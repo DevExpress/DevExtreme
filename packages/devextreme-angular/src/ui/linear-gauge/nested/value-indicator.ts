@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeValueIndicatorComponent';
+    readonly _dxClassName = 'DxoLinearGaugeValueIndicatorComponent';
 
     
     @Input()

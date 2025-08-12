@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation {
-    _dxClassName = 'DxiCustomOperationComponent';
+    readonly _dxClassName = 'DxiCustomOperationComponent';
 
     
 

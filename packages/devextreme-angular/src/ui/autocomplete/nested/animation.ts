@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoAutocompleteAnimationComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoAutocompleteAnimationComponent';
+    readonly _dxClassName = 'DxoAutocompleteAnimationComponent';
 
     
     @Input()

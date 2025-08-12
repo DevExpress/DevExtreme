@@ -115,7 +115,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxDropDownBoxComponent';
+    readonly _dxClassName = 'DxDropDownBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

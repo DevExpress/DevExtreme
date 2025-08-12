@@ -68,7 +68,7 @@ import {
     ]
 })
 export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxValidationSummaryComponent';
+    readonly _dxClassName = 'DxValidationSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

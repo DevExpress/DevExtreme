@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoAutocompleteBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoAutocompleteBoundaryOffsetComponent';
+    readonly _dxClassName = 'DxoAutocompleteBoundaryOffsetComponent';
 
     
     @Input()

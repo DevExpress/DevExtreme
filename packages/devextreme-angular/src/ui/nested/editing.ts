@@ -45,7 +45,7 @@ import {
     ],
 })
 export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoEditingComponent';
+    readonly _dxClassName = 'DxoEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesNestedItems(value: QueryList<CollectionNestedOption>) {

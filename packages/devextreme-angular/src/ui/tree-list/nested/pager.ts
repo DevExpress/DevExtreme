@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListPagerComponent';
+    readonly _dxClassName = 'DxoTreeListPagerComponent';
 
     
     @Input()

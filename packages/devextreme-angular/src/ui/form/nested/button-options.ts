@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFormButtonOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoFormButtonOptionsComponent';
+    readonly _dxClassName = 'DxoFormButtonOptionsComponent';
 
     
     @Input()

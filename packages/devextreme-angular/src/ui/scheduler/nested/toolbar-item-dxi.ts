@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiSchedulerToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiSchedulerToolbarItemComponent';
+    readonly _dxClassName = 'DxiSchedulerToolbarItemComponent';
 
     
     @Input()

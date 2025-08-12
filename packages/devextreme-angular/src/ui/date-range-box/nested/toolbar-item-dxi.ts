@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiDateRangeBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDateRangeBoxToolbarItemComponent';
+    readonly _dxClassName = 'DxiDateRangeBoxToolbarItemComponent';
 
     
     @Input()

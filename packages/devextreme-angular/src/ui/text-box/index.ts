@@ -82,7 +82,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxTextBoxComponent';
+    readonly _dxClassName = 'DxTextBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

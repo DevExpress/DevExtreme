@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiVectorMapLegendComponent';
+    readonly _dxClassName = 'DxiVectorMapLegendComponent';
 
     
     @Input()

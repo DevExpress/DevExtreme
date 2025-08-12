@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLoadPanelOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLoadPanelOffsetComponent';
+    readonly _dxClassName = 'DxoLoadPanelOffsetComponent';
 
     
     @Input()

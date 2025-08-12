@@ -119,7 +119,7 @@ import {
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxVectorMapComponent';
+    readonly _dxClassName = 'DxVectorMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
     set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {

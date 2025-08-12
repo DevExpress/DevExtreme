@@ -117,7 +117,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxDateBoxComponent';
+    readonly _dxClassName = 'DxDateBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

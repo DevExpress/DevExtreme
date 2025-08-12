@@ -52,7 +52,7 @@ import {
 })
 export class DxiTreeViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiTreeViewItemComponent';
+    readonly _dxClassName = 'DxiTreeViewItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiDropDownButtonToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDropDownButtonToolbarItemComponent';
+    readonly _dxClassName = 'DxiDropDownButtonToolbarItemComponent';
 
     
     @Input()

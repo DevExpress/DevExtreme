@@ -49,7 +49,7 @@ import {
     ],
 })
 export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChartArgumentAxisComponent';
+    readonly _dxClassName = 'DxoChartArgumentAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {

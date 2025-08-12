@@ -71,7 +71,7 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     ]
 })
 export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCommonAnnotationSettingsComponent';
+    readonly _dxClassName = 'DxoCommonAnnotationSettingsComponent';
 
     
 

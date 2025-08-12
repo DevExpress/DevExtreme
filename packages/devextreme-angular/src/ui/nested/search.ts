@@ -41,7 +41,7 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
     ]
 })
 export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSearchComponent';
+    readonly _dxClassName = 'DxoSearchComponent';
 
     
 

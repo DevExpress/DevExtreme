@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeWidthComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeWidthComponent';
+    readonly _dxClassName = 'DxoLinearGaugeWidthComponent';
 
     
     @Input()

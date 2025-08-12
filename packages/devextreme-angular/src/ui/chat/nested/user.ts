@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChatUserComponent';
+    readonly _dxClassName = 'DxoChatUserComponent';
 
     
     @Input()

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDiagramPageSizeItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDiagramPageSizeItemComponent';
+    readonly _dxClassName = 'DxiDiagramPageSizeItemComponent';
 
     
     @Input()

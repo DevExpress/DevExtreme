@@ -39,7 +39,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorFileUploaderOptionsComponent';
+    readonly _dxClassName = 'DxoHtmlEditorFileUploaderOptionsComponent';
 
     
     @Input()

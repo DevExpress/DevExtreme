@@ -38,7 +38,7 @@ import { DxoConverter } from './base/converter';
     ]
 })
 export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit {
-    _dxClassName = 'DxoConverterComponent';
+    readonly _dxClassName = 'DxoConverterComponent';
 
     
 

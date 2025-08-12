@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSankeyHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSankeyHoverStyleComponent';
+    readonly _dxClassName = 'DxoSankeyHoverStyleComponent';
 
     
     @Input()

@@ -44,7 +44,7 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
     ]
 })
 export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSelectionComponent';
+    readonly _dxClassName = 'DxoSelectionComponent';
 
     
 

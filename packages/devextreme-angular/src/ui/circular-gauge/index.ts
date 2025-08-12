@@ -117,7 +117,7 @@ import {
     ]
 })
 export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxCircularGaugeComponent';
+    readonly _dxClassName = 'DxCircularGaugeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {

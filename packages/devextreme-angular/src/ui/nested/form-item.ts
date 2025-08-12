@@ -56,7 +56,7 @@ import {
     ]
 })
 export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFormItemComponent';
+    readonly _dxClassName = 'DxoFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

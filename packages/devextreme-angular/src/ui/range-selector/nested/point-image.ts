@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorPointImageComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeSelectorPointImageComponent';
+    readonly _dxClassName = 'DxoRangeSelectorPointImageComponent';
 
     
     @Input()

@@ -55,7 +55,7 @@ import {
 })
 export class DxiGanttItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiGanttItemComponent';
+    readonly _dxClassName = 'DxiGanttItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

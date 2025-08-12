@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPopupMyComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPopupMyComponent';
+    readonly _dxClassName = 'DxoPopupMyComponent';
 
     
     @Input()

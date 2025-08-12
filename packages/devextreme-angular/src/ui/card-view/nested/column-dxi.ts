@@ -49,7 +49,7 @@ import {
     ],
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiCardViewColumnComponent';
+    readonly _dxClassName = 'DxiCardViewColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

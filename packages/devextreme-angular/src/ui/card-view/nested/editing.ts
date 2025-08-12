@@ -43,7 +43,7 @@ import {
     ],
 })
 export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCardViewEditingComponent';
+    readonly _dxClassName = 'DxoCardViewEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesNestedItems(value: QueryList<CollectionNestedOption>) {

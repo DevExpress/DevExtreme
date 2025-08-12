@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiFileManagerColumnComponent';
+    readonly _dxClassName = 'DxiFileManagerColumnComponent';
 
     
     @Input()

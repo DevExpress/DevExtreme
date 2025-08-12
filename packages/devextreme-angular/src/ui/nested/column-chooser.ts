@@ -49,7 +49,7 @@ import { DxoColumnChooser } from './base/column-chooser';
     ]
 })
 export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit {
-    _dxClassName = 'DxoColumnChooserComponent';
+    readonly _dxClassName = 'DxoColumnChooserComponent';
 
     
 

@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeFontComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeFontComponent';
+    readonly _dxClassName = 'DxoLinearGaugeFontComponent';
 
     
     @Input()

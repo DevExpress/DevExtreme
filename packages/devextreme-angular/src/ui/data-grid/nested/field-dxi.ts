@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridFieldComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDataGridFieldComponent';
+    readonly _dxClassName = 'DxiDataGridFieldComponent';
 
     
     @Input()

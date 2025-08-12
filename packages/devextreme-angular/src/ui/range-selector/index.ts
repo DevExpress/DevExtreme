@@ -218,7 +218,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxRangeSelectorComponent';
+    readonly _dxClassName = 'DxRangeSelectorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {

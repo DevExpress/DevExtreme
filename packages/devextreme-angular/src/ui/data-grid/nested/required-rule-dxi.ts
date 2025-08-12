@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridRequiredRuleComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDataGridRequiredRuleComponent';
+    readonly _dxClassName = 'DxiDataGridRequiredRuleComponent';
 
     
     @Input()

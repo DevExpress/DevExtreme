@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiCardViewTabbedItemComponent';
+    readonly _dxClassName = 'DxiCardViewTabbedItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {

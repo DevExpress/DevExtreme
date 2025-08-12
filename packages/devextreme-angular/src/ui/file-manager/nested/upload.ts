@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFileManagerUploadComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFileManagerUploadComponent';
+    readonly _dxClassName = 'DxoFileManagerUploadComponent';
 
     
     @Input()

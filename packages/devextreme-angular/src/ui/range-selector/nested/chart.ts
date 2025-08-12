@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoRangeSelectorChartComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeSelectorChartComponent';
+    readonly _dxClassName = 'DxoRangeSelectorChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_series)
     set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {

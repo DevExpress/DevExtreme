@@ -83,7 +83,7 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiSeriesComponent extends DxiChartSeries {
-    _dxClassName = 'DxiSeriesComponent';
+    readonly _dxClassName = 'DxiSeriesComponent';
 
     
 

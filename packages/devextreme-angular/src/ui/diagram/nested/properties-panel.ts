@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDiagramPropertiesPanelComponent';
+    readonly _dxClassName = 'DxoDiagramPropertiesPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {

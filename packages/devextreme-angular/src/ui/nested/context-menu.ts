@@ -46,7 +46,7 @@ import {
     ]
 })
 export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit {
-    _dxClassName = 'DxoContextMenuComponent';
+    readonly _dxClassName = 'DxoContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {

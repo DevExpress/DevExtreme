@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBulletFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoBulletFormatComponent';
+    readonly _dxClassName = 'DxoBulletFormatComponent';
 
     
     @Input()

@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxiFileManagerItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiFileManagerItemComponent';
+    readonly _dxClassName = 'DxiFileManagerItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

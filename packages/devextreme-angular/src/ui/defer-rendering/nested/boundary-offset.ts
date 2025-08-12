@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDeferRenderingBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDeferRenderingBoundaryOffsetComponent';
+    readonly _dxClassName = 'DxoDeferRenderingBoundaryOffsetComponent';
 
     
     @Input()

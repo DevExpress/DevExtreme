@@ -77,7 +77,7 @@ import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
     ]
 })
 export class DxToastComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxToastComponent';
+    readonly _dxClassName = 'DxToastComponent';
 
     instance: DxToast = null;
 

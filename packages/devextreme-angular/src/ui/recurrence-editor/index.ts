@@ -72,7 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRecurrenceEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxRecurrenceEditorComponent';
+    readonly _dxClassName = 'DxRecurrenceEditorComponent';
 
     instance: DxRecurrenceEditor = null;
 

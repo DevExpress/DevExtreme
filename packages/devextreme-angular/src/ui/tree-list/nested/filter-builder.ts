@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListFilterBuilderComponent';
+    readonly _dxClassName = 'DxoTreeListFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {

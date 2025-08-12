@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoScrollBarComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoScrollBarComponent';
+    readonly _dxClassName = 'DxoScrollBarComponent';
 
     
     @Input()

@@ -70,7 +70,7 @@ import {
     ]
 })
 export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxGalleryComponent';
+    readonly _dxClassName = 'DxGalleryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

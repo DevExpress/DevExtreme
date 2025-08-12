@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeAnimationComponent';
+    readonly _dxClassName = 'DxoLinearGaugeAnimationComponent';
 
     
     @Input()

@@ -97,7 +97,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoStepareaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    _dxClassName = 'DxoStepareaComponent';
+    readonly _dxClassName = 'DxoStepareaComponent';
 
     
 

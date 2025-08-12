@@ -82,7 +82,7 @@ import {
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxMapComponent';
+    readonly _dxClassName = 'DxMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_markers)
     set _markersNestedItems(value: QueryList<CollectionNestedOption>) {

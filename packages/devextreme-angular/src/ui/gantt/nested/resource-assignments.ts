@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGanttResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoGanttResourceAssignmentsComponent';
+    readonly _dxClassName = 'DxoGanttResourceAssignmentsComponent';
 
     
     @Input()

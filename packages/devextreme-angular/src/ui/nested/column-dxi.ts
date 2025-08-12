@@ -113,7 +113,7 @@ import {
     ]
 })
 export class DxiColumnComponent extends DxiDataGridColumn {
-    _dxClassName = 'DxiColumnComponent';
+    readonly _dxClassName = 'DxiColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

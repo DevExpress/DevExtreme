@@ -72,7 +72,7 @@ import {
     ]
 })
 export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxSplitterComponent';
+    readonly _dxClassName = 'DxSplitterComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

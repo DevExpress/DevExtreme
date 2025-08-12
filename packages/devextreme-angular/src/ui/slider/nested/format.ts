@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSliderFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSliderFormatComponent';
+    readonly _dxClassName = 'DxoSliderFormatComponent';
 
     
     @Input()

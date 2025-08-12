@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSummaryComponent';
+    readonly _dxClassName = 'DxoSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
     set _groupItemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoContextToolboxComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoContextToolboxComponent';
+    readonly _dxClassName = 'DxoContextToolboxComponent';
 
     
     @Input()

@@ -55,7 +55,7 @@ import {
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
+    readonly _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {

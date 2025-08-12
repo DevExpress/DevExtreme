@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiListButtonComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiListButtonComponent';
+    readonly _dxClassName = 'DxiListButtonComponent';
 
     
     @Input()

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTagBoxToComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTagBoxToComponent';
+    readonly _dxClassName = 'DxoTagBoxToComponent';
 
     
     @Input()

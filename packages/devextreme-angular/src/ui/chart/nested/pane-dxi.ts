@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChartPaneComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiChartPaneComponent';
+    readonly _dxClassName = 'DxiChartPaneComponent';
 
     
     @Input()

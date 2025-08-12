@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridKeyboardNavigationComponent';
+    readonly _dxClassName = 'DxoDataGridKeyboardNavigationComponent';
 
     
     @Input()

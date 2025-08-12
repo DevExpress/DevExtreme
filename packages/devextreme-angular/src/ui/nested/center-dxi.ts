@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_center } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiCenterComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiCenterComponent';
+    readonly _dxClassName = 'DxiCenterComponent';
 
     
     @Input()

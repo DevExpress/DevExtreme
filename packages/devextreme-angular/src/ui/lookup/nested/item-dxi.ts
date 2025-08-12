@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiLookupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiLookupItemComponent';
+    readonly _dxClassName = 'DxiLookupItemComponent';
 
     
     @Input()

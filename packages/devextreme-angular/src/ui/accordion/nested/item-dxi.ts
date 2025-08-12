@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiAccordionItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiAccordionItemComponent';
+    readonly _dxClassName = 'DxiAccordionItemComponent';
 
     
     @Input()

@@ -73,7 +73,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFileUploaderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxFileUploaderComponent';
+    readonly _dxClassName = 'DxFileUploaderComponent';
 
     instance: DxFileUploader = null;
 

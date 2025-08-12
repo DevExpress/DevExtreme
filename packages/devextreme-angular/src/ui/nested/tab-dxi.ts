@@ -70,7 +70,7 @@ import {
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiTabComponent';
+    readonly _dxClassName = 'DxiTabComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

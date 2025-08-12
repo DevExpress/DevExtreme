@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiFilterBuilderCustomOperationComponent';
+    readonly _dxClassName = 'DxiFilterBuilderCustomOperationComponent';
 
     
     @Input()

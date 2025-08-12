@@ -43,7 +43,7 @@ import {
     ],
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeContainerComponent';
+    readonly _dxClassName = 'DxoRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiConnectionPointComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiConnectionPointComponent';
+    readonly _dxClassName = 'DxiConnectionPointComponent';
 
     
     @Input()

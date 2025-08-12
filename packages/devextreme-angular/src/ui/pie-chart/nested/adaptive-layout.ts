@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPieChartAdaptiveLayoutComponent';
+    readonly _dxClassName = 'DxoPieChartAdaptiveLayoutComponent';
 
     
     @Input()

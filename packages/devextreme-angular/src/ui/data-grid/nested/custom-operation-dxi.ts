@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridCustomOperationComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDataGridCustomOperationComponent';
+    readonly _dxClassName = 'DxiDataGridCustomOperationComponent';
 
     
     @Input()

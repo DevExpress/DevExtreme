@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapExportComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoVectorMapExportComponent';
+    readonly _dxClassName = 'DxoVectorMapExportComponent';
 
     
     @Input()

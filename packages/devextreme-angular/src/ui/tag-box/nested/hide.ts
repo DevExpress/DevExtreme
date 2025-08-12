@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTagBoxHideComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTagBoxHideComponent';
+    readonly _dxClassName = 'DxoTagBoxHideComponent';
 
     
     @Input()

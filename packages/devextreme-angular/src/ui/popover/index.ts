@@ -95,7 +95,7 @@ import {
     ]
 })
 export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxPopoverComponent';
+    readonly _dxClassName = 'DxPopoverComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {

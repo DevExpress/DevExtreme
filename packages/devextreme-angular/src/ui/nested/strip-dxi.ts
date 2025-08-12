@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_strips } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiStripComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiStripComponent';
+    readonly _dxClassName = 'DxiStripComponent';
 
     
     @Input()

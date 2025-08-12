@@ -42,7 +42,7 @@ import {
     ],
 })
 export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDiagramPageSizeComponent';
+    readonly _dxClassName = 'DxoDiagramPageSizeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

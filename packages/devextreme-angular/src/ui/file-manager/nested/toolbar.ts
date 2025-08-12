@@ -42,7 +42,7 @@ import {
     ],
 })
 export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFileManagerToolbarComponent';
+    readonly _dxClassName = 'DxoFileManagerToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
     set _fileSelectionItemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -43,7 +43,7 @@ import {
     ],
 })
 export class DxiRouteComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiRouteComponent';
+    readonly _dxClassName = 'DxiRouteComponent';
 
     @ContentChildren(PROPERTY_TOKEN_locations)
     set _locationsNestedItems(value: QueryList<CollectionNestedOption>) {

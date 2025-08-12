@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeViewButtonComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTreeViewButtonComponent';
+    readonly _dxClassName = 'DxiTreeViewButtonComponent';
 
     
     @Input()

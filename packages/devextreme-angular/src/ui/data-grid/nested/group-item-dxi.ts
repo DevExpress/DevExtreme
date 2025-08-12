@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDataGridGroupItemComponent';
+    readonly _dxClassName = 'DxiDataGridGroupItemComponent';
 
     
     @Input()

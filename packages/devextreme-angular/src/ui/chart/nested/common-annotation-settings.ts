@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoChartCommonAnnotationSettingsComponent';
+    readonly _dxClassName = 'DxoChartCommonAnnotationSettingsComponent';
 
     
     @Input()

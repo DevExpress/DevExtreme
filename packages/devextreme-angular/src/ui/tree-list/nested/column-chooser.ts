@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListColumnChooserComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListColumnChooserComponent';
+    readonly _dxClassName = 'DxoTreeListColumnChooserComponent';
 
     
     @Input()

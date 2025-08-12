@@ -81,7 +81,7 @@ import {
     ]
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxValidatorComponent';
+    readonly _dxClassName = 'DxValidatorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

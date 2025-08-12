@@ -47,7 +47,7 @@ import {
     ]
 })
 export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements OnDestroy, OnInit {
-    _dxClassName = 'DxoImageUploadComponent';
+    readonly _dxClassName = 'DxoImageUploadComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFunnelTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFunnelTooltipBorderComponent';
+    readonly _dxClassName = 'DxoFunnelTooltipBorderComponent';
 
     
     @Input()

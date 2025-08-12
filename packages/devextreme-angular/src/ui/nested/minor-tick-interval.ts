@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoMinorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoMinorTickIntervalComponent';
+    readonly _dxClassName = 'DxoMinorTickIntervalComponent';
 
     
     @Input()

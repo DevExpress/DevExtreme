@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiCardViewRequiredRuleComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiCardViewRequiredRuleComponent';
+    readonly _dxClassName = 'DxiCardViewRequiredRuleComponent';
 
     
     @Input()

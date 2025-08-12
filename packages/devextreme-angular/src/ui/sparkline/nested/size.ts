@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSparklineSizeComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSparklineSizeComponent';
+    readonly _dxClassName = 'DxoSparklineSizeComponent';
 
     
     @Input()

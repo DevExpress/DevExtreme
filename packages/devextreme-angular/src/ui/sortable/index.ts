@@ -56,7 +56,7 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
     ]
 })
 export class DxSortableComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxSortableComponent';
+    readonly _dxClassName = 'DxSortableComponent';
 
     instance: DxSortable = null;
 

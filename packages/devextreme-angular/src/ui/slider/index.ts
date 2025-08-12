@@ -79,7 +79,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxSliderComponent';
+    readonly _dxClassName = 'DxSliderComponent';
 
     instance: DxSlider = null;
 

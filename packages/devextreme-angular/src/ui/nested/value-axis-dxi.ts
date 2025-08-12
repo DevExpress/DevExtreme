@@ -50,7 +50,7 @@ import {
     ],
 })
 export class DxiValueAxisComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiValueAxisComponent';
+    readonly _dxClassName = 'DxiValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {

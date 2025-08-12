@@ -38,7 +38,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDateBoxCalendarOptionsComponent';
+    readonly _dxClassName = 'DxoDateBoxCalendarOptionsComponent';
 
     
     @Input()

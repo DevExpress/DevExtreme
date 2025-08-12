@@ -239,7 +239,7 @@ import {
     ]
 })
 export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxDataGridComponent';
+    readonly _dxClassName = 'DxDataGridComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

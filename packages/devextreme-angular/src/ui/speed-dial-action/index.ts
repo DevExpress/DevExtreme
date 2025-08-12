@@ -53,7 +53,7 @@ import {
     ]
 })
 export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxSpeedDialActionComponent';
+    readonly _dxClassName = 'DxSpeedDialActionComponent';
 
     instance: DxSpeedDialAction = null;
 

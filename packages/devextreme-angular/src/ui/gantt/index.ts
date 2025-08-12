@@ -115,7 +115,7 @@ import {
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxGanttComponent';
+    readonly _dxClassName = 'DxGanttComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_resources } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiResourceComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiResourceComponent';
+    readonly _dxClassName = 'DxiResourceComponent';
 
     
     @Input()

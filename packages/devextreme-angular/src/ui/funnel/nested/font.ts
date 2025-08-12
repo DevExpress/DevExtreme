@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFunnelFontComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFunnelFontComponent';
+    readonly _dxClassName = 'DxoFunnelFontComponent';
 
     
     @Input()

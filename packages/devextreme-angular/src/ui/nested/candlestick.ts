@@ -97,7 +97,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoCandlestickComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCandlestickComponent';
+    readonly _dxClassName = 'DxoCandlestickComponent';
 
     
 

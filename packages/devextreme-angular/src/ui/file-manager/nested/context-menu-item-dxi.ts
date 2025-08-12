@@ -42,7 +42,7 @@ import {
     ],
 })
 export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiFileManagerContextMenuItemComponent';
+    readonly _dxClassName = 'DxiFileManagerContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

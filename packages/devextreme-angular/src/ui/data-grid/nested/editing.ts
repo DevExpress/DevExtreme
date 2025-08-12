@@ -47,7 +47,7 @@ import {
     ],
 })
 export class DxoDataGridEditingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridEditingComponent';
+    readonly _dxClassName = 'DxoDataGridEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesNestedItems(value: QueryList<CollectionNestedOption>) {

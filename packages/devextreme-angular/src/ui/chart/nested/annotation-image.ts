@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartAnnotationImageComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChartAnnotationImageComponent';
+    readonly _dxClassName = 'DxoChartAnnotationImageComponent';
 
     
     @Input()

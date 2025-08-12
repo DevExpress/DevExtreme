@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeListCustomOperationComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTreeListCustomOperationComponent';
+    readonly _dxClassName = 'DxiTreeListCustomOperationComponent';
 
     
     @Input()

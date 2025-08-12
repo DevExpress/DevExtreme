@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSliderLabelComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSliderLabelComponent';
+    readonly _dxClassName = 'DxoSliderLabelComponent';
 
     
     @Input()

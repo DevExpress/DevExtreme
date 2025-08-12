@@ -96,7 +96,7 @@ import {
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxFormComponent';
+    readonly _dxClassName = 'DxFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

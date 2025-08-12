@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoNumberBoxFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoNumberBoxFormatComponent';
+    readonly _dxClassName = 'DxoNumberBoxFormatComponent';
 
     
     @Input()

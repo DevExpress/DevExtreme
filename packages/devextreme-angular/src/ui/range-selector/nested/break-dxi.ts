@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiRangeSelectorBreakComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiRangeSelectorBreakComponent';
+    readonly _dxClassName = 'DxiRangeSelectorBreakComponent';
 
     
     @Input()

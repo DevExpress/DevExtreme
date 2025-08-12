@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeSelectorHoverStyleComponent';
+    readonly _dxClassName = 'DxoRangeSelectorHoverStyleComponent';
 
     
     @Input()

@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoHtmlEditorMediaResizingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorMediaResizingComponent';
+    readonly _dxClassName = 'DxoHtmlEditorMediaResizingComponent';
 
     
     @Input()

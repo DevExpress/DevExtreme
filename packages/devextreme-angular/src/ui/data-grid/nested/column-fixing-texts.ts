@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridColumnFixingTextsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridColumnFixingTextsComponent';
+    readonly _dxClassName = 'DxoDataGridColumnFixingTextsComponent';
 
     
     @Input()

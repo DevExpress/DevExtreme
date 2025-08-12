@@ -79,7 +79,7 @@ import {
     ]
 })
 export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxTreeViewComponent';
+    readonly _dxClassName = 'DxTreeViewComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

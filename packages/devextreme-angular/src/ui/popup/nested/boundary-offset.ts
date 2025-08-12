@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPopupBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPopupBoundaryOffsetComponent';
+    readonly _dxClassName = 'DxoPopupBoundaryOffsetComponent';
 
     
     @Input()

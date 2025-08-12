@@ -87,7 +87,7 @@ import {
     ]
 })
 export class DxListComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxListComponent';
+    readonly _dxClassName = 'DxListComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

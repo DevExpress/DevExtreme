@@ -53,7 +53,7 @@ import {
 })
 export class DxiGanttContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiGanttContextMenuItemComponent';
+    readonly _dxClassName = 'DxiGanttContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -89,7 +89,7 @@ import {
     ]
 })
 export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTabPanelOptionsComponent';
+    readonly _dxClassName = 'DxoTabPanelOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

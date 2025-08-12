@@ -72,7 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxProgressBarComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxProgressBarComponent';
+    readonly _dxClassName = 'DxProgressBarComponent';
 
     instance: DxProgressBar = null;
 

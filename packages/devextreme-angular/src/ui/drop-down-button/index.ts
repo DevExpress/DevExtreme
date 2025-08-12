@@ -97,7 +97,7 @@ import {
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxDropDownButtonComponent';
+    readonly _dxClassName = 'DxDropDownButtonComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

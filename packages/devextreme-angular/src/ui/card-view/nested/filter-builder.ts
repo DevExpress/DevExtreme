@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoCardViewFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCardViewFilterBuilderComponent';
+    readonly _dxClassName = 'DxoCardViewFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {

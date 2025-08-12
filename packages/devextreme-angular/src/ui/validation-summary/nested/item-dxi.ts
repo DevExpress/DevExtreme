@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiValidationSummaryItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiValidationSummaryItemComponent';
+    readonly _dxClassName = 'DxiValidationSummaryItemComponent';
 
     
     @Input()

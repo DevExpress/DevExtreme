@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoVectorMapCommonAnnotationSettingsComponent';
+    readonly _dxClassName = 'DxoVectorMapCommonAnnotationSettingsComponent';
 
     
     @Input()

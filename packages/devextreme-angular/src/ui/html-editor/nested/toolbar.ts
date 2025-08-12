@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorToolbarComponent';
+    readonly _dxClassName = 'DxoHtmlEditorToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

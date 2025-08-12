@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiHtmlEditorTabComponent';
+    readonly _dxClassName = 'DxiHtmlEditorTabComponent';
 
     
     @Input()

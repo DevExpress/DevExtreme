@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewScrollingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCardViewScrollingComponent';
+    readonly _dxClassName = 'DxoCardViewScrollingComponent';
 
     
     @Input()

@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/tokens
     ],
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDataGridSortByGroupSummaryInfoComponent';
+    readonly _dxClassName = 'DxiDataGridSortByGroupSummaryInfoComponent';
 
     
     @Input()

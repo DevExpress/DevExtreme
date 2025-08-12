@@ -45,7 +45,7 @@ import { DxoSearchPanel } from './base/search-panel';
     ]
 })
 export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSearchPanelComponent';
+    readonly _dxClassName = 'DxoSearchPanelComponent';
 
     
 

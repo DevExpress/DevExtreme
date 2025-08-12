@@ -194,7 +194,7 @@ import {
     ]
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxPolarChartComponent';
+    readonly _dxClassName = 'DxPolarChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
     set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {

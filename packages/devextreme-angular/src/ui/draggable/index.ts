@@ -56,7 +56,7 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
     ]
 })
 export class DxDraggableComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxDraggableComponent';
+    readonly _dxClassName = 'DxDraggableComponent';
 
     instance: DxDraggable = null;
 

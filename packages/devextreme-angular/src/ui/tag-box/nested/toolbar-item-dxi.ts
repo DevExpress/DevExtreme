@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiTagBoxToolbarItemComponent';
+    readonly _dxClassName = 'DxiTagBoxToolbarItemComponent';
 
     
     @Input()

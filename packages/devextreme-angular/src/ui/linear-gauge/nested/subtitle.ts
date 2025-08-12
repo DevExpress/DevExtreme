@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeSubtitleComponent';
+    readonly _dxClassName = 'DxoLinearGaugeSubtitleComponent';
 
     
     @Input()

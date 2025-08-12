@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChatAlertComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiChatAlertComponent';
+    readonly _dxClassName = 'DxiChatAlertComponent';
 
     
     @Input()

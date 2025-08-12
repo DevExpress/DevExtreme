@@ -135,7 +135,7 @@ import {
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxPieChartComponent';
+    readonly _dxClassName = 'DxPieChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
     set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {

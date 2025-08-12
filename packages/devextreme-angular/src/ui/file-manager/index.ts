@@ -90,7 +90,7 @@ import {
     ]
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxFileManagerComponent';
+    readonly _dxClassName = 'DxFileManagerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {

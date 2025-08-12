@@ -53,7 +53,7 @@ import {
     ],
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTreeListColumnComponent';
+    readonly _dxClassName = 'DxiTreeListColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -49,7 +49,7 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
 })
 export class DxiPolarChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiPolarChartAnnotationComponent';
+    readonly _dxClassName = 'DxiPolarChartAnnotationComponent';
 
     
     @Input()

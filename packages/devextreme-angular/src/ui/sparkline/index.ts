@@ -78,7 +78,7 @@ import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/neste
     ]
 })
 export class DxSparklineComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxSparklineComponent';
+    readonly _dxClassName = 'DxSparklineComponent';
 
     instance: DxSparkline = null;
 

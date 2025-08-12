@@ -78,7 +78,7 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
     ]
 })
 export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxLoadPanelComponent';
+    readonly _dxClassName = 'DxLoadPanelComponent';
 
     instance: DxLoadPanel = null;
 

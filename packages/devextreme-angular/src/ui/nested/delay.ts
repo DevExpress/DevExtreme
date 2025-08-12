@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDelayComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDelayComponent';
+    readonly _dxClassName = 'DxoDelayComponent';
 
     
     @Input()

@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeMapTitleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeMapTitleComponent';
+    readonly _dxClassName = 'DxoTreeMapTitleComponent';
 
     
     @Input()

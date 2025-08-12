@@ -42,7 +42,7 @@ import {
     ],
 })
 export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLinearGaugeRangeContainerComponent';
+    readonly _dxClassName = 'DxoLinearGaugeRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {

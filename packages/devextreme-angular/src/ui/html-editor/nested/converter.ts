@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoHtmlEditorConverterComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorConverterComponent';
+    readonly _dxClassName = 'DxoHtmlEditorConverterComponent';
 
     
     @Input()

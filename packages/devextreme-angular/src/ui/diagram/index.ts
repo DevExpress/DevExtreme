@@ -121,7 +121,7 @@ import {
     ]
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxDiagramComponent';
+    readonly _dxClassName = 'DxDiagramComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {

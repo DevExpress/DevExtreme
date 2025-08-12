@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiDataGridToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDataGridToolbarItemComponent';
+    readonly _dxClassName = 'DxiDataGridToolbarItemComponent';
 
     
     @Input()

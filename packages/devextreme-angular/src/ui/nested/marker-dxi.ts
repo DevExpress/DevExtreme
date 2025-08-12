@@ -42,7 +42,7 @@ import {
     ],
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiMarkerComponent';
+    readonly _dxClassName = 'DxiMarkerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_location)
     set _locationNestedItems(value: QueryList<CollectionNestedOption>) {

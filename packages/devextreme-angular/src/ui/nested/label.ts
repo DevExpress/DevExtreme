@@ -50,7 +50,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoLabelComponent';
+    readonly _dxClassName = 'DxoLabelComponent';
 
     
     @Input()

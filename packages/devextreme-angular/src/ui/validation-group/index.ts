@@ -53,7 +53,7 @@ import {
     ]
 })
 export class DxValidationGroupComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxValidationGroupComponent';
+    readonly _dxClassName = 'DxValidationGroupComponent';
 
     instance: DxValidationGroup = null;
 

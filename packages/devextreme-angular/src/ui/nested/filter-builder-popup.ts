@@ -94,7 +94,7 @@ import {
     ]
 })
 export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFilterBuilderPopupComponent';
+    readonly _dxClassName = 'DxoFilterBuilderPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateRangeBoxAnimationComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDateRangeBoxAnimationComponent';
+    readonly _dxClassName = 'DxoDateRangeBoxAnimationComponent';
 
     
     @Input()

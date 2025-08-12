@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCircularGaugeTextComponent';
+    readonly _dxClassName = 'DxoCircularGaugeTextComponent';
 
     
     @Input()

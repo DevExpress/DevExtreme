@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBarGaugeFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoBarGaugeFormatComponent';
+    readonly _dxClassName = 'DxoBarGaugeFormatComponent';
 
     
     @Input()

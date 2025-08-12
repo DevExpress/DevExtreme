@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChartBreakComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiChartBreakComponent';
+    readonly _dxClassName = 'DxiChartBreakComponent';
 
     
     @Input()

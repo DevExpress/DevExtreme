@@ -111,7 +111,7 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
     ]
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxFunnelComponent';
+    readonly _dxClassName = 'DxFunnelComponent';
 
     instance: DxFunnel = null;
 

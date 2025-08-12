@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFileManagerContextMenuComponent';
+    readonly _dxClassName = 'DxoFileManagerContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

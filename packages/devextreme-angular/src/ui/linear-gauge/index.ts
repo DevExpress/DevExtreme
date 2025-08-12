@@ -119,7 +119,7 @@ import {
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxLinearGaugeComponent';
+    readonly _dxClassName = 'DxLinearGaugeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {

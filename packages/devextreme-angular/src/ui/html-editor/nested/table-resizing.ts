@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoHtmlEditorTableResizingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorTableResizingComponent';
+    readonly _dxClassName = 'DxoHtmlEditorTableResizingComponent';
 
     
     @Input()

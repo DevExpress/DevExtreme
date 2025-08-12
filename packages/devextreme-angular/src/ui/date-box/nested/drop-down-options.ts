@@ -51,7 +51,7 @@ import {
     ],
 })
 export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDateBoxDropDownOptionsComponent';
+    readonly _dxClassName = 'DxoDateBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {

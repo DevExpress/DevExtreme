@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartMinorTickComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPolarChartMinorTickComponent';
+    readonly _dxClassName = 'DxoPolarChartMinorTickComponent';
 
     
     @Input()

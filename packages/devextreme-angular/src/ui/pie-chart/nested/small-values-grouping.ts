@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartSmallValuesGroupingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPieChartSmallValuesGroupingComponent';
+    readonly _dxClassName = 'DxoPieChartSmallValuesGroupingComponent';
 
     
     @Input()

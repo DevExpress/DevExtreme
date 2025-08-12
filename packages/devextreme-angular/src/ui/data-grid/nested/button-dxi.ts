@@ -49,7 +49,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
 })
 export class DxiDataGridButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDataGridButtonComponent';
+    readonly _dxClassName = 'DxiDataGridButtonComponent';
 
     
     @Input()

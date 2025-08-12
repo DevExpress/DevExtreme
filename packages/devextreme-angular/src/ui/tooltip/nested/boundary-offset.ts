@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTooltipBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTooltipBoundaryOffsetComponent';
+    readonly _dxClassName = 'DxoTooltipBoundaryOffsetComponent';
 
     
     @Input()

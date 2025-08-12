@@ -140,7 +140,7 @@ import {
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiItemComponent';
+    readonly _dxClassName = 'DxiItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

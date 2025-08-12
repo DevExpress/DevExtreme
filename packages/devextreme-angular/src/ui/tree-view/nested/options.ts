@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeViewOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoTreeViewOptionsComponent';
+    readonly _dxClassName = 'DxoTreeViewOptionsComponent';
 
     
     @Input()

@@ -87,7 +87,7 @@ import {
     ]
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxChatComponent';
+    readonly _dxClassName = 'DxChatComponent';
 
     @ContentChildren(PROPERTY_TOKEN_alerts)
     set _alertsNestedItems(value: QueryList<CollectionNestedOption>) {

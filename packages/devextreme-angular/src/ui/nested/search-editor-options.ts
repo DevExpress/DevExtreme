@@ -99,7 +99,7 @@ import {
     ]
 })
 export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSearchEditorOptionsComponent';
+    readonly _dxClassName = 'DxoSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

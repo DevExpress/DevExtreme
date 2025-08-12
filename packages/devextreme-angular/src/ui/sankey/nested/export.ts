@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSankeyExportComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSankeyExportComponent';
+    readonly _dxClassName = 'DxoSankeyExportComponent';
 
     
     @Input()

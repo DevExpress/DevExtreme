@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSchedulerScrollingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSchedulerScrollingComponent';
+    readonly _dxClassName = 'DxoSchedulerScrollingComponent';
 
     
     @Input()

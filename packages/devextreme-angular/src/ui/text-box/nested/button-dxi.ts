@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTextBoxButtonComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTextBoxButtonComponent';
+    readonly _dxClassName = 'DxiTextBoxButtonComponent';
 
     
     @Input()

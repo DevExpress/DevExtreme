@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLookupHideEventComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoLookupHideEventComponent';
+    readonly _dxClassName = 'DxoLookupHideEventComponent';
 
     
     @Input()

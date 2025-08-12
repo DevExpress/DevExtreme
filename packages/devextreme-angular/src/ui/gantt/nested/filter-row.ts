@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoGanttFilterRowComponent';
+    readonly _dxClassName = 'DxoGanttFilterRowComponent';
 
     
     @Input()

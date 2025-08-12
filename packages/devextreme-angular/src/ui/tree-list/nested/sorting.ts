@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListSortingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListSortingComponent';
+    readonly _dxClassName = 'DxoTreeListSortingComponent';
 
     
     @Input()

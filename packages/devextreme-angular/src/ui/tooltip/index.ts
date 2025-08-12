@@ -82,7 +82,7 @@ import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
     ]
 })
 export class DxTooltipComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxTooltipComponent';
+    readonly _dxClassName = 'DxTooltipComponent';
 
     instance: DxTooltip = null;
 

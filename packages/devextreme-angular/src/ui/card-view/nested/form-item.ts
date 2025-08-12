@@ -53,7 +53,7 @@ import {
 })
 export class DxoCardViewFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    _dxClassName = 'DxoCardViewFormItemComponent';
+    readonly _dxClassName = 'DxoCardViewFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

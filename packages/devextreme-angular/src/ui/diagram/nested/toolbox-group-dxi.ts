@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_groups } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDiagramToolboxGroupComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDiagramToolboxGroupComponent';
+    readonly _dxClassName = 'DxiDiagramToolboxGroupComponent';
 
     
     @Input()

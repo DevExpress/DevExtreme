@@ -45,7 +45,7 @@ import {
     ],
 })
 export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSchedulerOptionsComponent';
+    readonly _dxClassName = 'DxoSchedulerOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

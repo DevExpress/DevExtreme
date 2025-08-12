@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiAutocompleteItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiAutocompleteItemComponent';
+    readonly _dxClassName = 'DxiAutocompleteItemComponent';
 
     
     @Input()

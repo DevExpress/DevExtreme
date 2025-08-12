@@ -47,7 +47,7 @@ import {
     ],
 })
 export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCardViewTabPanelOptionsComponent';
+    readonly _dxClassName = 'DxoCardViewTabPanelOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

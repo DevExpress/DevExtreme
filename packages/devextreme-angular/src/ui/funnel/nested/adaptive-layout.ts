@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFunnelAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFunnelAdaptiveLayoutComponent';
+    readonly _dxClassName = 'DxoFunnelAdaptiveLayoutComponent';
 
     
     @Input()

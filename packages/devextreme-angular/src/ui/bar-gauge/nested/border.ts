@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBarGaugeBorderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoBarGaugeBorderComponent';
+    readonly _dxClassName = 'DxoBarGaugeBorderComponent';
 
     
     @Input()

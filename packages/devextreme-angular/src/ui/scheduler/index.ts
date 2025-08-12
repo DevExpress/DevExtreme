@@ -89,7 +89,7 @@ import {
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxSchedulerComponent';
+    readonly _dxClassName = 'DxSchedulerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

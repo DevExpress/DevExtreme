@@ -48,7 +48,7 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
     ]
 })
 export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHeaderFilterComponent';
+    readonly _dxClassName = 'DxoHeaderFilterComponent';
 
     
 

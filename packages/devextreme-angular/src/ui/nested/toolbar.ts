@@ -49,7 +49,7 @@ import {
     ]
 })
 export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit {
-    _dxClassName = 'DxoToolbarComponent';
+    readonly _dxClassName = 'DxoToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

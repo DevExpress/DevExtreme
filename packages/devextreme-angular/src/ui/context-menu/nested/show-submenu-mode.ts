@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoContextMenuShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoContextMenuShowSubmenuModeComponent';
+    readonly _dxClassName = 'DxoContextMenuShowSubmenuModeComponent';
 
     
     @Input()

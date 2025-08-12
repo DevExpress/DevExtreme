@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoColorBoxOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoColorBoxOffsetComponent';
+    readonly _dxClassName = 'DxoColorBoxOffsetComponent';
 
     
     @Input()

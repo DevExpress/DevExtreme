@@ -43,7 +43,7 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiVectorMapLayerComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiVectorMapLayerComponent';
+    readonly _dxClassName = 'DxiVectorMapLayerComponent';
 
     
     @Input()

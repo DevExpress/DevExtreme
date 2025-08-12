@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFileManagerToolbarItemComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiFileManagerToolbarItemComponent';
+    readonly _dxClassName = 'DxiFileManagerToolbarItemComponent';
 
     
     @Input()

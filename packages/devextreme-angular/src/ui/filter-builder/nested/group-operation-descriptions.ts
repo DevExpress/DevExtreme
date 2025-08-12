@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFilterBuilderGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFilterBuilderGroupOperationDescriptionsComponent';
+    readonly _dxClassName = 'DxoFilterBuilderGroupOperationDescriptionsComponent';
 
     
     @Input()

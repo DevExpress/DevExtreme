@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeListFieldComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTreeListFieldComponent';
+    readonly _dxClassName = 'DxiTreeListFieldComponent';
 
     
     @Input()

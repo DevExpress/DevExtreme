@@ -46,7 +46,7 @@ import {
     ],
 })
 export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPolarChartValueAxisComponent';
+    readonly _dxClassName = 'DxoPolarChartValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
     set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {

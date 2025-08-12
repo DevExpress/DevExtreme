@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiAutocompleteButtonComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiAutocompleteButtonComponent';
+    readonly _dxClassName = 'DxiAutocompleteButtonComponent';
 
     
     @Input()

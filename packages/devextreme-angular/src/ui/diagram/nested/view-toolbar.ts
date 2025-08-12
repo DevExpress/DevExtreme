@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoDiagramViewToolbarComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDiagramViewToolbarComponent';
+    readonly _dxClassName = 'DxoDiagramViewToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {

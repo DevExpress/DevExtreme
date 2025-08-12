@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridPagingComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridPagingComponent';
+    readonly _dxClassName = 'DxoDataGridPagingComponent';
 
     
     @Input()

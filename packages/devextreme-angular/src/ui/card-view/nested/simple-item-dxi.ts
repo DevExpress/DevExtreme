@@ -55,7 +55,7 @@ import {
 })
 export class DxiCardViewSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiCardViewSimpleItemComponent';
+    readonly _dxClassName = 'DxiCardViewSimpleItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {

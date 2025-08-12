@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_locations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiMapLocationComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiMapLocationComponent';
+    readonly _dxClassName = 'DxiMapLocationComponent';
 
     
     @Input()

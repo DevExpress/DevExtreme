@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGanttFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoGanttFormatComponent';
+    readonly _dxClassName = 'DxoGanttFormatComponent';
 
     
     @Input()

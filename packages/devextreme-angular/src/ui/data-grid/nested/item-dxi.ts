@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiDataGridItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDataGridItemComponent';
+    readonly _dxClassName = 'DxiDataGridItemComponent';
 
     
     @Input()

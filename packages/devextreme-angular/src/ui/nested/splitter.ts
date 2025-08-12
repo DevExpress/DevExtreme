@@ -70,7 +70,7 @@ import {
     ]
 })
 export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSplitterComponent';
+    readonly _dxClassName = 'DxoSplitterComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoCardViewFormComponent';
+    readonly _dxClassName = 'DxoCardViewFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

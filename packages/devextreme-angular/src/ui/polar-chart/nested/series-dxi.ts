@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiPolarChartSeriesComponent';
+    readonly _dxClassName = 'DxiPolarChartSeriesComponent';
 
     
     @Input()

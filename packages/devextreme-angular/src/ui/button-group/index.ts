@@ -67,7 +67,7 @@ import {
     ]
 })
 export class DxButtonGroupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxButtonGroupComponent';
+    readonly _dxClassName = 'DxButtonGroupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

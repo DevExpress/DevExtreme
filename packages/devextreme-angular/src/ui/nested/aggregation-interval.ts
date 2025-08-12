@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoAggregationIntervalComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoAggregationIntervalComponent';
+    readonly _dxClassName = 'DxoAggregationIntervalComponent';
 
     
     @Input()

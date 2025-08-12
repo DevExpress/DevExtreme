@@ -43,7 +43,7 @@ import {
     ],
 })
 export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeSelectorScaleComponent';
+    readonly _dxClassName = 'DxoRangeSelectorScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListColumnFixingTextsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListColumnFixingTextsComponent';
+    readonly _dxClassName = 'DxoTreeListColumnFixingTextsComponent';
 
     
     @Input()

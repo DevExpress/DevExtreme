@@ -53,7 +53,7 @@ import {
     ]
 })
 export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
-    _dxClassName = 'DxLoadIndicatorComponent';
+    readonly _dxClassName = 'DxLoadIndicatorComponent';
 
     instance: DxLoadIndicator = null;
 

@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoZoomLevelComponent';
+    readonly _dxClassName = 'DxoZoomLevelComponent';
 
     
     @Input()

@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiValidationRuleComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiValidationRuleComponent';
+    readonly _dxClassName = 'DxiValidationRuleComponent';
 
     
     @Input()

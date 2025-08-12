@@ -42,7 +42,7 @@ import { DxoFormat } from './base/format';
     ]
 })
 export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFormatComponent';
+    readonly _dxClassName = 'DxoFormatComponent';
 
     
 

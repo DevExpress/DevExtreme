@@ -51,7 +51,7 @@ import {
     ],
 })
 export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeListPopupComponent';
+    readonly _dxClassName = 'DxoTreeListPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {

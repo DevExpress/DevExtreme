@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapAnnotationBorderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoVectorMapAnnotationBorderComponent';
+    readonly _dxClassName = 'DxoVectorMapAnnotationBorderComponent';
 
     
     @Input()

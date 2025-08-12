@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoTreeViewSearchEditorOptionsComponent';
+    readonly _dxClassName = 'DxoTreeViewSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {

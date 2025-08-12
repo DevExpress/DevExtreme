@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiCardViewStringLengthRuleComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiCardViewStringLengthRuleComponent';
+    readonly _dxClassName = 'DxiCardViewStringLengthRuleComponent';
 
     
     @Input()

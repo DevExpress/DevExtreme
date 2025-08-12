@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoHtmlEditorTableContextMenuComponent';
+    readonly _dxClassName = 'DxoHtmlEditorTableContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

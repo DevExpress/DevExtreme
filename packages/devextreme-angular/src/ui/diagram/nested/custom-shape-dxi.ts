@@ -53,7 +53,7 @@ import {
 })
 export class DxiDiagramCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiDiagramCustomShapeComponent';
+    readonly _dxClassName = 'DxiDiagramCustomShapeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
     set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {

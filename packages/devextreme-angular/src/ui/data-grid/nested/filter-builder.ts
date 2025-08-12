@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxoDataGridFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridFilterBuilderComponent';
+    readonly _dxClassName = 'DxoDataGridFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {

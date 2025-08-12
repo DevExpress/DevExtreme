@@ -72,7 +72,7 @@ import {
     ]
 })
 export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFilterBuilderComponent';
+    readonly _dxClassName = 'DxoFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {

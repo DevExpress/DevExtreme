@@ -52,7 +52,7 @@ import {
 })
 export class DxiCardViewGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiCardViewGroupItemComponent';
+    readonly _dxClassName = 'DxiCardViewGroupItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

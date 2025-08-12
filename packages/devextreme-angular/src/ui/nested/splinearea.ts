@@ -97,7 +97,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoSplineareaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSplineareaComponent';
+    readonly _dxClassName = 'DxoSplineareaComponent';
 
     
 

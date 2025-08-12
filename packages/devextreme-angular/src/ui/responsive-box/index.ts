@@ -79,7 +79,7 @@ import {
     ]
 })
 export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxResponsiveBoxComponent';
+    readonly _dxClassName = 'DxResponsiveBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_cols)
     set _colsNestedItems(value: QueryList<CollectionNestedOption>) {

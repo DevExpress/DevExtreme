@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiTabsItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiTabsItemComponent';
+    readonly _dxClassName = 'DxiTabsItemComponent';
 
     
     @Input()

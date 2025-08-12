@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorValueComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoRangeSelectorValueComponent';
+    readonly _dxClassName = 'DxoRangeSelectorValueComponent';
 
     
     @Input()

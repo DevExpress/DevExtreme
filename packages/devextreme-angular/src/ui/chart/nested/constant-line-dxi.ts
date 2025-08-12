@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChartConstantLineComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiChartConstantLineComponent';
+    readonly _dxClassName = 'DxiChartConstantLineComponent';
 
     
     @Input()

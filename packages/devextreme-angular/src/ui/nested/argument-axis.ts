@@ -48,7 +48,7 @@ import {
     ],
 })
 export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoArgumentAxisComponent';
+    readonly _dxClassName = 'DxoArgumentAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBreakStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoBreakStyleComponent';
+    readonly _dxClassName = 'DxoBreakStyleComponent';
 
     
     @Input()

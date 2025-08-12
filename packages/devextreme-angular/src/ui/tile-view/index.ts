@@ -71,7 +71,7 @@ import {
     ]
 })
 export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxTileViewComponent';
+    readonly _dxClassName = 'DxTileViewComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

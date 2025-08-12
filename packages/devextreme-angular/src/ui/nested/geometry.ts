@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoGeometryComponent';
+    readonly _dxClassName = 'DxoGeometryComponent';
 
     
     @Input()

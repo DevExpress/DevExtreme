@@ -52,7 +52,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiToolbarItemComponent extends DxiPopupToolbarItem {
-    _dxClassName = 'DxiToolbarItemComponent';
+    readonly _dxClassName = 'DxiToolbarItemComponent';
 
     
 

@@ -51,7 +51,7 @@ import {
     ],
 })
 export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDataGridPopupComponent';
+    readonly _dxClassName = 'DxoDataGridPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {

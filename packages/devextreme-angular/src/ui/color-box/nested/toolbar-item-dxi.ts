@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiColorBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiColorBoxToolbarItemComponent';
+    readonly _dxClassName = 'DxiColorBoxToolbarItemComponent';
 
     
     @Input()

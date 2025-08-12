@@ -67,7 +67,7 @@ import {
     ]
 })
 export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit {
-    _dxClassName = 'DxoBoxComponent';
+    readonly _dxClassName = 'DxoBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

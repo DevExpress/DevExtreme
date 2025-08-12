@@ -90,7 +90,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    _dxClassName = 'DxFilterBuilderComponent';
+    readonly _dxClassName = 'DxFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {

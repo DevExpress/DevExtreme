@@ -101,7 +101,7 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
     ]
 })
 export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxSankeyComponent';
+    readonly _dxClassName = 'DxSankeyComponent';
 
     instance: DxSankey = null;
 

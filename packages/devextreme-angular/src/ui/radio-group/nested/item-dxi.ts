@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiRadioGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiRadioGroupItemComponent';
+    readonly _dxClassName = 'DxiRadioGroupItemComponent';
 
     
     @Input()

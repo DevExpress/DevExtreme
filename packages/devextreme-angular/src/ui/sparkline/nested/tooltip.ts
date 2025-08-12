@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSparklineTooltipComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoSparklineTooltipComponent';
+    readonly _dxClassName = 'DxoSparklineTooltipComponent';
 
     
     @Input()

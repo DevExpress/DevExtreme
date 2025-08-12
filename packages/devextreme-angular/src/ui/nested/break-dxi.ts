@@ -41,7 +41,7 @@ import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiBreakComponent extends DxiVizScaleBreak {
-    _dxClassName = 'DxiBreakComponent';
+    readonly _dxClassName = 'DxiBreakComponent';
 
     
 

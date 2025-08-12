@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartWidthComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChartWidthComponent';
+    readonly _dxClassName = 'DxoChartWidthComponent';
 
     
     @Input()

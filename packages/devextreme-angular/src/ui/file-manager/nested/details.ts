@@ -41,7 +41,7 @@ import {
     ],
 })
 export class DxoFileManagerDetailsComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoFileManagerDetailsComponent';
+    readonly _dxClassName = 'DxoFileManagerDetailsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {

@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartBackgroundColorComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChartBackgroundColorComponent';
+    readonly _dxClassName = 'DxoChartBackgroundColorComponent';
 
     
     @Input()

@@ -42,7 +42,7 @@ import { DxoFormat } from './base/format';
     ]
 })
 export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnDestroy, OnInit {
-    _dxClassName = 'DxoMessageTimestampFormatComponent';
+    readonly _dxClassName = 'DxoMessageTimestampFormatComponent';
 
     
 

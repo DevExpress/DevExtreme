@@ -70,7 +70,7 @@ import {
     ]
 })
 export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    _dxClassName = 'DxMultiViewComponent';
+    readonly _dxClassName = 'DxMultiViewComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

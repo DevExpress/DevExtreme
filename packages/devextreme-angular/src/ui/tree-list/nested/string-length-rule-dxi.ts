@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeListStringLengthRuleComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiTreeListStringLengthRuleComponent';
+    readonly _dxClassName = 'DxiTreeListStringLengthRuleComponent';
 
     
     @Input()

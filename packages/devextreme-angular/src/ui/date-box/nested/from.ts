@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateBoxFromComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDateBoxFromComponent';
+    readonly _dxClassName = 'DxoDateBoxFromComponent';
 
     
     @Input()

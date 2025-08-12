@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiRangeComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiRangeComponent';
+    readonly _dxClassName = 'DxiRangeComponent';
 
     
     @Input()

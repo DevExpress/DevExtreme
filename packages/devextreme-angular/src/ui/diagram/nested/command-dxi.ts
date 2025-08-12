@@ -44,7 +44,7 @@ import {
     ],
 })
 export class DxiDiagramCommandComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiDiagramCommandComponent';
+    readonly _dxClassName = 'DxiDiagramCommandComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

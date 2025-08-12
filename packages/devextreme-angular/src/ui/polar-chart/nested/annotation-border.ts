@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartAnnotationBorderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoPolarChartAnnotationBorderComponent';
+    readonly _dxClassName = 'DxoPolarChartAnnotationBorderComponent';
 
     
     @Input()

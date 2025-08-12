@@ -52,7 +52,7 @@ import {
 })
 export class DxiMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    _dxClassName = 'DxiMenuItemComponent';
+    readonly _dxClassName = 'DxiMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {

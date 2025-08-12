@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiPaneComponent extends CollectionNestedOption {
-    _dxClassName = 'DxiPaneComponent';
+    readonly _dxClassName = 'DxiPaneComponent';
 
     
     @Input()

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoVectorMapTooltipBorderComponent';
+    readonly _dxClassName = 'DxoVectorMapTooltipBorderComponent';
 
     
     @Input()

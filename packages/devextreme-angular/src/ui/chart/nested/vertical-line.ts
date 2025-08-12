@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoChartVerticalLineComponent';
+    readonly _dxClassName = 'DxoChartVerticalLineComponent';
 
     
     @Input()

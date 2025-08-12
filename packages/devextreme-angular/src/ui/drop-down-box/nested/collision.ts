@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDropDownBoxCollisionComponent extends NestedOption implements OnDestroy, OnInit {
-    _dxClassName = 'DxoDropDownBoxCollisionComponent';
+    readonly _dxClassName = 'DxoDropDownBoxCollisionComponent';
 
     
     @Input()
