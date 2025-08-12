@@ -37,8 +37,8 @@ import {
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
-  checkIncompatibleNestedItems,  
-    
+  checkIncompatibleNestedItems,
+
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -64,13 +64,13 @@ export const getServerStateKey = () => {
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
   protected _dxClassName = 'DxComponent';
-  
+
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
-  
+
   eventHelper: EmitterHelper;
 
   optionChangedHandlers: EventEmitter<any> = new EventEmitter();
@@ -90,20 +90,19 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   widgetUpdateLocked = false;
 
   templateUpdateRequired = false;
-  
-  
+
   protected _setChildren(propertyName: string, items: QueryList<ICollectionNestedOption>) {
     const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
-        items,
-        this._dxClassName,
-        this.getLegacyClassNames()[propertyName]
+      items,
+      this._dxClassName,
+      this.getLegacyClassNames()[propertyName],
     );
 
     if (!hasIncopatibleNestedItems) {
       this.setChildren(propertyName, items);
     }
   }
-  
+
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};
