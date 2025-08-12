@@ -16,7 +16,6 @@ export const createResourceEditorModel = (
         displayExpr: resourceLoader.dataAccessor.textExpr,
         valueExpr: resourceLoader.dataAccessor.idExpr,
         stylingMode: isFluent(current()) ? 'filled' : 'outlined',
-        _ignoreFieldTemplateDeprecation: true,
       },
       dataField,
       editorType: resourceLoader.allowMultiple ? 'dxTagBox' : 'dxSelectBox',

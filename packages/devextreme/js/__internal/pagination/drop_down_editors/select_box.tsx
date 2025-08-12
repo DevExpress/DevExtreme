@@ -23,7 +23,6 @@ export interface SelectBoxProps extends EditorPropsType {
   value?: any;
   valueChange?: EventCallback<any>;
   isReactComponentWrapper?: boolean;
-  _ignoreFieldTemplateDeprecation?: boolean;
 }
 
 export type SelectBoxPropsType = SelectBoxProps & EditorStateProps & EditorLabelProps;
@@ -37,7 +36,6 @@ export const NumberBoxDefaultProps: SelectBoxPropsType = {
   searchEnabled: false,
   value: null,
   isReactComponentWrapper: true,
-  _ignoreFieldTemplateDeprecation: true,
 };
 
 export class SelectBox extends BaseInfernoComponent<SelectBoxPropsType> {

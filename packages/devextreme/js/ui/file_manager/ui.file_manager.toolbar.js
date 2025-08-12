@@ -340,7 +340,6 @@ class FileManagerToolbar extends Widget {
                 extend(true, result, {
                     options: {
                         stylingMode: 'filled',
-                        _ignoreFieldTemplateDeprecation: true,
                     },
                 });
             }
