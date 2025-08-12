@@ -37,7 +37,7 @@ export const checkIncompatibleNestedItems = (
           the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
 
-      return true;
+      return false;
     }
   }
   return false;
