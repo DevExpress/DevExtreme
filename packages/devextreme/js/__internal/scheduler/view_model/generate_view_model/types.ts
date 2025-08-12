@@ -6,7 +6,7 @@ interface SimpleAppointment {
   endDate: Date;
 }
 
-export interface BaseAppointmentViewModelSettingsOld {
+export interface BaseViewModelSettingsInternal {
   allDay?: boolean;
   direction: string;
   groupIndex: number;
@@ -26,7 +26,7 @@ export interface BaseAppointmentViewModelSettingsOld {
   };
 }
 
-export interface AppointmentViewModelSettingsOld extends BaseAppointmentViewModelSettingsOld {
+export interface AppointmentViewModelSettingsInternal extends BaseViewModelSettingsInternal {
   index: number;
   count: number;
   info: {
@@ -47,17 +47,17 @@ export interface AppointmentViewModelSettingsOld extends BaseAppointmentViewMode
   partTotalCount: number;
 }
 
-export interface AgendaViewModelSettingsOld extends BaseAppointmentViewModelSettingsOld {
+export interface AgendaViewModelSettingsInternal extends BaseViewModelSettingsInternal {
   agendaSettings: SimpleAppointment;
   height: number;
   width: string;
 }
 
-export interface AppointmentViewModelOld {
+export interface AppointmentViewModelInternal {
   itemData: SafeAppointment; // it will save in DOM by key: dxItemData
   needRepaint: boolean;
   needRemove: boolean;
-  settings: (AppointmentViewModelSettingsOld & AgendaViewModelSettingsOld)[];
+  settings: (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal)[];
 }
 
 export interface BaseAppointmentViewModel {

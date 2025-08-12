@@ -6,11 +6,11 @@ export const isElementCanBeFocused = ($element: dxElementWrapper): boolean => Bo
 
 export const getPrevElement = (
   sortedIndex: number,
-  sortedElementsMap: dxElementWrapper[] = [],
+  renderedElementsBySortedIndex: dxElementWrapper[] = [],
 ): dxElementWrapper | undefined => {
   let index = sortedIndex - 1;
   while (index >= 0) {
-    const $nextElement = sortedElementsMap[index];
+    const $nextElement = renderedElementsBySortedIndex[index];
     if (isElementCanBeFocused($nextElement)) {
       return $nextElement;
     }
@@ -22,11 +22,11 @@ export const getPrevElement = (
 
 export const getNextElement = (
   sortedIndex: number,
-  sortedElementsMap: dxElementWrapper[] = [],
+  renderedElementsBySortedIndex: dxElementWrapper[] = [],
 ): dxElementWrapper | undefined => {
   let index = sortedIndex + 1;
-  while (index < sortedElementsMap.length) {
-    const $nextElement = sortedElementsMap[index];
+  while (index < renderedElementsBySortedIndex.length) {
+    const $nextElement = renderedElementsBySortedIndex[index];
     if (isElementCanBeFocused($nextElement)) {
       return $nextElement;
     }

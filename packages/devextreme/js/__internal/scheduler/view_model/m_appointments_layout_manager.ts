@@ -13,6 +13,7 @@ import type { ResourceManager } from '../utils/resource_manager/resource_manager
 import { getAllDayHeight, getCellHeight, getCellWidth } from '../workspaces/helpers/m_position_helper';
 import { createAppointmentFilter } from './filtering/create_appointment_filter';
 import { AppointmentViewModelGenerator } from './generate_view_model/m_view_model_generator';
+import type { AppointmentViewModelPlain } from './generate_view_model/types';
 import { getAppointmentDataItems } from './preparation/get_appointment_data_items';
 
 const toMs = dateUtils.dateToMilliseconds;

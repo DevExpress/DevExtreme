@@ -62,7 +62,8 @@ interface ViewModelDiff {
 
 // @ts-expect-error
 class SchedulerAppointments extends CollectionWidget {
-  sortedElementsMap: dxElementWrapper[] = [];
+  // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
+  renderedElementsBySortedIndex: dxElementWrapper[] = [];
 
   _appointmentClickTimeout: any;
 
@@ -131,8 +132,8 @@ class SchedulerAppointments extends CollectionWidget {
       const focusedItem = navigatableItems.filter('.dx-state-focused');
       let index = focusedItem.data(APPOINTMENT_SETTINGS_KEY).sortedIndex;
       let $nextAppointment = e.shiftKey
-        ? getPrevElement(index, this.sortedElementsMap)
-        : getNextElement(index, this.sortedElementsMap);
+        ? getPrevElement(index, this.renderedElementsBySortedIndex)
+        : getNextElement(index, this.renderedElementsBySortedIndex);
       const lastIndex = navigatableItems.length - 1;
 
       if ($nextAppointment || (index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
@@ -251,7 +252,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     const elementsInRenderOrder = previousValue
-      .map(({ sortedIndex }) => this.sortedElementsMap[sortedIndex]);
+      .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
     const diff = getViewModelDiff(previousValue, value);
     diff
       .filter((item) => !isNeedToAdd(item))
@@ -262,30 +263,14 @@ class SchedulerAppointments extends CollectionWidget {
     return diff;
   }
 
-  protected removeIrrelevantAppointments(): void {
-    const renderedItems = new Set(this.sortedElementsMap.map((item) => item[0]));
-    const existedItemsSet = [
-      ...this._getAppointmentContainer(true).children().toArray(),
-      ...this._getAppointmentContainer(false).children().toArray(),
-    ];
-    existedItemsSet.forEach((element) => {
-      if (!renderedItems.has(element)) {
-        const $element = $(element);
-        $element.detach();
-        $element.remove();
-      }
-    });
-  }
-
   _optionChanged(args) {
     switch (args.name) {
       case 'items': {
         (this as any)._cleanFocusState();
 
         const diff = this.getItemsDiff(args.previousValue, args.value);
-        this.sortedElementsMap = [];
+        this.renderedElementsBySortedIndex = [];
         this._repaintAppointments(diff);
-        this.removeIrrelevantAppointments();
 
         this._attachAppointmentsEvents();
         break;
@@ -356,7 +341,7 @@ class SchedulerAppointments extends CollectionWidget {
 
         if (item.element) {
           item.element.data(APPOINTMENT_SETTINGS_KEY, item.item);
-          this.sortedElementsMap[item.item.sortedIndex] = item.element;
+          this.renderedElementsBySortedIndex[item.item.sortedIndex] = item.element;
         }
       });
     });
@@ -567,7 +552,9 @@ class SchedulerAppointments extends CollectionWidget {
     const $item = super._renderItem(index, item.itemData, container);
 
     $item.data(APPOINTMENT_SETTINGS_KEY, item);
-    this.sortedElementsMap[item.sortedIndex] = $item;
+    if (item.sortedIndex !== -1) {
+      this.renderedElementsBySortedIndex[item.sortedIndex] = $item;
+    }
 
     return $item;
   }
@@ -1015,7 +1002,7 @@ class SchedulerAppointments extends CollectionWidget {
       cellWidth: this.invoke('getCellWidth'),
       isCompact: this.invoke('isAdaptive') || isGroupCompact,
     });
-    this.sortedElementsMap[appointment.sortedIndex] = $item;
+    this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
 
     return $item;
   }

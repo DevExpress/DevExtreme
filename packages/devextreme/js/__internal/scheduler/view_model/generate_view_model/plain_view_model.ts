@@ -1,17 +1,17 @@
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import type {
-  AgendaViewModelSettingsOld,
-  AppointmentViewModelOld,
-  AppointmentViewModelSettingsOld,
+  AgendaViewModelSettingsInternal,
+  AppointmentViewModelInternal,
+  AppointmentViewModelSettingsInternal,
 } from './types';
 
 export const plainViewModel = (
-  viewModel: AppointmentViewModelOld[],
-): (AppointmentViewModelSettingsOld & AgendaViewModelSettingsOld & {
+  viewModel: AppointmentViewModelInternal[],
+): (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal & {
   itemData: SafeAppointment;
 })[] => {
-  const result: (AppointmentViewModelSettingsOld & AgendaViewModelSettingsOld & {
+  const result: (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal & {
     itemData: SafeAppointment;
   })[] = [];
 

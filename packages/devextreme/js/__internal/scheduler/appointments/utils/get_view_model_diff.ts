@@ -6,24 +6,42 @@ import { getArraysDiff } from './get_arrays_diff';
 
 const getObjectToCompare = (
   item: AppointmentViewModelPlain,
-): Omit<AppointmentViewModelPlain, 'itemData' | 'info' | 'agendaSettings' | 'items'> & {
-  itemData: string;
-  info: false;
-  agendaSettings: false;
-  items: number;
-} => ({
-  ...item,
-  itemData: JSON.stringify(item.itemData),
-  info: false,
-  agendaSettings: false,
-  items: 'items' in item ? item.items.length : 0,
-  sortedIndex: 0,
-});
+): object => {
+  if ('agendaSettings' in item) {
+    return {};
+  }
+
+  if ('items' in item) {
+    return {
+      allDay: item.allDay,
+      groupIndex: item.groupIndex,
+      top: item.top,
+      left: item.left,
+      items: item.items.length,
+    };
+  }
+
+  return {
+    allDay: item.allDay,
+    groupIndex: item.groupIndex,
+    direction: item.direction,
+    left: item.left,
+    top: item.top,
+    height: item.height,
+    width: item.width,
+    reduced: item.reduced,
+    partIndex: item.partIndex,
+    partTotalCount: item.partTotalCount,
+    rowIndex: item.rowIndex,
+    columnIndex: item.columnIndex,
+  };
+};
 
 const compareViewModel = (
   x: AppointmentViewModelPlain,
   y: AppointmentViewModelPlain,
-): boolean => equalByValue(getObjectToCompare(x), getObjectToCompare(y));
+): boolean => x.itemData === y.itemData
+  && equalByValue(getObjectToCompare(x), getObjectToCompare(y));
 
 export const getViewModelDiff = (
   viewModelOld: AppointmentViewModelPlain[],

@@ -5,13 +5,13 @@ import { plainViewModel } from './plain_view_model';
 import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
-  AppointmentViewModelOld,
+  AppointmentViewModelInternal,
   AppointmentViewModelPlain,
-  AppointmentViewModelSettingsOld,
+  AppointmentViewModelSettingsInternal,
 } from './types';
 
 const cropSettingsProps = (
-  setting: AppointmentViewModelSettingsOld & {
+  setting: AppointmentViewModelSettingsInternal & {
     itemData: SafeAppointment;
   },
 ): AppointmentItemViewModel => ({
@@ -42,7 +42,7 @@ const cropSettingsProps = (
 
 const processVirtualAppointment = (
   virtualAppointments: Record<string, AppointmentCollectorViewModel>,
-  appointmentSetting: AppointmentViewModelSettingsOld & {
+  appointmentSetting: AppointmentViewModelSettingsInternal & {
     itemData: SafeAppointment;
   },
 ): void => {
@@ -69,7 +69,7 @@ const processVirtualAppointment = (
 };
 
 export const addCollector = (
-  viewModel: AppointmentViewModelOld[],
+  viewModel: AppointmentViewModelInternal[],
 ): AppointmentViewModelPlain[] => {
   const settings = plainViewModel(viewModel);
   const result: AppointmentViewModelPlain[] = [];

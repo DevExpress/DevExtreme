@@ -10,7 +10,7 @@ import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strate
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month_line';
 import VerticalAppointmentsStrategy from './rendering_strategies/m_strategy_vertical';
 import WeekAppointmentRenderingStrategy from './rendering_strategies/m_strategy_week';
-import type { AppointmentViewModelOld } from './types';
+import type { AppointmentViewModelInternal } from './types';
 
 const RENDERING_STRATEGIES: Record<RenderStrategyName, typeof BaseAppointmentsStrategy> = {
   horizontal: HorizontalAppointmentsStrategy,
@@ -62,7 +62,7 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModelOld[] {
+  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModelInternal[] {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -79,7 +79,7 @@ export class AppointmentViewModelGenerator {
           : 'horizontal';
       });
 
-      const item: AppointmentViewModelOld = {
+      const item: AppointmentViewModelInternal = {
         itemData: data,
         settings: appointmentSettings,
         needRepaint: true,
@@ -94,9 +94,9 @@ export class AppointmentViewModelGenerator {
   // because in this case it will break the refs (keys) of dataSource's appointments,
   // and it will break appointment updates :(
   private unshiftViewModelAppointmentsByViewOffset(
-    viewModel: AppointmentViewModelOld[],
+    viewModel: AppointmentViewModelInternal[],
     viewOffset: number,
-  ): AppointmentViewModelOld[] {
+  ): AppointmentViewModelInternal[] {
     const processedAppointments = new Set();
 
     // eslint-disable-next-line no-restricted-syntax
