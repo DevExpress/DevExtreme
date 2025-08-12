@@ -20,7 +20,6 @@ import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -45,10 +44,10 @@ import {
     ],
 })
 export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiCardViewTabbedItemComponent';
+    _dxClassName = 'DxiCardViewTabbedItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
     

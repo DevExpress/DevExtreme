@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartHeightComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChartHeightComponent';
+    _dxClassName = 'DxoChartHeightComponent';
 
     
     @Input()

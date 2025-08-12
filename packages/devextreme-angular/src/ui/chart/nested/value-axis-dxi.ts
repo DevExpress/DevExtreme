@@ -25,7 +25,6 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -52,18 +51,18 @@ import {
     ],
 })
 export class DxiChartValueAxisComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiChartValueAxisComponent';
+    _dxClassName = 'DxiChartValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('breaks', value);
     }
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
     

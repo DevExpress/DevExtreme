@@ -24,7 +24,7 @@ import { ChartAxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -44,10 +44,10 @@ import {
     ],
 })
 export class DxoRangeSelectorChartComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeSelectorChartComponent';
+    _dxClassName = 'DxoRangeSelectorChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
     

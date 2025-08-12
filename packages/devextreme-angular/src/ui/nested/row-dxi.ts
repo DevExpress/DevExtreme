@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_rows } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiRowComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiRowComponent';
+    _dxClassName = 'DxiRowComponent';
 
     
     @Input()

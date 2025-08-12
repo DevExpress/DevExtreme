@@ -23,24 +23,30 @@ export interface INestedOptionContainer {
 export type IOptionPathGetter = () => string;
 
 export const checkIncompatibleNestedItems = (
-  items: QueryList<ICollectionNestedOption>,
-  containerClassName,
-  legacyClassNames,
-) =>
-/*  if (console && console.warn) {
-    console.warn(`In ${containerClassName},
-          the nested ${itemClassName} and ${anotherItemClassName} components are incompatible.
+  items: QueryList<CollectionNestedOption>,
+  containerClassName: string,
+  legacyClassNames: string[],
+) => {
+  if (items.length > 0 && legacyClassNames.length > 0 && console && console.warn) {
+    const itemsLassNames = items.map((item) => item._dxClassName);
+    const itemLegacyClassName = itemsLassNames.find((itemClassName) => legacyClassNames.includes(itemClassName));
+    const itemClassName = itemsLassNames.find((itemClassName) => !legacyClassNames.includes(itemClassName));
+
+    if (itemLegacyClassName && itemClassName) {
+      console.warn(`In ${containerClassName},
+          the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
-  } */
-  false
-;
+
+      return true;
+    }
+  }
+  return false;
+};
 
 @Component({
   template: '',
 })
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
-  protected _dxClassName = 'BaseNestedOption';
-
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
@@ -50,17 +56,20 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   protected _initialOptions = {};
 
   protected abstract get _optionPath(): string;
+
+  _dxClassName = 'BaseNestedOption';
+  
   protected abstract _fullOptionPath(): string;
 
   constructor() {
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
   }
 
-  protected _setChildren(propertyName: string, items: QueryList<ICollectionNestedOption>) {
+  protected _setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
     const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
       items,
       this._dxClassName,
-      null,
+      [],
     );
 
     if (!hasIncopatibleNestedItems) {

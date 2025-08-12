@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFileManagerNotificationsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFileManagerNotificationsComponent';
+    _dxClassName = 'DxoFileManagerNotificationsComponent';
 
     
     @Input()

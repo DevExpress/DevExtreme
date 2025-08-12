@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDeferRenderingAtComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDeferRenderingAtComponent';
+    _dxClassName = 'DxoDeferRenderingAtComponent';
 
     
     @Input()

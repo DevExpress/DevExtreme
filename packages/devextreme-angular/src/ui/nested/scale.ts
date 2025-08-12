@@ -25,7 +25,7 @@ import { AxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -45,10 +45,10 @@ import {
     ],
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoScaleComponent';
+    _dxClassName = 'DxoScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('breaks', value);
     }
     

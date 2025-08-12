@@ -25,7 +25,7 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -46,14 +46,14 @@ import {
     ],
 })
 export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPolarChartValueAxisComponent';
+    _dxClassName = 'DxoPolarChartValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
     

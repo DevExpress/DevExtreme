@@ -21,7 +21,7 @@ import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoHtmlEditorToolbarComponent';
+    _dxClassName = 'DxoHtmlEditorToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

@@ -43,7 +43,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoConverterModule } from 'devextreme-angular/ui/nested';
@@ -108,25 +108,25 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxHtmlEditorComponent';
+    _dxClassName = 'DxHtmlEditorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_mentions)
-    set _mentionsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _mentionsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('mentions', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 
@@ -900,20 +900,11 @@ protected _dxClassName = 'DxHtmlEditorComponent';
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('mentions').push('DxiMentionComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "mentions": [
+  "DxiMentionComponent"
+ ]
+};
 
 
 

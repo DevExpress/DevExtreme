@@ -73,7 +73,7 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
-protected _dxClassName = 'DxDeferRenderingComponent';
+    _dxClassName = 'DxDeferRenderingComponent';
 
     instance: DxDeferRendering = null;
 

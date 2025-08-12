@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiGanttColumnComponent';
+    _dxClassName = 'DxiGanttColumnComponent';
 
     
     @Input()

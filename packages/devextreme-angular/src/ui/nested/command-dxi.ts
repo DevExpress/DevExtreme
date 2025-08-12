@@ -18,7 +18,7 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
 
@@ -52,10 +52,10 @@ import {
     ]
 })
 export class DxiCommandComponent extends DxiDiagramCustomCommand {
-    protected _dxClassName = 'DxiCommandComponent';
+    _dxClassName = 'DxiCommandComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

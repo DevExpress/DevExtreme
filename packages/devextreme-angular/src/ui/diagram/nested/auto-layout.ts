@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDiagramAutoLayoutComponent';
+    _dxClassName = 'DxoDiagramAutoLayoutComponent';
 
     
     @Input()

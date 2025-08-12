@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChatMessageTimestampFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChatMessageTimestampFormatComponent';
+    _dxClassName = 'DxoChatMessageTimestampFormatComponent';
 
     
     @Input()

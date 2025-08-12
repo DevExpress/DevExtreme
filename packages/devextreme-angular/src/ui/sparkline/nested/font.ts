@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSparklineFontComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSparklineFontComponent';
+    _dxClassName = 'DxoSparklineFontComponent';
 
     
     @Input()

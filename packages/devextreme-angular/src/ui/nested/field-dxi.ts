@@ -52,7 +52,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiFieldComponent extends DxiFilterBuilderField {
-    protected _dxClassName = 'DxiFieldComponent';
+    _dxClassName = 'DxiFieldComponent';
 
     
 

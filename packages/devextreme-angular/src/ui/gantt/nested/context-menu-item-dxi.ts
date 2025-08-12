@@ -28,7 +28,6 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -54,10 +53,10 @@ import {
 })
 export class DxiGanttContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiGanttContextMenuItemComponent';
+    _dxClassName = 'DxiGanttContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

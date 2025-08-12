@@ -38,7 +38,7 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
     ]
 })
 export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoVariablesComponent';
+    _dxClassName = 'DxoVariablesComponent';
 
     
 

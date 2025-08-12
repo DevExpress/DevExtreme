@@ -43,7 +43,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -255,40 +255,40 @@ import {
     ]
 })
 export class DxChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxChartComponent';
+    _dxClassName = 'DxChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('breaks', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_panes)
-    set _panesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _panesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('panes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_valueAxis)
-    set _valueAxisNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _valueAxisNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('valueAxis', value);
     }
 
@@ -1484,26 +1484,20 @@ protected _dxClassName = 'DxChartComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
-    
-        getLegacyClassNamesForPropertyName('panes').push('DxiPaneComponent');
-    
-        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
-    
-        getLegacyClassNamesForPropertyName('valueAxis').push('DxiValueAxisComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "annotations": [
+  "DxiAnnotationComponent"
+ ],
+ "panes": [
+  "DxiPaneComponent"
+ ],
+ "series": [
+  "DxiSeriesComponent"
+ ],
+ "valueAxis": [
+  "DxiValueAxisComponent"
+ ]
+};
 
 
 

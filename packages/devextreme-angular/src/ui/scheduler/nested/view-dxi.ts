@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiSchedulerViewComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiSchedulerViewComponent';
+    _dxClassName = 'DxiSchedulerViewComponent';
 
     
     @Input()

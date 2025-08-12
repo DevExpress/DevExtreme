@@ -28,7 +28,6 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -54,18 +53,18 @@ import {
     ],
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiTreeListColumnComponent';
+    _dxClassName = 'DxiTreeListColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
     

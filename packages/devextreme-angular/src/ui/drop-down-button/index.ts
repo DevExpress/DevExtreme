@@ -40,7 +40,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -97,15 +97,15 @@ import {
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxDropDownButtonComponent';
+    _dxClassName = 'DxDropDownButtonComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 
@@ -849,20 +849,11 @@ protected _dxClassName = 'DxDropDownButtonComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "items": [
+  "DxiItemComponent"
+ ]
+};
 
 
 

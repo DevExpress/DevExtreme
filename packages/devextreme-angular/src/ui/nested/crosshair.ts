@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCrosshairComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoCrosshairComponent';
+    _dxClassName = 'DxoCrosshairComponent';
 
     
     @Input()

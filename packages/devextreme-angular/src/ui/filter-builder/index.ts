@@ -41,7 +41,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -90,15 +90,15 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxFilterBuilderComponent';
+    _dxClassName = 'DxFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customOperations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _fieldsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fields', value);
     }
 
@@ -572,22 +572,14 @@ protected _dxClassName = 'DxFilterBuilderComponent';
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('customOperations').push('DxiCustomOperationComponent');
-    
-        getLegacyClassNamesForPropertyName('fields').push('DxiFieldComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "customOperations": [
+  "DxiCustomOperationComponent"
+ ],
+ "fields": [
+  "DxiFieldComponent"
+ ]
+};
 
 
 

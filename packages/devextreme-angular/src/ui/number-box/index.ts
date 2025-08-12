@@ -43,7 +43,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -85,10 +85,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxNumberBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxNumberBoxComponent';
+    _dxClassName = 'DxNumberBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
@@ -1006,20 +1006,11 @@ protected _dxClassName = 'DxNumberBoxComponent';
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "buttons": [
+  "DxiButtonComponent"
+ ]
+};
 
 
 

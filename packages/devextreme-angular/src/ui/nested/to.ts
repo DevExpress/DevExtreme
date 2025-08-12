@@ -41,7 +41,7 @@ import { DxoAnimationState } from './base/animation-state';
     ]
 })
 export class DxoToComponent extends DxoAnimationState implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoToComponent';
+    _dxClassName = 'DxoToComponent';
 
     
 

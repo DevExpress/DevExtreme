@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTreeListColCountByScreenComponent';
+    _dxClassName = 'DxoTreeListColCountByScreenComponent';
 
     
     @Input()

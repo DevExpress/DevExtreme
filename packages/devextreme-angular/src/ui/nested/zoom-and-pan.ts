@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoZoomAndPanComponent';
+    _dxClassName = 'DxoZoomAndPanComponent';
 
     
     @Input()

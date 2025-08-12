@@ -27,7 +27,6 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -54,10 +53,10 @@ import {
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiCustomShapeComponent';
+    _dxClassName = 'DxiCustomShapeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('connectionPoints', value);
     }
     

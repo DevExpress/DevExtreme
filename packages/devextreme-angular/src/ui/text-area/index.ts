@@ -72,7 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextAreaComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxTextAreaComponent';
+    _dxClassName = 'DxTextAreaComponent';
 
     instance: DxTextArea = null;
 

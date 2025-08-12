@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridValueFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDataGridValueFormatComponent';
+    _dxClassName = 'DxoDataGridValueFormatComponent';
 
     
     @Input()

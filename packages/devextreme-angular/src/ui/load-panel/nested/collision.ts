@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLoadPanelCollisionComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoLoadPanelCollisionComponent';
+    _dxClassName = 'DxoLoadPanelCollisionComponent';
 
     
     @Input()

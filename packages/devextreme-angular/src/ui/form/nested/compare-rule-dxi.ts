@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFormCompareRuleComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiFormCompareRuleComponent';
+    _dxClassName = 'DxiFormCompareRuleComponent';
 
     
     @Input()

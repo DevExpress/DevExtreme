@@ -41,7 +41,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
@@ -119,20 +119,20 @@ import {
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxVectorMapComponent';
+    _dxClassName = 'DxVectorMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_layers)
-    set _layersNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _layersNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('layers', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_legends)
-    set _legendsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _legendsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('legends', value);
     }
 
@@ -792,24 +792,17 @@ protected _dxClassName = 'DxVectorMapComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
-    
-        getLegacyClassNamesForPropertyName('layers').push('DxiLayerComponent');
-    
-        getLegacyClassNamesForPropertyName('legends').push('DxiLegendComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "annotations": [
+  "DxiAnnotationComponent"
+ ],
+ "layers": [
+  "DxiLayerComponent"
+ ],
+ "legends": [
+  "DxiLegendComponent"
+ ]
+};
 
 
 

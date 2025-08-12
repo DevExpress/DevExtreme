@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiDataGridTotalItemComponent';
+    _dxClassName = 'DxiDataGridTotalItemComponent';
 
     
     @Input()

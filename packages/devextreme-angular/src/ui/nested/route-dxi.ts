@@ -19,7 +19,6 @@ import { RouteMode } from 'devextreme/ui/map';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -44,10 +43,10 @@ import {
     ],
 })
 export class DxiRouteComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiRouteComponent';
+    _dxClassName = 'DxiRouteComponent';
 
     @ContentChildren(PROPERTY_TOKEN_locations)
-    set _locationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _locationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('locations', value);
     }
     

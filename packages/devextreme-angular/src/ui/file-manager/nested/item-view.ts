@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFileManagerItemViewComponent';
+    _dxClassName = 'DxoFileManagerItemViewComponent';
 
     
     @Input()

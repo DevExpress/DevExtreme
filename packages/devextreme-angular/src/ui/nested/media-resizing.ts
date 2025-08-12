@@ -38,7 +38,7 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
     ]
 })
 export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoMediaResizingComponent';
+    _dxClassName = 'DxoMediaResizingComponent';
 
     
 

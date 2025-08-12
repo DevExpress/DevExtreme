@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridIconsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDataGridIconsComponent';
+    _dxClassName = 'DxoDataGridIconsComponent';
 
     
     @Input()

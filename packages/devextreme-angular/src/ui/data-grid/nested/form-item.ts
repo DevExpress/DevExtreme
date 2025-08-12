@@ -31,7 +31,7 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -53,10 +53,10 @@ import {
 })
 export class DxoDataGridFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoDataGridFormItemComponent';
+    _dxClassName = 'DxoDataGridFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     

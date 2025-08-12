@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiCardViewButtonItemComponent';
+    _dxClassName = 'DxiCardViewButtonItemComponent';
 
     
     @Input()

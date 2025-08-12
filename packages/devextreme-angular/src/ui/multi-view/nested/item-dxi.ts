@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiMultiViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiMultiViewItemComponent';
+    _dxClassName = 'DxiMultiViewItemComponent';
 
     
     @Input()

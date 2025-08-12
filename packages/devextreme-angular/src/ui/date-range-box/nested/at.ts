@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateRangeBoxAtComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDateRangeBoxAtComponent';
+    _dxClassName = 'DxoDateRangeBoxAtComponent';
 
     
     @Input()

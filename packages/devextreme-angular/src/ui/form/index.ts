@@ -36,7 +36,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
@@ -96,20 +96,20 @@ import {
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxFormComponent';
+    _dxClassName = 'DxFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 
@@ -845,20 +845,11 @@ protected _dxClassName = 'DxFormComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "items": [
+  "DxiItemComponent"
+ ]
+};
 
 
 

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChatTypingUserComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiChatTypingUserComponent';
+    _dxClassName = 'DxiChatTypingUserComponent';
 
     
     @Input()

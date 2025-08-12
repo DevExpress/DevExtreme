@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapFontComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoVectorMapFontComponent';
+    _dxClassName = 'DxoVectorMapFontComponent';
 
     
     @Input()

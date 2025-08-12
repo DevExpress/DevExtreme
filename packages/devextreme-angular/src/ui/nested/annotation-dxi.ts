@@ -75,7 +75,7 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
-    protected _dxClassName = 'DxiAnnotationComponent';
+    _dxClassName = 'DxiAnnotationComponent';
 
     
 

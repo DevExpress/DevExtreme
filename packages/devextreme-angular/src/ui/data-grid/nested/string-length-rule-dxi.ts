@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiDataGridStringLengthRuleComponent';
+    _dxClassName = 'DxiDataGridStringLengthRuleComponent';
 
     
     @Input()

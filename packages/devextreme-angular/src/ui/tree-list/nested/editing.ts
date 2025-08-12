@@ -27,7 +27,7 @@ import { dxPopupOptions } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -47,10 +47,10 @@ import {
     ],
 })
 export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTreeListEditingComponent';
+    _dxClassName = 'DxoTreeListEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _changesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('changes', value);
     }
     

@@ -42,7 +42,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -194,25 +194,25 @@ import {
     ]
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxPolarChartComponent';
+    _dxClassName = 'DxPolarChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
 
@@ -1148,22 +1148,14 @@ protected _dxClassName = 'DxPolarChartComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
-    
-        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "annotations": [
+  "DxiAnnotationComponent"
+ ],
+ "series": [
+  "DxiSeriesComponent"
+ ]
+};
 
 
 

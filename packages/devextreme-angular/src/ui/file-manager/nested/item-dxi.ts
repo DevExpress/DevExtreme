@@ -21,7 +21,6 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -45,10 +44,10 @@ import {
     ],
 })
 export class DxiFileManagerItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiFileManagerItemComponent';
+    _dxClassName = 'DxiFileManagerItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

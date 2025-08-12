@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPivotGridPivotGridTextsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPivotGridPivotGridTextsComponent';
+    _dxClassName = 'DxoPivotGridPivotGridTextsComponent';
 
     
     @Input()

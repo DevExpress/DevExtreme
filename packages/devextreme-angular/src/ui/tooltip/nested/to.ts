@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTooltipToComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTooltipToComponent';
+    _dxClassName = 'DxoTooltipToComponent';
 
     
     @Input()

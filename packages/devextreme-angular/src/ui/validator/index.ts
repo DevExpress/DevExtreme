@@ -39,7 +39,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
@@ -81,10 +81,10 @@ import {
     ]
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxValidatorComponent';
+    _dxClassName = 'DxValidatorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 
@@ -264,20 +264,11 @@ protected _dxClassName = 'DxValidatorComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('validationRules').push('DxiValidationRuleComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "validationRules": [
+  "DxiValidationRuleComponent"
+ ]
+};
 
 
 

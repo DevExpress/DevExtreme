@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChartTooltipComponent';
+    _dxClassName = 'DxoChartTooltipComponent';
 
     
     @Input()

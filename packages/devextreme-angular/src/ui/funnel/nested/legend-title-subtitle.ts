@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFunnelLegendTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFunnelLegendTitleSubtitleComponent';
+    _dxClassName = 'DxoFunnelLegendTitleSubtitleComponent';
 
     
     @Input()

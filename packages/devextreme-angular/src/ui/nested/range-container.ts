@@ -23,7 +23,7 @@ import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -43,10 +43,10 @@ import {
     ],
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeContainerComponent';
+    _dxClassName = 'DxoRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('ranges', value);
     }
     

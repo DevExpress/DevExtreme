@@ -35,7 +35,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
@@ -81,20 +81,20 @@ import {
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxMapComponent';
+    _dxClassName = 'DxMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_markers)
-    set _markersNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _markersNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('markers', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_routes)
-    set _routesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _routesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('routes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_locations)
-    set _locationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _locationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('locations', value);
     }
 
@@ -634,24 +634,17 @@ protected _dxClassName = 'DxMapComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('center').push('DxiCenterComponent');
-    
-        getLegacyClassNamesForPropertyName('markers').push('DxiMarkerComponent');
-    
-        getLegacyClassNamesForPropertyName('routes').push('DxiRouteComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "center": [
+  "DxiCenterComponent"
+ ],
+ "markers": [
+  "DxiMarkerComponent"
+ ],
+ "routes": [
+  "DxiRouteComponent"
+ ]
+};
 
 
 

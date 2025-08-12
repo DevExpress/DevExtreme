@@ -21,7 +21,7 @@ import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'd
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoToolboxComponent';
+    _dxClassName = 'DxoToolboxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groups', value);
     }
     

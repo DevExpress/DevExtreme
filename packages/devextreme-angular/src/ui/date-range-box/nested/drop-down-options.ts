@@ -31,7 +31,7 @@ import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -51,10 +51,10 @@ import {
     ],
 })
 export class DxoDateRangeBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDateRangeBoxDropDownOptionsComponent';
+    _dxClassName = 'DxoDateRangeBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
     

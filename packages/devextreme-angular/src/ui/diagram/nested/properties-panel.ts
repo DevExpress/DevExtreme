@@ -21,7 +21,7 @@ import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDiagramPropertiesPanelComponent';
+    _dxClassName = 'DxoDiagramPropertiesPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
     

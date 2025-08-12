@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartCommonSeriesSettingsHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChartCommonSeriesSettingsHoverStyleComponent';
+    _dxClassName = 'DxoChartCommonSeriesSettingsHoverStyleComponent';
 
     
     @Input()

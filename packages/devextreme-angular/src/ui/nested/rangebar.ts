@@ -97,7 +97,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoRangebarComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangebarComponent';
+    _dxClassName = 'DxoRangebarComponent';
 
     
 

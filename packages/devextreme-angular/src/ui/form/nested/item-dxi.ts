@@ -31,7 +31,6 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -59,18 +58,18 @@ import {
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiFormItemComponent';
+    _dxClassName = 'DxiFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

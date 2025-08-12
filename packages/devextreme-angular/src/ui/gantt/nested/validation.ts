@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGanttValidationComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoGanttValidationComponent';
+    _dxClassName = 'DxoGanttValidationComponent';
 
     
     @Input()

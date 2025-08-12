@@ -48,7 +48,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiDropDownButtonItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiDropDownButtonItemComponent';
+    _dxClassName = 'DxiDropDownButtonItemComponent';
 
     
     @Input()

@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiFilterBuilderFieldComponent';
+    _dxClassName = 'DxiFilterBuilderFieldComponent';
 
     
     @Input()

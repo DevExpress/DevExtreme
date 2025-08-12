@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChatDayHeaderFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChatDayHeaderFormatComponent';
+    _dxClassName = 'DxoChatDayHeaderFormatComponent';
 
     
     @Input()

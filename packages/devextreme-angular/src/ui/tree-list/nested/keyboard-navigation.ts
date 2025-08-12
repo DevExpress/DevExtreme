@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTreeListKeyboardNavigationComponent';
+    _dxClassName = 'DxoTreeListKeyboardNavigationComponent';
 
     
     @Input()

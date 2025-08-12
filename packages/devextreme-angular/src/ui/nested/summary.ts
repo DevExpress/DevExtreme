@@ -23,7 +23,7 @@ import { SummaryType } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -44,14 +44,14 @@ import {
     ],
 })
 export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSummaryComponent';
+    _dxClassName = 'DxoSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
-    set _groupItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _groupItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groupItems', value);
     }
     @ContentChildren(PROPERTY_TOKEN_totalItems)
-    set _totalItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _totalItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('totalItems', value);
     }
     

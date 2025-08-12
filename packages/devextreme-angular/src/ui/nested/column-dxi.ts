@@ -22,7 +22,7 @@ import { SelectedFilterOperation } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
 
@@ -113,18 +113,18 @@ import {
     ]
 })
 export class DxiColumnComponent extends DxiDataGridColumn {
-    protected _dxClassName = 'DxiColumnComponent';
+    _dxClassName = 'DxiColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     

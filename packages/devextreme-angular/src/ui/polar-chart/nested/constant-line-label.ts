@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPolarChartConstantLineLabelComponent';
+    _dxClassName = 'DxoPolarChartConstantLineLabelComponent';
 
     
     @Input()

@@ -21,7 +21,7 @@ import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDetailsComponent';
+    _dxClassName = 'DxoDetailsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
     

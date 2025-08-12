@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoGroupingComponent';
+    _dxClassName = 'DxoGroupingComponent';
 
     
     @Input()

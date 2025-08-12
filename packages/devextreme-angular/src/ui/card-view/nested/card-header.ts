@@ -29,7 +29,7 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -51,10 +51,10 @@ import {
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoCardViewCardHeaderComponent';
+    _dxClassName = 'DxoCardViewCardHeaderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

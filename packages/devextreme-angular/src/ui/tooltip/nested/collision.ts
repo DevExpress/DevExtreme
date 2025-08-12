@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTooltipCollisionComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTooltipCollisionComponent';
+    _dxClassName = 'DxoTooltipCollisionComponent';
 
     
     @Input()

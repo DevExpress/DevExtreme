@@ -50,7 +50,7 @@ import { DxoAnimationConfig } from './base/animation-config';
     ]
 })
 export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoAnimationComponent';
+    _dxClassName = 'DxoAnimationComponent';
 
     
 

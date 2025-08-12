@@ -72,7 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSwitchComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxSwitchComponent';
+    _dxClassName = 'DxSwitchComponent';
 
     instance: DxSwitch = null;
 

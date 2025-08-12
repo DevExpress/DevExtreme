@@ -67,7 +67,7 @@ import { DxoSortableOptions } from './base/sortable-options';
     ]
 })
 export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoItemDraggingComponent';
+    _dxClassName = 'DxoItemDraggingComponent';
 
     
 

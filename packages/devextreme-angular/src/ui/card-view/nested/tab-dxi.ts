@@ -48,7 +48,7 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiCardViewTabComponent';
+    _dxClassName = 'DxiCardViewTabComponent';
 
     
     @Input()

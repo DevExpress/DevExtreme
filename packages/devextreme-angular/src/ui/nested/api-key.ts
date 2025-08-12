@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoApiKeyComponent';
+    _dxClassName = 'DxoApiKeyComponent';
 
     
     @Input()

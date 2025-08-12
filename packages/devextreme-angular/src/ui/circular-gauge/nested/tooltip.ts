@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCircularGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoCircularGaugeTooltipComponent';
+    _dxClassName = 'DxoCircularGaugeTooltipComponent';
 
     
     @Input()

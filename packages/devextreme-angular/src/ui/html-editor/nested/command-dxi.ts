@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_commands } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiHtmlEditorCommandComponent';
+    _dxClassName = 'DxiHtmlEditorCommandComponent';
 
     
     @Input()

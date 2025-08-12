@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeListNumericRuleComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiTreeListNumericRuleComponent';
+    _dxClassName = 'DxiTreeListNumericRuleComponent';
 
     
     @Input()

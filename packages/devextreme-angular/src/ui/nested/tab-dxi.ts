@@ -26,7 +26,7 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
 
@@ -70,18 +70,18 @@ import {
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiTabComponent';
+    _dxClassName = 'DxiTabComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groups', value);
     }
     

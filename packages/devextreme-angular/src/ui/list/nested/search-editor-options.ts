@@ -24,7 +24,7 @@ import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, Dispo
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -44,10 +44,10 @@ import {
     ],
 })
 export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoListSearchEditorOptionsComponent';
+    _dxClassName = 'DxoListSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
     

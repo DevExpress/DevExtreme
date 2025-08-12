@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_location } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiResponsiveBoxLocationComponent';
+    _dxClassName = 'DxiResponsiveBoxLocationComponent';
 
     
     @Input()

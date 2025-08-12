@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSankeyTooltipComponent';
+    _dxClassName = 'DxoSankeyTooltipComponent';
 
     
     @Input()

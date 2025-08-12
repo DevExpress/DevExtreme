@@ -44,7 +44,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 
@@ -151,40 +151,40 @@ import {
     ]
 })
 export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxCardViewComponent';
+    _dxClassName = 'DxCardViewComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _changesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('changes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customOperations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _fieldsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fields', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 

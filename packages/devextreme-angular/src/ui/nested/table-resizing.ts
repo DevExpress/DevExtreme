@@ -39,7 +39,7 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
     ]
 })
 export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTableResizingComponent';
+    _dxClassName = 'DxoTableResizingComponent';
 
     
 

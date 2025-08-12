@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoContextMenuDelayComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoContextMenuDelayComponent';
+    _dxClassName = 'DxoContextMenuDelayComponent';
 
     
     @Input()

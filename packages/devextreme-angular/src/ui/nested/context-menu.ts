@@ -20,7 +20,7 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
 
@@ -46,14 +46,14 @@ import {
     ]
 })
 export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoContextMenuComponent';
+    _dxClassName = 'DxoContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

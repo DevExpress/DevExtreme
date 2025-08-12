@@ -41,7 +41,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -135,15 +135,15 @@ import {
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxPieChartComponent';
+    _dxClassName = 'DxPieChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 
@@ -991,22 +991,14 @@ protected _dxClassName = 'DxPieChartComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
-    
-        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "annotations": [
+  "DxiAnnotationComponent"
+ ],
+ "series": [
+  "DxiSeriesComponent"
+ ]
+};
 
 
 

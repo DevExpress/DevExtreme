@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiFileSelectionItemComponent extends DxiFileManagerToolbarItem {
-    protected _dxClassName = 'DxiFileSelectionItemComponent';
+    _dxClassName = 'DxiFileSelectionItemComponent';
 
     
 

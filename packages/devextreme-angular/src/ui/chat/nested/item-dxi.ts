@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChatItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiChatItemComponent';
+    _dxClassName = 'DxiChatItemComponent';
 
     
     @Input()

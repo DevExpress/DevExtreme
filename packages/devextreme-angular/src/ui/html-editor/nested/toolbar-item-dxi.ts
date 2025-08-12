@@ -29,7 +29,6 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -56,10 +55,10 @@ import {
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
+    _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
     

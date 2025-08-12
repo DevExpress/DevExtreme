@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartLegendTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPolarChartLegendTitleSubtitleComponent';
+    _dxClassName = 'DxoPolarChartLegendTitleSubtitleComponent';
 
     
     @Input()

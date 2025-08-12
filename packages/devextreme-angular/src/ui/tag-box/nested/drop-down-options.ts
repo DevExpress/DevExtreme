@@ -31,7 +31,7 @@ import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -51,10 +51,10 @@ import {
     ],
 })
 export class DxoTagBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTagBoxDropDownOptionsComponent';
+    _dxClassName = 'DxoTagBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
     

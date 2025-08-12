@@ -40,7 +40,7 @@ import { DxoUser } from './base/user';
     ]
 })
 export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoAuthorComponent';
+    _dxClassName = 'DxoAuthorComponent';
 
     
 

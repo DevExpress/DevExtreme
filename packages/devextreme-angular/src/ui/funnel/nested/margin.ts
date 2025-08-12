@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFunnelMarginComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFunnelMarginComponent';
+    _dxClassName = 'DxoFunnelMarginComponent';
 
     
     @Input()

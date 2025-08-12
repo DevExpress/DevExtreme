@@ -18,7 +18,6 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -43,10 +42,10 @@ import {
     ],
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiMarkerComponent';
+    _dxClassName = 'DxiMarkerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _locationNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('location', value);
     }
     

@@ -42,7 +42,7 @@ import { DxoFormat } from './base/format';
     ]
 })
 export class DxoDayHeaderFormatComponent extends DxoFormat implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDayHeaderFormatComponent';
+    _dxClassName = 'DxoDayHeaderFormatComponent';
 
     
 

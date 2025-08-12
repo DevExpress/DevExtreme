@@ -40,7 +40,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAlertModule } from 'devextreme-angular/ui/nested';
@@ -87,20 +87,20 @@ import {
     ]
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxChatComponent';
+    _dxClassName = 'DxChatComponent';
 
     @ContentChildren(PROPERTY_TOKEN_alerts)
-    set _alertsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _alertsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('alerts', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_typingUsers)
-    set _typingUsersNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _typingUsersNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('typingUsers', value);
     }
 
@@ -704,24 +704,17 @@ protected _dxClassName = 'DxChatComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('alerts').push('DxiAlertComponent');
-    
-        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
-    
-        getLegacyClassNamesForPropertyName('typingUsers').push('DxiTypingUserComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "alerts": [
+  "DxiAlertComponent"
+ ],
+ "items": [
+  "DxiItemComponent"
+ ],
+ "typingUsers": [
+  "DxiTypingUserComponent"
+ ]
+};
 
 
 

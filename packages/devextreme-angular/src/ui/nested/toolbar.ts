@@ -20,7 +20,7 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoDataGridToolbar } from './base/data-grid-toolbar';
 
@@ -49,14 +49,14 @@ import {
     ]
 })
 export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoToolbarComponent';
+    _dxClassName = 'DxoToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
-    set _fileSelectionItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _fileSelectionItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fileSelectionItems', value);
     }
     

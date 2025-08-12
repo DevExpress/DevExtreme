@@ -23,7 +23,7 @@ import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
 
@@ -67,10 +67,10 @@ import {
     ]
 })
 export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoBoxComponent';
+    _dxClassName = 'DxoBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

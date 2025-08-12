@@ -39,7 +39,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColModule } from 'devextreme-angular/ui/nested';
@@ -79,25 +79,25 @@ import {
     ]
 })
 export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxResponsiveBoxComponent';
+    _dxClassName = 'DxResponsiveBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_cols)
-    set _colsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _colsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('cols', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _locationNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('location', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_rows)
-    set _rowsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _rowsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('rows', value);
     }
 
@@ -469,24 +469,17 @@ protected _dxClassName = 'DxResponsiveBoxComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('cols').push('DxiColComponent');
-    
-        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
-    
-        getLegacyClassNamesForPropertyName('rows').push('DxiRowComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "cols": [
+  "DxiColComponent"
+ ],
+ "items": [
+  "DxiItemComponent"
+ ],
+ "rows": [
+  "DxiRowComponent"
+ ]
+};
 
 
 

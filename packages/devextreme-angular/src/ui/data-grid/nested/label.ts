@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoDataGridLabelComponent';
+    _dxClassName = 'DxoDataGridLabelComponent';
 
     
     @Input()

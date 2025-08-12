@@ -44,7 +44,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoMasterDetailComponent';
+    _dxClassName = 'DxoMasterDetailComponent';
 
     
     @Input()

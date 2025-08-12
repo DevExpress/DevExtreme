@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorMarkerLabelComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeSelectorMarkerLabelComponent';
+    _dxClassName = 'DxoRangeSelectorMarkerLabelComponent';
 
     
     @Input()

@@ -25,7 +25,7 @@ import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -45,10 +45,10 @@ import {
     ],
 })
 export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSchedulerOptionsComponent';
+    _dxClassName = 'DxoSchedulerOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

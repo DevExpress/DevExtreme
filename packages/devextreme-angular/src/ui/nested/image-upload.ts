@@ -20,7 +20,7 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorImageUpload } from './base/html-editor-image-upload';
 
@@ -47,10 +47,10 @@ import {
     ]
 })
 export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoImageUploadComponent';
+    _dxClassName = 'DxoImageUploadComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
     

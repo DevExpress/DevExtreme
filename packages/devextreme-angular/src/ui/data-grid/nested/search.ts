@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridSearchComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDataGridSearchComponent';
+    _dxClassName = 'DxoDataGridSearchComponent';
 
     
     @Input()

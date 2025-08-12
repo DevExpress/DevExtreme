@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorMaxRangeComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeSelectorMaxRangeComponent';
+    _dxClassName = 'DxoRangeSelectorMaxRangeComponent';
 
     
     @Input()

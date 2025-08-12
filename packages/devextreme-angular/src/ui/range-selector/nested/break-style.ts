@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorBreakStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeSelectorBreakStyleComponent';
+    _dxClassName = 'DxoRangeSelectorBreakStyleComponent';
 
     
     @Input()

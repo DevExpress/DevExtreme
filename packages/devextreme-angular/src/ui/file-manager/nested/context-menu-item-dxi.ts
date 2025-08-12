@@ -19,7 +19,6 @@ import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } fr
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -43,10 +42,10 @@ import {
     ],
 })
 export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiFileManagerContextMenuItemComponent';
+    _dxClassName = 'DxiFileManagerContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

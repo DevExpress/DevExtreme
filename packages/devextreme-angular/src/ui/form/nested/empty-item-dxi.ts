@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiFormEmptyItemComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiFormEmptyItemComponent';
+    _dxClassName = 'DxiFormEmptyItemComponent';
 
     
     @Input()

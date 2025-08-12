@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoColorizerComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoColorizerComponent';
+    _dxClassName = 'DxoColorizerComponent';
 
     
     @Input()

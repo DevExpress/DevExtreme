@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorShutterComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoRangeSelectorShutterComponent';
+    _dxClassName = 'DxoRangeSelectorShutterComponent';
 
     
     @Input()

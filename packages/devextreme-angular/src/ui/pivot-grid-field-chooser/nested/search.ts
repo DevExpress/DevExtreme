@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPivotGridFieldChooserSearchComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPivotGridFieldChooserSearchComponent';
+    _dxClassName = 'DxoPivotGridFieldChooserSearchComponent';
 
     
     @Input()

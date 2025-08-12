@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoConstantLineStyleComponent';
+    _dxClassName = 'DxoConstantLineStyleComponent';
 
     
     @Input()

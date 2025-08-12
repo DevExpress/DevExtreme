@@ -21,7 +21,7 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoHistoryToolbarComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoHistoryToolbarComponent';
+    _dxClassName = 'DxoHistoryToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
     

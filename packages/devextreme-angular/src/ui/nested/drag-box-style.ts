@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDragBoxStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDragBoxStyleComponent';
+    _dxClassName = 'DxoDragBoxStyleComponent';
 
     
     @Input()

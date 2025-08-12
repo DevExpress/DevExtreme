@@ -39,7 +39,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -117,10 +117,10 @@ import {
     ]
 })
 export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxCircularGaugeComponent';
+    _dxClassName = 'DxCircularGaugeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('ranges', value);
     }
 

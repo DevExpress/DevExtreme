@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoIconsComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoIconsComponent';
+    _dxClassName = 'DxoIconsComponent';
 
     
     @Input()

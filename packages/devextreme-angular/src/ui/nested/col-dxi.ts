@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_cols } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiColComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiColComponent';
+    _dxClassName = 'DxiColComponent';
 
     
     @Input()

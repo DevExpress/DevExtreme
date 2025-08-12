@@ -97,7 +97,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoFullstackedlineComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFullstackedlineComponent';
+    _dxClassName = 'DxoFullstackedlineComponent';
 
     
 

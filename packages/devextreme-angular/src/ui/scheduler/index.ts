@@ -43,7 +43,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
@@ -89,20 +89,20 @@ import {
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxSchedulerComponent';
+    _dxClassName = 'DxSchedulerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_resources)
-    set _resourcesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _resourcesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('resources', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_views)
-    set _viewsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _viewsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('views', value);
     }
 
@@ -1476,22 +1476,14 @@ protected _dxClassName = 'DxSchedulerComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('resources').push('DxiResourceComponent');
-    
-        getLegacyClassNamesForPropertyName('views').push('DxiViewComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "resources": [
+  "DxiResourceComponent"
+ ],
+ "views": [
+  "DxiViewComponent"
+ ]
+};
 
 
 

@@ -38,7 +38,7 @@ import {
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
   checkIncompatibleNestedItems,
-
+  CollectionNestedOption,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -63,13 +63,15 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
-  protected _dxClassName = 'DxComponent';
-
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
+  
+  protected _legacyNestedClassNames: Record<string, any> = {};
+
+  protected _dxClassName = 'DxComponent';
 
   eventHelper: EmitterHelper;
 
@@ -91,11 +93,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   templateUpdateRequired = false;
 
-  protected _setChildren(propertyName: string, items: QueryList<ICollectionNestedOption>) {
+  protected _setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
     const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
       items,
       this._dxClassName,
-      this.getLegacyClassNames()[propertyName],
+      this._legacyNestedClassNames[propertyName],
     );
 
     if (!hasIncopatibleNestedItems) {
@@ -315,8 +317,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templates.push(template);
     this.templateUpdateRequired = true;
   }
-
-  protected getLegacyClassNames: () => Record<string, string[]> = () => ({});
 
   setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapControlBarComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoVectorMapControlBarComponent';
+    _dxClassName = 'DxoVectorMapControlBarComponent';
 
     
     @Input()

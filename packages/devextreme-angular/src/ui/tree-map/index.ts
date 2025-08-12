@@ -103,7 +103,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     ]
 })
 export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxTreeMapComponent';
+    _dxClassName = 'DxTreeMapComponent';
 
     instance: DxTreeMap = null;
 

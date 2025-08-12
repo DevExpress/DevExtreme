@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartFontComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoPieChartFontComponent';
+    _dxClassName = 'DxoPieChartFontComponent';
 
     
     @Input()

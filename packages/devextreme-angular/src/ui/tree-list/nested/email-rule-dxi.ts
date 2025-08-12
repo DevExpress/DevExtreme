@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiTreeListEmailRuleComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiTreeListEmailRuleComponent';
+    _dxClassName = 'DxiTreeListEmailRuleComponent';
 
     
     @Input()

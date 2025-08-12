@@ -50,7 +50,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
 })
 export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiAutocompleteToolbarItemComponent';
+    _dxClassName = 'DxiAutocompleteToolbarItemComponent';
 
     
     @Input()

@@ -54,7 +54,7 @@ import {
     ]
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
-protected _dxClassName = 'DxButtonComponent';
+    _dxClassName = 'DxButtonComponent';
 
     instance: DxButton = null;
 

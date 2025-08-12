@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartPointSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChartPointSelectionStyleComponent';
+    _dxClassName = 'DxoChartPointSelectionStyleComponent';
 
     
     @Input()

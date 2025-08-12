@@ -39,7 +39,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -121,35 +121,35 @@ import {
     ]
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxDiagramComponent';
+    _dxClassName = 'DxDiagramComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('connectionPoints', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_customShapes)
-    set _customShapesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _customShapesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customShapes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groups', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 
@@ -957,20 +957,11 @@ protected _dxClassName = 'DxDiagramComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('customShapes').push('DxiCustomShapeComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "customShapes": [
+  "DxiCustomShapeComponent"
+ ]
+};
 
 
 

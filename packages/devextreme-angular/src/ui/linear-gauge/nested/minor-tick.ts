@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeMinorTickComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoLinearGaugeMinorTickComponent';
+    _dxClassName = 'DxoLinearGaugeMinorTickComponent';
 
     
     @Input()

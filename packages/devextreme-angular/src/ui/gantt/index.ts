@@ -39,7 +39,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
@@ -115,20 +115,20 @@ import {
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxGanttComponent';
+    _dxClassName = 'DxGanttComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_stripLines)
-    set _stripLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _stripLinesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('stripLines', value);
     }
 
@@ -1204,22 +1204,14 @@ protected _dxClassName = 'DxGanttComponent';
 
 
 
-    protected getLegacyClassNames = () => {
-        const legacyClassNames = {};
-
-        const getLegacyClassNamesForPropertyName = (propName) => {
-                 legacyClassNames[propName] = legacyClassNames[propName] || [];
-                 return legacyClassNames[propName];
-        };
-
-    
-        getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
-    
-        getLegacyClassNamesForPropertyName('stripLines').push('DxiStripLineComponent');
-    
-
-        return legacyClassNames || {};
-    };
+   protected _legacyNestedClassNames: Record<string, string[]> = {
+ "columns": [
+  "DxiColumnComponent"
+ ],
+ "stripLines": [
+  "DxiStripLineComponent"
+ ]
+};
 
 
 

@@ -48,7 +48,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoChartLabelComponent';
+    _dxClassName = 'DxoChartLabelComponent';
 
     
     @Input()

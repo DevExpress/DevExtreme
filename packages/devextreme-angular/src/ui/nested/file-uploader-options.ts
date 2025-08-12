@@ -102,7 +102,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
     ]
 })
 export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFileUploaderOptionsComponent';
+    _dxClassName = 'DxoFileUploaderOptionsComponent';
 
     
 

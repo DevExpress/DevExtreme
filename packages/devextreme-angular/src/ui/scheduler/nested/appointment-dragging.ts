@@ -38,7 +38,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSchedulerAppointmentDraggingComponent';
+    _dxClassName = 'DxoSchedulerAppointmentDraggingComponent';
 
     
     @Input()

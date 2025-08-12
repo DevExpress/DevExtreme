@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSankeyFontComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoSankeyFontComponent';
+    _dxClassName = 'DxoSankeyFontComponent';
 
     
     @Input()

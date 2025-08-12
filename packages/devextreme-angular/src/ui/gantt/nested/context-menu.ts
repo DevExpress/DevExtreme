@@ -21,7 +21,7 @@ import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextre
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
@@ -41,10 +41,10 @@ import {
     ],
 })
 export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoGanttContextMenuComponent';
+    _dxClassName = 'DxoGanttContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
     

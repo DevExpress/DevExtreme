@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoCircularGaugeSubvalueIndicatorComponent';
+    _dxClassName = 'DxoCircularGaugeSubvalueIndicatorComponent';
 
     
     @Input()

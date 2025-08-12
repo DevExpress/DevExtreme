@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeMapHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoTreeMapHoverStyleComponent';
+    _dxClassName = 'DxoTreeMapHoverStyleComponent';
 
     
     @Input()

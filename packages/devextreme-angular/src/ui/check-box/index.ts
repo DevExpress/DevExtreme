@@ -72,7 +72,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxCheckBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-protected _dxClassName = 'DxCheckBoxComponent';
+    _dxClassName = 'DxCheckBoxComponent';
 
     instance: DxCheckBox = null;
 

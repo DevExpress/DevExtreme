@@ -37,7 +37,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartHorizontalLineComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoChartHorizontalLineComponent';
+    _dxClassName = 'DxoChartHorizontalLineComponent';
 
     
     @Input()

@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeBackgroundColorComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoLinearGaugeBackgroundColorComponent';
+    _dxClassName = 'DxoLinearGaugeBackgroundColorComponent';
 
     
     @Input()

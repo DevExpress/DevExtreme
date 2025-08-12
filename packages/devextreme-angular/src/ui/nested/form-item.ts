@@ -20,7 +20,7 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFormSimpleItem } from './base/form-simple-item';
 
@@ -56,10 +56,10 @@ import {
     ]
 })
 export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoFormItemComponent';
+    _dxClassName = 'DxoFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     

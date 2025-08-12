@@ -37,7 +37,7 @@ import {
     NestedOptionHost,
     IterableDifferHelper,
     WatcherHelper,
-    ICollectionNestedOption,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -90,20 +90,20 @@ import {
     ]
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-protected _dxClassName = 'DxFileManagerComponent';
+    _dxClassName = 'DxFileManagerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
-    set _fileSelectionItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _fileSelectionItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fileSelectionItems', value);
     }
 

@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDropDownBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxoDropDownBoxOptionsComponent';
+    _dxClassName = 'DxoDropDownBoxOptionsComponent';
 
     
     @Input()

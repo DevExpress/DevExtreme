@@ -48,7 +48,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 })
 export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    protected _dxClassName = 'DxiBoxItemComponent';
+    _dxClassName = 'DxiBoxItemComponent';
 
     
     @Input()

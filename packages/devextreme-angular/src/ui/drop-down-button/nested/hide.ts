@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDropDownButtonHideComponent extends NestedOption implements OnDestroy, OnInit {
-    protected _dxClassName = 'DxoDropDownButtonHideComponent';
+    _dxClassName = 'DxoDropDownButtonHideComponent';
 
     
     @Input()

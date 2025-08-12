@@ -25,7 +25,6 @@ import { dxFormSimpleItem } from 'devextreme/ui/form';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
@@ -50,10 +49,10 @@ import {
     ],
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
-    protected _dxClassName = 'DxiCardViewColumnComponent';
+    _dxClassName = 'DxiCardViewColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
     
