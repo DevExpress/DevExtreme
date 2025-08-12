@@ -52,6 +52,13 @@ export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
+const DEPRECATED_OPTIONS = {
+  fieldTemplate: {
+    since: '25.2',
+    alias: 'fieldTemplates',
+  },
+};
+
 const isIOs = devices.current().platform === 'ios';
 
 type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
@@ -1117,15 +1124,18 @@ class DropDownEditor<
     return super._getSubmitElement();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _getDropDownEditorDeprecatedOptions(): Record<string, unknown> {
+    return DEPRECATED_OPTIONS;
+  }
+
   _setDeprecatedOptions(): void {
     super._setDeprecatedOptions();
 
-    extend(this._deprecatedOptions, {
-      fieldTemplate: {
-        since: '25.2',
-        alias: 'fieldTemplates',
-      },
-    });
+    extend(
+      this._deprecatedOptions,
+      this._getDropDownEditorDeprecatedOptions(),
+    );
   }
 
   _dispose(): void {

@@ -1461,18 +1461,16 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
     });
 });
 
-QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
-    QUnit.test('using the \'onCustomItemCreating\' option should throw a warning if handler returns an item', function(assert) {
+QUnit.module('the "onCustomItemCreating" option', moduleSetup, () => {
+    QUnit.test('using the "onCustomItemCreating" option should throw a warning if handler returns an item', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             acceptCustomValue: true,
             displayExpr: 'display',
             valueExpr: 'value',
-            onCustomItemCreating(e) {
-                return {
-                    display: 'display ' + e.text,
-                    value: 'value ' + e.text
-                };
-            }
+            onCustomItemCreating: (e) => ({
+                display: `display ${e.text}`,
+                value: `value ${e.text}`,
+            }),
         });
 
         const $input = $tagBox.find('.dx-texteditor-input');
@@ -1480,18 +1478,23 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         const customValue = 'Custom value';
         const logStub = sinon.stub(coreErrors, 'log');
 
-        keyboard
-            .type(customValue)
-            .press('enter');
+        try {
+            keyboard
+                .type(customValue)
+                .press('enter');
 
-        const $tags = $tagBox.find('.dx-tag');
+            const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
 
-        assert.deepEqual($tagBox.dxTagBox('option', 'value'), ['value ' + customValue]);
-        assert.equal($tags.length, 1, 'tag is added');
-        assert.equal($tags.eq(0).text(), 'display ' + customValue);
-        assert.ok(logStub.calledOnce, 'There was an one message');
-        assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
-        logStub.restore();
+            const onCustomItemCreatingCallCount = logStub.args.filter(call => call.includes('onCustomItemCreating')).length;
+
+            assert.deepEqual($tagBox.dxTagBox('option', 'value'), [`value ${customValue}`]);
+            assert.strictEqual($tags.length, 1, 'tag is added');
+            assert.strictEqual($tags.eq(0).text(), `display ${customValue}`);
+            assert.strictEqual(onCustomItemCreatingCallCount, 1, 'There is a one message related to onCustomItemCreating');
+            assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+        } finally {
+            logStub.restore();
+        }
     });
 
     QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {

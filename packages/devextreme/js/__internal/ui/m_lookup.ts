@@ -300,6 +300,11 @@ class Lookup extends DropDownList<LookupProperties> {
     return '';
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _getDropDownEditorDeprecatedOptions(): Record<string, unknown> {
+    return {};
+  }
+
   _renderInput() {
     this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
     this._applyInputAttributes(this.option('inputAttr'));
