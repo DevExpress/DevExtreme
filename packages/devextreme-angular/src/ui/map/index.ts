@@ -59,6 +59,7 @@ import {
       PROPERTY_TOKEN_markers,
       PROPERTY_TOKEN_routes,
       PROPERTY_TOKEN_locations,
+      PROPERTY_TOKEN_center,
 } from 'devextreme-angular/tokens';
 
 
@@ -96,6 +97,11 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     @ContentChildren(PROPERTY_TOKEN_locations)
     set _locationsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('locations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_center)
+    set _centerNestedItems(value: QueryList<CollectionNestedOption>) {
+        this._setChildren('center', value);
     }
 
     instance: DxMap = null;

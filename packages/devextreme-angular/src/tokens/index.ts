@@ -1,6 +1,5 @@
 import { InjectionToken } from '@angular/core';
 
-export const PROPERTY_TOKEN_center = new InjectionToken<string>('property-token-center');
 export const PROPERTY_TOKEN_items = new InjectionToken<string>('property-token-items');
 export const PROPERTY_TOKEN_buttons = new InjectionToken<string>('property-token-buttons');
 export const PROPERTY_TOKEN_toolbarItems = new InjectionToken<string>('property-token-toolbarItems');
@@ -41,3 +40,4 @@ export const PROPERTY_TOKEN_resources = new InjectionToken<string>('property-tok
 export const PROPERTY_TOKEN_views = new InjectionToken<string>('property-token-views');
 export const PROPERTY_TOKEN_layers = new InjectionToken<string>('property-token-layers');
 export const PROPERTY_TOKEN_legends = new InjectionToken<string>('property-token-legends');
+export const PROPERTY_TOKEN_center = new InjectionToken<string>('property-token-center');

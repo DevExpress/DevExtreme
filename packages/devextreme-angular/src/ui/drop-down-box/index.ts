@@ -85,6 +85,7 @@ import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down
 import { 
       PROPERTY_TOKEN_buttons,
       PROPERTY_TOKEN_toolbarItems,
+      PROPERTY_TOKEN_items,
 } from 'devextreme-angular/tokens';
 
 
@@ -124,6 +125,11 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+        this._setChildren('items', value);
     }
 
     instance: DxDropDownBox = null;
