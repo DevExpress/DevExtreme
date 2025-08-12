@@ -231,6 +231,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @type_function_param1 selectedItem:object
      * @type_function_return string|Element|jQuery
      * @public
+     * @deprecated
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
