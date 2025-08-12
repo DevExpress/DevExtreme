@@ -52,13 +52,6 @@ export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
-const DEPRECATED_OPTIONS = {
-  fieldTemplate: {
-    since: '25.2',
-    alias: 'fieldTemplates',
-  },
-};
-
 const isIOs = devices.current().platform === 'ios';
 
 type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
@@ -87,6 +80,8 @@ export interface DropDownEditorProperties extends Omit<
   _onMarkupRendered?: () => void;
 
   onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
+
+  _ignoreFieldTemplateDeprecation?: boolean;
 }
 
 interface TemplateRenderPayload {
@@ -233,6 +228,7 @@ class DropDownEditor<
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
       _cached_dropDownOptions: {},
+      _ignoreFieldTemplateDeprecation: false,
     };
   }
 
@@ -1124,18 +1120,17 @@ class DropDownEditor<
     return super._getSubmitElement();
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _getDropDownEditorDeprecatedOptions(): Record<string, unknown> {
-    return DEPRECATED_OPTIONS;
-  }
+  ctor(element: Element, options: TProperties): void {
+    super.ctor(element, options);
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-
-    extend(
-      this._deprecatedOptions,
-      this._getDropDownEditorDeprecatedOptions(),
-    );
+    if (options) {
+      if ('fieldTemplate' in options && !options._ignoreFieldTemplateDeprecation) {
+        this._logDeprecatedOptionWarning('fieldTemplate', {
+          since: '25.2',
+          alias: 'fieldTemplates',
+        });
+      }
+    }
   }
 
   _dispose(): void {

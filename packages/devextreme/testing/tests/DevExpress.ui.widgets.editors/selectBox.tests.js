@@ -2358,11 +2358,9 @@ QUnit.module('editing', moduleSetup, () => {
                 .type(customValue)
                 .change();
 
-            const onCustomItemCreatingCallCount = logStub.args.filter(call => call.includes('onCustomItemCreating')).length;
-
             assert.strictEqual($selectBox.dxSelectBox('option', 'value'), `value ${customValue}`, 'value is correct');
             assert.strictEqual($input.val(), `display ${customValue}`, 'displayed value is correct');
-            assert.strictEqual(onCustomItemCreatingCallCount, 1, 'There is a one message related to onCustomItemCreating');
+            assert.strictEqual(logStub.calledOnce, true, 'There is a one warn message');
             assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
         } finally {
             logStub.restore();

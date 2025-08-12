@@ -148,8 +148,9 @@ class Lookup extends DropDownList<LookupProperties> {
         fullScreen: false,
       },
       dropDownCentered: false,
-      _scrollToSelectedItemEnabled: false,
       useHiddenSubmitElement: true,
+      _scrollToSelectedItemEnabled: false,
+      _ignoreFieldTemplateDeprecation: true,
     };
   }
 
@@ -298,11 +299,6 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _popupWrapperClass() {
     return '';
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  _getDropDownEditorDeprecatedOptions(): Record<string, unknown> {
-    return {};
   }
 
   _renderInput() {
