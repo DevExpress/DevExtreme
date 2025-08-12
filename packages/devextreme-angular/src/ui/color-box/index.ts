@@ -296,6 +296,8 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     /**
      * [descr:dxColorBoxOptions.fieldTemplate]
     
+     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
+    
      */
     @Input()
     get fieldTemplate(): any {
