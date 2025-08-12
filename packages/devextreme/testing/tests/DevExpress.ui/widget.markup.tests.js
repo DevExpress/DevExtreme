@@ -9,7 +9,7 @@ require('generic_light.css!');
     const WIDGET_CLASS = 'dx-widget';
     const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-    const DxWidget = Widget.inherit({});
+    class DxWidget extends Widget {}
     registerComponent('dxWidget', DxWidget);
 
 

@@ -56,9 +56,7 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     );
 
     this._list.$element()
-      // @ts-expect-error ts-error
       .append(this._$topShield.toggle(false))
-      // @ts-expect-error ts-error
       .append(this._$bottomShield.toggle(false));
   }
 
@@ -89,16 +87,13 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     this._animateToggleDelete($itemElement, isReadyToDelete);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isReadyToDelete($itemElement: dxElementWrapper): boolean {
     return $itemElement.hasClass(SWITCHABLE_DELETE_READY_CLASS);
   }
 
   _toggleShields($itemElement: dxElementWrapper, enabled: boolean): void {
     this._list.$element().toggleClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS, enabled);
-    // @ts-expect-error ts-error
     this._$topShield.toggle(enabled);
-    // @ts-expect-error ts-error
     this._$bottomShield.toggle(enabled);
     if (enabled) {
       this._updateShieldsHeight($itemElement);

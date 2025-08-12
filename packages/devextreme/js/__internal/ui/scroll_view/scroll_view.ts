@@ -9,15 +9,15 @@ import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/scroll_view';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import LoadPanel from '@ts/ui/m_load_panel';
-
-import PullDownStrategy from './scroll_view.native.pull_down';
-import SwipeDownStrategy from './scroll_view.native.swipe_down';
-import SimulatedStrategy from './scroll_view.simulated';
-import Scrollable from './scrollable';
-import type { RefreshStrategy, ScrollOffset } from './types';
+import PullDownStrategy from '@ts/ui/scroll_view/scroll_view.native.pull_down';
+import SwipeDownStrategy from '@ts/ui/scroll_view/scroll_view.native.swipe_down';
+import SimulatedStrategy from '@ts/ui/scroll_view/scroll_view.simulated';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { RefreshStrategy, ScrollOffset } from '@ts/ui/scroll_view/types';
 
 // STYLE scrollView
 
@@ -41,8 +41,11 @@ const refreshStrategies = {
 
 const isServerSide = !hasWindow();
 
-export interface ScrollViewProperties extends Omit<Properties, 'onScroll' | 'onUpdated' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-  refreshStrategy: RefreshStrategy;
+export interface ScrollViewProperties extends ScrollableProperties, Omit<
+  Properties,
+  keyof ScrollableProperties
+> {
+  refreshStrategy?: RefreshStrategy;
 }
 
 export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
@@ -63,7 +66,7 @@ export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
   // eslint-disable-next-line consistent-return
   _optionChanged(args: OptionChanged<ScrollViewProperties>): void {
     const { name } = args;
-    // @ts-expect-error ts-error
+
     if (name !== 'onUpdated') {
       return super._optionChanged(args);
     }
@@ -71,7 +74,6 @@ export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
 }
 
 export class ScrollView extends Scrollable<ScrollViewProperties> {
-  // @ts-expect-error ts-error
   _strategy!: PullDownStrategy | SwipeDownStrategy | SimulatedStrategy;
 
   _loadPanel!: LoadPanel;
@@ -124,8 +126,7 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased();
+          return isMaterialBased(current());
         },
         options: {
           pullingDownText: '',
@@ -220,11 +221,9 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     const { useNative, refreshStrategy } = this.option();
 
     const strategyName = useNative ? refreshStrategy : 'simulated';
-    const strategyClass = refreshStrategies[strategyName];
+    const StrategyClass = refreshStrategies[strategyName ?? 'pullDown'];
 
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line new-cap
-    this._strategy = new strategyClass(this);
+    this._strategy = new StrategyClass<ScrollViewProperties>(this);
     this._strategy.pullDownCallbacks.add(this._pullDownHandler.bind(this));
     this._strategy.releaseCallbacks.add(this._releaseHandler.bind(this));
     this._strategy.reachBottomCallbacks.add(this._reachBottomHandler.bind(this));
@@ -260,7 +259,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     }
 
     if (this._$pullDown && this._strategy) {
-      // @ts-expect-error ts-error
       this._$pullDown.toggle(enabled);
       this._strategy.pullDownEnable(enabled);
       this._pullDownEnabled = enabled;
@@ -274,7 +272,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     }
 
     if (this._$reachBottom && this._strategy) {
-      // @ts-expect-error ts-error
       this._$reachBottom.toggle(enabled);
       this._strategy.reachBottomEnable(enabled);
       this._reachBottomEnabled = enabled;
