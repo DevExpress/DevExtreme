@@ -109,8 +109,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       adaptivityEnabled: false,
       calendarOptions: {},
       useHiddenSubmitElement: true,
-
       _showValidationIcon: true,
+      _ignoreFieldTemplateDeprecation: false,
     };
   }
 

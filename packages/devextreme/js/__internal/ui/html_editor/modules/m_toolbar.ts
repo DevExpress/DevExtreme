@@ -358,6 +358,7 @@ if (Quill) {
               this._setValueSilent(e.component, e.value);
             }
           },
+          _ignoreFieldTemplateDeprecation: true,
         },
       }, item);
     }

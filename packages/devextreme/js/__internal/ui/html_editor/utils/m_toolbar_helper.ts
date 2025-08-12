@@ -538,6 +538,7 @@ function getTablePropertiesFormConfig(
             valueExpr: 'id',
             displayExpr: 'value',
             placeholder: 'Select style',
+            _ignoreFieldTemplateDeprecation: true,
           },
         },
         {
@@ -751,6 +752,7 @@ function getCellPropertiesFormConfig(
             items: getBorderStylesTranslated(),
             valueExpr: 'id',
             displayExpr: 'value',
+            _ignoreFieldTemplateDeprecation: true,
           },
         },
         {

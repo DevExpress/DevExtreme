@@ -274,6 +274,7 @@ class TimeView extends Editor<TimeViewProperties> {
         },
         value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
         stylingMode: this.option('stylingMode'),
+        _ignoreFieldTemplateDeprecation: true,
       },
     );
 

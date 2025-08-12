@@ -148,6 +148,7 @@ class DropDownList<
       },
       wrapItemText: false,
       useItemTextAsTitle: false,
+      _ignoreFieldTemplateDeprecation: true,
     } as TProperties;
   }
 

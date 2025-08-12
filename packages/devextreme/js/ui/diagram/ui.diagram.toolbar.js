@@ -138,7 +138,8 @@ class DiagramToolbar extends DiagramPanel {
             options: {
                 dataSource: items,
                 displayExpr: displayExpr || 'text',
-                valueExpr: valueExpr || 'value'
+                valueExpr: valueExpr || 'value',
+                _ignoreFieldTemplateDeprecation: true,
             }
         });
 

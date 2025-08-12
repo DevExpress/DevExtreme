@@ -204,6 +204,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           this._executeAICommand();
         }
       },
+      _ignoreFieldTemplateDeprecation: true,
     } as SelectBoxProperties);
   }
 
@@ -227,6 +228,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
           this._executeAICommand();
         }
       },
+      _ignoreFieldTemplateDeprecation: true,
     } as SelectBoxProperties);
   }
 
