@@ -12,16 +12,16 @@ import { Options } from '@js/core/options/index';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { convertRulesToOptions } from '@js/core/options/utils';
 import { PostponedOperations } from '@js/core/postponed_operations';
-import type { dxElementWrapper } from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { name as publicComponentName } from '@js/core/utils/public_component';
-import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
-import type { EventInfo, InitializedEventInfo } from '@js/events';
-
-import type { OptionChanged } from './types';
+import {
+  isDefined, isFunction, isPlainObject, isString,
+} from '@js/core/utils/type';
+import type { DxEvent, EventInfo, InitializedEventInfo } from '@js/events';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 const getEventName = (
   actionName: string,
@@ -40,20 +40,44 @@ export interface ActionConfig {
   category?: 'rendering';
 }
 
-export interface Properties<TComponent> extends ComponentOptions<
+export interface DefaultActionConfig<TComponent> {
+  component: TComponent;
+  context?: TComponent;
+}
+
+export interface DefaultActionArgs<TComponent> {
+  component: TComponent;
+  element?: Element;
+  event?: DxEvent;
+  model?: unknown;
+}
+
+export interface ComponentProperties<TComponent> extends ComponentOptions<
   EventInfo<TComponent>,
   InitializedEventInfo<TComponent>,
   OptionChangedEventInfo<TComponent>
 > {
-  onInitializing?: ((e: Record<string, unknown>) => void) | undefined;
+  onInitializing?: ((e: [ComponentProperties<TComponent>]) => void) | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaultOptionsRules?: DefaultOptionsRule<any>[];
+
+  beforeActionExecute?: (
+    component: TComponent,
+    action: (e) => void,
+    config: ActionConfig,
+  ) => (args) => void;
+
+  onActionCreated?: (
+    component: TComponent,
+    action: (e) => void,
+    config: ActionConfig
+  ) => () => unknown;
 }
 
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
-  TProperties extends Properties<TComponent> = Properties<TComponent>,
+  TProperties extends ComponentProperties<TComponent> = ComponentProperties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
   _deprecatedOptions!: Partial<TProperties>;
@@ -162,7 +186,6 @@ export class Component<
       );
 
       this._options.onChanging(
-
         (name, previousValue, value) => this._initialized
           && this._optionChanging(name, previousValue, value),
       );
@@ -175,7 +198,7 @@ export class Component<
       this._options.onStartChange(() => this.beginUpdate());
       this._options.onEndChange(() => this.endUpdate());
       this._options.addRules(this._defaultOptionsRules());
-      this._options.validateOptions((o) => this._validateOptions(o));
+      this._options.validateOptions((opts: TProperties) => this._validateOptions(opts));
 
       if (options && options.onInitializing) {
         // @ts-expect-error
@@ -214,11 +237,15 @@ export class Component<
   }
 
   _createOptionChangedAction(): void {
-    this._optionChangedAction = this._createActionByOption('onOptionChanged', { excludeValidators: ['disabled', 'readOnly'] });
+    this._optionChangedAction = this._createActionByOption('onOptionChanged', {
+      excludeValidators: ['disabled', 'readOnly'],
+    });
   }
 
   _createDisposingAction(): void {
-    this._disposingAction = this._createActionByOption('onDisposing', { excludeValidators: ['disabled', 'readOnly'] });
+    this._disposingAction = this._createActionByOption('onDisposing', {
+      excludeValidators: ['disabled', 'readOnly'],
+    });
   }
 
   _optionChanged(args: OptionChanged<TProperties> | Record<string, unknown>): void {
@@ -248,8 +275,7 @@ export class Component<
   }
 
   _lockUpdate(): void {
-    // eslint-disable-next-line no-plusplus
-    this._updateLockCount++;
+    this._updateLockCount += 1;
   }
 
   _unlockUpdate(): void {
@@ -304,17 +330,16 @@ export class Component<
     this._isUpdateAllowed() && this._commitUpdate();
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  _optionChanging(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  _optionChanging(...args: any[]): void {
 
   }
 
   _notifyOptionChanged(option: string, value: unknown, previousValue: unknown): void {
     if (this._initialized) {
       const optionNames = [option].concat(this._options.getAliasesByName(option));
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
-      for (let i = 0; i < optionNames.length; i++) {
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
+      for (let i = 0; i < optionNames.length; i += 1) {
         const name = optionNames[i];
         const args = {
           name: getPathParts(name)[0],
@@ -340,14 +365,14 @@ export class Component<
     return this._options.initial(name);
   }
 
-  _defaultActionConfig(): { context: TComponent; component: TComponent } {
+  _defaultActionConfig(): DefaultActionConfig<TComponent> {
     return {
       context: this as unknown as TComponent,
       component: this as unknown as TComponent,
     };
   }
 
-  _defaultActionArgs(): { component: TComponent; element?: dxElementWrapper; model?: unknown } {
+  _defaultActionArgs(): DefaultActionArgs<TComponent> {
     return {
       component: this as unknown as TComponent,
     };
@@ -376,7 +401,7 @@ export class Component<
   }
 
   _createActionByOption(
-    optionName: string,
+    optionName: keyof TProperties,
     config?: ActionConfig,
   ): (event?: unknown) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -386,14 +411,12 @@ export class Component<
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let actionFunc;
 
-    // eslint-disable-next-line no-param-reassign
-    config = extend({}, config);
+    let actionConfig = { ...config ?? {} } ;
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const result = (...args) => {
       if (!eventName) {
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
-        config = config || {};
+        actionConfig = actionConfig || {};
 
         if (typeof optionName !== 'string') {
           throw errors.Error('E0008');
@@ -411,27 +434,33 @@ export class Component<
         actionFunc = this.option(optionName);
       }
 
-      if (!action && !actionFunc && !config?.beforeExecute
-        && !config?.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
+      if (!action
+        && !actionFunc
+        && !actionConfig?.beforeExecute
+        && !actionConfig?.afterExecute
+        && !this._eventsStrategy.hasEvent(eventName)
+      ) {
         return;
       }
 
       if (!action) {
-        // @ts-expect-error
-        const { beforeExecute } = config;
-        // @ts-expect-error
-        config.beforeExecute = (...props): void => {
+        const { beforeExecute } = actionConfig;
+
+        actionConfig.beforeExecute = (...props): void => {
           beforeExecute?.apply(this, props);
           this._eventsStrategy.fireEvent(eventName, props[0].args);
         };
-        action = this._createAction(actionFunc, config);
+        action = this._createAction(actionFunc, actionConfig);
       }
 
       // @ts-expect-error
       if (Config().wrapActionsBeforeExecute) {
-        const beforeActionExecute = this.option('beforeActionExecute') || noop;
-        // @ts-expect-error
-        const wrappedAction = beforeActionExecute(this, action, config) || action;
+        const { beforeActionExecute = noop } = this.option();
+        const wrappedAction = beforeActionExecute(
+          this as unknown as TComponent,
+          action,
+          actionConfig,
+        ) || action;
         // eslint-disable-next-line consistent-return, @typescript-eslint/no-unsafe-return
         return wrappedAction.apply(this, args);
       }
@@ -444,11 +473,13 @@ export class Component<
     if (Config().wrapActionsBeforeExecute) {
       return result;
     }
-    const onActionCreated = this.option('onActionCreated') || noop;
+    const { onActionCreated = noop } = this.option();
 
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return onActionCreated(this, result, config) || result;
+    return onActionCreated(
+      this as unknown as TComponent,
+      result,
+      actionConfig,
+    ) || result;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -463,10 +494,10 @@ export class Component<
     return this;
   }
 
-  hasActionSubscription(actionName: string): boolean {
+  hasActionSubscription(actionName: keyof TProperties): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return !!this._options.silent(actionName)
-      || this._eventsStrategy.hasEvent(getEventName(actionName));
+      || (isString(actionName) && this._eventsStrategy.hasEvent(getEventName(actionName)));
   }
 
   isOptionDeprecated(name: string): boolean {
@@ -481,7 +512,7 @@ export class Component<
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  _getOptionValue(name: string, context?: any): any {
+  _getOptionValue(name: keyof TProperties, context?: any): any {
     const value = this.option(name);
 
     if (isFunction(value)) {

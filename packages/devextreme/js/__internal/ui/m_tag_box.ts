@@ -1074,10 +1074,10 @@ class TagBox<
       // @ts-expect-error ts-error
       this.option('selectedItems', this._selectedItems.slice());
     }
-    this._cleanTags();
 
     const fieldTemplate = this._getFieldTemplate();
     if (!fieldTemplate) {
+      this._cleanTags();
       this._renderTagsCore();
     }
   }
