@@ -148,9 +148,8 @@ class Lookup extends DropDownList<LookupProperties> {
         fullScreen: false,
       },
       dropDownCentered: false,
-      useHiddenSubmitElement: true,
       _scrollToSelectedItemEnabled: false,
-      _ignoreFieldTemplateDeprecation: true,
+      useHiddenSubmitElement: true,
     };
   }
 

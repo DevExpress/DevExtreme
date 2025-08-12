@@ -78,8 +78,6 @@ export interface DropDownEditorProperties extends Omit<
   _onMarkupRendered?: () => void;
 
   onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
-
-  _ignoreFieldTemplateDeprecation?: boolean;
 }
 
 function createTemplateWrapperElement(): dxElementWrapper {
@@ -211,7 +209,6 @@ class DropDownEditor<
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
       _cached_dropDownOptions: {},
-      _ignoreFieldTemplateDeprecation: false,
     };
   }
 
@@ -1002,19 +999,6 @@ class DropDownEditor<
       return this._$submitElement;
     }
     return super._getSubmitElement();
-  }
-
-  ctor(element: Element, options: TProperties): void {
-    super.ctor(element, options);
-
-    if (options) {
-      if ('fieldTemplate' in options && !options._ignoreFieldTemplateDeprecation) {
-        this._logDeprecatedOptionWarning('fieldTemplate', {
-          since: '25.2',
-          alias: 'fieldTemplates',
-        });
-      }
-    }
   }
 
   _dispose(): void {

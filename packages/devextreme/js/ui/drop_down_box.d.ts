@@ -212,7 +212,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @type_function_param1 value:object
      * @type_function_return string|Element|jQuery
      * @public
-     * @deprecated
      */
     fieldTemplate?: FieldTemplate;
     /**

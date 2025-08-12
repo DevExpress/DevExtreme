@@ -2343,28 +2343,28 @@ QUnit.module('editing', moduleSetup, () => {
             acceptCustomValue: true,
             displayExpr: 'display',
             valueExpr: 'value',
-            onCustomItemCreating: (e) => ({
-                display: `display ${e.text}`,
-                value: `value ${e.text}`,
-            }),
+            onCustomItemCreating: (e) => {
+                return {
+                    display: 'display ' + e.text,
+                    value: 'value ' + e.text
+                };
+            }
         });
         const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
         const logStub = sinon.stub(errors, 'log');
 
-        try {
-            keyboard
-                .type(customValue)
-                .change();
+        keyboard
+            .type(customValue)
+            .change();
 
-            assert.strictEqual($selectBox.dxSelectBox('option', 'value'), `value ${customValue}`, 'value is correct');
-            assert.strictEqual($input.val(), `display ${customValue}`, 'displayed value is correct');
-            assert.strictEqual(logStub.calledOnce, true, 'There is a one warn message');
-            assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
-        } finally {
-            logStub.restore();
-        }
+        assert.equal($selectBox.dxSelectBox('option', 'value'), 'value ' + customValue, 'value is correct');
+        assert.equal($input.val(), 'display ' + customValue, 'displayed value is correct');
+        assert.ok(logStub.calledOnce, 'There was an one message');
+        assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+
+        logStub.restore();
     });
 
     QUnit.test('onCustomItemCreating should not be called when existing item selecting', function(assert) {
