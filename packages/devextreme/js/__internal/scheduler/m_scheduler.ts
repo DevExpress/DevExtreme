@@ -37,6 +37,7 @@ import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
+import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
@@ -196,6 +197,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _dataSourceLoadedCallback: any;
 
   _subscribes: any;
+
+  _notifyScheduler!: NotifyScheduler;
 
   _recurrenceDialog: any;
 
@@ -743,6 +746,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._subscribes = subscribes;
 
     this.resourceManager = new ResourceManager(this.option('resources'));
+
+    this._notifyScheduler = new NotifyScheduler({ scheduler: this });
   }
 
   createAppointmentDataProvider() {
@@ -1232,6 +1237,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getAppointmentDataProvider: () => this.appointmentDataProvider,
       dataAccessors: this._dataAccessors,
       observer: this,
+      notifyScheduler: this._notifyScheduler,
       onItemRendered: this._getAppointmentRenderedAction(),
       onItemClick: this._createActionByOption('onAppointmentClick'),
       onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
@@ -1372,6 +1378,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }, currentViewOptions);
 
     result.observer = this;
+    result.notifyScheduler = this._notifyScheduler;
     result.groups = groupsResources;
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
