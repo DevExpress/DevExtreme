@@ -40,19 +40,15 @@ export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;
 }
 
-// type DropDownEditorOptions<T> = Omit<dxDropDownEditorOptions<T>, 'fieldTemplates'>;
-type DropDownEditorOptions<T> = Omit<
-    DataExpressionMixinOptions<T> & dxDropDownEditorOptions<T>,
-    'fieldTemplates'
->;
-
 /**
  * @namespace DevExpress.ui
  * @docid
  * @hidden
  */
-export interface dxDropDownListOptions<TComponent> extends DropDownEditorOptions<TComponent> {
-// export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, DropDownEditorOptions<TComponent> {
+export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, Omit<
+    dxDropDownEditorOptions<TComponent>,
+    'fieldTemplates'
+> {
     /**
      * @docid
      * @readonly
