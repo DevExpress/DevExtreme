@@ -965,7 +965,7 @@ QUnit.module('Templates', () => {
                     'dxDropDownEditor',
                     'fieldTemplate',
                     '25.2',
-                    'The fieldTemplate option is deprecated. Use insted fieldTemplates.'
+                    'Use the \'fieldTemplates\' option instead',
                 ], 'warning is raised with correct parameters');
             } finally {
                 errors.log.restore();
