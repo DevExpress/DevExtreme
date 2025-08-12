@@ -219,7 +219,6 @@ class SelectBox<
       showDropDownButton: true,
       displayCustomValue: false,
       useHiddenSubmitElement: true,
-      _ignoreFieldTemplateDeprecation: true,
     };
   }
 

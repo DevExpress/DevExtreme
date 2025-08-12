@@ -271,6 +271,7 @@ function getDropDownEditorOptions(
         });
       }
     },
+    _ignoreFieldTemplateDeprecation: true,
   };
 }
 

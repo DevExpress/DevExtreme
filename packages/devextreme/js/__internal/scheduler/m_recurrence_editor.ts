@@ -252,6 +252,7 @@ class RecurrenceEditor extends Editor {
           class: FREQUENCY_EDITOR,
         },
         onValueChanged: (args) => this._valueChangedHandler(args),
+        _ignoreFieldTemplateDeprecation: true,
       },
       label: {
         text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
@@ -378,6 +379,7 @@ class RecurrenceEditor extends Editor {
           class: MONTH_OF_YEAR,
         },
         onValueChanged: (args) => this._valueChangedHandler(args),
+        _ignoreFieldTemplateDeprecation: true,
       },
       visible: freq === 'yearly',
       label: {

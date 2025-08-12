@@ -337,7 +337,12 @@ class FileManagerToolbar extends Widget {
                 extend(true, result, { options: { stylingMode: 'text' } });
             }
             if(result.widget === 'dxSelectBox') {
-                extend(true, result, { options: { stylingMode: 'filled' } });
+                extend(true, result, {
+                    options: {
+                        stylingMode: 'filled',
+                        _ignoreFieldTemplateDeprecation: true,
+                    },
+                });
             }
         }
 

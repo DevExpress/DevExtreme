@@ -226,7 +226,8 @@ function prepareLookupEditor(options) {
 
                 !isFilterRow && params.push(e.component.option('text'));
                 options.setValue.apply(this, params);
-            }
+            },
+            _ignoreFieldTemplateDeprecation: true,
         }, options);
     }
 }

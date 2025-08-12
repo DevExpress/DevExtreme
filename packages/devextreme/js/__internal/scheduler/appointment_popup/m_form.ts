@@ -192,6 +192,7 @@ export class AppointmentForm {
             secondTimezoneEditor.option('value', args.value);
           }
         },
+        _ignoreFieldTemplateDeprecation: true,
       },
       visible,
     };
