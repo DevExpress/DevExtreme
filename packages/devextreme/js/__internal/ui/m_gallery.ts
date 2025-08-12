@@ -27,13 +27,15 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import type { Item, Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
+
+import type { CollectionItemKey } from './collection/collection_widget.base';
 
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_INDICATOR_VISIBLE_CLASS = 'dx-gallery-indicator-visible';
@@ -60,9 +62,8 @@ const GALLERY_ITEM_DATA_KEY = 'dxGalleryItemData';
 
 const MAX_CALC_ERROR = 1;
 
-export interface GalleryNavButtonProperties extends WidgetProperties {
+export interface GalleryNavButtonProperties extends WidgetProperties<GalleryNavButton> {
   direction?: string;
-
   onClick?: ((e: ClickEvent) => void) | null;
 }
 
@@ -121,7 +122,9 @@ export interface GalleryProperties extends Properties<Item>, Omit<
   selectionMode?: SingleOrMultiple;
 }
 
-class Gallery extends CollectionWidget<GalleryProperties> {
+class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKey> {
+  private static _wasAnyItemTemplateRendered?: boolean | null = false;
+
   _deferredAnimate?: DeferredObj<unknown>;
 
   _needLongMove?: boolean;
@@ -140,8 +143,6 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   _slideshowTimer?: ReturnType<typeof setTimeout>;
 
   _cacheElementWidth?: number;
-
-  _wasAnyItemTemplateRendered?: boolean | null;
 
   _prevNavButton?: dxElementWrapper;
 
@@ -164,15 +165,15 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       showNavButtons: false,
       wrapAround: false,
       stretchImages: false,
-      _itemAttributes: {
-        role: 'option',
-        'aria-label': messageLocalization.format('dxGallery-itemName'),
-      },
       loopItemFocus: false,
       selectOnFocus: true,
       selectionMode: 'single',
       selectionRequired: true,
       selectByClick: false,
+      _itemAttributes: {
+        role: 'option',
+        'aria-label': messageLocalization.format('dxGallery-itemName'),
+      },
     };
   }
 
@@ -188,12 +189,6 @@ class Gallery extends CollectionWidget<GalleryProperties> {
         },
       },
     ];
-  }
-
-  ctor(element: Element, options: Properties): void {
-    this._wasAnyItemTemplateRendered = false;
-
-    super.ctor(element, options);
   }
 
   _init(): void {
@@ -385,8 +380,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
 
   _onItemTemplateRendered() {
     return (): void => {
-      if (!this._wasAnyItemTemplateRendered) {
-        this._wasAnyItemTemplateRendered = true;
+      if (!Gallery._wasAnyItemTemplateRendered) {
+        Gallery._wasAnyItemTemplateRendered = true;
         triggerResizeEvent(this.$element()); // NOTE: T1132935
       }
     };
@@ -460,9 +455,10 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     if (startIndex !== undefined) {
       $items = $items.slice(startIndex);
     }
-    // @ts-expect-error ts-error
-    $items.each((index: number) => {
-      setOuterWidth($($items[index]), `${itemWidth * 100}%`);
+
+    $items.each((_index: number, element: Element): boolean => {
+      setOuterWidth($(element), `${itemWidth * 100}%`);
+      return true;
     });
   }
 
@@ -477,8 +473,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     const freeSpace = this._itemFreeSpace();
     const isGapBetweenImages = !!freeSpace;
     const side = rtlEnabled ? 'Right' : 'Left';
-    // @ts-expect-error ts-error
-    this._itemElements().each((index: number, item: Element): void => {
+
+    this._itemElements().each((index: number, item: Element): boolean => {
       let realIndex = index;
       const isLoopItem = $(item).hasClass(GALLERY_LOOP_ITEM_CLASS);
 
@@ -490,7 +486,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
         if (isGapBetweenImages) {
           $(item).css(`margin${side}`, `${freeSpace * 100}%`);
         }
-        return;
+        return true;
       }
 
       const itemPosition = itemWidth * (realIndex + offsetRatio)
@@ -498,6 +494,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       const property = isLoopItem ? side.toLowerCase() : `margin${side}`;
 
       $(item).css(property, `${itemPosition * 100}%`);
+      return true;
     });
 
     this._relocateItems(selectedIndex, selectedIndex, true);
@@ -679,13 +676,13 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) ?? $();
 
     if ($indicatorItems.length) {
-      // @ts-expect-error ts-error
-      $indicatorItems.each((index: number, element: Element): void => {
+      $indicatorItems.each((index: number, element: Element): boolean => {
         if (clickEnabled) {
           this._attachIndicatorClickHandler($(element), index);
         } else {
           this._detachIndicatorClickHandler($(element));
         }
+        return true;
       });
     }
   }
@@ -716,11 +713,11 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       return;
     }
 
-    // @ts-expect-error ts-error
-    this._itemElements().each((index: number, item: Element): void => {
+    this._itemElements().each((index: number, item: Element): boolean => {
       if (selectedIndex !== index) {
         $(item).find(ITEM_CONTENT_SELECTOR).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
       }
+      return true;
     });
   }
 
@@ -755,9 +752,18 @@ class Gallery extends CollectionWidget<GalleryProperties> {
 
     this._createComponent(rootElement, Swipeable, {
       disabled: !!disabled || !swipeEnabled,
-      onStart: this._swipeStartHandler.bind(this),
-      onUpdated: this._swipeUpdateHandler.bind(this),
-      onEnd: this._swipeEndHandler.bind(this),
+      onStart: (e) => {
+        const { event } = e;
+        this._swipeStartHandler(event);
+      },
+      onUpdated: (e) => {
+        const { event } = e;
+        this._swipeUpdateHandler(event);
+      },
+      onEnd: (e) => {
+        const { event } = e;
+        this._swipeEndHandler(event);
+      },
       // @ts-expect-error ts-error
       itemSizeFunc: this._elementWidth.bind(this),
     });
@@ -987,7 +993,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     delete this._cacheElementWidth;
   }
 
-  _swipeStartHandler(e: SwipeStartEvent): void {
+  _swipeStartHandler(event: SwipeStartEvent): void {
     this._releaseInvisibleItems();
 
     this._clearCacheWidth();
@@ -996,7 +1002,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     const itemsCount = this._itemsCount();
 
     if (!itemsCount) {
-      e.event.cancel = true;
+      event.cancel = true;
       return;
     }
 
@@ -1009,8 +1015,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       const startOffset = itemsCount - selectedIndex - this._itemsPerPage();
       const endOffset = selectedIndex;
 
-      e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
-      e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
+      event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
+      event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
     }
   }
 
@@ -1018,12 +1024,12 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     fx.stop(this._$container.get(0), true);
   }
 
-  _swipeUpdateHandler(e: SwipeUpdateEvent): void {
+  _swipeUpdateHandler(event: SwipeUpdateEvent): void {
     const { selectedIndex = 0, wrapAround } = this.option();
 
     const wrapAroundRatio = wrapAround ? 1 : 0;
     const itemsPerPage = this._itemsPerPage() + wrapAroundRatio;
-    const offset = this._offsetDirection() * e.event.offset * itemsPerPage - selectedIndex;
+    const offset = this._offsetDirection() * event.offset * itemsPerPage - selectedIndex;
 
     if (offset < 0) {
       this._loadNextPageIfNeeded(Math.ceil(Math.abs(offset)));
@@ -1033,8 +1039,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this._renderContainerPosition(offset);
   }
 
-  _swipeEndHandler(e: SwipeEndEvent): void {
-    const targetOffset = e.event.targetOffset * this._offsetDirection() * this._itemsPerPage();
+  _swipeEndHandler(event: SwipeEndEvent): void {
+    const targetOffset = event.targetOffset * this._offsetDirection() * this._itemsPerPage();
     const { selectedIndex = 0 } = this.option();
     const newIndex = this._fitIndex(selectedIndex - targetOffset);
     const paginatedIndex = this._fitPaginatedIndex(newIndex);
@@ -1099,7 +1105,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _dispose(): void {
-    this._wasAnyItemTemplateRendered = null;
+    Gallery._wasAnyItemTemplateRendered = null;
     clearTimeout(this._slideshowTimer);
     super._dispose();
   }
@@ -1133,8 +1139,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _focusInHandler(e: DxEvent): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$container) || this._userInteraction) {
+    if (fx.isAnimating(this._$container.get(0)) || this._userInteraction) {
       return;
     }
 
@@ -1142,8 +1147,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _focusOutHandler(e: DxEvent): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$container) || this._userInteraction) {
+    if (fx.isAnimating(this._$container.get(0)) || this._userInteraction) {
       return;
     }
 
@@ -1199,7 +1203,9 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'width':
       case 'initialItemWidth':
         super._optionChanged(args);
@@ -1211,8 +1217,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       case 'animationEnabled':
         break;
       case 'loop':
-        this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
-        this.option('loopItemFocus', args.value);
+        this.$element().toggleClass(GALLERY_LOOP_CLASS, value);
+        this.option('loopItemFocus', value);
 
         if (hasWindow()) {
           this._cloneDuplicateItems();
@@ -1241,7 +1247,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
         this._renderUserInteraction();
         break;
       case 'indicatorEnabled':
-        this._toggleIndicatorInteraction(args.value);
+        this._toggleIndicatorInteraction(value);
         break;
       default:
         super._optionChanged(args);

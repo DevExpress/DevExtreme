@@ -629,10 +629,8 @@ class Calendar<
   }
 
   _updateCurrentDate(date: Date): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$viewsWrapper)) {
-      // @ts-expect-error ts-error
-      fx.stop(this._$viewsWrapper, true);
+    if (fx.isAnimating(this._$viewsWrapper.get(0))) {
+      fx.stop(this._$viewsWrapper.get(0), true);
     }
 
     const min = this._getMinDate();
