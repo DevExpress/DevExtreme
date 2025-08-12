@@ -323,8 +323,7 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
     skipAnimation: boolean,
   ): DeferredObj<unknown> {
     const $title = $item.children(`.${ACCORDION_ITEM_TITLE_CLASS}`);
-    // @ts-expect-error ts-error
-    if (fx.isAnimating($item)) {
+    if (fx.isAnimating($item.get(0))) {
       fx.stop($item.get(0), false);
     }
 

@@ -1,13 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import type { SingleOrMultiple } from '@js/common';
+import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
+import type { DataSourceOptions } from '@js/common/data';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -18,18 +20,22 @@ import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import {
   getOuterHeight, getOuterWidth, getWidth, setOuterWidth,
 } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
-import type { Properties } from '@js/ui/gallery';
+import type { Item, Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
+
+import type { CollectionItemKey } from './collection/collection_widget.base';
 
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_INDICATOR_VISIBLE_CLASS = 'dx-gallery-indicator-visible';
@@ -56,9 +62,8 @@ const GALLERY_ITEM_DATA_KEY = 'dxGalleryItemData';
 
 const MAX_CALC_ERROR = 1;
 
-export interface GalleryNavButtonProperties extends WidgetProperties {
+export interface GalleryNavButtonProperties extends WidgetProperties<GalleryNavButton> {
   direction?: string;
-
   onClick?: ((e: ClickEvent) => void) | null;
 }
 
@@ -110,21 +115,16 @@ class GalleryNavButton extends Widget<GalleryNavButtonProperties> {
   }
 }
 
-export interface GalleryProperties extends Properties {
-  _itemAttributes?: Record<string, unknown>;
-
-  loopItemFocus?: boolean;
-
-  selectOnFocus?: boolean;
-
+export interface GalleryProperties extends Properties<Item>, Omit<
+  CollectionWidgetEditProperties<Gallery, Item>,
+  keyof Properties<Item>
+> {
   selectionMode?: SingleOrMultiple;
-
-  selectionRequired?: boolean;
-
-  selectByClick?: boolean;
 }
 
-class Gallery extends CollectionWidget<GalleryProperties> {
+class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKey> {
+  private static _wasAnyItemTemplateRendered?: boolean | null = false;
+
   _deferredAnimate?: DeferredObj<unknown>;
 
   _needLongMove?: boolean;
@@ -139,11 +139,10 @@ class Gallery extends CollectionWidget<GalleryProperties> {
 
   _$wrapper!: dxElementWrapper;
 
+  // eslint-disable-next-line no-restricted-globals
   _slideshowTimer?: ReturnType<typeof setTimeout>;
 
   _cacheElementWidth?: number;
-
-  _wasAnyItemTemplateRendered?: boolean | null;
 
   _prevNavButton?: dxElementWrapper;
 
@@ -166,20 +165,21 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       showNavButtons: false,
       wrapAround: false,
       stretchImages: false,
-      _itemAttributes: {
-        role: 'option',
-        'aria-label': messageLocalization.format('dxGallery-itemName'),
-      },
       loopItemFocus: false,
       selectOnFocus: true,
       selectionMode: 'single',
       selectionRequired: true,
       selectByClick: false,
+      _itemAttributes: {
+        role: 'option',
+        'aria-label': messageLocalization.format('dxGallery-itemName'),
+      },
     };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
-    return super._defaultOptionsRules().concat([
+    return [
+      ...super._defaultOptionsRules(),
       {
         device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
@@ -188,27 +188,23 @@ class Gallery extends CollectionWidget<GalleryProperties> {
           focusStateEnabled: true,
         },
       },
-    ]);
-  }
-
-  ctor(element: Element, options: Properties): void {
-    this._wasAnyItemTemplateRendered = false;
-
-    super.ctor(element, options);
+    ];
   }
 
   _init(): void {
     super._init();
 
+    const { loop } = this.option();
+
     this._activeStateUnit = GALLERY_ITEM_SELECTOR;
-    this.option('loopItemFocus', this.option('loop'));
+    this.option('loopItemFocus', loop);
   }
 
   _initTemplates(): void {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container, data) => {
+      item: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         const $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
         if (isPlainObject(data)) {
@@ -225,7 +221,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     });
   }
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): DataSourceOptions<Item> {
     return {
       paginate: false,
     };
@@ -246,32 +243,29 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _actualItemWidth(): number {
-    const isWrapAround = this.option('wrapAround');
+    const { wrapAround, stretchImages } = this.option();
 
-    if (this.option('stretchImages')) {
-      const itemPerPage = isWrapAround ? this._itemsPerPage() + 1 : this._itemsPerPage();
+    if (stretchImages) {
+      const itemPerPage = wrapAround ? this._itemsPerPage() + 1 : this._itemsPerPage();
       return 1 / itemPerPage;
     }
 
-    if (isWrapAround) {
-      return this._itemPercentWidth() * this._itemsPerPage() / (this._itemsPerPage() + 1);
+    if (wrapAround) {
+      return (this._itemPercentWidth() * this._itemsPerPage()) / (this._itemsPerPage() + 1);
     }
 
     return this._itemPercentWidth();
   }
 
   _itemPercentWidth(): number {
-    let percentWidth;
-    const elementWidth = getOuterWidth(this.$element());
+    const elementWidth: number = getOuterWidth(this.$element());
     const { initialItemWidth } = this.option();
 
     if (initialItemWidth && initialItemWidth <= elementWidth) {
-      percentWidth = initialItemWidth / elementWidth;
-    } else {
-      percentWidth = 1;
+      return initialItemWidth / elementWidth;
     }
 
-    return percentWidth;
+    return 1;
   }
 
   _itemsPerPage(): number {
@@ -285,14 +279,15 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _itemsCount(): number {
-    const { items } = this.option();
+    const { items = [] } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return (items || []).length;
+    return items.length;
   }
 
   _offsetDirection(): number {
-    return this.option('rtlEnabled') ? -1 : 1;
+    const { rtlEnabled } = this.option();
+
+    return rtlEnabled ? -1 : 1;
   }
 
   _initMarkup(): void {
@@ -319,6 +314,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   _render(): void {
     this._renderDragHandler();
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderContainerPosition();
     this._renderItemSizes();
     this._renderItemPositions();
@@ -337,7 +333,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _dimensionChanged(): void {
-    const selectedIndex = this.option('selectedIndex') || 0;
+    const { selectedIndex = 0 } = this.option();
 
     this._stopItemAnimations();
     this._clearCacheWidth();
@@ -347,6 +343,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this._renderItemSizes();
     this._renderItemPositions();
     this._renderIndicator();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderContainerPosition(this._calculateIndexOffset(selectedIndex), true);
     this._renderItemVisibility();
   }
@@ -368,11 +365,13 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       .appendTo(this.$element());
   }
 
-  _renderItems(items) {
+  _renderItems(items: Item[]): void {
     if (!hasWindow()) {
-      const { selectedIndex } = this.option();
-      // @ts-expect-error ts-error
-      items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
+      const { selectedIndex = 0 } = this.option();
+      // eslint-disable-next-line no-param-reassign
+      items = items.length > selectedIndex
+        ? items.slice(selectedIndex, selectedIndex + 1)
+        : items.slice(0, 1);
     }
     super._renderItems(items);
 
@@ -380,9 +379,9 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _onItemTemplateRendered() {
-    return () => {
-      if (!this._wasAnyItemTemplateRendered) {
-        this._wasAnyItemTemplateRendered = true;
+    return (): void => {
+      if (!Gallery._wasAnyItemTemplateRendered) {
+        Gallery._wasAnyItemTemplateRendered = true;
         triggerResizeEvent(this.$element()); // NOTE: T1132935
       }
     };
@@ -398,38 +397,34 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _cloneDuplicateItems(): void {
-    if (!this.option('loop')) {
+    const { loop, items = [] } = this.option();
+    const itemsCount = items.length;
+
+    if (!loop || !itemsCount) {
       return;
     }
 
-    const items = this.option('items') || [];
-    // @ts-expect-error ts-error
-    const itemsCount = items.length;
-    const lastItemIndex = itemsCount - 1;
-    let i;
-
-    if (!itemsCount) return;
-
     this._getLoopedItems().remove();
 
+    const lastItemIndex = itemsCount - 1;
     const duplicateCount = Math.min(this._itemsPerPage(), itemsCount);
 
     const $items = this._getRealItems();
     const $container = this._itemContainer();
 
-    for (i = 0; i < duplicateCount; i++) {
+    for (let i = 0; i < duplicateCount; i += 1) {
       this._cloneItemForDuplicate($items[i], $container);
     }
 
-    for (i = 0; i < duplicateCount; i++) {
+    for (let i = 0; i < duplicateCount; i += 1) {
       this._cloneItemForDuplicate($items[lastItemIndex - i], $container);
     }
   }
 
-  _cloneItemForDuplicate(item, $container): void {
+  _cloneItemForDuplicate(item: Element, $container: dxElementWrapper): void {
     if (item) {
       const $clonedItem = $(item)
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         .clone(false)
         .addClass(GALLERY_LOOP_ITEM_CLASS)
         .removeAttr('id')
@@ -453,35 +448,35 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     return this._$wrapper;
   }
 
-  _renderItemSizes(startIndex?): void {
+  _renderItemSizes(startIndex?: number): void {
     let $items = this._itemElements();
     const itemWidth = this._actualItemWidth();
 
     if (startIndex !== undefined) {
       $items = $items.slice(startIndex);
     }
-    // @ts-expect-error ts-error
-    $items.each((index) => {
-      setOuterWidth($($items[index]), `${itemWidth * 100}%`);
+
+    $items.each((_index: number, element: Element): boolean => {
+      setOuterWidth($(element), `${itemWidth * 100}%`);
+      return true;
     });
   }
 
-  _renderItemPositions() {
+  _renderItemPositions(): void {
+    const { rtlEnabled, wrapAround, selectedIndex = 0 } = this.option();
     const itemWidth = this._actualItemWidth();
     const itemsCount = this._itemsCount();
     const itemsPerPage = this._itemsPerPage();
     const loopItemsCount = this.$element().find(`.${GALLERY_LOOP_ITEM_CLASS}`).length;
     const lastItemDuplicateIndex = itemsCount + loopItemsCount - 1;
-    const offsetRatio = this.option('wrapAround') ? 0.5 : 0;
+    const offsetRatio = wrapAround ? 0.5 : 0;
     const freeSpace = this._itemFreeSpace();
     const isGapBetweenImages = !!freeSpace;
-    const rtlEnabled = this.option('rtlEnabled');
-    const selectedIndex = this.option('selectedIndex');
     const side = rtlEnabled ? 'Right' : 'Left';
-    // @ts-expect-error ts-error
-    this._itemElements().each(function (index) {
+
+    this._itemElements().each((index: number, item: Element): boolean => {
       let realIndex = index;
-      const isLoopItem = $(this).hasClass(GALLERY_LOOP_ITEM_CLASS);
+      const isLoopItem = $(item).hasClass(GALLERY_LOOP_ITEM_CLASS);
 
       if (index > itemsCount + itemsPerPage - 1) {
         realIndex = lastItemDuplicateIndex - realIndex - itemsPerPage;
@@ -489,48 +484,46 @@ class Gallery extends CollectionWidget<GalleryProperties> {
 
       if (!isLoopItem && realIndex !== 0) {
         if (isGapBetweenImages) {
-          $(this).css(`margin${side}`, `${freeSpace * 100}%`);
+          $(item).css(`margin${side}`, `${freeSpace * 100}%`);
         }
-        return;
+        return true;
       }
 
-      const itemPosition = itemWidth * (realIndex + offsetRatio) + freeSpace * (realIndex + 1 - offsetRatio);
+      const itemPosition = itemWidth * (realIndex + offsetRatio)
+        + freeSpace * (realIndex + 1 - offsetRatio);
       const property = isLoopItem ? side.toLowerCase() : `margin${side}`;
 
-      $(this).css(property, `${itemPosition * 100}%`);
+      $(item).css(property, `${itemPosition * 100}%`);
+      return true;
     });
 
     this._relocateItems(selectedIndex, selectedIndex, true);
   }
 
   _itemFreeSpace(): number {
-    let itemsPerPage = this._itemsPerPage();
-
-    if (this.option('wrapAround')) {
-      itemsPerPage += 1;
-    }
+    const { wrapAround } = this.option();
+    const itemsPerPage = wrapAround ? this._itemsPerPage() + 1 : this._itemsPerPage();
 
     return (1 - this._actualItemWidth() * itemsPerPage) / (itemsPerPage + 1);
   }
 
-  _renderContainerPosition(offset?, hideItems?, animate?) {
+  _renderContainerPosition(offset = 0, hideItems?: boolean, animate?: boolean): Promise<unknown> {
     this._releaseInvisibleItems();
-    offset = offset || 0;
 
-    const that = this;
     const itemWidth = this._actualItemWidth();
-    const targetIndex = offset;
-    const targetPosition = this._offsetDirection() * targetIndex * (itemWidth + this._itemFreeSpace());
-    let positionReady;
+    const targetPosition = this._offsetDirection() * offset * (itemWidth + this._itemFreeSpace());
+    let showAnimation = animate;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let positionReady: DeferredObj<unknown>;
 
     if (isDefined(this._animationOverride)) {
-      animate = this._animationOverride;
+      showAnimation = this._animationOverride;
       delete this._animationOverride;
     }
 
-    if (animate) {
-      that._startSwipe();
-      positionReady = that._animate(targetPosition).done(that._endSwipe.bind(that));
+    if (showAnimation) {
+      this._startSwipe();
+      positionReady = this._animate(targetPosition).done(this._endSwipe);
     } else {
       move(this._$container, {
         // @ts-expect-error ts-error
@@ -538,13 +531,15 @@ class Gallery extends CollectionWidget<GalleryProperties> {
         top: 0,
       });
       // @ts-expect-error ts-error
-      positionReady = Deferred().resolveWith(that);
+      positionReady = Deferred().resolveWith(this);
     }
 
-    positionReady.done(function () {
+    positionReady.done(() => {
       // @ts-expect-error ts-error
-      this._deferredAnimate && that._deferredAnimate.resolveWith(that);
-      hideItems && this._renderItemVisibility();
+      this._deferredAnimate?.resolveWith(this);
+      if (hideItems) {
+        this._renderItemVisibility();
+      }
     });
 
     return positionReady.promise();
@@ -558,53 +553,62 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this.$element().removeClass(GALLERY_ACTIVE_CLASS);
   }
 
-  _animate(targetPosition, extraConfig?) {
-    const that = this;
+  _animate(targetPosition: number, extraConfig: AnimationConfig = {}): DeferredObj<unknown> {
     const $container = this._$container;
     const animationComplete = Deferred();
-    // @ts-expect-error ts-error
-    fx.animate(this._$container, extend({
-      type: 'slide',
-      // @ts-expect-error ts-error
-      to: { left: targetPosition * this._elementWidth() },
-      duration: that.option('animationDuration'),
-      complete() {
-        if (that._needMoveContainerForward()) {
-          move($container, { left: 0, top: 0 });
-        }
+    const { animationDuration } = this.option();
 
-        if (that._needMoveContainerBack()) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fx.animate(
+      this._$container.get(0),
+      {
+        type: 'slide',
+        to: {
+          left: targetPosition * (this._elementWidth() ?? 0),
+        },
+        duration: animationDuration,
+        complete() {
+          if (that._needMoveContainerForward()) {
+            move($container, { left: 0, top: 0 });
+          }
+
+          if (that._needMoveContainerBack()) {
+            move($container, {
+              left: that._maxContainerOffset() * (that._elementWidth() ?? 0),
+              top: 0,
+            });
+          }
           // @ts-expect-error ts-error
-          move($container, { left: that._maxContainerOffset() * that._elementWidth(), top: 0 });
-        }
-        // @ts-expect-error ts-error
-        animationComplete.resolveWith(that);
+          animationComplete.resolveWith(that);
+        },
+        ...extraConfig,
       },
-    }, extraConfig || {}));
+    );
 
     return animationComplete;
   }
 
   _needMoveContainerForward(): boolean {
-    // @ts-expect-error ts-error
-    const expectedPosition = this._$container.position().left * this._offsetDirection();
-    // @ts-expect-error ts-error
-    const actualPosition = -this._maxItemWidth() * this._elementWidth() * this._itemsCount();
+    const expectedPosition = (this._$container.position()?.left ?? 0) * this._offsetDirection();
+    const actualPosition = -this._maxItemWidth() * (this._elementWidth() ?? 0) * this._itemsCount();
 
     return expectedPosition <= actualPosition + MAX_CALC_ERROR;
   }
 
   _needMoveContainerBack(): boolean {
-    // @ts-expect-error ts-error
-    const expectedPosition = this._$container.position().left * this._offsetDirection();
-    // @ts-expect-error ts-error
-    const actualPosition = this._actualItemWidth() * this._elementWidth();
+    const expectedPosition = (this._$container.position()?.left ?? 0) * this._offsetDirection();
+    const actualPosition = this._actualItemWidth() * (this._elementWidth() ?? 0);
 
     return expectedPosition >= actualPosition - MAX_CALC_ERROR;
   }
 
   _maxContainerOffset(): number {
-    return -this._maxItemWidth() * (this._itemsCount() - this._itemsPerPage()) * this._offsetDirection();
+    const itemOutPageCount = this._itemsCount() - this._itemsPerPage();
+
+    return -this._maxItemWidth() * itemOutPageCount * this._offsetDirection();
   }
 
   _maxItemWidth(): number {
@@ -612,18 +616,19 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _reviseDimensions(): void {
-    const that = this;
-    const $firstItem = that._itemElements().first().find(ITEM_CONTENT_SELECTOR);
+    const $firstItem = this._itemElements().first().find(ITEM_CONTENT_SELECTOR);
 
     if (!$firstItem || $firstItem.is(':hidden')) {
       return;
     }
 
-    if (!that.option('height')) {
-      that.option('height', getOuterHeight($firstItem));
+    const { height, width } = this.option();
+
+    if (!height) {
+      this.option('height', getOuterHeight($firstItem));
     }
-    if (!that.option('width')) {
-      that.option('width', getOuterWidth($firstItem));
+    if (!width) {
+      this.option('width', getOuterWidth($firstItem));
     }
 
     this._dimensionChanged();
@@ -638,14 +643,14 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       return;
     }
 
-    const indicator = this._$indicator = $('<div>')
+    this._$indicator = $('<div>')
       .addClass(GALLERY_INDICATOR_CLASS)
       .appendTo(this._$wrapper);
 
     const { indicatorEnabled } = this.option();
 
-    for (let i = 0; i < this._pagesCount(); i++) {
-      const $indicatorItem = $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+    for (let i = 0; i < this._pagesCount(); i += 1) {
+      const $indicatorItem = $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(this._$indicator);
 
       if (indicatorEnabled) {
         this._attachIndicatorClickHandler($indicatorItem, i);
@@ -655,28 +660,29 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this._renderSelectedPageIndicator();
   }
 
-  _attachIndicatorClickHandler($element, index) {
+  _attachIndicatorClickHandler($element: dxElementWrapper, index: number): void {
     // @ts-expect-error ts-error
-    eventsEngine.on($element, addNamespace(clickEventName, this.NAME), (event) => {
+    eventsEngine.on($element, addNamespace(clickEventName, this.NAME), (event: DxEvent) => {
       this._indicatorSelectHandler(event, index);
     });
   }
 
-  _detachIndicatorClickHandler($element): void {
+  _detachIndicatorClickHandler($element: dxElementWrapper): void {
     // @ts-expect-error ts-error
     eventsEngine.off($element, addNamespace(clickEventName, this.NAME));
   }
 
-  _toggleIndicatorInteraction(clickEnabled): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) || [];
+  _toggleIndicatorInteraction(clickEnabled: boolean | undefined): void {
+    const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) ?? $();
 
     if ($indicatorItems.length) {
-      // @ts-expect-error ts-error
-      $indicatorItems.each((index, element) => {
-        clickEnabled
-          ? this._attachIndicatorClickHandler($(element), index)
-          : this._detachIndicatorClickHandler($(element));
+      $indicatorItems.each((index: number, element: Element): boolean => {
+        if (clickEnabled) {
+          this._attachIndicatorClickHandler($(element), index);
+        } else {
+          this._detachIndicatorClickHandler($(element));
+        }
+        return true;
       });
     }
   }
@@ -687,27 +693,31 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     }
   }
 
-  _renderSelectedItem() {
+  _renderSelectedItem(): void {
     const { selectedIndex } = this.option();
 
-    this._itemElements()
-      .removeClass(GALLERY_ITEM_SELECTED_CLASS)
-      // @ts-expect-error
-      .eq(selectedIndex)
-      .addClass(GALLERY_ITEM_SELECTED_CLASS);
+    this._itemElements().removeClass(GALLERY_ITEM_SELECTED_CLASS);
+
+    if (isDefined(selectedIndex)) {
+      this._itemElements()
+        .eq(selectedIndex)
+        .addClass(GALLERY_ITEM_SELECTED_CLASS);
+    }
   }
 
   _renderItemVisibility(): void {
-    if (this.option('initialItemWidth') || this.option('wrapAround')) {
+    const { initialItemWidth, wrapAround, selectedIndex } = this.option();
+
+    if (initialItemWidth || wrapAround) {
       this._releaseInvisibleItems();
       return;
     }
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
-    this._itemElements().each((index, item) => {
+
+    this._itemElements().each((index: number, item: Element): boolean => {
       if (selectedIndex !== index) {
         $(item).find(ITEM_CONTENT_SELECTOR).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
       }
+      return true;
     });
   }
 
@@ -722,9 +732,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       return;
     }
 
-    const { selectedIndex } = this.option();
+    const { selectedIndex = 0 } = this.option();
     const lastIndex = this._pagesCount() - 1;
-    // @ts-expect-error ts-error
     let pageIndex = Math.ceil(selectedIndex / this._itemsPerPage());
 
     pageIndex = Math.min(lastIndex, pageIndex);
@@ -737,24 +746,33 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _renderUserInteraction(): void {
+    const { swipeEnabled: swipeEnabledOption, disabled } = this.option();
     const rootElement = this.$element();
-    const swipeEnabled = this.option('swipeEnabled') && this._itemsCount() > 1;
-
-    const { disabled } = this.option();
+    const swipeEnabled = swipeEnabledOption && this._itemsCount() > 1;
 
     this._createComponent(rootElement, Swipeable, {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      disabled: disabled || !swipeEnabled,
-      onStart: this._swipeStartHandler.bind(this),
-      onUpdated: this._swipeUpdateHandler.bind(this),
-      onEnd: this._swipeEndHandler.bind(this),
+      disabled: !!disabled || !swipeEnabled,
+      onStart: (e) => {
+        const { event } = e;
+        this._swipeStartHandler(event);
+      },
+      onUpdated: (e) => {
+        const { event } = e;
+        this._swipeUpdateHandler(event);
+      },
+      onEnd: (e) => {
+        const { event } = e;
+        this._swipeEndHandler(event);
+      },
       // @ts-expect-error ts-error
       itemSizeFunc: this._elementWidth.bind(this),
     });
   }
 
-  _indicatorSelectHandler(e, indicatorIndex): void {
-    if (!this.option('indicatorEnabled')) {
+  _indicatorSelectHandler(_e: DxEvent, indicatorIndex: number): void {
+    const { indicatorEnabled } = this.option();
+
+    if (!indicatorEnabled) {
       return;
     }
 
@@ -767,61 +785,69 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _renderNavButtons(): void {
-    const that = this;
+    const { showNavButtons } = this.option();
 
-    if (!that.option('showNavButtons')) {
-      that._cleanNavButtons();
+    if (!showNavButtons) {
+      this._cleanNavButtons();
       return;
     }
 
-    that._prevNavButton = $('<div>').appendTo(this._$wrapper);
-    that._createComponent(that._prevNavButton, GalleryNavButton, {
+    const nextPage = this._nextPage.bind(this);
+    const prevPage = this._prevPage.bind(this);
+
+    this._prevNavButton = $('<div>').appendTo(this._$wrapper);
+    this._createComponent(this._prevNavButton, GalleryNavButton, {
       direction: 'prev',
       onClick() {
-        that._prevPage();
+        prevPage();
       },
     });
 
-    that._nextNavButton = $('<div>').appendTo(this._$wrapper);
-    that._createComponent(that._nextNavButton, GalleryNavButton, {
+    this._nextNavButton = $('<div>').appendTo(this._$wrapper);
+    this._createComponent(this._nextNavButton, GalleryNavButton, {
       direction: 'next',
       onClick() {
-        that._nextPage();
+        nextPage();
       },
     });
 
     this._renderNavButtonsVisibility();
   }
 
-  _prevPage() {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _prevPage(): DeferredObj<unknown> | void {
     const visiblePageSize = this._itemsPerPage();
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
+    const { selectedIndex = 0 } = this.option();
     const newSelectedIndex = selectedIndex - visiblePageSize;
 
     if (newSelectedIndex === -visiblePageSize && visiblePageSize === this._itemsCount()) {
       return this._relocateItems(newSelectedIndex, 0);
     }
+
     return this.goToItem(this._fitPaginatedIndex(newSelectedIndex));
   }
 
-  _nextPage() {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _nextPage(): DeferredObj<unknown> | void {
     const visiblePageSize = this._itemsPerPage();
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
+    const { selectedIndex = 0 } = this.option();
     const newSelectedIndex = selectedIndex + visiblePageSize;
 
     if (newSelectedIndex === visiblePageSize && visiblePageSize === this._itemsCount()) {
       return this._relocateItems(newSelectedIndex, 0);
     }
-    return this.goToItem(this._fitPaginatedIndex(newSelectedIndex)).done(this._loadNextPageIfNeeded);
+
+    return (this.goToItem(this._fitPaginatedIndex(newSelectedIndex)) as DeferredObj<number>).done(
+      this._loadNextPageIfNeeded,
+    );
   }
 
-  _loadNextPageIfNeeded(selectedIndex?): void {
-    selectedIndex = selectedIndex === undefined ? this.option('selectedIndex') : selectedIndex;
+  _loadNextPageIfNeeded(index?: number): void {
+    const { selectedIndex: selectedIndexOption = 0 } = this.option();
+    const selectedIndex = index ?? selectedIndexOption;
+
     if (
     // @ts-expect-error ts-error
-
       this._dataSource
         // @ts-expect-error ts-error
         && this._dataSource.paginate()
@@ -841,34 +867,38 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     }
   }
 
-  _shouldLoadNextPage(selectedIndex): boolean {
+  _shouldLoadNextPage(selectedIndex: number): boolean {
     const visiblePageSize = this._itemsPerPage();
+    const { items = [] } = this.option();
 
-    const { items } = this.option();
-
-    // @ts-expect-error ts-error
     return selectedIndex + 2 * visiblePageSize > items.length;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _allowDynamicItemsAppend(): boolean {
     return true;
   }
 
   _fitPaginatedIndex(itemIndex: number): number {
     const itemsPerPage = this._itemsPerPage();
-
-    const restItemsCount = itemIndex < 0 ? itemsPerPage + itemIndex : this._itemsCount() - itemIndex;
+    const restItemsCount = itemIndex < 0
+      ? itemsPerPage + itemIndex
+      : this._itemsCount() - itemIndex;
 
     if (itemIndex > this._itemsCount() - 1) {
-      itemIndex = 0;
       this._goToGhostItem = true;
-    } else if (restItemsCount < itemsPerPage && restItemsCount > 0) {
-      if (itemIndex > 0) {
-        itemIndex -= itemsPerPage - restItemsCount;
-      } else {
-        itemIndex += itemsPerPage - restItemsCount;
-      }
+
+      return 0;
     }
+
+    if (restItemsCount < itemsPerPage && restItemsCount > 0) {
+      if (itemIndex > 0) {
+        return itemIndex - itemsPerPage + restItemsCount;
+      }
+
+      return itemIndex + itemsPerPage - restItemsCount;
+    }
+
     return itemIndex;
   }
 
@@ -884,12 +914,12 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _renderNavButtonsVisibility(): void {
-    if (!this.option('showNavButtons') || !this._prevNavButton || !this._nextNavButton) {
+    const { showNavButtons, selectedIndex, loop } = this.option();
+
+    if (!showNavButtons || !this._prevNavButton || !this._nextNavButton) {
       return;
     }
 
-    const { selectedIndex } = this.option();
-    const loop = this.option('loop');
     const itemsCount = this._itemsCount();
 
     this._prevNavButton.show();
@@ -906,8 +936,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
 
     let nextHidden = selectedIndex === itemsCount - this._itemsPerPage();
     const prevHidden = itemsCount < 2 || selectedIndex === 0;
-    // @ts-expect-error ts-error
 
+    // @ts-expect-error ts-error
     if (this._dataSource && this._dataSource.paginate()) {
       // @ts-expect-error ts-error
       nextHidden = nextHidden && this._isLastPage();
@@ -923,22 +953,31 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     }
   }
 
-  _setupSlideShow() {
-    const that = this;
-    const { slideshowDelay } = that.option();
+  _getUserInteraction(): boolean | undefined {
+    return this._userInteraction;
+  }
 
-    clearTimeout(that._slideshowTimer);
+  _setupSlideShow(): void {
+    const { slideshowDelay } = this.option();
+
+    clearTimeout(this._slideshowTimer);
 
     if (!slideshowDelay) {
       return;
     }
 
-    that._slideshowTimer = setTimeout(() => {
-      if (that._userInteraction) {
-        that._setupSlideShow();
+    const getUserInteraction = this._getUserInteraction.bind(this);
+    const setupSlideShow = this._setupSlideShow.bind(this);
+    const nextItem = this.nextItem.bind(this);
+
+    // eslint-disable-next-line no-restricted-globals
+    this._slideshowTimer = setTimeout(() => {
+      if (getUserInteraction()) {
+        setupSlideShow();
+
         return;
       }
-      that.nextItem(true).done(that._setupSlideShow);
+      nextItem(true).done(setupSlideShow);
     }, slideshowDelay);
   }
 
@@ -954,7 +993,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     delete this._cacheElementWidth;
   }
 
-  _swipeStartHandler(e): void {
+  _swipeStartHandler(event: SwipeStartEvent): void {
     this._releaseInvisibleItems();
 
     this._clearCacheWidth();
@@ -963,47 +1002,46 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     const itemsCount = this._itemsCount();
 
     if (!itemsCount) {
-      e.event.cancel = true;
+      event.cancel = true;
       return;
     }
 
     this._stopItemAnimations();
     this._startSwipe();
     this._userInteraction = true;
-    if (!this.option('loop')) {
-      const { selectedIndex, rtlEnabled } = this.option();
-      // @ts-expect-error ts-error
+    const { selectedIndex = 0, rtlEnabled, loop } = this.option();
+
+    if (!loop) {
       const startOffset = itemsCount - selectedIndex - this._itemsPerPage();
       const endOffset = selectedIndex;
 
-      e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
-      e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
+      event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
+      event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
     }
   }
 
   _stopItemAnimations(): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._$container, true);
+    fx.stop(this._$container.get(0), true);
   }
 
-  _swipeUpdateHandler(e): void {
-    const { selectedIndex, wrapAround } = this.option();
+  _swipeUpdateHandler(event: SwipeUpdateEvent): void {
+    const { selectedIndex = 0, wrapAround } = this.option();
 
     const wrapAroundRatio = wrapAround ? 1 : 0;
-    // @ts-expect-error ts-error
-    const offset = this._offsetDirection() * e.event.offset * (this._itemsPerPage() + wrapAroundRatio) - selectedIndex;
+    const itemsPerPage = this._itemsPerPage() + wrapAroundRatio;
+    const offset = this._offsetDirection() * event.offset * itemsPerPage - selectedIndex;
 
     if (offset < 0) {
       this._loadNextPageIfNeeded(Math.ceil(Math.abs(offset)));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderContainerPosition(offset);
   }
 
-  _swipeEndHandler(e): void {
-    const targetOffset = e.event.targetOffset * this._offsetDirection() * this._itemsPerPage();
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
+  _swipeEndHandler(event: SwipeEndEvent): void {
+    const targetOffset = event.targetOffset * this._offsetDirection() * this._itemsPerPage();
+    const { selectedIndex = 0 } = this.option();
     const newIndex = this._fitIndex(selectedIndex - targetOffset);
     const paginatedIndex = this._fitPaginatedIndex(newIndex);
 
@@ -1033,42 +1071,31 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this._userInteraction = false;
   }
 
-  _flipIndex(index: number): number {
-    const itemsCount = this._itemsCount();
-
-    index %= itemsCount;
-    if (index > (itemsCount + 1) / 2) {
-      index -= itemsCount;
-    }
-    if (index < -(itemsCount - 1) / 2) {
-      index += itemsCount;
-    }
-
-    return index;
-  }
-
   _fitIndex(index: number): number {
-    if (!this.option('loop')) {
+    const { loop } = this.option();
+
+    if (!loop) {
       return index;
     }
 
     const itemsCount = this._itemsCount();
+    let fittedIndex = index;
 
-    if (index >= itemsCount || index < 0) {
+    if (fittedIndex >= itemsCount || fittedIndex < 0) {
       this._goToGhostItem = true;
     }
 
-    if (index >= itemsCount) {
-      index = itemsCount - index;
+    if (fittedIndex >= itemsCount) {
+      fittedIndex = itemsCount - fittedIndex;
     }
 
-    index %= itemsCount;
+    fittedIndex %= itemsCount;
 
-    if (index < 0) {
-      index += itemsCount;
+    if (fittedIndex < 0) {
+      fittedIndex += itemsCount;
     }
 
-    return index;
+    return fittedIndex;
   }
 
   _clean(): void {
@@ -1078,12 +1105,12 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   }
 
   _dispose(): void {
-    this._wasAnyItemTemplateRendered = null;
+    Gallery._wasAnyItemTemplateRendered = null;
     clearTimeout(this._slideshowTimer);
     super._dispose();
   }
 
-  _updateSelection(addedSelection, removedSelection): void {
+  _updateSelection(addedSelection: number[], removedSelection: number[]): void {
     this._stopItemAnimations();
     this._renderNavButtonsVisibility();
 
@@ -1094,69 +1121,67 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     this._renderSelectedPageIndicator();
   }
 
-  _relocateItems(newIndex, prevIndex?, withoutAnimation?: boolean): void {
-    if (prevIndex === undefined) {
-      prevIndex = newIndex;
-    }
+  _relocateItems(newIndex: number, prevIndex?: number, withoutAnimation?: boolean): void {
+    const indexOffset = this._calculateIndexOffset(newIndex, prevIndex ?? newIndex);
+    const { animationEnabled } = this.option();
 
-    const indexOffset = this._calculateIndexOffset(newIndex, prevIndex);
-
-    this._renderContainerPosition(indexOffset, true, this.option('animationEnabled') && !withoutAnimation).done(function () {
-      this._setFocusOnSelect();
-      this._userInteraction = false;
-      this._setupSlideShow();
-    });
+    this._renderContainerPosition(indexOffset, true, animationEnabled && !withoutAnimation)
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line func-names
+      .done(function () {
+        // eslint-disable-next-line @typescript-eslint/no-invalid-this
+        this._setFocusOnSelect();
+        // eslint-disable-next-line @typescript-eslint/no-invalid-this
+        this._userInteraction = false;
+        // eslint-disable-next-line @typescript-eslint/no-invalid-this
+        this._setupSlideShow();
+      });
   }
 
-  _focusInHandler(): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$container) || this._userInteraction) {
+  _focusInHandler(e: DxEvent): void {
+    if (fx.isAnimating(this._$container.get(0)) || this._userInteraction) {
       return;
     }
-    // @ts-expect-error ts-error
-    super._focusInHandler.apply(this, arguments);
+
+    super._focusInHandler(e);
   }
 
-  _focusOutHandler(): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$container) || this._userInteraction) {
+  _focusOutHandler(e: DxEvent): void {
+    if (fx.isAnimating(this._$container.get(0)) || this._userInteraction) {
       return;
     }
-    // @ts-expect-error ts-error
-    super._focusOutHandler.apply(this, arguments);
+
+    super._focusOutHandler(e);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _selectFocusedItem(): void {}
 
-  _moveFocus(): void {
+  _moveFocus(location: string, e?: DxEvent<KeyboardEvent>): void {
     this._stopItemAnimations();
-    // @ts-expect-error ts-error
-    super._moveFocus.apply(this, arguments);
+    super._moveFocus(location, e);
 
-    // @ts-expect-error ts-error
     const { focusedElement, animationEnabled } = this.option();
 
     const index = this.itemElements().index($(focusedElement));
     this.goToItem(index, animationEnabled);
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._reviseDimensions();
     }
   }
 
-  _calculateIndexOffset(newIndex, lastIndex?): number {
-    if (lastIndex === undefined) {
-      lastIndex = newIndex;
-    }
+  _calculateIndexOffset(newIndex: number, lastIndex?: number): number {
+    const { loop } = this.option();
+    const prevIndex = lastIndex ?? newIndex;
+    let indexOffset = prevIndex - newIndex;
 
-    let indexOffset = lastIndex - newIndex;
-
-    if (this.option('loop') && !this._needLongMove && this._goToGhostItem) {
-      if (this._isItemOnFirstPage(newIndex) && this._isItemOnLastPage(lastIndex)) {
+    if (loop && !this._needLongMove && this._goToGhostItem) {
+      if (this._isItemOnFirstPage(newIndex) && this._isItemOnLastPage(prevIndex)) {
         indexOffset = -this._itemsPerPage();
-      } else if (this._isItemOnLastPage(newIndex) && this._isItemOnFirstPage(lastIndex)) {
+      } else if (this._isItemOnLastPage(newIndex) && this._isItemOnFirstPage(prevIndex)) {
         indexOffset = this._itemsPerPage();
       }
 
@@ -1164,25 +1189,26 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     }
 
     this._needLongMove = false;
-    indexOffset -= lastIndex;
+    indexOffset -= prevIndex;
 
     return indexOffset;
   }
 
-  _isItemOnLastPage(itemIndex): boolean {
+  _isItemOnLastPage(itemIndex: number): boolean {
     return itemIndex >= this._itemsCount() - this._itemsPerPage();
   }
 
-  _isItemOnFirstPage(itemIndex): boolean {
+  _isItemOnFirstPage(itemIndex: number): boolean {
     return itemIndex <= this._itemsPerPage();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'width':
       case 'initialItemWidth':
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         this._dimensionChanged();
         break;
       case 'animationDuration':
@@ -1191,8 +1217,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       case 'animationEnabled':
         break;
       case 'loop':
-        this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
-        this.option('loopItemFocus', args.value);
+        this.$element().toggleClass(GALLERY_LOOP_CLASS, value);
+        this.option('loopItemFocus', value);
 
         if (hasWindow()) {
           this._cloneDuplicateItems();
@@ -1221,14 +1247,14 @@ class Gallery extends CollectionWidget<GalleryProperties> {
         this._renderUserInteraction();
         break;
       case 'indicatorEnabled':
-        this._toggleIndicatorInteraction(args.value);
+        this._toggleIndicatorInteraction(value);
         break;
       default:
         super._optionChanged(args);
     }
   }
 
-  goToItem(itemIndex, animation?: boolean): DeferredObj<unknown> {
+  goToItem(itemIndex: number, animation?: boolean): DeferredObj<unknown> {
     const { selectedIndex } = this.option();
     const itemsCount = this._itemsCount();
 
@@ -1236,29 +1262,29 @@ class Gallery extends CollectionWidget<GalleryProperties> {
       this._animationOverride = animation;
     }
 
-    itemIndex = this._fitIndex(itemIndex);
+    const fittedIndex = this._fitIndex(itemIndex);
 
     this._deferredAnimate = Deferred();
 
-    if (itemIndex > itemsCount - 1 || itemIndex < 0 || selectedIndex === itemIndex) {
+    if (fittedIndex > itemsCount - 1 || fittedIndex < 0 || selectedIndex === fittedIndex) {
       // @ts-expect-error ts-error
       return this._deferredAnimate.resolveWith(this).promise();
     }
 
-    this.option('selectedIndex', itemIndex);
+    this.option('selectedIndex', fittedIndex);
     // @ts-expect-error ts-error
     return this._deferredAnimate.promise();
   }
 
-  prevItem(animation) {
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
+  prevItem(animation: boolean): DeferredObj<unknown> {
+    const { selectedIndex = 0 } = this.option();
+
     return this.goToItem(selectedIndex - 1, animation);
   }
 
-  nextItem(animation) {
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
+  nextItem(animation: boolean): DeferredObj<unknown> {
+    const { selectedIndex = 0 } = this.option();
+
     return this.goToItem(selectedIndex + 1, animation);
   }
 }
