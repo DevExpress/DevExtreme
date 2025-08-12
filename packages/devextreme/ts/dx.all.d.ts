@@ -11461,7 +11461,6 @@ declare module DevExpress.ui {
     editAlphaChannel?: boolean;
     /**
      * [descr:dxColorBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
      */
     fieldTemplate?:
       | template
@@ -16269,7 +16268,6 @@ declare module DevExpress.ui {
     displayValueFormatter?: (value: string | Array<any>) => string;
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
      */
     fieldTemplate?:
       | template
@@ -27038,7 +27036,6 @@ declare module DevExpress.ui {
     acceptCustomValue?: boolean;
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
      */
     fieldTemplate?:
       | template
