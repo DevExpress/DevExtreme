@@ -22334,7 +22334,6 @@ declare module DevExpress.ui {
     clearButtonText?: string;
     /**
      * [descr:dxLookupOptions.fieldTemplate]
-     * @deprecated [depNote:dxLookupOptions.fieldTemplate]
      */
     fieldTemplate?:
       | template

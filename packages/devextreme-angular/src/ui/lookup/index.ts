@@ -312,8 +312,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     /**
      * [descr:dxLookupOptions.fieldTemplate]
     
-     * @deprecated [depNote:dxLookupOptions.fieldTemplate]
-    
      */
     @Input()
     get fieldTemplate(): any {
