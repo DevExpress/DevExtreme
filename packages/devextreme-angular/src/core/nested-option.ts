@@ -27,7 +27,7 @@ export const checkIncompatibleNestedItems = (
   containerClassName: string,
   legacyClassNames: string[],
 ) => {
-  if (items.length > 0 && legacyClassNames.length > 0 && console && console.warn) {
+  if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
     const itemsLassNames = items.map((item) => item._dxClassName);
     const itemLegacyClassName = itemsLassNames.find((itemClassName) => legacyClassNames.includes(itemClassName));
     const itemClassName = itemsLassNames.find((itemClassName) => !legacyClassNames.includes(itemClassName));
@@ -37,7 +37,7 @@ export const checkIncompatibleNestedItems = (
           the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
 
-      return false;
+      return true;
     }
   }
   return false;
