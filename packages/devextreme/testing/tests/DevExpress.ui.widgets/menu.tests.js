@@ -3350,10 +3350,10 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $treeViewItems = $.find(`.${TREE_VIEW_ITEM_CLASS}`);
-        const $stubElements = $.find(`.${TREE_VIEW_EXPANDER_ICON_STUB_CLASS}`);
+        const $treeViewItems = $(`.${TREE_VIEW_ITEM_CLASS}`);
+        const $stubElements = $(`.${TREE_VIEW_EXPANDER_ICON_STUB_CLASS}`);
 
-        $treeViewItems.forEach((element, index) => {
+        $treeViewItems.each((index, element) => {
             assert.strictEqual(
                 window.getComputedStyle(element).gap,
                 '0px',
@@ -3361,7 +3361,7 @@ QUnit.module('adaptivity: render', {
             );
         });
 
-        $stubElements.forEach((element, index) => {
+        $stubElements.each((index, element) => {
             assert.strictEqual(
                 window.getComputedStyle(element).width,
                 '0px',
