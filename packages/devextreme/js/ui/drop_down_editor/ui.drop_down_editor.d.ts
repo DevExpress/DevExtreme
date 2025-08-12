@@ -35,6 +35,9 @@ export interface DropDownButtonTemplateDataModel {
     readonly icon?: string;
 }
 
+/**
+ * @docid
+ */
 export type FieldTemplate<T = any> = template | ((data: T, element: DxElement) => string | UserDefinedElement);
 
 export type FieldTemplates = {
