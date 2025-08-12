@@ -21,7 +21,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 // @ts-expect-error ts-error
 import { getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
 import type { EventInfo } from '@js/events';
-import type { Properties } from '@js/ui/button';
+import type { Properties as ButtonProperties, Properties } from '@js/ui/button';
 import type {
   FieldDataChangedEvent,
   FormItemComponent, Item, SimpleItem, TabbedItem,
@@ -695,8 +695,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       createComponentCallback: (
         $element: dxElementWrapper,
         options: Properties,
-        // @ts-expect-error ts-error
-      ) => super._createComponent($element, Button, options),
+      ) => super._createComponent<Button, ButtonProperties>($element, Button, options),
     });
 
     // TODO: try to remove '_itemsRunTimeInfo' from 'render' function

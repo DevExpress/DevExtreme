@@ -5,6 +5,7 @@ import holdEvent from '@js/common/core/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { applyBatch } from '@js/common/data/array_utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -15,7 +16,7 @@ import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
@@ -751,14 +752,25 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     }
   }
 
-  protected _renderSelectAllCheckBox($container, column?) {
-    const groupElement = $('<div>')
-      .appendTo($container)
+  protected _renderSelectAllCheckBox(
+    $container: dxElementWrapper,
+    column?: Column,
+  ): dxElementWrapper {
+    const $checkbox = this._createSelectAllCheckboxElement(column);
+    $checkbox.appendTo($container);
+
+    return $checkbox;
+  }
+
+  protected _createSelectAllCheckboxElement(
+    column?: Column,
+  ): dxElementWrapper {
+    const $groupElement = $('<div>')
       .addClass(SELECT_CHECKBOX_CLASS);
 
-    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
+    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), $groupElement);
 
-    this._editorFactoryController.createEditor(groupElement, extend({}, column, {
+    this._editorFactoryController.createEditor($groupElement, extend({}, column, {
       parentType: 'headerRow',
       dataType: 'boolean',
       value: this._selectionController.isSelectAll(),
@@ -786,7 +798,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
       },
     }));
 
-    return groupElement;
+    return $groupElement;
   }
 
   private _attachSelectAllCheckBoxClickEvent($element) {

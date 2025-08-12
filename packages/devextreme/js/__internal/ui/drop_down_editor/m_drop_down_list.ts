@@ -2,6 +2,7 @@ import type { SingleMultipleAllOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import type { GroupItem } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -22,15 +23,17 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
+import type { Item } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
-import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
-import List from '@ts/ui/list/m_list.edit.search';
-import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import List from '@ts/ui/list/list.edit.search';
 
 const window = getWindow();
 
@@ -48,7 +51,7 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 'onOpened' | 'onClosed' |
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+  encodeNoDataText?: boolean;
 }
 
 class DropDownList<
@@ -87,8 +90,11 @@ class DropDownList<
       tab(e): void {
         if (this._allowSelectItemByTab()) {
           this._saveValueChangeEvent(e);
-          const $focusedItem = $(this._list.option('focusedElement'));
-          $focusedItem.length && this._setSelectedElement($focusedItem);
+          const { focusedElement } = this._list.option();
+          const $focusedItem = $(focusedElement);
+          if ($focusedItem.length) {
+            this._setSelectedElement($focusedItem);
+          }
         }
 
         parentSupportedKeys.tab(e);
@@ -204,6 +210,7 @@ class DropDownList<
   }
 
   _initContentReadyAction(): void {
+    // @ts-expect-error
     this._contentReadyAction = this._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -381,7 +388,8 @@ class DropDownList<
 
   _getPlainItems(items?) {
     let plainItems: any = [];
-    const grouped = this._getGroupedOption();
+
+    const { grouped } = this.option();
 
     items = items || this.option('items') || this._dataSource.items() || [];
 
@@ -519,7 +527,11 @@ class DropDownList<
   _getKeyboardListeners(): any[] {
     const canListHaveFocus = this._canListHaveFocus();
 
-    return super._getKeyboardListeners().concat([!canListHaveFocus && this._list]);
+    if (!canListHaveFocus) {
+      return super._getKeyboardListeners().concat([this._list]);
+    }
+
+    return super._getKeyboardListeners();
   }
 
   _renderList(): void {
@@ -578,7 +590,7 @@ class DropDownList<
     return devices.real().deviceType === 'desktop';
   }
 
-  _listConfig(): ListSearchProperties {
+  _listConfig(): ListBaseProperties {
     const {
       noDataText,
       grouped,
@@ -587,6 +599,8 @@ class DropDownList<
       groupTemplate,
       hoverStateEnabled,
       focusStateEnabled,
+      encodeNoDataText,
+      useItemTextAsTitle,
     } = this.option();
 
     const options = {
@@ -594,10 +608,10 @@ class DropDownList<
       _templates: this.option('_templates'),
       templateProvider: this.option('templateProvider'),
       noDataText,
-      encodeNoDataText: this.option('encodeNoDataText'),
+      encodeNoDataText,
       grouped,
       wrapItemText,
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      useItemTextAsTitle,
       onContentReady: this._listContentReadyHandler.bind(this),
       itemTemplate,
       indicateLoading: false,
@@ -640,8 +654,17 @@ class DropDownList<
     };
   }
 
-  _getGroupedOption() {
-    return this.option('grouped');
+  _getSpecificDataSourceOption(): DataSourceLike<Item>
+    | DataSourceOptions<GroupItem<Item>>
+    | null
+    | undefined {
+    const { dataSource, grouped } = this.option();
+
+    if (dataSource && grouped) {
+      return getDataSourceOptions(dataSource);
+    }
+
+    return dataSource;
   }
 
   _dataSourceFromUrlLoadMode(): string {
@@ -1036,7 +1059,7 @@ class DropDownList<
 }
 
 // @ts-expect-error ts-error
-DropDownList.include(DataExpressionMixin, DataConverterMixin);
+DropDownList.include(DataExpressionMixin);
 
 registerComponent('dxDropDownList', DropDownList);
 

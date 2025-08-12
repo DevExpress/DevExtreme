@@ -31,11 +31,11 @@ import type {
   Cancelable, DxEvent,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
+import { focusable } from '@ts/core/utils/m_selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
@@ -68,11 +68,13 @@ const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
-export interface CollectionItemInfo<TItem, TIndex = number | { group: number; item: number }> {
+export interface CollectionItemInfo<TItem, TIndex = CollectionItemIndex> {
   readonly itemData: TItem;
   readonly itemElement: HTMLElement;
   readonly itemIndex: TIndex;
 }
+
+export type CollectionItemKey = string | number;
 
 export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   cancel?: boolean;
@@ -81,7 +83,7 @@ export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   toIndex?: CollectionItemIndex;
   node?: PublicNode;
 };
-export interface DataChange<TItem = CollectionItem, TKey = number | string> {
+export interface DataChange<TItem = CollectionItem, TKey = CollectionItemKey> {
   key: TKey;
   type: DataChangeType;
   data: TItem;
@@ -95,16 +97,16 @@ export type ItemTemplate<TItem> = template | (
 export interface ItemRenderInfo<TItem> {
   index: number;
   itemData: TItem;
-  container: dxElementWrapper;
-  contentClass: string;
-  defaultTemplateName: ItemTemplate<TItem> | undefined;
+  container: dxElementWrapper | Element;
+  contentClass?: string;
+  defaultTemplateName?: ItemTemplate<TItem>;
   uniqueKey?: string;
   templateProperty?: string;
 }
 
 export interface PostprocessRenderItemInfo<TItem> {
   itemElement: dxElementWrapper;
-  itemContent: dxElementWrapper;
+  itemContent: dxElementWrapper | Element;
   itemData: TItem;
   itemIndex: number;
 }
@@ -117,9 +119,13 @@ export interface CollectionWidgetBaseProperties<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
-    TKey = string | number,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
-  focusedElement?: dxElementWrapper;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TKey extends CollectionItemKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey>, Omit<
+  WidgetProperties<TComponent>,
+  keyof CollectionWidgetOptions<TComponent, TItem, TKey>
+> {
+  focusedElement?: Element | null;
 
   encodeNoDataText?: boolean;
 
@@ -142,7 +148,7 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends Widget<TProperties> {
   private _focusedItemId?: string;
 
@@ -217,6 +223,7 @@ class CollectionWidget<
 
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { focusedElement } = this.option();
+
     const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {
@@ -404,7 +411,6 @@ class CollectionWidget<
     }
 
     const { focusedElement } = this.option();
-
     const $focusedElement = $(focusedElement);
     if ($focusedElement.length) {
       // NOTE: If focusedElement is set, selection was already processed on its focusing.
@@ -434,7 +440,6 @@ class CollectionWidget<
 
   _getActiveItem(last?: boolean): dxElementWrapper {
     const { focusedElement } = this.option();
-
     const $focusedElement = $(focusedElement);
 
     if ($focusedElement.length) {
@@ -614,8 +619,7 @@ class CollectionWidget<
   }
 
   _setFocusedItem($target: dxElementWrapper): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (!$target || !$target.length) {
+    if (!$target?.length) {
       return;
     }
 
@@ -1256,7 +1260,7 @@ class CollectionWidget<
 
   _renderItemContent(
     args: ItemRenderInfo<TItem>,
-  ): dxElementWrapper | DeferredObj<dxElementWrapper> {
+  ): dxElementWrapper | Element | DeferredObj<dxElementWrapper> {
     const itemTemplateName = this._getItemTemplateName(args);
     const itemTemplate = this._getTemplate(itemTemplateName);
 
@@ -1389,23 +1393,22 @@ class CollectionWidget<
   ): ItemTemplate<TItem> {
     const data = args.itemData;
     const { itemTemplateProperty } = this.option();
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const templateProperty = args.templateProperty || itemTemplateProperty;
-    // @ts-expect-error ts-error
 
-    const template = data && data[templateProperty];
+    const templateProperty = args.templateProperty ?? itemTemplateProperty;
+
+    const template = data && templateProperty
+      ? data[templateProperty]
+      : undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return template || args.defaultTemplateName;
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _createItemByTemplate(
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     itemTemplate,
     renderArgs: ItemRenderInfo<TItem>,
-  ) {
+  ): dxElementWrapper {
     const { itemData, container, index } = renderArgs;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemTemplate.render({
@@ -1460,7 +1463,7 @@ class CollectionWidget<
 
   _itemDXEventHandler(
     dxEvent: DxEvent,
-    handlerOptionName: string,
+    handlerOptionName: keyof TProperties,
     actionArgs?: Record<string, unknown>,
     actionConfig?: ActionConfig,
   ): void {
@@ -1471,7 +1474,7 @@ class CollectionWidget<
 
   _itemEventHandler(
     initiator: dxElementWrapper | Element,
-    handlerOptionName: string,
+    handlerOptionName: keyof TProperties,
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {

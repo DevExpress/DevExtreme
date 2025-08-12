@@ -15,7 +15,7 @@ import coreDateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { CalendarSelectionMode, CalendarZoomLevel, DisabledDate } from '@js/ui/calendar';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -57,7 +57,7 @@ const SELECTION_MODE = {
   range: 'range',
 };
 
-export interface BaseViewProperties extends Properties {
+export interface BaseViewProperties extends WidgetProperties {
   date: Date;
 
   value?: Date | Date[];
@@ -455,14 +455,17 @@ class BaseView<
   }
 
   _createCellClickAction(): void {
+    // @ts-expect-error ts-error
     this._cellClickAction = this._createActionByOption('onCellClick');
   }
 
   _createCellHoverAction(): void {
+    // @ts-expect-error ts-error
     this._cellHoverAction = this._createActionByOption('onCellHover');
   }
 
   _createWeekNumberCellClickAction(): void {
+    // @ts-expect-error ts-error
     this._weekNumberCellClickAction = this._createActionByOption('onWeekNumberClick');
   }
 
@@ -492,7 +495,7 @@ class BaseView<
     Class.abstract();
   }
 
-  isDateDisabled(cellDate) {
+  isDateDisabled(cellDate): boolean {
     const dateParts = {
       date: cellDate,
       view: this._getViewName(),

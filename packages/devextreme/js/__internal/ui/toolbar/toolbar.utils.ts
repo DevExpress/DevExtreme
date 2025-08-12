@@ -2,8 +2,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
 import type Widget from '@ts/core/widget/widget';
+import type { ListBase } from '@ts/ui/list/list.base';
 
-import type { ListBase } from '../list/m_list.base';
 import type Toolbar from './toolbar';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';

@@ -1,5 +1,7 @@
-const itemsDriveD = [];
-const itemsDriveC = [{
+import type { FileSystemItem } from './types';
+
+const itemsDriveD: FileSystemItem[] = [];
+const itemsDriveC: FileSystemItem[] = [{
   id: '1',
   name: 'Documents',
   icon: 'activefolder',

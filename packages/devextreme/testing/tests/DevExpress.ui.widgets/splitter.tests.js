@@ -34,7 +34,7 @@ QUnit.testStart(() => {
                 border: 10px solid black;
             }
         </style>
-        
+
         <div id="splitter"></div>
         <div id="splitterParentContainer">
             <div id="splitterInContainer"></div>

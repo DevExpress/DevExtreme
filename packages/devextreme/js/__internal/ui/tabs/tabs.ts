@@ -15,17 +15,21 @@ import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-// eslint-disable-next-line import/no-named-default
-import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
   Item,
-  Orientation, Properties, TabsIconPosition, TabsStyle,
+  Orientation,
+  Properties,
+  TabsIconPosition,
+  TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
@@ -124,25 +128,18 @@ const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   secondary: 'secondary',
 };
 
-export interface TabsProperties extends Properties {
-  selectionRequired?: boolean;
-
-  selectOnFocus?: boolean;
-
-  loopItemFocus?: boolean;
-
+export interface TabsProperties extends Properties, Omit<
+  CollectionWidgetLiveUpdateProperties<TabsProperties>,
+  keyof Properties
+> {
   useInkRipple?: boolean;
 
   badgeExpr?: (data) => string | undefined;
 
-  _itemAttributes?: Record<string, unknown>;
-
   _indicatorPosition?: Position | null;
-
-  focusedElement?: dxElementWrapper;
 }
 
-class Tabs extends CollectionWidget<TabsProperties> {
+class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   static ItemClass = TabsItem;
 
   _scrollable?: Scrollable | null;
@@ -504,7 +501,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(item: dxElementWrapper | undefined): void {
+  _scrollToItem(item: Element | undefined | null): void {
     if (!this._scrollable) return;
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
@@ -593,9 +590,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
     const pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton');
     const pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
 
-    const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
+    const navButton = this._createComponent<Button, ButtonProperties>($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
       focusStateEnabled: false,
       icon,
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -773,7 +771,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       .toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
   }
 
-  _toggleFocusedDisabledClasses(value: dxElementWrapper | undefined): void {
+  _toggleFocusedDisabledClasses(value: dxElementWrapper): void {
     const { selectedIndex: currentIndex } = this.option();
 
     this._itemElements()
@@ -783,7 +781,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     const prevItemIndex = currentIndex - 1;
     // @ts-expect-error ts-error
     const nextItemIndex = currentIndex + 1;
-
     const nextFocusedIndex = $(value).index();
 
     const isNextDisabled = this._itemElements().eq(nextItemIndex).hasClass(STATE_DISABLED_CLASS);
@@ -837,11 +834,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        type PropertyType = TabsProperties[typeof name];
-
-        this._toggleFocusedDisabledClasses(value as PropertyType);
+        this._toggleFocusedDisabledClasses($(value));
         super._optionChanged(args);
-        this._scrollToItem(value as PropertyType);
+        this._scrollToItem(value);
         break;
       }
       case 'rtlEnabled': {

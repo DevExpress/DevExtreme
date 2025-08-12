@@ -24,8 +24,8 @@ import Overlay from '@js/ui/overlay/ui.overlay';
 import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
-import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
@@ -33,6 +33,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
+import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -710,12 +711,13 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  private _prepareEditCell(params) {
-    // @ts-expect-error
-    const isNotCanceled = super._prepareEditCell.apply(this, arguments as any);
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+    const { column, item } = parameters;
+    const isNotCanceled: boolean = super._prepareEditCell(parameters);
+    const key = !item.isNewRow ? item.key : undefined;
 
-    if (isNotCanceled && params.column.showEditorAlways) {
-      this._validatingController.updateValidationState({ key: params.key });
+    if (isNotCanceled && column.showEditorAlways) {
+      this._validatingController.updateValidationState({ key });
     }
 
     return isNotCanceled;

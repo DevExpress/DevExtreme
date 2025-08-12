@@ -16,15 +16,17 @@ import { sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/multi_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import type {
   CollectionItemInfo,
+  CollectionItemKey,
   DataChange,
   ItemRenderInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 
 import { _translator, animation } from './multi_view.animation';
 
@@ -44,20 +46,15 @@ const toNumber = (value): number => +value;
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getPosition = ($element: dxElementWrapper): number => locate($element).left;
 
-export interface MultiViewProperties extends Properties<Item> {
-  loopItemFocus?: boolean;
-
-  selectOnFocus?: boolean;
-
+export interface MultiViewProperties extends Properties<Item>, Omit<
+  CollectionWidgetLiveUpdateProperties<MultiView, Item, CollectionItemKey>,
+  keyof Properties<Item, CollectionItemKey>
+> {
   selectionMode?: SingleOrMultiple;
-
-  selectionRequired?: boolean;
-
-  selectByClick?: boolean;
 }
 class MultiView<
   TProperties extends MultiViewProperties = MultiViewProperties,
-> extends CollectionWidget<TProperties> {
+> extends CollectionWidgetLiveUpdate<TProperties> {
   _boundaryIndices?: {
     firstAvailableIndex: number;
     lastAvailableIndex: number;
@@ -282,12 +279,9 @@ class MultiView<
   _renderItemContent(args: ItemRenderInfo<Item>): DeferredObj<dxElementWrapper> {
     const renderContentDeferred = Deferred();
 
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
-
     const deferred = Deferred();
     deferred.done(() => {
-      const $itemContent = super._renderItemContent.call(that, args);
+      const $itemContent = super._renderItemContent(args);
       renderContentDeferred.resolve($itemContent);
     });
 
@@ -476,9 +470,15 @@ class MultiView<
       disabled: this._getSwipeDisabledState(),
       elastic: false,
       itemSizeFunc: this._itemWidth.bind(this),
-      onStart: (args) => this._swipeStartHandler(args.event),
-      onUpdated: (args) => this._swipeUpdateHandler(args.event),
-      onEnd: (args) => this._swipeEndHandler(args.event),
+      onStart: (args) => {
+        this._swipeStartHandler(args.event);
+      },
+      onUpdated: (args) => {
+        this._swipeUpdateHandler(args.event);
+      },
+      onEnd: (args) => {
+        this._swipeEndHandler(args.event);
+      },
     });
   }
 
@@ -508,7 +508,7 @@ class MultiView<
     };
   }
 
-  _swipeStartHandler(e: SwipeStartEvent['event']): void {
+  _swipeStartHandler(e: DxEvent<SwipeStartEvent>): void {
     animation.complete(this._$itemContainer);
 
     const { selectedIndex, loop, rtlEnabled } = this.option();
@@ -529,7 +529,7 @@ class MultiView<
     e.maxRightOffset = toNumber(!!loop || canSwipeRight);
   }
 
-  _swipeUpdateHandler(e: SwipeUpdateEvent['event']): void {
+  _swipeUpdateHandler(e: DxEvent<SwipeUpdateEvent>): void {
     const { offset } = e;
     const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
@@ -589,7 +589,7 @@ class MultiView<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _postprocessSwipe(args: { swipedTabsIndex: number }): void {}
 
-  _swipeEndHandler(e: SwipeEndEvent['event']): void {
+  _swipeEndHandler(e: DxEvent<SwipeEndEvent>): void {
     const targetOffset = e.targetOffset * this._getRTLSignCorrection();
 
     if (targetOffset) {

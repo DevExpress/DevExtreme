@@ -443,9 +443,7 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     this._setAriaRole(isAdaptive);
-    // @ts-expect-error ts-error
     $menuItemsContainer.toggle(!isAdaptive);
-    // @ts-expect-error ts-error
     $adaptiveElements.toggle(isAdaptive);
   }
 
@@ -551,9 +549,7 @@ class Menu extends MenuBase<MenuProperties> {
     const { cssClass } = this.option();
 
     const $hamburger = this._renderHamburgerButton();
-    // @ts-expect-error ts-error
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
-
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     this._overlay.$content()
       .append(this._treeView.$element())
@@ -866,7 +862,7 @@ class Menu extends MenuBase<MenuProperties> {
     const isFocusedElementHiding = focusedElement === submenuFocusedElement;
 
     if (isVisibleSubmenuHiding && isFocusedElementHiding) {
-      this.option('focusedElement', $menuAnchorItem);
+      this.option('focusedElement', getPublicElement($menuAnchorItem));
     }
 
     if (!eventArgs.cancel) {
