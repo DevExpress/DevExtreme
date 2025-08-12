@@ -97,8 +97,8 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
         IterableDifferHelper
     ]
 })
-export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxMenu<TKey> = null;
+export class DxMenuComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxMenu<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -300,10 +300,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get items(): Array<dxMenuItem> {
+    get items(): Array<any | dxMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxMenuItem>) {
+    set items(value: Array<any | dxMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -695,7 +695,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxMenuItem>>;
 
     /**
     

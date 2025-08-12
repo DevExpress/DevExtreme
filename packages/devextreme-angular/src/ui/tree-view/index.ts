@@ -369,10 +369,10 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get items(): Array<dxTreeViewItem> {
+    get items(): Array<any | dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxTreeViewItem>) {
+    set items(value: Array<any | dxTreeViewItem>) {
         this._setOption('items', value);
     }
 
@@ -964,7 +964,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxTreeViewItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxTreeViewItem>>;
 
     /**
     

@@ -34,7 +34,7 @@ import {
 
 import dxScrollable from './scroll_view/ui.scrollable';
 
-type ItemLike = string | Item | any;
+type ItemLike = Item | any;
 
 /**
  * @docid _ui_tree_view_ItemInfo
@@ -242,7 +242,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
     hasItemsExpr?: string | Function;
     /**
      * @docid
-     * @type Array<dxTreeViewItem>
+     * @type Array<dxTreeViewItem | any>
      * @public
      */
     items?: Array<TItem>;
