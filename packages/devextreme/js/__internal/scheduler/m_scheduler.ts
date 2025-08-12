@@ -43,6 +43,7 @@ import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
+import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
@@ -1708,15 +1709,17 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._subscribes[subject] = subscribes[subject] = action;
   }
 
-  fire(subject) {
+  fire<Subject extends SubscribeKey>(
+    subject: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> {
     const callback = this._subscribes[subject];
-    const args = Array.prototype.slice.call(arguments);
 
     if (!isFunction(callback)) {
       throw errors.Error('E1031', subject);
     }
 
-    return callback.apply(this, args.slice(1));
+    return callback.call(this, ...args);
   }
 
   getTargetCellData() {
