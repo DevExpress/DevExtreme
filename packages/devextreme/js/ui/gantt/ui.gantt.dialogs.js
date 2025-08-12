@@ -225,7 +225,8 @@ class TaskEditDialogInfo extends DialogInfoBase {
                             this._parameters.showResourcesDialogCommand.execute(showTaskEditDialogCallback);
                         }
                     }
-                }]
+                }],
+                _ignoreFieldTemplateDeprecation: true,
             }
         }];
     }

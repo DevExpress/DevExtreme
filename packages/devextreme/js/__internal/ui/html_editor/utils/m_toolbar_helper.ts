@@ -565,6 +565,7 @@ function getTablePropertiesFormConfig(
               onInitialized: (event: InitializedColorBoxEvent): void => {
                 borderColorEditorInstance = event.component;
               },
+              _ignoreFieldTemplateDeprecation: true,
             });
             return $content;
           },
@@ -619,6 +620,7 @@ function getTablePropertiesFormConfig(
               onInitialized: (event: InitializedColorBoxEvent): void => {
                 backgroundColorEditorInstance = event.component;
               },
+              _ignoreFieldTemplateDeprecation: true,
             });
             return $content;
           },
@@ -779,6 +781,7 @@ function getCellPropertiesFormConfig(
               onInitialized: (event: InitializedColorBoxEvent): void => {
                 borderColorEditorInstance = event.component;
               },
+              _ignoreFieldTemplateDeprecation: true,
             });
             return $content;
           },
@@ -843,6 +846,7 @@ function getCellPropertiesFormConfig(
               onInitialized: (event: InitializedColorBoxEvent): void => {
                 backgroundColorEditorInstance = event.component;
               },
+              _ignoreFieldTemplateDeprecation: true,
             });
             return $content;
           },

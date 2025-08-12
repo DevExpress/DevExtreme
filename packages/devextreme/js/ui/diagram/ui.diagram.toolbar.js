@@ -221,6 +221,7 @@ class DiagramToolbar extends DiagramPanel {
                 onClosed: () => {
                     $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
                 },
+                _ignoreFieldTemplateDeprecation: true,
             }
         });
         return options;
