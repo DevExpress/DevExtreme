@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
@@ -251,17 +251,16 @@ test('Sensitivity option change should be correctly handled during runtime chang
 test('"Select All" checkbox should not react when not visible', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  const editorCell = Selector('.dx-editor-cell').nth(0);
   const selectAllCheckBox = new CheckBox(
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
   );
+  const editorCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element;
 
   await t.expect(await selectAllCheckBox.option('visible')).notOk();
 
   await t.click(editorCell);
 
   await t.expect(await selectAllCheckBox.option('visible')).notOk();
-  // await t.expect(await selectAllCheckBox.option('value')).eql(undefined);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
   keyExpr: 'orderId',

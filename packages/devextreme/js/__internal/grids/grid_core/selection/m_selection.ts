@@ -752,25 +752,23 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
   }
 
   protected _renderSelectAllCheckBox($container, column?) {
-    const that = this;
-
     const groupElement = $('<div>')
       .appendTo($container)
       .addClass(SELECT_CHECKBOX_CLASS);
 
-    that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
+    this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
 
-    that._editorFactoryController.createEditor(groupElement, extend({}, column, {
+    this._editorFactoryController.createEditor(groupElement, extend({}, column, {
       parentType: 'headerRow',
       dataType: 'boolean',
-      value: that._selectionController.isSelectAll(),
+      value: this._selectionController.isSelectAll(),
       editorOptions: {
         visible: this._isSelectAllCheckBoxVisible(),
       },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
+      tabIndex: this.option('useLegacyKeyboardNavigation') ? -1 : this.option('tabIndex') || 0,
       setValue: (value, e) => {
-        const allowSelectAll = that.option('selection.allowSelectAll');
+        const allowSelectAll = this.option('selection.allowSelectAll');
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         e.component.option('visible', allowSelectAll || e.component.option('value') !== false);
 
