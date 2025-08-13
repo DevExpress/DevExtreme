@@ -17,8 +17,8 @@ import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/list.base';
-import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import Popup from '@ts/ui/popup/m_popup';
+import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
@@ -293,7 +293,6 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     this._popup.registerKeyHandler('escape', (
       e: DxEvent<KeyboardEvent>,
     ) => {
-      // @ts-expect-error
       if (this._popup?.$overlayContent().is($(e.target))) {
         this.option('opened', false);
       }
