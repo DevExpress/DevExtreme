@@ -4,7 +4,7 @@ import { each } from '@js/core/utils/iterator';
 import type { Item } from '@js/ui/toolbar';
 import { ListBase } from '@ts/ui/list/m_list.base';
 
-const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
+export const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';

@@ -18,7 +18,7 @@ import Widget from '@ts/core/widget/widget';
 import type { ListBase } from '@ts/ui/list/m_list.base';
 
 import { toggleItemFocusableElementTabIndex } from '../m_toolbar.utils';
-import ToolbarMenuList from './m_toolbar.menu.list';
+import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from './m_toolbar.menu.list';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
@@ -264,7 +264,20 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       dragEnabled: false,
       showTitle: false,
       fullScreen: false,
+      ignoreChildEvents: false,
       _fixWrapperPosition: true,
+    });
+    this._popup.registerKeyHandler('space', (e) => {
+      this._popupKeyHandler(e);
+    });
+    this._popup.registerKeyHandler('enter', (e) => {
+      this._popupKeyHandler(e);
+    });
+    this._popup.registerKeyHandler('escape', (e): void => {
+      // @ts-expect-error
+      if (this._popup?.$overlayContent().is($(e.target))) {
+        this.option('opened', false);
+      }
     });
   }
 
@@ -298,10 +311,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       noDataText: '',
       itemTemplate,
       onItemClick: (e) => {
-        if (this.option('closeOnClick')) {
-          this.option('opened', false);
-        }
-        this._itemClickAction(e);
+        this._itemClickHandler(e);
       },
       tabIndex: -1,
       focusStateEnabled: false,
@@ -310,6 +320,23 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       // @ts-expect-error ts-error
       _itemAttributes: { role: 'menuitem' },
     });
+  }
+
+  _popupKeyHandler(e): void {
+    if ($(e.target).closest(`.${TOOLBAR_MENU_ACTION_CLASS}`).length) {
+      this._closePopup();
+    }
+  }
+
+  _closePopup(): void {
+    if (this.option('closeOnClick')) {
+      this.option('opened', false);
+    }
+  }
+
+  _itemClickHandler(e): void {
+    this._closePopup();
+    this._itemClickAction?.(e);
   }
 
   _itemOptionChanged(item, property, value): void {
