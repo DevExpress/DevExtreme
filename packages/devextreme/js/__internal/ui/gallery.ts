@@ -221,7 +221,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceOptions(): DataSourceOptions<Item> {
     return {
       paginate: false,
@@ -232,12 +231,10 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     return this._$container;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return GALLERY_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return GALLERY_ITEM_DATA_KEY;
   }
@@ -848,9 +845,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
     if (
     // @ts-expect-error ts-error
-      this._dataSource
-        // @ts-expect-error ts-error
-        && this._dataSource.paginate()
+      this._dataSource?.paginate()
         && this._shouldLoadNextPage(selectedIndex)
         // @ts-expect-error ts-error
         && !this._isDataSourceLoading()
@@ -874,7 +869,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     return selectedIndex + 2 * visiblePageSize > items.length;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _allowDynamicItemsAppend(): boolean {
     return true;
   }
@@ -938,7 +932,7 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     const prevHidden = itemsCount < 2 || selectedIndex === 0;
 
     // @ts-expect-error ts-error
-    if (this._dataSource && this._dataSource.paginate()) {
+    if (this._dataSource?.paginate()) {
       // @ts-expect-error ts-error
       nextHidden = nextHidden && this._isLastPage();
     } else {
@@ -1154,7 +1148,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
     super._focusOutHandler(e);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectFocusedItem(): void {}
 
   _moveFocus(location: string, e?: DxEvent<KeyboardEvent>): void {
