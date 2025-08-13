@@ -61,16 +61,16 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     readonly _dxClassName = 'DxiFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

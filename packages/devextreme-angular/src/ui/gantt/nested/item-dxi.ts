@@ -58,8 +58,8 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
     readonly _dxClassName = 'DxiGanttItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

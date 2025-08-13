@@ -44,8 +44,8 @@ export class DxoDiagramContextMenuComponent extends NestedOption implements OnDe
     readonly _dxClassName = 'DxoDiagramContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     
     @Input()

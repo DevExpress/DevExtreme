@@ -48,8 +48,8 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     readonly _dxClassName = 'DxoScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('breaks', value);
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
     }
     
     @Input()

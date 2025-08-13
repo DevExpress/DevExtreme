@@ -54,8 +54,8 @@ export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implement
     readonly _dxClassName = 'DxoSelectBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
     
     @Input()

@@ -22,26 +22,6 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-export const checkIncompatibleNestedItems = (
-  items: QueryList<CollectionNestedOption>,
-  containerClassName: string,
-  legacyClassNames: string[],
-) => {
-  if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
-    const itemLegacyClassName = items.find(({ _dxClassName }) => legacyClassNames.includes(_dxClassName))?._dxClassName;
-    const itemClassName = items.find(({ _dxClassName }) => !legacyClassNames.includes(_dxClassName))?._dxClassName;
-
-    if (itemLegacyClassName && itemClassName) {
-      console.warn(`In ${containerClassName},
-          the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
-          Ensure that all nested components in the content area match.`);
-
-      return true;
-    }
-  }
-  return false;
-};
-
 @Component({
   template: '',
 })
@@ -62,18 +42,6 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
 
   constructor() {
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
-  }
-
-  protected _setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
-    const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
-      items,
-      this._dxClassName,
-      [],
-    );
-
-    if (!hasIncopatibleNestedItems) {
-      this.setChildren(propertyName, items);
-    }
   }
 
   protected _optionChangedHandler(e: any) {

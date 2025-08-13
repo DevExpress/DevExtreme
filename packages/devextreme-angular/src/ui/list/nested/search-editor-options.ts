@@ -47,8 +47,8 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     readonly _dxClassName = 'DxoListSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
     }
     
     @Input()

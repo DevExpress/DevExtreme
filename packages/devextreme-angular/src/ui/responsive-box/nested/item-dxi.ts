@@ -55,8 +55,8 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     readonly _dxClassName = 'DxiResponsiveBoxItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('location', value);
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
     }
     
     @Input()

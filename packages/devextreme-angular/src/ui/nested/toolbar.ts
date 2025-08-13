@@ -52,12 +52,12 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
     readonly _dxClassName = 'DxoToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
-    set _fileSelectionItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('fileSelectionItems', value);
+    set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fileSelectionItems', value);
     }
     
 

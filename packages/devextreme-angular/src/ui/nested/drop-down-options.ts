@@ -100,8 +100,8 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
     readonly _dxClassName = 'DxoDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
     
 

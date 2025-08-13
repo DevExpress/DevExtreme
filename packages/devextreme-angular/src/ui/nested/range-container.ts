@@ -46,8 +46,8 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     readonly _dxClassName = 'DxoRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('ranges', value);
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
     }
     
     @Input()

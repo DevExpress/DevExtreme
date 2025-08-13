@@ -37,7 +37,6 @@ import {
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
-  checkIncompatibleNestedItems,
   CollectionNestedOption,
 } from './nested-option';
 
@@ -69,7 +68,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
-  protected _legacyNestedClassNames: Record<string, any> = {};
+  protected _legacyChildrenNames: Record<string, any> = {};
 
   protected _dxClassName = 'DxComponent';
 
@@ -92,15 +91,35 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   widgetUpdateLocked = false;
 
   templateUpdateRequired = false;
+  
+  private checkContentChildren(
+      items: QueryList<CollectionNestedOption>,
+      containerClassName: string,
+      legacyClassNames: string[],
+  ) {
+    if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
+      const itemLegacyClassName = items.find(({ _dxClassName }) => legacyClassNames.includes(_dxClassName))?._dxClassName;
+      const itemClassName = items.find(({ _dxClassName }) => !legacyClassNames.includes(_dxClassName))?._dxClassName;
+
+      if (itemLegacyClassName && itemClassName) {
+        console.warn(`In ${containerClassName},
+          the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
+          Ensure that all nested components in the content area match.`);
+
+        return false;
+      }
+    }
+    return true;
+  }
 
   protected _setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
-    const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
+    const hasNoConflicts = this.checkContentChildren(
       items,
       this._dxClassName,
-      this._legacyNestedClassNames[propertyName],
+      this._legacyChildrenNames[propertyName],
     );
 
-    if (!hasIncopatibleNestedItems) {
+    if (hasNoConflicts) {
       this.setChildren(propertyName, items);
     }
   }

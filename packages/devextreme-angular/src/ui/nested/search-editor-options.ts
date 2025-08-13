@@ -102,8 +102,8 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
     readonly _dxClassName = 'DxoSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
     }
     
 

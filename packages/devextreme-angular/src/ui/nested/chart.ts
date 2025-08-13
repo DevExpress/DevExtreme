@@ -46,8 +46,8 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     readonly _dxClassName = 'DxoChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('series', value);
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
     }
     
     @Input()

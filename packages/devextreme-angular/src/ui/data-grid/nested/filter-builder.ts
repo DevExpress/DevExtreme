@@ -47,12 +47,12 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     readonly _dxClassName = 'DxoDataGridFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('customOperations', value);
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
     }
     @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('fields', value);
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
     }
     
     @Input()

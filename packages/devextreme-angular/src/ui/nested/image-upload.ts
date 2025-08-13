@@ -50,8 +50,8 @@ export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements
     readonly _dxClassName = 'DxoImageUploadComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
     
 

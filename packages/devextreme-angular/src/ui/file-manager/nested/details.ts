@@ -44,8 +44,8 @@ export class DxoFileManagerDetailsComponent extends NestedOption implements OnDe
     readonly _dxClassName = 'DxoFileManagerDetailsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
     }
     
     @Input()

@@ -44,8 +44,8 @@ export class DxoPropertiesPanelComponent extends NestedOption implements OnDestr
     readonly _dxClassName = 'DxoPropertiesPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
     
     @Input()

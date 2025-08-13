@@ -56,8 +56,8 @@ export class DxiGanttContextMenuItemComponent extends CollectionNestedOption imp
     readonly _dxClassName = 'DxiGanttContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

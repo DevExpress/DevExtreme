@@ -52,8 +52,8 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     readonly _dxClassName = 'DxiCardViewColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     
     @Input()

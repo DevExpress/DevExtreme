@@ -58,12 +58,12 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     readonly _dxClassName = 'DxiHtmlEditorItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

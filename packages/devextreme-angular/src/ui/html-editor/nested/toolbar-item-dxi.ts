@@ -58,8 +58,8 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     readonly _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     
     @Input()

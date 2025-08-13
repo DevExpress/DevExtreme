@@ -53,16 +53,16 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     readonly _dxClassName = 'DxiValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('breaks', value);
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
     }
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('constantLines', value);
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
     }
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('strips', value);
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
     }
     
     @Input()

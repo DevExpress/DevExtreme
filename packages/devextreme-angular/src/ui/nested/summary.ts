@@ -47,12 +47,12 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
     readonly _dxClassName = 'DxoSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
-    set _groupItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('groupItems', value);
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groupItems', value);
     }
     @ContentChildren(PROPERTY_TOKEN_totalItems)
-    set _totalItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('totalItems', value);
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('totalItems', value);
     }
     
     @Input()

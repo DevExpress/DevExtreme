@@ -143,24 +143,24 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
     readonly _dxClassName = 'DxiItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('location', value);
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
     }
     
 

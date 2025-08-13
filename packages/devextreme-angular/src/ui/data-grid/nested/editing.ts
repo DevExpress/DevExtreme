@@ -50,8 +50,8 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     readonly _dxClassName = 'DxoDataGridEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('changes', value);
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('changes', value);
     }
     
     @Input()

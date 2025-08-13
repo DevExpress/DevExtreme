@@ -55,8 +55,8 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
     readonly _dxClassName = 'DxiFormGroupItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

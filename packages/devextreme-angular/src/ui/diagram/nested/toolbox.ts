@@ -44,8 +44,8 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     readonly _dxClassName = 'DxoDiagramToolboxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('groups', value);
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
     }
     
     @Input()

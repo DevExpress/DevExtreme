@@ -48,12 +48,12 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     readonly _dxClassName = 'DxoDataGridSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
-    set _groupItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('groupItems', value);
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groupItems', value);
     }
     @ContentChildren(PROPERTY_TOKEN_totalItems)
-    set _totalItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('totalItems', value);
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('totalItems', value);
     }
     
     @Input()

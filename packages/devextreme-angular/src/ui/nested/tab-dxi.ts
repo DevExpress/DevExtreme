@@ -73,16 +73,16 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
     readonly _dxClassName = 'DxiTabComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('groups', value);
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
     }
     
 

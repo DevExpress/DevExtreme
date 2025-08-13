@@ -56,8 +56,8 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     readonly _dxClassName = 'DxiDiagramCustomShapeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('connectionPoints', value);
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
     }
     
     @Input()

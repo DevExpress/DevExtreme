@@ -44,8 +44,8 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
     readonly _dxClassName = 'DxoDetailsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
     }
     
     @Input()

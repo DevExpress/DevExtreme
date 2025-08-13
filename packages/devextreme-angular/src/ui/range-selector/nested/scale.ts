@@ -46,8 +46,8 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     readonly _dxClassName = 'DxoRangeSelectorScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('breaks', value);
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
     }
     
     @Input()

@@ -54,8 +54,8 @@ export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implem
     readonly _dxClassName = 'DxoAutocompleteDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
     
     @Input()

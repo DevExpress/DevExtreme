@@ -44,8 +44,8 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
     readonly _dxClassName = 'DxoDiagramPropertiesPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
     
     @Input()

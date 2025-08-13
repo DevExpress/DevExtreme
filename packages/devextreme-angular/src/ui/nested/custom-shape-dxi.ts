@@ -56,8 +56,8 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
     readonly _dxClassName = 'DxiCustomShapeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('connectionPoints', value);
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
     }
     
     @Input()

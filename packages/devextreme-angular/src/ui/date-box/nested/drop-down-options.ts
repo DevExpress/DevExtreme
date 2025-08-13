@@ -54,8 +54,8 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     readonly _dxClassName = 'DxoDateBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
     
     @Input()

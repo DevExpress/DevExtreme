@@ -45,8 +45,8 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
     readonly _dxClassName = 'DxoPageSizeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

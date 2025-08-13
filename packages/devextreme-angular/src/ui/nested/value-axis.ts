@@ -49,12 +49,12 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     readonly _dxClassName = 'DxoValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('constantLines', value);
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
     }
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('strips', value);
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
     }
     
     @Input()

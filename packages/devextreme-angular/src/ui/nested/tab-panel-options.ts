@@ -92,8 +92,8 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
     readonly _dxClassName = 'DxoTabPanelOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
 

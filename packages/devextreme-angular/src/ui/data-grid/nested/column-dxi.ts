@@ -56,16 +56,16 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     readonly _dxClassName = 'DxiDataGridColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
     }
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
     }
     
     @Input()

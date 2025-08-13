@@ -45,8 +45,8 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     readonly _dxClassName = 'DxoLinearGaugeRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('ranges', value);
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
     }
     
     @Input()
