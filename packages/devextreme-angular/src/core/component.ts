@@ -91,11 +91,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   widgetUpdateLocked = false;
 
   templateUpdateRequired = false;
-  
+
   private checkContentChildren(
-      items: QueryList<CollectionNestedOption>,
-      containerClassName: string,
-      legacyClassNames: string[],
+    items: QueryList<CollectionNestedOption>,
+    containerClassName: string,
+    legacyClassNames: string[],
   ) {
     if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
       const itemLegacyClassName = items.find(({ _dxClassName }) => legacyClassNames.includes(_dxClassName))?._dxClassName;
