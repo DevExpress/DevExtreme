@@ -1043,16 +1043,19 @@ QUnit.module('Selection', () => {
             selectByClick: true,
             onSelectionChanged: selectionChangedHandler,
         });
+        const $items = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`);
+        const $item1 = $items.eq(0);
+        const $item2 = $items.eq(1);
 
-        const $item2 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
         $item2.trigger('dxclick');
-        assert.equal(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
         assert.deepEqual(selectionChangedHandler.args[0][0].addedItems, [{ text: 'item2', selected: true }], 'onSelectionChanged is called with selected item as added item');
         assert.deepEqual(selectionChangedHandler.args[0][0].removedItems, [null], 'onSelectionChanged first called with null as removed item');
 
-        const $item1 = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
         $item1.trigger('dxclick');
-        assert.equal(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
         assert.deepEqual(selectionChangedHandler.args[1][0].addedItems, [{ text: 'item1', selected: true }], 'onSelectionChanged is called with selected item as added item');
         assert.deepEqual(selectionChangedHandler.args[1][0].removedItems, [{ text: 'item2', selected: false }], 'onSelectionChanged is called with previously selected item as removed item');
     });
@@ -1069,15 +1072,17 @@ QUnit.module('Selection', () => {
             selectByClick: true,
             onSelectionChanged: selectionChangedHandler,
         });
+        const $item = menuBase.element.find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
 
-        const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(1);
         $item.trigger('dxclick');
-        assert.equal(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'onSelectionChanged was called for the first time');
         assert.deepEqual(selectionChangedHandler.args[0][0].addedItems, [{ text: 'item2', selected: true }], 'onSelectionChanged was called with selected item as added item');
         assert.deepEqual(selectionChangedHandler.args[0][0].removedItems, [null], 'onSelectionChanged first called with null as removed item');
 
         $item.trigger('dxclick');
-        assert.equal(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
+
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'onSelectionChanged was called for the second time');
         assert.deepEqual(selectionChangedHandler.args[1][0].addedItems, [null], 'onSelectionChanged was called with null as added item');
         assert.deepEqual(selectionChangedHandler.args[1][0].removedItems, [{ text: 'item2', selected: false }], 'onSelectionChanged was called with previously selected item as removed item');
     });

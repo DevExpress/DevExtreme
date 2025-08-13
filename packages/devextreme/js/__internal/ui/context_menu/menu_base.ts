@@ -778,6 +778,8 @@ class MenuBase<
     return result;
   }
 
+  _updateSelectedItems(): void {}
+
   _updateSelectedItem(
     addedItem?: Item | null,
     removedItem?: Item,
