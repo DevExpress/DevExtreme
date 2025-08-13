@@ -41,8 +41,8 @@ import type {
   InternalNode, ItemData, ItemKey, PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
-import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
-import LoadIndicator from '@ts/ui/m_load_indicator';
+import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
+import LoadIndicator from '@ts/ui/load_indicator';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
