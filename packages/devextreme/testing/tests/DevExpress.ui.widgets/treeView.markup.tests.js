@@ -8,7 +8,7 @@ QUnit.testStart(function() {
 });
 
 import 'ui/tree_view';
-import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/tree_view.base';
+import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/m_tree_view.base';
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';

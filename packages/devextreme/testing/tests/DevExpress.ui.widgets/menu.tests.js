@@ -22,7 +22,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import {
     EXPANDER_ICON_STUB_CLASS as TREE_VIEW_EXPANDER_ICON_STUB_CLASS,
     ITEM_CLASS as TREE_VIEW_ITEM_CLASS,
-} from '__internal/ui/tree_view/tree_view.base';
+} from '__internal/ui/tree_view/m_tree_view.base';
 
 QUnit.testStart(function() {
     const markup =
