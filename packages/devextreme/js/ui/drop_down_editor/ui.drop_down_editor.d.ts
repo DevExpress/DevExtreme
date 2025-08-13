@@ -39,7 +39,7 @@ export interface DropDownButtonTemplateDataModel {
  * @namespace DevExpress.ui
  * @docid
  */
-export type FieldTemplate<T = any> = template | ((data: T, element: DxElement) => string | UserDefinedElement);
+export type FieldTemplate = template | ((data: any, element: DxElement) => string | UserDefinedElement);
 /**
  * @namespace DevExpress.ui
  * @docid

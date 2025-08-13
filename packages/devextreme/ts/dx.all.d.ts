@@ -32644,10 +32644,10 @@ declare module DevExpress.ui {
    * [descr:FieldTemplate]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type FieldTemplate<T = any> =
+  export type FieldTemplate =
     | template
     | ((
-        data: T,
+        data: any,
         element: DevExpress.core.DxElement
       ) => string | DevExpress.core.UserDefinedElement);
   /**
