@@ -61,7 +61,11 @@ describe('DxValidator', () => {
   [
     {
       name: 'legacy',
-      tpl: '<dx-validator>@for (rule of validationRules; track rule){ <dxi-validation-rule [type]="rule.type"></dxi-validation-rule> } </dx-validator>',
+      tpl: `<dx-validator>
+                @for (rule of validationRules; track rule){ 
+                    <dxi-validation-rule [type]="rule.type"></dxi-validation-rule>
+                }
+            </dx-validator>`,
     },
     {
       name: 'by props',
@@ -74,7 +78,7 @@ describe('DxValidator', () => {
                 @if (rule.type === 'email') {
                     <dxi-validator-email-rule ></dxi-validator-email-rule>
                 } @else {
-                    <dxi-validator-required-rule ></dxi-validator-required-rule>
+                    <dxi-validator-required-rule></dxi-validator-required-rule>
                  }
             }</dx-validator>`,
     },
