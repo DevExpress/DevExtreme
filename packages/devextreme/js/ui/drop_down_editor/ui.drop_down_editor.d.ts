@@ -38,6 +38,8 @@ export interface DropDownButtonTemplateDataModel {
 /**
  * @namespace DevExpress.ui
  * @docid
+ * @type_function_param1 selectedItem:object
+ * @type_function_return string|Element|jQuery
  */
 export type FieldTemplate = template | ((data: any, element: DxElement) => string | UserDefinedElement);
 /**
@@ -45,7 +47,17 @@ export type FieldTemplate = template | ((data: any, element: DxElement) => strin
  * @docid
  */
 export type FieldTemplates = {
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
     beforeTemplate?: FieldTemplate;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
     afterTemplate?: FieldTemplate;
 };
 

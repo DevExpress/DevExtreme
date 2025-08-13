@@ -63,6 +63,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldTemplatesModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDropDownBoxAnimationModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -71,6 +72,7 @@ import { DxoDropDownBoxBoundaryOffsetModule } from 'devextreme-angular/ui/drop-d
 import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxCollisionModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxFieldTemplatesModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxMyModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -1383,6 +1385,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoDropDownBoxAnimationModule,
     DxoDropDownBoxAtModule,
@@ -1390,6 +1393,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldTemplatesModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,
@@ -1418,6 +1422,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoDropDownBoxAnimationModule,
     DxoDropDownBoxAtModule,
@@ -1425,6 +1430,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldTemplatesModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,

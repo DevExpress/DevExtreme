@@ -9,6 +9,7 @@ import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
  FieldTemplates,
+ FieldTemplate,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  TextEditorButton,
@@ -23,6 +24,7 @@ import {
  VerticalAlignment,
  TextEditorButtonLocation,
  PositionAlignment,
+ template,
  Direction,
  ButtonStyle,
  ButtonType,
@@ -368,6 +370,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       button: { isCollectionItem: true, optionName: "buttons" },
       dropDownOptions: { isCollectionItem: false, optionName: "dropDownOptions" },
+      fieldTemplates: { isCollectionItem: false, optionName: "fieldTemplates" },
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
@@ -600,6 +603,25 @@ const DxDropDownOptions = defineComponent(DxDropDownOptionsConfig);
   position: { isCollectionItem: false, optionName: "position" },
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
+
+const DxFieldTemplatesConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:afterTemplate": null,
+    "update:beforeTemplate": null,
+  },
+  props: {
+    afterTemplate: [Object, Function] as PropType<FieldTemplate | (((selectedItem: any, element: any) => string | any)) | template>,
+    beforeTemplate: [Object, Function] as PropType<FieldTemplate | (((selectedItem: any, element: any) => string | any)) | template>
+  }
+};
+
+prepareConfigurationComponentConfig(DxFieldTemplatesConfig);
+
+const DxFieldTemplates = defineComponent(DxFieldTemplatesConfig);
+
+(DxFieldTemplates as any).$_optionName = "fieldTemplates";
 
 const DxFromConfig = {
   emits: {
@@ -951,6 +973,7 @@ export {
   DxButton,
   DxCollision,
   DxDropDownOptions,
+  DxFieldTemplates,
   DxFrom,
   DxHide,
   DxItem,

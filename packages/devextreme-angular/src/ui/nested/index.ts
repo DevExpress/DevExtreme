@@ -70,6 +70,7 @@ export * from './export';
 export * from './field-chooser';
 export * from './field-dxi';
 export * from './field-panel';
+export * from './field-templates';
 export * from './file-selection-item-dxi';
 export * from './file-uploader-options';
 export * from './filter-builder-popup';

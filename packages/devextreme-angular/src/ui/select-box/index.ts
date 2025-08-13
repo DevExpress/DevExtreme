@@ -64,6 +64,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldTemplatesModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSelectBoxAnimationModule } from 'devextreme-angular/ui/select-box/nested';
@@ -72,6 +73,7 @@ import { DxoSelectBoxBoundaryOffsetModule } from 'devextreme-angular/ui/select-b
 import { DxiSelectBoxButtonModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoSelectBoxCollisionModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoSelectBoxDropDownOptionsModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoSelectBoxFieldTemplatesModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoSelectBoxFromModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoSelectBoxHideModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxiSelectBoxItemModule } from 'devextreme-angular/ui/select-box/nested';
@@ -1747,6 +1749,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoSelectBoxAnimationModule,
     DxoSelectBoxAtModule,
@@ -1754,6 +1757,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiSelectBoxButtonModule,
     DxoSelectBoxCollisionModule,
     DxoSelectBoxDropDownOptionsModule,
+    DxoSelectBoxFieldTemplatesModule,
     DxoSelectBoxFromModule,
     DxoSelectBoxHideModule,
     DxiSelectBoxItemModule,
@@ -1783,6 +1787,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoSelectBoxAnimationModule,
     DxoSelectBoxAtModule,
@@ -1790,6 +1795,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiSelectBoxButtonModule,
     DxoSelectBoxCollisionModule,
     DxoSelectBoxDropDownOptionsModule,
+    DxoSelectBoxFieldTemplatesModule,
     DxoSelectBoxFromModule,
     DxoSelectBoxHideModule,
     DxiSelectBoxItemModule,

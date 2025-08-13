@@ -4,6 +4,7 @@ export * from './boundary-offset';
 export * from './button-dxi';
 export * from './collision';
 export * from './drop-down-options';
+export * from './field-templates';
 export * from './from';
 export * from './hide';
 export * from './my';

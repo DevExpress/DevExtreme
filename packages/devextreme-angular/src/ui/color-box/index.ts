@@ -60,6 +60,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldTemplatesModule } from 'devextreme-angular/ui/nested';
 
 import { DxoColorBoxAnimationModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxAtModule } from 'devextreme-angular/ui/color-box/nested';
@@ -67,6 +68,7 @@ import { DxoColorBoxBoundaryOffsetModule } from 'devextreme-angular/ui/color-box
 import { DxiColorBoxButtonModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxCollisionModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxDropDownOptionsModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxFieldTemplatesModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxFromModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxHideModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxMyModule } from 'devextreme-angular/ui/color-box/nested';
@@ -1303,12 +1305,14 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldTemplatesModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,
@@ -1337,12 +1341,14 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldTemplatesModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,

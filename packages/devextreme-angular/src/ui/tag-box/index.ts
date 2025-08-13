@@ -64,6 +64,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldTemplatesModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoTagBoxAnimationModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -72,6 +73,7 @@ import { DxoTagBoxBoundaryOffsetModule } from 'devextreme-angular/ui/tag-box/nes
 import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxCollisionModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxDropDownOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxFieldTemplatesModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxFromModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxHideModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxiTagBoxItemModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -1889,6 +1891,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,
@@ -1896,6 +1899,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
     DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFieldTemplatesModule,
     DxoTagBoxFromModule,
     DxoTagBoxHideModule,
     DxiTagBoxItemModule,
@@ -1925,6 +1929,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldTemplatesModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,
@@ -1932,6 +1937,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
     DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFieldTemplatesModule,
     DxoTagBoxFromModule,
     DxoTagBoxHideModule,
     DxiTagBoxItemModule,

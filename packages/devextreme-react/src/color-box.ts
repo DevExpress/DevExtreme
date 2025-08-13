@@ -16,6 +16,7 @@ import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
+import type { FieldTemplate } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -83,7 +84,8 @@ const ColorBox = memo(
 
       const expectedChildren = useMemo(() => ({
         button: { optionName: "buttons", isCollectionItem: true },
-        dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false }
+        dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false },
+        fieldTemplates: { optionName: "fieldTemplates", isCollectionItem: false }
       }), []);
 
       const templateProps = useMemo(() => ([
@@ -318,6 +320,25 @@ const _componentDropDownOptions = (props: IDropDownOptionsProps) => {
 };
 
 const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedComponentMeta>(_componentDropDownOptions, {
+  componentType: "option",
+});
+
+// owners:
+// ColorBox
+type IFieldTemplatesProps = React.PropsWithChildren<{
+  afterTemplate?: FieldTemplate;
+  beforeTemplate?: FieldTemplate;
+}>
+const _componentFieldTemplates = (props: IFieldTemplatesProps) => {
+  return React.createElement(NestedOption<IFieldTemplatesProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fieldTemplates",
+    },
+  });
+};
+
+const FieldTemplates = Object.assign<typeof _componentFieldTemplates, NestedComponentMeta>(_componentFieldTemplates, {
   componentType: "option",
 });
 
@@ -631,6 +652,8 @@ export {
   ICollisionProps,
   DropDownOptions,
   IDropDownOptionsProps,
+  FieldTemplates,
+  IFieldTemplatesProps,
   From,
   IFromProps,
   Hide,
