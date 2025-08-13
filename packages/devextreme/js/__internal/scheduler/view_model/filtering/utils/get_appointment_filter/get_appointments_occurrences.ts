@@ -49,6 +49,6 @@ export const getAppointmentsOccurrences = (
   return startDates.map((startDate) => ({
     ...appointment,
     startDate,
-    endDate: dateUtilsTs.addOffsets(startDate, [duration]),
+    endDate: dateUtilsTs.addOffsets(startDate, duration),
   }));
 };

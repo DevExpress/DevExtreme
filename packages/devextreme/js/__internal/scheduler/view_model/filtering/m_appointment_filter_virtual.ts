@@ -24,7 +24,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
-    const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
+    const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, viewOffset);
     const filterOptions: FilterOptions[] = [];
 
     const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();

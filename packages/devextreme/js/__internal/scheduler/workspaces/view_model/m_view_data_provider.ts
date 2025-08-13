@@ -443,7 +443,7 @@ export default class ViewDataProvider {
     const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
-    return dateUtilsTs.addOffsets(lastEndDate, [-this._options.viewOffset]);
+    return dateUtilsTs.addOffsets(lastEndDate, -this._options.viewOffset);
   }
 
   getLastViewDateByEndDayHour(endDayHour: number): Date {

@@ -1599,7 +1599,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       }
 
       const result = this.timeZoneCalculator.createDate(date, 'fromGrid');
-      return dateUtilsTs.addOffsets(result, [-viewOffset]);
+      return dateUtilsTs.addOffsets(result, -viewOffset);
     };
 
     const targetCell = this.getTargetCellData();
@@ -1612,9 +1612,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
     let appointmentStartDate = new Date(appointment.startDate);
-    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]);
+    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, -viewOffset);
     let appointmentEndDate = new Date(appointment.endDate);
-    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]);
+    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, -viewOffset);
     let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
     if (!dateUtilsTs.isValidDate(appointmentStartDate)) {
@@ -1635,7 +1635,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, 'toGrid');
       const timeInMs = startDate.getTime() - dateUtils.trimTime(startDate).getTime();
 
-      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, [-viewOffset]);
+      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, -viewOffset);
       resultedStartDate = new Date(dateUtils.trimTime(targetCellStartDate).getTime() + timeInMs);
       resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, 'fromGrid');
     }
@@ -1667,8 +1667,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       }
     }
 
-    result.startDate = dateUtilsTs.addOffsets(result.startDate, [viewOffset]);
-    result.endDate = dateUtilsTs.addOffsets(resultedEndDate, [viewOffset]);
+    result.startDate = dateUtilsTs.addOffsets(result.startDate, viewOffset);
+    result.endDate = dateUtilsTs.addOffsets(resultedEndDate, viewOffset);
     const rawResult = result.source;
 
     setAppointmentGroupValues(rawResult, this.resourceManager.resourceById, targetCell.groups);

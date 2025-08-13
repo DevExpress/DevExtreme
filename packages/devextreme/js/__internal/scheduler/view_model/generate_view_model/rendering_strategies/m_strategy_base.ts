@@ -611,8 +611,8 @@ class BaseRenderingStrategy {
     endDate: Date,
   ): number {
     const { viewOffset } = this.options;
-    const originalStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
-    const originalEndDate = dateUtilsTs.addOffsets(endDate, [viewOffset]);
+    const originalStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
+    const originalEndDate = dateUtilsTs.addOffsets(endDate, viewOffset);
     const daylightDiff = timeZoneUtils.getDaylightOffset(originalStartDate, originalEndDate);
     const correctedDuration: number = this._needAdjustDuration(daylightDiff)
       ? this._calculateDurationByDaylightDiff(duration, daylightDiff)
@@ -909,8 +909,8 @@ class BaseRenderingStrategy {
     let startDate = this.dataAccessors.get('startDate', appointment);
     let endDate = this.dataAccessors.get('endDate', appointment);
 
-    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-    endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+    startDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
+    endDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
     return {
       ...appointment,

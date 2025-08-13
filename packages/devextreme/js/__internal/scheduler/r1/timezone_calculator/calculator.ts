@@ -102,9 +102,10 @@ export class TimeZoneCalculator {
     const targetOffsetName = appointmentTimezone ? 'appointment' : 'common';
     const direction = isBack ? -1 : 1;
 
-    return dateUtilsTs.addOffsets(newDate, [
+    return dateUtilsTs.addOffsets(
+      newDate,
       direction * toMs('hour') * offsets[targetOffsetName],
       -direction * toMs('hour') * offsets.client,
-    ]);
+    );
   }
 }
