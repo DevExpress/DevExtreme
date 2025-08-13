@@ -82,12 +82,12 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     readonly _dxClassName = 'DxTreeViewComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

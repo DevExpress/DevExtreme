@@ -84,7 +84,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     readonly _dxClassName = 'DxValidatorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 

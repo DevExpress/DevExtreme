@@ -92,17 +92,17 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     readonly _dxClassName = 'DxSchedulerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_resources)
-    set _resourcesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _resourcesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('resources', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_views)
-    set _viewsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _viewsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('views', value);
     }
 

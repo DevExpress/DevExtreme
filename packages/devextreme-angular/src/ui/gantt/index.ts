@@ -118,17 +118,17 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     readonly _dxClassName = 'DxGanttComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_stripLines)
-    set _stripLinesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _stripLinesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('stripLines', value);
     }
 

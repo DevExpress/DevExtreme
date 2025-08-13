@@ -73,7 +73,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     readonly _dxClassName = 'DxAccordionComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

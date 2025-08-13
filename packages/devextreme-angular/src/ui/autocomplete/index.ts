@@ -120,17 +120,17 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     readonly _dxClassName = 'DxAutocompleteComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 

@@ -93,17 +93,17 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     readonly _dxClassName = 'DxFileManagerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
-    set _fileSelectionItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fileSelectionItems', value);
     }
 

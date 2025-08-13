@@ -88,7 +88,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     readonly _dxClassName = 'DxNumberBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 

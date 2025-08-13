@@ -94,7 +94,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     readonly _dxClassName = 'DxPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 

@@ -258,37 +258,37 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     readonly _dxClassName = 'DxChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('breaks', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_panes)
-    set _panesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _panesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('panes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_valueAxis)
-    set _valueAxisNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _valueAxisContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('valueAxis', value);
     }
 

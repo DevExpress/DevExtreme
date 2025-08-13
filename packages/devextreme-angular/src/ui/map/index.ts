@@ -85,22 +85,22 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     readonly _dxClassName = 'DxMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_markers)
-    set _markersNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _markersContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('markers', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_routes)
-    set _routesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _routesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('routes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_locations)
-    set _locationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('locations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_center)
-    set _centerNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _centerContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('center', value);
     }
 

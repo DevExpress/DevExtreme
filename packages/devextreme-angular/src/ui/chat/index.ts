@@ -90,17 +90,17 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     readonly _dxClassName = 'DxChatComponent';
 
     @ContentChildren(PROPERTY_TOKEN_alerts)
-    set _alertsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _alertsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('alerts', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_typingUsers)
-    set _typingUsersNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _typingUsersContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('typingUsers', value);
     }
 

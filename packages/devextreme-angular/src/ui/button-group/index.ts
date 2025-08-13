@@ -70,7 +70,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     readonly _dxClassName = 'DxButtonGroupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

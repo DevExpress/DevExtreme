@@ -221,12 +221,12 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     readonly _dxClassName = 'DxRangeSelectorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('breaks', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 

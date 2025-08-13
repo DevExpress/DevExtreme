@@ -122,7 +122,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     readonly _dxClassName = 'DxLinearGaugeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('ranges', value);
     }
 

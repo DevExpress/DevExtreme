@@ -93,12 +93,12 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     readonly _dxClassName = 'DxFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customOperations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fields', value);
     }
 

@@ -70,7 +70,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     readonly _dxClassName = 'DxStepperComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

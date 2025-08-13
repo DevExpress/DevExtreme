@@ -138,12 +138,12 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     readonly _dxClassName = 'DxPieChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 

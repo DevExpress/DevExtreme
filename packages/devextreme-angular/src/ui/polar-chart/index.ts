@@ -197,22 +197,22 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     readonly _dxClassName = 'DxPolarChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('constantLines', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('series', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('strips', value);
     }
 

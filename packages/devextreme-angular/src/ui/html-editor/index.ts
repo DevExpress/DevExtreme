@@ -111,22 +111,22 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     readonly _dxClassName = 'DxHtmlEditorComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_mentions)
-    set _mentionsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _mentionsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('mentions', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 

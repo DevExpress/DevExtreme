@@ -100,12 +100,12 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     readonly _dxClassName = 'DxDropDownButtonComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 

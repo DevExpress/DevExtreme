@@ -85,7 +85,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     readonly _dxClassName = 'DxTextBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 

@@ -73,7 +73,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     readonly _dxClassName = 'DxGalleryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

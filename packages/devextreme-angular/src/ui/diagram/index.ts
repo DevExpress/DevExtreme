@@ -124,32 +124,32 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     readonly _dxClassName = 'DxDiagramComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('commands', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('connectionPoints', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_customShapes)
-    set _customShapesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _customShapesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customShapes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_groups)
-    set _groupsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groups', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 

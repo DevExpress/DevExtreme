@@ -104,7 +104,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     readonly _dxClassName = 'DxContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

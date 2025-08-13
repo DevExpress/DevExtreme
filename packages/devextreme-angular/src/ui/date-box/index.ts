@@ -120,12 +120,12 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     readonly _dxClassName = 'DxDateBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 

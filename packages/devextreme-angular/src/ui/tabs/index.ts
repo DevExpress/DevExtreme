@@ -74,7 +74,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     readonly _dxClassName = 'DxTabsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

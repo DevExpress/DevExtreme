@@ -82,22 +82,22 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     readonly _dxClassName = 'DxResponsiveBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_cols)
-    set _colsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _colsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('cols', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('location', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_rows)
-    set _rowsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _rowsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('rows', value);
     }
 

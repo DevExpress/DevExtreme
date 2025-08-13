@@ -122,17 +122,17 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     readonly _dxClassName = 'DxVectorMapComponent';
 
     @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('annotations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_layers)
-    set _layersNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _layersContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('layers', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_legends)
-    set _legendsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _legendsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('legends', value);
     }
 

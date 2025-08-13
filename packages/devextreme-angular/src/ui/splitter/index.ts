@@ -75,7 +75,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     readonly _dxClassName = 'DxSplitterComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

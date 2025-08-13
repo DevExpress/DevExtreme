@@ -98,7 +98,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     readonly _dxClassName = 'DxPopoverComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 

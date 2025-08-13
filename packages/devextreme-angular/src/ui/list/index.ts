@@ -90,17 +90,17 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     readonly _dxClassName = 'DxListComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_menuItems)
-    set _menuItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _menuItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('menuItems', value);
     }
 

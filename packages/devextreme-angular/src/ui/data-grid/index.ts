@@ -242,57 +242,57 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     readonly _dxClassName = 'DxDataGridComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('buttons', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('changes', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('columns', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('customOperations', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('fields', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
-    set _groupItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('groupItems', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
-    set _sortByGroupSummaryInfoNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _sortByGroupSummaryInfoContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('sortByGroupSummaryInfo', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('toolbarItems', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_totalItems)
-    set _totalItemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('totalItems', value);
     }
 

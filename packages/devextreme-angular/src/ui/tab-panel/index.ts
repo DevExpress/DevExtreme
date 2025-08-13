@@ -74,7 +74,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     readonly _dxClassName = 'DxTabPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

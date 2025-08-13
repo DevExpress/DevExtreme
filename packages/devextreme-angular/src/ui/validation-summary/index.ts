@@ -71,7 +71,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     readonly _dxClassName = 'DxValidationSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 

@@ -99,17 +99,17 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     readonly _dxClassName = 'DxFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('validationRules', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('items', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsNestedItems(value: QueryList<CollectionNestedOption>) {
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this._setChildren('tabs', value);
     }
 
