@@ -1236,7 +1236,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       getAppointmentDataProvider: () => this.appointmentDataProvider,
       dataAccessors: this._dataAccessors,
-      observer: this,
       notifyScheduler: this._notifyScheduler,
       onItemRendered: this._getAppointmentRenderedAction(),
       onItemClick: this._createActionByOption('onAppointmentClick'),
@@ -1377,7 +1376,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
     }, currentViewOptions);
 
-    result.observer = this;
     result.notifyScheduler = this._notifyScheduler;
     result.groups = groupsResources;
     result.onCellClick = this._createActionByOption('onCellClick');

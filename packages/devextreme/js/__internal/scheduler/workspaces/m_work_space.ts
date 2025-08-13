@@ -31,6 +31,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
+import Widget from '@js/ui/widget/ui.widget';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import {
   AllDayPanelTitleComponent,
@@ -51,7 +52,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
-import WidgetObserver from '../base/m_widget_observer';
+import type NotifyScheduler from '../base/m_widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
@@ -66,6 +67,7 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
+import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/m_current_time_shader_vertical';
@@ -109,8 +111,8 @@ const { tableCreator } = tableCreatorModule;
 // The constant is needed so that the dragging is not sharp. To prevent small twitches
 const DRAGGING_MOUSE_FAULT = 10;
 
-// @ts-expect-error
-const { abstract } = WidgetObserver;
+// @ts-expect-error Widget exposes a static abstract() helper not typed in its d.ts
+const { abstract } = Widget;
 const toMs = dateUtils.dateToMilliseconds;
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
@@ -202,7 +204,7 @@ type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   startDayHour: number;
   endDayHour: number;
 };
-class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
+class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   _viewDataProvider: any;
 
   _cache: any;
@@ -391,6 +393,28 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
   get isDefaultDraggingMode() {
     return this.option('draggingMode') === 'default';
+  }
+
+  notifyObserver<Subject extends SubscribeKey>(
+    funcName: Subject,
+    args: Parameters<SubscribeMethods[Subject]>,
+  ): void {
+    // delegate to invoke to call the scheduler bridge
+
+    this.invoke(funcName, ...args);
+  }
+
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> | undefined {
+    const notifyScheduler = this.option('notifyScheduler') as NotifyScheduler | undefined;
+
+    if (!notifyScheduler) {
+      return undefined;
+    }
+
+    return notifyScheduler.invoke(funcName, ...args);
   }
 
   _supportedKeys() {
