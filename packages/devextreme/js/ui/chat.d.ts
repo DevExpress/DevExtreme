@@ -281,7 +281,7 @@ export type Message = TextMessage | ImageMessage;
 /** @public */
 export type MessageTemplateData = {
     readonly component: dxChat;
-    readonly data?: Message;
+    readonly message?: Message;
 };
 
 /** @public */

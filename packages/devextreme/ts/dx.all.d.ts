@@ -11020,7 +11020,7 @@ declare module DevExpress.ui {
       };
     export type MessageTemplateData = {
       readonly component: dxChat;
-      readonly data?: Message;
+      readonly message?: Message;
     };
     /**
      * [descr:_ui_chat_MessageUpdatedEvent]
