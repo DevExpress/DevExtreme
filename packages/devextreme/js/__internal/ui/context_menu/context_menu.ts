@@ -131,11 +131,16 @@ export interface ContextMenuProperties<
   TItem extends dxMenuBaseItem = Item,
 > extends
   MenuBaseProperties<TItem>,
-  Pick<Properties, ContextMenuPropertiesKeys> {
+  Pick<Properties<TItem>, ContextMenuPropertiesKeys> {
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
   overlayContainer?: string | Element | null;
   boundaryOffset?: PositionConfig['boundaryOffset'];
+  onSubmenuCreated?: ((e) => void) | null;
+  onLeftFirstItem?: ((e) => void) | null;
+  onLeftLastItem?: ((e) => void) | null;
+  onCloseRootSubmenu?: ((e) => void) | null;
+  onExpandLastSubmenu?: ((e) => void) | null;
 }
 
 class ContextMenu<

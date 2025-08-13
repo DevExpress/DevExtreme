@@ -5,7 +5,9 @@ const Proxy = window.Proxy;
 
 QUnit.module('SSR specific for DOM Component', {
     beforeEach: function(module) {
-        this.TestComponent = DOMComponent.inherit({});
+        class TestComponent extends DOMComponent {}
+
+        this.TestComponent = TestComponent;
     }
 });
 

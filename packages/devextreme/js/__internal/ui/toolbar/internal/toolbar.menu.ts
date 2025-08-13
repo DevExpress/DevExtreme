@@ -1,5 +1,3 @@
-import '@js/ui/popup/ui.popup';
-
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -9,18 +7,18 @@ import { getOuterHeight } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { DxEvent } from '@js/events';
-import type { ClickEvent } from '@js/ui/button';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import type { Item as ListItem, ItemClickEvent } from '@js/ui/list';
 import type { dxPopupAnimation } from '@js/ui/popup';
-import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { Item } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/list.base';
 import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
+import Popup from '@ts/ui/popup/m_popup';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
@@ -31,27 +29,17 @@ const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
 
-export interface DropDownMenuProperties extends Properties<DropDownMenu> {
+export interface DropDownMenuProperties extends WidgetProperties<DropDownMenu> {
   opened?: boolean;
-
   container: string | Element | undefined;
-
   animation?: dxPopupAnimation;
-
   items?: Item[];
-
   dataSource?: DataSourceLike<Item, string | number> | null;
-
   itemTemplate?: string | (() => void);
-
   onItemRendered?: (e: Record<string, unknown>) => void;
-
   onItemClick?: (e) => void;
-
   onButtonClick?: (e: ClickEvent) => void;
-
   useInkRipple?: boolean;
-
   closeOnClick?: boolean;
 }
 
@@ -204,11 +192,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
     const { useInkRipple } = this.option();
 
-    this._button = this._createComponent($button, Button, {
+    this._button = this._createComponent<Button, ButtonProperties>($button, Button, {
       icon: 'overflow',
       template: 'content',
-      // @ts-expect-error ts-error
-      stylingMode: isFluent() ? 'text' : 'contained',
+      stylingMode: isFluent(current()) ? 'text' : 'contained',
+      // @ts-expect-error
       useInkRipple,
       hoverStateEnabled: false,
       focusStateEnabled: false,
@@ -246,8 +234,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     this._$popup = $('<div>').appendTo(this.$element());
     const { rtlEnabled, container, animation } = this.option();
 
-    this._popup = this._createComponent(this._$popup, 'dxPopup', {
-      onInitialized({ component }) {
+    this._popup = this._createComponent(this._$popup, Popup, {
+      onInitialized(e) {
+        const { component } = e;
+        // @ts-expect-error
         component.$wrapper()
           .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
           .addClass(DROP_DOWN_MENU_POPUP_CLASS);
@@ -256,12 +246,17 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       preventScrollEvents: false,
       contentTemplate: (contentElement) => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error
       maxHeight: () => this._getMaxHeight(),
       position: {
+        // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
+        // @ts-expect-error
         at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
         collision: 'fit flip',
+        // @ts-expect-error
         offset: { v: POPUP_VERTICAL_OFFSET },
+        // @ts-expect-error
         of: this.$element(),
       },
       animation,

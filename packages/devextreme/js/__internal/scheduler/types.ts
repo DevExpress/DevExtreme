@@ -28,21 +28,50 @@ export interface AppointmentDataItem {
   rawAppointment: SafeAppointment;
 }
 
-// TODO: add correct types here. Agenda and other views have different types
-export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
+export interface BaseAppointmentViewModelSettings {
   allDay?: boolean;
   direction: string;
-  height: number | string;
-  width: number | string;
   groupIndex: number;
   sortedIndex: number;
+}
+
+export interface AppointmentViewModelSettings extends BaseAppointmentViewModelSettings {
+  index: number; // current level in stack
+  count: number; // max level including appointments not in stack
+  info: {
+    sourceAppointment: {
+      startDate: Date;
+      endDate: Date;
+    };
+    appointment: {
+      startDate: Date;
+      endDate: Date;
+    };
+  };
+  left: number;
+  top: number;
+  height: number;
+  width: number;
+  isCompact: boolean;
+  appointmentReduced: 'head' | 'body' | 'tail' | undefined;
+  partIndex: number;
+  partTotalCount: number;
+}
+
+export interface AgendaViewModelSettings extends BaseAppointmentViewModelSettings {
+  agendaSettings: {
+    startDate: Date;
+    endDate: Date;
+  };
+  height: number;
+  width: string;
 }
 
 export interface AppointmentViewModel {
   itemData: SafeAppointment;
   needRepaint: boolean;
   needRemove: boolean;
-  settings: BaseAppointmentViewModelSettings[];
+  settings: (AppointmentViewModelSettings & AgendaViewModelSettings)[];
 }
 
 export interface AppointmentGeometry {

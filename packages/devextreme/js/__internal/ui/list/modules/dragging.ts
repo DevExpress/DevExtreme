@@ -1,1 +1,1 @@
-import '../list.edit.decorator.reorder';
+import '@ts/ui/list/list.edit.decorator.reorder';

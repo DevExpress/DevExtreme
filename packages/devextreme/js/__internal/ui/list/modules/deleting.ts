@@ -1,6 +1,6 @@
-import './deleting.context';
-import './deleting.slideButton';
-import './deleting.slideItem';
-import './deleting.static';
-import './deleting.swipe';
-import './deleting.toggle';
+import '@ts/ui/list/modules/deleting.context';
+import '@ts/ui/list/modules/deleting.slideButton';
+import '@ts/ui/list/modules/deleting.slideItem';
+import '@ts/ui/list/modules/deleting.static';
+import '@ts/ui/list/modules/deleting.swipe';
+import '@ts/ui/list/modules/deleting.toggle';

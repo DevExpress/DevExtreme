@@ -213,8 +213,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _removePanelManualPosition(): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (this._$panelContentWrapper && this._$panelContentWrapper.attr('manualposition')) {
+    if (this._$panelContentWrapper?.attr('manualposition')) {
       this._$panelContentWrapper.removeAttr('manualPosition');
       this._$panelContentWrapper.css({
         position: '', top: '', left: '', right: '', bottom: '',

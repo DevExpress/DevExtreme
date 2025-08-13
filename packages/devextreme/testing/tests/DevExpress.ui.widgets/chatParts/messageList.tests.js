@@ -1371,7 +1371,6 @@ QUnit.module('MessageList', () => {
             const expectedOptions = {
                 bounceEnabled: false,
                 useKeyboard: false,
-                indicateLoading: false,
                 reachBottomText: '',
             };
 

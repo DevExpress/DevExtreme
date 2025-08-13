@@ -1,9 +1,9 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { ClickEvent } from '@js/ui/button';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
@@ -95,7 +95,7 @@ class EditingPreview extends DOMComponent<EditingPreview, Properties> {
       .addClass(CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS)
       .appendTo(this.element());
 
-    this._closeButton = this._createComponent($button, Button, {
+    this._closeButton = this._createComponent<Button, ButtonProperties>($button, Button, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
