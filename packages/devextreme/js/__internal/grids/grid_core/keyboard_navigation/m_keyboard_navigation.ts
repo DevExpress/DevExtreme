@@ -3006,7 +3006,9 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
   protected _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
     super._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
     if (view.name === ROWS_VIEW) {
-      this._rowsView.renderFocusState({ preventScroll: true });
+      this._rowsView.renderFocusState({
+        preventScroll: shouldPreventScroll(this),
+      });
     }
   }
 };

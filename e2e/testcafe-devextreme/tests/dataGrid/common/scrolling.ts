@@ -20,12 +20,12 @@ async function getRightScrollOffset(dataGrid: DataGrid): Promise<number> {
   return maxHorizontalOffset - scrollLeft;
 }
 
-function getData(rowCount, colCount): Record<string, string>[] {
+function getData(rowCount: number, colCount: number): Record<string, string>[] {
   const items: Record<string, string>[] = [];
   for (let i = 0; i < rowCount; i += 1) {
     const item: Record<string, string> = {};
     for (let j = 0; j < colCount; j += 1) {
-      item[`field_${i}_${j}`] = `val_${i}_${j}`;
+      item[`field_${j}`] = `val_${i}_${j}`;
     }
     items.push(item);
   }
@@ -1856,18 +1856,8 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
       await t.expect(hasSmallScrollValues).notOk();
     },
   ).before(async () => {
-    const columns = new Array(100)
-      .fill(null)
-      .map((_, idx) => `col_${idx}`);
-
     await createWidget('dxDataGrid', {
-      dataSource: new Array(3)
-        .fill(null)
-        .map((_, idx) => columns
-          .reduce((result, columnName) => {
-            result[columnName] = 'Value';
-            return result;
-          }, { id: idx })),
+      dataSource: getData(3, 100).map((item, idx) => ({ ...item, id: idx })),
       keyExpr: 'id',
       columnHidingEnabled: true,
       focusedRowEnabled: true,
