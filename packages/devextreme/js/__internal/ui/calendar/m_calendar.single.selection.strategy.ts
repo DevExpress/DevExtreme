@@ -11,7 +11,7 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
 
   dateOption(optionName: 'min' | 'max' | 'value'): Date | null {
     if (optionName === 'value') {
-      return this.calendar._getDateOption('value') as Date;
+      return this.calendar._getDateOption('value') as Date | null;
     }
     return this.calendar._getDateOption(optionName);
   }
