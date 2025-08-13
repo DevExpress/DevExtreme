@@ -1173,8 +1173,10 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
         assert.strictEqual($rowElements.eq(2).children().first().text(), '4', 'third node - first cell text');
 
         const $expandIcon = $rowElements.eq(2).children().first().find('.dx-treelist-collapsed');
+        const $checkbox = $expandIcon.next().children().eq(0);
+
         assert.strictEqual($expandIcon.length, 1, 'third node has an expand icon');
-        assert.ok($expandIcon.next().hasClass('dx-select-checkbox'), 'third node has a select checkbox');
+        assert.ok($checkbox.hasClass('dx-select-checkbox'), 'third node has a select checkbox');
     });
 
     // T861052
