@@ -27033,6 +27033,10 @@ declare module DevExpress.ui {
      */
     fieldTemplate?: FieldTemplate;
     /**
+     * [descr:dxSelectBoxOptions.fieldTemplates]
+     */
+    fieldTemplates?: FieldTemplates;
+    /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
     onCustomItemCreating?: (

@@ -103,7 +103,6 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
     /**
      * @docid
      * @default null
-     * @type object
      * @public
      */
     fieldTemplates?: FieldTemplates;

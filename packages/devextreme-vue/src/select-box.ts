@@ -9,6 +9,7 @@ import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
  FieldTemplate,
+ FieldTemplates,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  TextEditorButton,
@@ -112,6 +113,7 @@ type AccessibleOptions = Pick<Properties,
   "dropDownOptions" |
   "elementAttr" |
   "fieldTemplate" |
+  "fieldTemplates" |
   "focusStateEnabled" |
   "grouped" |
   "groupTemplate" |
@@ -201,6 +203,7 @@ const componentConfig = {
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     fieldTemplate: [Object, Function] as PropType<FieldTemplate | (((data: any, element: any) => string | any)) | template>,
+    fieldTemplates: Object as PropType<FieldTemplates | Record<string, any>>,
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
@@ -286,6 +289,7 @@ const componentConfig = {
     "update:dropDownOptions": null,
     "update:elementAttr": null,
     "update:fieldTemplate": null,
+    "update:fieldTemplates": null,
     "update:focusStateEnabled": null,
     "update:grouped": null,
     "update:groupTemplate": null,

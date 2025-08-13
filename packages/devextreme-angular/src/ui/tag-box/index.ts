@@ -300,6 +300,19 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
+     * [descr:dxSelectBoxOptions.fieldTemplates]
+    
+     */
+    @Input()
+    get fieldTemplates(): any {
+        return this._getOption('fieldTemplates');
+    }
+    set fieldTemplates(value: any) {
+        this._setOption('fieldTemplates', value);
+    }
+
+
+    /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
     
      */
@@ -1255,6 +1268,13 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldTemplatesChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -1720,6 +1740,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
             { emit: 'fieldTemplateChange' },
+            { emit: 'fieldTemplatesChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'groupedChange' },
             { emit: 'groupTemplateChange' },

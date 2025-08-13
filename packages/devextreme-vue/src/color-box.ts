@@ -28,6 +28,7 @@ import {
 import {
  DropDownPredefinedButton,
  FieldTemplate,
+ FieldTemplates,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  dxPopupOptions,
@@ -166,7 +167,7 @@ const componentConfig = {
     editAlphaChannel: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     fieldTemplate: [Object, Function] as PropType<FieldTemplate | (((data: any, element: any) => string | any)) | template>,
-    fieldTemplates: Object as PropType<Record<string, any>>,
+    fieldTemplates: Object as PropType<FieldTemplates | Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
