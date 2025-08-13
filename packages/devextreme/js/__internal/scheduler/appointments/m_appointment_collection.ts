@@ -253,7 +253,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
-    const diff = getViewModelDiff(previousValue, value);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
     diff
       .filter((item) => !isNeedToAdd(item))
       .forEach((item, index) => {
@@ -451,7 +451,7 @@ class SchedulerAppointments extends CollectionWidget {
     const formatText = this.invoke(
       'getTextAndFormatDate',
       model.appointmentData,
-      model.targetedAppointmentData,
+      (this._currentAppointmentSettings as any)?.agendaSettings || model.targetedAppointmentData,
       'TIME',
     );
 
@@ -553,6 +553,10 @@ class SchedulerAppointments extends CollectionWidget {
 
     $item.data(APPOINTMENT_SETTINGS_KEY, item);
     if (item.sortedIndex !== -1) {
+      // NOTE: fallback for integration testing
+      if (!this.renderedElementsBySortedIndex) {
+        this.renderedElementsBySortedIndex = [];
+      }
       this.renderedElementsBySortedIndex[item.sortedIndex] = $item;
     }
 

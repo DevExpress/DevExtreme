@@ -1039,7 +1039,7 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
             assert.equal(dataSource.length, 2, 'appointment should be exclude from series');
 
             scheduler.appointmentList.forEach((appointment, index) => {
-                const result = ['10:00 AM - 10:30 AM', '12:00 PM - 12:30 PM', '11:00 AM - 11:30 AM'];
+                const result = ['12:00 PM - 12:30 PM', '11:00 AM - 11:30 AM', '10:00 AM - 10:30 AM'];
                 assert.equal(appointment.date, result[index]);
             });
 
@@ -1607,7 +1607,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         const $element = scheduler.getElement();
         let $appt = $element.find(CLASSES.appointment);
         const cellHeight = $element.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
-        const apptPosition = translator.locate($appt.eq(0));
+        const apptPosition = translator.locate($appt.eq(1));
         const clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
 
         const cellsCount = (new Date(

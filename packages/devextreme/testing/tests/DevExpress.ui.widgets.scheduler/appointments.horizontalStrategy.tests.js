@@ -76,7 +76,8 @@ module('Horizontal Month Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 2, 6, 6),
                 allDay: true
             },
-            settings: [{ top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true }]
+            sortedIndex: -1,
+            top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true
         }];
 
         const instance = createInstance({
@@ -95,7 +96,8 @@ module('Horizontal Month Strategy', moduleOptions, () => {
                 startDate: new Date(2015, 2, 1),
                 endDate: new Date(2015, 2, 8)
             },
-            settings: [{ top: 0, left: 0, max: 135 }]
+            sortedIndex: -1,
+            top: 0, left: 0, max: 135
         }];
 
         const instance = createInstance({
@@ -115,7 +117,8 @@ module('Horizontal Month Strategy', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 11),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0, empty: true }]
+            sortedIndex: -1,
+            top: 0, left: 0, empty: true
         }];
 
         const instance = createInstance({
@@ -134,7 +137,8 @@ module('Horizontal Month Strategy', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0, height: 50, width: 39.5, empty: true }]
+            sortedIndex: -1,
+            top: 0, left: 0, height: 50, width: 39.5, empty: true
         }];
 
         const instance = createInstance({
@@ -153,7 +157,8 @@ module('Horizontal Month Strategy', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0, height: 18.5, width: 10, empty: true }]
+            sortedIndex: -1,
+            top: 0, left: 0, height: 18.5, width: 10, empty: true
         }];
 
         const instance = createInstance({
@@ -175,7 +180,8 @@ module('Horizontal Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 2),
                 allDay: true
             },
-            settings: [{ top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true }]
+            sortedIndex: -1,
+            top: 0, left: 0, count: 1, index: 0, width: 40, allDay: true
         }];
 
         const instance = createInstance({
@@ -196,7 +202,8 @@ module('Horizontal Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 2),
                 allDay: true
             },
-            settings: [{ width: 2 }]
+            sortedIndex: -1,
+            width: 2
         }];
 
         const instance = createInstance({
