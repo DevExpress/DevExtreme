@@ -1,5 +1,3 @@
-import '@js/ui/popup/ui.popup';
-
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -12,7 +10,6 @@ import type { DxEvent } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import type { Item as ListItem, ItemClickEvent } from '@js/ui/list';
 import type { dxPopupAnimation } from '@js/ui/popup';
-import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { Item } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -20,6 +17,7 @@ import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/list.base';
+import Popup from '@ts/ui/popup/m_popup';
 import ToolbarMenuList from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
@@ -236,8 +234,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     this._$popup = $('<div>').appendTo(this.$element());
     const { rtlEnabled, container, animation } = this.option();
 
-    this._popup = this._createComponent(this._$popup, 'dxPopup', {
-      onInitialized({ component }) {
+    this._popup = this._createComponent(this._$popup, Popup, {
+      onInitialized(e) {
+        const { component } = e;
+        // @ts-expect-error
         component.$wrapper()
           .addClass(DROP_DOWN_MENU_POPUP_WRAPPER_CLASS)
           .addClass(DROP_DOWN_MENU_POPUP_CLASS);
@@ -246,12 +246,17 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       preventScrollEvents: false,
       contentTemplate: (contentElement) => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error
       maxHeight: () => this._getMaxHeight(),
       position: {
+        // @ts-expect-error
         my: `top ${rtlEnabled ? 'left' : 'right'}`,
+        // @ts-expect-error
         at: `bottom ${rtlEnabled ? 'left' : 'right'}`,
         collision: 'fit flip',
+        // @ts-expect-error
         offset: { v: POPUP_VERTICAL_OFFSET },
+        // @ts-expect-error
         of: this.$element(),
       },
       animation,

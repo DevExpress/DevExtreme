@@ -36,8 +36,8 @@ type ITreeViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  defaultItems?: Array<dxTreeViewItem>;
-  onItemsChange?: (value: Array<dxTreeViewItem>) => void;
+  defaultItems?: Array<any | dxTreeViewItem>;
+  onItemsChange?: (value: Array<any | dxTreeViewItem>) => void;
 }>
 
 interface TreeViewRef<TItem = any, TKey = any> {

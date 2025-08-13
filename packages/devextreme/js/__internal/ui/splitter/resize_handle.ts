@@ -3,7 +3,7 @@ import { name as CLICK_EVENT } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/common/core/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
-import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';

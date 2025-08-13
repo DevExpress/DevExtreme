@@ -36,11 +36,9 @@ import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
-import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
-import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -51,7 +49,6 @@ import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
 import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
-  getAppointmentDataItems,
   getToday,
   isAppointmentTakesAllDay,
   isDateAndTimeView,
@@ -60,11 +57,7 @@ import {
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
-import type {
-  AppointmentDataItem,
-  AppointmentViewModel,
-  SafeAppointment,
-} from './types';
+import type { AppointmentViewModel } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import type { IFieldExpr } from './utils/index';
@@ -76,6 +69,8 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import { AppointmentDataProvider } from './view_model/generate_view_model/data_provider/m_appointment_data_provider';
+import AppointmentLayoutManager from './view_model/m_appointments_layout_manager';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -156,10 +151,6 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
-  filteredItems!: SafeAppointment[];
-
-  preparedItems!: AppointmentDataItem[];
-
   _timeZoneCalculator!: any;
 
   postponedOperations: any;
@@ -204,7 +195,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _recurrenceDialog: any;
 
-  _layoutManager: any;
+  _layoutManager!: AppointmentLayoutManager;
 
   _appointmentForm: any;
 
@@ -558,7 +549,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _isAgenda() {
-    return this.getLayoutManager().appointmentRenderingStrategyName === 'agenda';
+    return this._layoutManager.appointmentRenderingStrategyName === 'agenda';
   }
 
   _allowDragging() {
@@ -578,10 +569,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _isAllDayExpanded() {
-    return this.option('showAllDayPanel') && this.appointmentDataProvider.hasAllDayAppointments(
-      this.filteredItems,
-      this.preparedItems,
-    );
+    return this.option('showAllDayPanel') && this._layoutManager.hasAllDayAppointments();
   }
 
   _filterAppointmentsByDate() {
@@ -661,14 +649,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (
       !this._isAgenda()
-      && this.filteredItems
+      && this._layoutManager
       && workspace
       && !isAgendaWorkspaceComponent(workspace)
     ) {
       if (isForce || (!isFixedHeight || !isFixedWidth)) {
         workspace.option('allDayExpanded', this._isAllDayExpanded());
         workspace._dimensionChanged();
-        const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
+        const appointments = this._layoutManager.createAppointmentsMap();
 
         this._appointments.option('items', appointments);
       }
@@ -849,22 +837,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderContentImpl();
   }
 
-  _updatePreparedItems(items?: Appointment[]): void {
-    this.preparedItems = getAppointmentDataItems(
-      items,
-      this._dataAccessors,
-      this.getViewOption('cellDuration'),
-      this.timeZoneCalculator,
-    );
-  }
-
   _dataSourceChangedHandler(result?: Appointment[]) {
     if (this._readyToRenderAppointments) {
       this._workSpaceRecalculation.done(() => {
-        this._updatePreparedItems(result);
+        this._layoutManager.prepareItems(result);
         this._renderAppointments();
         this._updateA11yStatus();
-        this.getWorkSpace().onDataSourceChanged(this.filteredItems);
+        this.getWorkSpace().onDataSourceChanged(this._layoutManager.filteredItems);
       });
     }
   }
@@ -881,13 +860,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return scrolling?.mode === 'virtual';
   }
 
-  _filterAppointments() {
-    this.filteredItems = this.appointmentDataProvider.filter(this.preparedItems);
-  }
-
   _renderAppointments() {
     const workspace = this.getWorkSpace();
-    this._filterAppointments();
+    this._layoutManager.filterAppointments();
 
     workspace.option('allDayExpanded', this._isAllDayExpanded());
 
@@ -901,11 +876,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _getAppointmentsToRepaint(): AppointmentViewModel[] {
-    const layoutManager = this.getLayoutManager();
+    const appointmentsMap = this._layoutManager.createAppointmentsMap();
 
-    const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
-
-    return layoutManager.getRepaintedAppointments(
+    return this._layoutManager.getRepaintedAppointments(
       appointmentsMap,
       this.getAppointmentsInstance().option('items'),
     );
@@ -1183,8 +1156,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _initMarkupCore() {
-    this.filteredItems = [];
-    this.preparedItems = [];
     this._readyToRenderAppointments = hasWindow();
 
     this._workSpace && this._cleanWorkspace();
@@ -1357,7 +1328,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
-      getFilteredItems: () => this.filteredItems,
+      getFilteredItems: () => this._layoutManager.filteredItems,
 
       noDataText: this.option('noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1868,7 +1839,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   getRenderingStrategyInstance() {
-    return this.getLayoutManager().getRenderingStrategyInstance();
+    return this._layoutManager.getRenderingStrategyInstance();
   }
 
   getActions() {
@@ -1924,7 +1895,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (groups?.length) {
       const { resourceById, groupsLeafs } = this.resourceManager;
       const appointmentSettings = this._isAgenda()
-        ? this.getLayoutManager()._positionMap[appointmentIndex][0]
+        ? this._layoutManager._positionMap[appointmentIndex][0]
         : utils.dataAccessors.getAppointmentSettings(element) || {};
       const cellGroups = getLeafGroupValues(groupsLeafs, appointmentSettings.groupIndex);
 

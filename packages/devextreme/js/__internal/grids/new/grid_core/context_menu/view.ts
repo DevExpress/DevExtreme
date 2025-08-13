@@ -1,5 +1,5 @@
 import type {
-  InitializedEvent, Item as ItemClickEvent,
+  InitializedEvent, ItemClickEvent,
 } from '@js/ui/context_menu';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed } from '@preact/signals-core';
