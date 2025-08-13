@@ -3,12 +3,12 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
+import DOMComponent from '@js/core/dom_component';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
-import WidgetObserver from '@ts/scheduler/base/m_widget_observer';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
@@ -24,6 +24,7 @@ import {
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../m_classes';
 import { getRecurrenceProcessor } from '../../m_recurrence';
+import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentProperties } from './m_types';
 import {
@@ -38,7 +39,7 @@ const DEFAULT_VERTICAL_HANDLES = 'top bottom';
 const REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = addNamespace(pointerEvents.enter, 'dxSchedulerAppointment');
 const REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = addNamespace(pointerEvents.leave, 'dxSchedulerAppointment');
 
-export class Appointment extends WidgetObserver<AppointmentProperties> {
+export class Appointment extends DOMComponent<AppointmentProperties> {
   get coloredElement(): any {
     return this.$element();
   }
@@ -72,22 +73,25 @@ export class Appointment extends WidgetObserver<AppointmentProperties> {
     });
   }
 
-  // @ts-expect-error
-  notifyObserver(subject, args) {
-    const observer = this.option('observer');
-    if (observer) {
-      observer.fire(subject, args);
-    }
+  notifyObserver<Subject extends SubscribeKey>(
+    funcName: Subject,
+    args: Parameters<SubscribeMethods[Subject]>,
+  ): void {
+    // Delegate to invoke to keep a single bridge
+    this.invoke(funcName, ...args);
   }
 
-  // @ts-expect-error eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  invoke(funcName: string) {
-    const observer = this.option('observer');
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> | undefined {
+    const notifyScheduler = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (!notifyScheduler) {
+      return undefined;
     }
+
+    return notifyScheduler.invoke(funcName, ...args);
   }
 
   _optionChanged(args) {

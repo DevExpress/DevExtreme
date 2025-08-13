@@ -1378,7 +1378,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
     }, currentViewOptions);
 
-    result.observer = this;
     result.notifyScheduler = this._notifyScheduler;
     result.groups = groupsResources;
     result.onCellClick = this._createActionByOption('onCellClick');
