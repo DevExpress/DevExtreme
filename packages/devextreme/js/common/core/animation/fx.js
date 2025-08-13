@@ -733,7 +733,8 @@ const destroyAnimQueueData = function($element) {
     $element.removeData(ANIM_QUEUE_KEY);
 };
 
-function isAnimating($element) {
+function isAnimating(element) {
+    const $element = $(element);
     return !!$element.data(ANIM_DATA_KEY);
 }
 
