@@ -262,11 +262,11 @@ class Chat extends Widget<Properties> {
     return allowDeleting ?? false;
   }
 
-  _getRenderTemplateFunction(optionName: 'messageTemplate'): MessageTemplate | null;
-  _getRenderTemplateFunction(optionName: 'emptyViewTemplate'): EmptyViewTemplate | null;
+  _getRenderTemplateFunction(optionName: 'messageTemplate'): MessageTemplate;
+  _getRenderTemplateFunction(optionName: 'emptyViewTemplate'): EmptyViewTemplate;
   _getRenderTemplateFunction(
     optionName: 'messageTemplate' | 'emptyViewTemplate',
-  ): MessageTemplate | EmptyViewTemplate | null {
+  ): MessageTemplate | EmptyViewTemplate {
     const { [optionName]: templateOption } = this.option();
 
     if (templateOption) {
