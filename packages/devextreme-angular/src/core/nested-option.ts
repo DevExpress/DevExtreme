@@ -28,9 +28,8 @@ export const checkIncompatibleNestedItems = (
   legacyClassNames: string[],
 ) => {
   if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
-    const itemsLassNames = items.map((item) => item._dxClassName);
-    const itemLegacyClassName = itemsLassNames.find((сlassName) => legacyClassNames.includes(сlassName));
-    const itemClassName = itemsLassNames.find((itemClassName) => !legacyClassNames.includes(itemClassName));
+    const itemLegacyClassName = items.find((item) => legacyClassNames.includes(item._dxClassName));
+    const itemClassName = items.find((item) => !legacyClassNames.includes(item._dxClassName));
 
     if (itemLegacyClassName && itemClassName) {
       console.warn(`In ${containerClassName},
