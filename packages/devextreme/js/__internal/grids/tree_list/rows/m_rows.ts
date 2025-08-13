@@ -1,5 +1,6 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { removeEvent } from '@js/common/core/events/remove';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import { rowsModule, RowsView } from '@ts/grids/grid_core/views/m_rows_view';
@@ -9,7 +10,8 @@ import treeListCore from '../m_core';
 const TREELIST_TEXT_CONTENT = 'dx-treelist-text-content';
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const TREELIST_CELL_EXPANDABLE_CLASS = 'dx-treelist-cell-expandable';
-const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
+const TREELIST_EMPTY_SPACE_CLASS = 'dx-treelist-empty-space';
+const TREELIST_EMPTY_SPACE_LAST_CLASS = 'dx-treelist-empty-space--last';
 const TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded';
 const TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
 
@@ -19,14 +21,19 @@ const createCellContent = function ($container) {
     .appendTo($container);
 };
 
-const createIcon = function (hasIcon, isExpanded) {
-  const $iconElement = $('<div>').addClass(TREELIST_EMPTY_SPACE);
+const createIcon = (
+  isLast: boolean,
+  hasIcon: boolean,
+  isExpanded: boolean,
+): dxElementWrapper => {
+  const $iconElement = $('<div>').addClass(TREELIST_EMPTY_SPACE_CLASS);
+
+  if (isLast) {
+    $iconElement.addClass(TREELIST_EMPTY_SPACE_LAST_CLASS);
+  }
 
   if (hasIcon) {
-    $iconElement
-      .toggleClass(TREELIST_EXPANDED_CLASS, isExpanded)
-      .toggleClass(TREELIST_COLLAPSED_CLASS, !isExpanded)
-      .append($('<span>'));
+    $iconElement.addClass(isExpanded ? TREELIST_EXPANDED_CLASS : TREELIST_COLLAPSED_CLASS);
   }
 
   return $iconElement;
@@ -55,12 +62,19 @@ class TreeListRowsView extends RowsView {
     return this._renderIcons($iconContainer, options);
   }
 
-  private _renderIcons($iconContainer, options) {
+  protected _renderIcons(
+    $container: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    const $iconContainer = super._renderIcons($container, options);
     const { row } = options;
     const { level } = row;
 
-    for (let i = 0; i <= level; i++) {
-      $iconContainer.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
+    for (let idx = 0; idx <= level; idx += 1) {
+      const isLast = idx === level;
+      const hasIcon = isLast && row.node.hasChildren;
+      const $icon = createIcon(isLast, hasIcon, row.isExpanded);
+      $icon.appendTo($iconContainer);
     }
 
     return $iconContainer;

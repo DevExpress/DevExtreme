@@ -2812,3 +2812,153 @@ test('DataGrid - A new row is added above the existing row if the data source is
     })
     .after(async () => changeTheme(Themes.genericLight));
 });
+
+// T1291087
+test('The editCellTemplate template should not be called after clicking on a cell in another row and column', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
+  const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
+  const checkEditCellTemplateCallArgs = async () => {
+    const templateCallArgs = await ClientFunction(() => (window as any).editCellTemplateCallArgs)();
+
+    await t
+      .expect(templateCallArgs.length)
+      .eql(1, 'editCellTemplate should be called only once')
+      .expect(templateCallArgs[0])
+      .eql('Column1', 'editCellTemplate should be called for the first column only');
+  };
+
+  // act
+  await t.click(firstCellOfFirstRow.element);
+
+  // assert
+  await t
+    .expect(firstCellOfFirstRow.isEditCell)
+    .ok('The first cell of the first row should be in edit mode')
+    .expect(firstCellOfFirstRow.getEditor().element.focused)
+    .ok('The first cell of the first row should be focused');
+
+  await checkEditCellTemplateCallArgs();
+
+  // act
+  await t.click(secondCellOfSecondRow.element);
+
+  // assert
+  await t
+    .expect(secondCellOfSecondRow.isEditCell)
+    .ok('The second cell of the second row should be in edit mode')
+    .expect(secondCellOfSecondRow.getEditor().element.focused)
+    .ok('The second cell of the second row should be focused');
+
+  await checkEditCellTemplateCallArgs();
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).editCellTemplateCallArgs = [];
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        ID: 1, Column1: 'a', Column2: 'b', Column3: 'c',
+      },
+      {
+        ID: 2, Column1: 'd', Column2: 'e', Column3: 'f',
+      },
+      {
+        ID: 3, Column1: 'g', Column2: 'h', Column3: 'i',
+      },
+    ],
+    keyExpr: 'ID',
+    columns: [{
+      dataField: 'Column1',
+      editCellTemplate(_, cellInfo) {
+        (window as any).editCellTemplateCallArgs.push(cellInfo.column.dataField);
+
+        return ($('<div>') as any).dxTextBox({
+          value: cellInfo.value,
+          onValueChanged: (args) => cellInfo.setValue(args.value),
+        });
+      },
+    }, 'Column2', 'Column3'],
+    showBorders: true,
+    editing: { mode: 'batch', allowUpdating: true },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).editCellTemplateCallArgs;
+  })();
+});
+
+// T1291087
+test('The onEditorPreparing event should be called once after clicking on a cell in another row and column', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstCellOfFirstRow = dataGrid.getDataCell(0, 0);
+  const secondCellOfSecondRow = dataGrid.getDataCell(1, 1);
+  const checkOnEditorPreparingCallArgs = async (expectedCallCount, expectedArgs) => {
+    const eventCallArgs = await ClientFunction(() => (window as any).onEditorPreparingCallArgs)();
+
+    await t
+      .expect(eventCallArgs.length)
+      .eql(expectedCallCount, 'number of the onEditorPreparing event calls is correct')
+      .expect(eventCallArgs[expectedCallCount - 1])
+      .eql(expectedArgs, 'onEditorPreparing event called for expected cell');
+  };
+
+  // act
+  await t.click(firstCellOfFirstRow.element);
+
+  // assert
+  await t
+    .expect(firstCellOfFirstRow.isEditCell)
+    .ok('The first cell of the first row should be in edit mode')
+    .expect(firstCellOfFirstRow.getEditor().element.focused)
+    .ok('The first cell of the first row should be focused');
+
+  await checkOnEditorPreparingCallArgs(1, { dataField: 'Column1', rowIndex: 0 });
+
+  // act
+  await t.click(secondCellOfSecondRow.element);
+
+  // assert
+  await t
+    .expect(secondCellOfSecondRow.isEditCell)
+    .ok('The second cell of the second row should be in edit mode')
+    .expect(secondCellOfSecondRow.getEditor().element.focused)
+    .ok('The second cell of the second row should be focused');
+
+  await checkOnEditorPreparingCallArgs(2, { dataField: 'Column2', rowIndex: 1 });
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onEditorPreparingCallArgs = [];
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        ID: 1, Column1: 'a', Column2: 'b', Column3: 'c',
+      },
+      {
+        ID: 2, Column1: 'd', Column2: 'e', Column3: 'f',
+      },
+      {
+        ID: 3, Column1: 'g', Column2: 'h', Column3: 'i',
+      },
+    ],
+    keyExpr: 'ID',
+    columns: ['Column1', 'Column2', 'Column3'],
+    showBorders: true,
+    editing: { mode: 'batch', allowUpdating: true },
+    onEditorPreparing(e) {
+      (window as any).onEditorPreparingCallArgs.push({
+        dataField: e.dataField,
+        rowIndex: e.row?.rowIndex,
+      });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).onEditorPreparingCallArgs;
+  })();
+});

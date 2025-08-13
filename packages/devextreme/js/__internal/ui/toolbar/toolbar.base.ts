@@ -511,8 +511,7 @@ class ToolbarBase<
         const check = (): boolean => {
           let readyToResolve = true;
           this.$element().parents().each((_, parent: Element): boolean => {
-            // @ts-expect-error ts-error
-            if (fx.isAnimating($(parent))) {
+            if (fx.isAnimating($(parent).get(0))) {
               readyToResolve = false;
               return false;
             }
