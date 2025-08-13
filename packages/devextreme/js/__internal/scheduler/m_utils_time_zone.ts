@@ -306,12 +306,6 @@ const getExtremeDates = () => {
   return [startDate, endDate];
 };
 
-// TODO Vinogradov refactoring: Change to date utils.
-const setOffsetsToDate = (targetDate, offsetsArray) => {
-  const newDateMs = offsetsArray.reduce((result, offset) => result + offset, targetDate.getTime());
-  return new Date(newDateMs);
-};
-
 const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
   const newDate = dateUtilsTs.addOffsets(date, offsets);
   const daylightShift = getDaylightOffsetInMs(date, newDate);
@@ -383,7 +377,6 @@ const utils = {
   isEqualLocalTimeZone,
   isEqualLocalTimeZoneByDeclaration,
 
-  setOffsetsToDate,
   addOffsetsWithoutDST,
 
   getTimeZones,
