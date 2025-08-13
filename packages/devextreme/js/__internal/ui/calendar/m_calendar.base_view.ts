@@ -5,7 +5,6 @@ import { start as hoverStartEventName } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
@@ -121,13 +120,13 @@ class BaseView<
 
   _$rangeEndDateCell!: dxElementWrapper;
 
-  _$rangeCells!: dxElementWrapper;
+  _$rangeCells!: dxElementWrapper[];
 
-  _$hoveredRangeCells!: dxElementWrapper;
+  _$hoveredRangeCells!: dxElementWrapper[];
 
   _$rangeStartHoverCell!: dxElementWrapper;
 
-  _$selectedCells!: dxElementWrapper;
+  _$selectedCells!: dxElementWrapper[];
 
   _getViewName(): string {
     return 'base';
@@ -192,7 +191,7 @@ class BaseView<
     const { value } = this.option();
 
     const localizedWidgetName = this._getLocalizedWidgetName();
-    const [startDate, endDate] = value as [Date | undefined, Date | undefined];
+    const [startDate, endDate] = value as [Date, Date];
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
@@ -467,7 +466,7 @@ class BaseView<
         const $row = $(e.currentTarget).closest('tr');
 
         const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
-        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
+        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY) ;
         const rowDates = [
           ...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL),
           lastDateInRow,
@@ -591,25 +590,23 @@ class BaseView<
     if (this._isRangeMode() && !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
+
     this._$selectedCells?.forEach(($cell: dxElementWrapper) => {
       $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS);
     });
-    // @ts-expect-error ts-error
+
     this._$selectedCells = value.map((date: Date) => this._getCellByDate(date));
-    // @ts-expect-error ts-error
     this._$selectedCells.forEach(($cell) => { $cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
   }
 
   _renderRange(): void {
-    const { allowValueSelection, value, range } = this.option();
+    const { allowValueSelection, value = [], range } = this.option();
 
     if (!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
+
     this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_IN_RANGE_CLASS); });
-    // @ts-expect-error ts-error
     this._$hoveredRangeCells?.forEach(($cell) => {
       $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
     });
@@ -618,15 +615,12 @@ class BaseView<
 
     this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
     this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
-    // @ts-expect-error ts-error
-    this._$rangeCells = range.map((date) => this._getCellByDate(date));
-    // @ts-expect-error ts-error
-    this._$rangeStartDateCell = this._getCellByDate(value[0]);
-    // @ts-expect-error ts-error
-    this._$rangeEndDateCell = this._getCellByDate(value[1]);
-    // @ts-expect-error ts-error
-    this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
 
+    this._$rangeCells = range.map((date) => this._getCellByDate(date));
+    this._$rangeStartDateCell = this._getCellByDate(value[0]);
+    this._$rangeEndDateCell = this._getCellByDate(value[1]);
+
+    this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
     this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
     this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
   }
@@ -637,20 +631,20 @@ class BaseView<
     if (!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
+
     this._$hoveredRangeCells?.forEach(($cell) => {
       $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
     });
 
     this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
     this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
-    // @ts-expect-error ts-error
+
     this._$hoveredRangeCells = hoveredRange
       .map((date) => this._getCellByDate(date));
 
     this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[0]);
     this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
-    // @ts-expect-error ts-error
+
     this._$hoveredRangeCells.forEach(($cell) => {
       $cell.addClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
     });
@@ -701,10 +695,9 @@ class BaseView<
     return new Date(min && firstAvailableDate < min ? min : firstAvailableDate);
   }
 
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getCellByDate(contouredDate: Date | undefined): dxElementWrapper {
-    Class.abstract();
+    return $();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

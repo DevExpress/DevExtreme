@@ -442,7 +442,9 @@ function sameHoursAndMinutes(date1, date2): boolean {
 }
 
 const sameDecade = function (date1, date2): boolean {
-  if (!isDefined(date1) || !isDefined(date2)) return false;
+  if (!isDefined(date1) || !isDefined(date2)) {
+    return false;
+  }
 
   const startDecadeDate1 = date1.getFullYear() - date1.getFullYear() % 10;
   const startDecadeDate2 = date2.getFullYear() - date2.getFullYear() % 10;
@@ -451,7 +453,9 @@ const sameDecade = function (date1, date2): boolean {
 };
 
 const sameCentury = function (date1, date2): boolean {
-  if (!isDefined(date1) || !isDefined(date2)) return false;
+  if (!isDefined(date1) || !isDefined(date2)) {
+    return false;
+  }
 
   const startCenturyDate1 = date1.getFullYear() - date1.getFullYear() % 100;
   const startCenturyDate2 = date2.getFullYear() - date2.getFullYear() % 100;
@@ -540,20 +544,27 @@ function getLastDateInYear(year) {
 
 function getDayWeekNumber(date, firstDayOfWeek) {
   let day = date.getDay() - firstDayOfWeek + 1;
-  if (day <= 0) { day += DAYS_IN_WEEK; }
+  if (day <= 0) {
+    day += DAYS_IN_WEEK;
+  }
 
   return day;
 }
 
 function getWeekNumber(date, firstDayOfWeek, rule): number {
-  const firstWeekDayInYear = getDayWeekNumber(getFirstDateInYear(date.getFullYear()), firstDayOfWeek);
+  const firstWeekDayInYear = getDayWeekNumber(
+    getFirstDateInYear(date.getFullYear()),
+    firstDayOfWeek,
+  );
   const lastWeekDayInYear = getDayWeekNumber(getLastDateInYear(date.getFullYear()), firstDayOfWeek);
   const daysInFirstWeek = DAYS_IN_WEEK - firstWeekDayInYear + 1;
 
   let weekNumber = Math.ceil((getDayNumber(date) - daysInFirstWeek) / 7);
   switch (rule) {
     case 'fullWeek': {
-      if (daysInFirstWeek === DAYS_IN_WEEK) { weekNumber += 1; }
+      if (daysInFirstWeek === DAYS_IN_WEEK) {
+        weekNumber += 1;
+      }
       if (weekNumber === 0) {
         const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
         return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
@@ -561,20 +572,28 @@ function getWeekNumber(date, firstDayOfWeek, rule): number {
       return weekNumber;
     }
     case 'firstDay': {
-      if (daysInFirstWeek > 0) { weekNumber += 1; }
+      if (daysInFirstWeek > 0) {
+        weekNumber += 1;
+      }
 
       const isSunday = firstWeekDayInYear === SUNDAY_WEEK_NUMBER
                 || lastWeekDayInYear === SUNDAY_WEEK_NUMBER;
-      if ((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) { weekNumber = 1; }
+      if ((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) {
+        weekNumber = 1;
+      }
 
       return weekNumber;
     }
     case 'firstFourDays': {
-      if (daysInFirstWeek > 3) { weekNumber += 1; }
+      if (daysInFirstWeek > 3) {
+        weekNumber += 1;
+      }
 
       const isThursday = firstWeekDayInYear === THURSDAY_WEEK_NUMBER
                 || lastWeekDayInYear === THURSDAY_WEEK_NUMBER;
-      if (weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) { weekNumber = 1; }
+      if (weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) {
+        weekNumber = 1;
+      }
 
       if (weekNumber === 0) {
         const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
