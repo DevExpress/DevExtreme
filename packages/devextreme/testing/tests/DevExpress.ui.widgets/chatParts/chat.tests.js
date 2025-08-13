@@ -760,10 +760,10 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.module('emptyMessageTemplate', () => {
-            QUnit.test('emptyMessageTemplate should set empty view content on init', function(assert) {
+        QUnit.module('emptyViewTemplate', () => {
+            QUnit.test('emptyViewTemplate should set empty view content on init', function(assert) {
                 this.reinit({
-                    emptyMessageTemplate: () => $('<h1>').text('This is empty'),
+                    emptyViewTemplate: () => $('<h1>').text('This is empty'),
                 });
 
                 const $emptyView = this.getMessageListEmptyView();
@@ -771,25 +771,25 @@ QUnit.module('Chat', () => {
                 assert.strictEqual($emptyView.text(), 'This is empty');
             });
 
-            QUnit.test('emptyMessageTemplate should set empty view content at runtime', function(assert) {
+            QUnit.test('emptyViewTemplate should set empty view content at runtime', function(assert) {
                 this.reinit({ });
-                this.instance.option('emptyMessageTemplate', () => $('<h1>').text('This is empty'));
+                this.instance.option('emptyViewTemplate', () => $('<h1>').text('This is empty'));
 
                 const $emptyView = this.getMessageListEmptyView();
 
                 assert.strictEqual($emptyView.text(), 'This is empty');
             });
 
-            QUnit.test('emptyMessageTemplate specified as a string text should set empty view content', function(assert) {
-                this.reinit({ emptyMessageTemplate: 'empty' });
+            QUnit.test('emptyViewTemplate specified as a string text should set empty view content', function(assert) {
+                this.reinit({ emptyViewTemplate: 'empty' });
 
                 const $emptyView = this.getMessageListEmptyView();
 
                 assert.strictEqual($emptyView.text(), 'empty');
             });
 
-            QUnit.test('emptyMessageTemplate specified as a string with a html element should set empty view content', function(assert) {
-                this.reinit({ emptyMessageTemplate: '<p>p text</p>' });
+            QUnit.test('emptyViewTemplate specified as a string with a html element should set empty view content', function(assert) {
+                this.reinit({ emptyViewTemplate: '<p>p text</p>' });
 
                 const $emptyViewChild = this.getMessageListEmptyView().children();
 
@@ -797,35 +797,38 @@ QUnit.module('Chat', () => {
                 assert.strictEqual($emptyViewChild.prop('tagName'), 'P', 'templte tag element is correct');
             });
 
-            QUnit.test('emptyMessageTemplate function argument should include Chat instance', function(assert) {
+            QUnit.test('emptyViewTemplate function argument should include Chat instance', function(assert) {
                 assert.expect(1);
 
-                const emptyMessageTemplate = (data) => {
+                const emptyViewTemplate = (data) => {
                     assert.strictEqual(data.component instanceof Chat, true, 'chat instance is passed');
                 };
 
-                this.reinit({ emptyMessageTemplate });
+                this.reinit({ emptyViewTemplate });
             });
 
-            QUnit.test('emptyMessageTemplate function argument should include localized empty message text', function(assert) {
-                assert.expect(1);
+            QUnit.test('emptyViewTemplate function argument should include data with localized message and prompt', function(assert) {
+                assert.expect(2);
 
                 const defaultLocale = localization.locale();
-                const localizedEmptyListMessageText = 'Lista wiadomości jest pusta';
+                const localizedEmptyListMessage = 'Lista wiadomości jest pusta';
+                const localizedEmptyListPrompt = 'Napisz swoją pierwszą wiadomość';
 
-                const emptyMessageTemplate = (data) => {
-                    assert.strictEqual(data.message, localizedEmptyListMessageText, 'localized empty message is passed');
+                const emptyViewTemplate = ({ data }) => {
+                    assert.strictEqual(data.message, localizedEmptyListMessage, 'localized message is passed');
+                    assert.strictEqual(data.prompt, localizedEmptyListPrompt, 'localized prompt is passed');
                 };
 
                 try {
                     localization.loadMessages({
                         'pl': {
-                            'dxChat-emptyListMessage': localizedEmptyListMessageText,
+                            'dxChat-emptyListMessage': localizedEmptyListMessage,
+                            'dxChat-emptyListPrompt': localizedEmptyListPrompt,
                         }
                     });
                     localization.locale('pl');
 
-                    this.reinit({ emptyMessageTemplate });
+                    this.reinit({ emptyViewTemplate });
                 } finally {
                     localization.locale(defaultLocale);
                 }

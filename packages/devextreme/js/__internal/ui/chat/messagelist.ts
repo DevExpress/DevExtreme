@@ -65,8 +65,10 @@ const ESCAPE_KEY = 'escape';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
-export type EmptyMessageTemplate = ((messageText: string, emptyMessageContainer: Element) => void)
-  | null;
+export type EmptyViewTemplate = ((
+  data: { message: string; prompt: string },
+  emptyViewContainer: Element) => void
+) | null;
 
 export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & {
   readonly itemData?: ContextMenuItem;
@@ -91,7 +93,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
-  emptyMessageTemplate?: EmptyMessageTemplate;
+  emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -135,7 +137,7 @@ class MessageList extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
-      emptyMessageTemplate: null,
+      emptyViewTemplate: null,
       messageTemplate: null,
     };
   }
@@ -205,14 +207,18 @@ class MessageList extends Widget<Properties> {
   _renderEmptyViewContent(): void {
     const messageText = messageLocalization.format('dxChat-emptyListMessage');
     const promptText = messageLocalization.format('dxChat-emptyListPrompt');
-    const { emptyMessageTemplate } = this.option();
+    const { emptyViewTemplate } = this.option();
 
     const $emptyView = $('<div>')
       .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
       .attr('id', `dx-${new Guid()}`);
 
-    if (emptyMessageTemplate) {
-      emptyMessageTemplate(messageText, getPublicElement($emptyView));
+    if (emptyViewTemplate) {
+      const data = {
+        message: messageText,
+        prompt: promptText,
+      };
+      emptyViewTemplate(data, getPublicElement($emptyView));
       $emptyView.appendTo(this._$content);
 
       return;
@@ -819,7 +825,7 @@ class MessageList extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
-      case 'emptyMessageTemplate':
+      case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
         this._invalidate();

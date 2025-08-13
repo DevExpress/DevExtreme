@@ -10945,9 +10945,12 @@ declare module DevExpress.ui {
      */
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxChat>;
-    export type EmptyMessageTemplateData = {
+    export type EmptyViewTemplateData = {
       readonly component: dxChat;
-      readonly emptyMessageText: string;
+      readonly data: {
+        readonly message: string;
+        readonly prompt: string;
+      };
     };
     export type ExplicitTypes = {
       Properties: Properties;
@@ -11017,7 +11020,7 @@ declare module DevExpress.ui {
       };
     export type MessageTemplateData = {
       readonly component: dxChat;
-      readonly message?: Message;
+      readonly data?: Message;
     };
     /**
      * [descr:_ui_chat_MessageUpdatedEvent]
@@ -11128,13 +11131,13 @@ declare module DevExpress.ui {
           }) => boolean);
     };
     /**
-     * [descr:dxChatOptions.emptyMessageTemplate]
+     * [descr:dxChatOptions.emptyViewTemplate]
      */
-    emptyMessageTemplate?:
+    emptyViewTemplate?:
       | template
       | null
       | ((
-          data: DevExpress.ui.dxChat.EmptyMessageTemplateData,
+          data: DevExpress.ui.dxChat.EmptyViewTemplateData,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -11160,7 +11163,7 @@ declare module DevExpress.ui {
       | template
       | null
       | ((
-          data: DevExpress.ui.dxChat.MessageTemplateData,
+          data: DevExpress.ui.dxChat.EmptyViewTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**

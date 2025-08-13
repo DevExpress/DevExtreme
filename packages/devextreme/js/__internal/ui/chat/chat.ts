@@ -31,7 +31,7 @@ import type {
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
 import type {
-  EmptyMessageTemplate,
+  EmptyViewTemplate,
   MessageEditingEvent,
   MessageTemplate,
   Properties as MessageListProperties,
@@ -90,7 +90,7 @@ class Chat extends Widget<Properties> {
       dayHeaderFormat: 'shortdate',
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
-      emptyMessageTemplate: null,
+      emptyViewTemplate: null,
       alerts: [],
       showAvatar: true,
       showUserName: true,
@@ -203,7 +203,7 @@ class Chat extends Widget<Properties> {
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
       isEditActionDisabled: (message) => this._messageToEdit === message,
       messageTemplate: this._getMessageTemplate(),
-      emptyMessageTemplate: this._getEmptyMessageTemplate(),
+      emptyViewTemplate: this._getEmptyViewTemplate(),
       showDayHeaders,
       showAvatar,
       showUserName,
@@ -263,21 +263,22 @@ class Chat extends Widget<Properties> {
   }
 
   _getRenderTemplateFunction(optionName: 'messageTemplate'): MessageTemplate | null;
-  _getRenderTemplateFunction(optionName: 'emptyMessageTemplate'): EmptyMessageTemplate | null;
+  _getRenderTemplateFunction(optionName: 'emptyViewTemplate'): EmptyViewTemplate | null;
   _getRenderTemplateFunction(
-    optionName: 'messageTemplate' | 'emptyMessageTemplate',
-  ): MessageTemplate | EmptyMessageTemplate | null {
+    optionName: 'messageTemplate' | 'emptyViewTemplate',
+  ): MessageTemplate | EmptyViewTemplate | null {
     const { [optionName]: templateOption } = this.option();
 
     if (templateOption) {
-      return (message, $container): void => {
+      return (data, $container): void => {
         const template = this._getTemplateByOption(optionName);
+        const dataFieldName = optionName === 'messageTemplate' ? 'message' : 'data';
 
         template.render({
           container: $container,
           model: {
             component: this,
-            message,
+            [dataFieldName]: data,
           },
         });
       };
@@ -290,8 +291,8 @@ class Chat extends Widget<Properties> {
     return this._getRenderTemplateFunction('messageTemplate');
   }
 
-  _getEmptyMessageTemplate(): EmptyMessageTemplate {
-    return this._getRenderTemplateFunction('emptyMessageTemplate');
+  _getEmptyViewTemplate(): EmptyViewTemplate {
+    return this._getRenderTemplateFunction('emptyViewTemplate');
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
@@ -631,8 +632,8 @@ class Chat extends Widget<Properties> {
       case 'messageTemplate':
         this._messageList.option(name, this._getMessageTemplate());
         break;
-      case 'emptyMessageTemplate':
-        this._messageList.option(name, this._getEmptyMessageTemplate());
+      case 'emptyViewTemplate':
+        this._messageList.option(name, this._getEmptyViewTemplate());
         break;
       case 'reloadOnChange':
         break;

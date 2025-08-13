@@ -281,13 +281,16 @@ export type Message = TextMessage | ImageMessage;
 /** @public */
 export type MessageTemplateData = {
     readonly component: dxChat;
-    readonly message?: Message;
+    readonly data?: Message;
 };
 
 /** @public */
-export type EmptyMessageTemplateData = {
+export type EmptyViewTemplateData = {
     readonly component: dxChat;
-    readonly emptyMessageText: string;
+    readonly data: {
+        readonly message: string;
+        readonly prompt: string;
+    };
 };
 
 /**
@@ -351,7 +354,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    emptyMessageTemplate?: template | null | ((data: EmptyMessageTemplateData, itemElement: DxElement) => string | UserDefinedElement);
+    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
@@ -383,7 +386,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
+    messageTemplate?: template | null | ((data: EmptyViewTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 'shorttime'
