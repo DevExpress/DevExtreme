@@ -189,7 +189,7 @@ export class DateGeneratorBaseStrategy {
       return false;
     }
 
-    return !timeZoneUtils.isEqualLocalTimeZone(this.timeZone, appointment.startDate);
+    return !timeZoneUtils.isEqualLocalTimeZone(this.timeZone);
   }
 
   _getDateOffsetDST(date) {
