@@ -51,6 +51,8 @@ type ISelectBoxOptionsNarrowedEvents = {
 type ISelectBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISelectBoxOptionsNarrowedEvents> & IHtmlOptions & {
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
+  fieldRender?: (...params: any) => React.ReactNode;
+  fieldComponent?: React.ComponentType<any>;
   groupRender?: (...params: any) => React.ReactNode;
   groupComponent?: React.ComponentType<any>;
   itemRender?: (...params: any) => React.ReactNode;
@@ -97,6 +99,11 @@ const SelectBox = memo(
           tmplOption: "dropDownButtonTemplate",
           render: "dropDownButtonRender",
           component: "dropDownButtonComponent"
+        },
+        {
+          tmplOption: "fieldTemplate",
+          render: "fieldRender",
+          component: "fieldComponent"
         },
         {
           tmplOption: "groupTemplate",

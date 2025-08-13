@@ -1,14 +1,21 @@
 import {
+    UserDefinedElement,
+    DxElement,
+} from '../core/element';
+
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../common/core/events';
 
-import { ApplyValueMode } from '../common';
+import {
+    template,
+    ApplyValueMode,
+} from '../common';
 
 import dxDropDownEditor, {
-    FieldTemplate,
     dxDropDownEditorOptions,
     DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
@@ -191,7 +198,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    fieldTemplate?: FieldTemplate<string>;
+    fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 1

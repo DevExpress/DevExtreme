@@ -11462,7 +11462,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBoxOptions.fieldTemplate]
      */
-    fieldTemplate?: FieldTemplate<string>;
+    fieldTemplate?:
+      | template
+      | ((
+          value: string,
+          fieldElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxColorBoxOptions.keyStep]
      */
@@ -16264,7 +16269,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
      */
-    fieldTemplate?: FieldTemplate;
+    fieldTemplate?:
+      | template
+      | ((
+          value: any,
+          fieldElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxDropDownBoxOptions.items]
      */
@@ -27031,7 +27041,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
      */
-    fieldTemplate?: FieldTemplate;
+    fieldTemplate?:
+      | template
+      | ((
+          selectedItem: any,
+          fieldElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxSelectBoxOptions.fieldTemplates]
      */
