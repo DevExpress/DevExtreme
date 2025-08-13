@@ -292,11 +292,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     });
     this._popup.registerKeyHandler('escape', (
       e: DxEvent<KeyboardEvent>,
-    ) => {
+    ): void => {
       if (this._popup?.$overlayContent().is($(e.target))) {
         this.option('opened', false);
       }
-      return undefined;
     });
   }
 
