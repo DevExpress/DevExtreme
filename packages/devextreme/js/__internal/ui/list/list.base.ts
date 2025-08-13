@@ -943,13 +943,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
     $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 
-    // @ts-expect-error ts-error
-    if (fx.isAnimating($groupBody)) {
-      fx.stop($groupBody.get(0), false);
+    const groupBodyElement = $groupBody.get(0);
+
+    if (fx.isAnimating(groupBodyElement)) {
+      fx.stop(groupBodyElement, false);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($groupBody.get(0), {
+    fx.animate(groupBodyElement, {
       // @ts-expect-error fx.animate does not have proper typing
       type: 'custom',
       // @ts-expect-error fx.animate does not have proper typing
