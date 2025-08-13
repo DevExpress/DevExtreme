@@ -104,18 +104,17 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   notifyObserver(subject, args) {
-    const observer: any = this.option('observer');
-    if (observer) {
-      observer.fire(subject, args);
+    const notifyScheduler: any = this.option('notifyScheduler');
+    if (notifyScheduler) {
+      notifyScheduler.invoke(subject, args);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   invoke(funcName: string, ...args) {
-    const observer: any = this.option('observer');
+    const notifyScheduler: any = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (notifyScheduler) {
+      return notifyScheduler.invoke(funcName, ...args);
     }
   }
 
