@@ -479,7 +479,7 @@ export class ViewDataGenerator {
     }, rowIndex, columnIndex);
     const { viewOffset } = options;
     const startDate = dateUtils.trimTime(data.startDate);
-    const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
+    const shiftedStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
 
     return {
       ...data,

@@ -305,14 +305,14 @@ const getExtremeDates = () => {
 };
 
 const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
-  const newDate = dateUtilsTs.addOffsets(date, offsets);
+  const newDate = dateUtilsTs.addOffsets(date, ...offsets);
   const daylightShift = getDaylightOffsetInMs(date, newDate);
 
   if (!daylightShift) {
     return newDate;
   }
 
-  const correctLocalDate = dateUtilsTs.addOffsets(newDate, [-daylightShift]);
+  const correctLocalDate = dateUtilsTs.addOffsets(newDate, -daylightShift);
   const daylightSecondShift = getDaylightOffsetInMs(newDate, correctLocalDate);
 
   return !daylightSecondShift

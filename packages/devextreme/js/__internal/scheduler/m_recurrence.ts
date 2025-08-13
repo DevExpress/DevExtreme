@@ -83,11 +83,11 @@ class RecurrenceProcessor {
     const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
 
     // NOTE: Remove local timezone offsets from Rrule date params.
-    const startIntervalDate = addOffsets(options.start, [-clientOffsets.startDate, appointmentTimezoneOffset]);
+    const startIntervalDate = addOffsets(options.start, -clientOffsets.startDate, appointmentTimezoneOffset);
     const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
     // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
     const minViewDate = new Date(minViewTime - duration);
-    const maxViewDate = addOffsets(options.max, [-clientOffsets.maxViewDate, appointmentTimezoneOffset]);
+    const maxViewDate = addOffsets(options.max, -clientOffsets.maxViewDate, appointmentTimezoneOffset);
 
     // NOTE: Check DST after start date without local timezone offset conversion.
     const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
@@ -104,14 +104,15 @@ class RecurrenceProcessor {
   }
 
   _convertRruleResult(rruleIntervalParams, options, rruleDate) {
-    const convertedBackDate = addOffsets(rruleDate, [
+    const convertedBackDate = addOffsets(
+      rruleDate,
       ...this._getLocalMachineOffset(rruleDate),
       -options.appointmentTimezoneOffset,
       rruleIntervalParams.startIntervalDateDSTShift,
-    ]);
+    );
     const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
     const switchToSummerTime = convertedDateDSTShift < 0;
-    const resultDate = addOffsets(convertedBackDate, [convertedDateDSTShift]);
+    const resultDate = addOffsets(convertedBackDate, convertedDateDSTShift);
     const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
 
     if (resultDateDSTShift && switchToSummerTime) {
@@ -285,7 +286,8 @@ class RecurrenceProcessor {
     if (until) {
       ruleOptions.until = addOffsets(
         until,
-        [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset],
+        -timeZoneUtils.getClientTimezoneOffset(until),
+        options.appointmentTimezoneOffset,
       );
     }
 
@@ -303,7 +305,7 @@ class RecurrenceProcessor {
           : [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset];
         const exceptionDateInPseudoUtc = addOffsets(
           date,
-          rruleTimezoneOffsets,
+          ...rruleTimezoneOffsets,
         );
 
         this.rRuleSet!.exdate(exceptionDateInPseudoUtc);
