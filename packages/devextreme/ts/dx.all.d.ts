@@ -11163,7 +11163,7 @@ declare module DevExpress.ui {
       | template
       | null
       | ((
-          data: DevExpress.ui.dxChat.EmptyViewTemplateData,
+          data: DevExpress.ui.dxChat.MessageTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
