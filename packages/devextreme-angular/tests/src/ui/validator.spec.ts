@@ -61,11 +61,11 @@ describe('DxValidator', () => {
   [
     {
       name: 'legacy',
-      tpl: '<dx-validator>@for (rule of validationRules; track rule){ <dxi-validation-rule [type]="rule.type"></dxi-validation-rule> } </dx-validator>'
+      tpl: '<dx-validator>@for (rule of validationRules; track rule){ <dxi-validation-rule [type]="rule.type"></dxi-validation-rule> } </dx-validator>',
     },
     {
       name: 'by props',
-      tpl: '<dx-validator [validationRules]="validationRules"></dx-validator>'
+      tpl: '<dx-validator [validationRules]="validationRules"></dx-validator>',
     },
     {
       name: 'modern',
@@ -76,9 +76,9 @@ describe('DxValidator', () => {
                 } @else {
                     <dxi-validator-required-rule ></dxi-validator-required-rule>
                  }
-            }</dx-validator>`,  
-    }
-  ].forEach(({name, tpl}) => {
+            }</dx-validator>`,
+    },
+  ].forEach(({ name, tpl }) => {
     // spec
     it('should work with dx-validator', () => {
       TestBed.overrideComponent(TestContainerComponent, {
