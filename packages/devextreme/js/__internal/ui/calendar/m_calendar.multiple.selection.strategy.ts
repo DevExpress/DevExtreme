@@ -1,6 +1,7 @@
 import type { DxEvent } from '@js/events';
 
 import type Calendar from './m_calendar';
+import type { WeekNumberClickEvent } from './m_calendar.base_view';
 import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
@@ -22,7 +23,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     value: (Date | null)[];
     range: Date[];
     selectionMode: 'multiple';
-    onWeekNumberClick?: ((e: { rowDates: Date[]; event: DxEvent }) => void) | null;
+    onWeekNumberClick?: ((e: WeekNumberClickEvent) => void) | null;
   } {
     return {
       value: this.dateOption('value'),
@@ -69,7 +70,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     this.calendar.option('value', []);
   }
 
-  _weekNumberClickHandler({ rowDates, event }: { rowDates: Date[]; event: DxEvent }): void {
+  _weekNumberClickHandler({ rowDates, event }: WeekNumberClickEvent): void {
     const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
 
     this.dateValue(selectedDates, event);

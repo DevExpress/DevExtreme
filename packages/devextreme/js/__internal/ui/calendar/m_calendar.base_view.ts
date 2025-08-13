@@ -59,6 +59,16 @@ const SELECTION_MODE = {
   range: 'range',
 };
 
+export interface CellEvent {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
+  value: Date;
+}
+
+export interface WeekNumberClickEvent {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
+  rowDates: Date[];
+}
+
 export interface BaseViewProperties extends WidgetProperties {
   date: Date;
 
@@ -94,9 +104,9 @@ export interface BaseViewProperties extends WidgetProperties {
     (itemData: CellTemplateData, itemIndex: number, itemElement: Element) => dxElementWrapper
   );
 
-  onCellClick?: (e: { event: DxEvent; value: Date }) => void;
-  onCellHover?: (e: { event: DxEvent; value: Date }) => void;
-  onWeekNumberClick?: (e: { event: DxEvent; rowDates: Date[] }) => void;
+  onCellClick?: (e: CellEvent) => void;
+  onCellHover?: (e: CellEvent) => void;
+  onWeekNumberClick?: (e: WeekNumberClickEvent) => void;
 }
 
 class BaseView<
@@ -108,11 +118,11 @@ class BaseView<
 
   _disabledDatesHandler!: ((data: DisabledDate) => boolean);
 
-  _cellClickAction!: (e: Record<string, unknown>) => void;
+  _cellClickAction!: (e: CellEvent) => void;
 
-  _cellHoverAction!: (e: Record<string, unknown>) => void;
+  _cellHoverAction!: (e: CellEvent) => void;
 
-  _weekNumberCellClickAction!: (e: Record<string, unknown>) => void;
+  _weekNumberCellClickAction!: (e: WeekNumberClickEvent) => void;
 
   _$rangeEndHoverCell!: dxElementWrapper;
 
@@ -433,6 +443,7 @@ class BaseView<
       if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
         this._cellClickAction({
           event: e,
+          // @ts-expect-error ts-error
           value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
         });
       }
@@ -452,6 +463,7 @@ class BaseView<
           if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
             this._cellHoverAction({
               event: e,
+              // @ts-expect-error ts-error
               value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
             });
           }
@@ -474,6 +486,7 @@ class BaseView<
 
         this._weekNumberCellClickAction({
           event: e,
+          // @ts-expect-error ts-error
           rowDates,
         });
       });

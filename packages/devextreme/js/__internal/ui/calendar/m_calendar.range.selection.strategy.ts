@@ -2,6 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import type { DxEvent } from '@js/events';
 
 import type Calendar from './m_calendar';
+import type { CellEvent, WeekNumberClickEvent } from './m_calendar.base_view';
 import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 const DAY_INTERVAL = 86400000;
@@ -25,8 +26,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     value: (Date | null)[];
     range: Date[];
     selectionMode: 'range';
-    onCellHover?: (e: { value: Date }) => void;
-    onWeekNumberClick?: ((e: { rowDates: Date[]; event: DxEvent }) => void) | null;
+    onCellHover?: (e: CellEvent) => void;
+    onWeekNumberClick?: ((e: WeekNumberClickEvent) => void) | null;
   } {
     const value = this._getValue();
     const range = this._getDaysInRange(value[0], value[1]);
@@ -159,7 +160,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     ];
   }
 
-  _cellHoverHandler(e: { value: Date }): void {
+  _cellHoverHandler(e: CellEvent): void {
     const isMaxZoomLevel = this._isMaxZoomLevel();
     const [startDate, endDate] = this._getValue();
 
@@ -192,7 +193,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
   }
 
-  _weekNumberClickHandler({ rowDates, event }: { rowDates: Date[]; event: DxEvent }): void {
+  _weekNumberClickHandler({ rowDates, event }: WeekNumberClickEvent): void {
     const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
     const value = selectedDates.length
       ? [selectedDates[0], selectedDates[selectedDates.length - 1]]

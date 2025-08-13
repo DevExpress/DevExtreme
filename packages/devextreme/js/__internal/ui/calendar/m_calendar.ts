@@ -36,7 +36,7 @@ import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/event
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
 
-import type { BaseViewProperties } from './m_calendar.base_view';
+import type { BaseViewProperties, CellEvent } from './m_calendar.base_view';
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
 import type { NavigatorOptions } from './m_calendar.navigator';
 import Navigator from './m_calendar.navigator';
@@ -100,7 +100,7 @@ export interface CalendarProperties extends Properties {
   allowChangeSelectionOrder?: boolean;
   currentSelection?: 'startDate' | 'endDate';
   _todayDate: () => Date;
-  onCellClick?: (e: { event: DxEvent; value: Date }) => void;
+  onCellClick?: (e: CellEvent) => void;
   onContouredChanged?: (e: { activeElement: string }) => void;
 }
 
@@ -115,9 +115,9 @@ class Calendar<
 
   _skipNavigate?: boolean;
 
-  _onContouredChanged?: (arg) => void;
+  _onContouredChanged?: (activeElement: string) => void;
 
-  _cellClickAction?: (e) => void;
+  _cellClickAction?: (e: CellEvent) => void;
 
   _view!: MonthView | YearView | DecadeView | CenturyView;
 
@@ -1018,7 +1018,7 @@ class Calendar<
     return `${coefficient * 100 * rtlCorrection}%`;
   }
 
-  _cellClickHandler(e: { event: DxEvent; value: Date }): void {
+  _cellClickHandler(e: CellEvent): void {
     const zoomLevel = this.option('zoomLevel');
     const nextView = dateUtils.getViewDown(zoomLevel);
 
