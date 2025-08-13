@@ -16,6 +16,7 @@ import type { DxEvent } from '@js/events';
 import type {
   CalendarSelectionMode, CalendarZoomLevel, CellTemplateData, DisabledDate,
 } from '@js/ui/calendar';
+import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -59,12 +60,12 @@ const SELECTION_MODE = {
   range: 'range',
 };
 
-export interface CellEvent {
+export interface CellEvent extends DefaultActionArgs<BaseView> {
   event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
   value: Date;
 }
 
-export interface WeekNumberClickEvent {
+export interface WeekNumberClickEvent extends DefaultActionArgs<BaseView> {
   event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
   rowDates: Date[];
 }
