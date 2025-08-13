@@ -42,6 +42,7 @@ import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
+import { countVisibleAppointments } from './utils/count_visible_appointments';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './utils/m_utils';
@@ -94,7 +95,7 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   get appointmentsCount(): number {
-    return (this.option('items') ?? []).length;
+    return countVisibleAppointments(this.option('items') ?? []);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
