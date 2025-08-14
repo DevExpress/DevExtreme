@@ -714,10 +714,6 @@ declare module DevExpress {
       DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
     > {
     /**
-     * [descr:DOMComponentOptions.bindingOptions]
-     */
-    bindingOptions?: { [key: string]: any };
-    /**
      * [descr:DOMComponentOptions.elementAttr]
      */
     elementAttr?: { [key: string]: any };

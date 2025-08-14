@@ -455,7 +455,6 @@ const DxCalendarOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:cellTemplate": null,
     "update:dateSerializationFormat": null,
     "update:disabled": null,
@@ -499,7 +498,6 @@ const DxCalendarOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
@@ -600,7 +598,6 @@ const DxDropDownOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -651,7 +648,6 @@ const DxDropDownOptionsConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -823,7 +819,6 @@ const DxOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -850,7 +845,6 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
