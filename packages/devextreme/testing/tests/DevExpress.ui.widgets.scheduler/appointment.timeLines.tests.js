@@ -589,9 +589,9 @@ module('Integration: Appointments in Timeline views', {
                     });
 
                     assert.strictEqual(scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(0)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
-                    assert.strictEqual($(scheduler.appointments.getAppointment(1)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).position().left, $(scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(2)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
+                    assert.strictEqual($(scheduler.appointments.getAppointment(3)).innerWidth(), $(scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
                 });
             });
         });

@@ -1,7 +1,8 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { getAppointmentKey } from '@ts/scheduler/r1/utils/index';
-import type { AppointmentViewModel, RenderStrategyName, SafeAppointment } from '@ts/scheduler/types';
+import type { RenderStrategyName, SafeAppointment } from '@ts/scheduler/types';
 
+import { addCollector } from './add_collector';
+import { plainViewModel } from './plain_view_model';
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import type BaseAppointmentsStrategy from './rendering_strategies/m_strategy_base';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
@@ -9,6 +10,7 @@ import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strate
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month_line';
 import VerticalAppointmentsStrategy from './rendering_strategies/m_strategy_vertical';
 import WeekAppointmentRenderingStrategy from './rendering_strategies/m_strategy_week';
+import type { AppointmentViewModelInternal } from './types';
 
 const RENDERING_STRATEGIES: Record<RenderStrategyName, typeof BaseAppointmentsStrategy> = {
   horizontal: HorizontalAppointmentsStrategy,
@@ -43,14 +45,24 @@ export class AppointmentViewModelGenerator {
     const positionMap = renderingStrategy.createTaskPositionMap(appointments); // appointments are mutated inside!
     const shiftedViewModel = this.postProcess(appointments, positionMap);
     const viewModel = this.unshiftViewModelAppointmentsByViewOffset(shiftedViewModel, viewOffset);
+    viewModel.forEach((item) => {
+      item.settings.forEach((settings) => {
+        settings.geometry = options.appointmentRenderingStrategyName === 'agenda'
+          ? undefined
+          : renderingStrategy.getAppointmentGeometry(settings);
+      });
+    });
+    const viewModelPlain = options.appointmentRenderingStrategyName === 'agenda'
+      ? plainViewModel(viewModel)
+      : addCollector(viewModel);
 
     return {
       positionMap,
-      viewModel,
+      viewModel: viewModelPlain,
     };
   }
 
-  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModel[] {
+  postProcess(filteredItems: SafeAppointment[], positionMap): AppointmentViewModelInternal[] {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -67,7 +79,7 @@ export class AppointmentViewModelGenerator {
           : 'horizontal';
       });
 
-      const item: AppointmentViewModel = {
+      const item: AppointmentViewModelInternal = {
         itemData: data,
         settings: appointmentSettings,
         needRepaint: true,
@@ -78,138 +90,24 @@ export class AppointmentViewModelGenerator {
     });
   }
 
-  makeRenovatedViewModels(viewModel, supportAllDayRow, isVerticalGrouping) {
-    const strategy = this.getRenderingStrategy();
-    const regularViewModels: any = [];
-    const allDayViewModels: any = [];
-    const compactOptions: any = [];
-    const isAllDayPanel = supportAllDayRow && !isVerticalGrouping;
-
-    viewModel.forEach(({ itemData, settings }) => {
-      settings.forEach((options) => {
-        const item = this.prepareViewModel(options, strategy, itemData);
-        if (options.isCompact) {
-          compactOptions.push({
-            compactViewModel: options.virtual,
-            appointmentViewModel: item,
-          });
-        } else if (options.allDay && isAllDayPanel) {
-          allDayViewModels.push(item);
-        } else {
-          regularViewModels.push(item);
-        }
-      });
-    });
-
-    const compactViewModels = this.prepareCompactViewModels(compactOptions, supportAllDayRow);
-
-    const result = {
-      allDay: allDayViewModels,
-      regular: regularViewModels,
-      ...compactViewModels,
-    };
-
-    return result;
-  }
-
-  prepareViewModel(options, strategy, itemData) {
-    const geometry = strategy.getAppointmentGeometry(options);
-
-    const viewModel = {
-      key: getAppointmentKey(geometry),
-      appointment: itemData,
-      geometry: {
-        ...geometry,
-        // TODO move to the rendering strategies
-        leftVirtualWidth: options.leftVirtualWidth,
-        topVirtualHeight: options.topVirtualHeight,
-      },
-      info: {
-        ...options.info,
-        allDay: options.allDay,
-        direction: options.direction,
-        appointmentReduced: options.appointmentReduced,
-        groupIndex: options.groupIndex,
-      },
-    };
-
-    return viewModel;
-  }
-
-  getCompactViewModelFrame(compactViewModel) {
-    return {
-      isAllDay: !!compactViewModel.isAllDay,
-      isCompact: compactViewModel.isCompact,
-      groupIndex: compactViewModel.groupIndex,
-      geometry: {
-        left: compactViewModel.left,
-        top: compactViewModel.top,
-        width: compactViewModel.width,
-        height: compactViewModel.height,
-      },
-      items: {
-        colors: [],
-        data: [],
-        settings: [],
-      },
-    };
-  }
-
-  prepareCompactViewModels(compactOptions, supportAllDayRow) {
-    const regularCompact = {};
-    const allDayCompact = {};
-
-    compactOptions.forEach(({ compactViewModel, appointmentViewModel }) => {
-      const {
-        index,
-        isAllDay,
-      } = compactViewModel;
-      const viewModel = isAllDay && supportAllDayRow
-        ? allDayCompact
-        : regularCompact;
-
-      if (!viewModel[index]) {
-        viewModel[index] = this.getCompactViewModelFrame(compactViewModel);
-      }
-
-      const {
-        settings,
-        data,
-        colors,
-      } = viewModel[index].items;
-
-      settings.push(appointmentViewModel);
-      data.push(appointmentViewModel.appointment);
-      colors.push(appointmentViewModel.info.resourceColor);
-    });
-
-    const toArray = (items) => Object
-      .keys(items)
-      .map((key) => ({ key, ...items[key] }));
-
-    const allDayViewModels = toArray(allDayCompact);
-    const regularViewModels = toArray(regularCompact);
-
-    return {
-      allDayCompact: allDayViewModels,
-      regularCompact: regularViewModels,
-    };
-  }
-
   // NOTE: Unfortunately, we cannot implement immutable behavior here
   // because in this case it will break the refs (keys) of dataSource's appointments,
   // and it will break appointment updates :(
   private unshiftViewModelAppointmentsByViewOffset(
-    viewModel: AppointmentViewModel[],
+    viewModel: AppointmentViewModelInternal[],
     viewOffset: number,
-  ): AppointmentViewModel[] {
+  ): AppointmentViewModelInternal[] {
     const processedAppointments = new Set();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        const appointment = (setting as any)?.info?.appointment;
+        const appointment = setting?.info?.appointment as {
+          startDate: Date;
+          endDate: Date;
+          normalizedEndDate: Date;
+        } | undefined;
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs
