@@ -209,6 +209,7 @@ function generatePackageJsonFile(folder, moduleFileName, filePath = folder) {
     const relativeBase = '../'.repeat(relativePath.split('..').length - 1);
 
     fs.writeFileSync(path.join(absoluteModulePath, 'package.json'), JSON.stringify({
+        sideEffects: false,
         main: `${relativeBase}cjs/${moduleFilePath}.js`,
         module: `${relativeBase}esm/${moduleFilePath}.js`,
         typings: `${relativeBase}cjs/${moduleFilePath}.d.ts`,

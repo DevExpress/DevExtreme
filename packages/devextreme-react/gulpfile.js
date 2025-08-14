@@ -217,6 +217,7 @@ function generatePackageJsonFile(folder, moduleFileName, filePath = folder) {
       path.join(absoluteModulePath, 'package.json'),
       JSON.stringify(
         {
+          sideEffects: false,
           main: `${relativeBase}cjs/${moduleFilePath}.js`,
           module: `${relativeBase}esm/${moduleFilePath}.js`,
           typings: `${relativeBase}cjs/${moduleFilePath}.d.ts`,
