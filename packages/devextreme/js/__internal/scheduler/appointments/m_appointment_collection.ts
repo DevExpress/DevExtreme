@@ -25,7 +25,12 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
+import {
+  AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS,
+  APPOINTMENT_CONTENT_CLASSES,
+  APPOINTMENT_DRAG_SOURCE_CLASS,
+  APPOINTMENT_ITEM_CLASS,
+} from '../m_classes';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
@@ -183,7 +188,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   private _getNavigatableItems(): dxElementWrapper {
     // @ts-expect-error
-    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
+    const appts = this._itemElements().not('.dx-state-disabled');
     // @ts-expect-error
     const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
     return appts.add(apptCollectors);
@@ -638,7 +643,10 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentAgendaViewModel,
   ): void {
-    const { allDay } = settings;
+    if (settings.isLastInGroup) {
+      element.addClass(AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS);
+    }
+
     const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
     const config: any = {
       data: settings.itemData,
@@ -646,12 +654,8 @@ class SchedulerAppointments extends CollectionWidget {
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
       notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
-      direction: settings.direction || 'vertical',
       allowResize: false,
       allowDrag: false,
-      allDay,
-      cellWidth: this.invoke('getCellWidth'),
-      cellHeight: this.invoke('getCellHeight'),
       groups: this.option('groups'),
 
       dataAccessors: this.option('dataAccessors'),

@@ -42,11 +42,6 @@ const moduleOptions = {
 
 QUnit.module('LayoutManager', moduleOptions);
 
-QUnit.test('LayoutManager should be initialized', async function(assert) {
-    await this.createInstance();
-    assert.ok(this.instance.getLayoutManager() instanceof AppointmentLayoutManager, 'AppointmentLayoutManager was initialized');
-});
-
 QUnit.test('RenderingStrategy should be initialized', async function(assert) {
     await this.createInstance();
     assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'AppointmentLayoutManager was initialized');

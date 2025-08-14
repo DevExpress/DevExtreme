@@ -4,8 +4,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { isAppointmentTakesAllDay, isDateAndTimeView } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
+import { isAppointmentMatchedResources } from '../../view_model_new/filtration/is_appointment_matched_resources';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
-import { isAppointmentMatchedResources } from './utils/get_appointment_filter/is_appointment_matched_resources';
 import {
   filterArray,
   getRawAppointments,

@@ -2,11 +2,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 
 import { formatDates, getFormatType } from './appointments/m_text_utils';
-import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import { utils } from './m_utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
@@ -276,21 +274,6 @@ const subscribes = {
 
   forceMaxAppointmentPerCell() {
     return this.forceMaxAppointmentPerCell();
-  },
-
-  onAgendaReady(rows) {
-    const $appts = this.getAppointmentsInstance()._itemElements();
-    let total = 0;
-
-    const applyClass = function (_, count) {
-      const index = count + total - 1;
-      $appts.eq(index).addClass(AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS);
-      total += count;
-    };
-
-    for (let i = 0; i < rows.length; i++) {
-      each(rows[i], applyClass);
-    }
   },
 
   getTargetedAppointmentData(appointment, element) {

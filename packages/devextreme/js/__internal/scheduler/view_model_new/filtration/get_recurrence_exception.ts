@@ -1,7 +1,7 @@
 import dateSerialization from '@js/core/utils/date_serialization';
 
-import timeZoneUtils from '../../../../m_utils_time_zone';
-import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import timeZoneUtils from '../../m_utils_time_zone';
+import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 

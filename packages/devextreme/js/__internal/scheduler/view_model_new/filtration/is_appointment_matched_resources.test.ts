@@ -2,7 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { ResourceLoader } from '../../../../utils/loader/resource_loader';
+import { ResourceLoader } from '../../utils/loader/resource_loader';
 import {
   isAppointmentMatchedResources,
 } from './is_appointment_matched_resources';

@@ -2,8 +2,8 @@ import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
 
 export interface DateInterval {
-  min: Date;
-  max: Date;
+  min: number;
+  max: number;
 }
 
 export interface CompareOptions {

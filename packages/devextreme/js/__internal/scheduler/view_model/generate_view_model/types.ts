@@ -48,7 +48,7 @@ export interface AppointmentViewModelSettingsInternal extends BaseViewModelSetti
 }
 
 export interface AgendaViewModelSettingsInternal extends BaseViewModelSettingsInternal {
-  agendaSettings: SimpleAppointment;
+  agendaSettings: SafeAppointment;
   height: number;
   width: string;
 }
@@ -74,10 +74,10 @@ export interface AppointmentCollectorViewModel extends BaseAppointmentViewModel 
 }
 
 export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel {
-  direction: string;
-  agendaSettings: SimpleAppointment;
+  agendaSettings: SafeAppointment;
   height: number;
   width: string;
+  isLastInGroup: boolean;
 }
 
 export interface AppointmentItemViewModel extends BaseAppointmentViewModel {
