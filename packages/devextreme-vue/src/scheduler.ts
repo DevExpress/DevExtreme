@@ -468,7 +468,6 @@ const DxOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:buttonTemplate": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -496,7 +495,6 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     buttonTemplate: {},
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
