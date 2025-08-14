@@ -4,6 +4,6 @@ You can use the DevExtreme Chart component to visualize data as a [Pareto chart]
 
 Follow the steps below to create a Pareto chart:
 
-1. Configure a [Bar](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/) series object and assign your primary data to this series (specify **series**.[valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField)).
-2. Add a [Line](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/LineSeries/) or [Spline](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/SplineSeries/) series object and assign your cumulative total values to this series.
-3. To display the numbers of the [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) (80/20) specify **valueAxis**.[constantLines](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/constantLines/).
+1. Configure a [Bar](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/) series and assign your primary data to this series (specify **series**.[valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField) property).
+2. Add a [Line](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/LineSeries/) or [Spline](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/SplineSeries/) series and assign your cumulative total values to this series.
+3. Specify **valueAxis**.[constantLines](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/constantLines/) to illustrate [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) correlation (80/20).
