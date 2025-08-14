@@ -1,3 +1,4 @@
+import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
@@ -6,24 +7,24 @@ import errors from '@js/ui/widget/ui.errors';
 
 import SelectionStrategy from './m_selection.strategy';
 
-export default class DeferredStrategy extends SelectionStrategy {
+export default class DeferredStrategy<TItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
   getSelectedItems() {
     return this._loadFilteredData(this.options.selectionFilter);
   }
 
-  getSelectedItemKeys() {
-    const d = Deferred();
+  getSelectedItemKeys(): any {
+    const d = Deferred<LoadResult<TItem>>();
     const that = this;
     const key = this.options.key();
     const select = isString(key) ? [key] : key;
 
     this._loadFilteredData(this.options.selectionFilter, null, select).done((items) => {
-      // @ts-expect-error
-      const keys = items.map((item) => that.options.keyOf(item));
+      const keys = (Array.isArray(items) ? items : []).map((item) => that.options.keyOf(item));
 
       d.resolve(keys);
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    }).fail(d.reject);
+    }).fail((error) => {
+      d.reject(error);
+    });
 
     return d.promise();
   }
@@ -223,8 +224,7 @@ export default class DeferredStrategy extends SelectionStrategy {
 
   _normalizeFilter(filter) {
     if (filter && filter.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      filter = filter[0];
+      [filter] = filter;
     }
     return filter;
   }
@@ -306,8 +306,8 @@ export default class DeferredStrategy extends SelectionStrategy {
           if (!selectionFilter[i].length) {
             this._removeFilterByIndex(selectionFilter, i, isSelectAll);
           } else if (selectionFilter[i].length === 1) {
-            // eslint-disable-next-line prefer-destructuring
-            selectionFilter[i] = selectionFilter[i][0];
+            const [firstFilter] = selectionFilter[i];
+            selectionFilter[i] = firstFilter;
           }
           return filterIndex;
         }

@@ -1,14 +1,16 @@
+import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
   getKeyHash,
   noop,
 } from '@js/core/utils/common';
-import { Deferred } from '@js/core/utils/deferred';
+import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
+import type { SelectOptions } from '@ts/ui/selection/m_selection';
 
-export default class SelectionStrategy {
-  options: any;
+export default class SelectionStrategy<TItem = any, TKey = any> {
+  options: SelectOptions<TItem, TKey>;
 
   _lastSelectAllPageDeferred = Deferred().reject();
 
@@ -121,7 +123,6 @@ export default class SelectionStrategy {
     keys = keys || [];
     keys = Array.isArray(keys) ? keys : [keys];
     this.validate();
-    // @ts-expect-error
     return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
   }
 
@@ -153,10 +154,10 @@ export default class SelectionStrategy {
     };
   }
 
-  _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
+  _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean): any {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
-    const deferred = Deferred();
+    const deferred = Deferred<LoadResult<TItem>>();
     const queryParams = this._getQueryParams();
 
     const loadOptions = {
@@ -170,7 +171,7 @@ export default class SelectionStrategy {
     } else {
       this.options.load(loadOptions)
         .done((items) => {
-          let filteredItems = isPlainObject(items) ? items.data : items;
+          let filteredItems = !Array.isArray(items) && isPlainObject(items) ? items.data : items;
 
           if (localFilter && !isSelectAll) {
             filteredItems = filteredItems.filter(localFilter);
@@ -181,7 +182,9 @@ export default class SelectionStrategy {
 
           deferred.resolve(filteredItems);
         })
-        .fail(deferred.reject.bind(deferred));
+        .fail((error: any) => {
+          deferred.reject(error);
+        });
     }
 
     return deferred;
@@ -213,7 +216,7 @@ export default class SelectionStrategy {
   _getFullSelectAllState() {
     const items = this.options.plainItems();
     const dataFilter = this.options.filter();
-    let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item) => !item?.disabled);
+    let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item: any) => !item?.disabled);
 
     if (dataFilter) {
       // @ts-expect-error
@@ -256,6 +259,11 @@ export default class SelectionStrategy {
       return !hasUnselectedItems ? true : undefined;
     }
     return false;
+  }
+
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys?, forceCombinedFilter?): DeferredObj<unknown> {
+    throw new Error('selectedItemKeys method should be overriden');
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars

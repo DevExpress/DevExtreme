@@ -1,3 +1,4 @@
+import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
@@ -10,7 +11,7 @@ import errors from '@js/ui/widget/ui.errors';
 
 import SelectionStrategy from './m_selection.strategy';
 
-export default class StandardStrategy extends SelectionStrategy {
+export default class StandardStrategy<TItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
   _shouldMergeWithLastRequest?: boolean;
 
   _lastLoadDeferred?: any;
@@ -95,7 +96,7 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   _loadSelectedItemsCore(keys, isDeselect, isSelectAll, filter, forceCombinedFilter = false) {
-    let deferred = Deferred();
+    let deferred = Deferred<LoadResult<TItem>>();
     const key = this.options.key();
 
     if (!keys.length && !isSelectAll) {
@@ -136,7 +137,7 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   _replaceSelectionUpdate(items) {
-    const internalKeys = [];
+    const internalKeys: TKey[] = [];
     const { keyOf } = this.options;
 
     if (!keyOf) return;
@@ -144,7 +145,6 @@ export default class StandardStrategy extends SelectionStrategy {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const key = keyOf(item);
-      // @ts-expect-error
       internalKeys.push(key);
     }
 
@@ -231,7 +231,7 @@ export default class StandardStrategy extends SelectionStrategy {
 
   _loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
     const that = this;
-    const deferred = Deferred();
+    const deferred = Deferred<LoadResult<TItem>>();
     const filter = that.options.filter();
 
     this._shouldMergeWithLastRequest = this._requestInProgress();
@@ -244,10 +244,12 @@ export default class StandardStrategy extends SelectionStrategy {
       that._shouldMergeWithLastRequest = false;
 
       that._loadSelectedItemsCore(currentKeys, isDeselect, isSelectAll, filter, forceCombinedFilter)
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        .done(deferred.resolve)
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        .fail(deferred.reject);
+        .done((result) => {
+          deferred.resolve(result);
+        })
+        .fail((error) => {
+          deferred.reject(error);
+        });
     });
 
     that._lastLoadDeferred = deferred;
@@ -301,7 +303,7 @@ export default class StandardStrategy extends SelectionStrategy {
 
   addSelectedItem(key, itemData) {
     if (isDefined(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
-      if (this.options.disabledItemKeys.indexOf(key) === -1) {
+      if (!this.options.disabledItemKeys.includes(key)) {
         this.options.disabledItemKeys.push(key);
       }
       return;
