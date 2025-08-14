@@ -59,7 +59,7 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
 
     @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setChildren(value);
+        this._setCollectionOptionChildren(value);
     }
     
     @Input()

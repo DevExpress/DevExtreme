@@ -28,9 +28,11 @@ export const СOLLECTION_NESTED_OPTION_TOKEN = new InjectionToken<string>('colle
 export abstract class DxBaseClass {
   private _activatedProps: string[] = [];
 
-  abstract setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>): any;
+  private _activatedQueries = {};
 
-  protected _setChildren(value: QueryList<{ propertyName: string; component: CollectionNestedOption }>) {
+  protected abstract _setOption(name: string, value: any): void;
+
+  protected _setCollectionOptionChildren(value: QueryList<{ propertyName: string; component: CollectionNestedOption }>) {
     const groupedItems: Record<string, CollectionNestedOption[]> = {};
 
     value.forEach(({ propertyName, component }) => {
@@ -56,28 +58,34 @@ export abstract class DxBaseClass {
 
     this._activatedProps = notEmptyProps;
   }
+
+  setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
+    if (items.length) {
+      this._activatedQueries[propertyName] = true;
+    }
+    if (this._activatedQueries[propertyName]) {
+      const widgetItems = items.map((item, index) => {
+        item._index = index;
+        return item._value;
+      });
+      this._setOption(propertyName, widgetItems);
+    }
+  }
 }
 
 @Component({
   template: '',
 })
-export abstract class BaseNestedOption extends DxBaseClass implements INestedOptionContainer, ICollectionNestedOptionContainer {
+export abstract class BaseNestedOption extends DxBaseClass implements INestedOptionContainer {
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
-
-  private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
   protected _initialOptions = {};
 
   protected abstract get _optionPath(): string;
 
   protected abstract _fullOptionPath(): string;
-
-  constructor() {
-    super();
-    this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
-  }
 
   protected _optionChangedHandler(e: any) {
     const fullOptionPath = this._fullOptionPath();
@@ -142,13 +150,9 @@ export abstract class BaseNestedOption extends DxBaseClass implements INestedOpt
     this.optionChangedHandlers.subscribe(this._optionChangedHandler.bind(this));
   }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
+  setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items);
-  }
-
-  _filterItems(items: QueryList<BaseNestedOption>) {
-    return items.filter((item) => item !== this);
+    return super.setChildren(propertyName, items);
   }
 
   get instance() {
@@ -185,32 +189,6 @@ export abstract class BaseNestedOption extends DxBaseClass implements INestedOpt
 
   get optionChangedHandlers() {
     return this._host && this._host.optionChangedHandlers;
-  }
-}
-
-export interface ICollectionNestedOptionContainer {
-  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) => any;
-}
-
-export class CollectionNestedOptionContainerImpl implements ICollectionNestedOptionContainer {
-  private _activatedQueries = {};
-
-  constructor(private readonly _setOption: Function, private readonly _filterItems?: Function) { }
-
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
-    if (this._filterItems) {
-      items = this._filterItems(items);
-    }
-    if (items.length) {
-      this._activatedQueries[propertyName] = true;
-    }
-    if (this._activatedQueries[propertyName]) {
-      const widgetItems = items.map((item, index) => {
-        item._index = index;
-        return item._value;
-      });
-      this._setOption(propertyName, widgetItems);
-    }
   }
 }
 

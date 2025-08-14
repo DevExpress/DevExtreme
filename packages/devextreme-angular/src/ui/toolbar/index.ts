@@ -70,7 +70,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setChildren(value);
+        this._setCollectionOptionChildren(value);
     }
 
     instance: DxToolbar<TItem, TKey> = null;

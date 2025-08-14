@@ -139,7 +139,7 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
 
     @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setChildren(value);
+        this._setCollectionOptionChildren(value);
     }
     
 

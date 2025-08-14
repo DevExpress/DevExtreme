@@ -33,10 +33,8 @@ import { WatcherHelper } from './watcher-helper';
 
 import {
   INestedOptionContainer,
-  ICollectionNestedOption,
-  ICollectionNestedOptionContainer,
-  CollectionNestedOptionContainerImpl,
-  DxBaseClass,
+  DxBaseClass, 
+  CollectionNestedOption,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -60,12 +58,10 @@ export const getServerStateKey = () => {
   template: '',
 })
 export abstract class DxComponent extends DxBaseClass implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
-    INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
+    INestedOptionContainer, IDxTemplateHost {
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
-
-  private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
   eventHelper: EmitterHelper;
 
@@ -231,7 +227,6 @@ export abstract class DxComponent extends DxBaseClass implements OnChanges, OnIn
 
     this.templates = [];
     templateHost.setHost(this);
-    this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
     this.eventHelper = new EmitterHelper(ngZone, this);
   }
 
@@ -301,9 +296,9 @@ export abstract class DxComponent extends DxBaseClass implements OnChanges, OnIn
     this.templateUpdateRequired = true;
   }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
+  setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items);
+    return super.setChildren(propertyName, items);
   }
 }
 
