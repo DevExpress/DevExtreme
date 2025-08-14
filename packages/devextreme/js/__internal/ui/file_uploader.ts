@@ -234,7 +234,6 @@ class FileBlobReader {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   sliceFile(file: File, startPos: number, length: number): Blob | null {
     if (file.slice) {
       return file.slice(startPos, startPos + length);
@@ -303,7 +302,7 @@ class FileUploadStrategyBase {
     file.request = xhr;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _createUploadArgument(_file: FileUploaderItem): UploadChunkInfo {
     // This is an abstract method and should be implemented in subclasses.
     // Returning a default object to satisfy the return type.
@@ -316,7 +315,7 @@ class FileUploadStrategyBase {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _uploadCore(_file: FileUploaderItem): void {
   }
 
@@ -335,7 +334,6 @@ class FileUploadStrategyBase {
     this._handleProgressCore(file, e);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _handleProgressCore(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _file: FileUploaderItem,
@@ -344,7 +342,6 @@ class FileUploadStrategyBase {
   ): void {
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _handleFileError(file: FileUploaderItem, error: unknown): void {
     file._isError = true;
     file.onError.fire(error);
@@ -372,7 +369,6 @@ class FileUploadStrategyBase {
     return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isStatusError(status: number): boolean {
     return (status >= 400 && status < 500) || (status >= 500 && status < 600);
   }
@@ -454,7 +450,6 @@ class FileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getLoadedData(
     loaded: number,
     total: number,
@@ -544,7 +539,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _sendChunkCore(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _file: FileUploaderItem,
@@ -558,7 +552,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     return Deferred().reject();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _tryRaiseStartLoad(file: FileUploaderItem): void {
     if (!file.isStartLoad) {
       file.isStartLoad = true;
@@ -566,7 +559,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getEvent(_e: Event): null {
     return null;
   }
@@ -575,7 +568,6 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     return this._createChunksInfo(file.chunksData);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _createChunksInfo(chunksData?: FileUploaderChunksData): UploadChunkInfo {
     return {
       bytesUploaded: chunksData?.loadedBytes ?? 0,
@@ -655,7 +647,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _shouldHandleError(_file: FileUploaderItem, _error: unknown): boolean {
     return true;
   }
@@ -681,14 +673,13 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _uploadFile(_file: FileUploaderItem): PromiseLike<unknown> | DeferredObj<unknown> {
     // Abstract method: subclasses should override this.
     // Return a rejected Deferred to satisfy the return type.
     return Deferred().reject();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _handleProgressCore(
     file: FileUploaderItem,
     e: Event | { loaded?: number; total?: number },
@@ -760,7 +751,7 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _shouldHandleError(_file: FileUploaderItem, _e: unknown): boolean {
     return true;
   }
@@ -1074,7 +1065,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this.option({ value: files?.concat(value) });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getFiles(fileList: FileList): File[] {
     return [...fileList];
   }
@@ -1218,7 +1208,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return minFileSize > 0 ? fileSize >= minFileSize : true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isFileExtensionAllowed(file: File, allowedExtensions: string[]): boolean {
     for (let i = 0, n = allowedExtensions.length; i < n; i += 1) {
       let allowedExtension = allowedExtensions[i];
@@ -1276,7 +1265,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._dropZoneLeaveAction = this._createActionByOption('onDropZoneLeave');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _createFile(value: File): FileUploaderItem {
     return {
       value,
@@ -1298,7 +1286,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _resetFileState(file: FileUploaderItem): void {
     file.isAborted = false;
     file.uploadStarted = false;
@@ -1531,12 +1518,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
       );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _hasInvalidFile(files: FileUploaderItem[]): boolean {
     return files.some((file) => !file.isValid());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getFileSize(size: number): string {
     const labels = [
       messageLocalization.format('dxFileUploader-bytes'),
@@ -1622,7 +1607,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _detachSelectFileDialogHandlers(target: FileDialogEventTarget): void {
     if (!isDefined(target)) {
       return;
@@ -2007,12 +1991,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._setLoadedSize(totalLoadedFilesSize);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getProgressValue(ratio: number): number {
     return Math.floor(ratio * 100);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _initStatusMessage(file: FileUploaderItem): void {
     file.$statusMessage?.css('display', 'none');
   }
@@ -2120,7 +2102,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
       : (e as MouseEvent).clientY + this._getDocumentScrollTop();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getTouchEventX(e: TouchEvent): number {
     let touchPoint: TouchList | null = null;
     if (e.changedTouches.length > 0) {
@@ -2131,7 +2112,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return touchPoint ? touchPoint[0].pageX : 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getTouchEventY(e: TouchEvent): number {
     let touchPoint: TouchList | null = null;
     if (e.changedTouches.length > 0) {
@@ -2142,13 +2122,11 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return touchPoint ? touchPoint[0].pageY : 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDocumentScrollTop(): number {
     const document = domAdapter.getDocument();
     return document.documentElement.scrollTop || document.body.scrollTop;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDocumentScrollLeft(): number {
     const document = domAdapter.getDocument();
     return document.documentElement.scrollLeft || document.body.scrollLeft;

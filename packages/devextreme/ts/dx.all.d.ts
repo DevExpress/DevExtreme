@@ -9806,7 +9806,7 @@ declare module DevExpress.ui {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
     export type CellTemplateData = {
-      readonly date: Date;
+      readonly date?: Date;
       readonly view: string;
       readonly text?: string;
     };
