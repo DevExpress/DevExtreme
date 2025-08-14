@@ -57,13 +57,10 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       return;
     }
 
-    Array.prototype.forEach.call(
-      [
-        ...elements.current,
-        removalListenerElement.current,
-      ],
-      (el: HTMLElement | undefined) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved),
-    );
+    [
+      ...elements.current,
+      removalListenerElement.current,
+    ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
     // In case of multiple root elements, letting the widget remove them all sync
     Promise.resolve().then(() => {
@@ -93,14 +90,11 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
         }
       };
 
-      Array.prototype.forEach.call(
-        [
-          ...elements.current,
-          hiddenNodeElement.current,
-          removalListenerElement.current,
-        ],
-        (el: HTMLElement | undefined) => safeAppend(el),
-      );
+      [
+        ...elements.current,
+        hiddenNodeElement.current,
+        removalListenerElement.current,
+      ].forEach((el) => safeAppend(el));
 
       if (elementNodes.length) {
         elementNodes.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
