@@ -38,7 +38,6 @@ import {
   EDIT_MODE_CELL,
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
-  EDITOR_CELL_CLASS,
   FILTER_ROW_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
@@ -1449,8 +1448,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         const $target = event
           && $(event.target).closest(`${NON_FOCUSABLE_ELEMENTS_SELECTOR}, td`);
         const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
-        const isEditor = !!column && !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
-        const isDisabled = !isEditor && (!args.isHighlighted || skipFocusEvent);
+        const isDisabled = !args.isHighlighted || skipFocusEvent;
         this._focus($cell, isDisabled, skipFocusEvent);
       }
     } else {
