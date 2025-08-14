@@ -3,7 +3,7 @@ import { name as CLICK_EVENT } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/common/core/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
-import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -22,7 +22,7 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import type {
-  HandlerMap, InteractionEvent, ResizeOffset,
+  HandlerMap, InteractionEvent, ResizeHandleEventMap, ResizeOffset,
 } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -45,7 +45,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
-export interface ResizeHandleOptions extends WidgetOptions<ResizeHandle> {
+export interface ResizeHandleProperties extends WidgetOptions<ResizeHandle> {
   direction?: DragDirection;
   onResize?: ((e: ResizeEvent) => void);
   onResizeEnd?: ((e: ResizeEndEvent) => void);
@@ -58,7 +58,7 @@ export interface ResizeHandleOptions extends WidgetOptions<ResizeHandle> {
   separatorSize?: number;
 }
 
-class ResizeHandle extends Widget<ResizeHandleOptions> {
+class ResizeHandle extends Widget<ResizeHandleProperties> {
   private _$collapsePrevButton?: dxElementWrapper;
 
   private _$resizeHandle?: dxElementWrapper;
@@ -163,7 +163,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     };
   }
 
-  _getDefaultOptions(): ResizeHandleOptions {
+  _getDefaultOptions(): ResizeHandleProperties {
     return {
       ...super._getDefaultOptions(),
       ...{
@@ -365,7 +365,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     this._resizeEndHandler(e);
   }
 
-  _createEventAction(eventName: keyof HandlerMap): void {
+  _createEventAction(eventName: keyof HandlerMap<ResizeHandleEventMap>): void {
     const actionName = getActionNameByEventName(eventName);
 
     this[actionName] = this._createActionByOption(eventName, {
@@ -373,9 +373,9 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     });
   }
 
-  _getAction<K extends keyof HandlerMap>(
+  _getAction<K extends keyof HandlerMap<ResizeHandleEventMap>>(
     eventName: K,
-  ): HandlerMap[K] {
+  ): HandlerMap<ResizeHandleEventMap>[K] {
     const actionName = getActionNameByEventName(eventName);
 
     if (!this[actionName]) {
@@ -494,7 +494,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     super._clean();
   }
 
-  _optionChanged(args: OptionChanged<ResizeHandleOptions>): void {
+  _optionChanged(args: OptionChanged<ResizeHandleProperties>): void {
     const { name, value } = args;
 
     switch (name) {

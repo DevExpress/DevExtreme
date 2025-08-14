@@ -119,7 +119,7 @@ type MenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
 
 interface MenuProperties extends
   MenuBaseProperties,
-  Pick<Properties, MenuPropertiesKeys> {
+  Pick<Properties<Item>, MenuPropertiesKeys> {
   templatesRenderAsynchronously?: boolean;
 }
 
@@ -443,9 +443,7 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     this._setAriaRole(isAdaptive);
-    // @ts-expect-error ts-error
     $menuItemsContainer.toggle(!isAdaptive);
-    // @ts-expect-error ts-error
     $adaptiveElements.toggle(isAdaptive);
   }
 
@@ -551,9 +549,7 @@ class Menu extends MenuBase<MenuProperties> {
     const { cssClass } = this.option();
 
     const $hamburger = this._renderHamburgerButton();
-    // @ts-expect-error ts-error
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
-
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     this._overlay.$content()
       .append(this._treeView.$element())

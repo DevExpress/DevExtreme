@@ -1,21 +1,24 @@
+import type { template } from '@js/common';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { start as hoverStartEventName } from '@js/common/core/events/hover';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import coreDateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import type { CalendarSelectionMode, CalendarZoomLevel, DisabledDate } from '@js/ui/calendar';
+import type { DxEvent } from '@js/events';
+import type {
+  CalendarSelectionMode, CalendarZoomLevel, CellTemplateData, DisabledDate,
+} from '@js/ui/calendar';
+import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -57,10 +60,24 @@ const SELECTION_MODE = {
   range: 'range',
 };
 
-export interface BaseViewProperties extends Properties {
+export interface CellEvent extends DefaultActionArgs<BaseView> {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
+  value: Date;
+}
+
+export interface WeekNumberClickEvent extends DefaultActionArgs<BaseView> {
+  event: DxEvent<KeyboardEvent | MouseEvent | PointerEvent>;
+  rowDates: Date[];
+}
+
+export interface BaseViewProperties extends WidgetProperties {
   date: Date;
 
   value?: Date | Date[];
+
+  min?: Date;
+
+  max?: Date;
 
   contouredDate?: Date;
 
@@ -83,6 +100,14 @@ export interface BaseViewProperties extends Properties {
   range: Date[];
 
   hoveredRange: Date[];
+
+  cellTemplate?: template | (
+    (itemData: CellTemplateData, itemIndex: number, itemElement: Element) => dxElementWrapper
+  );
+
+  onCellClick?: (e: CellEvent) => void;
+  onCellHover?: (e: CellEvent) => void;
+  onWeekNumberClick?: (e: WeekNumberClickEvent) => void;
 }
 
 class BaseView<
@@ -92,13 +117,13 @@ class BaseView<
 
   $body!: dxElementWrapper;
 
-  _disabledDatesHandler?: Date[] | ((data: DisabledDate) => boolean);
+  _disabledDatesHandler!: ((data: DisabledDate) => boolean);
 
-  _cellClickAction!: (e: Record<string, unknown>) => void;
+  _cellClickAction!: (e: CellEvent) => void;
 
-  _cellHoverAction!: (e: Record<string, unknown>) => void;
+  _cellHoverAction!: (e: CellEvent) => void;
 
-  _weekNumberCellClickAction!: (e: Record<string, unknown>) => void;
+  _weekNumberCellClickAction!: (e: WeekNumberClickEvent) => void;
 
   _$rangeEndHoverCell!: dxElementWrapper;
 
@@ -106,15 +131,14 @@ class BaseView<
 
   _$rangeEndDateCell!: dxElementWrapper;
 
-  _$rangeCells!: dxElementWrapper;
+  _$rangeCells!: dxElementWrapper[];
 
-  _$hoveredRangeCells!: dxElementWrapper;
+  _$hoveredRangeCells!: dxElementWrapper[];
 
   _$rangeStartHoverCell!: dxElementWrapper;
 
-  _$selectedCells!: dxElementWrapper;
+  _$selectedCells!: dxElementWrapper[];
 
-  // eslint-disable-next-line class-methods-use-this
   _getViewName(): string {
     return 'base';
   }
@@ -154,7 +178,6 @@ class BaseView<
     this._updateTableAriaLabel();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getLocalizedWidgetName(): string {
     const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
 
@@ -165,8 +188,8 @@ class BaseView<
     const { value } = this.option();
 
     const localizedWidgetName = this._getLocalizedWidgetName();
-    // @ts-expect-error
-    const formattedDate = dateLocalization.format(value, ARIA_LABEL_DATE_FORMAT);
+    const formattedDate = dateLocalization
+      .format(value as Date | undefined, ARIA_LABEL_DATE_FORMAT);
     // @ts-expect-error ts-error
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDate', formattedDate);
 
@@ -179,8 +202,7 @@ class BaseView<
     const { value } = this.option();
 
     const localizedWidgetName = this._getLocalizedWidgetName();
-    // @ts-expect-error ts-error
-    const [startDate, endDate] = value;
+    const [startDate, endDate] = value as [Date, Date];
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
     const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
@@ -207,8 +229,8 @@ class BaseView<
 
   _getMultipleRangesText(): string {
     const { value } = this.option();
-    // @ts-expect-error ts-error
-    const ranges = coreDateUtils.getRangesByDates(value.map((date) => new Date(date)));
+    const rangeValue = value as Date[];
+    const ranges = coreDateUtils.getRangesByDates(rangeValue.map((date) => new Date(date)));
 
     if (ranges.length > 2) {
       // @ts-expect-error ts-error
@@ -227,7 +249,7 @@ class BaseView<
     return result;
   }
 
-  _getRangeText(range) {
+  _getRangeText(range: [Date | undefined, Date | undefined]): string {
     const [startDate, endDate] = range;
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
@@ -238,20 +260,18 @@ class BaseView<
       ? messageLocalization.format('dxCalendar-selectedMultipleDateRange', formattedStartDate, formattedEndDate)
       : formattedStartDate;
 
-    return selectedDatesText;
+    return `${selectedDatesText}`;
   }
 
-  // @ts-expect-error ts-error
-  _getTableAriaLabel() {
+  _getTableAriaLabel(): string {
     const { value, selectionMode } = this.option();
 
-    const isValueEmpty = !value || Array.isArray(value) && !value.filter(Boolean).length;
+    const isValueEmpty = !value || (Array.isArray(value) && !value.filter(Boolean).length);
 
     if (isValueEmpty) {
       return this._getLocalizedWidgetName();
     }
 
-    // eslint-disable-next-line default-case, @typescript-eslint/switch-exhaustiveness-check
     switch (selectionMode) {
       case SELECTION_MODE.single:
         return this._getSingleModeAriaLabel();
@@ -259,10 +279,12 @@ class BaseView<
         return this._getRangeModeAriaLabel();
       case SELECTION_MODE.multiple:
         return this._getMultipleModeAriaLabel();
+      default:
+        return this._getSingleModeAriaLabel();
     }
   }
 
-  _updateTableAriaLabel() {
+  _updateTableAriaLabel(): void {
     const label = this._getTableAriaLabel();
 
     this.setAria({ label }, this._$table);
@@ -279,17 +301,17 @@ class BaseView<
   _renderBody(): void {
     this.$body = $('<tbody>').appendTo(this._$table);
 
-    const rowData = {
+    const rowData: { cellDate: Date; prevCellDate: Date | null; row: HTMLElement | undefined } = {
       cellDate: this._getFirstCellData(),
       prevCellDate: null,
+      row: undefined,
     };
 
     const { rowCount: rowsCount, colCount: colsCount } = this.option();
 
-    for (let rowIndex = 0, rowCount = rowsCount; rowIndex < rowCount; rowIndex++) {
-      // @ts-expect-error ts-error
+    for (let rowIndex = 0, rowCount = rowsCount; rowIndex < rowCount; rowIndex += 1) {
       rowData.row = this._createRow();
-      for (let colIndex = 0, colCount = colsCount; colIndex < colCount; colIndex++) {
+      for (let colIndex = 0, colCount = colsCount; colIndex < colCount; colIndex += 1) {
         this._renderCell(rowData, colIndex);
       }
 
@@ -298,9 +320,10 @@ class BaseView<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderWeekNumberCell(rowData) {}
+  _renderWeekNumberCell(rowData?: unknown): void {
+  }
 
-  _createRow() {
+  _createRow(): HTMLElement {
     const row = domAdapter.createElement('tr');
 
     this.setAria('role', 'row', $(row));
@@ -309,7 +332,7 @@ class BaseView<
     return row;
   }
 
-  _createCell(cellDate, cellIndex) {
+  _createCell(cellDate: Date, cellIndex: number): { cell: HTMLElement; $cell: dxElementWrapper } {
     const cell = domAdapter.createElement('td');
     const $cell = $(cell);
 
@@ -327,7 +350,10 @@ class BaseView<
     return { cell, $cell };
   }
 
-  _renderCell(params, cellIndex) {
+  _renderCell(
+    params: { cellDate: Date; prevCellDate: Date | null; row: HTMLElement | undefined },
+    cellIndex: number,
+  ): void {
     const { cellDate, prevCellDate, row } = params;
 
     // T425127
@@ -339,7 +365,7 @@ class BaseView<
 
     const { cell, $cell } = this._createCell(cellDate, cellIndex);
 
-    const cellTemplate = this.option('cellTemplate');
+    const { cellTemplate } = this.option();
 
     $(row).append(cell);
 
@@ -347,14 +373,13 @@ class BaseView<
       // @ts-expect-error ts-error
       cellTemplate.render(this._prepareCellTemplateData(cellDate, cellIndex, $cell));
     } else {
-      // @ts-expect-error ts-error
       cell.innerHTML = this._getCellText(cellDate);
     }
 
     params.cellDate = this._getNextCellData(cellDate);
   }
 
-  _getClassNameByDate(cellDate, cellIndex) {
+  _getClassNameByDate(cellDate: Date, cellIndex: number): string {
     let className = CALENDAR_CELL_CLASS;
 
     if (this._isTodayCell(cellDate)) {
@@ -394,7 +419,11 @@ class BaseView<
     return className;
   }
 
-  _prepareCellTemplateData(cellDate, cellIndex, $cell) {
+  _prepareCellTemplateData(cellDate: Date, cellIndex: number, $cell: dxElementWrapper): {
+    model: CellTemplateData;
+    container: Element;
+    index: number;
+  } {
     const isDateCell = cellDate instanceof Date;
     const text = isDateCell ? this._getCellText(cellDate) : cellDate;
     const date = isDateCell ? cellDate : undefined;
@@ -415,6 +444,7 @@ class BaseView<
       if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
         this._cellClickAction({
           event: e,
+          // @ts-expect-error ts-error
           value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
         });
       }
@@ -426,14 +456,20 @@ class BaseView<
     if (selectionMode === SELECTION_MODE.range) {
       this._createCellHoverAction();
 
-      eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, (e) => {
-        if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
-          this._cellHoverAction({
-            event: e,
-            value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
-          });
-        }
-      });
+      eventsEngine.on(
+        this._$table,
+        CALENDAR_DXHOVERSTART_EVENT_NAME,
+        NOT_WEEK_CELL_SELECTOR,
+        (e) => {
+          if (!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+            this._cellHoverAction({
+              event: e,
+              // @ts-expect-error ts-error
+              value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY),
+            });
+          }
+        },
+      );
     }
 
     if (selectionMode !== SELECTION_MODE.single) {
@@ -443,11 +479,15 @@ class BaseView<
         const $row = $(e.currentTarget).closest('tr');
 
         const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
-        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
-        const rowDates = [...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL), lastDateInRow];
+        const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY) ;
+        const rowDates = [
+          ...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL),
+          lastDateInRow,
+        ];
 
         this._weekNumberCellClickAction({
           event: e,
+          // @ts-expect-error ts-error
           rowDates,
         });
       });
@@ -468,83 +508,77 @@ class BaseView<
 
   _createDisabledDatesHandler(): void {
     const { disabledDates } = this.option();
-    // @ts-expect-error ts-error
+
     this._disabledDatesHandler = Array.isArray(disabledDates)
       ? this._getDefaultDisabledDatesHandler(disabledDates)
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      : disabledDates || noop;
+      : disabledDates ?? ((): boolean => false);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getDefaultDisabledDatesHandler(disabledDates): (args) => void {
-    return noop;
+  _getDefaultDisabledDatesHandler(disabledDates: Date[]): (args) => boolean {
+    return () => false;
   }
 
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isTodayCell(cellDate): boolean {
-    Class.abstract();
+  _isTodayCell(cellDate: Date): boolean {
+    return false;
   }
 
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isDateOutOfRange(cellDate): boolean {
-    Class.abstract();
+  _isDateOutOfRange(cellDate: Date): boolean {
+    return false;
   }
 
-  isDateDisabled(cellDate): boolean {
+  isDateDisabled(cellDate: Date): boolean {
     const dateParts = {
       date: cellDate,
       view: this._getViewName(),
     };
-    // @ts-expect-error ts-error
-    return this._disabledDatesHandler(dateParts);
-  }
 
-  // @ts-expect-error ts-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isOtherView(cellDate): boolean {
-    Class.abstract();
-  }
-
-  // @ts-expect-error ts-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isStartDayOfMonth(cellDate): boolean {
-    Class.abstract();
-  }
-
-  // @ts-expect-error ts-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isEndDayOfMonth(cellDate): boolean {
-    Class.abstract();
+    return this._disabledDatesHandler(dateParts as DisabledDate);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getCellText(cellDate) {
-    Class.abstract();
-  }
-
-  _getFirstCellData() {
-    Class.abstract();
+  _isOtherView(cellDate: Date): boolean {
+    return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getNextCellData(date) {
-    Class.abstract();
+  _isStartDayOfMonth(cellDate: Date): boolean {
+    return false;
   }
 
-  _renderContouredDate(contouredDate?) {
-    if (!this.option('focusStateEnabled')) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _isEndDayOfMonth(cellDate: Date): boolean {
+    return false;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getCellText(cellDate: Date): string {
+    return '';
+  }
+
+  _getFirstCellData(): Date {
+    return new Date();
+  }
+
+  _getNextCellData(date: Date): Date {
+    return new Date(date);
+  }
+
+  _renderContouredDate(contouredDate?: Date | undefined): void {
+    const { focusStateEnabled } = this.option();
+    if (!focusStateEnabled) {
       return;
     }
-
-    contouredDate = contouredDate || this.option('contouredDate');
+    const { contouredDate: currentContouredDate } = this.option();
+    const newContouredDate = contouredDate ?? currentContouredDate;
 
     const $oldContouredCell = this._getContouredCell();
-    const $newContouredCell = this._getCellByDate(contouredDate);
+    const $newContouredCell = this._getCellByDate(newContouredDate);
 
     $oldContouredCell.removeClass(CALENDAR_CONTOURED_DATE_CLASS);
-    if (contouredDate) {
+    if (newContouredDate) {
       $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
     }
   }
@@ -558,72 +592,73 @@ class BaseView<
       return;
     }
 
-    let value = this.option('value');
+    let { value = [] } = this.option();
     if (!Array.isArray(value)) {
-      // @ts-expect-error ts-error
       value = [value];
     }
 
     this._updateSelectedClass(value);
   }
 
-  _updateSelectedClass(value): void {
+  _updateSelectedClass(value: Date[]): void {
     if (this._isRangeMode() && !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
-    this._$selectedCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS); });
-    this._$selectedCells = value.map((value) => this._getCellByDate(value));
-    // @ts-expect-error ts-error
+
+    this._$selectedCells?.forEach(($cell: dxElementWrapper) => {
+      $cell.removeClass(CALENDAR_SELECTED_DATE_CLASS);
+    });
+
+    this._$selectedCells = value.map((date: Date) => this._getCellByDate(date));
     this._$selectedCells.forEach(($cell) => { $cell.addClass(CALENDAR_SELECTED_DATE_CLASS); });
   }
 
   _renderRange(): void {
-    const { allowValueSelection, value, range } = this.option();
+    const { allowValueSelection, value = [], range } = this.option();
 
     if (!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
+
     this._$rangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_IN_RANGE_CLASS); });
-    // @ts-expect-error ts-error
-    this._$hoveredRangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
+    this._$hoveredRangeCells?.forEach(($cell) => {
+      $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
+    });
     this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
     this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
 
     this._$rangeStartDateCell?.removeClass(CALENDAR_RANGE_START_DATE_CLASS);
     this._$rangeEndDateCell?.removeClass(CALENDAR_RANGE_END_DATE_CLASS);
-    // @ts-expect-error ts-error
-    this._$rangeCells = range.map((value) => this._getCellByDate(value));
-    // @ts-expect-error ts-error
-    this._$rangeStartDateCell = this._getCellByDate(value[0]);
-    // @ts-expect-error ts-error
-    this._$rangeEndDateCell = this._getCellByDate(value[1]);
-    // @ts-expect-error ts-error
-    this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
 
+    this._$rangeCells = range.map((date) => this._getCellByDate(date));
+    this._$rangeStartDateCell = this._getCellByDate(value[0]);
+    this._$rangeEndDateCell = this._getCellByDate(value[1]);
+
+    this._$rangeCells.forEach(($cell) => { $cell.addClass(CALENDAR_CELL_IN_RANGE_CLASS); });
     this._$rangeStartDateCell?.addClass(CALENDAR_RANGE_START_DATE_CLASS);
     this._$rangeEndDateCell?.addClass(CALENDAR_RANGE_END_DATE_CLASS);
   }
 
-  _renderHoveredRange() {
+  _renderHoveredRange(): void {
     const { allowValueSelection, hoveredRange } = this.option();
 
     if (!allowValueSelection || !this._isRangeMode() || !this._isMonthView()) {
       return;
     }
-    // @ts-expect-error ts-error
-    this._$hoveredRangeCells?.forEach(($cell) => { $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS); });
+
+    this._$hoveredRangeCells?.forEach(($cell) => {
+      $cell.removeClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
+    });
 
     this._$rangeStartHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_START_CLASS);
     this._$rangeEndHoverCell?.removeClass(CALENDAR_CELL_RANGE_HOVER_END_CLASS);
-    // @ts-expect-error ts-error
+
     this._$hoveredRangeCells = hoveredRange
-      .map((value) => this._getCellByDate(value));
+      .map((date) => this._getCellByDate(date));
 
     this._$rangeStartHoverCell = this._getCellByDate(hoveredRange[0]);
     this._$rangeEndHoverCell = this._getCellByDate(hoveredRange[hoveredRange.length - 1]);
-    // @ts-expect-error ts-error
+
     this._$hoveredRangeCells.forEach(($cell) => {
       $cell.addClass(CALENDAR_CELL_RANGE_HOVER_CLASS);
     });
@@ -648,13 +683,13 @@ class BaseView<
     return null;
   }
 
-  getCellAriaLabel(date) {
+  getCellAriaLabel(date: Date): string {
     const viewName = this._getViewName();
     const isToday = this._isTodayCell(date);
     const format = this._getCurrentDateFormat();
 
     const dateRangeText = format
-      ? dateLocalization.format(date, format)
+      ? `${dateLocalization.format(date, format)}`
       : this._getCellText(date);
 
     const ariaLabel = isToday
@@ -665,23 +700,23 @@ class BaseView<
   }
 
   _getFirstAvailableDate(): Date {
-    let date = this.option('date');
-    const min = this.option('min');
-    // @ts-expect-error ts-error
-    date = coreDateUtils.getViewFirstCellDate(this._getViewName(), date);
-    // @ts-expect-error ts-error
-    return new Date(min && date < min ? min : date);
+    const { date, min } = this.option();
+    const firstAvailableDate = coreDateUtils.getViewFirstCellDate(
+      this._getViewName(),
+      date,
+    ) ?? date;
+
+    return new Date(min && firstAvailableDate < min ? min : firstAvailableDate);
   }
 
-  // @ts-expect-error ts-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getCellByDate(contouredDate): dxElementWrapper {
-    Class.abstract();
+  _getCellByDate(contouredDate: Date | undefined): dxElementWrapper {
+    return $();
   }
 
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
-  isBoundary(date?) {
-    Class.abstract();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isBoundary(date?: Date): boolean {
+    return false;
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -698,7 +733,7 @@ class BaseView<
         this._renderHoveredRange();
         break;
       case 'contouredDate':
-        this._renderContouredDate(value);
+        this._renderContouredDate(value as Date | undefined);
         break;
       case 'onCellClick':
         this._createCellClickAction();

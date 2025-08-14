@@ -1,7 +1,8 @@
-import { afterEach } from 'node:test';
-
-import { describe, expect, it } from '@jest/globals';
-import $ from 'jquery';
+import {
+  afterEach, describe, expect, it,
+} from '@jest/globals';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 
 import type { Properties as DataGridProperties } from '../../../../ui/data_grid';
 import DataGrid from '../../../../ui/data_grid';
@@ -16,7 +17,7 @@ const GRID_CONTAINER_ID = 'gridContainer';
 
 const createDataGrid = async (
   options: DataGridProperties = {},
-): Promise<{ $container: JQuery; instance: DataGrid }> => new Promise((resolve) => {
+): Promise<{ $container: dxElementWrapper; instance: DataGrid }> => new Promise((resolve) => {
   const $container = $('<div>')
     .attr('id', GRID_CONTAINER_ID)
     .appendTo(document.body);

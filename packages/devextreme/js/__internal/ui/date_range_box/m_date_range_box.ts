@@ -149,7 +149,7 @@ class DateRangeBox extends Editor<Properties> {
       value: [null, null],
       valueChangeEvent: 'change',
       _internalValidationErrors: [],
-      _currentSelection: 'startDate',
+      currentSelection: 'startDate',
     });
   }
 
@@ -1061,7 +1061,7 @@ class DateRangeBox extends Editor<Properties> {
 
         break;
       }
-      case '_currentSelection':
+      case 'currentSelection':
         break;
       default:
       // @ts-expect-error

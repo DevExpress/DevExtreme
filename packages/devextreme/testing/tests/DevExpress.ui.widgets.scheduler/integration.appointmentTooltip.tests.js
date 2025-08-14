@@ -1167,7 +1167,12 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         });
-        assert.equal(scheduler.appointments.compact.getButtonText(), '2 more', 'Count of compact buttons should be increase after add appointment');
+        scheduler.instance.addAppointment({
+            text: 'Temp appointment 3',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        });
+        assert.equal(scheduler.appointments.compact.getButtonText(4), '3 more', 'Count of compact buttons should be increase after add appointment');
         assert.equal(scheduler.appointments.compact.getButtonCount(), 5, 'Count of compact buttons shouldn\'t change');
     });
 

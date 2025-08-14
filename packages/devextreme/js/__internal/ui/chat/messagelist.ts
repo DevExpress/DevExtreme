@@ -290,6 +290,7 @@ class MessageList extends Widget<Properties> {
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
+        // @ts-expect-error ts-error
         onClick: (e: ItemClick): void => {
           const onMessageEditStarted = onMessageEditingStart?.({
             event: e.event, message: message as TextMessage,
@@ -309,6 +310,7 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'trash',
         text: deleteText,
+        // @ts-expect-error ts-error
         onClick(e: ItemClick): void {
           onMessageDeleting?.({ event: e.event, message });
         },
@@ -384,7 +386,6 @@ class MessageList extends Widget<Properties> {
       useKeyboard: false,
       bounceEnabled: false,
       reachBottomText: '',
-      indicateLoading: false,
       onReachBottom: noop,
     });
   }

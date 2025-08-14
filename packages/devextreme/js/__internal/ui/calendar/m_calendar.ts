@@ -1,4 +1,3 @@
-import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -37,7 +36,7 @@ import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/event
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
 
-import type { BaseViewProperties } from './m_calendar.base_view';
+import type { BaseViewProperties, CellEvent } from './m_calendar.base_view';
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
 import type { NavigatorOptions } from './m_calendar.navigator';
 import Navigator from './m_calendar.navigator';
@@ -96,9 +95,13 @@ export interface CalendarProperties extends Properties {
 
   todayButtonText?: string;
 
-  _rangeMin?: Date;
-  _rangeMax?: Date;
+  rangeMin?: Date;
+  rangeMax?: Date;
+  allowChangeSelectionOrder?: boolean;
+  currentSelection?: 'startDate' | 'endDate';
   _todayDate: () => Date;
+  onCellClick?: (e: CellEvent) => void;
+  onContouredChanged?: (e: { activeElement: string }) => void;
 }
 
 class Calendar<
@@ -112,9 +115,9 @@ class Calendar<
 
   _skipNavigate?: boolean;
 
-  _onContouredChanged?: (arg) => void;
+  _onContouredChanged?: (activeElement: string) => void;
 
-  _cellClickAction?: (e) => void;
+  _cellClickAction?: (e: CellEvent) => void;
 
   _view!: MonthView | YearView | DecadeView | CenturyView;
 
@@ -138,7 +141,7 @@ class Calendar<
 
   _alreadyViewRender?: boolean;
 
-  _waitRenderViewTimeout?: ReturnType<typeof setTimeout>;
+  _waitRenderViewTimeout?: NodeJS.Timeout;
 
   _$footer?: dxElementWrapper;
 
@@ -149,6 +152,8 @@ class Calendar<
   _$submitElement!: dxElementWrapper;
 
   _isOtherViewCellClicked?: boolean;
+
+  _valueSelected?: boolean;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -217,7 +222,7 @@ class Calendar<
         if (isCommandKeyPressed(e)) {
           this._navigateUp();
         } else {
-          if (fx.isAnimating(this._view.$element())) {
+          if (fx.isAnimating(this._view.$element().get(0))) {
             return;
           }
           this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
@@ -228,7 +233,7 @@ class Calendar<
         if (isCommandKeyPressed(e)) {
           this._navigateDown();
         } else {
-          if (fx.isAnimating(this._view.$element())) {
+          if (fx.isAnimating(this._view.$element().get(0))) {
             return;
           }
           this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
@@ -307,14 +312,16 @@ class Calendar<
       return undefined;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.getDateSerializationFormat(value);
   }
 
-  _convertToDate(value): Date | null {
+  _convertToDate(value: DateLike | undefined): Date | null {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.deserializeDate(value);
   }
 
-  _dateValue(value: Date | Date[], event: DxEvent): void {
+  _dateValue(value: Date | null | (Date | null)[], event: DxEvent): void {
     if (event) {
       if (event.type === 'keydown') {
         const cellElement = this._view._getContouredCell().get(0);
@@ -336,6 +343,7 @@ class Calendar<
   ): void {
     const serializationFormat = this._getSerializationFormat(optionName);
     const serializedValue = this._isArrayValue(optionName, optionValue)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       ? optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat))
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
@@ -345,15 +353,15 @@ class Calendar<
   _getDateOption(optionName: 'value'): Date | null | (Date | null)[];
   _getDateOption(optionName: 'min' | 'max'): Date | null;
   _getDateOption(optionName: 'value' | 'min' | 'max'): Date | null | (Date | null)[] {
-    const { value } = this.option();
-
-    if (!this._isArrayValue(optionName, value)) {
-      const { [optionName]: optionValue } = this.option();
-
+    let { [optionName]: optionValue } = this.option();
+    if (!this._isArrayValue(optionName, optionValue)) {
+      if (optionValue === '') {
+        optionValue = null;
+      }
       return this._convertToDate(optionValue);
     }
 
-    const valueArray = value ?? [];
+    const valueArray = optionValue ?? [];
 
     return valueArray.map((item) => this._convertToDate(item));
   }
@@ -599,13 +607,16 @@ class Calendar<
 
   _initCurrentDate(): void {
     const { currentDate = new Date() } = this.option();
-    const date = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
+    const defaultCurrentDate = this._selectionStrategy.getDefaultCurrentDate();
+    const date = (defaultCurrentDate ? this._getNormalizedDate(defaultCurrentDate) : null)
     ?? this._getNormalizedDate(currentDate);
 
     this.option('currentDate', date);
   }
 
-  _getNormalizedDate(date: Date): Date {
+  _getNormalizedDate(date: Date): Date;
+  _getNormalizedDate(date: null): null;
+  _getNormalizedDate(date: Date | null): Date | null {
     const normalizedDate = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
     return isDefined(normalizedDate) ? this._getDate(normalizedDate) : date;
   }
@@ -627,10 +638,8 @@ class Calendar<
   }
 
   _updateCurrentDate(date: Date): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$viewsWrapper)) {
-      // @ts-expect-error ts-error
-      fx.stop(this._$viewsWrapper, true);
+    if (fx.isAnimating(this._$viewsWrapper.get(0))) {
+      fx.stop(this._$viewsWrapper.get(0), true);
     }
 
     const min = this._getMinDate();
@@ -701,7 +710,7 @@ class Calendar<
   }
 
   _getMinDate(): Date {
-    const { _rangeMin: rangeMin } = this.option();
+    const { rangeMin } = this.option();
     if (rangeMin) {
       return rangeMin;
     }
@@ -715,7 +724,7 @@ class Calendar<
   }
 
   _getMaxDate(): Date {
-    const { _rangeMax: rangeMax } = this.option();
+    const { rangeMax } = this.option();
     if (rangeMax) {
       return rangeMax;
     }
@@ -771,6 +780,7 @@ class Calendar<
 
     this._moveToClosestAvailableDate(date);
 
+    // eslint-disable-next-line no-restricted-globals
     this._waitRenderViewTimeout = setTimeout(() => {
       this._alreadyViewRender = false;
     });
@@ -1008,7 +1018,7 @@ class Calendar<
     return `${coefficient * 100 * rtlCorrection}%`;
   }
 
-  _cellClickHandler(e: { event: DxEvent; value: Date }): void {
+  _cellClickHandler(e: CellEvent): void {
     const zoomLevel = this.option('zoomLevel');
     const nextView = dateUtils.getViewDown(zoomLevel);
 
@@ -1098,7 +1108,7 @@ class Calendar<
     };
   }
 
-  _navigatorClickHandler(e): void {
+  _navigatorClickHandler(e: { direction: number; event: ClickEvent }): void {
     const { currentDate, viewsCount } = this.option();
     let offset = e.direction;
 
@@ -1150,23 +1160,28 @@ class Calendar<
   _renderSwipeable(): void {
     if (!this._swipeable) {
       this._swipeable = this._createComponent(this.$element(), Swipeable, {
-        onStart: this._swipeStartHandler.bind(this),
-        onUpdated: this._swipeUpdateHandler.bind(this),
-        onEnd: this._swipeEndHandler.bind(this),
+        onStart: (e) => {
+          this._swipeStartHandler(e.event);
+        },
+        onUpdated: (e) => {
+          this._swipeUpdateHandler(e.event);
+        },
+        onEnd: (e) => {
+          this._swipeEndHandler(e.event);
+        },
         itemSizeFunc: this._viewWidth.bind(this),
       });
     }
   }
 
-  _swipeStartHandler(e: SwipeStartEvent): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._$viewsWrapper, true);
+  _swipeStartHandler(event: SwipeStartEvent): void {
+    fx.stop(this._$viewsWrapper.get(0), true);
     const { viewsCount } = this.option();
 
     this._toggleGestureCoverCursor('grabbing');
 
-    e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
-    e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
+    event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
+    event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
   }
 
   _toggleGestureCoverCursor(cursor: string): void {
@@ -1184,18 +1199,18 @@ class Calendar<
     return rtlEnabled ? this._beforeView : this._afterView;
   }
 
-  _swipeUpdateHandler(e: SwipeUpdateEvent): void {
-    const { offset } = e.event;
+  _swipeUpdateHandler(event: SwipeUpdateEvent): void {
+    const { offset } = event;
 
     move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
     this._updateNavigatorCaption(offset);
   }
 
-  _swipeEndHandler(e: SwipeEndEvent): void {
+  _swipeEndHandler(event: SwipeEndEvent): void {
     this._toggleGestureCoverCursor('auto');
 
     const { currentDate, rtlEnabled } = this.option();
-    const { targetOffset } = e.event;
+    const { targetOffset } = event;
     const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
     const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
@@ -1203,6 +1218,7 @@ class Calendar<
       && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
     if (moveOffset === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
       return;
     }
@@ -1318,10 +1334,15 @@ class Calendar<
       .appendTo(this.$element());
 
     const { value } = this.option();
+
     this._setSubmitValue(value);
   }
 
-  _setSubmitValue(value): void {
+  _setSubmitValue(value: DateLike | DateLike[] | undefined): void {
+    if (this._isArrayValue('value', value)) {
+      return;
+    }
+
     const dateValue = this._convertToDate(value);
     this._getSubmitElement()
       .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
@@ -1332,8 +1353,8 @@ class Calendar<
   }
 
   _animateShowView(): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._view.$element(), true);
+    fx.stop(this._view.$element().get(0), true);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popAnimationView(
       this._view,
       POP_ANIMATION_FROM,
@@ -1344,8 +1365,8 @@ class Calendar<
     const { viewsCount } = this.option();
 
     if (viewsCount > 1) {
-      // @ts-expect-error ts-error
-      fx.stop(this._additionalView.$element(), true);
+      fx.stop(this._additionalView.$element().get(0), true);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._popAnimationView(
         this._additionalView,
         POP_ANIMATION_FROM,
@@ -1357,12 +1378,11 @@ class Calendar<
 
   _popAnimationView(
     view: MonthView | YearView | DecadeView | CenturyView,
-    from: AnimationConfig['from'],
-    to: AnimationConfig['to'],
+    from: number,
+    to: number,
     duration: number,
   ): Promise<unknown> {
-    // @ts-expect-error ts-error
-    return fx.animate(view.$element(), {
+    return fx.animate(view.$element().get(0), {
       type: 'pop',
       from: {
         scale: from,
@@ -1408,9 +1428,8 @@ class Calendar<
     }
   }
 
-  _animateWrapper(to: AnimationConfig['to'], duration: number): Promise<unknown> {
-    // @ts-expect-error ts-error
-    return fx.animate(this._$viewsWrapper, {
+  _animateWrapper(to: number, duration: number): Promise<void> {
+    return fx.animate(this._$viewsWrapper.get(0), {
       type: 'slide',
       // @ts-expect-error ts-error
       from: { left: this._$viewsWrapper.position().left },
@@ -1423,10 +1442,11 @@ class Calendar<
     return new Date(value);
   }
 
-  _toTodayView(args: ClickEvent): void {
+  _toTodayView(args: DxEvent<ClickEvent>): void {
     const today = new Date();
 
     if (this._isMaxZoomLevel()) {
+      // @ts-expect-error ts-error
       this._selectionStrategy.selectValue(today, args.event);
       return;
     }
@@ -1434,6 +1454,7 @@ class Calendar<
     this._preventViewChangeAnimation = true;
 
     this.option('zoomLevel', this.option('maxZoomLevel'));
+    // @ts-expect-error
     this._selectionStrategy.selectValue(today, args.event);
 
     this._animateShowView();
@@ -1457,11 +1478,11 @@ class Calendar<
     }
 
     const { viewsCount } = this.option();
-    let viewOffset;
-    let viewToCreateKey;
-    let viewToRemoveKey;
-    let viewBeforeCreateKey;
-    let viewAfterRemoveKey;
+    let viewOffset = -1;
+    let viewToCreateKey = '_afterView';
+    let viewToRemoveKey = '_beforeView';
+    let viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
+    let viewAfterRemoveKey = '_view';
 
     if (offset < 0) {
       viewOffset = 1;
@@ -1469,12 +1490,6 @@ class Calendar<
       viewToRemoveKey = '_afterView';
       viewBeforeCreateKey = '_view';
       viewAfterRemoveKey = viewsCount === 1 ? '_view' : '_additionalView';
-    } else {
-      viewOffset = -1;
-      viewToCreateKey = '_afterView';
-      viewToRemoveKey = '_beforeView';
-      viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
-      viewAfterRemoveKey = '_view';
     }
 
     if (!this[viewToCreateKey]) {
@@ -1593,21 +1608,21 @@ class Calendar<
 
   _setViewsMinOption(min: Date): void {
     this._restoreViewsMinMaxOptions();
-    this.option('_rangeMin', this._convertToDate(min));
+    this.option('rangeMin', this._convertToDate(min));
     this._updateViewsOption('min', this._getMinDate());
   }
 
   _setViewsMaxOption(max: Date): void {
     this._restoreViewsMinMaxOptions();
-    this.option('_rangeMax', this._convertToDate(max));
+    this.option('rangeMax', this._convertToDate(max));
     this._updateViewsOption('max', this._getMaxDate());
   }
 
   _restoreViewsMinMaxOptions(): void {
     this._resetActiveState();
     this.option({
-      _rangeMin: null,
-      _rangeMax: null,
+      rangeMin: null,
+      rangeMax: null,
     });
 
     this._updateViewsOption('min', this._getMinDate());
@@ -1628,23 +1643,38 @@ class Calendar<
     this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
   }
 
-  _updateAriaSelected(value: Date[], previousValue: Date[]): void {
-    previousValue.forEach((item) => {
+  _updateAriaSelected(
+    value: (Date | null)[] | null,
+    previousValue: (Date | null)[] | null,
+  ): void {
+    previousValue?.forEach((item) => {
+      if (!item) {
+        return;
+      }
       this.setAria('selected', false, this._view._getCellByDate(item));
     });
 
-    value.forEach((item) => {
+    value?.forEach((item) => {
+      if (!item) {
+        return;
+      }
       this.setAria('selected', true, this._view._getCellByDate(item));
     });
 
     const { viewsCount } = this.option();
 
     if (viewsCount > 1) {
-      previousValue.forEach((item) => {
+      previousValue?.forEach((item) => {
+        if (!item) {
+          return;
+        }
         this.setAria('selected', false, this._additionalView._getCellByDate(item));
       });
 
-      value.forEach((item) => {
+      value?.forEach((item) => {
+        if (!item) {
+          return;
+        }
         this.setAria('selected', true, this._additionalView._getCellByDate(item));
       });
     }
@@ -1704,7 +1734,7 @@ class Calendar<
         this._invalidate();
         break;
       case 'currentDate':
-        this.setAria('id', undefined, this._view._getCellByDate(previousValue));
+        this.setAria('id', undefined, this._view._getCellByDate(previousValue as Date));
         this._updateCurrentDate(value as Date);
         break;
       case 'zoomLevel':
@@ -1725,10 +1755,12 @@ class Calendar<
         const isSameValue = dateUtils.sameDatesArrays(value, previousValue);
 
         if (!isSameValue) {
-          this._selectionStrategy.processValueChanged(value, previousValue);
+          this._selectionStrategy.processValueChanged(
+            value as (Date | null)[],
+            previousValue as (Date | null)[],
+          );
         }
-
-        this._setSubmitValue(value);
+        this._setSubmitValue(value as DateLike | DateLike[] | undefined);
         super._optionChanged(args);
         break;
       }

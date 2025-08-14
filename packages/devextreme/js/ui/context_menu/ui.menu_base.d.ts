@@ -16,6 +16,8 @@ import {
     SubmenuShowMode,
 } from '../../common';
 
+type ItemLike = dxMenuBaseItem | any;
+
 /**
  * @namespace DevExpress.ui
  * @docid
@@ -23,7 +25,7 @@ import {
  */
 export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
-  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TItem extends ItemLike = any,
   TKey = any,
 > extends Omit<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
@@ -66,7 +68,7 @@ export interface dxMenuBaseOptions<
     /**
      * @docid
      * @public
-     * @type Array<dxMenuBaseItem>
+     * @type Array<dxMenuBaseItem | any>
      */
     items?: Array<TItem>;
     /**
@@ -119,7 +121,7 @@ export interface dxMenuBaseOptions<
  */
 export default class dxMenuBase<
   TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
-  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TItem extends ItemLike = any,
   TKey = any,
 > extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**

@@ -603,14 +603,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         }
       },
       onItemClick(properties) {
-        // @ts-expect-error
         const selectedFilterOperation = properties.itemData.name;
         const columnSelectedFilterOperation = getColumnSelectedFilterOperation(that, column);
         let notFocusEditor = false;
         const isOnClickMode = isOnClickApplyFilterMode(that);
         const options = {};
 
-        // @ts-expect-error
         if (properties.itemData.items || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)) {
           return;
         }

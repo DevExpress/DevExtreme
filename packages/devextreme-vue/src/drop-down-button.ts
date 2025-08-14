@@ -303,7 +303,6 @@ const DxDropDownOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -354,7 +353,6 @@ const DxDropDownOptionsConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,

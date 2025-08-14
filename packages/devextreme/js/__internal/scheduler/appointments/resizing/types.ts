@@ -1,6 +1,7 @@
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
-import type { SafeAppointment, ViewDataProviderType } from '../../types';
+import type { ViewDataProviderType } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import type { AppointmentItemViewModel } from '../../view_model/generate_view_model/types';
 
 export type Rect = Pick<DOMRect, 'top' | 'left' | 'width' | 'height'>;
 
@@ -9,16 +10,7 @@ export interface GetAppointmentDateRangeOptions {
     left: boolean;
     right: boolean;
   };
-  appointmentSettings: {
-    allDay: boolean;
-    info: SafeAppointment & {
-      appointment: SafeAppointment;
-    };
-    positionByMap: {
-      rowIndex: number;
-      columnIndex: number;
-    };
-  };
+  appointmentSettings: AppointmentItemViewModel;
   isVerticalGroupedWorkSpace: boolean;
   appointmentRect: Rect;
   parentAppointmentRect: Rect;
