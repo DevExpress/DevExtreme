@@ -26,11 +26,11 @@ export const СOLLECTION_NESTED_OPTION_TOKEN = new InjectionToken<string>('colle
 
 @Directive()
 export abstract class DxBaseClass {
-  private _activatedProps:string[] = [];
+  private _activatedProps: string[] = [];
 
-  abstract setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>): any
+  abstract setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>): any;
 
-  protected _setChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+  protected _setChildren(value: QueryList<{ propertyName: string; component: CollectionNestedOption }>) {
     const groupedItems: Record<string, CollectionNestedOption[]> = {};
 
     value.forEach(({ propertyName, component }) => {

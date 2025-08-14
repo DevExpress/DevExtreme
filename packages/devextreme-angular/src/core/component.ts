@@ -17,7 +17,7 @@ import {
   AfterViewChecked,
   createNgModule,
   inject,
-  Injector, 
+  Injector,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
