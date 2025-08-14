@@ -1,46 +1,56 @@
+import type { DxEvent } from '@js/events';
+
+import type Calendar from './m_calendar';
 import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
-  constructor(component) {
+  constructor(component: Calendar) {
     super(component);
     this.NAME = 'SingleSelection';
   }
 
-  getViewOptions() {
+  dateOption(optionName: 'min' | 'max' | 'value'): Date | null {
+    if (optionName === 'value') {
+      return this.calendar._getDateOption('value') as Date | null;
+    }
+    return this.calendar._getDateOption(optionName);
+  }
+
+  getViewOptions(): {
+    value: Date | undefined;
+    range: Date[];
+    selectionMode: 'single';
+  } {
+    const value = this.dateOption('value') ?? undefined;
+
     return {
-      value: this.dateOption('value'),
+      value,
       range: [],
       selectionMode: 'single',
     };
   }
 
-  selectValue(selectedValue, e) {
+  selectValue(selectedValue: Date, e: DxEvent): void {
     this.skipNavigate();
     this.dateValue(selectedValue, e);
   }
 
-  updateAriaSelected(value?, previousValue?) {
-    value ??= [this.dateOption('value')];
-    previousValue ??= [];
+  updateAriaSelected(val?: (Date | null)[], previousVal?: (Date | null)[]): void {
+    const value = val ?? [this.dateOption('value')];
+    const previousValue = previousVal ?? [];
 
     super.updateAriaSelected(value, previousValue);
   }
 
-  getDefaultCurrentDate() {
-    const date = this.dateOption('value');
-
-    if (date === '') {
-      return new Date();
-    }
-
-    return date;
+  getDefaultCurrentDate(): Date | null {
+    return this.dateOption('value');
   }
 
   restoreValue(): void {
     this.calendar.option('value', null);
   }
 
-  _updateViewsValue(value) {
+  _updateViewsValue(value: Date[]): void {
     this._updateViewsOption('value', value[0]);
   }
 }
