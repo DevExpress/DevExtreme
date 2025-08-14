@@ -307,7 +307,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
   }
 
-  protected forceRepaintAllAppointments(items: AppointmentViewModelPlain[]) {
+  protected forceRepaintAllAppointments(items: AppointmentViewModelPlain[]): void {
     this.renderedElementsBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       this._getAppointmentContainer(true).html('');

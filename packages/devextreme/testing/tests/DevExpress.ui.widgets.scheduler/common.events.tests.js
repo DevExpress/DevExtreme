@@ -688,7 +688,7 @@ QUnit.module('Events', {
         });
 
         const workspaceSpy = sinon.spy(scheduler.instance._workSpace, '_dimensionChanged');
-        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, '_repaintAppointments');
+        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, 'repaintAppointments');
 
         resizeCallbacks.fire();
 
