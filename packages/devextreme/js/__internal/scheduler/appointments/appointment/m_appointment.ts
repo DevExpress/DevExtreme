@@ -77,7 +77,6 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     funcName: Subject,
     args: Parameters<SubscribeMethods[Subject]>,
   ): void {
-    // Delegate to invoke to keep a single bridge
     this.invoke(funcName, ...args);
   }
 

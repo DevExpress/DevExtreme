@@ -399,8 +399,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     funcName: Subject,
     args: Parameters<SubscribeMethods[Subject]>,
   ): void {
-    // delegate to invoke to call the scheduler bridge
-
     this.invoke(funcName, ...args);
   }
 
