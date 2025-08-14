@@ -27,28 +27,5 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   staticDirs: ['../stories/assets', '../node_modules/devextreme/dist'],
-  webpackFinal: async (config, { configType }) => {
-    if (!config.plugins) {
-      return config;
-    }
-
-    if (configType === 'PRODUCTION') {
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(
-          /(.*)\/state_manager/,
-          (resource) => {
-            if (resource.request.includes('state_manager/index.prod')) {
-              return;
-            }
-
-            const newRequest = resource.request.replace('state_manager/index', 'state_manager/index.prod');
-            resource.request = newRequest;
-          }
-        )
-      );
-    }
-
-    return config;
-  },
 };
 export default config;
