@@ -36,15 +36,16 @@ module.exports = {
             },
         },
         {
-            displayName: 'build-scripts-tests',
+            displayName: 'node-tests',
             testEnvironment: 'node',
             modulePathIgnorePatterns: [
                 '__test-artifacts__'
             ],
-            roots: ['<rootDir>/build'],
+            roots: ['<rootDir>/build', '<rootDir>/eslint_plugins'],
             moduleFileExtensions: ['js'],
             testMatch: [
                 '<rootDir>/build/**/*.test.js',
+                '<rootDir>/eslint_plugins/**/*.test.js',
             ],
         }
     ]

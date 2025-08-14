@@ -80,6 +80,3 @@ ruleTester.run('no-direct-preact-signals-core-import', rule, {
         },
     ],
 });
-
-// eslint-disable-next-line no-console
-console.log('All tests passed!');
