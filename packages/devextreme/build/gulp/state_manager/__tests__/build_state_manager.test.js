@@ -58,7 +58,7 @@ describe('Build the state manager', () => {
 
     beforeEach(() => {
         const stream = replaceStateManagerModulesForProduction();
-        const tempDir = path.join(__dirname, 'temp');
+        const tempDir = path.join(__dirname, '__test-artifacts__');
 
         if (fs.existsSync(tempDir)) {
             fs.rmSync(tempDir, { recursive: true, force: true });
