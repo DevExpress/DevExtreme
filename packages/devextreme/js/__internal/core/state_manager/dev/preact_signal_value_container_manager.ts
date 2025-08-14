@@ -1,8 +1,9 @@
 import type * as StateManagementTypes from './types';
+import { isObject } from './utils';
 
 function isSignal(value: { brand?: symbol } | unknown):
   value is StateManagementTypes.ObservableValueContainer {
-  if (value && typeof value === 'object' && 'brand' in value) {
+  if (isObject(value) && 'brand' in value) {
     return value.brand === Symbol.for('preact-signals');
   }
 

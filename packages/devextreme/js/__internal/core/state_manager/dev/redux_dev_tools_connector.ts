@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { EventEmitter } from './event_emitter';
 import type * as StateManagementTypes from './types';
+import { isObject } from './utils';
 
 export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConnector {
   private devTools: StateManagementTypes.ReduxDevToolsInstance | null = null;
@@ -45,7 +46,7 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
           replacer: (key, value) => {
             // replaced because this property contains a reference to the component instance
             // which causes "heap out of memory"
-            if (key === 'changes' && (value !== undefined && value !== null) && typeof value === 'object' && 'component' in value && 'element' in value) {
+            if (key === 'changes' && isObject(value) && 'component' in value && 'element' in value) {
               return '[REPLACED]';
             }
 

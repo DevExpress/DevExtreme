@@ -3,6 +3,7 @@ import type { DIContext } from '../../di';
 import { Logger } from './logger';
 import { StateManagerFactory } from './state_manager';
 import type * as StateManagementTypes from './types';
+import { isObject } from './utils';
 
 export type DecoratorFunction<T = unknown> = (instance: T) => T;
 
@@ -19,8 +20,7 @@ function isStateSource(
   instance: unknown,
   stateSourceSign: RegExp,
 ): instance is StateManagementTypes.StateSource {
-  return instance !== null
-        && typeof instance === 'object'
+  return isObject(instance)
         && 'constructor' in instance
         && 'name' in instance.constructor
         && stateSourceSign.test(instance.constructor.name);

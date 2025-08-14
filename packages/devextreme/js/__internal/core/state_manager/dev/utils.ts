@@ -11,6 +11,10 @@ export function isValidStatePath(statePath: string): boolean {
   return parts.length >= 2;
 }
 
+export function isObject(input: unknown): input is object {
+  return input !== undefined && input !== null && typeof input === 'object';
+}
+
 export function deepCopy<T extends object>(inputObject: T): T {
   function iter(value: unknown, visited: Map<unknown, unknown>): unknown {
     if (value === null || typeof value !== 'object') {

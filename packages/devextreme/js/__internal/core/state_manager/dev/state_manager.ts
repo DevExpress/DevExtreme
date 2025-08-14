@@ -3,7 +3,7 @@ import { PreactSignalValueContainerManagerFactory } from './preact_signal_value_
 // eslint-disable-next-line spellcheck/spell-checker
 import { ReduxDevToolsConnector } from './redux_dev_tools_connector';
 import type * as StateManagementTypes from './types';
-import { deepCopy, joinStatePath } from './utils';
+import { deepCopy, isObject, joinStatePath } from './utils';
 
 class StateManager implements StateManagementTypes.StateManager {
   private readonly devToolsConnector: StateManagementTypes.DevToolsConnector;
@@ -61,9 +61,7 @@ class StateManager implements StateManagementTypes.StateManager {
         this.componentState[preparedSourceDataId] = {};
       }
 
-      const isObject = propertyValue !== undefined && propertyValue !== null
-          && typeof propertyValue === 'object';
-      this.componentState[preparedSourceDataId][propertyName] = isObject
+      this.componentState[preparedSourceDataId][propertyName] = isObject(propertyValue)
         ? new WeakRef(propertyValue) : propertyValue;
 
       this.trackStateSourceChanges(
@@ -171,7 +169,7 @@ class StateManager implements StateManagementTypes.StateManager {
             acc[stateId] = {};
           }
 
-          acc[stateId][propertyName] = value !== undefined && value !== null && typeof value === 'object' ? deepCopy(value) : value;
+          acc[stateId][propertyName] = isObject(value) ? deepCopy(value) : value;
 
           return acc;
         });
