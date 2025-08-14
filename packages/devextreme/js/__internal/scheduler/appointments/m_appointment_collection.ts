@@ -245,13 +245,6 @@ class SchedulerAppointments extends CollectionWidget {
     previousValue: AppointmentViewModelPlain[] = [],
     value: AppointmentViewModelPlain[] = [],
   ): ViewModelDiff[] {
-    if (this.isAgendaView) {
-      return value.map((item) => ({
-        item,
-        needToAdd: true,
-      }));
-    }
-
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
     const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
@@ -269,9 +262,13 @@ class SchedulerAppointments extends CollectionWidget {
       case 'items': {
         (this as any)._cleanFocusState();
 
+        if (this.isAgendaView) {
+          this.forceRepaintAllAppointments(args.value || []);
+          break;
+        }
+
         const diff = this.getItemsDiff(args.previousValue, args.value);
-        this.renderedElementsBySortedIndex = [];
-        this._repaintAppointments(diff);
+        this.repaintAppointments(diff);
 
         this._attachAppointmentsEvents();
         break;
@@ -283,7 +280,9 @@ class SchedulerAppointments extends CollectionWidget {
       case 'allowDrag':
       case 'allowResize':
       case 'allowAllDayResize':
-        (this as any)._invalidate();
+        (this as any)._cleanFocusState();
+        this.forceRepaintAllAppointments(this.option('items') || []);
+        this._attachAppointmentsEvents();
         break;
       case 'focusedElement':
         this._resetTabIndex($(args.value));
@@ -308,7 +307,26 @@ class SchedulerAppointments extends CollectionWidget {
     }
   }
 
-  _repaintAppointments(diff: ViewModelDiff[]): void {
+  protected forceRepaintAllAppointments(items: AppointmentViewModelPlain[]) {
+    this.renderedElementsBySortedIndex = [];
+    this._renderByFragments(($commonFragment, $allDayFragment) => {
+      this._getAppointmentContainer(true).html('');
+      this._getAppointmentContainer(false).html('');
+      if (items.length === 0) {
+        this._cleanItemContainer();
+      }
+
+      items.forEach((item, index) => {
+        const container = item.allDay
+          ? $allDayFragment
+          : $commonFragment;
+        this._renderItem(index, item, container);
+      });
+    });
+  }
+
+  protected repaintAppointments(diff: ViewModelDiff[]): void {
+    this.renderedElementsBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       const isRepaintAll = this.isAgendaView
         || !diff.some((item) => item.needToAdd === undefined && item.needToRemove === undefined);
