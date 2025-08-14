@@ -152,31 +152,8 @@
     "test-jest": {
       "executor": "nx:run-script",
       "options": {
-        "script": "test-jest"
+        "script": "test-jest:all"
       },
-      "inputs": [
-        "{projectRoot}/js/**/*",
-        "{projectRoot}/jest.*"
-      ],
-      "cache": true
-    },
-    "test-jest:build-scripts": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "test-jest:build-scripts"
-      },
-      "inputs": [
-        "{projectRoot}/build/**/*",
-        "{projectRoot}/jest.*"
-      ],
-      "cache": true
-    },
-    "test-jest:all": {
-      "executor": "nx:noop",
-      "dependsOn": [
-        "test-jest",
-        "test-jest:build-scripts"
-      ],
       "inputs": [
         "{projectRoot}/js/**/*",
         "{projectRoot}/build/**/*",
