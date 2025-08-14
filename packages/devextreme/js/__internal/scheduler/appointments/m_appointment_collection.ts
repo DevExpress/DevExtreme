@@ -259,20 +259,18 @@ class SchedulerAppointments extends CollectionWidget {
 
   _optionChanged(args) {
     switch (args.name) {
-      case 'items': {
+      case 'items':
         (this as any)._cleanFocusState();
 
         if (this.isAgendaView) {
           this.forceRepaintAllAppointments(args.value || []);
-          break;
+        } else {
+          const diff = this.getItemsDiff(args.previousValue, args.value);
+          this.repaintAppointments(diff);
         }
-
-        const diff = this.getItemsDiff(args.previousValue, args.value);
-        this.repaintAppointments(diff);
 
         this._attachAppointmentsEvents();
         break;
-      }
       case 'fixedContainer':
       case 'allDayContainer':
       case 'onAppointmentDblClick':
