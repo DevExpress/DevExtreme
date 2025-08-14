@@ -1,19 +1,19 @@
-DevExtreme Funnel displays data in a funnel chart. You can implement funnel charts to display the flow of data over different stages. This demo displays conversion rates from website visits to product renewals.
+DevExtreme Funnel displays the flow of data over different stages. This demo displays conversion rates from website visits to product renewals.
 
 <!--split-->
 
-This demo specifies multiple Funnel configuration objects:
+This demo configures the following objects:
 
 - [title](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/title/)    
-Specifies a title for the Funnel component.
+Specifies the component title.
 - [export](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/)    
-Configures export settings. Funnel supports multiple export [formats](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/#formats).
+Configures export settings. Funnel supports the following export [formats](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/#formats): PNG, PDF, JPEG, SVG, and GIF.
 - [tooltip](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/tooltip/)    
 Specifies item tooltips.
 - [label](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/label/)    
 Configures item labels.
 - [item](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/item/)    
-Customizes the visual appearance of items.
+Customizes item appearance.
 
 [note]
 
