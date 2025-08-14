@@ -50,7 +50,10 @@ import {
  * @hidden
  */
 export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
-    /** @docid */
+    /**
+     * @docid
+     * @type basePointObject
+     */
     readonly target: TPoint;
 }
 
@@ -59,7 +62,10 @@ export interface PointInteractionInfo<TPoint extends basePointObject = basePoint
  * @hidden
  */
 export interface TooltipInfo<TPoint extends basePointObject = basePointObject> {
-    /** @docid _viz_chart_components_base_chart_TooltipInfo.target */
+    /**
+     * @docid _viz_chart_components_base_chart_TooltipInfo.target
+     * @type basePointObject|dxChartAnnotationConfig|any
+     */
     target?: TPoint | dxChartAnnotationConfig | any;
 }
 
@@ -147,7 +153,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
-     * @type_function_param1_field target:object
+     * @type_function_param1_field target:basePointObject
      * @notUsedInTheme
      * @action
      * @public
@@ -158,7 +164,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
-     * @type_function_param1_field target:object
+     * @type_function_param1_field target:basePointObject
      * @notUsedInTheme
      * @action
      * @public
@@ -169,7 +175,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
-     * @type_function_param1_field target:object
+     * @type_function_param1_field target:basePointObject
      * @notUsedInTheme
      * @action
      * @public
@@ -180,7 +186,7 @@ export interface BaseChartOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
-     * @type_function_param1_field target:object
+     * @type_function_param1_field target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @public
@@ -191,7 +197,7 @@ export interface BaseChartOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
-     * @type_function_param1_field target:object
+     * @type_function_param1_field target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
      * @action
      * @public
