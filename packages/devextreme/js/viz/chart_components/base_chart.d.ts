@@ -49,18 +49,18 @@ import {
  * @docid
  * @hidden
  */
-export interface PointInteractionInfo {
+export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
     /** @docid */
-    readonly target: basePointObject;
+    readonly target: TPoint;
 }
 
 /**
  * @docid _viz_chart_components_base_chart_TooltipInfo
  * @hidden
  */
-export interface TooltipInfo {
+export interface TooltipInfo<TPoint extends basePointObject = basePointObject> {
     /** @docid _viz_chart_components_base_chart_TooltipInfo.target */
-    target?: basePointObject | dxChartAnnotationConfig | any;
+    target?: TPoint | dxChartAnnotationConfig | any;
 }
 
 /**
@@ -68,7 +68,10 @@ export interface TooltipInfo {
  * @docid
  * @type object
  */
-export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
+export interface BaseChartOptions<
+  TComponent,
+  TPoint extends basePointObject = basePointObject,
+> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -148,7 +151,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo<TPoint>) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
@@ -158,7 +161,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -168,7 +171,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
@@ -178,7 +181,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
@@ -188,7 +191,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default "Material"

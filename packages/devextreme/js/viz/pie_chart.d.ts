@@ -178,7 +178,7 @@ export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_PointHoverChangedEvent
@@ -186,7 +186,7 @@ export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEv
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_PointSelectionChangedEvent
@@ -194,7 +194,7 @@ export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInf
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_TooltipHiddenEvent
@@ -202,7 +202,7 @@ export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractio
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo<piePointObject>;
 
 /**
  * @docid _viz_pie_chart_TooltipShownEvent
@@ -210,7 +210,7 @@ export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo<piePointObject>;
 
 /**
  * @public
@@ -274,7 +274,7 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
+export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePointObject> {
     /**
      * @docid
      * @type object
