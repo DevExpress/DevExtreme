@@ -239,7 +239,12 @@ const getToastOptions = (
     return options;
   }
 
-  return defaultConfiguration;
+  const options = {
+    ...userOptions,
+    ...defaultConfiguration,
+  };
+
+  return options;
 };
 
 const notify = (
