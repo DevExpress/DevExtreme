@@ -20,10 +20,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoFilterPanel } from './base/filter-panel';
-
-
 
 @Component({
     selector: 'dxo-filter-panel',
@@ -42,7 +41,6 @@ import { DxoFilterPanel } from './base/filter-panel';
     ]
 })
 export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFilterPanelComponent';
 
     
 

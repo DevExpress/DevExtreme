@@ -19,10 +19,9 @@ import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-pivot-grid-header-filter',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPivotGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPivotGridHeaderFilterComponent';
 
     
     @Input()

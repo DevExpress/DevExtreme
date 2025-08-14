@@ -47,7 +47,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxTextAreaComponent),
@@ -72,7 +71,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextAreaComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxTextAreaComponent';
 
     instance: DxTextArea = null;
 

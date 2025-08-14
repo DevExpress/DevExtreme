@@ -25,13 +25,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_series,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-range-selector-chart',
@@ -44,11 +40,10 @@ import {
     ],
 })
 export class DxoRangeSelectorChartComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoRangeSelectorChartComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_series)
-    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('series', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

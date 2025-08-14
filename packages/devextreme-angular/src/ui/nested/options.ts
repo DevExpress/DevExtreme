@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoButtonOptions } from './base/button-options';
-
-
 
 @Component({
     selector: 'dxo-options',
@@ -60,7 +59,6 @@ import { DxoButtonOptions } from './base/button-options';
     ]
 })
 export class DxoOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoOptionsComponent';
 
     
 

@@ -26,10 +26,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-card-view-card-cover',
@@ -44,7 +43,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewCardCoverComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxoCardViewCardCoverComponent';
 
     
     @Input()

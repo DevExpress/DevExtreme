@@ -20,10 +20,9 @@ import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent,
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-list-item-dragging',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoListItemDraggingComponent';
 
     
     @Input()

@@ -43,6 +43,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -50,10 +51,6 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
-
-import { 
-      PROPERTY_TOKEN_buttons,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -82,13 +79,11 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxTextBoxComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
     instance: DxTextBox = null;
 
     /**

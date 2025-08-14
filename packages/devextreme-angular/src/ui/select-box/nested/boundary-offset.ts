@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-select-box-boundary-offset',
@@ -34,7 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSelectBoxBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSelectBoxBoundaryOffsetComponent';
 
     
     @Input()

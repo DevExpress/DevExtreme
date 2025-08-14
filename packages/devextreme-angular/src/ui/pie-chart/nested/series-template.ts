@@ -19,10 +19,9 @@ import { PieChartSeries } from 'devextreme/viz/pie_chart';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-pie-chart-series-template',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPieChartSeriesTemplateComponent';
 
     
     @Input()

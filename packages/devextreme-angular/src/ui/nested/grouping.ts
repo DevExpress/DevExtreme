@@ -19,10 +19,9 @@ import { GroupExpandMode } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-grouping',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoGroupingComponent';
 
     
     @Input()

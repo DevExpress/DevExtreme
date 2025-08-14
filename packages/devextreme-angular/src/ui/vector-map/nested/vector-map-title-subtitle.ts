@@ -19,10 +19,9 @@ import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-vector-map-vector-map-title-subtitle',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapVectorMapTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoVectorMapVectorMapTitleSubtitleComponent';
 
     
     @Input()

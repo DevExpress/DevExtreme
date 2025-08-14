@@ -22,13 +22,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_columns,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-details',
@@ -41,11 +37,10 @@ import {
     ],
 })
 export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDetailsComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('columns', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

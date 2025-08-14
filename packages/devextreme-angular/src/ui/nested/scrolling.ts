@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
-
-
 
 @Component({
     selector: 'dxo-scrolling',
@@ -45,7 +44,6 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
     ]
 })
 export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoScrollingComponent';
 
     
 

@@ -19,10 +19,9 @@ import { StateStoreType } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-pivot-grid-state-storing',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPivotGridStateStoringComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPivotGridStateStoringComponent';
 
     
     @Input()

@@ -21,10 +21,9 @@ import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-common-axis-settings',
@@ -37,7 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCommonAxisSettingsComponent';
 
     
     @Input()

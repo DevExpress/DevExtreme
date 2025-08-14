@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiUser } from './base/user-dxi';
-
-import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-typing-user',
@@ -31,8 +29,12 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_typingUsers,
-            useExisting: DxiTypingUserComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiTypingUserComponent) => ({
+               propertyName: 'typingUsers',
+               component
+            }),
+            deps: [DxiTypingUserComponent],
          }
     ],
     inputs: [
@@ -43,7 +45,6 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiTypingUserComponent extends DxiUser {
-    readonly _dxClassName = 'DxiTypingUserComponent';
 
     
 

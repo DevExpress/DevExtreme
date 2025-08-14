@@ -44,6 +44,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoConverterModule } from 'devextreme-angular/ui/nested';
@@ -74,13 +75,6 @@ import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/ne
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 
-import { 
-      PROPERTY_TOKEN_commands,
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_mentions,
-      PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/tokens';
-
 
 
 
@@ -108,28 +102,11 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxHtmlEditorComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('commands', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_mentions)
-    set _mentionsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('mentions', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('tabs', value);
-    }
-
     instance: DxHtmlEditor = null;
 
     /**

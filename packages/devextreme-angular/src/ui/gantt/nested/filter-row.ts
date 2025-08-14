@@ -19,10 +19,9 @@ import { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-gantt-filter-row',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoGanttFilterRowComponent';
 
     
     @Input()

@@ -24,11 +24,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-multi-view-item',
@@ -40,14 +38,17 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiMultiViewItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiMultiViewItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiMultiViewItemComponent],
          }
     ],
 })
 export class DxiMultiViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiMultiViewItemComponent';
 
     
     @Input()

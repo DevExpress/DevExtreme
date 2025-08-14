@@ -17,11 +17,9 @@ import { ValidationRuleType, ComparisonOperator } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-card-view-validation-rule',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_validationRules,
-            useExisting: DxiCardViewValidationRuleComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCardViewValidationRuleComponent) => ({
+               propertyName: 'validationRules',
+               component
+            }),
+            deps: [DxiCardViewValidationRuleComponent],
          }
     ],
 })
 export class DxiCardViewValidationRuleComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiCardViewValidationRuleComponent';
 
     
     @Input()

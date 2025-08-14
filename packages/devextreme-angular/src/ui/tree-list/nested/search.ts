@@ -19,10 +19,9 @@ import { SearchMode } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-tree-list-search',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListSearchComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTreeListSearchComponent';
 
     
     @Input()

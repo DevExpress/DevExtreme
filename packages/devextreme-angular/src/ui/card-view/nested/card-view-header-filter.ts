@@ -19,10 +19,9 @@ import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/g
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-card-view-card-view-header-filter',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewCardViewHeaderFilterComponent';
 
     
     @Input()

@@ -24,13 +24,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSplitterOptions } from './base/splitter-options';
-
-
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-splitter',
@@ -70,11 +66,10 @@ import {
     ]
 })
 export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSplitterComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
 

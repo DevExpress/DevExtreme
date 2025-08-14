@@ -23,15 +23,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
-
-
-import {
-    PROPERTY_TOKEN_buttons,
-    PROPERTY_TOKEN_columns,
-    PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-column',
@@ -42,8 +36,12 @@ import {
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_columns,
-            useExisting: DxiColumnComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiColumnComponent) => ({
+               propertyName: 'columns',
+               component
+            }),
+            deps: [DxiColumnComponent],
          }
     ],
     inputs: [
@@ -113,19 +111,10 @@ import {
     ]
 })
 export class DxiColumnComponent extends DxiDataGridColumn {
-    readonly _dxClassName = 'DxiColumnComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('buttons', value);
-    }
-    @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('columns', value);
-    }
-    @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('validationRules', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
 

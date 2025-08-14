@@ -22,10 +22,9 @@ import { FirstDayOfWeek, ValidationMessageMode, Position, ValidationStatus } fro
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-date-range-box-calendar-options',
@@ -38,7 +37,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDateRangeBoxCalendarOptionsComponent';
 
     
     @Input()

@@ -21,10 +21,9 @@ import { SortOrder } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-tree-list-column-chooser',
@@ -37,7 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListColumnChooserComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTreeListColumnChooserComponent';
 
     
     @Input()

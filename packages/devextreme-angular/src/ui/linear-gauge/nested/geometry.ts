@@ -19,10 +19,9 @@ import { Orientation } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-linear-gauge-geometry',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoLinearGaugeGeometryComponent';
 
     
     @Input()

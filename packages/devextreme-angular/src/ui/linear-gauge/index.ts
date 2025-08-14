@@ -40,6 +40,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -94,10 +95,6 @@ import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
 
-import { 
-      PROPERTY_TOKEN_ranges,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -119,13 +116,11 @@ import {
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxLinearGaugeComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_ranges)
-    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('ranges', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
     instance: DxLinearGauge = null;
 
     /**

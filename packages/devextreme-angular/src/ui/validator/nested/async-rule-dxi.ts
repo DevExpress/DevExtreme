@@ -17,11 +17,9 @@ import { ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-validator-async-rule',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_validationRules,
-            useExisting: DxiValidatorAsyncRuleComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiValidatorAsyncRuleComponent) => ({
+               propertyName: 'validationRules',
+               component
+            }),
+            deps: [DxiValidatorAsyncRuleComponent],
          }
     ],
 })
 export class DxiValidatorAsyncRuleComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiValidatorAsyncRuleComponent';
 
     
     @Input()

@@ -19,10 +19,9 @@ import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap } from 'devextr
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-polar-chart-common-axis-settings',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPolarChartCommonAxisSettingsComponent';
 
     
     @Input()

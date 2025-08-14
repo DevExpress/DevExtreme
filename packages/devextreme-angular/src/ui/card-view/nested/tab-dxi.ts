@@ -25,11 +25,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-card-view-tab',
@@ -41,14 +39,17 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_tabs,
-            useExisting: DxiCardViewTabComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCardViewTabComponent) => ({
+               propertyName: 'tabs',
+               component
+            }),
+            deps: [DxiCardViewTabComponent],
          }
     ],
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiCardViewTabComponent';
 
     
     @Input()

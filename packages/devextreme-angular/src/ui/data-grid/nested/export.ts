@@ -19,10 +19,9 @@ import { DataGridExportFormat } from 'devextreme/ui/data_grid';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-data-grid-export',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridExportComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDataGridExportComponent';
 
     
     @Input()

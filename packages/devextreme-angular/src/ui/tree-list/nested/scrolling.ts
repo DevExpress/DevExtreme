@@ -20,10 +20,9 @@ import { ScrollMode, ScrollbarMode, Mode } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-tree-list-scrolling',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListScrollingComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTreeListScrollingComponent';
 
     
     @Input()

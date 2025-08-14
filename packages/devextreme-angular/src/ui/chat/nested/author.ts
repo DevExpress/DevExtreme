@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-chat-author',
@@ -34,7 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChatAuthorComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoChatAuthorComponent';
 
     
     @Input()

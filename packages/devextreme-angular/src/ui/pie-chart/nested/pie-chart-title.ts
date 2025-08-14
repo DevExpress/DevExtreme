@@ -20,10 +20,9 @@ import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-pie-chart-pie-chart-title',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartPieChartTitleComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPieChartPieChartTitleComponent';
 
     
     @Input()

@@ -40,6 +40,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
@@ -56,10 +57,6 @@ import { DxiValidatorRangeRuleModule } from 'devextreme-angular/ui/validator/nes
 import { DxiValidatorRequiredRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
-
-import { 
-      PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -81,13 +78,11 @@ import {
     ]
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxValidatorComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
     instance: DxValidator = null;
 
     /**

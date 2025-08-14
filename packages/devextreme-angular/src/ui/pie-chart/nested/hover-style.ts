@@ -19,10 +19,9 @@ import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-pie-chart-hover-style',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPieChartHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPieChartHoverStyleComponent';
 
     
     @Input()

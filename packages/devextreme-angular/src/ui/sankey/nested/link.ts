@@ -20,10 +20,9 @@ import { HatchDirection } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-sankey-link',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSankeyLinkComponent';
 
     
     @Input()

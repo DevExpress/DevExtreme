@@ -20,10 +20,9 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-card-view-lookup',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewLookupComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewLookupComponent';
 
     
     @Input()

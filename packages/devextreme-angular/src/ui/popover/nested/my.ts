@@ -19,10 +19,9 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-popover-my',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPopoverMyComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPopoverMyComponent';
 
     
     @Input()

@@ -48,7 +48,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxFileUploaderComponent),
@@ -73,7 +72,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFileUploaderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxFileUploaderComponent';
 
     instance: DxFileUploader = null;
 

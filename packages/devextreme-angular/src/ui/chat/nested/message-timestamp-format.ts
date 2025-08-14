@@ -19,10 +19,9 @@ import { Format } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-chat-message-timestamp-format',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChatMessageTimestampFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoChatMessageTimestampFormatComponent';
 
     
     @Input()

@@ -50,7 +50,6 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
 
 
 
-
 /**
  * [descr:dxPivotGridFieldChooser]
 
@@ -69,7 +68,6 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
     ]
 })
 export class DxPivotGridFieldChooserComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxPivotGridFieldChooserComponent';
 
     instance: DxPivotGridFieldChooser = null;
 

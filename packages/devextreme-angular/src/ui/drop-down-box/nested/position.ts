@@ -20,10 +20,9 @@ import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-drop-down-box-position',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDropDownBoxPositionComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDropDownBoxPositionComponent';
 
     
     @Input()

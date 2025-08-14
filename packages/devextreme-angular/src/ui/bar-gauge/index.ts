@@ -80,7 +80,6 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
 
 
 
-
 /**
  * [descr:dxBarGauge]
 
@@ -100,7 +99,6 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
     ]
 })
 export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxBarGaugeComponent';
 
     instance: DxBarGauge = null;
 

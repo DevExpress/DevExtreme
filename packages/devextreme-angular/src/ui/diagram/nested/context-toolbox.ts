@@ -19,10 +19,9 @@ import { ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diag
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-diagram-context-toolbox',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDiagramContextToolboxComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDiagramContextToolboxComponent';
 
     
     @Input()

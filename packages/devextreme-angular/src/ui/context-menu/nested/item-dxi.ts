@@ -27,13 +27,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-context-menu-item',
@@ -45,18 +41,21 @@ import {
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiContextMenuItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiContextMenuItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiContextMenuItemComponent],
          }
     ],
 })
 export class DxiContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiContextMenuItemComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

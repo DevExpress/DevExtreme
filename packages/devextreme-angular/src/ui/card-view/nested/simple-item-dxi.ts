@@ -29,14 +29,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-simple-item',
@@ -48,18 +43,21 @@ import {
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiCardViewSimpleItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCardViewSimpleItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiCardViewSimpleItemComponent],
          }
     ],
 })
 export class DxiCardViewSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiCardViewSimpleItemComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('validationRules', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

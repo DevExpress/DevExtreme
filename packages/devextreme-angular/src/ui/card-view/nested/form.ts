@@ -25,13 +25,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-card-view-form',
@@ -44,11 +40,10 @@ import {
     ],
 })
 export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewFormComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

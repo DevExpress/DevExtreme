@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
-
-
 
 @Component({
     selector: 'dxo-value-indicator',
@@ -55,7 +54,6 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
     ]
 })
 export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoValueIndicatorComponent';
 
     
 

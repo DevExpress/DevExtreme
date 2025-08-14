@@ -19,11 +19,9 @@ import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_legends } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-legend',
@@ -34,13 +32,16 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_legends,
-            useExisting: DxiLegendComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiLegendComponent) => ({
+               propertyName: 'legends',
+               component
+            }),
+            deps: [DxiLegendComponent],
          }
     ],
 })
 export class DxiLegendComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiLegendComponent';
 
     
     @Input()

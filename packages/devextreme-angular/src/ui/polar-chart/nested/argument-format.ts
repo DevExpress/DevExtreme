@@ -19,10 +19,9 @@ import { Format } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-polar-chart-argument-format',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartArgumentFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPolarChartArgumentFormatComponent';
 
     
     @Input()

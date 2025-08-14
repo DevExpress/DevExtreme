@@ -19,10 +19,9 @@ import { Format } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-bar-gauge-item-text-format',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBarGaugeItemTextFormatComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoBarGaugeItemTextFormatComponent';
 
     
     @Input()

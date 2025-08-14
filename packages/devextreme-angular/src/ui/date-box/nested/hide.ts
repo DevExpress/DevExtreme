@@ -20,10 +20,9 @@ import { Direction } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-date-box-hide',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDateBoxHideComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDateBoxHideComponent';
 
     
     @Input()

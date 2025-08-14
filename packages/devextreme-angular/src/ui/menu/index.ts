@@ -42,6 +42,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -76,10 +77,6 @@ import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/ne
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 
-import { 
-      PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -100,13 +97,11 @@ import {
     ]
 })
 export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxMenuComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
     instance: DxMenu<TKey> = null;
 
     /**

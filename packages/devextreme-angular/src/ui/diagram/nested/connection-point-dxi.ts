@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-diagram-connection-point',
@@ -31,13 +29,16 @@ import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_connectionPoints,
-            useExisting: DxiDiagramConnectionPointComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiDiagramConnectionPointComponent) => ({
+               propertyName: 'connectionPoints',
+               component
+            }),
+            deps: [DxiDiagramConnectionPointComponent],
          }
     ],
 })
 export class DxiDiagramConnectionPointComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiDiagramConnectionPointComponent';
 
     
     @Input()

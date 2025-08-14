@@ -17,11 +17,9 @@ import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-file-manager-column',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_columns,
-            useExisting: DxiFileManagerColumnComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiFileManagerColumnComponent) => ({
+               propertyName: 'columns',
+               component
+            }),
+            deps: [DxiFileManagerColumnComponent],
          }
     ],
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiFileManagerColumnComponent';
 
     
     @Input()

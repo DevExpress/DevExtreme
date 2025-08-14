@@ -20,10 +20,9 @@ import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devext
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-polar-chart-legend',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPolarChartLegendComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPolarChartLegendComponent';
 
     
     @Input()

@@ -21,10 +21,9 @@ import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
-
-
 
 @Component({
     selector: 'dxo-calendar-options',
@@ -79,7 +78,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
     ]
 })
 export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCalendarOptionsComponent';
 
     
 

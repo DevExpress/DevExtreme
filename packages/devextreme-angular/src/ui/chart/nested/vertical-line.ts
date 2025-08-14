@@ -21,10 +21,9 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-chart-vertical-line',
@@ -37,7 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoChartVerticalLineComponent';
 
     
     @Input()

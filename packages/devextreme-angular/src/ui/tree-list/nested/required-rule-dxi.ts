@@ -17,11 +17,9 @@ import { ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-tree-list-required-rule',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_validationRules,
-            useExisting: DxiTreeListRequiredRuleComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiTreeListRequiredRuleComponent) => ({
+               propertyName: 'validationRules',
+               component
+            }),
+            deps: [DxiTreeListRequiredRuleComponent],
          }
     ],
 })
 export class DxiTreeListRequiredRuleComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiTreeListRequiredRuleComponent';
 
     
     @Input()

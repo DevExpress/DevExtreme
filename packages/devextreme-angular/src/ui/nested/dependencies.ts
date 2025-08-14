@@ -20,10 +20,9 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-dependencies',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDependenciesComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDependenciesComponent';
 
     
     @Input()

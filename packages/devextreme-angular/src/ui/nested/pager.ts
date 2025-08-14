@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoPager } from './base/pager';
-
-
 
 @Component({
     selector: 'dxo-pager',
@@ -44,7 +43,6 @@ import { DxoPager } from './base/pager';
     ]
 })
 export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPagerComponent';
 
     
 

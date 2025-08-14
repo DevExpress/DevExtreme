@@ -19,10 +19,9 @@ import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/commo
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-point',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPointComponent';
 
     
     @Input()

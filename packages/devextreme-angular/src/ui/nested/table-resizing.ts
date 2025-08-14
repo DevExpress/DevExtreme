@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
-
-
 
 @Component({
     selector: 'dxo-table-resizing',
@@ -39,7 +38,6 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
     ]
 })
 export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTableResizingComponent';
 
     
 

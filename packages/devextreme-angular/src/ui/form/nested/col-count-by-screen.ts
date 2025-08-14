@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-form-col-count-by-screen',
@@ -34,7 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFormColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFormColCountByScreenComponent';
 
     
     @Input()

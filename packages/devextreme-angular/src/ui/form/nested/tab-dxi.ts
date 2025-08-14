@@ -25,11 +25,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-form-tab',
@@ -41,14 +39,17 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_tabs,
-            useExisting: DxiFormTabComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiFormTabComponent) => ({
+               propertyName: 'tabs',
+               component
+            }),
+            deps: [DxiFormTabComponent],
          }
     ],
 })
 export class DxiFormTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiFormTabComponent';
 
     
     @Input()

@@ -20,10 +20,9 @@ import { MapLayerElement } from 'devextreme/viz/vector_map';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-vector-map-tooltip',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoVectorMapTooltipComponent';
 
     
     @Input()

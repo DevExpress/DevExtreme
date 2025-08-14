@@ -35,7 +35,6 @@ import {
 
 
 
-
 /**
  * [descr:dxResizable]
 
@@ -53,7 +52,6 @@ import {
     ]
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
-    readonly _dxClassName = 'DxResizableComponent';
 
     instance: DxResizable = null;
 

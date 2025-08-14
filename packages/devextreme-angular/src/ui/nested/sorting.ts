@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSorting } from './base/sorting';
-
-
 
 @Component({
     selector: 'dxo-sorting',
@@ -41,7 +40,6 @@ import { DxoSorting } from './base/sorting';
     ]
 })
 export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSortingComponent';
 
     
 

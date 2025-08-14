@@ -19,14 +19,9 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_groups } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_commands,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-diagram-tab-group',
@@ -37,17 +32,20 @@ import {
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_groups,
-            useExisting: DxiDiagramTabGroupComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiDiagramTabGroupComponent) => ({
+               propertyName: 'groups',
+               component
+            }),
+            deps: [DxiDiagramTabGroupComponent],
          }
     ],
 })
 export class DxiDiagramTabGroupComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiDiagramTabGroupComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_commands)
-    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('commands', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

@@ -19,10 +19,9 @@ import { SliderValueChangeMode } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-behavior',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoBehaviorComponent';
 
     
     @Input()

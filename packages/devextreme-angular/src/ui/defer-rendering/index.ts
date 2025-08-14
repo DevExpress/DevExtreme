@@ -55,7 +55,6 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
 
 
 
-
 /**
  * [descr:dxDeferRendering]
 
@@ -73,7 +72,6 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
-    readonly _dxClassName = 'DxDeferRenderingComponent';
 
     instance: DxDeferRendering = null;
 

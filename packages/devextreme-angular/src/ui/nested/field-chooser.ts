@@ -20,10 +20,9 @@ import { ApplyChangesMode } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-field-chooser',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFieldChooserComponent';
 
     
     @Input()

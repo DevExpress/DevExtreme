@@ -22,10 +22,9 @@ import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-legend',
@@ -38,7 +37,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoLegendComponent';
 
     
     @Input()

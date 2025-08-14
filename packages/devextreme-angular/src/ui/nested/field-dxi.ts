@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
-
-import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-field',
@@ -31,8 +29,12 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_fields,
-            useExisting: DxiFieldComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiFieldComponent) => ({
+               propertyName: 'fields',
+               component
+            }),
+            deps: [DxiFieldComponent],
          }
     ],
     inputs: [
@@ -52,7 +54,6 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     ]
 })
 export class DxiFieldComponent extends DxiFilterBuilderField {
-    readonly _dxClassName = 'DxiFieldComponent';
 
     
 

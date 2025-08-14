@@ -28,10 +28,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-form-label',
@@ -46,7 +45,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFormLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxoFormLabelComponent';
 
     
     @Input()

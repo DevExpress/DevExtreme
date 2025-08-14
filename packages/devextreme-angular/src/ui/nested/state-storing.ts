@@ -19,10 +19,9 @@ import { StateStoreType } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-state-storing',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoStateStoringComponent';
 
     
     @Input()

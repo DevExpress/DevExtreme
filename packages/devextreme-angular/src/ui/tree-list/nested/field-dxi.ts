@@ -21,11 +21,9 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-tree-list-field',
@@ -36,13 +34,16 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_fields,
-            useExisting: DxiTreeListFieldComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiTreeListFieldComponent) => ({
+               propertyName: 'fields',
+               component
+            }),
+            deps: [DxiTreeListFieldComponent],
          }
     ],
 })
 export class DxiTreeListFieldComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiTreeListFieldComponent';
 
     
     @Input()

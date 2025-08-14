@@ -20,10 +20,9 @@ import { Font } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-strip-style',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoStripStyleComponent';
 
     
     @Input()

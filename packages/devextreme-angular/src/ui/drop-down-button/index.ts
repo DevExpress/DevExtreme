@@ -41,6 +41,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -72,11 +73,6 @@ import { DxoDropDownButtonShowModule } from 'devextreme-angular/ui/drop-down-but
 import { DxoDropDownButtonToModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
 
-import { 
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -97,18 +93,11 @@ import {
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxDropDownButtonComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
-    }
-
     instance: DxDropDownButton = null;
 
     /**

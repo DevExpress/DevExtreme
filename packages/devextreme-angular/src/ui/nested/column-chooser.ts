@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoColumnChooser } from './base/column-chooser';
-
-
 
 @Component({
     selector: 'dxo-column-chooser',
@@ -49,7 +48,6 @@ import { DxoColumnChooser } from './base/column-chooser';
     ]
 })
 export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoColumnChooserComponent';
 
     
 

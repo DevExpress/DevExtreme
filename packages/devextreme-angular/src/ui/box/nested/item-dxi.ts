@@ -25,11 +25,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-box-item',
@@ -41,14 +39,17 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiBoxItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiBoxItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiBoxItemComponent],
          }
     ],
 })
 export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiBoxItemComponent';
 
     
     @Input()

@@ -22,10 +22,9 @@ import { DataLayoutType } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-nodes',
@@ -38,7 +37,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoNodesComponent';
 
     
     @Input()

@@ -38,6 +38,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -64,12 +65,6 @@ import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/
 import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 
-import { 
-      PROPERTY_TOKEN_columns,
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_fileSelectionItems,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -90,23 +85,11 @@ import {
     ]
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxFileManagerComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
-    set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('fileSelectionItems', value);
-    }
-
     instance: DxFileManager = null;
 
     /**

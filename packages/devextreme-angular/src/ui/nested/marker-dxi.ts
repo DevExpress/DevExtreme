@@ -18,14 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_markers } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_location,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-marker',
@@ -36,17 +31,20 @@ import {
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_markers,
-            useExisting: DxiMarkerComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiMarkerComponent) => ({
+               propertyName: 'markers',
+               component
+            }),
+            deps: [DxiMarkerComponent],
          }
     ],
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiMarkerComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('location', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

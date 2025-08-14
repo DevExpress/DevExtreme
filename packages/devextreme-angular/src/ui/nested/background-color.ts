@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoChartsColor } from './base/charts-color';
-
-
 
 @Component({
     selector: 'dxo-background-color',
@@ -38,7 +37,6 @@ import { DxoChartsColor } from './base/charts-color';
     ]
 })
 export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoBackgroundColorComponent';
 
     
 

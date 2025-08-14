@@ -27,11 +27,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-tree-list-button',
@@ -43,14 +41,17 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_buttons,
-            useExisting: DxiTreeListButtonComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiTreeListButtonComponent) => ({
+               propertyName: 'buttons',
+               component
+            }),
+            deps: [DxiTreeListButtonComponent],
          }
     ],
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiTreeListButtonComponent';
 
     
     @Input()

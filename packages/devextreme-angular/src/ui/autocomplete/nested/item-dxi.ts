@@ -24,11 +24,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-autocomplete-item',
@@ -40,14 +38,17 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiAutocompleteItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiAutocompleteItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiAutocompleteItemComponent],
          }
     ],
 })
 export class DxiAutocompleteItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiAutocompleteItemComponent';
 
     
     @Input()

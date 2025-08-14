@@ -19,10 +19,9 @@ import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregat
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-range-selector-aggregation',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorAggregationComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoRangeSelectorAggregationComponent';
 
     
     @Input()

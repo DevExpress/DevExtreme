@@ -17,11 +17,9 @@ import { SortOrder } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-data-grid-sort-by-group-summary-info',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/tokens
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_sortByGroupSummaryInfo,
-            useExisting: DxiDataGridSortByGroupSummaryInfoComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiDataGridSortByGroupSummaryInfoComponent) => ({
+               propertyName: 'sortByGroupSummaryInfo',
+               component
+            }),
+            deps: [DxiDataGridSortByGroupSummaryInfoComponent],
          }
     ],
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiDataGridSortByGroupSummaryInfoComponent';
 
     
     @Input()

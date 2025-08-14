@@ -27,14 +27,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_connectionPoints,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-diagram-custom-shape',
@@ -46,18 +41,21 @@ import {
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_customShapes,
-            useExisting: DxiDiagramCustomShapeComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiDiagramCustomShapeComponent) => ({
+               propertyName: 'customShapes',
+               component
+            }),
+            deps: [DxiDiagramCustomShapeComponent],
          }
     ],
 })
 export class DxiDiagramCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiDiagramCustomShapeComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
-    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('connectionPoints', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

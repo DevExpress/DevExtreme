@@ -44,6 +44,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
@@ -62,12 +63,6 @@ import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nes
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
-
-import { 
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_resources,
-      PROPERTY_TOKEN_views,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -89,23 +84,11 @@ import {
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxSchedulerComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_resources)
-    set _resourcesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('resources', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_views)
-    set _viewsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('views', value);
-    }
-
     instance: DxScheduler = null;
 
     /**

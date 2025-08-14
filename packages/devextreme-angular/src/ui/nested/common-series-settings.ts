@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
-
-
 
 @Component({
     selector: 'dxo-common-series-settings',
@@ -101,7 +100,6 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     ]
 })
 export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCommonSeriesSettingsComponent';
 
     
 

@@ -19,10 +19,9 @@ import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/c
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-chart-value-error-bar',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoChartValueErrorBarComponent';
 
     
     @Input()

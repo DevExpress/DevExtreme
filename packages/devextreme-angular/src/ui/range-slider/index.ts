@@ -54,7 +54,6 @@ import { DxoRangeSliderTooltipModule } from 'devextreme-angular/ui/range-slider/
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxRangeSliderComponent),
@@ -79,7 +78,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxRangeSliderComponent';
 
     instance: DxRangeSlider = null;
 

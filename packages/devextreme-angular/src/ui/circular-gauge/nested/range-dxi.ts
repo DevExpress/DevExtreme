@@ -17,11 +17,9 @@ import { ChartsColor } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-circular-gauge-range',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_ranges,
-            useExisting: DxiCircularGaugeRangeComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCircularGaugeRangeComponent) => ({
+               propertyName: 'ranges',
+               component
+            }),
+            deps: [DxiCircularGaugeRangeComponent],
          }
     ],
 })
 export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiCircularGaugeRangeComponent';
 
     
     @Input()

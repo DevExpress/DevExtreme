@@ -19,10 +19,9 @@ import { ApplyFilterMode } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-tree-list-filter-row',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListFilterRowComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTreeListFilterRowComponent';
 
     
     @Input()

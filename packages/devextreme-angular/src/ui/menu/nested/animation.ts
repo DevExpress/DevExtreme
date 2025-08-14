@@ -19,10 +19,9 @@ import { AnimationConfig } from 'devextreme/common/core/animation';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-menu-animation',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoMenuAnimationComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoMenuAnimationComponent';
 
     
     @Input()

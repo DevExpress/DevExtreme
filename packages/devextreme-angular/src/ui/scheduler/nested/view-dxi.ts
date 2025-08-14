@@ -18,11 +18,9 @@ import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_views } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-scheduler-view',
@@ -33,13 +31,16 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_views,
-            useExisting: DxiSchedulerViewComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiSchedulerViewComponent) => ({
+               propertyName: 'views',
+               component
+            }),
+            deps: [DxiSchedulerViewComponent],
          }
     ],
 })
 export class DxiSchedulerViewComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiSchedulerViewComponent';
 
     
     @Input()

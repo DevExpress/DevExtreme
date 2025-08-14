@@ -21,11 +21,9 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-gantt-column',
@@ -36,13 +34,16 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_columns,
-            useExisting: DxiGanttColumnComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiGanttColumnComponent) => ({
+               propertyName: 'columns',
+               component
+            }),
+            deps: [DxiGanttColumnComponent],
          }
     ],
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiGanttColumnComponent';
 
     
     @Input()

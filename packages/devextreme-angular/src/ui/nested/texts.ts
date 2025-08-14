@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
-
-
 
 @Component({
     selector: 'dxo-texts',
@@ -96,7 +95,6 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
     ]
 })
 export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTextsComponent';
 
     
 

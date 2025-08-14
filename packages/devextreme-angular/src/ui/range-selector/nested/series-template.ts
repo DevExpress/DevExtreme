@@ -19,10 +19,9 @@ import { ChartSeries } from 'devextreme/viz/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-range-selector-series-template',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoRangeSelectorSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoRangeSelectorSeriesTemplateComponent';
 
     
     @Input()

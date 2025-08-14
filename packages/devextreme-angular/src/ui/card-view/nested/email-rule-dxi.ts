@@ -17,11 +17,9 @@ import { ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-card-view-email-rule',
@@ -32,13 +30,16 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_validationRules,
-            useExisting: DxiCardViewEmailRuleComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCardViewEmailRuleComponent) => ({
+               propertyName: 'validationRules',
+               component
+            }),
+            deps: [DxiCardViewEmailRuleComponent],
          }
     ],
 })
 export class DxiCardViewEmailRuleComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiCardViewEmailRuleComponent';
 
     
     @Input()

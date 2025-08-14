@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-diagram-page-size-item',
@@ -31,13 +29,16 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiDiagramPageSizeItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiDiagramPageSizeItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiDiagramPageSizeItemComponent],
          }
     ],
 })
 export class DxiDiagramPageSizeItemComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiDiagramPageSizeItemComponent';
 
     
     @Input()

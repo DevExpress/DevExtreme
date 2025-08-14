@@ -40,6 +40,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
@@ -89,12 +90,6 @@ import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 
-import { 
-      PROPERTY_TOKEN_columns,
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_stripLines,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -115,23 +110,11 @@ import {
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxGanttComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_stripLines)
-    set _stripLinesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('stripLines', value);
-    }
-
     instance: DxGantt = null;
 
     /**

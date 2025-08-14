@@ -22,10 +22,9 @@ import { SearchMode } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-card-view-header-filter',
@@ -38,7 +37,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewHeaderFilterComponent';
 
     
     @Input()

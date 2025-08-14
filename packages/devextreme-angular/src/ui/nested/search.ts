@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
-
-
 
 @Component({
     selector: 'dxo-search',
@@ -41,7 +40,6 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
     ]
 })
 export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSearchComponent';
 
     
 

@@ -42,6 +42,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
@@ -92,12 +93,6 @@ import { DxoVectorMapTooltipBorderModule } from 'devextreme-angular/ui/vector-ma
 import { DxoVectorMapVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
 
-import { 
-      PROPERTY_TOKEN_annotations,
-      PROPERTY_TOKEN_layers,
-      PROPERTY_TOKEN_legends,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -119,23 +114,11 @@ import {
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxVectorMapComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_annotations)
-    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('annotations', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_layers)
-    set _layersContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('layers', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_legends)
-    set _legendsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('legends', value);
-    }
-
     instance: DxVectorMap = null;
 
     /**

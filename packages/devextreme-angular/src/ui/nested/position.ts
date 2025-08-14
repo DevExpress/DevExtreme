@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoPositionConfig } from './base/position-config';
-
-
 
 @Component({
     selector: 'dxo-position',
@@ -43,7 +42,6 @@ import { DxoPositionConfig } from './base/position-config';
     ]
 })
 export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPositionComponent';
 
     
 

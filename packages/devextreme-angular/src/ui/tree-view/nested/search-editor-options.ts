@@ -25,13 +25,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_buttons,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
@@ -44,11 +40,10 @@ import {
     ],
 })
 export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoTreeViewSearchEditorOptionsComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('buttons', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoColumnHeaderFilter } from './base/column-header-filter';
-
-
 
 @Component({
     selector: 'dxo-header-filter',
@@ -48,7 +47,6 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
     ]
 })
 export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoHeaderFilterComponent';
 
     
 

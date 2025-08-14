@@ -18,11 +18,9 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-chart-constant-line',
@@ -33,13 +31,16 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_constantLines,
-            useExisting: DxiChartConstantLineComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiChartConstantLineComponent) => ({
+               propertyName: 'constantLines',
+               component
+            }),
+            deps: [DxiChartConstantLineComponent],
          }
     ],
 })
 export class DxiChartConstantLineComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiChartConstantLineComponent';
 
     
     @Input()

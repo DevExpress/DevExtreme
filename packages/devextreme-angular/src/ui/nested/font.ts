@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
-
-
 
 @Component({
     selector: 'dxo-font',
@@ -41,7 +40,6 @@ import { DxoVizFont } from './base/viz-font';
     ]
 })
 export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFontComponent';
 
     
 

@@ -19,10 +19,9 @@ import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-image',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoImageComponent';
 
     
     @Input()

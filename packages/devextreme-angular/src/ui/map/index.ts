@@ -36,6 +36,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
@@ -54,13 +55,6 @@ import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
-
-import { 
-      PROPERTY_TOKEN_markers,
-      PROPERTY_TOKEN_routes,
-      PROPERTY_TOKEN_locations,
-      PROPERTY_TOKEN_center,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -82,28 +76,11 @@ import {
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxMapComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_markers)
-    set _markersContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('markers', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_routes)
-    set _routesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('routes', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_locations)
-    set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('locations', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_center)
-    set _centerContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('center', value);
-    }
-
     instance: DxMap = null;
 
     /**

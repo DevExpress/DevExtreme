@@ -41,6 +41,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiAlertModule } from 'devextreme-angular/ui/nested';
@@ -60,12 +61,6 @@ import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
-
-import { 
-      PROPERTY_TOKEN_alerts,
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_typingUsers,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -87,23 +82,11 @@ import {
     ]
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxChatComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_alerts)
-    set _alertsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('alerts', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_typingUsers)
-    set _typingUsersContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('typingUsers', value);
-    }
-
     instance: DxChat = null;
 
     /**

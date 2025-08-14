@@ -24,13 +24,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_changes,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-card-view-editing',
@@ -43,11 +39,10 @@ import {
     ],
 })
 export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewEditingComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('changes', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

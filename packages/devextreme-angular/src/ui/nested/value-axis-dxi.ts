@@ -24,16 +24,9 @@ import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_breaks,
-    PROPERTY_TOKEN_constantLines,
-    PROPERTY_TOKEN_strips,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-value-axis',
@@ -44,25 +37,20 @@ import {
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_valueAxis,
-            useExisting: DxiValueAxisComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiValueAxisComponent) => ({
+               propertyName: 'valueAxis',
+               component
+            }),
+            deps: [DxiValueAxisComponent],
          }
     ],
 })
 export class DxiValueAxisComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiValueAxisComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_breaks)
-    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('breaks', value);
-    }
-    @ContentChildren(PROPERTY_TOKEN_constantLines)
-    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('constantLines', value);
-    }
-    @ContentChildren(PROPERTY_TOKEN_strips)
-    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('strips', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

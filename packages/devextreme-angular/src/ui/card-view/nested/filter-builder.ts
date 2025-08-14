@@ -24,14 +24,9 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
-import {
-    PROPERTY_TOKEN_customOperations,
-    PROPERTY_TOKEN_fields,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-card-view-filter-builder',
@@ -44,15 +39,10 @@ import {
     ],
 })
 export class DxoCardViewFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCardViewFilterBuilderComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('customOperations', value);
-    }
-    @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('fields', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

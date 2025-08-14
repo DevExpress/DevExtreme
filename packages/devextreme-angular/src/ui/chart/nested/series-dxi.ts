@@ -20,11 +20,9 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-chart-series',
@@ -35,13 +33,16 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_series,
-            useExisting: DxiChartSeriesComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiChartSeriesComponent) => ({
+               propertyName: 'series',
+               component
+            }),
+            deps: [DxiChartSeriesComponent],
          }
     ],
 })
 export class DxiChartSeriesComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiChartSeriesComponent';
 
     
     @Input()

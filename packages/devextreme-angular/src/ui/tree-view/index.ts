@@ -42,6 +42,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -53,11 +54,6 @@ import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested'
 import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
-
-import { 
-      PROPERTY_TOKEN_buttons,
-      PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
 
 
 
@@ -79,18 +75,11 @@ import {
     ]
 })
 export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxTreeViewComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
     instance: DxTreeView<TKey> = null;
 
     /**

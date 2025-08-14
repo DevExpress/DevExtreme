@@ -26,14 +26,9 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_location,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-item',
@@ -45,18 +40,21 @@ import {
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiResponsiveBoxItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiResponsiveBoxItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiResponsiveBoxItemComponent],
          }
     ],
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-    readonly _dxClassName = 'DxiResponsiveBoxItemComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_location)
-    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('location', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

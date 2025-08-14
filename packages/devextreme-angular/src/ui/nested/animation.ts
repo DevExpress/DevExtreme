@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoAnimationConfig } from './base/animation-config';
-
-
 
 @Component({
     selector: 'dxo-animation',
@@ -50,7 +49,6 @@ import { DxoAnimationConfig } from './base/animation-config';
     ]
 })
 export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoAnimationComponent';
 
     
 

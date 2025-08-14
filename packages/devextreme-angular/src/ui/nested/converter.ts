@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoConverter } from './base/converter';
-
-
 
 @Component({
     selector: 'dxo-converter',
@@ -38,7 +37,6 @@ import { DxoConverter } from './base/converter';
     ]
 })
 export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoConverterComponent';
 
     
 

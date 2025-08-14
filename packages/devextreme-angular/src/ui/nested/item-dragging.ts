@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSortableOptions } from './base/sortable-options';
-
-
 
 @Component({
     selector: 'dxo-item-dragging',
@@ -67,7 +66,6 @@ import { DxoSortableOptions } from './base/sortable-options';
     ]
 })
 export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoItemDraggingComponent';
 
     
 

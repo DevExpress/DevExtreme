@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorVariables } from './base/html-editor-variables';
-
-
 
 @Component({
     selector: 'dxo-variables',
@@ -38,7 +37,6 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
     ]
 })
 export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoVariablesComponent';
 
     
 

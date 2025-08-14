@@ -21,10 +21,9 @@ import { CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from 'deve
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-circular-gauge-scale',
@@ -37,7 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCircularGaugeScaleComponent';
 
     
     @Input()

@@ -36,7 +36,6 @@ import {
 
 
 
-
 /**
  * [descr:dxDrawer]
 
@@ -54,7 +53,6 @@ import {
     ]
 })
 export class DxDrawerComponent extends DxComponent implements OnDestroy {
-    readonly _dxClassName = 'DxDrawerComponent';
 
     instance: DxDrawer = null;
 

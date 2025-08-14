@@ -19,10 +19,9 @@ import { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-diagram-default-item-properties',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDiagramDefaultItemPropertiesComponent';
 
     
     @Input()

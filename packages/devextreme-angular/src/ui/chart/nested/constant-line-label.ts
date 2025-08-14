@@ -20,10 +20,9 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-chart-constant-line-label',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoChartConstantLineLabelComponent';
 
     
     @Input()

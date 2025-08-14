@@ -20,14 +20,9 @@ import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
-
-import {
-    PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-tabbed-item',
@@ -38,17 +33,20 @@ import {
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_items,
-            useExisting: DxiCardViewTabbedItemComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiCardViewTabbedItemComponent) => ({
+               propertyName: 'items',
+               component
+            }),
+            deps: [DxiCardViewTabbedItemComponent],
          }
     ],
 })
 export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiCardViewTabbedItemComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_tabs)
-    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('tabs', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
     
     @Input()

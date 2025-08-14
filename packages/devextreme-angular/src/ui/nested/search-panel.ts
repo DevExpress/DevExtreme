@@ -20,10 +20,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSearchPanel } from './base/search-panel';
-
-
 
 @Component({
     selector: 'dxo-search-panel',
@@ -45,7 +44,6 @@ import { DxoSearchPanel } from './base/search-panel';
     ]
 })
 export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoSearchPanelComponent';
 
     
 

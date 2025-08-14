@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_rows } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-responsive-box-row',
@@ -31,13 +29,16 @@ import { PROPERTY_TOKEN_rows } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_rows,
-            useExisting: DxiResponsiveBoxRowComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiResponsiveBoxRowComponent) => ({
+               propertyName: 'rows',
+               component
+            }),
+            deps: [DxiResponsiveBoxRowComponent],
          }
     ],
 })
 export class DxiResponsiveBoxRowComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiResponsiveBoxRowComponent';
 
     
     @Input()

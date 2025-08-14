@@ -49,6 +49,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoColumnChooserModule } from 'devextreme-angular/ui/nested';
@@ -183,17 +184,6 @@ import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/u
 import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 
-import { 
-      PROPERTY_TOKEN_validationRules,
-      PROPERTY_TOKEN_buttons,
-      PROPERTY_TOKEN_changes,
-      PROPERTY_TOKEN_columns,
-      PROPERTY_TOKEN_customOperations,
-      PROPERTY_TOKEN_fields,
-      PROPERTY_TOKEN_items,
-      PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -214,48 +204,11 @@ import {
     ]
 })
 export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxTreeListComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_validationRules)
-    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('validationRules', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
-    @ContentChildren(PROPERTY_TOKEN_buttons)
-    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('buttons', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_changes)
-    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('changes', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_columns)
-    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('columns', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_customOperations)
-    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('customOperations', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_fields)
-    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('fields', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
-
-    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
-    }
-
     instance: DxTreeList<TRowData, TKey> = null;
 
     /**

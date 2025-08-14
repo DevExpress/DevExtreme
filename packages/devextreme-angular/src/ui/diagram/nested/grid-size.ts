@@ -20,10 +20,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-diagram-grid-size',
@@ -36,7 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDiagramGridSizeComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDiagramGridSizeComponent';
 
     
     @Input()

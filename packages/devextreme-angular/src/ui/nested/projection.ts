@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-config';
-
-
 
 @Component({
     selector: 'dxo-projection',
@@ -39,7 +38,6 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
     ]
 })
 export class DxoProjectionComponent extends DxoVectorMapProjectionConfig implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoProjectionComponent';
 
     
 

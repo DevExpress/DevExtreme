@@ -40,6 +40,7 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -71,10 +72,6 @@ import { DxoPopoverShowEventModule } from 'devextreme-angular/ui/popover/nested'
 import { DxoPopoverToModule } from 'devextreme-angular/ui/popover/nested';
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 
-import { 
-      PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/tokens';
-
 
 
 /**
@@ -95,13 +92,11 @@ import {
     ]
 })
 export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxPopoverComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
-    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this._setChildren('toolbarItems', value);
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setChildren(value);
     }
-
     instance: DxPopover = null;
 
     /**

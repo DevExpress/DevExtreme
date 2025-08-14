@@ -19,10 +19,9 @@ import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-file-manager-item-view',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFileManagerItemViewComponent';
 
     
     @Input()

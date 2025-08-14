@@ -16,11 +16,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-chat-alert',
@@ -31,13 +29,16 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_alerts,
-            useExisting: DxiChatAlertComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiChatAlertComponent) => ({
+               propertyName: 'alerts',
+               component
+            }),
+            deps: [DxiChatAlertComponent],
          }
     ],
 })
 export class DxiChatAlertComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiChatAlertComponent';
 
     
     @Input()

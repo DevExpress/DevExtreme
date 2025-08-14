@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
-
-
 
 @Component({
     selector: 'dxo-common-annotation-settings',
@@ -71,7 +70,6 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     ]
 })
 export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoCommonAnnotationSettingsComponent';
 
     
 

@@ -18,11 +18,9 @@ import { dxButtonOptions } from 'devextreme/ui/button';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
-import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
-
 
 @Component({
     selector: 'dxi-autocomplete-button',
@@ -33,13 +31,16 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
     providers: [
         NestedOptionHost,
          {
-            provide: PROPERTY_TOKEN_buttons,
-            useExisting: DxiAutocompleteButtonComponent,
+            provide: СOLLECTION_NESTED_OPTION_TOKEN,
+            useFactory: (component: DxiAutocompleteButtonComponent) => ({
+               propertyName: 'buttons',
+               component
+            }),
+            deps: [DxiAutocompleteButtonComponent],
          }
     ],
 })
 export class DxiAutocompleteButtonComponent extends CollectionNestedOption {
-    readonly _dxClassName = 'DxiAutocompleteButtonComponent';
 
     
     @Input()

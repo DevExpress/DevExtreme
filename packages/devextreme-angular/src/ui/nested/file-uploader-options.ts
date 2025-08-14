@@ -20,10 +20,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
-
-
 
 @Component({
     selector: 'dxo-file-uploader-options',
@@ -102,7 +101,6 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
     ]
 })
 export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoFileUploaderOptionsComponent';
 
     
 

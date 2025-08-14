@@ -21,10 +21,9 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-diagram-edges',
@@ -37,7 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoDiagramEdgesComponent';
 
     
     @Input()

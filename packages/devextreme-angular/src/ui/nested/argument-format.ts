@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
-
-
 
 @Component({
     selector: 'dxo-argument-format',
@@ -42,7 +41,6 @@ import { DxoFormat } from './base/format';
     ]
 })
 export class DxoArgumentFormatComponent extends DxoFormat implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoArgumentFormatComponent';
 
     
 

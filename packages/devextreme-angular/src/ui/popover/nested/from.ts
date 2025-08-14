@@ -19,10 +19,9 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-popover-from',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoPopoverFromComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoPopoverFromComponent';
 
     
     @Input()

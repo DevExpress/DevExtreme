@@ -19,10 +19,9 @@ import { FinancialChartReductionLevel } from 'devextreme/viz/chart';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
-
 
 @Component({
     selector: 'dxo-reduction',
@@ -35,7 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoReductionComponent extends NestedOption implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoReductionComponent';
 
     
     @Input()

@@ -1,5 +1,5 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter, InjectionToken, Directive,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
@@ -22,10 +22,46 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
+export const СOLLECTION_NESTED_OPTION_TOKEN = new InjectionToken<string>('collection-nested-option-token');
+
+@Directive()
+export abstract class DxBaseClass {
+  private _activatedProps:string[] = [];
+
+  abstract setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>): any
+
+  protected _setChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+    const groupedItems: Record<string, CollectionNestedOption[]> = {};
+
+    value.forEach(({ propertyName, component }) => {
+      groupedItems[propertyName] = groupedItems[propertyName] || [];
+      groupedItems[propertyName].push(component);
+    });
+
+    const notEmptyProps: string[] = [];
+
+    Object.entries(groupedItems).forEach(([propertyName, items]) => {
+      const q = new QueryList<CollectionNestedOption>();
+      q.reset(items);
+
+      this.setChildren(propertyName, q);
+      notEmptyProps.push(propertyName);
+    });
+
+    this._activatedProps.forEach((propertyName) => {
+      if (!notEmptyProps.includes(propertyName)) {
+        this.setChildren(propertyName, new QueryList<CollectionNestedOption>());
+      }
+    });
+
+    this._activatedProps = notEmptyProps;
+  }
+}
+
 @Component({
   template: '',
 })
-export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
+export abstract class BaseNestedOption extends DxBaseClass implements INestedOptionContainer, ICollectionNestedOptionContainer {
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
@@ -36,11 +72,10 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
 
   protected abstract get _optionPath(): string;
 
-  _dxClassName = 'BaseNestedOption';
-
   protected abstract _fullOptionPath(): string;
 
   constructor() {
+    super();
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
   }
 

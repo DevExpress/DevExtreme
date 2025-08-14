@@ -9,7 +9,6 @@ import {
   PLATFORM_ID,
   Inject,
   EventEmitter,
-
   OnChanges,
   OnInit,
   DoCheck,
@@ -18,7 +17,7 @@ import {
   AfterViewChecked,
   createNgModule,
   inject,
-  Injector,
+  Injector, 
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -37,7 +36,7 @@ import {
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
-  CollectionNestedOption,
+  DxBaseClass,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -60,17 +59,13 @@ export const getServerStateKey = () => {
 @Component({
   template: '',
 })
-export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
+export abstract class DxComponent extends DxBaseClass implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
-
-  protected _legacyChildrenNames: Record<string, any> = {};
-
-  protected _dxClassName = 'DxComponent';
 
   eventHelper: EmitterHelper;
 
@@ -91,38 +86,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   widgetUpdateLocked = false;
 
   templateUpdateRequired = false;
-
-  private checkContentChildren(
-    items: QueryList<CollectionNestedOption>,
-    containerClassName: string,
-    legacyClassNames: string[],
-  ) {
-    if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
-      const itemLegacyClassName = items.find(({ _dxClassName }) => legacyClassNames.includes(_dxClassName))?._dxClassName;
-      const itemClassName = items.find(({ _dxClassName }) => !legacyClassNames.includes(_dxClassName))?._dxClassName;
-
-      if (itemLegacyClassName && itemClassName) {
-        console.warn(`In ${containerClassName},
-          the nested ${itemClassName} and ${itemLegacyClassName} components are incompatible.
-          Ensure that all nested components in the content area match.`);
-
-        return false;
-      }
-    }
-    return true;
-  }
-
-  protected _setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
-    const hasNoConflicts = this.checkContentChildren(
-      items,
-      this._dxClassName,
-      this._legacyChildrenNames[propertyName],
-    );
-
-    if (hasNoConflicts) {
-      this.setChildren(propertyName, items);
-    }
-  }
 
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
@@ -261,6 +224,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     private readonly transferState: TransferState,
     @Inject(PLATFORM_ID) private readonly platformId: any,
   ) {
+    super();
     if (!DxIntegrationModule.initialized) {
       createNgModule(DxIntegrationModule, inject(Injector));
     }

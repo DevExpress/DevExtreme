@@ -36,7 +36,6 @@ import {
 
 
 
-
 /**
  * [descr:dxButton]
 
@@ -54,7 +53,6 @@ import {
     ]
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
-    readonly _dxClassName = 'DxButtonComponent';
 
     instance: DxButton = null;
 

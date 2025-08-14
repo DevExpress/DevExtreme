@@ -18,10 +18,9 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoUser } from './base/user';
-
-
 
 @Component({
     selector: 'dxo-user',
@@ -40,7 +39,6 @@ import { DxoUser } from './base/user';
     ]
 })
 export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit {
-    readonly _dxClassName = 'DxoUserComponent';
 
     
 

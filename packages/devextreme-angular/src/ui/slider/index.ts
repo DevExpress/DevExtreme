@@ -54,7 +54,6 @@ import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxSliderComponent),
@@ -79,7 +78,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    readonly _dxClassName = 'DxSliderComponent';
 
     instance: DxSlider = null;
 
