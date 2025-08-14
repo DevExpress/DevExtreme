@@ -92,6 +92,7 @@ import {
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
+import type { NormalizedEditCellOptions } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
@@ -650,17 +651,6 @@ class EditingControllerImpl extends modules.ViewController {
       this._refocusEditCell = false;
       this._focusEditingCell();
     }
-  }
-
-  private _setEditRowKeyByIndex(rowIndex, silent) {
-    const key = this._dataController.getKeyByRowIndex(rowIndex);
-
-    if (key === undefined) {
-      this._dataController.fireError('E1043');
-      return;
-    }
-
-    this._setEditRowKey(key, silent);
   }
 
   public getEditRowIndex() {
@@ -2476,6 +2466,8 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _isRowDeleteAllowed(): any {}
+
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
 
   public shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);

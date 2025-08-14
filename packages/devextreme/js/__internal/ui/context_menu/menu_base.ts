@@ -728,7 +728,6 @@ class MenuBase<
             this._toggleItemSelection(selectedNode, false);
           }
           this._toggleItemSelection(node, true);
-          this._updateSelectedItems();
         }
         break;
       }
@@ -770,24 +769,26 @@ class MenuBase<
     return result;
   }
 
-  _updateSelectedItems(
-    oldSelection?: Item,
-    newSelection?: Item | null,
+  _updateSelectedItems(): void {}
+
+  _updateSelectedItem(
+    addedItem?: Item | null,
+    removedItem?: Item,
   ): void {
-    if (oldSelection || newSelection) {
-      this._fireSelectionChangeEvent(newSelection, oldSelection);
+    if (addedItem || removedItem) {
+      this._fireSelectionChangeEvent(addedItem, removedItem);
     }
   }
 
   _fireSelectionChangeEvent(
-    addedSelection: Item | null | undefined,
-    removedSelection: Item | undefined,
+    addedItem?: Item | null,
+    removedItem?: Item,
   ): void {
     this._createActionByOption('onSelectionChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     })({
-      addedItems: [addedSelection],
-      removedItems: [removedSelection],
+      addedItems: [addedItem],
+      removedItems: [removedItem],
     });
   }
 
@@ -804,7 +805,7 @@ class MenuBase<
         this._toggleItemSelection(selectedNode, false);
       }
       this._toggleItemSelection(node, true);
-      this._updateSelectedItems(selectedItem, itemData);
+      this._updateSelectedItem(itemData, selectedItem);
       this._setOptionWithoutOptionChange('selectedItem', itemData);
     }
   }
@@ -816,7 +817,7 @@ class MenuBase<
 
     if (node?.internalFields.selected) {
       this._toggleItemSelection(node, false);
-      this._updateSelectedItems(selectedItem, null);
+      this._updateSelectedItem(null, selectedItem);
       this._setOptionWithoutOptionChange('selectedItem', null);
     }
   }

@@ -53,8 +53,13 @@
     order: 3;
   }
 
+  .dx-treeview-expander-icon-stub {
+    width: 0;
+  }
+
   .dx-treeview-item {
     cursor: pointer;
+    gap: 0;
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
