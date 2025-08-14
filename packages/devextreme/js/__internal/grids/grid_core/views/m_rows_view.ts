@@ -1435,6 +1435,16 @@ export class RowsView extends ColumnsView {
 
     return $rowsViewElement.is(this.element());
   }
+
+  /**
+   * @extended: TreeList's rowsView extender & selection
+   */
+  protected _renderIcons(
+    $iconContainer: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    return $iconContainer;
+  }
 }
 
 export const rowsModule = {

@@ -73,9 +73,11 @@ interface HandleDataChangedArguments {
 
 type UserData = Record<string, unknown>;
 
-interface Item {
+export interface Item {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
   data: UserData;
+  key: unknown;
+  oldData?: UserData;
   dataIndex?: number;
   values?: unknown[];
   visible?: boolean;
@@ -85,8 +87,8 @@ interface Item {
   rowIndex?: number;
   cells?: unknown[];
   loadIndex?: number;
-  key: unknown;
   isSelected?: boolean;
+  removed?: boolean;
 }
 
 export type Filter = any;

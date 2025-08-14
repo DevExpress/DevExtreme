@@ -24,7 +24,7 @@ import { BUTTON_CLASS } from '__internal/ui/button/button';
 import {
     ANIMATION_TYPE_CLASSES,
     LOADINDICATOR_CONTENT_CLASS,
-} from '__internal/ui/m_load_indicator';
+} from '__internal/ui/load_indicator';
 import { AIIntegration } from '__internal/core/ai_integration/core/ai_integration';
 import { isPromise } from 'core/utils/type';
 import keyboardMock from '../../../helpers/keyboardMock.js';
