@@ -17,7 +17,7 @@ import {
 
 import {
     DropDownButtonTemplateDataModel,
-    FieldTemplates,
+    FieldAddons,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import dxDropDownList, {
@@ -238,7 +238,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @default null
      * @public
      */
-    fieldTemplates?: FieldTemplates;
+    fieldAddons?: FieldAddons;
     /**
      * @section Utils
      * @type function

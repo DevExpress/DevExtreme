@@ -21,7 +21,6 @@ import {
  VerticalAlignment,
  TextEditorButtonLocation,
  PositionAlignment,
- template,
  Direction,
  ButtonStyle,
  ButtonType,
@@ -30,8 +29,7 @@ import {
 } from "devextreme/common";
 import {
  DropDownPredefinedButton,
- FieldTemplates,
- FieldTemplate,
+ FieldAddons,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  CollectionWidgetItem,
@@ -113,8 +111,8 @@ type AccessibleOptions = Pick<Properties,
   "dropDownButtonTemplate" |
   "dropDownOptions" |
   "elementAttr" |
+  "fieldAddons" |
   "fieldTemplate" |
-  "fieldTemplates" |
   "focusStateEnabled" |
   "grouped" |
   "groupTemplate" |
@@ -209,8 +207,8 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
+    fieldAddons: Object as PropType<FieldAddons | Record<string, any>>,
     fieldTemplate: {},
-    fieldTemplates: Object as PropType<FieldTemplates | Record<string, any>>,
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
@@ -301,8 +299,8 @@ const componentConfig = {
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
     "update:elementAttr": null,
+    "update:fieldAddons": null,
     "update:fieldTemplate": null,
-    "update:fieldTemplates": null,
     "update:focusStateEnabled": null,
     "update:grouped": null,
     "update:groupTemplate": null,
@@ -389,7 +387,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       button: { isCollectionItem: true, optionName: "buttons" },
       dropDownOptions: { isCollectionItem: false, optionName: "dropDownOptions" },
-      fieldTemplates: { isCollectionItem: false, optionName: "fieldTemplates" },
+      fieldAddons: { isCollectionItem: false, optionName: "fieldAddons" },
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
@@ -623,7 +621,7 @@ const DxDropDownOptions = defineComponent(DxDropDownOptionsConfig);
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
 
-const DxFieldTemplatesConfig = {
+const DxFieldAddonsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -631,16 +629,16 @@ const DxFieldTemplatesConfig = {
     "update:beforeTemplate": null,
   },
   props: {
-    afterTemplate: [Object, Function] as PropType<FieldTemplate | (((selectedItem: any, element: any) => string | any)) | template>,
-    beforeTemplate: [Object, Function] as PropType<FieldTemplate | (((selectedItem: any, element: any) => string | any)) | template>
+    afterTemplate: {},
+    beforeTemplate: {}
   }
 };
 
-prepareConfigurationComponentConfig(DxFieldTemplatesConfig);
+prepareConfigurationComponentConfig(DxFieldAddonsConfig);
 
-const DxFieldTemplates = defineComponent(DxFieldTemplatesConfig);
+const DxFieldAddons = defineComponent(DxFieldAddonsConfig);
 
-(DxFieldTemplates as any).$_optionName = "fieldTemplates";
+(DxFieldAddons as any).$_optionName = "fieldAddons";
 
 const DxFromConfig = {
   emits: {
@@ -992,7 +990,7 @@ export {
   DxButton,
   DxCollision,
   DxDropDownOptions,
-  DxFieldTemplates,
+  DxFieldAddons,
   DxFrom,
   DxHide,
   DxItem,

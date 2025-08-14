@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-color-box-field-templates',
+    selector: 'dxo-drop-down-box-field-addons',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoColorBoxFieldTemplatesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownBoxFieldAddonsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get afterTemplate(): any {
         return this._getOption('afterTemplate');
@@ -49,7 +49,7 @@ export class DxoColorBoxFieldTemplatesComponent extends NestedOption implements 
 
 
     protected get _optionPath() {
-        return 'fieldTemplates';
+        return 'fieldAddons';
     }
 
 
@@ -74,10 +74,10 @@ export class DxoColorBoxFieldTemplatesComponent extends NestedOption implements 
 
 @NgModule({
   imports: [
-    DxoColorBoxFieldTemplatesComponent
+    DxoDropDownBoxFieldAddonsComponent
   ],
   exports: [
-    DxoColorBoxFieldTemplatesComponent
+    DxoDropDownBoxFieldAddonsComponent
   ],
 })
-export class DxoColorBoxFieldTemplatesModule { }
+export class DxoDropDownBoxFieldAddonsModule { }

@@ -16,7 +16,6 @@ import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
-import type { FieldTemplate } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 
@@ -92,7 +91,7 @@ const SelectBox = memo(
       const expectedChildren = useMemo(() => ({
         button: { optionName: "buttons", isCollectionItem: true },
         dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false },
-        fieldTemplates: { optionName: "fieldTemplates", isCollectionItem: false },
+        fieldAddons: { optionName: "fieldAddons", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true }
       }), []);
 
@@ -343,20 +342,33 @@ const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedCo
 
 // owners:
 // SelectBox
-type IFieldTemplatesProps = React.PropsWithChildren<{
-  afterTemplate?: FieldTemplate;
-  beforeTemplate?: FieldTemplate;
+type IFieldAddonsProps = React.PropsWithChildren<{
+  afterTemplate?: ((data: any, element: any) => string | any) | template;
+  beforeTemplate?: ((data: any, element: any) => string | any) | template;
+  afterRender?: (...params: any) => React.ReactNode;
+  afterComponent?: React.ComponentType<any>;
+  beforeRender?: (...params: any) => React.ReactNode;
+  beforeComponent?: React.ComponentType<any>;
 }>
-const _componentFieldTemplates = (props: IFieldTemplatesProps) => {
-  return React.createElement(NestedOption<IFieldTemplatesProps>, {
+const _componentFieldAddons = (props: IFieldAddonsProps) => {
+  return React.createElement(NestedOption<IFieldAddonsProps>, {
     ...props,
     elementDescriptor: {
-      OptionName: "fieldTemplates",
+      OptionName: "fieldAddons",
+      TemplateProps: [{
+        tmplOption: "afterTemplate",
+        render: "afterRender",
+        component: "afterComponent"
+      }, {
+        tmplOption: "beforeTemplate",
+        render: "beforeRender",
+        component: "beforeComponent"
+      }],
     },
   });
 };
 
-const FieldTemplates = Object.assign<typeof _componentFieldTemplates, NestedComponentMeta>(_componentFieldTemplates, {
+const FieldAddons = Object.assign<typeof _componentFieldAddons, NestedComponentMeta>(_componentFieldAddons, {
   componentType: "option",
 });
 
@@ -700,8 +712,8 @@ export {
   ICollisionProps,
   DropDownOptions,
   IDropDownOptionsProps,
-  FieldTemplates,
-  IFieldTemplatesProps,
+  FieldAddons,
+  IFieldAddonsProps,
   From,
   IFromProps,
   Hide,

@@ -1,5 +1,6 @@
 /* tslint:disable:max-line-length */
 
+/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -7,8 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    Input
+    SkipSelf
 } from '@angular/core';
 
 
@@ -19,37 +19,25 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
+import { DxoFieldAddons } from './base/field-addons';
 
 
 @Component({
-    selector: 'dxo-tag-box-field-templates',
+    selector: 'dxo-field-addons',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [NestedOptionHost],
+    inputs: [
+        'afterTemplate',
+        'beforeTemplate'
+    ]
 })
-export class DxoTagBoxFieldTemplatesComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get afterTemplate(): any {
-        return this._getOption('afterTemplate');
-    }
-    set afterTemplate(value: any) {
-        this._setOption('afterTemplate', value);
-    }
-
-    @Input()
-    get beforeTemplate(): any {
-        return this._getOption('beforeTemplate');
-    }
-    set beforeTemplate(value: any) {
-        this._setOption('beforeTemplate', value);
-    }
-
+export class DxoFieldAddonsComponent extends DxoFieldAddons implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
-        return 'fieldTemplates';
+        return 'fieldAddons';
     }
 
 
@@ -74,10 +62,10 @@ export class DxoTagBoxFieldTemplatesComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTagBoxFieldTemplatesComponent
+    DxoFieldAddonsComponent
   ],
   exports: [
-    DxoTagBoxFieldTemplatesComponent
+    DxoFieldAddonsComponent
   ],
 })
-export class DxoTagBoxFieldTemplatesModule { }
+export class DxoFieldAddonsModule { }

@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-drop-down-box-field-templates',
+    selector: 'dxo-tag-box-field-addons',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownBoxFieldTemplatesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxFieldAddonsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get afterTemplate(): any {
         return this._getOption('afterTemplate');
@@ -49,7 +49,7 @@ export class DxoDropDownBoxFieldTemplatesComponent extends NestedOption implemen
 
 
     protected get _optionPath() {
-        return 'fieldTemplates';
+        return 'fieldAddons';
     }
 
 
@@ -74,10 +74,10 @@ export class DxoDropDownBoxFieldTemplatesComponent extends NestedOption implemen
 
 @NgModule({
   imports: [
-    DxoDropDownBoxFieldTemplatesComponent
+    DxoTagBoxFieldAddonsComponent
   ],
   exports: [
-    DxoDropDownBoxFieldTemplatesComponent
+    DxoTagBoxFieldAddonsComponent
   ],
 })
-export class DxoDropDownBoxFieldTemplatesModule { }
+export class DxoTagBoxFieldAddonsModule { }

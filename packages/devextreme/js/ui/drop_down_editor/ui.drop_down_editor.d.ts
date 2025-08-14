@@ -38,27 +38,22 @@ export interface DropDownButtonTemplateDataModel {
 /**
  * @namespace DevExpress.ui
  * @docid
- * @type_function_param1 selectedItem:object
- * @type_function_return string|Element|jQuery
  */
-export type FieldTemplate = template | ((data: any, element: DxElement) => string | UserDefinedElement);
-/**
- * @namespace DevExpress.ui
- * @docid
- */
-export type FieldTemplates = {
+export type FieldAddons = {
     /**
+     * @namespace DevExpress.ui
      * @docid
-     * @default null
-     * @public
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
      */
-    beforeTemplate?: FieldTemplate;
+    beforeTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
     /**
+     * @namespace DevExpress.ui
      * @docid
-     * @default null
-     * @public
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
      */
-    afterTemplate?: FieldTemplate;
+    afterTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
 };
 
 /**
@@ -117,7 +112,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default null
      * @public
      */
-    fieldTemplates?: FieldTemplates;
+    fieldAddons?: FieldAddons;
     /**
      * @docid
      * @default null

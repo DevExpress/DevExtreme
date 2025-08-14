@@ -8,7 +8,7 @@ export default DropDownList;
  */
 
 /**
- * @name dxDropDownListOptions.fieldTemplates
+ * @name dxDropDownListOptions.fieldAddons
  * @hidden
  */
 

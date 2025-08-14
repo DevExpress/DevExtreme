@@ -4,6 +4,6 @@ export default DateBox;
 // STYLE dateBox
 
 /**
- * @name dxDateBoxOptions.fieldTemplates
+ * @name dxDateBoxOptions.fieldAddons
  * @hidden
  */

@@ -296,7 +296,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
  */
 export interface DateBoxBaseOptions<TComponent> extends Omit<
     dxDropDownEditorOptions<TComponent>,
-    'fieldTemplates'
+    'fieldAddons'
 > {
     /**
      * @docid

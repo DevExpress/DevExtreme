@@ -47,7 +47,7 @@ export interface SelectionChangedInfo<T = any> {
  */
 export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, Omit<
     dxDropDownEditorOptions<TComponent>,
-    'fieldTemplates'
+    'fieldAddons'
 > {
     /**
      * @docid

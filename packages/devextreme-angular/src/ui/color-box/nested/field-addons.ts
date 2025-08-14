@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,7 +7,8 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    Input
 } from '@angular/core';
 
 
@@ -19,25 +19,37 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoFieldTemplates } from './base/field-templates';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-field-templates',
+    selector: 'dxo-color-box-field-addons',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'afterTemplate',
-        'beforeTemplate'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoFieldTemplatesComponent extends DxoFieldTemplates implements OnDestroy, OnInit  {
+export class DxoColorBoxFieldAddonsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get afterTemplate(): any {
+        return this._getOption('afterTemplate');
+    }
+    set afterTemplate(value: any) {
+        this._setOption('afterTemplate', value);
+    }
+
+    @Input()
+    get beforeTemplate(): any {
+        return this._getOption('beforeTemplate');
+    }
+    set beforeTemplate(value: any) {
+        this._setOption('beforeTemplate', value);
+    }
+
 
     protected get _optionPath() {
-        return 'fieldTemplates';
+        return 'fieldAddons';
     }
 
 
@@ -62,10 +74,10 @@ export class DxoFieldTemplatesComponent extends DxoFieldTemplates implements OnD
 
 @NgModule({
   imports: [
-    DxoFieldTemplatesComponent
+    DxoColorBoxFieldAddonsComponent
   ],
   exports: [
-    DxoFieldTemplatesComponent
+    DxoColorBoxFieldAddonsComponent
   ],
 })
-export class DxoFieldTemplatesModule { }
+export class DxoColorBoxFieldAddonsModule { }

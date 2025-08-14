@@ -5,23 +5,22 @@ import {
     Component,
 } from '@angular/core';
 
-import { FieldTemplate } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 
 @Component({
     template: ''
 })
-export abstract class DxoFieldTemplates extends NestedOption {
-    get afterTemplate(): FieldTemplate {
+export abstract class DxoFieldAddons extends NestedOption {
+    get afterTemplate(): any {
         return this._getOption('afterTemplate');
     }
-    set afterTemplate(value: FieldTemplate) {
+    set afterTemplate(value: any) {
         this._setOption('afterTemplate', value);
     }
 
-    get beforeTemplate(): FieldTemplate {
+    get beforeTemplate(): any {
         return this._getOption('beforeTemplate');
     }
-    set beforeTemplate(value: FieldTemplate) {
+    set beforeTemplate(value: any) {
         this._setOption('beforeTemplate', value);
     }
 }
