@@ -17,7 +17,7 @@ const CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';
 
 export interface NavigatorOptions extends WidgetOptions<Navigator> {
-  onClick?: ((e: ClickEvent) => void);
+  onClick?: ((e: { direction: number; event: ClickEvent }) => void);
   onCaptionClick?: ((e: ClickEvent) => void);
   type?: ButtonType;
   stylingMode?: ButtonStyle;
