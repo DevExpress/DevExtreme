@@ -17,14 +17,16 @@ import { setupStateManager } from './dev/setup_state_manager';
 import type { StateManager } from './dev/types';
 
 const waitGarbageCollection = async (): Promise<void> => {
-  if (global.gc) {
-    for (let i = 0; i < 2; i += 1) {
-      global.gc();
-      // eslint-disable-next-line @stylistic/max-len
-      // eslint-disable-next-line no-await-in-loop, no-promise-executor-return, no-restricted-globals
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    }
+  if (!global.gc) {
+    throw new Error('Global gc is not defined. Did you use the `--expose-gc` flag?');
   }
+
+  global.gc();
+  await new Promise((resolve) => {
+    // eslint-disable-next-line no-restricted-globals
+    setTimeout(resolve, 0);
+  });
+  global.gc();
 };
 
 type TrackedSignal<T> = Signal<T>;
