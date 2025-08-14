@@ -3235,16 +3235,15 @@ const createDragBehaviorConfig = (
 
   const createDragAppointment = (itemData, settings, appointments) => {
     const appointmentIndex = appointments.option('items').length;
-
-    settings.isCompact = false;
-    settings.virtual = false;
-
-    const items = appointments._renderItem(appointmentIndex, {
+    const $item = appointments._renderItem(appointmentIndex, {
       itemData,
-      settings: [settings],
+      ...settings,
+      isCompact: false,
+      virtual: false,
+      sortedIndex: -1,
     });
 
-    return items[0];
+    return $item;
   };
 
   const onDragStart = (e) => {
