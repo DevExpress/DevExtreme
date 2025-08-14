@@ -16,6 +16,11 @@ import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
 
+import {
+    DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT,
+    DROP_DOWN_EDITOR_AFTER_FIELD_SLOT
+} from '__internal/ui/drop_down_editor/m_drop_down_editor';
+
 import 'generic_light.css!';
 import 'ui/validator';
 
@@ -1448,10 +1453,12 @@ QUnit.module('Templates', () => {
 
             const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
             const $children = $inputWrapper.children();
-            assert.strictEqual($children.length, 3, 'element count is correct');
+            assert.strictEqual($children.length, 5, 'element count is correct');
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
-            assert.ok($children.eq(2).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+            assert.ok($children.eq(2).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT), 'before template slot');
+            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_SLOT), 'after template slot');
+            assert.ok($children.eq(4).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
         QUnit.test('should keep elements correct order when hidden input is used', function(assert) {
@@ -1469,11 +1476,13 @@ QUnit.module('Templates', () => {
 
             const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
             const $children = $inputWrapper.children();
-            assert.strictEqual($children.length, 4, 'element count is correct');
+            assert.strictEqual($children.length, 6, 'element count is correct');
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
             assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
-            assert.ok($children.eq(3).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT), 'before template slot');
+            assert.ok($children.eq(4).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_SLOT), 'after template slot');
+            assert.ok($children.eq(5).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
         QUnit.testInActiveWindow('should not trigger focusout event (T751314)', function(assert) {
@@ -1626,6 +1635,46 @@ QUnit.module('Templates', () => {
             .press('backspace');
 
         assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
+    });
+
+    QUnit.test('renders fieldAddons content', function(assert) {
+        const $editor = $('#dropDownEditorLazy').dxDropDownEditor({
+            value: 'test',
+            fieldAddons: { beforeTemplate: () => 'beforeTest', afterTemplate: () => 'afterTest' },
+        });
+
+        const beforeSlot = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
+        const afterSlot = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
+
+        assert.ok(beforeSlot, 'before slot exists');
+        assert.ok(afterSlot, 'after slot exists');
+
+        assert.strictEqual($(beforeSlot).text(), 'beforeTest', 'before slot content is correct');
+        assert.strictEqual($(afterSlot).text(), 'afterTest', 'after slot content is correct');
+
+    });
+
+    QUnit.test('creates fieldAddons slots once and reuses them on value change', function(assert) {
+        const $editor = $('#dropDownEditorLazy').dxDropDownEditor({
+            value: 'test',
+            fieldAddons: { beforeTemplate: () => 'beforeTest', afterTemplate: () => 'afterTest' },
+        });
+
+        const instance = $editor.dxDropDownEditor('instance');
+
+        const beforeSlot1 = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
+        const afterSlot1 = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
+
+        assert.ok(beforeSlot1, 'before slot exists');
+        assert.ok(afterSlot1, 'after slot exists');
+
+        instance.option('value', 'test1');
+
+        const beforeSlot2 = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
+        const afterSlot2 = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
+
+        assert.strictEqual(beforeSlot1, beforeSlot2, 'before slot is reused');
+        assert.strictEqual(afterSlot1, afterSlot2, 'after slot is reused');
     });
 });
 
