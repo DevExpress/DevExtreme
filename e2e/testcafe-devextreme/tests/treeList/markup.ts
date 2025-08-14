@@ -6,7 +6,8 @@ import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { Themes } from '../../helpers/themes';
 
-fixture`Markup`
+fixture`TreeList - Markup`
+  .disablePageReloads
   .page(url(__dirname, '../container.html'));
 
 const tasksT1223168 = [{
@@ -218,3 +219,78 @@ test('The shading should alternate correctly after expanding the node when repai
   },
   columns: [{ dataField: 'id', fixed: true }, 'text'],
 }));
+
+[
+  Themes.genericLight,
+  Themes.genericLightCompact,
+  Themes.materialBlue,
+  Themes.materialBlueCompact,
+  Themes.fluentBlue,
+  Themes.fluentBlueCompact,
+].forEach((theme) => {
+  ['single', 'multiple'].forEach((selectionMode) => {
+    ['single-line', 'multiple-line'].forEach((contentType) => {
+      [false, true].forEach((rtlEnabled) => {
+        test(
+          `Markup should be correct [T1291914 & T1294907]:selection=${selectionMode},content=${contentType},rtl=${rtlEnabled}`,
+          async (t) => {
+            const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+            const treeList = new TreeList('#container');
+
+            await t
+              .expect(await takeScreenshot(`markup-selection=${selectionMode}-rtl=${rtlEnabled}-content=${contentType} (${theme})`, treeList.element))
+              .ok()
+              .expect(compareResults.isValid())
+              .ok(compareResults.errorMessages());
+          },
+        ).before(async () => {
+          await changeTheme(theme);
+          await createWidget('dxTreeList', {
+            dataSource: [
+              {
+                id: 1, parentId: 0, first: 'Alice', last: 'Blue', age: 30, position: 'CEO',
+              },
+              {
+                id: 2, parentId: 1, first: 'Bob', last: 'Brown', age: 25, position: 'CTO',
+              },
+              {
+                id: 3, parentId: 1, first: 'Charlie', last: 'Green', age: 28, position: 'CFO',
+              },
+              {
+                id: 4, parentId: 1, first: 'David', last: 'White', age: 22, position: 'Developer',
+              },
+              {
+                id: 5, parentId: 3, first: 'Eve', last: 'Black', age: 26, position: 'Designer',
+              },
+            ],
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            expandedRowKeys: [1, 2],
+            columns: [
+              {
+                dataField: 'first',
+                cellTemplate: contentType === 'single-line'
+                  ? undefined
+                  : () => {
+                    const div = document.createElement('div');
+                    div.innerText = 'Long text that should wrap into multiple lines. Long text that should wrap into multiple lines.';
+                    div.style.whiteSpace = 'break-spaces';
+
+                    return div;
+                  },
+              },
+              'last',
+              'age',
+              'position',
+            ],
+            rtlEnabled,
+            selection: {
+              mode: selectionMode,
+            },
+            selectedRowKeys: selectionMode === 'single' ? [3] : [3, 4],
+          });
+        }).after(async () => changeTheme(Themes.genericLight));
+      });
+    });
+  });
+});
