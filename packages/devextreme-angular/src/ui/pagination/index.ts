@@ -59,6 +59,7 @@ import {
 })
 export class DxPaginationComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
+
     instance: DxPagination = null;
 
     /**

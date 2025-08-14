@@ -118,6 +118,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxDiagram = null;
 
     /**

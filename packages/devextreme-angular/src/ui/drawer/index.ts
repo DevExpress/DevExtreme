@@ -54,6 +54,7 @@ import {
 })
 export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
+
     instance: DxDrawer = null;
 
     /**

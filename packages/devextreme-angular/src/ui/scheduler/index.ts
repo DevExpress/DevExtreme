@@ -89,6 +89,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxScheduler = null;
 
     /**

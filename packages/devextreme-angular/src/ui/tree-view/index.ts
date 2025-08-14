@@ -80,6 +80,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxTreeView<TKey> = null;
 
     /**

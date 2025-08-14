@@ -107,6 +107,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxHtmlEditor = null;
 
     /**

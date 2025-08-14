@@ -136,6 +136,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxPieChart = null;
 
     /**

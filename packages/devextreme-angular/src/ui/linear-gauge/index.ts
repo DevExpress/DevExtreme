@@ -121,6 +121,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxLinearGauge = null;
 
     /**

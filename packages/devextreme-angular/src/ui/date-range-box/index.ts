@@ -117,6 +117,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxDateRangeBox = null;
 
     /**

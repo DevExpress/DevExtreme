@@ -117,6 +117,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxAutocomplete = null;
 
     /**

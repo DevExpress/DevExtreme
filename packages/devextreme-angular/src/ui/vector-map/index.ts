@@ -119,6 +119,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxVectorMap = null;
 
     /**

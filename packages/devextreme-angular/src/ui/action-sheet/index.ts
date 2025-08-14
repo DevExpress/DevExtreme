@@ -72,6 +72,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxActionSheet<TItem, TKey> = null;
 
     /**

@@ -115,6 +115,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxDropDownBox = null;
 
     /**

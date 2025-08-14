@@ -147,6 +147,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxCardView<TCardData, TKey> = null;
 
     

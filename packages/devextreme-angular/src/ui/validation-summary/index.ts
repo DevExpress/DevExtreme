@@ -70,6 +70,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxValidationSummary<TItem, TKey> = null;
 
     /**

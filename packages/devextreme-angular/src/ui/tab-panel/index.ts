@@ -73,6 +73,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxTabPanel<TItem, TKey> = null;
 
     /**

@@ -115,6 +115,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxGantt = null;
 
     /**

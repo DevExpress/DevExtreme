@@ -117,6 +117,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxTagBox = null;
 
     /**

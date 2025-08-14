@@ -72,6 +72,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
         this._setChildren(value);
     }
+
     instance: DxAccordion<TItem, TKey> = null;
 
     /**
