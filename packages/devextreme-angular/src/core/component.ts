@@ -33,7 +33,7 @@ import { WatcherHelper } from './watcher-helper';
 
 import {
   INestedOptionContainer,
-  DxBaseClass, 
+  DxBaseClass,
   CollectionNestedOption,
 } from './nested-option';
 
