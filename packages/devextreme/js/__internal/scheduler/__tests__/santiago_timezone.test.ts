@@ -103,7 +103,7 @@ const getTexts = (
 
 describe('scheduler', () => {
   it.each(views)('should render correct workspace in Santiago DST for view: $view.name', async ({ view, result }) => {
-    setupSchedulerTestEnvironment(true);
+    setupSchedulerTestEnvironment({ height: 450 });
 
     const { container } = await createScheduler({
       views: [view],
