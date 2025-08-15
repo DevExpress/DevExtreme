@@ -980,8 +980,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

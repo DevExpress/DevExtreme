@@ -854,8 +854,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

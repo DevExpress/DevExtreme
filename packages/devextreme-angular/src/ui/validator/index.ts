@@ -258,8 +258,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
-
-
     parentElement: any;
 
 

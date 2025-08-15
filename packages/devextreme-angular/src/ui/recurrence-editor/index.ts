@@ -542,10 +542,8 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      */
     @Output() onBlur: EventEmitter<any>;
 
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

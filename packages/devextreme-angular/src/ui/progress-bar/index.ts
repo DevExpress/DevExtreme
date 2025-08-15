@@ -550,10 +550,8 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
      */
     @Output() onBlur: EventEmitter<any>;
 
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

@@ -882,10 +882,8 @@ export class DxTextAreaComponent extends DxComponent implements OnDestroy, Contr
      */
     @Output() onBlur: EventEmitter<any>;
 
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

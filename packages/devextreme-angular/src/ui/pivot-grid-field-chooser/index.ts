@@ -533,8 +533,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

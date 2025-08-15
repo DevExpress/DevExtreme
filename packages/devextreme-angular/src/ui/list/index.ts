@@ -1343,8 +1343,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

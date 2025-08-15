@@ -434,8 +434,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

@@ -608,8 +608,6 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

@@ -1507,10 +1507,8 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
      */
     @Output() onBlur: EventEmitter<any>;
 
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

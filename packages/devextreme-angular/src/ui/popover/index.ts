@@ -773,8 +773,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

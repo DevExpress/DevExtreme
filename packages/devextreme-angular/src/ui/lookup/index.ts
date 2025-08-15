@@ -1602,10 +1602,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      */
     @Output() onBlur: EventEmitter<any>;
 
-
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

@@ -141,8 +141,6 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,

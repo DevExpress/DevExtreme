@@ -1443,8 +1443,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

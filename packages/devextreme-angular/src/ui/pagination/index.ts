@@ -535,8 +535,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

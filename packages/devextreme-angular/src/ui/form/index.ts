@@ -828,8 +828,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
