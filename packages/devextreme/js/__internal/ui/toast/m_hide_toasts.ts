@@ -1,25 +1,37 @@
 import $ from '@js/core/renderer';
+import type Toast from '@ts/ui/toast/m_toast';
+import { TOAST_CLASS } from '@ts/ui/toast/m_toast';
 
-const TOAST_CLASS = 'dx-toast';
-
-function hideAllToasts(container): void {
+function hideAllToasts(container: Element): void {
   const toasts = $(`.${TOAST_CLASS}`).toArray();
-  if (!arguments.length) {
-    // @ts-expect-error
-    toasts.forEach((toast) => { $(toast).dxToast('hide'); });
+
+  if (!container) {
+    toasts.forEach((toast) => {
+      // @ts-expect-error does not exist on type 'dxElementWrapper'
+      $(toast).dxToast('hide');
+    });
+
     return;
   }
 
   const containerElement = $(container).get(0);
 
   toasts
-    // @ts-expect-error
-    .map((toast) => $(toast).dxToast('instance'))
+    .map((toast): Toast => {
+      // @ts-expect-error does not exist on type 'dxElementWrapper'
+      const instance = $(toast).dxToast('instance');
+
+      return instance as Toast;
+    })
     .filter((instance) => {
-      const toastContainerElement = $(instance.option('container')).get(0);
+      const { container: toastContainer } = instance.option();
+
+      const toastContainerElement = $(toastContainer).get(0);
+
       return containerElement === toastContainerElement && containerElement;
     })
     .forEach((instance) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       instance.hide();
     });
 }

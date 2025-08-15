@@ -5,6 +5,7 @@ import '@js/common/core/events/hover';
 import {
   active, focus, hover, keyboard,
 } from '@js/common/core/events/short';
+import type { DeepPartial } from '@js/core';
 import Action from '@js/core/action';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
@@ -124,18 +125,22 @@ class Widget<
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    return super._defaultOptionsRules().concat([{
-      device(): boolean {
-        const device = devices.real();
-        const { platform } = device;
-        const { version } = device;
-        return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+    const rules = [
+      ...super._defaultOptionsRules(),
+      {
+        device(): boolean {
+          const device = devices.real();
+          const { platform } = device;
+          const { version } = device;
+          return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+        },
+        options: {
+          useResizeObserver: false,
+        } as DeepPartial<TProperties>,
       },
-      // @ts-expect-error
-      options: {
-        useResizeObserver: false,
-      },
-    }]);
+    ];
+
+    return rules;
   }
 
   _init(): void {
