@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DevExtreme jQuery Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
+
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+     <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/dx-exceljs-fork.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./themeSelector.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <script type="module">
+        import { AzureOpenAI } from "https://esm.sh/openai";
+
+        window.AzureOpenAI = AzureOpenAI;
+    </script>
+    <style>
+        #form-container {
+            margin: 10px;
+        }
+
+        .dx-form-group-custom-caption .dx-icon {
+            color: var(--dx-color-spin-icon);
+        }
+
+        .dx-form-group-custom-caption span {
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="dx-surface">
+    <div role="main">
+        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+
+        <select id="theme-selector" style="display: block;">
+        </select>
+        <br />
+        <div id="form-container">
+            <div id="form"></div>
+        </div>
+        <div id="button"></div>
+        <script>
+            const deployment = 'gpt-4o-mini';
+            const apiVersion = '2024-02-01';
+            const endpoint = 'https://public-api.devexpress.com/demo-openai';
+            const apiKey = 'DEMO';
+
+            $(() => {
+                function groupCaptionTemplate($icon){
+                    return (data) => {
+                        return $(`<i class='dx-icon dx-icon-${$icon}'></i><span>${data.caption}</span>`);
+                    }
+                }
+
+                const aIService = new AzureOpenAI({
+                    dangerouslyAllowBrowser: true,
+                    deployment,
+                    endpoint,
+                    apiVersion,
+                    apiKey,
+                });
+
+                const generateAIServiceResponse = (prompt) => {
+                    const { system, user } = prompt;
+
+                    const params = {
+                        messages: [
+                            { role: 'system', content: system },
+                            { role: 'user', content: user },
+                        ],
+                        model: deployment,
+                    };
+
+                    return aIService.chat.completions.create(params);
+                };
+
+                const aIIntegration = {
+                    getModelResponse: (prompt, type) => {
+                        return new Promise((resolve, reject) => {
+                            generateAIServiceResponse(prompt)
+                                .then((result) => {
+                                    const data = { choices: result.choices };
+                                    const response = data.choices[0].message.content;
+
+                                    resolve(response);
+                                })
+                                .catch((error) => {
+                                    reject(error);
+                                });
+                        });
+                    },
+                };
+
+                const form = $('#form').dxForm({
+                    formData: {},
+                    colCount: 2,
+                    aIIntegration,
+                    items: [{
+                        itemType: 'group',
+                        captionTemplate: groupCaptionTemplate('info'),
+                        caption: 'System Information',
+                        items: [{
+                            dataField: 'ID',
+                            editorType: 'dxNumberBox',
+                            editorOptions: {
+                                mode: 'number',
+                                value: null,
+                            },
+                        }, {
+                            itemType: 'group',
+                            captionTemplate: groupCaptionTemplate('user'),
+                            caption: 'Main Information',
+                            items: [{
+                                dataField: 'FirstName',
+                                editorType: 'dxTextBox',
+                            }, {
+                                dataField: 'LastName',
+                                editorType: 'dxTextBox',
+                            }, {
+                                dataField :'ContractDates',
+                                editorType: 'dxDateRangeBox',
+                            }, {
+                                dataField: 'Position',
+                                editorType: 'dxAutocomplete',
+                                editorOptions: {
+                                    items: ['CEO', 'Manager', 'Developer', 'Sales', 'Support'],
+                                }
+                            }, {
+                                dataField: 'Permissions',
+                                editorType: 'dxTagBox',
+                                editorOptions: {
+                                    items: ['Read', 'Write', 'Execute', 'Delete'],
+                                }
+                            },{
+                                dataField: 'OfficeNo',
+                                editorType: 'dxNumberBox',
+                                editorOptions: {
+                                    mode: 'text',
+                                    value: null,
+                                }
+                            }, {
+                                dataField: 'StaffMember',
+                                editorType: 'dxCheckBox',
+                            }, {
+                                dataField: 'OnVacation',
+                                editorType: 'dxSwitch',
+                            }, {
+                                dataField: 'NextWorkingDay',
+                                editorType: 'dxCalendar',
+                            }],
+                        }, {
+                            itemType: 'group',
+                            captionTemplate: groupCaptionTemplate('tel'),
+                            caption: 'Contact Information',
+
+                            items: [{
+                                itemType: 'tabbed',
+                                tabPanelOptions: {
+                                    deferRendering: false,
+                                },
+                                tabs: [{
+                                    title: 'Phone',
+                                    items: [{
+                                        dataField: 'Phone',
+                                        editorType: 'dxTextBox',
+                                        aiProcessing: {
+                                            instruction: 'If area code is absent, add it using city from address and format it like +1(XXX) XXX-XXXX',
+                                        }
+                                    }],
+                                }, {
+                                    title: 'Email',
+                                    items: [{
+                                        dataField: 'Email',
+                                        editorType: 'dxTextBox',
+                                    }],
+                                }],
+                            }],
+                        }],
+                    }, {
+                        itemType: 'group',
+                        captionTemplate: groupCaptionTemplate('card'),
+                        caption: 'Personal Data',
+                        items: [{
+                            dataField: 'BirthDate',
+                            editorType: 'dxDateBox',
+                        }, {
+                            itemType: 'group',
+                            captionTemplate: groupCaptionTemplate('home'),
+                            caption: 'Home Address',
+                            items: [{
+                                dataField: 'Address',
+                                editorType: 'dxTextArea',
+                                editorOptions: {
+                                    minHeight: 50,
+                                },
+                                aiProcessing: {
+                                    instruction: 'Street name and number, apartment number if available',
+                                }
+                            }, {
+                                dataField: 'City',
+                                editorType: 'dxSelectBox',
+                                editorOptions: {
+                                    items: ['Los Angeles', 'New York', 'Chicago', 'Houston', 'Phoenix'],
+                                    acceptCustomValue: true,
+                                }
+                            }, {
+                                dataField: 'State',
+                                editorType: 'dxDropDownBox',
+                                editorOptions: {
+                                    items: ['CA', 'NY', 'IL', 'TX', 'AZ'],
+                                    contentTemplate: function(e) {
+                                        const $list = $("<div>").dxList({
+                                            dataSource: ['CA', 'NY', 'IL', 'TX', 'AZ'],
+                                            selectionMode: "single",
+                                            onSelectionChanged: function(arg) {
+                                                e.component.option("value", arg.addedItems[0]);
+                                                e.component.close();
+                                            },
+                                        });
+                                        list = $list.dxList('instance');
+                                        return $list;
+                                    },
+                                    acceptCustomValue: true,
+                                }
+                            }, {
+                                dataField: 'Zipcode',
+                                editorType: 'dxNumberBox',
+                                editorOptions: {
+                                    mode: 'text',
+                                    value: null,
+                                }
+                            }],
+                        }, {
+                            itemType: 'group',
+                            captionTemplate: groupCaptionTemplate('home'),
+                            caption: 'Other',
+                            items: [{
+                                dataField: 'BadgeColor',
+                                editorType: 'dxColorBox',
+                            }, {
+                                dataField: 'Height',
+                                editorType: 'dxSlider',
+                                editorOptions: {
+                                    min: 0,
+                                    max: 250,
+                                    value: 160,
+                                }
+                            }, {
+                                dataField: 'Weight',
+                                editorType: 'dxRangeSlider',
+                                editorOptions: {
+                                    min: 0,
+                                    max: 150,
+                                    start: 50,
+                                    end: 100,
+                                }
+                            }, {
+                                dataField: 'Sex',
+                                editorType: 'dxRadioGroup',
+                                editorOptions: {
+                                    items: ['female', 'male', 'other'],
+                                    layout: 'horizontal',
+                                }
+                            }, {
+                                dataField: 'Nationality',
+                                editorType: 'dxLookup',
+                                editorOptions: {
+                                    items: ['American', 'Canadian', 'Mexican', 'British', 'Australian', 'other'],
+                                }
+                            }, {
+                                dataField: 'Hobbies',
+                                editorType: 'dxHtmlEditor',
+                                editorOptions: {
+                                    toolbar: {
+                                        items: [ 'bold', 'italic', 'underline', 'strike', 'separator' ],
+                                    },
+                                    height: 150,
+                                },
+                                aiProcessing: {
+                                    instruction: 'Translate it to serbian cyrillic',
+                                }
+                            }],
+                        }, {
+                            itemType: 'button',
+                            buttonOptions: {
+                                onClick: () => {
+                                    const index = Math.floor(Math.random() * employees.length);
+                                    form.smartPaste(employees[index]);
+                                },
+                                icon: 'paste',
+                                text: 'Smart Paste',
+                            }
+                        }, {
+                            itemType: 'button',
+                            buttonOptions: {
+                                onClick: () => {
+                                    navigator.clipboard
+                                        .readText()
+                                        .then(form.smartPaste);
+                                },
+                                icon: 'paste',
+                                text: 'Smart Paste from Clipboard',
+                            }
+                        }
+                        ],
+                    }],
+                }).dxForm('instance');
+            });
+
+            const employees = [
+                'My name is Sarah Johnson (101). I’m a Manager at Tech Solutions. I started to work here on January 1, 2020, and will proceed till December 31, 2025. I can read and change documents in wiki. My office number is 204. I am a staff member, and I am currently not on vacation. You can reach me at +1(312) five-five-five-1234 or email me at sarah.johnson@techsolutions.com. I was born on April 12, 1985, and I live at 123 Elm Street, Chicago, IL, 60614. My badge color is #FF5733. I am 165 cm tall and weigh 60 kg. I am non-binary person, German. My hobbies include painting and hiking.',
+                'I’m Michael Brown, a Developer at CodeCraft Inc. I came to company 10 years ago, on March the 1st, and my current contract expires on March 15, 2026. My permissions are Read and Write. You can find me in three-zero-one, call me 555-5678,  michael.brown@codecraft.com. I am a staff member. I was born on August 22, 1990, and live on 456 Oak Avenue, Houston, TX, 77002. My badge color is #33FF57. I am 180 cm tall and weigh about 73 - 75 kg.  I love playing chess and reading science fiction novels.',
+                'Emily Davis, ID 1112, a Sales representative at Global Trade Co. My contract dates are from June 1, 2019, to June 1, 2024. My permissions include Read, Write, and Delete. I sit in office five. I am a staff member, and I am currently on vacation. Contact me at +1(602) 555-7890 or emily.davis@globaltrade.com. I was born on January 5, 30 years ago, and I live at 789 Pine Road, Seattle, WA, 85004. My badge color is #3357FF. I am 170 cm tall and weigh 60 - 65 kg. I’m from Britain. My hobbies include traveling and photography. I return to work next Monday.',
+                'Hi there, my ID is 104. I’m James Wilson, a Support Specialist at CustomerCare Ltd. My contract dates are from February 10, 2021, to February 10, 2026. My permissions are Read and Execute. My office number is 410. I am a staff member, and I am not on vacation. My calendar is organized with support tickets. My phone number is +1(213) 555-4567, and my email is james.wilson@customercare.com. I was born on June 15, 1988, and I reside at 321 Maple Lane, Los Angeles, CA, 90015. My badge color is #FF33A1. I am 175 cm tall and weigh 70 kg. I identify as male, and my nationality is Mexican. I enjoy cooking and playing the guitar.',
+                'My ID is 105. My name is Olivia Martinez, and I’m the CEO of Bright Future Enterprises. My contract dates are from September 1, 2015, to September 1, 2025. My permissions include Read, Write, Execute, and Delete. My office number is 101. I am a staff member, and I am not on vacation. My calendar is filled with strategic planning sessions. You can reach me at +12125556789 or email me at olivia.martinez at brightfuture.com. I was born on March 30, 1980, and my home address is 654 Cedar Street, New York, NY, 10001. My badge color is #A133FF. I am 160 cm tall and weigh 55 kg. I identify as female, and my nationality is Australian. I’m passionate about mentoring young entrepreneurs and practicing yoga.',
+            ]
+        </script>
+    </div>
+</body>
+</html>

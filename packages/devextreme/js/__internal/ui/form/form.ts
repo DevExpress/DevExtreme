@@ -2,6 +2,7 @@ import '@js/ui/validation_summary';
 import '@js/ui/validation_group';
 
 import type { EditorStyle } from '@js/common';
+import type { AIIntegration } from '@js/common/ai-integration';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
@@ -26,10 +27,11 @@ import type { ChangedOptionInfo, EventInfo } from '@js/events';
 import type {
   FieldDataChangedEvent,
   FormItemType,
-  GroupItem, Item, LabelLocation, Properties, SimpleItemTemplateData, TabbedItem,
+  GroupItem, Item, LabelLocation, Properties, SimpleItem, SimpleItemTemplateData, TabbedItem,
 } from '@js/ui/form';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
+import { logger } from '@ts/core/utils/m_console';
 import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
@@ -101,6 +103,8 @@ export interface FormProperties extends Properties {
   formID?: string;
 
   templatesRenderAsynchronously?: boolean;
+
+  aiIntegration?: AIIntegration | null;
 }
 
 class Form extends Widget<FormProperties> {
@@ -175,6 +179,7 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
+      aiIntegration: null,
     };
   }
 
@@ -1759,6 +1764,64 @@ class Form extends Widget<FormProperties> {
 
   getTargetScreenFactor(): ScreenSizeQualifier | undefined {
     return this._targetScreenFactor;
+  }
+
+  _getSystemPrompt(): string {
+    return `You are a helpful assistant that helps to fill form fields based on the text provided.
+                You will get a text and a list of fields that should be filled using info from the text.
+                It can include the name of field, suitable format, optionally some additional info about what should it include. You need to return
+                data for all the fields in the following format: {fieldName}:::{fieldValue};;;{fieldName}:::{fieldValue} and so on,
+                where {fieldName} - is a variable for a field name and {fieldValue} - is a variable for a string to fill.
+                If there is no info to fill, field value should be empty (like Name:::;;;).
+                If it is possible, adapt value to most common format for {fieldName}
+                Return dates in ISO format, return ranges in format {start}:::{end}.`;
+  }
+
+  _getItemsInfo(items: SimpleItem[]): string {
+    const fieldData = items.map(({
+      // @ts-expect-error
+      dataField, editorType, editorOptions, aiProcessing,
+    }) => {
+      const instruction = aiProcessing?.instruction || '';
+      const customItems = editorOptions?.acceptCustomValue ? ' (custom values are allowed)' : '';
+      const itemsPrompt = `${editorOptions?.items ? `select field value among ${editorOptions.items}, split item values with :::` : ''}`;
+
+      return `fieldName: ${dataField},
+                            format: ${editorType?.slice(2)},
+                            ${instruction ? `instruction: ${instruction}` : ''}
+                            ${itemsPrompt}${customItems}\n`;
+    });
+
+    return fieldData.join(':::');
+  }
+
+  async smartPaste(text: string): Promise<void> {
+    const formItems = Object.values(this._itemsRunTimeInfo._map).map(({ item }) => item);
+    const isDataItem = (item: PreparedItem): item is SimpleItem => 'dataField' in item;
+    const dataItems = formItems.filter(isDataItem);
+
+    const prompt = {
+      system: this._getSystemPrompt(),
+      user: `Text: ${text}, fields info: ${this._getItemsInfo(dataItems)}`,
+    };
+
+    // @ts-expect-error
+    const { aIIntegration } = this.option();
+    const extractedData = await aIIntegration.getModelResponse(prompt, 'shortentext');
+
+    extractedData.split(';;;').forEach((data: string) => {
+      const [dataField, ...values] = data.split(':::');
+      const value = values.length === 1 ? values[0] : values;
+      logger.log('Processing field: ', dataField, 'value: ', value);
+
+      if (value) {
+        try {
+          this._updateFieldValue(dataField, value);
+        } catch (e) {
+          logger.error(`Error processing field ${dataField}:`, e);
+        }
+      }
+    });
   }
 }
 
