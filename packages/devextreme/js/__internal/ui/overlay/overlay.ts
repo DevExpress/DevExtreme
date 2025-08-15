@@ -10,6 +10,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { keyboard } from '@js/common/core/events/short';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -301,18 +302,22 @@ class Overlay<
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    return super._defaultOptionsRules().concat([{
-      device(): boolean {
-        return !windowUtils.hasWindow();
+    const rules = [
+      ...super._defaultOptionsRules(),
+      {
+        device(): boolean {
+          return !windowUtils.hasWindow();
+        },
+        options: {
+          width: null,
+          height: null,
+          animation: null,
+          _checkParentVisibility: false,
+        } as DeepPartial<TProperties>,
       },
-      // @ts-expect-error overload
-      options: {
-        width: null,
-        height: null,
-        animation: null,
-        _checkParentVisibility: false,
-      },
-    }]);
+    ];
+
+    return rules;
   }
 
   _setOptionsByReference(): void {

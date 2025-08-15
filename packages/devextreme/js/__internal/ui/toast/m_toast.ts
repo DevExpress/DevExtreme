@@ -1,32 +1,33 @@
+import type { PositionAlignment } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { isString } from '@js/core/utils/type';
 import Overlay from '@js/ui/overlay/ui.overlay';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
 import type { Properties } from '@js/ui/toast';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { OverlayProperties, PointerLikeEvent } from '@ts/ui/overlay/overlay';
 
 const ready = readyCallbacks.add;
 
-const TOAST_CLASS = 'dx-toast';
-const TOAST_CLASS_PREFIX = `${TOAST_CLASS}-`;
-const TOAST_WRAPPER_CLASS = `${TOAST_CLASS_PREFIX}wrapper`;
-const TOAST_CONTENT_CLASS = `${TOAST_CLASS_PREFIX}content`;
-const TOAST_MESSAGE_CLASS = `${TOAST_CLASS_PREFIX}message`;
-const TOAST_ICON_CLASS = `${TOAST_CLASS_PREFIX}icon`;
+export const TOAST_CLASS = 'dx-toast';
+const TOAST_WRAPPER_CLASS = 'dx-toast-wrapper';
+const TOAST_CONTENT_CLASS = 'dx-toast-content';
+const TOAST_MESSAGE_CLASS = 'dx-toast-message';
+const TOAST_ICON_CLASS = 'dx-toast-icon';
 
 const WIDGET_NAME = 'dxToast';
 const toastTypes = ['info', 'warning', 'error', 'success'];
 
-const TOAST_STACK = [];
+const TOAST_STACK: Toast[] = [];
 const FIRST_Z_INDEX_OFFSET = 8000;
 
 const POSITION_ALIASES = {
@@ -51,24 +52,34 @@ const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 const DEFAULT_MARGIN = 20;
 
 ready(() => {
-  // @ts-expect-error ts-error
-  eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, (e) => {
-    for (let i = TOAST_STACK.length - 1; i >= 0; i--) {
-      // @ts-expect-error ts-error
-      if (!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
+  const element = domAdapter.getDocument();
+
+  const callback = (e: PointerLikeEvent): void => {
+    for (let i = TOAST_STACK.length - 1; i >= 0; i -= 1) {
+      if (!TOAST_STACK[i]._proxiedDocumentDownHandler?.(e)) {
         return;
       }
     }
-  });
+  };
+
+  // @ts-expect-error subscribeGlobal should be described in .d.ts
+  eventsEngine.subscribeGlobal(
+    element,
+    pointerEvents.down,
+    callback,
+  );
 });
 
-interface ToastProperties extends Properties {}
+interface ToastProperties extends Properties {
+  container: OverlayProperties['container'];
+}
 
 class Toast<
-TProperties extends ToastProperties = ToastProperties,
+  TProperties extends ToastProperties = ToastProperties,
 > extends Overlay<TProperties> {
   _message?: dxElementWrapper;
 
+  // eslint-disable-next-line no-restricted-globals
   _hideTimeout?: ReturnType<typeof setTimeout>;
 
   _getDefaultOptions(): TProperties {
@@ -118,13 +129,12 @@ TProperties extends ToastProperties = ToastProperties,
     };
 
     const tabletAndMobileCommonOptions = {
-      // @ts-expect-error ts-error
-      displayTime: isMaterialBased() ? 4000 : 2000,
+      displayTime: isMaterialBased(current()) ? 4000 : 2000,
       hideOnOutsideClick: true,
       animation: tabletAndMobileAnimation,
     };
-    // @ts-expect-error ts-error
-    return super._defaultOptionsRules().concat([
+
+    const toastRules: DefaultOptionsRule<TProperties>[] = [
       {
         device(device): boolean {
           return device.deviceType === 'phone';
@@ -132,7 +142,7 @@ TProperties extends ToastProperties = ToastProperties,
         options: {
           width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
           ...tabletAndMobileCommonOptions,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(device): boolean {
@@ -142,20 +152,26 @@ TProperties extends ToastProperties = ToastProperties,
           width: 'auto',
           maxWidth: '80vw',
           ...tabletAndMobileCommonOptions,
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(device): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased() && device.deviceType === 'desktop';
+          return isMaterialBased(current()) && device.deviceType === 'desktop';
         },
         options: {
           minWidth: 344,
           maxWidth: 568,
           displayTime: 4000,
-        },
+        } as DeepPartial<TProperties>,
       },
-    ]);
+    ];
+
+    const rules = [
+      ...super._defaultOptionsRules(),
+      ...toastRules,
+    ];
+
+    return rules;
   }
 
   _init(): void {
@@ -164,23 +180,21 @@ TProperties extends ToastProperties = ToastProperties,
     this._posStringToObject();
   }
 
-  // @ts-expect-error ts-error
-  _renderContentImpl() {
+  _renderContentImpl(): Promise<void> {
     const { message, type } = this.option();
 
     this._message = $('<div>')
       .addClass(TOAST_MESSAGE_CLASS)
-      // @ts-expect-error ts-error
-      .text(message)
+      .text(message ?? '')
       .appendTo(this.$content());
 
     this.setAria('role', 'alert', this._message);
-    // @ts-expect-error ts-error
-    if (toastTypes.includes(type.toLowerCase())) {
+
+    if (type && toastTypes.includes(type.toLowerCase())) {
       this.$content().prepend($('<div>').addClass(TOAST_ICON_CLASS));
     }
 
-    super._renderContentImpl();
+    return super._renderContentImpl();
   }
 
   _render(): void {
@@ -190,56 +204,83 @@ TProperties extends ToastProperties = ToastProperties,
     this.$wrapper().addClass(TOAST_WRAPPER_CLASS);
 
     const { type } = this.option();
-    this.$content().addClass(TOAST_CLASS_PREFIX + String(type).toLowerCase());
+
+    if (type) {
+      this.$content().addClass(`${TOAST_CLASS}-${type.toLowerCase()}`);
+    }
+
     this.$content().addClass(TOAST_CONTENT_CLASS);
 
     this._toggleCloseEvents('Swipe');
     this._toggleCloseEvents('Click');
   }
 
-  _toggleCloseEvents(event): void {
+  _toggleCloseEvents(event: 'Swipe' | 'Click'): void {
     const dxEvent = `dx${event.toLowerCase()}`;
 
     eventsEngine.off(this.$content(), dxEvent);
-    this.option(`closeOn${event}`) && eventsEngine.on(this.$content(), dxEvent, this.hide.bind(this));
+
+    const optionName = `closeOn${event}`;
+    const optionValue = this.option(optionName);
+
+    if (optionValue) {
+      eventsEngine.on(this.$content(), dxEvent, this.hide.bind(this));
+    }
   }
 
   _posStringToObject(): void {
     const { position } = this.option();
 
-    if (!isString(position)) return;
+    if (!isString(position)) {
+      return;
+    }
 
     const verticalPosition = position.split(' ')[0];
     const horizontalPosition = position.split(' ')[1];
 
-    this.option('position', extend({ boundaryOffset: DEFAULT_BOUNDARY_OFFSET }, POSITION_ALIASES[verticalPosition]));
+    const newPosition = {
+      boundaryOffset: DEFAULT_BOUNDARY_OFFSET,
+      ...POSITION_ALIASES[verticalPosition],
+    };
 
-    // eslint-disable-next-line default-case
+    this.option('position', newPosition);
+
     switch (horizontalPosition) {
       case 'center':
       case 'left':
-      case 'right':
-        // @ts-expect-error ts-error
-        this.option('position').at += ` ${horizontalPosition}`;
-        // @ts-expect-error ts-error
-        this.option('position').my += ` ${horizontalPosition}`;
+      case 'right': {
+        if (newPosition && typeof newPosition === 'object') {
+          const at = `${newPosition.at as PositionAlignment} ${horizontalPosition}`;
+          const my = `${newPosition.my as PositionAlignment} ${horizontalPosition}`;
+
+          this.option('position.at', at);
+          this.option('position.my', my);
+        }
+        break;
+      }
+      default:
         break;
     }
   }
 
-  _show(): DeferredObj<unknown> {
-    // @ts-expect-error ts-error
-    return super._show.apply(this, arguments).always(() => {
+  _show(): DeferredObj<unknown> | Promise<unknown> {
+    const callback = (): void => {
       clearTimeout(this._hideTimeout);
 
       const { displayTime } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises, no-restricted-globals
       this._hideTimeout = setTimeout(this.hide.bind(this), displayTime);
-    });
+    };
+
+    const promise = super._show() as DeferredObj<unknown>;
+
+    promise.always(callback);
+
+    return promise;
   }
 
-  // @ts-expect-error ts-error
+  // @ts-expect-error Violation of the Principle of Liskov Substitutability
   // eslint-disable-next-line class-methods-use-this
   _overlayStack(): Toast[] {
     return TOAST_STACK;
@@ -259,8 +300,11 @@ TProperties extends ToastProperties = ToastProperties,
 
     switch (name) {
       case 'type':
-        this.$content().removeClass(TOAST_CLASS_PREFIX + previousValue);
-        this.$content().addClass(TOAST_CLASS_PREFIX + String(value).toLowerCase());
+        this.$content().removeClass(`${TOAST_CLASS}-${previousValue}`);
+
+        if (value) {
+          this.$content().addClass(`${TOAST_CLASS}-${String(value).toLowerCase()}`);
+        }
         break;
       case 'message':
         if (this._message) {
