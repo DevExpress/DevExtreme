@@ -1,5 +1,4 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
 
 import {
@@ -21,7 +20,6 @@ import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
 

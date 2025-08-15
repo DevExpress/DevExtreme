@@ -1,5 +1,4 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
 
 import {
@@ -20,7 +19,6 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoSearchPanel } from './base/search-panel';
 

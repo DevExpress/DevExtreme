@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-
 import {
     Component,
     OnInit,
@@ -21,7 +20,6 @@ import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 

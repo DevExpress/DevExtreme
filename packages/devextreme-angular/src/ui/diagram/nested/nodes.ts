@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-
 import {
     Component,
     OnInit,
@@ -23,7 +22,6 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 

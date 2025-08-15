@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-
 import {
     Component,
     OnInit,
@@ -20,7 +19,6 @@ import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 

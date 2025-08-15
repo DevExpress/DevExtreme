@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-
 import {
     Component,
     OnInit,
@@ -20,7 +19,6 @@ import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 

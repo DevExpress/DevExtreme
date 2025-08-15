@@ -1,5 +1,4 @@
 /* tslint:disable:max-line-length */
-
 /* tslint:disable:use-input-property-decorator */
 
 import {
