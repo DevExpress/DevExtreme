@@ -44,6 +44,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.22.0",
+    "react-shadow": "^20.6.0",
     "rrule": "2.6.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

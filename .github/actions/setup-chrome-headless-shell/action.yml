@@ -7,7 +7,7 @@ description: Install chrome-headless-shell
 inputs:
   chrome-version:
     description: Chrome headless shell version to install
-    default: "138.0.7204.157" # TODO: revert, this tmp solution
+    default: "latest"
 
 runs:
   using: composite

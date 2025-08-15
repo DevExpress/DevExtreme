@@ -83,7 +83,8 @@ const startStaticServer = () =>
 
         const failedCount = await runner
             .src('./tests/**/*.js')
-            .browsers(process.env.BROWSER || 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800')
+            // .browsers(process.env.BROWSER || 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800')
+            .browsers(process.env.BROWSER || 'chrome --window-size=1200,800')
             .concurrency(1)
             .run({
                 skipJsErrors: true,
