@@ -5,7 +5,7 @@ import { TOAST_CLASS } from '@ts/ui/toast/m_toast';
 function hideAllToasts(container: Element): void {
   const toasts = $(`.${TOAST_CLASS}`).toArray();
 
-  if (!container) {
+  if (!arguments.length) {
     toasts.forEach((toast) => {
       // @ts-expect-error does not exist on type 'dxElementWrapper'
       $(toast).dxToast('hide');
