@@ -216,7 +216,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
     let { columnIndex } = appointmentSettings;
 
-    while (tailHeight > 0 && left < hMax) {
+    while (tailHeight > 0 && left < Math.round(hMax)) {
       tailHeight = Math.max(minHeight, tailHeight);
       columnIndex += cellsDiff;
       const height = Math.min(tailHeight, maxHeight);
