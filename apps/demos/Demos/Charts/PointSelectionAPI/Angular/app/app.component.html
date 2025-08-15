@@ -3,8 +3,8 @@
   [dataSource]="catBreedsData"
   [rotated]="true"
   title="Most Popular US Cat Breeds"
-  (onPointClick)="pointClick($event)"
   (onDone)="done($event)"
+  (onPointClick)="pointClick($event)"
 >
   <dxi-series valueField="count" name="breeds" color="#a3d6d2">
     <dxo-selection-style color="#ec2e7a">
