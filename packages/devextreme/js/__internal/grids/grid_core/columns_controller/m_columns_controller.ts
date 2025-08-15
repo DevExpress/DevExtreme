@@ -613,14 +613,16 @@ export class ColumnsController extends modules.Controller {
       expandColumn = this.columnOption('command:expand');
     }
 
-    expandColumns = map(expandColumns, (column) => extend({}, column, {
+    expandColumns = map(expandColumns, (column) => ({
+      ...column,
       visibleWidth: null,
       minWidth: null,
+      ownerBand: undefined,
       cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
       headerCellTemplate: null,
       fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
       fixedPosition: rtlEnabled ? 'right' : 'left',
-    }, expandColumn, {
+      ...expandColumn,
       index: column.index,
       type: column.type || GROUP_COMMAND_COLUMN_NAME,
     }));
