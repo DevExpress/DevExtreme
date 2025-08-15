@@ -172,11 +172,11 @@ QUnit.test('Scheduler should handle events from units', async function(assert) {
 
         this.instance.subscribe('testFunction', spy);
 
-        const observer = unit.option('observer');
+        const notifyScheduler = unit.option('notifyScheduler');
 
-        assert.equal(observer, this.instance, 'observer is instance of scheduler');
+        assert.equal(notifyScheduler.scheduler, this.instance, 'notifyScheduler is instance of scheduler');
 
-        unit.notifyObserver('testFunction', { a: 1 });
+        unit.invoke('testFunction', { a: 1 });
 
         assert.ok(spy.calledOnce, 'testFunction called once');
         assert.deepEqual(spy.getCall(0).args[0], { a: 1 }, 'testFunction has right args');
