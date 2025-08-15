@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import Class from 'core/class';
-import Views from '__internal/ui/calendar/m_calendar.views';
+import Views from '__internal/ui/calendar/calendar.views';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
