@@ -96,7 +96,6 @@ import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
 
 
-
 /**
  * [descr:dxLinearGauge]
 
@@ -622,6 +621,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangle" | "circle" | "rhombus" | "rangeBar" | "triangleMarker" | "textCloud" }>;
+
 
 
 

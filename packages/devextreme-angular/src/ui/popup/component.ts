@@ -69,7 +69,6 @@ import { DxoPopupToModule } from 'devextreme-angular/ui/popup/nested';
 import { DxiPopupToolbarItemModule } from 'devextreme-angular/ui/popup/nested';
 
 
-
 /**
  * [descr:dxPopup]
 
@@ -910,6 +909,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
+
 
 
 

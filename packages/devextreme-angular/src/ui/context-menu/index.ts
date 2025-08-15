@@ -79,7 +79,6 @@ import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/conte
 import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
 
 
-
 /**
  * [descr:dxContextMenu]
 
@@ -808,6 +807,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

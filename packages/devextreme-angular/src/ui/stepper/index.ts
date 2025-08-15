@@ -49,7 +49,6 @@ import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
 
 
 
-
 @Component({
     selector: 'dx-stepper',
     standalone: true,
@@ -474,6 +473,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

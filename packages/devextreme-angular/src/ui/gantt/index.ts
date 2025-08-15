@@ -91,7 +91,6 @@ import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 
 
-
 /**
  * [descr:dxGantt]
 
@@ -1184,6 +1183,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

@@ -48,7 +48,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
 
 
-
 /**
  * [descr:dxToolbar]
 
@@ -417,6 +416,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

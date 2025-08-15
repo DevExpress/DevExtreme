@@ -46,7 +46,6 @@ import {
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxProgressBarComponent),
@@ -549,6 +548,7 @@ export class DxProgressBarComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

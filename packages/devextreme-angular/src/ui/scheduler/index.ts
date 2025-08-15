@@ -65,7 +65,6 @@ import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/n
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 
 
-
 /**
  * [descr:dxScheduler]
 
@@ -1456,6 +1455,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

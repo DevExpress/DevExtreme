@@ -48,7 +48,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
 
 
-
 /**
  * [descr:dxMultiView]
 
@@ -605,6 +604,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

@@ -127,7 +127,6 @@ import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view
 
 
 
-
 @Component({
     selector: 'dx-card-view',
     standalone: true,
@@ -1187,6 +1186,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
+
 
 
 

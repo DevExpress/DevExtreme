@@ -56,7 +56,6 @@ import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 
 
-
 /**
  * [descr:dxTreeView]
 
@@ -1145,6 +1144,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

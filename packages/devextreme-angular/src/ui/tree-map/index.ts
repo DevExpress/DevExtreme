@@ -82,7 +82,6 @@ import { DxoTreeMapTooltipBorderModule } from 'devextreme-angular/ui/tree-map/ne
 import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/nested';
 
 
-
 /**
  * [descr:dxTreeMap]
 
@@ -756,6 +755,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() valueFieldChange: EventEmitter<string>;
+
 
 
 

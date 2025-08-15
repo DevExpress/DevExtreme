@@ -63,7 +63,6 @@ import { DxoTooltipShowEventModule } from 'devextreme-angular/ui/tooltip/nested'
 import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
 
 
-
 /**
  * [descr:dxTooltip]
 
@@ -627,6 +626,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
+
 
 
 

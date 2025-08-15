@@ -57,7 +57,6 @@ import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 
 
-
 /**
  * [descr:dxMap]
 
@@ -614,6 +613,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Output() zoomChange: EventEmitter<number>;
+
 
 
 

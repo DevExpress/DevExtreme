@@ -78,7 +78,6 @@ import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested'
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 
 
-
 /**
  * [descr:dxMenu]
 
@@ -799,6 +798,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

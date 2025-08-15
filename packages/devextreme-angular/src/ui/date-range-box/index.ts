@@ -87,7 +87,6 @@ import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-ran
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxDateRangeBoxComponent),
@@ -1502,6 +1501,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

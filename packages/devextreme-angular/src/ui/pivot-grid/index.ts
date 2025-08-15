@@ -64,7 +64,6 @@ import { DxoPivotGridStateStoringModule } from 'devextreme-angular/ui/pivot-grid
 import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 
 
-
 /**
  * [descr:dxPivotGrid]
 
@@ -789,6 +788,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
+
 
 
 

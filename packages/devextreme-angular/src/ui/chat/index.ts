@@ -63,7 +63,6 @@ import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 
 
-
 /**
  * [descr:dxChat]
 
@@ -684,6 +683,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

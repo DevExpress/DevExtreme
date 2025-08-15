@@ -87,7 +87,6 @@ import { DxiTagBoxToolbarItemModule } from 'devextreme-angular/ui/tag-box/nested
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxTagBoxComponent),
@@ -1638,6 +1637,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

@@ -77,7 +77,6 @@ import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxHtmlEditorComponent),
@@ -872,6 +871,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

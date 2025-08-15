@@ -49,7 +49,6 @@ import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
 
 
-
 /**
  * [descr:dxBox]
 
@@ -418,6 +417,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

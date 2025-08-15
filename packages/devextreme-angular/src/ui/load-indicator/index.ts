@@ -34,7 +34,6 @@ import {
 
 
 
-
 /**
  * [descr:dxLoadIndicator]
 
@@ -226,6 +225,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

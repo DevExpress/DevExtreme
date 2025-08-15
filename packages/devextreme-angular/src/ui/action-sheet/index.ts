@@ -48,7 +48,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
 
 
-
 /**
  * [descr:dxActionSheet]
 
@@ -505,6 +504,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

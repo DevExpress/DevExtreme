@@ -185,7 +185,6 @@ import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-l
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 
 
-
 /**
  * [descr:dxTreeList]
 
@@ -2038,6 +2037,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
+
 
 
 

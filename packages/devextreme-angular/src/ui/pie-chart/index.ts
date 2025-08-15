@@ -111,7 +111,6 @@ import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
 
 
-
 /**
  * [descr:dxPieChart]
 
@@ -977,6 +976,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Output() typeChange: EventEmitter<PieChartType>;
+
 
 
 

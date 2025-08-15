@@ -49,7 +49,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiTileViewItemModule } from 'devextreme-angular/ui/tile-view/nested';
 
 
-
 /**
  * [descr:dxTileView]
 
@@ -578,6 +577,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

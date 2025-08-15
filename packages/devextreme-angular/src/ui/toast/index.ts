@@ -58,7 +58,6 @@ import { DxoToastShowModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
 
 
-
 /**
  * [descr:dxToast]
 
@@ -682,6 +681,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
+
 
 
 

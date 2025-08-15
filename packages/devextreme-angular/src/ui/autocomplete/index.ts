@@ -87,7 +87,6 @@ import { DxiAutocompleteToolbarItemModule } from 'devextreme-angular/ui/autocomp
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxAutocompleteComponent),
@@ -1358,6 +1357,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

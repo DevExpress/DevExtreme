@@ -54,7 +54,6 @@ import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxTextBoxComponent),
@@ -1013,6 +1012,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

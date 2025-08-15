@@ -72,7 +72,6 @@ import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nes
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
 
 
-
 /**
  * [descr:dxForm]
 
@@ -825,6 +824,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

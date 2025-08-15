@@ -80,7 +80,6 @@ import { DxoSankeyTooltipModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/nested';
 
 
-
 /**
  * [descr:dxSankey]
 
@@ -698,6 +697,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Output() weightFieldChange: EventEmitter<string>;
+
 
 
 

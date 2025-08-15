@@ -56,7 +56,6 @@ import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/neste
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxRadioGroupComponent),
@@ -695,6 +694,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

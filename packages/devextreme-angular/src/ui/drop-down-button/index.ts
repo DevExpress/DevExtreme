@@ -74,7 +74,6 @@ import { DxoDropDownButtonToModule } from 'devextreme-angular/ui/drop-down-butto
 import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
 
 
-
 /**
  * [descr:dxDropDownButton]
 
@@ -835,6 +834,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Output() wrapItemTextChange: EventEmitter<boolean>;
+
 
 
 

@@ -207,7 +207,6 @@ import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
 
 
-
 /**
  * [descr:dxDataGrid]
 
@@ -2062,6 +2061,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
+
 
 
 

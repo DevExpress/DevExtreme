@@ -45,7 +45,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
 
 
-
 /**
  * [descr:dxButtonGroup]
 
@@ -498,6 +497,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

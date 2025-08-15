@@ -54,7 +54,6 @@ import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
 
 
-
 /**
  * [descr:dxResponsiveBox]
 
@@ -443,6 +442,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Output() widthChange: EventEmitter<number | string>;
+
 
 
 

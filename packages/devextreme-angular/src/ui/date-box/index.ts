@@ -88,7 +88,6 @@ import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nest
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxDateBoxComponent),
@@ -1423,6 +1422,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

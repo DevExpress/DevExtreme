@@ -49,7 +49,6 @@ import { DxoPivotGridFieldChooserSearchModule } from 'devextreme-angular/ui/pivo
 import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 
-
 /**
  * [descr:dxPivotGridFieldChooser]
 
@@ -530,6 +529,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

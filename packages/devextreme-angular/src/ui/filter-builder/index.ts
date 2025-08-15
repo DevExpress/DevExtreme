@@ -61,7 +61,6 @@ import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-build
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxFilterBuilderComponent),
@@ -556,6 +555,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

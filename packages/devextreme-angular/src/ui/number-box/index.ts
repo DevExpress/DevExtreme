@@ -57,7 +57,6 @@ import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nest
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxNumberBoxComponent),
@@ -996,6 +995,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

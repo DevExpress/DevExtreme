@@ -94,7 +94,6 @@ import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/neste
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 
 
-
 /**
  * [descr:dxDiagram]
 
@@ -919,6 +918,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
+
 
 
 

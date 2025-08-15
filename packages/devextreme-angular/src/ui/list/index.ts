@@ -63,7 +63,6 @@ import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
 
 
-
 /**
  * [descr:dxList]
 
@@ -1340,6 +1339,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

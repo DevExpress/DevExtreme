@@ -49,7 +49,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
 
 
-
 /**
  * [descr:dxTabPanel]
 
@@ -818,6 +817,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

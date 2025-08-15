@@ -34,7 +34,6 @@ import {
 
 
 
-
 /**
  * [descr:dxSpeedDialAction]
 
@@ -334,6 +333,7 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
     
      */
     @Output() visibleChange: EventEmitter<boolean>;
+
 
 
 

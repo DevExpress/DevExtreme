@@ -226,7 +226,6 @@ import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
 
 
-
 /**
  * [descr:dxChart]
 
@@ -1440,6 +1439,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() zoomAndPanChange: EventEmitter<{ allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: ChartZoomAndPanMode, dragBoxStyle?: { color?: string | undefined, opacity?: number | undefined }, dragToZoom?: boolean, panKey?: EventKeyModifier, valueAxis?: ChartZoomAndPanMode }>;
+
 
 
 

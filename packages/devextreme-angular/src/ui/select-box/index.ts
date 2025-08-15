@@ -87,7 +87,6 @@ import { DxiSelectBoxToolbarItemModule } from 'devextreme-angular/ui/select-box/
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxSelectBoxComponent),
@@ -1506,6 +1505,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

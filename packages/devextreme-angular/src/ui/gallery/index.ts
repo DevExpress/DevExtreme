@@ -48,7 +48,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
 
 
-
 /**
  * [descr:dxGallery]
 
@@ -725,6 +724,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() wrapAroundChange: EventEmitter<boolean>;
+
 
 
 

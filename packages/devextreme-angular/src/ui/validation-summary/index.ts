@@ -46,7 +46,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
 
 
-
 /**
  * [descr:dxValidationSummary]
 
@@ -211,6 +210,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     
      */
     @Output() validationGroupChange: EventEmitter<string>;
+
 
 
 

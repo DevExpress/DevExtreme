@@ -85,7 +85,6 @@ import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down
 
 
 
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxDropDownBoxComponent),
@@ -1172,6 +1171,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Output() onBlur: EventEmitter<any>;
+
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};

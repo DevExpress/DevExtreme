@@ -50,7 +50,6 @@ import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 
 
-
 /**
  * [descr:dxSplitter]
 
@@ -431,6 +430,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 

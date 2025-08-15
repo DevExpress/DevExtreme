@@ -59,7 +59,6 @@ import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/valida
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 
 
-
 /**
  * [descr:dxValidator]
 
@@ -256,6 +255,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
     parentElement: any;

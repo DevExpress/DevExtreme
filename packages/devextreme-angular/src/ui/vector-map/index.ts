@@ -94,7 +94,6 @@ import { DxoVectorMapVectorMapTitleModule } from 'devextreme-angular/ui/vector-m
 import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
 
 
-
 /**
  * [descr:dxVectorMap]
 
@@ -772,6 +771,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() zoomingEnabledChange: EventEmitter<boolean>;
+
 
 
 

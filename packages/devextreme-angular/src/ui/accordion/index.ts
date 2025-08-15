@@ -48,7 +48,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
 
 
-
 /**
  * [descr:dxAccordion]
 
@@ -713,6 +712,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
+
 
 
 
