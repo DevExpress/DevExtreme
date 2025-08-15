@@ -1344,17 +1344,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "items": [
-  "DxiItemComponent"
- ],
- "menuItems": [
-  "DxiMenuItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -1444,23 +1444,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "annotations": [
-  "DxiAnnotationComponent"
- ],
- "panes": [
-  "DxiPaneComponent"
- ],
- "series": [
-  "DxiSeriesComponent"
- ],
- "valueAxis": [
-  "DxiValueAxisComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

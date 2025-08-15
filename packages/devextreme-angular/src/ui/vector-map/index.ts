@@ -776,20 +776,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "annotations": [
-  "DxiAnnotationComponent"
- ],
- "layers": [
-  "DxiLayerComponent"
- ],
- "legends": [
-  "DxiLegendComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

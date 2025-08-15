@@ -479,8 +479,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

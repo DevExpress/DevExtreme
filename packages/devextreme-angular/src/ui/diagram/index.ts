@@ -923,14 +923,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "customShapes": [
-  "DxiCustomShapeComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

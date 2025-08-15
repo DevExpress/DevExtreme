@@ -618,20 +618,6 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "center": [
-  "DxiCenterComponent"
- ],
- "markers": [
-  "DxiMarkerComponent"
- ],
- "routes": [
-  "DxiRouteComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

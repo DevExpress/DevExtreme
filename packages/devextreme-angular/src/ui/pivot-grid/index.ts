@@ -794,8 +794,6 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

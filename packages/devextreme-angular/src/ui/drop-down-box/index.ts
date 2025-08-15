@@ -1178,17 +1178,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "buttons": [
-  "DxiButtonComponent"
- ],
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

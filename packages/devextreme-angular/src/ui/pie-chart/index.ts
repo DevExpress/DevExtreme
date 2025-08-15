@@ -981,17 +981,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "annotations": [
-  "DxiAnnotationComponent"
- ],
- "series": [
-  "DxiSeriesComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

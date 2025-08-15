@@ -215,14 +215,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

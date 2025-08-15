@@ -688,20 +688,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "alerts": [
-  "DxiAlertComponent"
- ],
- "items": [
-  "DxiItemComponent"
- ],
- "typingUsers": [
-  "DxiTypingUserComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

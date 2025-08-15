@@ -701,14 +701,6 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -1512,17 +1512,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "buttons": [
-  "DxiButtonComponent"
- ],
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

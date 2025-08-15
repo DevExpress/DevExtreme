@@ -2066,17 +2066,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "columns": [
-  "DxiColumnComponent"
- ],
- "sortByGroupSummaryInfo": [
-  "DxiSortByGroupSummaryInfoComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

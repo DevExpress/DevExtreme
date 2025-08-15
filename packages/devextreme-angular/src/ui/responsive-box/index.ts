@@ -447,20 +447,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "cols": [
-  "DxiColComponent"
- ],
- "items": [
-  "DxiItemComponent"
- ],
- "rows": [
-  "DxiRowComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

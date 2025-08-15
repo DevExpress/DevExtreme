@@ -1201,8 +1201,6 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

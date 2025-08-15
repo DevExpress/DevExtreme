@@ -1188,17 +1188,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "columns": [
-  "DxiColumnComponent"
- ],
- "stripLines": [
-  "DxiStripLineComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

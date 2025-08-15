@@ -260,14 +260,6 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "validationRules": [
-  "DxiValidationRuleComponent"
- ]
-};
-
-
-
     parentElement: any;
 
 

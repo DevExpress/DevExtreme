@@ -1460,17 +1460,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "resources": [
-  "DxiResourceComponent"
- ],
- "views": [
-  "DxiViewComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

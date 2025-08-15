@@ -1364,17 +1364,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "buttons": [
-  "DxiButtonComponent"
- ],
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

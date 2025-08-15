@@ -562,17 +562,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "customOperations": [
-  "DxiCustomOperationComponent"
- ],
- "fields": [
-  "DxiFieldComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

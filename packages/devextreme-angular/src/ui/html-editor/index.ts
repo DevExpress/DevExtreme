@@ -878,14 +878,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "mentions": [
-  "DxiMentionComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

@@ -803,14 +803,6 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

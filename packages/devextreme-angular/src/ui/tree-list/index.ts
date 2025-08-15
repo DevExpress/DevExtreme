@@ -2042,14 +2042,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "columns": [
-  "DxiColumnComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

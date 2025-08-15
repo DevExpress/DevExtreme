@@ -795,8 +795,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

@@ -735,8 +735,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
 
 
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

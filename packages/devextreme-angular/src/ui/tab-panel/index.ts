@@ -822,14 +822,6 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "items": [
-  "DxiItemComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,

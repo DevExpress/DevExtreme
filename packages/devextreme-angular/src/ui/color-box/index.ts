@@ -1114,14 +1114,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-   protected _legacyNestedClassNames: Record<string, string[]> = {
- "buttons": [
-  "DxiButtonComponent"
- ]
-};
-
-
-
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
