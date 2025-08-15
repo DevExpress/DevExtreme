@@ -256,7 +256,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.title = formData.title;
         this._parameters.start = formData.start;
         this._parameters.end = formData.end;
-        this._parameters.progress = formData.progress * 100;
+        this._parameters.progress = Math.round(formData.progress * 100);
         this._parameters.assigned = formData.assigned;
     }
     isValidated() {
