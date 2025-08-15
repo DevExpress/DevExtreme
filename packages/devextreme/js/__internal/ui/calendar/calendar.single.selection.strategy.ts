@@ -1,7 +1,7 @@
 import type { DxEvent } from '@js/events';
 
-import type Calendar from './m_calendar';
-import CalendarSelectionStrategy from './m_calendar.selection.strategy';
+import type Calendar from './calendar';
+import CalendarSelectionStrategy from './calendar.selection.strategy';
 
 class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
   constructor(component: Calendar) {
