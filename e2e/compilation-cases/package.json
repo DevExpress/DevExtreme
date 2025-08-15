@@ -8,9 +8,9 @@
   },
   "devDependencies": {
     "@angular/common": "11.2.14",
-    "@types/jquery": "3.5.29",
+    "@types/jquery": "catalog:",
     "devextreme": "workspace:*",
-    "jquery": "3.7.1",
+    "jquery": "catalog:",
     "typescript": "4.9.5"
   }
 }
