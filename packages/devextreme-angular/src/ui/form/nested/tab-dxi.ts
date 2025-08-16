@@ -11,6 +11,8 @@ import {
     AfterViewInit,
     SkipSelf,
     Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -51,6 +53,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 export class DxiFormTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
 
+    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
+    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
+        this._setCollectionOptionChildren(value);
+    }
     
     @Input()
     get alignItemLabels(): boolean {

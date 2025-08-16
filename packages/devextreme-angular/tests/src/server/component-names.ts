@@ -61,6 +61,7 @@ export const componentNames = [
     'sparkline',
     'speed-dial-action',
     'splitter',
+    'stepper',
     'switch',
     'tab-panel',
     'tabs',
