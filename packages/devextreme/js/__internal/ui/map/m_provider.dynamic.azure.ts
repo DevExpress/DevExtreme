@@ -278,6 +278,7 @@ class AzureProvider extends DynamicProvider {
   }
 
   updateControls() {
+    // @ts-expect-error ts-error
     const { controls } = this._option();
 
     if (controls) {

@@ -223,6 +223,7 @@ class BingProvider extends DynamicProvider {
     this._map.setView({
       animate: false,
       mapTypeId: this._mapType(type),
+      // @ts-expect-error ts-error
       labelOverlay: type === 'satellite' ? labelOverlay.hidden : labelOverlay.visible,
     });
 

@@ -1,16 +1,21 @@
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
-import { map } from '@js/core/utils/iterator';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
 
-// @ts-expect-error dxClass inheritance issue
-class Provider extends (Class.inherit({}) as new() => {}) {
-  _mapWidget?: any;
+import type Map from './m_map';
+
+class Provider {
+  _mapWidget!: Map;
 
   _map?: any;
 
   _$container!: dxElementWrapper;
+
+  constructor(map: Map, $container: dxElementWrapper) {
+    this._mapWidget = map;
+    this._$container = $container;
+  }
 
   _defaultRouteWeight(): number {
     return 5;
@@ -22,11 +27,6 @@ class Provider extends (Class.inherit({}) as new() => {}) {
 
   _defaultRouteColor(): string {
     return '#0000FF';
-  }
-
-  ctor(map, $container: dxElementWrapper): void {
-    this._mapWidget = map;
-    this._$container = $container;
   }
 
   render(markerOptions, routeOptions) {
@@ -130,11 +130,14 @@ class Provider extends (Class.inherit({}) as new() => {}) {
     }
 
     this._mapWidget.setOptionSilent(name, value);
+
+    return undefined;
   }
 
   _keyOption(providerName) {
     const key = this._option('apiKey');
 
+    // @ts-expect-error ts-error
     return key[providerName] === undefined ? key : key[providerName];
   }
 
@@ -147,10 +150,10 @@ class Provider extends (Class.inherit({}) as new() => {}) {
 
   _getLatLng(location) {
     if (typeof location === 'string') {
-      const coords = map(location.split(','), (item) => item.trim());
+      const coords = location.split(',').map((item) => item.trim());
       const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
 
-      if (coords.length === 2 && coords[0].match(numericRegex) && coords[1].match(numericRegex)) {
+      if (coords.length === 2 && numericRegex.exec(coords[0]) && numericRegex.exec(coords[1])) {
         return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
       }
     } else if (Array.isArray(location) && location.length === 2) {
@@ -167,6 +170,7 @@ class Provider extends (Class.inherit({}) as new() => {}) {
   }
 
   _addEventNamespace(name) {
+    // @ts-expect-error ts-error
     return addNamespace(name, this._mapWidget.NAME);
   }
 

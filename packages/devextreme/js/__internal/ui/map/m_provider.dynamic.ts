@@ -3,7 +3,7 @@ import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 
 import Provider from './m_provider';
 
@@ -20,10 +20,10 @@ class DynamicProvider extends Provider {
 
   _mapsLoader?: any;
 
-  ctor(map, $container: dxElementWrapper): void {
-    this._geocodedLocations = {};
+  constructor(map, $container: dxElementWrapper) {
+    super(map, $container);
 
-    super.ctor(map, $container);
+    this._geocodedLocations = {};
   }
 
   _geocodeLocation(location) {
@@ -84,10 +84,10 @@ class DynamicProvider extends Provider {
   }
 
   addMarkers(options) {
-    return Promise.all(map(options, (options) => this._addMarker(options))).then((markerObjects) => {
+    return Promise.all(options.map((options) => this._addMarker(options))).then((markerObjects) => {
       this._fitBounds();
 
-      return [false, map(markerObjects, (markerObject) => markerObject.marker)];
+      return [false, markerObjects.map((markerObject) => markerObject.marker)];
     });
   }
 
@@ -165,10 +165,10 @@ class DynamicProvider extends Provider {
   }
 
   addRoutes(options) {
-    return Promise.all(map(options, (options) => this._addRoute(options))).then((routeObjects) => {
+    return Promise.all(options.map((options) => this._addRoute(options))).then((routeObjects) => {
       this._fitBounds();
 
-      return [false, map(routeObjects, (routeObject) => routeObject.instance)];
+      return [false, routeObjects.map((routeObject) => routeObject.instance)];
     });
   }
 

@@ -203,6 +203,7 @@ class GoogleProvider extends DynamicProvider {
       this._resolveLocation(this._option('center')).then((center) => {
         const disableDefaultUI = !this._option('controls');
         const providerConfig = this._option('providerConfig');
+        // @ts-expect-error ts-error
         const mapId = providerConfig?.mapId ?? '';
         this._map = new google.maps.Map(this._$container[0], {
           center,
@@ -315,6 +316,7 @@ class GoogleProvider extends DynamicProvider {
         });
       } else {
         const providerConfig = this._option('providerConfig');
+        // @ts-expect-error ts-error
         const useAdvancedMarkers = providerConfig?.useAdvancedMarkers ?? true;
         const icon = options.iconSrc || this._option('markerIconSrc');
         if (useAdvancedMarkers) {
