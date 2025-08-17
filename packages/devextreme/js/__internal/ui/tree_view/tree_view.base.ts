@@ -41,8 +41,8 @@ import type {
   InternalNode, ItemData, ItemKey, PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
-import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
-import LoadIndicator from '@ts/ui/m_load_indicator';
+import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
+import LoadIndicator from '@ts/ui/load_indicator';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
@@ -55,7 +55,7 @@ const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
 const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 
-const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+export const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
 const ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS = `${ITEM_CLASS}-with-custom-expander-icon`;
 const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS = `${WIDGET_CLASS}-custom-expander-icon-item-container`;
@@ -81,7 +81,7 @@ const ITEM_URL_CLASS = 'dx-item-url';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
-const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
+export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 
 type TreeViewItem = Item & {
   url?: string;

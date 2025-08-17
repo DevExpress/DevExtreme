@@ -4,7 +4,7 @@ import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dblclickEvent from 'common/core/events/dblclick';
 import fx from 'common/core/animation/fx';
-import AgendaAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_agenda';
+import AgendaAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_agenda';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
@@ -306,7 +306,7 @@ module('Integration: Agenda', moduleConfig, () => {
             dataSource: []
         });
 
-        const renderingStrategy = instance.getRenderingStrategyInstance();
+        const renderingStrategy = instance.getLayoutManager().getRenderingStrategyInstance();
         const rows = [
             [0, 1, 0, 2, 1, 1, 1],
             [3, 0, 1, 0, 1, 1, 1]
@@ -1588,7 +1588,7 @@ module('Integration: Agenda', moduleConfig, () => {
             dataSource: data
         });
 
-        const filteredItems = instance.filteredItems;
+        const filteredItems = instance.getLayoutManager().filteredItems;
 
         assert.equal(filteredItems.length, 1, 'Filtered items amount is correct');
         assert.deepEqual(filteredItems[0], data[2], 'Filtered item is correct');

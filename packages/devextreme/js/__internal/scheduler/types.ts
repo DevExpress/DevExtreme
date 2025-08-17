@@ -28,31 +28,12 @@ export interface AppointmentDataItem {
   rawAppointment: SafeAppointment;
 }
 
-// TODO: add correct types here. Agenda and other views have different types
-export interface BaseAppointmentViewModelSettings extends Record<string, unknown> {
-  allDay?: boolean;
-  direction: string;
-  height: number | string;
-  width: number | string;
-  groupIndex: number;
-  sortedIndex: number;
-}
-
-export interface AppointmentViewModel {
-  itemData: SafeAppointment;
-  needRepaint: boolean;
-  needRemove: boolean;
-  settings: BaseAppointmentViewModelSettings[];
-}
-
 export interface AppointmentGeometry {
   empty: boolean;
   left: number;
   top: number;
   width: number;
   height: number;
-  leftVirtualWidth: number;
-  topVirtualHeight: number;
 }
 
 export type GetDateForHeaderText = (

@@ -143,8 +143,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name} {
-    line-height: inherit;
-
     .dx-row-alt {
       & > td,
       & > tr > td {

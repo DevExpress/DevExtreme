@@ -36,8 +36,8 @@ type ITreeViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  defaultItems?: Array<dxTreeViewItem>;
-  onItemsChange?: (value: Array<dxTreeViewItem>) => void;
+  defaultItems?: Array<any | dxTreeViewItem>;
+  onItemsChange?: (value: Array<any | dxTreeViewItem>) => void;
 }>
 
 interface TreeViewRef<TItem = any, TKey = any> {
@@ -164,7 +164,6 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -213,7 +212,6 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
