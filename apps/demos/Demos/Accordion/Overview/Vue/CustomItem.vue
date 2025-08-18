@@ -33,6 +33,6 @@
 import { type CompanyData } from './data';
 
 defineProps<{
-  itemData?: CompanyData
+  itemData: CompanyData
 }>();
 </script>
