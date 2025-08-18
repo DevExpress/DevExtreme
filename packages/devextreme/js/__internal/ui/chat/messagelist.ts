@@ -525,7 +525,7 @@ class MessageList extends Widget<Properties> {
     const $lastMessageGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_CLASS}`).last();
 
     if ($lastMessageGroup.length) {
-      return MessageGroup.getInstance($lastMessageGroup) as MessageGroup;
+      return MessageGroup.getInstance($lastMessageGroup);
     }
 
     return undefined;

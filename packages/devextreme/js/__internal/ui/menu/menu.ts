@@ -956,7 +956,7 @@ class Menu extends MenuBase<MenuProperties> {
       return undefined;
     }
 
-    return Submenu.getInstance($submenu) as Submenu;
+    return Submenu.getInstance($submenu);
   }
 
   getSubmenuPosition($rootItem: dxElementWrapper): PositionConfig {
