@@ -9,7 +9,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { ItemRenderInfo, ItemTemplate } from '@ts/ui/collection/collection_widget.base';
 import { ListBase } from '@ts/ui/list/list.base';
 
-const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
+export const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';
 const TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS = 'dx-toolbar-hidden-button-group';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
