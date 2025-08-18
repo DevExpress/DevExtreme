@@ -4,7 +4,6 @@ import { equalByValue } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
-import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -169,7 +168,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _focusRowByKey(
-    key: Key,
+    key: any,
   ): DeferredObj<number | unknown> {
     if (!isDefined(key)) {
       this._resetFocusedRow();
@@ -213,7 +212,7 @@ export class FocusController extends core.ViewController {
   }
 
   public _navigateToRow(
-    key: Key,
+    key: any,
     needFocusRow: boolean,
   ): DeferredObj<number> {
     const that = this;
