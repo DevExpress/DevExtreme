@@ -93,7 +93,6 @@ class AppointmentLayoutManager {
     );
     return {
       resources: this.instance.option('resources'),
-      loadedResources: this.instance.option('loadedResources'),
       getResourceManager: (): ResourceManager => this.instance.resourceManager,
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,

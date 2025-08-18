@@ -1,7 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type { SafeAppointment } from '../../types';
-import type { AppointmentDataProvider } from '../../view_model/generate_view_model/data_provider/m_appointment_data_provider';
+import type { AppointmentDataSource } from '../../view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from '../../view_model/generate_view_model/types';
 import type { DiffItem } from './get_arrays_diff';
 import { getArraysDiff } from './get_arrays_diff';
@@ -41,7 +41,7 @@ const getObjectToCompare = (
 
 const isDataChanged = (
   data: SafeAppointment,
-  appointmentDataProvider: AppointmentDataProvider,
+  appointmentDataProvider: AppointmentDataSource,
 ): boolean => {
   const updatedData = appointmentDataProvider.getUpdatedAppointment();
 
@@ -50,7 +50,7 @@ const isDataChanged = (
     .some((item) => data[item.key] === item.value);
 };
 
-const compareViewModel = (appointmentDataProvider: AppointmentDataProvider) => (
+const compareViewModel = (appointmentDataProvider: AppointmentDataSource) => (
   viewModelOld: AppointmentViewModelPlain,
   viewModelNext: AppointmentViewModelPlain,
 ): boolean => viewModelOld.itemData === viewModelNext.itemData
@@ -60,7 +60,7 @@ const compareViewModel = (appointmentDataProvider: AppointmentDataProvider) => (
 export const getViewModelDiff = (
   viewModelOld: AppointmentViewModelPlain[],
   viewModelNext: AppointmentViewModelPlain[],
-  appointmentDataProvider: AppointmentDataProvider,
+  appointmentDataProvider: AppointmentDataSource,
 ): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => getArraysDiff(
   viewModelOld,
   viewModelNext,

@@ -6,53 +6,53 @@ const STORE_EVENTS = {
 };
 
 export class AppointmentDataSource {
-  _updatedAppointmentKeys: any[];
+  protected updatedAppointmentKeys: any[];
 
-  _dataSource: any;
+  protected dataSource: any;
 
-  _updatedAppointment: any;
+  protected updatedAppointment: any;
 
   constructor(dataSource) {
     this.setDataSource(dataSource);
-    this._updatedAppointmentKeys = [];
+    this.updatedAppointmentKeys = [];
   }
 
   get keyName() {
-    const store = this._dataSource.store();
+    const store = this.dataSource.store();
     return store.key();
   }
 
   get isDataSourceInit() {
-    return !!this._dataSource;
+    return !!this.dataSource;
   }
 
   _getStoreKey(target) {
-    const store = this._dataSource.store();
+    const store = this.dataSource.store();
 
     return store.keyOf(target);
   }
 
   setDataSource(dataSource) {
-    this._dataSource = dataSource;
+    this.dataSource = dataSource;
 
     this.cleanState();
     this._initStoreChangeHandlers();
   }
 
   _initStoreChangeHandlers() {
-    const dataSource = this._dataSource;
+    const { dataSource } = this;
     const store = dataSource?.store();
 
     if (store) {
       store.on(STORE_EVENTS.updating, (key) => {
         const keyName = store.key();
         if (keyName) {
-          this._updatedAppointmentKeys.push({
+          this.updatedAppointmentKeys.push({
             key: keyName,
             value: key,
           });
         } else {
-          this._updatedAppointment = key;
+          this.updatedAppointment = key;
         }
       });
 
@@ -64,7 +64,7 @@ export class AppointmentDataSource {
           const itemExists = items.filter((item) => item[keyName] === pushItem.key).length !== 0;
 
           if (itemExists) {
-            this._updatedAppointmentKeys.push({
+            this.updatedAppointmentKeys.push({
               key: keyName,
               value: pushItem.key,
             });
@@ -80,20 +80,20 @@ export class AppointmentDataSource {
   }
 
   getUpdatedAppointment() {
-    return this._updatedAppointment;
+    return this.updatedAppointment;
   }
 
   getUpdatedAppointmentKeys() {
-    return this._updatedAppointmentKeys;
+    return this.updatedAppointmentKeys;
   }
 
   cleanState() {
-    this._updatedAppointment = null;
-    this._updatedAppointmentKeys = [];
+    this.updatedAppointment = null;
+    this.updatedAppointmentKeys = [];
   }
 
   add(rawAppointment) {
-    return this._dataSource.store().insert(rawAppointment).done(() => this._dataSource.load());
+    return this.dataSource.store().insert(rawAppointment).done(() => this.dataSource.load());
   }
 
   update(target, data) {
@@ -101,8 +101,8 @@ export class AppointmentDataSource {
     // @ts-expect-error
     const d = new Deferred();
 
-    this._dataSource.store().update(key, data)
-      .done((result) => this._dataSource.load()
+    this.dataSource.store().update(key, data)
+      .done((result) => this.dataSource.load()
         .done(() => d.resolve(result))
         .fail(d.reject))
       .fail(d.reject);
@@ -112,11 +112,11 @@ export class AppointmentDataSource {
 
   remove(rawAppointment) {
     const key = this._getStoreKey(rawAppointment);
-    return this._dataSource.store().remove(key).done(() => this._dataSource.load());
+    return this.dataSource.store().remove(key).done(() => this.dataSource.load());
   }
 
   destroy() {
-    const store = this._dataSource?.store();
+    const store = this.dataSource?.store();
 
     if (store) {
       store.off(STORE_EVENTS.updating);

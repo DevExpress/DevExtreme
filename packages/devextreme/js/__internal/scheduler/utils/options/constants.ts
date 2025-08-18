@@ -13,7 +13,6 @@ const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 
 export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
-  loadedResources: [],
   indicatorTime: undefined,
   renovateRender: true,
   _draggingMode: 'outlook',
