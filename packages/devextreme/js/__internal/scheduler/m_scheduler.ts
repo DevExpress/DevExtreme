@@ -985,9 +985,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.setAria({ role: 'group' });
   }
 
-  _initMarkupOnResourceLoaded(groupsResources) {
+  _initMarkupOnResourceLoaded() {
     if (!(this as any)._disposed) {
-      this.option('loadedResources', groupsResources);
       this._initMarkupCore();
       this._reloadDataSource();
     }
@@ -1022,9 +1021,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       if (groups?.length) {
         this.resourceManager.loadGroupResources(groups, true)
-          .then((groupsResources) => this._initMarkupOnResourceLoaded(groupsResources));
+          .then(() => this._initMarkupOnResourceLoaded());
       } else {
-        this._initMarkupOnResourceLoaded([]);
+        this._initMarkupOnResourceLoaded();
       }
     }
   }
