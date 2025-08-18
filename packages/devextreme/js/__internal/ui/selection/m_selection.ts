@@ -57,7 +57,7 @@ export type SelectOptions<TItem = any, TKey = any> = DefaultOptions<TItem, TKey>
 export default class Selection<TItem = any, TKey = any> {
   options: SelectOptions<TItem, TKey>;
 
-  _selectionStrategy: DeferredStrategy | StandardStrategy;
+  _selectionStrategy: DeferredStrategy<TItem, TKey> | StandardStrategy<TItem, TKey>;
 
   _focusedItemIndex: number;
 
