@@ -69,6 +69,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     // @ts-expect-error
     super._initMarkup();
     this.updateViews();
+    this.validateOptions();
   }
 
   protected schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {

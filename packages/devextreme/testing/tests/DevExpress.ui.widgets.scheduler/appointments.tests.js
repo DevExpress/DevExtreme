@@ -21,7 +21,6 @@ import Resizable from 'ui/resizable';
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
-import { AppointmentDataProvider } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_provider';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 
 QUnit.testStart(function() {
@@ -101,8 +100,9 @@ const createInstance = (options, subscribesConfig) => {
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
         dataAccessors,
-        getAppointmentDataProvider: () => new AppointmentDataProvider({
-            getIsVirtualScrolling: () => false
+        getAppointmentDataSource: () => ({
+            getUpdatedAppointment: () => false,
+            getUpdatedAppointmentKeys: () => [],
         })
     }).dxSchedulerAppointments('instance');
 
@@ -467,9 +467,6 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', async function(assert) {
         const strategy = new VerticalAppointmentsStrategy({
-            appointmentDataProvider: {
-                appointmentTakesAllDay: commonUtils.noop,
-            },
             dataAccessors: mockDataAccessor,
             allDayPanelMode: 'all',
             cellDurationInMinutes: 30,

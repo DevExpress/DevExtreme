@@ -1,7 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type { SafeAppointment } from '../../types';
-import type { AppointmentDataProvider } from '../../view_model/generate_view_model/data_provider/m_appointment_data_provider';
+import type { AppointmentDataSource } from '../../view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from '../../view_model/generate_view_model/types';
 import type { DiffItem } from './get_arrays_diff';
 import { getArraysDiff } from './get_arrays_diff';
@@ -41,28 +41,28 @@ const getObjectToCompare = (
 
 const isDataChanged = (
   data: SafeAppointment,
-  appointmentDataProvider: AppointmentDataProvider,
+  appointmentDataSource: AppointmentDataSource,
 ): boolean => {
-  const updatedData = appointmentDataProvider.getUpdatedAppointment();
+  const updatedData = appointmentDataSource.getUpdatedAppointment();
 
-  return updatedData === data || appointmentDataProvider
+  return updatedData === data || appointmentDataSource
     .getUpdatedAppointmentKeys()
     .some((item) => data[item.key] === item.value);
 };
 
-const compareViewModel = (appointmentDataProvider: AppointmentDataProvider) => (
+const compareViewModel = (appointmentDataSource: AppointmentDataSource) => (
   viewModelOld: AppointmentViewModelPlain,
   viewModelNext: AppointmentViewModelPlain,
 ): boolean => viewModelOld.itemData === viewModelNext.itemData
-  && !isDataChanged(viewModelNext.itemData, appointmentDataProvider)
+  && !isDataChanged(viewModelNext.itemData, appointmentDataSource)
   && equalByValue(getObjectToCompare(viewModelOld), getObjectToCompare(viewModelNext));
 
 export const getViewModelDiff = (
   viewModelOld: AppointmentViewModelPlain[],
   viewModelNext: AppointmentViewModelPlain[],
-  appointmentDataProvider: AppointmentDataProvider,
+  appointmentDataSource: AppointmentDataSource,
 ): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => getArraysDiff(
   viewModelOld,
   viewModelNext,
-  compareViewModel(appointmentDataProvider),
+  compareViewModel(appointmentDataSource),
 );

@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
 import dateLocalization from 'common/core/localization/date';
-import { AppointmentDataProvider } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_provider';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
@@ -31,8 +30,6 @@ module('Agenda', {}, () => {
             rows.push(singleGroup);
         }
 
-        const resources = options && options.groups || [];
-
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
@@ -48,11 +45,6 @@ module('Agenda', {}, () => {
                     }
                 }
             },
-            getAppointmentDataProvider: () => new AppointmentDataProvider({
-                getIsVirtualScrolling: () => false,
-                dataAccessors: {},
-                resources,
-            }),
             getResourceManager: getEmptyResourceManager,
         };
 

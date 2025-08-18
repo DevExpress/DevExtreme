@@ -40,7 +40,7 @@ const createInstance = (options) => {
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
-        getAppointmentDataProvider: () => ({
+        getAppointmentDataSource: () => ({
             getUpdatedAppointment: () => false,
             getUpdatedAppointmentKeys: () => [],
         }),

@@ -34,7 +34,7 @@ describe('data processor', () => {
         currentDate,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10, 10),
         new Date(2015, 1, 10, 13),
         true,
@@ -82,7 +82,7 @@ describe('data processor', () => {
         ],
       ];
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 9, 0),
         new Date(2015, 1, 10, 13),
         true,
@@ -100,8 +100,8 @@ describe('data processor', () => {
       const changedDataSource = new DataSource({
         store: data,
       });
-      scheduler.appointmentDataProvider.setDataSource(changedDataSource);
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.option('dataSource', changedDataSource);
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 9, 0),
         new Date(2015, 1, 10, 13),
         true,
@@ -142,7 +142,7 @@ describe('data processor', () => {
         endDateTimeZoneExpr: 'EndDateTimeZone',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 0, 1, 1),
         new Date(2015, 0, 2),
       );
@@ -150,7 +150,7 @@ describe('data processor', () => {
       dataSource.load().done(() => {
         dataSource.filter('priorityId', '=', 1);
 
-        scheduler.appointmentDataProvider.filterByDate(
+        scheduler.setRemoteFilter(
           new Date(2015, 0, 1, 1),
           new Date(2015, 0, 2),
           true,
@@ -161,7 +161,7 @@ describe('data processor', () => {
 
         dataSource.filter(null);
 
-        scheduler.appointmentDataProvider.filterByDate(
+        scheduler.setRemoteFilter(
           new Date(2015, 0, 1, 1),
           new Date(2015, 0, 2),
           true,
@@ -194,7 +194,7 @@ describe('data processor', () => {
         currentDate,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 9, 0),
         new Date(2015, 1, 10, 13),
         true,
@@ -244,7 +244,7 @@ describe('data processor', () => {
           currentDate,
         });
 
-        scheduler.appointmentDataProvider.filterByDate(
+        scheduler.setRemoteFilter(
           new Date(2015, 1, 10, 10),
           new Date(2015, 1, 10, 13),
           true,
@@ -295,7 +295,7 @@ describe('data processor', () => {
           currentDate,
         });
 
-        scheduler.appointmentDataProvider.filterByDate(
+        scheduler.setRemoteFilter(
           new Date(2015, 1, 10, 10),
           new Date(2015, 1, 10, 13),
           true,
@@ -343,7 +343,7 @@ describe('data processor', () => {
         currentDate,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10, 11, 5),
         new Date(2015, 1, 10, 11, 45),
         true,
@@ -368,7 +368,7 @@ describe('data processor', () => {
         currentDate,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 9),
         new Date(2015, 1, 20),
       );
@@ -395,7 +395,7 @@ describe('data processor', () => {
         allDayExpr: 'AllDay',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10, 12),
         new Date(2015, 1, 11),
         true,
@@ -422,7 +422,7 @@ describe('data processor', () => {
         currentDate,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 11),
         new Date(2015, 1, 11, 11),
         true,
@@ -457,7 +457,7 @@ describe('data processor', () => {
         recurrenceRuleExpr: '_recurrenceRule',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10),
         new Date(2015, 1, 10, 13),
         true,
@@ -491,7 +491,7 @@ describe('data processor', () => {
         recurrenceRuleExpr: null,
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10),
         new Date(2015, 1, 10, 13),
         true,
@@ -526,7 +526,7 @@ describe('data processor', () => {
         recurrenceRuleExpr: '',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 10),
         new Date(2015, 1, 10, 13),
         true,
@@ -554,7 +554,7 @@ describe('data processor', () => {
         recurrenceRuleExpr: '',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 1, 9, 0),
         new Date(2015, 1, 9, 23, 59),
       );
@@ -592,7 +592,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 0, 1, 0),
         new Date(2015, 0, 3),
       );
@@ -637,7 +637,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2015, 0, 1, 0),
         new Date(2015, 0, 3),
         true,
@@ -649,7 +649,7 @@ describe('data processor', () => {
 
       existingFilter[1] = newUserFilter;
       dataSource.filter(existingFilter);
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2014, 11, 29, 0),
         new Date(2014, 11, 30),
         true,
@@ -678,9 +678,9 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+      scheduler.appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
+      scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
       scheduler.repaint();
       const appts = scheduler._layoutManager.filteredItems;
@@ -703,8 +703,8 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
+      scheduler.appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
+      scheduler.appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
       scheduler.repaint();
       const appts = scheduler._layoutManager.filteredItems;
@@ -728,9 +728,9 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
+      scheduler.appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
+      scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
       scheduler.repaint();
       const appts = scheduler._layoutManager.filteredItems;
@@ -753,13 +753,13 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'RecException',
       });
 
-      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+      scheduler.appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+      scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataSource.add({
         text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE',
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH',
       });
 
@@ -789,10 +789,10 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'RecException',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
       });
 
@@ -824,10 +824,10 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'RecException',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
       });
 
@@ -870,16 +870,16 @@ describe('data processor', () => {
         ],
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2],
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4,
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2],
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3],
       });
 
@@ -912,14 +912,14 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true,
       });
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false,
       });
-      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-      scheduler.appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
+      scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
 
       scheduler.repaint();
       const appts = scheduler._layoutManager.filteredItems;
@@ -944,7 +944,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY',
       });
 
@@ -977,7 +977,7 @@ describe('data processor', () => {
           recurrenceExceptionExpr: 'Exception',
         });
 
-        scheduler.appointmentDataProvider.add({
+        scheduler.appointmentDataSource.add({
           text: 'a',
           StartDate: new Date(2015, 0, 1).toString(),
           EndDate: new Date(2015, 0, 2).toString(),
@@ -1008,7 +1008,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a',
         startDate: new Date(2020, 6, 16, 0),
         endDate: new Date(2020, 6, 16, 1),
@@ -1035,7 +1035,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a',
         StartDate: new Date(2015, 2, 1, 10, 30),
         EndDate: new Date(2015, 2, 2, 5, 0),
@@ -1062,7 +1062,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a',
         StartDate: new Date(2015, 2, 1, 7, 0),
         EndDate: new Date(2015, 2, 2, 0, 30),
@@ -1089,7 +1089,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a',
         StartDate: new Date(2015, 2, 1, 11, 0),
         EndDate: new Date(2015, 2, 2, 1, 0),
@@ -1117,7 +1117,7 @@ describe('data processor', () => {
         cellDuration: 60,
       });
 
-      scheduler.appointmentDataProvider.add({
+      scheduler.appointmentDataSource.add({
         text: 'a',
         StartDate: new Date(2015, 2, 1, 11, 0),
         EndDate: new Date(2015, 2, 1, 1, 0),
@@ -1168,7 +1168,7 @@ describe('data processor', () => {
           cellDuration: 60,
         });
 
-        scheduler.appointmentDataProvider.add(item);
+        scheduler.appointmentDataSource.add(item);
 
         const result = scheduler._layoutManager.hasAllDayAppointments();
 
@@ -1205,7 +1205,7 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataProvider.filterByDate(
+      scheduler.setRemoteFilter(
         new Date(2021, 8, 6, 9),
         new Date(2021, 8, 6, 12),
       );
