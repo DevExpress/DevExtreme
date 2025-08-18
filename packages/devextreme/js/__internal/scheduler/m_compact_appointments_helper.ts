@@ -1,7 +1,7 @@
 import { locate, move } from '@js/common/core/animation/translator';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import $ from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
@@ -21,7 +21,7 @@ export class CompactAppointmentsHelper {
   constructor(public instance) {
   }
 
-  render(options) {
+  render(options): dxElementWrapper {
     const { isCompact, items } = options;
 
     const template = this._createTemplate(items.data.length, isCompact);

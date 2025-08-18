@@ -417,8 +417,8 @@ module('Integration: Appointment Day, Week views', {
                 await waitForAsync(() => getAppointmentColor(tasks.eq(0)) === '#cb2824');
                 assert.equal(getAppointmentColor(tasks.eq(0)), '#cb2824', 'Color is OK');
                 assert.equal(getAppointmentColor(tasks.eq(1)), '#cb7d7b', 'Color is OK');
-                assert.equal(getAppointmentColor(tasks.eq(2)), '#cb2824', 'Color is OK');
-                assert.equal(getAppointmentColor(tasks.eq(3)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(2)), '#cb7d7b', 'Color is OK');
+                assert.equal(getAppointmentColor(tasks.eq(3)), '#cb2824', 'Color is OK');
                 assert.equal(getAppointmentColor(tasks.eq(4)), '#cb7d7b', 'Color is OK');
             });
 

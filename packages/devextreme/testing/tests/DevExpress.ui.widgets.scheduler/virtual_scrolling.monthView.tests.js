@@ -282,29 +282,29 @@ module('Virtual scrolling Month View', () => {
                             top: -9837,
                             width: 150
                         }, {
-                            left: -10324,
-                            top: -9762,
-                            width: 150
-                        }, {
-                            left: -10324,
-                            top: -9687,
-                            width: 150
-                        }, {
-                            left: -10324,
-                            top: -9612,
-                            width: 75
-                        }, {
                             left: -9574,
                             top: -9837,
                             width: 450
                         }, {
+                            left: -10324,
+                            top: -9762,
+                            width: 150
+                        }, {
                             left: -9649,
                             top: -9762,
                             width: 525
                         }, {
+                            left: -10324,
+                            top: -9687,
+                            width: 150
+                        }, {
                             left: -9649,
                             top: -9687,
                             width: 525
+                        }, {
+                            left: -10324,
+                            top: -9612,
+                            width: 75
                         }, {
                             left: -9649,
                             top: -9612,

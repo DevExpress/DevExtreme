@@ -57,7 +57,6 @@ import {
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
-import type { AppointmentViewModel } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import type { IFieldExpr } from './utils/index';
@@ -70,6 +69,10 @@ import { getLeafGroupValues } from './utils/resource_manager/group_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import { AppointmentDataProvider } from './view_model/generate_view_model/data_provider/m_appointment_data_provider';
+import type {
+  AppointmentAgendaViewModel,
+  AppointmentViewModelPlain,
+} from './view_model/generate_view_model/types';
 import AppointmentLayoutManager from './view_model/m_appointments_layout_manager';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
@@ -867,7 +870,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     workspace.option('allDayExpanded', this._isAllDayExpanded());
 
     // @ts-expect-error
-    const viewModel: AppointmentViewModel[] = this._isVisible()
+    const viewModel: AppointmentViewModelPlain[] = this._isVisible()
       ? this._getAppointmentsToRepaint()
       : [];
 
@@ -875,13 +878,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.appointmentDataProvider.cleanState();
   }
 
-  _getAppointmentsToRepaint(): AppointmentViewModel[] {
+  _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
     const appointmentsMap = this._layoutManager.createAppointmentsMap();
-
-    return this._layoutManager.getRepaintedAppointments(
-      appointmentsMap,
-      this.getAppointmentsInstance().option('items'),
-    );
+    return appointmentsMap;
   }
 
   _initExpressions(fields: IFieldExpr) {
@@ -1677,10 +1676,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   getTargetedAppointment(appointment, element) {
-    const settings: any = utils.dataAccessors.getAppointmentSettings(element);
-    const info = utils.dataAccessors.getAppointmentInfo(element);
-
-    const appointmentIndex = $(element).data(this._appointments._itemIndexKey());
+    const settings = utils.dataAccessors.getAppointmentSettings(element)!;
+    const info = 'info' in settings ? settings.info : undefined;
 
     const adapter = new AppointmentAdapter(
       appointment,
@@ -1690,7 +1687,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const targetedAdapter = adapter.clone();
 
     if (this._isAgenda() && adapter.isRecurrent) {
-      const { agendaSettings } = settings;
+      const { agendaSettings } = settings as AppointmentAgendaViewModel;
 
       targetedAdapter.startDate = this._dataAccessors.get('startDate', agendaSettings);
       targetedAdapter.endDate = this._dataAccessors.get('endDate', agendaSettings);
@@ -1701,7 +1698,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     const rawTargetedAppointment = targetedAdapter.source;
     if (element) {
-      this.setTargetedAppointmentResources(rawTargetedAppointment, element, appointmentIndex);
+      this.setTargetedAppointmentResources(rawTargetedAppointment, element);
     }
 
     if (info) {
@@ -1838,10 +1835,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._layoutManager;
   }
 
-  getRenderingStrategyInstance() {
-    return this._layoutManager.getRenderingStrategyInstance();
-  }
-
   getActions() {
     return this._actions;
   }
@@ -1889,15 +1882,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return startDateTimeStamp <= dayTimeStamp && dayTimeStamp <= endDateTimeStamp;
   }
 
-  setTargetedAppointmentResources(rawAppointment, element, appointmentIndex) {
+  setTargetedAppointmentResources(rawAppointment, element) {
     const groups = this.getViewOption('groups');
 
     if (groups?.length) {
       const { resourceById, groupsLeafs } = this.resourceManager;
-      const appointmentSettings = this._isAgenda()
-        ? this._layoutManager._positionMap[appointmentIndex][0]
-        : utils.dataAccessors.getAppointmentSettings(element) || {};
-      const cellGroups = getLeafGroupValues(groupsLeafs, appointmentSettings.groupIndex);
+      const appointmentSettings = utils.dataAccessors.getAppointmentSettings(element);
+      const cellGroups = getLeafGroupValues(groupsLeafs, appointmentSettings?.groupIndex);
 
       setAppointmentGroupValues(rawAppointment, resourceById, cellGroups);
     }
