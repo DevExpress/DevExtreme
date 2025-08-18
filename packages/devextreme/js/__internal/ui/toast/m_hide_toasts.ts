@@ -1,16 +1,20 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type Toast from '@ts/ui/toast/m_toast';
-import { TOAST_CLASS } from '@ts/ui/toast/m_toast';
+import Toast, { TOAST_CLASS } from '@ts/ui/toast/m_toast';
 
-function hideAllToasts(container: Element): void {
+function hideToasts(container?: Element | dxElementWrapper): void {
   const toasts = $(`.${TOAST_CLASS}`).toArray();
 
-  if (!arguments.length) {
+  if (arguments.length === 0) {
     toasts.forEach((toast) => {
-      // @ts-expect-error does not exist on type 'dxElementWrapper'
-      $(toast).dxToast('hide');
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      Toast.getInstance<Toast>(toast).hide();
     });
 
+    return;
+  }
+
+  if (!container) {
     return;
   }
 
@@ -18,10 +22,9 @@ function hideAllToasts(container: Element): void {
 
   toasts
     .map((toast): Toast => {
-      // @ts-expect-error does not exist on type 'dxElementWrapper'
-      const instance = $(toast).dxToast('instance');
+      const instance = Toast.getInstance<Toast>(toast);
 
-      return instance as Toast;
+      return instance;
     })
     .filter((instance) => {
       const { container: toastContainer } = instance.option();
@@ -36,4 +39,4 @@ function hideAllToasts(container: Element): void {
     });
 }
 
-export default hideAllToasts;
+export default hideToasts;
