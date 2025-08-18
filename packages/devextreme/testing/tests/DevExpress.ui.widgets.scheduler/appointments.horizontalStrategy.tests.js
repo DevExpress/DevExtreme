@@ -18,8 +18,8 @@ testStart(function() {
 });
 
 const createInstance = (options = {}) => {
-    const createObserver = (renderingStrategy) => ({
-        fire: (command, field, obj, value) => {
+    const createMockScheduler = (renderingStrategy) => ({
+        invoke: (command, field, obj, value) => {
             switch(command) {
                 case 'getEndDayHour':
                     if(renderingStrategy === 'horizontalMonthLine') {
@@ -48,7 +48,7 @@ const createInstance = (options = {}) => {
     });
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
-        observer: createObserver(options.renderingStrategy),
+        notifyScheduler: createMockScheduler(options.renderingStrategy),
         ...options,
         dataAccessors: mockDataAccessor,
         getResources: () => [],

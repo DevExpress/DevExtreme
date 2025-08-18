@@ -316,5 +316,8 @@ const subscribes = {
   removeDroppableCellClass() {
     this._workSpace.removeDroppableCellClass();
   },
-};
+} as const;
+
 export default subscribes;
+export type SubscribeMethods = typeof subscribes;
+export type SubscribeKey = keyof typeof subscribes;

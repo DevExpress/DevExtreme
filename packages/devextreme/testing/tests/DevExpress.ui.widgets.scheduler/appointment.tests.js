@@ -16,8 +16,8 @@ testStart(function() {
 });
 
 const createInstance = () => {
-    const observer = {
-        fire: (command) => {
+    const notifyScheduler = {
+        invoke: (command) => {
             switch(command) {
                 case 'getCellHeight':
                     return CELL_HEIGHT;
@@ -32,7 +32,7 @@ const createInstance = () => {
     };
 
     return $('#scheduler-appointment').dxSchedulerAppointment({
-        observer,
+        notifyScheduler,
         getAppointmentColor: () => new Deferred(),
         dataAccessors: {
             get(prop, obj) {
