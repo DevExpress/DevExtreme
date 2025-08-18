@@ -19,7 +19,7 @@ interface DefaultOptions<TItem = any, TKey = any> {
   }) => void;
   key: () => void;
   keyOf: (item: any) => any;
-  load: (loadOptions: LoadOptions) => DeferredObj<unknown>;
+  load: (loadOptions: LoadOptions) => DeferredObj<LoadResult<TItem>>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
   isItemSelected: (arg: any, options?: any) => boolean;

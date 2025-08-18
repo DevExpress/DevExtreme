@@ -1,5 +1,6 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import type { LoadResult } from '@js/common/data';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -76,7 +77,7 @@ class CollectionWidget<
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   static _userOptions = {};
 
-  _selection!: Selection;
+  _selection!: Selection<TItem, TKey>;
 
   _editStrategy!: PlainEditStrategy<TItem, TKey>;
 
@@ -259,7 +260,7 @@ class CollectionWidget<
       },
       key: this.key.bind(this),
       keyOf: this.keyOf.bind(this),
-      load(options): DeferredObj<unknown> {
+      load(options): DeferredObj<LoadResult<TItem>> {
         const dataController = that._dataController;
         options.customQueryParams = dataController.loadOptions()?.customQueryParams;
         options.userData = dataController.userData();
@@ -276,7 +277,7 @@ class CollectionWidget<
             dataController.applyMapFunction(items);
           });
         }
-        return Deferred().resolve(this.plainItems());
+        return Deferred<LoadResult<TItem>>().resolve(this.plainItems());
       },
       // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-function-return-type
