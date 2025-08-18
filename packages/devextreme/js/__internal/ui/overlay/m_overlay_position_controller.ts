@@ -210,9 +210,11 @@ export class OverlayPositionController<
       this._properties.container = element;
     }
 
-    this._$markupContainer = element
-      ? $(element)
-      : swatch.getSwatchContainer(this._$root);
+    if (element) {
+      this._$markupContainer = $(element);
+    } else if (this._$root) {
+      this._$markupContainer = swatch.getSwatchContainer(this._$root);
+    }
 
     this.updateVisualContainer(this._properties.visualContainer);
   }
