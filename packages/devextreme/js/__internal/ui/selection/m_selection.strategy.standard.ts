@@ -1,4 +1,3 @@
-import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
@@ -8,10 +7,14 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
+import type { SelectionFilter, SelectionItem, SelectionOptions } from '@ts/ui/selection/types';
 
-import SelectionStrategy from './m_selection.strategy';
+interface KeyIndicesToRemoveMap {
+  [index: number]: boolean;
+}
 
-export default class StandardStrategy<TItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
+export default class StandardStrategy<TItem extends SelectionItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
   _shouldMergeWithLastRequest?: boolean;
 
   _lastLoadDeferred?: any;
@@ -23,31 +26,31 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
   _lastSelectAllPageDeferred = Deferred().reject();
 
   _storedSelectionState?: {
-    selectedItems: any;
-    selectedItemKeys: any;
+    selectedItems: TItem[];
+    selectedItemKeys: TKey[];
     keyHashIndices: any;
   };
 
-  constructor(options) {
+  constructor(options: SelectionOptions<TItem, TKey>) {
     super(options);
     this._initSelectedItemKeyHash();
   }
 
-  _initSelectedItemKeyHash() {
+  _initSelectedItemKeyHash(): void {
     this._setOption('keyHashIndices', this.options.equalByReference ? null : {});
   }
 
-  getSelectedItemKeys() {
+  getSelectedItemKeys(): TKey[] {
     return this.options.selectedItemKeys.slice(0);
   }
 
-  getSelectedItems() {
+  getSelectedItems(): TItem[] {
     return this.options.selectedItems.slice(0);
   }
 
-  _preserveSelectionUpdate(items, isDeselect) {
+  _preserveSelectionUpdate(items: TItem[], isDeselect: boolean): void {
     const { keyOf } = this.options;
-    let keyIndicesToRemoveMap;
+    let keyIndicesToRemoveMap: KeyIndicesToRemoveMap | undefined;
     let keyIndex;
     let i;
 
@@ -63,7 +66,7 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
       const item = items[i];
       const key = keyOf(item);
       if (isDeselect) {
-        keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item?.disabled);
+        keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap, item && typeof item === 'object' && 'disabled' in item ? !!item.disabled : false);
         if (keyIndicesToRemoveMap && keyIndex >= 0) {
           keyIndicesToRemoveMap[keyIndex] = true;
         }
@@ -73,11 +76,11 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
     }
 
     if (isBatchDeselect) {
-      this._batchRemoveSelectedItems(keyIndicesToRemoveMap);
+      this._batchRemoveSelectedItems(keyIndicesToRemoveMap!);
     }
   }
 
-  _batchRemoveSelectedItems(keyIndicesToRemoveMap) {
+  _batchRemoveSelectedItems(keyIndicesToRemoveMap: KeyIndicesToRemoveMap): void {
     const selectedItemKeys = this.options.selectedItemKeys.slice(0);
     const selectedItems = this.options.selectedItems.slice(0);
 
@@ -95,8 +98,14 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
     this.updateSelectedItemKeyHash(this.options.selectedItemKeys);
   }
 
-  _loadSelectedItemsCore(keys, isDeselect, isSelectAll, filter, forceCombinedFilter = false) {
-    let deferred = Deferred<LoadResult<TItem>>();
+  _loadSelectedItemsCore(
+    keys: TKey[],
+    isDeselect: boolean,
+    isSelectAll: boolean,
+    filter: SelectionFilter,
+    forceCombinedFilter = false,
+  ): DeferredObj<TItem[]> {
+    let deferred = Deferred<TItem[]>();
     const key = this.options.key();
 
     if (!keys.length && !isSelectAll) {
@@ -231,7 +240,7 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
 
   _loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
     const that = this;
-    const deferred = Deferred<LoadResult<TItem>>();
+    const deferred = Deferred<TItem[]>();
     const filter = that.options.filter();
 
     this._shouldMergeWithLastRequest = this._requestInProgress();
@@ -344,7 +353,7 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
     return indices && indices[0] >= 0 ? indices[0] : -1;
   }
 
-  _indexOfSelectedItemKey(key, ignoreIndicesMap?: any[]) {
+  _indexOfSelectedItemKey(key, ignoreIndicesMap?: KeyIndicesToRemoveMap) {
     let selectedIndex;
 
     if (this.options.equalByReference) {
@@ -376,7 +385,7 @@ export default class StandardStrategy<TItem = any, TKey = any> extends Selection
 
   removeSelectedItem(
     key,
-    keyIndicesToRemoveMap?: any[],
+    keyIndicesToRemoveMap?: KeyIndicesToRemoveMap,
     isDisabled?: boolean,
   ) {
     if (!this.options.ignoreDisabledItems && isDisabled) {

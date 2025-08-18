@@ -1,19 +1,19 @@
-import type { LoadResult } from '@js/common/data';
+// import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
+import type { SelectionItem } from '@ts/ui/selection/types';
 
-import SelectionStrategy from './m_selection.strategy';
-
-export default class DeferredStrategy<TItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
-  getSelectedItems() {
+export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
+  getSelectedItems(): DeferredObj<TItem[]> {
     return this._loadFilteredData(this.options.selectionFilter);
   }
 
-  getSelectedItemKeys(): any {
-    const d = Deferred<LoadResult<TItem>>();
+  getSelectedItemKeys() {
+    const d = Deferred();
     const that = this;
     const key = this.options.key();
     const select = isString(key) ? [key] : key;

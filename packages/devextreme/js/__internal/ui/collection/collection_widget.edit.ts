@@ -1,6 +1,6 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import type { LoadResult } from '@js/common/data';
+// import type { LoadResult } from '@js/common/data';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -77,7 +77,8 @@ class CollectionWidget<
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   static _userOptions = {};
 
-  _selection!: Selection<TItem, TKey>;
+  // @ts-expect-error
+  _selection!: Selection<TItem, TKey, false>;
 
   _editStrategy!: PlainEditStrategy<TItem, TKey>;
 
@@ -170,7 +171,7 @@ class CollectionWidget<
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
   }
 
-  _getKeyByIndex(index: CollectionItemIndex): unknown {
+  _getKeyByIndex(index: CollectionItemIndex): TKey {
     return this._editStrategy.getKeyByIndex(index);
   }
 
@@ -225,6 +226,7 @@ class CollectionWidget<
     const { itemsGetter } = this._editStrategy;
     const { selectionMode, maxFilterLengthInRequest } = this.option();
 
+    // @ts-expect-error TItem
     this._selection = new Selection({
       allowNullValue: this._nullValueSelectionSupported(),
       mode: selectionMode,
@@ -246,7 +248,9 @@ class CollectionWidget<
       },
       onSelectionChanged: (args): void => {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
+          // @ts-expect-error TItem
           this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          // @ts-expect-error TItem
           this._updateSelectedItems(args);
         }
       },
@@ -260,7 +264,7 @@ class CollectionWidget<
       },
       key: this.key.bind(this),
       keyOf: this.keyOf.bind(this),
-      load(options): DeferredObj<LoadResult<TItem>> {
+      load(options): DeferredObj<TItem[]> {
         const dataController = that._dataController;
         options.customQueryParams = dataController.loadOptions()?.customQueryParams;
         options.userData = dataController.userData();
@@ -277,7 +281,7 @@ class CollectionWidget<
             dataController.applyMapFunction(items);
           });
         }
-        return Deferred<LoadResult<TItem>>().resolve(this.plainItems());
+        return Deferred<TItem[]>().resolve(this.plainItems());
       },
       // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-function-return-type
@@ -480,7 +484,9 @@ class CollectionWidget<
 
         const { grouped } = this.option();
 
+        // @ts-expect-error items inside TItem
         if (grouped && normalizedSelection?.items) {
+          // @ts-expect-error items inside TItem
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 

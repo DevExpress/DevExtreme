@@ -543,6 +543,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
     const selectedRowsData: any[] = [];
 
+    // @ts-expect-error if _selection can be deferred, than selectedKeys can be a Promise
     selectedKeys.forEach((key) => {
       // @ts-expect-error
       const node = dataController.getNodeByKey(key);

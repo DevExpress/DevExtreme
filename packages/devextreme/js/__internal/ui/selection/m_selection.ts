@@ -1,76 +1,39 @@
 import type { LoadResult } from '@js/common/data';
-import type { LoadOptions } from '@js/common/data.types';
 import { noop } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 
 import DeferredStrategy from './m_selection.strategy.deferred';
 import StandardStrategy from './m_selection.strategy.standard';
+import type {
+  DefaultOptions,
+  SelectionItem,
+  SelectionOptions,
+  SelectionStrategy,
+} from './types';
+// import DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
+// import StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
+// import type { SelectionOptions, SelectionStrategy, DefaultOptions, SelectionItem } from '@ts/ui/selection/types';
 
-interface DefaultOptions<TItem = any, TKey = any> {
-  onSelectionChanged: (args: {
-    selectedItems: TItem[];
-    selectedItemKeys: TKey[];
-    addedItemKeys: TKey[];
-    removedItemKeys: TKey[];
-    addedItems: TItem[];
-    removedItems: TItem[];
-  }) => void;
-  key: () => void;
-  keyOf: (item: any) => any;
-  load: (loadOptions: LoadOptions) => DeferredObj<LoadResult<TItem>>;
-  totalCount: () => number;
-  isSelectableItem: (item: TItem) => boolean;
-  isItemSelected: (arg: any, options?: any) => boolean;
-  getItemData: (item: TItem) => any;
-  dataFields: () => void;
-  filter: () => any;
-  allowNullValue: boolean;
-  deferred: boolean;
-  equalByReference: boolean;
-  mode: string;
-  selectedItems: TItem[];
-  selectionFilter: any[];
-  maxFilterLengthInRequest: number;
-}
+export default class Selection<TItem extends SelectionItem = any, TKey = any, TDeferred extends boolean = boolean> {
+  options: SelectionOptions<TItem, TKey, TDeferred>;
 
-export type SelectOptions<TItem = any, TKey = any> = DefaultOptions<TItem, TKey> & {
-  selectedKeys: TKey[];
-  selectedItemKeys: TKey[];
-  plainItems: (cached?: boolean) => any;
-  isVirtualPaging?: boolean;
-  sensitivity: 'case' | 'base' | 'variant' | any;
-  allowLoadByRange?: () => boolean | undefined;
-  alwaysSelectByShift?: boolean;
-  getLoadOptions: (loadItemIndex, focusedItemIndex, shiftItemIndex) => LoadOptions;
-  addedItemKeys: TKey[];
-  removedItemKeys: TKey[];
-  addedItems: TItem[];
-  removedItems: TItem[];
-  onSelectionChanging: (e: any) => void;
-  keyHashIndices: any;
-  ignoreDisabledItems?: boolean;
-  disabledItemKeys: TKey[];
-};
-
-export default class Selection<TItem = any, TKey = any> {
-  options: SelectOptions<TItem, TKey>;
-
-  _selectionStrategy: DeferredStrategy<TItem, TKey> | StandardStrategy<TItem, TKey>;
+  _selectionStrategy: SelectionStrategy<TItem, TKey, TDeferred>;
+  // _selectionStrategy: DeferredStrategy<TItem, TKey> | StandardStrategy<TItem, TKey>;
 
   _focusedItemIndex: number;
 
   _shiftFocusedItemIndex?: number;
 
-  constructor(options: Partial<SelectOptions>) {
+  constructor(options: Partial<SelectionOptions<TItem, TKey, TDeferred>>) {
     this.options = extend(this._getDefaultOptions(), options, {
       selectedItemKeys: options.selectedKeys ?? [],
     });
 
-    this._selectionStrategy = this.options.deferred
+    this._selectionStrategy = (this.options.deferred
       ? new DeferredStrategy(this.options)
-      : new StandardStrategy(this.options);
+      : new StandardStrategy(this.options)) as SelectionStrategy<TItem, TKey, TDeferred>;
 
     this._focusedItemIndex = -1;
 
@@ -79,7 +42,7 @@ export default class Selection<TItem = any, TKey = any> {
     }
   }
 
-  _getDefaultOptions(): DefaultOptions<TItem, TKey> {
+  _getDefaultOptions(): DefaultOptions<TItem, TKey, false> {
     return {
       allowNullValue: false,
       deferred: false,
@@ -91,7 +54,7 @@ export default class Selection<TItem = any, TKey = any> {
       onSelectionChanged: noop,
       key: noop,
       keyOf(item) { return item; },
-      load() { return Deferred<LoadResult<TItem>>().resolve([]); },
+      load() { return Deferred<TItem[]>().resolve([]); },
       totalCount() { return -1; },
       isSelectableItem() { return true; },
       isItemSelected() { return false; },
@@ -101,19 +64,25 @@ export default class Selection<TItem = any, TKey = any> {
     };
   }
 
-  validate() {
+  validate(): void {
     this._selectionStrategy.validate();
   }
 
-  getSelectedItemKeys() {
-    return this._selectionStrategy.getSelectedItemKeys();
+  // getSelectedItemKeys(): Promise<LoadResult<TKey>>
+  // getSelectedItemKeys(): TKey[]
+  // getSelectedItemKeys(): TDeferred extends true ? Promise<LoadResult<TKey>> : TKey[] {
+  getSelectedItemKeys(): TDeferred extends true ? Promise<LoadResult<TKey>> : TKey[] {
+  // getSelectedItemKeys(): Promise<LoadResult<TKey>> | TKey[] {
+  // getSelectedItemKeys() {
+    return this._selectionStrategy.getSelectedItemKeys() as TDeferred extends true ? Promise<LoadResult<TKey>> : TKey[];
   }
 
-  getSelectedItems() {
-    return this._selectionStrategy.getSelectedItems();
+  // getSelectedItems() {
+  getSelectedItems(): TDeferred extends true ? Promise<LoadResult<TItem>> : TItem[] {
+    return this._selectionStrategy.getSelectedItems() as TDeferred extends true ? Promise<LoadResult<TItem>> : TItem[];
   }
 
-  selectionFilter(value?: any) {
+  selectionFilter(value?: any): any[] | undefined {
     if (value === undefined) {
       return this.options.selectionFilter;
     }
@@ -127,15 +96,15 @@ export default class Selection<TItem = any, TKey = any> {
     return undefined;
   }
 
-  setSelection(keys, updatedKeys?) {
+  setSelection(keys: TKey[], updatedKeys?: TKey[]) {
     return this.selectedItemKeys(keys, false, false, false, updatedKeys);
   }
 
-  select(keys) {
+  select(keys: TKey[]) {
     return this.selectedItemKeys(keys, true);
   }
 
-  deselect(keys) {
+  deselect(keys: TKey[]) {
     return this.selectedItemKeys(keys, true, true);
   }
 
@@ -145,7 +114,7 @@ export default class Selection<TItem = any, TKey = any> {
     isDeselect?: boolean,
     isSelectAll?: boolean,
     updatedKeys?: TKey[],
-  ) {
+  ): DeferredObj<unknown> {
     const that = this;
 
     keys = keys ?? [];
@@ -155,27 +124,31 @@ export default class Selection<TItem = any, TKey = any> {
     return this._selectionStrategy.selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys);
   }
 
-  clearSelection() {
+  clearSelection(): DeferredObj<unknown> {
     return this.selectedItemKeys([]);
   }
 
-  _addSelectedItem(itemData, key) {
+  _addSelectedItem(itemData: TItem, key: TKey): void {
     this._selectionStrategy.addSelectedItem(key, itemData);
   }
 
-  _removeSelectedItem(key) {
+  _removeSelectedItem(key: TKey): void {
     this._selectionStrategy.removeSelectedItem(key);
   }
 
-  _setSelectedItems(keys, items) {
+  _setSelectedItems(keys: TKey[], items: TItem[]): void {
     this._selectionStrategy.setSelectedItems(keys, items);
   }
 
-  onSelectionChanged() {
+  onSelectionChanged(): void {
     this._selectionStrategy.onSelectionChanged();
   }
 
-  changeItemSelection(itemIndex, keys, setFocusOnly) {
+  changeItemSelection(
+    itemIndex: number,
+    keys: { control?: boolean; shift?: boolean },
+    setFocusOnly?: boolean,
+  ): boolean | undefined {
     let isSelectedItemsChanged;
     const items = this.options.plainItems();
     const item = items[itemIndex];
@@ -258,15 +231,15 @@ export default class Selection<TItem = any, TKey = any> {
     return undefined;
   }
 
-  isDataItem(item) {
+  isDataItem(item: TItem): boolean {
     return this.options.isSelectableItem(item);
   }
 
-  isSelectable() {
+  isSelectable(): boolean {
     return this.options.mode === 'single' || this.options.mode === 'multiple';
   }
 
-  isItemDataSelected(data) {
+  isItemDataSelected(data: any): boolean {
     return this._selectionStrategy.isItemDataSelected(data, { checkPending: true });
   }
 
@@ -274,21 +247,22 @@ export default class Selection<TItem = any, TKey = any> {
     return this._selectionStrategy.isItemKeySelected(arg, options);
   }
 
-  _resetItemSelectionWhenShiftKeyPressed() {
+  _resetItemSelectionWhenShiftKeyPressed(): void {
     delete this._shiftFocusedItemIndex;
   }
 
-  _resetFocusedItemIndex() {
+  _resetFocusedItemIndex(): void {
     this._focusedItemIndex = -1;
   }
 
-  changeItemSelectionWhenShiftKeyInVirtualPaging(loadIndex) {
+  changeItemSelectionWhenShiftKeyInVirtualPaging(loadIndex: number): Promise<unknown> {
     const loadOptions = this.options.getLoadOptions(loadIndex, this._focusedItemIndex, this._shiftFocusedItemIndex);
     const deferred = Deferred();
     const indexOffset = loadOptions.skip;
 
     this.options.load(loadOptions).done((items) => {
-      this.changeItemSelectionWhenShiftKeyPressed(loadIndex, items, indexOffset);
+      const filteredItems = !Array.isArray(items) && isPlainObject(items) ? items.data : items;
+      this.changeItemSelectionWhenShiftKeyPressed(loadIndex, filteredItems, indexOffset);
 
       deferred.resolve();
     });
@@ -296,7 +270,7 @@ export default class Selection<TItem = any, TKey = any> {
     return deferred.promise();
   }
 
-  changeItemSelectionWhenShiftKeyPressed(itemIndex, items, indexOffset) {
+  changeItemSelectionWhenShiftKeyPressed(itemIndex: number, items: TItem[], indexOffset?: number): boolean {
     let isSelectedItemsChanged = false;
     let itemIndexStep;
     const indexOffsetDefined = isDefined(indexOffset);
@@ -354,11 +328,11 @@ export default class Selection<TItem = any, TKey = any> {
     return isSelectedItemsChanged;
   }
 
-  clearSelectedItems() {
+  clearSelectedItems(): void {
     this._setSelectedItems([], []);
   }
 
-  selectAll(isOnePage) {
+  selectAll(isOnePage: boolean): DeferredObj<unknown> {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
@@ -367,7 +341,7 @@ export default class Selection<TItem = any, TKey = any> {
     return this.selectedItemKeys([], true, false, true);
   }
 
-  deselectAll(isOnePage) {
+  deselectAll(isOnePage: boolean): DeferredObj<unknown> {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
@@ -376,11 +350,11 @@ export default class Selection<TItem = any, TKey = any> {
     return this.selectedItemKeys([], true, true, true);
   }
 
-  getSelectAllState(visibleOnly) {
+  getSelectAllState(visibleOnly: boolean): boolean | undefined {
     return this._selectionStrategy.getSelectAllState(visibleOnly);
   }
 
-  loadSelectedItemsWithFilter() {
+  loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     return this._selectionStrategy.loadSelectedItemsWithFilter();
   }
 }

@@ -1,4 +1,3 @@
-import type { LoadResult } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
@@ -7,32 +6,32 @@ import {
 } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
-import type { SelectOptions } from '@ts/ui/selection/m_selection';
+import type { SelectionItem, SelectionOptions } from '@ts/ui/selection/types';
 
-export default class SelectionStrategy<TItem = any, TKey = any> {
-  options: SelectOptions<TItem, TKey>;
+export default class SelectionStrategy<TItem extends SelectionItem = any, TKey = any> {
+  options: SelectionOptions<TItem, TKey>;
 
   _lastSelectAllPageDeferred = Deferred().reject();
 
-  constructor(options) {
+  constructor(options: SelectionOptions<TItem, TKey>) {
     this.options = options;
 
     this._setOption('disabledItemKeys', []);
     this._clearItemKeys();
   }
 
-  _clearItemKeys() {
+  _clearItemKeys(): void {
     this._setOption('addedItemKeys', []);
     this._setOption('removedItemKeys', []);
     this._setOption('removedItems', []);
     this._setOption('addedItems', []);
   }
 
-  validate() {
+  validate(): void {
 
   }
 
-  _setOption(name, value) {
+  _setOption(name: string, value: any): void {
     this.options[name] = value;
   }
 
@@ -83,7 +82,7 @@ export default class SelectionStrategy<TItem = any, TKey = any> {
     }
   }
 
-  onSelectionChanged() {
+  onSelectionChanged(): void {
     const {
       selectedItems,
       selectedItemKeys,
@@ -105,7 +104,7 @@ export default class SelectionStrategy<TItem = any, TKey = any> {
     });
   }
 
-  equalKeys(key1, key2) {
+  equalKeys(key1: TKey, key2: TKey) {
     if (this.options.equalByReference) {
       if (isObject(key1) && isObject(key2)) {
         return key1 === key2;
@@ -115,7 +114,7 @@ export default class SelectionStrategy<TItem = any, TKey = any> {
     return equalByValue(key1, key2);
   }
 
-  getSelectableItems(items) {
+  getSelectableItems(items: TItem[]): TItem[] {
     return items.filter((item) => !item?.disabled);
   }
 
@@ -154,10 +153,10 @@ export default class SelectionStrategy<TItem = any, TKey = any> {
     };
   }
 
-  _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean): any {
+  _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
-    const deferred = Deferred<LoadResult<TItem>>();
+    const deferred = Deferred<TItem[]>();
     const queryParams = this._getQueryParams();
 
     const loadOptions = {
@@ -215,7 +214,8 @@ export default class SelectionStrategy<TItem = any, TKey = any> {
 
   _getFullSelectAllState() {
     const items = this.options.plainItems();
-    const dataFilter = this.options.filter();
+    const { filter } = this.options;
+    const dataFilter = filter();
     let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item: any) => !item?.disabled);
 
     if (dataFilter) {

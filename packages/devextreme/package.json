@@ -219,7 +219,7 @@
     "lint-js": "eslint --quiet '**/*.js'",
     "lint-ts": "eslint --quiet '**/*.{tsx,ts}' --ignore-pattern /testing/renovation/ --ignore-pattern '**/*.d.ts'",
     "lint-dts": "eslint './js/**/*.d.ts'",
-    "lint-staged": "lint-staged",
+    "lint-staged": "lint-staged -- --fix",
     "lint-texts": "node build/linters/validate-non-latin-symbols.js",
     "build": "cross-env BUILD_ESM_PACKAGE=true gulp default",
     "build:dev": "cross-env DEVEXTREME_TEST_CI=TRUE BUILD_ESM_PACKAGE=true gulp default",
