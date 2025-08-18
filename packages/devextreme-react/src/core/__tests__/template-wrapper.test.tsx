@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { default as dxRender } from 'devextreme/core/renderer';
 import { useEffect, useContext } from 'react';
 import { TemplateWrapper } from '../template-wrapper';
 import { cleanup, render } from '@testing-library/react';
@@ -6,8 +7,8 @@ import * as events from 'devextreme/events';
 import { RemovalLockerContext, UpdateLocker } from '../contexts';
 import { TemplateFunc } from '../types';
 
-function TemplateComponent(args: { data, index, onRendered?, effect? }) {
-  const { data, index, onRendered, effect } = args;
+function TemplateComponent(args: { data, index, onRendered?, effect?, multipleRoots }) {
+  const { data, index, onRendered, effect, multipleRoots } = args;
 
   effect?.();
 
@@ -15,12 +16,19 @@ function TemplateComponent(args: { data, index, onRendered?, effect? }) {
     onRendered?.();
   }, [onRendered]);
 
-  return (
-    <div className='template-element'>{`${data.text} - ${index}`}</div>
-  );
+  return multipleRoots
+    ? (
+      <>
+        <div className='template-element-1'>{`${data.text} - ${index}`}</div>
+        <div className='template-element-2'>{`${data.text} - ${index}`}</div>
+      </>
+    )
+    : (
+      <div className='template-element'>{`${data.text} - ${index}`}</div>
+    );
 }
 
-function getComponentTemplateFunction(effect?) {
+function getComponentTemplateFunction(effect?, multipleRoots = false) {
   return ({ data, index, onRendered }) => {
     return (
       <TemplateComponent
@@ -28,6 +36,7 @@ function getComponentTemplateFunction(effect?) {
         index={index}
         onRendered={onRendered}
         effect={effect}
+        multipleRoots={multipleRoots}
       />
     );
   };
@@ -43,7 +52,7 @@ describe('Template Wrapper', () => {
     cleanup();
   });
 
-  it('works with locker in the context correctly', () => {
+  it('works with locker in the context correctly', async () => {
     let onRemovedFired = false;
     let removalLocker: UpdateLocker | undefined = undefined;
 
@@ -86,6 +95,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
 
     onRemovedFired = false;
@@ -107,6 +117,7 @@ describe('Template Wrapper', () => {
     removalLocker.lock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -127,6 +138,7 @@ describe('Template Wrapper', () => {
     removalLocker.lock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -147,10 +159,11 @@ describe('Template Wrapper', () => {
     removalLocker.unlock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('does not fire onRemove when the event comes from wrappers', () => {
+  it('does not fire onRemove when the event comes from wrappers', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -182,6 +195,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove', { isUnmounting: true });
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -201,6 +215,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
@@ -355,7 +370,7 @@ describe('Template Wrapper', () => {
       .toBe('<div class="template-container">My template - 1<div style="display: none;"></div><span style="display: none;"></span></div>');
   });
 
-  it('triggers onRemove when the element is removed', () => {
+  it('triggers onRemove when the element is removed', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -383,15 +398,17 @@ describe('Template Wrapper', () => {
         />
       </>
     );
-
+    
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('removes text templates when the removal listener is removed', () => {
+  it('removes text templates when the removal listener is removed', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -420,6 +437,7 @@ describe('Template Wrapper', () => {
       </>
     );
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     const containerChildren = document.querySelector('.template-container')?.children!;
@@ -428,10 +446,11 @@ describe('Template Wrapper', () => {
       events.triggerHandler(containerChildren[i], 'dxremove');
     }
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('returns all the elements to DOM on unmount to avoid upsetting React', () => {
+  it('returns the element and hidden nodes to DOM on unmount to avoid upsetting React', () => {
     const templateFunction: TemplateFunc = getComponentTemplateFunction();
 
     const { rerender, unmount } = render(
@@ -458,10 +477,45 @@ describe('Template Wrapper', () => {
     const children = container.children;
 
     for(var i = 0; i < children.length; i++) {
-      container.removeChild(children[i]);
+      dxRender(children[i]).remove();
     }
 
     expect(() => unmount()).not.toThrow();
+    expect(container.children.length).toBe(0);
+  });
+
+  it('returns multiple template root elements to DOM on unmount to avoid upsetting React', () => {
+    const templateFunction: TemplateFunc = getComponentTemplateFunction(void 0, true);
+
+    const { rerender, unmount } = render(
+      <>
+        <div className='template-container' />
+      </>
+    );
+
+    rerender(
+      <>
+        <div className='template-container' />
+        <TemplateWrapper
+          templateFactory={templateFunction}
+          data={{ text: 'My template' }}
+          index={1}
+          onRendered={() => undefined}
+          container={document.querySelector('.template-container')!}
+          onRemoved={() => undefined}
+        />
+      </>
+    );
+
+    const container = document.querySelector('.template-container')!;
+    const children = container.children;
+
+    for(var i = 0; i < children.length; i++) {
+      dxRender(children[i]).remove();
+    }
+
+    expect(() => unmount()).not.toThrow();
+    expect(container.children.length).toBe(0);
   });
 
   it('portals its component to the specified container', () => {
