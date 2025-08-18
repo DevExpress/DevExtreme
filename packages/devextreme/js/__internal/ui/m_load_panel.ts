@@ -4,10 +4,11 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/load_panel';
-import { isFluent, isMaterial } from '@js/ui/themes';
+import { current, isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Overlay from '@ts/ui/overlay/overlay';
@@ -29,6 +30,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
 
   _$loadPanelContentWrapper?: dxElementWrapper;
 
+  // eslint-disable-next-line no-restricted-globals -- needed for delayed panel show
   _showTimeout?: ReturnType<typeof setTimeout>;
 
   _supportedKeys(): SupportedKeys {
@@ -44,7 +46,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       message: messageLocalization.format('Loading'),
       width: 222,
       height: 90,
-      // @ts-expect-error ts-error
+      // @ts-expect-error 'null' is not assignable
       animation: null,
       showIndicator: true,
       indicatorSrc: '',
@@ -68,8 +70,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterial();
+          return isMaterial(current());
         },
         options: {
           message: '',
@@ -81,8 +82,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isFluent();
+          return isFluent(current());
         },
         options: {
           width: 'auto',
@@ -93,8 +93,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   }
 
   _init(): void {
-    // @ts-expect-error ts-error
-    super._init.apply(this, arguments);
+    super._init();
   }
 
   _render(): void {
@@ -113,13 +112,15 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     const showIndicator = this.option('showIndicator');
     if (!showIndicator) {
       const aria = this._getAriaAttributes();
-      // @ts-expect-error ts-error
+
+      // @ts-expect-error attr should have overload
       this.$wrapper().attr(aria);
     }
   }
 
-  _getAriaAttributes() {
+  _getAriaAttributes(): Record<string, string> {
     const { message } = this.option();
+
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const label = message || messageLocalization.format('Loading');
 
@@ -131,9 +132,8 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     return aria;
   }
 
-  // @ts-expect-error ts-error
-  _renderContentImpl(): void {
-    super._renderContentImpl();
+  _renderContentImpl(): Promise<void> {
+    const result = super._renderContentImpl();
 
     this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
@@ -145,9 +145,11 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this._cleanPreviousContent();
     this._renderLoadIndicator();
     this._renderMessage();
+
+    return result;
   }
 
-  _show() {
+  _show(): DeferredObj<unknown> | Promise<unknown> {
     const { delay } = this.option();
 
     if (!delay) {
@@ -158,8 +160,10 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     const callBase = super._show.bind(this);
 
     this._clearShowTimeout();
+
+    // eslint-disable-next-line no-restricted-globals -- needed for delayed panel show
     this._showTimeout = setTimeout(() => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error done should be typed
       callBase().done(() => {
         deferred.resolve();
       });
@@ -168,8 +172,9 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     return deferred.promise();
   }
 
-  _hide() {
+  _hide(): DeferredObj<unknown> | Promise<unknown> {
     this._clearShowTimeout();
+
     return super._hide();
   }
 
@@ -184,9 +189,12 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
 
     const { message } = this.option();
 
-    if (!message) return;
+    if (!message) {
+      return;
+    }
 
-    const $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
+    const $message = $('<div>')
+      .addClass(LOADPANEL_MESSAGE_CLASS)
       .text(message);
 
     this._$loadPanelContentWrapper.append($message);
@@ -212,7 +220,8 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   _cleanPreviousContent(): void {
     this.$content().find(`.${LOADPANEL_MESSAGE_CLASS}`).remove();
     this.$content().find(`.${LOADPANEL_INDICATOR_CLASS}`).remove();
-    delete this._$indicator;
+
+    this._$indicator = undefined;
   }
 
   _togglePaneVisible(): void {

@@ -5,16 +5,15 @@ import type Scheduler from '../m_scheduler';
 import { getCellDuration } from '../r1/utils/index';
 import type {
   AppointmentDataItem,
-  AppointmentViewModel,
   RenderStrategyName,
   SafeAppointment,
   ViewType,
 } from '../types';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import { getAllDayHeight, getCellHeight, getCellWidth } from '../workspaces/helpers/m_position_helper';
-import { getRepaintedAppointments } from './detect_changes/get_repainted_appointments';
 import { createAppointmentFilter } from './filtering/create_appointment_filter';
 import { AppointmentViewModelGenerator } from './generate_view_model/m_view_model_generator';
+import type { AppointmentViewModelPlain } from './generate_view_model/types';
 import { getAppointmentDataItems } from './preparation/get_appointment_data_items';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -153,7 +152,7 @@ class AppointmentLayoutManager {
     };
   }
 
-  public createAppointmentsMap(): AppointmentViewModel[] {
+  public createAppointmentsMap(): AppointmentViewModelPlain[] {
     const renderingStrategyOptions = this._getRenderingStrategyOptions();
 
     const {
@@ -161,19 +160,9 @@ class AppointmentLayoutManager {
       positionMap,
     } = this.appointmentViewModel.generate(this.filteredItems, renderingStrategyOptions) as any;
 
-    this._positionMap = positionMap; // TODO get rid of this after remove old render
+    this._positionMap = positionMap;
 
     return viewModel;
-  }
-
-  public getRepaintedAppointments(
-    currentAppointments: AppointmentViewModel[],
-    sourceAppointments: AppointmentViewModel[],
-  ): AppointmentViewModel[] {
-    return getRepaintedAppointments(currentAppointments, sourceAppointments, {
-      appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
-      appointmentDataProvider: this.instance.appointmentDataProvider,
-    });
   }
 
   public getRenderingStrategyInstance() {
