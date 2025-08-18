@@ -130,6 +130,7 @@ export class SelectionController {
         selectionOption,
       );
 
+      // @ts-expect-error TKey
       return new Selection(selectionConfig);
     });
 

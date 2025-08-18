@@ -6,9 +6,16 @@ import {
 } from '@js/core/utils/common';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
-import type { SelectionItem, SelectionOptions } from '@ts/ui/selection/types';
+import type {
+  ClearedFilter,
+  QueryParams,
+  RemoteFilter,
+  SelectionFilter,
+  SelectionItem,
+  SelectionOptions,
+} from '@ts/ui/selection/types';
 
-export default class SelectionStrategy<TItem extends SelectionItem = any, TKey = any> {
+export default class SelectionStrategy<TItem extends SelectionItem = any, TKey extends string | number = any> {
   options: SelectionOptions<TItem, TKey>;
 
   _lastSelectAllPageDeferred = Deferred().reject();
@@ -104,7 +111,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     });
   }
 
-  equalKeys(key1: TKey, key2: TKey) {
+  equalKeys(key1: TKey, key2: TKey): boolean {
     if (this.options.equalByReference) {
       if (isObject(key1) && isObject(key2)) {
         return key1 === key2;
@@ -118,14 +125,19 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return items.filter((item) => !item?.disabled);
   }
 
-  _clearSelection(keys, preserve, isDeselect, isSelectAll) {
+  _clearSelection(
+    keys: TKey[] | TKey,
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+  ): DeferredObj<unknown> {
     keys = keys || [];
     keys = Array.isArray(keys) ? keys : [keys];
     this.validate();
     return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
   }
 
-  _removeTemplateProperty(remoteFilter: { template: any }) {
+  _removeTemplateProperty(remoteFilter: RemoteFilter): ClearedFilter {
     if (Array.isArray(remoteFilter)) {
       return remoteFilter.map((f) => this._removeTemplateProperty(f));
     }
@@ -137,7 +149,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return remoteFilter;
   }
 
-  _getQueryParams() {
+  _getQueryParams(): QueryParams | undefined {
     const { sensitivity } = this.options;
 
     if (!sensitivity) {
@@ -153,7 +165,12 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     };
   }
 
-  _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
+  _loadFilteredData(
+    remoteFilter: SelectionFilter,
+    localFilter?: any,
+    select?: any,
+    isSelectAll?: boolean,
+  ): DeferredObj<TItem[]> {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred<TItem[]>();
@@ -165,7 +182,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
       ...queryParams,
     };
 
-    if (remoteFilter && remoteFilter.length === 0) {
+    if (remoteFilter && Array.isArray(remoteFilter) && remoteFilter.length === 0) {
       deferred.resolve([]);
     } else {
       this.options.load(loadOptions)
@@ -189,7 +206,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return deferred;
   }
 
-  updateSelectedItemKeyHash(keys) {
+  updateSelectedItemKeyHash(keys: TKey[]): void {
     for (let i = 0; i < keys.length; i++) {
       const keyHash = getKeyHash(keys[i]);
 
@@ -202,7 +219,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     }
   }
 
-  _isAnyItemSelected(items) {
+  _isAnyItemSelected(items: TItem[]): boolean | undefined {
     for (let i = 0; i < items.length; i++) {
       if (this.options.isItemSelected(items[i])) {
         return undefined;
@@ -212,7 +229,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return false;
   }
 
-  _getFullSelectAllState() {
+  _getFullSelectAllState(): boolean | undefined {
     const items = this.options.plainItems();
     const { filter } = this.options;
     const dataFilter = filter();
@@ -236,7 +253,7 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return undefined;
   }
 
-  _getVisibleSelectAllState() {
+  _getVisibleSelectAllState(): boolean | undefined {
     const items = this.getSelectableItems(this.options.plainItems());
     let hasSelectedItems = false;
     let hasUnselectedItems = false;
@@ -261,23 +278,44 @@ export default class SelectionStrategy<TItem extends SelectionItem = any, TKey =
     return false;
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys?, forceCombinedFilter?): DeferredObj<unknown> {
+  selectedItemKeys(
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    keys: TKey[],
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    preserve?: boolean,
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    isDeselect?: boolean,
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    isSelectAll?: boolean,
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    updatedKeys?: TKey[],
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+    forceCombinedFilter?: boolean,
+  ): DeferredObj<unknown> {
     throw new Error('selectedItemKeys method should be overriden');
   }
 
+  isItemKeySelected(itemKey: TKey | TItem): boolean;
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  isItemKeySelected(itemKey): boolean {
+  isItemKeySelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
     throw new Error('isItemKeySelected method should be overriden');
   }
 
+  isItemDataSelected(itemKey: TKey | TItem): boolean;
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  addSelectedItem(itemKey, itemData): void {
+  isItemDataSelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
+    throw new Error('isItemKeySelected method should be overriden');
+  }
+
+  // addSelectedItem(itemKey: TKey, isSelectAll?: boolean, skipFilter?: boolean): void
+  // addSelectedItem(itemKey: TKey, data: TItem): void
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  addSelectedItem(itemKey: TKey, dataOrIsSelectAll?: TItem | boolean, skipFilter?: boolean): void {
     throw new Error('addSelectedItem method should be overriden');
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  removeSelectedItem(itemKey): void {
+  removeSelectedItem(itemKey: TKey): void {
     throw new Error('removeSelectedItem method should be overriden');
   }
 

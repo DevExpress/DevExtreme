@@ -8,6 +8,7 @@ import DeferredStrategy from './m_selection.strategy.deferred';
 import StandardStrategy from './m_selection.strategy.standard';
 import type {
   DefaultOptions,
+  SelectionFilter,
   SelectionItem,
   SelectionOptions,
   SelectionStrategy,
@@ -16,7 +17,7 @@ import type {
 // import StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
 // import type { SelectionOptions, SelectionStrategy, DefaultOptions, SelectionItem } from '@ts/ui/selection/types';
 
-export default class Selection<TItem extends SelectionItem = any, TKey = any, TDeferred extends boolean = boolean> {
+export default class Selection<TItem extends SelectionItem = any, TKey extends string | number = any, TDeferred extends boolean = boolean> {
   options: SelectionOptions<TItem, TKey, TDeferred>;
 
   _selectionStrategy: SelectionStrategy<TItem, TKey, TDeferred>;
@@ -52,7 +53,7 @@ export default class Selection<TItem extends SelectionItem = any, TKey = any, TD
       selectionFilter: [],
       maxFilterLengthInRequest: 0,
       onSelectionChanged: noop,
-      key: noop,
+      key() { return undefined; },
       keyOf(item) { return item; },
       load() { return Deferred<TItem[]>().resolve([]); },
       totalCount() { return -1; },
@@ -60,7 +61,7 @@ export default class Selection<TItem extends SelectionItem = any, TKey = any, TD
       isItemSelected() { return false; },
       getItemData(item) { return item; },
       dataFields: noop,
-      filter: noop,
+      filter() { return undefined; },
     };
   }
 
@@ -82,7 +83,7 @@ export default class Selection<TItem extends SelectionItem = any, TKey = any, TD
     return this._selectionStrategy.getSelectedItems() as TDeferred extends true ? Promise<LoadResult<TItem>> : TItem[];
   }
 
-  selectionFilter(value?: any): any[] | undefined {
+  selectionFilter(value?: any): SelectionFilter | undefined {
     if (value === undefined) {
       return this.options.selectionFilter;
     }
@@ -129,7 +130,8 @@ export default class Selection<TItem extends SelectionItem = any, TKey = any, TD
   }
 
   _addSelectedItem(itemData: TItem, key: TKey): void {
-    this._selectionStrategy.addSelectedItem(key, itemData);
+    const { deferred } = this.options;
+    this._selectionStrategy.addSelectedItem(key, deferred ? !!itemData : itemData);
   }
 
   _removeSelectedItem(key: TKey): void {

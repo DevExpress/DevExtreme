@@ -8,13 +8,19 @@ import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
-import type { SelectionFilter, SelectionItem, SelectionOptions } from '@ts/ui/selection/types';
+import type {
+  RequestData,
+  RequestItems,
+  SelectionFilter,
+  SelectionItem,
+  SelectionOptions,
+} from '@ts/ui/selection/types';
 
 interface KeyIndicesToRemoveMap {
   [index: number]: boolean;
 }
 
-export default class StandardStrategy<TItem extends SelectionItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
+export default class StandardStrategy<TItem extends SelectionItem = any, TKey extends string | number = any> extends SelectionStrategy<TItem, TKey> {
   _shouldMergeWithLastRequest?: boolean;
 
   _lastLoadDeferred?: any;
@@ -48,7 +54,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return this.options.selectedItems.slice(0);
   }
 
-  _preserveSelectionUpdate(items: TItem[], isDeselect: boolean): void {
+  _preserveSelectionUpdate(items: TItem[], isDeselect?: boolean): void {
     const { keyOf } = this.options;
     let keyIndicesToRemoveMap: KeyIndicesToRemoveMap | undefined;
     let keyIndex;
@@ -100,9 +106,9 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
 
   _loadSelectedItemsCore(
     keys: TKey[],
-    isDeselect: boolean,
-    isSelectAll: boolean,
-    filter: SelectionFilter,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+    filter?: SelectionFilter,
     forceCombinedFilter = false,
   ): DeferredObj<TItem[]> {
     let deferred = Deferred<TItem[]>();
@@ -145,7 +151,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return deferred;
   }
 
-  _replaceSelectionUpdate(items) {
+  _replaceSelectionUpdate(items: TItem[]): void {
     const internalKeys: TKey[] = [];
     const { keyOf } = this.options;
 
@@ -160,7 +166,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     this.setSelectedItems(internalKeys, items);
   }
 
-  _warnOnIncorrectKeys(keys) {
+  _warnOnIncorrectKeys(keys: TKey[]): void {
     const { allowNullValue } = this.options;
 
     for (let i = 0; i < keys.length; i++) {
@@ -172,22 +178,28 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     }
   }
 
-  _isMultiSelectEnabled() {
+  _isMultiSelectEnabled(): boolean {
     const { mode } = this.options;
     return mode === 'all' || mode === 'multiple';
   }
 
-  _requestInProgress() {
+  _requestInProgress(): boolean {
     return this._lastLoadDeferred?.state() === 'pending';
   }
 
-  _concatRequestsItems(keys, isDeselect, oldRequestItems, updatedKeys) {
+  _concatRequestsItems(
+    keys: TKey[],
+    oldRequestItems: RequestItems<TItem, TKey>,
+    isDeselect?: boolean,
+    updatedKeys?: TKey[],
+  ): RequestData<TItem, TKey> {
     let selectedItems;
     const deselectedItems = isDeselect ? keys : [];
 
     if (updatedKeys) {
       selectedItems = updatedKeys;
     } else {
+      // @ts-expect-error removeDuplicates
       selectedItems = removeDuplicates(keys, this.options.selectedItemKeys);
     }
 
@@ -198,7 +210,12 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     };
   }
 
-  _collectLastRequestData(keys, isDeselect, isSelectAll, updatedKeys) {
+  _collectLastRequestData(
+    keys: TKey[],
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+    updatedKeys?: TKey[],
+  ): RequestData<TItem, TKey> {
     const isDeselectAll = isDeselect && isSelectAll;
     const oldRequestItems = {
       added: [],
@@ -222,23 +239,31 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
         }
       }
 
-      lastRequestData = this._concatRequestsItems(keys, isDeselect, oldRequestItems, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
+      lastRequestData = this._concatRequestsItems(keys, oldRequestItems, isDeselect, this._shouldMergeWithLastRequest ? undefined : updatedKeys);
     }
 
     return lastRequestData;
   }
 
-  _updateKeysByLastRequestData(keys, isDeselect, isSelectAll) {
+  _updateKeysByLastRequestData(keys: TKey[], isDeselect?: boolean, isSelectAll?: boolean): TKey[] {
     let currentKeys = keys;
     if (this._isMultiSelectEnabled() && this._shouldMergeWithLastRequest && !isDeselect && !isSelectAll) {
+      // @ts-expect-error removeDuplicates
       currentKeys = removeDuplicates(keys.concat(this._lastRequestData?.addedItems), this._lastRequestData?.removedItems);
+      // @ts-expect-error getUniqueValues
       currentKeys = getUniqueValues(currentKeys);
     }
 
     return currentKeys;
   }
 
-  _loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
+  _loadSelectedItems(
+    keys: TKey[],
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+    updatedKeys?: TKey[],
+    forceCombinedFilter = false,
+  ): DeferredObj<TItem[]> {
     const that = this;
     const deferred = Deferred<TItem[]>();
     const filter = that.options.filter();
@@ -266,7 +291,15 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return deferred;
   }
 
-  selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
+  // selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
+  selectedItemKeys(
+    keys: TKey[],
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+    updatedKeys?: TKey[],
+    forceCombinedFilter?: boolean,
+  ): DeferredObj<unknown> {
     if (this._isCancelingInProgress) {
       return Deferred().reject();
     }
@@ -310,8 +343,9 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return selectionDeferred;
   }
 
-  addSelectedItem(key, itemData) {
-    if (isDefined(itemData) && !this.options.ignoreDisabledItems && itemData.disabled) {
+  addSelectedItem(key: TKey, dataOrIsSelectAll): void {
+  // addSelectedItem(key: TKey, itemData: TItem) {
+    if (isDefined(dataOrIsSelectAll) && !this.options.ignoreDisabledItems && dataOrIsSelectAll.disabled) {
       if (!this.options.disabledItemKeys.includes(key)) {
         this.options.disabledItemKeys.push(key);
       }
@@ -327,12 +361,12 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
 
       this.options.selectedItemKeys.push(key);
       this.options.addedItemKeys.push(key);
-      this.options.addedItems.push(itemData);
-      this.options.selectedItems.push(itemData);
+      this.options.addedItems.push(dataOrIsSelectAll);
+      this.options.selectedItems.push(dataOrIsSelectAll);
     }
   }
 
-  _getSelectedIndexByKey(key, ignoreIndicesMap) {
+  _getSelectedIndexByKey(key: TKey, ignoreIndicesMap?: KeyIndicesToRemoveMap): number {
     const { selectedItemKeys } = this.options;
 
     for (let index = 0; index < selectedItemKeys.length; index++) {
@@ -343,7 +377,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return -1;
   }
 
-  _getSelectedIndexByHash(key, ignoreIndicesMap) {
+  _getSelectedIndexByHash(key: TKey, ignoreIndicesMap?: KeyIndicesToRemoveMap): number {
     let indices = this.options.keyHashIndices[key];
 
     if (indices && indices.length > 1 && ignoreIndicesMap) {
@@ -353,7 +387,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return indices && indices[0] >= 0 ? indices[0] : -1;
   }
 
-  _indexOfSelectedItemKey(key, ignoreIndicesMap?: KeyIndicesToRemoveMap) {
+  _indexOfSelectedItemKey(key: TKey, ignoreIndicesMap?: KeyIndicesToRemoveMap): number {
     let selectedIndex;
 
     if (this.options.equalByReference) {
@@ -367,7 +401,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return selectedIndex;
   }
 
-  _shiftSelectedKeyIndices(keyIndex) {
+  _shiftSelectedKeyIndices(keyIndex: number): void {
     for (let currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex++) {
       const currentKey = this.options.selectedItemKeys[currentKeyIndex];
       const currentKeyHash = getKeyHash(currentKey);
@@ -384,10 +418,10 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
   }
 
   removeSelectedItem(
-    key,
+    key: TKey,
     keyIndicesToRemoveMap?: KeyIndicesToRemoveMap,
     isDisabled?: boolean,
-  ) {
+  ): number | undefined {
     if (!this.options.ignoreDisabledItems && isDisabled) {
       return;
     }
@@ -432,7 +466,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return keyIndex;
   }
 
-  _updateAddedItemKeys(keys, items) {
+  _updateAddedItemKeys(keys: TKey[], items: TItem[]): void {
     for (let i = 0; i < keys.length; i++) {
       if (!this.isItemKeySelected(keys[i])) {
         this.options.addedItemKeys.push(keys[i]);
@@ -441,7 +475,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     }
   }
 
-  _updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems) {
+  _updateRemovedItemKeys(_: TKey[], oldSelectedKeys: TKey[], oldSelectedItems: TItem[]): void {
     for (let i = 0; i < oldSelectedKeys.length; i++) {
       if (!this.isItemKeySelected(oldSelectedKeys[i])) {
         this.options.removedItemKeys.push(oldSelectedKeys[i]);
@@ -450,7 +484,7 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     }
   }
 
-  _isItemSelectionInProgress(key, checkPending) {
+  _isItemSelectionInProgress(key: TKey, checkPending?: boolean): boolean {
     const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
     if (shouldCheckPending) {
       const addedItems = this._lastRequestData.addedItems ?? [];
@@ -459,11 +493,11 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return false;
   }
 
-  _getKeyHash(key) {
+  _getKeyHash(key: TKey): any {
     return this.options.equalByReference ? key : getKeyHash(key);
   }
 
-  setSelectedItems(keys, items) {
+  setSelectedItems(keys: TKey[], items: TItem[]): void {
     this._updateAddedItemKeys(keys, items);
 
     const oldSelectedKeys = this.options.selectedItemKeys;
@@ -480,12 +514,12 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
   }
 
-  isItemDataSelected(itemData, options = {}) {
+  isItemDataSelected(itemData: TItem, options = {}): boolean {
     const key = this.options.keyOf(itemData);
     return this.isItemKeySelected(key, options);
   }
 
-  isItemKeySelected(key, options: { checkPending?: boolean } = {}) {
+  isItemKeySelected(key: TKey, options: { checkPending?: boolean } = {}): boolean {
     let result = this._isItemSelectionInProgress(key, options.checkPending);
 
     if (!result) {
@@ -497,14 +531,14 @@ export default class StandardStrategy<TItem extends SelectionItem = any, TKey = 
     return result;
   }
 
-  getSelectAllState(visibleOnly) {
+  getSelectAllState(visibleOnly: boolean): boolean | undefined {
     if (visibleOnly) {
       return this._getVisibleSelectAllState();
     }
     return this._getFullSelectAllState();
   }
 
-  loadSelectedItemsWithFilter() {
+  loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     const keyExpr = this.options.key();
     const keys = this.getSelectedItemKeys();
     const filter = this.options.filter();

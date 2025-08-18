@@ -254,6 +254,7 @@ class CollectionWidget<
           this._updateSelectedItems(args);
         }
       },
+      // @ts-expect-error filter
       filter: this._getCombinedFilter.bind(this),
       totalCount: (): number => {
         const { items = [] } = this.option();

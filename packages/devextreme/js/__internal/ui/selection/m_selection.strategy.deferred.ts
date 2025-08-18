@@ -5,14 +5,14 @@ import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
-import type { SelectionItem } from '@ts/ui/selection/types';
+import type { SelectionFilter, SelectionItem } from '@ts/ui/selection/types';
 
-export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = any> extends SelectionStrategy<TItem, TKey> {
+export default class DeferredStrategy<TItem extends SelectionItem = any, TKey extends string | number = any> extends SelectionStrategy<TItem, TKey> {
   getSelectedItems(): DeferredObj<TItem[]> {
     return this._loadFilteredData(this.options.selectionFilter);
   }
 
-  getSelectedItemKeys() {
+  getSelectedItemKeys(): Promise<unknown> {
     const d = Deferred();
     const that = this;
     const key = this.options.key();
@@ -29,7 +29,12 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return d.promise();
   }
 
-  selectedItemKeys(keys, preserve, isDeselect, isSelectAll) {
+  selectedItemKeys(
+    keys: TKey[],
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+  ): DeferredObj<unknown> {
     if (isSelectAll) {
       const filter = this.options.filter();
       const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
@@ -58,18 +63,18 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return Deferred().resolve();
   }
 
-  setSelectedItems(keys) {
+  setSelectedItems(keys: TKey[]): void {
     this._setOption('selectionFilter', null);
     for (let i = 0; i < keys.length; i++) {
       this.addSelectedItem(keys[i]);
     }
   }
 
-  isItemDataSelected(itemData) {
+  isItemDataSelected(itemData: TItem | TKey): boolean {
     return this.isItemKeySelected(itemData);
   }
 
-  isItemKeySelected(itemData) {
+  isItemKeySelected(itemData: TItem | TKey): boolean {
     const { selectionFilter } = this.options;
 
     if (!selectionFilter) {
@@ -82,7 +87,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 
-  _getKeyExpr() {
+  _getKeyExpr(): string | undefined | Function {
     const keyField = this.options.key();
     if (Array.isArray(keyField) && keyField.length === 1) {
       return keyField[0];
@@ -98,9 +103,9 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return key;
   }
 
-  _getFilterByKey(key) {
+  _getFilterByKey(key: TKey): SelectionFilter {
     const keyField = this._getKeyExpr();
-    let filter = [keyField, '=', this._normalizeKey(key)];
+    let filter: SelectionFilter = [keyField, '=', this._normalizeKey(key)];
 
     if (Array.isArray(keyField)) {
       filter = [];
@@ -115,19 +120,19 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return filter;
   }
 
-  addSelectedItem(key, isSelectAll?: boolean, skipFilter?: boolean) {
+  addSelectedItem(key: TKey, dataOrIsSelectAll?: boolean, skipFilter?: boolean): void {
     const filter = this._getFilterByKey(key);
 
-    this._addSelectionFilter(false, filter, isSelectAll, skipFilter);
+    this._addSelectionFilter(false, filter, dataOrIsSelectAll, skipFilter);
   }
 
-  removeSelectedItem(key) {
+  removeSelectedItem(key: TKey): void {
     const filter = this._getFilterByKey(key);
 
     this._addSelectionFilter(true, filter);
   }
 
-  validate() {
+  validate(): void {
     const { key } = this.options;
 
     if (key && key() === undefined) {
@@ -135,7 +140,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     }
   }
 
-  _findSubFilter(selectionFilter, filter) {
+  _findSubFilter(selectionFilter?: SelectionFilter, filter?: SelectionFilter): number {
     if (!selectionFilter) return -1;
     const filterString = JSON.stringify(filter);
 
@@ -149,31 +154,31 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return -1;
   }
 
-  _isLastSubFilter(selectionFilter, filter) {
+  _isLastSubFilter(selectionFilter?: SelectionFilter, filter?: SelectionFilter) {
     if (selectionFilter && filter) {
       return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1 || this._findSubFilter([selectionFilter], filter) === 0;
     }
     return false;
   }
 
-  _addFilterOperator(selectionFilter, filterOperator) {
+  _addFilterOperator(selectionFilter: SelectionFilter, filterOperator: 'and' | 'or'): SelectionFilter {
     if (selectionFilter.length > 1 && isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
       selectionFilter = [selectionFilter];
     }
-    if (selectionFilter.length) {
+    if (Array.isArray(selectionFilter) && selectionFilter.length) {
       selectionFilter.push(filterOperator);
     }
     return selectionFilter;
   }
 
-  _denormalizeFilter(filter) {
+  _denormalizeFilter(filter: SelectionFilter): SelectionFilter {
     if (filter && isString(filter[0])) {
       filter = [filter];
     }
     return filter;
   }
 
-  _isOnlyNegativeFiltersLeft(filters) {
+  _isOnlyNegativeFiltersLeft(filters: SelectionFilter): boolean {
     return filters.every((filterItem, i) => {
       if (i % 2 === 0) {
         return Array.isArray(filterItem) && filterItem[0] === '!';
@@ -183,16 +188,16 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
   }
 
   _addSelectionFilter(
-    isDeselect,
-    filter,
+    isDeselect?: boolean,
+    filter?: SelectionFilter,
     isSelectAll?: boolean,
     skipFilter?: boolean,
-  ) {
+  ): void {
     const that = this;
     const currentFilter = isDeselect ? ['!', filter] : filter;
     const currentOperation = isDeselect ? 'and' : 'or';
     let needAddFilter = true;
-    let selectionFilter = that.options.selectionFilter || [];
+    let selectionFilter: SelectionFilter = that.options.selectionFilter || [];
 
     selectionFilter = that._denormalizeFilter(selectionFilter);
     if (selectionFilter?.length && !skipFilter) {
@@ -209,12 +214,12 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
 
       const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
-      needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
+      needAddFilter = !!filter?.length && !isKeyOperatorsAfterRemoved;
     }
 
     if (needAddFilter) {
       selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
-      selectionFilter.push(currentFilter);
+      Array.isArray(selectionFilter) && selectionFilter.push(currentFilter);
     }
 
     selectionFilter = that._normalizeFilter(selectionFilter);
@@ -222,14 +227,14 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
   }
 
-  _normalizeFilter(filter) {
+  _normalizeFilter(filter: SelectionFilter): SelectionFilter {
     if (filter && filter.length === 1) {
       [filter] = filter;
     }
     return filter;
   }
 
-  _removeFilterByIndex(filter, filterIndex, isSelectAll) {
+  _removeFilterByIndex(filter: SelectionFilter, filterIndex: number, isSelectAll?: boolean): void {
     const operation = filter[1];
 
     if (filterIndex > 0) {
@@ -243,25 +248,25 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     }
   }
 
-  _isSimpleKeyFilter(filter, key) {
-    return filter.length === 3 && filter[0] === key && filter[1] === '=';
+  _isSimpleKeyFilter(filter?: SelectionFilter, key?: string | Function): boolean {
+    return filter?.length === 3 && filter[0] === key && filter[1] === '=';
   }
 
-  _isKeyFilter(filter) {
-    if (filter.length === 2 && filter[0] === '!') {
+  _isKeyFilter(filter?: SelectionFilter): boolean {
+    if (filter?.length === 2 && filter?.[0] === '!') {
       return this._isKeyFilter(filter[1]);
     }
     const keyField = this._getKeyExpr();
 
     if (Array.isArray(keyField)) {
-      if (filter.length !== keyField.length * 2 - 1) {
+      if (filter?.length !== keyField.length * 2 - 1) {
         return false;
       }
       for (let i = 0; i < keyField.length; i++) {
-        if (i > 0 && filter[i * 2 - 1] !== 'and') {
+        if (i > 0 && filter?.[i * 2 - 1] !== 'and') {
           return false;
         }
-        if (!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {
+        if (!this._isSimpleKeyFilter(filter?.[i * 2], keyField[i])) {
           return false;
         }
       }
@@ -271,7 +276,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return this._isSimpleKeyFilter(filter, keyField);
   }
 
-  _hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex) {
+  _hasKeyFiltersOnlyStartingFromIndex(selectionFilter: SelectionFilter, filterIndex: number): boolean {
     if (filterIndex >= 0) {
       for (let i = filterIndex; i < selectionFilter.length; i++) {
         if (typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
@@ -285,7 +290,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return false;
   }
 
-  _removeSameFilter(selectionFilter, filter, inverted, isSelectAll?: boolean) {
+  _removeSameFilter(selectionFilter: SelectionFilter, filter?: SelectionFilter, inverted?: boolean, isSelectAll?: boolean): number {
     filter = inverted ? ['!', filter] : filter;
 
     if (JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
@@ -316,7 +321,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return -1;
   }
 
-  getSelectAllState() {
+  getSelectAllState(): boolean | undefined {
     const filter = this.options.filter();
     let { selectionFilter } = this.options;
 
@@ -337,7 +342,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey = 
     return undefined;
   }
 
-  loadSelectedItemsWithFilter() {
+  loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     const componentFilter = this.options.filter();
     const { selectionFilter } = this.options;
 
