@@ -15,10 +15,9 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
-
 import {
-    DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT,
-    DROP_DOWN_EDITOR_AFTER_FIELD_SLOT
+    DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON,
+    DROP_DOWN_EDITOR_AFTER_FIELD_ADDON
 } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
 import 'generic_light.css!';
@@ -1456,8 +1455,8 @@ QUnit.module('Templates', () => {
             assert.strictEqual($children.length, 5, 'element count is correct');
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
-            assert.ok($children.eq(2).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT), 'before template slot');
-            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_SLOT), 'after template slot');
+            assert.ok($children.eq(2).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), 'before template slot');
+            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), 'after template slot');
             assert.ok($children.eq(4).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
@@ -1480,8 +1479,8 @@ QUnit.module('Templates', () => {
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
             assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
-            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT), 'before template slot');
-            assert.ok($children.eq(4).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_SLOT), 'after template slot');
+            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), 'before template slot');
+            assert.ok($children.eq(4).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), 'after template slot');
             assert.ok($children.eq(5).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
@@ -1636,45 +1635,175 @@ QUnit.module('Templates', () => {
 
         assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
     });
+});
 
-    QUnit.test('renders fieldAddons content', function(assert) {
-        const $editor = $('#dropDownEditorLazy').dxDropDownEditor({
-            value: 'test',
-            fieldAddons: { beforeTemplate: () => 'beforeTest', afterTemplate: () => 'afterTest' },
-        });
+QUnit.module('Templates: fieldAddons', {
+    beforeEach: function() {
+        this.$container = $('#dropDownEditorLazy');
 
-        const beforeSlot = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
-        const afterSlot = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
+        this.createEditor = function(options = {}) {
+            return this.$container
+                .dxDropDownEditor({
+                    value: 'test',
+                    fieldAddons: this.getDefaultAddons(),
+                    ...options,
+                })
+                .dxDropDownEditor('instance');
+        };
 
-        assert.ok(beforeSlot, 'before slot exists');
-        assert.ok(afterSlot, 'after slot exists');
+        this.getDefaultAddons = function() {
+            return {
+                beforeTemplate: (value) => `before - ${value}`,
+                afterTemplate: (value) => `after - ${value}`,
+            };
+        };
 
-        assert.strictEqual($(beforeSlot).text(), 'beforeTest', 'before slot content is correct');
-        assert.strictEqual($(afterSlot).text(), 'afterTest', 'after slot content is correct');
+        this.getAddons = function() {
+            const $beforeAddon = this.$container.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
+            const $afterAddon = this.$container.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_ADDON}`);
 
-    });
+            return {
+                beforeAddon: $beforeAddon.get(0),
+                afterAddon: $afterAddon.get(0),
+                $beforeAddon,
+                $afterAddon
+            };
+        };
+    },
+    afterEach: function() {
+        this.$container.remove();
+    }
+}, () => {
+    QUnit.test('should create addons addons once and reuse them on value change', function(assert) {
+        const instance = this.createEditor();
 
-    QUnit.test('creates fieldAddons slots once and reuses them on value change', function(assert) {
-        const $editor = $('#dropDownEditorLazy').dxDropDownEditor({
-            value: 'test',
-            fieldAddons: { beforeTemplate: () => 'beforeTest', afterTemplate: () => 'afterTest' },
-        });
+        const { beforeAddon: beforeInitial, afterAddon: afterInitial } = this.getAddons();
 
-        const instance = $editor.dxDropDownEditor('instance');
-
-        const beforeSlot1 = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
-        const afterSlot1 = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
-
-        assert.ok(beforeSlot1, 'before slot exists');
-        assert.ok(afterSlot1, 'after slot exists');
+        assert.ok(beforeInitial, 'before addon exists');
+        assert.ok(afterInitial, 'after addon exists');
 
         instance.option('value', 'test1');
 
-        const beforeSlot2 = $editor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`).get(0);
-        const afterSlot2 = $editor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`).get(0);
+        const { beforeAddon: beforeUpdated, afterAddon: afterUpdated } = this.getAddons();
 
-        assert.strictEqual(beforeSlot1, beforeSlot2, 'before slot is reused');
-        assert.strictEqual(afterSlot1, afterSlot2, 'after slot is reused');
+        assert.strictEqual(beforeInitial, beforeUpdated, 'before addon is reused');
+        assert.strictEqual(afterInitial, afterUpdated, 'after addon is reused');
+    });
+
+    QUnit.test('should render addons content with data', function(assert) {
+        this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content is correct');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addon content is correct');
+    });
+
+    ['beforeTemplate', 'afterTemplate'].forEach(template => {
+        QUnit.test(`should support only ${template}`, function(assert) {
+            this.createEditor({
+                fieldAddons: { [template]: (data) => `${template} - ${data}` },
+            });
+
+            const { $beforeAddon, $afterAddon } = this.getAddons();
+
+            if(template === 'beforeTemplate') {
+                assert.strictEqual($beforeAddon.text(), 'beforeTemplate - test', 'beforeTemplate rendered');
+                assert.strictEqual($afterAddon.text(), '', 'after slot remains empty');
+            } else {
+                assert.strictEqual($beforeAddon.text(), '', 'before slot remains empty');
+                assert.strictEqual($afterAddon.text(), 'afterTemplate - test', 'afterTemplate rendered');
+            }
+        });
+    });
+
+    QUnit.test('should update addons content and re-render on value change', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content matches value');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addons content matches value');
+
+        instance.option('value', 'updated');
+
+        assert.strictEqual($beforeAddon.text(), 'before - updated', 'before addon content updated');
+        assert.strictEqual($afterAddon.text(), 'after - updated', 'after addon content updated');
+    });
+
+    QUnit.test('should render fieldAddons when set dynamically', function(assert) {
+        const instance = this.createEditor();
+
+        instance.option('fieldAddons', this.getDefaultAddons());
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'rendered correct content');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'rendered correct content');
+    });
+
+    QUnit.test('should clear addons addons when fieldAddons is removed', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content matches value');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addon content matches value');
+
+        instance.option('fieldAddons', null);
+
+        const { $beforeAddon: $beforeSlotUpdated, $afterAddon: $afterSlotUpdated } = this.getAddons();
+
+        assert.strictEqual($beforeSlotUpdated.text(), '', 'before addon cleared');
+        assert.strictEqual($afterSlotUpdated.text(), '', 'after addon cleared');
+    });
+
+    QUnit.test('should remove addons addons on widget dispose', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.length, 1, 'before addon exists');
+        assert.strictEqual($afterAddon.length, 1, 'after addon exists');
+
+        instance.dispose();
+
+        const { $beforeAddon: $beforeSlotRemoved, $afterAddon: $afterSlotRemoved } = this.getAddons();
+
+        assert.strictEqual($beforeSlotRemoved.length, 0, 'before addon removed');
+        assert.strictEqual($afterSlotRemoved.length, 0, 'after addon removed');
+    });
+
+    QUnit.test('should render fieldAddons but not fieldTemplate if both provided', function(assert) {
+        const instance = this.createEditor({
+            fieldTemplate: (data, container) => $('<div>').dxTextBox({ value: 'Custom' }).appendTo(container)
+        });
+
+        const $inputs = this.$container.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test');
+        assert.strictEqual($afterAddon.text(), 'after - test');
+        assert.strictEqual($inputs.length, 1, 'only editor input is present');
+        assert.strictEqual($inputs.val(), instance.option('value'), 'input shows editor value');
+    });
+
+    QUnit.test('should handle string templates using integrationOptions', function(assert) {
+        this.createEditor({
+            fieldAddons: { beforeTemplate: 'customBefore', afterTemplate: 'customAfter' },
+            integrationOptions: {
+                templates: {
+                    customBefore: { render: ({ container, model }) => $(container).text(`before - ${model}`) },
+                    customAfter: { render: ({ container, model }) => $(container).text(`after - ${model}`) },
+                }
+            }
+        });
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before content is correct');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after content is correct');
     });
 });
 

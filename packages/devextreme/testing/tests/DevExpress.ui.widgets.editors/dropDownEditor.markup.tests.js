@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
 import {
-    DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT,
-    DROP_DOWN_EDITOR_AFTER_FIELD_SLOT
+    DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON,
+    DROP_DOWN_EDITOR_AFTER_FIELD_ADDON
 } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
@@ -120,8 +120,8 @@ module('DropDownEditor markup', {
     test('should render fieldAddons content slots on initialization', function(assert) {
         const $wrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
 
-        const $before = $wrapper.children(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_SLOT}`);
-        const $after = $wrapper.children(`.${DROP_DOWN_EDITOR_AFTER_FIELD_SLOT}`);
+        const $before = $wrapper.children(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
+        const $after = $wrapper.children(`.${DROP_DOWN_EDITOR_AFTER_FIELD_ADDON}`);
 
         assert.strictEqual($before.length, 1, 'before slot rendered');
         assert.strictEqual($after.length, 1, 'after slot rendered');
