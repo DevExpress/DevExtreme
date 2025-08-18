@@ -75,6 +75,14 @@ QUnit.module('hideToasts', {
 
         hideToasts(undefinedElement);
 
-        assert.strictEqual(this.getToastCount(), 2, 'nothing has changed');
+        assert.strictEqual(this.getToastCount(), 2, 'nothing has been hidden');
+    });
+
+    QUnit.test('with empty jquery element parameter hides nothing', function(assert) {
+        assert.strictEqual(this.getToastCount(), 2);
+
+        hideToasts($());
+
+        assert.strictEqual(this.getToastCount(), 2, 'nothing has been hidden');
     });
 });
