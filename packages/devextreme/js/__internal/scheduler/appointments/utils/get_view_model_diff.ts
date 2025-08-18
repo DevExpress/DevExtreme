@@ -41,28 +41,28 @@ const getObjectToCompare = (
 
 const isDataChanged = (
   data: SafeAppointment,
-  appointmentDataProvider: AppointmentDataSource,
+  appointmentDataSource: AppointmentDataSource,
 ): boolean => {
-  const updatedData = appointmentDataProvider.getUpdatedAppointment();
+  const updatedData = appointmentDataSource.getUpdatedAppointment();
 
-  return updatedData === data || appointmentDataProvider
+  return updatedData === data || appointmentDataSource
     .getUpdatedAppointmentKeys()
     .some((item) => data[item.key] === item.value);
 };
 
-const compareViewModel = (appointmentDataProvider: AppointmentDataSource) => (
+const compareViewModel = (appointmentDataSource: AppointmentDataSource) => (
   viewModelOld: AppointmentViewModelPlain,
   viewModelNext: AppointmentViewModelPlain,
 ): boolean => viewModelOld.itemData === viewModelNext.itemData
-  && !isDataChanged(viewModelNext.itemData, appointmentDataProvider)
+  && !isDataChanged(viewModelNext.itemData, appointmentDataSource)
   && equalByValue(getObjectToCompare(viewModelOld), getObjectToCompare(viewModelNext));
 
 export const getViewModelDiff = (
   viewModelOld: AppointmentViewModelPlain[],
   viewModelNext: AppointmentViewModelPlain[],
-  appointmentDataProvider: AppointmentDataSource,
+  appointmentDataSource: AppointmentDataSource,
 ): DiffItem<AppointmentViewModelPlain, AppointmentViewModelPlain>[] => getArraysDiff(
   viewModelOld,
   viewModelNext,
-  compareViewModel(appointmentDataProvider),
+  compareViewModel(appointmentDataSource),
 );

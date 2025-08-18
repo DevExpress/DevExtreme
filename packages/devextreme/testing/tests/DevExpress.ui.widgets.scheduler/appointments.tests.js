@@ -467,9 +467,6 @@ QUnit.module('Appointments', moduleOptions, () => {
 
     QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', async function(assert) {
         const strategy = new VerticalAppointmentsStrategy({
-            appointmentDataProvider: {
-                appointmentTakesAllDay: commonUtils.noop,
-            },
             dataAccessors: mockDataAccessor,
             allDayPanelMode: 'all',
             cellDurationInMinutes: 30,
