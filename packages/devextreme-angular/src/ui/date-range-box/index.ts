@@ -47,7 +47,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -84,6 +83,10 @@ import { DxoDateRangeBoxPositionModule } from 'devextreme-angular/ui/date-range-
 import { DxoDateRangeBoxShowModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/tokens';
 
 
 
@@ -112,9 +115,14 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
 
     instance: DxDateRangeBox = null;

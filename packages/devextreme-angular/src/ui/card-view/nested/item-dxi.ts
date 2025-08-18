@@ -33,9 +33,15 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-item',
@@ -46,22 +52,26 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiCardViewItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiCardViewItemComponent,
+        }
     ],
 })
 export class DxiCardViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
     
     @Input()

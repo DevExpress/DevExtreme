@@ -26,9 +26,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-button',
@@ -39,14 +41,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiDataGridButtonComponent) => ({
-               propertyName: 'buttons',
-               component
-            }),
-            deps: [DxiDataGridButtonComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiDataGridButtonComponent,
+        }
     ],
 })
 export class DxiDataGridButtonComponent extends CollectionNestedOption implements AfterViewInit,

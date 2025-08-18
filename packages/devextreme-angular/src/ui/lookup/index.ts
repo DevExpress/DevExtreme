@@ -48,7 +48,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -83,6 +82,10 @@ import { DxoLookupShowModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupShowEventModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxiLookupToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
+import { 
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/tokens';
 
 
 
@@ -111,9 +114,14 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxLookupComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
 
     instance: DxLookup = null;

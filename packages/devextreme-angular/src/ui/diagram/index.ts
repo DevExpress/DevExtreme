@@ -40,7 +40,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -92,6 +91,14 @@ import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
+import { 
+           PROPERTY_TOKEN_commands,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_connectionPoints,
+           PROPERTY_TOKEN_customShapes,
+           PROPERTY_TOKEN_groups,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/tokens';
 
 
 /**
@@ -113,9 +120,34 @@ import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested'
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customShapes)
+    set _customShapesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customShapes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     instance: DxDiagram = null;

@@ -32,9 +32,13 @@ import {
     IDxTemplateHost,
     DxTemplateHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-tree-list-form-item',
@@ -50,9 +54,9 @@ import { NestedOption } from 'devextreme-angular/core';
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     
     @Input()

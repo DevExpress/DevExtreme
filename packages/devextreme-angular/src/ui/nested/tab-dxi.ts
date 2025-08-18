@@ -27,9 +27,16 @@ import {
     IDxTemplateHost,
     DxTemplateHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
+
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
+
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-tab',
@@ -40,14 +47,10 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiTabComponent) => ({
-               propertyName: 'tabs',
-               component
-            }),
-            deps: [DxiTabComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_tabs,
+           useExisting: DxiTabComponent,
+        }
     ],
     inputs: [
         'alignItemLabels',
@@ -68,9 +71,17 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
     IDxTemplateHost {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
     }
     
 

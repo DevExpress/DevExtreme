@@ -28,9 +28,15 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_columns,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-tree-list-column',
@@ -40,21 +46,25 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiTreeListColumnComponent) => ({
-               propertyName: 'columns',
-               component
-            }),
-            deps: [DxiTreeListColumnComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiTreeListColumnComponent,
+        }
     ],
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
     }
     
     @Input()

@@ -23,9 +23,13 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxoTextBoxOptions } from './base/text-box-options';
+
+
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-search-editor-options',
@@ -96,9 +100,9 @@ import { DxoTextBoxOptions } from './base/text-box-options';
 })
 export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
     }
     
 

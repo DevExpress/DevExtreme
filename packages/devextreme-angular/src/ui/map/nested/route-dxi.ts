@@ -19,9 +19,14 @@ import { RouteMode } from 'devextreme/ui/map';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_routes } from 'devextreme-angular/tokens';
+
+import {
+    PROPERTY_TOKEN_locations,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-map-route',
@@ -31,21 +36,17 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiMapRouteComponent) => ({
-               propertyName: 'routes',
-               component
-            }),
-            deps: [DxiMapRouteComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_routes,
+           useExisting: DxiMapRouteComponent,
+        }
     ],
 })
 export class DxiMapRouteComponent extends CollectionNestedOption {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_locations)
+    set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('locations', value);
     }
     
     @Input()

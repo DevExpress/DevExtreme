@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRow } from './base/gantt-filter-row';
 
+
+
 @Component({
     selector: 'dxo-filter-row',
     standalone: true,

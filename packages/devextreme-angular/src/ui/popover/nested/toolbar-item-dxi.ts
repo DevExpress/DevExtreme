@@ -27,9 +27,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-popover-toolbar-item',
@@ -40,14 +42,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiPopoverToolbarItemComponent) => ({
-               propertyName: 'toolbarItems',
-               component
-            }),
-            deps: [DxiPopoverToolbarItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_toolbarItems,
+           useExisting: DxiPopoverToolbarItemComponent,
+        }
     ],
 })
 export class DxiPopoverToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,

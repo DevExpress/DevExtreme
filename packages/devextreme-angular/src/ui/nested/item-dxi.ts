@@ -27,9 +27,17 @@ import {
     IDxTemplateHost,
     DxTemplateHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
+
+
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-item',
@@ -40,14 +48,10 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiItemComponent,
+        }
     ],
     inputs: [
         'disabled',
@@ -137,9 +141,25 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
     IDxTemplateHost {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
     }
     
 

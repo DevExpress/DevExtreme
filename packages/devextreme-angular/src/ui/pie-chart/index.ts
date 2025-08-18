@@ -42,7 +42,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -109,6 +108,10 @@ import { DxoPieChartSubtitleModule } from 'devextreme-angular/ui/pie-chart/neste
 import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_series,
+     } from 'devextreme-angular/tokens';
 
 
 /**
@@ -131,9 +134,14 @@ import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
     }
 
     instance: DxPieChart = null;

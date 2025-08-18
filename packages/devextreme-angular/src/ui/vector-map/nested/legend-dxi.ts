@@ -19,9 +19,11 @@ import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devext
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_legends } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-vector-map-legend',
@@ -31,14 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiVectorMapLegendComponent) => ({
-               propertyName: 'legends',
-               component
-            }),
-            deps: [DxiVectorMapLegendComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_legends,
+           useExisting: DxiVectorMapLegendComponent,
+        }
     ],
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {

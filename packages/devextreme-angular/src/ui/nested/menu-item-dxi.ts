@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_menuItems } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-menu-item',
@@ -28,14 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiMenuItemComponent) => ({
-               propertyName: 'menuItems',
-               component
-            }),
-            deps: [DxiMenuItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_menuItems,
+           useExisting: DxiMenuItemComponent,
+        }
     ],
 })
 export class DxiMenuItemComponent extends CollectionNestedOption {

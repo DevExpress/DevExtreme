@@ -25,9 +25,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-scheduler-options-item',
@@ -38,14 +40,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiSchedulerOptionsItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiSchedulerOptionsItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiSchedulerOptionsItemComponent,
+        }
     ],
 })
 export class DxiSchedulerOptionsItemComponent extends CollectionNestedOption implements AfterViewInit,

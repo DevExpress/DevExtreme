@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-config';
 
+
+
 @Component({
     selector: 'dxo-projection',
     standalone: true,

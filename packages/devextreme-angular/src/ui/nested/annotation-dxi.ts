@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
+
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-annotation',
@@ -28,14 +30,10 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiAnnotationComponent) => ({
-               propertyName: 'annotations',
-               component
-            }),
-            deps: [DxiAnnotationComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_annotations,
+           useExisting: DxiAnnotationComponent,
+        }
     ],
     inputs: [
         'allowDragging',

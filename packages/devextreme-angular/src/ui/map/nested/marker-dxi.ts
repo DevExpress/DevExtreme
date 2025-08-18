@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_markers } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-map-marker',
@@ -28,14 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiMapMarkerComponent) => ({
-               propertyName: 'markers',
-               component
-            }),
-            deps: [DxiMapMarkerComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_markers,
+           useExisting: DxiMapMarkerComponent,
+        }
     ],
 })
 export class DxiMapMarkerComponent extends CollectionNestedOption {

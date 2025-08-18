@@ -17,9 +17,11 @@ import { FormItemType } from 'devextreme/ui/form';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-empty-item',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewEmptyItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiCardViewEmptyItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiCardViewEmptyItemComponent,
+        }
     ],
 })
 export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {

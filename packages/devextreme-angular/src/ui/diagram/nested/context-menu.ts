@@ -22,9 +22,13 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-diagram-context-menu',
@@ -38,9 +42,9 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     
     @Input()

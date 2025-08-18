@@ -32,9 +32,13 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-data-grid-popup',
@@ -48,9 +52,9 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy, OnInit {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
     }
     
     @Input()

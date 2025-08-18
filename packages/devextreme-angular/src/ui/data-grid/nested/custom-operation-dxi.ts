@@ -18,9 +18,11 @@ import { DataType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-custom-operation',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiDataGridCustomOperationComponent) => ({
-               propertyName: 'customOperations',
-               component
-            }),
-            deps: [DxiDataGridCustomOperationComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_customOperations,
+           useExisting: DxiDataGridCustomOperationComponent,
+        }
     ],
 })
 export class DxiDataGridCustomOperationComponent extends CollectionNestedOption {

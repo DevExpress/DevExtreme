@@ -17,9 +17,11 @@ import { User } from 'devextreme/ui/chat';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-chat-item',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiChatItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiChatItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiChatItemComponent,
+        }
     ],
 })
 export class DxiChatItemComponent extends CollectionNestedOption {

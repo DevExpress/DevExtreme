@@ -17,9 +17,11 @@ import { AICommandNameExtended } from 'devextreme/ui/html_editor';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_commands } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-html-editor-command',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiHtmlEditorCommandComponent) => ({
-               propertyName: 'commands',
-               component
-            }),
-            deps: [DxiHtmlEditorCommandComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_commands,
+           useExisting: DxiHtmlEditorCommandComponent,
+        }
     ],
 })
 export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {

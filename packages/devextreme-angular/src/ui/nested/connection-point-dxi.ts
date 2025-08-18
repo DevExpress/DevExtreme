@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-connection-point',
@@ -28,14 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiConnectionPointComponent) => ({
-               propertyName: 'connectionPoints',
-               component
-            }),
-            deps: [DxiConnectionPointComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_connectionPoints,
+           useExisting: DxiConnectionPointComponent,
+        }
     ],
 })
 export class DxiConnectionPointComponent extends CollectionNestedOption {

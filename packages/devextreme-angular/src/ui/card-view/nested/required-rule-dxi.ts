@@ -17,9 +17,11 @@ import { ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-required-rule',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewRequiredRuleComponent) => ({
-               propertyName: 'validationRules',
-               component
-            }),
-            deps: [DxiCardViewRequiredRuleComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiCardViewRequiredRuleComponent,
+        }
     ],
 })
 export class DxiCardViewRequiredRuleComponent extends CollectionNestedOption {

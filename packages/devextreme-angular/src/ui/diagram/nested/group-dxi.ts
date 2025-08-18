@@ -19,9 +19,14 @@ import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } 
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_groups } from 'devextreme-angular/tokens';
+
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-diagram-group',
@@ -31,21 +36,17 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiDiagramGroupComponent) => ({
-               propertyName: 'groups',
-               component
-            }),
-            deps: [DxiDiagramGroupComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_groups,
+           useExisting: DxiDiagramGroupComponent,
+        }
     ],
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
     }
     
     @Input()

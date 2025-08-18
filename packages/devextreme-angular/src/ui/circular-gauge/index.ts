@@ -40,7 +40,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -92,6 +91,9 @@ import { DxoCircularGaugeTickModule } from 'devextreme-angular/ui/circular-gauge
 import { DxoCircularGaugeTitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeTooltipModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { 
+           PROPERTY_TOKEN_ranges,
+     } from 'devextreme-angular/tokens';
 
 
 /**
@@ -114,9 +116,9 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
 })
 export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
     }
 
     instance: DxCircularGauge = null;

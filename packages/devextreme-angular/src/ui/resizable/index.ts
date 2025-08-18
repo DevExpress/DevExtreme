@@ -52,7 +52,6 @@ import {
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
 
-
     instance: DxResizable = null;
 
     /**

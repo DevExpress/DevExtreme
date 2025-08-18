@@ -1,5 +1,5 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter, InjectionToken, Directive,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter, Directive,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
@@ -22,42 +22,11 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-export const СOLLECTION_NESTED_OPTION_TOKEN = new InjectionToken<string>('collection-nested-option-token');
-
 @Directive()
 export abstract class DxBaseClass {
-  private _activatedProps: string[] = [];
-
   private _activatedQueries = {};
 
   protected abstract _setOption(name: string, value: any): void;
-
-  protected _setCollectionOptionChildren(value: QueryList<{ propertyName: string; component: CollectionNestedOption }>) {
-    const groupedItems: Record<string, CollectionNestedOption[]> = {};
-
-    value.forEach(({ propertyName, component }) => {
-      groupedItems[propertyName] = groupedItems[propertyName] || [];
-      groupedItems[propertyName].push(component);
-    });
-
-    const notEmptyProps: string[] = [];
-
-    Object.entries(groupedItems).forEach(([propertyName, items]) => {
-      const q = new QueryList<CollectionNestedOption>();
-      q.reset(items);
-
-      this.setChildren(propertyName, q);
-      notEmptyProps.push(propertyName);
-    });
-
-    this._activatedProps.forEach((propertyName) => {
-      if (!notEmptyProps.includes(propertyName)) {
-        this.setChildren(propertyName, new QueryList<CollectionNestedOption>());
-      }
-    });
-
-    this._activatedProps = notEmptyProps;
-  }
 
   setChildren(propertyName: string, items: QueryList<CollectionNestedOption>) {
     if (items.length) {

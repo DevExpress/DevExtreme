@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
 
+
+
 @Component({
     selector: 'dxo-file-uploader-options',
     standalone: true,

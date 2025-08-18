@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
 
+
+
 @Component({
     selector: 'dxo-scatter',
     standalone: true,

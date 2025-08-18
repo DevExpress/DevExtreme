@@ -18,9 +18,11 @@ import { DataType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-custom-operation',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewCustomOperationComponent) => ({
-               propertyName: 'customOperations',
-               component
-            }),
-            deps: [DxiCardViewCustomOperationComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_customOperations,
+           useExisting: DxiCardViewCustomOperationComponent,
+        }
     ],
 })
 export class DxiCardViewCustomOperationComponent extends CollectionNestedOption {

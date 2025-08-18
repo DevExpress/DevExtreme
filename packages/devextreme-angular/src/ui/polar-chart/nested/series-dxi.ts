@@ -19,9 +19,11 @@ import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-polar-chart-series',
@@ -31,14 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiPolarChartSeriesComponent) => ({
-               propertyName: 'series',
-               component
-            }),
-            deps: [DxiPolarChartSeriesComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_series,
+           useExisting: DxiPolarChartSeriesComponent,
+        }
     ],
 })
 export class DxiPolarChartSeriesComponent extends CollectionNestedOption {

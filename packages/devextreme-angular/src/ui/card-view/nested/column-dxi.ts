@@ -25,9 +25,14 @@ import { dxFormSimpleItem } from 'devextreme/ui/form';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
+
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-column',
@@ -37,21 +42,17 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewColumnComponent) => ({
-               propertyName: 'columns',
-               component
-            }),
-            deps: [DxiCardViewColumnComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiCardViewColumnComponent,
+        }
     ],
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
     }
     
     @Input()

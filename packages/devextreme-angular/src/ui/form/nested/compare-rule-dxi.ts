@@ -17,9 +17,11 @@ import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-form-compare-rule',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiFormCompareRuleComponent) => ({
-               propertyName: 'validationRules',
-               component
-            }),
-            deps: [DxiFormCompareRuleComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiFormCompareRuleComponent,
+        }
     ],
 })
 export class DxiFormCompareRuleComponent extends CollectionNestedOption {

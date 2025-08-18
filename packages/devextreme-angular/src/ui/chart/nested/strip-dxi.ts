@@ -18,9 +18,11 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_strips } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-chart-strip',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiChartStripComponent) => ({
-               propertyName: 'strips',
-               component
-            }),
-            deps: [DxiChartStripComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_strips,
+           useExisting: DxiChartStripComponent,
+        }
     ],
 })
 export class DxiChartStripComponent extends CollectionNestedOption {

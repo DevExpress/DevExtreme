@@ -43,7 +43,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -166,6 +165,12 @@ import { DxoPolarChartValueAxisModule } from 'devextreme-angular/ui/polar-chart/
 import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartVisualRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_constantLines,
+           PROPERTY_TOKEN_series,
+           PROPERTY_TOKEN_strips,
+     } from 'devextreme-angular/tokens';
 
 
 /**
@@ -188,9 +193,24 @@ import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
     }
 
     instance: DxPolarChart = null;

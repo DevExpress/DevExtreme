@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_location } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-responsive-box-location',
@@ -28,14 +30,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiResponsiveBoxLocationComponent) => ({
-               propertyName: 'location',
-               component
-            }),
-            deps: [DxiResponsiveBoxLocationComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_location,
+           useExisting: DxiResponsiveBoxLocationComponent,
+        }
     ],
 })
 export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {

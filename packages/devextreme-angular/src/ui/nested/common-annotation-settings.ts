@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
 
+
+
 @Component({
     selector: 'dxo-common-annotation-settings',
     standalone: true,

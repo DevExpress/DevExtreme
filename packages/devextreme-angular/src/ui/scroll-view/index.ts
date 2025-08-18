@@ -53,7 +53,6 @@ import {
 })
 export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
-
     instance: DxScrollView = null;
 
     /**

@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoAnimationConfig } from './base/animation-config';
 
+
+
 @Component({
     selector: 'dxo-animation',
     standalone: true,

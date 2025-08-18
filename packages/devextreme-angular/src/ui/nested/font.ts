@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
 
+
+
 @Component({
     selector: 'dxo-font',
     standalone: true,

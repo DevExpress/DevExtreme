@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
 
+
+
 @Component({
     selector: 'dxo-search',
     standalone: true,

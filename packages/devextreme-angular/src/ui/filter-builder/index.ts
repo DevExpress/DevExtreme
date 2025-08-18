@@ -42,7 +42,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -58,6 +57,10 @@ import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-an
 import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { 
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+     } from 'devextreme-angular/tokens';
 
 
 
@@ -86,9 +89,14 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
     }
 
     instance: DxFilterBuilder = null;

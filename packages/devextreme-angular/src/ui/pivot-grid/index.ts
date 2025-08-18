@@ -83,7 +83,6 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
 })
 export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-
     instance: DxPivotGrid = null;
 
     /**

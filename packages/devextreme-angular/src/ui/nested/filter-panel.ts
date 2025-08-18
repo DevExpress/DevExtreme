@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFilterPanel } from './base/filter-panel';
 
+
+
 @Component({
     selector: 'dxo-filter-panel',
     standalone: true,

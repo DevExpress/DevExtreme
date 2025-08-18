@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoSorting } from './base/sorting';
 
+
+
 @Component({
     selector: 'dxo-sorting',
     standalone: true,

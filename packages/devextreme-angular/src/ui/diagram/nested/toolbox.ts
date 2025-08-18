@@ -22,9 +22,13 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-diagram-toolbox',
@@ -38,9 +42,9 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
     }
     
     @Input()

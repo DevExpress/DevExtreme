@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
 
+
+
 @Component({
     selector: 'dxo-texts',
     standalone: true,

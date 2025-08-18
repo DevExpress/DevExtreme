@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoPositionConfig } from './base/position-config';
 
+
+
 @Component({
     selector: 'dxo-position',
     standalone: true,

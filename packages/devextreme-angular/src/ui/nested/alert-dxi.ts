@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiAlert } from './base/alert-dxi';
+
+import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-alert',
@@ -28,14 +30,10 @@ import { DxiAlert } from './base/alert-dxi';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiAlertComponent) => ({
-               propertyName: 'alerts',
-               component
-            }),
-            deps: [DxiAlertComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_alerts,
+           useExisting: DxiAlertComponent,
+        }
     ],
     inputs: [
         'id',

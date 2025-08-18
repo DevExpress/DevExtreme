@@ -17,9 +17,11 @@ import { DataChangeType } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-change',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiTreeListChangeComponent) => ({
-               propertyName: 'changes',
-               component
-            }),
-            deps: [DxiTreeListChangeComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_changes,
+           useExisting: DxiTreeListChangeComponent,
+        }
     ],
 })
 export class DxiTreeListChangeComponent extends CollectionNestedOption {

@@ -26,9 +26,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-chart-annotation',
@@ -39,14 +41,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiChartAnnotationComponent) => ({
-               propertyName: 'annotations',
-               component
-            }),
-            deps: [DxiChartAnnotationComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_annotations,
+           useExisting: DxiChartAnnotationComponent,
+        }
     ],
 })
 export class DxiChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,

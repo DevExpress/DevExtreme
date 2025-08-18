@@ -41,11 +41,13 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 
 import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/tokens';
 
 
 
@@ -64,9 +66,9 @@ import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
 })
 export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
     }
 
     instance: DxStepper<TItem, TKey> = null;

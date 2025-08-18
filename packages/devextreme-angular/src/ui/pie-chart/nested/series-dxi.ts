@@ -19,9 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-pie-chart-series',
@@ -31,14 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiPieChartSeriesComponent) => ({
-               propertyName: 'series',
-               component
-            }),
-            deps: [DxiPieChartSeriesComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_series,
+           useExisting: DxiPieChartSeriesComponent,
+        }
     ],
 })
 export class DxiPieChartSeriesComponent extends CollectionNestedOption {

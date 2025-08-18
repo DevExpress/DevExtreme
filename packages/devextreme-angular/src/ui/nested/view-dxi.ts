@@ -18,9 +18,11 @@ import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType 
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_views } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-view',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiViewComponent) => ({
-               propertyName: 'views',
-               component
-            }),
-            deps: [DxiViewComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_views,
+           useExisting: DxiViewComponent,
+        }
     ],
 })
 export class DxiViewComponent extends CollectionNestedOption {

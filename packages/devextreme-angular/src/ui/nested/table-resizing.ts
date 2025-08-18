@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
 
+
+
 @Component({
     selector: 'dxo-table-resizing',
     standalone: true,

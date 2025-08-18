@@ -16,6 +16,7 @@ const inputs = {
     'devextreme-angular': `${baseDir}devextreme-angular.mjs`,
     'devextreme-angular-core': `${baseDir}devextreme-angular-core.mjs`,
     'devextreme-angular-http': `${baseDir}devextreme-angular-http.mjs`,
+    'devextreme-angular-tokens': `${baseDir}devextreme-angular-tokens.mjs`,
     ...fileNames.reduce((acc, name) => {
         acc[name] = `${baseDir}${name}.mjs`;
 

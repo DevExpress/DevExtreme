@@ -21,9 +21,11 @@ import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_m
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_layers } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-layer',
@@ -33,14 +35,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiLayerComponent) => ({
-               propertyName: 'layers',
-               component
-            }),
-            deps: [DxiLayerComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_layers,
+           useExisting: DxiLayerComponent,
+        }
     ],
 })
 export class DxiLayerComponent extends CollectionNestedOption {

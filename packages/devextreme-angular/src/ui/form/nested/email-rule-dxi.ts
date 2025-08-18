@@ -17,9 +17,11 @@ import { ValidationRuleType } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-form-email-rule',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiFormEmailRuleComponent) => ({
-               propertyName: 'validationRules',
-               component
-            }),
-            deps: [DxiFormEmailRuleComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiFormEmailRuleComponent,
+        }
     ],
 })
 export class DxiFormEmailRuleComponent extends CollectionNestedOption {

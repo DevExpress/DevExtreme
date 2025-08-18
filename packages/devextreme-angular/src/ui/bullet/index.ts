@@ -69,7 +69,6 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 })
 export class DxBulletComponent extends DxComponent implements OnDestroy {
 
-
     instance: DxBullet = null;
 
     /**

@@ -21,9 +21,11 @@ import { Store } from 'devextreme/data/store';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-field',
@@ -33,14 +35,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiCardViewFieldComponent) => ({
-               propertyName: 'fields',
-               component
-            }),
-            deps: [DxiCardViewFieldComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_fields,
+           useExisting: DxiCardViewFieldComponent,
+        }
     ],
 })
 export class DxiCardViewFieldComponent extends CollectionNestedOption {

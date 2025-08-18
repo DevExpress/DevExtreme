@@ -19,9 +19,11 @@ import { FormItemType } from 'devextreme/ui/form';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-form-button-item',
@@ -31,14 +33,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiFormButtonItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiFormButtonItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiFormButtonItemComponent,
+        }
     ],
 })
 export class DxiFormButtonItemComponent extends CollectionNestedOption {

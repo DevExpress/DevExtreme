@@ -37,7 +37,6 @@ import {
     IterableDifferHelper,
     WatcherHelper,
     CollectionNestedOption,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
@@ -70,6 +69,11 @@ import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/tokens';
 
 
 /**
@@ -91,9 +95,19 @@ import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
-    @ContentChildren(СOLLECTION_NESTED_OPTION_TOKEN)
-    set _CollectionOptionChildren(value: QueryList<{ propertyName: string, component: CollectionNestedOption }>) {
-        this._setCollectionOptionChildren(value);
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     instance: DxForm = null;

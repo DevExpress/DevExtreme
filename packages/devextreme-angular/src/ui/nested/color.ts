@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoChartsColor } from './base/charts-color';
 
+
+
 @Component({
     selector: 'dxo-color',
     standalone: true,

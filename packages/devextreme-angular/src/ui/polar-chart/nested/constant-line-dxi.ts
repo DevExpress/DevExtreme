@@ -17,9 +17,11 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-polar-chart-constant-line',
@@ -29,14 +31,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiPolarChartConstantLineComponent) => ({
-               propertyName: 'constantLines',
-               component
-            }),
-            deps: [DxiPolarChartConstantLineComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_constantLines,
+           useExisting: DxiPolarChartConstantLineComponent,
+        }
     ],
 })
 export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {

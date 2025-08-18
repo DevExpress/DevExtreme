@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
+
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-mention',
@@ -28,14 +30,10 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiMentionComponent) => ({
-               propertyName: 'mentions',
-               component
-            }),
-            deps: [DxiMentionComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_mentions,
+           useExisting: DxiMentionComponent,
+        }
     ],
     inputs: [
         'dataSource',

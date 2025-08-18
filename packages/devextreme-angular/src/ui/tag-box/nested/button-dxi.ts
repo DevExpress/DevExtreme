@@ -18,9 +18,11 @@ import { dxButtonOptions } from 'devextreme/ui/button';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-tag-box-button',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiTagBoxButtonComponent) => ({
-               propertyName: 'buttons',
-               component
-            }),
-            deps: [DxiTagBoxButtonComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiTagBoxButtonComponent,
+        }
     ],
 })
 export class DxiTagBoxButtonComponent extends CollectionNestedOption {

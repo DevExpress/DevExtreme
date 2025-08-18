@@ -24,9 +24,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-tag-box-item',
@@ -37,14 +39,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiTagBoxItemComponent) => ({
-               propertyName: 'items',
-               component
-            }),
-            deps: [DxiTagBoxItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiTagBoxItemComponent,
+        }
     ],
 })
 export class DxiTagBoxItemComponent extends CollectionNestedOption implements AfterViewInit,

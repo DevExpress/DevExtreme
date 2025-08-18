@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
 
+
+
 @Component({
     selector: 'dxo-scrolling',
     standalone: true,

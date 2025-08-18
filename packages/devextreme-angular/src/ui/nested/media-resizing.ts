@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
 
+
+
 @Component({
     selector: 'dxo-media-resizing',
     standalone: true,

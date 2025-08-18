@@ -18,9 +18,11 @@ import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-constant-line',
@@ -30,14 +32,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiConstantLineComponent) => ({
-               propertyName: 'constantLines',
-               component
-            }),
-            deps: [DxiConstantLineComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_constantLines,
+           useExisting: DxiConstantLineComponent,
+        }
     ],
 })
 export class DxiConstantLineComponent extends CollectionNestedOption {

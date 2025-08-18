@@ -27,9 +27,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-color-box-toolbar-item',
@@ -40,14 +42,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
         DxTemplateHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiColorBoxToolbarItemComponent) => ({
-               propertyName: 'toolbarItems',
-               component
-            }),
-            deps: [DxiColorBoxToolbarItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_toolbarItems,
+           useExisting: DxiColorBoxToolbarItemComponent,
+        }
     ],
 })
 export class DxiColorBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,

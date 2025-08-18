@@ -16,9 +16,11 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
-    СOLLECTION_NESTED_OPTION_TOKEN,
 } from 'devextreme-angular/core';
 import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
+
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
+
 
 @Component({
     selector: 'dxi-toolbar-item',
@@ -28,14 +30,10 @@ import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: СOLLECTION_NESTED_OPTION_TOKEN,
-            useFactory: (component: DxiToolbarItemComponent) => ({
-               propertyName: 'toolbarItems',
-               component
-            }),
-            deps: [DxiToolbarItemComponent],
-         }
+        {
+           provide: PROPERTY_TOKEN_toolbarItems,
+           useExisting: DxiToolbarItemComponent,
+        }
     ],
     inputs: [
         'cssClass',
