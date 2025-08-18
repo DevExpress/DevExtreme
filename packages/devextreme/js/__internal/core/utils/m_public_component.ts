@@ -43,7 +43,7 @@ export function attachInstanceToElement($element, componentInstance, disposeFn) 
   data[COMPONENT_NAMES_DATA_KEY].push(name);
 }
 
-export function getInstanceByElement($element, componentClass) {
+export function getInstanceByElement<T = any>($element, componentClass): T {
   const name = getName(componentClass);
 
   return elementData($element.get(0), name);
