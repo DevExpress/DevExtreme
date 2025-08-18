@@ -25,7 +25,7 @@ import {
 import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
 import type { ChangedOptionInfo, EventInfo } from '@js/events';
 import type {
-  FieldDataChangedEvent,
+  FieldDataChangedEvent, FormItemComponent,
   FormItemType,
   GroupItem, Item, LabelLocation, Properties, SimpleItem, SimpleItemTemplateData, TabbedItem,
 } from '@js/ui/form';
@@ -1768,28 +1768,93 @@ class Form extends Widget<FormProperties> {
 
   _getSystemPrompt(): string {
     return `You are a helpful assistant that helps to fill form fields based on the text provided.
-                You will get a text and a list of fields that should be filled using info from the text.
-                It can include the name of field, suitable format, optionally some additional info about what should it include. You need to return
-                data for all the fields in the following format: {fieldName}:::{fieldValue};;;{fieldName}:::{fieldValue} and so on,
-                where {fieldName} - is a variable for a field name and {fieldValue} - is a variable for a string to fill.
-                If there is no info to fill, field value should be empty (like Name:::;;;).
-                If it is possible, adapt value to most common format for {fieldName}
-                Return dates in ISO format, return ranges in format {start}:::{end}.`;
+            You will get a text and a list of fields that should be filled using info from the text.
+            It can include the name of field, suitable format, optionally some additional info about what should it include. You need to return
+            data for all the fields in the following format: {fieldName}:::{fieldValue};;;{fieldName}:::{fieldValue} and so on,
+            where {fieldName} - is a variable for a field name and {fieldValue} - is a variable for a string to fill.
+            If there is no info to fill, field value should be empty (like Name:::;;;).`;
+  }
+
+  _getEditorTypeInfo(editorType: FormItemComponent | undefined): string {
+    switch (editorType) {
+      case 'dxDateBox':
+      case 'dxCalendar':
+        return 'date in ISO format';
+      case 'dxDateRangeBox':
+        return 'date range in ISO format, use pattern {start}:::{end}';
+      case 'dxColorBox':
+        return 'color in hex format';
+      case 'dxCheckBox':
+      case 'dxSwitch':
+        return 'boolean value, true or false';
+      case 'dxNumberBox':
+      case 'dxSlider':
+        return 'numeric value';
+      case 'dxRangeSlider':
+        return 'numeric range, use pattern {start}:::{end}';
+      default:
+        return 'text';
+    }
+  }
+
+  _getValidationRuleInfo(validationRules: SimpleItem['validationRules']): string {
+    const supportedRues = ['numeric', 'email', 'pattern', 'custom'];
+
+    if (!validationRules?.length) {
+      return '';
+    }
+
+    return validationRules
+      .filter((rule) => supportedRues.includes(rule.type))
+      .map((rule) => {
+        if (rule.type === 'pattern') {
+          return `use ${rule.pattern} pattern`;
+        }
+
+        if (rule.type === 'custom') {
+          return `value should have format: ${rule.validationCallback}`;
+        }
+
+        return rule.type;
+      })
+      .join(', ');
+  }
+
+  _getItemsAcceptedValuesInfo(editorOptions: SimpleItem['editorOptions']): string {
+    if (!editorOptions?.items) {
+      return '';
+    }
+
+    const items = editorOptions.items.map((item: { text?: string } | string) => {
+      if (isObject(item)) {
+        return item.text;
+      }
+
+      return item;
+    });
+
+    const acceptedValues = `, accepted values: ${items.join(', ')}, split values with :::`;
+    const customItemsAllowed = editorOptions?.acceptCustomValue ? ' (custom values are allowed)' : '';
+
+    return `${acceptedValues}${customItemsAllowed}`;
+  }
+
+  _getItemFormatInfo({ editorType, editorOptions, validationRules }: SimpleItem): string {
+    const dataType = this._getEditorTypeInfo(editorType);
+    const validationData = this._getValidationRuleInfo(validationRules);
+    const acceptedValues = this._getItemsAcceptedValuesInfo(editorOptions);
+
+    return `${dataType} ${validationData}${acceptedValues}`;
   }
 
   _getItemsInfo(items: SimpleItem[]): string {
-    const fieldData = items.map(({
+    const fieldData = items.map((item) => {
       // @ts-expect-error
-      dataField, editorType, editorOptions, aiProcessing,
-    }) => {
-      const instruction = aiProcessing?.instruction || '';
-      const customItems = editorOptions?.acceptCustomValue ? ' (custom values are allowed)' : '';
-      const itemsPrompt = `${editorOptions?.items ? `select field value among ${editorOptions.items}, split item values with :::` : ''}`;
+      const instruction = item.aiProcessing?.instruction || '';
 
-      return `fieldName: ${dataField},
-                            format: ${editorType?.slice(2)},
-                            ${instruction ? `instruction: ${instruction}` : ''}
-                            ${itemsPrompt}${customItems}\n`;
+      return `fieldName: ${item.dataField},
+              format: ${this._getItemFormatInfo(item)},
+              ${instruction ? `instruction: ${instruction}` : ''}\n`;
     });
 
     return fieldData.join(':::');
