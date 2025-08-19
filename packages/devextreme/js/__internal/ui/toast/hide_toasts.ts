@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import Toast, { TOAST_CLASS } from '@ts/ui/toast/m_toast';
+import Toast, { TOAST_CLASS } from '@ts/ui/toast/toast';
 
 function hideToasts(container?: Element | dxElementWrapper): void {
   const toasts = $(`.${TOAST_CLASS}`).toArray();
