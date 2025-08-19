@@ -1,6 +1,5 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-// import type { LoadResult } from '@js/common/data';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import type { dxElementWrapper } from '@js/core/renderer';

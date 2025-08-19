@@ -37,8 +37,6 @@ export interface DefaultOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keyOf: (item: TItem) => any;
   load: (loadOptions: LoadOptions) => DeferredObj<LoadResult<TItem>>;
-  // load: (loadOptions: LoadOptions) => DeferredObj<TItem[]>;
-  // load: (loadOptions: LoadOptions) => DeferredObj<unknown>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -67,7 +65,6 @@ export type SelectionOptions<
 > = DefaultOptions<TItem, TKey, TDeferred> & {
   selectedKeys: TKey[];
   selectedItemKeys: TKey[];
-  //   plainItems: (cached?: boolean) => TItem[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plainItems: (cached?: boolean) => any[];
   isVirtualPaging?: boolean;

@@ -182,7 +182,6 @@ export default class SelectionStrategy<
     const needLoadAllData = this.options.maxFilterLengthInRequest
       && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred<TItem[]>();
-    // const deferred = Deferred<unknown>();
     const queryParams = this._getQueryParams();
 
     const loadOptions = {
@@ -317,8 +316,6 @@ export default class SelectionStrategy<
     throw new Error('isItemKeySelected method should be overriden');
   }
 
-  // addSelectedItem(itemKey: TKey, isSelectAll?: boolean, skipFilter?: boolean): void
-  // addSelectedItem(itemKey: TKey, data: TItem): void
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
   addSelectedItem(itemKey: TKey, dataOrIsSelectAll?: TItem | boolean, skipFilter?: boolean): void {
     throw new Error('addSelectedItem method should be overriden');
