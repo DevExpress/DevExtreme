@@ -264,6 +264,7 @@ class CollectionWidget<
           : this._getItemsCount(items);
       },
       key: this.key.bind(this),
+      // @ts-expect-error TItem
       keyOf: this.keyOf.bind(this),
       load(options): DeferredObj<TItem[]> {
         const dataController = that._dataController;

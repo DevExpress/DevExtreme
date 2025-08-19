@@ -16,6 +16,8 @@ export interface SelectionItem {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Sensitivity = 'case' | 'base' | 'variant' | any;
 
+export type KeyExpr = string | string[];
+
 export interface DefaultOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
@@ -31,26 +33,27 @@ export interface DefaultOptions<
     addedItems: TItem[];
     removedItems: TItem[];
   }) => void;
-  key: () => string | Function | undefined;
+  key: () => KeyExpr | Function | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  keyOf: (item: any) => any;
+  keyOf: (item: TItem) => any;
   load: (loadOptions: LoadOptions) => DeferredObj<LoadResult<TItem>>;
-  //   load: (loadOptions: LoadOptions) => DeferredObj<TItem[]>;
-  //   load: (loadOptions: LoadOptions) => DeferredObj<unknown>;
+  // load: (loadOptions: LoadOptions) => DeferredObj<TItem[]>;
+  // load: (loadOptions: LoadOptions) => DeferredObj<unknown>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isItemSelected: (arg: any, options?: any) => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getItemData: (item: TItem) => any;
-  dataFields: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dataFields: () => any | undefined;
   filter: Filter;
   allowNullValue: boolean;
   deferred: TDeferred;
   equalByReference: boolean;
   mode: string;
   selectedItems: TItem[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   selectionFilter: SelectionFilter;
   maxFilterLengthInRequest: number;
 }
@@ -59,7 +62,7 @@ export type SelectionOptions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends SelectionItem = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TKey extends string | number = any,
+    TKey = any,
     TDeferred extends boolean = boolean,
 > = DefaultOptions<TItem, TKey, TDeferred> & {
   selectedKeys: TKey[];
@@ -68,7 +71,7 @@ export type SelectionOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plainItems: (cached?: boolean) => any[];
   isVirtualPaging?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   sensitivity: Sensitivity;
   allowLoadByRange?: () => boolean | undefined;
   alwaysSelectByShift?: boolean;
@@ -80,7 +83,6 @@ export type SelectionOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSelectionChanging: (e: any) => void;
   keyHashIndices: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [keyHash: string | number | symbol]: number[];
   };
   ignoreDisabledItems?: boolean;
