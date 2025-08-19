@@ -786,7 +786,7 @@
 /packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
-/packages/devextreme/js/__internal/ui/m_load_panel.ts                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/load_panel.ts                @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/**/loadPanel/**               @DevExpress/devextreme-editors
