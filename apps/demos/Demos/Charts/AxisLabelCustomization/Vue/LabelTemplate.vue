@@ -22,7 +22,7 @@ defineProps<{
   data?: { valueText: string }
 }>();
 
-const getFilePath = (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;
+const getFilePath = (text: string): string => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;
 </script>
 <style scoped>
 .template-text {
