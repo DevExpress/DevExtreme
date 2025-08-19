@@ -110,7 +110,7 @@ const series = [{
   valueField: 'Na',
 }];
 
-const customizeText = ({ valueText }) => `${valueText}%`;
+const customizeText = ({ valueText }: { valueText: string }) => `${valueText}%`;
 </script>
 <style scoped>
 #zoomedChart {

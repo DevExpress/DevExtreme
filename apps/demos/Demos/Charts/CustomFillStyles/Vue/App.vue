@@ -34,7 +34,7 @@ import {
 } from './utils.js';
 import { data } from './data.ts';
 
-function customizePoint(point) {
+function customizePoint(point: any) {
   const color = point.series.getPointsByArg(point.argument)[0].getColor();
   let fillId;
   switch (point.argument) {
@@ -59,7 +59,8 @@ function customizePoint(point) {
 
   return { color: { fillId } };
 }
-const customizeText = ({ argument }) => argument;
+
+const customizeText = ({ argument }: { argument: string }) => argument;
 </script>
 
 <style>

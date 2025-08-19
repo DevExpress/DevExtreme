@@ -29,24 +29,29 @@
 </template>
 <script setup lang="ts">
 
+import { type DxPieChart } from "devextreme-vue/pie-chart";
+import { chartPointObject } from "devextreme/viz/chart";
+
+type DxPieChartInstance = DxPieChart['instance'];
+
 const props = withDefaults(defineProps<{
-  pieChart?: Record<string, any>
+  pieChart?: DxPieChartInstance
 }>(), {
-  pieChart: () => ({} as Record<string, any>),
+  pieChart: () => ({} as DxPieChartInstance),
 });
 
 const country = props.pieChart
   .getAllSeries()[0]
   .getVisiblePoints()[0]
   .data
-  .country;
+  .country as String;
 
-const getImagePath = (countryName) => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
-const calculateTotal = (pieChart) => formatNumber(
+const getImagePath = (countryName: string): string => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
+const calculateTotal = (pieChart: DxPieChartInstance): string => formatNumber(
   pieChart
     .getAllSeries()[0]
     .getVisiblePoints()
-    .reduce((s, p) => s + p.originalValue, 0),
+    .reduce((s: number, p: chartPointObject ) => s + (p.originalValue as number), 0),
 );
 
 const formatNumber = new Intl.NumberFormat('en-US', {
