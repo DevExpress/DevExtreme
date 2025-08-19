@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
-import { Deferred, when } from '@js/core/utils/deferred';
+import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isBoolean, isDefined } from '@js/core/utils/type';
 
@@ -53,8 +53,9 @@ export class FocusController extends core.ViewController {
           return;
         }
 
-        this._focusRowByKey(value);
-        this.getKeyboardController()._fireFocusedRowChanged();
+        this._focusRowByKey(value).done(() => {
+          this.getKeyboardController()._fireFocusedRowChanged();
+        });
         args.handled = true;
         break;
 
@@ -166,12 +167,14 @@ export class FocusController extends core.ViewController {
     }
   }
 
-  private _focusRowByKey(key) {
+  private _focusRowByKey(
+    key: any,
+  ): DeferredObj<number | unknown> {
     if (!isDefined(key)) {
       this._resetFocusedRow();
-    } else {
-      this._navigateToRow(key, true);
+      return Deferred().resolve();
     }
+    return this._navigateToRow(key, true);
   }
 
   public _resetFocusedRow() {
@@ -205,10 +208,13 @@ export class FocusController extends core.ViewController {
     if (!this.isAutoNavigateToFocusedRow()) {
       this.option('focusedRowIndex', -1);
     }
-    return this._navigateToRow(key);
+    return this._navigateToRow(key, false);
   }
 
-  public _navigateToRow(key, needFocusRow?) {
+  public _navigateToRow(
+    key: any,
+    needFocusRow: boolean,
+  ): DeferredObj<number> {
     const that = this;
     const isAutoNavigate = that.isAutoNavigateToFocusedRow();
     // @ts-expect-error
