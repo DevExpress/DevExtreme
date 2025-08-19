@@ -430,17 +430,25 @@ class DropDownEditor<
     return fieldTemplate ? this._$container : this._$textEditorContainer;
   }
 
-  _renderFieldAddons(): void {
+  _renderBeforeFieldAddon(): void {
     if (!this._$beforeFieldAddon) {
       this._$beforeFieldAddon = $('<div>')
         .addClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON)
         .insertBefore(this._$textEditorContainer);
     }
+  }
+
+  _renderAfterFieldAddon(): void {
     if (!this._$afterFieldAddon) {
       this._$afterFieldAddon = $('<div>')
         .addClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON)
         .insertAfter(this._$textEditorContainer);
     }
+  }
+
+  _renderFieldAddons(): void {
+    this._renderBeforeFieldAddon();
+    this._renderAfterFieldAddon();
   }
 
   _renderTemplateWrapper(): void {
@@ -520,9 +528,36 @@ class DropDownEditor<
     };
   }
 
-  _renderFieldAddonsContent(fieldAddonsTemplates: FieldAddonsTemplates, model: unknown): void {
+  _clearFieldAddons(removeField?: boolean): void {
     this._$beforeFieldAddon?.empty();
     this._$afterFieldAddon?.empty();
+
+    if (removeField) {
+      this._$beforeFieldAddon = null;
+      this._$afterFieldAddon = null;
+    }
+  }
+
+  _renderBeforeFieldAddonContent(model: Properties['value'], beforeTemplate?: FieldAddonsTemplates['beforeTemplate'] | null): void {
+    if (beforeTemplate && this._$beforeFieldAddon) {
+      beforeTemplate.render({
+        model,
+        container: getPublicElement(this._$beforeFieldAddon),
+      });
+    }
+  }
+
+  _renderAfterFieldAddonContent(model: Properties['value'], afterTemplate?: FieldAddonsTemplates['afterTemplate'] | null): void {
+    if (afterTemplate && this._$afterFieldAddon) {
+      afterTemplate.render({
+        model,
+        container: getPublicElement(this._$afterFieldAddon),
+      });
+    }
+  }
+
+  _renderFieldAddonsContent(fieldAddonsTemplates: FieldAddonsTemplates, model: Properties['value']): void {
+    this._clearFieldAddons();
 
     if (!fieldAddonsTemplates) {
       return;
@@ -530,19 +565,8 @@ class DropDownEditor<
 
     const { beforeTemplate, afterTemplate } = fieldAddonsTemplates;
 
-    if (beforeTemplate && this._$beforeFieldAddon) {
-      beforeTemplate.render({
-        model,
-        container: getPublicElement(this._$beforeFieldAddon),
-      });
-    }
-
-    if (afterTemplate && this._$afterFieldAddon) {
-      afterTemplate.render({
-        model,
-        container: getPublicElement(this._$afterFieldAddon),
-      });
-    }
+    this._renderBeforeFieldAddonContent(model, beforeTemplate);
+    this._renderAfterFieldAddonContent(model, afterTemplate);
   }
 
   _integrateInput(): void {
@@ -957,10 +981,7 @@ class DropDownEditor<
     delete this._openOnFieldClickAction;
     delete this._$templateWrapper;
 
-    this._$beforeFieldAddon?.remove();
-    this._$afterFieldAddon?.remove();
-    this._$beforeFieldAddon = null;
-    this._$afterFieldAddon = null;
+    this._clearFieldAddons(true);
 
     if (this._$popup) {
       this._$popup.remove();
