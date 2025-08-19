@@ -9,11 +9,11 @@ import type {
   PopoverControllerElements,
   PopoverControllerProperties,
   PopoverPosition,
-} from '@ts/ui/popover/m_popover_position_controller';
+} from '@ts/ui/popover/popover_position_controller';
 import {
   isCommonPosition,
   PopoverPositionController,
-} from '@ts/ui/popover/m_popover_position_controller';
+} from '@ts/ui/popover/popover_position_controller';
 
 const SLIDER_CLASS = 'dx-slider';
 
@@ -92,7 +92,6 @@ export class SliderTooltipPositionController<
     this._updateVisualPositionValue();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
       const configuration: PopoverPosition = {
