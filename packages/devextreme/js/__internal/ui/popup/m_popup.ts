@@ -44,12 +44,12 @@ import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 import type {
   ControllerOverlayElements,
   ControllerProperties,
-} from '@ts/ui/overlay/m_overlay_position_controller';
-import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
-import Overlay from '@ts/ui/overlay/overlay';
+} from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';

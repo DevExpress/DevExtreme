@@ -9,8 +9,8 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type {
   ControllerOverlayElements,
   OverlayPosition,
-} from '@ts/ui/overlay/m_overlay_position_controller';
-import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
+import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
