@@ -1,27 +1,42 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import Toast, { TOAST_CLASS } from '@ts/ui/toast/m_toast';
 
-const TOAST_CLASS = 'dx-toast';
-
-function hideAllToasts(container): void {
+function hideToasts(container?: Element | dxElementWrapper): void {
   const toasts = $(`.${TOAST_CLASS}`).toArray();
-  if (!arguments.length) {
-    // @ts-expect-error
-    toasts.forEach((toast) => { $(toast).dxToast('hide'); });
+
+  if (arguments.length === 0) {
+    toasts.forEach((toast) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      Toast.getInstance<Toast>(toast).hide();
+    });
+
+    return;
+  }
+
+  if (!container) {
     return;
   }
 
   const containerElement = $(container).get(0);
 
   toasts
-    // @ts-expect-error
-    .map((toast) => $(toast).dxToast('instance'))
+    .map((toast): Toast => {
+      const instance = Toast.getInstance<Toast>(toast);
+
+      return instance;
+    })
     .filter((instance) => {
-      const toastContainerElement = $(instance.option('container')).get(0);
+      const { container: toastContainer } = instance.option();
+
+      const toastContainerElement = $(toastContainer).get(0);
+
       return containerElement === toastContainerElement && containerElement;
     })
     .forEach((instance) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       instance.hide();
     });
 }
 
-export default hideAllToasts;
+export default hideToasts;
