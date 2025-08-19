@@ -74,7 +74,7 @@ import { dataSource } from './data.ts';
 
 const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 
-const customizeText = (e: { value: number }): string => `${e.value}M`;
+const customizeText = (e: { value: string | number | Date }): string => `${e.value}M`;
 
 const customizeTooltip = (pointInfo: { 
   point: { tag: string }; 
