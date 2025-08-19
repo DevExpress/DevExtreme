@@ -56,17 +56,6 @@ const isIOs = devices.current().platform === 'ios';
 
 type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 
-interface TemplateRenderPayload {
-  model: unknown;
-  container: Element;
-  onRendered?: () => void;
-}
-
-interface FieldAddonsTemplates {
-  beforeTemplate?: { render: (payload: TemplateRenderPayload) => void };
-  afterTemplate?: { render: (payload: TemplateRenderPayload) => void };
-}
-
 export interface DropDownEditorProperties extends Omit<
   Properties,
   | 'onChange'
@@ -91,6 +80,17 @@ export interface DropDownEditorProperties extends Omit<
   _onMarkupRendered?: () => void;
 
   onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
+}
+
+interface TemplateRenderPayload {
+  model: Properties['value'];
+  container: Element;
+  onRendered?: () => void;
+}
+
+interface FieldAddonsTemplates {
+  beforeTemplate?: { render: (payload: TemplateRenderPayload) => void };
+  afterTemplate?: { render: (payload: TemplateRenderPayload) => void };
 }
 
 function createTemplateWrapperElement(): dxElementWrapper {
@@ -566,8 +566,9 @@ class DropDownEditor<
     this._renderEmptinessEvent();
   }
 
-  _fieldRenderData(): any {
-    return this.option('value');
+  _fieldRenderData(): Properties['value'] {
+    const { value } = this.option();
+    return value;
   }
 
   _initTemplates(): void {
