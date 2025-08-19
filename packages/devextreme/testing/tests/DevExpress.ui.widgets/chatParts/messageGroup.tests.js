@@ -312,7 +312,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
         });
 
-        QUnit.test('Group content element and buble element should be attatched to DOM before template is rendrered ()', function(assert) {
+        QUnit.test('Group content and bubble elements should be attatched to DOM before template is rendrered ()', function(assert) {
             assert.expect(2);
 
             this.reinit({
