@@ -10,7 +10,7 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
-import swatch from '@ts/core/utils/m_swatch_container';
+import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
