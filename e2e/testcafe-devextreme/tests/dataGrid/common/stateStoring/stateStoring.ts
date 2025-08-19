@@ -155,18 +155,24 @@ test.only('DataGrid - The filterType property is reset if client state storing c
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [
-      { id: 0, text: 'item 1' },
-      { id: 1, text: 'item 2' },
+      { id: 0, textID: '0', text: 'item 0' },
+      { id: 1, textID: '1', text: 'item 1' },
     ],
     keyExpr: 'id',
-    focusedRowEnabled: true,
+    filterSyncEnabled: true,
     columns: [
       {
         dataField: 'id',
-        filterType: 'exclude',
-        filterValues: [0],
+        caption: 'ID',
+        dataType: 'string',
       },
-      'text',
+      {
+        dataField: 'textID',
+        filterType: 'exclude',
+        name: 'textID',
+        dataType: 'string',
+        filterValues: ['0'],
+      },
     ],
     stateStoring: {
       enabled: true,
@@ -175,13 +181,12 @@ test.only('DataGrid - The filterType property is reset if client state storing c
         return Promise.resolve({
           columns: [
             {
-              visibleIndex: 0,
               dataField: 'id',
             },
             {
-              visibleIndex: 1,
-              dataField: 'text',
-            }],
+              dataField: 'textID',
+            },
+          ],
         });
       },
     },

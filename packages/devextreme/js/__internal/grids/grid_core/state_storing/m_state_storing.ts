@@ -196,7 +196,8 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
     this.option('searchPanel.text', searchText || '');
 
-    this.option('filterValue', getFilterValue(this, state));
+    const accumulatedFilterValue = getFilterValue(this, this.state());
+    this.option('filterValue', accumulatedFilterValue);
 
     this.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
 
