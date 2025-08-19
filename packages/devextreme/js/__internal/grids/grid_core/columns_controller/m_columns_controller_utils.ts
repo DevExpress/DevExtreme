@@ -19,6 +19,7 @@ import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
+  COLUMN_FILTER_TYPE_NAME,
   COLUMN_INDEX_OPTIONS,
   DEFAULT_COLUMN_OPTIONS,
   GROUP_COMMAND_COLUMN_NAME,
@@ -998,4 +999,12 @@ export const isFirstOrLastColumn = function (
   }
 
   return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
+};
+
+const DEFAULT_VALUES = {
+  [COLUMN_FILTER_TYPE_NAME]: 'include',
+};
+
+export const isDefaultPropertyValue = function (propertyName: string, propertyValue: unknown): boolean {
+  return DEFAULT_VALUES[propertyName] === propertyValue;
 };

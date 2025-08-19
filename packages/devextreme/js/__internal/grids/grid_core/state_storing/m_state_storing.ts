@@ -143,7 +143,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
       if (!equalByValue(oldStateHash, newStateHash)) {
         state = extend(true, {}, state);
-        extend(this._state, state);
+        extend(true, this._state, state);
 
         this.save();
       }
