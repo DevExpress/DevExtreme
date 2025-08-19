@@ -37,12 +37,14 @@ import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
+import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
+import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
@@ -196,6 +198,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _dataSourceLoadedCallback: any;
 
   _subscribes: any;
+
+  _notifyScheduler!: NotifyScheduler;
 
   _recurrenceDialog: any;
 
@@ -759,6 +763,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._subscribes = subscribes;
 
     this.resourceManager = new ResourceManager(this.option('resources'));
+
+    this._notifyScheduler = new NotifyScheduler({ scheduler: this });
   }
 
   createAppointmentDataSource() {
@@ -1227,7 +1233,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       getAppointmentDataSource: () => this.appointmentDataSource,
       dataAccessors: this._dataAccessors,
-      observer: this,
+      notifyScheduler: this._notifyScheduler,
       onItemRendered: this._getAppointmentRenderedAction(),
       onItemClick: this._createActionByOption('onAppointmentClick'),
       onItemContextMenu: this._createActionByOption('onAppointmentContextMenu'),
@@ -1366,7 +1372,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
     }, currentViewOptions);
 
-    result.observer = this;
+    result.notifyScheduler = this._notifyScheduler;
     result.groups = this.resourceManager.groupResources();
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
@@ -1708,15 +1714,17 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._subscribes[subject] = subscribes[subject] = action;
   }
 
-  fire(subject) {
+  fire<Subject extends SubscribeKey>(
+    subject: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> {
     const callback = this._subscribes[subject];
-    const args = Array.prototype.slice.call(arguments);
 
     if (!isFunction(callback)) {
       throw errors.Error('E1031', subject);
     }
 
-    return callback.apply(this, args.slice(1));
+    return callback.call(this, ...args);
   }
 
   getTargetCellData() {

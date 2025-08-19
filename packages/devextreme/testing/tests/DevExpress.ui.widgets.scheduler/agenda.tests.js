@@ -34,8 +34,8 @@ module('Agenda', {}, () => {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
             },
-            observer: {
-                fire: (functionName) => {
+            notifyScheduler: {
+                invoke: (functionName) => {
                     if(functionName === 'getLayoutManager') {
                         return {
                             getRenderingStrategyInstance: () => {

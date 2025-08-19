@@ -83,8 +83,8 @@ const createInstance = (options, subscribesConfig) => {
         subscribesConfig.cellHeight,
     );
 
-    const observer = {
-        fire: function(subject) {
+    const notifyScheduler = {
+        invoke: function(subject) {
             const callback = subscribes[subject];
             const args = Array.prototype.slice.call(arguments);
 
@@ -93,7 +93,7 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
-        observer,
+        notifyScheduler,
         ...options,
         timeZoneCalculator: createTimeZoneCalculator(),
         getLoadedResources: () => [],
