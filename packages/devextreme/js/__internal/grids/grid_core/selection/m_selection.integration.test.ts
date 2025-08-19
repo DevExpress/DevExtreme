@@ -1,10 +1,11 @@
 import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
+import { CustomStore } from '@js/common/data';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
-import type { Properties as DataGridProperties } from '../../../../ui/data_grid';
+import type { GridsEditRefreshMode, Properties as DataGridProperties } from '../../../../ui/data_grid';
 import DataGrid from '../../../../ui/data_grid';
 
 const SELECTORS = {
@@ -32,7 +33,7 @@ const createDataGrid = async (
   instance.on('contentReady', contentReadyHandler);
 });
 
-describe('GridCore master_detail', () => {
+describe('GridCore selection', () => {
   afterEach(() => {
     const $container = $(SELECTORS.gridContainer);
 
@@ -102,5 +103,74 @@ describe('GridCore master_detail', () => {
         expect(selectionChangedCount).toBe(1);
       });
     });
+  });
+
+  describe('remote dataSource', () => {
+    ([
+      { refreshMode: 'full', expectedCallCount: 2 },
+      { refreshMode: 'reshape', expectedCallCount: 1 },
+      { refreshMode: 'repaint', expectedCallCount: 0 },
+    ] as { refreshMode: GridsEditRefreshMode; expectedCallCount: number }[])
+      .forEach(({ refreshMode, expectedCallCount }) => {
+        it(`dataSource.load is not called to load selectedRow after data save with editing.refreshMode=${refreshMode}`, async () => {
+          let data = [
+            { id: 1, name: 'Item 1' },
+            { id: 2, name: 'Item 2' },
+            { id: 3, name: 'Item 3' },
+            { id: 4, name: 'Item 4' },
+          ];
+
+          const store = new CustomStore({
+            key: 'id',
+            load: (e) => {
+              const skip = e.skip ?? 0;
+              const take = e.take ?? data.length;
+              const pageData = data.slice(skip, skip + take);
+              return Promise.resolve({
+                data: pageData,
+                totalCount: data.length,
+              });
+            },
+            remove(key) {
+              data = data.filter((item) => item.id !== key);
+              return Promise.resolve();
+            },
+          });
+
+          const { instance } = await createDataGrid({
+            dataSource: store,
+            editing: {
+              mode: 'batch',
+              refreshMode,
+              allowDeleting: true,
+            },
+            remoteOperations: true,
+            paging: {
+              pageSize: 2,
+            },
+            columns: ['id', 'name'],
+            keyExpr: 'id',
+            selection: {
+              mode: 'multiple',
+              showCheckBoxesMode: 'always',
+            },
+          });
+
+          await instance.selectRows([4], false);
+
+          let callCount = 0;
+          store.on('loading', () => {
+            callCount += 1;
+          });
+
+          instance.option('editing.changes', [{
+            type: 'remove',
+            key: 1,
+          }]);
+          await instance.saveEditData();
+
+          expect(callCount).toBe(expectedCallCount);
+        });
+      });
   });
 });
