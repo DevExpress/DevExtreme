@@ -46,7 +46,7 @@ import type {
 } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 
 import type { SubmenuProperties } from './submenu';
