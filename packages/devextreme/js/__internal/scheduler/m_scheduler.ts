@@ -46,6 +46,7 @@ import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
+import { combineRemoteFilter } from './r1/filterting/remote';
 import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
@@ -68,7 +69,7 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
-import { AppointmentDataProvider } from './view_model/generate_view_model/data_provider/m_appointment_data_provider';
+import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type {
   AppointmentAgendaViewModel,
   AppointmentViewModelPlain,
@@ -166,7 +167,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _appointments: any;
 
-  appointmentDataProvider!: AppointmentDataProvider;
+  appointmentDataSource!: AppointmentDataSource;
 
   _dataSource: any;
 
@@ -234,9 +235,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     const resolveCallbacks = new Deferred();
 
-    whenLoaded.done((groupsResources) => {
-      this.option('loadedResources', groupsResources);
-      resolveCallbacks.resolve(groupsResources);
+    whenLoaded.done(() => {
+      resolveCallbacks.resolve();
     });
 
     this._postponeDataSourceLoading(whenLoaded);
@@ -274,7 +274,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._initDataSource();
 
         this._postponeResourceLoading().done(() => {
-          this.appointmentDataProvider.setDataSource(this._dataSource);
+          this.appointmentDataSource.setDataSource(this._dataSource);
           this._filterAppointmentsByDate();
           this._updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
         });
@@ -334,7 +334,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'resources':
         this.resourceManager?.dispose();
         this.resourceManager = new ResourceManager(this.option('resources'));
-        this.updateInstances();
+        this.updateAppointmentDataSource();
 
         this._postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
@@ -345,7 +345,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'startDayHour':
       case 'endDayHour':
-        this.updateInstances();
+        this.updateAppointmentDataSource();
 
         this._appointments.option('items', []);
         this._updateOption('workSpace', name, value);
@@ -357,7 +357,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
       case 'offset':
 
-        this.updateInstances();
+        this.updateAppointmentDataSource();
 
         this._appointments.option('items', []);
         this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
@@ -452,7 +452,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       }
       case 'showAllDayPanel':
-        this.updateInstances();
+        this.updateAppointmentDataSource();
         this.repaint();
         break;
       case 'showCurrentTimeIndicator':
@@ -473,7 +473,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'recurrenceEditMode':
       case 'remoteFiltering':
       case 'timeZone':
-        this.updateInstances();
+        this.updateAppointmentDataSource();
         this.repaint();
         break;
       case 'dropDownAppointmentTemplate':
@@ -499,8 +499,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'recurrenceExceptionExpr':
       case 'disabledExpr':
         this._updateExpression(name, value);
-        this.appointmentDataProvider.updateDataAccessors(this._dataAccessors);
-
         this._initAppointmentTemplate();
         this.repaint();
         break;
@@ -514,7 +512,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'allDayPanelMode':
-        this.updateInstances();
+        this.updateAppointmentDataSource();
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'renovateRender':
@@ -527,8 +525,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._header
           ? this._header.onToolbarOptionChanged(args.fullName, value)
           : this.repaint();
-        break;
-      case 'loadedResources':
         break;
       default:
         // @ts-expect-error
@@ -585,12 +581,33 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const startDate = this.timeZoneCalculator.createDate(dateRange[0], 'fromGrid');
     const endDate = this.timeZoneCalculator.createDate(dateRange[1], 'fromGrid');
 
-    this.appointmentDataProvider.filterByDate(
+    this.setRemoteFilter(
       startDate,
       endDate,
       this.option('remoteFiltering'),
       this.option('dateSerializationFormat'),
     );
+  }
+
+  setRemoteFilter(min, max, remoteFiltering = false, dateSerializationFormat?) {
+    const dataSource = this._dataSource;
+    const dataAccessors = this._dataAccessors;
+
+    if (!dataSource || !remoteFiltering) {
+      return;
+    }
+
+    const dataSourceFilter = dataSource.filter();
+    const filter = combineRemoteFilter({
+      dataSourceFilter,
+      dataAccessors,
+      min,
+      max,
+      dateSerializationFormat,
+      forceIsoDateParsing: config().forceIsoDateParsing,
+    });
+
+    dataSource.filter(filter);
   }
 
   _reloadDataSource() {
@@ -729,7 +746,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._initEditing();
 
-    this.updateInstances();
+    this.updateAppointmentDataSource();
 
     this._initActions();
 
@@ -744,35 +761,16 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.resourceManager = new ResourceManager(this.option('resources'));
   }
 
-  createAppointmentDataProvider() {
-    this.appointmentDataProvider?.destroy();
-    this.appointmentDataProvider = new AppointmentDataProvider({
-      dataSource: this._dataSource,
-      dataAccessors: this._dataAccessors,
-      timeZoneCalculator: this.timeZoneCalculator,
-      dateSerializationFormat: this.option('dateSerializationFormat'),
-      resources: this.option('resources'),
-      startDayHour: () => this.getViewOption('startDayHour'),
-      endDayHour: () => this.getViewOption('endDayHour'),
-      viewOffset: () => this.getViewOffsetMs(),
-      allDayPanelMode: () => this.getViewOption('allDayPanelMode'),
-      showAllDayPanel: () => this.option('showAllDayPanel'),
-      getResourceManager: () => this.resourceManager,
-      getIsVirtualScrolling: () => this.isVirtualScrolling(),
-      getSupportAllDayRow: () => this._workSpace.supportAllDayRow(),
-      getViewType: () => this._workSpace.type,
-      getViewDirection: () => this._workSpace.viewDirection,
-      getDateRange: () => this._workSpace.getDateRange(),
-      getGroupCount: () => this._workSpace._getGroupCount(),
-      getViewDataProvider: () => this._workSpace.viewDataProvider,
-    });
+  createAppointmentDataSource() {
+    this.appointmentDataSource?.destroy();
+    this.appointmentDataSource = new AppointmentDataSource(this._dataSource);
   }
 
-  updateInstances() {
+  updateAppointmentDataSource() {
     this._timeZoneCalculator = null;
 
     if (this.getWorkSpace()) {
-      this.createAppointmentDataProvider();
+      this.createAppointmentDataSource();
     }
   }
 
@@ -875,7 +873,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       : [];
 
     this._appointments.option('items', viewModel);
-    this.appointmentDataProvider.cleanState();
+    this.appointmentDataSource.cleanState();
   }
 
   _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
@@ -981,9 +979,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.setAria({ role: 'group' });
   }
 
-  _initMarkupOnResourceLoaded(groupsResources) {
+  _initMarkupOnResourceLoaded() {
     if (!(this as any)._disposed) {
-      this.option('loadedResources', groupsResources);
       this._initMarkupCore();
       this._reloadDataSource();
     }
@@ -1018,9 +1015,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       if (groups?.length) {
         this.resourceManager.loadGroupResources(groups, true)
-          .then((groupsResources) => this._initMarkupOnResourceLoaded(groupsResources));
+          .then(() => this._initMarkupOnResourceLoaded());
       } else {
-        this._initMarkupOnResourceLoaded([]);
+        this._initMarkupOnResourceLoaded();
       }
     }
   }
@@ -1166,7 +1163,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     });
     this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
 
-    this.createAppointmentDataProvider();
+    this.createAppointmentDataSource();
     this._filterAppointmentsByDate();
     this._validateKeyFieldIfAgendaExist();
     this._updateA11yStatus();
@@ -1228,7 +1225,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResourceManager: () => this.resourceManager,
       getAppointmentColor: this.createGetAppointmentColor(),
 
-      getAppointmentDataProvider: () => this.appointmentDataProvider,
+      getAppointmentDataSource: () => this.appointmentDataSource,
       dataAccessors: this._dataAccessors,
       observer: this,
       onItemRendered: this._getAppointmentRenderedAction(),
@@ -1312,7 +1309,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _workSpaceConfig(currentViewOptions: NormalizedView) {
-    const groupsResources = this.option('loadedResources');
     const scrolling = this.getViewOption('scrolling');
     const isVirtualScrolling = scrolling.mode === 'virtual';
     const horizontalVirtualScrollingAllowed = isVirtualScrolling
@@ -1371,7 +1367,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }, currentViewOptions);
 
     result.observer = this;
-    result.groups = groupsResources;
+    result.groups = this.resourceManager.groupResources();
     result.onCellClick = this._createActionByOption('onCellClick');
     result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
     result.currentDate = this.getViewOption('currentDate');
@@ -1381,7 +1377,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     result.timeCellTemplate = result.timeCellTemplate ? this._getTemplate(result.timeCellTemplate) : null;
     result.resourceCellTemplate = result.resourceCellTemplate ? this._getTemplate(result.resourceCellTemplate) : null;
     result.dateCellTemplate = result.dateCellTemplate ? this._getTemplate(result.dateCellTemplate) : null;
-    result.getAppointmentDataProvider = () => this.appointmentDataProvider;
 
     return result;
   }
@@ -1518,7 +1513,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     delete singleRawAppointment[this._dataAccessors.expr.recurrenceExceptionExpr];
     delete singleRawAppointment[this._dataAccessors.expr.recurrenceRuleExpr];
 
-    const keyPropertyName = this.appointmentDataProvider.keyName;
+    const keyPropertyName = this.appointmentDataSource.keyName;
     delete singleRawAppointment[keyPropertyName];
     /* eslint-enable @typescript-eslint/no-dynamic-delete */
 
@@ -1760,7 +1755,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._expandAllDayPanel(rawAppointment);
 
         try {
-          deferred = this.appointmentDataProvider
+          deferred = this.appointmentDataSource
             .update(target, rawAppointment)
             .done(() => {
               dragEvent?.cancel.resolve(false);
@@ -2072,7 +2067,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
       this._expandAllDayPanel(serializedAppointment);
 
-      return this.appointmentDataProvider
+      return this.appointmentDataSource
         .add(serializedAppointment)
         .always((storeAppointment) => this._onDataPromiseCompleted(StoreEventNames.ADDED, storeAppointment));
     });
@@ -2102,7 +2097,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   processDeleteAppointment(rawAppointment, deletingOptions) {
     this._processActionResult(deletingOptions, function (canceled) {
       if (!canceled) {
-        this.appointmentDataProvider
+        this.appointmentDataSource
           .remove(rawAppointment)
           .always((storeAppointment) => this._onDataPromiseCompleted(
             StoreEventNames.DELETED,
@@ -2153,12 +2148,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _validateKeyFieldIfAgendaExist() {
-    if (!this.appointmentDataProvider.isDataSourceInit) {
+    if (!this.appointmentDataSource.isDataSourceInit) {
       return;
     }
 
     const hasAgendaView = this.hasAgendaView();
-    const isKeyNotExist = !this.appointmentDataProvider.keyName;
+    const isKeyNotExist = !this.appointmentDataSource.keyName;
 
     if (hasAgendaView && isKeyNotExist) {
       errors.log('W1023');
