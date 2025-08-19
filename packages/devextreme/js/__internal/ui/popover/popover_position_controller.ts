@@ -124,7 +124,6 @@ export class PopoverPositionController<
     this.updatePosition(this._properties.position);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition(): PopoverPosition {
@@ -184,7 +183,6 @@ export class PopoverPositionController<
     return side === 'left' || side === 'right';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDisplaySide(position: PopoverPosition): CommonPosition {
     const my = positionUtils.setup.normalizeAlign(position.my);
     const at = positionUtils.setup.normalizeAlign(position.at);
@@ -220,7 +218,6 @@ export class PopoverPositionController<
     return resultPosition;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
       const configuration = {
