@@ -52,7 +52,7 @@ import { type ExportFormat } from "devextreme/common";
 
 const exportFormats: ExportFormat[] = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
 
-function customizePoint({ value }) {
+function customizePoint({ value }: { value: number }) {
   if (value === 1) {
     return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
   }
@@ -64,7 +64,8 @@ function customizePoint({ value }) {
   }
   return null;
 }
-function customizeText({ valueText }) {
+
+function customizeText({ valueText }: { valueText: string }) {
   if (valueText === '1') {
     return `${valueText}st place`;
   } if (valueText === '2') {
