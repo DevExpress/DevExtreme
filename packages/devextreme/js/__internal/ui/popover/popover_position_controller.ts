@@ -15,7 +15,7 @@ import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
-} from '@ts/ui/popup/m_popup_position_controller';
+} from '@ts/ui/popup/popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {

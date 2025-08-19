@@ -60,8 +60,8 @@ import { createBodyOverflowManager } from './m_popup_overflow_manager';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
-} from './m_popup_position_controller';
-import { PopupPositionController } from './m_popup_position_controller';
+} from './popup_position_controller';
+import { PopupPositionController } from './popup_position_controller';
 
 // STYLE popup
 
