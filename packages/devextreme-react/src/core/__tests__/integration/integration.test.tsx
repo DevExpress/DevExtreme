@@ -13,14 +13,13 @@ import {
 import Validator from '../../../validator';
 import ValidationSummary from '../../../validation-summary';
 import DataGrid from '../../../data-grid';
+import Scheduler, { View, Resource } from '../../../scheduler';
 import { ContextMenu, Item as ContextMenuItem } from '../../../context-menu';
 import Button from '../../../button';
 
 jest.useFakeTimers();
 
 describe('integration tests', () => {
-  let consoleWarnSpy;
-
   afterEach(() => {
     jest.clearAllMocks();
     testingLib.cleanup();
@@ -155,7 +154,7 @@ describe('integration tests', () => {
 
   it('ref callback is not triggered when not needed', async () => {
     const user = userEvent.setup({ delay: null });
-    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {}); 
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {}); 
 
     const DataGridWithSelectButton = () => {
     const [selectedRowKeys, setSelectedRowKeys] = React.useState([] as any);
@@ -225,5 +224,135 @@ describe('integration tests', () => {
     await user.click(testingLib.screen.getByText('Test'));
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     consoleWarnSpy.mockRestore();
+  });
+
+  it('must not fail if a template with two root elements is unmounted (T1300588)', async () => {
+    try {
+      jest.useRealTimers();
+      expect.assertions(1);
+
+      const user = userEvent.setup({ delay: null });
+
+      const currentDate = new Date(2021, 3, 27);
+      const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const typeGroups = ['typeId'];
+      const priorityGroups = ['priorityId'];
+
+      const data = [
+        {
+          text: 'Walking a dog',
+          priorityId: 1,
+          typeId: 1,
+          startDate: new Date('2021-04-26T15:00:00.000Z'),
+          endDate: new Date('2021-04-26T15:30:00.000Z'),
+          recurrenceRule: 'FREQ=DAILY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20210502',
+        },
+        {
+          text: 'Website Re-Design Plan',
+          priorityId: 2,
+          typeId: 2,
+          startDate: new Date('2021-04-26T16:00:00.000Z'),
+          endDate: new Date('2021-04-26T18:30:00.000Z'),
+        },
+        {
+          text: 'Book Flights to San Fran for Sales Trip',
+          priorityId: 2,
+          typeId: 2,
+          startDate: new Date('2021-04-26T19:00:00.000Z'),
+          endDate: new Date('2021-04-26T20:00:00.000Z'),
+        }
+      ];
+
+      const priorityData = [{
+        text: 'Low Priority',
+        id: 1,
+        color: '#fcb65e',
+      }, {
+        text: 'High Priority',
+        id: 2,
+        color: '#e18e92',
+      }];
+
+      const typeData = [{
+        text: 'Home',
+        id: 1,
+        color: '#b6d623',
+      }, {
+        text: 'Work',
+        id: 2,
+        color: '#679ec5',
+      }];
+
+      const DateCell = ({ data: cellData }) => (
+        <React.Fragment>
+          <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
+          <div className="number">{cellData.date.getDate()}</div>
+        </React.Fragment>
+      );
+
+      let clicked = false;
+      let resolve = () => {};
+
+      const onContentReady = async () => {
+        if (clicked)
+          return;
+
+        clicked = true;
+        await expect(user.click(document.querySelector('.dx-icon-chevronnext')!)).resolves.toBe(void 0);
+        resolve();
+      }
+
+      const SchedulerWithTemplates = () => (
+        <Scheduler
+          timeZone="America/Los_Angeles"
+          dataSource={data}
+          defaultCurrentView="workWeek"
+          showAllDayPanel={false}
+          defaultCurrentDate={currentDate}
+          height={730}
+          startDayHour={7}
+          endDayHour={23}
+          onContentReady={onContentReady}
+        >
+          <View type="day" />
+          <View type="week" groups={typeGroups} dateCellComponent={DateCell} />
+          <View
+            type="workWeek"
+            groups={priorityGroups}
+            startDayHour={9}
+            endDayHour={18}
+            dateCellComponent={DateCell}
+          />
+          <View type="month" />
+          <Resource
+            dataSource={priorityData}
+            fieldExpr="priorityId"
+            label="Priority"
+            allowMultiple={false}
+          />
+          <Resource
+            dataSource={typeData}
+            fieldExpr="typeId"
+            label="Type"
+            allowMultiple={false}
+          />
+        </Scheduler>
+      );
+      
+      testingLib.render(
+        <React.Fragment>
+          <SchedulerWithTemplates />
+        </React.Fragment>
+      );
+
+      await testingLib.act(async () => {
+        return new Promise((r) => {
+          resolve = r;
+        });
+      });
+    }
+    finally {
+      jest.useFakeTimers();
+    }
   });
 });
