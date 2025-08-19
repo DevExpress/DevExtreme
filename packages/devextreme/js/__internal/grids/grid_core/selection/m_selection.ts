@@ -124,7 +124,7 @@ export class SelectionController extends modules.Controller {
 
   private _isSelectionWithCheckboxes?: boolean;
 
-  private _selection!: Selection<any, string | number>;
+  private _selection!: Selection;
 
   public selectionChanged: any;
 
