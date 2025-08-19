@@ -46,11 +46,11 @@ import type {
   ControllerOverlayElements,
   ControllerProperties,
   PositionControllerConstructor,
-} from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
 import {
   OVERLAY_POSITION_ALIASES,
   OverlayPositionController,
-} from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 
 const ready = readyCallbacks.add;

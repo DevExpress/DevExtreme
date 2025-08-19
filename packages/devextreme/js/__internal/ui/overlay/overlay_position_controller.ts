@@ -374,7 +374,6 @@ export class OverlayPositionController<
     return defaultConfiguration;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): OverlayPosition {
     if (isPositionAlignment(position)) {
       const configuration: OverlayPosition = {
