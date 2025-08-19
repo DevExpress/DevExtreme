@@ -153,7 +153,11 @@
 .dx-icon-restore
 .dx-icon-groupbycolumn,
 .dx-icon-ungroupcolumn,
-.dx-icon-ungroupallcolumns {
+.dx-icon-ungroupallcolumns,
+.dx-icon-ratingoutline,
+.dx-icon-ratingfilled,
+.dx-icon-chatadd,
+.dx-icon-colordismiss {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -499,6 +503,8 @@ $icons: (
     "datausage": "\f177",
     "datapie": "\f178",
     "pinmap": "\f179",
+    "ratingoutline": "\f17f",
+    "ratingfilled": "\f180",
     "csv": "\f181",
     "packagebox": "\f182",
     "checkmarkcircle": "\f183",
@@ -522,6 +528,8 @@ $icons: (
     "groupbycolumn":"\f197",
     "ungroupcolumn":"\f198",
     "ungroupallcolumns":"\f199",
+    "chatadd":"\f200",
+    "colordismiss":"\f201",
 );
 
 // stylelint-enable
