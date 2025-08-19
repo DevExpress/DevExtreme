@@ -19,6 +19,7 @@ export * from './data-change-dxi';
 export * from './data-grid-column-dxi';
 export * from './data-grid-toolbar';
 export * from './diagram-custom-command-dxi';
+export * from './field-addons';
 export * from './file-manager-context-menu';
 export * from './file-manager-toolbar-item-dxi';
 export * from './file-uploader-options';
