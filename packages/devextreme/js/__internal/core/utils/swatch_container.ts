@@ -26,4 +26,4 @@ const getSwatchContainer = (
   return viewportSwatchContainer;
 };
 
-export default { getSwatchContainer: getSwatchContainer };
+export default { getSwatchContainer };
