@@ -65,6 +65,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   isColumnFixed,
+  isDefaultPropertyValue,
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
@@ -1528,7 +1529,10 @@ export class ColumnsController extends modules.Controller {
 
     function handleStateField(index, value) {
       if (columns[i][value] !== undefined) {
-        result[i][value] = columns[i][value];
+        const propertyValue = columns[i][value];
+        if (!isDefaultPropertyValue(value, propertyValue)) {
+          result[i][value] = propertyValue;
+        }
       }
     }
 
