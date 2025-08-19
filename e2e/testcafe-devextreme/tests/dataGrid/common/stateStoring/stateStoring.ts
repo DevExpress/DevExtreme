@@ -143,7 +143,7 @@ test('DataGrid - Cannot read properties of undefined (reading \'done\') error oc
   await createWidget('dxDataGrid', { ...dataGridConfig });
 });
 
-test.only('DataGrid - The filterType property is reset if client state storing contains no filtering settings (T1296608)', async (t) => {
+test('DataGrid - The filterType property is reset if client state storing contains no filtering settings (T1296608)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // assert
