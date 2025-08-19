@@ -269,7 +269,6 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
   disabled?: boolean;
   elementAttr?: Record<string, any>;

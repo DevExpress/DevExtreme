@@ -11,7 +11,7 @@ import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/scroll_view';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import LoadPanel from '@ts/ui/m_load_panel';
+import LoadPanel from '@ts/ui/load_panel';
 import PullDownStrategy from '@ts/ui/scroll_view/scroll_view.native.pull_down';
 import SwipeDownStrategy from '@ts/ui/scroll_view/scroll_view.native.swipe_down';
 import SimulatedStrategy from '@ts/ui/scroll_view/scroll_view.simulated';
