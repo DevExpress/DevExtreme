@@ -2,7 +2,6 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "noImplicitAny": true,
     "strict": false
   },
   "include": [
