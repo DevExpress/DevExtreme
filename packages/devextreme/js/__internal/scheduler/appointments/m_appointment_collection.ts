@@ -86,8 +86,8 @@ class SchedulerAppointments extends CollectionWidget {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataProvider() {
-    return this.option('getAppointmentDataProvider')();
+  get appointmentDataSource() {
+    return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -247,7 +247,7 @@ class SchedulerAppointments extends CollectionWidget {
   ): ViewModelDiff[] {
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
-    const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
     diff
       .filter((item) => !isNeedToAdd(item))
       .forEach((item, index) => {
