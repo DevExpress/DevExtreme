@@ -295,6 +295,8 @@ const iconSet = {
   groupbycolumn: '\f197',
   ungroupcolumn: '\f198',
   ungroupallcolumns: '\f199',
+  chatadd: '\f200',
+  colordismiss: '\f201',
 };
 
 fixture.disablePageReloads`Icons`
