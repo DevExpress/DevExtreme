@@ -95,3 +95,8 @@
     cursor: inherit;
   }
 }
+
+.dx-dropdowneditor-before-field-template:empty,
+.dx-dropdowneditor-after-field-template:empty {
+  display: none;
+}
