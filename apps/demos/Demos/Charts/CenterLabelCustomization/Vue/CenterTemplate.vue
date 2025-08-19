@@ -30,7 +30,7 @@
 <script setup lang="ts">
 
 import { type DxPieChart } from "devextreme-vue/pie-chart";
-import { chartPointObject } from "devextreme/viz/chart";
+import { type chartPointObject } from "devextreme/viz/chart";
 
 type DxPieChartInstance = DxPieChart['instance'];
 
@@ -44,14 +44,14 @@ const country = props.pieChart
   .getAllSeries()[0]
   .getVisiblePoints()[0]
   .data
-  .country as String;
+  .country as string;
 
 const getImagePath = (countryName: string): string => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
 const calculateTotal = (pieChart: DxPieChartInstance): string => formatNumber(
   pieChart
     .getAllSeries()[0]
     .getVisiblePoints()
-    .reduce((s: number, p: chartPointObject ) => s + (p.originalValue as number), 0),
+    .reduce((s: number, p: chartPointObject) => s + (p.originalValue as number), 0),
 );
 
 const formatNumber = new Intl.NumberFormat('en-US', {
