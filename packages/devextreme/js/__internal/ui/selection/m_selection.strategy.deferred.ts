@@ -140,7 +140,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey ex
     }
   }
 
-  _findSubFilter(selectionFilter?: SelectionFilter, filter?: SelectionFilter): number {
+  _findSubFilter(selectionFilter: SelectionFilter | undefined, filter: SelectionFilter | undefined): number {
     if (!selectionFilter) return -1;
     const filterString = JSON.stringify(filter);
 
@@ -154,7 +154,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey ex
     return -1;
   }
 
-  _isLastSubFilter(selectionFilter?: SelectionFilter, filter?: SelectionFilter) {
+  _isLastSubFilter(selectionFilter: SelectionFilter | undefined, filter: SelectionFilter | undefined) {
     if (selectionFilter && filter) {
       return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1 || this._findSubFilter([selectionFilter], filter) === 0;
     }
@@ -188,8 +188,8 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey ex
   }
 
   _addSelectionFilter(
-    isDeselect?: boolean,
-    filter?: SelectionFilter,
+    isDeselect: boolean | undefined,
+    filter: SelectionFilter | undefined,
     isSelectAll?: boolean,
     skipFilter?: boolean,
   ): void {
@@ -248,11 +248,11 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey ex
     }
   }
 
-  _isSimpleKeyFilter(filter?: SelectionFilter, key?: string | Function): boolean {
+  _isSimpleKeyFilter(filter: SelectionFilter | undefined, key: string | Function | undefined): boolean {
     return filter?.length === 3 && filter[0] === key && filter[1] === '=';
   }
 
-  _isKeyFilter(filter?: SelectionFilter): boolean {
+  _isKeyFilter(filter: SelectionFilter | undefined): boolean {
     if (filter?.length === 2 && filter?.[0] === '!') {
       return this._isKeyFilter(filter[1]);
     }
@@ -290,7 +290,7 @@ export default class DeferredStrategy<TItem extends SelectionItem = any, TKey ex
     return false;
   }
 
-  _removeSameFilter(selectionFilter: SelectionFilter, filter?: SelectionFilter, inverted?: boolean, isSelectAll?: boolean): number {
+  _removeSameFilter(selectionFilter: SelectionFilter, filter: SelectionFilter | undefined, inverted?: boolean, isSelectAll?: boolean): number {
     filter = inverted ? ['!', filter] : filter;
 
     if (JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
