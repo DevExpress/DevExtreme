@@ -26,11 +26,11 @@ import type {
   PopoverControllerElements,
   PopoverControllerProperties,
   PopoverPositionControllerConstructor,
-} from './m_popover_position_controller';
+} from './popover_position_controller';
 import {
   POPOVER_POSITION_ALIASES,
   PopoverPositionController,
-} from './m_popover_position_controller';
+} from './popover_position_controller';
 
 // STYLE popover
 

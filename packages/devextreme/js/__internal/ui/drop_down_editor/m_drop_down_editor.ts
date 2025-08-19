@@ -54,9 +54,25 @@ const isIOs = devices.current().platform === 'ios';
 
 type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 
-export interface DropDownEditorProperties extends Omit<Properties,
-'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
-| 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
+export interface DropDownEditorProperties extends Omit<
+  Properties,
+  | 'onChange'
+  | 'onCopy'
+  | 'onCut'
+  | 'onEnterKey'
+  | 'onFocusIn'
+  | 'onFocusOut'
+  | 'onInput'
+  | 'onKeyDown'
+  | 'onKeyUp'
+  | 'onPaste'
+  | 'onValueChanged'
+  | 'validationMessagePosition'
+  | 'onContentReady'
+  | 'onDisposing'
+  | 'onOptionChanged'
+  | 'onInitialized'
+> {
   buttonsLocation?: string;
 
   _onMarkupRendered?: () => void;
