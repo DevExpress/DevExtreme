@@ -14,11 +14,6 @@ const COMPONENTS = [
     name: 'TextBoxDynamicStyles',
     component: () => import('@examples/text-box-dynamic-styles/react19/index.jsx')
   },
-  {
-    path: 'shadow-dom',
-    name: 'ShadowDom',
-    component: () => import('@examples/shadow-dom/react19/index.jsx')
-  }
 ];
 
 export function getAllComponents() {
