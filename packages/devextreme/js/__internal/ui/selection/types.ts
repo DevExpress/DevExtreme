@@ -16,6 +16,7 @@ export interface SelectionItem {
 type Sensitivity = 'case' | 'base' | 'variant' | any;
 
 export type KeyExpr = string | string[];
+export type KeyHash = string | number | symbol;
 
 export interface DefaultOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,7 +78,7 @@ export type SelectionOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSelectionChanging: (e: any) => void;
   keyHashIndices: {
-    [keyHash: string | number | symbol]: number[];
+    [keyHash: KeyHash]: number[];
   };
   ignoreDisabledItems?: boolean;
   disabledItemKeys: TKey[];
