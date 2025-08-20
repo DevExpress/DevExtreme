@@ -126,7 +126,11 @@ const useAggregation = ref(true);
 const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregationFunctions[0].func);
 const currentInterval = ref(aggregationIntervals[0].interval);
 
-function calculateRangeArea({ data, intervalStart, intervalEnd }) {
+function calculateRangeArea({ data, intervalStart, intervalEnd }: { 
+  data: Array<{ temp: number }>; 
+  intervalStart: Date; 
+  intervalEnd: Date 
+}) {
   if (!data.length) {
     return null;
   }
@@ -140,21 +144,22 @@ function calculateRangeArea({ data, intervalStart, intervalEnd }) {
     minTemp: Math.min.apply(null, temp),
   };
 }
-function customizeTooltip(pointInfo) {
+
+function customizeTooltip(pointInfo: any) {
   const { aggregationInfo } = pointInfo.point;
   const start = aggregationInfo && aggregationInfo.intervalStart;
   const end = aggregationInfo && aggregationInfo.intervalEnd;
   const handlers = {
-    'Average temperature': ({ argument, value }) => ({
+    'Average temperature': ({ argument, value }: { argument: Date; value: number }) => ({
       text: `${(!aggregationInfo
         ? `Date: ${argument.toDateString()}`
         : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
       }<br/>Temperature: ${value.toFixed(2)} °C`,
     }),
-    'Temperature range': ({ rangeValue1, rangeValue2 }) => ({
+    'Temperature range': ({ rangeValue1, rangeValue2 }: { rangeValue1: number; rangeValue2: number }) => ({
       text: `Interval: ${start.toDateString()} - ${end.toDateString()}<br/>Temperature range: ${rangeValue1} - ${rangeValue2} °C`,
     }),
-    Precipitation: ({ argument, valueText }) => ({
+    Precipitation: ({ argument, valueText }: { argument: Date; valueText: string }) => ({
       text: `Date: ${argument.toDateString()}<br/>Precipitation: ${valueText} mm`,
     }),
   };
