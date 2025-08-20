@@ -1,5 +1,5 @@
 import type { Prompt } from '@js/common/ai-integration';
-import { templates } from '@ts/core/ai_integration/templates/index';
+import { templates } from '@ts/core/ai_integration/templates';
 
 export interface PromptData {
   system?: Record<string, string>;
@@ -19,7 +19,8 @@ export type PromptTemplateName =
   | 'proofread'
   | 'shorten'
   | 'summarize'
-  | 'translate';
+  | 'translate'
+  | 'smartPaste';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 
