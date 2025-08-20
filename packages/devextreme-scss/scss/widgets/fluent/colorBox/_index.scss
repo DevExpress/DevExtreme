@@ -21,13 +21,6 @@
       padding-inline-start: $fluent-colorbox-preview-width;
     }
 
-    &.dx-colorbox-color-is-not-defined {
-      .dx-colorbox-color-result-preview {
-        background: $colorbox-preview-empty-bg no-repeat 0 0;
-        background-size: contain;
-      }
-    }
-
     &::after {
       left: $fluent-colorbox-preview-padding + 1;
     }

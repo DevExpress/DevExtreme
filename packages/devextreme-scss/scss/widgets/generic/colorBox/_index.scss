@@ -22,14 +22,6 @@
   }
 }
 
-.dx-colorbox-input-container {
-  &.dx-colorbox-color-is-not-defined {
-    .dx-colorbox-color-result-preview {
-      background: $colorbox-preview-empty-bg no-repeat 0 0;
-    }
-  }
-}
-
 .dx-colorbox-color-result-preview {
   position: absolute;
   top: 50%;
