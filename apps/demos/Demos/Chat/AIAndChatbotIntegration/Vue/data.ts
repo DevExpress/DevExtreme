@@ -34,8 +34,8 @@ export const assistant = {
   name: 'Virtual Assistant',
 };
 
-export const store = [];
-export const messages = [];
+export const store: any[] = [];
+export const messages: any[] = [];
 
 const customStore = new CustomStore({
   key: 'id',
@@ -44,7 +44,7 @@ const customStore = new CustomStore({
       resolve([...store]);
     }, 0);
   }),
-  insert: (message) => new Promise((resolve) => {
+  insert: (message: any) => new Promise((resolve) => {
     setTimeout(() => {
       store.push(message);
       resolve(message);

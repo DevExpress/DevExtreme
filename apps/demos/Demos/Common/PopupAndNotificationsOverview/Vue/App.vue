@@ -124,11 +124,13 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
-const currency = (val) => currencyFormatter.format(val);
-function showHouse(house) {
+const currency = (val: number) => currencyFormatter.format(val);
+
+function showHouse(house: any) {
   currentHouse.value = house;
   popupVisible.value = true;
 }
+
 function changeFavoriteState() {
   const favoriteState = !currentHouse.value.Favorite;
   const message = `This item has been ${

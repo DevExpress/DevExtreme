@@ -126,11 +126,7 @@ const useAggregation = ref(true);
 const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregationFunctions[0].func);
 const currentInterval = ref(aggregationIntervals[0].interval);
 
-function calculateRangeArea({ data, intervalStart, intervalEnd }: { 
-  data: Array<{ temp: number }>; 
-  intervalStart: Date; 
-  intervalEnd: Date 
-}) {
+function calculateRangeArea({ data, intervalStart, intervalEnd }: any) {
   if (!data.length) {
     return null;
   }

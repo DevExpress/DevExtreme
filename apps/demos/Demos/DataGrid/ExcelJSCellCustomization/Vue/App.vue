@@ -90,7 +90,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     worksheet,
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
+    customizeCell: ({ gridCell, excelCell }: any) => {
       if (gridCell.rowType === 'data') {
         if (gridCell.column.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);

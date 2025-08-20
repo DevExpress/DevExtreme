@@ -132,14 +132,14 @@ const exportGrids = () => {
     worksheet: priceSheet,
     component: priceGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell: DataGridCell, excelCell: any }) => {
       setAlternatingRowsBackground(gridCell, excelCell);
     },
   }).then(() => exportDataGrid({
     worksheet: ratingSheet,
     component: ratingGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
+    customizeCell: ({ gridCell, excelCell }: { gridCell: DataGridCell, excelCell: any }) => {
       setAlternatingRowsBackground(gridCell, excelCell);
     },
   })).then(() => {

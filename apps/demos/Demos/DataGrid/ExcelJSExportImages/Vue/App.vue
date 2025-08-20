@@ -59,7 +59,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     worksheet,
     autoFilterEnabled: true,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
+    customizeCell: ({ gridCell, excelCell }: any) => {
       if (gridCell.rowType === 'data') {
         if (gridCell.column.dataField === 'Picture') {
           excelCell.value = undefined;

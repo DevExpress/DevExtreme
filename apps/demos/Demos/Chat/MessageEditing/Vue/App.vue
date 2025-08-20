@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { DxChat, DxEditing } from 'devextreme-vue/chat';
+import { DxChat, DxEditing, type DxChatTypes } from 'devextreme-vue/chat';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { Guid } from 'devextreme-vue/common';
 import { CustomStore, DataSource } from 'devextreme-vue/common/data';
@@ -61,7 +61,7 @@ const store = [...initialMessages];
 const customStore = new CustomStore({
   key: 'id',
   load: async() => store,
-  insert: async(message) => {
+  insert: async(message: DxChatTypes.Message) => {
     store.push(message);
     return message;
   },
@@ -72,7 +72,7 @@ const dataSource = computed(() => new DataSource({
   paginate: false,
 }));
 
-const onMessageEntered = ({ message }) => {
+const onMessageEntered = ({ message }: DxChatTypes.MessageEnteredEvent) => {
   const newMessage = {
     id: new Guid().toString(),
     ...message,
@@ -87,7 +87,7 @@ const onMessageEntered = ({ message }) => {
   ]);
 };
 
-const onMessageDeleted = ({ message }) => {
+const onMessageDeleted = ({ message }: DxChatTypes.MessageDeletedEvent) => {
   dataSource.value.store().push([
     {
       type: 'update',
@@ -97,7 +97,7 @@ const onMessageDeleted = ({ message }) => {
   ]);
 };
 
-const onMessageUpdated = ({ message, text }) => {
+const onMessageUpdated = ({ message, text }: DxChatTypes.MessageUpdatedEvent) => {
   dataSource.value.store().push([
     {
       type: 'update',
@@ -110,12 +110,12 @@ const onMessageUpdated = ({ message, text }) => {
 const editingStrategy = {
   enabled: true,
   disabled: false,
-  custom: ({ component, message }) => {
+  custom: ({ component, message }: { component: DxChat['instance'], message: DxChatTypes.Message }) => {
     const { items, user } = component.option();
     const userId = user.id;
 
     const lastNotDeletedMessage = items.findLast(
-      (item) => item.author?.id === userId && !item.isDeleted
+      (item: any) => item.author?.id === userId && !item.isDeleted
     );
 
     return message.id === lastNotDeletedMessage?.id;
@@ -128,12 +128,12 @@ const selectedDeletingStrategy = ref('enabled');
 const allowUpdating = ref(editingStrategy[selectedEditingStrategy.value]);
 const allowDeleting = ref(editingStrategy[selectedDeletingStrategy.value]);
 
-const onAllowEditingChange = (event) => {
+const onAllowEditingChange = (event: any) => {
   selectedEditingStrategy.value = event.value;
   allowUpdating.value = editingStrategy[event.value];
 };
 
-const onAllowDeletingChange = (event) => {
+const onAllowDeletingChange = (event: any) => {
   selectedDeletingStrategy.value = event.value;
   allowDeleting.value = editingStrategy[event.value];
 };

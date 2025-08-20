@@ -60,7 +60,7 @@ function customizePoint(point: any) {
   return { color: { fillId } };
 }
 
-const customizeText = ({ argument }: { argument: string }) => argument;
+const customizeText = ({ argument }: any) => argument;
 </script>
 
 <style>
