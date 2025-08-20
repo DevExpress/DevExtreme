@@ -76,17 +76,21 @@ const DEFAULT_FILTER_VALUE = null;
 const getFilterValue = (that, state) => {
   // TODO: getController
   const filterSyncController = that.getController('filterSync');
-  const columnsController = that.getController('columns');
-  const hasFilterState = state.columns || state.filterValue !== undefined;
-
-  if (filterSyncController) {
-    if (hasFilterState) {
-      return state.filterValue || filterSyncController.getFilterValueFromColumns(state.columns);
-    }
-    return that._initialFilterValue || filterSyncController.getFilterValueFromColumns(columnsController.getColumns());
+  if (!filterSyncController) {
+    return DEFAULT_FILTER_VALUE;
   }
 
-  return DEFAULT_FILTER_VALUE;
+  const columnsController = that.getController('columns');
+  const filterValueFromColumns = filterSyncController.getFilterValueFromColumns?.(state.columns);
+  const hasFilterState = state.filterValue !== undefined || !!filterValueFromColumns?.length;
+
+  if (hasFilterState) {
+    return state.filterValue ?? filterValueFromColumns;
+  }
+
+  const initialFilterValue = that._initialFilterValue;
+  const columns = columnsController.getColumns();
+  return initialFilterValue ?? filterSyncController.getFilterValueFromColumns(columns);
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class StateStoringRowsViewExtender extends Base {
