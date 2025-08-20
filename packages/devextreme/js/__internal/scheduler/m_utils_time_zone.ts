@@ -5,7 +5,6 @@ import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
 import { globalCache } from './global_cache';
-import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
 import timeZoneList from './timezones/timezone_list';
 
@@ -43,14 +42,13 @@ const createUTCDateWithLocalOffset = (date) => {
   ));
 };
 
-const createDateFromUTCWithLocalOffset = (date) => {
-  const result = DateAdapter(date);
+const createDateFromUTCWithLocalOffset = (date: Date) => {
+  const original = new Date(date);
+  const offsetBeforeInMin = original.getTimezoneOffset();
+  const shifted = new Date(original.getTime() + offsetBeforeInMin * MS_IN_MINUTE);
+  const offsetAfterInMin = shifted.getTimezoneOffset();
 
-  const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
-  result.addTime(result.getTimezoneOffset('minute'));
-  result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
-
-  return result.source;
+  return new Date(shifted.getTime() - (offsetBeforeInMin - offsetAfterInMin) * MS_IN_MINUTE);
 };
 
 const createUTCDate = (date) => new Date(Date.UTC(
