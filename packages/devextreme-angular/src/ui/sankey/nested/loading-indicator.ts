@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoSankeyLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');

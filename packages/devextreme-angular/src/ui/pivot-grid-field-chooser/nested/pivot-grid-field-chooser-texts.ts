@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridFieldChooserPivotGridFieldChooserTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allFields(): string {
         return this._getOption('allFields');

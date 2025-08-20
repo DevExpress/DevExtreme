@@ -41,11 +41,11 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_groupItems)
     set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('groupItems', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_totalItems)
     set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('totalItems', value);

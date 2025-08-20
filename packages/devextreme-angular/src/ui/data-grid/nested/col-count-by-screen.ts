@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get lg(): number | undefined {
         return this._getOption('lg');

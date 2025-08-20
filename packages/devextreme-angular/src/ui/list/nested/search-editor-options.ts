@@ -41,7 +41,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('buttons', value);

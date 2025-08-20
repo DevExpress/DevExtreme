@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoFileManagerPermissionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get copy(): boolean {
         return this._getOption('copy');

@@ -43,8 +43,6 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
 })
 export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'filterRow';
     }

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');

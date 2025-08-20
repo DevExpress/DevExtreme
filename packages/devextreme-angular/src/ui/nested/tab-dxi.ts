@@ -69,15 +69,16 @@ import {
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
     IDxTemplateHost {
-
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('commands', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_groups)
     set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('groups', value);

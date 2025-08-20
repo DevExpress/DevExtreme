@@ -41,8 +41,6 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiLayerComponent extends CollectionNestedOption {
-
-    
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');

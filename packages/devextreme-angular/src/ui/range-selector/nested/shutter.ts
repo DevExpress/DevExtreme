@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorShutterComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get color(): string | undefined {
         return this._getOption('color');

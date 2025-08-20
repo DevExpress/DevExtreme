@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get scrollByContent(): boolean {
         return this._getOption('scrollByContent');

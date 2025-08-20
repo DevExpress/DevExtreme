@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get dropFeedbackMode(): DragHighlight {
         return this._getOption('dropFeedbackMode');

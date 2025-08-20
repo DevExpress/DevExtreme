@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');

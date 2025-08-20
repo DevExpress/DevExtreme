@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiChatTypingUserComponent extends CollectionNestedOption {
-
-    
     @Input()
     get avatarAlt(): string {
         return this._getOption('avatarAlt');

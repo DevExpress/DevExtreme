@@ -41,8 +41,6 @@ import { DxoPositionConfig } from './base/position-config';
 })
 export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'position';
     }

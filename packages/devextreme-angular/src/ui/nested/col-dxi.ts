@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_cols } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiColComponent extends CollectionNestedOption {
-
-    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

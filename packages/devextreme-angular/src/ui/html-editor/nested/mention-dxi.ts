@@ -49,8 +49,6 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 })
 export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');

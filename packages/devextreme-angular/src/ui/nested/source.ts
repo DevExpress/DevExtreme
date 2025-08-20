@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoSourceComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get grouping(): string {
         return this._getOption('grouping');

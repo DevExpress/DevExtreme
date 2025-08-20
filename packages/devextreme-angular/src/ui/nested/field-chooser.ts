@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');

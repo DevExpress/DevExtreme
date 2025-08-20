@@ -47,8 +47,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 })
 export class DxiSplitterItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get collapsed(): boolean {
         return this._getOption('collapsed');

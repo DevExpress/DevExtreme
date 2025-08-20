@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorIndentComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get left(): number | undefined {
         return this._getOption('left');

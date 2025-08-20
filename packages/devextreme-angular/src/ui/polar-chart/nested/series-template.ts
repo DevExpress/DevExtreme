@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeSeries(): ((seriesName: any) => PolarChartSeries) {
         return this._getOption('customizeSeries');

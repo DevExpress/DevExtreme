@@ -42,7 +42,6 @@ import {
     ]
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('commands', value);

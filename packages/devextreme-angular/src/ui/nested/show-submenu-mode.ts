@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get delay(): number | { hide?: number, show?: number } {
         return this._getOption('delay');

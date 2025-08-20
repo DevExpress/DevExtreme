@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoItemViewComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get details(): { columns?: Array<dxFileManagerDetailsColumn | string> } {
         return this._getOption('details');

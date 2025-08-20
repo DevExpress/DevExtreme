@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_cols } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
-
-    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

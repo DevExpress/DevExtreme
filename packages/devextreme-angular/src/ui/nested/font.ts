@@ -39,8 +39,6 @@ import { DxoVizFont } from './base/viz-font';
 })
 export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'font';
     }

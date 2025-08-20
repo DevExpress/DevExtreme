@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorUrlComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get rangeMaxPoint(): string | undefined {
         return this._getOption('rangeMaxPoint');

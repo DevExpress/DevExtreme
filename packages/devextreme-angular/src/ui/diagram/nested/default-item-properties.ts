@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get connectorLineEnd(): ConnectorLineEnd {
         return this._getOption('connectorLineEnd');

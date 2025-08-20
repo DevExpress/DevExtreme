@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridExportTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get exportAll(): string {
         return this._getOption('exportAll');

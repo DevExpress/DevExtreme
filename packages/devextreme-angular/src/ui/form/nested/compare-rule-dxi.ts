@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFormCompareRuleComponent extends CollectionNestedOption {
-
-    
     @Input()
     get comparisonTarget(): Function {
         return this._getOption('comparisonTarget');

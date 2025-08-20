@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTooltipShowEventComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get delay(): number | undefined {
         return this._getOption('delay');

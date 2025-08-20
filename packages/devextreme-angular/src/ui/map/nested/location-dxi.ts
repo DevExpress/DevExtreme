@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_locations } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiMapLocationComponent extends CollectionNestedOption {
-
-    
     @Input()
     get lat(): number {
         return this._getOption('lat');

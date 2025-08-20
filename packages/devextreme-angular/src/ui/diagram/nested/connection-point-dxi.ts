@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/core/tokens'
     ]
 })
 export class DxiDiagramConnectionPointComponent extends CollectionNestedOption {
-
-    
     @Input()
     get x(): number {
         return this._getOption('x');

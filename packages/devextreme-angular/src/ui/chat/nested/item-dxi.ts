@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiChatItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get alt(): string {
         return this._getOption('alt');

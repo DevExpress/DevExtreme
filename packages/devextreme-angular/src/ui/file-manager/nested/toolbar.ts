@@ -39,11 +39,11 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
     set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('fileSelectionItems', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

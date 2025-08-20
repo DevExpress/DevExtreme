@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');

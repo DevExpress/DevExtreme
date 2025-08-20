@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get applyValidationResults(): Function {
         return this._getOption('applyValidationResults');

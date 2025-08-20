@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customDataExpr(): ((data: any, value: any) => any) | string | undefined {
         return this._getOption('customDataExpr');

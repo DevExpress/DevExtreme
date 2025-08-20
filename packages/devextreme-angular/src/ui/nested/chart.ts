@@ -40,7 +40,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_series)
     set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('series', value);

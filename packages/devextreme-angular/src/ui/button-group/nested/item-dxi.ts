@@ -47,8 +47,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 })
 export class DxiButtonGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTagBoxCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');

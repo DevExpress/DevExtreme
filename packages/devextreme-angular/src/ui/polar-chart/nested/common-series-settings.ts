@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get area(): any {
         return this._getOption('area');

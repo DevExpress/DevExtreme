@@ -49,8 +49,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 })
 export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

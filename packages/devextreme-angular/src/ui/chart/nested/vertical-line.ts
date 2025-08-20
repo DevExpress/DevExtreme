@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get color(): string {
         return this._getOption('color');

@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoValidationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get autoUpdateParentTasks(): boolean {
         return this._getOption('autoUpdateParentTasks');

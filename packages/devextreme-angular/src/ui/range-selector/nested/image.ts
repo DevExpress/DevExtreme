@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorImageComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get location(): BackgroundImageLocation {
         return this._getOption('location');

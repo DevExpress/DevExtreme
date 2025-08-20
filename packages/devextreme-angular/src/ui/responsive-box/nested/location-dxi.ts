@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_location } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {
-
-    
     @Input()
     get col(): number {
         return this._getOption('col');

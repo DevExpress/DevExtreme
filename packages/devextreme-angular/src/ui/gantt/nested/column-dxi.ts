@@ -41,8 +41,6 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
-
-    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

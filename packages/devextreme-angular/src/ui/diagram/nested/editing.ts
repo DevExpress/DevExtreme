@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramEditingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowAddShape(): boolean {
         return this._getOption('allowAddShape');

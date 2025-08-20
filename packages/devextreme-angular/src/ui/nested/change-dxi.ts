@@ -44,8 +44,6 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 })
 export class DxiChangeComponent extends DxiDataChange {
 
-    
-
     protected get _optionPath() {
         return 'changes';
     }

@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');

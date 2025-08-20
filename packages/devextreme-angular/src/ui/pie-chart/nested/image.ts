@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPieChartImageComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get height(): number {
         return this._getOption('height');

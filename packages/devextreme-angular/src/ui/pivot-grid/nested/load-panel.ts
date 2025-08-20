@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');

@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get highlightCaseSensitive(): boolean {
         return this._getOption('highlightCaseSensitive');

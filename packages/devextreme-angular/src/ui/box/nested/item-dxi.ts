@@ -47,8 +47,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 })
 export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

@@ -99,8 +99,6 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 })
 export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'commonSeriesSettings';
     }

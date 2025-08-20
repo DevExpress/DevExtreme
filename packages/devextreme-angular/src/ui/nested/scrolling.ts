@@ -43,8 +43,6 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
 })
 export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'scrolling';
     }

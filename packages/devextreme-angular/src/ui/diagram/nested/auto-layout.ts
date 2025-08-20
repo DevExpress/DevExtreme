@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');

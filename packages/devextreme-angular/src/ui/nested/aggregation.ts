@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get calculate(): Function | undefined {
         return this._getOption('calculate');

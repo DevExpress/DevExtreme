@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridFilterPanelTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get clearFilter(): string {
         return this._getOption('clearFilter');

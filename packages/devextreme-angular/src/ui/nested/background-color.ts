@@ -36,8 +36,6 @@ import { DxoChartsColor } from './base/charts-color';
 })
 export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'backgroundColor';
     }

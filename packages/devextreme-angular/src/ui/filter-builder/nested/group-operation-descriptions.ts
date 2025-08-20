@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoFilterBuilderGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get and(): string {
         return this._getOption('and');

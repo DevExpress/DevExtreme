@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get enabled(): boolean | Mode {
         return this._getOption('enabled');

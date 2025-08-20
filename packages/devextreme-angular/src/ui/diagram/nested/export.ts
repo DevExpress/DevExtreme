@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramExportComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get fileName(): string {
         return this._getOption('fileName');

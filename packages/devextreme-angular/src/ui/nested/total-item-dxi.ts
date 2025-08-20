@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiTotalItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiDataGridChangeComponent extends CollectionNestedOption {
-
-    
     @Input()
     get data(): any {
         return this._getOption('data');

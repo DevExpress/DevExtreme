@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeWidthComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get end(): number {
         return this._getOption('end');

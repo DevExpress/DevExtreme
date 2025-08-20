@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFormEmptyItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');

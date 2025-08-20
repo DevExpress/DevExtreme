@@ -43,8 +43,6 @@ import { DxoSearchPanel } from './base/search-panel';
 })
 export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit  {
 
-    
-
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.

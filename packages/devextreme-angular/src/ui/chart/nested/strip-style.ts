@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment } {
         return this._getOption('label');

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');

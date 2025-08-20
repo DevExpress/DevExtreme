@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFileManagerToolbarItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

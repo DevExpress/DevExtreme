@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoMapLocationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get lat(): number {
         return this._getOption('lat');

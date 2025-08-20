@@ -39,8 +39,6 @@ import { DxoAnimationState } from './base/animation-state';
 })
 export class DxoFromComponent extends DxoAnimationState implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'from';
     }

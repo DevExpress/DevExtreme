@@ -42,8 +42,6 @@ import { DxoPager } from './base/pager';
 })
 export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'pager';
     }

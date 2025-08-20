@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiGroupItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get alignByColumn(): boolean {
         return this._getOption('alignByColumn');

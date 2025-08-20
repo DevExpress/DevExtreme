@@ -94,8 +94,6 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
 })
 export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'texts';
     }

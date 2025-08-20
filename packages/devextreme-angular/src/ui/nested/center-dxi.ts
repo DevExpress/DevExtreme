@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_center } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiCenterComponent extends CollectionNestedOption {
-
-    
     @Input()
     get lat(): number {
         return this._getOption('lat');

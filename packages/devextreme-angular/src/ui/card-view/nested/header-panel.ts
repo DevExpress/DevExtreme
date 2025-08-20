@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get dragging(): { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void), onDragEnd?: ((e: any) => void), onDragMove?: ((e: any) => void), onDragStart?: ((e: any) => void), onRemove?: ((e: any) => void), onReorder?: ((e: any) => void), scrollSensitivity?: number, scrollSpeed?: number } {
         return this._getOption('dragging');

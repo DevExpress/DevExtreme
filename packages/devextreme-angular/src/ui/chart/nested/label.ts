@@ -44,8 +44,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get font(): Font {
         return this._getOption('font');

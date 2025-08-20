@@ -42,8 +42,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFormLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');

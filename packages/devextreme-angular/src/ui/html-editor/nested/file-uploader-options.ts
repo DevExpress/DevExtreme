@@ -36,8 +36,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
         return this._getOption('abortUpload');

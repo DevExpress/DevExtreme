@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiCardViewValidationRuleComponent extends CollectionNestedOption {
-
-    
     @Input()
     get message(): string {
         return this._getOption('message');

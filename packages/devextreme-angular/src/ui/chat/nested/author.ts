@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChatAuthorComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get avatarAlt(): string {
         return this._getOption('avatarAlt');

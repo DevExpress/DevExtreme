@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeMapTileComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');

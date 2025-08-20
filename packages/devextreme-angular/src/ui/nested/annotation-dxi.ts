@@ -75,8 +75,6 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 })
 export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
 
-    
-
     protected get _optionPath() {
         return 'annotations';
     }

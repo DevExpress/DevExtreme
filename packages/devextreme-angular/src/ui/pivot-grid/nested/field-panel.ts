@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowFieldDragging(): boolean {
         return this._getOption('allowFieldDragging');

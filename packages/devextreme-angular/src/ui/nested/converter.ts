@@ -36,8 +36,6 @@ import { DxoConverter } from './base/converter';
 })
 export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'converter';
     }

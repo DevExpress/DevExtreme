@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiConstantLineComponent extends CollectionNestedOption {
-
-    
     @Input()
     get color(): string {
         return this._getOption('color');

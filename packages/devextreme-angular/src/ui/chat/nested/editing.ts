@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChatEditingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowDeleting(): boolean | ((options: { component: dxChat, message: Message }) => boolean) {
         return this._getOption('allowDeleting');

@@ -37,8 +37,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');

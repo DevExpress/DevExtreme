@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get between(): string {
         return this._getOption('between');

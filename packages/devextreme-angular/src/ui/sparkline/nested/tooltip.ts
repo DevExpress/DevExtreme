@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoSparklineTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');

@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_panes } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiPaneComponent extends CollectionNestedOption {
-
-    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');

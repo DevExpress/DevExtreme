@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridFieldPanelTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get columnFieldArea(): string {
         return this._getOption('columnFieldArea');

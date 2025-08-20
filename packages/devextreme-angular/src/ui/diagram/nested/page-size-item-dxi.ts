@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiDiagramPageSizeItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get height(): number {
         return this._getOption('height');

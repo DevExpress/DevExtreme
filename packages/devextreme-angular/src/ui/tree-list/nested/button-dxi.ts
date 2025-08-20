@@ -49,8 +49,6 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get cssClass(): string {
         return this._getOption('cssClass');

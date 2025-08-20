@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPieChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');

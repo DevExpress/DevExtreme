@@ -77,8 +77,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
 })
 export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit  {
 
-    
-
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.

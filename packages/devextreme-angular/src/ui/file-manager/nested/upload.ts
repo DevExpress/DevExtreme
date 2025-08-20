@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoFileManagerUploadComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get chunkSize(): number {
         return this._getOption('chunkSize');

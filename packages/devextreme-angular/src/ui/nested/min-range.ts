@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoMinRangeComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get days(): number {
         return this._getOption('days');

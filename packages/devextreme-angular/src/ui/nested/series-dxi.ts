@@ -83,8 +83,6 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 })
 export class DxiSeriesComponent extends DxiChartSeries {
 
-    
-
     protected get _optionPath() {
         return 'series';
     }

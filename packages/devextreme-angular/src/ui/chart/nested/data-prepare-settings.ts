@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartDataPrepareSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get checkTypeForAllData(): boolean {
         return this._getOption('checkTypeForAllData');

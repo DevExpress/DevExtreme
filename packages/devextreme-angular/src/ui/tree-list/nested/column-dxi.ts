@@ -52,15 +52,16 @@ import {
     ]
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('validationRules', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('buttons', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('columns', value);

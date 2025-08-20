@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
-
-    
     @Input()
     get color(): string {
         return this._getOption('color');

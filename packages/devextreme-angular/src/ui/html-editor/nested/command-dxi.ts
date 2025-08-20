@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
-
-    
     @Input()
     get name(): AICommandNameExtended {
         return this._getOption('name');

@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');

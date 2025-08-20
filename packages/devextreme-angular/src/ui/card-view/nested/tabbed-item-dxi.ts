@@ -43,7 +43,6 @@ import {
     ]
 })
 export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('tabs', value);

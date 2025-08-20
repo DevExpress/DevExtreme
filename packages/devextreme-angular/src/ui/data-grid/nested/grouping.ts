@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridGroupingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowCollapsing(): boolean {
         return this._getOption('allowCollapsing');

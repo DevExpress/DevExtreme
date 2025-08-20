@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiRangeComponent extends CollectionNestedOption {
-
-    
     @Input()
     get color(): ChartsColor | string {
         return this._getOption('color');

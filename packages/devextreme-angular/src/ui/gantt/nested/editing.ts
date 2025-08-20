@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoGanttEditingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowDependencyAdding(): boolean {
         return this._getOption('allowDependencyAdding');

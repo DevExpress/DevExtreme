@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get addCard(): string {
         return this._getOption('addCard');

@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewColumnChooserSearchComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');

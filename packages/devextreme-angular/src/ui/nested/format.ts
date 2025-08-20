@@ -40,8 +40,6 @@ import { DxoFormat } from './base/format';
 })
 export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'format';
     }

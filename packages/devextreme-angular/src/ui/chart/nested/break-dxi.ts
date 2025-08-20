@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiChartBreakComponent extends CollectionNestedOption {
-
-    
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');

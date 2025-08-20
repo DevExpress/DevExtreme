@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
         return this._getOption('height');

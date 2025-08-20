@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get mapId(): string {
         return this._getOption('mapId');

@@ -49,8 +49,6 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 })
 export class DxiTreeListToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

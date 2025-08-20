@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFormButtonItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get buttonOptions(): dxButtonOptions | undefined {
         return this._getOption('buttonOptions');

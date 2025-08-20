@@ -43,8 +43,6 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
 })
 export class DxiTypingUserComponent extends DxiUser {
 
-    
-
     protected get _optionPath() {
         return 'typingUsers';
     }

@@ -41,8 +41,6 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiDataGridFieldComponent extends CollectionNestedOption {
-
-    
     @Input()
     get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | Function | Array<any>) {
         return this._getOption('calculateFilterExpression');

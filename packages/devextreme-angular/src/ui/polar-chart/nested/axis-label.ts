@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartAxisLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeHint(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeHint');

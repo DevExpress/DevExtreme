@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get dataField(): string {
         return this._getOption('dataField');

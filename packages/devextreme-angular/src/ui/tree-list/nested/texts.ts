@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get addRow(): string {
         return this._getOption('addRow');

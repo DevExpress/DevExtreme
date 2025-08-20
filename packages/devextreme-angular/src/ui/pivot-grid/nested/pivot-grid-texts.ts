@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPivotGridPivotGridTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get collapseAll(): string {
         return this._getOption('collapseAll');

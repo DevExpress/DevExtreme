@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoControlBarComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');

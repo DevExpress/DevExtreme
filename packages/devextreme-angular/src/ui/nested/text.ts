@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTextComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeText(): Function | undefined {
         return this._getOption('customizeText');

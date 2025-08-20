@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeText(): ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');

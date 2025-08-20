@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFormRangeRuleComponent extends CollectionNestedOption {
-
-    
     @Input()
     get ignoreEmptyValue(): boolean {
         return this._getOption('ignoreEmptyValue');

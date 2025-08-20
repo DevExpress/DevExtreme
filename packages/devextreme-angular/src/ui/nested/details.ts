@@ -38,7 +38,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_columns)
     set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('columns', value);

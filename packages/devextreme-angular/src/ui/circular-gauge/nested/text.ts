@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeText(): ((indicatedValue: { value: number, valueText: string }) => string) | undefined {
         return this._getOption('customizeText');

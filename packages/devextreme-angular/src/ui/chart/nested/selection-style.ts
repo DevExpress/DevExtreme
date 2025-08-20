@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number, dashStyle?: DashStyle | undefined } {
         return this._getOption('border');

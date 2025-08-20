@@ -42,8 +42,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoNumberBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

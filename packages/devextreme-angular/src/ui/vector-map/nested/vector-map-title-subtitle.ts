@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapVectorMapTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get font(): Font {
         return this._getOption('font');

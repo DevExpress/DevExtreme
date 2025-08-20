@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoGanttTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get cancel(): string {
         return this._getOption('cancel');

@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridGroupingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get groupByThisColumn(): string {
         return this._getOption('groupByThisColumn');

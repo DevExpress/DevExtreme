@@ -57,15 +57,16 @@ import {
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('validationRules', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('tabs', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

@@ -41,7 +41,6 @@ import {
     ]
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_location)
     set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('location', value);

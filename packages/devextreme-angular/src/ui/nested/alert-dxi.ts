@@ -41,8 +41,6 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/core/tokens';
 })
 export class DxiAlertComponent extends DxiAlert {
 
-    
-
     protected get _optionPath() {
         return 'alerts';
     }

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get label(): { customizeText?: Function, format?: Format | string | undefined } {
         return this._getOption('label');

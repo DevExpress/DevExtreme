@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiGanttStripLineComponent extends CollectionNestedOption {
-
-    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

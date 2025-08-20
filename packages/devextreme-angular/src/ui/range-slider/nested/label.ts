@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSliderLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get format(): Format {
         return this._getOption('format');

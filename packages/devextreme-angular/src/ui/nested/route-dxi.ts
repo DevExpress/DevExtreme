@@ -42,7 +42,6 @@ import {
     ]
 })
 export class DxiRouteComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_locations)
     set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('locations', value);

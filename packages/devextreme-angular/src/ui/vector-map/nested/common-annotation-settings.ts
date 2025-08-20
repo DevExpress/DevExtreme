@@ -42,8 +42,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');

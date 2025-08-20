@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartPaneBorderComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get bottom(): boolean {
         return this._getOption('bottom');

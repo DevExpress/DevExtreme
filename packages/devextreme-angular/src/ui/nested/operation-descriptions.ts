@@ -45,8 +45,6 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
 })
 export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'operationDescriptions';
     }

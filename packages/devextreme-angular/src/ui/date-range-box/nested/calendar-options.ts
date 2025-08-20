@@ -35,8 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

@@ -139,23 +139,26 @@ import {
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
     IDxTemplateHost {
-
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('validationRules', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('tabs', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('commands', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_location)
     set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('location', value);

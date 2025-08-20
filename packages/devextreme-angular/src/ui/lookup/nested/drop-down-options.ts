@@ -44,7 +44,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('toolbarItems', value);

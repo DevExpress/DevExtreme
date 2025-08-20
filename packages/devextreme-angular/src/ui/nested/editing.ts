@@ -42,7 +42,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('changes', value);

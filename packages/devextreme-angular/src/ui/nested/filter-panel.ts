@@ -40,8 +40,6 @@ import { DxoFilterPanel } from './base/filter-panel';
 })
 export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit  {
 
-    
-
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.

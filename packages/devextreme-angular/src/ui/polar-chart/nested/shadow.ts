@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartShadowComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get blur(): number {
         return this._getOption('blur');

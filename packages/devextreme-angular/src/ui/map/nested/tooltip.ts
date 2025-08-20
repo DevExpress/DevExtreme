@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get isShown(): boolean {
         return this._getOption('isShown');

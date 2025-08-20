@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get betweenEndText(): string {
         return this._getOption('betweenEndText');

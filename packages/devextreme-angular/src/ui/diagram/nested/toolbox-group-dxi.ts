@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_groups } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiDiagramToolboxGroupComponent extends CollectionNestedOption {
-
-    
     @Input()
     get category(): ShapeCategory | string {
         return this._getOption('category');

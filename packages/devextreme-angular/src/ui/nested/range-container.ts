@@ -40,7 +40,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('ranges', value);

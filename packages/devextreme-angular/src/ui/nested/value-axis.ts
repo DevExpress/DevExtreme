@@ -43,11 +43,11 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_constantLines)
     set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('constantLines', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_strips)
     set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('strips', value);

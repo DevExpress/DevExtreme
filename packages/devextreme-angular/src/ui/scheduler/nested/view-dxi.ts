@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_views } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiSchedulerViewComponent extends CollectionNestedOption {
-
-    
     @Input()
     get agendaDuration(): number {
         return this._getOption('agendaDuration');

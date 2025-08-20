@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeSeries(): Function {
         return this._getOption('customizeSeries');

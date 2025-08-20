@@ -46,8 +46,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get connectorColor(): string | undefined {
         return this._getOption('connectorColor');

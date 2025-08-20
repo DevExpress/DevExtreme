@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiChatAlertComponent extends CollectionNestedOption {
-
-    
     @Input()
     get id(): number | string {
         return this._getOption('id');

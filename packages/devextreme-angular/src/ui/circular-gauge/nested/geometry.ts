@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get endAngle(): number {
         return this._getOption('endAngle');

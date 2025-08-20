@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
-
-    
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');

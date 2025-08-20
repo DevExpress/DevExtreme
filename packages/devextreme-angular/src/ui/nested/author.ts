@@ -38,8 +38,6 @@ import { DxoUser } from './base/user';
 })
 export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'author';
     }

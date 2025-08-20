@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiLegendComponent extends CollectionNestedOption {
-
-    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

@@ -52,8 +52,6 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 })
 export class DxiFieldComponent extends DxiFilterBuilderField {
 
-    
-
     protected get _optionPath() {
         return 'fields';
     }

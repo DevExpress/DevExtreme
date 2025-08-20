@@ -35,8 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

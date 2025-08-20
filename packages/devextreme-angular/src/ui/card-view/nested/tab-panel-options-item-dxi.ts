@@ -46,8 +46,6 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 })
 export class DxiCardViewTabPanelOptionsItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get badge(): string {
         return this._getOption('badge');

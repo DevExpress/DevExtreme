@@ -38,7 +38,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('commands', value);

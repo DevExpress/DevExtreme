@@ -53,7 +53,6 @@ import {
     ]
 })
 export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('validationRules', value);

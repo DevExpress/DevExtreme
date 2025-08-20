@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_menuItems } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiMenuItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get action(): Function {
         return this._getOption('action');

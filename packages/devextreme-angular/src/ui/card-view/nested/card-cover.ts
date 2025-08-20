@@ -40,8 +40,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewCardCoverComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get altExpr(): ((data: any) => string) | string {
         return this._getOption('altExpr');

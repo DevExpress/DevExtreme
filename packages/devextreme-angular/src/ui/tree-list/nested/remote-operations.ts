@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get filtering(): boolean {
         return this._getOption('filtering');

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDiagramContextToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get category(): ShapeCategory | string {
         return this._getOption('category');

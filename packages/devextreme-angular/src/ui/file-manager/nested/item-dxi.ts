@@ -43,7 +43,6 @@ import {
     ]
 })
 export class DxiFileManagerItemComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

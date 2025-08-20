@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoAutocompleteFromComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get left(): number {
         return this._getOption('left');

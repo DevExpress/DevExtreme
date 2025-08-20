@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartCommonPaneSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');

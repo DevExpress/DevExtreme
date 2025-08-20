@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoBarGaugeMarginComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get bottom(): number {
         return this._getOption('bottom');

@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_rows } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiRowComponent extends CollectionNestedOption {
-
-    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

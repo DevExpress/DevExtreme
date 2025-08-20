@@ -53,8 +53,6 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
 })
 export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'subvalueIndicator';
     }

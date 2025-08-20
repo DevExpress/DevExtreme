@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');

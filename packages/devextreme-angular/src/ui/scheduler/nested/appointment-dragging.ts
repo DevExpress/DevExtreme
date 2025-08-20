@@ -35,8 +35,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get autoScroll(): boolean {
         return this._getOption('autoScroll');

@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get applyFilter(): ApplyFilterMode {
         return this._getOption('applyFilter');

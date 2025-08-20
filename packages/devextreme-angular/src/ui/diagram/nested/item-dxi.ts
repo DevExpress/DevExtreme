@@ -42,7 +42,6 @@ import {
     ]
 })
 export class DxiDiagramItemComponent extends CollectionNestedOption {
-
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

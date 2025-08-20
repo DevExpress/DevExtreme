@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get duration(): number {
         return this._getOption('duration');

@@ -40,8 +40,6 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption {
-
-    
     @Input()
     get aggregation(): { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');

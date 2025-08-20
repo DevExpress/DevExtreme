@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorScaleLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeText(): ((scaleValue: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');

@@ -94,7 +94,6 @@ import {
     ]
 })
 export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('toolbarItems', value);

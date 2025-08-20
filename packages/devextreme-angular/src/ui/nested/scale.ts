@@ -42,7 +42,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('breaks', value);

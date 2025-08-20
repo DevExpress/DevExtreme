@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiDateBoxButtonComponent extends CollectionNestedOption {
-
-    
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');

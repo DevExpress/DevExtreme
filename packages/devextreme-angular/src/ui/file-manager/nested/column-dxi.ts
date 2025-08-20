@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
-
-    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

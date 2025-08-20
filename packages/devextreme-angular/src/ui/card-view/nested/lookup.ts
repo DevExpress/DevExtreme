@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewLookupComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');

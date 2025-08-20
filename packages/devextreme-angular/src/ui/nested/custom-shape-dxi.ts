@@ -52,7 +52,6 @@ import {
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)
     set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('connectionPoints', value);

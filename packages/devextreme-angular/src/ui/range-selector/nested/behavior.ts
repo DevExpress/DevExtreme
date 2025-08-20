@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorBehaviorComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowSlidersSwap(): boolean {
         return this._getOption('allowSlidersSwap');

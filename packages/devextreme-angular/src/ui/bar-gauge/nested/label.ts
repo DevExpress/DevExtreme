@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get connectorColor(): string | undefined {
         return this._getOption('connectorColor');

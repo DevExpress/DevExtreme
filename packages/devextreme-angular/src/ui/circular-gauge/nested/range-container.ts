@@ -39,7 +39,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('ranges', value);

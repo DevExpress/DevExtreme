@@ -48,8 +48,6 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 })
 export class DxiPieChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
-
-    
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');

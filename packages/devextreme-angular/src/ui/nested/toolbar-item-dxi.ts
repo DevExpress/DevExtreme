@@ -52,8 +52,6 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 })
 export class DxiToolbarItemComponent extends DxiPopupToolbarItem {
 
-    
-
     protected get _optionPath() {
         return 'toolbarItems';
     }

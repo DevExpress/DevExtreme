@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowMouseWheel(): boolean {
         return this._getOption('allowMouseWheel');

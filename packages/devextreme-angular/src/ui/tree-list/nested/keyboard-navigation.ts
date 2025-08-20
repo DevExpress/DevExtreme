@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get editOnKeyPress(): boolean {
         return this._getOption('editOnKeyPress');

@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorValueComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');

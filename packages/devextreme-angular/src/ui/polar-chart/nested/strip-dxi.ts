@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiPolarChartStripComponent extends CollectionNestedOption {
-
-    
     @Input()
     get color(): string | undefined {
         return this._getOption('color');

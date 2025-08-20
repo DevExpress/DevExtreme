@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiResourceComponent extends CollectionNestedOption {
-
-    
     @Input()
     get allowMultiple(): boolean {
         return this._getOption('allowMultiple');

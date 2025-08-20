@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapProjectionComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get aspectRatio(): number {
         return this._getOption('aspectRatio');

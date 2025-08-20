@@ -34,8 +34,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoGanttResourcesComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get colorExpr(): Function | string {
         return this._getOption('colorExpr');

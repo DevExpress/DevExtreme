@@ -31,8 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoContextMenuDelayComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get hide(): number {
         return this._getOption('hide');

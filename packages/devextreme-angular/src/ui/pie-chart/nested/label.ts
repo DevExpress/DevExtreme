@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');

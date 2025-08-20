@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get inverted(): boolean {
         return this._getOption('inverted');

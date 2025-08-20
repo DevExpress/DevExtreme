@@ -43,8 +43,6 @@ import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
 })
 export class DxiStripLineComponent extends DxiGanttStripLine {
 
-    
-
     protected get _optionPath() {
         return 'stripLines';
     }

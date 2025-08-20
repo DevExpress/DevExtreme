@@ -96,8 +96,6 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
 })
 export class DxoScatterComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'scatter';
     }

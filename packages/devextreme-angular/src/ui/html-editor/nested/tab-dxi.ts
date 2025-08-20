@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
-
-    
     @Input()
     get name(): HtmlEditorImageUploadTab | undefined {
         return this._getOption('name');

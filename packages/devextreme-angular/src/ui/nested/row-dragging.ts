@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');

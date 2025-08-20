@@ -40,8 +40,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get autoExpandAll(): boolean {
         return this._getOption('autoExpandAll');

@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get items(): Array<number> {
         return this._getOption('items');

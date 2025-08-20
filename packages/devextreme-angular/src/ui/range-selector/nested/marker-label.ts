@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorMarkerLabelComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get customizeText(): ((markerValue: { value: Date | number, valueText: string }) => string) {
         return this._getOption('customizeText');

@@ -48,8 +48,6 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 })
 export class DxiMentionComponent extends DxiHtmlEditorMention {
 
-    
-
     protected get _optionPath() {
         return 'mentions';
     }

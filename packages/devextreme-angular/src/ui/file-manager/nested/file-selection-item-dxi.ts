@@ -39,8 +39,6 @@ import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/token
     ]
 })
 export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
-
-    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

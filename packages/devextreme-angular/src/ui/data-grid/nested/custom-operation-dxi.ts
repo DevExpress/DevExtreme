@@ -38,8 +38,6 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens'
     ]
 })
 export class DxiDataGridCustomOperationComponent extends CollectionNestedOption {
-
-    
     @Input()
     get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | Function | Array<any>) {
         return this._getOption('calculateFilterExpression');

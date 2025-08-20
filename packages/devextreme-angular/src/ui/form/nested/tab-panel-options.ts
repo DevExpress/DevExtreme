@@ -44,7 +44,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

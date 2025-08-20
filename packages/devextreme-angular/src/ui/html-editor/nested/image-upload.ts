@@ -39,7 +39,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_tabs)
     set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('tabs', value);

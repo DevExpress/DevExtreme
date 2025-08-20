@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartLegendComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

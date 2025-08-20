@@ -43,8 +43,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
-
-    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

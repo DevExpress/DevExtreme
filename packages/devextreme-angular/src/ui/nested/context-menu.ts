@@ -43,11 +43,11 @@ import {
     ]
 })
 export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('commands', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

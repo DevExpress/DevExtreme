@@ -39,8 +39,6 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
 })
 export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit  {
 
-    
-
     protected get _optionPath() {
         return 'search';
     }

@@ -33,8 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoCardViewSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');

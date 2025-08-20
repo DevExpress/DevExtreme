@@ -37,8 +37,6 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/t
     ]
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
-
-    
     @Input()
     get groupColumn(): string | undefined {
         return this._getOption('groupColumn');

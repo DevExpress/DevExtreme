@@ -38,7 +38,6 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_groups)
     set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('groups', value);

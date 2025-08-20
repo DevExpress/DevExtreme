@@ -41,11 +41,11 @@ import {
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
-
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('customOperations', value);
     }
+    
     @ContentChildren(PROPERTY_TOKEN_fields)
     set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('fields', value);

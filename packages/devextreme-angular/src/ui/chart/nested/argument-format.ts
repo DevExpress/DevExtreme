@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoChartArgumentFormatComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get currency(): string {
         return this._getOption('currency');

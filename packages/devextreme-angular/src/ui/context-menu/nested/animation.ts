@@ -32,8 +32,6 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoContextMenuAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
-
-    
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');

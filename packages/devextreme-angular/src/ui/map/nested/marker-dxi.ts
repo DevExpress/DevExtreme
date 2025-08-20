@@ -36,8 +36,6 @@ import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiMapMarkerComponent extends CollectionNestedOption {
-
-    
     @Input()
     get iconSrc(): string {
         return this._getOption('iconSrc');
