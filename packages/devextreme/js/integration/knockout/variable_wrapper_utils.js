@@ -11,6 +11,22 @@ if(ko) {
             if(ko.isObservable(value)) {
                 return ko.utils.unwrapObservable(value);
             }
+            // Recursively unwrap observable properties within objects
+            if(value && typeof value === 'object' && !Array.isArray(value)) {
+                const unwrapped = {};
+                for(const key in value) {
+                    if(value.hasOwnProperty(key)) {
+                        const subValue = value[key];
+                        if(ko.isObservable(subValue)) {
+                            unwrapped[key] = ko.utils.unwrapObservable(subValue);
+                        } else {
+                            unwrapped[key] = subValue;
+                        }
+                    }
+                }
+                return unwrapped;
+            }
+
             return this.callBase(value);
         },
         assign: function(variable, value) {

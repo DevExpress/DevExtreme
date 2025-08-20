@@ -199,7 +199,7 @@ export class Options {
   option(options, value?) {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
     if (isGetter) {
-      return this._optionManager.get(undefined, this._normalizeName(options || Object.keys(this._optionManager._options)));
+      return this._optionManager.get(undefined, this._normalizeName(options));
     }
     this._startChangeCallback();
     try {
