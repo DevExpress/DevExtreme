@@ -76,7 +76,7 @@ onBeforeMount(() => {
   loadMessages(dictionary);
 });
 
-async function getAIResponse(messages: any): Promise<string | undefined> {
+async function getAIResponse(messages: Array<DxChatTypes.Message>): Promise<string | undefined> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,

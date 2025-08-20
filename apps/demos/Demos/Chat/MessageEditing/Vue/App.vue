@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { DxChat, DxEditing, type DxChatTypes } from 'devextreme-vue/chat';
-import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { Guid } from 'devextreme-vue/common';
 import { CustomStore, DataSource } from 'devextreme-vue/common/data';
 import {
@@ -128,12 +128,12 @@ const selectedDeletingStrategy = ref('enabled');
 const allowUpdating = ref(editingStrategy[selectedEditingStrategy.value]);
 const allowDeleting = ref(editingStrategy[selectedDeletingStrategy.value]);
 
-const onAllowEditingChange = (event: any) => {
+const onAllowEditingChange = (event: DxSelectBoxTypes.ValueChangedEvent) => {
   selectedEditingStrategy.value = event.value;
   allowUpdating.value = editingStrategy[event.value];
 };
 
-const onAllowDeletingChange = (event: any) => {
+const onAllowDeletingChange = (event: DxSelectBoxTypes.ValueChangedEvent) => {
   selectedDeletingStrategy.value = event.value;
   allowDeleting.value = editingStrategy[event.value];
 };
