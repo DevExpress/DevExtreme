@@ -10,6 +10,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { keyboard } from '@js/common/core/events/short';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
+import type { DeepPartial } from '@js/core';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -45,11 +46,11 @@ import type {
   ControllerOverlayElements,
   ControllerProperties,
   PositionControllerConstructor,
-} from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
 import {
   OVERLAY_POSITION_ALIASES,
   OverlayPositionController,
-} from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 
 const ready = readyCallbacks.add;
@@ -72,7 +73,8 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
 
-export type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+type PointerLikeNativeEvents = MouseEvent | PointerEvent | TouchEvent;
+export type PointerLikeEvent = DxEvent<PointerLikeNativeEvents>;
 
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 
@@ -135,7 +137,7 @@ export type PositioningEvent<
   TPosition = OverlayProperties['position'],
 > = NativeEventInfo<
   Overlay,
-  PointerLikeEvent
+  PointerLikeNativeEvents
 > & {
   readonly position: TPosition;
 };
@@ -301,18 +303,22 @@ class Overlay<
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    return super._defaultOptionsRules().concat([{
-      device(): boolean {
-        return !windowUtils.hasWindow();
+    const rules = [
+      ...super._defaultOptionsRules(),
+      {
+        device(): boolean {
+          return !windowUtils.hasWindow();
+        },
+        options: {
+          width: null,
+          height: null,
+          animation: null,
+          _checkParentVisibility: false,
+        } as DeepPartial<TProperties>,
       },
-      // @ts-expect-error overload
-      options: {
-        width: null,
-        height: null,
-        animation: null,
-        _checkParentVisibility: false,
-      },
-    }]);
+    ];
+
+    return rules;
   }
 
   _setOptionsByReference(): void {

@@ -8,8 +8,8 @@ import type {
   OverlayPosition,
   Position,
   PositionControllerConstructor,
-} from '@ts/ui/overlay/m_overlay_position_controller';
-import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
+import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
 
 import windowUtils from '../../core/utils/m_window';

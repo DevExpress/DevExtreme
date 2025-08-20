@@ -150,7 +150,6 @@ const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMet
 type IButtonOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -813,7 +812,6 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   animationEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
   deferRendering?: boolean;
   disabled?: boolean;

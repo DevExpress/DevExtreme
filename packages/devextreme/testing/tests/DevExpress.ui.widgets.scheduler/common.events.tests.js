@@ -224,8 +224,8 @@ QUnit.module('Events', {
 
         const changedItems = appointments.option('items');
 
-        assert.notDeepEqual(initialItems[0].settings, changedItems[0].settings, 'Item\'s settings were changed');
-        assert.notDeepEqual(initialItems[1].settings, changedItems[1].settings, 'Item\'s settings were changed');
+        assert.notDeepEqual(initialItems[0], changedItems[0], 'Item\'s settings were changed');
+        assert.notDeepEqual(initialItems[1], changedItems[1], 'Item\'s settings were changed');
     });
 
     QUnit.test('targetedAppointmentData should return correct allDay appointmentData', async function(assert) {
@@ -688,7 +688,7 @@ QUnit.module('Events', {
         });
 
         const workspaceSpy = sinon.spy(scheduler.instance._workSpace, '_dimensionChanged');
-        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, '_repaintAppointments');
+        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, 'repaintAppointments');
 
         resizeCallbacks.fire();
 

@@ -562,7 +562,7 @@ module('Subscribes', {
     test('"getAppointmentDurationInMs" should return visible appointment duration', async function(assert) {
         await this.createInstance();
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 2, 20)
@@ -580,7 +580,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 4, 20)
@@ -598,7 +598,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 3, 0)
@@ -615,7 +615,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 4, 25, 21),
             new Date(2015, 4, 26, 3)
@@ -632,7 +632,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 10),
             new Date(2015, 2, 4, 17)
@@ -649,7 +649,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 7),
             new Date(2015, 2, 4, 21),
@@ -666,7 +666,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 7),
             new Date(2015, 2, 4, 21),

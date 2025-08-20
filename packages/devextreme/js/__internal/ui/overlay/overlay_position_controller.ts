@@ -10,7 +10,7 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
-import swatch from '@ts/core/utils/m_swatch_container';
+import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
@@ -210,9 +210,11 @@ export class OverlayPositionController<
       this._properties.container = element;
     }
 
-    this._$markupContainer = element
-      ? $(element)
-      : swatch.getSwatchContainer(this._$root);
+    if (element) {
+      this._$markupContainer = $(element);
+    } else if (this._$root) {
+      this._$markupContainer = swatch.getSwatchContainer(this._$root);
+    }
 
     this.updateVisualContainer(this._properties.visualContainer);
   }
@@ -372,7 +374,6 @@ export class OverlayPositionController<
     return defaultConfiguration;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): OverlayPosition {
     if (isPositionAlignment(position)) {
       const configuration: OverlayPosition = {

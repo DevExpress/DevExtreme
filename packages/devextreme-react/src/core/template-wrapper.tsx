@@ -10,7 +10,6 @@ import {
   useMemo,
   memo,
   FC,
-  MutableRefObject,
 } from 'react';
 
 import { createPortal } from 'react-dom';
@@ -49,7 +48,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     unlock(): void { isRemovalLocked.current = false; },
   }), []);
 
-  const element = useRef<HTMLElement>();
+  const elements = useRef<HTMLElement[]>([]);
   const hiddenNodeElement = useRef<HTMLElement>();
   const removalListenerElement = useRef<HTMLElement>();
 
@@ -58,23 +57,25 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       return;
     }
 
-    if (element.current) {
-      events.off(element.current, DX_REMOVE_EVENT, onTemplateRemoved);
-    }
+    [
+      ...elements.current,
+      removalListenerElement.current,
+    ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
-    if (removalListenerElement.current) {
-      events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
-    }
-
-    onRemoved();
+    // In case of multiple root elements, letting the widget remove them all sync
+    Promise.resolve().then(() => {
+      onRemoved();
+    });
   }, [onRemoved]);
 
   useLayoutEffect(() => {
-    const el = element.current;
+    const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
 
-    if (el && el.nodeType === Node.ELEMENT_NODE) {
-      events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
-      events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
+    if (elementNodes.length) {
+      elementNodes.forEach((el) => {
+        events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
+        events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
+      });
     } else if (!removalListenerRequired) {
       setRemovalListenerRequired(true);
     } else if (removalListenerElement.current) {
@@ -83,18 +84,20 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     }
 
     return () => {
-      const safeAppend = (child?: MutableRefObject<HTMLElement | undefined>) => {
-        if (child?.current && container && !container.contains(child.current)) {
-          container.appendChild(child.current);
+      const safeAppend = (child: HTMLElement | undefined) => {
+        if (child && container && !container.contains(child)) {
+          container.appendChild(child);
         }
       };
 
-      safeAppend(element);
-      safeAppend(hiddenNodeElement);
-      safeAppend(removalListenerElement);
+      [
+        ...elements.current,
+        hiddenNodeElement.current,
+        removalListenerElement.current,
+      ].forEach((el) => safeAppend(el));
 
-      if (el) {
-        events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
+      if (elementNodes.length) {
+        elementNodes.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
       }
     };
   }, [onTemplateRemoved, removalListenerRequired, container]);
@@ -103,9 +106,21 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     onRendered();
   }, [onRendered]);
 
+  const containerContent = Array.from(container.childNodes);
+
   const hiddenNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
     hiddenNodeElement.current = node;
-    element.current = node?.previousSibling as HTMLElement;
+    elements.current = [];
+
+    let currentNode = node?.previousSibling as HTMLElement;
+
+    while (currentNode) {
+      if (!containerContent.includes(currentNode)) {
+        elements.current.push(currentNode);
+      }
+
+      currentNode = currentNode?.previousSibling as HTMLElement;
+    }
   }, 'div');
 
   const removalListener = removalListenerRequired

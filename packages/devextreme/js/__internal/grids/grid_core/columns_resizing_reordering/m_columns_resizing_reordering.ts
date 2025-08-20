@@ -20,7 +20,7 @@ import {
   setHeight, setWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject, isString } from '@js/core/utils/type';
-import swatchContainer from '@ts/core/utils/m_swatch_container';
+import swatchContainer from '@ts/core/utils/swatch_container';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ColumnPoint, ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';

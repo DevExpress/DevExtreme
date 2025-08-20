@@ -1649,7 +1649,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
             if(args.name === 'formData') formDataChangedCount++;
         });
 
-        scheduler.appointments.dblclick(0);
+        scheduler.appointments.dblclick(1);
         formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
         assert.deepEqual(formData.startDate, appointments[0].startDate, 'Second opening appointment form has right startDate');
