@@ -912,6 +912,10 @@ declare module DevExpress.aiIntegration {
       params: TranslateCommandParams,
       callbacks: RequestCallbacks<TranslateCommandResult>
     ): () => void;
+    smartPaste(
+      params: SmartPasteCommandParams,
+      callbacks: RequestCallbacks<SmartPasteCommandResult>
+    ): () => void;
   }
   /**
    * [descr:AIProvider]
@@ -964,6 +968,14 @@ declare module DevExpress.aiIntegration {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type ExpandCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type FieldInfo = {
+    name: string;
+    format: string;
+    instruction?: string;
+  };
   /**
    * [descr:Prompt]
    */
@@ -1027,6 +1039,20 @@ declare module DevExpress.aiIntegration {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type ShortenCommandResult = string;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteCommandParams = {
+    text: string;
+    fields: FieldInfo[];
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteCommandResult = Array<{
+    name: string;
+    value: string | string[];
+  }>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
