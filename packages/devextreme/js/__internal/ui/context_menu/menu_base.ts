@@ -419,7 +419,7 @@ class MenuBase<
   }
 
   _getItemElementByEventArgs(
-    eventArgs: HoverEvent | ClickEvent | DxEvent<KeyboardEvent>,
+    eventArgs: DxEvent,
   ): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
