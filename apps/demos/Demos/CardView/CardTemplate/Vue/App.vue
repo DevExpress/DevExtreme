@@ -83,9 +83,8 @@ import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'd
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
-import { vehicles } from './data.ts';
+import { vehicles, type Vehicle } from './data.ts';
 import { ref } from 'vue';
-import type { Vehicle } from './data';
 
 const popupVisible = ref(false);
 const currentVehicle = ref<Vehicle | undefined>();

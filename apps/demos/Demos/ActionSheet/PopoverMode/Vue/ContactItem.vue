@@ -6,7 +6,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { type ContactInfo } from './data';
+import { type ContactInfo } from './data.ts';
 
 defineProps<{
   itemData?: ContactInfo
