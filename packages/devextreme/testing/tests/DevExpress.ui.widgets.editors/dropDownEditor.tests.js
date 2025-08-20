@@ -1452,12 +1452,10 @@ QUnit.module('Templates', () => {
 
             const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
             const $children = $inputWrapper.children();
-            assert.strictEqual($children.length, 5, 'element count is correct');
+            assert.strictEqual($children.length, 3, 'element count is correct');
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
-            assert.ok($children.eq(2).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), 'before template slot');
-            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), 'after template slot');
-            assert.ok($children.eq(4).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+            assert.ok($children.eq(2).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
         QUnit.test('should keep elements correct order when hidden input is used', function(assert) {
@@ -1475,13 +1473,11 @@ QUnit.module('Templates', () => {
 
             const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
             const $children = $inputWrapper.children();
-            assert.strictEqual($children.length, 6, 'element count is correct');
+            assert.strictEqual($children.length, 4, 'element count is correct');
             assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
             assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
             assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
-            assert.ok($children.eq(3).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), 'before template slot');
-            assert.ok($children.eq(4).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), 'after template slot');
-            assert.ok($children.eq(5).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+            assert.ok($children.eq(3).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
 
         QUnit.testInActiveWindow('should not trigger focusout event (T751314)', function(assert) {

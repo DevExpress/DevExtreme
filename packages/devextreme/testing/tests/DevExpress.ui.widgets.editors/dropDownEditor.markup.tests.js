@@ -117,14 +117,18 @@ module('DropDownEditor markup', {
         assert.ok(renderFieldSpy.calledOnce, 'field has been rendered');
     });
 
-    test('should render fieldAddons content slots on initialization', function(assert) {
-        const $wrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
+    test('should render fieldAddons content slots if fieldAddons is provided', function(assert) {
+        const fieldAddons = { beforeTemplate: () => 'before', afterTemplate: 'after' };
 
-        const $before = $wrapper.children(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
-        const $after = $wrapper.children(`.${DROP_DOWN_EDITOR_AFTER_FIELD_ADDON}`);
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            fieldAddons
+        });
 
-        assert.strictEqual($before.length, 1, 'before slot rendered');
-        assert.strictEqual($after.length, 1, 'after slot rendered');
+        const $before = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
+        const $after = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_ADDON}`);
+
+        assert.strictEqual($before.length, 1, 'before is  rendered ');
+        assert.strictEqual($after.length, 1, 'after slot is  rendered ');
     });
 });
 

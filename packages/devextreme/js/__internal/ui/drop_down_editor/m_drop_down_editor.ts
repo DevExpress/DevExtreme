@@ -447,6 +447,12 @@ class DropDownEditor<
   }
 
   _renderFieldAddons(): void {
+    const { fieldAddons } = this.option();
+
+    if (!fieldAddons) {
+      return;
+    }
+
     this._renderBeforeFieldAddon();
     this._renderAfterFieldAddon();
   }
