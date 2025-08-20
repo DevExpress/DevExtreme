@@ -30,14 +30,31 @@ import {
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 
-const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
-  if (controller._warnedFixedInChildColumns || !childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
+const POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = [
+  'fixed',
+  'fixedPosition',
+  'type',
+  'buttons',
+];
 
-  const fixedColumns = childColumns.filter((el: any) => typeof el === 'object' && el !== null && ('fixed' in el || 'FixedPosition' in el || 'type' in el || 'buttons' in el));
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[], isLastIndexOnTopLevel?: boolean): void => {
+  if (
+    (controller._unsupportedPropertiesForChildColumns && controller._unsupportedPropertiesForChildColumns.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) || !childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
 
-  if (fixedColumns && fixedColumns?.length > 0) {
-    errors.log('W1028');
-    controller._warnedFixedInChildColumns = true;
+  if (!controller._unsupportedPropertiesForChildColumns) {
+    controller._unsupportedPropertiesForChildColumns = new Set();
+  }
+
+  each(childColumns, (_, column) => {
+    if (column && typeof column === 'object' && column !== null) {
+      for (const property of POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+        if (property in column) controller._unsupportedPropertiesForChildColumns!.add(`'${property}'`);
+      }
+    }
+  });
+
+  if (isLastIndexOnTopLevel || controller._unsupportedPropertiesForChildColumns.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) {
+    errors.log('W1028', Array.from(controller._unsupportedPropertiesForChildColumns).join(', '));
   }
 };
 
@@ -84,7 +101,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
   }
 };
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
+export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?, isTopLevel = true) {
   let result: any = [];
 
   if (columnsOptions) {
@@ -102,8 +119,9 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
-          warnFixedInChildColumnsOnce(that, column.columns);
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
+          const isLastIndexOnTopLevel = isTopLevel && columnsOptions.length - 1 === index;
+          warnFixedInChildColumnsOnce(that, column.columns, isLastIndexOnTopLevel);
+          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length, false));
           delete column.columns;
           column.hasColumns = true;
         }

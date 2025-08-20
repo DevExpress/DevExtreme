@@ -136,7 +136,7 @@ export class ColumnsController extends modules.Controller {
 
   protected _stateStoringController!: StateStoringController;
 
-  public _warnedFixedInChildColumns?: boolean;
+  public _unsupportedPropertiesForChildColumns?: Set<string>;
 
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
