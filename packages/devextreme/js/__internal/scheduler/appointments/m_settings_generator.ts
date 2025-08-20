@@ -167,8 +167,6 @@ export class DateGeneratorBaseStrategy {
 
       return {
         ...item,
-        // TODO: Check usages & delete this field.
-        exceptionDate: new Date(item.startDate),
       };
     });
 
@@ -235,8 +233,6 @@ export class DateGeneratorBaseStrategy {
         ...item,
         startDate: newStartDate,
         endDate: newEndDate,
-        // TODO: Check usages & delete this field.
-        exceptionDate: new Date(newStartDate),
       };
     });
   }
@@ -318,7 +314,6 @@ export class DateGeneratorBaseStrategy {
       if (offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
         source.startDate = dateUtilsTs.addOffsets(source.startDate, [offsetDifference * toMs('minute')]);
         source.endDate = dateUtilsTs.addOffsets(source.endDate, [offsetDifference * toMs('minute')]);
-        source.exceptionDate = new Date(source.startDate);
       }
 
       const duration = source.endDate.getTime() - source.startDate.getTime();
