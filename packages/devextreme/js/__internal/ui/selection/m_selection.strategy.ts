@@ -7,7 +7,6 @@ import {
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
 import type {
-  ClearedFilter,
   QueryParams,
   RemoteFilter,
   SelectionFilter,
@@ -142,7 +141,7 @@ export default class SelectionStrategy<
     return this.selectedItemKeys(normalizedKeys, preserve, isDeselect, isSelectAll);
   }
 
-  _removeTemplateProperty(remoteFilter: RemoteFilter): ClearedFilter {
+  _removeTemplateProperty(remoteFilter: RemoteFilter): RemoteFilter {
     if (Array.isArray(remoteFilter)) {
       return remoteFilter.map((f) => this._removeTemplateProperty(f));
     }

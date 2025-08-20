@@ -85,7 +85,6 @@ export default class Selection<
 
   selectionFilter(value?: SelectionFilter): SelectionFilter | undefined {
     if (value === undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.options.selectionFilter;
     }
 

@@ -196,7 +196,7 @@ export default class DeferredStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _denormalizeFilter(filter: SelectionFilter<TKey>): SelectionFilter<TKey> {
+  _denormalizeFilter(filter: SelectionFilter): SelectionFilter {
     let resultFilter = filter;
     if (resultFilter && isString(resultFilter[0])) {
       resultFilter = [resultFilter];
@@ -205,7 +205,7 @@ export default class DeferredStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _isOnlyNegativeFiltersLeft(filters: SelectionFilter<TKey>): boolean {
+  _isOnlyNegativeFiltersLeft(filters: SelectionFilter): boolean {
     return filters.every((filterItem, i) => {
       if (i % 2 === 0) {
         return Array.isArray(filterItem) && filterItem[0] === '!';
@@ -216,13 +216,13 @@ export default class DeferredStrategy<
 
   _addSelectionFilter(
     isDeselect: boolean | undefined,
-    filter: SelectionFilter<TKey> | undefined,
+    filter: SelectionFilter | undefined,
     isSelectAll?: boolean,
     skipFilter?: boolean,
   ): void {
     const currentOperation = isDeselect ? 'and' : 'or';
     let needAddFilter = true;
-    let selectionFilter: SelectionFilter<TKey> = this.options.selectionFilter || [];
+    let selectionFilter: SelectionFilter = this.options.selectionFilter || [];
 
     selectionFilter = this._denormalizeFilter(selectionFilter);
     if (selectionFilter?.length && !skipFilter) {

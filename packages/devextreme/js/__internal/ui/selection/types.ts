@@ -1,25 +1,12 @@
 import type { LoadResult } from '@js/common/data';
-import type { LoadOptions } from '@js/common/data.types';
+import type { FilterDescriptor, LoadOptions } from '@js/common/data.types';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
 import type StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
 
-// type PlainKey = string | number | symbol;
-// interface ComplexKey {
-//   [key: string]: PlainKey;
-// }
-// export type Key = PlainKey | ComplexKey;
+export type SelectionFilter = FilterDescriptor[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type FilterItem<TKey = any> = string | TKey | FilterItem<TKey>[];
-// type FilterItem<TKey = any> = string | TKey;
-
-// type PlainSelectionFilter<TKey = any> = FilterItem<TKey>[];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SelectionFilter<TKey = any> = FilterItem<TKey>[];
-// export type SelectionFilter<TKey=any> = PlainSelectionFilter<TKey>|PlainSelectionFilter<TKey>[];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Filter<TKey = any> = () => SelectionFilter<TKey> | undefined;
+type Filter = () => SelectionFilter | undefined;
 export interface SelectionItem {
   disabled?: boolean;
   loadIndex: number;
@@ -63,17 +50,16 @@ export interface DefaultOptions<
   equalByReference: boolean;
   mode: string;
   selectedItems: TItem[];
-
   selectionFilter: SelectionFilter;
   maxFilterLengthInRequest: number;
 }
 
 export type SelectionOptions<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TItem extends SelectionItem = any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TKey = any,
-    TDeferred extends boolean = boolean,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends SelectionItem = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+  TDeferred extends boolean = boolean,
 > = DefaultOptions<TItem, TKey, TDeferred> & {
   selectedKeys: TKey[];
   selectedItemKeys: TKey[];
@@ -116,7 +102,6 @@ export type RemoteFilterItem = {
 } & ClearedFilterItem;
 
 export type RemoteFilter = SelectionFilter | RemoteFilterItem | RemoteFilterItem[];
-export type ClearedFilter = SelectionFilter | ClearedFilterItem | ClearedFilterItem[];
 
 export interface QueryParams {
   langParams: {
