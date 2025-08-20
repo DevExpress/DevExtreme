@@ -36,7 +36,7 @@ import {
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_buttons,
     PROPERTY_TOKEN_columns,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-column',

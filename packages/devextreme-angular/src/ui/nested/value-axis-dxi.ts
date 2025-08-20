@@ -27,13 +27,13 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_breaks,
     PROPERTY_TOKEN_constantLines,
     PROPERTY_TOKEN_strips,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-value-axis',

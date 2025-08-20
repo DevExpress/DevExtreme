@@ -73,7 +73,7 @@ import {
            PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

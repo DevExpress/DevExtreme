@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
 
-import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
 
 @Component({

@@ -72,7 +72,7 @@ import { DxoPopoverToModule } from 'devextreme-angular/ui/popover/nested';
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 import { 
            PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

@@ -37,7 +37,7 @@ import {
     PROPERTY_TOKEN_tabs,
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_location,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-item',

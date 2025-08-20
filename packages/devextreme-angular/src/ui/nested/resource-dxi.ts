@@ -21,7 +21,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_resources } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
 
 
 @Component({

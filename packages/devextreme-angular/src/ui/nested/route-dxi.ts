@@ -22,11 +22,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_routes } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_routes } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_locations,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-route',

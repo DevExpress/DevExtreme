@@ -30,13 +30,13 @@ import {
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
 
-import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_groups,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tab',

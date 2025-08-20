@@ -54,7 +54,7 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/nested';
 import { 
            PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

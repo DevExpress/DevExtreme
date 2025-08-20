@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
 
-import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
 
 @Component({

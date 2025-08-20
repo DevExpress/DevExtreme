@@ -28,7 +28,7 @@ import { DxoDataGridToolbar } from './base/data-grid-toolbar';
 import {
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_fileSelectionItems,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-toolbar',

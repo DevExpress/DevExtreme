@@ -60,7 +60,7 @@ import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-build
 import { 
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

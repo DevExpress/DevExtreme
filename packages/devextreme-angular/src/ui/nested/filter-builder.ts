@@ -30,7 +30,7 @@ import { DxoFilterBuilderOptions } from './base/filter-builder-options';
 import {
     PROPERTY_TOKEN_customOperations,
     PROPERTY_TOKEN_fields,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-filter-builder',

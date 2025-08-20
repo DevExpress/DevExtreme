@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi';
 
-import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
 
 
 @Component({

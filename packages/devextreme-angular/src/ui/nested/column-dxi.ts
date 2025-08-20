@@ -31,7 +31,7 @@ import {
     PROPERTY_TOKEN_buttons,
     PROPERTY_TOKEN_columns,
     PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-column',

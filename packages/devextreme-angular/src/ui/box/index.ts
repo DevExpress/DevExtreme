@@ -48,7 +48,7 @@ import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
 import { 
            PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

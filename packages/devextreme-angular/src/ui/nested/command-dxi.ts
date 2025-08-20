@@ -22,11 +22,11 @@ import {
 } from 'devextreme-angular/core';
 import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
 
-import { PROPERTY_TOKEN_commands } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-command',

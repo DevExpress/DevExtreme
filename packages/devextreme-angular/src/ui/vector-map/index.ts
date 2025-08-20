@@ -95,7 +95,7 @@ import {
            PROPERTY_TOKEN_annotations,
            PROPERTY_TOKEN_layers,
            PROPERTY_TOKEN_legends,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

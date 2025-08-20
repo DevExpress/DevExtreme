@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-operation-dxi';
 
-import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens';
 
 
 @Component({

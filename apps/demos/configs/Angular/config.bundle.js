@@ -41,7 +41,7 @@ const bundleConfig = {
       'devextreme-angular/common/core/*',
       'devextreme-angular/common/export/*',
       'devextreme-angular/core/*',
-      'devextreme-angular/tokens/*',
+      'devextreme-angular/core/tokens/*',
       'devexpress-gantt',
       'devexpress-diagram',
       'rxjs/*',

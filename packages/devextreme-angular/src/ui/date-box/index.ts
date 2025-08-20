@@ -87,7 +87,7 @@ import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nest
 import { 
            PROPERTY_TOKEN_buttons,
            PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

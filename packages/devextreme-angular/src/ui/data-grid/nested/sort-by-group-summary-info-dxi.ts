@@ -20,7 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/tokens';
 
 
 @Component({

@@ -28,7 +28,7 @@ import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
 import {
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-context-menu',

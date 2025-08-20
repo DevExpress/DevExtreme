@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
 
-import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/core/tokens';
 
 
 @Component({

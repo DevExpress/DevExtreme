@@ -74,7 +74,7 @@ import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-d
 import { 
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_toolbarItems,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

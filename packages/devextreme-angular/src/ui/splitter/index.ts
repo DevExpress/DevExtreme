@@ -49,7 +49,7 @@ import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 import { 
            PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

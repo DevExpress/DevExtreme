@@ -93,7 +93,7 @@ import { DxoCircularGaugeTooltipModule } from 'devextreme-angular/ui/circular-ga
 import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { 
            PROPERTY_TOKEN_ranges,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

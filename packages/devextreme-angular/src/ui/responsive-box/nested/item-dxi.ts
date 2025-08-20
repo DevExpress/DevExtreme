@@ -29,11 +29,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_location,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-item',

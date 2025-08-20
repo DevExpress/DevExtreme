@@ -27,7 +27,7 @@ import { DxoHtmlEditorImageUpload } from './base/html-editor-image-upload';
 
 import {
     PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-image-upload',

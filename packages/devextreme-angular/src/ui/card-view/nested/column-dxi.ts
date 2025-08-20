@@ -28,11 +28,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 import {
     PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-column',

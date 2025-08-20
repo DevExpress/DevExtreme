@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
 
-import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
 
 
 @Component({

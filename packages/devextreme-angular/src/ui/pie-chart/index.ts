@@ -111,7 +111,7 @@ import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/
 import { 
            PROPERTY_TOKEN_annotations,
            PROPERTY_TOKEN_series,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

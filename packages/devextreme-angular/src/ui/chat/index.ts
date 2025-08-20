@@ -64,7 +64,7 @@ import {
            PROPERTY_TOKEN_alerts,
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_typingUsers,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

@@ -59,7 +59,7 @@ import {
            PROPERTY_TOKEN_routes,
            PROPERTY_TOKEN_locations,
            PROPERTY_TOKEN_center,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

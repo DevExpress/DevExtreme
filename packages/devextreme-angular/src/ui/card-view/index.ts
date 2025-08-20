@@ -131,7 +131,7 @@ import {
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
            PROPERTY_TOKEN_tabs,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

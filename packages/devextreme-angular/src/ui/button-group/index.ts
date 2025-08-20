@@ -44,7 +44,7 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
 import { 
            PROPERTY_TOKEN_items,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

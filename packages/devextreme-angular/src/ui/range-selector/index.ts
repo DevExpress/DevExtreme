@@ -187,7 +187,7 @@ import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selecto
 import { 
            PROPERTY_TOKEN_breaks,
            PROPERTY_TOKEN_series,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

@@ -29,7 +29,7 @@ import { DxoTextBoxOptions } from './base/text-box-options';
 
 import {
     PROPERTY_TOKEN_buttons,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-search-editor-options',

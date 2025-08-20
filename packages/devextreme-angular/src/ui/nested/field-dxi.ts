@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
 
-import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 
 
 @Component({

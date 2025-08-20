@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
 
-import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 
 @Component({

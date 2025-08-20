@@ -52,7 +52,7 @@ import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
 import { 
            PROPERTY_TOKEN_buttons,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 

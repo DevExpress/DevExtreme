@@ -216,7 +216,7 @@ import {
            PROPERTY_TOKEN_sortByGroupSummaryInfo,
            PROPERTY_TOKEN_toolbarItems,
            PROPERTY_TOKEN_totalItems,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

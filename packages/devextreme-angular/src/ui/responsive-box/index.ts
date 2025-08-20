@@ -56,7 +56,7 @@ import {
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_location,
            PROPERTY_TOKEN_rows,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

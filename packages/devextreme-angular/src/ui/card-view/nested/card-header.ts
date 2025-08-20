@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 import {
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-card-view-card-header',

@@ -231,7 +231,7 @@ import {
            PROPERTY_TOKEN_series,
            PROPERTY_TOKEN_strips,
            PROPERTY_TOKEN_valueAxis,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**

@@ -58,7 +58,7 @@ import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/valida
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { 
            PROPERTY_TOKEN_validationRules,
-     } from 'devextreme-angular/tokens';
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
