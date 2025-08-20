@@ -135,7 +135,7 @@ export default class SelectionStrategy<
     preserve?: boolean,
     isDeselect?: boolean,
     isSelectAll?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<TItem[]> {
     let normalizedKeys = keys || [];
     normalizedKeys = Array.isArray(normalizedKeys) ? normalizedKeys : [normalizedKeys];
     this.validate();
@@ -206,8 +206,8 @@ export default class SelectionStrategy<
 
           deferred.resolve(filteredItems);
         })
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .fail((error: any) => {
+        .fail((error) => {
+          // @ts-expect-error error
           deferred.reject(error);
         });
     }
@@ -300,7 +300,7 @@ export default class SelectionStrategy<
     updatedKeys?: TKey[],
     // eslint-disable-next-line  @typescript-eslint/no-unused-vars
     forceCombinedFilter?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<TItem[]> {
     throw new Error('selectedItemKeys method should be overriden');
   }
 

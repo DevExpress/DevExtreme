@@ -337,9 +337,9 @@ export default class StandardStrategy<
     isSelectAll?: boolean,
     updatedKeys?: TKey[],
     forceCombinedFilter?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<TItem[]> {
     if (this._isCancelingInProgress) {
-      return Deferred().reject();
+      return Deferred<TItem[]>().reject();
     }
 
     const loadingDeferred = this._loadSelectedItems(
@@ -350,7 +350,7 @@ export default class StandardStrategy<
       forceCombinedFilter,
     );
 
-    const selectionDeferred = Deferred();
+    const selectionDeferred = Deferred<TItem[]>();
 
     loadingDeferred.done((items) => {
       this._storeSelectionState();
@@ -584,13 +584,13 @@ export default class StandardStrategy<
     return this._getFullSelectAllState();
   }
 
-  loadSelectedItemsWithFilter(): DeferredObj<unknown> {
+  loadSelectedItemsWithFilter(): DeferredObj<TItem[]> {
     const keyExpr = this.options.key();
     const keys = this.getSelectedItemKeys();
     const filter = this.options.filter();
 
     if (!keys.length) {
-      return Deferred().resolve([]);
+      return Deferred<TItem[]>().resolve([]);
     }
 
     const selectionFilterCreator = new SelectionFilterCreator(keys);

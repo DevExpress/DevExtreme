@@ -1,4 +1,3 @@
-import type { LoadResult } from '@js/common/data';
 import { noop } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -72,15 +71,15 @@ export default class Selection<
     this._selectionStrategy.validate();
   }
 
-  getSelectedItemKeys(): TDeferred extends true ? Promise<LoadResult<TKey>> : TKey[] {
+  getSelectedItemKeys(): TDeferred extends true ? Promise<TKey[]> : TKey[] {
     return this._selectionStrategy.getSelectedItemKeys() as TDeferred extends true
-      ? Promise<LoadResult<TKey>>
+      ? Promise<TKey[]>
       : TKey[];
   }
 
-  getSelectedItems(): TDeferred extends true ? Promise<LoadResult<TItem>> : TItem[] {
+  getSelectedItems(): TDeferred extends true ? Promise<TItem[]> : TItem[] {
     return this._selectionStrategy.getSelectedItems() as TDeferred extends true
-      ? Promise<LoadResult<TItem>>
+      ? Promise<TItem[]>
       : TItem[];
   }
 
@@ -102,11 +101,11 @@ export default class Selection<
     return undefined;
   }
 
-  setSelection(keys: TKey[], updatedKeys?: TKey[]): DeferredObj<unknown> {
+  setSelection(keys: TKey[], updatedKeys?: TKey[]): DeferredObj<TItem[]> {
     return this.selectedItemKeys(keys, false, false, false, updatedKeys);
   }
 
-  select(keys: TKey[]): DeferredObj<unknown> {
+  select(keys: TKey[]): DeferredObj<TItem[]> {
     return this.selectedItemKeys(keys, true);
   }
 
@@ -120,7 +119,7 @@ export default class Selection<
     isDeselect?: boolean,
     isSelectAll?: boolean,
     updatedKeys?: TKey[],
-  ): DeferredObj<unknown> {
+  ): DeferredObj<TItem[]> {
     let normalizedKeys = keys ?? [];
     normalizedKeys = Array.isArray(normalizedKeys) ? normalizedKeys : [normalizedKeys];
 
@@ -135,7 +134,7 @@ export default class Selection<
     );
   }
 
-  clearSelection(): DeferredObj<unknown> {
+  clearSelection(): DeferredObj<TItem[]> {
     return this.selectedItemKeys([]);
   }
 

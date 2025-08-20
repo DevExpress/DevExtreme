@@ -4,10 +4,22 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
 import type StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
 
+// type PlainKey = string | number | symbol;
+// interface ComplexKey {
+//   [key: string]: PlainKey;
+// }
+// export type Key = PlainKey | ComplexKey;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type SelectionFilter = any[]; // string | Array<any> | Function;
-export type Filter = () => SelectionFilter | undefined;
-// export type SelectionItem = any;
+type FilterItem<TKey = any> = string | TKey | FilterItem<TKey>[];
+// type FilterItem<TKey = any> = string | TKey;
+
+// type PlainSelectionFilter<TKey = any> = FilterItem<TKey>[];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type SelectionFilter<TKey = any> = FilterItem<TKey>[];
+// export type SelectionFilter<TKey=any> = PlainSelectionFilter<TKey>|PlainSelectionFilter<TKey>[];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Filter<TKey = any> = () => SelectionFilter<TKey> | undefined;
 export interface SelectionItem {
   disabled?: boolean;
   loadIndex: number;
@@ -36,7 +48,7 @@ export interface DefaultOptions<
   key: () => KeyExpr | Function | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keyOf: (item: TItem) => any;
-  load: (loadOptions: LoadOptions) => DeferredObj<LoadResult<TItem>>;
+  load: (loadOptions: LoadOptions<TItem>) => DeferredObj<LoadResult<TItem>>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -103,8 +115,8 @@ export type RemoteFilterItem = {
   template: any;
 } & ClearedFilterItem;
 
-export type RemoteFilter = RemoteFilterItem | RemoteFilterItem[];
-export type ClearedFilter = ClearedFilterItem | ClearedFilterItem[];
+export type RemoteFilter = SelectionFilter | RemoteFilterItem | RemoteFilterItem[];
+export type ClearedFilter = SelectionFilter | ClearedFilterItem | ClearedFilterItem[];
 
 export interface QueryParams {
   langParams: {

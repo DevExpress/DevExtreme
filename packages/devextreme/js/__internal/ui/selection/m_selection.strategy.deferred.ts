@@ -16,8 +16,8 @@ export default class DeferredStrategy<
     return this._loadFilteredData(this.options.selectionFilter);
   }
 
-  getSelectedItemKeys(): Promise<unknown> {
-    const d = Deferred();
+  getSelectedItemKeys(): Promise<TKey[]> {
+    const d = Deferred<TKey[]>();
     const key = this.options.key();
     const select = isString(key) ? [key] : key;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -28,6 +28,7 @@ export default class DeferredStrategy<
 
       d.resolve(keys);
     }).fail((error) => {
+      // @ts-expect-error error
       d.reject(error);
     });
 
@@ -39,7 +40,7 @@ export default class DeferredStrategy<
     preserve?: boolean,
     isDeselect?: boolean,
     isSelectAll?: boolean,
-  ): DeferredObj<unknown> {
+  ): DeferredObj<TItem[]> {
     if (isSelectAll) {
       const filter = this.options.filter();
       const needResetSelectionFilter = !filter
@@ -66,7 +67,7 @@ export default class DeferredStrategy<
 
     this.onSelectionChanged();
 
-    return Deferred().resolve();
+    return Deferred<TItem[]>().resolve();
   }
 
   setSelectedItems(keys: TKey[]): void {
@@ -195,7 +196,7 @@ export default class DeferredStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _denormalizeFilter(filter: SelectionFilter): SelectionFilter {
+  _denormalizeFilter(filter: SelectionFilter<TKey>): SelectionFilter<TKey> {
     let resultFilter = filter;
     if (resultFilter && isString(resultFilter[0])) {
       resultFilter = [resultFilter];
@@ -204,7 +205,7 @@ export default class DeferredStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _isOnlyNegativeFiltersLeft(filters: SelectionFilter): boolean {
+  _isOnlyNegativeFiltersLeft(filters: SelectionFilter<TKey>): boolean {
     return filters.every((filterItem, i) => {
       if (i % 2 === 0) {
         return Array.isArray(filterItem) && filterItem[0] === '!';
@@ -215,14 +216,13 @@ export default class DeferredStrategy<
 
   _addSelectionFilter(
     isDeselect: boolean | undefined,
-    filter: SelectionFilter | undefined,
+    filter: SelectionFilter<TKey> | undefined,
     isSelectAll?: boolean,
     skipFilter?: boolean,
   ): void {
-    const currentFilter = isDeselect ? ['!', filter] : filter;
     const currentOperation = isDeselect ? 'and' : 'or';
     let needAddFilter = true;
-    let selectionFilter: SelectionFilter = this.options.selectionFilter || [];
+    let selectionFilter: SelectionFilter<TKey> = this.options.selectionFilter || [];
 
     selectionFilter = this._denormalizeFilter(selectionFilter);
     if (selectionFilter?.length && !skipFilter) {
@@ -245,7 +245,8 @@ export default class DeferredStrategy<
 
     if (needAddFilter) {
       selectionFilter = this._addFilterOperator(selectionFilter, currentOperation);
-      if (Array.isArray(selectionFilter)) {
+      if (Array.isArray(selectionFilter) && filter) {
+        const currentFilter = isDeselect ? ['!', filter] : filter;
         selectionFilter.push(currentFilter);
       }
     }
