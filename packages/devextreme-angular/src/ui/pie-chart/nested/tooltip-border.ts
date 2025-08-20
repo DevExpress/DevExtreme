@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-pie-chart-tooltip-border',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPieChartTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPieChartTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -81,6 +78,7 @@ export class DxoPieChartTooltipBorderComponent extends NestedOption implements O
     protected get _optionPath() {
         return 'border';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

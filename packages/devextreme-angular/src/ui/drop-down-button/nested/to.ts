@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-drop-down-button-to',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDropDownButtonToComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDropDownButtonToComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -81,6 +78,7 @@ export class DxoDropDownButtonToComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'to';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

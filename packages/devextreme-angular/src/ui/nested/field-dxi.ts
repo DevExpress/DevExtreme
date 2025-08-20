@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
 
 import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-field',
@@ -58,6 +57,7 @@ export class DxiFieldComponent extends DxiFilterBuilderField {
     protected get _optionPath() {
         return 'fields';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

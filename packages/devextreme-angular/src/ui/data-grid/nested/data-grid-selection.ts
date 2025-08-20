@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-data-grid-data-grid-selection',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDataGridDataGridSelectionComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDataGridDataGridSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -91,6 +88,7 @@ export class DxoDataGridDataGridSelectionComponent extends NestedOption implemen
     protected get _optionPath() {
         return 'selection';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

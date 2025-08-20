@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-popup-boundary-offset',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPopupBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPopupBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -56,6 +53,7 @@ export class DxoPopupBoundaryOffsetComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'boundaryOffset';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

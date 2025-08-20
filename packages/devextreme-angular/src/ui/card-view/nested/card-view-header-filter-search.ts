@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-card-view-card-view-header-filter-search',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCardViewCardViewHeaderFilterSearchComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewCardViewHeaderFilterSearchComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -73,6 +70,7 @@ export class DxoCardViewCardViewHeaderFilterSearchComponent extends NestedOption
     protected get _optionPath() {
         return 'search';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

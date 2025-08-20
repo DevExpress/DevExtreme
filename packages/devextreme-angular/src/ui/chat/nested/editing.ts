@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-chat-editing',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChatEditingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChatEditingComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -58,6 +55,7 @@ export class DxoChatEditingComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'editing';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

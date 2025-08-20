@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoSorting } from './base/sorting';
 
 
-
 @Component({
     selector: 'dxo-sorting',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'ascendingText',
         'clearText',
@@ -40,13 +37,14 @@ import { DxoSorting } from './base/sorting';
         'showSortIndexes'
     ]
 })
-export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit {
+export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'sorting';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

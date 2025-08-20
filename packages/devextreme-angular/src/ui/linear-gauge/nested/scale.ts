@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-linear-gauge-scale',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -147,6 +144,7 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'scale';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

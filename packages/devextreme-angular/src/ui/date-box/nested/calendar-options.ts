@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,18 +26,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-date-box-calendar-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -377,6 +374,7 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'calendarOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

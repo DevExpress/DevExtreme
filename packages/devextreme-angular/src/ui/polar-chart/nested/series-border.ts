@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-polar-chart-series-border',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPolarChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -73,6 +70,7 @@ export class DxoPolarChartSeriesBorderComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'border';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

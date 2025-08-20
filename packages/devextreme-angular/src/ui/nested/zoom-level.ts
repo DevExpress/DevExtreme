@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-zoom-level',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -64,6 +61,7 @@ export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'zoomLevel';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

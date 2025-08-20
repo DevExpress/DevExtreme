@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-operation-dxi';
 
 import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-custom-operation',
@@ -53,6 +52,7 @@ export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation
     protected get _optionPath() {
         return 'customOperations';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-group-panel',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -73,6 +70,7 @@ export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'groupPanel';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

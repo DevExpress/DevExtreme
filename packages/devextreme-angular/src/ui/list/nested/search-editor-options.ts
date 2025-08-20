@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -28,7 +28,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_buttons,
 } from 'devextreme-angular/core/tokens';
@@ -39,11 +38,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
     set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -500,6 +497,7 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     protected get _optionPath() {
         return 'searchEditorOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

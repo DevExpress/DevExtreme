@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-vector-map-legend',
     standalone: true,
@@ -37,7 +36,7 @@ import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_legends,
            useExisting: DxiVectorMapLegendComponent,
         }
-    ],
+    ]
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
 
@@ -246,6 +245,7 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'legends';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

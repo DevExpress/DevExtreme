@@ -12,7 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,7 +31,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_connectionPoints,
 } from 'devextreme-angular/core/tokens';
@@ -49,7 +48,7 @@ import {
            provide: PROPERTY_TOKEN_customShapes,
            useExisting: DxiCustomShapeComponent,
         }
-    ],
+    ]
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -367,6 +366,7 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
     protected get _optionPath() {
         return 'customShapes';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

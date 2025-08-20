@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-strip-style',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -66,6 +63,7 @@ export class DxoStripStyleComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'stripStyle';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-menu';
 
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -35,15 +34,13 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'enabled',
         'items'
     ]
 })
-export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit {
+export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -54,6 +51,7 @@ export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu 
     protected get _optionPath() {
         return 'tableContextMenu';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

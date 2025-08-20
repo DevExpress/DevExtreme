@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-gantt-resource-assignments',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoGanttResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoGanttResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -75,6 +72,7 @@ export class DxoGanttResourceAssignmentsComponent extends NestedOption implement
     protected get _optionPath() {
         return 'resourceAssignments';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

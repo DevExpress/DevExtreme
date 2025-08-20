@@ -14,7 +14,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -35,7 +35,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_validationRules,
 } from 'devextreme-angular/core/tokens';
@@ -46,10 +45,7 @@ import {
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-        DxTemplateHost,
-    ],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoDataGridFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -175,6 +171,7 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
     protected get _optionPath() {
         return 'formItem';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

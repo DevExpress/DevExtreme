@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-popup-at',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPopupAtComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPopupAtComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -57,6 +54,7 @@ export class DxoPopupAtComponent extends NestedOption implements OnDestroy, OnIn
     protected get _optionPath() {
         return 'at';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

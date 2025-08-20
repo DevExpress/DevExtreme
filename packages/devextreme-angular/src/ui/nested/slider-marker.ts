@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-slider-marker',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -114,6 +111,7 @@ export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'sliderMarker';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

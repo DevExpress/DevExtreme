@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-field-chooser',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -114,6 +111,7 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'fieldChooser';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

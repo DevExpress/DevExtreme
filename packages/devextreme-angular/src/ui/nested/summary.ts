@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_groupItems,
     PROPERTY_TOKEN_totalItems,
@@ -39,11 +38,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)
     set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -106,6 +103,7 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
     protected get _optionPath() {
         return 'summary';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -29,7 +29,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_breaks,
     PROPERTY_TOKEN_constantLines,
@@ -48,7 +47,7 @@ import {
            provide: PROPERTY_TOKEN_valueAxis,
            useExisting: DxiChartValueAxisComponent,
         }
-    ],
+    ]
 })
 export class DxiChartValueAxisComponent extends CollectionNestedOption {
 
@@ -466,6 +465,7 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'valueAxis';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-range-selector-background',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoRangeSelectorBackgroundComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorBackgroundComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -65,6 +62,7 @@ export class DxoRangeSelectorBackgroundComponent extends NestedOption implements
     protected get _optionPath() {
         return 'background';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoDataGridToolbar } from './base/data-grid-toolbar';
 
-
 import {
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_fileSelectionItems,
@@ -36,9 +35,7 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'disabled',
         'items',
@@ -48,7 +45,7 @@ import {
         'multiline'
     ]
 })
-export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit {
+export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -63,6 +60,7 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
     protected get _optionPath() {
         return 'toolbar';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

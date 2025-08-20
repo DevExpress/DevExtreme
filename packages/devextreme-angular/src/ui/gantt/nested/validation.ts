@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-gantt-validation',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoGanttValidationComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoGanttValidationComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -64,6 +61,7 @@ export class DxoGanttValidationComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'validation';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

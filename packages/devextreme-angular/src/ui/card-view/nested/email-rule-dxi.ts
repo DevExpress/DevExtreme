@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-card-view-email-rule',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_validationRules,
            useExisting: DxiCardViewEmailRuleComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewEmailRuleComponent extends CollectionNestedOption {
 
@@ -68,6 +67,7 @@ export class DxiCardViewEmailRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

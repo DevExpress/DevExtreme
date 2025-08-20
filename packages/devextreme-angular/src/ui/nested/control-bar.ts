@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-control-bar',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoControlBarComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoControlBarComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -113,6 +110,7 @@ export class DxoControlBarComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'controlBar';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

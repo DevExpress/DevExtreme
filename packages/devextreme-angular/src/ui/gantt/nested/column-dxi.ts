@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,7 +26,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-gantt-column',
     standalone: true,
@@ -39,7 +38,7 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_columns,
            useExisting: DxiGanttColumnComponent,
         }
-    ],
+    ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
 
@@ -352,6 +351,7 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'columns';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

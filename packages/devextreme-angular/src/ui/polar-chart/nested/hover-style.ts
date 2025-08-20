@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-polar-chart-hover-style',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPolarChartHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -97,6 +94,7 @@ export class DxoPolarChartHoverStyleComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'hoverStyle';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

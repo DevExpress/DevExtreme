@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-data-grid-validation-rule',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_validationRules,
            useExisting: DxiDataGridValidationRuleComponent,
         }
-    ],
+    ]
 })
 export class DxiDataGridValidationRuleComponent extends CollectionNestedOption {
 
@@ -132,6 +131,7 @@ export class DxiDataGridValidationRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

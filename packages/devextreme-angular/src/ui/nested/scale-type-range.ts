@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-scale-type-range',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoScaleTypeRangeComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoScaleTypeRangeComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -57,6 +54,7 @@ export class DxoScaleTypeRangeComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'scaleTypeRange';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

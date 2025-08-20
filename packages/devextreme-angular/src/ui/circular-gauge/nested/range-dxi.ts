@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-circular-gauge-range',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_ranges,
            useExisting: DxiCircularGaugeRangeComponent,
         }
-    ],
+    ]
 })
 export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
 
@@ -68,6 +67,7 @@ export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'ranges';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

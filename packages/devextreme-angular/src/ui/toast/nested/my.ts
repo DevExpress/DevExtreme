@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-toast-my',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoToastMyComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoToastMyComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -57,6 +54,7 @@ export class DxoToastMyComponent extends NestedOption implements OnDestroy, OnIn
     protected get _optionPath() {
         return 'my';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

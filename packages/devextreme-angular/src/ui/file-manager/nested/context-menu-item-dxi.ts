@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 import {
     PROPERTY_TOKEN_items,
@@ -39,7 +38,7 @@ import {
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiFileManagerContextMenuItemComponent,
         }
-    ],
+    ]
 })
 export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
 
@@ -132,6 +131,7 @@ export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOpti
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

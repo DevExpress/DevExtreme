@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-sankey-tooltip-border',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -81,6 +78,7 @@ export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'border';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

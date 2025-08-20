@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiTextEditorButton } from './base/text-editor-button-dxi';
 
 import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-button',
@@ -56,6 +55,7 @@ export class DxiButtonComponent extends DxiTextEditorButton {
     protected get _optionPath() {
         return 'buttons';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

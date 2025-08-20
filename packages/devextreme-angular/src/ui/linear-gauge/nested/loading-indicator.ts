@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-linear-gauge-loading-indicator',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoLinearGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLinearGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -81,6 +78,7 @@ export class DxoLinearGaugeLoadingIndicatorComponent extends NestedOption implem
     protected get _optionPath() {
         return 'loadingIndicator';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

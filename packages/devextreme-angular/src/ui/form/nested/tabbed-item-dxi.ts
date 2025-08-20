@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_tabs,
 } from 'devextreme-angular/core/tokens';
@@ -41,7 +40,7 @@ import {
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiFormTabbedItemComponent,
         }
-    ],
+    ]
 })
 export class DxiFormTabbedItemComponent extends CollectionNestedOption {
 
@@ -118,6 +117,7 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

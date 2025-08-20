@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
 
 import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-strip-line',
@@ -49,6 +48,7 @@ export class DxiStripLineComponent extends DxiGanttStripLine {
     protected get _optionPath() {
         return 'stripLines';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -26,7 +26,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-tree-list-field',
     standalone: true,
@@ -39,7 +38,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_fields,
            useExisting: DxiTreeListFieldComponent,
         }
-    ],
+    ]
 })
 export class DxiTreeListFieldComponent extends CollectionNestedOption {
 
@@ -152,6 +151,7 @@ export class DxiTreeListFieldComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'fields';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

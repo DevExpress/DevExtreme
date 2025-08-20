@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_location } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-location',
     standalone: true,
@@ -34,7 +33,7 @@ import { PROPERTY_TOKEN_location } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_location,
            useExisting: DxiLocationComponent,
         }
-    ],
+    ]
 })
 export class DxiLocationComponent extends CollectionNestedOption {
 
@@ -99,6 +98,7 @@ export class DxiLocationComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'location';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

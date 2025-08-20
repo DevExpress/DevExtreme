@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-tile',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -81,6 +78,7 @@ export class DxoTileComponent extends NestedOption implements OnDestroy, OnInit 
     protected get _optionPath() {
         return 'tile';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

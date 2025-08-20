@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
 
 
-
 @Component({
     selector: 'dxo-search',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'editorOptions',
         'enabled',
@@ -40,13 +37,14 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
         'searchExpr'
     ]
 })
-export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit {
+export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'search';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

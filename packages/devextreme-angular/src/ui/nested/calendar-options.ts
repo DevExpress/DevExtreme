@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,16 +25,13 @@ import {
 import { DxoCalendarOptions } from './base/calendar-options';
 
 
-
 @Component({
     selector: 'dxo-calendar-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -78,7 +75,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'zoomLevel'
     ]
 })
-export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit {
+export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit  {
 
     
 
@@ -98,6 +95,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
     protected get _optionPath() {
         return 'calendarOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-map-location',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoMapLocationComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoMapLocationComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -56,6 +53,7 @@ export class DxoMapLocationComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'location';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

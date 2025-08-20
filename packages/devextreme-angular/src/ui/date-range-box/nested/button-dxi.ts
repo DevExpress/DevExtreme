@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-date-range-box-button',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_buttons,
            useExisting: DxiDateRangeBoxButtonComponent,
         }
-    ],
+    ]
 })
 export class DxiDateRangeBoxButtonComponent extends CollectionNestedOption {
 
@@ -69,6 +68,7 @@ export class DxiDateRangeBoxButtonComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'buttons';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

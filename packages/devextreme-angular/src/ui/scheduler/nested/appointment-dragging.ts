@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -26,18 +26,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-scheduler-appointment-dragging',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -124,6 +121,7 @@ export class DxoSchedulerAppointmentDraggingComponent extends NestedOption imple
     protected get _optionPath() {
         return 'appointmentDragging';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

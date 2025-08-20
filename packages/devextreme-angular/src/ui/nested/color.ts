@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,28 +22,26 @@ import {
 import { DxoChartsColor } from './base/charts-color';
 
 
-
 @Component({
     selector: 'dxo-color',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'base',
         'fillId'
     ]
 })
-export class DxoColorComponent extends DxoChartsColor implements OnDestroy, OnInit {
+export class DxoColorComponent extends DxoChartsColor implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'color';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

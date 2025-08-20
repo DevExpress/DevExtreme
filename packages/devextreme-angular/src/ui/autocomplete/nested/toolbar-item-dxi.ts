@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,7 +32,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-autocomplete-toolbar-item',
     standalone: true,
@@ -46,7 +45,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_toolbarItems,
            useExisting: DxiAutocompleteToolbarItemComponent,
         }
-    ],
+    ]
 })
 export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -160,6 +159,7 @@ export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption 
     protected get _optionPath() {
         return 'toolbarItems';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

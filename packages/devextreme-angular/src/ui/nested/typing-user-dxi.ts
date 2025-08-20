@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiUser } from './base/user-dxi';
 
 import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-typing-user',
@@ -49,6 +48,7 @@ export class DxiTypingUserComponent extends DxiUser {
     protected get _optionPath() {
         return 'typingUsers';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,7 +32,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-card-view-card-header-item',
     standalone: true,
@@ -46,7 +45,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiCardViewCardHeaderItemComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -160,6 +159,7 @@ export class DxiCardViewCardHeaderItemComponent extends CollectionNestedOption i
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

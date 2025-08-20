@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-minor-tick',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoMinorTickComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoMinorTickComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -88,6 +85,7 @@ export class DxoMinorTickComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'minorTick';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-tasks',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -106,6 +103,7 @@ export class DxoTasksComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'tasks';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

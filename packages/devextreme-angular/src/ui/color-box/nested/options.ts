@@ -12,7 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,17 +32,13 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-color-box-options',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-        DxTemplateHost,
-    ],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoColorBoxOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -244,6 +240,7 @@ export class DxoColorBoxOptionsComponent extends NestedOption implements AfterVi
     protected get _optionPath() {
         return 'options';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

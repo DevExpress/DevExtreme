@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-common-axis-settings',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -219,6 +216,7 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'commonAxisSettings';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

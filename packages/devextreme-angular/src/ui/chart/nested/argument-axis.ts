@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -31,7 +31,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_breaks,
     PROPERTY_TOKEN_constantLines,
@@ -44,11 +43,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
     set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -472,6 +469,7 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'argumentAxis';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

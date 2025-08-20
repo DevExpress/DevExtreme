@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-circular-gauge-label',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -107,6 +104,7 @@ export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'label';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

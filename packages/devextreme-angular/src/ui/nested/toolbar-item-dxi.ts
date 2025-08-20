@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
 
 import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-toolbar-item',
@@ -58,6 +57,7 @@ export class DxiToolbarItemComponent extends DxiPopupToolbarItem {
     protected get _optionPath() {
         return 'toolbarItems';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

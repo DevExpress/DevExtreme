@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,28 +22,26 @@ import {
 import { DxoHtmlEditorVariables } from './base/html-editor-variables';
 
 
-
 @Component({
     selector: 'dxo-variables',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'dataSource',
         'escapeChar'
     ]
 })
-export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit {
+export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'variables';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

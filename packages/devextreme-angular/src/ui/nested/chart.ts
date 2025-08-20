@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_series,
 } from 'devextreme-angular/core/tokens';
@@ -38,11 +37,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_series)
     set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -165,6 +162,7 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'chart';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
 
 import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-annotation',
@@ -81,6 +80,7 @@ export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
     protected get _optionPath() {
         return 'annotations';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

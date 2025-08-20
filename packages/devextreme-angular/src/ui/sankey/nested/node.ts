@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-sankey-node',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -89,6 +86,7 @@ export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'node';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

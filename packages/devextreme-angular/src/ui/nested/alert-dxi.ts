@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiAlert } from './base/alert-dxi';
 
 import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-alert',
@@ -47,6 +46,7 @@ export class DxiAlertComponent extends DxiAlert {
     protected get _optionPath() {
         return 'alerts';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

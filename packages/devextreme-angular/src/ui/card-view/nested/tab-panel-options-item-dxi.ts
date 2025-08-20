@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -29,7 +29,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-card-view-tab-panel-options-item',
     standalone: true,
@@ -43,7 +42,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiCardViewTabPanelOptionsItemComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewTabPanelOptionsItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -125,6 +124,7 @@ export class DxiCardViewTabPanelOptionsItemComponent extends CollectionNestedOpt
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

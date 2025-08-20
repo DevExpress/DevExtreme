@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,28 +22,26 @@ import {
 import { DxoConverter } from './base/converter';
 
 
-
 @Component({
     selector: 'dxo-converter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'fromHtml',
         'toHtml'
     ]
 })
-export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit {
+export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'converter';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

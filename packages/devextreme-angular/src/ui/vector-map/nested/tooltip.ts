@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-vector-map-tooltip',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -154,6 +151,7 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'tooltip';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

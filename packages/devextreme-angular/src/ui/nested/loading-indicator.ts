@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-loading-indicator',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -89,6 +86,7 @@ export class DxoLoadingIndicatorComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'loadingIndicator';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

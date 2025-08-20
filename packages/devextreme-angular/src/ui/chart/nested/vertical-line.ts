@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-chart-vertical-line',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -91,6 +88,7 @@ export class DxoChartVerticalLineComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'verticalLine';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

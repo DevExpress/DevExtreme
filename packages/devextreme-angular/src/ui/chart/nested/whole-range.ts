@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-chart-whole-range',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChartWholeRangeComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartWholeRangeComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -80,6 +77,7 @@ export class DxoChartWholeRangeComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'wholeRange';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
 
 import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-mention',
@@ -54,6 +53,7 @@ export class DxiMentionComponent extends DxiHtmlEditorMention {
     protected get _optionPath() {
         return 'mentions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

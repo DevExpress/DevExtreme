@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-linear-gauge-animation',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoLinearGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLinearGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -65,6 +62,7 @@ export class DxoLinearGaugeAnimationComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'animation';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

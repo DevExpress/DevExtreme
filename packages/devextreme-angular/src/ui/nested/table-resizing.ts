@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,29 +22,27 @@ import {
 import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
 
 
-
 @Component({
     selector: 'dxo-table-resizing',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'enabled',
         'minColumnWidth',
         'minRowHeight'
     ]
 })
-export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit {
+export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'tableResizing';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

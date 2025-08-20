@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -29,7 +29,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_changes,
 } from 'devextreme-angular/core/tokens';
@@ -40,11 +39,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -379,6 +376,7 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     protected get _optionPath() {
         return 'editing';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

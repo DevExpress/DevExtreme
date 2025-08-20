@@ -12,7 +12,7 @@ import {
     AfterViewInit,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,7 +31,6 @@ import {
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_commands,
@@ -88,6 +87,7 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
     protected get _optionPath() {
         return 'tabs';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

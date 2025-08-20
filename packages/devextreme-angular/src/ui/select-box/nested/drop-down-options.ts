@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -35,7 +35,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_toolbarItems,
 } from 'devextreme-angular/core/tokens';
@@ -46,11 +45,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
     set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -472,6 +469,7 @@ export class DxoSelectBoxDropDownOptionsComponent extends NestedOption implement
     protected get _optionPath() {
         return 'dropDownOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

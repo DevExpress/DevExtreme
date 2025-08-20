@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-resource',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_resources,
            useExisting: DxiResourceComponent,
         }
-    ],
+    ]
 })
 export class DxiResourceComponent extends CollectionNestedOption {
 
@@ -109,6 +108,7 @@ export class DxiResourceComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'resources';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

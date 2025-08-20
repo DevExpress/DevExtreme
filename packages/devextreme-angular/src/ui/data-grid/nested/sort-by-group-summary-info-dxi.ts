@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-data-grid-sort-by-group-summary-info',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/core/t
            provide: PROPERTY_TOKEN_sortByGroupSummaryInfo,
            useExisting: DxiDataGridSortByGroupSummaryInfoComponent,
         }
-    ],
+    ]
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
 
@@ -68,6 +67,7 @@ export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNested
     protected get _optionPath() {
         return 'sortByGroupSummaryInfo';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

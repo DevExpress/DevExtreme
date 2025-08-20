@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-polar-chart-connector',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPolarChartConnectorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartConnectorComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -64,6 +61,7 @@ export class DxoPolarChartConnectorComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'connector';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,16 +24,13 @@ import {
 import { DxoSearchPanel } from './base/search-panel';
 
 
-
 @Component({
     selector: 'dxo-search-panel',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'highlightCaseSensitive',
         'highlightSearchText',
@@ -44,7 +41,7 @@ import { DxoSearchPanel } from './base/search-panel';
         'width'
     ]
 })
-export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
+export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit  {
 
     
 
@@ -57,6 +54,7 @@ export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy
     protected get _optionPath() {
         return 'searchPanel';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

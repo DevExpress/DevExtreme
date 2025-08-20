@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-chart-minor-tick-interval',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoChartMinorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartMinorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -112,6 +109,7 @@ export class DxoChartMinorTickIntervalComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'minorTickInterval';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

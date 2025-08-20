@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-toast-hide',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoToastHideComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoToastHideComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -122,6 +119,7 @@ export class DxoToastHideComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'hide';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

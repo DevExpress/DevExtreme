@@ -12,7 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -34,7 +34,6 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_tabs,
@@ -54,7 +53,7 @@ import {
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiFormItemComponent,
         }
-    ],
+    ]
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -332,6 +331,7 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

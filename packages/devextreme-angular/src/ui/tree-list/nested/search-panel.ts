@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-tree-list-search-panel',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoTreeListSearchPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -104,6 +101,7 @@ export class DxoTreeListSearchPanelComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'searchPanel';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

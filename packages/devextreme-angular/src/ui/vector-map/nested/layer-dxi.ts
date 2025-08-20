@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-vector-map-layer',
     standalone: true,
@@ -40,7 +39,7 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_layers,
            useExisting: DxiVectorMapLayerComponent,
         }
-    ],
+    ]
 })
 export class DxiVectorMapLayerComponent extends CollectionNestedOption {
 
@@ -281,6 +280,7 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'layers';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

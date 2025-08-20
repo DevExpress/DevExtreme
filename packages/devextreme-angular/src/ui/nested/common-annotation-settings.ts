@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
 
 
-
 @Component({
     selector: 'dxo-common-annotation-settings',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'allowDragging',
         'argument',
@@ -70,13 +67,14 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
         'coordinates'
     ]
 })
-export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
+export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'commonAnnotationSettings';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

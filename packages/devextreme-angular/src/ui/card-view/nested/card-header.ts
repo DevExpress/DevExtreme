@@ -14,7 +14,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -33,7 +33,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -44,10 +43,7 @@ import {
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-        DxTemplateHost,
-    ],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -85,6 +81,7 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     protected get _optionPath() {
         return 'cardHeader';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

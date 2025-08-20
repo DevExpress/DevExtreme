@@ -8,7 +8,7 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import {
 import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
 
 import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -62,6 +61,7 @@ export class DxiCommandComponent extends DxiDiagramCustomCommand {
     protected get _optionPath() {
         return 'commands';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
 
-
 import {
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_items,
@@ -36,16 +35,14 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'commands',
         'enabled',
         'items'
     ]
 })
-export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit {
+export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -60,6 +57,7 @@ export class DxoContextMenuComponent extends DxoFileManagerContextMenu implement
     protected get _optionPath() {
         return 'contextMenu';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

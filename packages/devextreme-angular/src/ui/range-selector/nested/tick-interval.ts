@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-range-selector-tick-interval',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoRangeSelectorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -112,6 +109,7 @@ export class DxoRangeSelectorTickIntervalComponent extends NestedOption implemen
     protected get _optionPath() {
         return 'tickInterval';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

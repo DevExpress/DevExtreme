@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFormSimpleItem } from './base/form-simple-item';
 
-
 import {
     PROPERTY_TOKEN_validationRules,
 } from 'devextreme-angular/core/tokens';
@@ -35,9 +34,7 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'colSpan',
         'cssClass',
@@ -55,7 +52,7 @@ import {
         'visibleIndex'
     ]
 })
-export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit {
+export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
     set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -66,6 +63,7 @@ export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy
     protected get _optionPath() {
         return 'formItem';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

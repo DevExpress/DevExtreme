@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-gantt-operation-descriptions',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoGanttOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoGanttOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -128,6 +125,7 @@ export class DxoGanttOperationDescriptionsComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'operationDescriptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

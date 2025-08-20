@@ -12,7 +12,7 @@ import {
     AfterViewInit,
     SkipSelf,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -29,7 +29,6 @@ import {
     CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
-
 
 import {
     PROPERTY_TOKEN_items,
@@ -166,6 +165,7 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_ranges,
 } from 'devextreme-angular/core/tokens';
@@ -38,11 +37,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_ranges)
     set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -125,6 +122,7 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'rangeContainer';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

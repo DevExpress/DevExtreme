@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,7 +24,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-total-item',
     standalone: true,
@@ -37,7 +36,7 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_totalItems,
            useExisting: DxiTotalItemComponent,
         }
-    ],
+    ]
 })
 export class DxiTotalItemComponent extends CollectionNestedOption {
 
@@ -126,6 +125,7 @@ export class DxiTotalItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'totalItems';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

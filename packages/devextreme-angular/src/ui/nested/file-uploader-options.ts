@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,16 +24,13 @@ import {
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
 
 
-
 @Component({
     selector: 'dxo-file-uploader-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'abortUpload',
         'accept',
@@ -101,7 +98,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
         'width'
     ]
 })
-export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit {
+export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit  {
 
     
 
@@ -114,6 +111,7 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
     protected get _optionPath() {
         return 'fileUploaderOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-color-box-show',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoColorBoxShowComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoColorBoxShowComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -122,6 +119,7 @@ export class DxoColorBoxShowComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'show';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,7 +32,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-html-editor-mention',
     standalone: true,
@@ -46,7 +45,7 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_mentions,
            useExisting: DxiHtmlEditorMentionComponent,
         }
-    ],
+    ]
 })
 export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -128,6 +127,7 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
     protected get _optionPath() {
         return 'mentions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

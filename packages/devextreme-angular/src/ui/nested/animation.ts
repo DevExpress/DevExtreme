@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoAnimationConfig } from './base/animation-config';
 
 
-
 @Component({
     selector: 'dxo-animation',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'hide',
         'show',
@@ -49,13 +46,14 @@ import { DxoAnimationConfig } from './base/animation-config';
         'type'
     ]
 })
-export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit {
+export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'animation';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

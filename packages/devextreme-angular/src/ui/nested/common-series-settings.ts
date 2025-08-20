@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
 
 
-
 @Component({
     selector: 'dxo-common-series-settings',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'aggregation',
         'area',
@@ -100,13 +97,14 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'closed'
     ]
 })
-export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
+export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'commonSeriesSettings';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

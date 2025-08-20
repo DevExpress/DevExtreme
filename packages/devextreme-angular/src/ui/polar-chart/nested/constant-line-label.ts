@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-polar-chart-constant-line-label',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPolarChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -65,6 +62,7 @@ export class DxoPolarChartConstantLineLabelComponent extends NestedOption implem
     protected get _optionPath() {
         return 'label';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

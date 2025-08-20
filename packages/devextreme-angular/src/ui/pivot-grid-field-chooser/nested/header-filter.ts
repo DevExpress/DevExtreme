@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-header-filter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPivotGridFieldChooserHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPivotGridFieldChooserHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -105,6 +102,7 @@ export class DxoPivotGridFieldChooserHeaderFilterComponent extends NestedOption 
     protected get _optionPath() {
         return 'headerFilter';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

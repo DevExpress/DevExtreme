@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_center } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-center',
     standalone: true,
@@ -34,7 +33,7 @@ import { PROPERTY_TOKEN_center } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_center,
            useExisting: DxiCenterComponent,
         }
-    ],
+    ]
 })
 export class DxiCenterComponent extends CollectionNestedOption {
 
@@ -59,6 +58,7 @@ export class DxiCenterComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'center';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

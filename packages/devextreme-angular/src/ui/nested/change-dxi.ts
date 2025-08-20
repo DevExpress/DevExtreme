@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiDataChange } from './base/data-change-dxi';
 
 import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-change',
@@ -50,6 +49,7 @@ export class DxiChangeComponent extends DxiDataChange {
     protected get _optionPath() {
         return 'changes';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

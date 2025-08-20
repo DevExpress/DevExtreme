@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-polar-chart-argument-axis-tick',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPolarChartArgumentAxisTickComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartArgumentAxisTickComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -88,6 +85,7 @@ export class DxoPolarChartArgumentAxisTickComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'tick';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

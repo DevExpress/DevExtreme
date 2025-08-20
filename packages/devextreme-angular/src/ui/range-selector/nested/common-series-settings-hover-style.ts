@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-range-selector-common-series-settings-hover-style',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoRangeSelectorCommonSeriesSettingsHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorCommonSeriesSettingsHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -89,6 +86,7 @@ export class DxoRangeSelectorCommonSeriesSettingsHoverStyleComponent extends Nes
     protected get _optionPath() {
         return 'hoverStyle';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

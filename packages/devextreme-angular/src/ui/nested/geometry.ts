@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-geometry',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -65,6 +62,7 @@ export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnI
     protected get _optionPath() {
         return 'geometry';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

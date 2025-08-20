@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-map-marker',
     standalone: true,
@@ -34,7 +33,7 @@ import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_markers,
            useExisting: DxiMapMarkerComponent,
         }
-    ],
+    ]
 })
 export class DxiMapMarkerComponent extends CollectionNestedOption {
 
@@ -75,6 +74,7 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'markers';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-chat-typing-user',
     standalone: true,
@@ -34,7 +33,7 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_typingUsers,
            useExisting: DxiChatTypingUserComponent,
         }
-    ],
+    ]
 })
 export class DxiChatTypingUserComponent extends CollectionNestedOption {
 
@@ -75,6 +74,7 @@ export class DxiChatTypingUserComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'typingUsers';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

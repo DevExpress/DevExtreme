@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoGanttFilterRow } from './base/gantt-filter-row';
 
 
-
 @Component({
     selector: 'dxo-filter-row',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'applyFilter',
         'applyFilterText',
@@ -44,13 +41,14 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
         'visible'
     ]
 })
-export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit {
+export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'filterRow';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-permissions',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoPermissionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPermissionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -96,6 +93,7 @@ export class DxoPermissionsComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'permissions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

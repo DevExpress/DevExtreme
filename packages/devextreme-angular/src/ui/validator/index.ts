@@ -21,7 +21,7 @@ import {
     DoCheck,
     SimpleChanges,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 

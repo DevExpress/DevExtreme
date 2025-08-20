@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoFormat } from './base/format';
 
 
-
 @Component({
     selector: 'dxo-argument-format',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'currency',
         'formatter',
@@ -41,13 +38,14 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoArgumentFormatComponent extends DxoFormat implements OnDestroy, OnInit {
+export class DxoArgumentFormatComponent extends DxoFormat implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'argumentFormat';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

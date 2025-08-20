@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiChartSeries } from './base/chart-series-dxi';
 
 import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-series',
@@ -89,6 +88,7 @@ export class DxiSeriesComponent extends DxiChartSeries {
     protected get _optionPath() {
         return 'series';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-group-item',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_groupItems,
            useExisting: DxiGroupItemComponent,
         }
-    ],
+    ]
 })
 export class DxiGroupItemComponent extends CollectionNestedOption {
 
@@ -125,6 +124,7 @@ export class DxiGroupItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'groupItems';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

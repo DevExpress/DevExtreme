@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,7 +31,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-chart-annotation',
     standalone: true,
@@ -45,7 +44,7 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_annotations,
            useExisting: DxiChartAnnotationComponent,
         }
-    ],
+    ]
 })
 export class DxiChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -311,6 +310,7 @@ export class DxiChartAnnotationComponent extends CollectionNestedOption implemen
     protected get _optionPath() {
         return 'annotations';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

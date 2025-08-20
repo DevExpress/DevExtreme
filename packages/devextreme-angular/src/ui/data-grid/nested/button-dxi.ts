@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,7 +31,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-data-grid-button',
     standalone: true,
@@ -45,7 +44,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_buttons,
            useExisting: DxiDataGridButtonComponent,
         }
-    ],
+    ]
 })
 export class DxiDataGridButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -127,6 +126,7 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     protected get _optionPath() {
         return 'buttons';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -10,7 +10,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -29,7 +29,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_validationRules,
 } from 'devextreme-angular/core/tokens';
@@ -46,7 +45,7 @@ import {
            provide: PROPERTY_TOKEN_columns,
            useExisting: DxiCardViewColumnComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
 
@@ -412,6 +411,7 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'columns';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

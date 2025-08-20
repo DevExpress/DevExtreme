@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-validator-adapter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -88,6 +85,7 @@ export class DxoValidatorAdapterComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'adapter';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

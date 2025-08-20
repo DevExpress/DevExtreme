@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-card-view-change',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_changes,
            useExisting: DxiCardViewChangeComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewChangeComponent extends CollectionNestedOption {
 
@@ -84,6 +83,7 @@ export class DxiCardViewChangeComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'changes';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

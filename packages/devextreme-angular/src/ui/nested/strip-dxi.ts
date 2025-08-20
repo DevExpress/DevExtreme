@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-strip',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_strips,
            useExisting: DxiStripComponent,
         }
-    ],
+    ]
 })
 export class DxiStripComponent extends CollectionNestedOption {
 
@@ -93,6 +92,7 @@ export class DxiStripComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'strips';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

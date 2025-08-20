@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-chart-constant-line',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_constantLines,
            useExisting: DxiChartConstantLineComponent,
         }
-    ],
+    ]
 })
 export class DxiChartConstantLineComponent extends CollectionNestedOption {
 
@@ -117,6 +116,7 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'constantLines';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

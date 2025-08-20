@@ -10,7 +10,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -31,7 +31,6 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_buttons,
@@ -50,7 +49,7 @@ import {
            provide: PROPERTY_TOKEN_columns,
            useExisting: DxiTreeListColumnComponent,
         }
-    ],
+    ]
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
 
@@ -567,6 +566,7 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'columns';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

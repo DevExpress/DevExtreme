@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoColumnHeaderFilter } from './base/column-header-filter';
 
 
-
 @Component({
     selector: 'dxo-header-filter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'allowSearch',
         'allowSelectAll',
@@ -47,13 +44,14 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
         'showRelevantValues'
     ]
 })
-export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit {
+export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'headerFilter';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

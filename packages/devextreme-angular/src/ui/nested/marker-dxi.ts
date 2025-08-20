@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_location,
 } from 'devextreme-angular/core/tokens';
@@ -39,7 +38,7 @@ import {
            provide: PROPERTY_TOKEN_markers,
            useExisting: DxiMarkerComponent,
         }
-    ],
+    ]
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
 
@@ -84,6 +83,7 @@ export class DxiMarkerComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'markers';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

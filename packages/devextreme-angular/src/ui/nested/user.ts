@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoUser } from './base/user';
 
 
-
 @Component({
     selector: 'dxo-user',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'avatarAlt',
         'avatarUrl',
@@ -39,13 +36,14 @@ import { DxoUser } from './base/user';
         'name'
     ]
 })
-export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit {
+export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'user';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

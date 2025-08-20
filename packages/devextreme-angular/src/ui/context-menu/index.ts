@@ -18,7 +18,7 @@ import {
     DoCheck,
     SimpleChanges,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/context_menu';

@@ -10,7 +10,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -25,7 +25,6 @@ import {
     CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
-
 
 import {
     PROPERTY_TOKEN_buttons,
@@ -186,6 +185,7 @@ export class DxiColumnComponent extends DxiDataGridColumn {
     protected get _optionPath() {
         return 'columns';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

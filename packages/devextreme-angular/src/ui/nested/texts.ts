@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
 
 
-
 @Component({
     selector: 'dxo-texts',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'fix',
         'leftPosition',
@@ -95,13 +92,14 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
         'addRowToNode'
     ]
 })
-export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit {
+export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'texts';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_groups } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_commands,
 } from 'devextreme-angular/core/tokens';
@@ -40,7 +39,7 @@ import {
            provide: PROPERTY_TOKEN_groups,
            useExisting: DxiGroupComponent,
         }
-    ],
+    ]
 })
 export class DxiGroupComponent extends CollectionNestedOption {
 
@@ -101,6 +100,7 @@ export class DxiGroupComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'groups';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

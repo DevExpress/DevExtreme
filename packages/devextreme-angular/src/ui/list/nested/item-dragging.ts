@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-list-item-dragging',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -290,6 +287,7 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'itemDragging';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

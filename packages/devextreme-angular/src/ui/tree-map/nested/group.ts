@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-tree-map-group',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -105,6 +102,7 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'group';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

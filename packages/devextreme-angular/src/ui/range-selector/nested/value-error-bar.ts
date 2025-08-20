@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,18 +23,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-range-selector-value-error-bar',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoRangeSelectorValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -113,6 +110,7 @@ export class DxoRangeSelectorValueErrorBarComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'valueErrorBar';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

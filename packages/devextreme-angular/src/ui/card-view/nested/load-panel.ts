@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -28,18 +28,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-card-view-load-panel',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -323,6 +320,7 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'loadPanel';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

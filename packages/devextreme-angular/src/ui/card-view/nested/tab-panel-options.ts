@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -31,7 +31,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -42,11 +41,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -437,6 +434,7 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     protected get _optionPath() {
         return 'tabPanelOptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

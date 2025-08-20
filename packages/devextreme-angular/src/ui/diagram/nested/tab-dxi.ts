@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_commands,
     PROPERTY_TOKEN_groups,
@@ -41,7 +40,7 @@ import {
            provide: PROPERTY_TOKEN_tabs,
            useExisting: DxiDiagramTabComponent,
         }
-    ],
+    ]
 })
 export class DxiDiagramTabComponent extends CollectionNestedOption {
 
@@ -82,6 +81,7 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'tabs';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

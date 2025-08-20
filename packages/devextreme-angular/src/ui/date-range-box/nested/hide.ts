@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-date-range-box-hide',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -122,6 +119,7 @@ export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'hide';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

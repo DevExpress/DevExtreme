@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
 
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -38,9 +37,7 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'align',
         'crossAlign',
@@ -66,7 +63,7 @@ import {
         'width'
     ]
 })
-export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit {
+export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -83,6 +80,7 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
     protected get _optionPath() {
         return 'box';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

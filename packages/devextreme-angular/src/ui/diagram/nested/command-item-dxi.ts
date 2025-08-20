@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 import {
     PROPERTY_TOKEN_items,
@@ -40,7 +39,7 @@ import {
            provide: PROPERTY_TOKEN_items,
            useExisting: DxiDiagramCommandItemComponent,
         }
-    ],
+    ]
 })
 export class DxiDiagramCommandItemComponent extends CollectionNestedOption {
 
@@ -93,6 +92,7 @@ export class DxiDiagramCommandItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'items';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

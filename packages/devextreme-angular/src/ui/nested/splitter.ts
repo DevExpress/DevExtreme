@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,7 +27,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoSplitterOptions } from './base/splitter-options';
 
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -38,9 +37,7 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'allowKeyboardNavigation',
         'dataSource',
@@ -69,7 +66,7 @@ import {
         'width'
     ]
 })
-export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit {
+export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -86,6 +83,7 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
     protected get _optionPath() {
         return 'splitter';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

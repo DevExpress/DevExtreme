@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -22,16 +22,13 @@ import {
 import { DxoSortableOptions } from './base/sortable-options';
 
 
-
 @Component({
     selector: 'dxo-item-dragging',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'allowDropInsideItem',
         'allowReordering',
@@ -66,13 +63,14 @@ import { DxoSortableOptions } from './base/sortable-options';
         'width'
     ]
 })
-export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit {
+export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit  {
 
     
 
     protected get _optionPath() {
         return 'itemDragging';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

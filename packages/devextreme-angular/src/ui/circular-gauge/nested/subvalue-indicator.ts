@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -25,18 +25,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-circular-gauge-subvalue-indicator',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -195,6 +192,7 @@ export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption imp
     protected get _optionPath() {
         return 'subvalueIndicator';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

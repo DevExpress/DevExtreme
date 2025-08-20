@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi';
 
 import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-file-selection-item',
@@ -56,6 +55,7 @@ export class DxiFileSelectionItemComponent extends DxiFileManagerToolbarItem {
     protected get _optionPath() {
         return 'fileSelectionItems';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

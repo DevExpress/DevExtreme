@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -23,7 +23,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-card-view-custom-operation',
     standalone: true,
@@ -36,7 +35,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens'
            provide: PROPERTY_TOKEN_customOperations,
            useExisting: DxiCardViewCustomOperationComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewCustomOperationComponent extends CollectionNestedOption {
 
@@ -109,6 +108,7 @@ export class DxiCardViewCustomOperationComponent extends CollectionNestedOption 
     protected get _optionPath() {
         return 'customOperations';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

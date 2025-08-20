@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-diagram-auto-layout',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -58,6 +55,7 @@ export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'autoLayout';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

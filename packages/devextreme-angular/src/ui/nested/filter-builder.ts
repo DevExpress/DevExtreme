@@ -12,7 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -26,7 +26,6 @@ import {
 } from 'devextreme-angular/core';
 import { DxoFilterBuilderOptions } from './base/filter-builder-options';
 
-
 import {
     PROPERTY_TOKEN_customOperations,
     PROPERTY_TOKEN_fields,
@@ -38,9 +37,7 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -71,7 +68,7 @@ import {
         'width'
     ]
 })
-export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit {
+export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
     set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -92,6 +89,7 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
     protected get _optionPath() {
         return 'filterBuilder';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

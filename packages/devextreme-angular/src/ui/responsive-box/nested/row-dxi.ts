@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -21,7 +21,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_rows } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-responsive-box-row',
     standalone: true,
@@ -34,7 +33,7 @@ import { PROPERTY_TOKEN_rows } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_rows,
            useExisting: DxiResponsiveBoxRowComponent,
         }
-    ],
+    ]
 })
 export class DxiResponsiveBoxRowComponent extends CollectionNestedOption {
 
@@ -75,6 +74,7 @@ export class DxiResponsiveBoxRowComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'rows';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

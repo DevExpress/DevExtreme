@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 
@@ -25,7 +25,6 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 import {
     PROPERTY_TOKEN_commands,
 } from 'devextreme-angular/core/tokens';
@@ -36,11 +35,9 @@ import {
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
 
     @ContentChildren(PROPERTY_TOKEN_commands)
     set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -67,6 +64,7 @@ export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'viewToolbar';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

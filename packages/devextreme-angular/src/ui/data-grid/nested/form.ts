@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,18 +26,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-data-grid-form',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoDataGridFormComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDataGridFormComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -370,6 +367,7 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'form';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

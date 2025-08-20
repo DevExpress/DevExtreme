@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-slider-tooltip',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -74,6 +71,7 @@ export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy
     protected get _optionPath() {
         return 'tooltip';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

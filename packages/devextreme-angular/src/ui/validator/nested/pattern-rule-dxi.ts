@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,7 +22,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
-
 @Component({
     selector: 'dxi-validator-pattern-rule',
     standalone: true,
@@ -35,7 +34,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
            provide: PROPERTY_TOKEN_validationRules,
            useExisting: DxiValidatorPatternRuleComponent,
         }
-    ],
+    ]
 })
 export class DxiValidatorPatternRuleComponent extends CollectionNestedOption {
 
@@ -76,6 +75,7 @@ export class DxiValidatorPatternRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -26,18 +26,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-bar-gauge-legend',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -228,6 +225,7 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'legend';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

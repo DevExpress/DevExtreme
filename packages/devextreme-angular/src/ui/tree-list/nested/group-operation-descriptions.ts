@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 
@@ -22,18 +22,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-tree-list-group-operation-descriptions',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -72,6 +69,7 @@ export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption
     protected get _optionPath() {
         return 'groupOperationDescriptions';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

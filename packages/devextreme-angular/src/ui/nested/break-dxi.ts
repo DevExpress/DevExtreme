@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf,
+    SkipSelf
 } from '@angular/core';
 
 
@@ -20,7 +20,6 @@ import {
 import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
 
 import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/core/tokens';
-
 
 @Component({
     selector: 'dxi-break',
@@ -47,6 +46,7 @@ export class DxiBreakComponent extends DxiVizScaleBreak {
     protected get _optionPath() {
         return 'breaks';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

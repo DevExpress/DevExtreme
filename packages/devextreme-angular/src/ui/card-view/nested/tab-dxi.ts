@@ -12,7 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    QueryList,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,7 +31,6 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
-
 import {
     PROPERTY_TOKEN_items,
 } from 'devextreme-angular/core/tokens';
@@ -49,7 +48,7 @@ import {
            provide: PROPERTY_TOKEN_tabs,
            useExisting: DxiCardViewTabComponent,
         }
-    ],
+    ]
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -143,6 +142,7 @@ export class DxiCardViewTabComponent extends CollectionNestedOption implements A
     protected get _optionPath() {
         return 'tabs';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

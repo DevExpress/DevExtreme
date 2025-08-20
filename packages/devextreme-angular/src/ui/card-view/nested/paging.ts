@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,18 +24,15 @@ import {
 import { NestedOption } from 'devextreme-angular/core';
 
 
-
 @Component({
     selector: 'dxo-card-view-paging',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [
-        NestedOptionHost,
-    ],
+    providers: [NestedOptionHost]
 })
-export class DxoCardViewPagingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewPagingComponent extends NestedOption implements OnDestroy, OnInit  {
 
     
     @Input()
@@ -79,6 +76,7 @@ export class DxoCardViewPagingComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'paging';
     }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
