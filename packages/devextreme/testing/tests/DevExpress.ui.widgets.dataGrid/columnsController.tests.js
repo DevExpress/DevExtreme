@@ -7169,7 +7169,7 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], fixed: true, fixedPosition: 'right' });
         assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'dataType': 'string', 'visibleIndex': 1, 'visible': true, 'width': 50, 'sortOrder': 'asc', 'sortIndex': 1, 'filterValue': 'TestFilter2', 'selectedFilterOperation': 'startswith' });
     });
 
@@ -7188,7 +7188,7 @@ QUnit.module('State storing', {
 
         // assert
         assert.equal(columns.length, 2);
-        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], filterType: 'include', fixed: true, fixedPosition: 'right' });
+        assert.deepEqual(columns[0], { 'dataField': 'TestField1', 'name': 'TestField1', 'dataType': 'string', 'visibleIndex': 0, 'visible': true, 'width': 100, 'sortOrder': 'asc', 'sortIndex': 0, 'filterValue': 'TestFilter1', 'selectedFilterOperation': '=', filterValues: ['TestFilter1'], fixed: true, fixedPosition: 'right' });
         assert.deepEqual(columns[1], { 'dataField': 'TestField2', 'name': 'TestField2', 'visibleIndex': 1, 'visible': true, 'added': 'TestField2' });
     });
 

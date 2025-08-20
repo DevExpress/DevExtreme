@@ -1250,6 +1250,7 @@ QUnit.module('State Storing with real controllers', {
             dataField: 'id',
             name: 'id',
             dataType: 'number',
+            filterType: 'include',
             filterValues: [3],
             visible: true,
             visibleIndex: 0

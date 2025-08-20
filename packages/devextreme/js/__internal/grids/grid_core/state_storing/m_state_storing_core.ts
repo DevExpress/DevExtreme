@@ -121,16 +121,30 @@ export class StateStoringController extends modules.ViewController {
 
   private _saveState(state) {
     const options = this.option('stateStoring')!;
+    const normalizedState = this.normalizeState(state);
 
     if (options.type === 'custom') {
-      options.customSave && options.customSave(state);
+      options.customSave && options.customSave(normalizedState);
       return;
     }
     try {
-      getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
+      getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(normalizedState));
     } catch (e: any) {
       errors.log(e.message);
     }
+  }
+
+  private normalizeState(state) {
+    const normalizedState = extend(true, {}, state);
+    if (Array.isArray(normalizedState.columns)) {
+      for (const column of normalizedState.columns) {
+        const isFilterExists = isDefined(column.filterValues);
+        if (isFilterExists && column.filterType === undefined) {
+          column.filterType = 'include'; // Default value for filterType
+        }
+      }
+    }
+    return normalizedState;
   }
 
   public publicMethods() {
