@@ -3,7 +3,7 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 
-import type Calendar from './m_calendar';
+import type Calendar from './calendar';
 
 class CalendarSelectionStrategy {
   public NAME!: string;

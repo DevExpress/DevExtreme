@@ -36,16 +36,16 @@ import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/event
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
 
-import type { BaseViewProperties, CellEvent } from './m_calendar.base_view';
-import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
-import type { NavigatorOptions } from './m_calendar.navigator';
-import Navigator from './m_calendar.navigator';
-import CalendarRangeSelectionStrategy from './m_calendar.range.selection.strategy';
-import CalendarSingleSelectionStrategy from './m_calendar.single.selection.strategy';
+import type { BaseViewProperties, CellEvent } from './calendar.base_view';
+import CalendarMultipleSelectionStrategy from './calendar.multiple.selection.strategy';
+import type { NavigatorOptions } from './calendar.navigator';
+import Navigator from './calendar.navigator';
+import CalendarRangeSelectionStrategy from './calendar.range.selection.strategy';
+import CalendarSingleSelectionStrategy from './calendar.single.selection.strategy';
 import type {
   CenturyView, DecadeView, MonthView, MonthViewProperties, YearView,
-} from './m_calendar.views';
-import Views from './m_calendar.views';
+} from './calendar.views';
+import Views from './calendar.views';
 
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';

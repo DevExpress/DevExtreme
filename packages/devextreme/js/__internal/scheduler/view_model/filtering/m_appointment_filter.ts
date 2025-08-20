@@ -40,8 +40,6 @@ export class AppointmentFilterBaseStrategy {
 
   get showAllDayPanel() { return this._resolveOption('showAllDayPanel'); }
 
-  get loadedResources() { return this.options.getResourceManager().groupResources(); }
-
   get supportAllDayRow() { return this._resolveOption('supportAllDayRow'); }
 
   get viewType() { return this._resolveOption('viewType'); }
@@ -92,7 +90,7 @@ export class AppointmentFilterBaseStrategy {
     return {
       ...compareOptions,
       ...this.getIntervals(compareOptions),
-      resources: this.loadedResources,
+      resources: this.options.getResourceManager().groupResources(),
       firstDayOfWeek: this.firstDayOfWeek,
       allDayPanelFilter,
       allDayPanelMode: this.allDayPanelMode,

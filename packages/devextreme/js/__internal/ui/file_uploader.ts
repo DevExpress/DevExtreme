@@ -1747,20 +1747,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _getDropZoneElement(isCustomTarget: boolean, e: DxEvent): Element | undefined {
     if (!e.currentTarget) {
-      return;
+      return undefined;
     }
 
     const { dropZone } = this.option();
 
-    // @ts-expect-error dropZone option public type: it can be an array of Elements or NodeList
-    const targetList = isCustomTarget ? Array.from(dropZone) : [this._$inputWrapper];
+    const targetList = isCustomTarget ? $(dropZone).toArray() : [this._$inputWrapper];
+    const targetListElements = targetList.map((element) => $(element).get(0));
+    const currentTargetIndex = targetListElements.indexOf(e.currentTarget);
 
-    const targetListElements = targetList.map(
-      (element: dxElementWrapper | string) => $(element).get(0),
-    );
-
-    // eslint-disable-next-line consistent-return
-    return targetListElements[targetListElements.indexOf(e.currentTarget)];
+    return targetListElements[currentTargetIndex];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return

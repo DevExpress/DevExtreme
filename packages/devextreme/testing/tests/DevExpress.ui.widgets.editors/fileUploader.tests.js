@@ -3901,6 +3901,25 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.notOk(onDropZoneLeaveSpy.called);
     });
 
+    QUnit.test('dropZoneEnter should not cause an error if custom dropZone is specified as string', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
+
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: '.drop',
+            onDropZoneEnter: onDropZoneEnterSpy
+        });
+
+        try {
+            triggerDragEvent(customDropZone, 'dragenter');
+
+            assert.ok(true, 'No error is thrown');
+        } catch(error) {
+            assert.ok(false, `Error is thrown: ${error}`);
+        }
+    });
+
     QUnit.test('onValueChanged event should not fire if dragged item is not file', function(assert) {
         const onValueChangedSpy = sinon.spy();
 

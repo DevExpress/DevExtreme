@@ -83,7 +83,8 @@ const ColorBox = memo(
 
       const expectedChildren = useMemo(() => ({
         button: { optionName: "buttons", isCollectionItem: true },
-        dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false }
+        dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false },
+        fieldAddons: { optionName: "fieldAddons", isCollectionItem: false }
       }), []);
 
       const templateProps = useMemo(() => ([
@@ -317,6 +318,38 @@ const _componentDropDownOptions = (props: IDropDownOptionsProps) => {
 };
 
 const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedComponentMeta>(_componentDropDownOptions, {
+  componentType: "option",
+});
+
+// owners:
+// ColorBox
+type IFieldAddonsProps = React.PropsWithChildren<{
+  afterTemplate?: ((data: any, element: any) => string | any) | template;
+  beforeTemplate?: ((data: any, element: any) => string | any) | template;
+  afterRender?: (...params: any) => React.ReactNode;
+  afterComponent?: React.ComponentType<any>;
+  beforeRender?: (...params: any) => React.ReactNode;
+  beforeComponent?: React.ComponentType<any>;
+}>
+const _componentFieldAddons = (props: IFieldAddonsProps) => {
+  return React.createElement(NestedOption<IFieldAddonsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fieldAddons",
+      TemplateProps: [{
+        tmplOption: "afterTemplate",
+        render: "afterRender",
+        component: "afterComponent"
+      }, {
+        tmplOption: "beforeTemplate",
+        render: "beforeRender",
+        component: "beforeComponent"
+      }],
+    },
+  });
+};
+
+const FieldAddons = Object.assign<typeof _componentFieldAddons, NestedComponentMeta>(_componentFieldAddons, {
   componentType: "option",
 });
 
@@ -629,6 +662,8 @@ export {
   ICollisionProps,
   DropDownOptions,
   IDropDownOptionsProps,
+  FieldAddons,
+  IFieldAddonsProps,
   From,
   IFromProps,
   Hide,

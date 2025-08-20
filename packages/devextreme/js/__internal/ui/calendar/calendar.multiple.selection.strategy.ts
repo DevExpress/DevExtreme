@@ -1,8 +1,8 @@
 import type { DxEvent } from '@js/events';
 
-import type Calendar from './m_calendar';
-import type { WeekNumberClickEvent } from './m_calendar.base_view';
-import CalendarSelectionStrategy from './m_calendar.selection.strategy';
+import type Calendar from './calendar';
+import type { WeekNumberClickEvent } from './calendar.base_view';
+import CalendarSelectionStrategy from './calendar.selection.strategy';
 
 class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
   constructor(component: Calendar) {

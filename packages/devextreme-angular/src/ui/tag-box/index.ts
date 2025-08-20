@@ -26,7 +26,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { ApplyValueMode, TextEditorButton, LabelMode, SimplifiedSearchMode, SelectAllMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -64,6 +64,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldAddonsModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoTagBoxAnimationModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -72,6 +73,7 @@ import { DxoTagBoxBoundaryOffsetModule } from 'devextreme-angular/ui/tag-box/nes
 import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxCollisionModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxDropDownOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxFieldAddonsModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxFromModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxoTagBoxHideModule } from 'devextreme-angular/ui/tag-box/nested';
 import { DxiTagBoxItemModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -287,7 +289,22 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
+     * [descr:dxSelectBoxOptions.fieldAddons]
+    
+     */
+    @Input()
+    get fieldAddons(): FieldAddons {
+        return this._getOption('fieldAddons');
+    }
+    set fieldAddons(value: FieldAddons) {
+        this._setOption('fieldAddons', value);
+    }
+
+
+    /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
+    
+     * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
     
      */
     @Input()
@@ -1248,6 +1265,13 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
@@ -1719,6 +1743,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { emit: 'dropDownButtonTemplateChange' },
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'fieldAddonsChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'groupedChange' },
@@ -1868,6 +1893,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldAddonsModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,
@@ -1875,6 +1901,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
     DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFieldAddonsModule,
     DxoTagBoxFromModule,
     DxoTagBoxHideModule,
     DxiTagBoxItemModule,
@@ -1904,6 +1931,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldAddonsModule,
     DxiItemModule,
     DxoTagBoxAnimationModule,
     DxoTagBoxAtModule,
@@ -1911,6 +1939,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxiTagBoxButtonModule,
     DxoTagBoxCollisionModule,
     DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxFieldAddonsModule,
     DxoTagBoxFromModule,
     DxoTagBoxHideModule,
     DxiTagBoxItemModule,

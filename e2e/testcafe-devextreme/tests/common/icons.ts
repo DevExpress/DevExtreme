@@ -276,6 +276,8 @@ const iconSet = {
   fixcolumnleft: '\f17b',
   stickcolumn: '\f17c',
   fixcolumnright: '\f17d',
+  ratingoutline: '\f17f',
+  ratingfilled: '\f180',
   csv: '\f181',
   packagebox: '\f182',
   checkmarkcircle: '\f183',
@@ -295,6 +297,8 @@ const iconSet = {
   groupbycolumn: '\f197',
   ungroupcolumn: '\f198',
   ungroupallcolumns: '\f199',
+  chatadd: '\f200',
+  colordismiss: '\f201',
 };
 
 fixture.disablePageReloads`Icons`

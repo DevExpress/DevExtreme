@@ -1,3 +1,3 @@
-import notify from '../__internal/ui/m_notify';
+import notify from '../__internal/ui/notify';
 
 export default notify;

@@ -86,8 +86,8 @@ class SchedulerAppointments extends CollectionWidget {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataProvider() {
-    return this.option('getAppointmentDataProvider')();
+  get appointmentDataSource() {
+    return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -104,18 +104,17 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   notifyObserver(subject, args) {
-    const observer: any = this.option('observer');
-    if (observer) {
-      observer.fire(subject, args);
+    const notifyScheduler: any = this.option('notifyScheduler');
+    if (notifyScheduler) {
+      notifyScheduler.invoke(subject, args);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   invoke(funcName: string, ...args) {
-    const observer: any = this.option('observer');
+    const notifyScheduler: any = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (notifyScheduler) {
+      return notifyScheduler.invoke(funcName, ...args);
     }
   }
 
@@ -247,7 +246,7 @@ class SchedulerAppointments extends CollectionWidget {
   ): ViewModelDiff[] {
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
-    const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
     diff
       .filter((item) => !isNeedToAdd(item))
       .forEach((item, index) => {
@@ -645,7 +644,7 @@ class SchedulerAppointments extends CollectionWidget {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
-      observer: this.option('observer'),
+      notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
       direction: settings.direction || 'vertical',
       allowResize: false,
@@ -675,7 +674,7 @@ class SchedulerAppointments extends CollectionWidget {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
-      observer: this.option('observer'),
+      notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
       direction: settings.direction || 'vertical',
       allowResize,

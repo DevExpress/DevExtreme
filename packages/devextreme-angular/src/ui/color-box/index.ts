@@ -25,7 +25,7 @@ import {
 
 
 import { ApplyValueMode, TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
 
@@ -60,6 +60,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldAddonsModule } from 'devextreme-angular/ui/nested';
 
 import { DxoColorBoxAnimationModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxAtModule } from 'devextreme-angular/ui/color-box/nested';
@@ -67,6 +68,7 @@ import { DxoColorBoxBoundaryOffsetModule } from 'devextreme-angular/ui/color-box
 import { DxiColorBoxButtonModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxCollisionModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxDropDownOptionsModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxFieldAddonsModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxFromModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxHideModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxMyModule } from 'devextreme-angular/ui/color-box/nested';
@@ -279,7 +281,22 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
 
     /**
+     * [descr:dxDropDownEditorOptions.fieldAddons]
+    
+     */
+    @Input()
+    get fieldAddons(): FieldAddons {
+        return this._getOption('fieldAddons');
+    }
+    set fieldAddons(value: FieldAddons) {
+        this._setOption('fieldAddons', value);
+    }
+
+
+    /**
      * [descr:dxColorBoxOptions.fieldTemplate]
+    
+     * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
     
      */
     @Input()
@@ -891,6 +908,13 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
@@ -1168,6 +1192,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'dropDownOptionsChange' },
             { emit: 'editAlphaChannelChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'fieldAddonsChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
@@ -1282,12 +1307,14 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldAddonsModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldAddonsModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,
@@ -1316,12 +1343,14 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoFieldAddonsModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
     DxiColorBoxButtonModule,
     DxoColorBoxCollisionModule,
     DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxFieldAddonsModule,
     DxoColorBoxFromModule,
     DxoColorBoxHideModule,
     DxoColorBoxMyModule,

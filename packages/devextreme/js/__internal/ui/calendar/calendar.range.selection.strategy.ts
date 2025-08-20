@@ -1,9 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 import type { DxEvent } from '@js/events';
 
-import type Calendar from './m_calendar';
-import type { CellEvent, WeekNumberClickEvent } from './m_calendar.base_view';
-import CalendarSelectionStrategy from './m_calendar.selection.strategy';
+import type Calendar from './calendar';
+import type { CellEvent, WeekNumberClickEvent } from './calendar.base_view';
+import CalendarSelectionStrategy from './calendar.selection.strategy';
 
 const DAY_INTERVAL = 86400000;
 
@@ -154,6 +154,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     const rangeStartDate = new Date(Math.max(firstDateInViews.getTime(), startDate.getTime()));
     const rangeEndDate = new Date(Math.min(lastDateInViews.getTime(), endDate.getTime()));
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return [
       ...dateUtils.getDatesOfInterval(rangeStartDate, rangeEndDate, DAY_INTERVAL),
       rangeEndDate,

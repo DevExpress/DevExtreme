@@ -6,7 +6,7 @@ import dateSerialization from 'core/utils/date_serialization';
 import { noop } from 'core/utils/common';
 import swipeEvents from 'common/core/events/swipe';
 import fx from 'common/core/animation/fx';
-import Views from '__internal/ui/calendar/m_calendar.views';
+import Views from '__internal/ui/calendar/calendar.views';
 import Calendar from 'ui/calendar';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
