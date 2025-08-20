@@ -31,19 +31,13 @@ import {
 import type { ColumnsController } from './m_columns_controller';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
-  if (controller._warnedFixedInChildColumns || !childColumns || childColumns.length === 0) return;
+  if (controller._warnedFixedInChildColumns || !childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
 
-  const fixedColumns = childColumns.filter((el: any) => 'fixed' in el || 'FixedPosition' in el || 'type' in el || 'buttons' in el);
-  if (fixedColumns.length > 0) {
+  const fixedColumns = childColumns.filter((el: any) => typeof el === 'object' && el !== null && ('fixed' in el || 'FixedPosition' in el || 'type' in el || 'buttons' in el));
+
+  if (fixedColumns && fixedColumns?.length > 0) {
     errors.log('W1028');
     controller._warnedFixedInChildColumns = true;
-    return;
-  }
-
-  const subColumns = childColumns.filter((el: any) => 'columns' in el);
-
-  if (subColumns && subColumns.length > 0) {
-    warnFixedInChildColumnsOnce(controller, subColumns);
   }
 };
 
