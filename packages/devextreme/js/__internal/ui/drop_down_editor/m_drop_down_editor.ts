@@ -395,7 +395,7 @@ class DropDownEditor<
     const fieldAddonsTemplates = this._getFieldAddonsTemplates();
 
     if (fieldAddonsTemplates) {
-      this._renderFieldAddonsContent(fieldAddonsTemplates, this._fieldRenderData());
+      this._renderFieldAddonsContent(fieldAddonsTemplates);
 
       return;
     }
@@ -544,25 +544,25 @@ class DropDownEditor<
     }
   }
 
-  _renderBeforeFieldAddonContent(model: Properties['value'], beforeTemplate?: FieldAddonsTemplates['beforeTemplate'] | null): void {
+  _renderBeforeFieldAddonContent(beforeTemplate?: FieldAddonsTemplates['beforeTemplate'] | null): void {
     if (beforeTemplate && this._$beforeFieldAddon) {
       beforeTemplate.render({
-        model,
+        model: this._fieldRenderData(),
         container: getPublicElement(this._$beforeFieldAddon),
       });
     }
   }
 
-  _renderAfterFieldAddonContent(model: Properties['value'], afterTemplate?: FieldAddonsTemplates['afterTemplate'] | null): void {
+  _renderAfterFieldAddonContent(afterTemplate?: FieldAddonsTemplates['afterTemplate'] | null): void {
     if (afterTemplate && this._$afterFieldAddon) {
       afterTemplate.render({
-        model,
+        model: this._fieldRenderData(),
         container: getPublicElement(this._$afterFieldAddon),
       });
     }
   }
 
-  _renderFieldAddonsContent(fieldAddonsTemplates: FieldAddonsTemplates, model: Properties['value']): void {
+  _renderFieldAddonsContent(fieldAddonsTemplates: FieldAddonsTemplates): void {
     this._clearFieldAddons();
 
     if (!fieldAddonsTemplates) {
@@ -571,8 +571,8 @@ class DropDownEditor<
 
     const { beforeTemplate, afterTemplate } = fieldAddonsTemplates;
 
-    this._renderBeforeFieldAddonContent(model, beforeTemplate);
-    this._renderAfterFieldAddonContent(model, afterTemplate);
+    this._renderBeforeFieldAddonContent(beforeTemplate);
+    this._renderAfterFieldAddonContent(afterTemplate);
   }
 
   _integrateInput(): void {

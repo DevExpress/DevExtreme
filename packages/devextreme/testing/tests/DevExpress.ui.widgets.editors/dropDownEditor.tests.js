@@ -1666,11 +1666,8 @@ QUnit.module('Templates: fieldAddons', {
             };
         };
     },
-    afterEach: function() {
-        this.$container.remove();
-    }
 }, () => {
-    QUnit.test('should create addons addons once and reuse them on value change', function(assert) {
+    QUnit.test('should create addons once and reuse them on value change', function(assert) {
         const instance = this.createEditor();
 
         const { beforeAddon: beforeInitial, afterAddon: afterInitial } = this.getAddons();
@@ -1704,8 +1701,8 @@ QUnit.module('Templates: fieldAddons', {
             const { $beforeAddon, $afterAddon } = this.getAddons();
 
             if(template === 'beforeTemplate') {
-                assert.strictEqual($beforeAddon.text(), 'beforeTemplate - test', 'beforeTemplate rendered');
                 assert.strictEqual($afterAddon.text(), '', 'after slot remains empty');
+                assert.strictEqual($beforeAddon.text(), 'beforeTemplate - test', 'beforeTemplate rendered');
             } else {
                 assert.strictEqual($beforeAddon.text(), '', 'before slot remains empty');
                 assert.strictEqual($afterAddon.text(), 'afterTemplate - test', 'afterTemplate rendered');
@@ -1728,7 +1725,7 @@ QUnit.module('Templates: fieldAddons', {
     });
 
     QUnit.test('should render fieldAddons when set dynamically', function(assert) {
-        const instance = this.createEditor();
+        const instance = this.createEditor({ fieldAddons: undefined });
 
         instance.option('fieldAddons', this.getDefaultAddons());
 
@@ -1738,7 +1735,7 @@ QUnit.module('Templates: fieldAddons', {
         assert.strictEqual($afterAddon.text(), 'after - test', 'rendered correct content');
     });
 
-    QUnit.test('should clear addons addons when fieldAddons is removed', function(assert) {
+    QUnit.test('should clear addons when fieldAddons is removed', function(assert) {
         const instance = this.createEditor();
 
         const { $beforeAddon, $afterAddon } = this.getAddons();
@@ -1754,7 +1751,7 @@ QUnit.module('Templates: fieldAddons', {
         assert.strictEqual($afterSlotUpdated.text(), '', 'after addon cleared');
     });
 
-    QUnit.test('should remove addons addons on widget dispose', function(assert) {
+    QUnit.test('should remove addons on widget dispose', function(assert) {
         const instance = this.createEditor();
 
         const { $beforeAddon, $afterAddon } = this.getAddons();
@@ -1790,16 +1787,60 @@ QUnit.module('Templates: fieldAddons', {
             fieldAddons: { beforeTemplate: 'customBefore', afterTemplate: 'customAfter' },
             integrationOptions: {
                 templates: {
-                    customBefore: { render: ({ container, model }) => $(container).text(`before - ${model}`) },
-                    customAfter: { render: ({ container, model }) => $(container).text(`after - ${model}`) },
+                    customBefore: { render: ({ container, model }) => $(container).text(`customBefore - ${model}`) },
+                    customAfter: { render: ({ container, model }) => $(container).text(`customAfter - ${model}`) },
                 }
             }
         });
 
         const { $beforeAddon, $afterAddon } = this.getAddons();
 
-        assert.strictEqual($beforeAddon.text(), 'before - test', 'before content is correct');
-        assert.strictEqual($afterAddon.text(), 'after - test', 'after content is correct');
+        assert.strictEqual($beforeAddon.text(), 'customBefore - test', 'before content is correct');
+        assert.strictEqual($afterAddon.text(), 'customAfter - test', 'after content is correct');
+    });
+
+    QUnit.test('should pass correct values to fieldAddons render-functions', function(assert) {
+        const beforeSpy = sinon.spy((data, element) => {
+            assert.strictEqual(data, 'test', 'beforeTemplate: data is value');
+            assert.strictEqual($(element).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), true, 'beforeTemplate: element is addon');
+        });
+
+        const afterSpy = sinon.spy((data, element) => {
+            assert.strictEqual(data, 'test', 'afterTemplate: data is value');
+            assert.strictEqual($(element).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), true, 'afterTemplate: element is addon');
+        });
+
+        this.createEditor({
+            fieldAddons: { beforeTemplate: beforeSpy, afterTemplate: afterSpy },
+        });
+
+        assert.strictEqual(beforeSpy.calledOnce, true, 'beforeTemplate called once');
+        assert.strictEqual(afterSpy.calledOnce, true, 'afterTemplate called once');
+    });
+
+    QUnit.test('should pass correct values to fieldAddons render-functions with integrationOptions', function(assert) {
+        const beforeSpy = sinon.spy(({ container, model }) => {
+            assert.strictEqual(model, 'test', 'before: model is value');
+            assert.strictEqual($(container).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), true, 'before: container is addon');
+        });
+
+        const afterSpy = sinon.spy(({ container, model }) => {
+            assert.strictEqual(model, 'test', 'after: model is value');
+            assert.strictEqual($(container).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), true, 'after: container is addon');
+        });
+
+        this.createEditor({
+            fieldAddons: { beforeTemplate: 'customBefore', afterTemplate: 'customAfter' },
+            integrationOptions: {
+                templates: {
+                    customBefore: { render: beforeSpy },
+                    customAfter: { render: afterSpy },
+                }
+            }
+        });
+
+        assert.strictEqual(beforeSpy.calledOnce, true, 'before.render called');
+        assert.strictEqual(afterSpy.calledOnce, true, 'after.render called');
     });
 });
 
