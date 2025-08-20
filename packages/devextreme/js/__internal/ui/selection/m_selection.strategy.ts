@@ -1,3 +1,4 @@
+import type { LoadOptions } from '@js/common/data.types';
 import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
@@ -183,7 +184,7 @@ export default class SelectionStrategy<
     const deferred = Deferred<TItem[]>();
     const queryParams = this._getQueryParams();
 
-    const loadOptions = {
+    const loadOptions: LoadOptions<TItem> = {
       filter: needLoadAllData ? undefined : remoteFilter,
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
       ...queryParams,

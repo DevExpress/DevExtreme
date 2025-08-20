@@ -177,7 +177,6 @@ export default class StandardStrategy<
 
     if (!keyOf) return;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const internalKeys: TKey[] = items.map((item) => keyOf(item));
 
     this.setSelectedItems(internalKeys, items);
@@ -538,8 +537,8 @@ export default class StandardStrategy<
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getKeyHash(key: TKey): any {
+  _getKeyHash(key: TKey): TKey {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.options.equalByReference ? key : getKeyHash(key);
   }
 

@@ -20,7 +20,6 @@ export default class DeferredStrategy<
     const d = Deferred<TKey[]>();
     const key = this.options.key();
     const select = isString(key) ? [key] : key;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const getKey = (item: TItem): TKey => this.options.keyOf(item);
 
     this._loadFilteredData(this.options.selectionFilter, null, select).done((items) => {
