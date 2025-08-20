@@ -38,23 +38,28 @@ const POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = [
 ];
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[], isLastIndexOnTopLevel?: boolean): void => {
-  if (
-    (controller._unsupportedPropertiesForChildColumns && controller._unsupportedPropertiesForChildColumns.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) || !childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
+  if (controller?._warningUnsupportedPropertiesForChildColumns?.isShown) return;
+  if (controller?._warningUnsupportedPropertiesForChildColumns?.properties?.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) return;
+  if (!childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
 
-  if (!controller._unsupportedPropertiesForChildColumns) {
-    controller._unsupportedPropertiesForChildColumns = new Set();
+  if (!controller?._warningUnsupportedPropertiesForChildColumns) {
+    controller._warningUnsupportedPropertiesForChildColumns = {
+      isShown: false,
+      properties: new Set(),
+    };
   }
 
   each(childColumns, (_, column) => {
     if (column && typeof column === 'object' && column !== null) {
       for (const property of POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
-        if (property in column) controller._unsupportedPropertiesForChildColumns!.add(`'${property}'`);
+        if (property in column) controller._warningUnsupportedPropertiesForChildColumns!.properties!.add(`'${property}'`);
       }
     }
   });
 
-  if (isLastIndexOnTopLevel || controller._unsupportedPropertiesForChildColumns.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) {
-    errors.log('W1028', Array.from(controller._unsupportedPropertiesForChildColumns).join(', '));
+  if (isLastIndexOnTopLevel || controller._warningUnsupportedPropertiesForChildColumns.properties!.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) {
+    errors.log('W1028', Array.from(controller._warningUnsupportedPropertiesForChildColumns.properties!).join(', '));
+    controller._warningUnsupportedPropertiesForChildColumns.isShown = true;
   }
 };
 
