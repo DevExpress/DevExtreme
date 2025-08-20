@@ -88,6 +88,7 @@ import {
   isDetailRow,
   isEditForm,
   isEditorCell,
+  isEditRow,
   isElementDefined,
   isGroupFooterRow,
   isGroupRow,
@@ -1533,6 +1534,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         isHighlighted,
       );
       $element = args.$newCellElement;
+
       if (isRowFocusType && !args.isHighlighted) {
         this.setRowFocusType();
       }
@@ -1540,7 +1542,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (!args.cancel) {
       this._focus($element, !args.isHighlighted);
-      this._focusInteractiveElement($element);
+
+      if (this._getElementType($element) !== 'row' || isEditRow($element)) {
+        this._focusInteractiveElement($element);
+      }
     }
   }
 
