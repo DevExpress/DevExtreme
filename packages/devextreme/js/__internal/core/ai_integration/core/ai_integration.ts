@@ -32,7 +32,7 @@ import {
   SmartPasteCommand,
   SummarizeCommand,
   TranslateCommand,
-} from '@ts/core/ai_integration/commands';
+} from '@ts/core/ai_integration/commands/index';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
