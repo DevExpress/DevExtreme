@@ -9,13 +9,13 @@ import { isDefined, isString } from '@js/core/utils/type';
 import type {
   ControllerOverlayElements,
   OverlayPosition,
-} from '@ts/ui/overlay/m_overlay_position_controller';
-import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+} from '@ts/ui/overlay/overlay_position_controller';
+import { OverlayPositionController } from '@ts/ui/overlay/overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import type {
   PopupControllerProperties,
   PopupPositionControllerConstructor,
-} from '@ts/ui/popup/m_popup_position_controller';
+} from '@ts/ui/popup/popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {
@@ -124,7 +124,6 @@ export class PopoverPositionController<
     this.updatePosition(this._properties.position);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition(): PopoverPosition {
@@ -184,7 +183,6 @@ export class PopoverPositionController<
     return side === 'left' || side === 'right';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDisplaySide(position: PopoverPosition): CommonPosition {
     const my = positionUtils.setup.normalizeAlign(position.my);
     const at = positionUtils.setup.normalizeAlign(position.at);
@@ -220,7 +218,6 @@ export class PopoverPositionController<
     return resultPosition;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
       const configuration = {

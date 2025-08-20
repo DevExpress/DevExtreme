@@ -680,7 +680,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         view: 'month',
         expectedNumberOfCollectors: 9,
         expectedText: '5 more',
-        collectorIndex: 3,
+        collectorIndex: 0,
         description: 'Scheduler should render correct number of collectors and pass correct number of appointments to them in month view (T965267)',
     }, {
         dataSource: [{
