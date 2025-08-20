@@ -1401,7 +1401,7 @@ QUnit.module('Real dataGrid', {
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 1);
         assert.strictEqual(dataGrid.columnOption('field', 'selectedFilterOperation'), '=');
         assert.deepEqual(dataGrid.columnOption('field2', 'filterValues'), undefined);
-        assert.strictEqual(dataGrid.columnOption('field2', 'filterType'), 'include');
+        assert.strictEqual(dataGrid.columnOption('field2', 'filterType'), undefined);
         assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', 1]);
     });
 
