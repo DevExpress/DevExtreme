@@ -73,7 +73,8 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
 
-export type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+type PointerLikeNativeEvents = MouseEvent | PointerEvent | TouchEvent;
+export type PointerLikeEvent = DxEvent<PointerLikeNativeEvents>;
 
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 
@@ -136,7 +137,7 @@ export type PositioningEvent<
   TPosition = OverlayProperties['position'],
 > = NativeEventInfo<
   Overlay,
-  PointerLikeEvent
+  PointerLikeNativeEvents
 > & {
   readonly position: TPosition;
 };
