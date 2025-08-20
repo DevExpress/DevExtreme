@@ -97,8 +97,9 @@ export class AIIntegration implements IAIIntegration {
     callbacks: RequestCallbacks<Commands[K]['result']>,
   ): () => void {
     type Command = BaseCommand<Commands[K]['params'], Commands[K]['result']>;
+    type CommandInstance = Commands[K]['command'];
 
-    let command = this.commands.get(commandName) as Command | undefined;
+    let command = this.commands.get(commandName) as CommandInstance | undefined;
 
     if (!command) {
       const Command = COMMANDS[commandName];
@@ -108,7 +109,7 @@ export class AIIntegration implements IAIIntegration {
       this.commands.set(commandName, command);
     }
 
-    return command.execute(params, callbacks);
+    return (command as Command).execute(params, callbacks);
   }
 
   public changeStyle(

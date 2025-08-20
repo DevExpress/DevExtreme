@@ -21,21 +21,25 @@ export class SmartPasteCommand extends BaseCommand<
   }
 
   protected parseResult(response: string): SmartPasteCommandResult {
-    const result = {};
+    const result: SmartPasteCommandResult = [];
+
     response.split(';;;').forEach((data: string) => {
       const [name, ...values] = data.split(':::');
       const value = values.length === 1 ? values[0] : values;
 
       if (value) {
         try {
-          result[name] = value;
+          result.push({
+            name,
+            value,
+          });
         } catch (e) {
-          result[name] = undefined;
+          // If parsing fails, we can ignore this field or handle it as needed.
         }
       }
     });
 
-    return JSON.stringify(result);
+    return result;
   }
 
   private generateFieldsInstructions(fields: FieldInfo[]): string {

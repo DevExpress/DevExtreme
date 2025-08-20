@@ -43,7 +43,7 @@ describe('SmartPasteCommand', () => {
       // @ts-expect-error Access to protected property for a test
       const templateName = command.getTemplateName();
 
-      expect(templateName).toBe(COMMAND_NAME);
+      expect(templateName).toStrictEqual(COMMAND_NAME);
     });
   });
 
@@ -54,7 +54,25 @@ describe('SmartPasteCommand', () => {
       // @ts-expect-error Access to private property for a test
       const fieldsInfo = command.generateFieldsInstructions(params.fields);
 
-      expect(promptData).toEqual({
+      expect(promptData).toStrictEqual({
+        user: { text: USER_TEXT, fields: fieldsInfo },
+      });
+    });
+
+    it('should form PromptData with text and fields info including instruction', () => {
+      const paramsWithInstruction = {
+        ...params,
+        fields: [{
+          ...params.fields[0],
+          instruction: 'instruction',
+        }],
+      };
+      // @ts-expect-error Access to protected property for a test
+      const promptData: PromptData = command.buildPromptData(paramsWithInstruction);
+      // @ts-expect-error Access to private property for a test
+      const fieldsInfo = command.generateFieldsInstructions(paramsWithInstruction.fields);
+
+      expect(promptData).toStrictEqual({
         user: { text: USER_TEXT, fields: fieldsInfo },
       });
     });
@@ -66,12 +84,15 @@ describe('SmartPasteCommand', () => {
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
 
-      const expectedResult = {
-        Field1: 'value1',
-        Field2: 'value2',
-      };
+      const expectedResult = [{
+        name: 'Field1',
+        value: 'value1',
+      }, {
+        name: 'Field2',
+        value: 'value2',
+      }];
 
-      expect(JSON.parse(result)).toStrictEqual(expectedResult);
+      expect(result).toStrictEqual(expectedResult);
     });
 
     it('should not include an empty fields into parsed result', () => {
@@ -79,11 +100,12 @@ describe('SmartPasteCommand', () => {
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
 
-      const expectedResult = {
-        Field1: 'value1',
-      };
+      const expectedResult = [{
+        name: 'Field1',
+        value: 'value1',
+      }];
 
-      expect(JSON.parse(result)).toStrictEqual(expectedResult);
+      expect(result).toStrictEqual(expectedResult);
     });
   });
 

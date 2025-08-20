@@ -166,7 +166,10 @@ export type TranslateCommandResult = string;
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type SmartPasteCommandResult = string;
+export type SmartPasteCommandResult = Array<{
+  name: string;
+  value: string | string[];
+}>;
 
 /**
  * @namespace DevExpress.aiIntegration
