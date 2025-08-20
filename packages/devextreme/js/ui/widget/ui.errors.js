@@ -368,4 +368,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1027
      */
     W1027: 'A prompt should be specified for a custom command.',
+    /**
+     * @name ErrorsUIWidgets.W1028
+     */
+    W1028: 'Passing parameters: \'fixed\', \'FixedPosition\', \'type\', \'buttons\' for child columns is not supported',
 });

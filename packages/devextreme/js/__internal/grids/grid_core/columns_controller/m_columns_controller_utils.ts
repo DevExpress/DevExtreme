@@ -12,6 +12,7 @@ import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import errors from '@js/ui/widget/ui.errors';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import gridCoreUtils from '../m_utils';
@@ -28,6 +29,23 @@ import {
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
+
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
+  if (controller._warnedFixedInChildColumns || !childColumns || childColumns.length === 0) return;
+
+  const fixedColumns = childColumns.filter((el: any) => 'fixed' in el || 'FixedPosition' in el || 'type' in el || 'buttons' in el);
+  if (fixedColumns.length > 0) {
+    errors.log('W1028');
+    controller._warnedFixedInChildColumns = true;
+    return;
+  }
+
+  const subColumns = childColumns.filter((el: any) => 'columns' in el);
+
+  if (subColumns && subColumns.length > 0) {
+    warnFixedInChildColumnsOnce(controller, subColumns);
+  }
+};
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
@@ -47,7 +65,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
 
     that.setName(columnOptions);
 
-    let result = { };
+    let result = {};
     if (columnOptions.command) {
       result = deepExtendArraySafe(commonColumnOptions, columnOptions);
     } else {
@@ -90,6 +108,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
+          warnFixedInChildColumnsOnce(that, column.columns);
           result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
@@ -945,7 +964,7 @@ const isFirstOrLastBandColumn = function (
   fixedPosition?: StickyPosition,
 ): boolean {
   return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
-        || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+    || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
 };
 
 const isFirstOrLastColumnCore = function (
