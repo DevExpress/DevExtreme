@@ -333,8 +333,8 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.model.units, 0);
     });
     test('should change pageSize property', function(assert) {
-        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
-        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8400);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11910);
         this.instance.option('pageSize', { width: 3, height: 5 });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
@@ -351,8 +351,8 @@ QUnit.module('Options', {
         assert.equal(this.onOptionChanged.getCalls().length, 3); // +hasChanges
     });
     test('should change pageSize object property', function(assert) {
-        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
-        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8400);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11910);
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 11);
         this.instance.option('pageSize', { width: 3, height: 5, items: [{ width: 3, height: 5, text: 'A10' }] });
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
