@@ -353,7 +353,7 @@ class MenuBase<
     }
   }
 
-  _hoverStartHandler(e: DxEvent<HoverEvent>): void {
+  _hoverStartHandler(e: HoverEvent): void {
     const $itemElement = this._getItemElementByEventArgs(e);
 
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
@@ -434,7 +434,7 @@ class MenuBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverEndHandler(event: DxEvent<HoverEvent>): void {
+  _hoverEndHandler(event: HoverEvent): void {
     clearTimeout(this._showSubmenusTimeout);
   }
 

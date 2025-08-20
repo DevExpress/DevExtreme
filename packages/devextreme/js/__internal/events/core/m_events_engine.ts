@@ -11,54 +11,16 @@ import {
   isFunction, isObject, isString, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import {
+  EMPTY_EVENT_NAME,
+  EVENT_PROPERTIES,
+  forcePassiveFalseEventNames,
+  NATIVE_EVENTS_TO_SUBSCRIBE,
+  NATIVE_EVENTS_TO_TRIGGER,
+  NO_BUBBLE_EVENTS,
+} from '@ts/events/core/m_consts';
 
 const window = getWindow();
-
-/* eslint-disable spellcheck/spell-checker */
-const EMPTY_EVENT_NAME = 'dxEmptyEventType';
-const NATIVE_EVENTS_TO_SUBSCRIBE = {
-  mouseenter: 'mouseover',
-  mouseleave: 'mouseout',
-  pointerenter: 'pointerover',
-  pointerleave: 'pointerout',
-};
-const NATIVE_EVENTS_TO_TRIGGER = {
-  focusin: 'focus',
-  focusout: 'blur',
-};
-const NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
-
-const forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
-
-const EVENT_PROPERTIES = [
-  'target',
-  'relatedTarget',
-  'delegateTarget',
-  'altKey',
-  'bubbles',
-  'cancelable',
-  'changedTouches',
-  'ctrlKey',
-  'detail',
-  'eventPhase',
-  'metaKey',
-  'shiftKey',
-  'view',
-  'char',
-  'code',
-  'charCode',
-  'key',
-  'keyCode',
-  'button',
-  'buttons',
-  'offsetX',
-  'offsetY',
-  'pointerId',
-  'pointerType',
-  'targetTouches',
-  'toElement',
-  'touches',
-];
 
 function matchesSafe(target, selector) {
   return !isWindow(target) && target.nodeName !== '#document' && domAdapter.elementMatches(target, selector);
