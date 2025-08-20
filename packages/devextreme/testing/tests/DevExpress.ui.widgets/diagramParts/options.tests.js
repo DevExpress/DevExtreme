@@ -752,8 +752,8 @@ QUnit.module('Options (initially set)', {
 
         assert.ok(instance._diagramInstance.settings.readOnly);
         assert.equal(instance._diagramInstance.model.pageColor, -1); // FFFFFF
-        assert.equal(instance._diagramInstance.model.pageSize.width, 8391);
-        assert.equal(instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(instance._diagramInstance.model.pageSize.width, 8400);
+        assert.equal(instance._diagramInstance.model.pageSize.height, 11910);
         assert.ok(instance._diagramInstance.settings.snapToGrid);
     });
 });
