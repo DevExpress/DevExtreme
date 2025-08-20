@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import devices from '__internal/core/m_devices';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
@@ -4202,6 +4203,8 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
 QUnit.module('Validation with virtual scrolling and rendering', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.addHiddenColumn = () => {
             this.columns.push({
                 dataField: 'hiddenField',
@@ -4249,6 +4252,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     },
     afterEach: function() {
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 

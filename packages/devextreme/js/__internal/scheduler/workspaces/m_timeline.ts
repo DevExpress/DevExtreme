@@ -212,8 +212,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _getIntervalBetween(currentDate, allDay) {
-    const startDayHour = this.option('startDayHour')!;
-    const endDayHour = this.option('endDayHour')!;
+    const startDayHour = this.option('startDayHour');
+    const endDayHour = this.option('endDayHour');
     const firstViewDate = this.getStartViewDate();
     const firstViewDateTime = firstViewDate.getTime();
     const hiddenInterval = (24 - endDayHour + startDayHour) * toMs('hour');

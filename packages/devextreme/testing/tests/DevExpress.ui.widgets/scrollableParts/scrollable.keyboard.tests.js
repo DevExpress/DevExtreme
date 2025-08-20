@@ -4,7 +4,6 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { setWindow, getWindow } from 'core/utils/window';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 import 'generic_light.css!';
@@ -15,7 +14,6 @@ import {
 } from './scrollable.constants.js';
 
 const SCROLL_LINE_HEIGHT = 40;
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
@@ -55,16 +53,10 @@ QUnit.module('keyboard support', {
 });
 
 const getKeyboardMock = ($scrollable) => {
-    let keyboard;
+    const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    const keyboard = keyboardMock($container);
 
-    if(isRenovatedScrollable) {
-        keyboard = keyboardMock($scrollable);
-        $scrollable.focus();
-    } else {
-        const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-        keyboard = keyboardMock($container);
-        $container.focus();
-    }
+    $container.focus();
 
     return keyboard;
 };

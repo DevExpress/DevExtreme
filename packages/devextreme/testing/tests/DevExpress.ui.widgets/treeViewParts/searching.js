@@ -263,7 +263,7 @@ QUnit.test('searchValue from value to empty - update selection', function(assert
     assert.equal($items.length, 6, '6 items were rendered after filtration');
 });
 
-QUnit.test('Should recalculate selection after \'searchValue\' changing', function(assert) {
+QUnit.test('Should recalculate selection after searchValue changing', function(assert) {
     const treeView = initTree({
         searchValue: 'b',
         showCheckBoxesMode: 'normal',
@@ -393,7 +393,7 @@ QUnit.test('searchEnabled', function(assert) {
 
     instance.option('searchEnabled', false);
 
-    assert.notOk($treeView.find('.dx-treeview-search').length, 'hasn\'t search editor');
+    assert.notOk($treeView.find('.dx-treeview-search').length, 'has not search editor');
 
     instance.option('searchEnabled', true);
 
@@ -495,7 +495,8 @@ QUnit.test('searchEditorOptions', function(assert) {
 
     instance.option('searchEditorOptions', { placeholder: 'Test' });
 
-    searchEditorInstance = $treeView.children().first().dxTextBox('instance'), assert.strictEqual(searchEditorInstance.option('placeholder'), 'Test', 'placeholder of the search editor');
+    searchEditorInstance = $treeView.children().first().dxTextBox('instance');
+    assert.strictEqual(searchEditorInstance.option('placeholder'), 'Test', 'placeholder of the search editor');
 });
 
 QUnit.test('search immediately if searchTimeout was set, but searchValue is changed by option', function(assert) {

@@ -41,7 +41,7 @@ const DeferRendering = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onRendered","onShown"]), []);
 

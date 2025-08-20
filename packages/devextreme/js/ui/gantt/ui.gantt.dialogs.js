@@ -5,7 +5,7 @@ import '../radio_group';
 import dateLocalization from '../../common/core/localization/date';
 import messageLocalization from '../../common/core/localization/message';
 import '../list_light';
-import '../../__internal/ui/list/modules/m_deleting';
+import '../../__internal/ui/list/modules/deleting';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -256,7 +256,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.title = formData.title;
         this._parameters.start = formData.start;
         this._parameters.end = formData.end;
-        this._parameters.progress = formData.progress * 100;
+        this._parameters.progress = Math.round(formData.progress * 100);
         this._parameters.assigned = formData.assigned;
     }
     isValidated() {

@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  line-height: inherit;
   min-height: inherit;
   max-height: inherit;
 }
@@ -201,6 +202,12 @@
 
       &.dx-#{$widget-name}-sticky-column-right {
         z-index: 3;
+      }
+    }
+
+    .dx-#{$widget-name}-total-footer {
+      .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
+        background-color: transparent;
       }
     }
   }
@@ -971,12 +978,21 @@
       &:focus {
         outline: 0;
       }
+    }
 
-      &.dx-#{$widget-name}-sticky-column-left  {
-        display: inline-block;
-        overflow: hidden;
-        left: 0;
-        right: 0;
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row > .dx-master-detail-cell {
+        overflow: visible;
+
+        .dx-#{$widget-name}-master-detail-container {
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &.dx-#{$widget-name}-sticky-column-left {
+            left: 0;
+            right: 0;
+          }
+        }
       }
     }
 

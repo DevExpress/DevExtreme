@@ -77,6 +77,7 @@ const configMethod = (...args) => {
 
   extend(config, newConfig);
 };
+
 // @ts-expect-error typescript cant see global
 if (typeof DevExpress !== 'undefined' && DevExpress.config) {
 // @ts-expect-error typescript cant see global

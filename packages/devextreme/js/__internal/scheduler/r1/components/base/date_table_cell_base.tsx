@@ -13,7 +13,7 @@ export interface DateTableCellBaseProps extends CellBaseProps {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
   otherMonth?: boolean;
   today?: boolean;
-  firstDayOfMonth?: boolean;
+  isFirstDayMonthHighlighting?: boolean;
   isSelected: boolean;
   isFocused: boolean;
 }
@@ -22,7 +22,7 @@ export const DateTableCallBaseDefaultProps: DefaultProps<DateTableCellBaseProps>
   ...CellBaseDefaultProps,
   otherMonth: false,
   today: false,
-  firstDayOfMonth: false,
+  isFirstDayMonthHighlighting: false,
   isSelected: false,
   isFocused: false,
 };

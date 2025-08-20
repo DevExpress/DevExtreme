@@ -116,6 +116,10 @@ function isPreview(patch: number): boolean {
   return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
+function isDevExpressLicenseKey(licenseKey: string): boolean {
+  return licenseKey.startsWith('LCX') || licenseKey.startsWith('LCP');
+}
+
 function getLicenseCheckParams({
   licenseKey,
   version,
@@ -132,6 +136,10 @@ function getLicenseCheckParams({
 
     if (!licenseKey) {
       return { preview, error: 'W0019' };
+    }
+
+    if (isDevExpressLicenseKey(licenseKey)) {
+      return { preview, error: 'W0024' };
     }
 
     const license = parseLicenseKey(licenseKey);

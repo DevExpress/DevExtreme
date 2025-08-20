@@ -31,6 +31,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
+import Widget from '@js/ui/widget/ui.widget';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 import {
   AllDayPanelTitleComponent,
@@ -51,7 +52,7 @@ import {
 } from '@ts/scheduler/r1/utils/index';
 import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
-import WidgetObserver from '../base/m_widget_observer';
+import type NotifyScheduler from '../base/m_widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
@@ -66,6 +67,7 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
+import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import VerticalShader from '../shaders/m_current_time_shader_vertical';
@@ -109,8 +111,8 @@ const { tableCreator } = tableCreatorModule;
 // The constant is needed so that the dragging is not sharp. To prevent small twitches
 const DRAGGING_MOUSE_FAULT = 10;
 
-// @ts-expect-error
-const { abstract } = WidgetObserver;
+// @ts-expect-error Widget exposes a static abstract() helper not typed in its d.ts
+const { abstract } = Widget;
 const toMs = dateUtils.dateToMilliseconds;
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
@@ -195,8 +197,14 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
 type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   groups: ResourceLoader[];
   getResourceManager: () => ResourceManager;
+  startDate?: Date;
+  currentDate: Date;
+  intervalCount: number;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
 };
-class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
+class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   _viewDataProvider: any;
 
   _cache: any;
@@ -310,7 +318,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return '';
   }
 
-  get viewDataProvider() {
+  get viewDataProvider(): ViewDataProvider {
     if (!this._viewDataProvider) {
       this._viewDataProvider = new ViewDataProvider(this.type as ViewType);
     }
@@ -387,6 +395,26 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return this.option('draggingMode') === 'default';
   }
 
+  notifyObserver<Subject extends SubscribeKey>(
+    funcName: Subject,
+    args: Parameters<SubscribeMethods[Subject]>,
+  ): void {
+    this.invoke(funcName, ...args);
+  }
+
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> | undefined {
+    const notifyScheduler = this.option('notifyScheduler') as NotifyScheduler | undefined;
+
+    if (!notifyScheduler) {
+      return undefined;
+    }
+
+    return notifyScheduler.invoke(funcName, ...args);
+  }
+
   _supportedKeys() {
     const clickHandler = function (e) {
       e.preventDefault();
@@ -407,7 +435,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
       e.preventDefault();
       e.stopPropagation();
 
-      const focusedCellData = this.cellsSelectionState.focusedCell?.cellData;
+      const focusedCellData = this.cellsSelectionState.getFocusedCell()?.cellData;
 
       if (focusedCellData) {
         const isAllDayPanelCell = focusedCellData.allDay && !this._isVerticalGroupedWorkSpace();
@@ -479,7 +507,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
     const currentCellData = this._getFullCellData($cell);
-    const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
+    const focusedCellData = this.cellsSelectionState.getFocusedCell().cellData;
 
     const nextFocusedCellData = this.cellsSelectionController.moveToCell({
       isMultiSelection,
@@ -552,7 +580,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
       this.cellsSelectionState.restoreSelectedAndFocusedCells();
 
-      if (!this.cellsSelectionState.focusedCell) {
+      if (!this.cellsSelectionState.getFocusedCell()) {
         const cellCoordinates = {
           columnIndex: 0,
           rowIndex: 0,
@@ -840,7 +868,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
       selectedCells: this.cellsSelectionState.getSelectedCells(),
-      focusedCell: this.cellsSelectionState.focusedCell,
+      focusedCell: this.cellsSelectionState.getFocusedCell(),
       headerCellTextFormat: this._getFormat(),
       getDateForHeaderText: (_, date) => date,
       viewOffset: this.option('viewOffset'),
@@ -891,8 +919,8 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
   _getViewStartByOptions() {
     return getViewStartByOptions(
-      this.option('startDate') as any,
-      this.option('currentDate') as any,
+      this.option('startDate'),
+      this.option('currentDate'),
       this._getIntervalDuration(),
       this.option('startDate') ? this._calculateViewStartDate() : undefined,
     );
@@ -907,7 +935,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _calculateViewStartDate() {
-    return calculateViewStartDate(this.option('startDate') as any);
+    return calculateViewStartDate(this.option('startDate'));
   }
 
   _firstDayOfWeek() {
@@ -1233,7 +1261,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
-      isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this._firstDayOfWeek(),
@@ -1355,9 +1382,9 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
-    const currentDate = date || new Date(this.option('currentDate') as any);
-    const startDayHour = this.option('startDayHour')!;
-    const endDayHour = this.option('endDayHour')!;
+    const currentDate = date || new Date(this.option('currentDate'));
+    const startDayHour = this.option('startDayHour');
+    const endDayHour = this.option('endDayHour');
 
     if (hours < startDayHour) {
       hours = startDayHour;
@@ -1370,11 +1397,10 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     currentDate.setHours(hours, minutes, 0, 0);
 
     const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay);
-    const { position, cellData } = cell;
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-      cellData,
-      position,
+      cell?.cellData,
+      cell?.position,
       currentDate,
       isDateAndTimeView(this.type as any),
       this.viewDirection === 'vertical',
@@ -1423,7 +1449,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   getCellData($cell) {
-    const cellData = this._getFullCellData($cell) || {};
+    const cellData = this._getFullCellData($cell) ?? {};
 
     return this._normalizeCellData(cellData);
   }
@@ -1988,7 +2014,11 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return (cell, rowIndex, columnIndex) => {
       const validColumnIndex = columnIndex % this._getCellCount();
       const options = this._getDateGenerationOptions(true);
-      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(options, rowIndex, validColumnIndex, this._getCellCountInDay());
+      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
+        options as any,
+        rowIndex,
+        validColumnIndex,
+      );
 
       startDate = dateUtils.trimTime(startDate);
 
@@ -3227,16 +3257,15 @@ const createDragBehaviorConfig = (
 
   const createDragAppointment = (itemData, settings, appointments) => {
     const appointmentIndex = appointments.option('items').length;
-
-    settings.isCompact = false;
-    settings.virtual = false;
-
-    const items = appointments._renderItem(appointmentIndex, {
+    const $item = appointments._renderItem(appointmentIndex, {
       itemData,
-      settings: [settings],
+      ...settings,
+      isCompact: false,
+      virtual: false,
+      sortedIndex: -1,
     });
 
-    return items[0];
+    return $item;
   };
 
   const onDragStart = (e) => {

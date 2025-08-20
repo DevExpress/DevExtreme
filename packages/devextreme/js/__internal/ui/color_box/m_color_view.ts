@@ -15,6 +15,7 @@ import { extend } from '@js/core/utils/extend';
 import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
 import Draggable from '@js/ui/draggable';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 import NumberBox from '@ts/ui/number_box/m_number_box';
@@ -136,7 +137,7 @@ class ColorView extends Editor<ColorViewProperties> {
 
   _onEnterKeyPressedAction?: (event: Record<string, unknown>) => void;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const isRTL = this.option('rtlEnabled');
 
     const that = this;

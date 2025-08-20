@@ -23,7 +23,7 @@ class TestComponent extends CollectionWidget {
     _itemClass() { return 'item'; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
-    _shouldAppendItems() { return true; }
+    _allowDynamicItemsAppend() { return true; }
 
     reload() {
         super.reload();
@@ -60,13 +60,16 @@ class LiveUpdateTestHelper {
 
         return new TestComponent(this.$element, options || {
             dataSource: new DataSource({
-                load: (e) => this.data.sort((a, b) => a.index - b.index),
+                load: () => this.data.sort((a, b) => a.index - b.index),
                 loadMode: 'raw',
                 pageSize: 2,
                 pushAggregationTimeout: 0,
-                key: 'id'
+                reshapeOnPush: true,
+                sort: { field: 'index' },
+                key: 'id',
             }),
-            onItemDeleting: this.onItemDeletingSpy
+            repaintChangesOnly: true,
+            onItemDeleting: this.onItemDeletingSpy,
         });
     }
 
@@ -85,29 +88,29 @@ module('live update', {
 }, () => {
     test('check load next page', function(assert) {
         assert.equal(helper.getItems().length, 2);
-        helper.instance.loadNextPage();
+        helper.instance._loadNextPage();
         assert.equal(helper.getItems()[2], helper.data[2]);
         assert.equal(helper.getItems().length, 4);
     });
 
     test('correct index after push insert', function(assert) {
         helper.store.push([{ type: 'insert', data: { id: 200, text: 'text ' + 200, index: 0 }, index: 0 }]);
-        helper.instance.loadNextPage();
-        assert.equal(helper.getItems().length, 5);
+        helper.instance._loadNextPage();
+        assert.equal(helper.getItems().length, 4);
         assert.equal(helper.getItems()[0].id, 200);
-        assert.equal(helper.getItems()[4].id, 4);
+        assert.equal(helper.getItems()[3].id, 2);
     });
 
-    test('correct index after push \'remove\'', function(assert) {
+    test('correct index after push remove', function(assert) {
         helper.store.push([{ type: 'remove', key: 0 }]);
-        helper.instance.loadNextPage();
-        assert.equal(helper.getItems().length, 3);
+        helper.instance._loadNextPage();
+        assert.equal(helper.getItems().length, 4);
         assert.equal(helper.getItems()[0].id, 1);
-        assert.equal(helper.getItems()[2].id, 3);
+        assert.equal(helper.getItems()[1].id, 2);
     });
 
     // T723520
-    test('correct index after push \'remove\' and dataSource reload', function(assert) {
+    test('correct index after push remove and dataSource reload', function(assert) {
         helper.instance._shouldAppendItems = () => false;
         helper.instance.getDataSource().pageSize(20);
         helper.instance.reload();
@@ -125,13 +128,13 @@ module('live update', {
         assert.equal(take, 20);
     });
 
-    test('fire deleting event after push \'remove\'', function(assert) {
+    test('fire deleting event after push remove', function(assert) {
         assert.equal(helper.onItemDeletingSpy.callCount, 0);
         helper.store.push([{ type: 'remove', key: 0 }]);
         assert.equal(helper.onItemDeletingSpy.callCount, 1);
     });
 
-    test('fire dxremove event after push \'remove\'', function(assert) {
+    test('fire dxremove event after push remove', function(assert) {
         const removeSpy = sinon.spy();
 
         $('.dx-item').on('dxremove', removeSpy);
@@ -142,7 +145,7 @@ module('live update', {
 
     test('refresh correct index after reload', function(assert) {
         helper.store.push([{ type: 'insert', data: { id: 200, text: 'text ' + 200, index: 0 }, index: 0 }]);
-        assert.equal(helper.getItems().length, 3);
+        assert.equal(helper.getItems().length, 2);
         helper.instance.reload();
         assert.equal(helper.getItems()[0].id, 200);
         assert.equal(helper.getItems()[1].id, 0);
@@ -150,7 +153,7 @@ module('live update', {
         assert.equal(helper.instance.itemElements().length, 2);
     });
 
-    test('item is pushed to the end of store\'s array', function(assert) {
+    test('item is pushed to the end of store array', function(assert) {
         helper.store.push([{ type: 'insert', data: { id: 200, text: 'text ' + 200, index: 0 }, index: 0 }]);
         assert.equal(helper.data.pop().id, 200);
     });
@@ -168,7 +171,8 @@ module('live update', {
         helper.reinitializeWithOptions({
             dataSource: {
                 store,
-                paginate: true
+                paginate: true,
+                reshapeOnPush: true,
             },
             displayExpr: 'text',
             repaintChangesOnly: true
@@ -190,6 +194,7 @@ module('live update', {
             loadMode: 'raw',
             pageSize: 2,
             pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             key: 'id'
         });
         helper.instance.option('dataSource', newDataSource);
@@ -202,20 +207,22 @@ module('live update', {
         newDataSource.store().push([{ type: 'remove', key: 0 }]);
 
         items = helper.getItems();
-        assert.strictEqual(items.length, 1, '1 item on the first page after remove');
+        assert.strictEqual(items.length, 2, '2 item on the first page after remove');
         assert.strictEqual(items[0].id, 1, '1 item');
 
-        helper.instance.loadNextPage();
+        helper.instance._loadNextPage();
 
         items = helper.getItems();
-        assert.strictEqual(items.length, 3, '2 pages are loaded');
+        assert.strictEqual(items.length, 4, '2 pages are loaded');
         assert.strictEqual(items[0].id, 1, '1 item');
         assert.strictEqual(items[1].id, 2, '2 item');
         assert.strictEqual(items[2].id, 3, '3 item');
+        assert.strictEqual(items[3].id, 4, '4 item');
     });
 
     test('dataSource runtime change should be correct even if remove was pushed to the previous dataSource', function(assert) {
         const data = [...helper.data];
+
         helper.store.push([{ type: 'remove', key: 0 }]);
 
         const newDataSource = new DataSource({
@@ -223,6 +230,7 @@ module('live update', {
             loadMode: 'raw',
             pageSize: 2,
             pushAggregationTimeout: 0,
+            reshapeOnPush: true,
             key: 'id'
         });
         helper.instance.option('dataSource', newDataSource);
@@ -231,7 +239,7 @@ module('live update', {
         assert.strictEqual(items[0].id, 0, '0 item');
         assert.strictEqual(items[1].id, 1, '1 item');
 
-        helper.instance.loadNextPage();
+        helper.instance._loadNextPage();
 
         items = helper.getItems();
         assert.strictEqual(items[2].id, 2, '2 item');

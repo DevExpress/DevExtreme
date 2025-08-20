@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import HierarchicalDataAdapter from '__internal/ui/hierarchical_collection/m_data_adapter';
+import HierarchicalDataAdapter from '__internal/ui/hierarchical_collection/data_adapter';
 import { processRequestResultLock } from 'common/data/utils';
 import HierarchicalCollectionTestHelper from './hierarchicalCollectionTestHelper.js';
 import errors from 'ui/widget/ui.errors';

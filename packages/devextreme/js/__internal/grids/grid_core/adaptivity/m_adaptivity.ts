@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -808,7 +807,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
       return;
     }
 
-    // @ts-expect-errors
     const $row = $(this.component.getRowElement(rowIndex));
 
     this.setCommandAdaptiveAriaLabel($row, label);

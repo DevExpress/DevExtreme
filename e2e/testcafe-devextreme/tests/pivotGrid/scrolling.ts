@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -136,6 +136,54 @@ testFixture()`PivotGrid_scrolling`
         useNative,
       },
     });
+  });
+});
+
+generateOptionMatrix({
+  height: [450, 350],
+  useNative: [false, true],
+}).forEach(({ height, useNative }) => {
+  test(`Rows content dont hide under vertical scrollbar when scrolling{useNative=${useNative}},height=100% (${height}px) (T1290313)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    await testScreenshot(
+      t,
+      takeScreenshot,
+      `PivotGrid rows content height=100%(${height}px),useNative=${useNative}.png`,
+      { element: '#container' },
+    );
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`#parentContainer { height: ${height}px; }`);
+
+    return createWidget('dxPivotGrid', {
+      height: '100%',
+      showBorders: true,
+      scrolling: {
+        useNative,
+        mode: 'standard',
+      },
+      dataSource: {
+        fields: [{
+          dataField: 'rowField',
+          area: 'row',
+        }, {
+          dataField: 'dataField',
+          area: 'data',
+        }, {
+          dataField: 'dataField',
+          area: 'data',
+        }],
+        store: Array.from({ length: 9 }).map((_, id) => ({
+          id,
+          rowField: id > 7 ? 'row '.repeat(id) : `row ${id}`,
+          dataField: 47,
+        })),
+      },
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
   });
 });
 

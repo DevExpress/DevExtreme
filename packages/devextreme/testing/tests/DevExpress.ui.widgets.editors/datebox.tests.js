@@ -75,6 +75,7 @@ const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-v
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
+const SELECTBOX_CLASS = 'dx-selectbox';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
@@ -1189,7 +1190,7 @@ QUnit.module('dateView integration', {
         }, this.instance);
 
         this.popupTitle = function() {
-            return this.popup()._$title.find('.dx-toolbar-label').text();
+            return this.popup().topToolbar().find('.dx-toolbar-label').text();
         };
 
         this.instance.open();
@@ -2229,14 +2230,14 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(this.fixture.input.val(), dateLocalization.format(date, this.fixture.format));
     });
 
-    QUnit.test('DateBox must pass value to calendar correctly if value is empty string', function(assert) {
+    QUnit.test('DateBox should pass empty string value to calendar if value is empty string', function(assert) {
         this.reinitFixture({
             value: '',
             pickerType: 'calendar',
             opened: true
         });
 
-        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), null, 'value is correctly');
+        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), '', 'value is equal to empty string');
     });
 
     QUnit.test('DateBox must show the calendar with a proper date selected', function(assert) {
@@ -3250,9 +3251,9 @@ QUnit.module('datebox with time component', {
 
         dateBox.open();
 
-        const hourEditor = $('.dx-timeview-field .dx-numberbox').eq(0);
-        const minuteEditor = $('.dx-timeview-field .dx-numberbox').eq(1);
-        const amPmEditor = $('.dx-timeview-field .dx-selectbox').eq(0);
+        const hourEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(0);
+        const minuteEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(1);
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0);
 
         assert.ok(hourEditor.hasClass('dx-editor-outlined'));
         assert.ok(minuteEditor.hasClass('dx-editor-outlined'));
@@ -3271,13 +3272,30 @@ QUnit.module('datebox with time component', {
 
         dateBox.open();
 
-        const hourEditor = $('.dx-timeview-field .dx-numberbox').eq(0);
-        const minuteEditor = $('.dx-timeview-field .dx-numberbox').eq(1);
-        const amPmEditor = $('.dx-timeview-field .dx-selectbox').eq(0);
+        const hourEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(0);
+        const minuteEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(1);
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0);
 
         assert.ok(hourEditor.hasClass('dx-editor-underlined'));
         assert.ok(minuteEditor.hasClass('dx-editor-underlined'));
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
+    });
+
+    QUnit.test('DateBox with timeview should have amPm popup inside of dateBox popup content (T1300566)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            opened: true,
+            displayFormat: 'ddMMyy hh:mm',
+        }).dxDateBox('instance');
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0).dxSelectBox('instance');
+
+        amPmEditor.open();
+
+        const $dateBoxPopup = $(dateBox.content());
+        const $amPmPopup = $(amPmEditor.content());
+
+        assert.strictEqual($amPmPopup.closest($dateBoxPopup).length, 1, 'amPm popup is inside dateBox popup');
     });
 
     QUnit.test('Reset seconds and milliseconds when DateBox has no value for time view', function(assert) {
@@ -6146,6 +6164,33 @@ QUnit.module('DateBox number and string value support', {
             assert.ok(true, 'there is no error');
         }
     });
+
+    [true, false].forEach(isRuntime => {
+        QUnit.test(`should not throw error after applying new date when empty string ${isRuntime ? 'runtime' : 'initial'} value is passed and datetime type used (T1301310)`, function(assert) {
+            const dateBox = $('#dateBox').dxDateBox({
+                value: isRuntime ? undefined : '',
+                type: 'datetime',
+            }).dxDateBox('instance');
+
+            try {
+                dateBox.open();
+
+                if(isRuntime) {
+                    dateBox.option('value', '');
+                }
+
+                const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
+                $calendarCell.trigger('dxclick');
+
+                const $applyButton = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
+                $applyButton.trigger('dxclick');
+
+                assert.ok(true, 'no error');
+            } catch(e) {
+                assert.ok(false, `error thrown: ${e.message}`);
+            }
+        });
+    });
 });
 
 testModule('native picker', function() {
@@ -6355,6 +6400,20 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
+    });
+
+    QUnit.test('should display custom text on today button from todayButtonText option', function(assert) {
+        this.instance.option({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
+    });
+
+    QUnit.test('should display custom text on today button from todayButtonText option initialize', function(assert) {
+        this.reinit({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
     });
 });
 

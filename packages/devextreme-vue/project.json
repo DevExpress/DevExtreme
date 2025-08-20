@@ -19,10 +19,10 @@
     },
     "regenerate": {
       "executor": "nx:run-script",
+      "dependsOn": ["devextreme-metadata:build"],
       "options": {
         "script": "regenerate"
-      },
-      "dependsOn": ["devextreme-monorepo:\"vue:copy-metadata\""]
+      }
     },
     "test": {
       "executor": "nx:run-script",
@@ -38,7 +38,7 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/build.config.js",

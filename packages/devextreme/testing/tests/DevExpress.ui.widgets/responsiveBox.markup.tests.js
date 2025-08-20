@@ -475,7 +475,8 @@ QUnit.module('template rendering', moduleConfig, () => {
 
         this.updateScreenSize(1000);
 
-        registerComponent('dxWidget', Widget.inherit({}));
+        class DxWidget extends Widget {}
+        registerComponent('dxWidget', DxWidget);
 
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],

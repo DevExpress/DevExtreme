@@ -353,10 +353,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         this.clock.tick(10);
 
-        const $cells = $(dataGrid.element()).find('.dx-editor-inline-block');
+        const $dataGrid = $(dataGrid.element());
+        const $cells = $dataGrid.find('.dx-editor-cell .dx-checkbox');
+        const $checkboxes = $dataGrid.find('.dx-editor-cell .dx-checkbox');
 
         // assert
-        assert.equal($cells.length, 3, 'checkbox cell count');
+        assert.equal($checkboxes.length, 3, 'checkbox cell count');
         $cells.each((_, el) => {
             assert.strictEqual($(el).css('vertical-align'), 'middle', 'middle vertical align');
         });

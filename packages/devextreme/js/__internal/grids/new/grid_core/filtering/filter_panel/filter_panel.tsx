@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { FilterPanel } from '@js/common/grids';
 import $ from '@js/core/renderer';
 import type { Properties as FilterBuilderProperties } from '@js/ui/filter_builder';
@@ -34,12 +33,12 @@ export class FilterPanelComponent extends Component<FilterPanelProps> {
   }
 
   public componentDidMount(): void {
-    this.props.oldFilterPanelView.render($(this.filterPanelRef.current!));
-    this.props.oldFilterBuilderView.render($(this.filterBuilderRef.current!));
+    this.props.oldFilterPanelView.render($(this.filterPanelRef.current));
+    this.props.oldFilterBuilderView.render($(this.filterBuilderRef.current));
   }
 
   public componentDidUpdate(): void {
-    this.props.oldFilterPanelView.render($(this.filterPanelRef.current!));
-    this.props.oldFilterBuilderView.render($(this.filterBuilderRef.current!));
+    this.props.oldFilterPanelView.render($(this.filterPanelRef.current));
+    this.props.oldFilterBuilderView.render($(this.filterBuilderRef.current));
   }
 }

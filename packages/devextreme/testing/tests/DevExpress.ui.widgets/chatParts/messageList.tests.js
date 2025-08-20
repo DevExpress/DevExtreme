@@ -17,7 +17,7 @@ import {
 } from './chat.tests.js';
 import ContextMenu, {
     DX_MENU_ITEM_CLASS
-} from '__internal/ui/context_menu/m_context_menu';
+} from '__internal/ui/context_menu/context_menu';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import TypingIndicator from '__internal/ui/chat/typingindicator';
 import devices from '__internal/core/m_devices';
@@ -1371,7 +1371,6 @@ QUnit.module('MessageList', () => {
             const expectedOptions = {
                 bounceEnabled: false,
                 useKeyboard: false,
-                indicateLoading: false,
                 reachBottomText: '',
             };
 

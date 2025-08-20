@@ -8,10 +8,8 @@ import $ from '@js/core/renderer';
 import { getPathParts } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
-import type { dxSchedulerOptions, ViewType } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
-import { viewsUtils } from '@ts/scheduler/r1/utils/index';
 
 import type { Direction } from './constants';
 import SchedulerCalendar from './m_calendar';
@@ -22,16 +20,14 @@ import {
   getCaption,
   getNextIntervalDate,
   getStep,
-  getViewName,
-  getViewType,
   nextWeek,
-  validateViews,
 } from './m_utils';
 import {
   getDropDownViewSwitcher,
   getTabViewSwitcher,
 } from './m_view_switcher';
 import { getTodayButtonOptions } from './today';
+import type { HeaderOptions, IntervalOptions } from './types';
 
 const CLASSES = {
   component: 'dx-scheduler-header',
@@ -43,31 +39,28 @@ const ITEM_NAMES = {
   viewSwitcher: 'viewSwitcher',
 };
 
-export class SchedulerHeader extends Widget<dxSchedulerOptions> {
-  currentView: any;
-
+export class SchedulerHeader extends Widget<HeaderOptions> {
   eventMap: any;
 
   _toolbar!: Toolbar;
 
   _calendar: any;
 
-  get views() {
-    return this.option('views');
-  }
-
   get captionText() {
     return this._getCaption().text;
   }
 
-  get intervalOptions() {
-    const step = getStep(this.currentView);
-    const intervalCount = this.option('intervalCount');
+  getIntervalOptions(date: Date): IntervalOptions {
+    const currentView = this.option('currentView');
+    const step = getStep(currentView.type);
     const firstDayOfWeek = this.option('firstDayOfWeek');
-    const agendaDuration = this.option('agendaDuration');
 
     return {
-      step, intervalCount, firstDayOfWeek, agendaDuration,
+      date,
+      step,
+      firstDayOfWeek,
+      intervalCount: currentView.intervalCount,
+      agendaDuration: currentView.agendaDuration,
     };
   }
 
@@ -81,13 +74,8 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
   _createEventMap() {
     this.eventMap = new Map(
       [
-        ['currentView', [(view) => {
-          this.currentView = viewsUtils.getCurrentView(
-            getViewName(view) as string,
-            this.option('views') as ViewType[],
-          );
-        }]],
-        ['views', [validateViews]],
+        ['currentView', []],
+        ['views', []],
         ['currentDate', [this._getCalendarOptionUpdater('value')]],
         ['min', [this._getCalendarOptionUpdater('min')]],
         ['max', [this._getCalendarOptionUpdater('max')]],
@@ -152,11 +140,6 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     this._createEventMap();
 
     this.$element().addClass(CLASSES.component);
-
-    this.currentView = viewsUtils.getCurrentView(
-      getViewName(this.option('currentView') as ViewType) as string,
-      this.option('views') as ViewType[],
-    );
   }
 
   _render() {
@@ -191,7 +174,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
   }
 
   _createToolbarConfig() {
-    const options = this.option('toolbar') as any;
+    const options = this.option('toolbar');
     const parsedItems = options.items.map((element) => this._parseItem(element));
 
     return {
@@ -232,10 +215,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
   }
 
   _updateCurrentView(view) {
-    const onCurrentViewChange = this.option('onCurrentViewChange') as any;
-    onCurrentViewChange(view.name);
-
-    this._callEvent('currentView', view);
+    this.option('onCurrentViewChange')(view.name);
   }
 
   _updateCalendarValueAndCurrentDate(date) {
@@ -244,9 +224,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
   }
 
   _updateCurrentDate(date) {
-    const onCurrentDateChange = this.option('onCurrentDateChange') as any;
-    onCurrentDateChange(date);
-
+    this.option('onCurrentDateChange')(date);
     this._callEvent('currentDate', date);
   }
 
@@ -278,19 +256,16 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
   _getNextDate(direction: Direction, initialDate?: Date) {
     const date = initialDate ?? this.option('currentDate');
-    const options = { ...this.intervalOptions, date };
+    const options = this.getIntervalOptions(date);
 
     return getNextIntervalDate(options, direction);
   }
 
-  _isMonth() {
-    return getViewType(this.currentView) === 'month';
-  }
-
   _getDisplayedDate() {
-    const startViewDate = new Date(this.option('startViewDate') as any);
+    const startViewDate = new Date(this.option('startViewDate'));
+    const isMonth = this.option('currentView')?.type === 'month';
 
-    return this._isMonth() ? nextWeek(startViewDate) : startViewDate;
+    return isMonth ? nextWeek(startViewDate) : startViewDate;
   }
 
   _getCaptionOptions() {
@@ -302,7 +277,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
 
     date = dateUtils.trimTime(date);
 
-    return { ...this.intervalOptions, date };
+    return this.getIntervalOptions(date);
   }
 
   _getCaption() {

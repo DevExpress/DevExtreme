@@ -10,14 +10,7 @@
     [closeOnOutsideClick]="true"
   >
     <div *dxTemplate="let data of 'template'">
-      <dx-list
-        class="panel-list"
-        [hoverStateEnabled]="false"
-        [activeStateEnabled]="false"
-        [focusStateEnabled]="false"
-        [dataSource]="navigation"
-      >
-      </dx-list>
+      <dx-list class="panel-list" [dataSource]="navigation"> </dx-list>
     </div>
     <div id="content" [innerHTML]="text"></div>
   </dx-drawer>

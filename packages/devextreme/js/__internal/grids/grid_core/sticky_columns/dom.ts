@@ -138,7 +138,6 @@ const getLastLeftFixedCell = (
   $container: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => {
-  // @ts-expect-error
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray() : $cells.toArray().reverse();
   const lastLeftFixedCell = processedCells
@@ -153,7 +152,6 @@ const getFirstRightFixedCell = (
   $container: dxElementWrapper,
   addWidgetPrefix,
 ): dxElementWrapper => {
-  // @ts-expect-error
   const rtlEnabled = $container.css('direction') === 'rtl';
   const processedCells = rtlEnabled ? $cells.toArray().reverse() : $cells.toArray();
   const firstRightFixedCell = processedCells

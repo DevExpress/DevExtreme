@@ -144,7 +144,7 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!card.isSelected,
     });
 
-    const hasCover = !!cover?.imageExpr;
+    const hasCover = !!cover?.imageExpr || !!cover?.template;
 
     const imageSrc = cover?.imageExpr?.(this.props.card.data);
     const alt = cover?.altExpr?.(this.props.card.data);
@@ -235,7 +235,7 @@ export class Card extends Component<CardProps> {
 
   componentDidMount(): void {
     const onPreparedArgs = {
-      cardElement: getPublicElement($(this.containerRef.current!)),
+      cardElement: getPublicElement($(this.containerRef.current)),
       card: this.props.card,
     };
 
@@ -260,7 +260,7 @@ export class Card extends Component<CardProps> {
     const args = {
       eventType: event.type,
       card: this.props.card,
-      cardElement: getPublicElement($(this.containerRef.current!)),
+      cardElement: getPublicElement($(this.containerRef.current)),
       event,
     };
 
@@ -270,7 +270,7 @@ export class Card extends Component<CardProps> {
   onClick = (event: MouseEvent): void => {
     const args = {
       card: this.props.card,
-      cardElement: getPublicElement($(this.containerRef.current!)),
+      cardElement: getPublicElement($(this.containerRef.current)),
       event,
     };
 
@@ -289,7 +289,7 @@ export class Card extends Component<CardProps> {
   onDblClick = (event: MouseEvent): void => {
     const args = {
       card: this.props.card,
-      cardElement: getPublicElement($(this.containerRef.current!)),
+      cardElement: getPublicElement($(this.containerRef.current)),
       event,
     };
 

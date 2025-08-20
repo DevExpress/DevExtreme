@@ -1470,6 +1470,32 @@ QUnit.module('popup', moduleConfig, () => {
 
         assert.ok(wheelEvent.originalEvent.isDefaultPrevented());
     });
+
+    QUnit.test('Popup should not be disabled after runtime change of disabled, dropDownOptions and option that triggers invalidate (T1279637)', function(assert) {
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items: [1, 2, 3],
+            opened: true,
+            disabled: false,
+            searchEnabled: true,
+        }).dxDropDownList('instance');
+
+        dropDownList.option({
+            disabled: true,
+            dropDownOptions: { width: 200 },
+            searchEnabled: false,
+        });
+        let popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, true, 'popup is disabled');
+
+        dropDownList.option({
+            disabled: false,
+            searchEnabled: true,
+        });
+        popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, false, 'popup is not disabled');
+    });
 });
 
 QUnit.module('dataSource integration', moduleConfig, function() {

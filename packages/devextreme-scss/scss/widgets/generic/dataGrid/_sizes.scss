@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use '../../base/dataGrid/variables' as *;
 
 // adduse
 
@@ -12,3 +13,4 @@ $generic-datagrid-cell-padding: null !default;
   $generic-datagrid-cell-padding: 5px !default;
 }
 
+$datagrid-cell-padding: $generic-datagrid-cell-padding !default;

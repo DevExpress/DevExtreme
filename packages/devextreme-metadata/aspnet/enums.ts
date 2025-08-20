@@ -1,0 +1,569 @@
+export const enums = {
+  AnimationEasing: {
+    items: [
+      'ease',
+      'ease-in',
+      'ease-in-out',
+      'ease-out',
+      'linear',
+      'step-end',
+      'step-start',
+      'swing',
+    ],
+  },
+  EdmType: {
+    items: [
+      'Guid',
+      'Int32',
+      'Int64',
+      'String',
+      'Boolean',
+      'Single',
+      'Decimal',
+    ],
+  },
+  FilterOperations: {
+    items: [
+      '=',
+      '<>',
+      '<',
+      '<=',
+      '>',
+      '>=',
+      'between',
+      'contains',
+      'endswith',
+      'notcontains',
+      'startswith',
+    ],
+  },
+  GaugeIndicatorType: {
+    items: [
+      'circle',
+      'rangeBar',
+      'rectangle',
+      'rectangleNeedle',
+      'rhombus',
+      'textCloud',
+      'triangleMarker',
+      'triangleNeedle',
+      'twoColorNeedle',
+    ],
+    options: [
+      'GaugeIndicator.type',
+    ],
+  },
+  GeoMapProvider: {
+    items: [
+      'bing',
+      'google',
+      'googleStatic',
+      'azure',
+    ],
+  },
+  SchedulerViewType: {
+    items: [
+      'agenda',
+      'day',
+      'month',
+      'timelineDay',
+      'timelineMonth',
+      'timelineWeek',
+      'timelineWorkWeek',
+      'week',
+      'workWeek',
+    ],
+    options: [
+      'dxScheduler.views',
+    ],
+  },
+  ShowScrollbarMode: {
+    items: [
+      'always',
+      'never',
+      'onHover',
+      'onScroll',
+    ],
+    options: [
+      'dxScrollView.showScrollbar',
+    ],
+  },
+  TextEditorButtonWidget: {
+    items: [
+      'dxButton',
+    ],
+  },
+  DiagramDataLayoutOrientation: {
+    items: [
+      'vertical',
+      'horizontal',
+    ],
+  },
+  GanttSortingMode: {
+    items: [
+      'multiple',
+      'none',
+      'single',
+    ],
+  },
+  GridSortingMode: {
+    items: [
+      'multiple',
+      'none',
+      'single',
+    ],
+  },
+  PieChartLegendHoverMode: {
+    items: [
+      'none',
+      'allArgumentPoints',
+    ],
+  },
+  PolarChartOverlappingBehavior: {
+    items: [
+      'none',
+      'hide',
+    ],
+  },
+  SelectionMode: {
+    items: [
+      'multiple',
+      'none',
+      'single',
+    ],
+  },
+  PolarChartResolveLabelOverlapping: {
+    items: [
+      'hide',
+      'none',
+    ],
+  },
+  ButtonGroupSelectionMode: {
+    items: [
+      'multiple',
+      'single',
+      'none',
+    ],
+  },
+  ChartElementSelectionMode: {
+    items: [
+      'multiple',
+      'single',
+    ],
+  },
+  FileManagerSelectionMode: {
+    items: [
+      'multiple',
+      'single',
+    ],
+  },
+  ListSelectionMode: {
+    items: [
+      'all',
+      'multiple',
+      'none',
+      'single',
+    ],
+  },
+  MenuSelectionMode: {
+    items: [
+      'none',
+      'single',
+    ],
+  },
+  NavSelectionMode: {
+    items: [
+      'multiple',
+      'single',
+    ],
+  },
+};
+
+export const enumAliases = {
+  '(dxTabs|dxNavBar|dxTreeView)\\.(.*)': {
+    'SingleOrMultiple': 'NavSelectionMode',
+  },
+
+  '(dxSlider|dxRangeSlider)(.*)': {
+    'TooltipShowMode': 'SliderTooltipShowMode',
+  },
+
+  '(dxMenu|dxContextMenu)(.*)': {
+    'SingleOrNone': 'MenuSelectionMode',
+  },
+
+  'dxMap(.*)': {
+    'MapProvider': 'GeoMapProvider',
+    'MapType': 'GeoMapType',
+    'RouteMode': 'GeoMapRouteMode',
+  },
+
+  'dxScheduler(.*)': {
+    'CellAppointmentsLimit': 'MaxAppointmentsPerCell',
+    'RecurrenceEditMode': 'SchedulerRecurrenceEditMode',
+    'ScrollMode': 'SchedulerScrollingMode',
+    'ViewType': 'SchedulerViewType',
+  },
+
+  'dxContextMenu(.*)': {
+    'ContextSubmenuDirection': 'ContextMenuSubmenuDirection',
+  },
+
+  'dxDateBox(.*)': {
+    'DatePickerType': 'DateBoxPickerType',
+    'DateType': 'DateBoxType',
+  },
+
+  'dxNumberBox(.*)': {
+    'DateType': 'DateBoxType',
+    'NumberBoxPredefinedButton': 'NumberBoxButtonName',
+    'NumberBoxType': 'NumberBoxMode',
+  },
+
+  'dxTextBox(.*)': {
+    'TextBoxType': 'TextBoxMode',
+  },
+
+  'dxHtmlEditor(.*)': {
+    'HtmlEditorImageUploadMode': 'HtmlEditorImageUploadFileUploadMode',
+    'HtmlEditorPredefinedContextMenuItem': 'HtmlEditorContextMenuItem',
+    'HtmlEditorPredefinedToolbarItem': 'HtmlEditorToolbarItem',
+    'MarkupType': 'HtmlEditorValueType',
+  },
+
+  'dxTreeView(.*)': {
+    'DataStructure': 'TreeViewDataStructure',
+  },
+
+  'dxButtonGroup\\.(.*)': {
+    'SingleMultipleOrNone': 'ButtonGroupSelectionMode',
+  },
+
+  'dxFileManager(.*)': {
+    'DataType': 'GridColumnDataType',
+    'FileManagerPredefinedContextMenuItem': 'FileManagerContextMenuItem',
+    'FileManagerPredefinedToolbarItem': 'FileManagerToolbarItem',
+    'SingleOrMultiple': 'FileManagerSelectionMode',
+  },
+
+  'dxDrawer(.*)': {
+    'OpenedStateMode': 'DrawerOpenedStateMode',
+    'PanelLocation': 'DrawerPosition',
+    'RevealMode': 'DrawerRevealMode',
+  },
+
+  'dxList(.*)': {
+    'ItemDeleteMode': 'ListItemDeleteMode',
+    'SingleMultipleAllOrNone': 'ListSelectionMode',
+  },
+
+  'dxForm(.*)': {
+    'FormItemComponent': 'FormItemEditorType',
+    'LabelLocation': 'FormLabelLocation',
+  },
+
+  'dxBox(.*)': {
+    'CrosswiseDistribution': 'BoxCrossAlign',
+    'Distribution': 'BoxAlign',
+  },
+
+  'dxDiagram(.*)': {
+    'Orientation': 'DiagramDataLayoutOrientation',
+    'PageOrientation': 'DiagramPageOrientation',
+    'AutoZoomMode': 'DiagramAutoZoomMode',
+    'Command': 'DiagramCommand',
+    'ConnectorLineEnd': 'DiagramConnectorLineEnd',
+    'ConnectorLineType': 'DiagramConnectorLineType',
+    'ConnectorPosition': 'DiagramConnectorPosition',
+    'DataLayoutType': 'DiagramDataLayoutType',
+    'ItemType': 'DiagramItemType',
+    'ModelOperation': 'DiagramModelOperation',
+    'PanelVisibility': 'DiagramPanelVisibility',
+    'RequestEditOperationReason': 'DiagramRequestEditOperationReason',
+    'ShapeCategory': 'DiagramShapeCategory',
+    'ShapeType': 'DiagramShapeType',
+    'ToolboxDisplayMode': 'DiagramToolboxDisplayMode',
+    'Units': 'DiagramUnits',
+  },
+
+  'CustomCommand(.*)': {
+    'Command': 'DiagramCommand',
+  },
+
+  'ColumnProperties.dataType': {
+    'DataType': 'GridColumnDataType',
+  },
+
+  '(dxDataGrid|dxTreeList|dxGantt)(.*)': {
+    'ApplyFilterMode': 'GridApplyFilterMode',
+    'ColumnResizeMode': 'ColumnResizingMode',
+    'DataType': 'GridColumnDataType',
+    'EnterKeyAction': 'GridEnterKeyAction',
+    'EnterKeyDirection': 'GridEnterKeyDirection',
+    'FilterOperation': 'GridFilterOperations',
+    'GridsEditMode': 'GridEditMode',
+    'GridsEditRefreshMode': 'GridEditRefreshMode',
+    'GroupExpandMode': 'GridGroupingExpandMode',
+    'NewRowPosition': 'GridNewRowPosition',
+    'PagerDisplayMode': 'GridPagerDisplayMode',
+    'PagerPageSize': 'GridPagerPageSize',
+    'SelectedFilterOperation': 'FilterOperations',
+    'SelectionColumnDisplayMode': 'GridSelectionShowCheckBoxesMode',
+    'StartEditAction': 'GridStartEditAction',
+    'StateStoreType': 'StateStoringType',
+  },
+
+  'ColumnChooser.mode': {
+    'ColumnChooserMode': 'GridColumnChooserMode',
+  },
+
+  'Sorting.mode': {
+    'SingleMultipleOrNone': 'GridSortingMode',
+  },
+
+  '(dxDataGrid|dxTreeList)(.*)\\.columnRenderingMode': { 'DataRenderMode': 'GridColumnRenderingMode' },
+
+  '(dxDataGrid|dxTreeList)(.*)\\.rowRenderingMode': { 'DataRenderMode': 'GridRowRenderingMode' },
+
+  '(dxDataGrid|dxTreeList)(.*)selection(.*)': { 'SingleMultipleOrNone': 'SelectionMode' },
+
+  'dxDataGrid(.*)': {
+    'DataGridCommandColumnType': 'GridCommandColumnType',
+    'DataGridPredefinedColumnButton': 'GridColumnButtonName',
+    'DataGridPredefinedToolbarItem': 'DataGridToolbarItem',
+    'DataGridScrollMode': 'GridScrollingMode',
+  },
+
+  'dxTreeList(.*)': {
+    'DataStructure': 'TreeListDataStructure',
+    'ScrollMode': 'TreeListScrollingMode',
+    'TreeListPredefinedColumnButton': 'TreeListColumnButtonName',
+    'TreeListPredefinedToolbarItem': 'TreeListToolbarItem',
+  },
+
+  'dxGantt(.*)': {
+    'GanttPredefinedContextMenuItem': 'GanttContextMenuItem',
+    'GanttPredefinedToolbarItem': 'GanttToolbarItem',
+    'SingleMultipleOrNone': 'GanttSortingMode',
+  },
+
+  'dxFilterBuilder(.*)': {
+    'DataType': 'FilterBuilderFieldDataType',
+    'FilterBuilderOperation': 'FilterBuilderFieldFilterOperations',
+    'GroupOperation': 'FilterBuilderGroupOperations',
+    'RouteMode': 'GeoMapRouteMode',
+  },
+
+  'dxPivotGrid(.*)': {
+    'PivotGridRowHeaderLayout': 'PivotGridRowHeadersLayout',
+    'PivotGridTotalDisplayMode': 'PivotGridTotalsDisplayMode',
+    'ScrollMode': 'PivotGridScrollingMode',
+    'StateStoreType': 'StateStoringType',
+  },
+
+  '(dxChart|dxPolarChart|dxPieChart)\\.(.*)': {
+    'SingleOrMultiple': 'ChartElementSelectionMode',
+  },
+
+  'dxChart(.*)': {
+    'ChartsAxisLabelOverlap': 'OverlappingBehavior',
+    'ChartsLabelOverlap': 'ChartResolveLabelOverlapping',
+  },
+
+  'dxPieChart(.*)': {
+    'PieChartLabelOverlap': 'PieChartResolveLabelOverlapping',
+    'PieChartSegmentDirection': 'PieChartSegmentsDirection',
+  },
+
+  'dxCircularGauge(.*)': {
+    'CircularGaugeLabelOverlap': 'GaugeOverlappingBehavior',
+  },
+
+  'dxFunnel(.*)': {
+    'FunnelLabelOverlap': 'FunnelResolveLabelOverlapping',
+    'LabelPosition': 'FunnelLabelPosition',
+  },
+
+  'dxSankey\\.(.*)\\.overlappingBehavior': {
+    'TextOverflow': 'SankeyLabelOverlappingBehavior',
+  },
+
+  'dxBarGauge(.*)': {
+    'LabelOverlap': 'BarGaugeResolveLabelOverlapping',
+  },
+
+  'dxPolarChart(.*)\\.overlappingBehavior': {
+    'LabelOverlap': 'PolarChartOverlappingBehavior',
+  },
+
+  'dxPolarChart(.*)\\.resolveLabelOverlapping': {
+    'LabelOverlap': 'PolarChartResolveLabelOverlapping',
+  },
+
+  '(dxCircularGauge|dxLinearGauge|dxRangeSelector)(.*)\\.overlappingBehavior': {
+    'LabelOverlap': 'ScaleLabelOverlappingBehavior',
+  },
+
+  '(dxSparkline|PolarChart)(.*)\\.(pointSymbol|point\\.symbol)': {
+    'PointSymbol': 'VizPointSymbol',
+  },
+
+  '(.*)\\.overlappingBehavior': {
+    'PolarChartOverlapping': 'PolarChartOverlappingBehavior',
+  },
+
+  '(.*)\\.resolveLabelOverlapping': {
+    'PolarChartOverlapping': 'PolarChartResolveLabelOverlapping',
+  },
+
+  '(.*)selection(.*)': { 'SingleMultipleOrNone': 'SelectionMode' },
+
+  '.*': {
+    'AnimationEaseMode': 'VizAnimationEasing',
+    'ApplyValueMode': 'EditorApplyValueMode',
+    'AxisScale': 'RangeSelectorAxisScaleType',
+    'ButtonStyle': 'ButtonStylingMode',
+    'ChartAxisScale': 'RangeSelectorChartAxisScaleType',
+    'ChartsDataType': 'ChartDataType',
+    'CollisionResolution': 'PositionResolveCollision',
+    'CollisionResolutionCombination': 'PositionResolveCollisionXY',
+    'DataChangeType': 'GridDataChangeType',
+    'DisplayMode': 'GridPagerDisplayMode',
+    'DragHighlight': 'DropFeedbackMode',
+    'DropDownPredefinedButton': 'DropDownEditorButtonName',
+    'EditorStyle': 'EditorStylingMode',
+    'FieldChooserLayout': 'PivotGridFieldChooserLayout',
+    'HatchDirection': 'HatchingDirection',
+    'LabelMode': 'EditorLabelMode',
+    'LabelPosition': 'PieChartLabelPosition',
+    'LegendHoverMode': 'ChartLegendHoverMode',
+    'LocateInMenuMode': 'ToolbarItemLocateInMenuMode',
+    'MaskMode': 'ShowMaskMode',
+    'PageLoadMode': 'ListPageLoadMode',
+    'Palette': 'VizPalette',
+    'PaletteColorSet': 'VizPaletteColorSet',
+    'PaletteExtensionMode': 'VizPaletteExtensionMode',
+    'PointInteractionMode': 'ChartPointInteractionMode',
+    'ScrollbarMode': 'ShowScrollbarMode',
+    'SearchMode': 'CollectionSearchMode',
+    'SeriesHoverMode': 'ChartSeriesHoverMode',
+    'SeriesSelectionMode': 'ChartSeriesSelectionMode',
+    'ShowTextMode': 'ToolbarItemShowTextMode',
+    'SimplifiedSearchMode': 'DropDownSearchMode',
+    'SubmenuShowMode': 'ShowSubmenuMode',
+    'TextBoxPredefinedButton': 'TextBoxButtonName',
+    'TextOverflow': 'VizTextOverflow',
+    'Theme': 'VizTheme',
+    'TimeInterval': 'VizTimeInterval',
+    'ToolbarItemComponent': 'ToolbarItemWidget',
+    'ToolbarLocation': 'Toolbar',
+    'WordWrap': 'VizWordWrap',
+  },
+};
+
+export const enumItemRenamings = {
+  '.*': {
+    'dx(.*)': '$1',
+  },
+
+  '(.*FilterOperations|.*SearchMode|ComparisonOperator)': {
+    '>=': 'greaterThanOrEqual',
+    '<=': 'lessThanOrEqual',
+    '<>': 'notEqual',
+    '===': 'strictEqual',
+    '!==': 'notStrictEqual',
+    '==': 'equal',
+    '!=': 'notEqual',
+    '=': 'equal',
+    '>': 'greaterThan',
+    '<': 'lessThan',
+    'startswith': 'startsWith',
+    'endswith': 'endsWith',
+    'isblank': 'isBlank',
+    'isnotblank': 'isNotBlank',
+    'anyof': 'anyOf',
+    'noneof': 'noneOf',
+    'notcontains': 'notContains',
+  },
+
+  '(.*Data|DateBox)Type': {
+    'datetime': 'DateTime',
+  },
+
+  'FirstDayOfWeek': {
+    '0': 'Sunday',
+    '1': 'Monday',
+    '2': 'Tuesday',
+    '3': 'Wednesday',
+    '4': 'Thursday',
+    '5': 'Friday',
+    '6': 'Saturday',
+  },
+
+  'GaugeOverlappingBehavior': {
+    'first': 'HideFirstLabel',
+    'last': 'HideLastLabel',
+  },
+
+  'PieChartSegmentsDirection': {
+    'anticlockwise': 'AntiClockwise',
+  },
+
+  'PivotGridFieldChooserLayout': {
+    '0': 'Layout0',
+    '1': 'Layout1',
+    '2': 'Layout2',
+  },
+
+  'PositionResolveCollision': {
+    'flipfit': 'flipFit',
+  },
+
+  '(Series|Sparkline)Type': {
+    'fullstackedarea': 'FullStackedArea',
+    'fullstackedbar': 'FullStackedBar',
+    'fullstackedline': 'FullStackedLine',
+    'fullstackedspline': 'FullStackedSpline',
+    'fullstackedsplinearea': 'FullStackedSplineArea',
+    'rangearea': 'RangeArea',
+    'rangebar': 'RangeBar',
+    'splinearea': 'SplineArea',
+    'stackedarea': 'StackedArea',
+    'stackedbar': 'StackedBar',
+    'stackedline': 'StackedLine',
+    'stackedspline': 'StackedSpline',
+    'stackedsplinearea': 'StackedSplineArea',
+    'steparea': 'StepArea',
+    'stepline': 'StepLine',
+    'winloss': 'WinLoss',
+  },
+
+  'TextEditorButtonWidget': {
+    'dxButton': 'Button',
+  },
+
+  'TreeMapLayoutAlgorithm': {
+    'sliceanddice': 'SliceAndDice',
+  },
+
+  'TreeViewExpandEvent': {
+    'dblclick': 'dblClick',
+  },
+
+  'VizTheme': {
+    'ios7.default': 'iOS7Default',
+    'generic.darkmoon': 'genericDarkMoon',
+    'generic.darkviolet': 'genericDarkViolet',
+    'generic.greenmist': 'genericGreenMist',
+    'generic.softblue': 'genericSoftBlue',
+  },
+
+  'PointSymbol': {
+    '^triangle$': null,
+  },
+
+  'VizPointSymbol': {
+    '^triangleDown$': null,
+    '^triangleUp$': null,
+  },
+};

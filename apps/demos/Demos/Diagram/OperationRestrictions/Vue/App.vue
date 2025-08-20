@@ -1,7 +1,6 @@
 <template>
   <DxDiagram
     id="diagram"
-    ref="diagram"
     @request-edit-operation="onRequestEditOperation"
     @request-layout-update="onRequestLayoutUpdate"
   >
@@ -56,7 +55,6 @@
   </DxDiagram>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
 import {
   DxDiagram,
   DxCustomShape,
@@ -76,7 +74,6 @@ const orgItemsDataSource = new ArrayStore({
   key: 'ID',
   data: service.getOrgItems(),
 });
-const diagram = ref();
 const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
 
 const itemStyleExpr = ({ Type }) => ({
@@ -126,7 +123,7 @@ function onRequestEditOperation(e) {
     if (e.args.shape.type === 'team') {
       const connectorIds = e.args.shape.attachedConnectorIds;
       for (i = 0; i < connectorIds.length; i += 1) {
-        if (diagram.value.instance.getItemById(connectorIds[i]).toId !== e.args.shape.id) {
+        if (e.component.instance().getItemById(connectorIds[i]).toId !== e.args.shape.id) {
           if (e.reason !== 'checkUIElementAvailability') {
             showToast('You cannot delete a \'Team\' shape that has a child shape.');
           }

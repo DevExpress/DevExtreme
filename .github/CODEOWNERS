@@ -180,7 +180,7 @@
 ## accordion
 /packages/devextreme/js/ui/accordion.js                        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/accordion/**             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_accordion.ts           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/accordion.ts             @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/accordion/**                 @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_accordion.scss    @DevExpress/devextreme-navigation
@@ -197,8 +197,7 @@
 
 ## action_sheet
 /packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/action_sheet/**          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_action_sheet.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/action_sheet.ts          @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-navigation
@@ -213,8 +212,7 @@
 
 ## box
 /packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/box/**                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_box.ts                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/box.ts                   @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-navigation
@@ -244,8 +242,7 @@
 
 ## button_group
 /packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/button_group/**          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_button_group.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/button_group.ts          @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-navigation
 
@@ -324,7 +321,7 @@
 ## gallery
 /packages/devextreme/js/ui/gallery.js                          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/gallery/**               @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_gallery.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/gallery.ts               @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/gallery/**                   @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_gallery.scss      @DevExpress/devextreme-navigation
@@ -367,7 +364,7 @@
 ## load_indicator
 /packages/devextreme/js/ui/load_indicator.js                   @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/load_indicator/**        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_load_indicator.ts      @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/load_indicator.ts        @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/loadIndicator/**             @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_loadIndicator.scss   @DevExpress/devextreme-navigation
@@ -384,7 +381,7 @@
 ## menu
 /packages/devextreme/js/ui/menu.js                             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/menu/**                  @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_menu.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/menu.ts                  @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/menu/**                      @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_menu.scss         @DevExpress/devextreme-navigation
@@ -402,7 +399,7 @@
 ## multi_view
 /packages/devextreme/js/ui/multi_view.js                       @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/multi_view/**            @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_multi_view.ts          @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/multi_view.ts            @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/multiView/**                 @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_multiView.scss    @DevExpress/devextreme-navigation
@@ -417,22 +414,22 @@
 /packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
 
 ## radio_group
-/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-editors
 
-/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-navigation
+/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-editors
 
-/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/common/radioGroup.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-navigation
+/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/radioGroup.ts   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-editors
 
-/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
 ## resizable
 /packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
@@ -450,8 +447,7 @@
 
 ## responsive_box
 /packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/responsive_box/**        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_responsive_box.ts      @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/responsive_box.ts        @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-navigation
 
@@ -484,7 +480,7 @@
 ## selection
 /packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-navigation
 
-/packages/devextreme/testing/tests/**/selection.*              @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/selection.*   @DevExpress/devextreme-navigation
 
 ## splitter
 /packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-navigation
@@ -552,8 +548,7 @@
 
 ## tile_view
 /packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tile_view/**             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_tile_view.ts           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tile_view.ts             @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-navigation

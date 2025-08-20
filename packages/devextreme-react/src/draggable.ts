@@ -42,7 +42,7 @@ const Draggable = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onDisposing","onDragEnd","onDragMove","onDragStart","onInitialized"]), []);
 

@@ -20,12 +20,12 @@ async function getRightScrollOffset(dataGrid: DataGrid): Promise<number> {
   return maxHorizontalOffset - scrollLeft;
 }
 
-function getData(rowCount, colCount): Record<string, string>[] {
+function getData(rowCount: number, colCount: number): Record<string, string>[] {
   const items: Record<string, string>[] = [];
   for (let i = 0; i < rowCount; i += 1) {
     const item: Record<string, string> = {};
     for (let j = 0; j < colCount; j += 1) {
-      item[`field_${i}_${j}`] = `val_${i}_${j}`;
+      item[`field_${j}`] = `val_${i}_${j}`;
     }
     items.push(item);
   }
@@ -1824,3 +1824,88 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
     enabled: false,
   },
 }));
+
+// T1280020
+test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a non-focused row if the grid height is small', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const otherContainer = Selector('#otherContainer');
+
+  await dataGrid.apiOption('focusedRowKey', '2');
+  await t.expect(otherContainer.innerText).eql('2');
+
+  await dataGrid.apiOption('focusedRowKey', '0');
+  await t.expect(otherContainer.innerText).eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 70,
+  dataSource: [
+    { id: '0' },
+    { id: '1' },
+    { id: '2' },
+  ],
+  scrolling: { mode: 'virtual' },
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  onFocusedRowChanged(e) {
+    const data = e.row?.data;
+    $('#otherContainer').text(data.id);
+  },
+}));
+
+[true, false].forEach((nativeScroll) => {
+  type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
+
+  test(
+    `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
+    async (t) => {
+    // NOTE: idx + 1 logic inside POM
+      const adaptiveCellIdx = 101;
+      const scrollValuesThreshold = 100;
+
+      const dataGrid = new DataGrid('#container');
+      const firstRow = dataGrid.getDataRow(0);
+      const firstDataCell = firstRow.getDataCell(0);
+      const adaptiveCell = firstRow.getCommandCell(adaptiveCellIdx);
+      const scrollContainer = dataGrid.getScrollContainer();
+
+      await t
+        .click(firstDataCell.element)
+        .click(adaptiveCell.element);
+
+      await t
+        .scroll(scrollContainer, 0, 1000)
+        .scroll(scrollContainer, 0, 1000);
+
+      const scrollOffsets = await t
+        .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
+
+      const hasSmallScrollValues = scrollOffsets.some((offset) => offset < scrollValuesThreshold);
+      await t.expect(hasSmallScrollValues).notOk();
+    },
+  ).before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(3, 100).map((item, idx) => ({ ...item, id: idx })),
+      keyExpr: 'id',
+      columnHidingEnabled: true,
+      focusedRowEnabled: true,
+      scrolling: {
+        mode: 'virtual',
+        useNative: nativeScroll,
+      },
+      onContentReady: ({ component }) => {
+        const testWindow = window as TestCaseWindow;
+
+        component.getScrollable().on('scroll', ({ scrollOffset: { top } }) => {
+          if (!Array.isArray(testWindow.dataGridScrollableEventValues)) {
+            testWindow.dataGridScrollableEventValues = [];
+          }
+
+          testWindow.dataGridScrollableEventValues.push(top);
+        });
+      },
+      width: 400,
+      height: 400,
+    });
+  }).after(async (t) => t.eval(() => {
+    delete (window as TestCaseWindow).dataGridScrollableEventValues;
+  }));
+});

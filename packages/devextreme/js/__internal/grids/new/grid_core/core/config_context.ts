@@ -1,9 +1,9 @@
 import { createContext } from '@ts/core/r1/runtime/inferno/index';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 
 export interface Config {
-  rtlEnabled: Properties['rtlEnabled'];
-  disabled: Properties['disabled'];
+  rtlEnabled: WidgetProperties['rtlEnabled'];
+  disabled: WidgetProperties['disabled'];
   templatesRenderAsynchronously: unknown; // TODO: Properties['templatesRenderAsynchronously'];
 }
 

@@ -7,7 +7,7 @@ import {
 import {
     FLEX_LAYOUT_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import 'ui/form';
 import 'ui/switch';

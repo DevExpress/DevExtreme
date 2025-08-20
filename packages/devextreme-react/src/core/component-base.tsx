@@ -99,6 +99,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const { parentType } = useContext(NestedOptionContext);
 
+    if (parentType === 'option') {
+      return React.createElement('div');
+    }
+
     const [widgetConfig, context] = useOptionScanning(
       {
         type: ElementType.Option,
@@ -283,10 +287,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [shouldRestoreFocus.current, instance.current]);
 
     const onComponentUpdated = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       if (!optionsManager.current?.isInstanceSet) {
         return;
       }
@@ -311,10 +311,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       const { style } = props;
 
       if (childElementsDetached.current) {

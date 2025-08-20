@@ -91,36 +91,6 @@ QUnit.module('Options', () => {
         }
     });
 
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', async function(assert) {
-        const { instance } = await createWrapper();
-        const repaintStub = sinon.stub(instance, 'repaint');
-
-        try {
-            const { appointmentDataProvider } = instance;
-
-            instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const dataAccessors = instance._dataAccessors;
-
-            assert.deepEqual(dataAccessors.getter, appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.setter, appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.resources, appointmentDataProvider.dataAccessors.resources, 'resources were passed to appointmentDataProvider');
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
     QUnit.test('Appointment should be rendered correctly after expression changing', async function(assert) {
         const scheduler = await createWrapper({
             dataSource: [{
@@ -453,7 +423,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.name', async function(assert) {
@@ -474,7 +444,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.type', async function(assert) {
@@ -498,7 +468,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.startDate is passed to workspace & header', async function(assert) {
@@ -519,7 +489,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.deepEqual(workSpaceWeek.option('startDate'), date, 'workspace has correct startDate');
-        assert.deepEqual(header.option('startDate'), date, 'header has correct startDate');
+        assert.deepEqual(header.option('currentView').startDate, date, 'header has correct startDate');
     });
 
     QUnit.test('view.groupByDate is passed to workspace', async function(assert) {

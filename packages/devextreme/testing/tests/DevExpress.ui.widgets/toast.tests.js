@@ -255,20 +255,47 @@ QUnit.module('regression', moduleConfig, () => {
     });
 
     QUnit.test('animation option should not contain window object if it was not set (T228805)', function(assert) {
-        const instance = this.instance;
-        const animationConfig = {
-            show: { type: 'pop', from: { opacity: 1, scale: 0 }, to: { scale: 1 } },
-            hide: { type: 'pop', from: { scale: 1 }, to: { scale: 0 } }
-        };
+        const animateSpy = sinon.spy(fx, 'animate');
 
-        instance.option('animation', animationConfig);
+        try {
+            const animationConfig = {
+                show: {
+                    type: 'pop',
+                    from: {
+                        opacity: 1,
+                        scale: 0,
+                    },
+                    to: {
+                        scale: 1,
+                    },
+                },
+                hide: {
+                    type: 'pop',
+                    from: { scale: 1 },
+                    to: { scale: 0 },
+                }
+            };
 
-        instance.show();
+            this.instance.option('animation', animationConfig);
+            this.instance.show();
 
-        assert.equal(animationConfig.show.to.position.of, null);
+            const initialPositionOf = animationConfig.show.to.position.of;
+            const normalizedPositionOf = animateSpy.firstCall.args[1].to.position.of;
+            const positionOfOptionValue = this.instance.option('animation').show.to.position.of;
 
-        instance.option('animation.show.to.position.of', window);
-        assert.equal(animationConfig.show.to.position.of, window);
+            this.instance.option('animation.show.to.position.of', window);
+
+            const positionOfOptionValueAfterOptionChange = this.instance.option('animation').show.to.position.of;
+            const initialPositionOfAfterOptionChange = animationConfig.show.to.position.of;
+
+            assert.strictEqual(initialPositionOf, null, 'initial position.of on init is undefined');
+            assert.strictEqual(normalizedPositionOf, null, 'position.of of show animation is correctly normalized');
+            assert.strictEqual(positionOfOptionValue, null, 'position.of from option of show animation is null');
+            assert.strictEqual(initialPositionOfAfterOptionChange, window, 'initial position.of is window after option change');
+            assert.strictEqual(positionOfOptionValueAfterOptionChange, window, 'position.of from option of show animation is window after option change');
+        } finally {
+            fx.animate.restore();
+        }
     });
 });
 

@@ -75,7 +75,7 @@ test('Changing keyboardNavigation options should not invalidate the entire conte
     .expect(ClientFunction(() => (window as any).invalidateCounter)())
     .eql(0)
     .expect(ClientFunction(() => (window as any).renderTableCounter)())
-    .eql(10);
+    .eql(9);
 }).before(async () => {
   await ClientFunction(() => {
     (window as any).invalidateCounter = 0;

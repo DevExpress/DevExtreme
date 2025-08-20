@@ -153,10 +153,8 @@ class ProgressBar extends TrackBar<ProgressBarProperties> {
   _toggleIndeterminateState(value: boolean): void {
     if (value) {
       this._renderIndeterminateState();
-      // @ts-expect-error ts-error
       this._$bar.toggle(false);
     } else {
-      // @ts-expect-error ts-error
       this._$bar.toggle(true);
       this._$segmentContainer?.remove();
       delete this._$segmentContainer;

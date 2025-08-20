@@ -19,7 +19,6 @@ test('selectAll state should be correct after unselect item if refresh(true) is 
 
   // act
   await t.click(firstRowSelectionCheckBox.element);
-
   // assert
   await t
     .expect(await selectAllCheckBox.option('value')).eql(undefined)
@@ -248,3 +247,50 @@ test('Sensitivity option change should be correctly handled during runtime chang
 }));
 
 // ---
+
+test('"Select All" checkbox should not react when not visible', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const selectAllCheckBox = new CheckBox(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
+  );
+  const editorCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element;
+
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+
+  await t.click(editorCell);
+
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  keyExpr: 'orderId',
+  selection: {
+    mode: 'multiple',
+  },
+  paging: {
+    pageSize: 10,
+  },
+  pager: {
+    visible: true,
+  },
+  filterRow: {
+    visible: true,
+  },
+  columns: [{
+    dataField: 'orderId',
+    caption: 'Order ID',
+    width: 90,
+  },
+  'city', {
+    dataField: 'country',
+    width: 180,
+  },
+  'region', {
+    dataField: 'date',
+    dataType: 'date',
+  }, {
+    dataField: 'amount',
+    format: 'currency',
+    width: 90,
+  }],
+}));

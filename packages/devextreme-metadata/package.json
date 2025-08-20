@@ -1,0 +1,25 @@
+{
+  "name": "devextreme-metadata",
+  "version": "25.1.4",
+  "private": true,
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "catalog:tools",
+    "devextreme-internal-tools": "catalog:tools",
+    "prettier": "catalog:tools",
+    "ts-node": "catalog:tools"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./Declarations.json": "./dist/Declarations.json",
+    "./NGMetaData.json": "./dist/NGMetaData.json",
+    "./StrongMetaData.json": "./dist/StrongMetaData.json",
+    "./integration-data.json": "./dist/integration-data.json",
+    "./modules-meta.json": "./dist/modules-meta.json"
+  }
+}

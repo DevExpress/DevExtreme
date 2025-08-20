@@ -298,12 +298,17 @@ const baseTrackerPrototype = {
         }
     },
 
+    _processArgumentHoveredPoint: function(argument, argumentIndex) {
+        this._releaseHoveredPoint();
+    },
+
     _hoverArgument: function(argument, argumentIndex) {
         const that = this;
         const hoverMode = that._getArgumentHoverMode();
 
         if(isDefined(argument)) {
-            that._releaseHoveredPoint();
+            this._processArgumentHoveredPoint(argument, argumentIndex);
+
             that._hoveredArgument = argument;
             that._argumentIndex = argumentIndex;
             that._notifySeries({
@@ -685,6 +690,17 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     _getArgumentHoverMode: function() {
         return correctHoverMode(this._legend);
     },
+
+    _processArgumentHoveredPoint: function(argument, argumentIndex) {
+        const points = this._storedSeries.flatMap((series) => series.getPointsByKeys(argument, argumentIndex));
+
+        if(points.length === 1) {
+            this._setHoveredPoint(points[0]);
+        } else {
+            this._releaseHoveredPoint();
+        }
+    },
+
     _hoverArgumentAxis: _noop,
     _setStuckSeries: _noop,
     _getCanvas: _noop,

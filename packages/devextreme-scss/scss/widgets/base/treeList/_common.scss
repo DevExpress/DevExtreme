@@ -3,14 +3,12 @@
 
 // adduse
 
-
 @include grid-base(treelist);
 
 .dx-treelist-container {
   position: relative;
   cursor: default;
   white-space: normal;
-  line-height: normal;
 }
 
 .dx-treelist-rowsview {
@@ -21,23 +19,6 @@
     .dx-treelist-text-content {
       display: inline-block;
       white-space: normal;
-    }
-
-    .dx-treelist-icon-container {
-      float: none;
-    }
-  }
-
-  .dx-treelist-icon-container {
-    display: inline-block;
-    white-space: nowrap;
-    vertical-align: top;
-    line-height: 1;
-  }
-
-  .dx-treelist-table-fixed {
-    .dx-treelist-icon-container {
-      float: left;
     }
   }
 }

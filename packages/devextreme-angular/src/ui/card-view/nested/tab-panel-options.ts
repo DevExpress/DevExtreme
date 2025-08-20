@@ -173,6 +173,14 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     }
 
     @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
+    @Input()
     get loop(): boolean {
         return this._getOption('loop');
     }

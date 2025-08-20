@@ -259,3 +259,38 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
   columnWidth: 400,
   width: 500,
 }));
+
+// T1290381
+test('DataGrid - filter row\'s search-box\'s aria-label should be customizable via localization', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .eql('custom text');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      // Replace "en" with the target locale of the dictionary
+      en: {
+        'dxDataGrid-ariaSearchBox': 'custom text',
+      },
+    });
+  });
+
+  return createWidget('dxDataGrid', {
+    columns: [{
+      dataField: 'test',
+      dataType: 'string',
+    }],
+    filterRow: {
+      visible: true,
+    },
+  });
+}).after(async (t) => {
+  // To reset localization messages
+  await t
+    .eval(() => location.reload());
+});

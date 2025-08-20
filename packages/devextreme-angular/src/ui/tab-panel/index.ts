@@ -280,6 +280,19 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
     /**
+     * [descr:dxTabPanelOptions.keyExpr]
+    
+     */
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
+
+    /**
      * [descr:dxMultiViewOptions.loop]
     
      */
@@ -694,6 +707,13 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() keyExprChange: EventEmitter<Function | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() loopChange: EventEmitter<boolean>;
 
     /**
@@ -856,6 +876,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
             { emit: 'itemTitleTemplateChange' },
+            { emit: 'keyExprChange' },
             { emit: 'loopChange' },
             { emit: 'noDataTextChange' },
             { emit: 'repaintChangesOnlyChange' },

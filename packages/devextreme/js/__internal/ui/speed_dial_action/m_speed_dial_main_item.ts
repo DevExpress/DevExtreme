@@ -6,8 +6,8 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
 import { isCompact, isFluent, isMaterial } from '@js/ui/themes';
-import swatchContainer from '@js/ui/widget/swatch_container';
 import errors from '@js/ui/widget/ui.errors';
+import swatchContainer from '@ts/core/utils/swatch_container';
 
 import type { SpeedDialItemProperties } from './m_speed_dial_item';
 import SpeedDialItem from './m_speed_dial_item';
@@ -234,7 +234,6 @@ class SpeedDialMainItem extends SpeedDialItem {
     for (let i = 0; i < actions.length; i++) {
       actions[i].option('animation', this._getActionAnimation(actions[i], i, lastActionIndex));
       actions[i].option('position', this._getActionPosition(actions, i));
-      // @ts-expect-error
       actions[i]._$wrapper.css('position', this._$wrapper.css('position'));
       actions[i].toggle();
     }

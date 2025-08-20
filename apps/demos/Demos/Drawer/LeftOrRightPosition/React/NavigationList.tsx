@@ -7,9 +7,6 @@ function NavigationList() {
     <div className="list" style={{ width: '200px' }}>
       <List
         dataSource={navigation}
-        hoverStateEnabled={false}
-        activeStateEnabled={false}
-        focusStateEnabled={false}
         className="panel-list" />
     </div>
   );

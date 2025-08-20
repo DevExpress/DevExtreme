@@ -3,6 +3,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end, start } from '@js/common/core/events/hover';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
 import type TextEditorBase from '../m_text_editor.base';
@@ -37,8 +38,9 @@ export default class CustomButton extends TextEditorButton {
 
     this._addToContainer($element);
 
-    const instance = editor._createComponent($element, Button, {
+    const instance = editor._createComponent<Button, ButtonProperties>($element, Button, {
       ...this.options,
+      // @ts-expect-error
       ignoreParentReadOnly: true,
       disabled: this._isDisabled(),
       integrationOptions: this._prepareIntegrationOptions(editor),

@@ -1,3 +1,5 @@
+import { type Orientation } from "devextreme-vue/common";
+
 export const steps = [
   {
     text: 'A',
@@ -27,7 +29,7 @@ export const steps = [
   },
 ];
 
-export const orientations = [
+export const orientations: Array<{ text: string; value: Orientation }> = [
   { text: 'Horizontal', value: 'horizontal' },
   { text: 'Vertical', value: 'vertical' },
 ];

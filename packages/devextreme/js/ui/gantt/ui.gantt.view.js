@@ -9,7 +9,6 @@ import { format } from '../../core/utils/string';
 import coreLocalization from '../../common/core/localization/core';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../common/core/animation/frame';
 
-
 const visualStateKey = 'visualState';
 const fullScreenModeKey = 'fullScreen';
 
@@ -41,7 +40,7 @@ export class GanttView extends Widget {
             endDateRange: this.option('endDateRange'),
             editing: this._parseEditingSettings(this.option('editing')),
             validation: this.option('validation'),
-            stripLines: { stripLines: this.option('stripLines') },
+            stripLines: { stripLines: this.option('stripLines')?.map(item => ({ ...item })) },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
@@ -256,7 +255,7 @@ export class GanttView extends Widget {
                 this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.min), this._getViewTypeByScaleType(args.value.max));
                 break;
             case 'stripLines':
-                this._ganttViewCore.setStripLines({ stripLines: args.value });
+                this._ganttViewCore.setStripLines({ stripLines: this.option('stripLines') });
                 break;
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);

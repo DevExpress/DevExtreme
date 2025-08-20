@@ -4,7 +4,7 @@ import '__internal/scheduler/m_scheduler';
 import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy
-} from '__internal/scheduler/appointments/m_settings_generator';
+} from '__internal/scheduler/view_model/generate_view_model/m_settings_generator';
 
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
@@ -14,7 +14,7 @@ import config from 'core/config';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/data_provider/m_utils';
+import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/utils/m_utils';
 
 const {
     module,
@@ -562,7 +562,7 @@ module('Subscribes', {
     test('"getAppointmentDurationInMs" should return visible appointment duration', async function(assert) {
         await this.createInstance();
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 2, 20)
@@ -580,7 +580,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 4, 20)
@@ -598,7 +598,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 8),
             new Date(2015, 2, 3, 0)
@@ -615,7 +615,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 4, 25, 21),
             new Date(2015, 4, 26, 3)
@@ -632,7 +632,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 10),
             new Date(2015, 2, 4, 17)
@@ -649,7 +649,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 7),
             new Date(2015, 2, 4, 21),
@@ -666,7 +666,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
             new Date(2015, 2, 2, 7),
             new Date(2015, 2, 4, 21),
@@ -782,14 +782,14 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        let countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
         await waitAsync(0);
 
-        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
@@ -809,14 +809,14 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        let countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
         await waitAsync(0);
 
-        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });
@@ -851,7 +851,7 @@ module('Subscribes', {
     test('\'supportCompactDropDownAppointments\' should return true for some views', async function(assert) {
         await this.createInstance({
             dataSource: [],
-            views: ['motnh', 'week'],
+            views: ['month', 'week'],
             currentView: 'week'
         });
 

@@ -8,7 +8,7 @@ import Swipeable from 'common/core/events/gesture/swipeable';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/multi_view';
-import { animation } from '__internal/ui/multi_view/m_multi_view.animation';
+import { animation } from '__internal/ui/multi_view/multi_view.animation';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
@@ -56,7 +56,6 @@ const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const MULTIVIEW_ITEM_HIDDEN_CLASS = 'dx-multiview-item-hidden';
 
-const toSelector = cssClass => `.${cssClass}`;
 const position = $element => translator.locate($element).left;
 
 const mockFxAnimate = (animations, type, output, startAction) => {
@@ -117,7 +116,7 @@ QUnit.module('rendering', () => {
             $container.appendTo('#qunit-fixture');
             triggerShownEvent($container);
 
-            const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+            const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
             assert.equal($items.eq(0).outerHeight(), $multiView.outerHeight(), 'element has correct height');
         } finally {
             $container.remove();
@@ -130,7 +129,7 @@ QUnit.module('rendering', () => {
                 { text: '1' }
             ]
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
     });
@@ -142,7 +141,7 @@ QUnit.module('rendering', () => {
                 { text: '2', visible: false }
             ]
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'second item is hidden');
@@ -174,7 +173,7 @@ QUnit.module('rendering', () => {
         multiView.option('items[1].template', $('#template2'));
         multiView.option('selectedIndex', 1);
 
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.equal($items.eq(1).text(), 'Test2', 'element has correct content');
     });
@@ -188,7 +187,7 @@ QUnit.module('rendering', () => {
 
         multiView.option('items[1].template', $('#template2'));
 
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'second item is still hidden');
@@ -205,11 +204,11 @@ QUnit.module('nested multiview', () => {
                 });
             }
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
         $multiView.dxMultiView('option', 'selectedIndex', 3);
 
-        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $itemContainer.children(`.${MULTIVIEW_ITEM_CLASS}`);
         assert.ok(!$items.eq(3).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'correct item selected');
     });
 
@@ -251,7 +250,7 @@ QUnit.module('items positioning', {
             items: [1, 2, 3],
             selectedIndex: 0
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.equal(position($items.eq(0)), 0, 'first item has correct position');
 
@@ -264,7 +263,7 @@ QUnit.module('items positioning', {
             items: [1, 2, 3],
             selectedIndex: 0
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         assert.ok(!$items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
@@ -308,8 +307,8 @@ QUnit.module('animations', {
 
         const origFxStop = fx.stop;
 
-        fx.stop = $.proxy(function(element, complete) {
-            assert.equal(element[0], this.$animated[0], 'element correct');
+        fx.stop = $.proxy(function($element, complete) {
+            assert.equal($element, this.$animated[0], 'element correct');
             assert.equal(complete, true, 'animation completed');
         }, this);
 
@@ -342,7 +341,7 @@ QUnit.module('selected index change animation', {
             selectedIndex: 0
         });
         const multiView = $('#multiView').dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
         multiView.option('selectedIndex', 1);
 
@@ -359,7 +358,7 @@ QUnit.module('selected index change animation', {
             selectedIndex: 2
         });
         const multiView = $('#multiView').dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
         multiView.option('selectedIndex', 1);
 
@@ -376,7 +375,7 @@ QUnit.module('selected index change animation', {
             selectedIndex: 0
         });
         const multiView = $('#multiView').dxMultiView('instance');
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         this.animationStartAction = function() {
             assert.equal(position($items.eq(0)), 0, 'first item has correct position');
@@ -395,7 +394,7 @@ QUnit.module('selected index change animation', {
             selectedIndex: 2
         });
         const multiView = $('#multiView').dxMultiView('instance');
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
 
         this.animationStartAction = function() {
             assert.equal(position($items.eq(0)), -800, 'first item has correct position');
@@ -543,7 +542,7 @@ QUnit.module('interaction via swipe', {
             ]
         });
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
@@ -560,7 +559,7 @@ QUnit.module('interaction via swipe', {
             ]
         });
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const $thirdItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(2);
         const pointer = pointerMock($multiView);
 
@@ -632,7 +631,7 @@ QUnit.module('interaction via swipe', {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3]
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.1);
@@ -775,7 +774,7 @@ QUnit.module('interaction via swipe', {
             items: [1, 2, 3],
             selectedIndex: 2
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.2);
@@ -789,7 +788,7 @@ QUnit.module('interaction via swipe', {
             items: [1, 2, 3],
             swipeEnabled: false
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.1);
@@ -909,7 +908,7 @@ QUnit.module('loop', {
             loop: true
         });
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
@@ -958,7 +957,7 @@ QUnit.module('loop', {
             selectedIndex: 0,
             loop: true
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(0.1);
@@ -972,7 +971,7 @@ QUnit.module('loop', {
             selectedIndex: 2,
             loop: true
         });
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.1);
@@ -1146,7 +1145,7 @@ QUnit.module('loop', {
             selectedIndex: 0,
             loop: true
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
@@ -1163,7 +1162,7 @@ QUnit.module('loop', {
             selectedIndex: 2,
             loop: true
         });
-        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+        const $items = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`);
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
@@ -1180,7 +1179,7 @@ QUnit.module('loop', {
             selectedIndex: 0,
             loop: true
         });
-        const $item1 = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1);
+        const $item1 = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
         const pointer = pointerMock($multiView);
 
         pointer.start().swipeStart().swipe(-0.01);
@@ -1357,7 +1356,7 @@ QUnit.module('keyboard navigation', {
                 focusStateEnabled: true
             });
             const instance = $multiView.dxMultiView('instance');
-            const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+            const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
             const keyboard = keyboardMock($multiView);
 
             $multiView.focusin();

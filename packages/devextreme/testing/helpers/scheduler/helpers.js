@@ -651,7 +651,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 rect.height = cell.outerHeight();
                 rect.width = cell.outerWidth();
 
-                if(this.instance.currentView === 'month') {
+                if(this.instance.currentView.type === 'month') {
                     const monthNum = cell.find('div').eq(0);
                     if(monthNum.length > 0) {
                         rect.top += monthNum.outerHeight();

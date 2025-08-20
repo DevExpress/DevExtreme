@@ -71,16 +71,6 @@ const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('api', moduleConfig);
 
-[true, false].forEach((useNative) => {
-    QUnit.test('Check that widget is renovated or not', function(assert) {
-        const scrollable = $('#scrollable').dxScrollable({
-            useNative
-        }).dxScrollable('instance');
-
-        assert.strictEqual(scrollable.isRenovated(), !!Scrollable.IS_RENOVATED_WIDGET);
-    });
-});
-
 QUnit.test('scroll event should be triggered if scroll position changed', function(assert) {
     let called = 0;
     const $scrollable = $('#scrollable').dxScrollable({
@@ -144,7 +134,7 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
         if(useNative) {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, -distance, 'scroll to correctly vertical position');
-            assert.equal(location.left, isRenovatedScrollable ? 0 : -distance, 'scroll to correctly horizontal position');
+            assert.equal(location.left, -distance, 'scroll to correctly horizontal position');
         }
     });
 
@@ -167,7 +157,7 @@ QUnit.test('scroll event should be triggered if scroll position changed', functi
         if(useNative) {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, -distance, 'scroll to correctly vertical position');
-            assert.equal(location.left, isRenovatedScrollable ? 0 : -distance, 'scroll to correctly horizontal position');
+            assert.equal(location.left, -distance, 'scroll to correctly horizontal position');
         }
     });
 });
@@ -273,7 +263,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
-                assert.equal(location.top, isRenovatedScrollable ? -20 : 0, 'vertical location set correctly');
+                assert.equal(location.top, 0, 'vertical location set correctly');
             }
             wasFirstMove = true;
         }
@@ -422,7 +412,7 @@ QUnit.test('event arguments', function(assert) {
         inertiaEnabled: false,
         onScroll: function(e) {
             assert.notEqual(e.event, undefined, 'Event passed');
-            assert.deepEqual(e.scrollOffset, { top: 10, left: isRenovatedScrollable ? 0 : undefined }, 'scrollOffset passed');
+            assert.deepEqual(e.scrollOffset, { top: 10, left: undefined }, 'scrollOffset passed');
             assert.equal(e.reachedLeft, undefined, 'reachedLeft passed');
             assert.equal(e.reachedRight, undefined, 'reachedRight passed');
             assert.equal(e.reachedTop, false, 'reachedTop passed');
@@ -526,7 +516,7 @@ QUnit.test('event handlers should be reattached after changing to simulated stra
 
         let eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, isRenovatedScrollable ? 4 : 6, 'event listeners');
+        assert.equal(eventListeners.length, 6, 'event listeners');
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
         });
@@ -537,7 +527,7 @@ QUnit.test('event handlers should be reattached after changing to simulated stra
 
         eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, isRenovatedScrollable ? 7 : 6, 'event listeners');
+        assert.equal(eventListeners.length, 6, 'event listeners');
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
         });
@@ -558,7 +548,7 @@ QUnit.test('event handlers should be reattached after changing to native strateg
 
         let eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, isRenovatedScrollable ? 7 : 6, 'event listeners');
+        assert.equal(eventListeners.length, 6, 'event listeners');
 
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
@@ -570,7 +560,7 @@ QUnit.test('event handlers should be reattached after changing to native strateg
 
         eventListeners = Object.values($._data(wrapperEl).events || {});
 
-        assert.equal(eventListeners.length, isRenovatedScrollable ? 4 : 6, 'event listeners');
+        assert.equal(eventListeners.length, 6, 'event listeners');
         eventListeners.forEach((event) => {
             assert.equal(event.length, 1, 'event handler');
         });
@@ -968,10 +958,7 @@ class ScrollableTestHelper {
 
     setContainerWidth(width) {
         this.$scrollable.css('width', width);
-
-        if(!isRenovatedScrollable) {
-            resizeCallbacks.fire();
-        }
+        resizeCallbacks.fire();
     }
 }
 
@@ -1231,11 +1218,11 @@ class ScrollableTestHelper {
 
                 helper.$scrollable.find('.content1').css('width', '200px');
                 helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 25 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: useNative || isRenovatedScrollable ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative && !isRenovatedScrollable ? 12 : 35 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 12 });
             });
         });
 

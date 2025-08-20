@@ -19,7 +19,7 @@ import {
   setWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import swatchContainer from '@js/ui/widget/swatch_container';
+import swatchContainer from '@ts/core/utils/swatch_container';
 
 const { getSwatchContainer } = swatchContainer;
 

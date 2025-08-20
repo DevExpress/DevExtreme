@@ -18,10 +18,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-function toSelector(text) {
-    return '.' + text;
-}
-
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
 const PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status';
@@ -58,7 +54,7 @@ QUnit.module('options', {
             value: 10
         });
         const progressBar = $progressBar.dxProgressBar('instance');
-        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+        const $status = $progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`);
 
         progressBar.option('value', 30);
         assert.equal($status.text(), 'Progress: ' + progressBar.option('value') + '%', 'status text has been change right');
@@ -74,7 +70,7 @@ QUnit.module('options', {
             }
         });
         const progressBar = $progressBar.dxProgressBar('instance');
-        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+        const $status = $progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`);
         assert.equal($status.text(), 'Customised value: ' + progressBar.option('value'), 'status text is right');
 
         progressBar.option('value', 50);
@@ -182,8 +178,8 @@ QUnit.module('states', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentContainersCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length;
-        let renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        const renderedIndeterminateSegmentContainersCount = $progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER}`).length;
+        let renderedIndeterminateSegmentsCount = $progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT}`).length;
         const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal(renderedIndeterminateSegmentContainersCount, 0, 'Segment wrapper has not been created');
@@ -191,12 +187,12 @@ QUnit.module('states', {
 
         progressBar.option('value', null);
 
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length, 1, 'Segment wrapper has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER}`).length, 1, 'Segment wrapper has been created');
 
-        renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        renderedIndeterminateSegmentsCount = $progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT}`).length;
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'Segments have been created');
 
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_CONTAINER_CLASS)).is(':visible'), false, 'progressbar container does not attached');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_CONTAINER_CLASS}`).is(':visible'), false, 'progressbar container does not attached');
     });
 });
 

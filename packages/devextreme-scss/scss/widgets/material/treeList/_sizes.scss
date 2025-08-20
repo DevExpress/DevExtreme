@@ -1,8 +1,24 @@
-@use "sass:math";
 @use "../sizes" as *;
+@use "../../base/treeList/variables" as *;
 
 // adduse
 
-$treelist-expanded-icon-margin-left: 5px !default;
-$treelist-collapsed-icon-margin-left: 6px !default;
-$treelist-icon-margin-top: math.div($material-base-icon-size, 2) !default;
+$treelist-material-expand-icon-size: null !default;
+$treelist-material-expand-checkbox-size: null !default;
+
+@if $size == "default" {
+  $treelist-material-expand-icon-size: 24px !default;
+  $treelist-material-expand-checkbox-size: 20px !default;
+}
+
+@else if $size == "compact" {
+  $treelist-material-expand-icon-size: 18px !default;
+  $treelist-material-expand-checkbox-size: 16px !default;
+}
+
+$treelist-expand-icon-size: $treelist-material-expand-icon-size !default;
+$treelist-expand-icon-name-expanded: chevrondown !default;
+$treelist-expand-icon-name-collapsed: chevronright !default;
+$treelist-expand-icon-right-gap: 4px !default;
+$treelist-expand-checkbox-size: $treelist-material-expand-checkbox-size !default;
+$treelist-expand-checkbox-right-gap: 8px !default;

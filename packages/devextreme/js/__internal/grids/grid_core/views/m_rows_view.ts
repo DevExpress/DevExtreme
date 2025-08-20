@@ -279,7 +279,10 @@ export class RowsView extends ColumnsView {
         setWatcher({
           element: $row.get(0),
           watch: rowOptions.watch,
-          getter: () => this._isAltRow(row),
+          getter: () => this._isAltRow(
+            // The row needs to be obtained again because the current row is out of date.
+            this._dataController.getRowByKey(row.key),
+          ),
           callBack: (value) => {
             $row.toggleClass(ROW_ALTERNATION_CLASS, value);
           },
@@ -1149,10 +1152,7 @@ export class RowsView extends ColumnsView {
       // @ts-expect-error
       scrollable.update();
 
-      // @ts-expect-error
-      if (scrollable.option('useNative') || !scrollable?.isRenovated()) {
-        this._updateHorizontalScrollPosition();
-      }
+      this._updateHorizontalScrollPosition();
     }
   }
 
@@ -1271,7 +1271,6 @@ export class RowsView extends ColumnsView {
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
@@ -1435,6 +1434,16 @@ export class RowsView extends ColumnsView {
     const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`);
 
     return $rowsViewElement.is(this.element());
+  }
+
+  /**
+   * @extended: TreeList's rowsView extender & selection
+   */
+  protected _renderIcons(
+    $iconContainer: dxElementWrapper,
+    options,
+  ): dxElementWrapper {
+    return $iconContainer;
   }
 }
 

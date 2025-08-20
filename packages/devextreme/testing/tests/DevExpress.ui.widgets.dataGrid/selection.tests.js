@@ -2,6 +2,7 @@ import 'ui/data_grid';
 import 'common/data/odata/store';
 
 import $ from 'jquery';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
@@ -19,6 +20,8 @@ const createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 const setupModule = function() {
+    this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+    gridCoreUtils.isElementInCurrentGrid = () => true;
     setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'search']);
 
     this.applyOptions = function(options) {
@@ -33,6 +36,7 @@ const setupModule = function() {
 const teardownModule = function() {
     this.dispose();
     this.clock.restore();
+    gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
 };
 
 const setupSelectionModule = function() {
@@ -3441,6 +3445,8 @@ QUnit.module('Multiple selection with checkboxes on click', { beforeEach: setupS
 
 QUnit.module('Selection with views', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.array = [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 16 },
@@ -3469,6 +3475,7 @@ QUnit.module('Selection with views', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -4116,6 +4123,8 @@ QUnit.module('Selection with views', {
 
 QUnit.module('Deferred selection', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.setupDataGrid = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'editing'], { initDefaultOptions: true, options: options });
         };
@@ -4135,6 +4144,7 @@ QUnit.module('Deferred selection', {
 
     afterEach: function() {
         teardownModule.apply(this);
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -4674,6 +4684,8 @@ QUnit.module('Deferred selection', {
 
 QUnit.module('Selection with virtual scrolling', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.setupDataGrid = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'selection', 'virtualScrolling'], { initDefaultOptions: true, options: options });
         };

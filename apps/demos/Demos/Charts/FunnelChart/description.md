@@ -1,5 +1,19 @@
-The DevExtreme JavaScript Funnel Chart visualizes a&nbsp;value at&nbsp;different stages. It&nbsp;helps assess value changes throughout these stages and identify potential issues. In&nbsp;this demo, the Funnel shows the percentage of&nbsp;website users that performed a&nbsp;certain action: downloaded a&nbsp;trial, contacted support, purchased a&nbsp;subscription, etc. The chart shows that most users decided not to&nbsp;subscribe after contacting support. You can use this information to&nbsp;make a&nbsp;decision, for example, to&nbsp;provide extra training for the support team.
+DevExtreme Funnel displays data in a funnel chart. You can implement funnel charts to display the flow of data over different stages. This demo displays conversion rates from website visits to product renewals.
+
 <!--split-->
+
+This demo specifies multiple Funnel configuration objects:
+
+- [title](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/title/)    
+Specifies a title for the Funnel component.
+- [export](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/)    
+Configures export settings. Funnel supports multiple export [formats](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/#formats).
+- [tooltip](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/tooltip/)    
+Specifies item tooltips.
+- [label](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/label/)    
+Configures item labels.
+- [item](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/item/)    
+Customizes the visual appearance of items.
 
 [note]
 

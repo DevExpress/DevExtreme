@@ -16,14 +16,12 @@ import {
   shouldSkipDemo,
   FRAMEWORKS,
 } from '../utils/visual-tests/matrix-test-helper';
-import {
-  getThemePostfix,
-  THEME,
-} from '../utils/visual-tests/helpers/theme-utils';
-
+import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
-import knownWarnings from './known-warnings.json';
-import skipJsErrorsComponents from './skip-js-errors-components.json';
+import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
+import { knownWarnings } from './known-warnings';
+import { skipJsErrorsComponents } from './skip-js-errors-components';
+import { skippedTests } from './skipped-tests';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
@@ -62,246 +60,6 @@ const getTestSpecificSkipRules = (testName) => {
   }
 };
 
-const SKIPPED_TESTS = {
-  jQuery: {
-    Charts: [
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
-    ],
-    Gantt: [
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-  },
-  Angular: {
-    DataGrid: [
-      { demo: 'EditStateManagement', themes: [THEME.generic] },
-      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
-      { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.generic] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Strips', themes: [THEME.material] },
-      { demo: 'Bubble', themes: [THEME.material] },
-      { demo: 'PointImage', themes: [THEME.material] },
-      { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
-      { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
-      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'MultiplePointSelection', themes: [THEME.material] },
-      { demo: 'EqualSizePies', themes: [THEME.material] },
-      { demo: 'Selection', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
-      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
-      { demo: 'PointSelectionAPI', themes: [THEME.material] },
-      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
-    ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ChartIntegration', themes: [THEME.material] },
-    ],
-    TreeList: [
-      { demo: 'BatchEditing', themes: [THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-      { demo: 'FormEditing', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    Gauges: [
-      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-      { demo: 'RangeBarBaseValue', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
-    ],
-    RangeSelector: [
-      { demo: 'DiscreteScale', themes: [THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'ContextMenu', themes: [THEME.material] },
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'Legend', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'CustomProjection', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-    ],
-  },
-  React: {
-    Charts: [
-      { demo: 'EqualSizePies', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
-      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
-    ],
-    DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
-      { demo: 'EditStateManagement', themes: [THEME.material] },
-      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-    ],
-    TreeList: [
-      { demo: 'Resizing', themes: [THEME.material] },
-      { demo: 'Overview', themes: [THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'ContextMenu', themes: [THEME.material] },
-    ],
-    Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-      { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
-    ],
-    List: [
-      { demo: 'Search', themes: [THEME.material] },
-      { demo: 'DragAndDrop', themes: [THEME.fluent, THEME.material] },
-    ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'CustomProjection', themes: [THEME.material] },
-      { demo: 'Legend', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
-    RangeSelector: [
-      { demo: 'DiscreteScale', themes: [THEME.material] },
-      { demo: 'Calculation', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
-      { demo: 'Customization', themes: [THEME.material] },
-    ],
-    Gauges: [
-      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorsRuntimeCustomization', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
-      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-    ],
-  },
-  Vue: {
-    Charts: [
-      { demo: 'TilingAlgorithms', themes: [THEME.material] },
-      { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
-      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
-      { demo: 'Line', themes: [THEME.material] },
-      { demo: 'Spline', themes: [THEME.material] },
-      { demo: 'Colorization', themes: [THEME.material] },
-      { demo: 'SignalRService', themes: [THEME.material] },
-      { demo: 'PointsAggregation', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
-      { demo: 'ResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'EqualSizePies', themes: [THEME.material] },
-      { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
-    ],
-    DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'FilteringAPI', themes: [THEME.material] },
-      { demo: 'Filtering', themes: [THEME.fluent] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      { demo: 'DeferredSelection', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.generic] },
-      { demo: 'RecordPaging', themes: [THEME.generic] },
-    ],
-    FileManager: [
-      { demo: 'BindingToFileSystem', themes: [THEME.material] },
-      { demo: 'CustomThumbnails', themes: [THEME.generic] },
-    ],
-    FilterBuilder: [
-      { demo: 'Customization', themes: [THEME.material] },
-    ],
-    TreeList: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'MultipleRowSelection', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Gauges: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorsRuntimeCustomization', themes: [THEME.material] },
-      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
-    ],
-    RangeSelector: [
-      { demo: 'Calculation', themes: [THEME.material] },
-      { demo: 'DiscreteScale', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Customization', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'CustomProjection', themes: [THEME.material] },
-      { demo: 'Spline', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'Legend', themes: [THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'ContextMenu', themes: [THEME.material] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Pagination: ['Overview'],
-  },
-};
-
 FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
@@ -327,16 +85,6 @@ FRAMEWORKS.forEach((approach) => {
 
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));
-  const ACCESSIBILITY_UNSUPPORTED_COMPONENTS = [
-    'Accordion',
-    'Charts',
-    'Diagram',
-    'FileManager',
-    'Gantt',
-    'Map',
-    'Scheduler',
-    'PivotGrid',
-  ];
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
@@ -362,7 +110,7 @@ FRAMEWORKS.forEach((approach) => {
         ...visualTestSettings[approachLowerCase],
       }) || {};
 
-      if (process.env.STRATEGY === 'accessibility' && ACCESSIBILITY_UNSUPPORTED_COMPONENTS.indexOf(widgetName) > -1) {
+      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.indexOf(widgetName) > -1) {
         return;
       }
       if (process.env.CI_ENV && process.env.DISABLE_DEMO_TEST_SETTINGS !== 'ignore') {
@@ -387,7 +135,7 @@ FRAMEWORKS.forEach((approach) => {
       return;
     }
 
-    if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
+    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests)) {
       return;
     }
 

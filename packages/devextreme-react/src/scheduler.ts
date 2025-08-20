@@ -83,7 +83,7 @@ const Scheduler = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["currentDate","currentView"]), []);
       const independentEvents = useMemo(() => (["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onContentReady","onDisposing","onInitialized"]), []);
@@ -269,7 +269,6 @@ const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componen
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttonTemplate?: ((buttonData: any, buttonContent: any) => string | any) | template;
   disabled?: boolean;
   elementAttr?: Record<string, any>;

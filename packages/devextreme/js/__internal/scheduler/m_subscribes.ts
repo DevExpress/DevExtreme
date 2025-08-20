@@ -1,3 +1,4 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -8,12 +9,13 @@ import { formatDates, getFormatType } from './appointments/m_text_utils';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import { utils } from './m_utils';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
+import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
   isCurrentViewAgenda() {
-    return this.currentViewType === 'agenda';
+    return this.currentView.type === 'agenda';
   },
   currentViewUpdated(currentView) {
     this.option('currentView', currentView);
@@ -54,10 +56,10 @@ const subscribes = {
   },
 
   updateAppointmentAfterResize(options) {
-    const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
-    const { exceptionDate } = info.sourceAppointment;
+    const { info } = utils.dataAccessors.getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
+    const { startDate } = info.sourceAppointment;
 
-    this._checkRecurringAppointment(options.target, options.data, exceptionDate, () => {
+    this._checkRecurringAppointment(options.target, options.data, startDate, () => {
       this._updateAppointment(options.target, options.data, function () {
         this._appointments.moveAppointmentBack();
       });
@@ -71,7 +73,7 @@ const subscribes = {
   updateAppointmentAfterDrag({
     event, element, rawAppointment, isDropToTheSameCell, isDropToSelfScheduler,
   }) {
-    const info = utils.dataAccessors.getAppointmentInfo(element);
+    const { info } = utils.dataAccessors.getAppointmentSettings(element) as AppointmentItemViewModel;
     // NOTE: enrich target appointment with additional data from the source
     // in case of one appointment of series will change
     const targetedRawAppointment = extend({}, rawAppointment, this._getUpdatedData(rawAppointment));
@@ -115,7 +117,7 @@ const subscribes = {
     const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
     const { startDate, endDate } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
 
-    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentViewType !== 'month');
+    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
 
     return {
       text: adapter.text,
@@ -133,7 +135,7 @@ const subscribes = {
 
   getResizableAppointmentArea(options) {
     const { allDay } = options;
-    const groups = this._getCurrentViewOption('groups');
+    const groups = this.getViewOption('groups');
 
     if (groups?.length) {
       if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
@@ -164,10 +166,6 @@ const subscribes = {
     return this.getWorkSpace().needRecalculateResizableArea();
   },
 
-  getAppointmentGeometry(settings) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getAppointmentGeometry(settings);
-  },
-
   isAllDay(appointmentData) {
     return this.getLayoutManager().getRenderingStrategyInstance().isAllDay(appointmentData);
   },
@@ -177,7 +175,12 @@ const subscribes = {
   },
 
   getDropDownAppointmentWidth(isAllDay) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    return this.getLayoutManager()
+      .getRenderingStrategyInstance()
+      .getDropDownAppointmentWidth(
+        this.currentView.intervalCount,
+        isAllDay,
+      );
   },
 
   getDropDownAppointmentHeight() {
@@ -193,21 +196,21 @@ const subscribes = {
   },
 
   getMaxAppointmentCountPerCellByType(isAllDay) {
-    return this.getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
+    return this.getLayoutManager().getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
   },
 
   needCorrectAppointmentDates() {
-    return this.getRenderingStrategyInstance().needCorrectAppointmentDates();
+    return this.getLayoutManager().getRenderingStrategyInstance().needCorrectAppointmentDates();
   },
 
   getRenderingStrategyDirection() {
-    return this.getRenderingStrategyInstance().getDirection();
+    return this.getLayoutManager().getRenderingStrategyInstance().getDirection();
   },
 
   updateAppointmentEndDate(options) {
     const { endDate } = options;
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-    const startDayHour = this._getCurrentViewOption('startDayHour');
+    const endDayHour = this.getViewOption('endDayHour');
+    const startDayHour = this.getViewOption('startDayHour');
 
     let updatedEndDate = endDate;
 
@@ -220,8 +223,8 @@ const subscribes = {
     return updatedEndDate;
   },
 
-  renderCompactAppointments(options) {
-    this._compactAppointmentsHelper.render(options);
+  renderCompactAppointments(options): dxElementWrapper {
+    return this._compactAppointmentsHelper.render(options);
   },
 
   clearCompactAppointments() {
@@ -260,7 +263,7 @@ const subscribes = {
   },
 
   getAgendaDuration() {
-    return this._getCurrentViewOption('agendaDuration');
+    return this.getViewOption('agendaDuration');
   },
 
   getStartViewDate() {
@@ -290,10 +293,6 @@ const subscribes = {
     }
   },
 
-  getTimezone() {
-    return this._getTimezoneOffsetByOption();
-  },
-
   getTargetedAppointmentData(appointment, element) {
     return this.getTargetedAppointment(appointment, element);
   },
@@ -317,5 +316,8 @@ const subscribes = {
   removeDroppableCellClass() {
     this._workSpace.removeDroppableCellClass();
   },
-};
+} as const;
+
 export default subscribes;
+export type SubscribeMethods = typeof subscribes;
+export type SubscribeKey = keyof typeof subscribes;

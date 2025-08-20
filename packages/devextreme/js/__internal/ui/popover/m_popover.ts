@@ -22,7 +22,15 @@ import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Popup from '@ts/ui/popup/m_popup';
 
-import { POPOVER_POSITION_ALIASES, PopoverPositionController } from './m_popover_position_controller';
+import type {
+  PopoverControllerElements,
+  PopoverControllerProperties,
+  PopoverPositionControllerConstructor,
+} from './popover_position_controller';
+import {
+  POPOVER_POSITION_ALIASES,
+  PopoverPositionController,
+} from './popover_position_controller';
 
 // STYLE popover
 
@@ -55,7 +63,7 @@ export interface PopoverProperties extends Omit<Properties,
   preventScrollEvents?: boolean;
 }
 class Popover<
-TProperties extends PopoverProperties = PopoverProperties,
+  TProperties extends PopoverProperties = PopoverProperties,
 > extends Popup<TProperties> {
   // @ts-expect-error ts-error
   _positionController!: PopoverPositionController;
@@ -267,10 +275,11 @@ TProperties extends PopoverProperties = PopoverProperties,
       .prependTo(this.$overlayContent());
   }
 
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
     }
+
     return true;
   }
 
@@ -295,15 +304,17 @@ TProperties extends PopoverProperties = PopoverProperties,
     super._stopAnimation.apply(this, arguments);
   }
 
-  _renderTitle(): void {
+  _renderTopToolbar(): void {
     this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
-    super._renderTitle();
+    super._renderTopToolbar();
   }
 
   _renderPosition(shouldUpdateDimensions = true): void {
     super._renderPosition();
     this._renderOverlayPosition(shouldUpdateDimensions);
-    this._actions.onPositioned();
+
+    // @ts-expect-error should provide event
+    this._actions?.onPositioned?.();
   }
 
   _renderOverlayPosition(shouldUpdateDimensions: boolean): void {
@@ -362,16 +373,30 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
-    return $(this._positionController._position.of || super._getHideOnParentScrollTarget());
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
   _getSideByLocation(location) {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
-    return this._isVerticalSide() && isFlippedByVertical || this._isHorizontalSide() && isFlippedByHorizontal || this._isPopoverInside()
-      ? POSITION_FLIP_MAP[this._positionController._positionSide]
-      : this._positionController._positionSide;
+    const isVertical = this._isVerticalSide() && isFlippedByVertical;
+    const isHorizontal = this._isHorizontalSide() && isFlippedByHorizontal;
+    const isInside = this._isPopoverInside();
+
+    const condition = isVertical || isHorizontal || isInside;
+    const positionSide = this._positionController._positionSide;
+
+    if (condition && positionSide) {
+      return POSITION_FLIP_MAP[positionSide];
+    }
+
+    if (positionSide) {
+      return positionSide;
+    }
+
+    return undefined;
   }
 
   _togglePositionClass(positionClass) {
@@ -389,11 +414,12 @@ TProperties extends PopoverProperties = PopoverProperties,
   _renderArrowPosition(side) {
     const arrowRect = getBoundingRect(this._$arrow.get(0));
     const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
+
     this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
     const axis = this._isVerticalSide(side) ? 'left' : 'top';
     const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
-    const $target = $(this._positionController._position.of);
+    const $target = $(this._positionController._position?.of);
     const targetOffset = positionUtils.offset($target) ?? { top: 0, left: 0 };
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
@@ -409,8 +435,11 @@ TProperties extends PopoverProperties = PopoverProperties,
 
     const min = Math.max(contentLocation, targetLocation);
     const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
+
     let arrowLocation;
+
     const { arrowPosition } = this.option();
+
     if (arrowPosition === 'start') {
       arrowLocation = min - contentLocation;
     } else if (arrowPosition === 'end') {
@@ -420,12 +449,15 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
+
     const { arrowOffset } = this.option();
+
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,
       borderWidth,
       contentSize - arrowSize - borderWidth * 2,
     );
+
     this._$arrow.css(axis, finalArrowLocation);
   }
 
@@ -439,14 +471,29 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  _getPositionControllerConfig() {
+  // @ts-expect-error Override parent method with more specific type
+  _getPositionControllerConfig(): PopoverPositionControllerConstructor {
+    const superConfiguration = super._getPositionControllerConfig();
+
     const { shading, target } = this.option();
 
-    return extend({}, super._getPositionControllerConfig(), {
+    const properties: PopoverControllerProperties = {
+      ...superConfiguration.properties,
       target,
       shading,
+    };
+
+    const elements: PopoverControllerElements = {
+      ...superConfiguration.elements,
       $arrow: this._$arrow,
-    });
+    };
+
+    const configuration: PopoverPositionControllerConstructor = {
+      properties,
+      elements,
+    };
+
+    return configuration;
   }
 
   _initPositionController() {
@@ -503,7 +550,7 @@ TProperties extends PopoverProperties = PopoverProperties,
         if (previousValue) {
           this._detachEvents(previousValue);
         }
-        this._positionController.updateTarget(value);
+        this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
         break;
       case 'showEvent':
@@ -531,7 +578,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  show(target?): Promise<unknown> {
+  show(target?): Promise<boolean> {
     if (target) {
       this.option('target', target);
     }

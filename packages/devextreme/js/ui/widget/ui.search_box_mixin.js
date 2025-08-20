@@ -1,3 +1,3 @@
-import SearchBoxMixin from '../../__internal/ui/collection/m_search_box_mixin';
+import SearchBoxMixin from '../../__internal/ui/collection/search_box_controller';
 
 export default SearchBoxMixin;

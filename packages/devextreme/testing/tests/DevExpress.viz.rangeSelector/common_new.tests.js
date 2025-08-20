@@ -41,7 +41,7 @@ QUnit.module('RangeSelector', {
 });
 
 // T347971
-QUnit.test('Empty scale is drawn with compact height when \'dataSource\' is defined and \'chart\' is not', function(assert) {
+QUnit.test('Empty scale is drawn with compact height when dataSource is defined and chart is not', function(assert) {
     this.$container.dxRangeSelector({
         dataSource: []
     });
@@ -52,7 +52,7 @@ QUnit.test('Empty scale is drawn with compact height when \'dataSource\' is defi
 });
 
 // T347971
-QUnit.test('Empty scale is drawn with full height when \'dataSource\' is not defined and \'chart\' is', function(assert) {
+QUnit.test('Empty scale is drawn with full height when dataSource is not defined and chart is', function(assert) {
     this.$container.dxRangeSelector({
         chart: {
             series: {}
@@ -65,7 +65,7 @@ QUnit.test('Empty scale is drawn with full height when \'dataSource\' is not def
 });
 
 // T347971
-QUnit.test('There is no unexpected incident when \'chart.series\' array is empty', function(assert) {
+QUnit.test('There is no unexpected incident when chart.series array is empty', function(assert) {
     const spy = sinon.spy();
     this.$container.dxRangeSelector({
         dataSource: [],
@@ -79,7 +79,7 @@ QUnit.test('There is no unexpected incident when \'chart.series\' array is empty
 });
 
 // T347293
-QUnit.test('There is no error when \'dataSource\' is an empty array and scale is discrete datetime', function(assert) {
+QUnit.test('There is no error when dataSource is an empty array and scale is discrete datetime', function(assert) {
     const translator = this.axis.getTranslator();
     translator.updateBusinessRange({});
 

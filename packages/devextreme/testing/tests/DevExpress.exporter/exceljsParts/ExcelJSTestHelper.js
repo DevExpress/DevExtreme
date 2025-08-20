@@ -1,5 +1,5 @@
 import { isDefined } from 'core/utils/type';
-import { Export } from 'exporter/exceljs/export';
+import { Export } from '__internal/exporter/exceljs/export';
 
 const { assert } = QUnit;
 

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 
 import 'ui/list';
 
@@ -743,5 +744,44 @@ QUnit.module('live update', {
         assert.strictEqual(list.itemElements().filter(selectedItemSelector).length, 0, 'no selected items');
         assert.equal(list.itemElements().get(0), $itemElements.get(0), 'item element 0 is not rerenderd');
         assert.notEqual(list.itemElements().get(1), $itemElements.get(1), 'item element 1 is rerenderd');
+    });
+
+    QUnit.test('repaintChangesOnly, dataSource skip should not be negative on search (T1083476)', function(assert) {
+        const items = Array.from({ length: 10 }, (_, i) => ({ text: `Item ${i}`, id: i }));
+        let skipValue = 0;
+        const $list = $('#list').dxList({
+            dataSource: {
+                key: 'id',
+                pushAggregationTimeout: 0,
+                load(loadOptions) {
+                    skipValue = loadOptions.skip;
+
+                    let result = items;
+
+                    if(loadOptions.searchValue) {
+                        result = result.filter(item =>
+                            String(item[loadOptions.searchExpr])
+                                .toLowerCase()
+                                .includes(String(loadOptions.searchValue).toLowerCase())
+                        );
+                    }
+
+                    result = result.slice(loadOptions.skip, loadOptions.skip + loadOptions.take);
+
+                    return result;
+                }
+            },
+            searchEnabled: true,
+            searchExpr: 'text',
+            displayExpr: 'text',
+            repaintChangesOnly: true,
+        });
+
+        const keyboard = keyboardMock($list.find('.dx-texteditor-input').eq(0));
+
+        keyboard.type('z');
+        keyboard.type('z');
+
+        assert.strictEqual(skipValue >= 0, true, 'skip value did not become negative');
     });
 });

@@ -32,6 +32,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiGanttItemComponent } from './item-dxi';
+import { DxiGanttContextMenuItemComponent } from './context-menu-item-dxi';
 
 
 @Component({
@@ -134,14 +135,18 @@ export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption
     
     @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
     
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemComponent)) contextMenuItemsChildren!: QueryList<DxiGanttContextMenuItemComponent>
+    
     setItems() {
         const q: QueryList<any> = new QueryList();
         q.reset([
             ...this.contextMenuItemItemsChildren.toArray(),
             ...this.itemsChildren.toArray(),
+            ...this.contextMenuItemsChildren.toArray(),
         ]);
         this.setChildren('items', q);
     }
+
 
 
 
@@ -175,6 +180,7 @@ export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption
         
         this.contextMenuItemItemsChildren.changes.subscribe(() => { this.setItems() });
         this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.contextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
     }
 }
 

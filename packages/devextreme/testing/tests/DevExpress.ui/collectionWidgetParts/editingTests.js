@@ -5,8 +5,10 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import {
+    ITEM_CLASS,
+} from '__internal/ui/collection/collection_widget.base';
 
-const ITEM_CLASS = 'dx-item';
 const ITEM_SELECTED_CLASS = `${ITEM_CLASS}-selected`;
 const ITEM_RESPONSE_WAIT_CLASS = `${ITEM_CLASS}-response-wait`;
 

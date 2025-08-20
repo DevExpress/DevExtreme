@@ -3,10 +3,10 @@ import fx from 'common/core/animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import Submenu from '__internal/ui/menu/m_submenu';
+import Submenu from '__internal/ui/menu/submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from '__internal/core/m_dom_adapter';
-import Menu from '__internal/ui/menu/m_menu';
+import Menu from '__internal/ui/menu/menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
 import { CustomStore } from 'common/data/custom_store';
@@ -19,6 +19,10 @@ import { shouldSkipOnMobile } from '../../helpers/device.js';
 import 'generic_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import {
+    EXPANDER_ICON_STUB_CLASS as TREE_VIEW_EXPANDER_ICON_STUB_CLASS,
+    ITEM_CLASS as TREE_VIEW_ITEM_CLASS,
+} from '__internal/ui/tree_view/tree_view.base';
 
 QUnit.testStart(function() {
     const markup =
@@ -257,7 +261,7 @@ QUnit.module('Menu rendering', {
         assert.equal(root.length, 1, 'just root level');
     });
 
-    QUnit.test('Don\'t create submenu on rendering', function(assert) {
+    QUnit.test('Do not create submenu on rendering', function(assert) {
         const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] });
         const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -1608,7 +1612,7 @@ QUnit.module('Menu tests', {
         assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
     });
 
-    QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
+    QUnit.test('Do not hide submenu when cancel is true', function(assert) {
         let i = 0;
 
         const options = {
@@ -2371,7 +2375,7 @@ QUnit.module('Menu tests', {
         assert.ok(submenu.option('visible'), 'submenu shown');
     });
 
-    QUnit.test('Menu should show after it\'s submenu has been selected', function(assert) {
+    QUnit.test('Menu should show after its submenu has been selected', function(assert) {
         const menu = createMenu({
             items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
             showFirstSubmenuMode: { name: 'onClick', delay: 0 }
@@ -2470,7 +2474,7 @@ QUnit.module('Menu tests', {
         assert.ok(submenu.isOverlayVisible(), 'submenu is still visible');
     });
 
-    QUnit.test('click should not be blocked on menu\'s item', function(assert) {
+    QUnit.test('click should not be blocked on menu item', function(assert) {
         const menu = createMenu({
             items: [{ text: 'Item 1' }]
         });
@@ -2641,7 +2645,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('selectedItem').text, 'item3', 'correct item is selected');
     });
 
-    QUnit.test('don\'t select an item when space pressed and selectionMode is none', function(assert) {
+    QUnit.test('do not select an item when space pressed and selectionMode is none', function(assert) {
         this.instance.option('selectionMode', 'none');
 
         this.keyboard
@@ -2891,7 +2895,7 @@ QUnit.module('keyboard navigation', {
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
         [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
     ].forEach(items => {
-        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it\'s opened (T1227670)', function(assert) {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it is opened (T1227670)', function(assert) {
             this.instance.option('items', items);
 
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
@@ -3339,6 +3343,32 @@ QUnit.module('adaptivity: render', {
             offset.restore();
         }
     });
+
+    QUnit.test('tree view stub elements should have display=none if adaptivityEnabled is set to true (T1302958)', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $treeViewItems = $(`.${TREE_VIEW_ITEM_CLASS}`);
+        const $stubElements = $(`.${TREE_VIEW_EXPANDER_ICON_STUB_CLASS}`);
+
+        $treeViewItems.each((index, element) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).gap,
+                '0px',
+                `gap property of tree view item #${index} is 0px`
+            );
+        });
+
+        $stubElements.each((index, element) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).width,
+                '0px',
+                `width property of stub element #${index} is 0px`
+            );
+        });
+    });
 });
 
 QUnit.module('adaptivity: transfer options', {
@@ -3576,7 +3606,7 @@ QUnit.module('adaptivity: transfer options', {
         assert.strictEqual(treeview.option('animationEnabled'), false, 'animation has been changed to disabled');
     });
 
-    QUnit.test('Data of tree view doesn\'t load twice when uses the custom store', function(assert) {
+    QUnit.test('Data of tree view does not load twice when uses the custom store', function(assert) {
         const that = this;
         let dataLoadCounter = 0;
         const clock = sinon.useFakeTimers();
@@ -3707,6 +3737,27 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(clickSpy.calledOnce);
     });
 
+    QUnit.test('onItemClick should be raised once if item.url is set', function(assert) {
+        const onItemClickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: this.items,
+            onItemClick: onItemClickSpy,
+            adaptivityEnabled: true
+        });
+
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        parentTreeviewItem.trigger('dxclick');
+        onItemClickSpy.resetHistory();
+
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+
+        treeviewItem.trigger('dxclick');
+
+        assert.strictEqual(onItemClickSpy.calledOnce, true, 'onItemClick was called once');
+    });
+
     QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
         if(shouldSkipOnMobile(assert)) {
             return;
@@ -3828,7 +3879,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok($treeview.is(':visible'), 'treeview is visible');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if container size changed', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if container size changed', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -3841,7 +3892,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if width is not enough', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if width is not enough', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             width: 500,
@@ -3851,7 +3902,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive if widget size changed', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive if widget size changed', function(assert) {
         const menu = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -3862,7 +3913,7 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).is(':hidden'), 'hamburger button is hidden');
     });
 
-    QUnit.test('Menu should toggle it\'s view between adaptive and non adaptive on visibilityChanged event', function(assert) {
+    QUnit.test('Menu should toggle its view between adaptive and non adaptive on visibilityChanged event', function(assert) {
         $('#qunit-fixture').width(500);
 
         const menu = new Menu(this.$element, {
@@ -4002,11 +4053,11 @@ QUnit.module('adaptivity: behavior', {
 
         $($item2).trigger('dxclick');
         assert.ok(getOuterHeight($overlayContent) > height, 'overlay should be enlarged');
-        assert.equal(overlayPositioned.callCount, 2, 'overlay\'s position should be recalculated');
+        assert.equal(overlayPositioned.callCount, 2, 'overlay position should be recalculated');
 
         $($item2).trigger('dxclick');
         assert.equal(getOuterHeight($overlayContent), height, 'overlay should be shrinked');
-        assert.equal(overlayPositioned.callCount, 3, 'overlay\'s position should be recalculated');
+        assert.equal(overlayPositioned.callCount, 3, 'overlay position should be recalculated');
     });
 
     QUnit.test('Adaptive width limit should contain only root items', function(assert) {
@@ -4174,7 +4225,7 @@ function createMenuForHoverStay(options) {
 }
 
 function transferActionTest(eventName, expectedArgs, triggerFunc) {
-    QUnit.test(eventName + ' action should be transferred to the treeview when \'on\' binding is used', function(assert) {
+    QUnit.test(eventName + ' action should be transferred to the treeview when on binding is used', function(assert) {
         const handler = sinon.spy();
 
         const menu = new Menu(this.$element, {
@@ -4185,7 +4236,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
 
         menu.on(eventName, handler);
         triggerFunc(treeView);
-        assert.equal(handler.callCount, 1, 'handler for \'on\' was called once');
+        assert.equal(handler.callCount, 1, 'handler for on was called once');
         $.each(expectedArgs, function(_, argument) {
             assert.ok(handler.getCall(0).args[0], argument + ' is exist in parameters');
         });
@@ -4193,7 +4244,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
         handler.resetHistory();
         menu.off(eventName);
         triggerFunc(treeView);
-        assert.equal(handler.callCount, 0, 'handler for \'on\' was not executed after unsubscribe');
+        assert.equal(handler.callCount, 0, 'handler for on was not executed after unsubscribe');
     });
 
     QUnit.test(eventName + ' action should be transferred to the treeview when option is used', function(assert) {

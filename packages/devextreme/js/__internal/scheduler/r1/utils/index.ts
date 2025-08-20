@@ -27,9 +27,6 @@ import {
   getDateForHeaderText,
 } from './timeline_week';
 import {
-  getCurrentView,
-} from './views';
-import {
   calculateStartViewDate as weekCalculateStartViewDate,
   calculateViewStartDate as weekCalculateViewStartDate,
   getIntervalDuration,
@@ -87,9 +84,6 @@ export {
   formatWeekday,
   formatWeekdayAndDay,
 } from './format_weekday';
-export {
-  getAppointmentDataItems,
-} from './get_appointment_data_items';
 
 export const agendaUtils = {
   calculateStartViewDate,
@@ -123,10 +117,6 @@ export const timelineWeekUtils = {
 
 export const timelineMonthUtils = {
   calculateStartViewDate: timelineMonthCalculateStartViewDate,
-};
-
-export const viewsUtils = {
-  getCurrentView,
 };
 
 export const renderUtils = {

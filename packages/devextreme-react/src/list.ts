@@ -69,7 +69,7 @@ const List = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedItemKeys","selectedItems"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onGroupRendered","onInitialized","onItemClick","onItemContextMenu","onItemDeleted","onItemDeleting","onItemHold","onItemRendered","onItemReordered","onItemSwipe","onPageLoading","onPullRefresh","onScroll","onSelectAllValueChanged","onSelectionChanging"]), []);
@@ -200,7 +200,6 @@ type IItemDraggingProps = React.PropsWithChildren<{
   allowDropInsideItem?: boolean;
   allowReordering?: boolean;
   autoScroll?: boolean;
-  bindingOptions?: Record<string, any>;
   boundary?: any | string | undefined;
   container?: any | string | undefined;
   cursorOffset?: Record<string, any> | string | {
@@ -281,7 +280,6 @@ const MenuItem = Object.assign<typeof _componentMenuItem, NestedComponentMeta>(_
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -330,7 +328,6 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;

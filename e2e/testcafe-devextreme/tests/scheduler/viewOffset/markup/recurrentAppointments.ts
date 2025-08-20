@@ -83,6 +83,7 @@ const getViewWithCorrectCellDuration = (
   }
 };
 
+// TODO(10): Fix view model. Appointment with offset can crops and doesn't render
 [
   { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },
   { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS },

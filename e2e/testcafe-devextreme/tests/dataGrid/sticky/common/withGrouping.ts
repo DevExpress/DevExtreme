@@ -281,3 +281,80 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     autoExpandAll: false,
   },
 }));
+
+[false, true].forEach((rtlEnabled) => {
+  // T1284612
+  safeSizeTest(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+    await takeScreenshot(`grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, dataGrid.element);
+
+    await dataGrid.apiOption('summary.totalItems', [{
+      column: 'SaleAmount',
+      summaryType: 'max',
+      valueFormat: 'currency',
+    }]);
+    await dataGrid.scrollTo(t, { x: 0 });
+    await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
+
+    await takeScreenshot(`grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [900, 800]).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    rtlEnabled,
+    customizeColumns(columns) {
+      columns[2].groupIndex = 0;
+    },
+    summary: {
+      groupItems: [{
+        column: 'OrderNumber',
+        summaryType: 'count',
+        displayFormat: '{0} orders',
+      }, {
+        column: 'City',
+        summaryType: 'max',
+        valueFormat: 'currency',
+        showInGroupFooter: false,
+        alignByColumn: true,
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'max',
+        valueFormat: 'currency',
+        showInGroupFooter: false,
+        alignByColumn: true,
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'sum',
+        valueFormat: 'currency',
+        displayFormat: 'Total: {0}',
+        showInGroupFooter: true,
+      }],
+      totalItems: [{
+        column: 'OrderNumber',
+        summaryType: 'count',
+        displayFormat: '{0} orders',
+      }, {
+        column: 'SaleAmount',
+        summaryType: 'max',
+        valueFormat: 'currency',
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'max',
+        valueFormat: 'currency',
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'sum',
+        valueFormat: 'currency',
+        displayFormat: 'Total: {0}',
+      }],
+    },
+  }));
+});

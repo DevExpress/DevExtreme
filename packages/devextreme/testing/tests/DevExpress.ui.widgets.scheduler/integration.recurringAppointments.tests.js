@@ -13,6 +13,7 @@ import {
     isDesktopEnvironment,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
+import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import dateUtils from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
@@ -112,8 +113,10 @@ supportedScrollingModes.forEach(scrollingMode => {
                     }
                 ]
             });
+            const appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
 
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').each(function() {
+            await waitForAsync(() => getAppointmentColor($(appointments).last()) === '#ff0000');
+            appointments.each(function() {
                 assert.equal(getAppointmentColor($(this)), '#ff0000', 'Color is OK');
             });
 

@@ -11,9 +11,6 @@ $(() => {
 
       return $list.dxList({
         dataSource: navigation,
-        hoverStateEnabled: false,
-        focusStateEnabled: false,
-        activeStateEnabled: false,
       });
     },
   }).dxDrawer('instance');

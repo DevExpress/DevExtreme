@@ -188,7 +188,7 @@ class Gantt extends Widget {
             scaleTypeRange: this.option('scaleTypeRange'),
             editing: this.option('editing'),
             validation: this.option('validation'),
-            stripLines: this.option('stripLines'),
+            stripLines: this.option('stripLines')?.map(item => ({ ...item })),
             bars: this._bars,
             mainElement: this.$element(),
             onSelectionChanged: (e) => { this._ganttTreeList.selectRows(GanttHelper.getArrayFromOneElement(e.id)); },
@@ -653,9 +653,9 @@ class Gantt extends Widget {
     assignResourceToTask(resourceKey, taskKey) {
         this._ganttView._ganttViewCore.assignResourceToTask(resourceKey, taskKey);
     }
-    // eslint-disable-next-line spellcheck/spell-checker
+
     unassignResourceFromTask(resourceKey, taskKey) {
-        // eslint-disable-next-line spellcheck/spell-checker
+
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
     unassignAllResourcesFromTask(taskKey) {
@@ -738,6 +738,7 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), GanttHelper.getDefaultOptions());
     }
+
     _optionChanged(args) {
         switch(args.name) {
             case 'tasks':
@@ -846,11 +847,11 @@ class Gantt extends Widget {
                 this._actionsManager?.createResourceAssignedAction();
                 break;
             case 'onResourceUnassigning':
-                // eslint-disable-next-line spellcheck/spell-checker
+
                 this._actionsManager?.createResourceUnassigningAction();
                 break;
             case 'onResourceUnassigned':
-                // eslint-disable-next-line spellcheck/spell-checker
+
                 this._actionsManager?.createResourceUnassignedAction();
                 break;
             case 'onCustomCommand':
@@ -871,7 +872,7 @@ class Gantt extends Widget {
                 this._setGanttViewOption('showRowLines', args.value);
                 break;
             case 'stripLines':
-                this._setGanttViewOption('stripLines', args.value);
+                this._setGanttViewOption(args.fullName, args.value);
                 break;
             case 'scaleType':
                 this._setGanttViewOption('scaleType', args.value);

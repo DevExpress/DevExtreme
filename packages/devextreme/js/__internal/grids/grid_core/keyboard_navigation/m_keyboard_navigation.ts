@@ -23,8 +23,8 @@ import {
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import * as accessibility from '@js/ui/shared/accessibility';
-import { focused } from '@js/ui/widget/selectors';
 import { isElementInDom } from '@ts/core/utils/m_dom';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
@@ -885,49 +885,52 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _editingCellTabHandler(eventArgs, direction) {
     const eventTarget = eventArgs.originalEvent.target;
-    let $cell = this._getCellElementFromTarget(eventTarget);
-    let isEditingAllowed;
-    const $event = eventArgs.originalEvent;
-    const elementType = this._getElementType(eventTarget);
+    const $targetCell = this._getCellElementFromTarget(eventTarget);
+    const isCommandCell = $targetCell.is(COMMAND_CELL_SELECTOR);
 
-    if ($cell.is(COMMAND_CELL_SELECTOR)) {
+    if (isCommandCell) {
       return !this._targetCellTabHandler(eventArgs, direction);
     }
 
-    this._updateFocusedCellPosition($cell);
+    this._updateFocusedCellPosition($targetCell);
+
+    const elementType = this._getElementType(eventTarget);
     const nextCellInfo = this._getNextCellByTabKey(
-      $event,
+      eventArgs.originalEvent,
       direction,
       elementType,
     );
-    $cell = nextCellInfo.$cell;
+    const $nextCell = nextCellInfo.$cell;
 
-    if (!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
+    if (!$nextCell || this._handleTabKeyOnMasterDetailCell($nextCell, direction)) {
       return false;
     }
 
-    const column = this._getColumnByCellElement($cell);
-    const $row = $cell.parent();
-    const rowIndex = this._getRowIndex($row);
-    const row = this._dataController.items()[rowIndex] as any;
-    const editingController = this._editingController;
+    let isEditingAllowed = false;
+    const column = this._getColumnByCellElement($nextCell);
 
-    if (column && column.allowEditing) {
+    if (column?.allowEditing) {
+      const $row = $nextCell.parent();
+      const rowIndex = this._getLocalRowIndex($row);
+      const row = this._dataController.items()[rowIndex] as any;
       const isDataRow = !row || row.rowType === 'data';
-      isEditingAllowed = editingController.allowUpdating({ row })
-        ? isDataRow
-        : row && row.isNewRow;
+
+      isEditingAllowed = this._editingController.allowUpdating({ row })
+        ? isDataRow : row?.isNewRow;
     }
 
     if (!isEditingAllowed) {
       this._closeEditCell();
     }
 
-    if (this._focusCell($cell, !nextCellInfo.isHighlighted)) {
-      if (!this._isRowEditMode() && isEditingAllowed) {
+    const nextCellFocused = this._focusCell($nextCell, !nextCellInfo.isHighlighted);
+
+    if (nextCellFocused) {
+      const isRowMode = this._isRowEditMode();
+      if (!isRowMode && isEditingAllowed) {
         this._editFocusedCell();
       } else {
-        this._focusInteractiveElement($cell, eventArgs.shift);
+        this._focusInteractiveElement($nextCell, eventArgs.shift);
       }
     }
 
@@ -2302,11 +2305,14 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     columnIndex: number,
   ): void {
     const $cell = this._getFocusedCell();
-    const rowIndex = this._getRowIndex($cell?.parent());
+    const $row = $cell?.parent();
+
+    const rowIndex = this.getRowIndex();
     const localRowIndex = Math.min(
-      rowIndex - this._dataController.getRowIndexOffset(),
+      this._getLocalRowIndex($row),
       this._dataController.items().length - 1,
     );
+
     const isEditingCell = this._editingController.isEditCell(
       localRowIndex,
       columnIndex,
@@ -2448,12 +2454,18 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  protected _getRowIndex($row) {
-    let rowIndex = this._rowsView.getRowIndex($row);
+  protected _getRowIndex($row): number {
+    let rowIndex = this._getLocalRowIndex($row);
 
     if (rowIndex >= 0) {
       rowIndex += this._dataController.getRowIndexOffset();
     }
+
+    return rowIndex;
+  }
+
+  protected _getLocalRowIndex($row): number {
+    const rowIndex = this._rowsView.getRowIndex($row);
 
     return rowIndex;
   }
@@ -2994,7 +3006,9 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
   protected _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
     super._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
     if (view.name === ROWS_VIEW) {
-      this._rowsView.renderFocusState(null);
+      this._rowsView.renderFocusState({
+        preventScroll: shouldPreventScroll(this),
+      });
     }
   }
 };

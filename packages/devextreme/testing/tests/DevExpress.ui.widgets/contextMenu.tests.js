@@ -79,11 +79,11 @@ QUnit.module('Rendering', moduleConfig, () => {
         const instance = new ContextMenu(this.$element, { items: [{ text: 'item1' }] });
         let $itemsContainer = instance.itemsContainer();
 
-        assert.ok(!$itemsContainer, 'no itemsContainer');
+        assert.strictEqual($itemsContainer.length, 0, 'no itemsContainer');
 
         instance.show();
         $itemsContainer = instance.itemsContainer();
-        assert.ok($itemsContainer.length, 'overlay is defined');
+        assert.strictEqual($itemsContainer.length, 1, 'overlay is defined');
     });
 
     QUnit.test('item click should not prevent document click handler', function(assert) {
@@ -957,11 +957,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         instance.option('visible', false);
         instance.option('submenuDirection', 'left');
         $itemsContainer = instance.itemsContainer();
-        assert.ok(!$itemsContainer, 'menu is removed');
+
+        assert.strictEqual($itemsContainer.length, 0, 'menu is removed');
 
         instance.show();
         $itemsContainer = instance.itemsContainer();
-        assert.ok($itemsContainer.is(':visible'), 'menu is rendered again');
+        assert.strictEqual($itemsContainer.is(':visible'), true, 'menu is rendered again');
     });
 
     QUnit.test('context menu overlay should have flipfit position as native context menu', function(assert) {
@@ -2185,8 +2186,8 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         const $items = instance.itemsContainer().find('.' + DX_MENU_ITEM_CLASS);
 
-        fx.stop = $element => {
-            if($element.hasClass(DX_SUBMENU_CLASS)) {
+        fx.stop = (element) => {
+            if($(element).hasClass(DX_SUBMENU_CLASS)) {
                 stopCalls++;
             }
         };

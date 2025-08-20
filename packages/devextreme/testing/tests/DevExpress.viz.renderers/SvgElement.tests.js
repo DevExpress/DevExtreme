@@ -591,6 +591,32 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.notStrictEqual(markupString.indexOf('1&#160;2&#160;3'), -1);
     });
 
+    QUnit.test('Keep self closing xhtml tags (T1297767)', function(assert) {
+        const parent = { element: document.createElement('div') };
+        const svg = (new rendererModule.SvgElement({}, 'svg')).append(parent);
+        $('#qunit-fixture').append(parent);
+
+        svg.attr({
+            xmlns: 'http://www.w3.org/2000/svg',
+            'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+            version: '1.1'
+        });
+
+        const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+        const div = document.createElement('div');
+        const br = document.createElement('br');
+
+        div.appendChild(br);
+        foreignObject.appendChild(div);
+
+        svg.element.appendChild(foreignObject);
+
+        const markupString = svg.markup();
+        const expectedMarkup = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><foreignObject><div xmlns="http://www.w3.org/1999/xhtml"><br /></div></foreignObject></svg>';
+
+        assert.deepEqual(mapFromStr(markupString), mapFromStr(expectedMarkup));
+    });
+
     QUnit.module('SvgElement jQuery API', {
         beforeEach: function() {
             const renderer = rendererModule;

@@ -483,7 +483,6 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
           $cellElement && result.push($cellElement.get(0));
         });
 
-        // @ts-expect-error
         return $(result);
       } if (!index || index < rowCount) {
         return that.getCellElements(index || 0);

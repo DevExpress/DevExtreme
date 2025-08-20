@@ -1,3 +1,5 @@
+import type ViewDataProvider from './view_model/m_view_data_provider';
+
 export default class CellsSelectionState {
   _focusedCell: any = null;
 
@@ -11,12 +13,9 @@ export default class CellsSelectionState {
 
   _prevSelectedCells: any = null;
 
-  constructor(public _viewDataProvider) {
-  }
+  constructor(public viewDataProvider: ViewDataProvider) {}
 
-  get viewDataProvider() { return this._viewDataProvider; }
-
-  get focusedCell() {
+  getFocusedCell() {
     const focusedCell = this._focusedCell;
 
     if (!focusedCell) {
@@ -34,13 +33,13 @@ export default class CellsSelectionState {
 
   setFocusedCell(rowIndex, columnIndex, isAllDay) {
     if (rowIndex >= 0) {
-      const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
+      const cell = this.viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
       this._focusedCell = cell;
     }
   }
 
   setSelectedCells(lastCellCoordinates, firstCellCoordinates: any = undefined) {
-    const viewDataProvider = this._viewDataProvider;
+    const { viewDataProvider } = this;
     const {
       rowIndex: lastRowIndex, columnIndex: lastColumnIndex, allDay: isLastCellAllDay,
     } = lastCellCoordinates;
@@ -60,7 +59,7 @@ export default class CellsSelectionState {
 
     this._firstSelectedCell = firstCell;
 
-    this._selectedCells = this._viewDataProvider.getCellsBetween(firstCell, lastCell);
+    this._selectedCells = this.viewDataProvider.getCellsBetween(firstCell, lastCell);
   }
 
   setSelectedCellsByData(selectedCellsData) {

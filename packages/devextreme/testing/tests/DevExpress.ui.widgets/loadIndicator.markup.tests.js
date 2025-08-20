@@ -10,7 +10,7 @@ import {
     LOADINDICATOR_IMAGE_CLASS,
     LOADINDICATOR_WRAPPER_CLASS,
     ANIMATION_TYPE_CLASSES,
-} from '__internal/ui/m_load_indicator';
+} from '__internal/ui/load_indicator';
 
 import 'ui/load_indicator';
 import 'generic_light.css!';

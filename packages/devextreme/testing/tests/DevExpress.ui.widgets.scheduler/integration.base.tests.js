@@ -45,8 +45,22 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         currentView: 'week'
     });
     const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
-    assert.deepEqual(header.option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
-    assert.equal(header.option('currentView'), 'week', 'Scheduler header has a correct current view');
+    const expectedViews = [
+        {
+            'groupOrientation': 'horizontal',
+            'intervalCount': 1,
+            'name': 'Day',
+            'type': 'day',
+        },
+        {
+            'groupOrientation': 'horizontal',
+            'intervalCount': 1,
+            'name': 'Week',
+            'type': 'week',
+        }
+    ];
+    assert.deepEqual(header.option('views'), expectedViews, 'Scheduler header has a correct views option');
+    assert.deepEqual(header.option('currentView'), expectedViews[1], 'Scheduler header has a correct current view');
 });
 
 QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of \'dx-scheduler-date-table-row\'', async function(assert) {
@@ -158,11 +172,11 @@ QUnit.test('Scheduler should handle events from units', async function(assert) {
 
         this.instance.subscribe('testFunction', spy);
 
-        const observer = unit.option('observer');
+        const notifyScheduler = unit.option('notifyScheduler');
 
-        assert.equal(observer, this.instance, 'observer is instance of scheduler');
+        assert.equal(notifyScheduler.scheduler, this.instance, 'notifyScheduler is instance of scheduler');
 
-        unit.notifyObserver('testFunction', { a: 1 });
+        unit.invoke('testFunction', { a: 1 });
 
         assert.ok(spy.calledOnce, 'testFunction called once');
         assert.deepEqual(spy.getCall(0).args[0], { a: 1 }, 'testFunction has right args');

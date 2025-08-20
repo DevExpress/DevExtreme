@@ -19,7 +19,6 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
         "{projectRoot}/js/common/core/localization/default_messages.js",
@@ -62,7 +61,6 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
         "{projectRoot}/js/common/core/localization/default_messages.js",

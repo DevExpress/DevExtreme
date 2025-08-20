@@ -1,14 +1,9 @@
+import type { VersionAssertion } from '@js/common';
+import config from '@js/core/config';
 import errors from '@js/core/errors';
 
 const MAX_MINOR_VERSION = 2;
 const MIN_MINOR_VERSION = 1;
-
-interface AssertedVersion {
-  packageName: string;
-  version: string;
-}
-
-const assertedVersions: AssertedVersion[] = [];
 
 export interface Version {
   major: number;
@@ -34,20 +29,21 @@ export function parseVersion(version: string): Version {
   };
 }
 
+export function getAssertedVersions(): VersionAssertion[] {
+  return config()?.versionAssertions ?? [];
+}
+
 export function assertDevExtremeVersion(packageName: string, version: string): void {
-  assertedVersions.push({
-    packageName,
-    version,
-  });
+  config({ versionAssertions: [...getAssertedVersions(), { packageName, version }] });
 }
 
 export function clearAssertedVersions(): void {
   /// #DEBUG
-  assertedVersions.splice(0);
+  config({ versionAssertions: [] });
   /// #ENDDEBUG
 }
 
-function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
+function stringifyVersionList(assertedVersionList: VersionAssertion[]): string {
   return assertedVersionList
     .map((assertedVersion) => `${assertedVersion.packageName}: ${assertedVersion.version}`)
     .join('\n');
@@ -76,7 +72,7 @@ export function getPreviousMajorVersion({ major, minor, patch }: Version): Versi
 }
 
 export function assertedVersionsCompatible(currentVersion: Version): boolean {
-  const mismatchingVersions = assertedVersions.filter(
+  const mismatchingVersions = getAssertedVersions().filter(
     (assertedVersion) => !versionsEqual(
       parseVersion(assertedVersion.version),
       currentVersion,

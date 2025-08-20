@@ -250,34 +250,36 @@ describe('option update', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['items[0].subItems[0].a', 234]);
   });
+
+  it('updates sub-nested collection item within a custom component', () => {
+    const MySetting = (props: any) => {
+      const { value } = props;
+
+      return (
+        <CollectionNestedComponent>
+          <CollectionSubNestedComponent a={value} />
+        </CollectionNestedComponent>
+      );
+    };
+
+    const TestContainer = (props: any) => {
+      const { value } = props;
+      return (
+        <TestComponentWithExpectation>
+          <MySetting value={value} />
+        </TestComponentWithExpectation>
+      );
+    };
+    const { rerender } = render(<TestContainer value={123} />);
+    rerender(<TestContainer value={234} />);
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['items[0].subItems[0].a', 234]);
+  });
 });
 
-it('updates sub-nested collection item within a custom component', () => {
-  const MySetting = (props: any) => {
-    const { value } = props;
 
-    return (
-      <CollectionNestedComponent>
-        <CollectionSubNestedComponent a={value} />
-      </CollectionNestedComponent>
-    );
-  };
-
-  const TestContainer = (props: any) => {
-    const { value } = props;
-    return (
-      <TestComponentWithExpectation>
-        <MySetting value={value} />
-      </TestComponentWithExpectation>
-    );
-  };
-  const { rerender } = render(<TestContainer value={123} />);
-  rerender(<TestContainer value={234} />);
-
-  jest.runAllTimers();
-  expect(Widget.option.mock.calls.length).toBe(1);
-  expect(Widget.option.mock.calls[0]).toEqual(['items[0].subItems[0].a', 234]);
-});
 
 describe('option control', () => {
   afterEach(() => {
@@ -359,26 +361,36 @@ describe('option control', () => {
     });
 
     it('should not rollback option if optionChanged is fired in endUpdate on props updating', () => {
-      const { rerender } = render(
+      const obj = { a: 'changed' };
+
+      let { rerender } = render(
         <ControlledComponent
           controlledOption="controlled"
+          complexOption={{ a: "controlled" }}
         />,
       );
 
-      Widget.endUpdate.mockImplementation(
-        () => {
-          fireOptionChange('controlledOption', 'changed');
-        },
-      );
+      try {
+        Widget.endUpdate.mockImplementation(
+          () => {
+            fireOptionChange('controlledOption', 'changed');
+            fireOptionChange('complexOption', obj);
+          },
+        );
 
-      rerender(<ControlledComponent
-        controlledOption="changed"
-      />);
+        rerender(<ControlledComponent
+          controlledOption="changed"
+          complexOption={obj}
+        />);
 
-      jest.runAllTimers(); // it is necessary to test that setGuard is not called
+        jest.runAllTimers(); // it is necessary to test that setGuard is not called
 
-      expect(Widget.option).toHaveBeenCalledTimes(1);
-      expect(Widget.option).toHaveBeenCalledWith('controlledOption', 'changed');
+        expect(Widget.option).toHaveBeenCalledTimes(2);
+        expect(Widget.option).toHaveBeenCalledWith('controlledOption', 'changed');
+        expect(Widget.option).toHaveBeenCalledWith('complexOption', obj);
+      } finally {
+        Widget.endUpdate.mockRestore();
+      }
     });
 
     it('is not updated on other prop updating', () => {
@@ -542,8 +554,42 @@ describe('option control', () => {
     );
 
     jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(0);
+  });
+
+  it('applies option changed twice', () => {
+    const { rerender } = render(
+      <ControlledComponent controlledOption='a' />,
+    );
+
+    fireOptionChange('controlledOption', 'b');
+    fireOptionChange('controlledOption', 'c');
+
+    rerender(
+      <ControlledComponent controlledOption='c' />,
+    );
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(0);
+  });
+
+  it('rolls back an option changed one extra time', () => {
+    const { rerender } = render(
+      <ControlledComponent controlledOption='a' />,
+    );
+
+    fireOptionChange('controlledOption', 'b');
+    fireOptionChange('controlledOption', 'c');
+
+    rerender(
+      <ControlledComponent controlledOption='b' />,
+    );
+
+    jest.runAllTimers();
+
     expect(Widget.option.mock.calls.length).toBe(1);
-    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 234]);
+    expect(Widget.option.mock.calls[0]).toEqual(['controlledOption', 'b']);
   });
 
   it('applies option change with async React 18+ update', () => {
@@ -561,8 +607,7 @@ describe('option control', () => {
     );
 
     jest.runAllTimers();
-    expect(Widget.option.mock.calls.length).toBe(1);
-    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 234]);
+    expect(Widget.option.mock.calls.length).toBe(0);
   });
 
   it('applies complex option change', () => {
@@ -939,8 +984,7 @@ describe('cfg-component option control', () => {
     rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
-    expect(Widget.option.mock.calls.length).toBe(1);
-    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 234]);
+    expect(Widget.option.mock.calls.length).toBe(0);
   });
 
   it('apply cfg-component option change if value really change (option in custom configuration component)', () => {
@@ -961,8 +1005,7 @@ describe('cfg-component option control', () => {
     rerender(<TestContainer value={234} />);
 
     jest.runAllTimers();
-    expect(Widget.option.mock.calls.length).toBe(1);
-    expect(Widget.option.mock.calls[0]).toEqual(['nestedOption.a', 234]);
+    expect(Widget.option.mock.calls.length).toBe(0);
   });
 
   it('does not control not specified cfg-component option', () => {

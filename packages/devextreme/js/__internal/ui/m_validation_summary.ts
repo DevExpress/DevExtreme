@@ -5,8 +5,8 @@ import { grep } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 
 import ValidationEngine from './m_validation_engine';
 import type ValidationGroup from './m_validation_group';

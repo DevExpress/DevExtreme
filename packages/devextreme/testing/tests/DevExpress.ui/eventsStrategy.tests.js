@@ -10,7 +10,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const DxWidget = Widget.inherit({});
+class DxWidget extends Widget {}
 registerComponent('dxWidget', DxWidget);
 
 

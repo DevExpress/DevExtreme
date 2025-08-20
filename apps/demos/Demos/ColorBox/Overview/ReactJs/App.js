@@ -69,11 +69,22 @@ function App() {
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Event Handling</div>
         <div className="hero-block">
-          <div
-            className="color-block"
-            style={{ backgroundColor: color }}
-          >
-            <div className="superhero"></div>
+          <div className="color-block">
+            <svg
+              className="brush"
+              width="360"
+              height="254"
+              style={{ color }}
+            >
+              <use href="../../../../images/Brush.svg#brush"></use>
+            </svg>
+            <svg
+              className="superhero dx-color-icon"
+              width="360"
+              height="254"
+            >
+              <use href="../../../../images/Hero.svg#hero"></use>
+            </svg>
           </div>
           <div className="hero-color-box">
             <ColorBox

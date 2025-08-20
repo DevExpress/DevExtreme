@@ -17,7 +17,7 @@ import {
 } from '../index';
 
 jest.mock(
-  '../../../appointments/data_provider/m_appointment_filter',
+  '@ts/scheduler/view_model/filtering/m_appointment_filter',
   () => ({
     AppointmentFilterBaseStrategy: jest.fn(() => ({ strategy: 'base' })),
     AppointmentFilterVirtualStrategy: jest.fn(() => ({ strategy: 'virtual' })),

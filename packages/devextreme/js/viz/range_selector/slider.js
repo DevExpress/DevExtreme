@@ -1,4 +1,4 @@
-import { utils, formatValue } from './common';
+import { utils, formatValue, isFirefoxOnAndroid } from './common';
 const animationSettings = utils.animationSettings;
 import SliderMarker from './slider_marker';
 import supportUtils from '../../__internal/core/utils/m_support';
@@ -16,7 +16,14 @@ function Slider(params, index) {
     that._sliderGroup = params.renderer.g().attr({ 'class': 'slider' }).append(params.root);
     that._line = params.renderer.path(null, 'line').append(that._sliderGroup);
     that._marker = new SliderMarker(params.renderer, that._sliderGroup, index === 1);
-    that._tracker = params.renderer.rect().attr({ 'class': 'slider-tracker', fill: '#000000', opacity: 0.0001 }).css({ cursor: 'w-resize' }).append(params.trackersGroup);
+    that._tracker = params.renderer.rect()
+        .attr({
+            'class': 'slider-tracker',
+            fill: '#000000',
+            opacity: 0.0001,
+        })
+        .css({ cursor: 'w-resize' })
+        .append(params.trackersGroup);
 }
 
 Slider.prototype = {
@@ -31,15 +38,22 @@ Slider.prototype = {
         const that = this;
         const slider = that._sliderGroup;
         const tracker = that._tracker;
-        const attrs = { translateX: that._position };
+
+        const sliderAttrs = { translateX: that._position };
+        let trackerAttrs = { translateX: that._position };
+
+        if(isFirefoxOnAndroid()) {
+            trackerAttrs = { x: that._position - (tracker._originalWidth / 2) };
+        }
 
         that._marker.setPosition(that._position);
+
         if(isAnimated) {
-            slider.animate(attrs, animationSettings);
-            tracker.animate(attrs, animationSettings);
+            slider.animate(sliderAttrs, animationSettings);
+            tracker.animate(trackerAttrs, animationSettings);
         } else {
-            slider.attr(attrs);
-            tracker.attr(attrs);
+            slider.attr(sliderAttrs);
+            tracker.attr(trackerAttrs);
         }
     },
 
@@ -59,11 +73,23 @@ Slider.prototype = {
         that._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
         that._sliderGroup.attr({ translateY: verticalRange[0] });
         that._line.attr({
-            'stroke-width': sliderHandleOptions.width, stroke: sliderHandleOptions.color, 'stroke-opacity': sliderHandleOptions.opacity, sharp: 'h',
+            'stroke-width': sliderHandleOptions.width,
+            stroke: sliderHandleOptions.color,
+            'stroke-opacity': sliderHandleOptions.opacity,
+            sharp: 'h',
             points: [0, 0, 0, verticalRange[1] - verticalRange[0]]
         });
         const trackerWidth = getSliderTrackerWidth(sliderHandleOptions.width);
-        that._tracker.attr({ x: -trackerWidth / 2, y: 0, width: trackerWidth, height: verticalRange[1] - verticalRange[0], translateY: verticalRange[0] });
+
+        const trackerAttrs = {
+            x: -trackerWidth / 2,
+            width: trackerWidth,
+            height: verticalRange[1] - verticalRange[0],
+            y: isFirefoxOnAndroid() ? verticalRange[0] : 0,
+            translateY: isFirefoxOnAndroid() ? undefined : verticalRange[0]
+        };
+
+        that._tracker.attr(trackerAttrs);
     },
 
     toForeground: function() {

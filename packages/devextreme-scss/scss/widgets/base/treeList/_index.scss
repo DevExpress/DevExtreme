@@ -14,7 +14,8 @@ $base-focus-color: null !default;
 @use "sass:color";
 @use "../mixins" as *;
 @use "../icons" as *;
-@use "./common";
+@use "./common" as *;
+@use "./expandable" as *;
 
 $treelist-border: $datagrid-border;
 $treelist-drag-header-border-color: $datagrid-drag-header-border-color;

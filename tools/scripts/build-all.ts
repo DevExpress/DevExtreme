@@ -46,9 +46,8 @@ const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 sh.cd(ROOT_DIR);
 
 if (!devMode) {
-    sh.exec('pnpm run tools:discover-declarations');
     // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
-    sh.exec(`pnpm run tools make-aspnet-metadata --config ./tools/smd-cfg.json --version ${MAJOR_VERSION}`);
+    sh.exec(`pnpx nx run devextreme-metadata:make-aspnet-metadata`);
 
     injectDescriptions();
 }

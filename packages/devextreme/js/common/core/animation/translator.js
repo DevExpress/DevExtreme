@@ -16,6 +16,7 @@ export const locate = function($element) {
         top: translate.y
     };
 };
+
 function isPercentValue(value) {
     return type(value) === 'string' && value[value.length - 1] === '%';
 }

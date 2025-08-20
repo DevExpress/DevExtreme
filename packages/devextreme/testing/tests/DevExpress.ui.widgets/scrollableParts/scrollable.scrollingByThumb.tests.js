@@ -1,9 +1,8 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'common/core/animation/frame';
-import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -16,10 +15,6 @@ import {
     SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS
 } from './scrollable.constants.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender as reRender } from 'inferno';
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -66,12 +61,6 @@ const getScrollOffset = function($scrollable) {
 QUnit.module('scrolling by thumb', moduleConfig);
 
 QUnit.test('normalize visibilityMode for scrollbar', function(assert) {
-    if(isRenovatedScrollable) {
-        // test not relevant for renovated scrollable
-        assert.ok(true);
-        return;
-    }
-
     const $scrollable = $('#scrollable').dxScrollable({
         showScrollbar: true,
         useNative: false
@@ -221,7 +210,6 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\'', function
     assert.equal($scroll.hasClass('dx-state-invisible'), false, 'thumb is visible after mouse enter');
 
     $container.trigger('mouseleave');
-    reRender();
 
     assert.equal($scroll.hasClass('dx-state-invisible'), true, 'thumb is hidden after mouse leave');
 });
@@ -415,9 +403,8 @@ QUnit.test('thumb is visible on mouseenter when thumbMode=\'onHover\' only for s
     $wrapScrollableContainer.trigger('mouseenter');
     $scrollableContainer.trigger('mouseenter');
 
-    reRender();
     assert.equal($scrollableScroll.hasClass('dx-state-invisible'), false, 'scrollbar is visible for inner scrollable');
-    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), isRenovatedScrollable ? false : true, 'scrollbar visibility for outer scrollable');
+    assert.equal($wrapScrollableScroll.hasClass('dx-state-invisible'), true, 'scrollbar visibility for outer scrollable');
 });
 
 QUnit.test('scroll by thumb does not hide scrollbar when mouse goes outside of scrollable', function(assert) {
@@ -504,16 +491,14 @@ QUnit.test('scrollbar is visible for parent scrollable after mouse leave for chi
 
     $parentContainer.trigger($.Event('mouseenter', { originalEvent: { target: $parentContainer.get(0) } }));
     $childrenContainer.trigger($.Event('mouseenter', { originalEvent: { target: $childrenContainer.get(0) } }));
-    reRender();
 
     const $childrenScroll = $childScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $parentScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($childrenScroll);
 
-    assert.equal($parentScroll.hasClass('dx-state-invisible'), isRenovatedScrollable ? false : true, 'parent scrollbar visibility');
+    assert.equal($parentScroll.hasClass('dx-state-invisible'), true, 'parent scrollbar visibility');
     assert.equal($childrenScroll.hasClass('dx-state-invisible'), false, 'children scrollbar is visible');
 
     $childScrollable.triggerHandler($.Event('mouseleave', { relatedTarget: $parentContainer.get(0) }));
-    reRender();
 
     assert.equal($parentScroll.hasClass('dx-state-invisible'), false, 'parent scrollbar is visible');
     assert.equal($childrenScroll.hasClass('dx-state-invisible'), true, 'children scrollbar is hidden');
@@ -547,7 +532,7 @@ QUnit.test('scrollbar is visible for parent scrollable after start', function(as
     const $childrenScroll = $childScrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
     const $parentScroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`).not($childrenScroll);
 
-    assert.equal($parentScroll.hasClass('dx-state-invisible'), isRenovatedScrollable ? false : true, 'parent scrollbar is hidden');
+    assert.equal($parentScroll.hasClass('dx-state-invisible'), true, 'parent scrollbar is hidden');
     assert.equal($childrenScroll.hasClass('dx-state-invisible'), false, 'children scrollbar is visible');
 });
 

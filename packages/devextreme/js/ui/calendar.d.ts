@@ -78,7 +78,7 @@ export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | Mous
 
 /** @public */
 export type CellTemplateData = {
-    readonly date: Date;
+    readonly date?: Date;
     readonly view: string;
     readonly text?: string;
 };

@@ -4,6 +4,7 @@
       <DxList
         :data-source="plannedTasks"
         key-expr="id"
+        :repaint-changes-only="true"
       >
         <DxItemDragging
           data="plannedTasks"
@@ -18,6 +19,7 @@
       <DxList
         :data-source="doingTasks"
         key-expr="id"
+        :repaint-changes-only="true"
       >
         <DxItemDragging
           data="doingTasks"

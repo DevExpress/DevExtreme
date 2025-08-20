@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
+import { DataType } from 'devextreme/ui/filter_builder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { fields, filter } from './data';
@@ -60,5 +61,36 @@ test('Dropdown Treeview should have no empty space', async (t) => {
     fields,
     value: filter,
     allowHierarchicalFields: true,
+  });
+});
+
+[
+  { dataType: 'date', value: 1740441600000 },
+  { dataType: 'date', value: '2025-02-25T00:00:00.000Z' },
+  { dataType: 'date', value: new Date('2025-02-25T00:00:00.000Z') },
+  { dataType: 'datetime', value: 1740441600000 },
+  { dataType: 'datetime', value: '2025-02-25T00:00:00.000Z' },
+  { dataType: 'datetime', value: new Date('2025-02-25T00:00:00.000Z') },
+].forEach(({ dataType, value }) => {
+  test(`item value text should be correct for dataType: ${dataType} and valueType: ${typeof value}`, async (t) => {
+    const filterBuilder = new FilterBuilder('#container');
+
+    const date = new Date(value);
+    const dateString = date.toLocaleDateString();
+    const timeString = date.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: '2-digit' });
+
+    const expectedValue = dataType === 'date' ? dateString : `${dateString}, ${timeString}`;
+
+    await t.expect(filterBuilder.getField(0).getValueText().textContent).eql(expectedValue);
+  }).before(async () => {
+    await createWidget('dxFilterBuilder', {
+      fields: [
+        {
+          dataField: 'field1',
+          dataType: dataType as DataType,
+        },
+      ],
+      value: ['field1', '=', value],
+    });
   });
 });

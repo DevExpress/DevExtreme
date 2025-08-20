@@ -55,7 +55,7 @@ export interface ViewCellData {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   key: number;
-  firstDayOfMonth?: boolean;
+  isFirstDayMonthHighlighting?: boolean;
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;

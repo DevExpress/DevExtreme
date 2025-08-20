@@ -1,5 +1,7 @@
 import dateUtils from '@js/core/utils/date';
-import { VIEWS } from '@ts/scheduler/constants';
+import type { DateHeaderData } from '@ts/scheduler/types';
+
+import timeZoneUtils from '../../m_utils_time_zone';
 import {
   formatWeekdayAndDay,
   getDisplayedCellCount,
@@ -7,9 +9,8 @@ import {
   getHorizontalGroupCount,
   getTotalCellCountByCompleteData,
   isTimelineView,
-} from '@ts/scheduler/r1/utils/index';
-
-import timeZoneUtils from '../../m_utils_time_zone';
+} from '../../r1/utils/index';
+import { VIEWS } from '../../utils/options/constants_view';
 import type { ViewDataProviderExtendedOptions } from './m_types';
 
 export class DateHeaderDataGenerator {
@@ -160,7 +161,7 @@ export class DateHeaderDataGenerator {
     });
   }
 
-  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options) {
+  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options): DateHeaderData {
     const {
       isGenerateWeekDaysHeaderData,
       cellWidth,

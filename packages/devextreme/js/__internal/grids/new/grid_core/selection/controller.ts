@@ -167,6 +167,7 @@ export class SelectionController {
 
   private getSelectionConfig(dataSource, selectionOption): object {
     const selectedCardKeys = this.selectedCardKeys.peek();
+    const { dataController } = this;
 
     return {
       selectedKeys: selectedCardKeys,
@@ -189,8 +190,7 @@ export class SelectionController {
         return dataSource.items();
       },
       filter() {
-        // TODO Salimov: Need to take combined filter
-        return dataSource.filter();
+        return dataController.getCombinedFilter();
       },
       totalCount: () => dataSource.totalCount(),
       onSelectionChanging: this.selectionChanging.bind(this),

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { name as clickEvent } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import registerComponent from '@js/core/component_registrator';
@@ -792,7 +792,7 @@ class TagBox<
 
   _multiTagRequired(): boolean {
     const values = this._getValue();
-    const maxDisplayedTags = this.option('maxDisplayedTags');
+    const { maxDisplayedTags } = this.option();
 
     return isDefined(maxDisplayedTags) && values.length > maxDisplayedTags;
   }
@@ -1074,10 +1074,10 @@ class TagBox<
       // @ts-expect-error ts-error
       this.option('selectedItems', this._selectedItems.slice());
     }
-    this._cleanTags();
 
     const fieldTemplate = this._getFieldTemplate();
     if (!fieldTemplate) {
+      this._cleanTags();
       this._renderTagsCore();
     }
   }
@@ -1099,7 +1099,7 @@ class TagBox<
   }
 
   _getSelectedItemsFromList(values) {
-    const listSelectedItems = this._list?.option('selectedItems');
+    const { selectedItems: listSelectedItems } = this._list ? this._list.option() : { selectedItems: [] };
 
     let selectedItems = [];
     if (values.length === listSelectedItems?.length) {
@@ -1432,6 +1432,7 @@ class TagBox<
     }
   }
 
+  // @ts-expect-error ts-error
   _fieldRenderData() {
     // @ts-expect-error ts-error
     return this._selectedItems.slice();
@@ -1453,7 +1454,9 @@ class TagBox<
     const useButtons = applyValueMode === 'useButtons';
     const valueIndex = this._valueIndex(value);
 
-    const values = (useButtons ? this._list?.option('selectedItemKeys') || [] : this._getValue()).slice();
+    const { selectedItemKeys } = this._list?.option() || { selectedItemKeys: [] };
+
+    const values = (useButtons ? selectedItemKeys ?? [] : this._getValue()).slice();
 
     if (valueIndex >= 0) {
       values.splice(valueIndex, 1);
@@ -1537,6 +1540,7 @@ class TagBox<
   }
 
   _refreshSelected(): void {
+    // @ts-expect-error ts-error
     this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
   }
 

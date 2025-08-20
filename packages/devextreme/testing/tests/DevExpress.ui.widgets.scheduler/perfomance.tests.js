@@ -7,7 +7,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');
@@ -398,15 +398,20 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
                 label: 'Resource'
             }]
         });
-        let appointmentFirst = this.scheduler.appointments.getAppointment(0);
-        assert.notEqual(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is not changed');
+        const getAppointmentColor = () => {
+            const appointmentFirst = this.scheduler.appointments.getAppointment(0);
+            return appointmentFirst.css('backgroundColor');
+        };
+        assert.notEqual(getAppointmentColor(), 'rgb(0, 255, 0)', 'Appointment background color is not changed');
 
         const resources = this.instance.option('resources');
-        resources[0].dataSource[0].color = '#00ff00';
+        resources[0].dataSource = [
+            { ...resourcesData[0], color: '#00ff00' },
+            resourcesData[1],
+        ];
         this.instance.option('resources', resources);
-        await waitAsync(0);
+        await waitForAsync(() => getAppointmentColor() === 'rgb(0, 255, 0)');
 
-        appointmentFirst = this.scheduler.appointments.getAppointment(0);
-        assert.equal(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is changed');
+        assert.equal(getAppointmentColor(), 'rgb(0, 255, 0)', 'Appointment background color is changed');
     });
 });

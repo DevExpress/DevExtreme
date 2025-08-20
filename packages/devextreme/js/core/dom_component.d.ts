@@ -38,12 +38,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default {}
      * @public
      */
-    bindingOptions?: { [key: string]: any };
-    /**
-     * @docid
-     * @default {}
-     * @public
-     */
     elementAttr?: { [key: string]: any };
     /**
      * @docid

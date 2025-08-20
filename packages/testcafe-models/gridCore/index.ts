@@ -153,4 +153,3 @@ export default abstract class GridCore extends Widget {
     )();
   }
 }
-

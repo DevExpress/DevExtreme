@@ -1,4 +1,4 @@
-import LoadIndicator from '../__internal/ui/m_load_indicator';
+import LoadIndicator from '../__internal/ui/load_indicator';
 
 export default LoadIndicator;
 

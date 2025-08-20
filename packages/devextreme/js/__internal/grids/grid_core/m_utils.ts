@@ -21,6 +21,8 @@ import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
+import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
+
 const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
 const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
 const DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed';
@@ -68,16 +70,6 @@ const getIntervalSelector = function () {
     const groupInterval = arguments[0];
     return Math.floor(Number(value) / groupInterval) * groupInterval;
   }
-};
-
-const equalSelectors = function (selector1, selector2) {
-  if (isFunction(selector1) && isFunction(selector2)) {
-    if (selector1.originalCallback && selector2.originalCallback) {
-      return selector1.originalCallback === selector2.originalCallback && selector1.columnIndex === selector2.columnIndex;
-    }
-  }
-
-  return selector1 === selector2;
 };
 
 function isDateType(dataType) {
@@ -247,7 +239,6 @@ export default {
   },
 
   calculateLoadPanelPosition($element) {
-    // @ts-expect-error
     const $window = $(getWindow());
     if (getHeight($element) > getHeight($window)) {
       return {
@@ -372,7 +363,6 @@ export default {
   normalizeSortingInfo,
 
   getFormatByDataType(dataType) {
-    // eslint-disable-next-line default-case
     switch (dataType) {
       case 'date':
         return 'shortDate';
@@ -428,7 +418,7 @@ export default {
         return false;
       }
       for (let i = 0; i < sortParameters1.length; i++) {
-        if (!equalSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
+        if (!isEqualSelectors(sortParameters1[i].selector, sortParameters2[i].selector) || sortParameters1[i].desc !== sortParameters2[i].desc || sortParameters1[i].groupInterval !== sortParameters2[i].groupInterval || (!ignoreIsExpanded && Boolean(sortParameters1[i].isExpanded) !== Boolean(sortParameters2[i].isExpanded))) {
           return false;
         }
       }
@@ -590,6 +580,7 @@ export default {
   isElementInCurrentGrid(controller, $element) {
     if ($element && $element.length) {
       const $grid = $element.closest(`.${controller.getWidgetContainerClass()}`).parent();
+
       return $grid.is(controller.component.$element());
     }
     return false;
@@ -797,4 +788,8 @@ export default {
 
     return !!customCommandColumns.length;
   },
+
+  // New utils
+  isEqualSelectors,
+  isSelectorEqualWithCallback,
 };

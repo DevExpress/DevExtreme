@@ -1578,6 +1578,22 @@ module('Options changed', setupModule, () => {
 });
 
 module('Regression', () => {
+    QUnit.test('onValueChanged should not be fired when input is invalid and useMaskBehavior is enabled (T1296990)', function(assert) {
+        const valueChangedHandler = sinon.spy();
+
+        const $element = $('#dateBox').dxDateBox({
+            useMaskBehavior: true,
+            onValueChanged: valueChangedHandler,
+            max: new Date('07/02/2025'),
+        });
+
+        const $input = $element.find('.dx-texteditor-input');
+
+        $input.val('10/10/2025').change();
+
+        assert.strictEqual(valueChangedHandler.callCount, 0, 'onValueChanged is not fired');
+    });
+
     QUnit.test('should paste text if value was not initialized (T715236)', function(assert) {
         const $input = $('#dateBox')
             .dxDateBox({
