@@ -1,3 +1,5 @@
+import { DxChatTypes } from "devextreme-vue/chat";
+
 const date = new Date();
 date.setHours(0, 0, 0, 0);
 
@@ -16,7 +18,7 @@ export const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-export const messages = [
+export const messages: Array<DxChatTypes.Message> = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,

@@ -76,7 +76,7 @@ onBeforeMount(() => {
   loadMessages(dictionary);
 });
 
-async function getAIResponse(messages) {
+async function getAIResponse(messages: Array<{ role: string; content: string }>): Promise<string | undefined> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -90,17 +90,17 @@ async function getAIResponse(messages) {
   return data.choices[0].message?.content;
 }
 
-function toggleDisabledState(disabled, event = undefined) {
+function toggleDisabledState(disabled: boolean, event?: Event): void {
   isDisabled.value = disabled;
 
   if (disabled) {
-    event?.target.blur();
+    event?.target?.blur();
   } else {
-    event?.target.focus();
+    event?.target?.focus();
   }
 }
 
-function updateLastMessage(text = REGENERATION_TEXT) {
+function updateLastMessage(text: string = REGENERATION_TEXT): void {
   const items = dataSource.items();
   const lastMessage = items.at(-1);
 
@@ -111,7 +111,7 @@ function updateLastMessage(text = REGENERATION_TEXT) {
   }]);
 }
 
-function renderAssistantMessage(text) {
+function renderAssistantMessage(text: string): void {
   const message = {
     id: Date.now(),
     timestamp: new Date(),
@@ -122,7 +122,7 @@ function renderAssistantMessage(text) {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
-async function processMessageSending(message, event) {
+async function processMessageSending(message: DxChatTypes.TextMessage, event: Event): Promise<void> {
   toggleDisabledState(true, event);
 
   messages.push({ role: 'user', content: message.text });
@@ -145,7 +145,7 @@ async function processMessageSending(message, event) {
   }
 }
 
-function alertLimitReached() {
+function alertLimitReached(): void {
   alerts.value = [{
     message: 'Request limit reached, try again in a minute.',
   }];
@@ -155,7 +155,7 @@ function alertLimitReached() {
   }, ALERT_TIMEOUT);
 }
 
-async function regenerate() {
+async function regenerate(): Promise<void> {
   toggleDisabledState(true);
 
   try {
@@ -171,7 +171,7 @@ async function regenerate() {
   }
 }
 
-function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
+function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent): void {
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
   if (!alerts.value.length) {
@@ -179,7 +179,7 @@ function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
   }
 }
 
-function onCopyButtonClick(message) {
+function onCopyButtonClick(message: { text: string }): void {
   navigator.clipboard?.writeText(message.text);
   copyButtonIcon.value = 'check';
 
@@ -188,7 +188,7 @@ function onCopyButtonClick(message) {
   }, 2500);
 }
 
-function onRegenerateButtonClick() {
+function onRegenerateButtonClick(): void {
   updateLastMessage();
   regenerate();
 }

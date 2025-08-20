@@ -86,10 +86,13 @@ const chartDataSource = new DataSource({
   filter: ['Id', '=', 1],
   paginate: false,
 });
-const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
-const customizeTooltip = ({ valueText }) => ({
+
+const customizeLabelText = ({ valueText }: any) => `${valueText}${'&#176C'}`;
+
+const customizeTooltip = ({ valueText }: any) => ({
   text: `${valueText}${'&#176C'}`,
 });
+
 function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   chartDataSource.filter(['Id', '=', value]);
   chartDataSource.load();

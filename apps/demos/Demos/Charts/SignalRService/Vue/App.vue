@@ -82,6 +82,7 @@ import {
   DxTooltip,
   DxCrosshair,
 } from 'devextreme-vue/chart';
+import { chartPointAggregationInfoObject } from "devextreme/viz/chart";
 import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.vue';
@@ -111,7 +112,7 @@ hubConnection
     connectionStarted.value = true;
   });
 
-function calculateCandle(e) {
+function calculateCandle(e: chartPointAggregationInfoObject) {
   const prices = e.data.map((d) => d.price);
   if (prices.length) {
     return {
@@ -125,7 +126,7 @@ function calculateCandle(e) {
   return null;
 }
 
-function customizePoint(pointInfo) {
+function customizePoint(pointInfo: any) {
   if (pointInfo.seriesName === 'Volume') {
     const point = chartRef.value.instance
       .getAllSeries()[0]

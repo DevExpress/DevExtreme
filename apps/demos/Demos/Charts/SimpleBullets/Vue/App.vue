@@ -39,7 +39,7 @@ import DxBullet, { DxTooltip } from 'devextreme-vue/bullet';
 import { service } from './data.ts';
 
 const getWeeksData = service.getWeeksData();
-const customizeTooltip = ({ value, target }) => ({
+const customizeTooltip = ({ value, target }: any) => ({
   text: `Current t&#176: ${value}&#176C<br>Average t&#176: ${target}&#176C`,
 });
 </script>

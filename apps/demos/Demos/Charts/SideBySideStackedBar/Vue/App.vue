@@ -69,8 +69,8 @@ import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-function customizeItems(items) {
-  const sortedItems = [];
+function customizeItems(items: Array<any>): Array<{ series: { stack: string } }> {
+  const sortedItems: Array<{ series: { stack: string } }> = [];
 
   items.forEach((item) => {
     const startIndex = item.series.stack === 'male' ? 0 : 3;

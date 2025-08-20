@@ -62,7 +62,7 @@ import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-const customizeTooltip = ({ percentText, valueText }) => ({ text: `${percentText} - ${valueText}` });
+const customizeTooltip = ({ percentText, valueText }: any) => ({ text: `${percentText} - ${valueText}` });
 </script>
 <style>
 #chart {
