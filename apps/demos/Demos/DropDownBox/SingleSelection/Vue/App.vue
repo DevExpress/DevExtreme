@@ -72,14 +72,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import {
   DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
 } from 'devextreme-vue/data-grid';
 import { CustomStore } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
-const treeBoxValue = ref('1_1');
+const treeBoxValue = ref(['1_1']);
 const isGridBoxOpened = ref(false);
 const isTreeBoxOpened = ref(false);
 const gridBoxValue = ref([3]);
@@ -87,14 +87,14 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 
-let treeView = null;
+let treeView: DxTreeView['instance'] = null;
 
-function treeViewContentReady({ component }) {
+function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
   treeView = component;
   syncTreeViewSelection();
 }
 
-function makeAsyncDataSource(jsonFile) {
+function makeAsyncDataSource(jsonFile: string) {
   return new CustomStore({
     loadMode: 'raw',
     key: 'ID',
@@ -113,11 +113,11 @@ function syncTreeViewSelection() {
   }
 }
 
-function treeViewItemSelectionChanged(e) {
+function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
   treeBoxValue.value = e.component.getSelectedNodeKeys();
 }
 
-function gridBoxDisplayExpr(item) {
+function gridBoxDisplayExpr(item: any) {
   return item && `${item.CompanyName} <${item.Phone}>`;
 }
 

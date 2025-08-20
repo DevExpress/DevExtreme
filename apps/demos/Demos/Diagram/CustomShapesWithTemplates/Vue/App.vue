@@ -67,9 +67,9 @@ const dataSource = new ArrayStore({
 });
 const currentEmployee = ref({} as Record<string, any>);
 const popupVisible = ref(false);
-const itemTypeExpr = ({ ID }) => `employee${ID}`;
+const itemTypeExpr = ({ ID }: any) => `employee${ID}`;
 
-function showInfo(employee) {
+function showInfo(employee: any) {
   currentEmployee.value = employee;
   popupVisible.value = true;
 }

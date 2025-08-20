@@ -163,6 +163,7 @@ import {
   DxGroup,
   DxTab,
   DxToolbox,
+  type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
 import { DxPopup } from 'devextreme-vue/popup';
 import DxTextBox from 'devextreme-vue/text-box';
@@ -170,13 +171,13 @@ import DxButton from 'devextreme-vue/button';
 import { ArrayStore } from 'devextreme-vue/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.vue';
-import service from './data.ts';
+import service, { type Employee } from './data.ts';
 
 let generatedID = 100;
 const dataSource = new ArrayStore({
   key: 'ID',
   data: service.getEmployees(),
-  onInserting(values) {
+  onInserting(values: Employee) {
     values.ID = values.ID || (generatedID += 1);
     values.Full_Name = values.Full_Name || "Employee's Name";
     values.Title = values.Title || "Employee's Title";
@@ -186,14 +187,14 @@ const currentEmployee = ref({} as Record<string, any>);
 const popupVisible = ref(false);
 
 const itemTypeExpr = () => 'employee';
-function itemCustomDataExpr(obj, value) {
+function itemCustomDataExpr(obj: any, value: any) {
   if (value === undefined) {
     return { ...obj };
   }
   Object.assign(obj, value);
   return null;
 }
-function onRequestLayoutUpdate(e) {
+function onRequestLayoutUpdate(e: DxDiagramTypes.RequestLayoutUpdateEvent) {
   for (let i = 0; i < e.changes.length; i += 1) {
     if (e.changes[i].type === 'remove') {
       e.allowed = true;
@@ -202,7 +203,7 @@ function onRequestLayoutUpdate(e) {
     }
   }
 }
-function editEmployee(employee) {
+function editEmployee(employee: Employee) {
   currentEmployee.value = {
     Full_Name: '',
     Prefix: '',
@@ -216,7 +217,7 @@ function editEmployee(employee) {
   };
   popupVisible.value = true;
 }
-function deleteEmployee(employee) {
+function deleteEmployee(employee: Employee) {
   dataSource.push([{ type: 'remove', key: employee.ID }]);
 }
 function updateEmployee() {

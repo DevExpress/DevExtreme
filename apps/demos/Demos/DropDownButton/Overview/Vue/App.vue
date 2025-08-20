@@ -94,7 +94,7 @@
 </template>
 <script setup lang="ts">
 import { ref, type CSSProperties } from 'vue';
-import DxDropDownButton from 'devextreme-vue/drop-down-button';
+import DxDropDownButton, { type DxDropDownButtonTypes } from 'devextreme-vue/drop-down-button';
 import DxToolbar from 'devextreme-vue/toolbar';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
@@ -104,7 +104,7 @@ const alignment = ref('left');
 const color = ref(null);
 const fontSize = ref('14px');
 const lineHeight = ref(1.35);
-let colorPicker;
+let colorPicker: DxDropDownButton['instance'];
 const data = service.getData();
 
 const employeeImageUrl = data.getEmployeeImageUrl();
@@ -120,8 +120,8 @@ const toolbarItems = [
       width: 125,
       stylingMode: 'text',
       useSelectMode: true,
-      onSelectionChanged: (e) => {
-        alignment.value = e.item.name.toLowerCase();
+      onSelectionChanged: ({ item }: DxDropDownButtonTypes.SelectionChangedEvent) => {
+        alignment.value = item.name.toLowerCase();
       },
       items: data.alignments,
     },
@@ -131,7 +131,7 @@ const toolbarItems = [
     widget: 'dxDropDownButton',
     options: {
       items: data.colors,
-      onInitialized: ({ component }) => {
+      onInitialized: ({ component }: DxDropDownButtonTypes.InitializedEvent) => {
         colorPicker = component;
       },
       icon: 'square',
@@ -150,8 +150,8 @@ const toolbarItems = [
       useSelectMode: true,
       items: data.fontSizes,
       selectedItemKey: 14,
-      onSelectionChanged: (e) => {
-        fontSize.value = `${e.item.size}px`;
+      onSelectionChanged: ({ item }: DxDropDownButtonTypes.SelectionChangedEvent) => {
+        fontSize.value = `${item.size}px`;
       },
       itemTemplate: 'fontItem',
     },
@@ -167,22 +167,22 @@ const toolbarItems = [
       useSelectMode: true,
       items: data.lineHeights,
       selectedItemKey: 1.35,
-      onSelectionChanged: (e) => {
-        lineHeight.value = e.item.lineHeight;
+      onSelectionChanged: ({ item }: DxDropDownButtonTypes.SelectionChangedEvent) => {
+        lineHeight.value = item.lineHeight;
       },
     },
   },
 ];
 
-function onButtonClick(e) {
+function onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
   notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
 }
-function onItemClick(e) {
+function onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {
   notify(e.itemData.name || e.itemData, 'success', 600);
 }
-function onColorClick(clickedColor) {
+function onColorClick(clickedColor: string) {
   color.value = clickedColor;
-  colorPicker.element().getElementsByClassName('dx-icon-square')[0].style.color = clickedColor;
+  (colorPicker.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement).style.color = clickedColor;
   colorPicker.close();
 }
 </script>

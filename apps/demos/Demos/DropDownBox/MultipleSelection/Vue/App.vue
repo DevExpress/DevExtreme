@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import {
   DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
 } from 'devextreme-vue/data-grid';
@@ -81,14 +81,14 @@ const gridBoxValue = ref([3]);
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
 const gridColumns = ref(['CompanyName', 'City', 'Phone']);
-let treeView = null;
+let treeView: DxTreeView['instance'] = null;
 
-function treeViewContentReady({ component }) {
+function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
   treeView = component;
   syncTreeViewSelection();
 }
 
-function makeAsyncDataSource(jsonFile) {
+function makeAsyncDataSource(jsonFile: string) {
   return new CustomStore({
     loadMode: 'raw',
     key: 'ID',
@@ -106,14 +106,14 @@ function syncTreeViewSelection() {
     if (value === null) {
       treeView.unselectAll();
     } else {
-      value?.forEach((val) => {
+      value?.forEach((val: string) => {
         treeView.selectItem(val);
       });
     }
   }
 }
 
-function treeViewItemSelectionChanged(e) {
+function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
   treeBoxValue.value = e.component.getSelectedNodeKeys();
 }
 </script>

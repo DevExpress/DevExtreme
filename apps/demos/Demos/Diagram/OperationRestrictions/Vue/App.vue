@@ -76,14 +76,14 @@ const orgItemsDataSource = new ArrayStore({
 });
 const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
 
-const itemStyleExpr = ({ Type }) => ({
+const itemStyleExpr = ({ Type }: any) => ({
   fill: {
     root: '#ffcfc3',
     team: '#b7e3fe',
   }[Type] || '#bbefcb',
 }
 );
-function showToast(text) {
+function showToast(text: string) {
   notify({
     position: {
       at: 'top', my: 'top', of: '#diagram', offset: '0 4',
@@ -93,7 +93,7 @@ function showToast(text) {
     delayTime: 2000,
   });
 }
-function onRequestLayoutUpdate(e) {
+function onRequestLayoutUpdate(e: DxDiagramTypes.RequestLayoutUpdateEvent) {
   for (let i = 0; i < e.changes.length; i += 1) {
     if (e.changes[i].type === 'remove') {
       e.allowed = true;
@@ -103,7 +103,7 @@ function onRequestLayoutUpdate(e) {
     }
   }
 }
-function onRequestEditOperation(e) {
+function onRequestEditOperation(e: Record<string, any>) {
   let i;
 
   if (e.operation === 'addShape') {

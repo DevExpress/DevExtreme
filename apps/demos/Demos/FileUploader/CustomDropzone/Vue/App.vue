@@ -76,12 +76,12 @@ function onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTy
     }
   }
 }
-function onDropZoneLeave(e) {
+function onDropZoneLeave(e: DxFileUploaderTypes.DropZoneLeaveEvent) {
   if (e.dropZoneElement.id === 'dropzone-external') {
     isDropZoneActive.value = false;
   }
 }
-function onUploaded({ file }) {
+function onUploaded({ file }: DxFileUploaderTypes.UploadedEvent) {
   const fileReader = new FileReader();
 
   fileReader.onload = () => {
@@ -94,7 +94,7 @@ function onUploaded({ file }) {
   progressVisible.value = false;
   progressValue.value = 0;
 }
-function onProgress(e) {
+function onProgress(e: DxFileUploaderTypes.ProgressEvent) {
   progressValue.value = (e.bytesLoaded / e.bytesTotal) * 100;
 }
 function onUploadStarted() {
