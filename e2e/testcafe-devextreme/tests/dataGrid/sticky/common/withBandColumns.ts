@@ -18,7 +18,7 @@ fixture.disablePageReloads`Band sticky columns`
     await t.expect(dataGrid.isReady()).ok();
 
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
-    await takeScreenshot(`T1279722_band_sticky_columns-headers_with_filter_row_and_grouped_column_(rtl=${rtlEnabled}).png.png`, dataGrid.element);
+    await takeScreenshot(`T1279722_band_sticky_columns-headers_with_filter_row_and_grouped_column_(rtl=${rtlEnabled}).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
