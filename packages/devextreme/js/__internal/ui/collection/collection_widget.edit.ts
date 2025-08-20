@@ -76,7 +76,7 @@ class CollectionWidget<
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   static _userOptions = {};
 
-  // @ts-expect-error
+  // @ts-expect-error TItem
   _selection!: Selection<TItem, TKey, false>;
 
   _editStrategy!: PlainEditStrategy<TItem, TKey>;

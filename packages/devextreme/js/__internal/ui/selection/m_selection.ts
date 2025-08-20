@@ -55,7 +55,7 @@ export default class Selection<
       maxFilterLengthInRequest: 0,
       onSelectionChanged: noop,
       key() { return undefined; },
-      keyOf(item) { return item; },
+      keyOf(item) { return item as unknown as TKey; },
       load() { return Deferred<TItem[]>().resolve([]); },
       totalCount() { return -1; },
       isSelectableItem() { return true; },
@@ -85,6 +85,7 @@ export default class Selection<
 
   selectionFilter(value?: SelectionFilter): SelectionFilter | undefined {
     if (value === undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.options.selectionFilter;
     }
 

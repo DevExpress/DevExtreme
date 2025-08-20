@@ -130,7 +130,6 @@ export class SelectionController {
         selectionOption,
       );
 
-      // @ts-expect-error TKey
       return new Selection(selectionConfig);
     });
 
@@ -166,7 +165,7 @@ export class SelectionController {
     });
   }
 
-  private getSelectionConfig(dataSource, selectionOption) {
+  private getSelectionConfig(dataSource, selectionOption): object {
     const selectedCardKeys = this.selectedCardKeys.peek();
     const { dataController } = this;
 

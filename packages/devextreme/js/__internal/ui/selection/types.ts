@@ -33,8 +33,7 @@ export interface DefaultOptions<
     removedItems: TItem[];
   }) => void;
   key: () => KeyExpr | Function | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  keyOf: (item: TItem) => any;
+  keyOf: (item: TItem) => TKey;
   load: (loadOptions: LoadOptions<TItem>) => DeferredObj<LoadResult<TItem>>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
