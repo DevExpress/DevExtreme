@@ -21,10 +21,16 @@ import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 const COMMAND_NAME = 'smartPaste';
 const USER_TEXT = 'text to paste';
 const USER_FIELDS = [{ name: 'description', format: 'text' }];
+const USER_FIELDS_WITH_INSTRUCTION = [{ name: 'description', format: 'text', instruction: 'instruction' }];
 const PROCESSED_USER_FIELDS = 'fieldName: description, format: text';
+const PROCESSED_USER_FIELDS_WITH_INSTRUCTION = 'fieldName: description, format: text, instruction: instruction';
 
 describe('SmartPasteCommand', () => {
   const params: SmartPasteCommandParams = { text: USER_TEXT, fields: USER_FIELDS };
+  const paramsWithInstruction: SmartPasteCommandParams = {
+    text: USER_TEXT,
+    fields: USER_FIELDS_WITH_INSTRUCTION,
+  };
   let promptManager = null as unknown as PromptManager;
   let requestManager = null as unknown as RequestManager;
   let command = null as unknown as SmartPasteCommand;
@@ -51,29 +57,18 @@ describe('SmartPasteCommand', () => {
     it('should form PromptData with text and fields info', () => {
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(params);
-      // @ts-expect-error Access to private property for a test
-      const fieldsInfo = command.generateFieldsInstructions(params.fields);
 
       expect(promptData).toStrictEqual({
-        user: { text: USER_TEXT, fields: fieldsInfo },
+        user: { text: USER_TEXT, fields: PROCESSED_USER_FIELDS },
       });
     });
 
     it('should form PromptData with text and fields info including instruction', () => {
-      const paramsWithInstruction = {
-        ...params,
-        fields: [{
-          ...params.fields[0],
-          instruction: 'instruction',
-        }],
-      };
       // @ts-expect-error Access to protected property for a test
       const promptData: PromptData = command.buildPromptData(paramsWithInstruction);
-      // @ts-expect-error Access to private property for a test
-      const fieldsInfo = command.generateFieldsInstructions(paramsWithInstruction.fields);
 
       expect(promptData).toStrictEqual({
-        user: { text: USER_TEXT, fields: fieldsInfo },
+        user: { text: USER_TEXT, fields: PROCESSED_USER_FIELDS_WITH_INSTRUCTION },
       });
     });
   });

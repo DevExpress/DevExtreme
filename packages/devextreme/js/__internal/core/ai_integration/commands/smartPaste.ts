@@ -28,14 +28,10 @@ export class SmartPasteCommand extends BaseCommand<
       const value = values.length === 1 ? values[0] : values;
 
       if (value) {
-        try {
-          result.push({
-            name,
-            value,
-          });
-        } catch (e) {
-          // If parsing fails, we can ignore this field or handle it as needed.
-        }
+        result.push({
+          name,
+          value,
+        });
       }
     });
 
