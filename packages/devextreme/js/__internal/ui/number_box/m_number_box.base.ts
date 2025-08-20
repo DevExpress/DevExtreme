@@ -230,11 +230,12 @@ class NumberBoxBase<
   }
 
   _renderProps(): void {
+    const { min, max, step } = this.option();
     // @ts-expect-error ts-error
     this._input().prop({
-      min: this.option('min'),
-      max: this.option('max'),
-      step: this.option('step'),
+      min,
+      max,
+      step,
     });
 
     this.setAria({
