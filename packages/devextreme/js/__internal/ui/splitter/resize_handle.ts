@@ -319,31 +319,31 @@ class ResizeHandle extends Widget<ResizeHandleProperties> {
     this._attachEventHandlers();
   }
 
-  _resizeStartHandler(e: DxEvent<InteractionEvent>): void {
+  _resizeStartHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
-  _resizeHandler(e: DxEvent<InteractionEvent>): void {
+  _resizeHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
-  _resizeEndHandler(e: DxEvent<InteractionEvent>): void {
+  _resizeEndHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
   }
 
-  _collapsePrevHandler(e: DxEvent<InteractionEvent>): void {
+  _collapsePrevHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
       event: e,
     });
   }
 
-  _collapseNextHandler(e: DxEvent<InteractionEvent>): void {
+  _collapseNextHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapseNext)({
       event: e,
     });
