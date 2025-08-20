@@ -108,7 +108,6 @@ export type TranslateCommandParams = {
 
 /**
  * @namespace DevExpress.aiIntegration
- * @hidden
  */
 export type FieldInfo = {
   name: string;
