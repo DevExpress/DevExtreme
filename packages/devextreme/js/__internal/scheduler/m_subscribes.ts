@@ -59,9 +59,9 @@ const subscribes = {
 
   updateAppointmentAfterResize(options) {
     const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
-    const { exceptionDate } = info.sourceAppointment;
+    const { startDate } = info.sourceAppointment;
 
-    this._checkRecurringAppointment(options.target, options.data, exceptionDate, () => {
+    this._checkRecurringAppointment(options.target, options.data, startDate, () => {
       this._updateAppointment(options.target, options.data, function () {
         this._appointments.moveAppointmentBack();
       });
