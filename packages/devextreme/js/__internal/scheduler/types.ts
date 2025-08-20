@@ -262,3 +262,10 @@ export interface ViewDataProviderType {
   getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
   viewType: ViewType;
 }
+
+export interface AppointmentTooltipItem {
+  appointment: Appointment;
+  targetedAppointment?: Appointment;
+  color?: string;
+  settings: never[];
+}

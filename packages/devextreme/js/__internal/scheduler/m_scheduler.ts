@@ -57,7 +57,6 @@ import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
-import { AppointmentTooltipInfo } from './m_data_structures';
 import { hide as hideLoading, show as showLoading } from './m_loading';
 import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
@@ -76,7 +75,8 @@ import { ResourceProcessor } from './resources/resource_processor';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
 import type {
-  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
+  AppointmentDataItem, AppointmentTooltipItem,
+  AppointmentViewModel, SafeAppointment, ViewType,
 } from './types';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import SchedulerAgenda from './workspaces/m_agenda';
@@ -2415,7 +2415,12 @@ class Scheduler extends Widget<any> {
       const getAppointmentColor = this.createGetAppointmentColor();
       const deferredColor = getAppointmentColor(appointmentConfig);
 
-      const info = new AppointmentTooltipInfo(appointment, targetedAppointment, deferredColor);
+      const info: AppointmentTooltipItem = {
+        appointment,
+        targetedAppointment,
+        color: deferredColor,
+        settings: [],
+      };
       this.showAppointmentTooltipCore(element, [info]);
     }
   }

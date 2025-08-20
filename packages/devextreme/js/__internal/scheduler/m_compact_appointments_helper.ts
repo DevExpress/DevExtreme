@@ -7,7 +7,7 @@ import Button from '@js/ui/button';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
 import { createAppointmentAdapter } from './m_appointment_adapter';
-import { AppointmentTooltipInfo } from './m_data_structures';
+import type { AppointmentTooltipItem } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
@@ -57,7 +57,14 @@ export class CompactAppointmentsHelper {
         targetedAdapter.endDate = info.sourceAppointment.endDate;
       }
 
-      return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
+      const tooltipInfo: AppointmentTooltipItem = {
+        appointment,
+        targetedAppointment: targetedAdapter.source(),
+        color: items.colors?.[index] ?? [],
+        settings: items.settings?.[index] ?? [],
+      };
+
+      return tooltipInfo;
     });
   }
 
