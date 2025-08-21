@@ -365,12 +365,7 @@ export class SelectionController {
   }
 
   public getSelectedCardsData(): DataObject[] {
-    const selectedCardKey = this.getSelectedCardKeys();
-
-    return selectedCardKey
-      .map((key) => this.itemsController.getCardByKey(key))
-      .filter((item): item is CardInfo => !!item)
-      .map((item) => item.data);
+    return this.selectionHelper?.peek()?.getSelectedItems();
   }
 
   public getSelectedCardKeys(): Key[] {
