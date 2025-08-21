@@ -52,8 +52,8 @@ import { dataSource } from './data.ts';
 
 const selected = ref(dataSource[0].name);
 const value = computed(() => dataSource.find((item) => item.name === selected.value));
-const customizeText = ({ valueText }) => `${valueText} kW`;
-function customizeTooltip(scaleValue) {
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} kW`;
+function customizeTooltip(scaleValue: Record<string, any>) {
   let result = `${scaleValue.valueText} kW`;
 
   if (scaleValue.index >= 0) {

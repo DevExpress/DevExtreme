@@ -66,7 +66,7 @@ import { dataSource } from './data.ts';
 const selected = ref(dataSource[0].name);
 const value = computed(() => dataSource.find((item) => item.name === selected.value));
 
-const customizeText = ({ valueText }) => `${valueText} °C`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} °C`;
 </script>
 <style scoped>
 #gauge-demo {

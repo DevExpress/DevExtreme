@@ -82,7 +82,7 @@ import {
   DxTooltip,
   DxCrosshair,
 } from 'devextreme-vue/chart';
-import { chartPointAggregationInfoObject } from "devextreme/viz/chart";
+import type { chartPointAggregationInfoObject } from "devextreme/viz/chart";
 import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.vue';

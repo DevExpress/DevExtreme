@@ -52,7 +52,7 @@ const customizeTooltip = ({ argumentText, valueText }: any) => ({
   text: `${argumentText}<br/>${valueText}`,
 });
 
-function onPointClick({ target: point }: DxPieChartTypes.PointClickEvent) {
+function onPointClick({ target: point }: DxPieChartTypes.PointClickEvent & { target: { argument: string }}) {
   point.showTooltip();
   selectedRegion.value = point.argument;
 }

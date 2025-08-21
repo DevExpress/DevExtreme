@@ -66,7 +66,7 @@ import {
   DxTooltip,
   
 } from 'devextreme-vue/chart';
-import { LegendItem } from 'devextreme-vue/common/charts';
+import type { LegendItem } from 'devextreme-vue/common/charts';
 import service from './data.ts';
 
 type ChartLegendItem = LegendItem & { series: { stack: string }};

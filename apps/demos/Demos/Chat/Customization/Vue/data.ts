@@ -1,4 +1,4 @@
-import { DxChatTypes } from "devextreme-vue/chat";
+import type { DxChatTypes } from "devextreme-vue/chat";
 
 const date = new Date();
 date.setHours(0, 0, 0, 0);

@@ -1,5 +1,5 @@
 import { Guid } from 'devextreme-vue/common';
-import { DxChatTypes } from "devextreme-vue/chat";
+import type { DxChatTypes } from "devextreme-vue/chat";
 
 function getTimestamp(date: Date, offsetMinutes: number = 0): number {
   return date.getTime() + offsetMinutes * 60000;
