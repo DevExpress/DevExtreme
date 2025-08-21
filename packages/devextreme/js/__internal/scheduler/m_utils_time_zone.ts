@@ -42,16 +42,16 @@ const createUTCDateWithLocalOffset = (date) => {
   ));
 };
 
-const createDateFromUTCWithLocalOffset = (date: Date) => {
-  const original = new Date(date);
-  const offsetBeforeInMin = original.getTimezoneOffset();
-  const shifted = new Date(original.getTime() + offsetBeforeInMin * MS_IN_MINUTE);
-  const offsetAfterInMin = shifted.getTimezoneOffset();
+const createDateFromUTCWithLocalOffset = (date: Date): Date => new Date(
+  date.getUTCFullYear(),
+  date.getUTCMonth(),
+  date.getUTCDate(),
+  date.getUTCHours(),
+  date.getUTCMinutes(),
+  date.getUTCSeconds(),
+);
 
-  return new Date(shifted.getTime() - (offsetBeforeInMin - offsetAfterInMin) * MS_IN_MINUTE);
-};
-
-const createUTCDate = (date) => new Date(Date.UTC(
+const createUTCDate = (date: Date): Date => new Date(Date.UTC(
   date.getUTCFullYear(),
   date.getUTCMonth(),
   date.getUTCDate(),
