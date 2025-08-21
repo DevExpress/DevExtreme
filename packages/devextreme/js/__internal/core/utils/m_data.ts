@@ -59,7 +59,9 @@ export const compileGetter = function (expr) {
   }
 
   if (!expr || expr === 'this') {
-    return function (obj) { return obj; };
+    return function (obj) {
+      return unwrap(obj, prepareOptions({}));
+    };
   }
 
   if (typeof expr === 'string') {
