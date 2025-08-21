@@ -23,13 +23,10 @@
     "@eslint-stylistic/metadata": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
-    "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-devextreme": "1.1.6",
     "eslint-plugin-i18n": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-no-only-tests": "catalog:",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-rulesdir": "0.2.2",
     "eslint-plugin-spellcheck": "0.0.20"
   },
   "alias": {
