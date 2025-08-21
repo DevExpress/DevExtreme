@@ -1119,7 +1119,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
     });
 
-    QUnit.test('Not rise selectionChanged event on refresh with changesOnly', function(assert) {
+    QUnit.test('Rise selectionChanged event on refresh with changesOnly', function(assert) {
         let selectionChangedCount = 0;
 
         this.applyOptions({
@@ -1137,8 +1137,8 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.refresh(true);
 
         // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
-        assert.strictEqual(selectionChangedCount, 1, 'selection changed is not raised');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
+        assert.strictEqual(selectionChangedCount, 2, 'selection changed is raised');
     });
 
     QUnit.test('Not rise selectionChanged event on apply filter when selectedRows count not changed', function(assert) {
@@ -2052,7 +2052,7 @@ QUnit.module('ChangeRowSelection for multiple selection. DataSource with key', {
         this.selectionController.changeItemSelection(3, { shift: true });
 
         // assert
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], 'selectedRowKeys');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 3, 4], 'selectedRowKeys');
     });
 
     // T547950
