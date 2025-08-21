@@ -5,10 +5,11 @@ import { getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { isDefined, isNumeric, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
 import type {
+  PendingOptions,
   RequestData,
   RequestItems,
   SelectionFilter,
@@ -80,7 +81,7 @@ export default class StandardStrategy<
           keyIndicesToRemoveMap,
           item && typeof item === 'object' && 'disabled' in item ? !!item.disabled : false,
         );
-        if (keyIndicesToRemoveMap && typeof keyIndex === 'number' && keyIndex >= 0) {
+        if (keyIndicesToRemoveMap && isNumeric(keyIndex) && keyIndex >= 0) {
           keyIndicesToRemoveMap[keyIndex] = true;
         }
       } else {
@@ -88,9 +89,8 @@ export default class StandardStrategy<
       }
     });
 
-    if (isBatchDeselect) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      this._batchRemoveSelectedItems(keyIndicesToRemoveMap!);
+    if (isBatchDeselect && keyIndicesToRemoveMap) {
+      this._batchRemoveSelectedItems(keyIndicesToRemoveMap);
     }
   }
 
@@ -276,12 +276,16 @@ export default class StandardStrategy<
     if (
       this._isMultiSelectEnabled()
       && this._shouldMergeWithLastRequest
+      && this._lastRequestData
       && !isDeselect
       && !isSelectAll
     ) {
       currentKeys = removeDuplicates(
         // @ts-expect-error removeDuplicates
-        keys.concat(this._lastRequestData?.addedItems),
+        [
+          ...keys,
+          ...this._lastRequestData.addedItems,
+        ],
         this._lastRequestData?.removedItems,
       );
       // @ts-expect-error getUniqueValues
@@ -417,7 +421,7 @@ export default class StandardStrategy<
   }
 
   _getSelectedIndexByHash(key: TKey, ignoreIndicesMap?: KeyIndicesToRemoveMap): number {
-    let indices = this.options.keyHashIndices[key];
+    let indices = this.options.keyHashIndices?.[key];
 
     if (indices && indices.length > 1 && ignoreIndicesMap) {
       indices = indices.filter((index) => !ignoreIndicesMap[index]);
@@ -448,7 +452,7 @@ export default class StandardStrategy<
     ) {
       const currentKey = this.options.selectedItemKeys[currentKeyIndex];
       const currentKeyHash = getKeyHash(currentKey);
-      const currentKeyIndices = this.options.keyHashIndices[currentKeyHash];
+      const currentKeyIndices = this.options.keyHashIndices?.[currentKeyHash];
 
       // eslint-disable-next-line no-continue
       if (!currentKeyIndices) continue;
@@ -564,7 +568,7 @@ export default class StandardStrategy<
     return this.isItemKeySelected(key, options);
   }
 
-  isItemKeySelected(key: TKey, options: { checkPending?: boolean } = {}): boolean {
+  isItemKeySelected(key: TKey, options: PendingOptions = {}): boolean {
     let result = this._isItemSelectionInProgress(key, options.checkPending);
 
     if (!result) {

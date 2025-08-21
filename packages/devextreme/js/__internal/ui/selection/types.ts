@@ -1,6 +1,7 @@
 import type { LoadResult } from '@js/common/data';
-import type { FilterDescriptor, LoadOptions } from '@js/common/data.types';
+import type { FilterDescriptor, LoadOptions, SelectDescriptor } from '@js/common/data.types';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import type { Cancelable } from '@js/events';
 import type DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
 import type StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
 
@@ -18,32 +19,60 @@ type Sensitivity = 'case' | 'base' | 'variant' | any;
 export type KeyExpr = string | string[];
 export type KeyHash = string | number | symbol;
 
-export interface DefaultOptions<
+interface SelectionChangeEvent<TItem, TKey> {
+  selectedItems: TItem[];
+  selectedItemKeys: TKey[];
+  addedItemKeys: TKey[];
+  removedItemKeys: TKey[];
+  addedItems: TItem[];
+  removedItems: TItem[];
+}
+
+export interface PendingOptions { checkPending?: boolean }
+
+export type DefaultOptions<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends SelectionItem = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+  TDeferred extends boolean = boolean,
+> = Omit<
+  SelectionOptions<TItem, TKey, TDeferred>,
+  'selectedKeys'
+  | 'plainItems'
+  | 'isVirtualPaging'
+  | 'sensitivity'
+  | 'allowLoadByRange'
+  | 'alwaysSelectByShift'
+  | 'getLoadOptions'
+  | 'ignoreDisabledItems'
+>;
+
+export type SettableOptions<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends SelectionItem = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+  TDeferred extends boolean = boolean,
+> = Omit<SelectionOptions<TItem, TKey, TDeferred>, keyof DefaultOptions>
+  & Partial<DefaultOptions<TItem, TKey, TDeferred>>;
+
+export interface SelectionOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
   TDeferred extends boolean = boolean,
 > {
-  onSelectionChanged: (args: {
-    selectedItems: TItem[];
-    selectedItemKeys: TKey[];
-    addedItemKeys: TKey[];
-    removedItemKeys: TKey[];
-    addedItems: TItem[];
-    removedItems: TItem[];
-  }) => void;
-  key: () => KeyExpr | Function | undefined;
+  onSelectionChanged: (event: SelectionChangeEvent<TItem, TKey>) => void;
+  key: () => KeyExpr | ((source: TItem) => TKey) | undefined;
   keyOf: (item: TItem) => TKey;
   load: (loadOptions: LoadOptions<TItem>) => DeferredObj<LoadResult<TItem>>;
   totalCount: () => number;
   isSelectableItem: (item: TItem) => boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  isItemSelected: (arg: any, options?: any) => boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getItemData: (item: TItem) => any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dataFields: () => any | undefined;
+  isItemSelected: (arg: TItem | TKey, options?: PendingOptions) => boolean;
+  getItemData: (item: TItem) => TItem;
+  dataFields: () => SelectDescriptor<TItem> | undefined;
   filter: Filter;
   allowNullValue: boolean;
   deferred: TDeferred;
@@ -52,44 +81,50 @@ export interface DefaultOptions<
   selectedItems: TItem[];
   selectionFilter: SelectionFilter;
   maxFilterLengthInRequest: number;
+  selectedKeys: TKey[];
+  selectedItemKeys: TKey[];
+  plainItems: (cached?: boolean) => TItem[];
+  isVirtualPaging?: boolean;
+  sensitivity?: Sensitivity;
+  allowLoadByRange?: () => boolean | undefined;
+  alwaysSelectByShift?: boolean;
+  getLoadOptions?: (
+    loadItemIndex: number,
+    focusedItemIndex: number,
+    shiftItemIndex?: number
+  ) => LoadOptions;
+  ignoreDisabledItems?: boolean;
 }
 
-export type SelectionOptions<
+export interface SelectionStrategyOptions<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-  TDeferred extends boolean = boolean,
-> = DefaultOptions<TItem, TKey, TDeferred> & {
-  selectedKeys: TKey[];
-  selectedItemKeys: TKey[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  plainItems: (cached?: boolean) => any[];
-  isVirtualPaging?: boolean;
-
-  sensitivity: Sensitivity;
-  allowLoadByRange?: () => boolean | undefined;
-  alwaysSelectByShift?: boolean;
-  getLoadOptions: (loadItemIndex, focusedItemIndex, shiftItemIndex) => LoadOptions;
+> {
+  disabledItemKeys: TKey[];
   addedItemKeys: TKey[];
   removedItemKeys: TKey[];
   addedItems: TItem[];
   removedItems: TItem[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSelectionChanging: (e: any) => void;
+  onSelectionChanging?: (event: SelectionChangeEvent<TItem, TKey> & Cancelable) => void;
   keyHashIndices: {
     [keyHash: KeyHash]: number[];
-  };
-  ignoreDisabledItems?: boolean;
-  disabledItemKeys: TKey[];
-};
+  } | null;
+}
+
+export type StrategyOptions<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends SelectionItem = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> = SelectionStrategyOptions<TItem, TKey> & SelectionOptions<TItem, TKey>;
 
 export type SelectionStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey extends string | number = any,
-  TDeferred extends boolean = boolean,
+  TKey extends string | number = string | number,
+  TDeferred extends boolean = false,
 > = TDeferred extends true
   ? DeferredStrategy<TItem, TKey>
   : StandardStrategy<TItem, TKey>;

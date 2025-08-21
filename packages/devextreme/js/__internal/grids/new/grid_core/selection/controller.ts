@@ -165,7 +165,7 @@ export class SelectionController {
     });
   }
 
-  private getSelectionConfig(dataSource, selectionOption): object {
+  private getSelectionConfig(dataSource, selectionOption) {
     const selectedCardKeys = this.selectedCardKeys.peek();
     const { dataController } = this;
 
