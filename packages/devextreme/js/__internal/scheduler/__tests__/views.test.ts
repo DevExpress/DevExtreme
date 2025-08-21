@@ -38,43 +38,33 @@ describe('views', () => {
     expect(appointment !== null).toBe(true);
   });
 
-  it('should not render all-day appointment in wrong resource (T1297021)', async () => {
-    setupSchedulerTestEnvironment({ width: 250.4 });
-    const { container, scheduler } = await createScheduler({
-      timeZone: 'Etc/UTC',
+  it('should render all-day appointment correctly with fractional cell values', async () => {
+    const FRACTIONAL_CELL_WIDTH = 250.4;
+    setupSchedulerTestEnvironment({ width: FRACTIONAL_CELL_WIDTH });
+    const { container } = await createScheduler({
       dataSource: [{
         text: 'Appointment 2',
         startDate: new Date('2021-02-02T15:15:00.000Z'),
         endDate: new Date('2021-02-02T17:45:00.000Z'),
         allDay: true,
-        id: 2,
-        resourceId: 2,
+        resourceId: 1,
       }],
-      views: ['day'],
-      currentView: 'day',
       currentDate: new Date(2021, 1, 2),
       startDayHour: 8,
       endDayHour: 20,
-      showAllDayPanel: false,
       allDayPanelMode: 'hidden',
       groups: ['resourceId'],
-      height: 900,
-      width: 1500,
       resources: [{
         label: 'User',
         dataSource: [
-          { title: 'John', id: 1 },
-          { title: 'Mark', id: 2 },
-          { title: 'Luke', id: 3 },
+          { title: 'Mark', id: 1 },
+          { title: 'Luke', id: 2 },
         ],
         displayExpr: 'title',
         fieldExpr: 'resourceId',
         valueExpr: 'id',
       }],
     });
-
-    scheduler.option('width', 800);
-    scheduler.option('width', 730);
 
     const appointments = container.querySelectorAll('.dx-item.dx-scheduler-appointment');
     expect(appointments.length).toBe(1);

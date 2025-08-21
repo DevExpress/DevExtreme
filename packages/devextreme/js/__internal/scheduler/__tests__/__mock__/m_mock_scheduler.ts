@@ -8,9 +8,13 @@ interface SetupSchedulerTestEnvironmentOptions {
   height?: number;
 }
 
+export const DEFAULT_CELL_WIDTH = 250;
+export const DEFAULT_CELL_HEIGHT = 80;
+export const DEFAULT_TIMELINE_CELL_HEIGHT = 450;
+
 export const setupSchedulerTestEnvironment = ({
-  width = 250,
-  height = 80,
+  width = DEFAULT_CELL_WIDTH,
+  height = DEFAULT_CELL_HEIGHT,
 }: SetupSchedulerTestEnvironmentOptions = {}): void => {
   DOMComponent.prototype._isVisible = jest.fn((): boolean => true);
   SchedulerWorkSpace.prototype._createCrossScrollingConfig = (): {
