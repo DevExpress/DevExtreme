@@ -130,7 +130,6 @@ export class SelectionController {
         selectionOption,
       );
 
-      // @ts-expect-error selectionConfig has type object
       return new Selection(selectionConfig);
     });
 

@@ -14,29 +14,23 @@ import type {
   SelectionFilter,
   SelectionItem,
   SelectionOptions,
-  StrategyOptions,
 } from '@ts/ui/selection/types';
 
 export default class SelectionStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey= any,
+  TKey = any,
 > {
-  options: StrategyOptions<TItem, TKey>;
+  options: SelectionOptions<TItem, TKey>;
 
   _lastSelectAllPageDeferred = Deferred().reject();
 
   constructor(options: SelectionOptions<TItem, TKey>) {
-    this.options = {
-      ...options,
-      disabledItemKeys: [],
-      addedItemKeys: [],
-      removedItemKeys: [],
-      removedItems: [],
-      addedItems: [],
-      keyHashIndices: null,
-    };
+    this.options = options;
+
+    this._setOption('disabledItemKeys', []);
+    this._clearItemKeys();
   }
 
   _clearItemKeys(): void {
