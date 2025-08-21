@@ -166,7 +166,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   private _getNavigatableItems(): dxElementWrapper {
     // @ts-expect-error
-    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
+    const appts = this._itemElements().not('.dx-state-disabled');
     // @ts-expect-error
     const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
     return appts.add(apptCollectors);

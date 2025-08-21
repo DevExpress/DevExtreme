@@ -142,3 +142,53 @@ test('DataGrid - Cannot read properties of undefined (reading \'done\') error oc
 }).before(async () => {
   await createWidget('dxDataGrid', { ...dataGridConfig });
 });
+
+test('DataGrid - The filterType property is reset if client state storing contains no filtering settings (T1296608)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).element().innerText)
+    .eql('1');
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 0, textID: '0', text: 'item 0' },
+      { id: 1, textID: '1', text: 'item 1' },
+    ],
+    keyExpr: 'id',
+    filterSyncEnabled: true,
+    columns: [
+      {
+        dataField: 'id',
+        caption: 'ID',
+        dataType: 'string',
+      },
+      {
+        dataField: 'textID',
+        filterType: 'exclude',
+        name: 'textID',
+        dataType: 'string',
+        filterValues: ['0'],
+      },
+    ],
+    stateStoring: {
+      enabled: true,
+      type: 'custom',
+      customLoad() {
+        return Promise.resolve({
+          columns: [
+            {
+              dataField: 'id',
+            },
+            {
+              dataField: 'textID',
+            },
+          ],
+        });
+      },
+    },
+  });
+});
