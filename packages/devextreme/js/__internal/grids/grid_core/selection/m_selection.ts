@@ -12,7 +12,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import supportUtils from '@ts/core/utils/m_support';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
@@ -650,17 +650,19 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return dataItem;
   }
 
-  public refresh(options) {
-    const that = this;
+  public refresh(options): any {
     // @ts-expect-error
-    const d = new Deferred();
+    const d: DeferredObj<void> = new Deferred();
 
-    super.refresh.apply(this, arguments as any).done(() => {
-      if (!options || options.selection) {
-        that._selectionController.refresh().done(d.resolve).fail(d.reject);
-      } else {
+    super.refresh(options).done(() => {
+      const skipSelectionRefresh = isObject(options) && !(options as any).selection;
+
+      if (skipSelectionRefresh) {
         d.resolve();
+        return;
       }
+
+      this._selectionController.refresh().done(d.resolve).fail(d.reject);
     }).fail(d.reject);
 
     return d.promise();

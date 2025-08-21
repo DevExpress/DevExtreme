@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
@@ -609,7 +608,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public fireError(...args: any[]) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
@@ -1637,7 +1635,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (options === true) {
       options = { reload: true, changesOnly: true };
     } else if (!options) {
-      options = { lookup: true, selection: true, reload: true };
+      options = { reload: true, lookup: true };
     }
 
     const that = this;
@@ -1729,7 +1727,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public reload(reload?, changesOnly?): any {
     return this._dataSource?.reload(reload, changesOnly);
   }
