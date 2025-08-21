@@ -7,6 +7,7 @@ import dateLocalization from 'common/core/localization/date';
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 
 const getStringTime = (time) => {
@@ -304,6 +305,21 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             assert.strictEqual(messageTemplate.callCount, 1, 'messageTemplate function was called on bubble template render');
             assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
+        });
+
+        QUnit.test('Group content and bubble elements should be attached to DOM before template is rendrered (T1304688)', function(assert) {
+            assert.expect(2);
+
+            this.reinit({
+                items: [{ text: 'some text' }],
+                messageTemplate: () => {
+                    const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
+                    const $bubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+                    assert.strictEqual($groupContent.length, 1, 'group content element exists');
+                    assert.strictEqual($bubble.length, 1, 'bubble element exists');
+                },
+            });
         });
     });
 });
