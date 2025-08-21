@@ -1,4 +1,4 @@
-DevExtreme Chart supports configurable series and point hover modes. This demo configures **hoverMode** for all series, series points, and the component legend.
+DevExtreme Chart supports configurable hover modes for series and points. This demo specifies properties that set common **hoverMode** for all series/points and a custom mode for the component legend.
 <!--split-->
 
 You can specify **hoverMode** for the following Chart elements:
