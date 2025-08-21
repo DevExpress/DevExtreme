@@ -20,8 +20,9 @@ import {
 
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -59,6 +60,14 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+    @Input()
+    get aiIntegration(): AIIntegration {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration) {
+        this._setOption('aiIntegration', value);
     }
 
     @Input()
@@ -246,6 +255,22 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
+    get onSmartPasted(): ((e: SmartPastedEvent) => void) {
+        return this._getOption('onSmartPasted');
+    }
+    set onSmartPasted(value: ((e: SmartPastedEvent) => void)) {
+        this._setOption('onSmartPasted', value);
+    }
+
+    @Input()
+    get onSmartPasting(): ((e: SmartPastingEvent) => void) {
+        return this._getOption('onSmartPasting');
+    }
+    set onSmartPasting(value: ((e: SmartPastingEvent) => void)) {
+        this._setOption('onSmartPasting', value);
+    }
+
+    @Input()
     get optionalMark(): string {
         return this._getOption('optionalMark');
     }
@@ -331,6 +356,14 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
     set showValidationSummary(value: boolean) {
         this._setOption('showValidationSummary', value);
+    }
+
+    @Input()
+    get smartPaste(): ((text: string) => void) {
+        return this._getOption('smartPaste');
+    }
+    set smartPaste(value: ((text: string) => void)) {
+        this._setOption('smartPaste', value);
     }
 
     @Input()

@@ -58,6 +58,14 @@ import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
 export class DxoCardViewFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost, AfterContentInit  {
     @Input()
+    get aiProcessing(): { disabled?: boolean, instruction?: string } {
+        return this._getOption('aiProcessing');
+    }
+    set aiProcessing(value: { disabled?: boolean, instruction?: string }) {
+        this._setOption('aiProcessing', value);
+    }
+
+    @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
     }
