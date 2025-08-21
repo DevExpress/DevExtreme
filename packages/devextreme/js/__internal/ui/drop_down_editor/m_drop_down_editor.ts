@@ -1127,7 +1127,7 @@ class DropDownEditor<
       if ('fieldTemplate' in options && !options._ignoreFieldTemplateDeprecation) {
         this._logDeprecatedOptionWarning('fieldTemplate', {
           since: '25.2',
-          alias: 'fieldTemplates',
+          alias: 'fieldAddons',
         });
       }
     }
