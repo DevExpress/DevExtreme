@@ -8,7 +8,7 @@ import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 describe('views', () => {
   it('should render appointment after view change (T1297019)', async () => {
     setupSchedulerTestEnvironment();
-    const { container, scheduler } = await createScheduler({
+    const { POM, scheduler } = await createScheduler({
       timeZone: 'Etc/UTC',
       dataSource: [{
         text: 'Appointment',
@@ -34,7 +34,7 @@ describe('views', () => {
     scheduler.option('currentView', 'day');
     await new Promise(process.nextTick);
 
-    const appointment = container.querySelector('.dx-scheduler-appointment');
+    const appointment = POM.getAppointment();
     expect(appointment !== null).toBe(true);
   });
 });
