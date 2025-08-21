@@ -284,6 +284,15 @@ export type MessageTemplateData = {
     readonly message?: Message;
 };
 
+/** @public */
+export type EmptyViewTemplateData = {
+    readonly component: dxChat;
+    readonly data: {
+        readonly message: string;
+        readonly prompt: string;
+    };
+};
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -339,6 +348,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
        */
       allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
     };
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
