@@ -158,9 +158,9 @@ import {
   DxItem,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
-import DxNumberBox from 'devextreme-vue/number-box';
+import DxNumberBox, {type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, {type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme-vue/common/export/pdf';
@@ -225,13 +225,13 @@ async function exportGantt() {
 
   doc.save('gantt.pdf');
 }
-function dateRangeBoxSelectionChanged(e) {
+function dateRangeBoxSelectionChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   customRangeDisabled.value = e.value !== 'Custom';
 }
-function startTaskIndexChanged(e) {
+function startTaskIndexChanged(e: DxNumberBoxTypes.ValueChangedEvent) {
   startTaskIndex.value = e.value;
 }
-function endTaskIndexChanged(e) {
+function endTaskIndexChanged(e: DxNumberBoxTypes.ValueChangedEvent) {
   endTaskIndex.value = e.value;
 }
 

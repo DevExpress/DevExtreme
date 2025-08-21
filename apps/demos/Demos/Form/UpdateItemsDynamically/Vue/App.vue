@@ -63,6 +63,7 @@ import {
   DxButtonItem,
   DxLabel,
 } from 'devextreme-vue/form';
+import { type DxCheckBoxTypes } from "devextreme-vue/check-box";
 import service from './data.ts';
 
 const employee = service.getEmployee();
@@ -72,7 +73,7 @@ const isHomeAddressVisible = ref(true);
 const checkBoxOptions = {
   text: 'Show Address',
   value: true,
-  onValueChanged: (e) => {
+  onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
     isHomeAddressVisible.value = e.component.option('value');
   },
 };
@@ -85,14 +86,14 @@ const addPhoneButtonOptions = {
   },
 };
 
-function getPhonesOptions(phones) {
+function getPhonesOptions(phones: string[]) {
   const options = [];
   for (let i = 0; i < phones.length; i += 1) {
     options.push(generateNewPhoneOptions(i));
   }
   return options;
 }
-function generateNewPhoneOptions(index) {
+function generateNewPhoneOptions(index: number) {
   return {
     mask: '+1 (X00) 000-0000',
     maskRules: { X: /[01-9]/ },

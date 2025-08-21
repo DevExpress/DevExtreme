@@ -41,13 +41,13 @@ const filterText = ref('');
 const groupOperations: DxFilterBuilderTypes.GroupOperation[] = ['and', 'or'];
 const dataSourceText = ref('');
 
-function updateTexts(e) {
+function updateTexts(e: DxFilterBuilderTypes.ValueChangedEvent) {
   filterText.value = formatValue(e.component.option('value'));
   dataSourceText.value = formatValue(e.component.getFilterExpression());
 }
-function calculateFilterExpression(filterValue, field) {
+function calculateFilterExpression(filterValue: any, field: any) {
   return filterValue && filterValue.length
-    && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
+    && Array.prototype.concat.apply([], filterValue.map((value: any) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
 }
 </script>
 <style scoped>
