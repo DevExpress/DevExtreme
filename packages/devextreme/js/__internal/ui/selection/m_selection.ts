@@ -173,7 +173,7 @@ export default class Selection<
     const item = items[itemIndex];
     let focusedItemIndex = itemIndex;
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let deferred: Promise<unknown> | undefined;
+    let deferred;
     const { isVirtualPaging } = this.options;
     const allowLoadByRange = this.options.allowLoadByRange?.();
     const { alwaysSelectByShift } = this.options;
