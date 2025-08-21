@@ -4,6 +4,9 @@ import { prepareComponentConfig } from "./core/index";
 import Form, { Properties } from "devextreme/ui/form";
 import  DataSource from "devextreme/data/data_source";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  Mode,
  ValidationRuleType,
  HorizontalAlignment,
@@ -29,6 +32,8 @@ import {
  FieldDataChangedEvent,
  InitializedEvent,
  OptionChangedEvent,
+ SmartPastedEvent,
+ SmartPastingEvent,
  FormItemType,
  FormItemComponent,
 } from "devextreme/ui/form";
@@ -69,6 +74,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiIntegration" |
   "alignItemLabels" |
   "alignItemLabelsInAllGroups" |
   "colCount" |
@@ -92,6 +98,8 @@ type AccessibleOptions = Pick<Properties,
   "onFieldDataChanged" |
   "onInitialized" |
   "onOptionChanged" |
+  "onSmartPasted" |
+  "onSmartPasting" |
   "optionalMark" |
   "readOnly" |
   "requiredMark" |
@@ -103,6 +111,7 @@ type AccessibleOptions = Pick<Properties,
   "showOptionalMark" |
   "showRequiredMark" |
   "showValidationSummary" |
+  "smartPaste" |
   "tabIndex" |
   "validationGroup" |
   "visible" |
@@ -117,6 +126,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<AIIntegration>,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
     colCount: [String, Number] as PropType<Mode | number>,
@@ -140,6 +150,8 @@ const componentConfig = {
     onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSmartPasted: Function as PropType<((e: SmartPastedEvent) => void)>,
+    onSmartPasting: Function as PropType<((e: SmartPastingEvent) => void)>,
     optionalMark: String,
     readOnly: Boolean,
     requiredMark: String,
@@ -151,6 +163,7 @@ const componentConfig = {
     showOptionalMark: Boolean,
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
+    smartPaste: Function as PropType<((text: string) => void)>,
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
@@ -161,6 +174,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
     "update:colCount": null,
@@ -184,6 +198,8 @@ const componentConfig = {
     "update:onFieldDataChanged": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
+    "update:onSmartPasted": null,
+    "update:onSmartPasting": null,
     "update:optionalMark": null,
     "update:readOnly": null,
     "update:requiredMark": null,
@@ -195,6 +211,7 @@ const componentConfig = {
     "update:showOptionalMark": null,
     "update:showRequiredMark": null,
     "update:showValidationSummary": null,
+    "update:smartPaste": null,
     "update:tabIndex": null,
     "update:validationGroup": null,
     "update:visible": null,
@@ -224,6 +241,25 @@ prepareComponentConfig(componentConfig);
 
 const DxForm = defineComponent(componentConfig);
 
+
+const DxAiProcessingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:instruction": null,
+  },
+  props: {
+    disabled: Boolean,
+    instruction: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAiProcessingConfig);
+
+const DxAiProcessing = defineComponent(DxAiProcessingConfig);
+
+(DxAiProcessing as any).$_optionName = "aiProcessing";
 
 const DxAsyncRuleConfig = {
   emits: {
@@ -546,6 +582,7 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiProcessing": null,
     "update:alignItemLabels": null,
     "update:badge": null,
     "update:buttonOptions": null,
@@ -580,6 +617,7 @@ const DxItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiProcessing: Object as PropType<Record<string, any>>,
     alignItemLabels: Boolean,
     badge: String,
     buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
@@ -622,6 +660,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
@@ -778,6 +817,7 @@ const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiProcessing": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -794,6 +834,7 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiProcessing: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -821,6 +862,7 @@ const DxSimpleItem = defineComponent(DxSimpleItemConfig);
   itemType: "simple"
 };
 (DxSimpleItem as any).$_expectedChildren = {
+  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -1130,6 +1172,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxForm;
 export {
   DxForm,
+  DxAiProcessing,
   DxAsyncRule,
   DxButtonItem,
   DxButtonOptions,

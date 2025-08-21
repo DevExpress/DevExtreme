@@ -1,3 +1,4 @@
+import { AIIntegration } from '../common/ai-integration';
 import {
     UserDefinedElement,
     DxElement,
@@ -24,9 +25,10 @@ import {
 } from '../common';
 
 import {
-    EventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  AsyncCancelable,
+  EventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
 } from '../common/core/events';
 
 import dxButton, {
@@ -121,6 +123,26 @@ export type InitializedEvent = InitializedEventInfo<dxForm>;
  */
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
+/**
+ * @docid _ui_form_SmartPastingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AsyncCancelable
+ */
+export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & {
+  readonly aiResult: AiResult;
+};
+
+/**
+ * @docid _ui_form_SmartPastedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type SmartPastedEvent = EventInfo<dxForm> & {
+  readonly aiResult: AiResult;
+};
+
 /** @public */
 export type GroupItemTemplateData = {
     readonly component: dxForm;
@@ -143,6 +165,9 @@ export type SimpleItemTemplateData = {
     readonly name?: string;
 };
 
+/** public */
+export type AiResult = Record<string, string | string[]>;
+
 /** @public */
 export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: string };
 
@@ -152,6 +177,12 @@ export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: strin
  * @docid
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    aiIntegration?: AIIntegration;
     /**
      * @docid
      * @default true
@@ -217,7 +248,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "outside"
      * @public
      */
-     labelMode?: FormLabelMode;
+    labelMode?: FormLabelMode;
     /**
      * @docid
      * @default 200
@@ -240,6 +271,22 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/form:SmartPastingEvent}
+     * @action
+     * @public
+     */
+    onSmartPasting?: ((e: SmartPastingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/form:SmartPastedEvent}
+     * @action
+     * @public
+     */
+    onSmartPasted?: ((e: SmartPastedEvent) => void);
     /**
      * @docid
      * @default "optional"
@@ -301,6 +348,12 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     showValidationSummary?: boolean;
+    /**
+     * @docid
+     * @type_function_param1 text:string
+     * @public
+     */
+    smartPaste?: ((text?: string) => void);
     /**
      * @docid
      * @default undefined
@@ -629,6 +682,25 @@ export interface dxFormSimpleItem {
      * @default undefined
      * @public
      */
+    aiProcessing?: {
+      /**
+       * @docid
+       * @default undefined
+       * @public
+       */
+      instruction?: string;
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      disabled?: boolean;
+    };
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
     colSpan?: number | undefined;
     /**
      * @docid
@@ -874,7 +946,8 @@ export type Options = dxFormOptions;
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey' | 'onFieldDataChanged'>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey'
+// | 'onFieldDataChanged' | 'onSmartPasting' | 'onSmartPasted'>;
 
 /**
 * @hidden

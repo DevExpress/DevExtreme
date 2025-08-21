@@ -2,6 +2,7 @@ export * from './adapter';
 export * from './adaptive-layout';
 export * from './aggregation-interval';
 export * from './aggregation';
+export * from './ai-processing';
 export * from './alert-dxi';
 export * from './animation';
 export * from './annotation-dxi';

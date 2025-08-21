@@ -12,7 +12,7 @@ import NestedOption from "./core/nested-option";
 import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, TreeListPredefinedColumnButton, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedToolbarItem, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, HeaderFilterSearchConfig, HeaderFilterTexts, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
-import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
+import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from "devextreme/common";
 import type { event } from "devextreme/events/events.types";
@@ -22,6 +22,7 @@ import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
+import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -172,6 +173,25 @@ const TreeList = memo(
   ),
 ) as <TRowData = any, TKey = any>(props: React.PropsWithChildren<ITreeListOptions<TRowData, TKey>> & { ref?: Ref<TreeListRef<TRowData, TKey>> }) => ReactElement | null;
 
+
+// owners:
+// FormItem
+type IAiProcessingProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  instruction?: string;
+}>
+const _componentAiProcessing = (props: IAiProcessingProps) => {
+  return React.createElement(NestedOption<IAiProcessingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aiProcessing",
+    },
+  });
+};
+
+const AiProcessing = Object.assign<typeof _componentAiProcessing, NestedComponentMeta>(_componentAiProcessing, {
+  componentType: "option",
+});
 
 // owners:
 // Popup
@@ -1301,6 +1321,7 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 type IFormProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
+  aiIntegration?: AIIntegration;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
   colCount?: Mode | number;
@@ -1329,6 +1350,8 @@ type IFormProps = React.PropsWithChildren<{
   onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void);
+  onSmartPasting?: ((e: SmartPastingEvent) => void);
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -1340,6 +1363,7 @@ type IFormProps = React.PropsWithChildren<{
   showOptionalMark?: boolean;
   showRequiredMark?: boolean;
   showValidationSummary?: boolean;
+  smartPaste?: ((text: string) => void);
   tabIndex?: number;
   validationGroup?: string | undefined;
   visible?: boolean;
@@ -1393,6 +1417,10 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IFormItemProps = React.PropsWithChildren<{
+  aiProcessing?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -1423,6 +1451,7 @@ const _componentFormItem = (props: IFormItemProps) => {
     elementDescriptor: {
       OptionName: "formItem",
       ExpectedChildren: {
+        aiProcessing: { optionName: "aiProcessing", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -2644,6 +2673,8 @@ export {
   TreeList,
   ITreeListOptions,
   TreeListRef,
+  AiProcessing,
+  IAiProcessingProps,
   Animation,
   IAnimationProps,
   AsyncRule,

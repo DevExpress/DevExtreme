@@ -18598,6 +18598,11 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
+    /** public */
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type AiResult = Record<string, string | string[]>;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
@@ -18690,6 +18695,21 @@ declare module DevExpress.ui {
       readonly editorType?: string;
       readonly name?: string;
     };
+    /**
+     * [descr:_ui_form_SmartPastedEvent]
+     */
+    export type SmartPastedEvent =
+      DevExpress.common.core.events.EventInfo<dxForm> & {
+        readonly aiResult: AiResult;
+      };
+    /**
+     * [descr:_ui_form_SmartPastingEvent]
+     */
+    export type SmartPastingEvent =
+      DevExpress.common.core.events.EventInfo<dxForm> &
+        DevExpress.common.core.events.AsyncCancelable & {
+          readonly aiResult: AiResult;
+        };
   }
   /**
    * @deprecated Use ButtonItem instead
@@ -18838,6 +18858,10 @@ declare module DevExpress.ui {
    */
   export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
+     * [descr:dxFormOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration;
+    /**
      * [descr:dxFormOptions.alignItemLabels]
      */
     alignItemLabels?: boolean;
@@ -18888,6 +18912,14 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxForm.FieldDataChangedEvent
     ) => void;
     /**
+     * [descr:dxFormOptions.onSmartPasting]
+     */
+    onSmartPasting?: (e: DevExpress.ui.dxForm.SmartPastingEvent) => void;
+    /**
+     * [descr:dxFormOptions.onSmartPasted]
+     */
+    onSmartPasted?: (e: DevExpress.ui.dxForm.SmartPastedEvent) => void;
+    /**
      * [descr:dxFormOptions.optionalMark]
      */
     optionalMark?: string;
@@ -18928,6 +18960,10 @@ declare module DevExpress.ui {
      */
     showValidationSummary?: boolean;
     /**
+     * [descr:dxFormOptions.smartPaste]
+     */
+    smartPaste?: (text?: string) => void;
+    /**
      * [descr:dxFormOptions.validationGroup]
      */
     validationGroup?: string | undefined;
@@ -18941,6 +18977,19 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFormSimpleItem {
+    /**
+     * [descr:dxFormSimpleItem.aiProcessing]
+     */
+    aiProcessing?: {
+      /**
+       * [descr:dxFormSimpleItem.aiProcessing.instruction]
+       */
+      instruction?: string;
+      /**
+       * [descr:dxFormSimpleItem.aiProcessing.disabled]
+       */
+      disabled?: boolean;
+    };
     /**
      * [descr:dxFormSimpleItem.colSpan]
      */
