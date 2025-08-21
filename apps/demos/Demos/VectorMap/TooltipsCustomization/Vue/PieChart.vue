@@ -39,5 +39,5 @@ withDefaults(defineProps<{
   data: () => [],
 });
 
-const customizeText = ({ argument, value }) => `${argument[0].toUpperCase()}${argument.slice(1)}: $${value}M`;
+const customizeText = ({ argument, value }: Record<string, any>) => `${argument[0].toUpperCase()}${argument.slice(1)}: $${value}M`;
 </script>

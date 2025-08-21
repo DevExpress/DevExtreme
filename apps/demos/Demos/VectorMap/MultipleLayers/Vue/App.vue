@@ -48,7 +48,7 @@ const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -75];
 const colorGroups = [0, 1, 2];
 const streamsPalette = ['#3c20c8', '#d82020'];
-const customizeText = ({ color }) => ((color === '#3c20c8') ? 'Cold' : 'Warm');
+const customizeText = ({ color }: Record<string, any>) => ((color === '#3c20c8') ? 'Cold' : 'Warm');
 </script>
 <style>
 #vector-map {

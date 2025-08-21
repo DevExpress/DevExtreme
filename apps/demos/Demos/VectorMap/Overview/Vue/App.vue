@@ -62,8 +62,8 @@ const { format } = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-const customizeLegendText = ({ start, end }) => `${format(start)} to ${format(end)}`;
-function customizeLayer(elements) {
+const customizeLegendText = ({ start, end }: Record<string, any>) => `${format(start)} to ${format(end)}`;
+function customizeLayer(elements: any[]) {
   elements.forEach((element) => {
     const countryGDPData = countriesGDP[element.attribute('name')];
     element.attribute('total', (countryGDPData && countryGDPData.total) || 0);

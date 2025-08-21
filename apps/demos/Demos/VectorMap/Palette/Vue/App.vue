@@ -40,17 +40,17 @@ const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 
-const customizeTooltip = (arg) => ((arg.attribute('population'))
+const customizeTooltip = (arg: any) => ((arg.attribute('population'))
   ? { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` } : null);
 
-const customizeText = ({ index, start, end }) => {
+const customizeText = ({ index, start, end }: Record<string, any>) => {
   if (index === 0) {
     return '< 0.5%';
   }
 
   return (index === 5) ? '> 3%' : `${start}% to ${end}%`;
 };
-function customizeLayer(elements) {
+function customizeLayer(elements: any[]) {
   elements.forEach((element) => {
     element.attribute('population', populations[element.attribute('name')]);
   });

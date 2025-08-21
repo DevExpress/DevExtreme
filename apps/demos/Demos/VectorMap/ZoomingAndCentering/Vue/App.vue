@@ -41,7 +41,7 @@ const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const vectorMap = ref();
 
-function customizeTooltip(info) {
+function customizeTooltip(info: any) {
   if (info.layer.type === 'marker') {
     return { text: info.attribute('name') };
   }

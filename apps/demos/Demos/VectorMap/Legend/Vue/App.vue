@@ -75,18 +75,18 @@ const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -75];
 const sizeGroups = [0, 8000, 10000, 50000];
-const customizeTooltip = (info) => ({ text: info.attribute('text') });
-const customizeMarkers = ({ index }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
-const customizeItems = (items) => items.reverse();
+const customizeTooltip = (info: any) => ({ text: info.attribute('text') });
+const customizeMarkers = ({ index }: { index: number }) => ['< 8000K', '8000K to 10000K', '> 10000K'][index];
+const customizeItems = (items: any[]) => items.reverse();
 
-function customizeText({ index, start, end }) {
+function customizeText({ index, start, end }: Record<string, any>) {
   if (index === 0) {
     return '< 0.5%';
   }
 
   return (index === 5) ? '> 3%' : `${start}% to ${end}%`;
 }
-function customizeLayer(elements) {
+function customizeLayer(elements: any[]) {
   elements.forEach((element) => {
     const name = element.attribute('name');
     const population = populations[name];

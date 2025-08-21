@@ -40,8 +40,8 @@ import { markers, names } from './data.ts';
 
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
-const customizeTooltip = (info) => ((info.layer.type === 'marker') ? { text: info.attribute('tooltip') } : null);
-const customizeText = ({ index }) => names[index];
+const customizeTooltip = (info: any) => ((info.layer.type === 'marker') ? { text: info.attribute('tooltip') } : null);
+const customizeText = ({ index }: Record<string, any>) => names[index];
 </script>
 <style>
 #vector-map {
