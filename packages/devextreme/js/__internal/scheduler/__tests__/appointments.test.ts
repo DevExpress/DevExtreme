@@ -8,7 +8,7 @@ import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 describe('Appointments', () => {
   it('All-day appointment should not be resizable if current view is "day"', async () => {
     setupSchedulerTestEnvironment();
-    const { container } = await createScheduler({
+    const { POM } = await createScheduler({
       dataSource: [{
         text: 'Appointment 1',
         startDate: new Date(2015, 1, 9, 8),
@@ -19,7 +19,7 @@ describe('Appointments', () => {
       currentDate: new Date(2015, 1, 9, 8),
     });
 
-    const appointment = container.querySelector('.dx-scheduler-appointment');
+    const appointment = POM.getAppointment();
     expect(appointment && !appointment.classList.contains('dx-resizable')).toBe(true);
   });
 });
