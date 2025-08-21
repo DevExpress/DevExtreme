@@ -30,7 +30,7 @@
     "vue-router": "4.2.5",
     "webpack": "5.94.0",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "5.2.1"
+    "webpack-dev-server": "5.2.2"
   },
   "scripts": {
     "test": "node runner.js",
