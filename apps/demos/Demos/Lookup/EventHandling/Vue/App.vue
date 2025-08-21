@@ -50,7 +50,7 @@ const applyValueModes: DxLookupTypes.ApplyValueMode[] = ['instantly', 'useButton
 const applyValueMode = ref(applyValueModes[0]);
 
 const getDisplayExpr = ({ FirstName = '', LastName = '' } = {}) => `${FirstName} ${LastName}`.trim();
-function setSelectedValue(e) {
+function setSelectedValue(e: DxLookupTypes.ValueChangedEvent) {
   selectedValue.value = e.value;
 }
 </script>

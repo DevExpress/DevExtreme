@@ -75,12 +75,12 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { DxNumberBox } from 'devextreme-vue/number-box';
+import { DxNumberBox, type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 
 const value = ref(16);
 const max = 30;
 
-function keyDown(e) {
+function keyDown(e: DxNumberBoxTypes.KeyDownEvent) {
   const { event } = e;
   const str = event.key;
   if (/^[.,e]$/.test(str)) {

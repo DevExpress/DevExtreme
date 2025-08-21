@@ -71,7 +71,7 @@ const orientation = ref<DxMenuTypes.Orientation>('horizontal');
 const hideSubmenuOnMouseLeave = ref(false);
 const currentProduct = ref(null);
 
-function itemClick(e) {
+function itemClick(e: DxMenuTypes.ItemClickEvent) {
   if (e.itemData.price) {
     currentProduct.value = e.itemData;
   }

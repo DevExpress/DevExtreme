@@ -36,26 +36,26 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxList, { DxItemDragging } from 'devextreme-vue/list';
+import DxList, { DxItemDragging, type DxListTypes } from 'devextreme-vue/list';
 import * as data from './data.ts';
 
 const doingTasks = ref(data.doingTasks);
 const plannedTasks = ref(data.plannedTasks);
 const tasks = { doingTasks, plannedTasks };
-function onDragStart(e) {
+function onDragStart(e: any) {
   e.itemData = tasks[e.fromData].value[e.fromIndex];
 }
-function onAdd(e) {
+function onAdd(e: any) {
   const newData = [...tasks[e.toData].value];
   newData.splice(e.toIndex, 0, e.itemData);
   tasks[e.toData].value = newData;
 }
-function onRemove(e) {
+function onRemove(e: any) {
   const newData = [...tasks[e.fromData].value];
   newData.splice(e.fromIndex, 1);
   tasks[e.fromData].value = newData;
 }
-function onReorder(e) {
+function onReorder(e: any) {
   onRemove(e);
   onAdd(e);
 }
