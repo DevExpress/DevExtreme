@@ -44,6 +44,7 @@ type AccessibleOptions = Pick<Properties,
   "disabled" |
   "editing" |
   "elementAttr" |
+  "emptyViewTemplate" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -89,6 +90,7 @@ const componentConfig = {
     disabled: Boolean,
     editing: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
+    emptyViewTemplate: {},
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
@@ -130,6 +132,7 @@ const componentConfig = {
     "update:disabled": null,
     "update:editing": null,
     "update:elementAttr": null,
+    "update:emptyViewTemplate": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
