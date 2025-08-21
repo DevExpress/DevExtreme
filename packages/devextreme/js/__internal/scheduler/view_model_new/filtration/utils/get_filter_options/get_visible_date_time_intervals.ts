@@ -1,6 +1,6 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import { getDatesWithoutTime } from '../../../../r1/utils';
+import { getDatesWithoutTime } from '../../../../r1/utils/base';
 import type { CompareOptions, DateInterval } from '../../../types';
 
 export const getVisibleDateTimeIntervals = ({

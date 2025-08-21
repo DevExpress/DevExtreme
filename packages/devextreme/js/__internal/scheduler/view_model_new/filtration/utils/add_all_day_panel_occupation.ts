@@ -1,5 +1,4 @@
-import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils';
-
+import { isAppointmentTakesAllDay } from '../../../r1/utils/base';
 import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../types';
 
 export const addAllDayPanelOccupation = <T extends MinimalAppointmentEntity>(
