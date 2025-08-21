@@ -64,13 +64,17 @@ import {
   DxBorder,
   DxExport,
   DxTooltip,
+  
 } from 'devextreme-vue/chart';
+import { LegendItem } from 'devextreme-vue/common/charts';
 import service from './data.ts';
+
+type ChartLegendItem = LegendItem & { series: { stack: string }};
 
 const dataSource = service.getMaleAgeData();
 
-function customizeItems(items: Array<any>): Array<{ series: { stack: string } }> {
-  const sortedItems: Array<{ series: { stack: string } }> = [];
+function customizeItems(items: Array<ChartLegendItem>): Array<ChartLegendItem> {
+  const sortedItems: Array<ChartLegendItem> = [];
 
   items.forEach((item) => {
     const startIndex = item.series.stack === 'male' ? 0 : 3;
