@@ -1,5 +1,9 @@
-You can utilize the DevExtreme Chart component to display data in a [Pareto chart](https://en.wikipedia.org/wiki/Pareto_chart). A Pareto chart displays individual values along with their cumulative totals. In this demo, individual values are numbers of complaints and cumulative totals are represented as percentages.
+You can use the DevExtreme Chart component to visualize data as a [Pareto chart](https://en.wikipedia.org/wiki/Pareto_chart). Such charts display individual values along with their cumulative totals. In this demo, individual values are numbers of complaints and cumulative totals are given in percentages.
 
 <!--split-->
 
-To create a Pareto chart, configure two [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) objects. Assign the [Bar](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/) and [Line](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/LineSeries/)/[Spline](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/SplineSeries/) series types to **series**.[type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type). To represent the numbers of the [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) (80/20), you can specify constant lines. This demo configures a **valueAxis**.[constantLines](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/constantLines/) object to display a constant line at 80% of the cumulative total axis.
+Follow the steps below to create a Pareto chart:
+
+1. Configure a [Bar](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/) series and assign your primary data to this series (specify **series**.[valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField) property).
+2. Add a [Line](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/LineSeries/) or [Spline](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/SplineSeries/) series and assign your cumulative total values to this series.
+3. Specify **valueAxis**.[constantLines](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/constantLines/) to illustrate [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) correlation (80/20).
