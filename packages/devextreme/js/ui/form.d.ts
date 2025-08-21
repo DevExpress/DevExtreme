@@ -64,6 +64,9 @@ export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
+/** public */
+export type AiResult = Record<string, string | string[]>;
+
 /**
  * @docid _ui_form_ContentReadyEvent
  * @public
@@ -164,9 +167,6 @@ export type SimpleItemTemplateData = {
     readonly editorType?: string;
     readonly name?: string;
 };
-
-/** public */
-export type AiResult = Record<string, string | string[]>;
 
 /** @public */
 export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: string };
