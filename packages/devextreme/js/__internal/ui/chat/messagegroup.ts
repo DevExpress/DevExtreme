@@ -112,11 +112,10 @@ class MessageGroup extends Widget<Properties> {
 
   _renderMessageBubble(message: Message): void {
     const $bubble = $('<div>')
-      .data(MESSAGE_DATA_KEY, message);
+      .data(MESSAGE_DATA_KEY, message)
+      .appendTo(this._$messageBubbleContainer);
 
     this._createComponent($bubble, MessageBubble, this._getMessageBubbleOptions(message));
-
-    this._$messageBubbleContainer.append($bubble);
   }
 
   _getMessageBubbleOptions(message: Message): MessageBubbleProperties {
@@ -136,13 +135,13 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageBubbles(items: Message[]): void {
-    this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
+    this._$messageBubbleContainer = $('<div>')
+      .addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS)
+      .appendTo(this.element());
 
     items.forEach((message) => {
       this._renderMessageBubble(message);
     });
-
-    this._$messageBubbleContainer.appendTo(this.element());
   }
 
   _renderMessageGroupInformation(message: Message): void {
