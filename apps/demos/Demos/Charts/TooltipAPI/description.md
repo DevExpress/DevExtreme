@@ -1,2 +1,2 @@
-This demo illustrates how to&nbsp;show and hide the point&rsquo;s tooltip with the API. To&nbsp;test this feature, select a&nbsp;continent from the drop-down menu under the PieChart or&nbsp;click a&nbsp;point directly in&nbsp;the PieChart.
+You can use tooltip API members to manage its visibility in code. This demo creates a [DevExtreme PieChart](/Documentation/Guide/UI_Components/PieChart/Getting_Started_with_PieChart/) and disables its default tooltip. When you click a pie segment or select an item in the **Choose Region** [box], the [showTooltip()](/Documentation/ApiReference/UI_Components/dxChart/Chart_Elements/Point/Methods/#showTooltip) method call displays a tooltip.
 <!--split-->
