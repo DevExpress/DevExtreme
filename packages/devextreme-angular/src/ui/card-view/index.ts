@@ -47,6 +47,7 @@ import {
 } from 'devextreme-angular/core';
 
 
+import { DxoCardViewAiProcessingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAnimationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewAsyncRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewAtModule } from 'devextreme-angular/ui/card-view/nested';
@@ -1339,6 +1340,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 @NgModule({
   imports: [
     DxCardViewComponent,
+    DxoCardViewAiProcessingModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,
@@ -1419,6 +1421,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
   ],
   exports: [
     DxCardViewComponent,
+    DxoCardViewAiProcessingModule,
     DxoCardViewAnimationModule,
     DxiCardViewAsyncRuleModule,
     DxoCardViewAtModule,

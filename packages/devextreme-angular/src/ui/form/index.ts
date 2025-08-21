@@ -22,8 +22,9 @@ import {
 } from '@angular/core';
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
+import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 
@@ -40,12 +41,14 @@ import {
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoAiProcessingModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxoFormAiProcessingModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormAsyncRuleModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormButtonItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
@@ -122,6 +125,19 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxFormOptions.aiIntegration]
+    
+     */
+    @Input()
+    get aiIntegration(): AIIntegration {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration) {
+        this._setOption('aiIntegration', value);
     }
 
 
@@ -490,6 +506,19 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxFormOptions.smartPaste]
+    
+     */
+    @Input()
+    get smartPaste(): ((text: string) => void) {
+        return this._getOption('smartPaste');
+    }
+    set smartPaste(value: ((text: string) => void)) {
+        this._setOption('smartPaste', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -590,6 +619,22 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:dxFormOptions.onSmartPasted]
+    
+    
+     */
+    @Output() onSmartPasted: EventEmitter<SmartPastedEvent>;
+
+    /**
+    
+     * [descr:dxFormOptions.onSmartPasting]
+    
+    
+     */
+    @Output() onSmartPasting: EventEmitter<SmartPastingEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -601,6 +646,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration>;
 
     /**
     
@@ -803,6 +855,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() smartPasteChange: EventEmitter<((text: string) => void)>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -905,8 +964,11 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'fieldDataChanged', emit: 'onFieldDataChanged' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'smartPasted', emit: 'onSmartPasted' },
+            { subscribe: 'smartPasting', emit: 'onSmartPasting' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiIntegrationChange' },
             { emit: 'alignItemLabelsChange' },
             { emit: 'alignItemLabelsInAllGroupsChange' },
             { emit: 'colCountChange' },
@@ -935,6 +997,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'showOptionalMarkChange' },
             { emit: 'showRequiredMarkChange' },
             { emit: 'showValidationSummaryChange' },
+            { emit: 'smartPasteChange' },
             { emit: 'tabIndexChange' },
             { emit: 'validationGroupChange' },
             { emit: 'visibleChange' },
@@ -988,11 +1051,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxFormComponent,
     DxoColCountByScreenModule,
     DxiItemModule,
+    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormAiProcessingModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,
@@ -1022,11 +1087,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxFormComponent,
     DxoColCountByScreenModule,
     DxiItemModule,
+    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormAiProcessingModule,
     DxiFormAsyncRuleModule,
     DxiFormButtonItemModule,
     DxoFormButtonOptionsModule,

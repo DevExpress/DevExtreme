@@ -166,6 +166,8 @@ import {
  FieldDataChangedEvent,
  InitializedEvent as FormInitializedEvent,
  OptionChangedEvent as FormOptionChangedEvent,
+ SmartPastedEvent,
+ SmartPastingEvent,
  FormItemComponent,
 } from "devextreme/ui/form";
 import {
@@ -175,6 +177,9 @@ import {
 import {
  Format,
 } from "devextreme/common/core/localization";
+import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
 import {
  dxTabPanelOptions,
  dxTabPanelItem,
@@ -480,6 +485,25 @@ prepareComponentConfig(componentConfig);
 
 const DxCardView = defineComponent(componentConfig);
 
+
+const DxAiProcessingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:instruction": null,
+  },
+  props: {
+    disabled: Boolean,
+    instruction: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAiProcessingConfig);
+
+const DxAiProcessing = defineComponent(DxAiProcessingConfig);
+
+(DxAiProcessing as any).$_optionName = "aiProcessing";
 
 const DxAnimationConfig = {
   emits: {
@@ -1657,6 +1681,7 @@ const DxFormConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
     "update:colCount": null,
@@ -1680,6 +1705,8 @@ const DxFormConfig = {
     "update:onFieldDataChanged": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
+    "update:onSmartPasted": null,
+    "update:onSmartPasting": null,
     "update:optionalMark": null,
     "update:readOnly": null,
     "update:requiredMark": null,
@@ -1691,6 +1718,7 @@ const DxFormConfig = {
     "update:showOptionalMark": null,
     "update:showRequiredMark": null,
     "update:showValidationSummary": null,
+    "update:smartPaste": null,
     "update:tabIndex": null,
     "update:validationGroup": null,
     "update:visible": null,
@@ -1699,6 +1727,7 @@ const DxFormConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<AIIntegration>,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
     colCount: [String, Number] as PropType<Mode | number>,
@@ -1722,6 +1751,8 @@ const DxFormConfig = {
     onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
     onInitialized: Function as PropType<((e: FormInitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: FormOptionChangedEvent) => void)>,
+    onSmartPasted: Function as PropType<((e: SmartPastedEvent) => void)>,
+    onSmartPasting: Function as PropType<((e: SmartPastingEvent) => void)>,
     optionalMark: String,
     readOnly: Boolean,
     requiredMark: String,
@@ -1733,6 +1764,7 @@ const DxFormConfig = {
     showOptionalMark: Boolean,
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
+    smartPaste: Function as PropType<((text: string) => void)>,
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
@@ -1786,6 +1818,7 @@ const DxFormItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiProcessing": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -1802,6 +1835,7 @@ const DxFormItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiProcessing: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -1825,6 +1859,7 @@ const DxFormItem = defineComponent(DxFormItemConfig);
 
 (DxFormItem as any).$_optionName = "formItem";
 (DxFormItem as any).$_expectedChildren = {
+  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -2049,6 +2084,7 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiProcessing": null,
     "update:alignItemLabels": null,
     "update:badge": null,
     "update:buttonOptions": null,
@@ -2089,6 +2125,7 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
+    aiProcessing: Object as PropType<Record<string, any>>,
     alignItemLabels: Boolean,
     badge: String,
     buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
@@ -2137,6 +2174,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
@@ -2693,6 +2731,7 @@ const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiProcessing": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -2709,6 +2748,7 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiProcessing: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -2736,6 +2776,7 @@ const DxSimpleItem = defineComponent(DxSimpleItemConfig);
   itemType: "simple"
 };
 (DxSimpleItem as any).$_expectedChildren = {
+  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -3206,6 +3247,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxCardView;
 export {
   DxCardView,
+  DxAiProcessing,
   DxAnimation,
   DxAsyncRule,
   DxAt,

@@ -67,6 +67,7 @@ import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
+import { DxoAiProcessingModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
@@ -106,6 +107,7 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
+import { DxoTreeListAiProcessingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -2255,6 +2257,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
+    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoHeaderFilterModule,
@@ -2293,6 +2296,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiProcessingModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
@@ -2390,6 +2394,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
+    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoHeaderFilterModule,
@@ -2428,6 +2433,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiProcessingModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,

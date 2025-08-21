@@ -12,6 +12,8 @@ export {
   FieldDataChangedEvent,
   InitializedEvent,
   OptionChangedEvent,
+  SmartPastingEvent,
+  SmartPastedEvent,
   GroupItemTemplateData,
   GroupCaptionTemplateData,
   SimpleItemTemplateData,
