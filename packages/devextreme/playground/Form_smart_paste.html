@@ -107,7 +107,7 @@
                 };
 
                 const aIIntegration = {
-                    getModelResponse: (prompt, type) => {
+                    sendRequest: ({ prompt }) => {
                         return new Promise((resolve, reject) => {
                             generateAIServiceResponse(prompt)
                                 .then((result) => {
@@ -218,7 +218,21 @@
                         caption: 'Personal Data',
                         items: [{
                             dataField: 'BirthDate',
-                            editorType: 'dxDateBox',
+                            // editorType: 'dxDateBox',
+                            label: {
+                                text: "Date of birth"
+                            },
+                            template: (data) => {
+                                return $("<div>").dxDateBox({
+                                    value: data.BirthDate,
+                                }).dxValidator({
+                                    validationGroup: "customerData",
+                                    validationRules: [{
+                                        type: 'required',
+                                        message: "Date of birth is required"
+                                    }]
+                                });
+                            }
                         }, {
                             itemType: 'group',
                             captionTemplate: groupCaptionTemplate('home'),

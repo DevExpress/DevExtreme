@@ -1872,7 +1872,13 @@ class Form extends Widget<FormProperties> {
 
     // @ts-expect-error
     const { aIIntegration } = this.option();
-    const extractedData = await aIIntegration.getModelResponse(prompt, 'shortentext');
+
+    if (!aIIntegration) {
+      logger.warn('To enable smart paste functionality, please provide AI integration in form options.');
+      return;
+    }
+
+    const extractedData = await aIIntegration.sendRequest({ prompt });
 
     extractedData.split(';;;').forEach((data: string) => {
       const [dataField, ...values] = data.split(':::');
@@ -1883,7 +1889,9 @@ class Form extends Widget<FormProperties> {
         try {
           this._updateFieldValue(dataField, value);
         } catch (e) {
-          logger.error(`Error processing field ${dataField}:`, e);
+          logger.error(`Error processing field ${dataField}, invalid value ${value}:`, e);
+          // reset editor value
+          this.reset({ [dataField]: '' });
         }
       }
     });
