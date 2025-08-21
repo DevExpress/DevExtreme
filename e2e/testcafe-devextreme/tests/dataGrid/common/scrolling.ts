@@ -1353,7 +1353,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
       .notOk();
 
     for (let i = 0; i < 3; i += 1) {
-    // act
+      // act
       await t
         .click(dataGrid.getPager().getNavPage('4').element)
         .wait(3500);
@@ -1432,18 +1432,21 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 // T1152498
 // TODO: fix unstable tests
 // ['infinite', 'virtual'].forEach((scrollingMode) => {
-// eslint-disable-next-line max-len
-//   safeSizeTest(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
-//   // arrange
+
+// safeSizeTest(
+//   eslint-disable-next-line @stylistic/max-len
+//   `${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`,
+//   async (t) => {
+//     // arrange
 //     const dataGrid = new DataGrid('#container');
 //     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-//
+
 //     // act
 //     await dataGrid.scrollTo({ y: 200 });
 //     await t.wait(100);
 //     await dataGrid.scrollTo({ y: 400 });
 //     await t.wait(300);
-//
+
 //     // assert
 //     await t
 //       .expect(await takeScreenshot(`grid-${scrollingMode}-scrolling-T1152498.png`, '#container'))
@@ -1459,8 +1462,8 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 //       renderAsync: false,
 //       templatesRenderAsynchronously: true,
 //       columnFixing: {
-//          // @ts-expect-error private option
-//          legacyMode: true,
+//         // @ts-expect-error private option
+//         legacyMode: true,
 //       },
 //       customizeColumns(columns) {
 //         columns[0].width = 70;
@@ -1471,16 +1474,16 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 //         mode: scrollingMode,
 //       },
 //     });
-//
+
 //     await t.wait(100);
-//
+
 //     // simulating async rendering in React
 //     await ClientFunction(() => {
 //       const dataGrid = ($('#container') as any).dxDataGrid('instance');
-//
+
 //       // eslint-disable-next-line no-underscore-dangle
 //       dataGrid.getView('rowsView')._templatesCache = {};
-//
+
 //       // eslint-disable-next-line no-underscore-dangle
 //       dataGrid._getTemplate = () => ({
 //         render(options) {
@@ -1490,10 +1493,10 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 //           }, 200);
 //         },
 //       });
-//
+
 //       dataGrid.repaint();
 //     })();
-//
+
 //     await t.wait(300);
 //   });
 // });
@@ -1857,7 +1860,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   test(
     `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
     async (t) => {
-    // NOTE: idx + 1 logic inside POM
+      // NOTE: idx + 1 logic inside POM
       const adaptiveCellIdx = 101;
       const scrollValuesThreshold = 100;
 

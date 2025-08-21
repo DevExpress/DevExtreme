@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker */
+
 export const virtualData = [{
     'metadataid': null,
     'x1code': 'CGIAR',

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 /* eslint-env node */
 
 const createTestCafe = require('testcafe');
@@ -21,9 +21,9 @@ const TESTCAFE_CONFIG = {
 };
 
 const changeTheme = async(t, themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
-    // eslint-disable-next-line no-undef
+
     window.DevExpress.ui.themes.ready(resolve);
-    // eslint-disable-next-line no-undef
+
     window.DevExpress.ui.themes.current(themeName);
 }),
 { dependencies: { themeName } }).with({ boundTestRun: t })();

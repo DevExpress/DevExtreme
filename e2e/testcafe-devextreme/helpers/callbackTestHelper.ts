@@ -31,7 +31,7 @@ const initClientTesting = async (keyArray: string[]): Promise<void> => {
 const clearClientData = async (keyArray: string[]): Promise<void> => ClientFunction(
   () => {
     const extendedWindow = window as WindowCallbackExtended;
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
     delete extendedWindow.clientTesting;
   },
   { dependencies: { keyArray } },

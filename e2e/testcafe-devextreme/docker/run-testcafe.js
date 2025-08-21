@@ -28,7 +28,7 @@ const matrix = [
 ];
 
 (async() => {
-    // eslint-disable-next-line no-undef
+
     const parsedArgs = parseArgs(process.argv);
     const componentFolderName = parsedArgs.componentFolder;
     let testParts = matrix;
@@ -44,7 +44,7 @@ const matrix = [
 
     // eslint-disable-next-line no-restricted-syntax
     for(const { name, ...args } of testParts) {
-        // eslint-disable-next-line no-console,no-undef
+        // eslint-disable-next-line no-console
         console.log(`Started test: ${name}`);
 
         const startupParams = Object.entries(args).map(([key, value]) => `--${key}=${value}`);

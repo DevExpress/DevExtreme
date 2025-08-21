@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { DataType } from 'devextreme/ui/filter_builder';

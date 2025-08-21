@@ -700,8 +700,10 @@ safeSizeTest('toIndex should not be corrected when source item gets removed from
       allowReordering: true,
       onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
-        // eslint-disable-next-line max-len
-        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+
+        const toIndex = items.findIndex(
+          (item) => item.field1 === visibleRows[e.toIndex].data.field1,
+        );
         const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
         items.splice(fromIndex, 1);
         items.splice(toIndex, 0, e.itemData);
@@ -756,8 +758,10 @@ safeSizeTest('Item should appear in a correct spot when dragging to a different 
       allowReordering: true,
       onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
-        // eslint-disable-next-line max-len
-        const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
+
+        const toIndex = items.findIndex(
+          (item) => item.field1 === visibleRows[e.toIndex].data.field1,
+        );
         const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
         items.splice(fromIndex, 1);
         items.splice(toIndex, 0, e.itemData);

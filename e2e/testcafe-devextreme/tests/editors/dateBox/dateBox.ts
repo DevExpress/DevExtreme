@@ -42,7 +42,7 @@ if (!isMaterialBased()) {
 
         await t
           .expect(scrollTop)
-          // eslint-disable-next-line no-nested-ternary
+
           .eql(views[viewName] * ITEM_HEIGHT, `${viewName} view is scrolled correctly`);
       });
     }).before(async () => createWidget('dxDateBox', {

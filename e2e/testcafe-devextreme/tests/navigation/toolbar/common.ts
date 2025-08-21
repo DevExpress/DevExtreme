@@ -55,7 +55,7 @@ const supportedWidgets = [
 
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
-        let iconPosition;
+        let iconPosition: string | null = null;
         if (widgetName === 'dxTabs') {
           iconPosition = 'start';
         }

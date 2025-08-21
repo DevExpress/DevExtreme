@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 function getRoot() {
     return document.querySelector('#parentContainer').shadowRoot;
 }

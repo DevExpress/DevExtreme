@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { Selector } from 'testcafe';
 import { CellEditor } from 'devextreme-testcafe-models/dataGrid/data/cellEditor';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
@@ -126,9 +125,17 @@ const getEditForm = (mode): EditForm | null => {
   return null;
 };
 
-const editCell = async (t: TestController, {
-  mode, dataField, useKeyboard, columnIndex,
-}, rowIndex: number, modifyFirstColumn = false): Promise<{ cell: DataCell; editor: CellEditor }> => {
+const editCell = async (
+  t: TestController,
+  {
+    mode,
+    dataField,
+    useKeyboard,
+    columnIndex,
+  },
+  rowIndex: number,
+  modifyFirstColumn = false,
+): Promise<{ cell: DataCell; editor: CellEditor }> => {
   const cell = dataGrid.getDataCell(rowIndex, columnIndex);
   let editor = cell.getEditor();
 
@@ -148,7 +155,7 @@ const editCell = async (t: TestController, {
 
   if (useKeyboard) {
     await t
-    // .pressKey('tab')
+      // .pressKey('tab')
       .pressKey('ctrl+down')
       .pressKey('enter');
     if (mode === 'popup') { // TODO
@@ -208,7 +215,15 @@ const addRow = async (t: TestController, {
   return { cell, editor };
 };
 
-const checkEditCell = async (t: TestController, { mode, dataField }, cell: DataCell | undefined, editor: CellEditor | undefined): Promise<void> => {
+const checkEditCell = async (
+  t: TestController,
+  {
+    mode,
+    dataField,
+  },
+  cell: DataCell | undefined,
+  editor: CellEditor | undefined,
+): Promise<void> => {
   if (mode !== 'form' && mode !== 'popup') {
     await t.expect(cell?.isFocused).ok();
   }
@@ -222,8 +237,10 @@ const checkEditCell = async (t: TestController, { mode, dataField }, cell: DataC
     .eql(true);
 };
 
-// eslint-disable-next-line max-len
-const getEditorValue = async (dataField: string, editor: CellEditor): Promise<string | undefined> => {
+const getEditorValue = async (
+  dataField: string,
+  editor: CellEditor,
+): Promise<string | undefined> => {
   if (dataField === 'boolean') {
     return await editor.isChecked() ? 'true' : 'false';
   }
@@ -239,7 +256,16 @@ const getCellText = async (dataField: string, cell: DataCell): Promise<string | 
   return cell.element.textContent;
 };
 
-const checkModifiedCell = async (t: TestController, { mode, dataField }, cell: DataCell, editor: CellEditor, value: string): Promise<void> => {
+const checkModifiedCell = async (
+  t: TestController,
+  {
+    mode,
+    dataField,
+  },
+  cell: DataCell,
+  editor: CellEditor,
+  value: string,
+): Promise<void> => {
   const editorText = mode === 'batch' || mode === 'cell'
     ? await getCellText(dataField, cell)
     : await getEditorValue(dataField, editor);
@@ -261,7 +287,14 @@ const checkModifiedCell = async (t: TestController, { mode, dataField }, cell: D
   }
 };
 
-const checkSavedCell = async (t: TestController, { dataField }, cell: DataCell, value: string): Promise<void> => {
+const checkSavedCell = async (
+  t: TestController,
+  {
+    dataField,
+  },
+  cell: DataCell,
+  value: string,
+): Promise<void> => {
   await t
     .expect(await getCellText(dataField, cell))
     .eql(value);
@@ -336,12 +369,22 @@ const setEditorValue = async (t: TestController, {
   }
 };
 
-const editNextCell = async (t: TestController, {
-  mode, dataField, columnInfoIndex, columnIndex, useKeyboard,
-}, rowIndex: number): Promise<{ nextEditor: CellEditor | undefined; nextCell: DataCell | undefined }> => {
+const editNextCell = async (
+  t: TestController,
+  {
+    mode,
+    dataField,
+    columnInfoIndex,
+    columnIndex,
+    useKeyboard,
+  },
+  rowIndex: number,
+): Promise<{ nextEditor: CellEditor | undefined; nextCell: DataCell | undefined }> => {
   const form = getEditForm(mode);
 
+  // eslint-disable-next-line @typescript-eslint/init-declarations
   let nextEditor: CellEditor | undefined;
+  // eslint-disable-next-line @typescript-eslint/init-declarations
   let nextCell: DataCell | undefined;
   if (form) {
     const nextColumnInfo = columnInfos[columnInfoIndex === 0 ? 1 : columnInfoIndex - 1];

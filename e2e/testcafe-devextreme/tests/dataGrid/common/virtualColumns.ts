@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
@@ -410,7 +409,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
       templates: {
         headerCellTemplate: {
           render({ model, container, onRendered }) {
-            const title = model.column.caption == null ? null : model.column.caption;
+            const title = model.column.caption ?? null;
             const content = $(`<span title='${title}'>
           ${title}
         </span>`);
@@ -424,7 +423,7 @@ test('Header, fixed columns and virtual scroll bar should have stable position d
         },
         cellTemplate: {
           render({ model, container, onRendered }) {
-            const title = model.value == null ? null : model.value;
+            const title = model.value ?? null;
             const content = $(`<span title='${title}'>
           ${title}
         </span>`);

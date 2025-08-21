@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
@@ -39,12 +38,11 @@ const INVALID_STATE_CLASS = 'dx-invalid';
       .expect(textBox.getLabel().getStyleProperty('max-width'))
       .eql(expectedWidth === 'none' ? 'none' : `${expectedWidth}px`);
 
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), `width: ${t.ctx.initialWidth + t.ctx.deltaWidth}px;`);
 
     await t
       .expect(textBox.getLabel().getStyleProperty('max-width'))
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+
       .eql(expectedWidth === 'none' ? 'none' : `${expectedWidth + t.ctx.deltaWidth}px`);
   }).before(async (t) => {
     t.ctx.initialWidth = 100;
