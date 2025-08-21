@@ -371,5 +371,5 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.W1028
      */
-    W1028: 'Passing parameters: {0} for child columns is not supported',
+    W1028: 'Nested/banded columns do not support the following properties: {0}.',
 });

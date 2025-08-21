@@ -25,41 +25,33 @@ import {
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   IGNORE_COLUMN_OPTION_NAMES,
+  UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS,
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
 
-const POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = [
-  'fixed',
-  'fixedPosition',
-  'type',
-  'buttons',
-];
-
-const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[], isLastIndexOnTopLevel?: boolean): void => {
-  if (controller?._warningUnsupportedPropertiesForChildColumns?.isShown) return;
-  if (controller?._warningUnsupportedPropertiesForChildColumns?.properties?.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) return;
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
+  if (controller?._isWarnedAboutUnsupportedProperties) return;
   if (!childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
 
-  if (!controller?._warningUnsupportedPropertiesForChildColumns) {
-    controller._warningUnsupportedPropertiesForChildColumns = {
-      isShown: false,
-      properties: new Set(),
-    };
-  }
+  let unsupportedProperty: string | null = null;
 
-  each(childColumns, (_, column) => {
-    if (column && typeof column === 'object' && column !== null) {
-      for (const property of POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
-        if (property in column) controller._warningUnsupportedPropertiesForChildColumns!.properties!.add(`'${property}'`);
+  for (const column of childColumns) {
+    if (unsupportedProperty) break;
+    if (!column || typeof column !== 'object' || column === null) continue;
+
+    for (const property of UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+      if (property in column) {
+        unsupportedProperty = property;
+        break;
       }
     }
-  });
+  }
 
-  if (isLastIndexOnTopLevel || controller._warningUnsupportedPropertiesForChildColumns.properties!.size === POSSIBLE_UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS.length) {
-    errors.log('W1028', Array.from(controller._warningUnsupportedPropertiesForChildColumns.properties!).join(', '));
-    controller._warningUnsupportedPropertiesForChildColumns.isShown = true;
+  if (unsupportedProperty) {
+    controller && (controller._isWarnedAboutUnsupportedProperties = true);
+    errors.log('W1028', `'${unsupportedProperty}'`);
   }
 };
 
@@ -106,7 +98,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
   }
 };
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?, isTopLevel = true) {
+export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
   let result: any = [];
 
   if (columnsOptions) {
@@ -124,9 +116,8 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
-          const isLastIndexOnTopLevel = isTopLevel && columnsOptions.length - 1 === index;
-          warnFixedInChildColumnsOnce(that, column.columns, isLastIndexOnTopLevel);
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length, false));
+          warnFixedInChildColumnsOnce(that, column.columns);
+          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
         }
