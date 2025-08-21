@@ -1,5 +1,5 @@
 import type { TimeZoneCalculator } from '../r1/timezone_calculator';
-import type { SafeAppointment } from '../types';
+import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
 
@@ -28,6 +28,9 @@ export interface PanelOptions {
 }
 
 export interface FilterOptions {
+  allDayPanelMode: AllDayPanelModeType;
+  showAllDayPanel: boolean;
+  supportAllDayPanel: boolean;
   resourceManager: ResourceManager;
   timeZoneCalculator: TimeZoneCalculator;
   viewOffset: number;
@@ -44,27 +47,49 @@ export interface GroupIndex {
   groupIndex: GroupLeaf['groupIndex'];
 }
 
+export interface AllDayPanelOccupation {
+  isAllDayPanelOccupied: boolean;
+}
+
 export interface MinimalAppointmentEntity {
   startDate: number;
   startDateTimeZone?: string;
   endDate: number;
-  duration: number;
   endDateTimeZone?: string;
   recurrenceRule?: string;
   recurrenceException?: string;
   hasRecurrenceRule: boolean;
   allDay: boolean;
-  isAllDayPanelOccupied: boolean;
   visible: boolean;
+  disabled: boolean;
   itemData: SafeAppointment;
 }
 
 export interface AppointmentPart {
+  originalAppointmentDates: {
+    startDate: number;
+    endDate: number;
+  };
   reduced?: 'head' | 'body' | 'tail';
   partIndex: number;
   partCount: number;
 }
 
 export type ListEntity<T = MinimalAppointmentEntity> = T
+  & AllDayPanelOccupation
   & GroupIndex
   & AppointmentPart;
+
+export interface LastInGroup {
+  isLastInGroup: boolean;
+}
+
+export interface AgendaGeometry {
+  width: string;
+  height: number;
+}
+
+export type AgendaEntity = ListEntity
+  & AgendaGeometry
+  & LastInGroup
+  & SortedIndex;

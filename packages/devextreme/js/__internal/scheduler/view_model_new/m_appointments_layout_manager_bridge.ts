@@ -1,18 +1,18 @@
 import type { Appointment } from '@js/ui/scheduler';
-import { AppointmentAdapter } from '@ts/scheduler/utils/appointment_adapter/appointment_adapter';
 
 import type Scheduler from '../m_scheduler';
 import type { RenderStrategyName, SafeAppointment } from '../types';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentViewModelPlain } from '../view_model/generate_view_model/types';
 import AppointmentLayoutManagerDeprecated from '../view_model/m_appointments_layout_manager';
-import { AgendaAppointmentLayoutManager } from './agenda_view/agenda_appointment_layout_manager';
+import { filterAppointments } from './filtration/filter_appointments';
+import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
+import { prepareAppointments } from './preparation/prepare_appointments';
 
 class AppointmentLayoutManagerBridge {
   preparedItems: any[] = [];
 
   filteredItems: any[] = [];
-
-  agendaLayoutManager: AgendaAppointmentLayoutManager;
 
   oldLayoutManager: AppointmentLayoutManagerDeprecated;
 
@@ -20,22 +20,18 @@ class AppointmentLayoutManagerBridge {
     return this.oldLayoutManager._positionMap;
   }
 
-  constructor(public instance: Scheduler) {
-    this.agendaLayoutManager = new AgendaAppointmentLayoutManager(instance);
-    this.oldLayoutManager = new AppointmentLayoutManagerDeprecated(instance);
+  // NOTE: Here we should pass global store. But right now scheduler component is global store
+  constructor(public schedulerStore: Scheduler) {
+    this.oldLayoutManager = new AppointmentLayoutManagerDeprecated(schedulerStore);
   }
 
   protected useNewViewModel(): boolean {
-    return this.instance.currentView.type === 'agenda';
-  }
-
-  public getLayoutManager(): AgendaAppointmentLayoutManager {
-    return this.agendaLayoutManager;
+    return this.schedulerStore.currentView.type === 'agenda';
   }
 
   public prepareAppointments(items?: Appointment[]): void {
     if (this.useNewViewModel()) {
-      this.preparedItems = this.getLayoutManager().prepareAppointments(items);
+      this.preparedItems = prepareAppointments(this.schedulerStore, items);
     } else {
       this.oldLayoutManager.prepareAppointments(items);
       this.preparedItems = this.oldLayoutManager.preparedItems;
@@ -44,7 +40,7 @@ class AppointmentLayoutManagerBridge {
 
   public filterAppointments(): void {
     if (this.useNewViewModel()) {
-      this.filteredItems = this.getLayoutManager().filterAppointments(this.preparedItems);
+      this.filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
     } else {
       this.oldLayoutManager.filterAppointments();
       this.filteredItems = this.oldLayoutManager.filteredItems;
@@ -61,17 +57,17 @@ class AppointmentLayoutManagerBridge {
 
   public generateViewModel(): AppointmentViewModelPlain[] {
     if (this.useNewViewModel()) {
-      if (this.instance.currentView.type === 'agenda') {
-        const viewModel = this.agendaLayoutManager.generateViewModel(this.filteredItems);
+      if (this.schedulerStore.currentView.type === 'agenda') {
+        const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
         return viewModel.map((item) => {
           const adapter = new AppointmentAdapter(
             item.itemData,
-            this.instance._dataAccessors,
+            this.schedulerStore._dataAccessors,
           ).clone();
 
           adapter.startDate = new Date(item.startDate);
           adapter.endDate = new Date(item.endDate);
-          adapter.calculateDates(this.instance.timeZoneCalculator, 'fromGrid');
+          adapter.calculateDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
 
           return {
             ...item,

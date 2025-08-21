@@ -4,8 +4,8 @@ import {
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import { getVisibleDateTimeIntervals } from '../../view_model_new/utils/get_visible_date_time_intervals';
-import { shiftIntervals } from '../../view_model_new/utils/shift_intervals';
+import { getVisibleDateTimeIntervals } from '../../view_model_new/filtration/utils/get_filter_options/get_visible_date_time_intervals';
+import { shiftIntervals } from '../../view_model_new/filtration/utils/get_filter_options/shift_intervals';
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
 import {
   filterArray,

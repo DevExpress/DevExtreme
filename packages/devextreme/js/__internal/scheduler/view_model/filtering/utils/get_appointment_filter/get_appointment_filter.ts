@@ -1,9 +1,9 @@
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
 import { isAppointmentTakesAllDay } from '../../../../r1/utils/index';
 import type { AppointmentDataItem } from '../../../../types';
-import { getAppointmentRecurrenceOccurrences } from '../../../../view_model_new/filtration/get_appointment_recurrence_occurrences';
-import { isAppointmentMatchedIntervals } from '../../../../view_model_new/filtration/is_appointment_matched_intervals';
-import { isAppointmentMatchedResources } from '../../../../view_model_new/filtration/is_appointment_matched_resources';
+import { isAppointmentMatchedResources } from '../../../../view_model_new/filtration/utils/filter_by_attributes/is_appointment_matched_resources';
+import { isAppointmentMatchedIntervals } from '../../../../view_model_new/filtration/utils/filter_by_intervals/is_appointment_matched_intervals';
+import { getAppointmentRecurrenceOccurrences } from '../../../../view_model_new/filtration/utils/split_by_recurrence/get_appointment_recurrence_occurrences';
 import type { FilterOptions } from '../type';
 import { getAppointmentOccurrenceDates } from './get_appointment_occurrence_dates';
 
