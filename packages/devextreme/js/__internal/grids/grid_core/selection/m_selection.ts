@@ -299,7 +299,8 @@ export class SelectionController extends modules.Controller {
   private _createSelection() {
     const options = this._getSelectionConfig();
 
-    return new Selection<any, any>(options);
+    // @ts-expect-error TKey
+    return new Selection(options);
   }
 
   /**
