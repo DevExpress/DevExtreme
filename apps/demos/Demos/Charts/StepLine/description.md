@@ -1,2 +1,2 @@
-_Step line_ series are much like traditional line series. The primary difference is&nbsp;that in _step line_ series, data points are connected by&nbsp;vertical and horizontal lines --- resulting in&nbsp;a&nbsp;&laquo;stair step&raquo; effect.
+Step line charts display data as points joined by horizontal and vertical line segments that form a step-like pattern. To create a step line chart, set the **series**.[type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) property to *"stepline"*. 
 <!--split-->

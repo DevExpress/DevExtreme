@@ -152,10 +152,11 @@
     "test-jest": {
       "executor": "nx:run-script",
       "options": {
-        "script": "test-jest"
+        "script": "test-jest:all"
       },
       "inputs": [
         "{projectRoot}/js/**/*",
+        "{projectRoot}/build/**/*",
         "{projectRoot}/jest.*"
       ],
       "cache": true

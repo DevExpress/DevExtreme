@@ -17,6 +17,7 @@ export {
   ImageMessage,
   Message,
   MessageTemplateData,
+  EmptyViewTemplateData,
   dxChatOptions,
   Properties,
 } from './chat';
