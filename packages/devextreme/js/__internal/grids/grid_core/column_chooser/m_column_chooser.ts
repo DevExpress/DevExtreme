@@ -392,10 +392,10 @@ export class ColumnChooserView extends ColumnsView {
     const columnIndices = isDefined(changes.columnIndex)
       ? [changes.columnIndex]
       : changes.columnIndices;
-    const needUpdate: boolean = COLUMN_OPTIONS_USED_IN_ITEMS
-      .some((
-        optionName,
-      ) => optionNames[optionName]) || (changes.changeTypes.columns && optionNames.all);
+    const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS
+      .some((optionName) => optionNames[optionName]);
+    const needUpdate: boolean = hasItemsOptionNames
+      || (changes.changeTypes.columns && optionNames.all);
 
     if (!needUpdate) {
       return;
