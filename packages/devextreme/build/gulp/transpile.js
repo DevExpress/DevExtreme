@@ -196,7 +196,7 @@ const transpileProd = (dist, isEsm) => transpile(
         ],
         tsPipes: [
             removeDebug(),
-            isEsm ? babel(transpileConfig.esm) : babel(transpileConfig.tsCjs)
+            isEsm ? babel(transpileConfig.esm) : babel(transpileConfig.tsCjs),
         ]
     },
 );

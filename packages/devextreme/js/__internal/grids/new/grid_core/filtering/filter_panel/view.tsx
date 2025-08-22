@@ -1,4 +1,4 @@
-import { computed, type ReadonlySignal } from '@preact/signals-core';
+import { computed, type ReadonlySignal } from '@ts/core/state_manager/index';
 import { FilterBuilderView as OldFilterBuilderView } from '@ts/grids/grid_core/filter/m_filter_builder';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
 
