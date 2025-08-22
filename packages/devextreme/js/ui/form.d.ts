@@ -679,7 +679,6 @@ export type SimpleItem = dxFormSimpleItem;
 export interface dxFormSimpleItem {
     /**
      * @docid
-     * @default undefined
      * @public
      */
     aiProcessing?: {
