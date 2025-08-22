@@ -51,7 +51,7 @@ const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns
 
   if (unsupportedProperty) {
     controller && (controller._isWarnedAboutUnsupportedProperties = true);
-    errors.log('W1028', `'${unsupportedProperty}'`);
+    errors.log('W1028', unsupportedProperty);
   }
 };
 

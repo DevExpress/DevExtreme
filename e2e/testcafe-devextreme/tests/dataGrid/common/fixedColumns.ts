@@ -437,277 +437,213 @@ test('DataGrid - Group summary is not updated when a column is fixed on the righ
   ],
 }));
 
-test(
-  'Warning should be shown when trying to set fixed state for child columns. Warning should work when columns changed in real time. Warning should be shown one time for every dataGrid instance',
-  async (t) => {
-    const grid1 = new DataGrid('#container');
-    const grid2 = new DataGrid('#otherContainer');
+const mockCountries = [
+  {
+    ID: 1,
+    Country: 'Brazil',
+    Area: 8515767,
+    Population_Urban: 0.85,
+    Population_Rural: 0.15,
+    Population_Total: 205809000,
+    GDP_Agriculture: 0.054,
+    GDP_Industry: 0.274,
+    GDP_Services: 0.672,
+    GDP_Total: 2353025,
+  },
+  {
+    ID: 2,
+    Country: 'China',
+    Area: 9388211,
+    Population_Urban: 0.54,
+    Population_Rural: 0.46,
+    Population_Total: 1375530000,
+    GDP_Agriculture: 0.091,
+    GDP_Industry: 0.426,
+    GDP_Services: 0.483,
+    GDP_Total: 10380380,
+  },
+  {
+    ID: 3,
+    Country: 'France',
+    Area: 675417,
+    Population_Urban: 0.79,
+    Population_Rural: 0.21,
+    Population_Total: 64529000,
+    GDP_Agriculture: 0.019,
+    GDP_Industry: 0.183,
+    GDP_Services: 0.798,
+    GDP_Total: 2846889,
+  },
+];
 
-    let consoleMessages = await t.getBrowserConsoleMessages();
-
-    let warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
-
-    await t.expect(warnings.length).eql(1, 'There is one warning W1028');
-
-    await grid2.option('columns', [
-      { dataField: 'test3', caption: 'test3' },
-      {
-        caption: 'test3 group',
-        columns: [
-          {
-            dataField: 'test4',
-            caption: 'test4',
-            fixed: true,
-          },
-          {
-            dataField: 'test5',
-            caption: 'test5',
-            fixed: true,
-          },
-        ],
-      },
-    ]);
-
-    consoleMessages = await t.getBrowserConsoleMessages();
-
-    warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
-
-    await t.expect(warnings.length).eql(2, 'There are two warnings W1028');
-
-    await grid1.apiAddColumn({
-      dataField: 'test',
-      caption: 'test',
+test('Warning should be shown when trying to set fixed state for child columns', async (t) => {
+  new DataGrid('#container');
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(1, 'There is warning W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: mockCountries,
+      keyExpr: 'ID',
+      columnAutoWidth: true,
+      allowColumnReordering: true,
+      width: 600,
+      showBorders: true,
+      columnChooser: { enabled: true },
       columns: [
         {
-          dataField: 'test1',
-          caption: 'test1',
+          dataField: 'Country',
+          fixed: true,
+          fixedPosition: 'left'
+        },
+        {
+          dataField: 'Area',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          caption: 'Population',
+          columns: [
+            {
+              caption: 'Total',
+              dataField: 'Population_Total',
+              format: 'fixedPoint',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+            {
+              caption: 'Urban',
+              dataField: 'Population_Urban',
+              format: 'percent',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+          ],
+        },
+      ],
+    },
+    '#container',
+  );
+});
+
+test('Warning should work when columns changed in real time', async (t) => {
+  const grid = new DataGrid('#container');
+
+  let consoleMessages = await t.getBrowserConsoleMessages();
+  let warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+
+  await t.expect(warnings.length).eql(0, 'There is not any warning W1028');
+
+  await grid.option('columns', [
+    {
+      dataField: 'test3',
+      caption: 'test3',
+    },
+    {
+      caption: 'test3 group',
+      columns: [
+        {
+          dataField: 'test4',
+          caption: 'test4',
           fixed: true,
         },
         {
-          dataField: 'test2',
-          caption: 'test2',
+          dataField: 'test5',
+          caption: 'test5',
           fixed: true,
         },
       ],
-    });
+    },
+  ]);
+  consoleMessages = await t.getBrowserConsoleMessages();
+  warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(1, 'There is warning W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: [],
+    },
+    '#container',
+  );
+});
 
-    consoleMessages = await t.getBrowserConsoleMessages();
+test('Warning should be shown one time for every dataGrid instance', async (t) => {
+  new DataGrid('#container');
+  const otherGrid = new DataGrid('#otherContainer');
 
-    warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
-
-    await t
-      .expect(warnings.length)
-      .eql(2, 'There are still two warnings W1028');
-  },
-)
-  .before(async () => {
-    const countries = [
+  await otherGrid.apiAddColumn({
+    dataField: 'test',
+    caption: 'test',
+    columns: [
       {
-        ID: 1,
-        Country: 'Brazil',
-        Area: 8515767,
-        Population_Urban: 0.85,
-        Population_Rural: 0.15,
-        Population_Total: 205809000,
-        GDP_Agriculture: 0.054,
-        GDP_Industry: 0.274,
-        GDP_Services: 0.672,
-        GDP_Total: 2353025,
+        dataField: 'test1',
+        caption: 'test1',
+        fixed: true,
       },
       {
-        ID: 2,
-        Country: 'China',
-        Area: 9388211,
-        Population_Urban: 0.54,
-        Population_Rural: 0.46,
-        Population_Total: 1375530000,
-        GDP_Agriculture: 0.091,
-        GDP_Industry: 0.426,
-        GDP_Services: 0.483,
-        GDP_Total: 10380380,
+        dataField: 'test2',
+        caption: 'test2',
+        fixed: true,
       },
-      {
-        ID: 3,
-        Country: 'France',
-        Area: 675417,
-        Population_Urban: 0.79,
-        Population_Rural: 0.21,
-        Population_Total: 64529000,
-        GDP_Agriculture: 0.019,
-        GDP_Industry: 0.183,
-        GDP_Services: 0.798,
-        GDP_Total: 2846889,
-      },
-      {
-        ID: 4,
-        Country: 'Germany',
-        Area: 357021,
-        Population_Urban: 0.75,
-        Population_Rural: 0.25,
-        Population_Total: 81459000,
-        GDP_Agriculture: 0.008,
-        GDP_Industry: 0.281,
-        GDP_Services: 0.711,
-        GDP_Total: 3859547,
-      },
-      {
-        ID: 5,
-        Country: 'India',
-        Area: 3287590,
-        Population_Urban: 0.32,
-        Population_Rural: 0.68,
-        Population_Total: 1286260000,
-        GDP_Agriculture: 0.174,
-        GDP_Industry: 0.258,
-        GDP_Services: 0.569,
-        GDP_Total: 2047811,
-      },
-      {
-        ID: 6,
-        Country: 'Italy',
-        Area: 301230,
-        Population_Urban: 0.69,
-        Population_Rural: 0.31,
-        Population_Total: 60676361,
-        GDP_Agriculture: 0.02,
-        GDP_Industry: 0.242,
-        GDP_Services: 0.738,
-        GDP_Total: 2147952,
-      },
-      {
-        ID: 7,
-        Country: 'Japan',
-        Area: 377835,
-        Population_Urban: 0.93,
-        Population_Rural: 0.07,
-        Population_Total: 126920000,
-        GDP_Agriculture: 0.012,
-        GDP_Industry: 0.275,
-        GDP_Services: 0.714,
-        GDP_Total: 4616335,
-      },
-      {
-        ID: 8,
-        Country: 'Russia',
-        Area: 17098242,
-        Population_Urban: 0.74,
-        Population_Rural: 0.26,
-        Population_Total: 146544710,
-        GDP_Agriculture: 0.039,
-        GDP_Industry: 0.36,
-        GDP_Services: 0.601,
-        GDP_Total: 1857461,
-      },
-      {
-        ID: 9,
-        Country: 'United States',
-        Area: 9147420,
-        Population_Urban: 0.81,
-        Population_Rural: 0.19,
-        Population_Total: 323097000,
-        GDP_Agriculture: 0.0112,
-        GDP_Industry: 0.191,
-        GDP_Services: 0.797,
-        GDP_Total: 17418925,
-      },
-      {
-        ID: 10,
-        Country: 'United Kingdom',
-        Area: 244820,
-        Population_Urban: 0.82,
-        Population_Rural: 0.18,
-        Population_Total: 65097000,
-        GDP_Agriculture: 0.007,
-        GDP_Industry: 0.21,
-        GDP_Services: 0.783,
-        GDP_Total: 2945146,
-      },
-    ];
-
-    await createWidget(
-      'dxDataGrid',
-      {
-        dataSource: countries,
-        keyExpr: 'ID',
-        columnAutoWidth: true,
-        allowColumnReordering: true,
-        width: 600,
-        showBorders: true,
-        columnChooser: { enabled: true },
-        columns: [
-          { dataField: 'Country', fixed: true, fixedPosition: 'left' },
-          {
-            dataField: 'Area',
-            fixed: true,
-            fixedPosition: 'left',
-          },
-          {
-            caption: 'Population',
-            columns: [
-              {
-                caption: 'Total',
-                dataField: 'Population_Total',
-                format: 'fixedPoint',
-                fixed: true,
-                fixedPosition: 'left',
-              },
-              {
-                caption: 'Urban',
-                dataField: 'Population_Urban',
-                format: 'percent',
-                fixed: true,
-                fixedPosition: 'left',
-              },
-            ],
-          },
-          {
-            caption: 'Nominal GDP',
-            columns: [
-              {
-                caption: 'Total, mln $',
-                dataField: 'GDP_Total',
-                format: 'fixedPoint',
-                sortOrder: 'desc',
-                fixed: true,
-                fixedPosition: 'left',
-              },
-              {
-                caption: 'By Sector',
-                columns: [
-                  {
-                    caption: 'Agriculture',
-                    dataField: 'GDP_Agriculture',
-                    width: 95,
-                    format: { type: 'percent', precision: 1 },
-                    fixed: true,
-                    fixedPosition: 'left',
-                  },
-                  {
-                    caption: 'Industry',
-                    dataField: 'GDP_Industry',
-                    width: 80,
-                    format: { type: 'percent', precision: 1 },
-                  },
-                  {
-                    caption: 'Services',
-                    dataField: 'GDP_Services',
-                    width: 85,
-                    format: { type: 'percent', precision: 1 },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      '#container',
-    );
-
-    await createWidget(
-      'dxDataGrid',
-      {
-        dataSource: [],
-      },
-      '#otherContainer',
-    );
+    ],
   });
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
+  await t.expect(warnings.length).eql(2, 'There are two warnings W1028');
+}).before(async () => {
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: mockCountries,
+      keyExpr: 'ID',
+      columnAutoWidth: true,
+      allowColumnReordering: true,
+      width: 600,
+      showBorders: true,
+      columnChooser: { enabled: true },
+      columns: [
+        {
+          dataField: 'Country',
+          fixed: true,
+          fixedPosition: 'left'
+        },
+        {
+          dataField: 'Area',
+          fixed: true,
+          fixedPosition: 'left',
+        },
+        {
+          caption: 'Population',
+          columns: [
+            {
+              caption: 'Total',
+              dataField: 'Population_Total',
+              format: 'fixedPoint',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+            {
+              caption: 'Urban',
+              dataField: 'Population_Urban',
+              format: 'percent',
+              fixed: true,
+              fixedPosition: 'left',
+            },
+          ],
+        },
+      ],
+    },
+    '#container',
+  );
+
+  await createWidget(
+    'dxDataGrid',
+    {
+      dataSource: [],
+    },
+    '#otherContainer',
+  );
+});
