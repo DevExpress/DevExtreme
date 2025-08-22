@@ -263,15 +263,14 @@ export default _extend({}, barPoint, {
     },
 
     _translate: function() {
-        const that = this;
-        const valTranslator = that._getValTranslator();
-        const x = that._getArgTranslator().translate(that.argument);
+        const valTranslator = this._getValTranslator();
+        const x = this._getArgTranslator().translate(this.argument);
 
-        that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
-        that.openY = that.openValue !== null ? valTranslator.translate(that.openValue) : null;
-        that.highY = valTranslator.translate(that.highValue);
-        that.lowY = valTranslator.translate(that.lowValue);
-        that.closeY = that.closeValue !== null ? valTranslator.translate(that.closeValue) : null;
+        this.vx = this.vy = this.x = x === null ? x : x + (this.xCorrection || 0);
+        this.openY = this.openValue !== null ? valTranslator.translate(this.openValue) : null;
+        this.highY = valTranslator.translate(this.highValue);
+        this.lowY = valTranslator.translate(this.lowValue);
+        this.closeY = this.closeValue !== null ? valTranslator.translate(this.closeValue) : null;
 
         const minValue = Math.min(this.lowY, this.highY);
         const height = Math.abs(this.lowY - this.highY);
