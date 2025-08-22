@@ -133,10 +133,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get aiIntegration(): AIIntegration {
+    get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
     }
-    set aiIntegration(value: AIIntegration) {
+    set aiIntegration(value: AIIntegration | undefined) {
         this._setOption('aiIntegration', value);
     }
 
@@ -639,7 +639,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() aiIntegrationChange: EventEmitter<AIIntegration>;
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
     

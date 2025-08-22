@@ -63,10 +63,10 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get aiIntegration(): AIIntegration {
+    get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
     }
-    set aiIntegration(value: AIIntegration) {
+    set aiIntegration(value: AIIntegration | undefined) {
         this._setOption('aiIntegration', value);
     }
 

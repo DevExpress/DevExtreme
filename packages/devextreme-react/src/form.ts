@@ -92,7 +92,7 @@ const Form = memo(
 // SimpleItem
 type IAiProcessingProps = React.PropsWithChildren<{
   disabled?: boolean;
-  instruction?: string;
+  instruction?: string | undefined;
 }>
 const _componentAiProcessing = (props: IAiProcessingProps) => {
   return React.createElement(NestedOption<IAiProcessingProps>, {
@@ -410,7 +410,7 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   aiProcessing?: Record<string, any> | {
     disabled?: boolean;
-    instruction?: string;
+    instruction?: string | undefined;
   };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
@@ -650,7 +650,7 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 type ISimpleItemProps = React.PropsWithChildren<{
   aiProcessing?: Record<string, any> | {
     disabled?: boolean;
-    instruction?: string;
+    instruction?: string | undefined;
   };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
