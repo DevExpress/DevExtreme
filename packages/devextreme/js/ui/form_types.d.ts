@@ -6,6 +6,7 @@ export {
   FormItemType,
   LabelLocation,
   FormLabelMode,
+  AiResult,
   ContentReadyEvent,
   DisposingEvent,
   EditorEnterKeyEvent,
