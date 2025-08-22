@@ -19,7 +19,7 @@ export default class SelectionStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey= any,
 > {
   options: SelectionOptions<TItem, TKey>;
 

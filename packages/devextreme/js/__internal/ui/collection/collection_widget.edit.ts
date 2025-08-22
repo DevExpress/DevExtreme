@@ -14,7 +14,7 @@ import {
   when,
 } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
@@ -485,8 +485,9 @@ class CollectionWidget<
 
         const { grouped } = this.option();
 
-        const hasSubItems = (item: TItem): item is TItem & { items: TItem[] } => isObject(item) && 'items' in item && Array.isArray(item.items);
-        if (grouped && hasSubItems(normalizedSelection)) {
+        // @ts-expect-error items inside TItem
+        if (grouped && normalizedSelection?.items) {
+          // @ts-expect-error items inside TItem
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 

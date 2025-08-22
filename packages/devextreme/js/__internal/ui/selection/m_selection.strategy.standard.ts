@@ -559,7 +559,7 @@ export default class StandardStrategy<
     this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
   }
 
-  isItemDataSelected(itemData: TItem, options: PendingOptions = {}): boolean {
+  isItemDataSelected(itemData: TItem, options = {}): boolean {
     const key = this.options.keyOf(itemData);
     return this.isItemKeySelected(key, options);
   }
