@@ -50,7 +50,6 @@ export const createAgendaAppointmentLayout = (formatText, config) => {
     .addClass('dx-scheduler-agenda-appointment-right-layout')
     .appendTo(result);
 
-  // eslint-disable-next-line no-unused-vars
   const marker = $('<div>')
     .addClass(APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER)
     .appendTo(leftLayoutContainer);

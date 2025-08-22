@@ -35,8 +35,8 @@ export class Row extends BaseInfernoComponent<RowProps> {
       rightVirtualCellWidth = RowDefaultProps.rightVirtualCellWidth,
       styles,
     } = this.props;
-    const hasLeftVirtualCell = !!leftVirtualCellCount;
-    const hasRightVirtualCell = !!rightVirtualCellCount;
+    const hasLeftVirtualCell = Boolean(leftVirtualCellCount);
+    const hasRightVirtualCell = Boolean(rightVirtualCellCount);
 
     return (
       <tr
