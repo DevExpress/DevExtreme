@@ -477,7 +477,6 @@ const mockCountries = [
 ];
 
 test('Warning should be shown when trying to set fixed state for child columns', async (t) => {
-  new DataGrid('#container');
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warnings = consoleMessages?.warn.filter((message) => message.startsWith('W1028')) || [];
   await t.expect(warnings.length).eql(1, 'There is warning W1028');
@@ -496,7 +495,7 @@ test('Warning should be shown when trying to set fixed state for child columns',
         {
           dataField: 'Country',
           fixed: true,
-          fixedPosition: 'left'
+          fixedPosition: 'left',
         },
         {
           dataField: 'Area',
@@ -571,7 +570,6 @@ test('Warning should work when columns changed in real time', async (t) => {
 });
 
 test('Warning should be shown one time for every dataGrid instance', async (t) => {
-  new DataGrid('#container');
   const otherGrid = new DataGrid('#otherContainer');
 
   await otherGrid.apiAddColumn({
@@ -608,7 +606,7 @@ test('Warning should be shown one time for every dataGrid instance', async (t) =
         {
           dataField: 'Country',
           fixed: true,
-          fixedPosition: 'left'
+          fixedPosition: 'left',
         },
         {
           dataField: 'Area',
