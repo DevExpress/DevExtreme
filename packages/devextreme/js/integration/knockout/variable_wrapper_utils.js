@@ -10,19 +10,31 @@ if(ko) {
         unwrap: function(value) {
 
             if(ko.isObservable(value)) {
+                if(ko.isObservableArray(value)) {
+                    return this.callBase(value);
+                }
                 return ko.utils.unwrapObservable(value);
             }
             // Recursively unwrap observable properties within objects
-            if(value && typeof value === 'object' && !Array.isArray(value)) {
-                for(const key in value) {
-                    if(value.hasOwnProperty(key)) {
-                        const subValue = value[key];
-                        if(ko.isObservable(subValue)) {
-                            value[key] = ko.utils.unwrapObservable(subValue);
-                        }
+            // if(value && typeof value === 'object' && !Array.isArray(value)) {
+            //     for(const key in value) {
+            //         if(value.hasOwnProperty(key)) {
+            //             const subValue = value[key];
+            //             if(ko.isObservable(subValue)) {
+            //                 value[key] = ko.utils.unwrapObservable(subValue);
+            //             }
+            //         }
+            //     }
+            //     return this.callBase(value);
+            // }
+
+            if(Array.isArray(value)) {
+                return this.callBase(value.map(item => {
+                    if(ko.isObservableArray(item)) {
+                        return ko.utils.unwrapObservable(item);
                     }
-                }
-                return this.callBase(value);
+                    return item;
+                }));
             }
 
             return this.callBase(value);
