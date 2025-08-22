@@ -543,6 +543,24 @@ export default [
                 boolean: true,
             }],
             'unicorn/filename-case': ['error', { case: 'snakeCase' }],
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    // allow only a single underscore identifier `_` to bypass this rule
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'allow',
+                },
+            ],
         },
     },
     // Rules for grid controls
