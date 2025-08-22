@@ -12,6 +12,7 @@ import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import unicorn from 'eslint-plugin-unicorn';
 import customRules from './eslint_plugins/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,6 +49,7 @@ export default [
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,
+            unicorn,
             'devextreme-custom': customRules,
         },
         settings: {
@@ -540,6 +542,7 @@ export default [
             'no-implicit-coercion': ['error', {
                 boolean: true,
             }],
+            'unicorn/filename-case': ['error', { case: 'snakeCase' }],
         },
     },
     // Rules for grid controls
