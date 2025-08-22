@@ -61,7 +61,7 @@ $colorview-handle-second-side-size: 17px;
 
 .dx-colorview-container-row {
   overflow: hidden;
-  padding-top: 1px;
+  padding: 1px 0;
 
   &:first-child {
     margin-top: 0;
