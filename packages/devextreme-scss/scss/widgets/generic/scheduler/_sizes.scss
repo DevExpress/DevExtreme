@@ -20,7 +20,7 @@ $generic-scheduler-agenda-appointment-font-size: null !default;
 $generic-scheduler-group-header-table-cell-width: null !default;
 $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
-$generic-scheduler-appointment-collector-height: null !default;
+$generic-scheduler-dropdown-button-height: null !default;
 
 $agenda-appointment-title-font-size: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -51,7 +51,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-left-border: 3px solid transparent !default;
   $generic-scheduler-appointment-transparent-right-border: 2px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 20px !default;
+  $generic-scheduler-dropdown-button-height: 20px !default;
 
   $agenda-appointment-title-font-size: 16px;
 
@@ -81,7 +81,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-left-border: 2px solid transparent !default;
   $generic-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 17px !default;
+  $generic-scheduler-dropdown-button-height: 17px !default;
 
   $agenda-appointment-title-font-size: 16px;
 

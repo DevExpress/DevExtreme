@@ -491,6 +491,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'dateSerializationFormat':
         break;
       case 'maxAppointmentsPerCell':
+        this.repaint();
         break;
       case 'startDateExpr':
       case 'endDateExpr':
@@ -850,9 +851,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._layoutManager.prepareAppointments(result);
         this._renderAppointments();
         this._updateA11yStatus();
-        if (this._isAgenda()) {
-          this._workSpace.renderAgendaLayout(this._layoutManager.filteredItems);
-        }
       });
     }
   }
@@ -882,6 +880,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
+    if (this._isAgenda()) {
+      this._workSpace.renderAgendaLayout(viewModel);
+    }
   }
 
   _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {

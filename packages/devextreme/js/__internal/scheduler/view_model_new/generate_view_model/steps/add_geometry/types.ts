@@ -1,0 +1,49 @@
+import type { DateInterval } from '../../../types';
+
+export interface Geometry {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+export interface X {
+  sizeX: number; // abstract width
+  offsetX: number; // abstract left corner
+}
+export interface Y {
+  sizeY: number; // abstract height
+  offsetY: number; // abstract top corner
+}
+export interface RealSize {
+  height: number; // real height
+  width: number; // real width
+}
+export interface AbstractSize {
+  sizeX: number; // abstract width
+  sizeY: number; // abstract height
+}
+export interface RawCollectorSize {
+  height: string;
+  width: string;
+  marginRight: string;
+  marginLeft: string;
+  marginTop: string;
+  marginBottom: string;
+}
+
+export interface GeometryOptions {
+  intervals: DateInterval[];
+  maxLevel: number;
+  viewOrientation: 'horizontal' | 'vertical';
+  groupOrientation?: 'horizontal' | 'vertical';
+  isGroupByDate: boolean;
+  isTimeline: boolean;
+  isRTLEnabled: boolean;
+  isAdaptivityEnabled: boolean;
+  groupCount: number;
+  cellSize: RealSize;
+  collectorSize: RealSize;
+  collectorWithMarginsSize: RealSize;
+  intervalSize: RealSize;
+  panelSize: RealSize;
+}

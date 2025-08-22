@@ -5,7 +5,6 @@ import { filterByAttributes } from './utils/filter_by_attributes/filter_by_attri
 import { filterByIntervals } from './utils/filter_by_intervals/filter_by_intervals';
 import { getFilterOptions } from './utils/get_filter_options/get_filter_options';
 import { splitByGroupIndex } from './utils/split_by_group_index';
-import { splitByParts } from './utils/split_by_parts';
 import { splitByRecurrence } from './utils/split_by_recurrence/split_by_recurrence';
 
 export const filterAppointments = (
@@ -18,7 +17,6 @@ export const filterAppointments = (
   entities = splitByRecurrence(entities, options);
   entities = filterByIntervals(entities, options);
   entities = splitByGroupIndex(entities, options);
-  entities = splitByParts(entities, options);
 
   return entities as ListEntity[];
 };

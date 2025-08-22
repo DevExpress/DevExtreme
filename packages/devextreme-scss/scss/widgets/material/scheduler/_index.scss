@@ -354,12 +354,13 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-collector {
+  height: $material-scheduler-dropdown-button-height;
   margin-top: $material-scheduler-dropdown-day-margin;
   position: absolute;
 
   &.dx-button {
     box-shadow: none;
-    border-radius: $material-scheduler-compact-appointment-button-border-radius;
+    border-radius: $material-scheduler-dropdown-button-height;
     height: $material-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;

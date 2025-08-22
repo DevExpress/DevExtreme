@@ -3,11 +3,18 @@ import type { Appointment } from '@js/ui/scheduler';
 import type Scheduler from '../m_scheduler';
 import type { RenderStrategyName, SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import type { AppointmentViewModelPlain } from '../view_model/generate_view_model/types';
+import type {
+  AppointmentCollectorViewModel,
+  AppointmentItemViewModel,
+  AppointmentViewModelPlain,
+} from '../view_model/generate_view_model/types';
 import AppointmentLayoutManagerDeprecated from '../view_model/m_appointments_layout_manager';
 import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
+import { generateMonthViewModel } from './generate_view_model/generate_month_view_model';
+import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { prepareAppointments } from './preparation/prepare_appointments';
+import type { AppointmentEntity, ListEntity, OriginalAppointmentDates } from './types';
 
 class AppointmentLayoutManagerBridge {
   preparedItems: any[] = [];
@@ -26,7 +33,12 @@ class AppointmentLayoutManagerBridge {
   }
 
   protected useNewViewModel(): boolean {
-    return this.schedulerStore.currentView.type === 'agenda';
+    const viewType = this.schedulerStore.currentView.type;
+    const isVirtualScrolling = this.schedulerStore.isVirtualScrolling();
+    return viewType === 'agenda' || (
+      !isVirtualScrolling
+      && ['month'].includes(this.schedulerStore.currentView.type)
+    );
   }
 
   public prepareAppointments(items?: Appointment[]): void {
@@ -57,23 +69,99 @@ class AppointmentLayoutManagerBridge {
 
   public generateViewModel(): AppointmentViewModelPlain[] {
     if (this.useNewViewModel()) {
-      if (this.schedulerStore.currentView.type === 'agenda') {
-        const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
-        return viewModel.map((item) => {
-          const adapter = new AppointmentAdapter(
-            item.itemData,
-            this.schedulerStore._dataAccessors,
-          ).clone();
+      switch (this.schedulerStore.currentView.type) {
+        case 'agenda': {
+          const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
+          return viewModel.map((item) => {
+            const adapter = new AppointmentAdapter(
+              item.itemData,
+              this.schedulerStore._dataAccessors,
+            ).clone();
 
-          adapter.startDate = new Date(item.startDate);
-          adapter.endDate = new Date(item.endDate);
-          adapter.calculateDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
+            adapter.startDate = new Date(item.startDate);
+            adapter.endDate = new Date(item.endDate);
+            adapter.calculateDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
 
-          return {
-            ...item,
-            agendaSettings: adapter.source as SafeAppointment,
-          };
-        });
+            return {
+              ...item,
+              agendaSettings: adapter.source as SafeAppointment,
+            };
+          });
+        }
+        case 'month': {
+          const viewModel = generateMonthViewModel(this.schedulerStore, this.filteredItems);
+          const toItem = (item: AppointmentEntity): AppointmentItemViewModel => ({
+            itemData: item.itemData,
+            allDay: false, // otherwise all day appointment will not render
+            groupIndex: item.groupIndex,
+            sortedIndex: item.sortedIndex,
+            direction: item.direction,
+            level: item.level,
+            maxLevel: item.maxLevel,
+            empty: item.height < 15,
+            top: item.top,
+            left: item.left,
+            height: item.height,
+            width: item.width,
+            reduced: item.reduced,
+            partIndex: item.partIndex,
+            partTotalCount: item.partCount,
+            rowIndex: item.rowIndex,
+            columnIndex: item.columnIndex,
+            info: {
+              sourceAppointment: {
+                startDate: new Date(item.originalAppointmentDates.startDate),
+                endDate: new Date(item.originalAppointmentDates.endDate),
+                allDay: item.allDay,
+              },
+              appointment: {
+                startDate: new Date(item.originalAppointmentDates.startDate),
+                endDate: new Date(item.originalAppointmentDates.endDate),
+                allDay: item.allDay,
+              },
+            },
+          });
+          const toCollectedItem = (
+            item: ListEntity & OriginalAppointmentDates & RealSize,
+          ): AppointmentItemViewModel => ({
+            itemData: item.itemData,
+            allDay: false, // otherwise all day appointment will not render
+            groupIndex: item.groupIndex,
+            width: item.width,
+            height: item.height,
+            info: {
+              sourceAppointment: {
+                startDate: new Date(item.originalAppointmentDates.startDate),
+                endDate: new Date(item.originalAppointmentDates.endDate),
+                allDay: item.allDay,
+              },
+              appointment: {
+                startDate: new Date(item.originalAppointmentDates.startDate),
+                endDate: new Date(item.originalAppointmentDates.endDate),
+                allDay: item.allDay,
+              },
+            },
+          } as unknown as AppointmentItemViewModel);
+          return viewModel.map((item) => {
+            if (item.items.length) {
+              return {
+                itemData: item.itemData,
+                allDay: false, // otherwise all day appointment will not render
+                groupIndex: item.groupIndex,
+                sortedIndex: item.sortedIndex,
+                top: item.top,
+                left: item.left,
+                width: item.width,
+                height: item.height,
+                isCompact: item.isCompact,
+                items: item.items.map(toCollectedItem),
+              } as AppointmentCollectorViewModel;
+            }
+
+            return toItem(item);
+          });
+        }
+        default:
       }
     }
 

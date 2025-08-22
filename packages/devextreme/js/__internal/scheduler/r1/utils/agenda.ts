@@ -7,19 +7,15 @@ export const calculateStartViewDate = (currentDate: Date, startDayHour: number):
   return setOptionHour(validCurrentDate, startDayHour);
 };
 
-const getDayStart = (date: Date | number, viewOffset: number): number => {
-  const trimDate = new Date(date).setHours(0, 0, 0, 0);
-  return trimDate + viewOffset;
-};
+const getDayStart = (date: Date | number): number => new Date(date).setHours(0, 0, 0, 0);
 
 export const calculateRows = (
   appointments: ListEntity[],
   agendaDuration: number,
   currentDate: Date,
   groupCount: number,
-  viewOffset = 0,
 ): number[][] => {
-  const dayMs = getDayStart(currentDate, viewOffset);
+  const dayMs = getDayStart(currentDate);
   const intervalsStartMap = new Map<number, number>();
   const result = Array.from(
     { length: groupCount || 1 },
@@ -32,7 +28,7 @@ export const calculateRows = (
   }
 
   appointments.forEach((appointment) => {
-    const appointmentStart = getDayStart(appointment.startDate, viewOffset);
+    const appointmentStart = getDayStart(appointment.startDate);
     const intervalIndex = intervalsStartMap.get(appointmentStart);
     if (intervalIndex !== undefined) {
       result[appointment.groupIndex][intervalIndex] += 1;

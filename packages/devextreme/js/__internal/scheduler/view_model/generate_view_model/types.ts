@@ -97,7 +97,6 @@ export interface AppointmentItemViewModel extends BaseAppointmentViewModel {
   top: number;
   height: number;
   width: number;
-  isCompact: boolean;
   reduced: 'head' | 'body' | 'tail' | undefined;
   partIndex: number;
   partTotalCount: number;

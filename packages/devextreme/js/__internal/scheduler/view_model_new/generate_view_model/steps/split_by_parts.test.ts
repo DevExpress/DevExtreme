@@ -1,11 +1,18 @@
 import { describe, expect, it } from '@jest/globals';
 
-import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../types';
+import type {
+  AllDayPanelOccupation,
+  DateIntervalsExtended,
+  MinimalAppointmentEntity,
+} from '../../types';
 import { splitByParts } from './split_by_parts';
 
 type Entity = MinimalAppointmentEntity & AllDayPanelOccupation;
 
-const filterOptions: Pick<FilterOptions, 'regularPanel' | 'allDayPanel'> = {
+const filterOptions: {
+  allDayPanel: DateIntervalsExtended;
+  regularPanel: DateIntervalsExtended;
+} = {
   regularPanel: {
     intervals: [
       {
@@ -53,6 +60,7 @@ describe('splitByParts', () => {
         originalAppointmentDates: items[0],
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 5).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 0,
         partCount: 0,
       }, {
@@ -60,6 +68,7 @@ describe('splitByParts', () => {
         originalAppointmentDates: items[1],
         startDate: new Date(2000, 0, 10, 7).getTime(),
         endDate: new Date(2000, 0, 10, 8).getTime(),
+        duration: 3600_000,
         partIndex: 0,
         partCount: 0,
       }, {
@@ -67,6 +76,7 @@ describe('splitByParts', () => {
         originalAppointmentDates: items[2],
         startDate: new Date(2000, 0, 10, 8).getTime(),
         endDate: new Date(2000, 0, 10, 10).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 0,
         partCount: 0,
       },
@@ -89,6 +99,7 @@ describe('splitByParts', () => {
         originalAppointmentDates: items[0],
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 5).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 0,
         partCount: 0,
         reduced: 'tail',
@@ -96,6 +107,7 @@ describe('splitByParts', () => {
         originalAppointmentDates: items[1],
         startDate: new Date(2000, 0, 12, 8).getTime(),
         endDate: new Date(2000, 0, 12, 10).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 0,
         partCount: 0,
         reduced: 'head',
@@ -133,6 +145,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 10).getTime(),
+        duration: 7 * 3600_000,
         partIndex: 0,
         partCount: 2,
         reduced: 'body',
@@ -144,6 +157,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 11, 3).getTime(),
         endDate: new Date(2000, 0, 11, 5).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 1,
         partCount: 2,
         reduced: 'tail',
@@ -155,6 +169,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 10).getTime(),
+        duration: 7 * 3600_000,
         partIndex: 0,
         partCount: 2,
         reduced: 'head',
@@ -166,6 +181,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 11, 3).getTime(),
         endDate: new Date(2000, 0, 11, 5).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 1,
         partCount: 2,
         reduced: 'tail',
@@ -177,6 +193,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 11, 8).getTime(),
         endDate: new Date(2000, 0, 11, 10).getTime(),
+        duration: 2 * 3600_000,
         partIndex: 0,
         partCount: 2,
         reduced: 'head',
@@ -188,6 +205,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 12, 3).getTime(),
         endDate: new Date(2000, 0, 12, 10).getTime(),
+        duration: 7 * 3600_000,
         partIndex: 1,
         partCount: 2,
         reduced: 'body',
@@ -199,6 +217,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 11, 9).getTime(),
         endDate: new Date(2000, 0, 11, 10).getTime(),
+        duration: 3600_000,
         partIndex: 0,
         partCount: 2,
         reduced: 'head',
@@ -210,6 +229,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 12, 3).getTime(),
         endDate: new Date(2000, 0, 12, 10).getTime(),
+        duration: 7 * 3600_000,
         partIndex: 1,
         partCount: 2,
         reduced: 'tail',
@@ -227,6 +247,7 @@ describe('splitByParts', () => {
       originalAppointmentDates: items[0],
       startDate: new Date(2000, 0, 10, 3).getTime(),
       endDate: new Date(2000, 0, 10, 10).getTime(),
+      duration: 7 * 3600_000,
       partIndex: 0,
       partCount: 0,
     }]);
@@ -237,7 +258,10 @@ describe('splitByParts', () => {
       startDate: new Date(2000, 0, 10, 0).getTime(),
       endDate: new Date(2000, 0, 11, 0).getTime(),
     }] as Entity[];
-    const filterOptions24Hours: Pick<FilterOptions, 'regularPanel' | 'allDayPanel'> = {
+    const filterOptions24Hours: {
+      allDayPanel: DateIntervalsExtended;
+      regularPanel: DateIntervalsExtended;
+    } = {
       regularPanel: {
         intervals: [{
           min: new Date(2000, 0, 10).getTime(),
@@ -256,6 +280,7 @@ describe('splitByParts', () => {
       originalAppointmentDates: items[0],
       startDate: new Date(2000, 0, 10).getTime(),
       endDate: new Date(2000, 0, 11).getTime(),
+      duration: 24 * 3600_000,
       partIndex: 0,
       partCount: 0,
     }]);
@@ -276,6 +301,7 @@ describe('splitByParts', () => {
       },
       startDate: new Date(2000, 0, 10, 0).getTime(),
       endDate: new Date(2000, 0, 11, 0).getTime(),
+      duration: 24 * 3600_000,
       partIndex: 0,
       partCount: 0,
     }]);
@@ -315,6 +341,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 10).getTime(),
         endDate: new Date(2000, 0, 11).getTime(),
+        duration: 24 * 3600_000,
         partIndex: 0,
         partCount: 0,
         reduced: 'tail',
@@ -326,6 +353,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 10).getTime(),
         endDate: new Date(2000, 0, 11).getTime(),
+        duration: 24 * 3600_000,
         partIndex: 0,
         partCount: 0,
       }, {
@@ -336,6 +364,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 10).getTime(),
         endDate: new Date(2000, 0, 12).getTime(),
+        duration: 48 * 3600_000,
         partIndex: 0,
         partCount: 0,
       }, {
@@ -346,6 +375,7 @@ describe('splitByParts', () => {
         },
         startDate: new Date(2000, 0, 11).getTime(),
         endDate: new Date(2000, 0, 12).getTime(),
+        duration: 24 * 3600_000,
         partIndex: 0,
         partCount: 0,
         reduced: 'head',

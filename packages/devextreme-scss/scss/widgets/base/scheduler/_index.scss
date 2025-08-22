@@ -515,10 +515,14 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-appointment-collector-compact {
+    &.dx-scheduler-appointment-collector {
+      width: 24px;
+    }
     .dx-scheduler-appointment-collector-content,
     .dx-button-content {
       span:last-child {
         padding-left: 0;
+        vertical-align: middle;
       }
     }
   }

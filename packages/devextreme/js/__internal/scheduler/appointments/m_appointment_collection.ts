@@ -23,6 +23,7 @@ import {
 } from '@js/core/utils/type';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { CompactAppointmentsHelper } from '@ts/scheduler/m_compact_appointments_helper';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import {
@@ -684,7 +685,6 @@ class SchedulerAppointments extends CollectionWidget {
       allowDrag,
       allDay,
       reduced: settings.reduced,
-      isCompact: settings.isCompact,
       startDate: new Date(settings.info?.appointment.startDate),
       cellWidth: this.invoke('getCellWidth'),
       cellHeight: this.invoke('getCellHeight'),
@@ -1023,6 +1023,13 @@ class SchedulerAppointments extends CollectionWidget {
     this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
 
     return $item;
+  }
+
+  getCollectorDimension(isCollectorCompact: boolean, isAllDayPanel: boolean) {
+    return CompactAppointmentsHelper.measureCollectorDimensions(
+      this._getAppointmentContainer(isAllDayPanel),
+      isCollectorCompact,
+    );
   }
 
   _sortAppointmentsByStartDate(appointments) {
