@@ -194,7 +194,7 @@ test('Check the behavior of pressing the Esc button when dragging a column from 
 }));
 
 test(
-  'Should take into account column options change during general option change [T1267471]',
+  'Should take into account column options change during general option change (T1267471)',
   async (t) => {
     const dataGrid = new DataGrid('#container');
     const columnChooserBtn = dataGrid.getColumnChooserButton();
