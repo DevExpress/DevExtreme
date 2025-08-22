@@ -7,7 +7,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { DEFAULT_TIMELINE_CELL_HEIGHT, setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 const dataSource = [
   {
@@ -98,7 +98,7 @@ const views = [
 
 describe('scheduler', () => {
   it.each(views)('should render correct workspace in Santiago DST for view: $view.name', async ({ view, result }) => {
-    setupSchedulerTestEnvironment(true);
+    setupSchedulerTestEnvironment({ height: DEFAULT_TIMELINE_CELL_HEIGHT });
 
     const { POM } = await createScheduler({
       views: [view],
