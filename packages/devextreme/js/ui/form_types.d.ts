@@ -7,7 +7,6 @@ export {
   LabelLocation,
   FormLabelMode,
   AIResult,
-  SmartPasteInfo,
   ContentReadyEvent,
   DisposingEvent,
   EditorEnterKeyEvent,

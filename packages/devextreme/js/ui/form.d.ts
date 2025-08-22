@@ -69,7 +69,7 @@ export type AIResult = Record<string, string | string[]>;
 
 /**
  * @docid
- * @public
+ * @hidden
  */
 export type SmartPasteInfo = {
   /**
