@@ -204,9 +204,13 @@ test(
     const columnChooser = dataGrid.getColumnChooser();
     const lastItemCheckbox = columnChooser.getCheckbox(1);
 
+    await t.expect(columnChooser.isCheckboxDisabled(0)).notOk();
+    await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
+
     await t.click(lastItemCheckbox);
 
     await t.expect(columnChooser.isCheckboxDisabled(0)).ok();
+    await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
   },
 ).before(async () => createWidget('dxDataGrid', {
   dataSource: [
