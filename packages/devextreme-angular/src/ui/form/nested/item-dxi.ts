@@ -131,10 +131,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get aiProcessing(): { disabled?: boolean, instruction?: string } {
+    get aiProcessing(): { disabled?: boolean, instruction?: string | undefined } {
         return this._getOption('aiProcessing');
     }
-    set aiProcessing(value: { disabled?: boolean, instruction?: string }) {
+    set aiProcessing(value: { disabled?: boolean, instruction?: string | undefined }) {
         this._setOption('aiProcessing', value);
     }
 

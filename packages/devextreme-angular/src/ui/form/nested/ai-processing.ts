@@ -40,10 +40,10 @@ export class DxoFormAiProcessingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get instruction(): string {
+    get instruction(): string | undefined {
         return this._getOption('instruction');
     }
-    set instruction(value: string) {
+    set instruction(value: string | undefined) {
         this._setOption('instruction', value);
     }
 
