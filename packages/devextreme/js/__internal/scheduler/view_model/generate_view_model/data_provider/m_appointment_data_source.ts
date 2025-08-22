@@ -23,7 +23,7 @@ export class AppointmentDataSource {
   }
 
   get isDataSourceInit() {
-    return !!this.dataSource;
+    return Boolean(this.dataSource);
   }
 
   _getStoreKey(target) {
