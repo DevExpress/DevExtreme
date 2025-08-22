@@ -1,4 +1,4 @@
-import type { LoadOptions, SelectDescriptor } from '@js/common/data.types';
+import type { LoadOptions } from '@js/common/data.types';
 import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
@@ -8,7 +8,6 @@ import {
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
 import type {
-  PendingOptions,
   QueryParams,
   RemoteFilter,
   SelectionFilter,
@@ -173,8 +172,8 @@ export default class SelectionStrategy<
 
   _loadFilteredData(
     remoteFilter: SelectionFilter,
-    localFilter?: Function | null,
-    select?: SelectDescriptor<TItem> | null,
+    localFilter?: unknown,
+    select?: unknown,
     isSelectAll?: boolean,
   ): DeferredObj<TItem[]> {
     const filterLength = encodeURI(
@@ -187,7 +186,6 @@ export default class SelectionStrategy<
 
     const loadOptions: LoadOptions<TItem> = {
       filter: needLoadAllData ? undefined : remoteFilter,
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
       ...queryParams,
     };
@@ -222,7 +220,6 @@ export default class SelectionStrategy<
       const keyHash = getKeyHash(keys[i]);
 
       if (!isObject(keyHash)) {
-        this.options.keyHashIndices = this.options.keyHashIndices ?? {};
         this.options.keyHashIndices[keyHash] = this.options.keyHashIndices[keyHash] || [];
 
         const keyIndices = this.options.keyHashIndices[keyHash];
@@ -309,13 +306,13 @@ export default class SelectionStrategy<
 
   isItemKeySelected(itemKey: TKey | TItem): boolean;
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
-  isItemKeySelected(itemKey: TKey | TItem, options: PendingOptions = {}): boolean {
+  isItemKeySelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
     throw new Error('isItemKeySelected method should be overriden');
   }
 
   isItemDataSelected(itemKey: TKey | TItem): boolean;
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
-  isItemDataSelected(itemKey: TKey | TItem, options: PendingOptions = {}): boolean {
+  isItemDataSelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
     throw new Error('isItemKeySelected method should be overriden');
   }
 

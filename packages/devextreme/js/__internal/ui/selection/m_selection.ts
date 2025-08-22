@@ -1,12 +1,11 @@
 import { noop } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import { extend } from '@ts/core/utils/m_extend';
 import DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
 import StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
 import type {
   DefaultOptions,
-  PendingOptions,
   SelectionFilter,
   SelectionItem,
   SelectionOptions,
@@ -35,8 +34,7 @@ export default class Selection<
 
     this._selectionStrategy = (this.options.deferred
       ? new DeferredStrategy(this.options)
-      : new StandardStrategy(this.options)
-    ) as SelectionStrategy<TItem, TKey, TDeferred>;
+      : new StandardStrategy(this.options)) as SelectionStrategy<TItem, TKey, TDeferred>;
 
     this._focusedItemIndex = -1;
 
@@ -77,12 +75,6 @@ export default class Selection<
     return this._selectionStrategy.getSelectedItemKeys() as TDeferred extends true
       ? Promise<TKey[]>
       : TKey[];
-  }
-
-  _isStandardStrategy(
-    strategy: StandardStrategy<TItem, TKey> | DeferredStrategy<TItem, TKey>,
-  ): strategy is StandardStrategy<TItem, TKey> {
-    return this.options.deferred;
   }
 
   getSelectedItems(): TDeferred extends true ? Promise<TItem[]> : TItem[] {
@@ -173,12 +165,12 @@ export default class Selection<
     const item = items[itemIndex];
     let focusedItemIndex = itemIndex;
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let deferred: Promise<unknown> | undefined;
+    let deferred;
     const { isVirtualPaging } = this.options;
     const allowLoadByRange = this.options.allowLoadByRange?.();
     const { alwaysSelectByShift } = this.options;
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let indexOffset: number | undefined;
+    let indexOffset;
     let focusedItemNotInLoadedRange = false;
     let shiftFocusedItemNotInLoadedRange = false;
 
@@ -277,7 +269,7 @@ export default class Selection<
     return this._selectionStrategy.isItemDataSelected(data, { checkPending: true });
   }
 
-  isItemSelected(arg: TKey, options: PendingOptions = {}): boolean {
+  isItemSelected(arg: TKey, options: { checkPending?: boolean } = {}): boolean {
     return this._selectionStrategy.isItemKeySelected(arg, options);
   }
 
@@ -290,11 +282,11 @@ export default class Selection<
   }
 
   changeItemSelectionWhenShiftKeyInVirtualPaging(loadIndex: number): Promise<unknown> {
-    const loadOptions = this.options.getLoadOptions?.(
+    const loadOptions = this.options.getLoadOptions(
       loadIndex,
       this._focusedItemIndex,
       this._shiftFocusedItemIndex,
-    ) ?? {};
+    );
     const deferred = Deferred();
     const indexOffset = loadOptions.skip;
 
@@ -328,7 +320,7 @@ export default class Selection<
 
     let itemIndexStep = 0;
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let itemKey: TKey;
+    let itemKey;
     let startIndex = 0;
     let endIndex = 0;
 
