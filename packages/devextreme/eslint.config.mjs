@@ -520,6 +520,24 @@ export default [
             '@typescript-eslint/prefer-for-of': 'warn',
         },
     },
+    // Rules for scheduler
+    {
+        files: ['js/__internal/scheduler/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            'no-implicit-coercion': ['error', {
+                boolean: true,
+            }],
+        },
+    },
     // Rules for grid controls
     {
         files: [

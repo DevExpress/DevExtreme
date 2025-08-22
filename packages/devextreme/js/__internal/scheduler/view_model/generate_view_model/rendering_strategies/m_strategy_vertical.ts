@@ -380,7 +380,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   _sortCondition(a, b) {
-    if (!!a.allDay !== !!b.allDay) {
+    if (Boolean(a.allDay) !== Boolean(b.allDay)) {
       return a.allDay ? 1 : -1;
     }
 

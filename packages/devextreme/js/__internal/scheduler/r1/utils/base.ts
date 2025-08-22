@@ -198,7 +198,7 @@ export const isVerticalGroupingApplied = (
   groups: unknown[],
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && !!groups.length;
+  && Boolean(groups.length);
 
 // TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
@@ -331,7 +331,7 @@ export const getKeyByGroup = (
   groupIndex: number | undefined,
   isVerticalGrouping: boolean,
 ): string => {
-  if (isVerticalGrouping && !!groupIndex) {
+  if (isVerticalGrouping && groupIndex !== undefined) {
     return groupIndex.toString();
   }
 
@@ -355,7 +355,7 @@ export const getCalculatedFirstDayOfWeek = (
 export const isHorizontalGroupingApplied = (
   groups: unknown[],
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && Boolean(groups.length);
 
 export const isGroupingByDate = (
   groups: unknown[],

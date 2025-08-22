@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class */
 export class AppointmentTooltipInfo {
   constructor(
     public appointment: any,
