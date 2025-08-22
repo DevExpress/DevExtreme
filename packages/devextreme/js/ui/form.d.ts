@@ -64,7 +64,7 @@ export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
-/** public */
+/** @public */
 export type AiResult = Record<string, string | string[]>;
 
 /**
@@ -133,6 +133,10 @@ export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
  * @inherits EventInfo,AsyncCancelable
  */
 export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & {
+  /**
+   * @docid _ui_form_SmartPastingEvent.aiResult
+   * @type object
+   */
   readonly aiResult: AiResult;
 };
 
@@ -143,6 +147,10 @@ export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & {
  * @inherits EventInfo
  */
 export type SmartPastedEvent = EventInfo<dxForm> & {
+  /**
+   * @docid _ui_form_SmartPastedEvent.aiResult
+   * @type object
+   */
   readonly aiResult: AiResult;
 };
 
