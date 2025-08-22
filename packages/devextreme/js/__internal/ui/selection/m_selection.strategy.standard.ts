@@ -5,10 +5,11 @@ import { getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
-import { isDefined, isObject } from '@js/core/utils/type';
+import { isDefined, isNumeric, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
 import type {
+  PendingOptions,
   RequestData,
   RequestItems,
   SelectionFilter,
@@ -23,8 +24,7 @@ interface KeyIndicesToRemoveMap {
 export default class StandardStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey extends string | number = any,
+  TKey extends string | number = string | number,
 > extends SelectionStrategy<TItem, TKey> {
   _shouldMergeWithLastRequest?: boolean;
 
@@ -80,7 +80,7 @@ export default class StandardStrategy<
           keyIndicesToRemoveMap,
           item && typeof item === 'object' && 'disabled' in item ? !!item.disabled : false,
         );
-        if (keyIndicesToRemoveMap && typeof keyIndex === 'number' && keyIndex >= 0) {
+        if (keyIndicesToRemoveMap && isNumeric(keyIndex) && keyIndex >= 0) {
           keyIndicesToRemoveMap[keyIndex] = true;
         }
       } else {
@@ -276,12 +276,16 @@ export default class StandardStrategy<
     if (
       this._isMultiSelectEnabled()
       && this._shouldMergeWithLastRequest
+      && this._lastRequestData
       && !isDeselect
       && !isSelectAll
     ) {
       currentKeys = removeDuplicates(
         // @ts-expect-error removeDuplicates
-        keys.concat(this._lastRequestData?.addedItems),
+        [
+          ...keys,
+          ...this._lastRequestData.addedItems,
+        ],
         this._lastRequestData?.removedItems,
       );
       // @ts-expect-error getUniqueValues
@@ -559,12 +563,12 @@ export default class StandardStrategy<
     this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
   }
 
-  isItemDataSelected(itemData: TItem, options = {}): boolean {
+  isItemDataSelected(itemData: TItem, options: PendingOptions = {}): boolean {
     const key = this.options.keyOf(itemData);
     return this.isItemKeySelected(key, options);
   }
 
-  isItemKeySelected(key: TKey, options: { checkPending?: boolean } = {}): boolean {
+  isItemKeySelected(key: TKey, options: PendingOptions = {}): boolean {
     let result = this._isItemSelectionInProgress(key, options.checkPending);
 
     if (!result) {

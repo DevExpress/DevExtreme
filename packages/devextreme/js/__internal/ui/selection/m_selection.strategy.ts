@@ -1,4 +1,4 @@
-import type { LoadOptions } from '@js/common/data.types';
+import type { LoadOptions, SelectDescriptor } from '@js/common/data.types';
 import dataQuery from '@js/common/data/query';
 import {
   equalByValue,
@@ -19,13 +19,15 @@ export default class SelectionStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends SelectionItem = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey= any,
+  TKey = any,
 > {
   options: SelectionOptions<TItem, TKey>;
 
   _lastSelectAllPageDeferred = Deferred().reject();
 
   constructor(options: SelectionOptions<TItem, TKey>) {
+    // eslint-disable-next-line no-console
+    console.log('i tried so hard and got');
     this.options = options;
 
     this._setOption('disabledItemKeys', []);
@@ -172,8 +174,8 @@ export default class SelectionStrategy<
 
   _loadFilteredData(
     remoteFilter: SelectionFilter,
-    localFilter?: unknown,
-    select?: unknown,
+    localFilter?: Function | null,
+    select?: SelectDescriptor<TItem> | null,
     isSelectAll?: boolean,
   ): DeferredObj<TItem[]> {
     const filterLength = encodeURI(
@@ -186,6 +188,7 @@ export default class SelectionStrategy<
 
     const loadOptions: LoadOptions<TItem> = {
       filter: needLoadAllData ? undefined : remoteFilter,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
       ...queryParams,
     };

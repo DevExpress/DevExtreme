@@ -14,7 +14,7 @@ import {
   when,
 } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
@@ -226,7 +226,7 @@ class CollectionWidget<
     const { selectionMode, maxFilterLengthInRequest } = this.option();
 
     // @ts-expect-error TItem
-    this._selection = new Selection({
+    this._selection = new Selection<TItem, TKey, false>({
       allowNullValue: this._nullValueSelectionSupported(),
       mode: selectionMode,
       maxFilterLengthInRequest,
@@ -247,13 +247,10 @@ class CollectionWidget<
       },
       onSelectionChanged: (args): void => {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          // @ts-expect-error TItem
           this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          // @ts-expect-error TItem
           this._updateSelectedItems(args);
         }
       },
-      // @ts-expect-error filter
       filter: this._getCombinedFilter.bind(this),
       totalCount: (): number => {
         const { items = [] } = this.option();
@@ -263,7 +260,6 @@ class CollectionWidget<
           : this._getItemsCount(items);
       },
       key: this.key.bind(this),
-      // @ts-expect-error TItem
       keyOf: this.keyOf.bind(this),
       load(options): DeferredObj<TItem[]> {
         const dataController = that._dataController;
@@ -485,9 +481,8 @@ class CollectionWidget<
 
         const { grouped } = this.option();
 
-        // @ts-expect-error items inside TItem
-        if (grouped && normalizedSelection?.items) {
-          // @ts-expect-error items inside TItem
+        const hasSubItems = (item: TItem): item is TItem & { items: TItem[] } => isObject(item) && 'items' in item && Array.isArray(item.items);
+        if (grouped && hasSubItems(normalizedSelection)) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 
