@@ -18602,10 +18602,6 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
-    /** public */
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
     export type AiResult = Record<string, string | string[]>;
     /**
      * [descr:_ui_form_ContentReadyEvent]
@@ -18704,6 +18700,9 @@ declare module DevExpress.ui {
      */
     export type SmartPastedEvent =
       DevExpress.common.core.events.EventInfo<dxForm> & {
+        /**
+         * [descr:_ui_form_SmartPastedEvent.aiResult]
+         */
         readonly aiResult: AiResult;
       };
     /**
@@ -18712,6 +18711,9 @@ declare module DevExpress.ui {
     export type SmartPastingEvent =
       DevExpress.common.core.events.EventInfo<dxForm> &
         DevExpress.common.core.events.AsyncCancelable & {
+          /**
+           * [descr:_ui_form_SmartPastingEvent.aiResult]
+           */
           readonly aiResult: AiResult;
         };
   }
