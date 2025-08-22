@@ -1,13 +1,13 @@
-DevExtreme Funnel displays the flow of data over different stages. This demo displays conversion rates from website visits to product renewals.
+DevExtreme Funnel displays data/information flow across different stages/periods. This demo displays conversion rates from website visits to product renewals.
 
 <!--split-->
 
 This demo configures the following objects:
 
 - [title](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/title/)    
-Specifies the component title.
+Specifies component title.
 - [export](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/)    
-Configures export settings. Funnel supports the following export [formats](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/#formats): PNG, PDF, JPEG, SVG, and GIF.
+Configures export settings. Our Funnel Chart supports the following export [formats](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/export/#formats): PNG, PDF, JPEG, SVG, and GIF.
 - [tooltip](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/tooltip/)    
 Specifies item tooltips.
 - [label](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/label/)    
@@ -17,13 +17,13 @@ Customizes item appearance.
 
 [note]
 
-Use our DevExpress BI Dashboard to embed interactive business intelligence into your next web app.
+Use the DevExpress BI Dashboard to embed interactive business intelligence into your next web app.
 
-The Web Dashboard is a data analysis UI component that you can embed into your ASP.NET Core or Angular, React, and Vue applications with .NET backend. Dashboards allow you to display multiple inter-connected data analysis elements such as grids, charts, maps, gauges, and others: all within an automatically-arranged layout.
+Our Web Dashboard is a data analysis UI component you can embed into your ASP.NET Core or Angular, React, and Vue applications with a .NET backend. DevExpress Dashboards allow you to display multiple inter-connected data analysis elements such as grids, charts, maps, gauges, and others: all within an auto-arranged layout.
 
-The set of components allows you to deploy an all-in-one solution and switch between Viewer and Designer modes directly on the web client (includes adaptive layouts for tablet & mobile).
+DevExpress Dashboard allows you to deploy an all-in-one solution and switch between Viewer and Designer modes directly within the web client (includes built-in adaptive layouts for tablet & mobile devices).
 
-The Web Dashboard is available as a part of a Universal subscription.
+DevExpress is available as part of a Universal subscription.
 
 [Get Started with DevExpress BI Dashboard](https://docs.devexpress.com/Dashboard/115955/web-dashboard) | [Explore Demos](https://demos.devexpress.com/Dashboard/)
 
