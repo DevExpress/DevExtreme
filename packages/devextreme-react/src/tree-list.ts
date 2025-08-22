@@ -1363,7 +1363,6 @@ type IFormProps = React.PropsWithChildren<{
   showOptionalMark?: boolean;
   showRequiredMark?: boolean;
   showValidationSummary?: boolean;
-  smartPaste?: ((text: string) => void);
   tabIndex?: number;
   validationGroup?: string | undefined;
   visible?: boolean;

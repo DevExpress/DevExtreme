@@ -18585,6 +18585,10 @@ declare module DevExpress.ui {
      */
     reset(editorsData?: Record<string, any>): void;
     /**
+     * [descr:dxForm.smartPaste(text)]
+     */
+    smartPaste(text?: string): void;
+    /**
      * [descr:dxForm.updateData(data)]
      */
     updateData(data: any): void;
@@ -18965,10 +18969,6 @@ declare module DevExpress.ui {
      * [descr:dxFormOptions.showValidationSummary]
      */
     showValidationSummary?: boolean;
-    /**
-     * [descr:dxFormOptions.smartPaste]
-     */
-    smartPaste?: (text?: string) => void;
     /**
      * [descr:dxFormOptions.validationGroup]
      */

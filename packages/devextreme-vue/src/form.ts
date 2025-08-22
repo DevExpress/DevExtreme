@@ -111,7 +111,6 @@ type AccessibleOptions = Pick<Properties,
   "showOptionalMark" |
   "showRequiredMark" |
   "showValidationSummary" |
-  "smartPaste" |
   "tabIndex" |
   "validationGroup" |
   "visible" |
@@ -163,7 +162,6 @@ const componentConfig = {
     showOptionalMark: Boolean,
     showRequiredMark: Boolean,
     showValidationSummary: Boolean,
-    smartPaste: Function as PropType<((text: string) => void)>,
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
@@ -211,7 +209,6 @@ const componentConfig = {
     "update:showOptionalMark": null,
     "update:showRequiredMark": null,
     "update:showValidationSummary": null,
-    "update:smartPaste": null,
     "update:tabIndex": null,
     "update:validationGroup": null,
     "update:visible": null,
