@@ -542,13 +542,13 @@ QUnit.test('Point is invisible on the top', function(assert) {
 });
 
 QUnit.test('Point is visible on the top border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
-    this.point.translate();
-
+    const point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
     const point2 = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
+
+    point.translate();
     point2.translate();
 
-    assert.strictEqual(this.point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
     assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if lowValue is inside visible area');
 });
 
@@ -560,13 +560,13 @@ QUnit.test('Point is invisible on the bottom', function(assert) {
 });
 
 QUnit.test('Point is visible on the bottom border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
-    this.point.translate();
-
+    const point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
     const point2 = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
+
+    point.translate();
     point2.translate();
 
-    assert.strictEqual(this.point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
     assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if highValue is inside visible area');
 });
 
@@ -650,13 +650,13 @@ QUnit.test('Point is invisible on the top', function(assert) {
 });
 
 QUnit.test('Point is visible on the top border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
-    this.point.translate();
-
+    const point = createPoint(this.series, { argument: 3, openValue: 6, closeValue: 8, highValue: 8, lowValue: 6 }, this.options);
     const point2 = createPoint(this.series, { argument: 3, openValue: 7, closeValue: 8, highValue: 8, lowValue: 7 }, this.options);
+
+    point.translate();
     point2.translate();
 
-    assert.strictEqual(this.point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
     assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if lowValue is inside visible area');
 });
 
@@ -668,13 +668,13 @@ QUnit.test('Point is invisible on the bottom', function(assert) {
 });
 
 QUnit.test('Point is visible on the bottom border', function(assert) {
-    this.point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
-    this.point.translate();
-
+    const point = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 3, highValue: 3, lowValue: 1 }, this.options);
     const point2 = createPoint(this.series, { argument: 3, openValue: 1, closeValue: 2, highValue: 2, lowValue: 1 }, this.options);
+
+    point.translate();
     point2.translate();
 
-    assert.strictEqual(this.point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
+    assert.strictEqual(point.isInVisibleArea(), true, 'Point is visible if center of point is inside visible area');
     assert.strictEqual(point2.isInVisibleArea(), true, 'Point is visible if highValue is inside visible area');
 });
 
