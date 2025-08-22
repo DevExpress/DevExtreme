@@ -1,2 +1,2 @@
-Step line charts display data as points joined by horizontal and vertical line segments that form a step-like pattern. To create a step line chart, set the **series**.[type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) property to *"stepline"*. 
+Step line charts display data as points joined by horizontal and vertical line segments (forming a step-like pattern). To create a step line chart, set the **series**.[type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) property to *"stepline"*. 
 <!--split-->
