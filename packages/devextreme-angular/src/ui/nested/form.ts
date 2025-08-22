@@ -75,7 +75,6 @@ import { DxiItemComponent } from './item-dxi';
         'showOptionalMark',
         'showRequiredMark',
         'showValidationSummary',
-        'smartPaste',
         'tabIndex',
         'validationGroup',
         'visible',

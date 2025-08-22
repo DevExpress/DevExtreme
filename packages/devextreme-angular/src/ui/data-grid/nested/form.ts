@@ -349,14 +349,6 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get smartPaste(): ((text: string) => void) {
-        return this._getOption('smartPaste');
-    }
-    set smartPaste(value: ((text: string) => void)) {
-        this._setOption('smartPaste', value);
-    }
-
-    @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }

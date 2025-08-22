@@ -286,13 +286,6 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('showValidationSummary', value);
     }
 
-    get smartPaste(): Function {
-        return this._getOption('smartPaste');
-    }
-    set smartPaste(value: Function) {
-        this._setOption('smartPaste', value);
-    }
-
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }
