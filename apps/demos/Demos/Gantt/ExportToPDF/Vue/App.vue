@@ -160,11 +160,11 @@ import {
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxNumberBox, {type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import DxSelectBox, {type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { exportGantt as exportGanttToPdf } from 'devextreme-vue/common/export/pdf';
-import { type GanttPdfExportMode } from 'devextreme/ui/gantt';
+import type { GanttPdfExportMode, GanttPdfExportDateRange } from 'devextreme/ui/gantt';
 import {
   tasks,
   dependencies,
@@ -202,7 +202,7 @@ async function exportGantt() {
       ? 'treeList'
       : exportModeBoxValue.value.toLowerCase() as GanttPdfExportMode;
   const dataRangeMode = dateRangeBoxValue.value.toLowerCase();
-  let dataRange;
+  let dataRange: object | GanttPdfExportDateRange;
   if (dataRangeMode === 'custom') {
     dataRange = {
       startIndex: startTaskIndex.value,
@@ -211,7 +211,7 @@ async function exportGantt() {
       endDate: endDate.value,
     };
   } else {
-    dataRange = dataRangeMode;
+    dataRange = dataRangeMode as GanttPdfExportDateRange;
   }
   const doc = await exportGanttToPdf({
     component: ganttRef.value.instance,

@@ -62,6 +62,7 @@ import DxDataGrid, {
 import { Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
+// @ts-ignore
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-vue/common/export/excel';
 import { countries } from './data.ts';

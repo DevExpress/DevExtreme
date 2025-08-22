@@ -5,7 +5,7 @@
       name="file"
       accept="image/*"
       upload-url="https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/ChunkUpload"
-      @upload-started="() => chunks = []"
+      @upload-started="uploadStarted"
       @progress="onUploadProgress($event)"
     />
     <span class="note">Allowed file extensions: <span>.jpg, .jpeg, .gif, .png</span>.</span>
@@ -35,9 +35,19 @@
 import { ref } from 'vue';
 import DxFileUploader, { type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
 
-const chunks = ref([]);
+interface ChunkInfo {
+  segmentSize: number;
+  bytesLoaded: number;
+  bytesTotal: number;
+}
+
+const chunks = ref<ChunkInfo[]>([]);
 
 const getValueInKb = (value: number) => `${(value / 1024).toFixed(0)}kb`;
+
+function uploadStarted() {
+  chunks.value = [];
+}
 
 function onUploadProgress(e: DxFileUploaderTypes.ProgressEvent) {
   chunks.value.push({

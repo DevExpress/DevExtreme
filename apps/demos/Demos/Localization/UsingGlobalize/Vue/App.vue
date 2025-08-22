@@ -79,7 +79,7 @@ import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
 import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
 // @ts-ignore
 import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
-
+// @ts-ignore
 import * as Globalize from 'globalize';
 import service from './data.ts';
 

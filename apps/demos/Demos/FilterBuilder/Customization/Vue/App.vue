@@ -34,7 +34,7 @@
 import { ref } from 'vue';
 import DxFilterBuilder, { DxCustomOperation, type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 import { filter, fields } from './data.ts';
-import { formatValue } from './helpers.js';
+import { formatValue } from './helpers.ts';
 import EditorComponent from './EditorComponent.vue';
 
 const filterText = ref('');

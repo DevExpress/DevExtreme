@@ -77,6 +77,8 @@ import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-gr
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { steps, orientations, navigationModes, type Step } from './data.ts';
 
+type Fields =  Array<keyof Step>;
+
 const orientation = ref(orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);
 const selectOnFocus = ref(true);
@@ -95,23 +97,23 @@ const stepperConfigs = [
     id: 'icons',
     labelId: 'iconsLabel',
     title: 'Icons and Labels',
-    fields: ['label', 'icon', 'optional'] as const,
+    fields: ['label', 'icon', 'optional'] as Fields,
   },
   {
     id: 'numbers',
     labelId: 'numbersLabel',
     title: 'Numbers and Labels',
-    fields: ['label', 'optional'] as const,
+    fields: ['label', 'optional'] as Fields,
   },
   {
     id: 'customText',
     labelId: 'customTextLabel',
     title: 'Custom Text',
-    fields: ['text'] as const,
+    fields: ['text'] as Fields,
   },
 ];
 
-function getItemProps(step: Step, fields: readonly string[]) {
+function getItemProps(step: Step, fields: Fields) {
   return fields.reduce((acc, field) => {
     if (field in step) {
       acc[field] = step[field];
