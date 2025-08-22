@@ -1,7 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { getResourceManagerMock } from '@ts/scheduler/__mock__/resourceManager.mock';
+import { getResourceManagerMock } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import {
   getAllGroupValues, getGroupTexts, getLeafGroupValues, getResourcesByGroupIndex, groupResources,

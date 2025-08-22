@@ -398,22 +398,34 @@ export const getSkippedHoursInRange = (
   const endDateHours = endDate.getHours() + (endDate.getTime() % HOUR_IN_MS) / HOUR_IN_MS;
 
   if (viewDataProvider.isSkippedDate(startDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (startDateHours < startDayHour) {
-      result += dayHours;
-    } else if (startDateHours < endDayHour) {
-      result += endDayHour - startDateHours;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case startDateHours < startDayHour:
+        result += dayHours;
+        break;
+      case startDateHours < endDayHour:
+        result += endDayHour - startDateHours;
+        break;
+      default:
+        break;
     }
   }
 
   if (viewDataProvider.isSkippedDate(endDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (endDateHours > endDayHour) {
-      result += dayHours;
-    } else if (endDateHours > startDayHour) {
-      result += endDateHours - startDayHour;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case endDateHours > endDayHour:
+        result += dayHours;
+        break;
+      case endDateHours > startDayHour:
+        result += endDateHours - startDayHour;
+        break;
+      default:
+        break;
     }
   }
 

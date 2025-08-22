@@ -561,6 +561,7 @@ export default [
                     leadingUnderscore: 'allow',
                 },
             ],
+            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
         },
     },
     // Rules for grid controls
