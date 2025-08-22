@@ -3,7 +3,7 @@
   "version": "25.2.0",
   "scripts": {
     "test": "node ./runner.js",
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint",
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
   "devDependencies": {
