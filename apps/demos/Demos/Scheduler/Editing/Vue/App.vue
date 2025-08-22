@@ -76,7 +76,7 @@ const allowUpdating = ref(true);
 const allowResizing = ref(true);
 const allowDragging = ref(true);
 
-function showToast(event, value, type) {
+function showToast(event: string, value: string, type: string) {
   notify(`${event} "${value}" task`, type, 800);
 }
 function showAddedToast(e: DxSchedulerTypes.AppointmentAddedEvent) {

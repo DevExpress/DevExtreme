@@ -119,7 +119,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTagBox from 'devextreme-vue/tag-box';
+import DxTagBox, { type DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import Item from './Item.vue';
 import Tag from './Tag.vue';
 import { simpleProducts, products } from './data.ts';
@@ -127,7 +127,7 @@ import { simpleProducts, products } from './data.ts';
 const editableProducts = ref(simpleProducts.slice());
 
 const value = ref([1, 2]);
-const onCustomItemCreating = ref((args) => {
+const onCustomItemCreating = ref((args: DxTagBoxTypes.CustomItemCreatingEvent) => {
   const newValue = args.text;
   const isItemInDataSource = editableProducts.value.some((item) => item === newValue);
   if (!isItemInDataSource) {

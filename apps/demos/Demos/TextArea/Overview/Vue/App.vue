@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxTextArea from 'devextreme-vue/text-area';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
 
@@ -74,13 +74,13 @@ const valueChangeEvents = service.valueChangeEvents;
 const autoResizeEnabled = ref(false);
 const height = ref(90);
 
-function onCheckboxValueChanged(e) {
+function onCheckboxValueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   const str = service.getContent();
   value.value = e.value ? str.substring(0, 100) : str;
   maxLength.value = e.value ? 100 : null;
 }
 
-function onAutoResizeChanged(e) {
+function onAutoResizeChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   height.value = e.value ? undefined : 90;
 }
 </script>

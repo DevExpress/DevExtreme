@@ -58,16 +58,18 @@
 </template>
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
-import DxSortable from 'devextreme-vue/sortable';
-import service from './data.ts';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
+import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
+import service, { type DriveItem } from './data.ts';
+
+type DxSortableInstance = DxSortable['instance'];
 
 const treeViewDriveCRef = ref();
 const treeViewDriveDRef = ref();
 const itemsDriveC = ref(service.getItemsDriveC());
 const itemsDriveD = ref(service.getItemsDriveD());
 
-function onDragChange(e) {
+function onDragChange(e: DxSortableTypes.DragChangeEvent) {
   if (e.fromComponent === e.toComponent) {
     const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
     const toNode = findNode(getTreeView(e.toData), calculateToIndex(e));
@@ -76,7 +78,7 @@ function onDragChange(e) {
     }
   }
 }
-function onDragEnd(e) {
+function onDragEnd(e: DxSortableTypes.DragEndEvent) {
   if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
     return;
   }
@@ -91,8 +93,8 @@ function onDragEnd(e) {
     return;
   }
 
-  const fromTopVisibleNode = getTopVisibleNode(e.fromComponent);
-  const toTopVisibleNode = getTopVisibleNode(e.toComponent);
+  const fromTopVisibleNode = getTopVisibleNode(e.fromComponent as DxSortableInstance);
+  const toTopVisibleNode = getTopVisibleNode(e.toComponent as DxSortableInstance);
 
   const fromItems = getItems(e.fromData);
   const toItems = getItems(e.toData);
@@ -106,17 +108,17 @@ function onDragEnd(e) {
     toTreeView.scrollToItem(toTopVisibleNode);
   });
 }
-function getTreeView(driveName) {
+function getTreeView(driveName: string) {
   return driveName === 'driveC'
     ? treeViewDriveCRef.value.instance
     : treeViewDriveDRef.value.instance;
 }
-function getItems(driveName) {
+function getItems(driveName: string) {
   return driveName === 'driveC'
     ? itemsDriveC.value
     : itemsDriveD.value;
 }
-function calculateToIndex(e) {
+function calculateToIndex(e: DxSortableTypes.DragEndEvent | DxSortableTypes.DragChangeEvent ) {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
     return e.toIndex;
   }
@@ -125,14 +127,14 @@ function calculateToIndex(e) {
     ? e.toIndex
     : e.toIndex + 1;
 }
-function findNode(treeView, index) {
+function findNode(treeView: DxTreeView['instance'], index: number) {
   const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
   if (nodeElement) {
     return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
   }
   return null;
 }
-function findNodeById(nodes, id) {
+function findNodeById(nodes: DxTreeViewTypes.Node[], id: string): DxTreeViewTypes.Node {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData.id === id) {
       return nodes[i];
@@ -146,7 +148,7 @@ function findNodeById(nodes, id) {
   }
   return null;
 }
-function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
+function moveNode(fromNode: DxTreeViewTypes.Node, toNode: DxTreeViewTypes.Node, fromItems: DriveItem[], toItems: any[], isDropInsideItem: boolean) {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
   fromItems.splice(fromIndex, 1);
 
@@ -164,7 +166,7 @@ function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
       : undefined;
   }
 }
-function moveChildren(node, fromDataSource, toDataSource) {
+function moveChildren(node: DxTreeViewTypes.Node, fromDataSource: DriveItem[], toDataSource: DxTreeViewTypes.Node[]) {
   if (!node.itemData.isDirectory) {
     return;
   }
@@ -179,7 +181,7 @@ function moveChildren(node, fromDataSource, toDataSource) {
     toDataSource.splice(toDataSource.length, 0, child.itemData);
   });
 }
-function isChildNode(parentNode, childNode) {
+function isChildNode(parentNode: DxTreeViewTypes.Node, childNode: DxTreeViewTypes.Node) {
   let { parent } = childNode;
   while (parent !== null) {
     if (parent.itemData.id === parentNode.itemData.id) {
@@ -189,7 +191,7 @@ function isChildNode(parentNode, childNode) {
   }
   return false;
 }
-function getTopVisibleNode(component) {
+function getTopVisibleNode(component:  DxSortableInstance) {
   const treeViewElement = component.element();
   const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
   const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');

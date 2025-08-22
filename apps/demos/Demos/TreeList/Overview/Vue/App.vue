@@ -88,13 +88,13 @@ import {
   DxSelection,
   DxLookup,
 } from 'devextreme-vue/tree-list';
-import { tasks, employees, priorities } from './data.ts';
+import { tasks, employees, priorities, type Task } from './data.ts';
 import EmployeeCell from './EmployeeCell.vue';
 
 const expandedRowKeys = [1, 2];
 const selectedRowKeys = [1, 29, 42];
 
-function customizeTaskCompletionText({ valueText }) {
+function customizeTaskCompletionText({ valueText }: Record<string, any>) {
   return `${valueText}%`;
 }
 const statuses = [
@@ -104,7 +104,7 @@ const statuses = [
   'Deferred',
   'Completed',
 ];
-const dataSource = tasks.map((task) => {
+const dataSource = tasks.map((task: Task) => {
   employees.forEach((employee) => {
     if (task.Task_Assigned_Employee_ID === employee.ID) {
       task.Task_Assigned_Employee = employee;

@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxContextMenu from 'devextreme-vue/context-menu';
+import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
 import { resourcesData, data } from './data.ts';
 
@@ -61,7 +61,7 @@ function onAppointmentContextMenu(
   const scheduler = schedulerRef.value!.instance!;
   const resourceItems = resourcesData.map((item) => ({
     ...item,
-    onItemClick: ({ itemData }) => scheduler?.updateAppointment(appointmentData, {
+    onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent) => scheduler?.updateAppointment(appointmentData, {
       ...appointmentData,
       ...{ roomId: [itemData.id] },
     }),
@@ -132,7 +132,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
     },
   ];
 }
-function onContextMenuItemClick(e) {
+function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
   e.itemData.onItemClick(e);
 }
 </script>

@@ -180,17 +180,17 @@ const appointmentsText = [
   'Staff Productivity Report',
 ];
 
-function getRandomDuration(durationState) {
+function getRandomDuration(durationState: number) {
   const durationMin = Math.floor((durationState % 23) / 3 + 5) * 15;
 
   return durationMin * 60 * 1000;
 }
 
-function getRandomText(textIndex) {
+function getRandomText(textIndex: number) {
   return appointmentsText[textIndex % appointmentsText.length];
 }
 
-function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
+function filterAppointmentsByTime(appointments: any[], startDayHour: number, endDayHour: number) {
   const result = [];
 
   for (let i = 0; i < appointments.length; i += 1) {
@@ -207,7 +207,7 @@ function filterAppointmentsByTime(appointments, startDayHour, endDayHour) {
   return result;
 }
 
-export function generateAppointments(startDay, endDay, startDayHour, endDayHour) {
+export function generateAppointments(startDay: Date, endDay: Date, startDayHour: number, endDayHour: number) {
   const appointments = [];
 
   let textIndex = 0;

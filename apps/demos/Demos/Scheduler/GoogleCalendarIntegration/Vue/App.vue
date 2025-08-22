@@ -27,10 +27,10 @@ import { CustomStore } from 'devextreme-vue/common/data';
 const views = ['day', 'workWeek', 'month'];
 const currentDate = new Date(2017, 4, 25);
 const dataSource = new CustomStore({
-  load: (options) => getData(options, { showDeleted: false }),
+  load: (options: Record<string, unknown>) => getData(options, { showDeleted: false }),
 });
 
-function getData(_, requestOptions) {
+function getData(_: unknown, requestOptions: Record<string, unknown>) {
   const PUBLIC_KEY = 'AIzaSyBnNAISIUKe6xdhq1_rjor2rxoI3UlMY7k';
   const CALENDAR_ID = 'f7jnetm22dsjc3npc2lu3buvu4@group.calendar.google.com';
   const dataUrl = ['https://www.googleapis.com/calendar/v3/calendars/',

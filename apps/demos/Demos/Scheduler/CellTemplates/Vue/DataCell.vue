@@ -12,7 +12,7 @@ withDefaults(defineProps<{
   cellData: () => {},
 });
 
-function markDataCell(cellData) {
+function markDataCell(cellData: Record<string, any>) {
   const date = cellData.startDate;
   const isDisableDate = Utils.isHoliday(date) || Utils.isWeekend(date);
   const isDinner = !isDisableDate && Utils.isDinner(date);

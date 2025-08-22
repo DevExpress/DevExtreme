@@ -28,6 +28,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -41,7 +42,7 @@ import { markers, names } from './data.ts';
 const mapsWorld = mapsData.world;
 const bounds = [-180, 85, 180, -60];
 const customizeTooltip = (info: any) => ((info.layer.type === 'marker') ? { text: info.attribute('tooltip') } : null);
-const customizeText = ({ index }: Record<string, any>) => names[index];
+const customizeText = ({ index }: Record<string, any> & { index: number}) => names[index];
 </script>
 <style>
 #vector-map {

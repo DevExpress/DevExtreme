@@ -31,9 +31,9 @@ const seconds = ref(maxValue);
 const buttonText = ref('Start progress');
 const inProgress = ref(false);
 const progressValue = computed(() => maxValue - seconds.value);
-const statusFormat = (ratio) => `Loading: ${ratio * 100}%`;
-const time = (value) => `00:00:${(`0${value}`).slice(-2)}`;
-let intervalId;
+const statusFormat = (ratio: number) => `Loading: ${ratio * 100}%`;
+const time = (value: number) => `00:00:${(`0${value}`).slice(-2)}`;
+let intervalId: number | undefined;
 
 function onButtonClick() {
   if (inProgress.value) {

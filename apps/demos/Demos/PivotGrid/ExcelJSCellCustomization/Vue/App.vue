@@ -69,7 +69,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   exportPivotGrid({
     component: e.component,
     worksheet,
-    customizeCell: ({ pivotCell, excelCell }) => {
+    customizeCell: ({ pivotCell, excelCell }: { pivotCell: DxPivotGridTypes.Cell, excelCell: any}) => {
       if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
         const appearance = getConditionalAppearance(pivotCell);
         Object.assign(excelCell, getExcelCellFormat(appearance));
@@ -95,10 +95,10 @@ function onCellPrepared({ cell, cellElement }: DxPivotGridTypes.CellPreparedEven
     Object.assign(cellElement.style, getCssStyles(appearance));
   }
 }
-function isDataCell(cell) {
+function isDataCell(cell: DxPivotGridTypes.Cell) {
   return (cell.rowType === 'D' && cell.columnType === 'D');
 }
-function isTotalCell(cell) {
+function isTotalCell(cell: DxPivotGridTypes.Cell) {
   return (cell.type === 'T' || cell.type === 'GT' || cell.rowType === 'T' || cell.rowType === 'GT' || cell.columnType === 'T' || cell.columnType === 'GT');
 }
 function getExcelCellFormat({ fill, font, bold = false }: ConditionalAppearance) {
@@ -114,7 +114,7 @@ function getCssStyles({ fill, font, bold = false }: ConditionalAppearance) {
     'font-weight': bold ? 'bold' : undefined,
   };
 }
-function getConditionalAppearance(cell): ConditionalAppearance {
+function getConditionalAppearance(cell: DxPivotGridTypes.Cell): ConditionalAppearance {
   if (isTotalCell(cell)) {
     return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
   }

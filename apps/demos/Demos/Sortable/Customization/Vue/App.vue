@@ -109,7 +109,7 @@ import type { DragDirection, Orientation } from "devextreme/common";
 import DxScrollView from 'devextreme-vue/scroll-view';
 import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
 import DxSelectBox from 'devextreme-vue/select-box';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import { tasks } from './data.ts';
 
@@ -125,20 +125,20 @@ const dragTemplate = ref('');
 const dragDirections = computed(() => (itemOrientation.value === 'vertical' ? ['both', 'vertical'] : ['both', 'horizontal']));
 const cursorOffset = computed(() => (dragTemplate.value ? { x: 10, y: 20 } : null));
 
-function onDragStart(e) {
+function onDragStart(e: DxSortableTypes.DragStartEvent) {
   e.itemData = items.value[e.fromIndex];
 }
-function onReorder(e) {
+function onReorder(e: DxSortableTypes.ReorderEvent) {
   items.value.splice(e.fromIndex, 1);
   items.value.splice(e.toIndex, 0, e.itemData);
 }
 function onItemOrientationChanged() {
   dragDirection.value = 'both';
 }
-function onHandleChanged(e) {
+function onHandleChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   handle.value = e.value ? '.handle' : '';
 }
-function onDragTemplateChanged(e) {
+function onDragTemplateChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   dragTemplate.value = e.value ? 'drag' : '';
 }
 </script>

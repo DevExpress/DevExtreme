@@ -40,11 +40,11 @@ import {
 import 'whatwg-fetch';
 
 const dataSource = {
-  load(loadOptions) {
+  load(loadOptions: Record<string, any>) {
     const parentIdsParam = loadOptions.parentIds;
     const url = new URL('https://js.devexpress.com/Demos/NetCore/api/treeListData');
     if (parentIdsParam) {
-      parentIdsParam.forEach((id) => {
+      parentIdsParam.forEach((id: string) => {
         url.searchParams.append('parentIds', id);
       });
     }

@@ -44,6 +44,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { DxForm } from 'devextreme-vue';
 import { DxScheduler, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import notify from 'devextreme/ui/notify';
 import { data, holidays } from './data.ts';
@@ -107,7 +108,7 @@ function onAppointmentUpdating(e: DxSchedulerTypes.AppointmentUpdatingEvent) {
 function notifyDisableDate() {
   notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
 }
-function applyDisableDatesToDateEditors(form) {
+function applyDisableDatesToDateEditors(form: DxForm['instance']) {
   const startDateEditor = form.getEditor('startDate');
   startDateEditor.option('disabledDates', holidays);
 
@@ -115,7 +116,7 @@ function applyDisableDatesToDateEditors(form) {
   endDateEditor.option('disabledDates', holidays);
 }
 
-function setComponentAria(element) {
+function setComponentAria(element: any) {
   const prevAria = element?.attr('aria-label') || '';
   element?.attr('aria-label', `${prevAria} ${ariaDescription.value}`);
 }

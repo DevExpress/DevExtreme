@@ -76,7 +76,7 @@ const gridDataSource = new PivotGridDataSource({
 function onRefreshClick() {
   window.location.reload();
 }
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: Record<string, any>) {
   const dataSource = e.component.getDataSource();
   const sourceField = e.field;
 
@@ -85,7 +85,7 @@ function onContextMenuPreparing(e) {
       e.items.push({
         text: 'Hide field',
         onItemClick() {
-          let fieldIndex;
+          let fieldIndex: number;
           if (sourceField.groupName) {
             fieldIndex = dataSource
               .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
@@ -103,7 +103,7 @@ function onContextMenuPreparing(e) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args) {
+      const setSummaryType = function(args: Record<string, any>) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });

@@ -71,14 +71,14 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: Record<string, any>) {
   if (e.field && e.field.dataField === 'amount') {
     summaryDisplayModes.forEach((mode) => {
       e.items.push({
         text: mode.text,
         selected: e.field.summaryDisplayMode === mode.value,
         onItemClick: () => {
-          let format;
+          let format: string | undefined;
           const caption = mode.value === 'none' ? 'Total Sales' : 'Relative Sales';
           if (mode.value === 'none'
                   || mode.value === 'absoluteVariation') {

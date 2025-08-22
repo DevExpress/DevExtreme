@@ -23,6 +23,7 @@ import {
   DxLayer,
   DxExport,
 } from 'devextreme-vue/vector-map';
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { coordLinesData } from './data.ts';
 

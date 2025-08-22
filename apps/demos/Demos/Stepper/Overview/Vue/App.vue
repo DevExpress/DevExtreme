@@ -75,7 +75,7 @@ import { ref } from 'vue';
 import { DxStepper, DxItem } from 'devextreme-vue/stepper';
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import { steps, orientations, navigationModes } from './data.ts';
+import { steps, orientations, navigationModes, type Step } from './data.ts';
 
 const orientation = ref(orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);
@@ -111,7 +111,7 @@ const stepperConfigs = [
   },
 ];
 
-function getItemProps(step, fields) {
+function getItemProps(step: Step, fields: readonly string[]) {
   return fields.reduce((acc, field) => {
     if (field in step) {
       acc[field] = step[field];

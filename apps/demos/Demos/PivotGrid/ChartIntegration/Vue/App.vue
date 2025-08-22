@@ -78,7 +78,7 @@ const dataSource = {
   }],
   store: sales,
 };
-const customizeTooltip = ({ seriesName, originalValue }) => {
+const customizeTooltip = ({ seriesName, originalValue }: Record<string, any>) => {
   const valueText = (seriesName.indexOf('Total') !== -1)
     ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(originalValue)
     : originalValue;

@@ -61,7 +61,7 @@ function onAppointmentFormOpening(args: DxSchedulerTypes.AppointmentFormOpeningE
   startDateDataSource.load();
   endDateDataSource.load();
 }
-function onOptionChanged(args) {
+function onOptionChanged(args: DxSchedulerTypes.OptionChangedEvent) {
   if (args.name === 'currentDate') {
     timeZones.value = getTimeZones(args.value);
   }

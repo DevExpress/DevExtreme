@@ -41,6 +41,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import {
   DxVectorMap,
@@ -64,7 +65,7 @@ const { format } = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 });
 
 function customizeLayer(elements: any[]) {
   elements.forEach((element) => {
-    const countryGDPData = countriesGDP[element.attribute('name')];
+    const countryGDPData: Record<string, unknown> = countriesGDP[element.attribute('name')];
     element.attribute('total', (countryGDPData && countryGDPData.total) || 0);
   });
 }

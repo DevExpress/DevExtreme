@@ -67,7 +67,7 @@ import DxPivotGrid, {
   DxFieldChooser,
   DxFieldPanel,
 } from 'devextreme-vue/pivot-grid';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import sales from './data.ts';
 
@@ -86,7 +86,7 @@ const gridDataSource = new PivotGridDataSource({
     dataField: 'city',
     width: 150,
     area: 'row',
-    selector(data) {
+    selector(data: Record<string, unknown>) {
       return `${data.city} (${data.country})`;
     },
   }, {
@@ -103,19 +103,19 @@ const gridDataSource = new PivotGridDataSource({
   store: sales,
 });
 
-function OnShowColumnFieldsChanged(e) {
+function OnShowColumnFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showColumnFields.value = e.value;
 }
-function OnShowDataFieldsChanged(e) {
+function OnShowDataFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showDataFields.value = e.value;
 }
-function OnShowFilterFieldsChanged(e) {
+function OnShowFilterFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showFilterFields.value = e.value;
 }
-function OnShowRowFieldsChanged(e) {
+function OnShowRowFieldsChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   showRowFields.value = e.value;
 }
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: Record<string, any>) {
   const dataSource = e.component.getDataSource();
   const sourceField = e.field;
 
@@ -143,7 +143,7 @@ function onContextMenuPreparing(e) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args) {
+      const setSummaryType = function(args: Record<string, any>) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });

@@ -76,6 +76,7 @@ import {
 import DxTextBox from 'devextreme-vue/text-box';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxSwitch from 'devextreme-vue/switch';
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { viewportCoordinates } from './data.ts';
 
