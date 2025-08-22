@@ -27,10 +27,10 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('activeStateEnabled', value);
     }
 
-    get aiIntegration(): AIIntegration {
+    get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
     }
-    set aiIntegration(value: AIIntegration) {
+    set aiIntegration(value: AIIntegration | undefined) {
         this._setOption('aiIntegration', value);
     }
 

@@ -178,7 +178,7 @@ const TreeList = memo(
 // FormItem
 type IAiProcessingProps = React.PropsWithChildren<{
   disabled?: boolean;
-  instruction?: string;
+  instruction?: string | undefined;
 }>
 const _componentAiProcessing = (props: IAiProcessingProps) => {
   return React.createElement(NestedOption<IAiProcessingProps>, {
@@ -1321,7 +1321,7 @@ const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>
 type IFormProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  aiIntegration?: AIIntegration;
+  aiIntegration?: AIIntegration | undefined;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
   colCount?: Mode | number;
@@ -1418,7 +1418,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 type IFormItemProps = React.PropsWithChildren<{
   aiProcessing?: Record<string, any> | {
     disabled?: boolean;
-    instruction?: string;
+    instruction?: string | undefined;
   };
   colSpan?: number | undefined;
   cssClass?: string | undefined;

@@ -65,7 +65,19 @@ export type LabelLocation = 'left' | 'right' | 'top';
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
 /** @public */
-export type AiResult = Record<string, string | string[]>;
+export type AIResult = Record<string, string | string[]>;
+
+/**
+ * @docid
+ * @public
+ */
+export type SmartPasteInfo = {
+  /**
+   * @docid _ui_form_SmartPastingEvent.aiResult
+   * @type AIResult
+   */
+  readonly aiResult: AIResult;
+};
 
 /**
  * @docid _ui_form_ContentReadyEvent
@@ -130,29 +142,17 @@ export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
  * @docid _ui_form_SmartPastingEvent
  * @public
  * @type object
- * @inherits EventInfo,AsyncCancelable
+ * @inherits EventInfo,AsyncCancelable,SmartPasteInfo
  */
-export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & {
-  /**
-   * @docid _ui_form_SmartPastingEvent.aiResult
-   * @type object
-   */
-  readonly aiResult: AiResult;
-};
+export type SmartPastingEvent = EventInfo<dxForm> & AsyncCancelable & SmartPasteInfo;
 
 /**
  * @docid _ui_form_SmartPastedEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,SmartPasteInfo
  */
-export type SmartPastedEvent = EventInfo<dxForm> & {
-  /**
-   * @docid _ui_form_SmartPastedEvent.aiResult
-   * @type object
-   */
-  readonly aiResult: AiResult;
-};
+export type SmartPastedEvent = EventInfo<dxForm> & SmartPasteInfo;
 
 /** @public */
 export type GroupItemTemplateData = {
@@ -187,10 +187,10 @@ export type SimpleItemLabelTemplateData = SimpleItemTemplateData & { text: strin
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
-     * @default null
+     * @default undefined
      * @public
      */
-    aiIntegration?: AIIntegration;
+    aiIntegration?: AIIntegration | undefined;
     /**
      * @docid
      * @default true
@@ -423,7 +423,7 @@ export default class dxForm extends Widget<dxFormOptions> {
     /**
      * @docid
      * @publicName smartPaste(text)
-     * @param1 text:object
+     * @param1 text:string|undefined
      * @public
      */
     smartPaste(text?: string): void;
@@ -696,7 +696,7 @@ export interface dxFormSimpleItem {
        * @default undefined
        * @public
        */
-      instruction?: string;
+      instruction?: string | undefined;
       /**
        * @docid
        * @default false

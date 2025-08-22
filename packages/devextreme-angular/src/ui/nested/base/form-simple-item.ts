@@ -12,10 +12,10 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
     template: ''
 })
 export abstract class DxoFormSimpleItem extends NestedOption {
-    get aiProcessing(): { disabled?: boolean, instruction?: string } {
+    get aiProcessing(): { disabled?: boolean, instruction?: string | undefined } {
         return this._getOption('aiProcessing');
     }
-    set aiProcessing(value: { disabled?: boolean, instruction?: string }) {
+    set aiProcessing(value: { disabled?: boolean, instruction?: string | undefined }) {
         this._setOption('aiProcessing', value);
     }
 

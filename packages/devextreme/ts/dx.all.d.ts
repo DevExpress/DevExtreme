@@ -18606,7 +18606,7 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
-    export type AiResult = Record<string, string | string[]>;
+    export type AIResult = Record<string, string | string[]>;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
@@ -18703,23 +18703,23 @@ declare module DevExpress.ui {
      * [descr:_ui_form_SmartPastedEvent]
      */
     export type SmartPastedEvent =
-      DevExpress.common.core.events.EventInfo<dxForm> & {
-        /**
-         * [descr:_ui_form_SmartPastedEvent.aiResult]
-         */
-        readonly aiResult: AiResult;
-      };
+      DevExpress.common.core.events.EventInfo<dxForm> & SmartPasteInfo;
+    /**
+     * [descr:SmartPasteInfo]
+     */
+    export type SmartPasteInfo = {
+      /**
+       * [descr:_ui_form_SmartPastingEvent.aiResult]
+       */
+      readonly aiResult: AIResult;
+    };
     /**
      * [descr:_ui_form_SmartPastingEvent]
      */
     export type SmartPastingEvent =
       DevExpress.common.core.events.EventInfo<dxForm> &
-        DevExpress.common.core.events.AsyncCancelable & {
-          /**
-           * [descr:_ui_form_SmartPastingEvent.aiResult]
-           */
-          readonly aiResult: AiResult;
-        };
+        DevExpress.common.core.events.AsyncCancelable &
+        SmartPasteInfo;
   }
   /**
    * @deprecated Use ButtonItem instead
@@ -18870,7 +18870,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.aiIntegration]
      */
-    aiIntegration?: DevExpress.aiIntegration.AIIntegration;
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
     /**
      * [descr:dxFormOptions.alignItemLabels]
      */
@@ -18990,7 +18990,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormSimpleItem.aiProcessing.instruction]
        */
-      instruction?: string;
+      instruction?: string | undefined;
       /**
        * [descr:dxFormSimpleItem.aiProcessing.disabled]
        */
