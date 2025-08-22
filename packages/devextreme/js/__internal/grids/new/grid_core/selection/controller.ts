@@ -365,6 +365,7 @@ export class SelectionController {
   }
 
   public getSelectedCardsData(): DataObject[] {
+    // @ts-expect-error selectedItems can return a promise for deferred selection
     return this.selectionHelper?.peek()?.getSelectedItems();
   }
 
