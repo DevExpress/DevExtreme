@@ -226,7 +226,7 @@ class CollectionWidget<
     const { selectionMode, maxFilterLengthInRequest } = this.option();
 
     // @ts-expect-error TItem
-    this._selection = new Selection<TItem, TKey>({
+    this._selection = new Selection<TItem, TKey, false>({
       allowNullValue: this._nullValueSelectionSupported(),
       mode: selectionMode,
       maxFilterLengthInRequest,

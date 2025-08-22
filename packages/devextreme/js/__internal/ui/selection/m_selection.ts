@@ -63,7 +63,7 @@ export default class Selection<
       isSelectableItem() { return true; },
       isItemSelected() { return false; },
       getItemData(item) { return item; },
-      dataFields() { return undefined; },
+      dataFields: noop,
       filter() { return undefined; },
     };
     return defaultOptions;
@@ -173,7 +173,7 @@ export default class Selection<
     const item = items[itemIndex];
     let focusedItemIndex = itemIndex;
     // eslint-disable-next-line @typescript-eslint/init-declarations
-    let deferred;
+    let deferred: Promise<unknown> | undefined;
     const { isVirtualPaging } = this.options;
     const allowLoadByRange = this.options.allowLoadByRange?.();
     const { alwaysSelectByShift } = this.options;

@@ -1,5 +1,5 @@
 import type { LoadResult } from '@js/common/data';
-import type { FilterDescriptor, LoadOptions, SelectDescriptor } from '@js/common/data.types';
+import type { FilterDescriptor, LoadOptions } from '@js/common/data.types';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Cancelable } from '@js/events';
 import type DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
@@ -45,7 +45,9 @@ export interface DefaultOptions<
   isSelectableItem: (item: TItem) => boolean;
   isItemSelected: (arg: TItem | TKey, options?: PendingOptions) => boolean;
   getItemData: (item: TItem) => TItem;
-  dataFields: () => SelectDescriptor<TItem> | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dataFields: () => any | undefined;
+  // dataFields: () => SelectDescriptor<TItem> | undefined;
   filter: Filter;
   allowNullValue: boolean;
   deferred: TDeferred;
