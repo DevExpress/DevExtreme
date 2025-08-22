@@ -358,12 +358,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     showValidationSummary?: boolean;
     /**
      * @docid
-     * @type_function_param1 text:string
-     * @public
-     */
-    smartPaste?: ((text?: string) => void);
-    /**
-     * @docid
      * @default undefined
      * @public
      */
@@ -426,6 +420,13 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @public
      */
     reset(editorsData?: Record<string, any>): void;
+    /**
+     * @docid
+     * @publicName smartPaste(text)
+     * @param1 text:object
+     * @public
+     */
+    smartPaste(text?: string): void;
     /**
      * @docid
      * @publicName updateData(data)

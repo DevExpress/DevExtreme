@@ -506,19 +506,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:dxFormOptions.smartPaste]
-    
-     */
-    @Input()
-    get smartPaste(): ((text: string) => void) {
-        return this._getOption('smartPaste');
-    }
-    set smartPaste(value: ((text: string) => void)) {
-        this._setOption('smartPaste', value);
-    }
-
-
-    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -855,13 +842,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() smartPasteChange: EventEmitter<((text: string) => void)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -997,7 +977,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'showOptionalMarkChange' },
             { emit: 'showRequiredMarkChange' },
             { emit: 'showValidationSummaryChange' },
-            { emit: 'smartPasteChange' },
             { emit: 'tabIndexChange' },
             { emit: 'validationGroupChange' },
             { emit: 'visibleChange' },
