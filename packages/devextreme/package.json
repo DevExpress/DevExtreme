@@ -246,8 +246,10 @@
     "validate-ts": "gulp validate-ts",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
-    "test-jest": "jest --no-coverage --runInBand",
+    "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
+    "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
+    "test-jest:all": "pnpm test-jest && pnpm test-jest:node",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },

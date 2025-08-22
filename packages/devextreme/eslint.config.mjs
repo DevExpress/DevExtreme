@@ -12,6 +12,7 @@ import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import customRules from './eslint_plugins/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +48,7 @@ export default [
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,
+            'devextreme-custom': customRules,
         },
         settings: {
             'import/resolver': {
@@ -164,6 +166,7 @@ export default [
             'import/named': 2,
             'import/default': 2,
             'import/no-duplicates': 2,
+            'devextreme-custom/no-direct-preact-signals-core-import': 'error',
         },
         plugins: {
             '@stylistic': stylistic,
@@ -214,6 +217,7 @@ export default [
             '@typescript-eslint/switch-exhaustiveness-check': ['error', {
                 considerDefaultExhaustiveForUnions: true,
             }],
+            'devextreme-custom/no-direct-preact-signals-core-import': 'error',
         },
     },
     ...compat.extends('devextreme/typescript').map(config => {
