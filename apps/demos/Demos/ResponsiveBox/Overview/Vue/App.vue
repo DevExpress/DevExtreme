@@ -103,7 +103,7 @@ import {
   DxResponsiveBox, DxItem, DxLocation, DxCol, DxRow,
 } from 'devextreme-vue/responsive-box';
 
-const screen = (width: number) => ((width < 700) ? 'sm' : 'lg') as any;
+const screen = (width: number) => ((width < 700) ? 'sm' : 'lg') as unknown as void;
 </script>
 <style>
 .demo-container,
