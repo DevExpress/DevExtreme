@@ -107,7 +107,7 @@ const onMessageUpdated = ({ message, text }: DxChatTypes.MessageUpdatedEvent) =>
   ]);
 };
 
-const editingStrategy = {
+const editingStrategy: Record<string, any> = {
   enabled: true,
   disabled: false,
   custom: ({ component, message }: { component: DxChat['instance'], message: DxChatTypes.Message }) => {

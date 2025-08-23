@@ -31,7 +31,7 @@ import {
   getLinearGradient,
   getRadialGradient,
   getPatternImage,
-} from './utils.js';
+} from './utils.ts';
 import { data } from './data.ts';
 
 function customizePoint(point: any) {

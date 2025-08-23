@@ -104,6 +104,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
+import type { chartPointAggregationInfoObject as ChartPointAggregationInfoObject } from 'devextreme/viz/chart';
 import DxChart, {
   DxCommonSeriesSettings,
   DxSeries,
@@ -122,16 +123,17 @@ import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { weatherData, aggregationFunctions, aggregationIntervals } from './data.ts';
 
+
 const useAggregation = ref(true);
 const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregationFunctions[0].func);
 const currentInterval = ref(aggregationIntervals[0].interval);
 
-function calculateRangeArea({ data, intervalStart, intervalEnd }: any) {
+function calculateRangeArea({ data, intervalStart, intervalEnd }: ChartPointAggregationInfoObject) {
   if (!data.length) {
     return null;
   }
 
-  const temp = data.map((item) => item.temp);
+  const temp = data.map((item: Record<string, unknown>) => item.temp);
 
   return {
     date: new Date((intervalStart.valueOf()
@@ -145,7 +147,7 @@ function customizeTooltip(pointInfo: any) {
   const { aggregationInfo } = pointInfo.point;
   const start = aggregationInfo && aggregationInfo.intervalStart;
   const end = aggregationInfo && aggregationInfo.intervalEnd;
-  const handlers = {
+  const handlers: Record<string, any> = {
     'Average temperature': ({ argument, value }: { argument: Date; value: number }) => ({
       text: `${(!aggregationInfo
         ? `Date: ${argument.toDateString()}`

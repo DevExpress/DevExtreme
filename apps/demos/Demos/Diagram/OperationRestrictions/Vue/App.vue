@@ -76,7 +76,7 @@ const orgItemsDataSource = new ArrayStore({
 });
 const shapes = ['team', 'employee'] as unknown as DxDiagramTypes.ShapeType[];
 
-const itemStyleExpr = ({ Type }: any) => ({
+const itemStyleExpr = ({ Type }: Record<string, string>) => ({
   fill: {
     root: '#ffcfc3',
     team: '#b7e3fe',

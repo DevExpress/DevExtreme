@@ -52,7 +52,7 @@ import { ref, onBeforeMount } from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme-vue/common/core/localization';
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI,  } from 'openai';
 import {
   dictionary,
   messages,
@@ -77,26 +77,26 @@ onBeforeMount(() => {
 });
 
 async function getAIResponse(messages: Array<DxChatTypes.Message>): Promise<string | undefined> {
-  const params = {
-    messages,
+  const params: Record<string, any> = {
+    messages: messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
   };
 
-  const response = await chatService.chat.completions.create(params);
+  const response = await chatService.chat.completions.create(params as any);
   const data = { choices: response.choices };
 
   return data.choices[0].message?.content;
 }
 
-function toggleDisabledState(disabled: boolean, event?: Event): void {
+function toggleDisabledState(disabled: boolean, event?: Record<string, any>): void {
   isDisabled.value = disabled;
 
   if (disabled) {
-    event?.target?.blur();
+    event?.element?.blur();
   } else {
-    event?.target?.focus();
+    event?.element?.focus();
   }
 }
 
