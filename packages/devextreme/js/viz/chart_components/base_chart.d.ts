@@ -153,7 +153,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
-     * @type_function_param1_field target:basePointObject
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -164,7 +164,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
-     * @type_function_param1_field target:basePointObject
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -175,7 +175,7 @@ export interface BaseChartOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
-     * @type_function_param1_field target:basePointObject
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -186,7 +186,7 @@ export interface BaseChartOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
-     * @type_function_param1_field target:basePointObject|dxChartAnnotationConfig|any
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
@@ -197,7 +197,7 @@ export interface BaseChartOptions<
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
-     * @type_function_param1_field target:basePointObject|dxChartAnnotationConfig|any
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
