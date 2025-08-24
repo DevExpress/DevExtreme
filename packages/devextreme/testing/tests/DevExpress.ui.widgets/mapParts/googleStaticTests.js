@@ -212,7 +212,7 @@ QUnit.test('apiKey', function(assert) {
     return new Promise(function(resolve) {
         const map = new Map($('#map'), {
             provider: 'googleStatic',
-            apiKey: 10153453,
+            apiKey: '10153453',
             onReady: function(e) {
                 assert.notEqual(mapUrl(map).indexOf('key=10153453'), -1, 'key set correctly');
 

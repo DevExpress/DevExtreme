@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import { name as clickEventName } from '@js/common/core/events/click';
@@ -113,17 +114,16 @@ class GoogleStaticProvider extends Provider {
   _updateMap(): Promise<boolean> {
     const key = this._keyOption('googleStatic');
     const providerConfig = this._option('providerConfig');
-    // @ts-expect-error ts-error
     const mapId = providerConfig?.mapId;
     const $container = this._$container;
 
     const requestOptions = [
       'sensor=false',
       `size=${Math.round(getWidth($container))}x${Math.round(getHeight($container))}`,
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+
       `maptype=${this._option('type')}`,
       `center=${this._locationToString(this._option('center'))}`,
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+
       `zoom=${this._option('zoom')}`,
       this._markersSubstring(),
     ];
@@ -152,7 +152,7 @@ class GoogleStaticProvider extends Provider {
 
     if (markerIcon) {
       // @ts-expect-error
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+
       markers.push(`icon:${markerIcon}`);
     }
 

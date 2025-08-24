@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
@@ -7,6 +8,7 @@ import { each, map } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { MapType } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import DynamicProvider from './m_provider.dynamic';
@@ -36,14 +38,14 @@ class BingProvider extends DynamicProvider {
 
   _preventZoomChangeEvent?: boolean;
 
-  _mapType(type) {
+  _mapType(type: MapType): unknown {
     const mapTypes = {
       roadmap: Microsoft.Maps.MapTypeId.road,
       hybrid: Microsoft.Maps.MapTypeId.aerial,
       satellite: Microsoft.Maps.MapTypeId.aerial,
     };
-    // @ts-expect-error
-    return mapTypes[type] || mapTypes.road;
+
+    return mapTypes[type] ?? mapTypes.roadmap;
   }
 
   _movementMode(type) {
@@ -147,7 +149,7 @@ class BingProvider extends DynamicProvider {
     ]));
   }
 
-  _loadMapScript() {
+  _loadMapScript(): Promise<void> {
     return new Promise((resolve) => {
       window[BING_MAP_READY] = resolve;
       ajax.sendRequest({
@@ -182,12 +184,12 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _attachHandlers() {
+  _attachHandlers(): void {
     this._providerViewChangeHandler = Microsoft.Maps.Events.addHandler(this._map, 'viewchange', this._viewChangeHandler.bind(this));
     this._providerClickHandler = Microsoft.Maps.Events.addHandler(this._map, 'click', this._clickActionHandler.bind(this));
   }
 
-  _viewChangeHandler() {
+  _viewChangeHandler(): void {
     const bounds = this._map.getBounds();
     this._option('bounds', this._normalizeLocationRect(bounds));
 
@@ -205,7 +207,7 @@ class BingProvider extends DynamicProvider {
     }
   }
 
-  updateDimensions() {
+  updateDimensions(): Promise<void> {
     const $container = this._$container;
 
     this._map.setOptions({
@@ -216,24 +218,24 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateMapType() {
-    const type = this._option('type');
+  updateMapType(): Promise<void> {
+    const type = this._option('type') ?? 'roadmap';
     const labelOverlay = Microsoft.Maps.LabelOverlay;
 
     this._map.setView({
       animate: false,
       mapTypeId: this._mapType(type),
-      // @ts-expect-error ts-error
       labelOverlay: type === 'satellite' ? labelOverlay.hidden : labelOverlay.visible,
     });
 
     return Promise.resolve();
   }
 
-  updateBounds() {
+  updateBounds(): Promise<void> {
+    const boundsOption = this._option('bounds');
     return Promise.all([
-      this._resolveLocation(this._option('bounds.northEast')),
-      this._resolveLocation(this._option('bounds.southWest')),
+      this._resolveLocation(boundsOption?.northEast),
+      this._resolveLocation(boundsOption?.southWest),
     ]).then((result) => {
       // eslint-disable-next-line new-cap
       const bounds = new Microsoft.Maps.LocationRect.fromLocations(result[0], result[1]);
@@ -245,7 +247,7 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  updateCenter() {
+  updateCenter(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       this._map.setView({
         animate: false,
@@ -254,7 +256,7 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  updateZoom() {
+  updateZoom(): Promise<void> {
     this._map.setView({
       animate: false,
       zoom: this._option('zoom'),
@@ -322,12 +324,12 @@ class BingProvider extends DynamicProvider {
       return;
     }
 
-    options = this._parseTooltipOptions(options);
+    const parsedOptions = this._parseTooltipOptions(options);
 
     const infobox = new Microsoft.Maps.Infobox(location, {
-      description: options.text,
+      description: parsedOptions.text,
       offset: new Microsoft.Maps.Point(0, INFOBOX_V_OFFSET_V8),
-      visible: options.visible,
+      visible: parsedOptions.visible,
     });
 
     infobox.setMap(this._map);
@@ -453,7 +455,7 @@ class BingProvider extends DynamicProvider {
     }
   }
 
-  clean() {
+  clean(): Promise<void> {
     if (this._map) {
       Microsoft.Maps.Events.removeHandler(this._providerViewChangeHandler);
       Microsoft.Maps.Events.removeHandler(this._providerClickHandler);
@@ -470,7 +472,7 @@ class BingProvider extends DynamicProvider {
 
 /// #DEBUG
 // @ts-expect-error ts-error
-BingProvider.remapConstant = function (newValue) {
+BingProvider.remapConstant = function remapConstant(newValue: string): void {
   BING_URL_V8 = newValue;
 };
 

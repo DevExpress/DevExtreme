@@ -1,9 +1,13 @@
+/* eslint-disable class-methods-use-this */
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
+import type { MapProvider } from '@js/ui/map';
+import { isDefined } from '@ts/core/utils/m_type';
 
 import type Map from './m_map';
+import type { MapProperties } from './m_map';
 
 class Provider {
   _mapWidget!: Map;
@@ -124,9 +128,16 @@ class Provider {
     return false;
   }
 
-  _option(name?, value?) {
+  _option<K extends keyof MapProperties>(name: K): MapProperties[K];
+  _option<K extends keyof MapProperties>(name: K, value: MapProperties[K]): undefined;
+  _option<K extends keyof MapProperties>(
+    name: K,
+    value?: MapProperties[K],
+  ): MapProperties[K] | undefined {
     if (value === undefined) {
-      return this._mapWidget.option(name);
+      const mapOptions = this._mapWidget.option();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return mapOptions[name];
     }
 
     this._mapWidget.setOptionSilent(name, value);
@@ -134,10 +145,9 @@ class Provider {
     return undefined;
   }
 
-  _keyOption(providerName) {
-    const key = this._option('apiKey');
+  _keyOption(providerName: MapProvider) {
+    const key = this._option('apiKey') ?? '';
 
-    // @ts-expect-error ts-error
     return key[providerName] === undefined ? key : key[providerName];
   }
 
@@ -165,11 +175,13 @@ class Provider {
     return null;
   }
 
-  _areBoundsSet() {
-    return this._option('bounds.northEast') && this._option('bounds.southWest');
+  _areBoundsSet(): boolean {
+    const bounds = this._option('bounds');
+
+    return isDefined(bounds?.northEast) && isDefined(bounds?.southWest);
   }
 
-  _addEventNamespace(name) {
+  _addEventNamespace(name: string): string {
     // @ts-expect-error ts-error
     return addNamespace(name, this._mapWidget.NAME);
   }

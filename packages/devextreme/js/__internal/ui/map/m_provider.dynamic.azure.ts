@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import $ from '@js/core/renderer';
@@ -6,6 +7,7 @@ import { noop } from '@js/core/utils/common';
 import { map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import DynamicProvider from './m_provider.dynamic';
@@ -34,16 +36,16 @@ class AzureProvider extends DynamicProvider {
 
   _mapReadyPromise?: Promise<void>;
 
-  _mapType(type) {
+  _mapType(type: MapType): string {
     const mapTypes = {
       roadmap: 'road',
       satellite: 'satellite',
       hybrid: 'satellite_road_labels',
     };
-    return mapTypes[type] || mapTypes.roadmap;
+    return mapTypes[type] ?? mapTypes.roadmap;
   }
 
-  _movementMode(type) {
+  _movementMode(type: RouteMode): string {
     const movementTypes = {
       driving: 'car',
       walking: 'pedestrian',
@@ -142,7 +144,7 @@ class AzureProvider extends DynamicProvider {
     ]);
   }
 
-  _loadMapScript() {
+  _loadMapScript(): Promise<void> {
     return new Promise<void>((resolve) => {
       ajax.sendRequest({
         url: AZURE_JS_URL,
@@ -153,7 +155,7 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  _loadMapStyles() {
+  _loadMapStyles(): Promise<void> {
     return new Promise<void>((resolve) => {
       ajax.sendRequest({
         url: AZURE_CSS_URL,
@@ -172,13 +174,14 @@ class AzureProvider extends DynamicProvider {
   }
 
   _createMap() {
+    const type = this._option('type') ?? 'roadmap';
     this._map = new atlas.Map(this._$container[0], {
       authOptions: {
         authType: 'subscriptionKey',
         subscriptionKey: this._keyOption('azure'),
       },
       zoom: this._option('zoom'),
-      style: this._mapType(this._option('type')),
+      style: this._mapType(type),
       interactive: !this._option('disabled'),
     });
 
@@ -188,15 +191,16 @@ class AzureProvider extends DynamicProvider {
       });
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.updateControls();
   }
 
-  _attachHandlers() {
+  _attachHandlers(): void {
     this._map.events.add('move', this._viewChangeHandler.bind(this));
     this._map.events.add('click', this._clickActionHandler.bind(this));
   }
 
-  _viewChangeHandler() {
+  _viewChangeHandler(): void {
     const { bounds } = this._map.getCamera();
     this._option('bounds', this._normalizeLocationRect(bounds));
 
@@ -217,13 +221,13 @@ class AzureProvider extends DynamicProvider {
     }
   }
 
-  updateDimensions() {
+  updateDimensions(): Promise<void> {
     this._map.resize();
 
     return Promise.resolve();
   }
 
-  updateDisabled() {
+  updateDisabled(): Promise<void> {
     const disabled = this._option('disabled');
 
     this._map.setUserInteraction({
@@ -233,8 +237,9 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateMapType() {
-    const newType = this._mapType(this._option('type'));
+  updateMapType(): Promise<void> {
+    const type = this._option('type') ?? 'roadmap';
+    const newType = this._mapType(type);
     const currentType = this._map.getStyle().style;
 
     if (newType !== currentType) {
@@ -246,10 +251,11 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateBounds() {
+  updateBounds(): Promise<void> {
+    const bounds = this._option('bounds');
     return Promise.all([
-      this._resolveLocation(this._option('bounds.northEast')),
-      this._resolveLocation(this._option('bounds.southWest')),
+      this._resolveLocation(bounds?.northEast),
+      this._resolveLocation(bounds?.southWest),
     ]).then((result) => {
       this._map.setCamera({
         bounds: [
@@ -261,7 +267,7 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  updateCenter() {
+  updateCenter(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       this._map.setCamera({
         center,
@@ -269,7 +275,7 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  updateZoom() {
+  updateZoom(): Promise<void> {
     this._map.setCamera({
       zoom: this._option('zoom'),
     });
@@ -277,9 +283,8 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateControls() {
-    // @ts-expect-error ts-error
-    const { controls } = this._option();
+  updateControls(): Promise<void> {
+    const controls = this._option('controls');
 
     if (controls) {
       this._map.controls.add([
@@ -348,9 +353,9 @@ class AzureProvider extends DynamicProvider {
       return;
     }
 
-    options = this._parseTooltipOptions(options);
+    const parsedOptions = this._parseTooltipOptions(options);
 
-    const $content = $('<div>').html(options.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
+    const $content = $('<div>').html(parsedOptions.text).addClass(MAP_MARKER_TOOLTIP_CLASS);
     const popup = new atlas.Popup({
       content: $content[0],
       position: location,
@@ -359,7 +364,7 @@ class AzureProvider extends DynamicProvider {
 
     this._map.popups.add(popup);
 
-    if (options.visible) {
+    if (parsedOptions.visible) {
       popup.open();
     }
 
@@ -440,7 +445,7 @@ class AzureProvider extends DynamicProvider {
     this._map.sources.remove(routeObject.instance.dataSource);
   }
 
-  _fitBounds() {
+  _fitBounds(): Promise<void> {
     this._updateBounds();
 
     if (this._bounds && this._option('autoAdjust')) {
@@ -482,7 +487,7 @@ class AzureProvider extends DynamicProvider {
     }
   }
 
-  clean() {
+  clean(): Promise<void> {
     if (this._map) {
       this._map.events.remove('move', this._viewChangeHandler);
       this._map.events.remove('click', this._clickActionHandler);

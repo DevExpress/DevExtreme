@@ -252,22 +252,24 @@ class DynamicProvider extends Provider {
     Class.abstract();
   }
 
-  _updateBounds() {
-    const that = this;
-
+  _updateBounds(): void {
     this._clearBounds();
 
     if (!this._option('autoAdjust')) {
       return;
     }
 
-    each(this._markers, (_, markerObject) => {
-      that._extendBounds(markerObject.location);
+    this._markers.forEach((markerObject) => {
+      this._extendBounds(markerObject.location);
     });
 
-    each(this._routes, (_, routeObject) => {
-      routeObject.northEast && that._extendBounds(routeObject.northEast);
-      routeObject.southWest && that._extendBounds(routeObject.southWest);
+    this._routes.forEach((routeObject) => {
+      if (routeObject.northEast) {
+        this._extendBounds(routeObject.northEast);
+      }
+      if (routeObject.southWest) {
+        this._extendBounds(routeObject.southWest);
+      }
     });
   }
 
