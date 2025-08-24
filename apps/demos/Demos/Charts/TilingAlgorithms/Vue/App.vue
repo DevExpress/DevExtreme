@@ -41,10 +41,10 @@ import DxTreeMap,
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { populationByAge } from './data.ts';
 
-type CustomAlgorithm = (e:  { items: any[]; rect: number[]; sum: number; }) => void;
+type CustomAlgorithm = (e: { items: any[]; rect: number[]; sum: number; }) => void;
 type SelectedAlgorithm = DxTreeMapTypes.TreeMapLayoutAlgorithm | 'custom';
 
-const algorithms: SelectedAlgorithm[] =  ['sliceanddice', 'squarified', 'strip', 'custom'];
+const algorithms: SelectedAlgorithm[] = ['sliceanddice', 'squarified', 'strip', 'custom'];
 const selectedAlgorithm = ref(algorithms[2]);
 const currentAlgorithm = computed(() => (
   (selectedAlgorithm.value === 'custom')

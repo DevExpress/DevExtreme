@@ -35,7 +35,7 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxFileManagerModule,
+    BrowserModule, DxFileManagerModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

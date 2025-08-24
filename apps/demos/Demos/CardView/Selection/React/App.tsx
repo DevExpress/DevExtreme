@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
-import SelectBox  from 'devextreme-react/select-box';
-import CheckBox  from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import { employees, Employee } from './data.ts';
 
 function altExpr({ FullName }: Employee): string {

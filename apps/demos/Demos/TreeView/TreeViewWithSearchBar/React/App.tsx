@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import { SearchMode } from 'devextreme-react/common';
 import { TreeView } from 'devextreme-react/tree-view';
-import { SelectBox,  type SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { products, searchModeLabel } from './data.ts';
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-export type Task  = {
+export type Task = {
   ID: number;
 
   Subject: string;
@@ -16,7 +16,7 @@ export type Task  = {
   Priority: number;
 }
 
-export type Employee  = {
+export type Employee = {
   ID: number;
 
   FullName: string;

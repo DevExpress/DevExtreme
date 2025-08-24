@@ -17,7 +17,7 @@ export const stylingModes: DxTabPanelTypes.TabsStyle[] = [
   'primary',
 ];
 
-export const iconPositionsSelectBoxLabel  = { 'aria-label': 'Icon positions' };
+export const iconPositionsSelectBoxLabel = { 'aria-label': 'Icon positions' };
 
 export const iconPositions: DxTabPanelTypes.TabsIconPosition[] = [
   'top',
