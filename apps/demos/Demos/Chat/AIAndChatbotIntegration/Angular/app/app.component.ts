@@ -63,7 +63,7 @@ export class AppComponent {
     } else {
       event?.target.focus();
     }
-  };
+  }
 
   async onMessageEntered(e: DxChatTypes.MessageEnteredEvent) {
     if (!this.appService.alerts.length) {

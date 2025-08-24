@@ -139,6 +139,6 @@ function App() {
       />
     </CardView>
   );
-};
+}
 
 export default App;

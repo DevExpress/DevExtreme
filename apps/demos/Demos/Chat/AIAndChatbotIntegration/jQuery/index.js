@@ -52,7 +52,7 @@ $(() => {
     } else {
       event?.target.focus();
     }
-  };
+  }
 
   async function processMessageSending(message, event) {
     toggleDisabledState(true, event);

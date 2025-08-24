@@ -32,11 +32,11 @@ async function emailValidationCallback(params) {
   const result = await response.json();
 
   return result;
-};
+}
 
 function hireDateValidationCallback(params) {
   return new Date(params.value) > new Date(params.data.birthDate);
-};
+}
 
 const App = () => (
   <CardView

@@ -53,7 +53,7 @@ function orderDateHeaderFilterDataSource(data) {
     });
     return results;
   };
-};
+}
 
 const App = () => (
   <CardView

@@ -84,7 +84,7 @@ function orderDateHeaderFilterDataSource(data) {
     });
     return results;
   };
-};
+}
 
 const saleAmountHeaderFilterDataSource = [
   {

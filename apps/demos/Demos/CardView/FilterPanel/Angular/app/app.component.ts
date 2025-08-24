@@ -16,7 +16,7 @@ if (window && window.config?.packageConfigPaths) {
 
 function getOrderDay({ OrderDate }: Order): number {
   return (new Date(OrderDate)).getDay();
-};
+}
 
 @Component({
   selector: 'demo-app',
