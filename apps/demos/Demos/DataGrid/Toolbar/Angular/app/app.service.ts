@@ -17,7 +17,7 @@ export class Order {
 
   CustomerStoreCity: string;
 
-  Employee:string;
+  Employee: string;
 }
 
 const orders: Order[] = [{

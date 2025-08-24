@@ -8,7 +8,7 @@ export interface Order {
   SaleAmount: number,
   Terms: string;
   Location: string;
-  Customer:  string;
+  Customer: string;
 }
 
 const orders: Order[] = [{
