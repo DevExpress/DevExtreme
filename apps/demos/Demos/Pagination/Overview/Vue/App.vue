@@ -12,7 +12,7 @@
           class="employees__img"
           :src="employee.Picture"
           :alt="employee.FullName"
-        />
+        >
       </div>
       <div class="employees__info">
         <div class="employees__info-row">

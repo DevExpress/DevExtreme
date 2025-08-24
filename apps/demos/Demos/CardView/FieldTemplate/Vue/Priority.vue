@@ -1,6 +1,6 @@
 <template>
   <div :className="priorityClassName">
-    <div className="task__indicator"></div>
+    <div className="task__indicator"/>
     <div>{{ priority.text }}</div>
   </div>
 </template>
