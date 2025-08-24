@@ -22,9 +22,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all
 });
 
 const spellcheckRule = spellcheckDevextreme.rules['spellcheck/spell-checker'];
@@ -45,22 +45,15 @@ export default [
       '**/*.{png,json,mjs,css,html,md}',
     ],
   },
-  ...compat.extends('eslint:recommended', 'devextreme/javascript', 'devextreme/spell-check'),
 
-  ...compat.extends('devextreme/typescript').map(config => {
-    const newConfig = {
-      ...config,
-      files: ['**/*.ts', '**/*.tsx'],
-    };
-
-    if (config.rules) {
-      newConfig.rules = changeRulesToStylistic(config.rules);
-    }
-
-    return newConfig;
-  }),
-
+  // Plugins and parser
   {
+    plugins: {
+      spellcheck: spellcheckPlugin,
+      'no-only-tests': noOnlyTests,
+      deprecation,
+      '@stylistic': stylistic,
+    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -76,12 +69,27 @@ export default [
         },
       },
     },
-    plugins: {
-      spellcheck: spellcheckPlugin,
-      'no-only-tests': noOnlyTests,
-      deprecation,
-      '@stylistic': stylistic,
-    },
+  },
+
+  ...compat.extends('eslint:recommended', 'devextreme/javascript', 'devextreme/spell-check').map(config => ({
+    ...config,
+    rules: changeRulesToStylistic(config.rules || {}),
+  })),
+  ...compat.extends('devextreme/typescript').map(config => {
+    const newConfig = {
+      ...config,
+      files: ['**/*.ts', '**/*.tsx'],
+    };
+
+    if (config.rules) {
+      newConfig.rules = changeRulesToStylistic(config.rules);
+    }
+
+    return newConfig;
+  }),
+
+  // General rules
+  {
     rules: {
       'spellcheck/spell-checker': (() => {
         spellcheckRule[1].skipWords = [
@@ -374,7 +382,7 @@ export default [
       'quotes': ['error', 'single', { avoidEscape: true }],
       'eqeqeq': 0,
       'no-plusplus': 0,
-      'max-len': 0,
+      '@stylistic/max-len': 0,
       'max-classes-per-file': 0,
       'consistent-return': 0,
       'import/extensions': 0,
@@ -382,7 +390,7 @@ export default [
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
       'spellcheck/spell-checker': 0,
-      'no-mixed-operators': 0,
+      '@stylistic/no-mixed-operators': 0,
       'no-useless-concat': 0,
       'no-self-assign': 0,
       'default-case': 0,
@@ -424,7 +432,7 @@ export default [
       },
     },
     rules: {
-      'quote-props': ['error', 'consistent'],
+      '@stylistic/quote-props': ['error', 'consistent'],
       'no-dupe-keys': 0,
     },
   },
@@ -502,16 +510,16 @@ export default [
       propWrapperFunctions: ['forbidExtraProps'],
     },
     rules: {
-      ...react.configs.recommended.rules,
-      'block-spacing': 'error',
-      'comma-spacing': 'error',
-      'computed-property-spacing': 'error',
-      'comma-style': ['error', 'last'],
-      'implicit-arrow-linebreak': 0,
-      'no-multiple-empty-lines': ['error', { max: 1 }],
+      ...changeRulesToStylistic(react.configs.recommended.rules),
+      '@stylistic/block-spacing': 'error',
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/computed-property-spacing': 'error',
+      '@stylistic/comma-style': ['error', 'last'],
+      '@stylistic/implicit-arrow-linebreak': 0,
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
       'no-irregular-whitespace': 'error',
-      'no-multi-spaces': 'error',
-      'no-trailing-spaces': 'error',
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/no-trailing-spaces': 'error',
       'no-new-func': 'error',
       'no-eval': 'error',
       'no-undef': 'error',
@@ -519,18 +527,17 @@ export default [
       'no-unused-vars': ['error'],
       'no-extend-native': 'error',
       'no-alert': 'error',
-      'no-whitespace-before-property': 'error',
-      'object-curly-spacing': ['error', 'always'],
-      'semi-spacing': 'error',
-      'semi': 'error',
-      // 'space-before-blocks': 'error',
-      'space-before-function-paren': ['error', 'never'],
-      'space-in-parens': 'error',
-      'space-infix-ops': 'error',
-      'space-unary-ops': 'error',
+      '@stylistic/no-whitespace-before-property': 'error',
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/semi-spacing': 'error',
+      '@stylistic/semi': 'error',
+      '@stylistic/space-before-function-paren': ['error', 'never'],
+      '@stylistic/space-in-parens': 'error',
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/space-unary-ops': 'error',
       'eol-last': ['error', 'always'],
       'curly': ['error', 'multi-line', 'consistent'],
-      'indent': [
+      '@stylistic/indent': [
         'error',
         2,
         {
@@ -541,7 +548,7 @@ export default [
           },
         },
       ],
-      'quotes': ['error', 'single', { avoidEscape: true }],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       'prefer-template': 'error',
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
       'react/jsx-curly-brace-presence': [
@@ -599,6 +606,7 @@ export default [
   // Vue demos
   ...compat.extends('plugin:vue/vue3-recommended').map(config => ({
     ...config,
+    rules: changeRulesToStylistic(config.rules || {}),
     files: [
       'Demos/**/Vue/*.vue',
       'Demos/**/Vue/*.js',
@@ -623,18 +631,18 @@ export default [
       },
     },
     rules: {
-      'block-spacing': 'error',
-      'comma-spacing': 'error',
-      'computed-property-spacing': 'error',
-      'comma-style': ['error', 'last'],
+      '@stylistic/block-spacing': 'error',
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/computed-property-spacing': 'error',
+      '@stylistic/comma-style': ['error', 'last'],
 
-      'no-multiple-empty-lines': ['error', {
+      '@stylistic/no-multiple-empty-lines': ['error', {
           max: 1,
       }],
 
       'no-irregular-whitespace': 'error',
-      'no-multi-spaces': 'error',
-      'no-trailing-spaces': 'error',
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/no-trailing-spaces': 'error',
       'no-new-func': 'error',
       'no-eval': 'error',
       'no-undef': 'error',
@@ -642,18 +650,18 @@ export default [
       'no-unused-vars': ['error'],
       'no-extend-native': 'error',
       'no-alert': 'error',
-      'no-whitespace-before-property': 'error',
-      'object-curly-spacing': ['error', 'always'],
-      'semi-spacing': 'error',
-      'semi': 'error',
-      'space-before-function-paren': ['error', 'never'],
-      'space-in-parens': 'error',
-      'space-infix-ops': 'error',
-      'space-unary-ops': 'error',
-      'eol-last': ['error', 'always'],
+      '@stylistic/no-whitespace-before-property': 'error',
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/semi-spacing': 'error',
+      '@stylistic/semi': 'error',
+      '@stylistic/space-before-function-paren': ['error', 'never'],
+      '@stylistic/space-in-parens': 'error',
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/space-unary-ops': 'error',
+      '@stylistic/eol-last': ['error', 'always'],
       'curly': ['error', 'multi-line', 'consistent'],
 
-      'quotes': ['error', 'single', {
+      '@stylistic/quotes': ['error', 'single', {
           avoidEscape: true,
       }],
 
@@ -669,7 +677,7 @@ export default [
       'vue/no-v-html': 'off',
       'vue/no-v-model-argument': 'off',
       'vue/valid-v-model': 'off',
-      'max-len': 0,
+      '@stylistic/max-len': 0,
 
       'vue/max-len': ['error', 100, 2, {
           ignoreUrls: true,
@@ -695,6 +703,7 @@ export default [
   // testcafe tests
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
+    rules: changeRulesToStylistic(config.rules || {}),
     files: ['testing/**/*.js'],
   })),
   {
@@ -712,6 +721,7 @@ export default [
   // jest tests
   ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
     ...config,
+    rules: changeRulesToStylistic(config.rules || {}),
     files: ['utils/tests/**/*.*'],
   })),
   {
@@ -724,6 +734,7 @@ export default [
   // testcafe visual tests
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
+    rules: changeRulesToStylistic(config.rules || {}),
     files: ['utils/visual-tests/**/*.*'],
   })),
   {
