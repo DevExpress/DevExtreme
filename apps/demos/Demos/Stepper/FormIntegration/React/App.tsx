@@ -15,7 +15,7 @@ import { BookingFormData } from './types.ts';
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
-export default function App () {
+export default function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [steps, setSteps] = useState<StepperTypes.Item[]>(initialSteps);
   const [formData, setFormData] = useState<BookingFormData>(getInitialFormData);

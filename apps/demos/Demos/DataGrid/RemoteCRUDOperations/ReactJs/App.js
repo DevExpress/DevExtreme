@@ -71,7 +71,7 @@ const App = () => {
   }, []);
   // eslint-disable-next-line consistent-return, space-before-function-paren
   const sendRequest = useCallback(
-    async(url, method = 'GET', data = {}) => {
+    async (url, method = 'GET', data = {}) => {
       logRequest(method, url, data);
       const request = {
         method,

@@ -346,7 +346,7 @@ function handleSubmit(e) {
   }, 'success', 3000);
   e.preventDefault();
 }
-const sendRequest = function(value) {
+const sendRequest = function (value) {
   const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {

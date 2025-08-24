@@ -76,7 +76,7 @@ $(() => {
     specContainer.append(bodyInfo);
     specContainer.append(horsepowerInfo);
 
-    const popupContentTemplate = function() {
+    const popupContentTemplate = function () {
       const sourceLink = `https://${Source}`;
       return $('<div>').append(
         $('<p>')

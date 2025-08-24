@@ -14,7 +14,7 @@ const props = defineProps<{
   appointmentModel: DxSchedulerTypes.AppointmentTemplateData
 }>();
 
-const getMovieInfo = function(data: DxSchedulerTypes.Appointment) {
+const getMovieInfo = function (data: DxSchedulerTypes.Appointment) {
   return Query(moviesData)
     .filter(['id', data.movieId])
     .toArray()[0] || {};

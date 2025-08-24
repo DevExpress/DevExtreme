@@ -30,7 +30,7 @@ const App = () => {
     }
   }, []);
   // eslint-disable-next-line @typescript-eslint/space-before-function-paren
-  const onFocusedRowChanged = useCallback(async(e) => {
+  const onFocusedRowChanged = useCallback(async (e) => {
     const rowData = e.row && e.row.data;
     if (rowData) {
       const progress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';

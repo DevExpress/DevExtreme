@@ -103,7 +103,7 @@ function onContextMenuPreparing(e) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args) {
+      const setSummaryType = function (args) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });
