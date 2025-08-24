@@ -58,7 +58,7 @@ $(() => {
           value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
         }, {
           text: 'Greater than $20000',
-          value: ['SaleAmount', '>=', 20000], 
+          value: ['SaleAmount', '>=', 20000],
         }],
       },
     }, {

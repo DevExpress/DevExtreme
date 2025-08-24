@@ -55,7 +55,7 @@
     <div class="dx-fieldset">
       <div class="dx-fieldset-header">Event Handling</div>
       <div class="hero-block">
-        <div class="color-block"> 
+        <div class="color-block">
           <svg class="brush" width="360" height="254" :style="{ color }">
             <use :href='"../../../../images/Brush.svg#brush"'></use>
           </svg>

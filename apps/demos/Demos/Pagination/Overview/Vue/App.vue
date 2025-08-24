@@ -1,13 +1,13 @@
 <template>
-  <div class="employees" :class="{ 
+  <div class="employees" :class="{
     'employees--forth': pageSize === 4,
     'employees--six': pageSize === 6,
   }">
     <div class="employees__card" v-for="employee in pageEmployees">
       <div class="employees__img-wrapper">
         <img class="employees__img"
-             :src="employee.Picture" 
-             :alt="employee.FullName" 
+             :src="employee.Picture"
+             :alt="employee.FullName"
         />
       </div>
       <div class="employees__info">

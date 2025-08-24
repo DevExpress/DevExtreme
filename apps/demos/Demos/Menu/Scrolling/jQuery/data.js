@@ -182,7 +182,7 @@ const menuData = [
       },
     ],
   },
-  
+
   {
     text: 'Entertainment',
     items: [
@@ -246,7 +246,7 @@ const menuData = [
       },
     ],
   },
-  
+
   {
     text: 'Healthcare & Living',
     items: [

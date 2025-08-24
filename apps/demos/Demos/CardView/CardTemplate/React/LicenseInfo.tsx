@@ -1,13 +1,13 @@
 import { VehicleImageLicenseProps } from './types';
 import React from 'react';
 
-const LicenseInfo = ({ 
-  vehicle: { 
+const LicenseInfo = ({
+  vehicle: {
     LicenseName,
     Author,
     Source,
     Edits,
-  }, 
+  },
 }: VehicleImageLicenseProps) => {
   const vehicleLink = `https://${Source}`;
   return (

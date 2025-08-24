@@ -35,7 +35,7 @@ export class AppComponent {
   showNavigationButtons = true;
 
   pageIndex = 1;
-  
+
   pageSize = 4;
 
   onPageIndexChange(val) {

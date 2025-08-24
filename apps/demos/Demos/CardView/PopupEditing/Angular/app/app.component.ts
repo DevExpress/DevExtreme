@@ -28,7 +28,7 @@ export class AppComponent {
     width: 700,
     height: 525,
   };
-  
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
   }
@@ -36,11 +36,11 @@ export class AppComponent {
   altExpr({ fullName }: Employee) {
     return `Photo of ${fullName}`;
   }
-  
+
   imageExpr({ picture }: Employee) {
     return picture;
   }
-  
+
   calculateFullName({firstName, lastName}: Employee) {
     return `${firstName} ${lastName}`;
   }

@@ -47,7 +47,7 @@ export class AppComponent {
   stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
   fontSizes: FontSize[] = this.customService.getFontSizes();
-  
+
   lineHeights: LineHeight[] = this.customService.getLineHeights();
   lineHeight: number[] = [this.lineHeights[1].lineHeight];
 

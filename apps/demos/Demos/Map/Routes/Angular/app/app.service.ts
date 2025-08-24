@@ -6,7 +6,7 @@ export class Marker {
 
 export type APIKey = {
   azure?: string;
-  
+
   bing?: string;
 
   google?: string;

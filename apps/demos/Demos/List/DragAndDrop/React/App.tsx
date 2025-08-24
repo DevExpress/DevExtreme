@@ -43,7 +43,7 @@ const App = () => {
         updatedTasks.splice(e.toIndex, 0, movedTask);
         return updatedTasks;
       };
-  
+
       if (e.fromData === 'plannedTasks') {
         setPlannedTasksState((prevTasks) => updateTasks(prevTasks));
       } else {
@@ -53,7 +53,7 @@ const App = () => {
     else {
       onRemove(e);
       onAdd(e);
-    }  
+    }
   }, [onAdd, onRemove]);
 
   return (

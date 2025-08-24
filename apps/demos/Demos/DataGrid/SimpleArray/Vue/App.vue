@@ -5,7 +5,7 @@
     :show-borders="true"
   >
     <DxColumn
-      v-for="column in columns"        
+      v-for="column in columns"
       :data-field="column"
     />
   </DxDataGrid>

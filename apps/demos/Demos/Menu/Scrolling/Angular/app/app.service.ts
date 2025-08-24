@@ -192,7 +192,7 @@ const products: Product[] = [
       },
     ],
   },
-  
+
   {
     text: 'Entertainment',
     items: [
@@ -256,7 +256,7 @@ const products: Product[] = [
       },
     ],
   },
-  
+
   {
     text: 'Healthcare & Living',
     items: [

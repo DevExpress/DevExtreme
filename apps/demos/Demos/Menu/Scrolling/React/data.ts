@@ -184,7 +184,7 @@ const products: ProductType[] = [
       },
     ],
   },
-  
+
   {
     text: 'Entertainment',
     items: [
@@ -248,7 +248,7 @@ const products: ProductType[] = [
       },
     ],
   },
-  
+
   {
     text: 'Healthcare & Living',
     items: [

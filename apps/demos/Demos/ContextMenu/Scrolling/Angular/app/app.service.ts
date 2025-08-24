@@ -189,7 +189,7 @@ const contextMenuItems: ContextMenuItems[] = [
       },
     ],
   },
-  
+
   {
     text: 'Entertainment',
     items: [
@@ -253,7 +253,7 @@ const contextMenuItems: ContextMenuItems[] = [
       },
     ],
   },
-  
+
   {
     text: 'Healthcare & Living',
     items: [

@@ -90,5 +90,5 @@ export const markup = `
     </ul>
 `;
 
-export const extractKeywordsPrompt: HtmlEditorTypes.AICustomCommand['prompt'] = () => 
+export const extractKeywordsPrompt: HtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';

@@ -14,7 +14,7 @@ $(() => {
     columns: [
       {
         dataField: 'Status',
-        fieldValueTemplate({ field: { value } }) {          
+        fieldValueTemplate({ field: { value } }) {
           return $('<div>')
             .append(
               $('<div>').addClass('indicator'),

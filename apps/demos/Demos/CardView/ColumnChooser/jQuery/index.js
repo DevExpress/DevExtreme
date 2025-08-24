@@ -35,7 +35,7 @@ $(() => {
         dataField: 'Birth_Date',
         dataType: 'date',
       },
-      { 
+      {
         dataField: 'Hire_Date',
         dataType: 'date',
       },
@@ -43,7 +43,7 @@ $(() => {
       'Department',
       'State',
       'City',
-      { 
+      {
         dataField: 'Phone',
         allowHiding: false,
       },

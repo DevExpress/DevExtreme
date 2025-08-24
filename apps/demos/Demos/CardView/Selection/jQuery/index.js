@@ -41,7 +41,7 @@ $(() => {
       },
       disabled: cardView.option('selection.mode') !== 'multiple',
     });
-  
+
     $('#allow-select-all').dxCheckBox({
       value: cardView.option('selection.allowSelectAll'),
       text: 'Allow Select All',
@@ -65,7 +65,7 @@ $(() => {
         }
       },
       disabled: (
-        cardView.option('selection.mode') !== 'multiple' || 
+        cardView.option('selection.mode') !== 'multiple' ||
         !cardView.option('selection.allowSelectAll')
       ),
     });

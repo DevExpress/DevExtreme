@@ -43,7 +43,7 @@ $(() => {
       }, {
         dataField: 'HireDate',
         dataType: 'date',
-      }, 
+      },
       'HomePhone',
       'MobilePhone',
       'Email',

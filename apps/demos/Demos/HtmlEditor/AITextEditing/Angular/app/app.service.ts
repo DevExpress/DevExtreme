@@ -9,7 +9,7 @@ const AzureOpenAIConfig = {
   apiKey: 'DEMO',
 };
 
-const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () => 
+const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';
 
 const markup = `

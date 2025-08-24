@@ -43,7 +43,7 @@ $(() => {
       return result;
     },
   });
-  
+
   $('.html-editor').dxHtmlEditor({
     height: 530,
     value: markup,
@@ -69,7 +69,7 @@ $(() => {
               },
             },
           ],
-        }, 
+        },
         'separator',
         'undo',
         'redo',
