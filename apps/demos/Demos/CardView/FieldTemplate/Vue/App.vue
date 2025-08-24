@@ -42,40 +42,48 @@
       field-template="progressTemplate"
     />
 
-    <template #headerTemplate="{
-      data: {
-        card: {
-          data: task,
+    <template
+      #headerTemplate="{
+        data: {
+          card: {
+            data: task,
+          }
         }
-      }
-    }">
+      }"
+    >
       <HeaderTemplate :text="task.Task_Subject"/>
     </template>
-    <template #priorityTemplate="{
-      data: {
-        field: {
-          value,
+    <template
+      #priorityTemplate="{
+        data: {
+          field: {
+            value,
+          }
         }
-      }
-    }">
+      }"
+    >
       <Priority :priorityID="value"/>
     </template>
-    <template #employeeTemplate="{
-      data: {
-        field: {
-          value,
+    <template
+      #employeeTemplate="{
+        data: {
+          field: {
+            value,
+          }
         }
-      }
-    }">
+      }"
+    >
       <Employee :employeeID="value"/>
     </template>
-    <template #progressTemplate="{
-      data: {
-        field: {
-          value,
+    <template
+      #progressTemplate="{
+        data: {
+          field: {
+            value,
+          }
         }
-      }
-    }">
+      }"
+    >
       <Progress :value="value"/>
     </template>
   </DxCardView>

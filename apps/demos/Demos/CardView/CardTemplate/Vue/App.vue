@@ -34,23 +34,25 @@
       caption="Body Style"
     />
     <DxColumn data-field="Horsepower"/>
-    <template #cardTemplate="{
-      data: {
-        card: {
-          data: vehicle,
-          data: {
-            ID,
-            TrademarkName,
-            Name,
-            CategoryName,
-            Modification,
-            BodyStyleName,
-            Horsepower,
-          },
-          fields,
+    <template
+      #cardTemplate="{
+        data: {
+          card: {
+            data: vehicle,
+            data: {
+              ID,
+              TrademarkName,
+              Name,
+              CategoryName,
+              Modification,
+              BodyStyleName,
+              Horsepower,
+            },
+            fields,
+          }
         }
-      }
-    }">
+      }"
+    >
       <VehicleCard
         :vehicle="vehicle"
         :id="ID"
