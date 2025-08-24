@@ -52,7 +52,7 @@ const currentAlgorithm = computed(() => (
     : selectedAlgorithm.value),
 );
 
-const customAlgorithm: CustomAlgorithm = ({ rect, sum, items } ) => {
+const customAlgorithm: CustomAlgorithm = ({ rect, sum, items }) => {
   const totalRect = rect.slice();
   let totalSum = sum;
   let side = 0;
