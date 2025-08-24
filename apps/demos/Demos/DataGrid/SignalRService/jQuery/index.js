@@ -1,7 +1,7 @@
 $(() => {
   $.type = $.type || function (obj) {
     if (obj == null) {
-      return obj + '';
+      return `${obj}`;
     }
 
     return typeof obj;

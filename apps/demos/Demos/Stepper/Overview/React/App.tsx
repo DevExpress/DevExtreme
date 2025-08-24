@@ -31,12 +31,12 @@ export default function App() {
     setRtlMode(e.value);
   };
 
-  const widgetWrapperOrientationClass: string = 'widget-wrapper-' + orientation;
+  const widgetWrapperOrientationClass: string = `widget-wrapper-${orientation}`;
 
   return (
     <div className="stepper-demo">
       <div className="widget-container">
-        <div className={'widget-wrapper ' + widgetWrapperOrientationClass}>
+        <div className={`widget-wrapper ${widgetWrapperOrientationClass}`}>
           <Steppers
             orientation={orientation}
             navigationMode={navigationMode}
