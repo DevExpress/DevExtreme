@@ -51,7 +51,7 @@
           @item-click="onNavigationModeClick"
         />
       </div>
-      <div class="option-separator" />
+      <div class="option-separator"/>
       <div class="option">
         <DxCheckBox
           id="selectOnFocus"
