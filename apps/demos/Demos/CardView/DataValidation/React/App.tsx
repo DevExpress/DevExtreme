@@ -146,13 +146,13 @@ const App = () => (
       dataField="birthDate"
       dataType="date"
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="hireDate"
       dataType="date"
     >
-      <RequiredRule/>
+      <RequiredRule />
       <CustomRule
         message="Hire date cannot be earlier than birth date"
         validationCallback={hireDateValidationCallback}
@@ -162,15 +162,15 @@ const App = () => (
       caption="Position"
       dataField="title"
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
-    <Column dataField="department"/>
-    <Column dataField="address"/>
+    <Column dataField="department" />
+    <Column dataField="address" />
     <Column dataField="mobilePhone">
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column dataField="email">
-      <EmailRule/>
+      <EmailRule />
       <AsyncRule
         message="Email address is not unique"
         ignoreEmptyValue={true}
@@ -185,13 +185,13 @@ const App = () => (
       dataField="firstName"
       visible={false}
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="lastName"
       visible={false}
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="city"

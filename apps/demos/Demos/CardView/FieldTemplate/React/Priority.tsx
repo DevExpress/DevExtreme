@@ -12,7 +12,7 @@ const Priority = ({ priorityID }: PriorityProps) => {
 
   return (
     <div className={`task__priority task__priority--${priority.postfix}`}>
-      <div className="task__indicator"/>
+      <div className="task__indicator" />
       <div>{ priority.text }</div>
     </div>
   );
