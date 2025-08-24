@@ -1,4 +1,3 @@
-
 import React, { useCallback } from 'react';
 import { DrillInfo } from './data';
 

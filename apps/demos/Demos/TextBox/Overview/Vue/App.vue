@@ -102,4 +102,3 @@ function valueChanged(data) {
   emailValue.value = `${data.value.replace(/\s/g, '').toLowerCase()}@corp.com`;
 }
 </script>
-

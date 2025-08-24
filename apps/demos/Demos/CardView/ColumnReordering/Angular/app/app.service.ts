@@ -310,7 +310,6 @@ const orders: Order[] = [{
   Customer: 'Clark Morgan',
 }];
 
-
 @Injectable()
 export class Service {
   getOrder() {

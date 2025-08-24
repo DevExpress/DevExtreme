@@ -90,4 +90,3 @@ export function House(props: HouseProps) {
     </div>
   );
 }
-

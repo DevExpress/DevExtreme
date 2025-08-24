@@ -3,7 +3,6 @@ import Button from 'devextreme-react/button';
 import Sortable, { type SortableTypes } from 'devextreme-react/sortable';
 import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
 
-
 import service from './data.ts';
 import EmployeeTemplate from './EmployeeTemplate.tsx';
 

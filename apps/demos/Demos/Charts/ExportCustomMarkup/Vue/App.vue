@@ -1,4 +1,3 @@
-
 <template>
   <div id="chart-demo">
     <div class="chart_environment">
@@ -139,4 +138,3 @@ function onClick() {
   text-align: center;
 }
 </style>
-

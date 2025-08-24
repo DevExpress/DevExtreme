@@ -2,7 +2,6 @@ import React from 'react';
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, FilterPanel, FilterBuilder } from 'devextreme-react/card-view';
 import { orders, Order } from './data.ts';
 
-
 function getOrderDay({ OrderDate }: Order): number {
   return (new Date(OrderDate)).getDay();
 };

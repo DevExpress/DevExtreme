@@ -29,4 +29,3 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 </script>
-

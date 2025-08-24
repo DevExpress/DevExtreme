@@ -32,4 +32,3 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 const formatCurrency = (value) => currencyFormatter.format(value);
 </script>
-
