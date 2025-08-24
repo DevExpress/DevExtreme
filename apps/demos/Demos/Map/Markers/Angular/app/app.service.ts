@@ -58,11 +58,11 @@ const markers: Marker[] = [{
 
 @Injectable()
 export class Service {
-  getMarkerUrl() : string {
+  getMarkerUrl(): string {
     return markerUrl;
   }
 
-  getMarkers() : Marker[] {
+  getMarkers(): Marker[] {
     return markers;
   }
 }

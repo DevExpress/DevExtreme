@@ -22,7 +22,7 @@ export class Customer {
   Accepted: boolean;
 }
 
-const customer : Customer = {
+const customer: Customer = {
   Email: '',
   Password: '',
   Name: 'Peter',
@@ -43,7 +43,7 @@ const cities: string[] = [
 
 @Injectable()
 export class Service {
-  getCustomer() : Customer {
+  getCustomer(): Customer {
     return customer;
   }
 

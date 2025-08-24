@@ -1,6 +1,6 @@
 import { SchedulerTypes } from 'devextreme-react/scheduler';
 
-type Appointment = SchedulerTypes.Appointment & { priorityId? : number[]; };
+type Appointment = SchedulerTypes.Appointment & { priorityId?: number[]; };
 
 type Resource = {
   text: string;
