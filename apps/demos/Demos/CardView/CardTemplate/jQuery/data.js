@@ -1,4 +1,5 @@
-const vehicles = [{
+const vehicles = [
+  {
     ID: 1,
     TrademarkName: 'Toyota',
     TrademarkID: 1,

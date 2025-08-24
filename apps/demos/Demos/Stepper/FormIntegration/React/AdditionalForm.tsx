@@ -7,15 +7,15 @@ import { FormProps } from './types.ts';
 const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
   <>
     <div>
-        Please let us know if you have any other requests.
+      Please let us know if you have any other requests.
     </div>
     <Form formData={formData} >
       <SimpleItem
         dataField='additionalRequest'
         editorType='dxTextArea'
         editorOptions={{
-            height: 160,
-            elementAttr: { id: 'additionalRequest' },
+          height: 160,
+          elementAttr: { id: 'additionalRequest' },
         }}
         label={{ visible: false }}
       ></SimpleItem>

@@ -19,7 +19,7 @@ const ResourceCell = (props: ResourceCellProps) => {
         />
       </div>
       <div className="info" style={{ color }}>
-          Age: {age}
+        Age: {age}
         <br />
         <b>{discipline}</b>
       </div>

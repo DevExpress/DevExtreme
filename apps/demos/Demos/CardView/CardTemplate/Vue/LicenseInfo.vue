@@ -17,16 +17,16 @@
 import type { Vehicle } from './data';
 
 const props = withDefaults(defineProps<{
-    vehicle?: Vehicle,
+  vehicle?: Vehicle,
 }>(), {
-    vehicle: () => ({} as Vehicle),
+  vehicle: () => ({} as Vehicle),
 });
 
 const {
-    LicenseName,
-    Author,
-    Source,
-    Edits,
+  LicenseName,
+  Author,
+  Source,
+  Edits,
 } = props.vehicle;
 const vehicleLink = `https://${Source}`;
 </script>

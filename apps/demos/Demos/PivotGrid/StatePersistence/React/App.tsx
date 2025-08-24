@@ -110,9 +110,9 @@ const App = () => (
   <React.Fragment>
     <div id="pivotgrid-demo">
       <div className="desc-container">Expand, filter, sort and perform other operations
-          on&nbsp;the PivotGrid&rsquo;s columns and
-          rows. <a onClick={onRefreshClick}>Refresh</a> the web page and note that
-          the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
+        on&nbsp;the PivotGrid&rsquo;s columns and
+        rows. <a onClick={onRefreshClick}>Refresh</a> the web page and note that
+        the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
       </div>
       <Button
         text={"Reset the PivotGrid's State"}

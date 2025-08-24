@@ -24,8 +24,8 @@ $(() => {
         fieldValueTemplate({ field: { value } }) {
           const priority = priorities.find(p => p.id === value);
           return $('<div>').append(
-              $('<div>').addClass('task__indicator')
-            )
+            $('<div>').addClass('task__indicator')
+          )
             .append(
               $('<div>').text(priority.text)
             )

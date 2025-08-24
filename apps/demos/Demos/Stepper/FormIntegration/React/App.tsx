@@ -170,7 +170,7 @@ export default function App () {
                 Step <span className="selected-index">{selectedIndex + 1}</span>
                 {' of '}
                 {steps.length}
-               </>
+              </>
             )}
           </div>
 

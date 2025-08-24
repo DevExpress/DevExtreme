@@ -1,7 +1,6 @@
 import { type DxPivotGridTypes } from "devextreme-vue/pivot-grid";
 
-const sales = [
-    {
+const sales = [{
   orderId: 1,
   region: 'North America',
   country: 'USA',

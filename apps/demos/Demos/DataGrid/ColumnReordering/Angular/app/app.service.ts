@@ -38,7 +38,8 @@ export class Employee {
   MobilePhone: string;
 }
 
-const employees: Employee[] = [{
+const employees: Employee[] = [
+  {
     ID: 1,
     Head_ID: 0,
     FirstName: 'John',
@@ -228,7 +229,8 @@ const employees: Employee[] = [{
     DepartmentID: 5,
     Department: 'Human Resources',
     MobilePhone: '(310) 555-7276',
-  }];
+  }
+];
   
 
 

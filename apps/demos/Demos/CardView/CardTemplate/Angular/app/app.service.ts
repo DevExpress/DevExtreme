@@ -30,7 +30,8 @@ export interface Vehicle {
   Source: string;
 }
 
-const vehicles: Vehicle[] = [{
+const vehicles: Vehicle[] = [
+  {
     ID: 1,
     TrademarkName: 'Toyota',
     TrademarkID: 1,

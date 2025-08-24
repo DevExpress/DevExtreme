@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-   DxButtonModule, DxPopupModule, DxPopoverModule,
+  DxButtonModule, DxPopupModule, DxPopoverModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Service, House, Agent } from './app.service';

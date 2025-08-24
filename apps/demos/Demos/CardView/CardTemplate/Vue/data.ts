@@ -26,7 +26,8 @@ export interface Vehicle {
   Source: string;
 }
 
-export const vehicles: Vehicle[] = [{
+export const vehicles: Vehicle[] = [
+  {
     ID: 1,
     TrademarkName: 'Toyota',
     TrademarkID: 1,

@@ -199,8 +199,8 @@ async function exportGantt() {
   const format = formatBoxValue.value.toLowerCase();
   const isLandscape = landscapeCheckBoxValue.value;
   const exportMode: GanttPdfExportMode = exportModeBoxValue.value === 'Tree List'
-      ? 'treeList'
-      : exportModeBoxValue.value.toLowerCase() as GanttPdfExportMode;
+    ? 'treeList'
+    : exportModeBoxValue.value.toLowerCase() as GanttPdfExportMode;
   const dataRangeMode = dateRangeBoxValue.value.toLowerCase();
   let dataRange;
   if (dataRangeMode === 'custom') {

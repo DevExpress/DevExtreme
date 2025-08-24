@@ -11,8 +11,8 @@
   </DxDataGrid>
 </template>
 <script setup lang="ts">
-  import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-  import { customers } from './data.ts';
+import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { customers } from './data.ts';
 
-  const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 </script>

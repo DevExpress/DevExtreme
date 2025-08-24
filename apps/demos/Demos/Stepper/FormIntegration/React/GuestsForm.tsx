@@ -23,7 +23,7 @@ const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
         }}
         label={{ text: 'Adults', location: 'top' }}
       >
-          <RangeRule min={1} />
+        <RangeRule min={1} />
       </SimpleItem>
       <SimpleItem
         dataField='childrenCount'
@@ -38,7 +38,7 @@ const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
         label={{ text: 'Pets', location: 'top' }}
       />
     </Form>
- </>
+  </>
 ));
 
 GuestsForm.displayName = 'GuestsForm';

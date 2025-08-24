@@ -1512,7 +1512,8 @@ export interface Priority {
   postfix: string;
 }
 
-const priorities: Priority[] = [{
+const priorities: Priority[] = [
+  {
     id: 1,
     text: 'Low',
     postfix: 'low', 

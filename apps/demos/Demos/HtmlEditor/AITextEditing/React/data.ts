@@ -1,8 +1,8 @@
 import { type HtmlEditorTypes } from 'devextreme-react/html-editor';
 import {
-    AIIntegration,
-    RequestParams,
-    Response,
+  AIIntegration,
+  RequestParams,
+  Response,
 } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 

@@ -20,7 +20,7 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => 
         editorOptions={{
           items: roomTypes,
           elementAttr: { id: 'roomType' },
-      }}
+        }}
       />
       <SimpleItem
         dataField='mealPlan'
@@ -30,7 +30,7 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => 
         editorOptions={{
           items: mealPlans,
           elementAttr: { id: 'mealPlan' },
-      }}
+        }}
       />
     </Form>
   </>

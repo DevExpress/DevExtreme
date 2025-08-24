@@ -82,17 +82,17 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    DxCardView,
-    DxColumn,
-    DxCardHeader,
-    DxPaging,
-  } from 'devextreme-vue/card-view';
-  import { tasks } from './data.ts';
-  import HeaderTemplate from './HeaderTemplate.vue';
-  import Priority from './Priority.vue';
-  import Employee from './Employee.vue';
-  import Progress from './Progress.vue';
+import {
+  DxCardView,
+  DxColumn,
+  DxCardHeader,
+  DxPaging,
+} from 'devextreme-vue/card-view';
+import { tasks } from './data.ts';
+import HeaderTemplate from './HeaderTemplate.vue';
+import Priority from './Priority.vue';
+import Employee from './Employee.vue';
+import Progress from './Progress.vue';
 </script>
 
 <style>

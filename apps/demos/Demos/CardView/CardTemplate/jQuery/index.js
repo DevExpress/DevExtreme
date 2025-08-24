@@ -89,9 +89,9 @@ $(() => {
           .append($('<b>').text('Source link: '))
           .append(
             $('<a>', {
-                href: sourceLink,
-                target: '_blank',
-              })
+              href: sourceLink,
+              target: '_blank',
+            })
               .text(sourceLink),
           ),
         $('<p>')

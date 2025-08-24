@@ -32,8 +32,7 @@ export type Status = {
   name: string;
 }
 
-const employees = [
-    {
+const employees = [{
   ID: 1,
   FullName: 'John Heart',
   Department: 'Management',
@@ -289,8 +288,7 @@ const employees = [
   Department: 'Engineering',
   Title: 'Engineer',
 }];
-const statuses = [
-    {
+const statuses = [{
   id: 1, name: 'Not Started',
 }, {
   id: 2, name: 'In Progress',
@@ -301,6 +299,7 @@ const statuses = [
 }, {
   id: 5, name: 'Completed',
 }];
+
 const tasks = [{
   ID: 1,
   Subject: 'Prepare 2013 Financial',
