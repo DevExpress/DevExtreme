@@ -1,7 +1,7 @@
 <template>
-    <div className="task__header" :title="text">
-        {{ text }}
-    </div>
+  <div className="task__header" :title="text">
+    {{ text }}
+  </div>
 </template>
 
 <script setup lang="ts">

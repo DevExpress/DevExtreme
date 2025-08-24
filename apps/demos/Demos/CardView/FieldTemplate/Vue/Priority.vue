@@ -1,7 +1,7 @@
 <template>
   <div :className="priorityClassName">
-      <div className="task__indicator"></div>
-      <div>{{ priority.text }}</div>
+    <div className="task__indicator"></div>
+    <div>{{ priority.text }}</div>
   </div>
 </template>
 

@@ -35,32 +35,32 @@
     />
     <DxColumn data-field="Horsepower"/>
     <template #cardTemplate="{
-        data: {
-          card: {
-            data: vehicle,
-            data: {
-              ID,
-              TrademarkName,
-              Name,
-              CategoryName,
-              Modification,
-              BodyStyleName,
-              Horsepower,
-            },
-            fields,
-          }
+      data: {
+        card: {
+          data: vehicle,
+          data: {
+            ID,
+            TrademarkName,
+            Name,
+            CategoryName,
+            Modification,
+            BodyStyleName,
+            Horsepower,
+          },
+          fields,
         }
-      }">
-        <VehicleCard
-          :vehicle="vehicle"
-          :id="ID"
-          :model="`${TrademarkName} ${Name}`"
-          :price="fields?.find(f => f.column?.dataField === 'Price')?.text"
-          :category-name="CategoryName"
-          :modification="Modification"
-          :body-style-name="BodyStyleName"
-          :horsepower="Horsepower"
-          @show-info="showInfo" />
+      }
+    }">
+      <VehicleCard
+        :vehicle="vehicle"
+        :id="ID"
+        :model="`${TrademarkName} ${Name}`"
+        :price="fields?.find(f => f.column?.dataField === 'Price')?.text"
+        :category-name="CategoryName"
+        :modification="Modification"
+        :body-style-name="BodyStyleName"
+        :horsepower="Horsepower"
+        @show-info="showInfo" />
     </template>
   </DxCardView>
   <DxPopup
@@ -73,9 +73,9 @@
     :onHiding="hideInfo"
   >
     <DxPosition at="center" my="center" collision="fit" />
-      <template #content>
-        <LicenseInfo :vehicle="currentVehicle" />
-      </template>
+    <template #content>
+      <LicenseInfo :vehicle="currentVehicle" />
+    </template>
   </DxPopup>
 </template>
 <script setup lang="ts">

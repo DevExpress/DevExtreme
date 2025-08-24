@@ -43,39 +43,39 @@
     />
 
     <template #headerTemplate="{
-        data: {
-          card: {
-            data: task,
-          }
+      data: {
+        card: {
+          data: task,
         }
-      }">
+      }
+    }">
       <HeaderTemplate :text="task.Task_Subject"/>
     </template>
     <template #priorityTemplate="{
-        data: {
-          field: {
-            value,
-          }
+      data: {
+        field: {
+          value,
         }
-      }">
+      }
+    }">
       <Priority :priorityID="value"/>
     </template>
     <template #employeeTemplate="{
-        data: {
-          field: {
-            value,
-          }
+      data: {
+        field: {
+          value,
         }
-      }">
+      }
+    }">
       <Employee :employeeID="value"/>
     </template>
     <template #progressTemplate="{
-        data: {
-          field: {
-            value,
-          }
+      data: {
+        field: {
+          value,
         }
-      }">
+      }
+    }">
       <Progress :value="value"/>
     </template>
   </DxCardView>
