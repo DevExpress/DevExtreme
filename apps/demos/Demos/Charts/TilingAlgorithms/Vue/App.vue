@@ -49,7 +49,7 @@ const selectedAlgorithm = ref(algorithms[2]);
 const currentAlgorithm = computed(() => (
   (selectedAlgorithm.value === 'custom')
     ? customAlgorithm
-    : selectedAlgorithm.value)
+    : selectedAlgorithm.value),
 );
 
 const customAlgorithm: CustomAlgorithm = ({ rect, sum, items } ) => {

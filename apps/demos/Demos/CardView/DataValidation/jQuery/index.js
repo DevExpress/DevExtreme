@@ -86,7 +86,7 @@ $(() => {
             validationCallback(params) {
               return new Date(params.value) > new Date(params.data.birthDate);
             },
-          }
+          },
         ],
         dataType: 'date',
       },

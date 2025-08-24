@@ -43,12 +43,12 @@ const products: Product[] = [
             text: 'Warranties',
           },
           {
-            text: 'Projectors & Screens'
+            text: 'Projectors & Screens',
           },
           {
             text: 'Computer Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Cell Phones',
@@ -60,7 +60,7 @@ const products: Product[] = [
             text: 'Smart Phones & PDAs',
           },
           {
-            text: 'Senior Cell Phones'
+            text: 'Senior Cell Phones',
           },
           {
             text: 'Mobile Broadband Devices',
@@ -68,7 +68,7 @@ const products: Product[] = [
           {
             text: 'Cell Phone Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Camera & Photo',
@@ -118,7 +118,7 @@ const products: Product[] = [
           {
             text: 'Camera Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Audio',
@@ -153,7 +153,7 @@ const products: Product[] = [
           {
             text: 'Speakers',
           },
-        ]
+        ],
       },
       {
         text: 'Home Appliances',
@@ -177,20 +177,20 @@ const products: Product[] = [
             text: 'Refrigerators',
           },
           {
-            text: 'Washers & Dryers'
+            text: 'Washers & Dryers',
           },
           {
             text: ' Water Heaters',
           },
           {
-            'text': 'Vacuum'
+            'text': 'Vacuum',
           },
           {
-            text: 'Steaming & Ironing'
-          }
-        ]
+            text: 'Steaming & Ironing',
+          },
+        ],
       },
-    ]
+    ],
   },
   
   {
@@ -218,15 +218,15 @@ const products: Product[] = [
             text: 'Vinyl',
           },
           {
-            text: 'Cassette'
+            text: 'Cassette',
           },
           {
             text: 'Musical Instruments',
           },
           {
-            text: 'DJ Equipment'
-          }
-        ]
+            text: 'DJ Equipment',
+          },
+        ],
       },
       {
         text: 'Games & Toys',
@@ -244,7 +244,7 @@ const products: Product[] = [
             text: 'Download Games',
           },
           {
-            text: 'Handheld Game Systems'
+            text: 'Handheld Game Systems',
           },
           {
             text: 'Legacy Systems',
@@ -252,9 +252,9 @@ const products: Product[] = [
           {
             text: 'Cards',
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   
   {
@@ -282,12 +282,12 @@ const products: Product[] = [
             text: 'Sport Electronics',
           },
           {
-            text: 'Sport Apparel'
+            text: 'Sport Apparel',
           },
           {
             text: 'Trainers & Tennis Shoes',
           },
-        ]
+        ],
       },
       {
         text: 'Beauty',
@@ -305,7 +305,7 @@ const products: Product[] = [
             text: 'Nail Care',
           },
           {
-            text: 'Make-up'
+            text: 'Make-up',
           },
           {
             text: 'Fragrance',
@@ -316,7 +316,7 @@ const products: Product[] = [
           {
             text: 'Tools & Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Fashion',
@@ -338,10 +338,10 @@ const products: Product[] = [
           },
           {
             text: 'Accessories',
-          }
-        ]
-      }
-    ]
+          },
+        ],
+      },
+    ],
   },
 ];
 

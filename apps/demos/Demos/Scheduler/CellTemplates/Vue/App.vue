@@ -68,7 +68,7 @@ const ariaDescription = computed(() => {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    })
+    }),
     );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;

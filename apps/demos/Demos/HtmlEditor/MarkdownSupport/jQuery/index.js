@@ -23,7 +23,7 @@ $(() => {
         .toString();
 
       return result;
-    }
+    },
   };
 
   const editorInstance = $('.html-editor').dxHtmlEditor({

@@ -27,7 +27,7 @@ $(() => {
       {
         dataField: 'Address',
         fixed: true,
-        fixedPosition: 'sticky'
+        fixedPosition: 'sticky',
       },
       'City',
       'Zipcode',

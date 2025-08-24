@@ -33,12 +33,12 @@ const menuData = [
             text: 'Warranties',
           },
           {
-            text: 'Projectors & Screens'
+            text: 'Projectors & Screens',
           },
           {
             text: 'Computer Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Cell Phones',
@@ -50,7 +50,7 @@ const menuData = [
             text: 'Smart Phones & PDAs',
           },
           {
-            text: 'Senior Cell Phones'
+            text: 'Senior Cell Phones',
           },
           {
             text: 'Mobile Broadband Devices',
@@ -58,7 +58,7 @@ const menuData = [
           {
             text: 'Cell Phone Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Camera & Photo',
@@ -108,7 +108,7 @@ const menuData = [
           {
             text: 'Camera Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Audio',
@@ -143,7 +143,7 @@ const menuData = [
           {
             text: 'Speakers',
           },
-        ]
+        ],
       },
       {
         text: 'Home Appliances',
@@ -167,20 +167,20 @@ const menuData = [
             text: 'Refrigerators',
           },
           {
-            text: 'Washers & Dryers'
+            text: 'Washers & Dryers',
           },
           {
             text: ' Water Heaters',
           },
           {
-            'text': 'Vacuum'
+            'text': 'Vacuum',
           },
           {
-            text: 'Steaming & Ironing'
-          }
-        ]
+            text: 'Steaming & Ironing',
+          },
+        ],
       },
-    ]
+    ],
   },
   
   {
@@ -208,15 +208,15 @@ const menuData = [
             text: 'Vinyl',
           },
           {
-            text: 'Cassette'
+            text: 'Cassette',
           },
           {
             text: 'Musical Instruments',
           },
           {
-            text: 'DJ Equipment'
-          }
-        ]
+            text: 'DJ Equipment',
+          },
+        ],
       },
       {
         text: 'Games & Toys',
@@ -234,7 +234,7 @@ const menuData = [
             text: 'Download Games',
           },
           {
-            text: 'Handheld Game Systems'
+            text: 'Handheld Game Systems',
           },
           {
             text: 'Legacy Systems',
@@ -242,9 +242,9 @@ const menuData = [
           {
             text: 'Cards',
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   
   {
@@ -272,12 +272,12 @@ const menuData = [
             text: 'Sport Electronics',
           },
           {
-            text: 'Sport Apparel'
+            text: 'Sport Apparel',
           },
           {
             text: 'Trainers & Tennis Shoes',
           },
-        ]
+        ],
       },
       {
         text: 'Beauty',
@@ -295,7 +295,7 @@ const menuData = [
             text: 'Nail Care',
           },
           {
-            text: 'Make-up'
+            text: 'Make-up',
           },
           {
             text: 'Fragrance',
@@ -306,7 +306,7 @@ const menuData = [
           {
             text: 'Tools & Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Fashion',
@@ -328,9 +328,9 @@ const menuData = [
           },
           {
             text: 'Accessories',
-          }
-        ]
-      }
-    ]
+          },
+        ],
+      },
+    ],
   },
 ];

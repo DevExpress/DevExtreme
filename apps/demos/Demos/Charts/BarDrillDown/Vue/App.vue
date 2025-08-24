@@ -42,7 +42,7 @@ function customizePoint() {
     color: colors[Number(isFirstLevel.value)],
     hoverStyle: {
       ...!isFirstLevel.value ? { hatching: 'none' } : {},
-    }
+    },
   } as SeriesPoint;
 }
 function onPointClick({ target }) {

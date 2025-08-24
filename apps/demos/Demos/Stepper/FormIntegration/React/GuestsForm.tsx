@@ -19,7 +19,7 @@ const GuestsForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
           elementAttr: { id: 'adultsCount' },
           showSpinButtons: true,
           min: 0,
-          max: 5
+          max: 5,
         }}
         label={{ text: 'Adults', location: 'top' }}
       >

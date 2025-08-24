@@ -31,7 +31,7 @@ import {
   DxLabel,
   DxLayer,
   DxFont,
-  DxLoadingIndicator
+  DxLoadingIndicator,
 } from 'devextreme-vue/vector-map';
 import { weatherData } from './data.ts';
 

@@ -116,7 +116,7 @@ import DxChart, {
   DxLegend,
   DxLabel,
   DxTooltip,
-  type DxChartTypes
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';

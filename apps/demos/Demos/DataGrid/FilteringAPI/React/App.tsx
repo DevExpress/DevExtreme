@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DataGrid, { Column, DataGridRef, Pager, } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef, Pager } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme-react/common/data';
 

@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const employee = computed(() =>
-  employees.find(e => e.ID === props.employeeID)
+  employees.find(e => e.ID === props.employeeID),
 );
 </script>
 

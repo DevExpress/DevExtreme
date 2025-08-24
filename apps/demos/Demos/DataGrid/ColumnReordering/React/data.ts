@@ -210,5 +210,5 @@ export const employees: Employee[] = [
     DepartmentID: 5,
     Department: 'Human Resources',
     MobilePhone: '(310) 555-7276',
-  }
+  },
 ];

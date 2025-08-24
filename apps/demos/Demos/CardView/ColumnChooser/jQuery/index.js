@@ -50,7 +50,7 @@ $(() => {
       {
         dataField: 'Email',
         visible: false,
-      }
+      },
     ],
   }).dxCardView('instance');
 

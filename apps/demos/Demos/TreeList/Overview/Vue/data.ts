@@ -2029,7 +2029,7 @@ export const employees: Employee[] = [{
   ID: 50,
   Name: 'Dallas Lou',
   Picture: '../../../../images/employees/41.png',
-}
+},
 ];
 
 export const priorities = [

@@ -17,10 +17,10 @@ $(() => {
         fieldValueTemplate({ field: { value } }) {          
           return $('<div>')
             .append(
-              $('<div>').addClass('indicator')
+              $('<div>').addClass('indicator'),
             )
             .append(
-              $('<div>').text(value)
+              $('<div>').text(value),
             )
             .addClass('status')
             .toggleClass('status--salaried', value === 'Salaried')

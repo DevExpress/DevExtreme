@@ -27,8 +27,8 @@ $(() => {
       const signal = controller.signal;
 
       const aiPrompt = [
-        { role: 'system', content: prompt.system, },
-        { role: 'user', content: prompt.user, },
+        { role: 'system', content: prompt.system },
+        { role: 'user', content: prompt.user },
       ];
 
       const promise = getAIResponse(aiPrompt, signal);
@@ -72,8 +72,8 @@ $(() => {
         }, 
         'separator',
         'undo',
-        'redo'
+        'redo',
       ],
-    }
+    },
   });
 });

@@ -1527,5 +1527,5 @@ export const priorities: Priority[] = [
     id: 4,
     text: 'High',
     postfix: 'high',
-  }
+  },
 ];

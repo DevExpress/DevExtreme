@@ -24,14 +24,14 @@ $(() => {
         fieldValueTemplate({ field: { value } }) {
           const priority = priorities.find(p => p.id === value);
           return $('<div>').append(
-            $('<div>').addClass('task__indicator')
+            $('<div>').addClass('task__indicator'),
           )
             .append(
-              $('<div>').text(priority.text)
+              $('<div>').text(priority.text),
             )
             .addClass('task__priority')
             .addClass(`task__priority--${priority.postfix}`);
-        }
+        },
       },
       {
         dataField: 'Task_Start_Date',
@@ -50,7 +50,7 @@ $(() => {
           return $('<button>')
             .addClass('task__link-button')
             .text(employees.find(e => e.ID === value).Name);
-        }
+        },
       },
       {
         dataField: 'Task_Status',
@@ -71,7 +71,7 @@ $(() => {
                 return `${value}%`;
               },
             });
-        }
+        },
       },
     ],
   });

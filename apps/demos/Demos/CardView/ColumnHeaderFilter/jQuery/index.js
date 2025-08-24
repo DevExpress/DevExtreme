@@ -10,7 +10,7 @@ $(() => {
     cardMinWidth: 280,
     wordWrapEnabled: true,
     headerFilter: {
-      visible: true
+      visible: true,
     },
     columns: [{
       dataField: 'OrderNumber',

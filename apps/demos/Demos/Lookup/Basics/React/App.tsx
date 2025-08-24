@@ -9,7 +9,7 @@ const groupedLookupLabel = { 'aria-label': 'Grouped lookup' };
 const groupedData = new DataSource({
   store: new ArrayStore({
     data: employeesTasks,
-    key: 'ID'
+    key: 'ID',
   }),
   group: 'Assigned',
 });

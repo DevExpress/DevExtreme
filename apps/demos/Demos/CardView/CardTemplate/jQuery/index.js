@@ -146,7 +146,7 @@ $(() => {
           format: 'currency',
           headerFilter: {
             groupInterval: 20000,
-          }
+          },
         },
         {
           dataField: 'CategoryName',

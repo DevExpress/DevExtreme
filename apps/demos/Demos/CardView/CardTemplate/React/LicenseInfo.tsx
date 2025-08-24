@@ -7,7 +7,7 @@ const LicenseInfo = ({
     Author,
     Source,
     Edits,
-  } 
+  }, 
 }: VehicleImageLicenseProps) => {
   const vehicleLink = `https://${Source}`;
   return (

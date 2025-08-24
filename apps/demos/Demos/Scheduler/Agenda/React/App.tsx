@@ -7,7 +7,7 @@ const currentDate = new Date(2021, 4, 11);
 const views: SchedulerTypes.ViewType[] = ['agenda'];
 const store = new ArrayStore({
   key: 'id',
-  data
+  data,
 })
 
 const App = () => (

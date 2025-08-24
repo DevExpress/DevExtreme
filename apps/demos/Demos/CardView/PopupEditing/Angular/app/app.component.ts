@@ -50,7 +50,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
-    DxTextAreaModule
+    DxTextAreaModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

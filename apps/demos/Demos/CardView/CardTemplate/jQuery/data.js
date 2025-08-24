@@ -24,7 +24,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage44'
+    Source: 'devexpress.com/carimage44',
   },
   {
     ID: 2,
@@ -51,7 +51,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Vauxford',
-    Source: 'devexpress.com/carimage45'
+    Source: 'devexpress.com/carimage45',
   },
   {
     ID: 3,
@@ -78,7 +78,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Minseong Kim',
-    Source: 'devexpress.com/carimage46'
+    Source: 'devexpress.com/carimage46',
   },
   {
     ID: 4,
@@ -105,7 +105,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage47'
+    Source: 'devexpress.com/carimage47',
   },
   {
     ID: 5,
@@ -132,7 +132,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage76'
+    Source: 'devexpress.com/carimage76',
   },
   {
     ID: 6,
@@ -159,7 +159,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage49'
+    Source: 'devexpress.com/carimage49',
   },
   {
     ID: 7,
@@ -186,7 +186,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage50'
+    Source: 'devexpress.com/carimage50',
   },
   {
     ID: 8,
@@ -213,7 +213,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Alexander Migl',
-    Source: 'devexpress.com/carimage51'
+    Source: 'devexpress.com/carimage51',
   },
   {
     ID: 9,
@@ -240,7 +240,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage52'
+    Source: 'devexpress.com/carimage52',
   },
   {
     ID: 10,
@@ -267,7 +267,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'Attribution Only',
     Author: 'M 93',
-    Source: 'devexpress.com/carimage53'
+    Source: 'devexpress.com/carimage53',
   },
   {
     ID: 11,
@@ -294,7 +294,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage54'
+    Source: 'devexpress.com/carimage54',
   },
   {
     ID: 12,
@@ -321,7 +321,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'JustAnotherCarDesigner',
-    Source: 'devexpress.com/carimage55'
+    Source: 'devexpress.com/carimage55',
   },
   {
     ID: 13,
@@ -348,7 +348,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Alexander Migl',
-    Source: 'devexpress.com/carimage56'
+    Source: 'devexpress.com/carimage56',
   },
   {
     ID: 14,
@@ -375,7 +375,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'crash71100',
-    Source: 'devexpress.com/carimage71'
+    Source: 'devexpress.com/carimage71',
   },
   {
     ID: 15,
@@ -402,7 +402,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'DestinationFearFan',
-    Source: 'devexpress.com/carimage57'
+    Source: 'devexpress.com/carimage57',
   },
   {
     ID: 16,
@@ -429,7 +429,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'HJUdall',
-    Source: 'devexpress.com/carimage58'
+    Source: 'devexpress.com/carimage58',
   },
   {
     ID: 17,
@@ -456,7 +456,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage59'
+    Source: 'devexpress.com/carimage59',
   },
   {
     ID: 18,
@@ -483,7 +483,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Matti Blume',
-    Source: 'devexpress.com/carimage72'
+    Source: 'devexpress.com/carimage72',
   },
   {
     ID: 19,
@@ -510,7 +510,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'DestinationFearFan',
-    Source: 'devexpress.com/carimage19'
+    Source: 'devexpress.com/carimage19',
   },
   {
     ID: 20,
@@ -537,7 +537,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Alexander-93',
-    Source: 'devexpress.com/carimage73'
+    Source: 'devexpress.com/carimage73',
   },
   {
     ID: 21,
@@ -564,7 +564,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Ruben de Rijcke',
-    Source: 'devexpress.com/carimage74'
+    Source: 'devexpress.com/carimage74',
   },
   {
     ID: 22,
@@ -591,7 +591,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage25'
+    Source: 'devexpress.com/carimage25',
   },
   {
     ID: 23,
@@ -618,7 +618,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage26'
+    Source: 'devexpress.com/carimage26',
   },
   {
     ID: 24,
@@ -645,7 +645,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 3.0',
     Author: 'Gold Pony',
-    Source: 'devexpress.com/carimage27'
+    Source: 'devexpress.com/carimage27',
   },
   {
     ID: 25,
@@ -672,7 +672,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 4.0',
     Author: 'OWS Photography',
-    Source: 'devexpress.com/carimage28'
+    Source: 'devexpress.com/carimage28',
   },
   {
     ID: 26,
@@ -699,7 +699,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage15'
+    Source: 'devexpress.com/carimage15',
   },
   {
     ID: 27,
@@ -726,7 +726,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage16'
+    Source: 'devexpress.com/carimage16',
   },
   {
     ID: 28,
@@ -753,7 +753,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Christopher Ziemnowicz',
-    Source: 'devexpress.com/carimage17'
+    Source: 'devexpress.com/carimage17',
   },
   {
     ID: 29,
@@ -780,7 +780,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Anonymousfox36',
-    Source: 'devexpress.com/carimage29'
+    Source: 'devexpress.com/carimage29',
   },
   {
     ID: 30,
@@ -807,7 +807,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'deathpallie325',
-    Source: 'devexpress.com/carimage60'
+    Source: 'devexpress.com/carimage60',
   },
   {
     ID: 31,
@@ -834,7 +834,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'HJUdall',
-    Source: 'devexpress.com/carimage61'
+    Source: 'devexpress.com/carimage61',
   },
   {
     ID: 32,
@@ -861,7 +861,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'Public Domain',
     Author: 'Bull-Doser',
-    Source: 'devexpress.com/carimage62'
+    Source: 'devexpress.com/carimage62',
   },
   {
     ID: 33,
@@ -888,7 +888,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
     Author: 'Alekc2m',
-    Source: 'devexpress.com/carimage75'
+    Source: 'devexpress.com/carimage75',
   },
   {
     ID: 34,
@@ -915,7 +915,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage30'
+    Source: 'devexpress.com/carimage30',
   },
   {
     ID: 35,
@@ -942,7 +942,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Damian B Oh',
-    Source: 'devexpress.com/carimage31'
+    Source: 'devexpress.com/carimage31',
   },
   {
     ID: 36,
@@ -969,7 +969,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage32'
+    Source: 'devexpress.com/carimage32',
   },
   {
     ID: 37,
@@ -996,7 +996,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage33'
+    Source: 'devexpress.com/carimage33',
   },
   {
     ID: 38,
@@ -1023,7 +1023,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 2.0 DE',
     Author: 'Lothar Spurzem',
-    Source: 'devexpress.com/carimage02'
+    Source: 'devexpress.com/carimage02',
   },
   {
     ID: 39,
@@ -1050,7 +1050,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 2.0',
     Author: 'AUDI AG',
-    Source: 'devexpress.com/carimage69'
+    Source: 'devexpress.com/carimage69',
   },
   {
     ID: 40,
@@ -1077,7 +1077,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'Milestoned',
-    Source: 'devexpress.com/carimage03'
+    Source: 'devexpress.com/carimage03',
   },
   {
     ID: 41,
@@ -1104,7 +1104,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'ilikewaffles11',
-    Source: 'devexpress.com/carimage34'
+    Source: 'devexpress.com/carimage34',
   },
   {
     ID: 42,
@@ -1131,7 +1131,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage64'
+    Source: 'devexpress.com/carimage64',
   },
   {
     ID: 43,
@@ -1158,7 +1158,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'Guillaume Vachey',
-    Source: 'devexpress.com/carimage11'
+    Source: 'devexpress.com/carimage11',
   },
   {
     ID: 44,
@@ -1185,7 +1185,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage70'
+    Source: 'devexpress.com/carimage70',
   },
   {
     ID: 45,
@@ -1212,7 +1212,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage35'
+    Source: 'devexpress.com/carimage35',
   },
   {
     ID: 46,
@@ -1239,7 +1239,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage65'
+    Source: 'devexpress.com/carimage65',
   },
   {
     ID: 47,
@@ -1266,7 +1266,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'Allie_Caulfield',
-    Source: 'devexpress.com/carimage12'
+    Source: 'devexpress.com/carimage12',
   },
   {
     ID: 48,
@@ -1293,7 +1293,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
     Author: 'XD4rkxL1ghtx',
-    Source: 'devexpress.com/carimage36'
+    Source: 'devexpress.com/carimage36',
   },
   {
     ID: 49,
@@ -1320,7 +1320,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 2.0',
     Author: 'Shadman Samee',
-    Source: 'devexpress.com/carimage04'
+    Source: 'devexpress.com/carimage04',
   },
   {
     ID: 50,
@@ -1347,7 +1347,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 4.0',
     Author: 'OWS Photography',
-    Source: 'devexpress.com/carimage37'
+    Source: 'devexpress.com/carimage37',
   },
   {
     ID: 51,
@@ -1374,7 +1374,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage38'
+    Source: 'devexpress.com/carimage38',
   },
   {
     ID: 52,
@@ -1401,7 +1401,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'Erik Drost',
-    Source: 'devexpress.com/carimage39'
+    Source: 'devexpress.com/carimage39',
   },
   {
     ID: 53,
@@ -1428,7 +1428,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'Public Domain',
     Author: 'IFCAR',
-    Source: 'devexpress.com/carimage01'
+    Source: 'devexpress.com/carimage01',
   },
   {
     ID: 54,
@@ -1455,7 +1455,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Jakub CA',
-    Source: 'devexpress.com/carimage40'
+    Source: 'devexpress.com/carimage40',
   },
   {
     ID: 55,
@@ -1482,7 +1482,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'Public Domain',
     Author: 'US NHTSA',
-    Source: 'devexpress.com/carimage13'
+    Source: 'devexpress.com/carimage13',
   },
   {
     ID: 56,
@@ -1509,7 +1509,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'Land Rover MENA',
-    Source: 'devexpress.com/carimage66'
+    Source: 'devexpress.com/carimage66',
   },
   {
     ID: 57,
@@ -1536,7 +1536,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'HJUdall',
-    Source: 'devexpress.com/carimage67'
+    Source: 'devexpress.com/carimage67',
   },
   {
     ID: 58,
@@ -1563,7 +1563,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Damian B Oh',
-    Source: 'devexpress.com/carimage05'
+    Source: 'devexpress.com/carimage05',
   },
   {
     ID: 59,
@@ -1590,7 +1590,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 2.0',
     Author: 'Alden Jewell',
-    Source: 'devexpress.com/carimage07'
+    Source: 'devexpress.com/carimage07',
   },
   {
     ID: 60,
@@ -1617,7 +1617,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Calreyn88',
-    Source: 'devexpress.com/carimage08'
+    Source: 'devexpress.com/carimage08',
   },
   {
     ID: 61,
@@ -1644,7 +1644,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Real Liquidstone',
-    Source: 'devexpress.com/carimage41'
+    Source: 'devexpress.com/carimage41',
   },
   {
     ID: 62,
@@ -1671,7 +1671,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage68'
+    Source: 'devexpress.com/carimage68',
   },
   {
     ID: 63,
@@ -1698,7 +1698,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Ethan Llamas',
-    Source: 'devexpress.com/carimage42'
+    Source: 'devexpress.com/carimage42',
   },
   {
     ID: 64,
@@ -1725,7 +1725,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 4.0',
     Author: 'Dinkun Chen',
-    Source: 'devexpress.com/carimage43'
+    Source: 'devexpress.com/carimage43',
   },
   {
     ID: 65,
@@ -1752,7 +1752,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
     Author: 'Noah Wulf',
-    Source: 'devexpress.com/carimage06'
+    Source: 'devexpress.com/carimage06',
   },
   {
     ID: 66,
@@ -1779,7 +1779,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY 4.0',
     Author: 'OWS Photography',
-    Source: 'devexpress.com/carimage09'
+    Source: 'devexpress.com/carimage09',
   },
   {
     ID: 67,
@@ -1806,7 +1806,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'HJUdall',
-    Source: 'devexpress.com/carimage22'
+    Source: 'devexpress.com/carimage22',
   },
   {
     ID: 68,
@@ -1833,7 +1833,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC0 1.0',
     Author: 'HJUdall',
-    Source: 'devexpress.com/carimage23'
+    Source: 'devexpress.com/carimage23',
   },
   {
     ID: 69,
@@ -1860,7 +1860,7 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
     Author: 'Cristianv14',
-    Source: 'devexpress.com/carimage24'
+    Source: 'devexpress.com/carimage24',
   },
   {
     ID: 70,
@@ -1887,6 +1887,6 @@ const vehicles = [
     Edits: 'Resize and crop',
     LicenseName: 'CC BY-SA 3.0',
     Author: 'Tobias \'\"ToMar\"\" Maier',
-    Source: 'devexpress.com/carimage10'
-  }
+    Source: 'devexpress.com/carimage10',
+  },
 ];

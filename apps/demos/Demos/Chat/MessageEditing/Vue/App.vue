@@ -115,7 +115,7 @@ const editingStrategy = {
     const userId = user.id;
 
     const lastNotDeletedMessage = items.findLast(
-      (item) => item.author?.id === userId && !item.isDeleted
+      (item) => item.author?.id === userId && !item.isDeleted,
     );
 
     return message.id === lastNotDeletedMessage?.id;
