@@ -100,7 +100,6 @@ $(() => {
         cardView.option('allowColumnReordering', value);
       },
     });
-
   }
 
   renderOptions();
