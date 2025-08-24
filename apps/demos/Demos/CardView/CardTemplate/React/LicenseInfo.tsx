@@ -1,4 +1,4 @@
-import { VehicleImageLicenseProps } from './types'
+import { VehicleImageLicenseProps } from './types';
 import React from 'react';
 
 const LicenseInfo = ({ 
@@ -26,6 +26,6 @@ const LicenseInfo = ({
       <p><b>Edits: </b> <span>{Edits}</span></p>
     </div>
   );
-}
+};
 
 export default LicenseInfo;

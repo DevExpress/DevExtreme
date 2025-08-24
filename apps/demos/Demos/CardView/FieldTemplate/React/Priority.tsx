@@ -16,6 +16,6 @@ const Priority = ({ priorityID }: PriorityProps) => {
       <div>{ priority.text }</div>
     </div>
   );
-}
+};
 
 export default Priority;

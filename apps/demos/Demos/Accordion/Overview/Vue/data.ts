@@ -8,7 +8,7 @@ export type CompanyData = {
   Phone: string,
   Fax: string,
   Website: string,
-}
+};
 
 const companies: CompanyData[] = [{
   ID: 1,

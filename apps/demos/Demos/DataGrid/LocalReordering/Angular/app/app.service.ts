@@ -14,7 +14,7 @@ export type Task = {
   OrderIndex: number;
 
   Priority: number;
-}
+};
 
 export type Employee = {
   ID: number;
@@ -24,13 +24,13 @@ export type Employee = {
   Department: string;
 
   Title: string;
-}
+};
 
 export type Status = {
   id: number;
 
   name: string;
-}
+};
 
 const employees = [{
   ID: 1,

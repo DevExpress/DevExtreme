@@ -47,7 +47,7 @@ export class AppService {
     this.navigationModes = [
       { text: 'Non-linear', value: false },
       { text: 'Linear', value: true },
-    ]
+    ];
   }
 
   getSteps(): DxStepperTypes.Item[] {

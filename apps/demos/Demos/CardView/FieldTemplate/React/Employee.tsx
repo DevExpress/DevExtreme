@@ -10,7 +10,7 @@ const Employee = ({ employeeID }: EmployeeProps) => {
     return employees.find(e => e.ID === employeeID);
   }, [employeeID, employees]);
     
-  return <button className='task__link-button'>{ employee.Name }</button>
-}
+  return <button className='task__link-button'>{ employee.Name }</button>;
+};
 
 export default Employee;

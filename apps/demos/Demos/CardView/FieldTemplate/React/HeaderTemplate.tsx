@@ -10,6 +10,6 @@ const HeaderTemplate = ({ text }: HeaderTemplateProps) => {
       {text}
     </div>
   );
-}
+};
 
 export default HeaderTemplate;

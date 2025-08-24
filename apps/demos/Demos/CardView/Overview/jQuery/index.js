@@ -89,7 +89,7 @@ $(() => {
               });
             },
           }),
-        )
+        );
     },
     selection: {
       mode: 'multiple',

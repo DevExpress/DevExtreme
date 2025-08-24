@@ -24,11 +24,11 @@ export default function App() {
   };
 
   const onSelectOnFocusChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
-    setSelectOnFocus(e.value)
+    setSelectOnFocus(e.value);
   };
 
   const onRtlModeChanged = (e: CheckBoxTypes.ValueChangedEvent) => {
-    setRtlMode(e.value)
+    setRtlMode(e.value);
   };
 
   const widgetWrapperOrientationClass: string = 'widget-wrapper-' + orientation;

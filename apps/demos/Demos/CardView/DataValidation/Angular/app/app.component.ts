@@ -31,7 +31,7 @@ export class AppComponent {
     showTitle: true,
     width: 700,
     height: 525,
-  }
+  };
   
   constructor(private httpClient: HttpClient, service: Service) {
     this.employees = service.getEmployees();

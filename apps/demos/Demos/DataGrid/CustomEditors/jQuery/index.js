@@ -100,7 +100,7 @@ $(() => {
   });
 
   function dropDownBoxEditorTemplate(cellElement, cellInfo) {
-    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : []
+    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : [];
     return $('<div>').dxDropDownBox({
       dropDownOptions: { width: 500 },
       dataSource: employees,

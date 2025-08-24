@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   calculateFullName({ First_Name, Last_Name }: Employee): string {
-    return `${First_Name} ${Last_Name}`
+    return `${First_Name} ${Last_Name}`;
   }
 }
 

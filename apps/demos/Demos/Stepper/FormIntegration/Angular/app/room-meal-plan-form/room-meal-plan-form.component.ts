@@ -14,7 +14,7 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/room-meal-plan-form/room-meal-plan-form.component.html`,
 })
 export class RoomMealPlanFormComponent {
-  @ViewChild('formComponent', { static: false }) form!: DxFormComponent
+  @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
 
   @Input() formData: BookingFormData;
 
@@ -50,5 +50,5 @@ export class RoomMealPlanFormComponent {
   roomSelectBoxOptions: DxSelectBoxTypes.Properties = {
     items: this.roomTypes,
     elementAttr: { id: 'roomType' },
-  }
+  };
 }

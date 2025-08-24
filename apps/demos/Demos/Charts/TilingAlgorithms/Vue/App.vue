@@ -67,7 +67,7 @@ const customAlgorithm: CustomAlgorithm = ({ rect, sum, items }) => {
     item.rect = itemRect;
     side = 1 - side;
   });
-}
+};
 
 function customizeTooltip({ node, node: { data: { name, value } }, valueText }: Record<string, any>) {
   const parentData = node.getParent().data;

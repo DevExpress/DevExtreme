@@ -27,7 +27,7 @@ export class AppComponent {
     showTitle: true,
     width: 700,
     height: 525,
-  }
+  };
   
   constructor(service: Service) {
     this.employees = service.getEmployees();

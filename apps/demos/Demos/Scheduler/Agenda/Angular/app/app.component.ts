@@ -38,7 +38,7 @@ export class AppComponent {
     this.appointmentsData = new ArrayStore({
       key: 'id',
       data: service.getAppointments(),
-    })
+    });
   }
 }
 

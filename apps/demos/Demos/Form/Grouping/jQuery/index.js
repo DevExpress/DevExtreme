@@ -3,7 +3,7 @@ $(() => {
   function groupCaptionTemplate($icon){
     return (data) => {
       return $(`<i class='dx-icon dx-icon-${$icon}'></i><span>${data.caption}</span>`);
-    }
+    };
   }
 
   $('#form').dxForm({

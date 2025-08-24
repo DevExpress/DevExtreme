@@ -1,5 +1,5 @@
 import React from 'react';
-import { type StepperTypes } from 'devextreme-react/stepper'
+import { type StepperTypes } from 'devextreme-react/stepper';
 
 export default function CustomStepShape(data: StepperTypes.Item) {
   return (

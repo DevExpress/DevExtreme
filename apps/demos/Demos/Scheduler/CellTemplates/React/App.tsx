@@ -37,7 +37,7 @@ const notifyDisableDate = () => {
 
 const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
   setComponentAria(e.component?.$element());
-}
+};
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
   const startDateEditor = form.getEditor('startDate');
@@ -77,7 +77,7 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
 const setComponentAria = (element) => {
   const prevAria = element?.attr('aria-label') || '';
   element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
-}
+};
 
 const App = () => {
   const [currentView, setCurrentView] = useState<SchedulerTypes.ViewType>(views[0]);

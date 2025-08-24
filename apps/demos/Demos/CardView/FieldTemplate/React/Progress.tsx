@@ -13,6 +13,6 @@ const Progress = ({ value }: ProgressProps) => {
       statusFormat={(_, value: number) => `${value}%`}
     />
   </div>;
-}
+};
 
 export default Progress;

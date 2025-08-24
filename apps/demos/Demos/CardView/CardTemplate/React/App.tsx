@@ -42,7 +42,7 @@ const App = () => {
             bodyStyleName={vehicle.BodyStyleName}
             horsepower={vehicle.Horsepower}
             onShowInfo={showInfo}
-          />
+          />;
         }}
       >
         <HeaderFilter visible={true} />

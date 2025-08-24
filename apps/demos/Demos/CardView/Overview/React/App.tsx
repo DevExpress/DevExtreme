@@ -52,7 +52,7 @@ function CardFooterComponent() {
       stylingMode="contained"
       onClick={notifySendEmail}
     />
-  </div>
+  </div>;
 }
 
 function StatusComponent({ data: { field: { value }}}) {

@@ -14,7 +14,7 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
 })
 export class GuestsFormComponent {
-  @ViewChild('formComponent', { static: false }) form!: DxFormComponent
+  @ViewChild('formComponent', { static: false }) form!: DxFormComponent;
 
   @Input() formData: BookingFormData;
 
