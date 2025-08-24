@@ -128,7 +128,7 @@ const App = () => (
           <Item
             dataField="mobilePhone"
             editorOptions={{
-              mask: "+1 (000) 000-0000",
+              mask: '+1 (000) 000-0000',
               useMaskedValue: true,
             }}
           ></Item>

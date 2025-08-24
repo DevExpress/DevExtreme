@@ -104,7 +104,7 @@ function onClick() {
     svgToCanvas(svg, canvas) {
       return new Promise((resolve) => {
         const v = Canvg.fromString(
-          canvas.getContext("2d"),
+          canvas.getContext('2d'),
           new XMLSerializer().serializeToString(svg),
         );
 

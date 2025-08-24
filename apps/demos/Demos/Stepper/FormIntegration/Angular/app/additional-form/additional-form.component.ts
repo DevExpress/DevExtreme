@@ -21,7 +21,7 @@ export class AdditionalFormComponent {
     elementAttr: { id: 'additionalRequest' },
   };
 
-  labelOptions: DxFormTypes.SimpleItem["label"] = {
+  labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }

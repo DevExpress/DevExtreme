@@ -36,7 +36,7 @@ export default function App() {
   return (
     <div className="stepper-demo">
       <div className="widget-container">
-        <div className={"widget-wrapper " + widgetWrapperOrientationClass}>
+        <div className={'widget-wrapper ' + widgetWrapperOrientationClass}>
           <Steppers
             orientation={orientation}
             navigationMode={navigationMode}

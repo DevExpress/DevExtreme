@@ -16,7 +16,7 @@ $(() => {
   }).dxCardView('instance');
 
   function renderOptions() {
-    $("#selection-mode").dxSelectBox({
+    $('#selection-mode').dxSelectBox({
       dataSource: ['single', 'multiple'],
       value: cardView.option('selection.mode'),
       inputAttr: { 'aria-label': 'Selection Mode' },
@@ -29,7 +29,7 @@ $(() => {
       },
     });
 
-    $("#show-checkboxes-mode").dxSelectBox({
+    $('#show-checkboxes-mode').dxSelectBox({
       dataSource: ['always', 'none', 'onClick', 'onLongTap'],
       value: cardView.option('selection.showCheckBoxesMode'),
       inputAttr: { 'aria-label': 'Show Checkboxes Mode' },
@@ -42,7 +42,7 @@ $(() => {
       disabled: cardView.option('selection.mode') !== 'multiple',
     });
   
-    $("#allow-select-all").dxCheckBox({
+    $('#allow-select-all').dxCheckBox({
       value: cardView.option('selection.allowSelectAll'),
       text: 'Allow Select All',
       onOptionChanged(e) {
@@ -54,7 +54,7 @@ $(() => {
       disabled: cardView.option('selection.mode') !== 'multiple',
     });
 
-    $("#select-all-mode").dxSelectBox({
+    $('#select-all-mode').dxSelectBox({
       dataSource: ['allPages', 'page'],
       value: cardView.option('selection.selectAllMode'),
       inputAttr: { 'aria-label': 'Select All Mode' },

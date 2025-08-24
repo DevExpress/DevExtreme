@@ -64,7 +64,7 @@ const App = () => {
         </div>
         <div className="option">
           <CheckBox
-            text={"Allow Select All"}
+            text={'Allow Select All'}
             value={allowSelectAll}
             onValueChange={setAllowSelectAll}
             disabled={selectionMode !== 'multiple'}

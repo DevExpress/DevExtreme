@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
 import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import type { BookingFormData } from '../app.types';
@@ -28,12 +28,12 @@ export class RoomMealPlanFormComponent {
     }
   }
 
-  roomLabelOptions: DxFormTypes.SimpleItem["label"] = {
+  roomLabelOptions: DxFormTypes.SimpleItem['label'] = {
     text: 'Room Type',
     location: 'top',
   };
 
-  mealLabelOptions: DxFormTypes.SimpleItem["label"] = {
+  mealLabelOptions: DxFormTypes.SimpleItem['label'] = {
     text: 'Meal Plan',
     location: 'top',
   };

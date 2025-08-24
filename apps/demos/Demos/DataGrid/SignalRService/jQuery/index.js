@@ -17,12 +17,12 @@ $(() => {
 
   const store = new DevExpress.data.CustomStore({
     load() {
-      return connection.invoke("getAllStocks");
+      return connection.invoke('getAllStocks');
     },
     key: 'symbol',
   });
 
-  connection.on("updateStockPrice", (data) => {
+  connection.on('updateStockPrice', (data) => {
     store.push([{ type: 'update', key: data.symbol, data }]);
   });
 

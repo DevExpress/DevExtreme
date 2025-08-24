@@ -34,7 +34,7 @@ export class DatesFormComponent {
     elementAttr: { id: 'datesPicker' },
   };
 
-  labelOptions: DxFormTypes.SimpleItem["label"] = {
+  labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }
