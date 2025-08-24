@@ -93,8 +93,8 @@ const holidays = [
 ];
 const ariaDescription = () => {
   const disabledDates = holidays
-    .filter(date => !isWeekend(date))
-    .map(date => new Date(date).toLocaleDateString('en-US', {
+    .filter((date) => !isWeekend(date))
+    .map((date) => new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',

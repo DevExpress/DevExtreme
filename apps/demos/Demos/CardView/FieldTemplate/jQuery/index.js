@@ -22,7 +22,7 @@ $(() => {
         dataField: 'Task_Priority',
         caption: 'Priority',
         fieldValueTemplate({ field: { value } }) {
-          const priority = priorities.find(p => p.id === value);
+          const priority = priorities.find((p) => p.id === value);
           return $('<div>').append(
             $('<div>').addClass('task__indicator'),
           )
@@ -49,7 +49,7 @@ $(() => {
         fieldValueTemplate({ field: { value } }) {
           return $('<button>')
             .addClass('task__link-button')
-            .text(employees.find(e => e.ID === value).Name);
+            .text(employees.find((e) => e.ID === value).Name);
         },
       },
       {

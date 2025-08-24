@@ -24,7 +24,7 @@ export class PriorityComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    const priority = this.priorities.find(p => p.id === this.priorityID);
+    const priority = this.priorities.find((p) => p.id === this.priorityID);
     this.text = priority.text;
     this.className = `priority priority--${priority.postfix}`;
   }

@@ -63,7 +63,7 @@ export class AppComponent {
   }
 
   normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
-    return changes.map(c => {
+    return changes.map((c) => {
       switch (c.type) {
         case 'insert':
           return {

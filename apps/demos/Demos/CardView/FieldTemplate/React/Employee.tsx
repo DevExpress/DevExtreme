@@ -7,7 +7,7 @@ interface EmployeeProps {
 
 const Employee = ({ employeeID }: EmployeeProps) => {
   const employee = useMemo<Employee>(() => {
-    return employees.find(e => e.ID === employeeID);
+    return employees.find((e) => e.ID === employeeID);
   }, [employeeID, employees]);
 
   return <button className='task__link-button'>{ employee.Name }</button>;

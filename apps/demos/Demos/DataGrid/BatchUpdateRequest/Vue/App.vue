@@ -56,7 +56,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 };
 
 function normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
-  return changes.map(c => {
+  return changes.map((c) => {
     switch (c.type) {
       case 'insert':
         return {

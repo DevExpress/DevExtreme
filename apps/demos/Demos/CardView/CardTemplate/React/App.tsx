@@ -6,7 +6,7 @@ import VehicleCard from './VehicleCard.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
 
 const getFormattedPrice = (card: any): string => {
-  const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+  const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
   return priceText?.text ?? '';
 };
 

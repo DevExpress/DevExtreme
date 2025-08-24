@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   getFormattedPrice(card: CardInfo): string {
-    const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+    const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
     return priceText?.text ?? '';
   }
 }

@@ -61,7 +61,7 @@ $(() => {
     const name = `${TrademarkName} ${Name}`;
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
-    const priceText = card.fields.find(f => f.column.dataField === 'Price')?.text;
+    const priceText = card.fields.find((f) => f.column.dataField === 'Price')?.text;
     const priceInfo = $('<div>').addClass('vehicle__price').text(priceText);
 
     const typeContainer = $('<div>').addClass('vehicle__type-container');
