@@ -45,7 +45,7 @@ $(() => {
       'Mobile_Phone',
       {
         dataField: 'Email',
-        fieldValueTemplate({ field: { value, text }}) {
+        fieldValueTemplate({ field: { value, text } }) {
           return $('<a>')
             .attr('href', `mailto:${value}`)
             .text(text);

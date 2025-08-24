@@ -45,7 +45,7 @@ export class AppComponent {
     return picture;
   }
 
-  calculateFullName({firstName, lastName}: Employee) {
+  calculateFullName({ firstName, lastName }: Employee) {
     return `${firstName} ${lastName}`;
   }
 

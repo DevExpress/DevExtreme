@@ -11,7 +11,7 @@ function imageExpr({ picture }: Employee) {
   return picture;
 }
 
-function calculateFullName({firstName, lastName}: Employee) {
+function calculateFullName({ firstName, lastName }: Employee) {
   return `${firstName} ${lastName}`;
 }
 

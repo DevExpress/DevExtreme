@@ -55,7 +55,7 @@ function CardFooterComponent() {
   </div>;
 }
 
-function StatusComponent({ data: { field: { value }}}) {
+function StatusComponent({ data: { field: { value } } }) {
   const classNameMap = {
     'Salaried': 'status--salaried',
     'Commission': 'status--commission',
@@ -72,7 +72,7 @@ function StatusComponent({ data: { field: { value }}}) {
   );
 }
 
-function EmailComponent({ data: { field: { value, text }}}) {
+function EmailComponent({ data: { field: { value, text } } }) {
   return (
     <a href={`mailto:${value}`}>{text}</a>
   );

@@ -46,7 +46,7 @@ $(() => {
       {
         dataField: 'Task_Assigned_Employee_ID',
         caption: 'Assigned to',
-        fieldValueTemplate({ field: { value }}) {
+        fieldValueTemplate({ field: { value } }) {
           return $('<button>')
             .addClass('task__link-button')
             .text(employees.find(e => e.ID === value).Name);
@@ -59,7 +59,7 @@ $(() => {
       {
         dataField: 'Task_Completion',
         caption: 'Completed',
-        fieldTemplate({ field: { value }}) {
+        fieldTemplate({ field: { value } }) {
           return $('<div>')
             .addClass('task__progress')
             .dxProgressBar({
