@@ -29,7 +29,7 @@ import DxPieChart, {
 } from 'devextreme-vue/pie-chart';
 
 withDefaults(defineProps<{
-  data?: {name: string, value: unknown}[]
+  data?: { name: string, value: unknown }[]
 }>(), {
   data: () => [],
 });

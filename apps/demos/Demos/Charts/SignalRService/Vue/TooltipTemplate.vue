@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   pointInfo: () => ({} as Record<string, any>),
 });
-const volume = computed<{value: number}>(() => props.pointInfo.points.filter(({ seriesName }) => seriesName === 'Volume')[0]);
+const volume = computed<{ value: number }>(() => props.pointInfo.points.filter(({ seriesName }) => seriesName === 'Volume')[0]);
 const prices = computed<Record<string, any>>(() => props.pointInfo.points.filter(({ seriesName }) => seriesName !== 'Volume')[0]);
 
 const formatCurrency = new Intl.NumberFormat('en-US',

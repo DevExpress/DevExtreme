@@ -14,7 +14,7 @@ $(() => {
       enabled: true,
       pageSize: 15,
     },
-    pager:{
+    pager: {
       visible: true,
     },
     headerFilter: {
