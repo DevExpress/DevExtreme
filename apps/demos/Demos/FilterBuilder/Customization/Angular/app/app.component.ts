@@ -39,13 +39,13 @@ export class AppComponent {
 
   dataSourceText: string;
 
-  fields: Array<string>;
+  fields: string[];
 
-  filter: Array<string[] | string>;
+  filter: (string[] | string)[];
 
   categories: string[];
 
-  customOperations: Array<typeof anyOfOperation> = [anyOfOperation];
+  customOperations: typeof anyOfOperation[] = [anyOfOperation];
 
   groupOperations = ['and', 'or'];
 

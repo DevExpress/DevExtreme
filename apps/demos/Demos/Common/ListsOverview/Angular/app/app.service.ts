@@ -18,7 +18,7 @@ export class Hotel {
 
   Price: number;
 
-  Images: Array<any>;
+  Images: any[];
 }
 
 const data: Hotel[] = [{
