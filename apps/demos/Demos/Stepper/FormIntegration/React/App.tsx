@@ -116,25 +116,30 @@ export default function App() {
     setSelectedIndex(component.option('selectedIndex') ?? 0);
   }, []);
 
-  const renderDatesForm = useCallback(() => {
-    return <DatesForm formData={formData} validationGroup={validationGroups[0]} />;
-  }, [formData]);
+  const renderDatesForm = useCallback(
+    () => <DatesForm formData={formData} validationGroup={validationGroups[0]} />,
+    [formData]
+  );
 
-  const renderGuestsForm = useCallback(() => {
-    return <GuestsForm formData={formData} validationGroup={validationGroups[1]} />;
-  }, [formData]);
+  const renderGuestsForm = useCallback(
+    () => <GuestsForm formData={formData} validationGroup={validationGroups[1]} />,
+    [formData]
+  );
 
-  const renderRoomMealPlanForm = useCallback(() => {
-    return <RoomMealPlanForm formData={formData} validationGroup={validationGroups[2]} />;
-  }, [formData]);
+  const renderRoomMealPlanForm = useCallback(
+    () => <RoomMealPlanForm formData={formData} validationGroup={validationGroups[2]} />,
+    [formData]
+  );
 
-  const renderAdditionalForm = useCallback(() => {
-    return <AdditionalForm formData={formData} />;
-  }, [formData]);
+  const renderAdditionalForm = useCallback(
+    () => <AdditionalForm formData={formData} />,
+    [formData]
+  );
 
-  const renderConfirmation = useCallback(() => {
-    return <Confirmation formData={formData} isConfirmed={isConfirmed} />;
-  }, [formData, isConfirmed]);
+  const renderConfirmation = useCallback(
+    () => <Confirmation formData={formData} isConfirmed={isConfirmed} />,
+    [formData, isConfirmed]
+  );
 
   return (
     <>

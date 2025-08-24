@@ -165,9 +165,7 @@ $(() => {
       searchPanel: {
         visible: true,
       },
-      cardTemplate: (info) => {
-        return createVehicleCard(info.card);
-      },
+      cardTemplate: (info) => createVehicleCard(info.card),
     });
   });
 });

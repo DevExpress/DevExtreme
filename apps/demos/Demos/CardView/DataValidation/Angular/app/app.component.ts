@@ -62,9 +62,7 @@ export class AppComponent {
     return result;
   };
 
-  hireDateValidationCallback = (params) => {
-    return new Date(params.value) > new Date(params.data.birthDate);
-  };
+  hireDateValidationCallback = (params) => new Date(params.value) > new Date(params.data.birthDate);
 }
 
 @NgModule({
