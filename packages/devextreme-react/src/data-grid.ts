@@ -622,7 +622,7 @@ const ColumnChooserSelection = Object.assign<typeof _componentColumnChooserSelec
 });
 
 // owners:
-// DataGrid
+// DataGrid test
 type IColumnFixingProps = React.PropsWithChildren<{
   enabled?: boolean;
   icons?: Record<string, any> | {
