@@ -43,7 +43,7 @@ AspNet.makeMetadata({
     }),
     addMember({
       uid: 'ui/popover:dxPopoverOptions.toolbarItems',
-      types: [types.array(types.memberRef('ui/popover:ToolbarItem'))],
+      types: [types.array(types.uidRef('ui/popover:ToolbarItem'))],
     }),
     removeMembers(/ui\/scheduler:ToolbarItem\.options/),
   ],
