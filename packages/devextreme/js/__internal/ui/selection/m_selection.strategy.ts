@@ -26,8 +26,6 @@ export default class SelectionStrategy<
   _lastSelectAllPageDeferred = Deferred().reject();
 
   constructor(options: SelectionOptions<TItem, TKey>) {
-    // eslint-disable-next-line no-console
-    console.log('i tried so hard and got');
     this.options = options;
 
     this._setOption('disabledItemKeys', []);
