@@ -62,7 +62,8 @@
         :modification="Modification"
         :body-style-name="BodyStyleName"
         :horsepower="Horsepower"
-        @show-info="showInfo"/>
+        @show-info="showInfo"
+/>
     </template>
   </DxCardView>
   <DxPopup
