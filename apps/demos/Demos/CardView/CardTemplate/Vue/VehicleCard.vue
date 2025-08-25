@@ -8,7 +8,10 @@
       >
     </div>
     <div class="vehicle__info">
-      <div class="vehicle__name" :title="`${model}`">
+      <div
+        class="vehicle__name"
+        :title="`${model}`"
+      >
         {{ model }}
       </div>
       <div class="vehicle__price">

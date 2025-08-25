@@ -33,8 +33,20 @@
         data-type="date"
       />
       <template #dataRowTemplate="{ data: rowInfo }">
-        <tr class="main-row" role="row">
-          <td rowspan="2" role="gridcell"><img :src="rowInfo.data.Picture" :alt="`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`" tabindex="0"></td>
+        <tr
+          class="main-row"
+          role="row"
+        >
+          <td
+            rowspan="2"
+            role="gridcell"
+          >
+            <img
+              :src="rowInfo.data.Picture"
+              :alt="`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`"
+              tabindex="0"
+            >
+          </td>
           <td role="gridcell">{{ rowInfo.data.Prefix }}</td>
           <td role="gridcell">{{ rowInfo.data.FirstName }}</td>
           <td role="gridcell">{{ rowInfo.data.LastName }}</td>
@@ -42,8 +54,16 @@
           <td role="gridcell">{{ formatDate(new Date(rowInfo.data.BirthDate)) }}</td>
           <td role="gridcell">{{ formatDate(new Date(rowInfo.data.HireDate)) }}</td>
         </tr>
-        <tr class="notes-row" role="row">
-          <td colspan="6" role="gridcell"><div>{{ rowInfo.data.Notes }}</div></td>
+        <tr
+          class="notes-row"
+          role="row"
+        >
+          <td
+            colspan="6"
+            role="gridcell"
+          >
+            <div>{{ rowInfo.data.Notes }}</div>
+          </td>
         </tr>
       </template>
     </DxDataGrid>

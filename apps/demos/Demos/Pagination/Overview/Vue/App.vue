@@ -1,12 +1,15 @@
 <template>
   <div
-    class="employees" 
+    class="employees"
     :class="{
       'employees--forth': pageSize === 4,
       'employees--six': pageSize === 6,
     }"
   >
-    <div class="employees__card" v-for="employee in pageEmployees">
+    <div
+      class="employees__card"
+      v-for="employee in pageEmployees"
+    >
       <div class="employees__img-wrapper">
         <img
           class="employees__img"

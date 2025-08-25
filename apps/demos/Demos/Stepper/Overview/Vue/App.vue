@@ -7,7 +7,10 @@
           :key="config.id"
           class="stepper-wrapper"
         >
-          <div :id="config.labelId" class="stepper-label">
+          <div
+            :id="config.labelId"
+            class="stepper-label"
+          >
             {{ config.title }}
           </div>
           <DxStepper

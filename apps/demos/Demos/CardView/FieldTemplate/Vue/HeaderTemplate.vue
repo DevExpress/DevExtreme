@@ -1,5 +1,8 @@
 <template>
-  <div className="task__header" :title="text">
+  <div
+    className="task__header"
+    :title="text"
+  >
     {{ text }}
   </div>
 </template>
