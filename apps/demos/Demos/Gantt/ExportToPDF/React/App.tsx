@@ -45,7 +45,7 @@ class App extends React.Component {
 
   dateRangeBoxSelectionChanged: ISelectBoxOptions['onValueChanged'];
 
-  onLandscapeCheckBoxChanged: ICheckBoxOptions['onValueChanged'] ;
+  onLandscapeCheckBoxChanged: ICheckBoxOptions['onValueChanged'];
 
   startTaskIndexValueChanged: INumberBoxOptions['onValueChanged'];
 
