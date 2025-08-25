@@ -103,7 +103,8 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
         const textHeight = doc.getTextDimensions(pdfCell.text).h;
         doc.textWithLink('website',
           options.rect.x + pdfCell.padding.left,
-          options.rect.y + options.rect.h / 2 + textHeight / 2, { url: pdfCell.text });
+          options.rect.y + options.rect.h / 2 + textHeight / 2,
+          { url: pdfCell.text });
       }
     },
   }).then(() => {
