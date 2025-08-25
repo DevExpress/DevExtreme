@@ -109,7 +109,7 @@ function onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.
 
   if (extension) {
     updated = createFile(extension, fileSystemItem);
-  } else if (category !== undefined) {
+  } else if (category !== undefined && fileSystemItem) {
     updated = updateCategory(category, fileSystemItem, viewArea);
   }
 
@@ -145,7 +145,7 @@ function createFile(fileExtension: string, directory: any = fileManager.value.in
   return true;
 }
 function updateCategory(newCategory: string, directory: FileSystemItem, viewArea: string) {
-  let items: FileSystemItem[] = null;
+  let items: FileSystemItem[] = [];
 
   if (viewArea === 'navPane') {
     items = [directory];

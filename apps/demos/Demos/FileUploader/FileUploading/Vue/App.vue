@@ -75,7 +75,7 @@ const fileTypesSource = [
 const files = ref<File[]>([]);
 
 function onValueChanged(e: DxFileUploaderTypes.ValueChangedEvent) {
-  files.value = e.value;
+  files.value = e.value || [];
 }
 
 function onFileTypeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {

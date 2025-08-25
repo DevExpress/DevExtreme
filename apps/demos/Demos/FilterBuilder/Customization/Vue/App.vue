@@ -42,7 +42,7 @@ const groupOperations: DxFilterBuilderTypes.GroupOperation[] = ['and', 'or'];
 const dataSourceText = ref('');
 
 function updateTexts(e: DxFilterBuilderTypes.ValueChangedEvent) {
-  filterText.value = formatValue(e.component.option('value'));
+  filterText.value = formatValue(e.component.option('value') || '');
   dataSourceText.value = formatValue(e.component.getFilterExpression());
 }
 function calculateFilterExpression(filterValue: any, field: any) {

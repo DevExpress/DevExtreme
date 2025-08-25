@@ -74,7 +74,7 @@ const checkBoxOptions = {
   text: 'Show Address',
   value: true,
   onValueChanged: (e: DxCheckBoxTypes.ValueChangedEvent) => {
-    isHomeAddressVisible.value = e.component.option('value');
+    isHomeAddressVisible.value = !!e.component.option('value');
   },
 };
 const addPhoneButtonOptions = {

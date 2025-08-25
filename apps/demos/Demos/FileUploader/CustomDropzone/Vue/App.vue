@@ -69,7 +69,7 @@ function onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTy
     const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
     const isSingleFileDragged = items.length === 1;
-    const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+    const isValidFileExtension = !!allowedFileExtensions?.includes(draggedFileExtension);
 
     if (isSingleFileDragged && isValidFileExtension) {
       isDropZoneActive.value = true;

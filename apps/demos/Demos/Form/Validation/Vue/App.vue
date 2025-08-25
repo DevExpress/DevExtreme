@@ -186,7 +186,7 @@ import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import service from './data.ts';
 
-const formInstance = ref(null);
+const formInstance = ref<typeof DxForm['instance']>();
 const customer = ref(service.getCustomer());
 const registerButtonOptions = ref({
   text: 'Register',
@@ -301,8 +301,8 @@ function saveFormInstance(e: DxFormTypes.InitializedEvent) {
   formInstance.value = e.component;
 }
 function changePasswordMode(name: string) {
-  const editor = formInstance.value.getEditor(name);
-  editor.option(
+  const editor = formInstance.value?.getEditor?.(name);
+  editor?.option(
     'mode',
     editor.option('mode') === 'text' ? 'password' : 'text',
   );

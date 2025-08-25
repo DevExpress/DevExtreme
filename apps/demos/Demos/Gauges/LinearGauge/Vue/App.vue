@@ -6,7 +6,7 @@
     <div id="gauge-demo">
       <DxLinearGauge
         id="temperatureGauge"
-        :value="value.data.temperature"
+        :value="value?.data.temperature"
         class="gauge-element"
       >
         <DxTitle
@@ -40,7 +40,7 @@
       </DxLinearGauge>
       <DxLinearGauge
         id="humidityGauge"
-        :value="value.data.humidity"
+        :value="value?.data.humidity"
         class="gauge-element"
       >
         <DxTitle
@@ -68,7 +68,7 @@
       </DxLinearGauge>
       <DxLinearGauge
         id="pressureGauge"
-        :value="value.data.pressure"
+        :value="value?.data.pressure"
         class="gauge-element"
       >
         <DxTitle

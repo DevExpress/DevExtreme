@@ -3,8 +3,8 @@
     <div id="gauge-demo">
       <DxLinearGauge
         id="gauge"
-        :value="value.primary"
-        :subvalues="value.secondary"
+        :value="value?.primary"
+        :subvalues="value?.secondary"
       >
         <DxScale
           :start-value="0"

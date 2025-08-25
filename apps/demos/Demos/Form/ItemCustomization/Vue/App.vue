@@ -138,7 +138,7 @@ const validationRules: Record<string, ValidationRule[]> = {
 };
 const nameEditorOptions = { disabled: true };
 const positionEditorOptions = { items: positions, searchEnabled: true, value: '' };
-const hireDateEditorOptions = { width: '100%', value: null as Date };
+const hireDateEditorOptions = { width: '100%', value: null };
 const birthDateEditorOptions = { width: '100%', disabled: true };
 const notesEditorOptions = { height: 90, maxLength: 200 };
 const phoneEditorOptions = { mask: '+1 (X00) 000-0000', maskRules: { X: /[02-9]/ } };

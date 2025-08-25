@@ -3,8 +3,8 @@
     <div id="gauge-demo">
       <DxCircularGauge
         id="gauge"
-        :value="value.mean"
-        :subvalues="[value.min, value.max]"
+        :value="value?.mean"
+        :subvalues="[value?.min, value?.max]"
       >
         <DxScale
           :start-value="10"
