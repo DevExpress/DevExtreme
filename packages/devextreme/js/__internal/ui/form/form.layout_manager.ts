@@ -23,6 +23,7 @@ import { getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
 import type { EventInfo } from '@js/events';
 import type { Properties as ButtonProperties, Properties } from '@js/ui/button';
 import type {
+  ButtonItem,
   FieldDataChangedEvent,
   FormItemComponent, Item, SimpleItem, TabbedItem,
 } from '@js/ui/form';
@@ -684,9 +685,61 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     return result;
   }
 
+  private _handleSmartPasteClick(): void {
+    const form = this._getFormOrThis();
+    // @ts-expect-error
+    form?.smartPaste();
+  }
+
+  private _handleResetClick(): void {
+    const form = this._getFormOrThis();
+    // @ts-expect-error
+    form?.reset();
+  }
+
+  private _configureDefaultButton(item: ButtonItem): void {
+    if (!item.name) {
+      return;
+    }
+
+    const buttonConfigs = {
+      smartPaste: {
+        icon: 'sparkle',
+        text: 'Smart Paste',
+        type: 'default',
+        onClick: (): void => {
+          this._handleSmartPasteClick();
+        },
+      },
+      reset: {
+        icon: 'refresh',
+        text: 'Reset',
+        onClick: (): void => {
+          this._handleResetClick();
+        },
+      },
+      submit: {
+        text: 'Submit',
+        type: 'default',
+        useSubmitBehavior: true,
+      },
+    };
+
+    const config = buttonConfigs[item.name];
+    if (config) {
+      item.buttonOptions = {
+        ...config,
+        ...item.buttonOptions ?? {},
+      };
+    }
+  }
+
   _renderButtonItem(info: TemplatesInfo): void {
     const { item, $parent, rootElementCssClassList } = info;
     const { validationGroup } = this.option();
+
+    this._configureDefaultButton(item);
+
     const { $rootElement, buttonInstance } = renderButtonItem({
       item,
       $parent,
@@ -828,6 +881,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _getFormOrThis(): Form | LayoutManager {
     const { form } = this.option();
+
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return form || this;
   }
