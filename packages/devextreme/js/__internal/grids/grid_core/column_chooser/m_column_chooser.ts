@@ -392,25 +392,45 @@ export class ColumnChooserView extends ColumnsView {
     this._columnChooserList.endUpdate();
   }
 
-  protected _columnOptionChanged(e) {
-    super._columnOptionChanged(e);
+  protected _columnOptionChanged(changes): void {
+    super._columnOptionChanged(changes);
 
+    const { optionNames } = changes;
     const isSelectMode = this.isSelectMode();
+    const onlyVisibleChanged = this.isColumnVisibilityOnlyUpdated(optionNames);
+    const isOnlyColumnVisibilityUpdated = this._isUpdatingColumnVisibility
+      && onlyVisibleChanged;
 
-    if (isSelectMode && this._columnChooserList && !this._isUpdatingColumnVisibility) {
-      const { optionNames } = e;
-      const onlyVisibleChanged = optionNames.visible && optionNames.length === 1;
-      const columnIndices = isDefined(e.columnIndex) ? [e.columnIndex] : e.columnIndices;
-      const needUpdate = COLUMN_OPTIONS_USED_IN_ITEMS.some((optionName) => optionNames[optionName]) || (e.changeTypes.columns && optionNames.all);
-
-      if (needUpdate) {
-        this._updateItemsSelection(columnIndices);
-
-        if (!onlyVisibleChanged) {
-          this._updateItems();
-        }
-      }
+    if (!isSelectMode || !this._columnChooserList || isOnlyColumnVisibilityUpdated) {
+      return;
     }
+
+    const columnIndices = isDefined(changes.columnIndex)
+      ? [changes.columnIndex]
+      : changes.columnIndices;
+    const hasItemsOptionNames = COLUMN_OPTIONS_USED_IN_ITEMS
+      .some((optionName) => optionNames[optionName]);
+    const needUpdate: boolean = hasItemsOptionNames
+      || (changes.changeTypes.columns && optionNames.all);
+
+    if (!needUpdate) {
+      return;
+    }
+
+    this._updateItemsSelection(columnIndices);
+    if (!onlyVisibleChanged) {
+      this._updateItems();
+    }
+  }
+
+  private isColumnVisibilityOnlyUpdated(
+    optionNames: { length: number } & Record<string, unknown>,
+  ): boolean {
+    const optionKeys = Object
+      .keys(optionNames ?? {})
+      .filter((key) => key !== 'length');
+
+    return optionKeys.length === 1 && optionKeys[0] === 'visible';
   }
 
   public getColumnElements() {
