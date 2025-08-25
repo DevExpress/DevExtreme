@@ -109,6 +109,23 @@ export type TranslateCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type FieldInfo = {
+  name: string;
+  format: string;
+  instruction?: string;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SmartPasteCommandParams = {
+  text: string;
+  fields: FieldInfo[];
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type ChangeStyleCommandResult = string;
 
 /**
@@ -145,6 +162,14 @@ export type SummarizeCommandResult = string;
  * @namespace DevExpress.aiIntegration
  */
 export type TranslateCommandResult = string;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type SmartPasteCommandResult = Array<{
+  name: string;
+  value: string | string[];
+}>;
 
 /**
  * @namespace DevExpress.aiIntegration
@@ -211,4 +236,8 @@ export class AIIntegration {
    * @publicName translate(params, callbacks)
    */
   translate(params: TranslateCommandParams, callbacks: RequestCallbacks<TranslateCommandResult>): () => void;
+  /**
+   * @publicName smartPaste(params, callbacks)
+   */
+  smartPaste(params: SmartPasteCommandParams, callbacks: RequestCallbacks<SmartPasteCommandResult>): () => void;
 }

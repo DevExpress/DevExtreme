@@ -14,6 +14,8 @@ import type {
   RequestCallbacks,
   ShortenCommandParams,
   ShortenCommandResult,
+  SmartPasteCommandParams,
+  SmartPasteCommandResult,
   SummarizeCommandParams,
   SummarizeCommandResult,
   TranslateCommandParams,
@@ -27,6 +29,7 @@ import {
   ExpandCommand,
   ProofreadCommand,
   ShortenCommand,
+  SmartPasteCommand,
   SummarizeCommand,
   TranslateCommand,
 } from '@ts/core/ai_integration/commands/index';
@@ -42,6 +45,7 @@ export const enum CommandNames {
   Shorten = 'shorten',
   Summarize = 'summarize',
   Translate = 'translate',
+  SmartPaste = 'smartPaste',
 }
 
 export const COMMANDS = {
@@ -53,6 +57,7 @@ export const COMMANDS = {
   [CommandNames.Shorten]: ShortenCommand,
   [CommandNames.Summarize]: SummarizeCommand,
   [CommandNames.Translate]: TranslateCommand,
+  [CommandNames.SmartPaste]: SmartPasteCommand,
 } as const;
 
 export interface CommandDefinition<TParams, TResult> {
@@ -70,6 +75,7 @@ export interface Commands {
   [CommandNames.Shorten]: CommandDefinition<ShortenCommandParams, ShortenCommandResult>;
   [CommandNames.Summarize]: CommandDefinition<SummarizeCommandParams, SummarizeCommandResult>;
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
+  [CommandNames.SmartPaste]: CommandDefinition<SmartPasteCommandParams, SmartPasteCommandResult>;
 }
 
 export class AIIntegration implements IAIIntegration {
@@ -91,8 +97,9 @@ export class AIIntegration implements IAIIntegration {
     callbacks: RequestCallbacks<Commands[K]['result']>,
   ): () => void {
     type Command = BaseCommand<Commands[K]['params'], Commands[K]['result']>;
+    type CommandInstance = Commands[K]['command'];
 
-    let command = this.commands.get(commandName) as Command | undefined;
+    let command = this.commands.get(commandName) as CommandInstance | undefined;
 
     if (!command) {
       const Command = COMMANDS[commandName];
@@ -102,7 +109,7 @@ export class AIIntegration implements IAIIntegration {
       this.commands.set(commandName, command);
     }
 
-    return command.execute(params, callbacks);
+    return (command as Command).execute(params, callbacks);
   }
 
   public changeStyle(
@@ -188,6 +195,17 @@ export class AIIntegration implements IAIIntegration {
   ): () => void {
     return this.executeCommand(
       CommandNames.Translate,
+      params,
+      callbacks,
+    );
+  }
+
+  public smartPaste(
+    params: SmartPasteCommandParams,
+    callbacks: RequestCallbacks<SmartPasteCommandResult>,
+  ): () => void {
+    return this.executeCommand(
+      CommandNames.SmartPaste,
       params,
       callbacks,
     );
