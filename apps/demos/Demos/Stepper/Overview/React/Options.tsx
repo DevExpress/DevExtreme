@@ -10,10 +10,10 @@ interface OptionsProps {
   navigationMode: boolean,
   selectOnFocus: boolean,
   rtlMode: boolean,
-  onOrientationClick(e: ButtonGroupTypes.ItemClickEvent): void;
-  onNavigationModeClick(e: ButtonGroupTypes.ItemClickEvent): void;
-  onSelectOnFocusChanged(e: CheckBoxTypes.ValueChangedEvent): void;
-  onRtlModeChanged(e: CheckBoxTypes.ValueChangedEvent): void;
+  onOrientationClick: (e: ButtonGroupTypes.ItemClickEvent) => void;
+  onNavigationModeClick: (e: ButtonGroupTypes.ItemClickEvent) => void;
+  onSelectOnFocusChanged: (e: CheckBoxTypes.ValueChangedEvent) => void;
+  onRtlModeChanged: (e: CheckBoxTypes.ValueChangedEvent) => void;
 }
 
 export default function Options({
