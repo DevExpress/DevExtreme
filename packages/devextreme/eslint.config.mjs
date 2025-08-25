@@ -561,7 +561,15 @@ export default [
                     leadingUnderscore: 'allow',
                 },
             ],
+            'devextreme-custom/no-deferred': 'error',
             'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
+        },
+    },
+    // Allow Deferred in m_* scheduler files only
+    {
+        files: ['js/__internal/scheduler/**/m_*.ts?(x)'],
+        rules: {
+            'devextreme-custom/no-deferred': 'off',
         },
     },
     // Rules for grid controls
