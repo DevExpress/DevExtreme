@@ -45,7 +45,8 @@ export class SelectionController {
 
   private readonly selectionOption: ReadonlySignal<SelectionOptions> = this.options.oneWay('selection');
 
-  private readonly selectionHelper: ReadonlySignal<Selection | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly selectionHelper: ReadonlySignal<Selection<any, any, false> | undefined>;
 
   private readonly _isCheckBoxesRendered = signal<boolean>(false);
 
@@ -365,7 +366,7 @@ export class SelectionController {
   }
 
   public getSelectedCardsData(): DataObject[] {
-    // @ts-expect-error selectedItems can return a promise for deferred selection
+    // @ts-expect-error undefined is not assignable to DataObject[]
     return this.selectionHelper?.peek()?.getSelectedItems();
   }
 

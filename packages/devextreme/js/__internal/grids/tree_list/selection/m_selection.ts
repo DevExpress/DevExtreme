@@ -543,7 +543,8 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
     const selectedRowsData: any[] = [];
 
-    // @ts-expect-error if _selection is deferred, then selectedKeys will be a Promise
+    // @ts-expect-error selection may be deferred only in DataGrid,
+    // we need to improve GridCore types to take it into account
     selectedKeys.forEach((key) => {
       // @ts-expect-error
       const node = dataController.getNodeByKey(key);
