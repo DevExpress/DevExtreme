@@ -65,7 +65,7 @@ export const data:Data[] = [{
   endDate: '2021-04-27T10:35:00.000Z',
 }];
 
-export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki', 'Europe/Madrid'];
+export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki'];
 
 @Injectable()
 export class Service {
