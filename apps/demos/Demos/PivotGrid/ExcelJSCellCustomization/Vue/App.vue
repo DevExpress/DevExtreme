@@ -28,7 +28,7 @@ import { Workbook } from 'devextreme-exceljs-fork';
 // We recommend that you use the official 'file-saver' package in your applications.
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
-import { exportPivotGrid } from 'devextreme/excel_exporter';
+import { exportPivotGrid, type PivotGridCell } from 'devextreme-vue/common/export/excel';
 import { sales } from './data.ts';
 
 interface ConditionalAppearance {
@@ -70,8 +70,8 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   exportPivotGrid({
     component: e.component,
     worksheet,
-    customizeCell: ({ pivotCell, excelCell }: { pivotCell: DxPivotGridTypes.Cell, excelCell: any}) => {
-      if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
+    customizeCell: ({ pivotCell, excelCell }: { pivotCell?: PivotGridCell, excelCell?: any }) => {
+      if (pivotCell && (isDataCell(pivotCell) || isTotalCell(pivotCell))) {
         const appearance = getConditionalAppearance(pivotCell);
         Object.assign(excelCell, getExcelCellFormat(appearance));
       }
@@ -91,7 +91,7 @@ function onExporting(e: DxPivotGridTypes.ExportingEvent) {
   });
 }
 function onCellPrepared({ cell, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
-  if (isDataCell(cell) || isTotalCell(cell)) {
+  if (cell && cellElement && (isDataCell(cell) || isTotalCell(cell))) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));
   }
