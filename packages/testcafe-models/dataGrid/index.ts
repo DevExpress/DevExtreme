@@ -231,7 +231,7 @@ export default class DataGrid extends Widget {
 
   getFilterEditor<T>(
     columnIndex: number,
-    EditorType: new(mainElement: Selector) => T,
+    EditorType: new (mainElement: Selector) => T,
   ): T {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
@@ -659,7 +659,7 @@ export default class DataGrid extends Widget {
     const { getInstance } = this;
     return ClientFunction(
       () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => {});
+        (getInstance() as DataGridInstance).refresh().catch(() => { });
       },
       { dependencies: { getInstance } },
     )();
@@ -718,6 +718,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiAddColumn(config: any): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).addColumn(config),
+      { dependencies: { getInstance, config } },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -739,7 +748,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -919,10 +928,10 @@ export default class DataGrid extends Widget {
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
-        () => {
-          (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-        },
-        { dependencies: { getInstance, sensitivity } },
+      () => {
+        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
+      },
+      { dependencies: { getInstance, sensitivity } },
     )();
   }
 }
