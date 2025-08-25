@@ -52,7 +52,7 @@ import {
 export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
     /**
      * @docid
-     * @type basePointObject
+     * @type object
      */
     readonly target: TPoint;
 }
@@ -64,7 +64,7 @@ export interface PointInteractionInfo<TPoint extends basePointObject = basePoint
 export interface TooltipInfo<TPoint extends basePointObject = basePointObject> {
     /**
      * @docid _viz_chart_components_base_chart_TooltipInfo.target
-     * @type basePointObject|dxChartAnnotationConfig|any
+     * @type object
      */
     target?: TPoint | dxChartAnnotationConfig | any;
 }
