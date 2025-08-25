@@ -91,9 +91,9 @@ const currentVehicle = ref<Vehicle | undefined>();
 
 function getPriceText(
   fields?: Array<{ column?: { dataField?: string }, text?: string }>,
-): string | undefined {
+): string {
   const priceField = fields?.find((field) => field?.column?.dataField === 'Price');
-  return priceField?.text;
+  return priceField?.text || '';
 }
 
 function showInfo(vehicle: Vehicle) {
