@@ -89,7 +89,7 @@ const nativeDOMAdapterStrategy: DomAdapter = {
     return context.createTextNode(text);
   },
 
-  createAttribute(text, context) {
+  createAttribute(text: string, context?: Document) {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     context = context || this._document;
     // @ts-expect-error
