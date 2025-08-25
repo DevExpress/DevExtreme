@@ -341,24 +341,24 @@ export default class DeferredStrategy<
       return filterIndex;
     }
 
-    const filtersWithConditions = selectionFilter
-      .filter((filterItem) => Array.isArray(filterItem) && filterItem.length > 2);
-    for (let i = 0; i < filtersWithConditions.length; i += 1) {
-      const innerFilterIndex = this._removeSameFilter(
-        filtersWithConditions[i],
-        sameFilter,
-        false,
-        isSelectAll,
-      );
-
-      if (innerFilterIndex >= 0) {
-        if (!filtersWithConditions[i].length) {
-          this._removeFilterByIndex(filtersWithConditions, i, isSelectAll);
-        } else if (filtersWithConditions[i].length === 1) {
-          const [firstFilter] = filtersWithConditions[i];
-          filtersWithConditions[i] = firstFilter;
+    for (let i = 0; i < selectionFilter.length; i += 1) {
+      if (Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2) {
+        const innerFilterIndex = this._removeSameFilter(
+          selectionFilter[i],
+          sameFilter,
+          false,
+          isSelectAll,
+        );
+        if (innerFilterIndex >= 0) {
+          // eslint-disable-next-line max-depth
+          if (!selectionFilter[i].length) {
+            this._removeFilterByIndex(selectionFilter, i, isSelectAll);
+          } else if (selectionFilter[i].length === 1) {
+            const [firstFilter] = selectionFilter[i];
+            selectionFilter[i] = firstFilter;
+          }
+          return innerFilterIndex;
         }
-        return innerFilterIndex;
       }
     }
     return -1;
