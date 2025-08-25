@@ -86,8 +86,8 @@ class SchedulerAppointments extends CollectionWidget {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataProvider() {
-    return this.option('getAppointmentDataProvider')();
+  get appointmentDataSource() {
+    return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -183,7 +183,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   private _getNavigatableItems(): dxElementWrapper {
     // @ts-expect-error
-    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
+    const appts = this._itemElements().not('.dx-state-disabled');
     // @ts-expect-error
     const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
     return appts.add(apptCollectors);
@@ -246,7 +246,7 @@ class SchedulerAppointments extends CollectionWidget {
   ): ViewModelDiff[] {
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
-    const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
     diff
       .filter((item) => !isNeedToAdd(item))
       .forEach((item, index) => {
@@ -638,7 +638,6 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentAgendaViewModel,
   ): void {
-    const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
     const config: any = {
       data: settings.itemData,
@@ -646,12 +645,8 @@ class SchedulerAppointments extends CollectionWidget {
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
       notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
-      direction: settings.direction || 'vertical',
       allowResize: false,
       allowDrag: false,
-      allDay,
-      cellWidth: this.invoke('getCellWidth'),
-      cellHeight: this.invoke('getCellHeight'),
       groups: this.option('groups'),
 
       dataAccessors: this.option('dataAccessors'),

@@ -17,6 +17,7 @@ import type { Message, TextMessage, User } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { getPublicElement } from '@ts/core/m_element';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import ContextMenu from '@ts/ui/context_menu/context_menu';
@@ -64,6 +65,10 @@ const ESCAPE_KEY = 'escape';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export type MessageTemplate = ((data: Message, messageBubbleContainer: Element) => void) | null;
+export type EmptyViewTemplate = ((
+  data: { message: string; prompt: string },
+  emptyViewContainer: Element) => void
+) | null;
 
 export type ItemClick = NativeEventInfo<ContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & {
   readonly itemData?: ContextMenuItem;
@@ -88,6 +93,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   messageTemplate?: MessageTemplate;
+  emptyViewTemplate?: EmptyViewTemplate;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
   typingUsers: User[];
@@ -131,6 +137,7 @@ class MessageList extends Widget<Properties> {
       showAvatar: true,
       showUserName: true,
       showMessageTimestamp: true,
+      emptyViewTemplate: null,
       messageTemplate: null,
     };
   }
@@ -198,22 +205,33 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderEmptyViewContent(): void {
+    const messageText = messageLocalization.format('dxChat-emptyListMessage');
+    const promptText = messageLocalization.format('dxChat-emptyListPrompt');
+    const { emptyViewTemplate } = this.option();
+
     const $emptyView = $('<div>')
       .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
       .attr('id', `dx-${new Guid()}`);
+
+    if (emptyViewTemplate) {
+      const data = {
+        message: messageText,
+        prompt: promptText,
+      };
+      emptyViewTemplate(data, getPublicElement($emptyView));
+      $emptyView.appendTo(this._$content);
+
+      return;
+    }
 
     $('<div>')
       .appendTo($emptyView)
       .addClass(CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS);
 
-    const messageText = messageLocalization.format('dxChat-emptyListMessage');
-
     $('<div>')
       .appendTo($emptyView)
       .addClass(CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS)
       .text(messageText);
-
-    const promptText = messageLocalization.format('dxChat-emptyListPrompt');
 
     $('<div>')
       .appendTo($emptyView)
@@ -527,7 +545,7 @@ class MessageList extends Widget<Properties> {
     const $lastMessageGroup = this._$content.find(`.${CHAT_MESSAGEGROUP_CLASS}`).last();
 
     if ($lastMessageGroup.length) {
-      return MessageGroup.getInstance($lastMessageGroup) as MessageGroup;
+      return MessageGroup.getInstance($lastMessageGroup);
     }
 
     return undefined;
@@ -809,6 +827,7 @@ class MessageList extends Widget<Properties> {
       case 'showUserName':
       case 'showMessageTimestamp':
       case 'messageTemplate':
+      case 'emptyViewTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':
         this._invalidate();

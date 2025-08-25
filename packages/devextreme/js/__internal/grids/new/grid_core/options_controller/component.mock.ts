@@ -1,5 +1,5 @@
 import { Component } from '@js/core/component';
-import { signal } from '@preact/signals-core';
+import { signal } from '@ts/core/state_manager/index';
 import { extend } from '@ts/core/utils/m_extend';
 
 // NOTE: We cannot modify the base "_getDefaultOptions" method with Component base class params

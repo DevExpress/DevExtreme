@@ -194,6 +194,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.emptyViewTemplate]
+    
+     */
+    @Input()
+    get emptyViewTemplate(): any {
+        return this._getOption('emptyViewTemplate');
+    }
+    set emptyViewTemplate(value: any) {
+        this._setOption('emptyViewTemplate', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.focusStateEnabled]
     
      */
@@ -570,6 +583,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() emptyViewTemplateChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -769,6 +789,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'disabledChange' },
             { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'emptyViewTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },

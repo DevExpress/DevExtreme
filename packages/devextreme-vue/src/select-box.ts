@@ -8,6 +8,7 @@ import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
+ FieldAddons,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  TextEditorButton,
@@ -109,6 +110,7 @@ type AccessibleOptions = Pick<Properties,
   "dropDownButtonTemplate" |
   "dropDownOptions" |
   "elementAttr" |
+  "fieldAddons" |
   "fieldTemplate" |
   "focusStateEnabled" |
   "grouped" |
@@ -198,6 +200,7 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
+    fieldAddons: Object as PropType<FieldAddons | Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
     grouped: Boolean,
@@ -283,6 +286,7 @@ const componentConfig = {
     "update:dropDownButtonTemplate": null,
     "update:dropDownOptions": null,
     "update:elementAttr": null,
+    "update:fieldAddons": null,
     "update:fieldTemplate": null,
     "update:focusStateEnabled": null,
     "update:grouped": null,
@@ -364,6 +368,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       button: { isCollectionItem: true, optionName: "buttons" },
       dropDownOptions: { isCollectionItem: false, optionName: "dropDownOptions" },
+      fieldAddons: { isCollectionItem: false, optionName: "fieldAddons" },
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
@@ -594,6 +599,25 @@ const DxDropDownOptions = defineComponent(DxDropDownOptionsConfig);
   position: { isCollectionItem: false, optionName: "position" },
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
+
+const DxFieldAddonsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:afterTemplate": null,
+    "update:beforeTemplate": null,
+  },
+  props: {
+    afterTemplate: {},
+    beforeTemplate: {}
+  }
+};
+
+prepareConfigurationComponentConfig(DxFieldAddonsConfig);
+
+const DxFieldAddons = defineComponent(DxFieldAddonsConfig);
+
+(DxFieldAddons as any).$_optionName = "fieldAddons";
 
 const DxFromConfig = {
   emits: {
@@ -943,6 +967,7 @@ export {
   DxButton,
   DxCollision,
   DxDropDownOptions,
+  DxFieldAddons,
   DxFrom,
   DxHide,
   DxItem,

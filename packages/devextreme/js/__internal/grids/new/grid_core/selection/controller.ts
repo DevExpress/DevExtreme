@@ -3,8 +3,8 @@
 
 import type { DeferredObj } from '@js/core/utils/deferred';
 import messageLocalization from '@js/localization/message';
-import type { ReadonlySignal } from '@preact/signals-core';
-import { computed, effect, signal } from '@preact/signals-core';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed, effect, signal } from '@ts/core/state_manager/index';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
@@ -365,12 +365,7 @@ export class SelectionController {
   }
 
   public getSelectedCardsData(): DataObject[] {
-    const selectedCardKey = this.getSelectedCardKeys();
-
-    return selectedCardKey
-      .map((key) => this.itemsController.getCardByKey(key))
-      .filter((item): item is CardInfo => !!item)
-      .map((item) => item.data);
+    return this.selectionHelper?.peek()?.getSelectedItems();
   }
 
   public getSelectedCardKeys(): Key[] {

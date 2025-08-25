@@ -9,7 +9,7 @@ catalog:
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.19
+  devexpress-diagram: 2.2.21
   devexpress-gantt: 4.1.62
   devextreme-quill: 1.7.4
   eslint: 9.18.0
@@ -20,10 +20,12 @@ catalog:
   eslint-plugin-qunit: 8.1.2
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
+  jquery: 3.7.1
   "@babel/eslint-parser": 7.26.5
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
   "@stylistic/eslint-plugin": 2.13.0
+  "@types/jquery": "3.5.29"
   "@typescript-eslint/eslint-plugin": 8.23.0
   "@typescript-eslint/parser": 8.23.0
 

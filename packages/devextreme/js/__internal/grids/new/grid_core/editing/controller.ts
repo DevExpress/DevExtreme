@@ -2,7 +2,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
-import { computed, type Signal } from '@preact/signals-core';
+import { computed, type Signal } from '@ts/core/state_manager/index';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 

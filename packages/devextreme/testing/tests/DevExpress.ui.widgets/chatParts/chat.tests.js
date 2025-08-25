@@ -28,6 +28,7 @@ import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
+import localization from 'localization';
 import ArrayStore from 'common/data/array_store';
 import {
     CHAT_EDITING_PREVIEW_CLASS,
@@ -122,6 +123,7 @@ const moduleConfig = {
         this.getContextMenuItems = () => $(this.getContextMenu().itemsContainer()).find(`.${DX_MENU_ITEM_CLASS}`);
         this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
         this.getCancelEditingButton = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
+        this.getMessageListEmptyView = () => this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
 
         init();
     },
@@ -755,6 +757,81 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual($bubbleContentChild.text(), 'p text', 'template text is correct');
                 assert.strictEqual($bubbleContentChild.prop('tagName'), 'P', 'templte tag element is correct');
+            });
+        });
+
+        QUnit.module('emptyViewTemplate', () => {
+            QUnit.test('emptyViewTemplate should set empty view content on init', function(assert) {
+                this.reinit({
+                    emptyViewTemplate: () => $('<h1>').text('This is empty'),
+                });
+
+                const $emptyView = this.getMessageListEmptyView();
+
+                assert.strictEqual($emptyView.text(), 'This is empty');
+            });
+
+            QUnit.test('emptyViewTemplate should set empty view content at runtime', function(assert) {
+                this.reinit({ });
+                this.instance.option('emptyViewTemplate', () => $('<h1>').text('This is empty'));
+
+                const $emptyView = this.getMessageListEmptyView();
+
+                assert.strictEqual($emptyView.text(), 'This is empty');
+            });
+
+            QUnit.test('emptyViewTemplate specified as a string text should set empty view content', function(assert) {
+                this.reinit({ emptyViewTemplate: 'empty' });
+
+                const $emptyView = this.getMessageListEmptyView();
+
+                assert.strictEqual($emptyView.text(), 'empty');
+            });
+
+            QUnit.test('emptyViewTemplate specified as a string with a html element should set empty view content', function(assert) {
+                this.reinit({ emptyViewTemplate: '<p>p text</p>' });
+
+                const $emptyViewChild = this.getMessageListEmptyView().children();
+
+                assert.strictEqual($emptyViewChild.text(), 'p text', 'template text is correct');
+                assert.strictEqual($emptyViewChild.prop('tagName'), 'P', 'templte tag element is correct');
+            });
+
+            QUnit.test('emptyViewTemplate function argument should include Chat instance', function(assert) {
+                assert.expect(1);
+
+                const emptyViewTemplate = (data) => {
+                    assert.strictEqual(data.component instanceof Chat, true, 'chat instance is passed');
+                };
+
+                this.reinit({ emptyViewTemplate });
+            });
+
+            QUnit.test('emptyViewTemplate function argument should include data with localized message and prompt', function(assert) {
+                assert.expect(2);
+
+                const defaultLocale = localization.locale();
+                const localizedEmptyListMessage = 'Lista wiadomości jest pusta';
+                const localizedEmptyListPrompt = 'Napisz swoją pierwszą wiadomość';
+
+                const emptyViewTemplate = ({ data }) => {
+                    assert.strictEqual(data.message, localizedEmptyListMessage, 'localized message is passed');
+                    assert.strictEqual(data.prompt, localizedEmptyListPrompt, 'localized prompt is passed');
+                };
+
+                try {
+                    localization.loadMessages({
+                        'pl': {
+                            'dxChat-emptyListMessage': localizedEmptyListMessage,
+                            'dxChat-emptyListPrompt': localizedEmptyListPrompt,
+                        }
+                    });
+                    localization.locale('pl');
+
+                    this.reinit({ emptyViewTemplate });
+                } finally {
+                    localization.locale(defaultLocale);
+                }
             });
         });
 

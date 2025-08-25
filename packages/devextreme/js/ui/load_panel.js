@@ -1,4 +1,4 @@
-import LoadPanel from '../__internal/ui/m_load_panel';
+import LoadPanel from '../__internal/ui/load_panel';
 
 export default LoadPanel;
 
