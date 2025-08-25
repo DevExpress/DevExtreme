@@ -1,15 +1,18 @@
 import React from 'react';
+
 import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
 import notify from 'devextreme/ui/notify';
-import { contextMenuItems as items } from './data.ts';
 
-const itemClick = (e: ContextMenuTypes.ItemClickEvent) => {
+import { contextMenuItems as items } from './data.ts';
+import type { ContextMenuItem } from './types';
+
+const itemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
   if (!e.itemData.items) {
     notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
   }
 };
 
-const ItemTemplate = (itemData) => (
+const ItemTemplate = (itemData: ContextMenuItem) => (
   <div className="item-template-container">
     {itemData.icon && <span className={`${itemData.icon} dx-icon`}></span>}
     <span className="dx-menu-item-text">{itemData.text}</span>

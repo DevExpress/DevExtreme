@@ -13,7 +13,7 @@ const App = () => {
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
   const treeViewItemContextMenu = useCallback((e) => {
     setSelectedTreeItem(e.itemData);
-    const isProduct = e.itemData.price !== undefined;
+    const isProduct = !e.itemData.items;
     contextMenuRef.current.instance().option('items[0].visible', !isProduct);
     contextMenuRef.current.instance().option('items[1].visible', !isProduct);
     contextMenuRef.current.instance().option('items[2].visible', isProduct);
@@ -49,7 +49,7 @@ const App = () => {
       const updatedLogItems = [...logItems, logEntry];
       setLogItems(updatedLogItems);
     },
-    [logItems, selectedTreeItem, setLogItems],
+    [logItems, selectedTreeItem],
   );
   return (
     <div className="form">

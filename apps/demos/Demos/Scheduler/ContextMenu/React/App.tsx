@@ -1,19 +1,22 @@
 import React, { useCallback, useRef, useState } from 'react';
+
 import Scheduler, { Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
 import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
-import { data, resourcesData, Resource as ResourceItem } from './data.ts';
+
+import { data, resourcesData } from './data.ts';
+import type { Resource as ResourceItem } from './types';
 import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
 
 // eslint-disable-next-line no-unused-vars
-type ContextMenuItem = ContextMenuTypes.Item & ResourceItem & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent) => void };
+type ContextMenuItem = ContextMenuTypes.Item & ResourceItem & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void };
 
 const views: SchedulerTypes.ViewType[] = ['day', 'month'];
 
 const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 
-const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent) => {
-  (e.itemData as ContextMenuItem).onItemClick?.(e);
+const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
+  e.itemData.onItemClick?.(e);
 };
 
 const App = () => {
@@ -31,9 +34,9 @@ const App = () => {
 
     const resourceItems: ContextMenuItem[] = resourcesData.map((item) => ({
       ...item,
-      onItemClick: (e) => scheduler?.updateAppointment(appointmentData, {
+      onItemClick: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => scheduler?.updateAppointment(appointmentData, {
         ...appointmentData,
-        ...{ roomId: [(e.itemData as ContextMenuItem).id] },
+        ...{ roomId: [(e.itemData).id] },
       }),
     }));
 

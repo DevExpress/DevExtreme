@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
+
 import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
@@ -13,14 +14,14 @@ const App = () => {
   const contextMenuRef = useRef(null);
   const treeViewRef = useRef(null);
   const [logItems, setLogItems] = useState([]);
-  const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
+  const [selectedTreeItem, setSelectedTreeItem] = useState<Product>(undefined);
 
   const treeViewItemContextMenu = useCallback((
     e: TreeViewTypes.ItemContextMenuEvent<Product>,
   ) => {
     setSelectedTreeItem(e.itemData);
 
-    const isProduct = e.itemData.price !== undefined;
+    const isProduct = !e.itemData.items;
     contextMenuRef.current.instance().option('items[0].visible', !isProduct);
     contextMenuRef.current.instance().option('items[1].visible', !isProduct);
     contextMenuRef.current.instance().option('items[2].visible', isProduct);
@@ -31,7 +32,7 @@ const App = () => {
   }, []);
 
   const contextMenuItemClick = useCallback((
-    e: ContextMenuTypes.ItemClickEvent & { itemData: { id?: any; }; },
+    e: ContextMenuTypes.ItemClickEvent<Product>,
   ) => {
     let logEntry = '';
     switch (e.itemData.id) {
@@ -58,7 +59,7 @@ const App = () => {
     }
     const updatedLogItems = [...logItems, logEntry];
     setLogItems(updatedLogItems);
-  }, [logItems, selectedTreeItem, setLogItems]);
+  }, [logItems, selectedTreeItem]);
 
   return (
     <div className="form">

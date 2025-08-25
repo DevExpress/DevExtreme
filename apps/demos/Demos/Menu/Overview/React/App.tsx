@@ -1,8 +1,11 @@
 import React, { useCallback, useState } from 'react';
+
 import Menu, { type MenuTypes } from 'devextreme-react/menu';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import service, { ProductItemType } from './data.ts';
+import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+
+import service from './data.ts';
+import type { ProductType } from './types';
 
 const orientations = ['horizontal', 'vertical'];
 const orientationLabel = { 'aria-label': 'Orientation' };
@@ -31,25 +34,25 @@ const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
   const [orientation, setOrientation] = useState<MenuTypes.Orientation>('horizontal');
   const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentProduct, setCurrentProduct] = useState<ProductType>(null);
 
-  const itemClick = useCallback((e: MenuTypes.ItemClickEvent & { itemData: ProductItemType }) => {
-    if (e.itemData.price) {
+  const itemClick = useCallback((e: MenuTypes.ItemClickEvent<ProductType>) => {
+    if (!e.itemData.items) {
       setCurrentProduct(e.itemData);
     }
-  }, [setCurrentProduct]);
+  }, []);
 
   const showSubmenuModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setShowFirstSubmenuModes(e.value);
-  }, [setShowFirstSubmenuModes]);
+  }, []);
 
   const orientationChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     setOrientation(e.value);
-  }, [setOrientation]);
+  }, []);
 
   const hideSubmenuOnMouseLeaveChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
     setHideSubmenuOnMouseLeave(e.value);
-  }, [setHideSubmenuOnMouseLeave]);
+  }, []);
 
   return (
     <div className="form">

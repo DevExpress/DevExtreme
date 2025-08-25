@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
 export interface Appointment {
   text: string;
@@ -13,6 +14,10 @@ export interface Resource {
   text: string;
   id: number;
   color: string;
+}
+
+export type ContextMenuItem = DxContextMenuTypes.Item & Resource & {
+  onItemClick?: (e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void
 }
 
 const appointments: Appointment[] = [

@@ -23,32 +23,20 @@ const App = () => {
   const [orientation, setOrientation] = useState('horizontal');
   const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
-  const itemClick = useCallback(
-    (e) => {
-      if (e.itemData.price) {
-        setCurrentProduct(e.itemData);
-      }
-    },
-    [setCurrentProduct],
-  );
-  const showSubmenuModeChanged = useCallback(
-    (e) => {
-      setShowFirstSubmenuModes(e.value);
-    },
-    [setShowFirstSubmenuModes],
-  );
-  const orientationChanged = useCallback(
-    (e) => {
-      setOrientation(e.value);
-    },
-    [setOrientation],
-  );
-  const hideSubmenuOnMouseLeaveChanged = useCallback(
-    (e) => {
-      setHideSubmenuOnMouseLeave(e.value);
-    },
-    [setHideSubmenuOnMouseLeave],
-  );
+  const itemClick = useCallback((e) => {
+    if (!e.itemData.items) {
+      setCurrentProduct(e.itemData);
+    }
+  }, []);
+  const showSubmenuModeChanged = useCallback((e) => {
+    setShowFirstSubmenuModes(e.value);
+  }, []);
+  const orientationChanged = useCallback((e) => {
+    setOrientation(e.value);
+  }, []);
+  const hideSubmenuOnMouseLeaveChanged = useCallback((e) => {
+    setHideSubmenuOnMouseLeave(e.value);
+  }, []);
   return (
     <div className="form">
       <div>

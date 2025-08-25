@@ -1,8 +1,9 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import notify from 'devextreme/ui/notify';
-import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -14,13 +15,19 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+class ContextMenuItem {
+  text: string;
+
+  items?: ContextMenuItem[];
+}
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  items: Record<any, unknown>[];
+  items: ContextMenuItem[];
 
   constructor() {
     this.items = [{
@@ -35,7 +42,7 @@ export class AppComponent {
     ];
   }
 
-  itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
+  itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
     if (!itemData.items) {
       notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
     }
