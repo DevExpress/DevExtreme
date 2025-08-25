@@ -1,7 +1,7 @@
 import { AspNet, Mutation } from 'devextreme-internal-tools/metadata';
 import { addMember, cleanArtifacts, removeMembers, types } from './common';
 import { commonSmdCollectionItems } from './common/smd';
-import { enums, enumAliases, enumItemRenamings } from './aspnet/enums'
+import { enums, enumAliases, enumItemRenamings } from './aspnet/enums';
 import { PATHS } from './common/paths';
 
 cleanArtifacts('StrongMetaData.json', 'StrongMetaDataGenerator.cfg.json');
@@ -43,7 +43,7 @@ AspNet.makeMetadata({
     }),
     addMember({
       uid: 'ui/popover:dxPopoverOptions.toolbarItems',
-      types: [types.array(types.memberRef('ui/popover:ToolbarItem'))],
+      types: [types.array(types.uidRef('ui/popover:ToolbarItem'))],
     }),
     removeMembers(/ui\/scheduler:ToolbarItem\.options/),
   ],
@@ -61,7 +61,7 @@ AspNet.makeMetadata({
     collectionItems: [...commonSmdCollectionItems],
     enums,
     enumAliases,
-    enumItemRenamings
+    enumItemRenamings,
   },
 });
 
