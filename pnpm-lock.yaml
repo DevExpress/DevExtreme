@@ -18,6 +18,9 @@ catalogs:
     '@stylistic/eslint-plugin':
       specifier: 2.13.0
       version: 2.13.0
+    '@types/jquery':
+      specifier: 3.5.29
+      version: 3.5.29
     '@typescript-eslint/eslint-plugin':
       specifier: 8.23.0
       version: 8.23.0
@@ -69,6 +72,9 @@ catalogs:
     inferno-server:
       specifier: ^8.2.3
       version: 8.2.3
+    jquery:
+      specifier: 3.7.1
+      version: 3.7.1
   eslint8:
     '@babel/eslint-parser':
       specifier: 7.23.10
@@ -414,8 +420,8 @@ importers:
         specifier: 'catalog:'
         version: 8.2.3
       jquery:
-        specifier: 3.6.3
-        version: 3.6.3
+        specifier: 'catalog:'
+        version: 3.7.1
       jspdf:
         specifier: 3.0.1
         version: 3.0.1
@@ -880,7 +886,7 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
       jquery:
-        specifier: 3.7.1
+        specifier: 'catalog:'
         version: 3.7.1
       minimist:
         specifier: 1.2.8
@@ -910,13 +916,13 @@ importers:
         specifier: 11.2.14
         version: 11.2.14(@angular/core@19.2.8(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@types/jquery':
-        specifier: 3.5.29
+        specifier: 'catalog:'
         version: 3.5.29
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       jquery:
-        specifier: 3.7.1
+        specifier: 'catalog:'
         version: 3.7.1
       typescript:
         specifier: 4.9.5
@@ -934,7 +940,7 @@ importers:
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.10.3)(testcafe@2.5.0(encoding@0.1.13))
       '@types/jquery':
-        specifier: 3.5.29
+        specifier: 'catalog:'
         version: 3.5.29
       '@typescript-eslint/eslint-plugin':
         specifier: catalog:eslint8
@@ -1248,7 +1254,7 @@ importers:
         specifier: 3.10.18
         version: 3.10.18
       '@types/jquery':
-        specifier: 3.5.29
+        specifier: 'catalog:'
         version: 3.5.29
       '@types/react':
         specifier: 16.14.34
@@ -1494,7 +1500,7 @@ importers:
         specifier: 29.7.0
         version: 29.7.0
       jquery:
-        specifier: 3.7.1
+        specifier: 'catalog:'
         version: 3.7.1
       jquery.tmpl:
         specifier: 0.0.2
@@ -13306,9 +13312,6 @@ packages:
   jquery.tmpl@0.0.2:
     resolution: {integrity: sha512-ONpdW9JcxJxi5Eu9s640SdN0y/nSjnXAP24s3X/LeWlG4xA+hyuIcxEdTWZPy9scWC7owkEeSU6ReQvpbWhs7A==}
 
-  jquery@3.6.3:
-    resolution: {integrity: sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==}
-
   jquery@3.7.1:
     resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
 
@@ -24376,13 +24379,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -24442,7 +24447,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24857,7 +24862,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -35967,8 +35972,6 @@ snapshots:
   jquery.tmpl@0.0.2:
     dependencies:
       jqueryify: 0.0.3
-
-  jquery@3.6.3: {}
 
   jquery@3.7.1: {}
 
