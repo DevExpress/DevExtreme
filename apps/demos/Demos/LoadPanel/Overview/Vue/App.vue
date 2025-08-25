@@ -73,7 +73,7 @@ import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 import { employee } from './data.ts';
 
-const employeeInfo = ref<typeof employee>();
+const employeeInfo = ref<Record<string, string | number> | null>();
 const loadingVisible = ref(false);
 const position = { of: '#employee' };
 const showIndicator = ref(true);

@@ -36,11 +36,11 @@ import DxButton from 'devextreme-vue/button';
 import { markersData } from './data.ts';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
-const markersIcon = ref(markerUrl);
+const markersIcon = ref<string | null>(markerUrl);
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
-const markers = ref(markersData);
+const markers = ref<Record<string, any>[]>(markersData);
 function useCustomMarkers(data: DxCheckBoxTypes.ValueChangedEvent) {
   markersIcon.value = data.value ? markerUrl : null;
   markers.value = markersData;

@@ -82,9 +82,13 @@ const max = 30;
 
 function keyDown(e: DxNumberBoxTypes.KeyDownEvent) {
   const { event } = e;
-  const str = event.key;
-  if (/^[.,e]$/.test(str)) {
-    event.preventDefault();
+
+  if( event ) {
+    const str = event.key;
+    
+    if (/^[.,e]$/.test(str)) {
+      event.preventDefault();
+    }
   }
 }
 </script>
