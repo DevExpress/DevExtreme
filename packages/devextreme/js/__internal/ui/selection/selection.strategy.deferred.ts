@@ -3,7 +3,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
+import SelectionStrategy from '@ts/ui/selection/selection.strategy';
 import type { KeyExpr, SelectionFilter, SelectionItem } from '@ts/ui/selection/types';
 
 export default class DeferredStrategy<
@@ -147,7 +147,6 @@ export default class DeferredStrategy<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _findSubFilter(
     selectionFilter: SelectionFilter | undefined,
     filter: SelectionFilter | undefined,
@@ -176,7 +175,6 @@ export default class DeferredStrategy<
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addFilterOperator(selectionFilter: SelectionFilter, filterOperator: 'and' | 'or'): SelectionFilter {
     let filter = selectionFilter;
     if (
@@ -194,7 +192,6 @@ export default class DeferredStrategy<
     return filter;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _denormalizeFilter(filter: SelectionFilter): SelectionFilter {
     let resultFilter = filter;
     if (resultFilter && isString(resultFilter[0])) {
@@ -203,7 +200,6 @@ export default class DeferredStrategy<
     return resultFilter;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isOnlyNegativeFiltersLeft(filters: SelectionFilter): boolean {
     return filters.every((filterItem, i) => {
       if (i % 2 === 0) {
@@ -255,7 +251,6 @@ export default class DeferredStrategy<
     this._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _normalizeFilter(filter: SelectionFilter): SelectionFilter {
     let resultFilter = filter;
     if (resultFilter && resultFilter.length === 1) {
@@ -264,7 +259,6 @@ export default class DeferredStrategy<
     return resultFilter;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _removeFilterByIndex(filter: SelectionFilter, filterIndex: number, isSelectAll?: boolean): void {
     const operation = filter[1];
 
@@ -279,7 +273,6 @@ export default class DeferredStrategy<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isSimpleKeyFilter(
     filter: SelectionFilter | undefined,
     key: string | Function | undefined,
@@ -348,23 +341,24 @@ export default class DeferredStrategy<
       return filterIndex;
     }
 
-    for (let i = 0; i < selectionFilter.length; i += 1) {
-      if (Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2) {
-        const innerFilterIndex = this._removeSameFilter(
-          selectionFilter[i],
-          sameFilter,
-          false,
-          isSelectAll,
-        );
-        if (innerFilterIndex >= 0) {
-          if (!selectionFilter[i].length) {
-            this._removeFilterByIndex(selectionFilter, i, isSelectAll);
-          } else if (selectionFilter[i].length === 1) {
-            const [firstFilter] = selectionFilter[i];
-            selectionFilter[i] = firstFilter;
-          }
-          return innerFilterIndex;
+    const filtersWithConditions = selectionFilter
+      .filter((filterItem) => Array.isArray(filterItem) && filterItem.length > 2);
+    for (let i = 0; i < filtersWithConditions.length; i += 1) {
+      const innerFilterIndex = this._removeSameFilter(
+        filtersWithConditions[i],
+        sameFilter,
+        false,
+        isSelectAll,
+      );
+
+      if (innerFilterIndex >= 0) {
+        if (!filtersWithConditions[i].length) {
+          this._removeFilterByIndex(filtersWithConditions, i, isSelectAll);
+        } else if (filtersWithConditions[i].length === 1) {
+          const [firstFilter] = filtersWithConditions[i];
+          filtersWithConditions[i] = firstFilter;
         }
+        return innerFilterIndex;
       }
     }
     return -1;
@@ -376,7 +370,7 @@ export default class DeferredStrategy<
 
     if (!selectionFilter) return true;
     if (!selectionFilter.length) return false;
-    if (!filter || !filter.length) return undefined;
+    if (!filter?.length) return undefined;
 
     selectionFilter = this._denormalizeFilter(selectionFilter);
 
