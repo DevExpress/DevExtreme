@@ -222,6 +222,7 @@ $datagrid-text-stub-background-image-path: null !default;
         .dx-datagrid-summary-item {
           background-color: $datagrid-base-background-color;
           padding-inline: $datagrid-cell-padding;
+          margin-left: 1px;
         }
       }
     }
