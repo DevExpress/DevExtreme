@@ -52,7 +52,7 @@ export default function App() {
 
     setStepValidationResult(selectedIndex, isValid);
 
-    if (isValid){
+    if (isValid) {
       setSelectedIndex(selectedIndex + 1);
     }
   }, [getValidationResult, selectedIndex, setStepValidationResult]);
