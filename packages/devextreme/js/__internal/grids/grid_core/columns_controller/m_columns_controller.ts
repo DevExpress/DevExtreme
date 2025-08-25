@@ -133,6 +133,8 @@ export class ColumnsController extends modules.Controller {
 
   protected _stateStoringController!: StateStoringController;
 
+  public _isWarnedAboutUnsupportedProperties?: boolean;
+
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
     this._focusController = this.getController('focus');

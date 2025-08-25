@@ -12,6 +12,7 @@ import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import errors from '@js/ui/widget/ui.errors';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import gridCoreUtils from '../m_utils';
@@ -24,10 +25,35 @@ import {
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   IGNORE_COLUMN_OPTION_NAMES,
+  UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS,
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
 import type { ColumnsController } from './m_columns_controller';
+
+const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
+  if (controller?._isWarnedAboutUnsupportedProperties) return;
+  if (!childColumns || !Array.isArray(childColumns) || childColumns?.length === 0) return;
+
+  let unsupportedProperty: string | null = null;
+
+  for (const column of childColumns) {
+    if (unsupportedProperty) break;
+    if (!column || typeof column !== 'object' || column === null) continue;
+
+    for (const property of UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS) {
+      if (property in column) {
+        unsupportedProperty = property;
+        break;
+      }
+    }
+  }
+
+  if (unsupportedProperty) {
+    controller && (controller._isWarnedAboutUnsupportedProperties = true);
+    errors.log('W1028', unsupportedProperty);
+  }
+};
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
@@ -47,7 +73,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
 
     that.setName(columnOptions);
 
-    let result = { };
+    let result = {};
     if (columnOptions.command) {
       result = deepExtendArraySafe(commonColumnOptions, columnOptions);
     } else {
@@ -90,6 +116,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
+          warnFixedInChildColumnsOnce(that, column.columns);
           result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
           delete column.columns;
           column.hasColumns = true;
@@ -945,7 +972,7 @@ const isFirstOrLastBandColumn = function (
   fixedPosition?: StickyPosition,
 ): boolean {
   return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
-        || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+    || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
 };
 
 const isFirstOrLastColumnCore = function (
