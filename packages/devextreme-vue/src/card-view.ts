@@ -152,6 +152,7 @@ import {
 } from "devextreme/ui/button";
 import {
  FormItemType,
+ FormPredefinedButtonItem,
  dxFormSimpleItem,
  dxFormOptions,
  dxFormGroupItem,
@@ -615,7 +616,7 @@ const DxButtonItemConfig = {
     cssClass: String,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     itemType: String as PropType<FormItemType>,
-    name: String,
+    name: String as PropType<FormPredefinedButtonItem | string>,
     verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
@@ -2148,7 +2149,7 @@ const DxItemConfig = {
     locateInMenu: String as PropType<LocateInMenuMode>,
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<CardHeaderPredefinedItem | string | PredefinedToolbarItem>,
+    name: String as PropType<CardHeaderPredefinedItem | string | FormPredefinedButtonItem | PredefinedToolbarItem>,
     options: {},
     showText: String as PropType<ShowTextMode>,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,

@@ -35,6 +35,7 @@ import {
  SmartPastedEvent,
  SmartPastingEvent,
  FormItemType,
+ FormPredefinedButtonItem,
  FormItemComponent,
 } from "devextreme/ui/form";
 import {
@@ -307,7 +308,7 @@ const DxButtonItemConfig = {
     cssClass: String,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     itemType: String as PropType<FormItemType>,
-    name: String,
+    name: String as PropType<FormPredefinedButtonItem | string>,
     verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
@@ -636,7 +637,7 @@ const DxItemConfig = {
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
     itemType: String as PropType<FormItemType>,
     label: Object as PropType<Record<string, any>>,
-    name: String,
+    name: String as PropType<string | FormPredefinedButtonItem>,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
     tabs: Array as PropType<Array<Record<string, any>>>,
     tabTemplate: {},
