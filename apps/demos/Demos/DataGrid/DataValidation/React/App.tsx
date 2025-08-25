@@ -18,7 +18,6 @@ const dataSource = createStore({
   },
 });
 
-// eslint-disable-next-line space-before-function-paren
 const asyncValidation = async (params) => {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',

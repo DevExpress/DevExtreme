@@ -58,6 +58,7 @@
   </div>
 </template>
 <script setup lang="ts">
+/* eslint-disable import/no-webpack-loader-syntax */
 import { onBeforeMount, ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
@@ -67,8 +68,6 @@ import 'devextreme/common/core/localization/globalize/number';
 import 'devextreme/common/core/localization/globalize/date';
 import 'devextreme/common/core/localization/globalize/currency';
 import 'devextreme/common/core/localization/globalize/message';
-/* eslint-disable import/no-unresolved */
-/* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
 // @ts-ignore

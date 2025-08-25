@@ -41,7 +41,6 @@ const App = () => {
     }
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/space-before-function-paren
   const onFocusedRowChanging = useCallback(async (e: DataGridTypes.FocusedRowChangingEvent) => {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();

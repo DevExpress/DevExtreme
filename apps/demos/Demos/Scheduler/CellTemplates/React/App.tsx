@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
@@ -13,6 +12,7 @@ import TimeCell from './TimeCell.tsx';
 
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek', 'month'];
+// eslint-disable-next-line consistent-return
 const ariaDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
@@ -90,7 +90,7 @@ const App = () => {
 
   const renderDateCell = useCallback((itemData) => (
     <DateCell itemData={itemData} currentView={currentView} />
-  ), []);
+  ), [currentView]);
 
   return (
     <Scheduler

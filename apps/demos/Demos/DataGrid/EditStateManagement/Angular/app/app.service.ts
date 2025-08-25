@@ -84,6 +84,7 @@ export class Service {
     return data;
   }
 
+  // eslint-disable-next-line consistent-return
   async saveChange(change: Change<Order>): Promise<Order> {
     switch (change.type) {
       case 'insert':

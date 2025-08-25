@@ -133,6 +133,7 @@ export class AppComponent {
   }
 
   getNodeContainingArray(node: Node, rootArray: Item[]) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return node === null || node.parent === null
       ? rootArray
       : node.parent.itemData.items;

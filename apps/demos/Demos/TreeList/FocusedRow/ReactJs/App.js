@@ -29,7 +29,7 @@ const App = () => {
       setFocusedRowKey(e.value);
     }
   }, []);
-  // eslint-disable-next-line @typescript-eslint/space-before-function-paren
+
   const onFocusedRowChanged = useCallback(async (e) => {
     const rowData = e.row && e.row.data;
     if (rowData) {

@@ -30,6 +30,7 @@ export class AppComponent {
     this.fileItems = service.getFileItems();
   }
 
+  // eslint-disable-next-line consistent-return
   customizeIcon(fileSystemItem) {
     if (fileSystemItem.isDirectory) { return '../../../../images/thumbnails/folder.svg'; }
 

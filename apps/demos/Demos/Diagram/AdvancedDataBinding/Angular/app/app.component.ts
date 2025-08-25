@@ -42,14 +42,17 @@ export class AppComponent {
     });
   }
 
+  // eslint-disable-next-line consistent-return
   itemTypeExpr(obj, value) {
     if (value) { obj.Type = (value === 'rectangle') ? undefined : 'group'; } else { return obj.Type === 'group' ? 'ellipse' : 'rectangle'; }
   }
 
+  // eslint-disable-next-line consistent-return
   itemWidthExpr(obj, value) {
     if (value) { obj.Width = value; } else { return obj.Width || (obj.Type === 'group' && 1.5) || 1; }
   }
 
+  // eslint-disable-next-line consistent-return
   itemHeightExpr(obj, value) {
     if (value) { obj.Height = value; } else { return obj.Height || (obj.Type === 'group' && 1) || 0.75; }
   }

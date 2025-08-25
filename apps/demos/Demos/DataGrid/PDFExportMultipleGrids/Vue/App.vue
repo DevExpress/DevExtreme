@@ -118,7 +118,6 @@ const ratingDataSource: DataSourceOptions = {
 const exportGrids = () => {
   const priceGrid = priceGridRef.value?.instance!;
   const ratingGrid = ratingGridRef.value?.instance!;
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

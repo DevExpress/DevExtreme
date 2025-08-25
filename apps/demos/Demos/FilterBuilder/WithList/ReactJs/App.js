@@ -20,7 +20,8 @@ const App = () => {
   }, []);
   useEffect(() => {
     refreshDataSource();
-  }, []);
+  }, [refreshDataSource]);
+
   return (
     <div>
       <div className="filter-container">

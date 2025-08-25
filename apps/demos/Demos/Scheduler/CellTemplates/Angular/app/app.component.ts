@@ -44,6 +44,7 @@ export class AppComponent {
 
   currentView = this.views[0];
 
+  // eslint-disable-next-line consistent-return
   ariaDescription = () => {
     const disabledDates = this.holidays
       .filter((date) => !this.isWeekend(date))

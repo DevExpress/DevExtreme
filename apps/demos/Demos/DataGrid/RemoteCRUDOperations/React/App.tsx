@@ -62,7 +62,6 @@ const App = () => {
     setRequests((prevRequests: ConcatArray<string>) => [request].concat(prevRequests));
   }, []);
 
-  // eslint-disable-next-line consistent-return, space-before-function-paren
   const sendRequest = useCallback(async (url: string, method = 'GET', data = {}) => {
     logRequest(method, url, data);
 

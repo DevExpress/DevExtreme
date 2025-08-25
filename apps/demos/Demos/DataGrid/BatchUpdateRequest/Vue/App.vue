@@ -56,6 +56,7 @@ const onSaving = (e: DxDataGridTypes.SavingEvent) => {
 };
 
 function normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
+  // eslint-disable-next-line consistent-return
   return changes.map((c) => {
     switch (c.type) {
       case 'insert':

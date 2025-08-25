@@ -34,7 +34,6 @@ const App = () => {
     }
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/space-before-function-paren
   const onFocusedRowChanged = useCallback(async (e: TreeListTypes.FocusedRowChangedEvent) => {
     const rowData = e.row?.data;
 

@@ -76,7 +76,6 @@ import { jsPDF } from 'jspdf';
 import { companies } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

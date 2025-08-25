@@ -29,7 +29,7 @@ const App = () => {
   const [taskCount, setTaskCount] = useState(0);
   const [peopleCount, setPeopleCount] = useState(0);
   const [avgDuration, setAvgDuration] = useState(0);
-  // eslint-disable-next-line space-before-function-paren
+
   const calculateStatistics = useCallback(async () => {
     const selectedItems = await dataGrid.getSelectedRowsData();
     const totalDuration = selectedItems.reduce((currentValue, item) => {

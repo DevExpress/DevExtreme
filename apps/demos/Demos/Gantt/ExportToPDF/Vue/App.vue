@@ -215,7 +215,6 @@ async function exportGantt() {
   }
   const doc = await exportGanttToPdf({
     component: ganttRef.value.instance,
-    // eslint-disable-next-line new-cap
     createDocumentMethod: (args) => new jsPDF(args),
     format,
     landscape: isLandscape,

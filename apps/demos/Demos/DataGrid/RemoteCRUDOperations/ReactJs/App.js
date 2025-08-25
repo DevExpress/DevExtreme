@@ -69,7 +69,7 @@ const App = () => {
     const request = [time, method, url.slice(URL.length), args].join(' ');
     setRequests((prevRequests) => [request].concat(prevRequests));
   }, []);
-  // eslint-disable-next-line consistent-return, space-before-function-paren
+
   const sendRequest = useCallback(
     async (url, method = 'GET', data = {}) => {
       logRequest(method, url, data);

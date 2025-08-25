@@ -32,6 +32,7 @@ export class AppComponent {
     this.customizeLayers = this.customizeLayers.bind(this);
   }
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip({ attribute }: { attribute: Function }) {
     if (attribute('population')) {
       return {

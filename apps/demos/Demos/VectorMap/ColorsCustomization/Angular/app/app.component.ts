@@ -33,6 +33,7 @@ export class AppComponent {
     this.click = this.click.bind(this);
   }
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip = ({ attribute }) => {
     const name = attribute('name');
     const country = this.countries[name];

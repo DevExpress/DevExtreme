@@ -91,6 +91,7 @@ const holidays = [
   new Date(2021, 3, 29),
   new Date(2021, 5, 6),
 ];
+// eslint-disable-next-line consistent-return
 const ariaDescription = () => {
   const disabledDates = holidays
     .filter((date) => !isWeekend(date))

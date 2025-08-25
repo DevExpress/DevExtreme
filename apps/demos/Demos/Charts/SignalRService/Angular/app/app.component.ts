@@ -55,6 +55,7 @@ export class AppComponent {
       });
   }
 
+  // eslint-disable-next-line consistent-return
   calculateCandle(e: Record<string, Date> & { data: Record<string, unknown>[] }) {
     const prices: unknown[] = e.data.map((d) => d.price);
     if (prices.length) {
@@ -68,6 +69,7 @@ export class AppComponent {
     }
   }
 
+  // eslint-disable-next-line consistent-return
   customizePoint: DxChartTypes.Properties['customizePoint'] = ({ seriesName, argument }) => {
     if (seriesName === 'Volume') {
       const point = this.component.instance.getAllSeries()[0].getPointsByArg(argument)[0].data;

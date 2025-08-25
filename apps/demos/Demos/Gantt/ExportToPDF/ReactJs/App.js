@@ -248,7 +248,6 @@ class App extends React.Component {
     pdfExporter
       .exportGantt({
         component: gantt,
-        // eslint-disable-next-line new-cap
         createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,

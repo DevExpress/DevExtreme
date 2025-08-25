@@ -14,6 +14,7 @@ const ordersStore = createStore({
 });
 
 function normalizeChanges(changes: DataGridTypes.DataChange[]): DataGridTypes.DataChange[] {
+  // eslint-disable-next-line consistent-return
   return changes.map((c) => {
     switch (c.type) {
       case 'insert':

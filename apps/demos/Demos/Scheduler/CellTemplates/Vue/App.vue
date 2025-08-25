@@ -60,6 +60,7 @@ const dataSource = data;
 
 const isMonthView = computed(() => currentView.value === 'month');
 
+// eslint-disable-next-line consistent-return
 const ariaDescription = computed(() => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))

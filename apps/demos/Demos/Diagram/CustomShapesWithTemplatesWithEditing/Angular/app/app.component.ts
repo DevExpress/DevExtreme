@@ -58,6 +58,7 @@ export class AppComponent {
     return 'employee';
   }
 
+  // eslint-disable-next-line consistent-return
   itemCustomDataExpr(obj, value) {
     if (value === undefined) {
       return {
