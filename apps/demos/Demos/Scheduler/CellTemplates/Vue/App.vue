@@ -84,12 +84,15 @@ function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
 }
 
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
-  const startDate = new Date(e.appointmentData.startDate);
-  if (!Utils.isValidAppointmentDate(startDate)) {
-    e.cancel = true;
-    notifyDisableDate();
+  if (e.appointmentData?.startDate) {
+    const startDate = new Date(e.appointmentData.startDate);
+    if (!Utils.isValidAppointmentDate(startDate)) {
+      e.cancel = true;
+      notifyDisableDate();
+    }
+    applyDisableDatesToDateEditors(e.form); 
   }
-  applyDisableDatesToDateEditors(e.form);
+
 }
 function onAppointmentAdding(e: DxSchedulerTypes.AppointmentAddingEvent) {
   const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
@@ -109,11 +112,15 @@ function notifyDisableDate() {
   notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
 }
 function applyDisableDatesToDateEditors(form: DxForm['instance']) {
+  if (!form) {
+    return 
+  }
+  
   const startDateEditor = form.getEditor('startDate');
-  startDateEditor.option('disabledDates', holidays);
+  startDateEditor?.option('disabledDates', holidays);
 
   const endDateEditor = form.getEditor('endDate');
-  endDateEditor.option('disabledDates', holidays);
+  endDateEditor?.option('disabledDates', holidays);
 }
 
 function setComponentAria(element: any) {

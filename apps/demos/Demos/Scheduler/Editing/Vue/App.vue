@@ -76,17 +76,17 @@ const allowUpdating = ref(true);
 const allowResizing = ref(true);
 const allowDragging = ref(true);
 
-function showToast(event: string, value: string, type: string) {
-  notify(`${event} "${value}" task`, type, 800);
+function showToast(event: string, value: string | undefined, type: string) {
+  notify(`${event} "${value || 'undefined'}" task`, type, 800);
 }
 function showAddedToast(e: DxSchedulerTypes.AppointmentAddedEvent) {
-  showToast('Added', e.appointmentData.text, 'success');
+  showToast('Added', e.appointmentData?.text, 'success');
 }
 function showUpdatedToast(e: DxSchedulerTypes.AppointmentUpdatedEvent) {
-  showToast('Updated', e.appointmentData.text, 'info');
+  showToast('Updated', e.appointmentData?.text, 'info');
 }
 function showDeletedToast(e: DxSchedulerTypes.AppointmentDeletedEvent) {
-  showToast('Deleted', e.appointmentData.text, 'warning');
+  showToast('Deleted', e.appointmentData?.text, 'warning');
 }
 </script>
 

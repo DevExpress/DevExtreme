@@ -22,12 +22,12 @@
 <script setup lang="ts">
 import 'whatwg-fetch';
 import DxScheduler from 'devextreme-vue/scheduler';
-import { CustomStore } from 'devextreme-vue/common/data';
+import { CustomStore, type LoadOptions } from 'devextreme-vue/common/data';
 
 const views = ['day', 'workWeek', 'month'];
 const currentDate = new Date(2017, 4, 25);
 const dataSource = new CustomStore({
-  load: (options: Record<string, unknown>) => getData(options, { showDeleted: false }),
+  load: (options: LoadOptions) => getData(options, { showDeleted: false }),
 });
 
 function getData(_: unknown, requestOptions: Record<string, unknown>) {

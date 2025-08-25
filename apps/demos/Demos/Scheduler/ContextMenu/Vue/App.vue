@@ -48,11 +48,11 @@ const appointmentClassName = '.dx-scheduler-appointment';
 const cellClassName = '.dx-scheduler-date-table-cell';
 const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
-const groups = ref<string[]>(undefined);
+const groups = ref<string[] | null>();
 const crossScrollingEnabled = ref(false);
 const disabled = ref(true);
-const contextMenuItems = ref([]);
-const target = ref(appointmentClassName);
+const contextMenuItems = ref<DxContextMenuTypes.Item[]>([]);
+const target = ref<string>(appointmentClassName);
 const schedulerRef = ref<DxScheduler>();
 
 function onAppointmentContextMenu(
@@ -63,7 +63,7 @@ function onAppointmentContextMenu(
     ...item,
     onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent) => scheduler?.updateAppointment(appointmentData, {
       ...appointmentData,
-      ...{ roomId: [itemData.id] },
+      ...{ roomId: [itemData?.id] },
     }),
   }));
   target.value = appointmentClassName;
@@ -81,7 +81,7 @@ function onAppointmentContextMenu(
       text: 'Repeat Weekly',
       beginGroup: true,
       onItemClick: () => scheduler.updateAppointment(appointmentData, {
-        startDate: targetedAppointmentData.startDate,
+        startDate: targetedAppointmentData?.startDate,
         recurrenceRule: 'FREQ=WEEKLY',
       }),
     },
@@ -133,7 +133,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
   ];
 }
 function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
-  e.itemData.onItemClick(e);
+  e.itemData?.onItemClick(e);
 }
 </script>
 
