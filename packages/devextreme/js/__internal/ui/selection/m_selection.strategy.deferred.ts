@@ -3,35 +3,47 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
+import type { KeyExpr, SelectionFilter, SelectionItem } from '@ts/ui/selection/types';
 
-import SelectionStrategy from './m_selection.strategy';
-
-export default class DeferredStrategy extends SelectionStrategy {
-  getSelectedItems() {
+export default class DeferredStrategy<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends SelectionItem = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends SelectionStrategy<TItem, TKey> {
+  getSelectedItems(): DeferredObj<TItem[]> {
     return this._loadFilteredData(this.options.selectionFilter);
   }
 
-  getSelectedItemKeys() {
-    const d = Deferred();
-    const that = this;
+  getSelectedItemKeys(): Promise<TKey[]> {
+    const d = Deferred<TKey[]>();
     const key = this.options.key();
     const select = isString(key) ? [key] : key;
+    const getKey = (item: TItem): TKey => this.options.keyOf(item);
 
     this._loadFilteredData(this.options.selectionFilter, null, select).done((items) => {
-      // @ts-expect-error
-      const keys = items.map((item) => that.options.keyOf(item));
+      const keys = (Array.isArray(items) ? items : []).map(getKey);
 
       d.resolve(keys);
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    }).fail(d.reject);
+    }).fail((error) => {
+      // @ts-expect-error error
+      d.reject(error);
+    });
 
     return d.promise();
   }
 
-  selectedItemKeys(keys, preserve, isDeselect, isSelectAll) {
+  selectedItemKeys(
+    keys: TKey[],
+    preserve?: boolean,
+    isDeselect?: boolean,
+    isSelectAll?: boolean,
+  ): DeferredObj<TItem[]> {
     if (isSelectAll) {
       const filter = this.options.filter();
-      const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
+      const needResetSelectionFilter = !filter
+        || (JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect);
 
       if (needResetSelectionFilter) {
         this._setOption('selectionFilter', isDeselect ? [] : null);
@@ -43,32 +55,32 @@ export default class DeferredStrategy extends SelectionStrategy {
         this._setOption('selectionFilter', []);
       }
 
-      for (let i = 0; i < keys.length; i++) {
+      keys.forEach((key) => {
         if (isDeselect) {
-          this.removeSelectedItem(keys[i]);
+          this.removeSelectedItem(key);
         } else {
-          this.addSelectedItem(keys[i], isSelectAll, !preserve);
+          this.addSelectedItem(key, isSelectAll, !preserve);
         }
-      }
+      });
     }
 
     this.onSelectionChanged();
 
-    return Deferred().resolve();
+    return Deferred<TItem[]>().resolve();
   }
 
-  setSelectedItems(keys) {
+  setSelectedItems(keys: TKey[]): void {
     this._setOption('selectionFilter', null);
-    for (let i = 0; i < keys.length; i++) {
-      this.addSelectedItem(keys[i]);
-    }
+    keys.forEach((key) => {
+      this.addSelectedItem(key);
+    });
   }
 
-  isItemDataSelected(itemData) {
+  isItemDataSelected(itemData: TItem | TKey): boolean {
     return this.isItemKeySelected(itemData);
   }
 
-  isItemKeySelected(itemData) {
+  isItemKeySelected(itemData: TItem | TKey): boolean {
     const { selectionFilter } = this.options;
 
     if (!selectionFilter) {
@@ -77,11 +89,11 @@ export default class DeferredStrategy extends SelectionStrategy {
 
     const queryParams = this._getQueryParams();
 
-    // @ts-expect-error
+    // @ts-expect-error dataQuery
     return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 
-  _getKeyExpr() {
+  _getKeyExpr(): KeyExpr | Function | undefined {
     const keyField = this.options.key();
     if (Array.isArray(keyField) && keyField.length === 1) {
       return keyField[0];
@@ -89,21 +101,22 @@ export default class DeferredStrategy extends SelectionStrategy {
     return keyField;
   }
 
-  _normalizeKey(key) {
+  _normalizeKey(key: TKey): TKey {
     const keyExpr = this.options.key();
     if (Array.isArray(keyExpr) && keyExpr.length === 1) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return key[keyExpr[0]];
     }
     return key;
   }
 
-  _getFilterByKey(key) {
+  _getFilterByKey(key: TKey): SelectionFilter {
     const keyField = this._getKeyExpr();
-    let filter = [keyField, '=', this._normalizeKey(key)];
+    let filter: SelectionFilter = [keyField, '=', this._normalizeKey(key)];
 
     if (Array.isArray(keyField)) {
       filter = [];
-      for (let i = 0; i < keyField.length; i++) {
+      for (let i = 0; i < keyField.length; i += 1) {
         filter.push([keyField[i], '=', key[keyField[i]]]);
         if (i !== keyField.length - 1) {
           filter.push('and');
@@ -114,19 +127,19 @@ export default class DeferredStrategy extends SelectionStrategy {
     return filter;
   }
 
-  addSelectedItem(key, isSelectAll?: boolean, skipFilter?: boolean) {
+  addSelectedItem(key: TKey, isSelectAll?: boolean, skipFilter?: boolean): void {
     const filter = this._getFilterByKey(key);
 
     this._addSelectionFilter(false, filter, isSelectAll, skipFilter);
   }
 
-  removeSelectedItem(key) {
+  removeSelectedItem(key: TKey): void {
     const filter = this._getFilterByKey(key);
 
     this._addSelectionFilter(true, filter);
   }
 
-  validate() {
+  validate(): void {
     const { key } = this.options;
 
     if (key && key() === undefined) {
@@ -134,11 +147,15 @@ export default class DeferredStrategy extends SelectionStrategy {
     }
   }
 
-  _findSubFilter(selectionFilter, filter) {
+  // eslint-disable-next-line class-methods-use-this
+  _findSubFilter(
+    selectionFilter: SelectionFilter | undefined,
+    filter: SelectionFilter | undefined,
+  ): number {
     if (!selectionFilter) return -1;
     const filterString = JSON.stringify(filter);
 
-    for (let index = 0; index < selectionFilter.length; index++) {
+    for (let index = 0; index < selectionFilter.length; index += 1) {
       const subFilter = selectionFilter[index];
       if (subFilter && JSON.stringify(subFilter) === filterString) {
         return index;
@@ -148,31 +165,46 @@ export default class DeferredStrategy extends SelectionStrategy {
     return -1;
   }
 
-  _isLastSubFilter(selectionFilter, filter) {
+  _isLastSubFilter(
+    selectionFilter: SelectionFilter | undefined,
+    filter: SelectionFilter | undefined,
+  ): boolean {
     if (selectionFilter && filter) {
-      return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1 || this._findSubFilter([selectionFilter], filter) === 0;
+      return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1
+        || this._findSubFilter([selectionFilter], filter) === 0;
     }
     return false;
   }
 
-  _addFilterOperator(selectionFilter, filterOperator) {
-    if (selectionFilter.length > 1 && isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
-      selectionFilter = [selectionFilter];
-    }
-    if (selectionFilter.length) {
-      selectionFilter.push(filterOperator);
-    }
-    return selectionFilter;
-  }
-
-  _denormalizeFilter(filter) {
-    if (filter && isString(filter[0])) {
+  // eslint-disable-next-line class-methods-use-this
+  _addFilterOperator(selectionFilter: SelectionFilter, filterOperator: 'and' | 'or'): SelectionFilter {
+    let filter = selectionFilter;
+    if (
+      filter.length > 1
+      && isString(filter[1])
+      && filter[1] !== filterOperator
+    ) {
       filter = [filter];
     }
+    if (Array.isArray(filter) && filter.length) {
+      filter.push(filterOperator);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return filter;
   }
 
-  _isOnlyNegativeFiltersLeft(filters) {
+  // eslint-disable-next-line class-methods-use-this
+  _denormalizeFilter(filter: SelectionFilter): SelectionFilter {
+    let resultFilter = filter;
+    if (resultFilter && isString(resultFilter[0])) {
+      resultFilter = [resultFilter];
+    }
+    return resultFilter;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _isOnlyNegativeFiltersLeft(filters: SelectionFilter): boolean {
     return filters.every((filterItem, i) => {
       if (i % 2 === 0) {
         return Array.isArray(filterItem) && filterItem[0] === '!';
@@ -182,21 +214,19 @@ export default class DeferredStrategy extends SelectionStrategy {
   }
 
   _addSelectionFilter(
-    isDeselect,
-    filter,
+    isDeselect: boolean | undefined,
+    filter: SelectionFilter | undefined,
     isSelectAll?: boolean,
     skipFilter?: boolean,
-  ) {
-    const that = this;
-    const currentFilter = isDeselect ? ['!', filter] : filter;
+  ): void {
     const currentOperation = isDeselect ? 'and' : 'or';
     let needAddFilter = true;
-    let selectionFilter = that.options.selectionFilter || [];
+    let selectionFilter: SelectionFilter = this.options.selectionFilter || [];
 
-    selectionFilter = that._denormalizeFilter(selectionFilter);
+    selectionFilter = this._denormalizeFilter(selectionFilter);
     if (selectionFilter?.length && !skipFilter) {
-      const removedIndex = that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
-      const filterIndex = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+      const removedIndex = this._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
+      const filterIndex = this._removeSameFilter(selectionFilter, filter, !isDeselect);
 
       const shouldCleanFilter = isDeselect
                     && (removedIndex !== -1 || filterIndex !== -1)
@@ -206,30 +236,36 @@ export default class DeferredStrategy extends SelectionStrategy {
         selectionFilter = [];
       }
 
-      const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter) && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
+      const isKeyOperatorsAfterRemoved = this._isKeyFilter(filter)
+        && this._hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex);
 
-      needAddFilter = filter.length && !isKeyOperatorsAfterRemoved;
+      needAddFilter = !!filter?.length && !isKeyOperatorsAfterRemoved;
     }
 
     if (needAddFilter) {
-      selectionFilter = that._addFilterOperator(selectionFilter, currentOperation);
-      selectionFilter.push(currentFilter);
+      selectionFilter = this._addFilterOperator(selectionFilter, currentOperation);
+      if (Array.isArray(selectionFilter) && filter) {
+        const currentFilter = isDeselect ? ['!', filter] : filter;
+        selectionFilter.push(currentFilter);
+      }
     }
 
-    selectionFilter = that._normalizeFilter(selectionFilter);
+    selectionFilter = this._normalizeFilter(selectionFilter);
 
-    that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
+    this._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
   }
 
-  _normalizeFilter(filter) {
-    if (filter && filter.length === 1) {
-      // eslint-disable-next-line prefer-destructuring
-      filter = filter[0];
+  // eslint-disable-next-line class-methods-use-this
+  _normalizeFilter(filter: SelectionFilter): SelectionFilter {
+    let resultFilter = filter;
+    if (resultFilter && resultFilter.length === 1) {
+      [resultFilter] = resultFilter;
     }
-    return filter;
+    return resultFilter;
   }
 
-  _removeFilterByIndex(filter, filterIndex, isSelectAll) {
+  // eslint-disable-next-line class-methods-use-this
+  _removeFilterByIndex(filter: SelectionFilter, filterIndex: number, isSelectAll?: boolean): void {
     const operation = filter[1];
 
     if (filterIndex > 0) {
@@ -243,25 +279,29 @@ export default class DeferredStrategy extends SelectionStrategy {
     }
   }
 
-  _isSimpleKeyFilter(filter, key) {
-    return filter.length === 3 && filter[0] === key && filter[1] === '=';
+  // eslint-disable-next-line class-methods-use-this
+  _isSimpleKeyFilter(
+    filter: SelectionFilter | undefined,
+    key: string | Function | undefined,
+  ): boolean {
+    return filter?.length === 3 && filter[0] === key && filter[1] === '=';
   }
 
-  _isKeyFilter(filter) {
-    if (filter.length === 2 && filter[0] === '!') {
+  _isKeyFilter(filter: SelectionFilter | undefined): boolean {
+    if (filter?.length === 2 && filter?.[0] === '!') {
       return this._isKeyFilter(filter[1]);
     }
     const keyField = this._getKeyExpr();
 
     if (Array.isArray(keyField)) {
-      if (filter.length !== keyField.length * 2 - 1) {
+      if (filter?.length !== keyField.length * 2 - 1) {
         return false;
       }
-      for (let i = 0; i < keyField.length; i++) {
-        if (i > 0 && filter[i * 2 - 1] !== 'and') {
+      for (let i = 0; i < keyField.length; i += 1) {
+        if (i > 0 && filter?.[i * 2 - 1] !== 'and') {
           return false;
         }
-        if (!this._isSimpleKeyFilter(filter[i * 2], keyField[i])) {
+        if (!this._isSimpleKeyFilter(filter?.[i * 2], keyField[i])) {
           return false;
         }
       }
@@ -271,9 +311,12 @@ export default class DeferredStrategy extends SelectionStrategy {
     return this._isSimpleKeyFilter(filter, keyField);
   }
 
-  _hasKeyFiltersOnlyStartingFromIndex(selectionFilter, filterIndex) {
+  _hasKeyFiltersOnlyStartingFromIndex(
+    selectionFilter: SelectionFilter,
+    filterIndex: number,
+  ): boolean {
     if (filterIndex >= 0) {
-      for (let i = filterIndex; i < selectionFilter.length; i++) {
+      for (let i = filterIndex; i < selectionFilter.length; i += 1) {
         if (typeof selectionFilter[i] !== 'string' && !this._isKeyFilter(selectionFilter[i])) {
           return false;
         }
@@ -285,38 +328,49 @@ export default class DeferredStrategy extends SelectionStrategy {
     return false;
   }
 
-  _removeSameFilter(selectionFilter, filter, inverted, isSelectAll?: boolean) {
-    filter = inverted ? ['!', filter] : filter;
+  _removeSameFilter(
+    selectionFilter: SelectionFilter,
+    filter: SelectionFilter | undefined,
+    inverted?: boolean,
+    isSelectAll?: boolean,
+  ): number {
+    const sameFilter = inverted ? ['!', filter] : filter;
 
-    if (JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
+    if (JSON.stringify(sameFilter) === JSON.stringify(selectionFilter)) {
       selectionFilter.splice(0, selectionFilter.length);
       return 0;
     }
 
-    const filterIndex = this._findSubFilter(selectionFilter, filter);
+    const filterIndex = this._findSubFilter(selectionFilter, sameFilter);
 
     if (filterIndex >= 0) {
       this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
       return filterIndex;
     }
-    for (let i = 0; i < selectionFilter.length; i++) {
+
+    for (let i = 0; i < selectionFilter.length; i += 1) {
       if (Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2) {
-        const filterIndex = this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
-        if (filterIndex >= 0) {
+        const innerFilterIndex = this._removeSameFilter(
+          selectionFilter[i],
+          sameFilter,
+          false,
+          isSelectAll,
+        );
+        if (innerFilterIndex >= 0) {
           if (!selectionFilter[i].length) {
             this._removeFilterByIndex(selectionFilter, i, isSelectAll);
           } else if (selectionFilter[i].length === 1) {
-            // eslint-disable-next-line prefer-destructuring
-            selectionFilter[i] = selectionFilter[i][0];
+            const [firstFilter] = selectionFilter[i];
+            selectionFilter[i] = firstFilter;
           }
-          return filterIndex;
+          return innerFilterIndex;
         }
       }
     }
     return -1;
   }
 
-  getSelectAllState() {
+  getSelectAllState(): boolean | undefined {
     const filter = this.options.filter();
     let { selectionFilter } = this.options;
 
@@ -337,7 +391,7 @@ export default class DeferredStrategy extends SelectionStrategy {
     return undefined;
   }
 
-  loadSelectedItemsWithFilter() {
+  loadSelectedItemsWithFilter(): DeferredObj<unknown> {
     const componentFilter = this.options.filter();
     const { selectionFilter } = this.options;
 

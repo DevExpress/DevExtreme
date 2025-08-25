@@ -27,3 +27,10 @@ export const COLUMN_INDEX_OPTIONS = {
 };
 export const GROUP_LOCATION = 'group';
 export const COLUMN_CHOOSER_LOCATION = 'columnChooser';
+
+export const UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = [
+  'fixed',
+  'fixedPosition',
+  'type',
+  'buttons',
+];
