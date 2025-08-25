@@ -63,7 +63,7 @@
         :body-style-name="BodyStyleName"
         :horsepower="Horsepower"
         @show-info="showInfo"
-/>
+      />
     </template>
   </DxCardView>
   <DxPopup
