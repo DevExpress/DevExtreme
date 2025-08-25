@@ -123,7 +123,7 @@ $(() => {
     return vehicleInfo;
   };
 
-  $(function () {
+  $(() => {
     $('#card-view').dxCardView({
       dataSource: vehicles,
       height: 1120,
