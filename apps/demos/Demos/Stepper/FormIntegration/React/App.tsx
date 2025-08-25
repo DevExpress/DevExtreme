@@ -72,7 +72,7 @@ export default function App() {
   }, []);
 
   const onNextButtonClick = useCallback(() => {
-    if (selectedIndex < initialSteps.length -1) {
+    if (selectedIndex < initialSteps.length - 1) {
       moveNext();
     } else if (isConfirmed) {
       onReset();

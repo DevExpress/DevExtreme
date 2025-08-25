@@ -37,7 +37,7 @@ export default function Steppers({
   navigationMode,
   selectOnFocus,
   rtlMode,
-}: SteppersProps): JSX.Element {
+}: SteppersProps) {
   return (
     <>
       {stepperConfigs.map(({ id, labelId, title, fields }) => (

@@ -9,7 +9,7 @@ const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
     <div>
       Please let us know if you have any other requests.
     </div>
-    <Form formData={formData} >
+    <Form formData={formData}>
       <SimpleItem
         dataField='additionalRequest'
         editorType='dxTextArea'

@@ -62,14 +62,14 @@
             height="254"
             :style="{ color }"
           >
-            <use :href='"../../../../images/Brush.svg#brush"'/>
+            <use :href="'../../../../images/Brush.svg#brush'"/>
           </svg>
           <svg
             class="superhero dx-color-icon"
             width="360"
             height="254"
           >
-            <use :href='"../../../../images/Hero.svg#hero"'/>
+            <use :href="'../../../../images/Hero.svg#hero'"/>
           </svg>
         </div>
         <div class="hero-color-box">

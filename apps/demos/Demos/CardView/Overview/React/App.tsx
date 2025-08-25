@@ -57,9 +57,9 @@ function CardFooterComponent() {
 
 function StatusComponent({ data: { field: { value } } }) {
   const classNameMap = {
-    'Salaried': 'status--salaried',
-    'Commission': 'status--commission',
-    'Terminated': 'status--terminated',
+    Salaried: 'status--salaried',
+    Commission: 'status--commission',
+    Terminated: 'status--terminated',
   };
 
   const className = classNameMap[value];

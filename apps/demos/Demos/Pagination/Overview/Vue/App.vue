@@ -9,6 +9,7 @@
     <div
       class="employees__card"
       v-for="employee in pageEmployees"
+      :key="employee.ID"
     >
       <div class="employees__img-wrapper">
         <img

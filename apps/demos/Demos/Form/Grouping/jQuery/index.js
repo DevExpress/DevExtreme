@@ -1,7 +1,7 @@
 $(() => {
   function groupCaptionTemplate($icon) {
     return (data) => $(
-      `<i class='dx-icon dx-icon-${$icon}'></i><span>${data.caption}</span>`
+      `<i class='dx-icon dx-icon-${$icon}'></i><span>${data.caption}</span>`,
     );
   }
 
