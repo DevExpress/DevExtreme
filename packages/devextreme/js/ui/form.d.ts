@@ -73,7 +73,7 @@ export type AIResult = Record<string, string | string[]>;
  */
 export type SmartPasteInfo = {
   /**
-   * @docid _ui_form_SmartPastingEvent.aiResult
+   * @docid
    * @type AIResult
    */
   readonly aiResult: AIResult;

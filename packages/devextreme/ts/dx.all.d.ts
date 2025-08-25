@@ -18706,7 +18706,7 @@ declare module DevExpress.ui {
      */
     export type SmartPasteInfo = {
       /**
-       * [descr:_ui_form_SmartPastingEvent.aiResult]
+       * [descr:SmartPasteInfo.aiResult]
        */
       readonly aiResult: AIResult;
     };
