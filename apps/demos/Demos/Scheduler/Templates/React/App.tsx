@@ -15,7 +15,7 @@ const groups = ['theatreId'];
 
 const onAppointmentFormOpening = (e: SchedulerTypes.AppointmentFormOpeningEvent) => {
   let movieInfo = getMovieById((e.appointmentData as AppointmentType).movieId) || {};
-  let { startDate } = e.appointmentData!;
+  let { startDate } = e.appointmentData;
 
   e.form.option('items', [{
     label: {
