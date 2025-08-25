@@ -2,6 +2,7 @@ import '@js/ui/validation_summary';
 import '@js/ui/validation_group';
 
 import type { EditorStyle } from '@js/common';
+import type { RequestCallbacks, SmartPasteCommandParams, SmartPasteCommandResult } from '@js/common/ai-integration';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
@@ -26,7 +27,12 @@ import type { ChangedOptionInfo, EventInfo } from '@js/events';
 import type {
   FieldDataChangedEvent,
   FormItemType,
-  GroupItem, Item, LabelLocation, Properties, SimpleItemTemplateData, TabbedItem,
+  GroupItem,
+  Item,
+  LabelLocation,
+  Properties,
+  SimpleItemTemplateData,
+  TabbedItem,
 } from '@js/ui/form';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
@@ -37,9 +43,7 @@ import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
 import type { Button } from '@ts/ui/button/button';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import Editor from '@ts/ui/editor/editor';
-import {
-  setLabelWidthByMaxLabelWidth,
-} from '@ts/ui/form/components/label';
+import { setLabelWidthByMaxLabelWidth } from '@ts/ui/form/components/label';
 import {
   FIELD_ITEM_CLASS,
   FIELD_ITEM_CONTENT_CLASS,
@@ -58,6 +62,7 @@ import {
   GROUP_COL_COUNT_CLASS,
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
+import { getItemFormatInfo } from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
@@ -91,6 +96,21 @@ import TabPanel from '@ts/ui/tab_panel/tab_panel';
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/m_text_editor.base';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 
+export type FormAICommandName = 'smartPaste';
+export interface AICommandParamsMap {
+  smartPaste: SmartPasteCommandParams;
+}
+
+export interface AICommandResultMap {
+  smartPaste: SmartPasteCommandResult;
+}
+
+interface AICommandWithParams<T extends FormAICommandName> {
+  command: T;
+  params: AICommandParamsMap[T];
+  callbacks: RequestCallbacks<AICommandResultMap[T]>;
+}
+
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
 
 export interface FormProperties extends Properties {
@@ -104,6 +124,10 @@ export interface FormProperties extends Properties {
 }
 
 class Form extends Widget<FormProperties> {
+  private _abort?: () => void;
+
+  private _currentAICommand?: AICommandWithParams<FormAICommandName> = undefined;
+
   _targetScreenFactor?: ScreenSizeQualifier;
 
   _lastMarkupScreenFactor!: ScreenSizeQualifier;
@@ -175,6 +199,7 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
+      aiIntegration: undefined,
     };
   }
 
@@ -1100,6 +1125,11 @@ class Form extends Widget<FormProperties> {
         ValidationEngine.removeGroup(args.previousValue || this);
         this._invalidate();
         break;
+      // @ts-expect-error
+      case 'aiIntegration': {
+        this._processAIIntegrationUpdate();
+        break;
+      }
       default:
         super._optionChanged(args);
     }
@@ -1759,6 +1789,69 @@ class Form extends Widget<FormProperties> {
 
   getTargetScreenFactor(): ScreenSizeQualifier | undefined {
     return this._targetScreenFactor;
+  }
+
+  private _processCommandCompletion(): void {
+    this._abort?.();
+    this._abort = undefined;
+    this._currentAICommand = undefined;
+  }
+
+  private _processAIIntegrationUpdate(): void {
+    if (this._currentAICommand) {
+      const { command, params, callbacks } = this._currentAICommand;
+
+      this._processCommandCompletion();
+      this._executeAICommand(command, params, callbacks);
+    }
+  }
+
+  private _executeAICommand<T extends FormAICommandName>(
+    command: T,
+    params: AICommandParamsMap[T],
+    callbacks: RequestCallbacks<AICommandResultMap[T]>,
+  ): void {
+    // @ts-expect-error
+    const { aiIntegration } = this.option();
+
+    this._currentAICommand = {
+      command,
+      params,
+      callbacks,
+    };
+    this._abort = aiIntegration?.[command](params, callbacks);
+  }
+
+  private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
+    return {
+      onComplete: (fieldsData: SmartPasteCommandResult): void => {
+        fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
+          this._updateFieldValue(name, value);
+        });
+        this._processCommandCompletion();
+      },
+      onError: (): void => {
+        this._processCommandCompletion();
+      },
+    };
+  }
+
+  async smartPaste(text?: string): Promise<void> {
+    const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
+    const fields = dataItems.map((item) => ({
+      name: item.dataField,
+      format: getItemFormatInfo(item),
+      // @ts-expect-error
+      instruction: item.aiProcessing?.instruction,
+    }));
+
+    const smartPastParams = {
+      text: text ?? await navigator.clipboard.readText(),
+      fields,
+    };
+    const smartPastCallbacks = this._getSmartPasteCommandCallbacks();
+
+    this._executeAICommand('smartPaste', smartPastParams, smartPastCallbacks);
   }
 }
 

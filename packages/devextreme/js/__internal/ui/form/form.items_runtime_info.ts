@@ -23,6 +23,7 @@ export type PreparedItem<T = Item> = T & {
 
 export type TabItem = NonNullable<TabbedItem['tabs']>[number];
 export type PreparedTabItem = PreparedItem<TabItem>;
+export type SimpleItemWithDataField = SimpleItem & Required<Pick<SimpleItem, 'dataField'>>;
 
 export interface PreparedGroupedItem extends PreparedItem<GroupItem> {
   _prepareGroupCaptionTemplate?: (captionTemplate?: template | ((
@@ -211,5 +212,30 @@ export default class FormItemsRunTimeInfo {
       return false;
     });
     filteredKeys.forEach((key) => this.removeItemByKey(key));
+  }
+
+  _isEditableItem(item: SimpleItem): boolean {
+    const { visible, editorOptions } = item;
+    const { readOnly, disabled } = editorOptions ?? {};
+
+    return visible !== false && !readOnly && !disabled;
+  }
+
+  _isDataItem(item: PreparedItem): item is SimpleItemWithDataField {
+    return 'dataField' in item;
+  }
+
+  getVisibleItems(): FormItemRuntimeInfo[] {
+    const allItems = Object.values(this._map);
+
+    return allItems.filter(({ $itemContainer }) => $itemContainer?.css('visibility') === 'visible');
+  }
+
+  getItemsForDataExtraction(): SimpleItemWithDataField[] {
+    const visibleItems = this.getVisibleItems().map(({ item }) => item);
+
+    return visibleItems
+      .filter(this._isDataItem)
+      .filter(this._isEditableItem);
   }
 }
