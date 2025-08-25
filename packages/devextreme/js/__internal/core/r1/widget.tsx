@@ -154,7 +154,6 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
         this.state.active,
       ]),
       new InfernoEffect(this.clickEffect, [
-        this.props.disabled,
         this.props.name,
         this.props.onClick,
       ]),
@@ -208,7 +207,6 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
       this.state.active,
     ]);
     this._effects[3]?.update([
-      this.props.disabled,
       this.props.name,
       this.props.onClick,
     ]);
@@ -318,10 +316,10 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   }
 
   clickEffect(): EffectReturn {
-    const { name, onClick, disabled } = this.props;
+    const { name, onClick } = this.props;
     const namespace = name;
 
-    if (onClick && !disabled) {
+    if (onClick) {
       dxClick.on(this.widgetElementRef?.current, onClick, { namespace });
       return (): void => dxClick.off(this.widgetElementRef?.current, { namespace });
     }

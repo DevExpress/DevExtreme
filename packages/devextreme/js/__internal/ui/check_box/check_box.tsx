@@ -83,9 +83,10 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     const {
       enableThreeStateBehavior,
       readOnly,
+      disabled,
       saveValueChangeEvent,
     } = this.props;
-    if (!readOnly) {
+    if (!readOnly && !disabled) {
       saveValueChangeEvent?.(event);
       if (enableThreeStateBehavior) {
         // eslint-disable-next-line @stylistic/max-len
