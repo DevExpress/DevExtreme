@@ -107,12 +107,12 @@ const focusedRowKey = ref(45);
 function onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
   const rowData = e.row && e.row.data;
   let cellValue;
-  let assigned;
+  let assigned: string = '';
 
   if (rowData) {
     cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
     taskEmployees.byKey(cellValue).done((item: Record<string, unknown>) => {
-      assigned = item.Name;
+      assigned = item.Name as string;
     });
 
     taskSubject.value = rowData.Task_Subject;

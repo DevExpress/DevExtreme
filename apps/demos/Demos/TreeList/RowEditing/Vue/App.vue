@@ -69,7 +69,7 @@ const dataSource = {
 };
 
 function onEditorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
-  if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+  if (e.dataField === 'Head_ID' && e.row?.data.ID === 1) {
     e.cancel = true;
   }
 }

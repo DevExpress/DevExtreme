@@ -61,7 +61,7 @@ import { products } from './data.ts';
 const items = products.slice(0, 5);
 
 function onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
-  const selectedItemsLength = args.selectedItems.length;
+  const selectedItemsLength = (args.selectedItems || []).length;
   const totalCount = 5;
 
   if (selectedItemsLength < totalCount) {

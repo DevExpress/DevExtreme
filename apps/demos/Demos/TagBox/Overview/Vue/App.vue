@@ -130,7 +130,7 @@ const value = ref([1, 2]);
 const onCustomItemCreating = ref((args: DxTagBoxTypes.CustomItemCreatingEvent) => {
   const newValue = args.text;
   const isItemInDataSource = editableProducts.value.some((item) => item === newValue);
-  if (!isItemInDataSource) {
+  if (!isItemInDataSource && newValue) {
     editableProducts.value = [newValue, ...editableProducts.value];
   }
   args.customItem = newValue;
