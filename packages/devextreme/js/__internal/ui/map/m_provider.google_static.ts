@@ -3,7 +3,6 @@
 import Color from '@js/color';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 
 import Provider from './m_provider';
@@ -11,9 +10,9 @@ import Provider from './m_provider';
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
 class GoogleStaticProvider extends Provider {
-  _locationToString(location) {
+  _locationToString(location: unknown): string {
     const latLng = this._getLatLng(location);
-    return latLng ? `${latLng.lat},${latLng.lng}` : location.toString().replace(/ /g, '+');
+    return latLng ? `${latLng.lat},${latLng.lng}` : String(location).replace(/ /g, '+');
   }
 
   _renderImpl(): Promise<boolean> {
@@ -44,12 +43,10 @@ class GoogleStaticProvider extends Provider {
     return Promise.resolve();
   }
 
-  addMarkers(options) {
-    const that = this;
-
+  addMarkers(markers = []): Promise<boolean> {
     return this._updateMap().then((result) => {
-      each(options, (_, options) => {
-        that._fireMarkerAddedAction({
+      markers.forEach((options) => {
+        this._fireMarkerAddedAction({
           options,
         });
       });
@@ -57,12 +54,10 @@ class GoogleStaticProvider extends Provider {
     });
   }
 
-  removeMarkers(options) {
-    const that = this;
-
+  removeMarkers(markers = []): Promise<boolean> {
     return this._updateMap().then((result) => {
-      each(options, (_, options) => {
-        that._fireMarkerRemovedAction({
+      markers.forEach((options) => {
+        this._fireMarkerRemovedAction({
           options,
         });
       });
@@ -74,12 +69,10 @@ class GoogleStaticProvider extends Provider {
     return Promise.resolve();
   }
 
-  addRoutes(options) {
-    const that = this;
-
+  addRoutes(routes = []): Promise<boolean> {
     return this._updateMap().then((result) => {
-      each(options, (_, options) => {
-        that._fireRouteAddedAction({
+      routes.forEach((options) => {
+        this._fireRouteAddedAction({
           options,
         });
       });
@@ -87,12 +80,10 @@ class GoogleStaticProvider extends Provider {
     });
   }
 
-  removeRoutes(options) {
-    const that = this;
-
+  removeRoutes(routes = []): Promise<boolean> {
     return this._updateMap().then((result) => {
-      each(options, (_, options) => {
-        that._fireRouteRemovedAction({
+      routes.forEach((options) => {
+        this._fireRouteRemovedAction({
           options,
         });
       });
@@ -127,7 +118,7 @@ class GoogleStaticProvider extends Provider {
       `zoom=${this._option('zoom')}`,
       this._markersSubstring(),
     ];
-    requestOptions.push.apply(requestOptions, this._routeSubstrings());
+    requestOptions.push(...this._routeSubstrings());
     if (key) {
       requestOptions.push(`key=${key}`);
     }
@@ -145,39 +136,36 @@ class GoogleStaticProvider extends Provider {
     return Promise.resolve(true);
   }
 
-  _markersSubstring() {
-    const that = this;
-    const markers = [];
+  _markersSubstring(): string {
+    const markers: string[] = [];
     const markerIcon = this._option('markerIconSrc');
-
+    const markersOption = this._option('markers') ?? [];
     if (markerIcon) {
-      // @ts-expect-error
-
       markers.push(`icon:${markerIcon}`);
     }
 
-    each(this._option('markers'), (_, marker) => {
-      // @ts-expect-error
-      markers.push(that._locationToString(marker.location));
+    markersOption.forEach((marker) => {
+      markers.push(this._locationToString(marker.location));
     });
 
     return `markers=${markers.join('|')}`;
   }
 
-  _routeSubstrings() {
-    const that = this;
-    const routes = [];
+  _routeSubstrings(): string[] {
+    const routes: string[] = [];
+    const routesOptions = this._option('routes') ?? [];
 
-    each(this._option('routes'), (_, route) => {
-      const color = new Color(route.color || that._defaultRouteColor()).toHex().replace('#', '0x');
-      const opacity = Math.round((route.opacity || that._defaultRouteOpacity()) * 255).toString(16);
-      const width = route.weight || that._defaultRouteWeight();
-      const locations = [];
-      each(route.locations, (_, routePoint) => {
-        // @ts-expect-error
-        locations.push(that._locationToString(routePoint));
+    routesOptions.forEach((route) => {
+      const color = new Color(route.color ?? this._defaultRouteColor()).toHex().replace('#', '0x');
+      const opacity = Math.round((route.opacity ?? this._defaultRouteOpacity()) * 255).toString(16);
+      const width = route.weight ?? this._defaultRouteWeight();
+      const locations: string[] = [];
+      const routeLocations = route.locations ?? [];
+
+      routeLocations.forEach((routePoint) => {
+        locations.push(this._locationToString(routePoint));
       });
-      // @ts-expect-error
+
       routes.push(`path=color:${color}${opacity}|weight:${width}|${locations.join('|')}`);
     });
 
@@ -185,19 +173,18 @@ class GoogleStaticProvider extends Provider {
   }
 
   _attachClickEvent(): void {
-    const that = this;
     const eventName = this._addEventNamespace(clickEventName);
 
     eventsEngine.off(this._$container, eventName);
     eventsEngine.on(this._$container, eventName, (e) => {
-      that._fireClickAction({ event: e });
+      this._fireClickAction({ event: e });
     });
   }
 }
 
 /// #DEBUG
 // @ts-expect-error ts-error
-GoogleStaticProvider.remapConstant = function (newValue) {
+GoogleStaticProvider.remapConstant = (newValue: string): void => {
   GOOGLE_STATIC_URL = newValue;
 };
 

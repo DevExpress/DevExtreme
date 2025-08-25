@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -248,7 +249,7 @@ class DynamicProvider extends Provider {
     return true;
   }
 
-  _fitBounds() {
+  _fitBounds(): void {
     Class.abstract();
   }
 

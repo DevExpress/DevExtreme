@@ -33,7 +33,10 @@ class Provider {
     return '#0000FF';
   }
 
-  render(markerOptions, routeOptions) {
+  render(
+    markerOptions,
+    routeOptions,
+  ): Promise<void> {
     // @ts-expect-error ts-error
     return this._renderImpl().then(() => Promise.all([
       this._applyFunctionIfNeeded('addMarkers', markerOptions),
@@ -158,7 +161,7 @@ class Provider {
     };
   }
 
-  _getLatLng(location) {
+  _getLatLng(location): { lat: number; lng: number } | null {
     if (typeof location === 'string') {
       const coords = location.split(',').map((item) => item.trim());
       const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
@@ -169,7 +172,7 @@ class Provider {
     } else if (Array.isArray(location) && location.length === 2) {
       return { lat: location[0], lng: location[1] };
     } else if (isPlainObject(location) && isNumeric(location.lat) && isNumeric(location.lng)) {
-      return location;
+      return location as { lat: number; lng: number };
     }
 
     return null;
@@ -186,7 +189,7 @@ class Provider {
     return addNamespace(name, this._mapWidget.NAME);
   }
 
-  _applyFunctionIfNeeded(fnName, array) {
+  _applyFunctionIfNeeded(fnName, array: any[]) {
     if (!array.length) {
       return Promise.resolve();
     }

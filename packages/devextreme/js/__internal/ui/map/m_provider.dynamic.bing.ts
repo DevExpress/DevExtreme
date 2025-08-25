@@ -8,7 +8,7 @@ import { each, map } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { MapType } from '@js/ui/map';
+import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import DynamicProvider from './m_provider.dynamic';
@@ -25,10 +25,8 @@ let BING_URL_V8 = `https://www.bing.com/api/maps/mapcontrol?callback=${BING_MAP_
 const INFOBOX_V_OFFSET_V8 = 13;
 const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
-const msMapsLoaded = function () {
-  // @ts-expect-error
-  return window.Microsoft?.Maps;
-};
+// @ts-expect-error ts-error
+const msMapsLoaded = (): boolean => Boolean(window.Microsoft?.Maps);
 
 let msMapsLoader;
 class BingProvider extends DynamicProvider {
@@ -48,7 +46,7 @@ class BingProvider extends DynamicProvider {
     return mapTypes[type] ?? mapTypes.roadmap;
   }
 
-  _movementMode(type) {
+  _movementMode(type: RouteMode): unknown {
     if (!type) {
       return Microsoft.Maps.Directions.RouteMode.driving;
     }
@@ -103,7 +101,12 @@ class BingProvider extends DynamicProvider {
     };
   }
 
-  _normalizeLocationRect(locationRect) {
+  _normalizeLocationRect(
+    locationRect: {
+      getNorthwest: () => { latitude: number; longitude: number };
+      getSoutheast: () => { latitude: number; longitude: number };
+    },
+  ): { northEast: { lat: number; lng: number }; southWest: { lat: number; lng: number } } {
     const northWest = this._normalizeLocation(locationRect.getNorthwest());
     const southEast = this._normalizeLocation(locationRect.getSoutheast());
 
@@ -122,7 +125,7 @@ class BingProvider extends DynamicProvider {
   _loadImpl() {
     return new Promise((resolve) => {
       if (msMapsLoaded()) {
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         resolve();
       } else {
         if (!msMapsLoader) {
@@ -131,12 +134,12 @@ class BingProvider extends DynamicProvider {
 
         msMapsLoader.then(() => {
           if (msMapsLoaded()) {
-            // @ts-expect-error
+            // @ts-expect-error ts-error
             resolve();
             return;
           }
 
-          this._loadMapScript().then(resolve);
+          this._loadMapScript().then(resolve).catch(() => {});
         });
       }
     }).then(() => Promise.all([
@@ -166,13 +169,13 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _init() {
+  _init(): Promise<void> {
     this._createMap();
 
     return Promise.resolve();
   }
 
-  _createMap() {
+  _createMap(): void {
     const controls = this._option('controls');
 
     this._map = new Microsoft.Maps.Map(this._$container[0], {
@@ -201,7 +204,9 @@ class BingProvider extends DynamicProvider {
     }
   }
 
-  _clickActionHandler(e) {
+  _clickActionHandler(
+    e: { targetType: string; location: { latitude: number; longitude: number } },
+  ): void {
     if (e.targetType === 'map') {
       this._fireClickAction({ location: this._normalizeLocation(e.location) });
     }
@@ -265,7 +270,7 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateControls() {
+  updateControls(): Promise<void> {
     this.clean();
     // @ts-expect-error ts-error
     return this.render.apply(this, arguments);
@@ -285,7 +290,7 @@ class BingProvider extends DynamicProvider {
 
         const { htmlOffset } = options;
         if (htmlOffset) {
-          // @ts-expect-error
+          // @ts-expect-error ts-error
           pushpinOptions.anchor = new Microsoft.Maps.Point(-htmlOffset.left, -htmlOffset.top);
         }
       }
@@ -337,7 +342,9 @@ class BingProvider extends DynamicProvider {
     return infobox;
   }
 
-  _destroyMarker(marker) {
+  _destroyMarker(marker: {
+    marker: unknown; infobox: { setMap: (arg: unknown) => void }; handler: () => {};
+  }): void {
     this._map.entities.remove(marker.marker);
     if (marker.infobox) {
       marker.infobox.setMap(null);
@@ -379,7 +386,7 @@ class BingProvider extends DynamicProvider {
       });
 
       const directionHandlers = [];
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', (args) => {
         while (directionHandlers.length) {
           Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
@@ -393,7 +400,7 @@ class BingProvider extends DynamicProvider {
           southWest: routeSummary.southWest,
         });
       }));
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsError', (args) => {
         while (directionHandlers.length) {
           Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
@@ -411,11 +418,11 @@ class BingProvider extends DynamicProvider {
     }));
   }
 
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: { instance: { dispose: () => void } }): void {
     routeObject.instance.dispose();
   }
 
-  _fitBounds() {
+  _fitBounds(): Promise<void> {
     this._updateBounds();
 
     if (this._bounds && this._option('autoAdjust')) {

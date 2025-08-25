@@ -12,7 +12,7 @@ import { extend } from '@js/core/utils/extend';
 import { map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { MapType } from '@js/ui/map';
+import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
 import DynamicProvider from './m_provider.dynamic';
@@ -74,10 +74,8 @@ const initCustomMarkerClass = function () {
   };
 };
 
-const googleMapsLoaded = function () {
-  // @ts-expect-error
-  return window.google?.maps;
-};
+// @ts-expect-error ts-error
+const googleMapsLoaded = (): boolean => Boolean(window.google?.maps);
 
 let googleMapsLoader;
 
@@ -97,7 +95,7 @@ class GoogleProvider extends DynamicProvider {
     return mapTypes[type] ?? mapTypes.hybrid;
   }
 
-  _movementMode(type) {
+  _movementMode(type: RouteMode): unknown {
     const movementTypes = {
       driving: google.maps.TravelMode.DRIVING,
       walking: google.maps.TravelMode.WALKING,
@@ -149,17 +147,22 @@ class GoogleProvider extends DynamicProvider {
     };
   }
 
-  _normalizeLocationRect(locationRect) {
+  _normalizeLocationRect(
+    locationRect: { getNorthEast: () => number; getSouthWest: () => number },
+  ): {
+      northEast: { lat: number; lng: number };
+      southWest: { lat: number; lng: number };
+    } {
     return {
       northEast: this._normalizeLocation(locationRect.getNorthEast()),
       southWest: this._normalizeLocation(locationRect.getSouthWest()),
     };
   }
 
-  _loadImpl() {
+  _loadImpl(): Promise<void> {
     return new Promise((resolve) => {
       if (googleMapsLoaded()) {
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         resolve();
       } else {
         if (!googleMapsLoader) {
@@ -168,12 +171,14 @@ class GoogleProvider extends DynamicProvider {
 
         googleMapsLoader.then(() => {
           if (googleMapsLoaded()) {
-            // @ts-expect-error
+            // @ts-expect-error ts-error
             resolve();
             return;
           }
 
-          this._loadMapScript().then(resolve);
+          this._loadMapScript()
+            .then(resolve)
+            .catch(() => {});
         });
       }
     }).then(() => {
@@ -216,7 +221,7 @@ class GoogleProvider extends DynamicProvider {
         const listener = google.maps.event.addListener(this._map, 'idle', () => {
           resolve(listener);
         });
-      });
+      }).catch(() => {});
     }).then((listener) => {
       google.maps.event.removeListener(listener);
     });
@@ -239,7 +244,9 @@ class GoogleProvider extends DynamicProvider {
     }
   }
 
-  _clickActionHandler(e) {
+  _clickActionHandler(
+    e: { latLng: { lat: () => number; lng: () => number }; domEvent: Event },
+  ): void {
     this._fireClickAction({ location: this._normalizeLocation(e.latLng), event: e.domEvent });
   }
 
@@ -298,7 +305,7 @@ class GoogleProvider extends DynamicProvider {
   isEventsCanceled(e): boolean {
     const gestureHandling = this._map?.get('gestureHandling');
     const isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
-    if (isInfoWindowContent || devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative') {
+    if (isInfoWindowContent || (devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative')) {
       return false;
     }
     return super.isEventsCanceled(e);
@@ -379,7 +386,7 @@ class GoogleProvider extends DynamicProvider {
     return infoWindow;
   }
 
-  _destroyMarker(marker) {
+  _destroyMarker(marker: { marker: { setMap: (arg: unknown) => void }; listener?: unknown }): void {
     marker.marker.setMap(null);
     if (marker.listener) {
       google.maps.event.removeListener(marker.listener);
@@ -433,7 +440,7 @@ class GoogleProvider extends DynamicProvider {
     }));
   }
 
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: { instance: { setMap: (arg: unknown) => void } }): void {
     routeObject.instance.setMap(null);
   }
 
@@ -459,7 +466,7 @@ class GoogleProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _extendBounds(location) {
+  _extendBounds(location): void {
     if (this._bounds) {
       this._bounds.extend(location);
     } else {
@@ -486,7 +493,7 @@ class GoogleProvider extends DynamicProvider {
 
 /// #DEBUG
 // @ts-expect-error ts-error
-GoogleProvider.remapConstant = function (newValue) {
+GoogleProvider.remapConstant = (newValue: string): void => {
   GOOGLE_URL = newValue;
 };
 

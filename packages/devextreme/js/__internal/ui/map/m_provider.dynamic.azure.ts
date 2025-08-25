@@ -19,22 +19,20 @@ declare let atlas: any;
 const AZURE_BASE_LINK = 'https://atlas.microsoft.com/';
 let AZURE_JS_URL = `${AZURE_BASE_LINK}sdk/javascript/mapcontrol/3/atlas.min.js`;
 let AZURE_CSS_URL = `${AZURE_BASE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.css`;
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let CUSTOM_URL;
 
 const MAP_MARKER_TOOLTIP_CLASS = 'dx-map-marker-tooltip';
 
 const CAMERA_PADDING = 50;
-
-const azureMapsLoaded = function () {
-  // @ts-expect-error
-  return window.atlas?.Map;
-};
+// @ts-expect-error ts-error
+const azureMapsLoaded = (): boolean => Boolean(window.atlas?.Map);
 
 let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
 
-  _mapReadyPromise?: Promise<void>;
+  _mapReadyPromise!: Promise<void>;
 
   _mapType(type: MapType): string {
     const mapTypes = {
@@ -102,7 +100,9 @@ class AzureProvider extends DynamicProvider {
     };
   }
 
-  _normalizeLocationRect(locationRect) {
+  _normalizeLocationRect(
+    locationRect: [number, number, number, number],
+  ): { northEast: { lat: number; lng: number }; southWest: { lat: number; lng: number } } {
     return {
       northEast: {
         lat: locationRect[1],
@@ -115,7 +115,7 @@ class AzureProvider extends DynamicProvider {
     };
   }
 
-  _loadImpl() {
+  _loadImpl(): Promise<void> {
     return new Promise<void>((resolve) => {
       if (azureMapsLoaded()) {
         resolve();
@@ -131,17 +131,19 @@ class AzureProvider extends DynamicProvider {
           resolve();
           return;
         }
-        // @ts-expect-error ts-error
-        this._loadMapResources().then(resolve);
+
+        this._loadMapResources()
+          .then(resolve)
+          .catch(() => {});
       });
     });
   }
 
-  _loadMapResources() {
+  _loadMapResources(): Promise<void> {
     return Promise.all([
       this._loadMapScript(),
       this._loadMapStyles(),
-    ]);
+    ]).then(() => {});
   }
 
   _loadMapScript(): Promise<void> {
@@ -167,13 +169,13 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  _init() {
+  _init(): Promise<void> {
     this._createMap();
 
     return this._mapReadyPromise;
   }
 
-  _createMap() {
+  _createMap(): void {
     const type = this._option('type') ?? 'roadmap';
     this._map = new atlas.Map(this._$container[0], {
       authOptions: {
@@ -212,7 +214,11 @@ class AzureProvider extends DynamicProvider {
     }
   }
 
-  _clickActionHandler(e) {
+  _clickActionHandler(e: {
+    type: string;
+    position: [number, number];
+    originalEvent: MouseEvent;
+  }): void {
     if (e.type === 'click') {
       this._fireClickAction({
         location: this._normalizeLocation(e.position),
@@ -440,7 +446,7 @@ class AzureProvider extends DynamicProvider {
     }));
   }
 
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: { instance: { dataSource: unknown; lineLayer: unknown } }): void {
     this._map.layers.remove(routeObject.instance.lineLayer);
     this._map.sources.remove(routeObject.instance.dataSource);
   }
@@ -471,7 +477,7 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _extendBounds(location) {
+  _extendBounds(location: [number, number]): void {
     const [longitude, latitude] = location;
     const delta = 0.0001;
     if (this._bounds) {
