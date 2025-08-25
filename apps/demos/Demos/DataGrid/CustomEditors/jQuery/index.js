@@ -117,7 +117,7 @@ $(() => {
           scrolling: { mode: 'virtual' },
           height: 250,
           selection: { mode: 'single' },
-          selectedRowKeys: selectedRowKeys,
+          selectedRowKeys,
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
           onContextMenuPreparing: (e) => {
