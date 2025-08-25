@@ -2,11 +2,11 @@
   <div class="showtime-preview">
     <div> {{ movieData.text }}</div>
     <div>
-      Ticket Price: <strong>${{ templateModel.targetedAppointmentData.price }}</strong>
+      Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
     </div>
     <div>
-      {{ getFormatDate(templateModel.targetedAppointmentData.displayStartDate) }} -
-      {{ getFormatDate(templateModel.targetedAppointmentData.displayEndDate) }}
+      {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
+      {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ const getMovieById = function(resourceId: string) {
     .toArray()[0];
 };
 
-const movieData = getMovieById(props.templateModel.targetedAppointmentData.movieId);
+const movieData = getMovieById(props.templateModel.targetedAppointmentData?.movieId);
 
 </script>
 <style scoped>

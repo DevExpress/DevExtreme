@@ -28,7 +28,7 @@ const getMovieById = function(resourceId: string) {
     .filter(['id', resourceId])
     .toArray()[0];
 };
-const movieData = getMovieById(props.templateTooltipModel.appointmentData.movieId);
+const movieData = getMovieById(props.templateTooltipModel?.appointmentData.movieId);
 </script>
 <style scoped>
   .appointment-content {

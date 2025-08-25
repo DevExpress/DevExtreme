@@ -60,7 +60,7 @@ import { data, moviesData, theatreData } from './data.ts';
 
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
-const scheduler = ref<DxScheduler['instance']>(null);
+const scheduler = ref<DxScheduler['instance']>();
 const currentDate = new Date(2021, 3, 27);
 const dataSource = data;
 const editing = { allowAdding: false };
@@ -70,8 +70,8 @@ function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
 }
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
   const { form } = e;
-  let movieInfo = getMovieById(e.appointmentData.movieId) || {};
-  let startDate = e.appointmentData.startDate as Date;
+  let movieInfo = getMovieById(e.appointmentData?.movieId) || {};
+  let startDate = e.appointmentData?.startDate as Date;
 
   form.option('items', [{
     label: {

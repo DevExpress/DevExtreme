@@ -56,9 +56,9 @@ const employeesMap: Record<number, string> = {};
 employees.forEach((employee) => {
   employeesMap[employee.ID] = employee.Name;
 });
-const lists = reactive([]);
+const lists: Task[][] = reactive([]);
 statuses.forEach((status) => {
-  lists.push(tasks.filter((task) => task.Task_Status === status));
+  lists.push(tasks.filter((task: Task) => task.Task_Status === status));
 });
 function onListReorder(e: any) {
   const list = lists.splice(e.fromIndex, 1)[0];
