@@ -542,6 +542,7 @@ export default [
             'no-implicit-coercion': ['error', {
                 boolean: true,
             }],
+            'no-extra-boolean-cast': 'error',
             'unicorn/filename-case': ['error', { case: 'snakeCase' }],
             '@typescript-eslint/naming-convention': [
                 'error',
