@@ -79,7 +79,7 @@ test('Focused total summary should have right appearance with sticky columns', a
     .pressKey('tab');
 
   await t
-    .expect(await takeScreenshot('total-summary-focused.png', dataGrid.element)).ok()
+    .expect(await takeScreenshot('total-summary-focused-with-sticky.png', dataGrid.element)).ok()
     .expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
