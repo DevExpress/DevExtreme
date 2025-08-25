@@ -107,7 +107,7 @@ $(() => {
     },
   });
 
-  function sendRequest(url, method = 'GET', data) {
+  function sendRequest(url, method = 'GET', data = {}) {
     const d = $.Deferred();
 
     logRequest(method, url, data);
