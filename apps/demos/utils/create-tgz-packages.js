@@ -42,7 +42,7 @@ async function buildAndPack(packageName, inputFile) {
     file: outputFile,
     format: 'esm',
     name: packageName,
-    globals: { },
+    globals: {},
   });
 
   const packageJson = {
