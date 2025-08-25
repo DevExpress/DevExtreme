@@ -6,6 +6,7 @@ export {
   FormItemType,
   LabelLocation,
   FormLabelMode,
+  FormPredefinedButtonItem,
   AIResult,
   ContentReadyEvent,
   DisposingEvent,

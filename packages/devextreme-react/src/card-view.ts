@@ -13,7 +13,7 @@ import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertin
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
+import type { FormItemType, FormPredefinedButtonItem, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
@@ -281,7 +281,7 @@ type IButtonItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string | undefined;
+  name?: FormPredefinedButtonItem | string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number | undefined;
@@ -1673,7 +1673,7 @@ type IItemProps = React.PropsWithChildren<{
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: CardHeaderPredefinedItem | string | undefined | PredefinedToolbarItem;
+  name?: CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
