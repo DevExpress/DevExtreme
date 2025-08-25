@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+
 import { ReactNode } from 'react';
 import { ITemplate } from './configuration/config-node';
 
@@ -55,6 +57,7 @@ export interface TemplateManagerUpdateContext {
   onUpdated: () => void;
 }
 
+// eslint-disable-next-line @stylistic/max-len
 export type DXTemplateCreator = (templateOptions: Record<string, ITemplate>) => DXTemplateCollection;
 
 export interface TemplateManagerProps {
@@ -74,5 +77,6 @@ export interface TemplateInstantiationModel {
 export type GetRenderFuncFn = (templateKey: string) => RenderFunc;
 
 export interface DXRemoveCustomArgs {
+  // eslint-disable-next-line spellcheck/spell-checker
   isUnmounting: boolean;
 }

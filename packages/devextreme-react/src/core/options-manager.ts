@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+/* eslint-disable no-restricted-globals, spellcheck/spell-checker */
 import { compareValues, getChanges } from './configuration/comparer';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
@@ -66,6 +66,7 @@ class OptionsManager {
     return options;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   public getTemplateOptions(rootNode: IConfigNode): Record<string, ITemplate> {
     const config = buildConfig(rootNode, false);
 
@@ -112,7 +113,7 @@ class OptionsManager {
     changedOptions.forEach(([name, value]) => {
       const currentPropValue = config.options[name];
       if (Object.prototype.hasOwnProperty.call(config.options, name)
-      && currentPropValue !== value) {
+        && currentPropValue !== value) {
         this.setValue(name, currentPropValue);
       }
     });
@@ -176,6 +177,7 @@ class OptionsManager {
   public dispose(): void {
     optionsManagers.delete(this);
     Object.keys(this.guards).forEach((optionName) => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.guards[optionName];
     });
     this.instance = null;
@@ -237,6 +239,7 @@ class OptionsManager {
     }
     const handler = () => {
       this.setValue(optionName, initialValue);
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.guards[optionName];
     };
     this.guards[optionName] = {
@@ -271,6 +274,7 @@ class OptionsManager {
           return;
         }
       } finally {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete this.guards[name];
       }
     }

@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+
 import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
 import { buildNode, buildTemplates } from './tree';
 import { mergeNameParts } from './utils';
@@ -40,6 +42,7 @@ function compareTemplates(
       return;
     }
 
+    // eslint-disable-next-line no-param-reassign
     changesAccum.options[mergeNameParts(currentFullName, key)] = currentTemplatesOptions[key];
   });
 
@@ -50,6 +53,7 @@ function compareTemplates(
       return;
     }
 
+    // eslint-disable-next-line no-param-reassign
     changesAccum.templates[key] = currentTemplate;
   });
 }
@@ -58,6 +62,7 @@ function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigC
   const fullName = buildNodeFullName(current);
 
   if (!prev) {
+    // eslint-disable-next-line no-param-reassign
     changesAccum.options[fullName] = buildNode(
       current,
       changesAccum.templates,
@@ -86,6 +91,7 @@ function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigC
       return;
     }
 
+    // eslint-disable-next-line no-param-reassign
     changesAccum.options[mergeNameParts(fullName, key)] = current.options[key];
   });
 
@@ -137,6 +143,8 @@ function compareCollections(
           updatedCollection.push(config);
         },
       );
+
+      // eslint-disable-next-line no-param-reassign
       changesAccum.options[mergeNameParts(currentFullName, key)] = updatedCollection;
       return;
     }

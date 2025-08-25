@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+
 import * as React from 'react';
 
 import {
@@ -44,7 +46,9 @@ const Component = forwardRef<ComponentRef, any>(
     }, [extensionCreators.current]);
 
     const createExtensions = useCallback(() => {
-      extensionCreators.current.forEach((creator) => creator(componentBaseRef.current?.getElement() as HTMLDivElement));
+      extensionCreators.current.forEach((creator) => {
+        creator(componentBaseRef.current?.getElement() as HTMLDivElement);
+      });
     }, [extensionCreators.current, componentBaseRef.current]);
 
     const renderChildren = useCallback(() => React.Children.map(
@@ -110,7 +114,9 @@ const Component = forwardRef<ComponentRef, any>(
       />
     );
   },
-) as <P extends IHtmlOptions>(props: P & ComponentProps & { ref?: React.Ref<ComponentRef> }) => ReactElement | null;
+) as <P extends IHtmlOptions>(
+  props: P & ComponentProps & { ref?: React.Ref<ComponentRef> },
+) => ReactElement | null;
 
 export {
   Component,

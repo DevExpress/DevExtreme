@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { ITemplateMeta, Template as TemplateComponent } from '../../template';
 import { NestedComponentMeta } from '../../types';
 
@@ -35,7 +36,7 @@ function getOptionInfo(
   let name = elementDescriptor.OptionName;
   let isCollectionItem = elementDescriptor.IsCollectionItem;
 
-  const expectation = parentExpectedChildren && parentExpectedChildren[name];
+  const expectation = parentExpectedChildren?.[name];
   if (expectation) {
     isCollectionItem = expectation.isCollectionItem;
     if (expectation.optionName) {
@@ -61,7 +62,7 @@ function getElementType(
   element: React.ReactNode,
 ): ElementType {
   const reactElement = element as unknown as React.ReactElement;
-  if (!reactElement || !reactElement.type) {
+  if (!reactElement?.type) {
     return ElementType.Unknown;
   }
 

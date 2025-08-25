@@ -48,7 +48,12 @@ export function useOptionScanning(
         configBuilder.addTemplate(template);
       }
     },
-    onChildOptionsReady: (childConfigNode, childDescriptor, childUpdateToken, childComponentKey) => {
+    onChildOptionsReady: (
+      childConfigNode,
+      childDescriptor,
+      childUpdateToken,
+      childComponentKey,
+    ) => {
       if (childUpdateToken !== updateToken) {
         return;
       }

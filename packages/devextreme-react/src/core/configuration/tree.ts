@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker, no-param-reassign */
+
 import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
 import { mergeNameParts, parseOptionName } from './utils';
 

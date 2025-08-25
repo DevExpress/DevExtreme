@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle, no-param-reassign */
+
 import * as React from 'react';
 import { separateProps } from '../widget-config';
 import { IOptionElement } from './react/element';
@@ -38,7 +40,7 @@ function buildNodeFullName(node: IConfigNode): string {
   let currentNode: IConfigNode | undefined = node;
   let fullName = '';
 
-  while (currentNode && currentNode.name) {
+  while (currentNode?.name) {
     fullName = currentNode.name.concat(
       typeof currentNode.index === 'number' ? `[${currentNode.index}]` : '',
       fullName ? `.${fullName}` : '',
@@ -117,7 +119,8 @@ const createConfigBuilder: (
         const template = getAnonymousTemplate(
           optionElement.props,
           templateMeta,
-          hasTemplateRendered && (optionElement.descriptor.isCollection || parentFullName.length > 0),
+          hasTemplateRendered
+            && (optionElement.descriptor.isCollection || parentFullName.length > 0),
         );
 
         if (template) {

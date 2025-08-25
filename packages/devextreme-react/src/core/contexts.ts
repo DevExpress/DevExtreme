@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+
 import {
   Context,
   createContext,
@@ -11,9 +13,10 @@ export interface UpdateLocker {
   unlock: () => void;
 }
 
+// eslint-disable-next-line @stylistic/max-len
 export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
 
-// eslint-disable-next-line @typescript-eslint/no-extra-parens
+// eslint-disable-next-line @stylistic/max-len
 export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
 
 export interface NestedOptionContextContent {
