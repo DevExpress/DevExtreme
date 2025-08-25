@@ -63,6 +63,8 @@ export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+/** @public */
+export type FormPredefinedButtonItem = 'reset' | 'submit' | 'smartPaste';
 
 /** @public */
 export type AIResult = Record<string, string | string[]>;
@@ -509,7 +511,7 @@ export interface dxFormButtonItem {
      * @default undefined
      * @public
      */
-    name?: string | undefined;
+    name?: FormPredefinedButtonItem | string | undefined;
     /**
      * @docid
      * @default "top"

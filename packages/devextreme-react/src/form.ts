@@ -8,7 +8,7 @@ import dxForm, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, SmartPastedEvent, SmartPastingEvent, FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
+import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, SmartPastedEvent, SmartPastingEvent, FormItemType, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
@@ -141,7 +141,7 @@ type IButtonItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string | undefined;
+  name?: FormPredefinedButtonItem | string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number | undefined;
@@ -428,7 +428,7 @@ type IItemProps = React.PropsWithChildren<{
     text?: string | undefined;
     visible?: boolean;
   };
-  name?: string | undefined;
+  name?: string | undefined | FormPredefinedButtonItem;
   validationRules?: Array<CommonTypes.ValidationRule>;
   visibleIndex?: number | undefined;
   alignItemLabels?: boolean;

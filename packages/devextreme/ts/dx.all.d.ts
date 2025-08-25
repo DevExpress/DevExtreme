@@ -18667,6 +18667,7 @@ declare module DevExpress.ui {
       | 'tabbed'
       | 'button';
     export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+    export type FormPredefinedButtonItem = 'reset' | 'submit' | 'smartPaste';
     export type GroupCaptionTemplateData = {
       readonly caption?: string;
       readonly component: dxForm;
@@ -18750,7 +18751,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.name]
      */
-    name?: string | undefined;
+    name?: DevExpress.ui.dxForm.FormPredefinedButtonItem | string | undefined;
     /**
      * [descr:dxFormButtonItem.verticalAlignment]
      */
