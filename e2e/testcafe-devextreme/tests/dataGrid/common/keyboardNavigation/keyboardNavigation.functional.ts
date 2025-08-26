@@ -1869,7 +1869,7 @@ test('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRender
 test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed columns are enabled', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox());
+  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox().element);
 
   // Tab
   for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
@@ -1877,7 +1877,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       if (columnIndex === 0) {
         const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
 
-        await t.expect(rowCheckBox.focused).ok()
+        await t.expect(rowCheckBox.element.focused).ok()
           .pressKey('tab');
       } else {
         const cell = columnIndex <= 2 || columnIndex >= 16
@@ -1901,7 +1901,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       if (columnIndex === 0) {
         const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
 
-        await t.expect(rowCheckBox.focused).ok()
+        await t.expect(rowCheckBox.element.focused).ok()
           .pressKey('shift+tab');
       } else {
         const cell = columnIndex <= 2 || columnIndex >= 16
@@ -1963,7 +1963,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
 test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed columns are enabled (rtlEnabled)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox());
+  await t.click(dataGrid.getFixedDataRow(0).getSelectCheckBox().element);
 
   // Tab
   for (let rowIndex = 0; rowIndex < 2; rowIndex += 1) {
@@ -1971,7 +1971,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       if (columnIndex === 0) {
         const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
 
-        await t.expect(rowCheckBox.focused).ok()
+        await t.expect(rowCheckBox.element.focused).ok()
           .pressKey('tab');
       } else {
         const cell = columnIndex <= 2 || columnIndex >= 16
@@ -1995,7 +1995,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       if (columnIndex === 0) {
         const rowCheckBox = dataGrid.getFixedDataRow(rowIndex).getSelectCheckBox();
 
-        await t.expect(rowCheckBox.focused).ok()
+        await t.expect(rowCheckBox.element.focused).ok()
           .pressKey('shift+tab');
       } else {
         const cell = columnIndex <= 2 || columnIndex >= 16

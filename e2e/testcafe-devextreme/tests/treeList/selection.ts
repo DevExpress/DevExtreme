@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import ExpandableCell from 'devextreme-testcafe-models/treeList/expandableCell';
 
+import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { tasksApiMock } from './apiMocks/tasksApiMock';
@@ -9,9 +10,12 @@ import { tasksApiMock } from './apiMocks/tasksApiMock';
 fixture`Selection`
   .page(url(__dirname, '../container.html'));
 
+const SELECTOR = '#container';
+const OTHER_SELECTOR = '#otherContainer';
+
 // T1109666
 test('TreeList with selection and boolean data in first column should render right', async (t) => {
-  const treeList = new TreeList('#container');
+  const treeList = new TreeList(SELECTOR);
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -64,13 +68,13 @@ test('TreeList with selection and boolean data in first column should render rig
 // T1264312
 test('TreeList restore selection after the search panel has cleared', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const treeList = new TreeList('#container');
+  const treeList = new TreeList(SELECTOR);
   const dataRow = treeList.getDataRow(0);
   const expandableCell = new ExpandableCell(dataRow.getDataCell(0));
   const searchBox = treeList.getSearchBox();
 
   await t
-    .click(dataRow.getSelectCheckBox())
+    .click(dataRow.getSelectCheckBox().element)
     .expect(dataRow.isSelected).ok();
   await t
     .click(expandableCell.getExpandButton())
@@ -84,7 +88,7 @@ test('TreeList restore selection after the search panel has cleared', async (t) 
   await t.expect(await takeScreenshot('T1264312-selection-checked-searched', treeList.element)).ok();
 
   await t
-    .click(dataRow.getSelectCheckBox())
+    .click(dataRow.getSelectCheckBox().element)
     .expect(dataRow.isSelected).notOk();
   await t.expect(await takeScreenshot('T1264312-selection-unchecked-searched', treeList.element)).ok();
 
@@ -137,4 +141,37 @@ test('TreeList restore selection after the search panel has cleared', async (t) 
     },
     ],
   }));
+});
+
+// T1302742
+test('TreeList selection becomes out of sync when TreeList is initially disabled and later enabled', async (t) => {
+  const treeList = new TreeList(SELECTOR);
+  const switchDisableCheckbox = new CheckBox(OTHER_SELECTOR);
+
+  await t
+    .click(switchDisableCheckbox.element)
+    .click(treeList.getDataRow(1).getSelectCheckBox().element)
+    .expect(treeList.getDataRow(1).getSelectCheckBox().isChecked())
+    .ok();
+}).before(async () => {
+  await createWidget('dxTreeList', {
+    dataSource: [
+      { id: 1, parentId: 0, text: 'parent1' },
+      { id: 2, parentId: 1, text: 'child1' },
+      { id: 3, parentId: 0, text: 'parent2' },
+    ],
+    columns: ['text'],
+    selection: {
+      mode: 'multiple',
+    },
+    disabled: true,
+  });
+
+  await createWidget('dxCheckBox', {
+    text: 'disabled',
+    value: true,
+    onValueChanged: (e) => {
+      ($('#container') as any).dxTreeList('option', 'disabled', e.value);
+    },
+  }, OTHER_SELECTOR);
 });

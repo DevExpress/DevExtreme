@@ -3,6 +3,7 @@ import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
 import CommandCell from '../commandCell';
+import CheckBox from '../../checkBox';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
@@ -58,8 +59,8 @@ export default class DataRow extends FocusableElement {
     return this.element.find(`.${CLASS.commandDrag}`);
   }
 
-  getSelectCheckBox(): Selector {
-    return this.element.find(`.${CLASS.selectCheckBox}`);
+  getSelectCheckBox(): CheckBox {
+    return new CheckBox (this.element.find(`.${CLASS.selectCheckBox}`));
   }
 
   getOffset(): Promise<any> {
