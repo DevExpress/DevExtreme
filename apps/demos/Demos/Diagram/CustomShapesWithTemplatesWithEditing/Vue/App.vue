@@ -205,14 +205,6 @@ function onRequestLayoutUpdate(e: DxDiagramTypes.RequestLayoutUpdateEvent) {
 }
 function editEmployee(employee: Employee) {
   currentEmployee.value = {
-    Full_Name: '',
-    Prefix: '',
-    Title: '',
-    City: '',
-    State: '',
-    Email: '',
-    Skype: '',
-    Mobile_Phone: '',
     ...employee,
   };
   popupVisible.value = true;
