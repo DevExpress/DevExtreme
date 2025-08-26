@@ -38,15 +38,15 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 
 const createMapKey = (key1: any, key2: HTMLElement) => ({ key1, key2 });
 
-const unsubscribeOnRemoval = (container: HTMLElement, onRemoved: (componentKey: string) => void) => {
+const unsubscribeOnRemoval = (container: HTMLElement, onContainerRemoved: () => void) => {
   if (container.nodeType === Node.ELEMENT_NODE) {
-    events.off(container, DX_REMOVE_EVENT, onRemoved);
+    events.off(container, DX_REMOVE_EVENT, onContainerRemoved);
   }
 };
 
-const subscribeOnRemoval = (container: HTMLElement, onRemoved: (componentKey: string) => void) => {
+const subscribeOnRemoval = (container: HTMLElement, onContainerRemoved: () => void) => {
   if (container.nodeType === Node.ELEMENT_NODE) {
-    events.on(container, DX_REMOVE_EVENT, onRemoved);
+    events.on(container, DX_REMOVE_EVENT, onContainerRemoved);
   }
 };
 
@@ -74,13 +74,17 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     const containerElement = unwrapElement(container);
     const key = createMapKey(data, containerElement);
 
-    const onRemoved = (componentKey: string): void => {
+    const onRemoved = (componentKey?: string): void => {
       const model = collection.get(key);
 
-      if (model && model.componentKey === componentKey) {
+      if (model && (!componentKey || model.componentKey === componentKey)) {
         collection.delete(key);
         setInstantiationModels({ collection });
       }
+    };
+
+    const onContainerRemoved = (): void => {
+      onRemoved();
     };
 
     const hostWidgetId = widgetId.current;
@@ -90,13 +94,14 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
       index,
       componentKey: getRandomId(),
       onRendered: () => {
-        unsubscribeOnRemoval(containerElement, onRemoved);
+        unsubscribeOnRemoval(containerElement, onContainerRemoved);
 
         if (hostWidgetId === widgetId.current) {
           onRendered?.();
         }
       },
       onRemoved,
+      onContainerRemoved,
     });
 
     setInstantiationModels({ collection });
@@ -187,8 +192,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
           componentKey,
           onRendered,
           onRemoved,
+          onContainerRemoved,
         }]) => {
-          subscribeOnRemoval(container, onRemoved);
+          subscribeOnRemoval(container, onContainerRemoved);
 
           const factory = templateFactories.current[templateKey];
 
