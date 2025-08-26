@@ -234,7 +234,6 @@ class SchedulerAppointments extends CollectionWidget {
       allowResize: true,
       allowAllDayResize: true,
       onAppointmentDblClick: null,
-      _collectorOffset: 0,
       groups: [],
       resources: [],
     });
@@ -1006,7 +1005,7 @@ class SchedulerAppointments extends CollectionWidget {
       items,
       buttonColor: items.colors[0],
       sortedIndex: appointment.sortedIndex,
-      width: appointment.width - this.option('_collectorOffset'),
+      width: appointment.width,
       height: appointment.height,
       onAppointmentClick: this.option('onItemClick'),
       allowDrag: this.option('allowDrag'),

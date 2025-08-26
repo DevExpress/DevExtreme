@@ -132,10 +132,6 @@ class BaseRenderingStrategy {
     return coordinates;
   }
 
-  needCorrectAppointmentDates() {
-    return true;
-  }
-
   getDirection() {
     return 'horizontal';
   }
@@ -636,7 +632,7 @@ class BaseRenderingStrategy {
     if ((coordinates.count - countFullWidthAppointmentInCell) > 0) {
       const { top, left } = coordinates;
       const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
-      const width = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay);
+      const width = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay) - this.options._collectorOffset;
       const height = this.getDropDownAppointmentHeight();
       const rtlOffset = this.rtlEnabled ? width : 0;
       coordinates.virtual = {
@@ -844,15 +840,6 @@ class BaseRenderingStrategy {
 
   _getAppointmentMinWidth() {
     return this._getAppointmentDefaultWidth();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _needVerticalGroupBounds(allDay) {
-    return false;
-  }
-
-  _needHorizontalGroupBounds() {
-    return false;
   }
 
   getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {

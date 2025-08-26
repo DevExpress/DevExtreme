@@ -86,6 +86,30 @@ generateOptionMatrix({
   });
 });
 
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+  test(`Appointment collector has correct offset when month view with double interval theme=${theme}`, async (t) => {
+    const scheduler = new Scheduler('#container');
+
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(await takeScreenshot(`appointment-collector-month-double-interval-${theme}.png`, scheduler.workSpace))
+      .ok()
+
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxScheduler', {
+      ...getSchedulerBaseOptions('month'),
+      views: [{ type: 'month', intervalCount: 2 }],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+});
+
 generateOptionMatrix({
   view: ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
   variants: [

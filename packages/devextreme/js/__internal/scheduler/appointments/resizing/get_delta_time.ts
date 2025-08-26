@@ -1,6 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 
-import type { SafeAppointment, ViewType } from '../../types';
+import type { ViewType } from '../../types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const VERTICAL_VIEW_TYPES = ['day', 'week', 'workWeek'];
@@ -14,7 +14,7 @@ interface Options {
   cellSize: Size;
   cellDurationInMinutes: number;
   resizableStep: number;
-  isAllDay: (itemData: SafeAppointment) => boolean;
+  isAllDay: boolean;
 }
 
 const MIN_RESIZABLE_STEP = 2;
@@ -44,7 +44,6 @@ const getVerticalDeltaTime = (args: Size, initialSize: Size, {
 export const getDeltaTime = (
   args: Size,
   initialSize: Size,
-  itemData: SafeAppointment,
   options: Options,
 ): number => {
   const { viewType, resizableStep, isAllDay } = options;
@@ -53,10 +52,10 @@ export const getDeltaTime = (
       return getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day');
     case viewType === 'agenda':
       return 0;
-    case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDay(itemData):
+    case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDay:
       return getVerticalDeltaTime(args, initialSize, options);
     default:
-      return isAllDay(itemData)
+      return isAllDay
         ? getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day')
         : getHorizontalDeltaTime(args, initialSize, options);
   }

@@ -181,7 +181,7 @@ const subscribes = {
   },
 
   getDeltaTime(e, initialSize, itemData) {
-    return getDeltaTime(e, initialSize, itemData, {
+    return getDeltaTime(e, initialSize, {
       viewType: this.currentView.type,
       cellSize: {
         width: this.getWorkSpace().getCellWidth(),
@@ -189,7 +189,7 @@ const subscribes = {
       },
       cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
       resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
-      isAllDay: (appointmentData) => isAllDay(this, appointmentData),
+      isAllDay: isAllDay(this, itemData),
     });
   },
 

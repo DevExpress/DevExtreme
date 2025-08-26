@@ -68,10 +68,6 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return result;
   }
 
-  needCorrectAppointmentDates() {
-    return false;
-  }
-
   getPositionShift(timeShift) {
     return {
       top: 0,

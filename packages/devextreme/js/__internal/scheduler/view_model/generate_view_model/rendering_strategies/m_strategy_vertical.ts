@@ -423,15 +423,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     return this.allDayHeight || this.getAppointmentMinSize();
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _needVerticalGroupBounds(allDay) {
-    return !allDay;
-  }
-
-  _needHorizontalGroupBounds() {
-    return false;
-  }
-
   getPositionShift(timeShift, isAllDay) {
     if (!isAllDay && this.isAdaptive && this._getMaxAppointmentCountPerCellByType(isAllDay) === 0) {
       return {
