@@ -57,7 +57,8 @@ const AnimationPresetCollection = Component.inherit({
       { // T254756
         device: function () {
           // @ts-expect-error
-          return devices.current().android ?? devices.real.android;
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-nullish-coalescing
+          return devices.current().android || devices.real.android;
         },
         options: {
           defaultAnimationDelay: 100,
@@ -294,7 +295,8 @@ const AnimationPresetCollection = Component.inherit({
     this.registerPreset('slide', {
       device: function () {
         // @ts-expect-error
-        return devices.current().android ?? devices.real.android;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-nullish-coalescing
+        return devices.current().android || devices.real.android;
       },
       animation: this._createAndroidSlideAnimationConfig(1, 1),
     });
@@ -337,7 +339,8 @@ const AnimationPresetCollection = Component.inherit({
     this.registerPreset('ios7-toolbar', {
       device: function () {
         // @ts-expect-error
-        return devices.current().android ?? devices.real.android;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        return devices.current().android || devices.real.android;
       },
       animation: this._createAndroidSlideAnimationConfig(0, 0.4),
     });
