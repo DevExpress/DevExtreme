@@ -18,13 +18,14 @@ const showSubmenuModes = [
     delay: { show: 0, hide: 300 },
   },
 ];
+const isProductItem = (item) => !('items' in item);
 const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
   const [orientation, setOrientation] = useState('horizontal');
   const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
   const itemClick = useCallback((e) => {
-    if (!e.itemData.items) {
+    if (isProductItem(e.itemData)) {
       setCurrentProduct(e.itemData);
     }
   }, []);
