@@ -759,12 +759,12 @@ class SchedulerAppointments extends CollectionWidget {
     } else {
       const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
       const { endDate } = info.appointment;
-      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
       dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
-      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, [viewOffset]);
-      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, [viewOffset]);
+      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, viewOffset);
+      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, viewOffset);
     }
 
     this.updateResizedAppointment(
@@ -825,8 +825,8 @@ class SchedulerAppointments extends CollectionWidget {
     const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
     const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
 
-    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, [startDateDelta]);
-    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, [endDateDelta]);
+    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
+    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, endDateDelta);
 
     const data = gridAdapter
       .calculateDates(timeZoneCalculator, 'fromGrid')
