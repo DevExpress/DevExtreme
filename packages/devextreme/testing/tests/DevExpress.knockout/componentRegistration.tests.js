@@ -720,6 +720,46 @@ moduleWithoutCsp(
 
             assert.strictEqual(observableValue(), true);
         });
+        QUnit.test('should correctly destructurize this.option', function(assert) {
+            const ComponentClass = this.TestComponent.inherit({
+                _render: function() {
+                    this.callBase();
+                }
+            });
+
+            registerComponent('dxDestructComponent', ComponentClass);
+
+            const vm = {
+                visible: ko.observable(false)
+            };
+
+            const $component = $('<div data-bind=\'dxDestructComponent: {\
+                visible: visible\
+            }\'></div>').appendTo(FIXTURE_ELEMENT);
+
+            ko.applyBindings(vm, $component.get(0));
+            const instance = $component.dxDestructComponent('instance');
+
+            assert.equal(vm.visible(), false);
+            const { visible } = instance.option();
+            assert.equal(visible, false);
+            assert.equal(instance.option('visible'), visible);
+
+            vm.visible(true);
+            assert.equal(vm.visible(), true);
+            const { visible: visible2 } = instance.option();
+            assert.equal(visible2, true);
+            assert.equal(instance.option('visible'), visible2);
+
+            // Test that getters are properly called when option() is called without arguments
+            // This ensures compatibility with Knockout.js and other reactive frameworks
+            const allOptions = instance.option();
+            assert.ok(allOptions.hasOwnProperty('visible'), 'Options object should contain property "visible"');
+            assert.equal(allOptions.visible, true, 'Property "visible" should have updated value');
+
+            // Test that the same value is returned whether accessed directly or through option()
+            assert.equal(allOptions.visible, instance.option('visible'), 'Values should be consistent');
+        });
 
     }
 );

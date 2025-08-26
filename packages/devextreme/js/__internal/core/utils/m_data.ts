@@ -60,6 +60,10 @@ export const compileGetter = function (expr) {
 
   if (!expr || expr === 'this') {
     return function (obj) {
+      if (!obj) {
+        return obj;
+      }
+
       const newObj = { ...obj };
       Object.keys(obj).forEach((key) => {
         if (isWrapped(obj[key])) {
