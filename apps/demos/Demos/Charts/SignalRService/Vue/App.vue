@@ -87,9 +87,9 @@ import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.vue';
 
-const chartRef = ref(null);
+const chartRef = ref<DxChart>();
 const connectionStarted = ref(false);
-const dataSource = ref(null);
+const dataSource = ref<CustomStore>();
 const hubConnection = new HubConnectionBuilder()
   .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
     skipNegotiation: true,
@@ -113,7 +113,7 @@ hubConnection
   });
 
 function calculateCandle(e: chartPointAggregationInfoObject) {
-  const prices = e.data.map((d) => d.price);
+  const prices = (e.data || []).map((d) => d.price);
   if (prices.length) {
     return {
       date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
@@ -126,14 +126,14 @@ function calculateCandle(e: chartPointAggregationInfoObject) {
   return null;
 }
 
-function customizePoint(pointInfo: any) {
+function customizePoint(pointInfo: Record<string, any>) {
   if (pointInfo.seriesName === 'Volume') {
-    const point = chartRef.value.instance
-      .getAllSeries()[0]
-      .getPointsByArg(pointInfo.argument)[0]
-      .data;
+    const point = chartRef.value?.instance
+        ?.getAllSeries()[0]
+        .getPointsByArg(pointInfo.argument)[0]
+        .data;
 
-    if (point.close >= point.open) {
+    if (point && point.close >= point.open) {
       return { color: '#1db2f5' };
     }
   }

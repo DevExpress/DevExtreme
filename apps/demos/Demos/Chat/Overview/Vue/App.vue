@@ -23,8 +23,8 @@ import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import { messages as initialMessages, supportAgent, currentUser } from './data.ts';
 
 const messages = ref(initialMessages);
-const userChatTypingUsers = ref([]);
-const supportChatTypingUsers = ref([]);
+const userChatTypingUsers = ref<Record<string, string>[]>([]);
+const supportChatTypingUsers = ref<Record<string, string>[]>([]);
 
 function onMessageEntered(event: DxChatTypes.MessageEnteredEvent) {
   messages.value = [...messages.value, event.message];

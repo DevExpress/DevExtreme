@@ -111,10 +111,12 @@ const editingStrategy: Record<string, any> = {
   enabled: true,
   disabled: false,
   custom: ({ component, message }: { component: DxChat['instance'], message: DxChatTypes.Message }) => {
+    if (!component) return;
+    
     const { items, user } = component.option();
-    const userId = user.id;
+    const userId = user?.id;
 
-    const lastNotDeletedMessage = items.findLast(
+    const lastNotDeletedMessage = items?.findLast(
       (item: any) => item.author?.id === userId && !item.isDeleted
     );
 

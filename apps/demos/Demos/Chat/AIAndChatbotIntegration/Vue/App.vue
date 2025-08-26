@@ -52,6 +52,7 @@ import { ref, onBeforeMount } from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme-vue/common/core/localization';
+import { type Events } from 'devextreme-vue/common/core';
 import { AzureOpenAI,  } from 'openai';
 import {
   dictionary,
@@ -67,8 +68,8 @@ import {
 
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
-const typingUsers = ref([]);
-const alerts = ref([]);
+const typingUsers = ref<{ id: string, name: string }[]>([]);
+const alerts = ref<{ message: string }[]>([]);
 const isDisabled = ref(false);
 const copyButtonIcon = ref('copy');
 
@@ -76,7 +77,7 @@ onBeforeMount(() => {
   loadMessages(dictionary);
 });
 
-async function getAIResponse(messages: Array<DxChatTypes.Message>): Promise<string | undefined> {
+async function getAIResponse(messages: Array<DxChatTypes.Message>): Promise<string> {
   const params: Record<string, any> = {
     messages: messages,
     model: AzureOpenAIConfig.deployment,
@@ -87,16 +88,16 @@ async function getAIResponse(messages: Array<DxChatTypes.Message>): Promise<stri
   const response = await chatService.chat.completions.create(params as any);
   const data = { choices: response.choices };
 
-  return data.choices[0].message?.content;
+  return data.choices[0].message?.content || '';
 }
 
-function toggleDisabledState(disabled: boolean, event?: Record<string, any>): void {
+function toggleDisabledState(disabled: boolean, event?: Events.EventObject): void {
   isDisabled.value = disabled;
 
   if (disabled) {
-    event?.element?.blur();
+    (event?.target as HTMLElement)?.blur();
   } else {
-    event?.element?.focus();
+    (event?.target as HTMLElement)?.focus();
   }
 }
 
@@ -122,7 +123,7 @@ function renderAssistantMessage(text: string): void {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
-async function processMessageSending(message: DxChatTypes.TextMessage, event: Event): Promise<void> {
+async function processMessageSending(message: DxChatTypes.TextMessage, event: Events.EventObject): Promise<void> {
   toggleDisabledState(true, event);
 
   messages.push({ role: 'user', content: message.text });
@@ -174,7 +175,7 @@ async function regenerate(): Promise<void> {
 function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent): void {
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
-  if (!alerts.value.length) {
+  if (!alerts.value.length && event) {
     processMessageSending(message, event);
   }
 }

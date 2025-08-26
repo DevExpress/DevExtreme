@@ -45,7 +45,7 @@ import DxPieChart, {
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { populationData } from './data.ts';
 
-const selectedRegion = ref(null);
+const selectedRegion = ref<string>();
 const pieChart = ref();
 
 const customizeTooltip = ({ argumentText, valueText }: any) => ({

@@ -33,7 +33,7 @@ const dataSource = createStore({
   onLoaded: setDefaultValue,
 });
 
-const productId = ref(null);
+const productId = ref<number>();
 
 function setDefaultValue(items: Product[]) {
   const firstItem = items[0];
