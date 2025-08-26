@@ -40,6 +40,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   container,
   onRemoved,
   onRendered,
+  componentKey,
 }) => {
   const [removalListenerRequired, setRemovalListenerRequired] = useState(false);
   const isRemovalLocked = useRef(false);
@@ -64,7 +65,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
 
     // In case of multiple root elements, letting the widget remove them all sync
     Promise.resolve().then(() => {
-      onRemoved();
+      onRemoved(componentKey);
     });
   }, [onRemoved]);
 
