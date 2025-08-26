@@ -78,7 +78,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={1}
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -103,7 +104,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={2}
+          key='2'
+          componentKey='2'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -124,7 +126,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={3}
+          key='3'
+          componentKey='3'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -145,7 +148,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={4}
+          key='4'
+          componentKey='4'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -182,7 +186,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={1}
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -202,7 +207,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
-          key={2}
+          key='2'
+          componentKey='2'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -232,6 +238,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -309,6 +317,8 @@ describe('Template Wrapper', () => {
           <tbody className='tbody-container' />
         </table>
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -317,6 +327,8 @@ describe('Template Wrapper', () => {
           onRemoved={() => undefined}
         />
         <TemplateWrapper
+          key='2'
+          componentKey='2'
           templateFactory={tableBodyTemplateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -325,6 +337,8 @@ describe('Template Wrapper', () => {
           onRemoved={() => undefined}
         />
         <TemplateWrapper
+          key='3'
+          componentKey='3'
           templateFactory={tableRowTemplateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -356,6 +370,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -389,6 +405,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -427,6 +445,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -463,6 +483,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -497,6 +519,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
@@ -531,6 +555,8 @@ describe('Template Wrapper', () => {
       <>
         <div className='template-container' />
         <TemplateWrapper
+          key='1'
+          componentKey='1'
           templateFactory={templateFunction}
           data={{ text: 'My template' }}
           index={1}
