@@ -231,13 +231,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('selected', value);
     }
 
-    get aiProcessing(): { disabled?: boolean, instruction?: string | undefined } {
-        return this._getOption('aiProcessing');
-    }
-    set aiProcessing(value: { disabled?: boolean, instruction?: string | undefined }) {
-        this._setOption('aiProcessing', value);
-    }
-
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
     }

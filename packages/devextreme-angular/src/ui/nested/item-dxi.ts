@@ -72,7 +72,6 @@ import { DxiLocationComponent } from './location-dxi';
         'items',
         'selectable',
         'selected',
-        'aiProcessing',
         'colSpan',
         'cssClass',
         'dataField',

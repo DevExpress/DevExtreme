@@ -68,7 +68,6 @@ import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
-import { DxoAiProcessingModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
@@ -2303,7 +2302,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
-    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoHeaderFilterModule,
@@ -2461,7 +2459,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
-    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoHeaderFilterModule,

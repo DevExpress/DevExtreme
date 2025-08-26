@@ -34,7 +34,6 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
-        'aiProcessing',
         'colSpan',
         'cssClass',
         'dataField',

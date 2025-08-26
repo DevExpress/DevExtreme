@@ -38,7 +38,6 @@ import { DxiItemComponent } from './item-dxi';
     inputs: [
         'accessKey',
         'activeStateEnabled',
-        'aiIntegration',
         'alignItemLabels',
         'alignItemLabelsInAllGroups',
         'colCount',
@@ -62,8 +61,6 @@ import { DxiItemComponent } from './item-dxi';
         'onFieldDataChanged',
         'onInitialized',
         'onOptionChanged',
-        'onSmartPasted',
-        'onSmartPasting',
         'optionalMark',
         'readOnly',
         'requiredMark',

@@ -41,7 +41,6 @@ import {
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoAiProcessingModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
@@ -128,10 +127,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
-    /**
-     * [descr:dxFormOptions.aiIntegration]
     
-     */
     @Input()
     get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
@@ -606,7 +602,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:dxFormOptions.onSmartPasted]
+     * [descr:undefined]
     
     
      */
@@ -614,7 +610,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:dxFormOptions.onSmartPasting]
+     * [descr:undefined]
     
     
      */
@@ -1030,7 +1026,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxFormComponent,
     DxoColCountByScreenModule,
     DxiItemModule,
-    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoTabPanelOptionsModule,
@@ -1066,7 +1061,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxFormComponent,
     DxoColCountByScreenModule,
     DxiItemModule,
-    DxoAiProcessingModule,
     DxoLabelModule,
     DxiValidationRuleModule,
     DxoTabPanelOptionsModule,

@@ -6,8 +6,7 @@ import {
 } from '@angular/core';
 
 import { Mode } from 'devextreme/common';
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { ButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, EmptyItem, FieldDataChangedEvent, FormLabelMode, GroupItem, InitializedEvent, LabelLocation, OptionChangedEvent, SimpleItem, SmartPastedEvent, SmartPastingEvent, TabbedItem } from 'devextreme/ui/form';
+import { ButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, EmptyItem, FieldDataChangedEvent, FormLabelMode, GroupItem, InitializedEvent, LabelLocation, OptionChangedEvent, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 
 @Component({
     template: ''
@@ -25,13 +24,6 @@ export abstract class DxoFormOptions extends NestedOption {
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
-    }
-
-    get aiIntegration(): AIIntegration | undefined {
-        return this._getOption('aiIntegration');
-    }
-    set aiIntegration(value: AIIntegration | undefined) {
-        this._setOption('aiIntegration', value);
     }
 
     get alignItemLabels(): boolean {
@@ -193,20 +185,6 @@ export abstract class DxoFormOptions extends NestedOption {
     }
     set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
         this._setOption('onOptionChanged', value);
-    }
-
-    get onSmartPasted(): ((e: SmartPastedEvent) => void) {
-        return this._getOption('onSmartPasted');
-    }
-    set onSmartPasted(value: ((e: SmartPastedEvent) => void)) {
-        this._setOption('onSmartPasted', value);
-    }
-
-    get onSmartPasting(): ((e: SmartPastingEvent) => void) {
-        return this._getOption('onSmartPasting');
-    }
-    set onSmartPasting(value: ((e: SmartPastingEvent) => void)) {
-        this._setOption('onSmartPasting', value);
     }
 
     get optionalMark(): string {
