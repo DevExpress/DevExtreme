@@ -101,7 +101,7 @@ import service from './data.ts';
 import 'whatwg-fetch';
 
 const alignment = ref('left');
-const color = ref(null);
+const color = ref<string>();
 const fontSize = ref('14px');
 const lineHeight = ref(1.35);
 let colorPicker: DxDropDownButton['instance'];
@@ -175,15 +175,17 @@ const toolbarItems = [
 ];
 
 function onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
-  notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
+  notify(`Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`, 'success', 600);
 }
 function onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {
   notify(e.itemData.name || e.itemData, 'success', 600);
 }
 function onColorClick(clickedColor: string) {
   color.value = clickedColor;
-  (colorPicker.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement).style.color = clickedColor;
-  colorPicker.close();
+  if (colorPicker) {
+    (colorPicker.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement).style.color = clickedColor;
+    colorPicker.close();   
+  }
 }
 </script>
 <style scoped>

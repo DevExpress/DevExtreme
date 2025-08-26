@@ -87,7 +87,7 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 
-let treeView: DxTreeView['instance'] = null;
+let treeView: DxTreeView['instance'];
 
 function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
   treeView = component;

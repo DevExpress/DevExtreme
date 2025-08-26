@@ -81,7 +81,7 @@ const gridBoxValue = ref([3]);
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
 const gridColumns = ref(['CompanyName', 'City', 'Phone']);
-let treeView: DxTreeView['instance'] = null;
+let treeView: DxTreeView['instance'];
 
 function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
   treeView = component;
@@ -107,7 +107,7 @@ function syncTreeViewSelection() {
       treeView.unselectAll();
     } else {
       value?.forEach((val: string) => {
-        treeView.selectItem(val);
+        treeView?.selectItem(val);
       });
     }
   }
