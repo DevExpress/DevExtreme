@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 
+class ProductItem {
+  text: string;
+}
 export class Product {
   text: string;
-  items?: Product[];
+  items: (Product | ProductItem)[];
 }
 
 const products: Product[] = [

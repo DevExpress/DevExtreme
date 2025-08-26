@@ -5,7 +5,7 @@ import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import service from './data.ts';
-import type { ProductType } from './types';
+import type { ProductType, ProductItemType } from './types';
 
 const orientations = ['horizontal', 'vertical'];
 const orientationLabel = { 'aria-label': 'Orientation' };
@@ -30,14 +30,18 @@ const showSubmenuModes: showSubmenuModesType[] = [
   },
 ];
 
+const isProductItem = (item: ProductType | ProductItemType): item is ProductItemType => {
+  return !('items' in item);
+}
+
 const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);
   const [orientation, setOrientation] = useState<MenuTypes.Orientation>('horizontal');
   const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<ProductType>(null);
+  const [currentProduct, setCurrentProduct] = useState<ProductItemType>(null);
 
   const itemClick = useCallback((e: MenuTypes.ItemClickEvent<ProductType>) => {
-    if (!e.itemData.items) {
+    if (isProductItem(e.itemData)) {
       setCurrentProduct(e.itemData);
     }
   }, []);

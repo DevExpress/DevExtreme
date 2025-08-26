@@ -54,7 +54,7 @@ import DxMenu, { type DxMenuTypes } from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
-import type { ProductType } from './types';
+import type { ProductItemType, ProductType } from './types';
 
 const showSubmenuModes = [{
   name: 'onHover',
@@ -70,10 +70,14 @@ const showFirstSubmenuModes = computed(() => showSubmenuModes.find(
 ));
 const orientation = ref<DxMenuTypes.Orientation>('horizontal');
 const hideSubmenuOnMouseLeave = ref(false);
-const currentProduct = ref(null);
+const currentProduct = ref<ProductItemType>(null);
+
+function isProductItem(item: ProductType | ProductItemType): item is ProductItemType {
+  return !('items' in item);
+}
 
 function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType> ) {
-  if (!e.itemData.items) {
+  if (isProductItem(e.itemData)) {
     currentProduct.value = e.itemData;
   }
 }

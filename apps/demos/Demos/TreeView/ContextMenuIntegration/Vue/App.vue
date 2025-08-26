@@ -47,12 +47,12 @@ const contextMenuRef = ref();
 function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
   selectedTreeItem.value = e.itemData;
   const contextMenu = contextMenuRef.value.instance;
-  const isProduct = !e.itemData.items;
+  const isProductItem = !e.itemData.items;
 
-  contextMenu.option('items[0].visible', !isProduct);
-  contextMenu.option('items[1].visible', !isProduct);
-  contextMenu.option('items[2].visible', isProduct);
-  contextMenu.option('items[3].visible', isProduct);
+  contextMenu.option('items[0].visible', !isProductItem);
+  contextMenu.option('items[1].visible', !isProductItem);
+  contextMenu.option('items[2].visible', isProductItem);
+  contextMenu.option('items[3].visible', isProductItem);
 
   contextMenu.option('items[0].disabled', e.node.expanded);
   contextMenu.option('items[1].disabled', !e.node.expanded);

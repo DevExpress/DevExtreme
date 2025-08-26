@@ -21,11 +21,11 @@ const App = () => {
   ) => {
     setSelectedTreeItem(e.itemData);
 
-    const isProduct = !e.itemData.items;
-    contextMenuRef.current.instance().option('items[0].visible', !isProduct);
-    contextMenuRef.current.instance().option('items[1].visible', !isProduct);
-    contextMenuRef.current.instance().option('items[2].visible', isProduct);
-    contextMenuRef.current.instance().option('items[3].visible', isProduct);
+    const isProductItem = !e.itemData.items;
+    contextMenuRef.current.instance().option('items[0].visible', !isProductItem);
+    contextMenuRef.current.instance().option('items[1].visible', !isProductItem);
+    contextMenuRef.current.instance().option('items[2].visible', isProductItem);
+    contextMenuRef.current.instance().option('items[3].visible', isProductItem);
 
     contextMenuRef.current.instance().option('items[0].disabled', e.node.expanded);
     contextMenuRef.current.instance().option('items[1].disabled', !e.node.expanded);
