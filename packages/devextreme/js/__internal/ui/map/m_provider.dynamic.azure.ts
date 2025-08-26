@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
@@ -10,6 +11,10 @@ import { getWindow } from '@js/core/utils/window';
 import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
+import type {
+  LocationOption,
+  MarkerObject, MarkerOptions, RouteObject, RouteOptions,
+} from './m_provider.dynamic';
 import DynamicProvider from './m_provider.dynamic';
 
 const window = getWindow();
@@ -28,6 +33,8 @@ const CAMERA_PADDING = 50;
 // @ts-expect-error ts-error
 const azureMapsLoaded = (): boolean => Boolean(window.atlas?.Map);
 
+export type AzureLocation = [number, number];
+
 let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
@@ -43,8 +50,8 @@ class AzureProvider extends DynamicProvider {
     return mapTypes[type] ?? mapTypes.roadmap;
   }
 
-  _movementMode(type: RouteMode): string {
-    const movementTypes = {
+  _movementMode(type: RouteMode | string = ''): string {
+    const movementTypes: Record<string, string> = {
       driving: 'car',
       walking: 'pedestrian',
     };
@@ -56,20 +63,22 @@ class AzureProvider extends DynamicProvider {
     return movementTypes[type] ?? type;
   }
 
-  _resolveLocation(location) {
+  _resolveLocation(location: LocationOption | null | undefined): Promise<AzureLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new atlas.data.Position(latLng.lng, latLng.lat));
       } else {
-        this._geocodeLocation(location).then((geocodedLocation) => {
-          resolve(geocodedLocation);
-        });
+        this._geocodeLocation(location as string).then((geocodedLocation) => {
+          resolve(geocodedLocation as AzureLocation);
+        }).catch(() => {});
       }
     });
   }
 
-  _geocodeLocationImpl(location) {
+  _geocodeLocationImpl(
+    location: string,
+  ): Promise<AzureLocation> {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
         resolve(new atlas.data.Position(0, 0));
@@ -93,7 +102,10 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  _normalizeLocation(location) {
+  _normalizeLocation(location: AzureLocation): {
+    lat: number;
+    lng: number;
+  } {
     return {
       lat: location[1],
       lng: location[0],
@@ -216,7 +228,7 @@ class AzureProvider extends DynamicProvider {
 
   _clickActionHandler(e: {
     type: string;
-    position: [number, number];
+    position: AzureLocation;
     originalEvent: MouseEvent;
   }): void {
     if (e.type === 'click') {
@@ -265,7 +277,6 @@ class AzureProvider extends DynamicProvider {
     ]).then((result) => {
       this._map.setCamera({
         bounds: [
-          // @ts-expect-error ts-error
           result[1][0], result[1][1], result[0][0], result[0][1],
         ],
         padding: 50,
@@ -312,9 +323,10 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _renderMarker(options) {
-    return this._resolveLocation(options.location).then((location) => {
-      const markerOptions: any = {
+  _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
+    const markerLocation = options.location;
+    return this._resolveLocation(markerLocation).then((location) => {
+      const markerOptions: Record<string, unknown> = {
         position: location,
       };
       const icon = options.iconSrc || this._option('markerIconSrc');
@@ -377,7 +389,7 @@ class AzureProvider extends DynamicProvider {
     return popup;
   }
 
-  _destroyMarker(marker) {
+  _destroyMarker(marker: { marker: unknown; popup: unknown; handler: () => {} }): void {
     this._map.markers.remove(marker.marker);
     if (marker.popup) {
       this._map.popups.remove(marker.popup);
@@ -387,7 +399,7 @@ class AzureProvider extends DynamicProvider {
     }
   }
 
-  _renderRoute(options) {
+  _renderRoute(options: RouteOptions): Promise<RouteObject> {
     return Promise.all(
       map(options.locations, (point) => this._resolveLocation(point)),
     ).then((locations) => new Promise((resolve) => {
@@ -477,7 +489,7 @@ class AzureProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _extendBounds(location: [number, number]): void {
+  _extendBounds(location: AzureLocation): void {
     const [longitude, latitude] = location;
     const delta = 0.0001;
     if (this._bounds) {

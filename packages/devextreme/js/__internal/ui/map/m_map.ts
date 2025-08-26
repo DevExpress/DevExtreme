@@ -17,6 +17,7 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import type { LocationOption } from './m_provider.dynamic';
 import azure from './m_provider.dynamic.azure';
 import bing from './m_provider.dynamic.bing';
 import google from './m_provider.dynamic.google';
@@ -38,7 +39,10 @@ const MAP_SHIELD_CLASS = 'dx-map-shield';
 export interface MapProperties extends Properties {
   onUpdated?: () => {};
 
-  bounds?: Record<string, unknown>;
+  bounds?: {
+    southWest?: LocationOption | null;
+    northEast?: LocationOption | null;
+  };
 }
 
 class Map extends Widget<MapProperties> {

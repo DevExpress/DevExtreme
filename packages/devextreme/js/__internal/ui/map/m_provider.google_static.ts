@@ -6,13 +6,14 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getHeight, getWidth } from '@js/core/utils/size';
 
 import Provider from './m_provider';
+import type { LocationOption, MarkerOptions, RouteOptions } from './m_provider.dynamic';
 
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
 class GoogleStaticProvider extends Provider {
-  _locationToString(location: unknown): string {
+  _locationToString(location: LocationOption): string {
     const latLng = this._getLatLng(location);
-    return latLng ? `${latLng.lat},${latLng.lng}` : String(location).replace(/ /g, '+');
+    return latLng ? `${latLng.lat},${latLng.lng}` : (location as string).replace(/ /g, '+');
   }
 
   _renderImpl(): Promise<boolean> {
@@ -43,7 +44,7 @@ class GoogleStaticProvider extends Provider {
     return Promise.resolve();
   }
 
-  addMarkers(markers = []): Promise<boolean> {
+  addMarkers(markers: MarkerOptions[] = []): Promise<boolean> {
     return this._updateMap().then((result) => {
       markers.forEach((options) => {
         this._fireMarkerAddedAction({
@@ -54,7 +55,7 @@ class GoogleStaticProvider extends Provider {
     });
   }
 
-  removeMarkers(markers = []): Promise<boolean> {
+  removeMarkers(markers: MarkerOptions[] = []): Promise<boolean> {
     return this._updateMap().then((result) => {
       markers.forEach((options) => {
         this._fireMarkerRemovedAction({
@@ -69,7 +70,7 @@ class GoogleStaticProvider extends Provider {
     return Promise.resolve();
   }
 
-  addRoutes(routes = []): Promise<boolean> {
+  addRoutes(routes: RouteOptions[] = []): Promise<boolean> {
     return this._updateMap().then((result) => {
       routes.forEach((options) => {
         this._fireRouteAddedAction({
@@ -80,7 +81,7 @@ class GoogleStaticProvider extends Provider {
     });
   }
 
-  removeRoutes(routes = []): Promise<boolean> {
+  removeRoutes(routes: RouteOptions[] = []): Promise<boolean> {
     return this._updateMap().then((result) => {
       routes.forEach((options) => {
         this._fireRouteRemovedAction({

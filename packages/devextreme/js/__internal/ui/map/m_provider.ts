@@ -3,11 +3,13 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { MapProvider } from '@js/ui/map';
 import { isDefined } from '@ts/core/utils/m_type';
 
 import type Map from './m_map';
 import type { MapProperties } from './m_map';
+import type { LocationOption, RouteOptions } from './m_provider.dynamic';
 
 class Provider {
   _mapWidget!: Map;
@@ -109,12 +111,12 @@ class Provider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addRoutes(options) {
+  addRoutes(options: RouteOptions[]): void {
     Class.abstract();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeRoutes(options) {
+  removeRoutes(options: RouteOptions[]): void {
     Class.abstract();
   }
 
@@ -122,12 +124,13 @@ class Provider {
     Class.abstract();
   }
 
-  map() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  map(): any {
     return this._map;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isEventsCanceled(e) {
+  isEventsCanceled(e: DxEvent): boolean {
     return false;
   }
 
@@ -154,14 +157,18 @@ class Provider {
     return key[providerName] === undefined ? key : key[providerName];
   }
 
-  _parseTooltipOptions(option) {
+  _parseTooltipOptions(
+    option: string | { text?: string; isShown?: boolean },
+  ): { text: string; visible: boolean } {
+    const isStringOption = typeof option === 'string';
+
     return {
-      text: option.text || option,
-      visible: option.isShown || false,
+      text: isStringOption ? option : option.text ?? '',
+      visible: isStringOption ? false : option.isShown ?? false,
     };
   }
 
-  _getLatLng(location): { lat: number; lng: number } | null {
+  _getLatLng(location: LocationOption | null | undefined): { lat: number; lng: number } | null {
     if (typeof location === 'string') {
       const coords = location.split(',').map((item) => item.trim());
       const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
