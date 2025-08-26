@@ -56,6 +56,13 @@ const isIOs = devices.current().platform === 'ios';
 
 type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 
+export const DROP_DOWN_EDITOR_DEPRECATED_OPTIONS = {
+  fieldTemplate: {
+    since: '25.2',
+    message: 'Use the \'fieldAddons\' option instead',
+  },
+};
+
 export interface DropDownEditorProperties extends Omit<
   Properties,
   | 'onChange'
@@ -76,6 +83,8 @@ export interface DropDownEditorProperties extends Omit<
   | 'onInitialized'
 > {
   buttonsLocation?: string;
+
+  fieldTemplate?: string | Element | Function | null;
 
   _onMarkupRendered?: () => void;
 
@@ -373,18 +382,27 @@ class DropDownEditor<
 
   _cleanFocusState(): void {
     super._cleanFocusState();
+    const { fieldTemplate } = this.option();
 
-    if (this.option('fieldTemplate')) {
+    if (fieldTemplate) {
       this._detachFocusEvents();
     }
   }
 
   _getFieldTemplate() {
-    return this.option('fieldTemplate') && this._getTemplateByOption('fieldTemplate');
+    const { fieldTemplate } = this.option();
+
+    if (!fieldTemplate) {
+      return;
+    }
+
+    return this._getTemplate(fieldTemplate);
   }
 
   _renderMask(): void {
-    if (this.option('fieldTemplate')) {
+    const { fieldTemplate } = this.option();
+
+    if (fieldTemplate) {
       return;
     }
 
@@ -1115,6 +1133,19 @@ class DropDownEditor<
       return this._$submitElement;
     }
     return super._getSubmitElement();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _shouldLogFieldTemplateDeprecationWarning(): boolean {
+    return false;
+  }
+
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
+
+    if (this._shouldLogFieldTemplateDeprecationWarning()) {
+      extend(this._deprecatedOptions, DROP_DOWN_EDITOR_DEPRECATED_OPTIONS);
+    }
   }
 
   _dispose(): void {

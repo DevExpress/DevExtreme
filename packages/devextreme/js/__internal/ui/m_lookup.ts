@@ -321,9 +321,11 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _renderField() {
+    const { fieldTemplate: fieldTemplateOption } = this.option();
+
     const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
-    if (fieldTemplate && this.option('fieldTemplate')) {
+    if (fieldTemplate && fieldTemplateOption) {
       this._renderFieldTemplate(fieldTemplate);
       return;
     }
