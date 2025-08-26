@@ -80,19 +80,16 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxButton from 'devextreme-vue/button';
-import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
-import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
-
-import { Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 // @ts-ignore
 import { saveAs } from 'file-saver-es';
-import { type DataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
+import DxButton from 'devextreme-vue/button';
+import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
+import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { Workbook } from 'devextreme-exceljs-fork';
+import { type DataGridCell as ExelDataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
 import { type DataSourceOptions } from 'devextreme-vue/common/data';
-
-import 'devextreme-vue/common/data';
 
 const priceGridRef = ref<DxDataGrid | null>(null);
 const ratingGridRef = ref<DxDataGrid | null>(null);
@@ -133,15 +130,19 @@ const exportGrids = () => {
     worksheet: priceSheet,
     component: priceGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell: DataGridCell, excelCell: any }) => {
-      setAlternatingRowsBackground(gridCell, excelCell);
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+      if (gridCell) {
+        setAlternatingRowsBackground(gridCell, excelCell);
+      }
     },
   }).then(() => exportDataGrid({
     worksheet: ratingSheet,
     component: ratingGridRef.value?.instance,
     topLeftCell: { row: 4, column: 2 },
-    customizeCell: ({ gridCell, excelCell }: { gridCell: DataGridCell, excelCell: any }) => {
-      setAlternatingRowsBackground(gridCell, excelCell);
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: ExelDataGridCell, excelCell?: any }) => {
+      if (gridCell) {
+        setAlternatingRowsBackground(gridCell, excelCell);
+      }
     },
   })).then(() => {
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -150,7 +151,7 @@ const exportGrids = () => {
   });
 };
 
-const setAlternatingRowsBackground = (gridCell: DataGridCell, excelCell: any) => {
+const setAlternatingRowsBackground = (gridCell: ExelDataGridCell, excelCell: any) => {
   if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
     if (excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {
