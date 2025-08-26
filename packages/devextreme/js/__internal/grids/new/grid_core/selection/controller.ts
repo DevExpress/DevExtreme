@@ -8,7 +8,7 @@ import { computed, effect, signal } from '@ts/core/state_manager/index';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { CardInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';

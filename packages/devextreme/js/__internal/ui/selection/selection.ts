@@ -2,8 +2,8 @@ import { noop } from '@js/core/utils/common';
 import { Deferred, type DeferredObj, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
-import StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
+import DeferredStrategy from '@ts/ui/selection/selection.strategy.deferred';
+import StandardStrategy from '@ts/ui/selection/selection.strategy.standard';
 import type {
   DefaultOptions,
   PendingOptions,
@@ -45,7 +45,6 @@ export default class Selection<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDefaultOptions(): DefaultOptions<TItem, TKey, false> {
     const defaultOptions: DefaultOptions<TItem, TKey, false> = {
       allowNullValue: false,

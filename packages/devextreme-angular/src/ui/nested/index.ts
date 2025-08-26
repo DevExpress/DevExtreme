@@ -67,7 +67,6 @@ export * from './drop-down-options';
 export * from './edges';
 export * from './editing';
 export * from './export';
-export * from './field-addons';
 export * from './field-chooser';
 export * from './field-dxi';
 export * from './field-panel';
