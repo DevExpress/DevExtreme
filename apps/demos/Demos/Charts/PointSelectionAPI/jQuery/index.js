@@ -2,6 +2,9 @@ $(() => {
   const chart = $('#chart').dxChart({
     dataSource,
     rotated: true,
+    title: {
+      text: 'Most Popular US Cat Breeds',
+    },
     commonSeriesSettings: {
       argumentField: 'breed',
       type: 'bar',
@@ -14,9 +17,6 @@ $(() => {
         color: '#ec2e7a',
         hatching: { direction: 'none' },
       },
-    },
-    title: {
-      text: 'Most Popular US Cat Breeds',
     },
     legend: {
       visible: false,
