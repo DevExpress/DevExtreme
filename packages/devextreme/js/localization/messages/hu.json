@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "választható",
         "dxForm-requiredMessage": "{0} kötelező",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Visszaállítás",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Az érték szám kell legyen",
         "dxNumberBox-noDataText": "Nincs adat",

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import consoleUtils from 'core/utils/console';
+import messageLocalization from 'common/core/localization/message';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
     FORM_LAYOUT_MANAGER_CLASS,
@@ -32,6 +33,7 @@ import {
 
 import { FIELD_BUTTON_ITEM_CLASS } from '__internal/ui/form/components/button_item';
 
+import Button from 'ui/button';
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import windowUtils from 'core/utils/window';
@@ -2625,78 +2627,75 @@ QUnit.module('Button item', () => {
 });
 
 QUnit.module('Default button configuration', () => {
-    test('Smart button gets default configuration', function(assert) {
-        const $testContainer = $('#container');
+    const buttonTestConfigs = [
+        {
+            name: 'smartPaste',
+            expectedText: 'Smart Paste',
+            expectedIcon: 'clipboardpastesmart',
+            expectedType: 'normal',
+            expectedStylingMode: 'outlined',
+            hasClickHandler: true,
+            handlerMethod: '_handleSmartPasteClick'
+        },
+        {
+            name: 'reset',
+            expectedText: 'Reset',
+            expectedIcon: '',
+            expectedType: 'normal',
+            expectedStylingMode: 'outlined',
+            hasClickHandler: true,
+            handlerMethod: '_handleResetClick'
+        },
+        {
+            name: 'submit',
+            expectedText: 'Submit',
+            expectedIcon: '',
+            expectedType: 'default',
+            expectedStylingMode: 'contained',
+            hasClickHandler: false,
+            useSubmitBehavior: true
+        }
+    ];
 
-        const layoutManager = $testContainer.dxLayoutManager({
-            items: [{
-                itemType: 'button',
-                name: 'smartPaste'
-            }]
-        }).dxLayoutManager('instance');
+    buttonTestConfigs.forEach(({ name, expectedText, expectedIcon, expectedType, expectedStylingMode, hasClickHandler, handlerMethod, useSubmitBehavior }) => {
+        test(`${name} button gets default configuration`, function(assert) {
+            const $testContainer = $('#container');
 
-        const handleSmartPasteClickStub = sinon.stub(layoutManager, '_handleSmartPasteClick');
+            const layoutManager = $testContainer.dxLayoutManager({
+                items: [{
+                    itemType: 'button',
+                    name
+                }]
+            }).dxLayoutManager('instance');
 
-        const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+            const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
+            const buttonInstance = Button.getInstance($buttonItem[0]);
+            const { text, icon, type, stylingMode, onClick, useSubmitBehavior: submitBehavior } = buttonInstance.option();
 
-        const { text, icon, type, onClick } = buttonInstance.option();
+            assert.strictEqual(text, expectedText, `${name} button has correct default text`);
+            assert.strictEqual(icon, expectedIcon, `${name} button has correct default icon`);
 
-        assert.strictEqual(text, 'Smart Paste', 'Smart button has correct default text');
-        assert.strictEqual(icon, 'sparkle', 'Smart button has correct default icon');
-        assert.strictEqual(type, 'default', 'Smart button has correct default type');
-        assert.strictEqual(typeof onClick, 'function', 'Smart button has default onClick handler');
+            if(expectedType !== undefined) {
+                assert.strictEqual(type, expectedType, `${name} button has correct default type`);
+            }
 
-        $buttonItem.trigger('dxclick');
-        assert.strictEqual(handleSmartPasteClickStub.calledOnce, true, 'Smart button calls _handleSmartPasteClick when clicked');
+            if(expectedStylingMode !== undefined) {
+                assert.strictEqual(stylingMode, expectedStylingMode, `${name} button has correct default stylingMode`);
+            }
 
-        handleSmartPasteClickStub.restore();
-    });
+            if(useSubmitBehavior !== undefined) {
+                assert.strictEqual(submitBehavior, useSubmitBehavior, `${name} button has useSubmitBehavior enabled`);
+            }
 
-    test('Reset button gets default configuration', function(assert) {
-        const $testContainer = $('#container');
+            if(hasClickHandler) {
+                assert.strictEqual(typeof onClick, 'function', `${name} button has default onClick handler`);
 
-        const layoutManager = $testContainer.dxLayoutManager({
-            items: [{
-                itemType: 'button',
-                name: 'reset'
-            }]
-        }).dxLayoutManager('instance');
-
-        const handleResetClickStub = sinon.stub(layoutManager, '_handleResetClick');
-
-        const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
-
-        const { text, icon } = buttonInstance.option();
-
-        assert.strictEqual(text, 'Reset', 'Reset button has correct default text');
-        assert.strictEqual(icon, 'refresh', 'Reset button has correct default icon');
-
-        $buttonItem.trigger('dxclick');
-        assert.strictEqual(handleResetClickStub.calledOnce, true, 'Reset button calls _handleResetClick when clicked');
-
-        handleResetClickStub.restore();
-    });
-
-    test('Submit button gets default configuration', function(assert) {
-        const $testContainer = $('#container');
-
-        $testContainer.dxLayoutManager({
-            items: [{
-                itemType: 'button',
-                name: 'submit'
-            }]
+                const handlerStub = sinon.stub(layoutManager, handlerMethod);
+                $buttonItem.trigger('dxclick');
+                assert.strictEqual(handlerStub.calledOnce, true, `${name} button calls ${handlerMethod} when clicked`);
+                handlerStub.restore();
+            }
         });
-
-        const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
-
-        const { text, type, useSubmitBehavior } = buttonInstance.option();
-
-        assert.strictEqual(text, 'Submit', 'Submit button has correct default text');
-        assert.strictEqual(type, 'default', 'Submit button has correct default type');
-        assert.strictEqual(useSubmitBehavior, true, 'Submit button has useSubmitBehavior enabled');
     });
 
     test('Custom button options override defaults', function(assert) {
@@ -2716,7 +2715,7 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon } = buttonInstance.option();
 
@@ -2741,13 +2740,14 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
-        const { text, icon, type, useSubmitBehavior } = buttonInstance.option();
+        const { text, icon, type, stylingMode, useSubmitBehavior } = buttonInstance.option();
 
         assert.strictEqual(text, 'Custom Submit', 'Custom text is applied');
         assert.strictEqual(icon, '', 'Default icon is preserved');
         assert.strictEqual(type, 'default', 'Default type is preserved');
+        assert.strictEqual(stylingMode, 'contained', 'Default stylingMode is preserved');
         assert.strictEqual(useSubmitBehavior, true, 'Default useSubmitBehavior is preserved');
     });
 
@@ -2761,7 +2761,7 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon } = buttonInstance.option();
 
@@ -2780,7 +2780,7 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon } = buttonInstance.option();
 
@@ -2799,12 +2799,12 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon } = buttonInstance.option();
 
         assert.strictEqual(text, 'Smart Paste', 'Default text is applied when buttonOptions is undefined');
-        assert.strictEqual(icon, 'sparkle', 'Default icon is applied when buttonOptions is undefined');
+        assert.strictEqual(icon, 'clipboardpastesmart', 'Default icon is applied when buttonOptions is undefined');
     });
 
     test('Button with null buttonOptions works correctly', function(assert) {
@@ -2819,12 +2819,12 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon } = buttonInstance.option();
 
         assert.strictEqual(text, 'Reset', 'Default text is applied when buttonOptions is null');
-        assert.strictEqual(icon, 'refresh', 'Default icon is applied when buttonOptions is null');
+        assert.strictEqual(icon, '', 'No icon is applied when buttonOptions is null');
     });
 
     test('All three default buttons can be rendered together', function(assert) {
@@ -2847,9 +2847,9 @@ QUnit.module('Default button configuration', () => {
 
         assert.strictEqual($buttonItems.length, 3, 'All three buttons are rendered');
 
-        const smartButton = $buttonItems.eq(0).dxButton('instance');
-        const resetButton = $buttonItems.eq(1).dxButton('instance');
-        const submitButton = $buttonItems.eq(2).dxButton('instance');
+        const smartButton = Button.getInstance($buttonItems[0]);
+        const resetButton = Button.getInstance($buttonItems[1]);
+        const submitButton = Button.getInstance($buttonItems[2]);
 
         const { text: smartText } = smartButton.option();
         const { text: resetText } = resetButton.option();
@@ -2899,7 +2899,7 @@ QUnit.module('Default button configuration', () => {
             });
 
             const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-            const buttonInstance = $buttonItem.dxButton('instance');
+            const buttonInstance = Button.getInstance($buttonItem[0]);
 
             const { text, icon } = buttonInstance.option();
 
@@ -2926,13 +2926,14 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
-        const { text, icon, type, useSubmitBehavior, width, height } = buttonInstance.option();
+        const { text, icon, type, stylingMode, useSubmitBehavior, width, height } = buttonInstance.option();
 
         assert.strictEqual(text, 'Custom Submit', 'Custom text overrides default');
         assert.strictEqual(icon, '', 'Default icon is preserved');
         assert.strictEqual(type, 'default', 'Default type is preserved');
+        assert.strictEqual(stylingMode, 'contained', 'Default stylingMode is preserved');
         assert.strictEqual(useSubmitBehavior, true, 'Default useSubmitBehavior is preserved');
         assert.strictEqual(width, 200, 'Custom width is preserved');
         assert.strictEqual(height, 50, 'Custom height is preserved');
@@ -2957,13 +2958,109 @@ QUnit.module('Default button configuration', () => {
         });
 
         const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
-        const buttonInstance = $buttonItem.dxButton('instance');
+        const buttonInstance = Button.getInstance($buttonItem[0]);
 
         const { text, icon, onClick } = buttonInstance.option();
 
         assert.strictEqual(text, '', 'User undefined text overrides default');
         assert.strictEqual(icon, null, 'User null icon overrides default');
         assert.strictEqual(onClick, null, 'User null onClick overrides default');
+    });
+
+    test('Default buttons use messageLocalization for text', function(assert) {
+        const $testContainer = $('#container');
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: 'button',
+                name: 'smartPaste'
+            }, {
+                itemType: 'button',
+                name: 'reset'
+            }, {
+                itemType: 'button',
+                name: 'submit'
+            }]
+        });
+
+        const $buttonItems = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
+
+        const smartButton = Button.getInstance($buttonItems[0]);
+        const resetButton = Button.getInstance($buttonItems[1]);
+        const submitButton = Button.getInstance($buttonItems[2]);
+
+        const expectedSmartText = messageLocalization.format('dxForm-smartPasteButtonText');
+        const expectedResetText = messageLocalization.format('dxForm-resetButtonText');
+        const expectedSubmitText = messageLocalization.format('dxForm-submitButtonText');
+
+        assert.strictEqual(smartButton.option('text'), expectedSmartText, 'Smart Paste button uses localized text');
+        assert.strictEqual(resetButton.option('text'), expectedResetText, 'Reset button uses localized text');
+        assert.strictEqual(submitButton.option('text'), expectedSubmitText, 'Submit button uses localized text');
+    });
+
+    test('Default button text updates when locale changes', function(assert) {
+        const $testContainer = $('#container');
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: 'button',
+                name: 'reset'
+            }]
+        });
+
+        const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
+        const buttonInstance = Button.getInstance($buttonItem[0]);
+
+        const originalMessages = messageLocalization.getMessagesByLocales();
+
+        const defaultText = messageLocalization.format('dxForm-resetButtonText');
+        assert.strictEqual(buttonInstance.option('text'), defaultText, 'Button shows default localized text');
+
+        messageLocalization.load({
+            'en': {
+                'dxForm-resetButtonText': 'Custom Reset Text'
+            }
+        });
+
+        $testContainer.dxLayoutManager({
+            items: [{
+                itemType: 'button',
+                name: 'reset'
+            }]
+        });
+
+        const newButtonInstance = Button.getInstance($testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`)[0]);
+        assert.strictEqual(newButtonInstance.option('text'), 'Custom Reset Text', 'Button text updates with locale change');
+
+        messageLocalization.load(originalMessages);
+    });
+
+    test('Localization keys are correctly mapped for each button type', function(assert) {
+        const $testContainer = $('#container');
+
+        const buttonConfigs = [
+            { name: 'smartPaste', localizationKey: 'dxForm-smartPasteButtonText' },
+            { name: 'reset', localizationKey: 'dxForm-resetButtonText' },
+            { name: 'submit', localizationKey: 'dxForm-submitButtonText' }
+        ];
+
+        buttonConfigs.forEach(({ name, localizationKey }) => {
+            $testContainer.empty();
+
+            $testContainer.dxLayoutManager({
+                items: [{
+                    itemType: 'button',
+                    name
+                }]
+            });
+
+            const $buttonItem = $testContainer.find(`.${FIELD_BUTTON_ITEM_CLASS} .${BUTTON_CLASS}`);
+            const buttonInstance = Button.getInstance($buttonItem[0]);
+            const { text } = buttonInstance.option();
+
+            const expectedText = messageLocalization.format(localizationKey);
+            assert.strictEqual(text, expectedText, `${name} button uses correct localized text from ${localizationKey}`);
+        });
     });
 });
 

@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "任意",
         "dxForm-requiredMessage": "{0} は必須フィールドです",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "リセット",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "数値を指定してください。",
         "dxNumberBox-noDataText": "データがありません",

@@ -704,22 +704,25 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
     const buttonConfigs = {
       smartPaste: {
-        icon: 'sparkle',
-        text: 'Smart Paste',
-        type: 'default',
+        icon: 'clipboardpastesmart',
+        text: messageLocalization.format('dxForm-smartPasteButtonText'),
+        stylingMode: 'outlined',
+        type: 'normal',
         onClick: (): void => {
           this._handleSmartPasteClick();
         },
       },
       reset: {
-        icon: 'refresh',
-        text: 'Reset',
+        text: messageLocalization.format('dxForm-resetButtonText'),
+        stylingMode: 'outlined',
+        type: 'normal',
         onClick: (): void => {
           this._handleResetClick();
         },
       },
       submit: {
-        text: 'Submit',
+        text: messageLocalization.format('dxForm-submitButtonText'),
+        stylingMode: 'contained',
         type: 'default',
         useSubmitBehavior: true,
       },

@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "可選",
         "dxForm-requiredMessage": "{0} 是必須的",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "重置",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "值必須是一個數字",
         "dxNumberBox-noDataText": "無資料",

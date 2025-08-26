@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "neobligāts",
         "dxForm-requiredMessage": "{0} ir obligāts",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Atiestatīt",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Vērtībai jābūt skaitlim",
         "dxNumberBox-noDataText": "Nav datu",
