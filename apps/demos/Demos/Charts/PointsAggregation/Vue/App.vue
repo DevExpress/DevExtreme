@@ -129,11 +129,11 @@ const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregati
 const currentInterval = ref(aggregationIntervals[0].interval);
 
 function calculateRangeArea({ data, intervalStart, intervalEnd }: ChartPointAggregationInfoObject) {
-  if (!data.length) {
+  if (!data?.length) {
     return null;
   }
 
-  const temp = data.map((item: Record<string, unknown>) => item.temp);
+  const temp = data.map((item: Record<string, any>) => item.temp);
 
   return {
     date: new Date((intervalStart.valueOf()

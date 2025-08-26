@@ -19,7 +19,7 @@
 </template>
 <script setup lang="ts">
 defineProps<{
-  data?: { valueText: string }
+  data: { valueText: string }
 }>();
 
 const getFilePath = (text: string): string => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`;

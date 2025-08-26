@@ -1,7 +1,7 @@
 <template>
   <svg>
     <circle
-      :r="pieChart.getInnerRadius() - 6"
+      :r="(pieChart?.getInnerRadius() || 6 ) - 6"
       cx="100"
       cy="100"
       fill="#eee"
@@ -31,28 +31,36 @@
 
 import { type DxPieChart } from "devextreme-vue/pie-chart";
 import { type chartPointObject } from "devextreme/viz/chart";
+import {computed} from "vue";
 
 type DxPieChartInstance = DxPieChart['instance'];
 
-const props = withDefaults(defineProps<{
-  pieChart?: DxPieChartInstance
-}>(), {
-  pieChart: () => ({} as DxPieChartInstance),
+const props = defineProps<{
+  pieChart: DxPieChartInstance
+}>();
+
+const country = computed(() => {
+  return props ? props.pieChart
+      ?.getAllSeries()[0]
+      ?.getVisiblePoints()[0]
+      ?.data
+      ?.country as string : '';
 });
 
-const country = props.pieChart
-  .getAllSeries()[0]
-  .getVisiblePoints()[0]
-  .data
-  .country as string;
-
 const getImagePath = (countryName: string): string => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
-const calculateTotal = (pieChart: DxPieChartInstance): string => formatNumber(
-  pieChart
-    .getAllSeries()[0]
-    .getVisiblePoints()
-    .reduce((s: number, p: chartPointObject) => s + (p.originalValue as number), 0),
-);
+const calculateTotal = (pieChart: DxPieChartInstance): string => {
+  const points = pieChart?.getAllSeries()[0]?.getVisiblePoints() || [];
+  
+  return formatNumber(
+      points.reduce<number>((s: number, p) => {
+        if (typeof p.originalValue == 'number') {
+          return s + p.originalValue;
+        }
+        
+        return s;
+      }, 0)
+  )
+};
 
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,

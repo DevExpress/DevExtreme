@@ -1,5 +1,5 @@
 export function generateDataSource() {
-  let x1: number; let x2: number; let y1: number; let y2: number; let
+  let x1 = 0; let x2 = 0; let y1 = 0; let y2 = 0; let
     i: number;
   const ds: Array<{ x1: number; y1: number; x2: number; y2: number }> = [];
   for (i = 0; i < 20; i += 1) {
