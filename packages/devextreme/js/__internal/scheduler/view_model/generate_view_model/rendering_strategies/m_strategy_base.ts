@@ -128,10 +128,6 @@ class BaseRenderingStrategy {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDeltaTime(args, initialSize, appointment) {
-  }
-
   getAppointmentGeometry(coordinates) {
     return coordinates;
   }
@@ -173,13 +169,6 @@ class BaseRenderingStrategy {
     const resultPositions = this._getResultPositions(positionArray);
 
     return this._getExtendedPositionMap(map, resultPositions);
-  }
-
-  _getDeltaWidth(args, initialSize): any {
-    const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
-    const initialWidth = initialSize.width;
-
-    return Math.round((args.width - initialWidth) / intervalWidth);
   }
 
   _correctRtlCoordinates(coordinates) {
@@ -647,11 +636,14 @@ class BaseRenderingStrategy {
     if ((coordinates.count - countFullWidthAppointmentInCell) > 0) {
       const { top, left } = coordinates;
       const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
+      const width = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay);
+      const height = this.getDropDownAppointmentHeight();
+      const rtlOffset = this.rtlEnabled ? width : 0;
       coordinates.virtual = {
-        left: left + this._getCollectorLeftOffset(isAllDay),
+        left: left + this._getCollectorLeftOffset(isAllDay) + rtlOffset,
         top,
-        width: this.getDropDownAppointmentWidth(this.intervalCount, isAllDay),
-        height: this.getDropDownAppointmentHeight(),
+        width,
+        height,
         index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
         isAllDay,
         groupIndex: coordinates.groupIndex,

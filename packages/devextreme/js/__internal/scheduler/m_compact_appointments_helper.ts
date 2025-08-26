@@ -12,9 +12,6 @@ const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
 
-const WEEK_VIEW_COLLECTOR_OFFSET = 5;
-const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
-
 export class CompactAppointmentsHelper {
   elements: any[] = [];
 
@@ -102,16 +99,6 @@ export class CompactAppointmentsHelper {
 
       workSpace._createDragBehaviorBase($element, $schedulerElement, options);
     };
-  }
-
-  _getCollectorOffset(width, cellWidth) {
-    return cellWidth - width - this._getCollectorRightOffset();
-  }
-
-  _getCollectorRightOffset() {
-    return this.instance.getRenderingStrategyInstance()._isCompactTheme()
-      ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
-      : WEEK_VIEW_COLLECTOR_OFFSET;
   }
 
   _setPosition(element, position) {

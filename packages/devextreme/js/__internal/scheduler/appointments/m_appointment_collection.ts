@@ -983,10 +983,6 @@ class SchedulerAppointments extends CollectionWidget {
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
     const virtualItems = appointment.items;
-    const buttonWidth = this.invoke('getDropDownAppointmentWidth', appointment.allDay);
-    const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-    const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
-    const isGroupCompact = !appointment.allDay && this.invoke('supportCompactDropDownAppointments');
     const items: any = { data: [], colors: [], settings: [] };
     virtualItems.forEach((item) => {
       const appointmentConfig = {
@@ -1005,17 +1001,16 @@ class SchedulerAppointments extends CollectionWidget {
       $container: $fragment,
       coordinates: {
         top: appointment.top,
-        left: appointment.left + rtlOffset,
+        left: appointment.left,
       },
       items,
       buttonColor: items.colors[0],
       sortedIndex: appointment.sortedIndex,
-      width: buttonWidth - this.option('_collectorOffset'),
-      height: buttonHeight,
+      width: appointment.width - this.option('_collectorOffset'),
+      height: appointment.height,
       onAppointmentClick: this.option('onItemClick'),
       allowDrag: this.option('allowDrag'),
-      cellWidth: this.invoke('getCellWidth'),
-      isCompact: this.invoke('isAdaptive') || isGroupCompact,
+      isCompact: appointment.isCompact,
     });
     this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
 
