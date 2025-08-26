@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView from 'devextreme-react/tree-view';
-import ContextMenu from 'devextreme-react/context-menu';
+import { TreeView } from 'devextreme-react/tree-view';
+import { ContextMenu } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import service from './data.js';
 

@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 
-import Scheduler, { Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
-import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
+import { Scheduler, Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import { ContextMenu, type ContextMenuTypes } from 'devextreme-react/context-menu';
 
+import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
 import { data, resourcesData } from './data.ts';
 import type { Resource as ResourceItem } from './types';
-import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
 
 // eslint-disable-next-line no-unused-vars
 type ContextMenuItem = ContextMenuTypes.Item & ResourceItem & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void };

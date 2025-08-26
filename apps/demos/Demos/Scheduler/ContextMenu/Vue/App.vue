@@ -38,10 +38,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
+import { DxScheduler, DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { DxContextMenu, type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
-import { resourcesData, data } from './data.ts';
+import { resourcesData, data } from './data';
 import type { ContextMenuItem } from './types';
 
 const views = ['day', 'month'];
@@ -52,7 +52,7 @@ const dataSource = data;
 const groups = ref<string[]>(undefined);
 const crossScrollingEnabled = ref(false);
 const disabled = ref(true);
-const contextMenuItems = ref([]);
+const contextMenuItems = ref<ContextMenuItem[]>([]);
 const target = ref(appointmentClassName);
 const schedulerRef = ref<DxScheduler>();
 

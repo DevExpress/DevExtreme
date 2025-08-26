@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
+import { ContextMenu, type ContextMenuTypes } from 'devextreme-react/context-menu';
 import notify from 'devextreme/ui/notify';
 
 import { contextMenuItems as items } from './data.ts';

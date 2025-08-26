@@ -31,9 +31,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
+import { DxTreeView, type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
-import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
+import { DxContextMenu, type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import service from './data.ts';
 import type { Product } from './types';
 

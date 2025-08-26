@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
-import Menu, { type MenuTypes } from 'devextreme-react/menu';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import { Menu, type MenuTypes } from 'devextreme-react/menu';
+import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import service from './data.ts';
 import type { ProductType, ProductItemType } from './types';

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import Menu from 'devextreme-react/menu';
-import SelectBox from 'devextreme-react/select-box';
-import CheckBox from 'devextreme-react/check-box';
+import { Menu } from 'devextreme-react/menu';
+import { SelectBox } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
 import service from './data.js';
 
 const orientations = ['horizontal', 'vertical'];
