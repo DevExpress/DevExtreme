@@ -190,7 +190,9 @@ class TreeViewSearch extends TreeViewBase {
   _itemContainer(isSearchMode?: boolean, selectAllEnabled?: boolean): dxElementWrapper {
     const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
 
-    if (isSelectAllEnabled) {
+    const { items } = this.option();
+    // T1294524
+    if (isSelectAllEnabled && items?.length) {
       return this._getNodeContainer();
     }
 

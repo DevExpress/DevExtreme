@@ -7,6 +7,7 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
+const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
@@ -295,6 +296,20 @@ QUnit.test('select all item should be focused on treeview focus', function(asser
     const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
 
     assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.test('Treeview container should be focused on empty treeview focus (T1294524)', function(assert) {
+    if(shouldSkipOnMobile(assert)) {
+        return;
+    }
+
+    initTree({
+        showCheckBoxesMode: 'selectAll',
+    }).dxTreeView('focus');
+
+    const $treeView = $(`.${TREEVIEW_CLASS_PREFIX}`);
+
+    assert.strictEqual($treeView.hasClass(FOCUSED_STATE_CLASS), true, 'treeview is focused');
 });
 
 QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {
