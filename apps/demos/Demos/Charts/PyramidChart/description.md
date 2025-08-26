@@ -1,10 +1,10 @@
-DevExtreme Funnel can display data as a pyramid chart. To create such visualization, set the [algorithm](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#algorithm) property to *"dynamicHeight"* and [invert the Funnel](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#inverted).
+DevExtreme Funnel can display data/information as a pyramid chart. To generate pyramid visualizations, set the [algorithm](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#algorithm) property to *"dynamicHeight"* and [invert the Funnel](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/#inverted).
 <!--split-->
 
 This demo configures the following objects:
 
 - [title](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/title/)    
-Specifies the component title.
+Specifies component title.
 - [tooltip](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/tooltip/)    
 Specifies item tooltips.
 - [item](/Documentation/ApiReference/UI_Components/dxFunnel/Configuration/item/)    

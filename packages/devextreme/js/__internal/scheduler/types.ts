@@ -1,6 +1,7 @@
 import type { Appointment } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -241,4 +242,11 @@ export interface ViewDataProviderType {
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
   getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
   viewType: ViewType;
+}
+
+export interface AppointmentTooltipItem {
+  appointment: Appointment;
+  targetedAppointment?: Appointment;
+  color?: string;
+  settings: AppointmentItemViewModel[];
 }
