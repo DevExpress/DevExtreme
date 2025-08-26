@@ -33,7 +33,7 @@ import { DataSource } from 'devextreme-vue/common/data';
 import CustomItem from './CustomItem.vue';
 import { filter, fields, products } from './data.ts';
 
-const filterBuilderRef = ref<typeof DxFilterBuilder>();
+const filterBuilderRef = ref<DxFilterBuilder>();
 const dataSource = new DataSource({
   store: products,
 });

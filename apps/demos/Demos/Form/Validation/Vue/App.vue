@@ -186,7 +186,7 @@ import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import service from './data.ts';
 
-const formInstance = ref<typeof DxForm['instance']>();
+const formInstance = ref<DxForm['instance']>();
 const customer = ref(service.getCustomer());
 const registerButtonOptions = ref({
   text: 'Register',
@@ -200,7 +200,7 @@ const resetButtonOptions = ref({
   disabled: true,
   width: '120px',
   onClick: () => {
-    formInstance.value.reset();
+    formInstance.value?.reset();
   },
 });
 const colCountByScreen = ref({
@@ -213,8 +213,8 @@ const passwordEditorOptions = ref({
   mode: 'password',
   valueChangeEvent: 'keyup',
   onValueChanged: () => {
-    const editor = formInstance.value.getEditor('ConfirmPassword');
-    if (editor.option('value')) {
+    const editor = formInstance.value?.getEditor('ConfirmPassword');
+    if (editor?.option('value')) {
       const instance = Validator.getInstance(editor.element()) as Validator;
       instance.validate();
     }
@@ -293,8 +293,8 @@ const phonePattern = ref(/^[02-9]\d{9}$/);
 
 function onOptionChanged(e: DxFormTypes.OptionChangedEvent) {
   if (e.name === 'isDirty') {
-    const resetButton = formInstance.value.getButton('Reset');
-    resetButton.option('disabled', !e.value);
+    const resetButton = formInstance.value?.getButton('Reset');
+    resetButton?.option('disabled', !e.value);
   }
 }
 function saveFormInstance(e: DxFormTypes.InitializedEvent) {
