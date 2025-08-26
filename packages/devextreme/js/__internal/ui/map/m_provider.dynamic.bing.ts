@@ -4,7 +4,6 @@ import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
@@ -371,8 +370,8 @@ class BingProvider extends DynamicProvider {
   }
 
   _renderRoute(options: RouteOptions): Promise<RouteObject> {
-    // const locations = options.locations ?? [];
-    return Promise.all(map(options.locations, (point) => this._resolveLocation(point)))
+    const routeLocations = options.locations ?? [];
+    return Promise.all(routeLocations.map((point) => this._resolveLocation(point)))
       .then((locations) => new Promise((resolve) => {
         const direction = new Microsoft.Maps.Directions.DirectionsManager(this._map);
         const color = new Color(options.color || this._defaultRouteColor()).toHex();
@@ -398,7 +397,7 @@ class BingProvider extends DynamicProvider {
           routeDraggable: false,
         });
 
-        each(locations, (_, location) => {
+        locations.forEach((location) => {
           const waypoint = new Microsoft.Maps.Directions.Waypoint({ location });
           direction.addWaypoint(waypoint);
         });

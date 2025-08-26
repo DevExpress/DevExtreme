@@ -4,7 +4,6 @@ import Color from '@js/color';
 import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
-import { map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { MapType, RouteMode } from '@js/ui/map';
@@ -403,8 +402,9 @@ class AzureProvider extends DynamicProvider {
   }
 
   _renderRoute(options: RouteOptions): Promise<RouteObject> {
+    const routeLocations = options.locations ?? [];
     return Promise.all(
-      map(options.locations, (point) => this._resolveLocation(point)),
+      routeLocations.map((point) => this._resolveLocation(point)),
     ).then((locations) => new Promise((resolve) => {
       const routeColor = new Color(options.color || this._defaultRouteColor()).toHex();
       const routeOpacity = options.opacity || this._defaultRouteOpacity();
