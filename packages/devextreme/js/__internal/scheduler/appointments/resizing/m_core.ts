@@ -32,7 +32,7 @@ const getCellData = (
   // but long appointments are not. So for all day appointments endDate === startDate,
   // for long appointments endDate = startDate + 1 day.
   if (!isAllDay) {
-    cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, [toMs('day')]);
+    cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, toMs('day'));
   }
 
   return cellData;

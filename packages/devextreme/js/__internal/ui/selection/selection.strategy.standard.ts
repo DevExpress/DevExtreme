@@ -7,7 +7,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isNumeric, isObject } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import SelectionStrategy from '@ts/ui/selection/m_selection.strategy';
+import SelectionStrategy from '@ts/ui/selection/selection.strategy';
 import type {
   PendingOptions,
   RequestData,
@@ -241,32 +241,33 @@ export default class StandardStrategy<
       removedItems: [],
       keys: [],
     };
-    let lastRequestData: RequestData<TItem, TKey> = multiSelectEnabled
-      ? this._lastRequestData ?? emptyData
-      : emptyData;
 
-    if (multiSelectEnabled) {
-      if (this._shouldMergeWithLastRequest) {
-        if (isDeselectAll) {
+    if (!multiSelectEnabled) {
+      return emptyData;
+    }
+
+    let lastRequestData: RequestData<TItem, TKey> = this._lastRequestData ?? emptyData;
+
+    if (this._shouldMergeWithLastRequest) {
+      if (isDeselectAll) {
+        this._lastLoadDeferred?.reject();
+        lastRequestData = {} as RequestData<TItem, TKey>;
+      } else if (!isKeysEqual(keys, this.options.selectedItemKeys)) {
+        oldRequestItems.added = lastRequestData?.addedItems;
+        oldRequestItems.removed = lastRequestData?.removedItems;
+
+        if (!isDeselect) {
           this._lastLoadDeferred?.reject();
-          lastRequestData = {} as RequestData<TItem, TKey>;
-        } else if (!isKeysEqual(keys, this.options.selectedItemKeys)) {
-          oldRequestItems.added = lastRequestData?.addedItems;
-          oldRequestItems.removed = lastRequestData?.removedItems;
-
-          if (!isDeselect) {
-            this._lastLoadDeferred?.reject();
-          }
         }
       }
-
-      lastRequestData = this._concatRequestsItems(
-        keys,
-        oldRequestItems,
-        isDeselect,
-        this._shouldMergeWithLastRequest ? undefined : updatedKeys,
-      );
     }
+
+    lastRequestData = this._concatRequestsItems(
+      keys,
+      oldRequestItems,
+      isDeselect,
+      this._shouldMergeWithLastRequest ? undefined : updatedKeys,
+    );
 
     return lastRequestData;
   }
@@ -415,8 +416,7 @@ export default class StandardStrategy<
 
     return selectedItemKeys
       .findIndex(
-        (_, index) => (!ignoreIndicesMap || !ignoreIndicesMap[index])
-          && this.equalKeys(selectedItemKeys[index], key),
+        (_, index) => !ignoreIndicesMap?.[index] && this.equalKeys(selectedItemKeys[index], key),
       );
   }
 
