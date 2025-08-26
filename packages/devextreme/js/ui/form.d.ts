@@ -76,7 +76,7 @@ export type AIResult = Record<string, string | string[]>;
 export type SmartPasteInfo = {
   /**
    * @docid
-   * @type AIResult
+   * @type object
    */
   readonly aiResult: AIResult;
 };
