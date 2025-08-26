@@ -68,7 +68,6 @@ import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
 
-
 const DEFAULT_MARGIN = 20;
 
 themes.setDefaultTimeout(0);
@@ -1714,6 +1713,32 @@ testComponentDefaults(FileUploader,
     function() {
         themes.isMaterial = this.origIsMaterial;
     }
+);
+
+testComponentDefaults(Form,
+    {},
+    {
+        formData: {},
+        colCount: 1,
+        labelLocation: 'left',
+        readOnly: false,
+        onFieldDataChanged: null,
+        customizeItem: null,
+        onEditorEnterKey: null,
+        minColWidth: 200,
+        alignItemLabels: true,
+        alignItemLabelsInAllGroups: true,
+        alignRootItemLabels: true,
+        showColonAfterLabel: true,
+        showRequiredMark: true,
+        showOptionalMark: false,
+        requiredMark: '*',
+        showValidationSummary: false,
+        scrollingEnabled: false,
+        labelMode: 'outside',
+        isDirty: false,
+        aiIntegration: undefined,
+    },
 );
 
 testComponentDefaults(Form,

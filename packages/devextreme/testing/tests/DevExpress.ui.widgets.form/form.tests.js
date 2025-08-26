@@ -25,7 +25,6 @@ import {
     TEXTEDITOR_INPUT_CLASS
 } from '__internal/ui/text_box/m_text_editor.base';
 
-
 import {
     FIELD_ITEM_CLASS,
     FORM_GROUP_CLASS,
@@ -64,6 +63,16 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isDefined } from 'core/utils/type.js';
 import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
+QUnit.testStart(function() {
+    const markup =
+        '<div id="form"></div>\
+        <div id="form2"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
+
+import './formParts/form.aiIntegration.tests.js';
+
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
@@ -74,14 +83,6 @@ const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const TEXTBOX_CLASS = 'dx-textbox';
-
-QUnit.testStart(function() {
-    const markup =
-        '<div id="form"></div>\
-        <div id="form2"></div>';
-
-    $('#qunit-fixture').html(markup);
-});
 
 QUnit.module('Form');
 

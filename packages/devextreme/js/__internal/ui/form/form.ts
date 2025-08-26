@@ -1825,9 +1825,11 @@ class Form extends Widget<FormProperties> {
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
     return {
       onComplete: (fieldsData: SmartPasteCommandResult): void => {
+        this.beginUpdate();
         fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
           this._updateFieldValue(name, value);
         });
+        this.endUpdate();
         this._processCommandCompletion();
       },
       onError: (): void => {
@@ -1845,13 +1847,13 @@ class Form extends Widget<FormProperties> {
       instruction: item.aiProcessing?.instruction,
     }));
 
-    const smartPastParams = {
+    const smartPasteParams = {
       text: text ?? await navigator.clipboard.readText(),
       fields,
     };
-    const smartPastCallbacks = this._getSmartPasteCommandCallbacks();
+    const smartPasteCallbacks = this._getSmartPasteCommandCallbacks();
 
-    this._executeAICommand('smartPaste', smartPastParams, smartPastCallbacks);
+    this._executeAICommand('smartPaste', smartPasteParams, smartPasteCallbacks);
   }
 }
 

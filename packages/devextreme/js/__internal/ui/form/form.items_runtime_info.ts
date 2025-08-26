@@ -215,10 +215,15 @@ export default class FormItemsRunTimeInfo {
   }
 
   _isEditableItem(item: SimpleItem): boolean {
-    const { visible, editorOptions } = item;
-    const { readOnly, disabled } = editorOptions ?? {};
+    const { visible: itemVisible, editorOptions } = item;
+    const { readOnly, disabled, visible } = editorOptions ?? {};
 
-    return visible !== false && !readOnly && !disabled;
+    return itemVisible !== false && !readOnly && !disabled && visible !== false;
+  }
+
+  _isItemAIEnabled(item: SimpleItem): boolean {
+    // @ts-expect-error
+    return !item.aiProcessing?.disabled;
   }
 
   _isDataItem(item: PreparedItem): item is SimpleItemWithDataField {
@@ -236,6 +241,7 @@ export default class FormItemsRunTimeInfo {
 
     return visibleItems
       .filter(this._isDataItem)
+      .filter(this._isItemAIEnabled)
       .filter(this._isEditableItem);
   }
 }
