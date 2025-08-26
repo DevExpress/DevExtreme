@@ -4,11 +4,8 @@ import { Scheduler, Resource, type SchedulerTypes, SchedulerRef } from 'devextre
 import { ContextMenu, type ContextMenuTypes } from 'devextreme-react/context-menu';
 
 import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
-import { data, resourcesData } from './data.ts';
-import type { Resource as ResourceItem } from './types';
-
-// eslint-disable-next-line no-unused-vars
-type ContextMenuItem = ContextMenuTypes.Item & ResourceItem & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void };
+import { data, resourcesData } from './data';
+import type { ContextMenuItem } from './types';
 
 const views: SchedulerTypes.ViewType[] = ['day', 'month'];
 
@@ -36,7 +33,7 @@ const App = () => {
       ...item,
       onItemClick: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => scheduler?.updateAppointment(appointmentData, {
         ...appointmentData,
-        ...{ roomId: [(e.itemData).id] },
+        ...{ roomId: [e.itemData.id] },
       }),
     }));
 
