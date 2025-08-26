@@ -111,11 +111,11 @@ export class AppointmentViewModelGenerator {
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs
-            .addOffsets(appointment.startDate, [viewOffset]);
+            .addOffsets(appointment.startDate, viewOffset);
           appointment.endDate = dateUtilsTs
-            .addOffsets(appointment.endDate, [viewOffset]);
+            .addOffsets(appointment.endDate, viewOffset);
           appointment.normalizedEndDate = dateUtilsTs
-            .addOffsets(appointment.normalizedEndDate, [viewOffset]);
+            .addOffsets(appointment.normalizedEndDate, viewOffset);
           processedAppointments.add(appointment);
         }
       }
