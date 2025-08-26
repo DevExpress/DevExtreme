@@ -39,7 +39,6 @@ export default class SelectionStrategy<
     this._setOption('addedItems', []);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validate(): void {}
 
   _setOption(name: string, value: unknown): void {
@@ -125,7 +124,6 @@ export default class SelectionStrategy<
     return equalByValue(key1, key2);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getSelectableItems(items: TItem[]): TItem[] {
     return items.filter((item) => !item?.disabled);
   }
@@ -287,7 +285,6 @@ export default class SelectionStrategy<
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   selectedItemKeys(
     // eslint-disable-next-line  @typescript-eslint/no-unused-vars
     keys: TKey[],
@@ -306,23 +303,23 @@ export default class SelectionStrategy<
   }
 
   isItemKeySelected(itemKey: TKey | TItem): boolean;
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   isItemKeySelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
     throw new Error('isItemKeySelected method should be overriden');
   }
 
   isItemDataSelected(itemKey: TKey | TItem): boolean;
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   isItemDataSelected(itemKey: TKey | TItem, options: { checkPending?: boolean } = {}): boolean {
     throw new Error('isItemKeySelected method should be overriden');
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   addSelectedItem(itemKey: TKey, dataOrIsSelectAll?: TItem | boolean, skipFilter?: boolean): void {
     throw new Error('addSelectedItem method should be overriden');
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
   removeSelectedItem(itemKey: TKey): void {
     throw new Error('removeSelectedItem method should be overriden');
   }
