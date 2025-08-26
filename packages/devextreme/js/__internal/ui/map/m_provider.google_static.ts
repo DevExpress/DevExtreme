@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import { name as clickEventName } from '@js/common/core/events/click';

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import $ from '@js/core/renderer';
@@ -19,6 +18,7 @@ import DynamicProvider from './m_provider.dynamic';
 
 const window = getWindow();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let atlas: any;
 
 const AZURE_BASE_LINK = 'https://atlas.microsoft.com/';
@@ -35,6 +35,7 @@ const azureMapsLoaded = (): boolean => Boolean(window.atlas?.Map);
 
 export type AzureLocation = [number, number];
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let azureMapsLoader;
 class AzureProvider extends DynamicProvider {
   _preventZoomChangeEvent?: boolean;
@@ -337,6 +338,7 @@ class AzureProvider extends DynamicProvider {
       this._map.markers.add(marker);
 
       const popup = this._renderTooltip(location, options.tooltip);
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let handler;
       if (options.onClick || options.tooltip) {
         const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
@@ -366,9 +368,10 @@ class AzureProvider extends DynamicProvider {
     });
   }
 
-  _renderTooltip(location, options) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _renderTooltip(location: AzureLocation, options: MarkerOptions['tooltip']): any {
     if (!options) {
-      return;
+      return undefined;
     }
 
     const parsedOptions = this._parseTooltipOptions(options);
@@ -417,7 +420,11 @@ class AzureProvider extends DynamicProvider {
         if (result?.routes && result.routes.length > 0) {
           const route = result.routes[0];
           const routeCoordinates = route.legs
-            .flatMap((leg) => leg.points.map((point) => [point.longitude, point.latitude]));
+            .flatMap(
+              (leg: { points: { longitude: number; latitude: number }[] }) => leg.points.map(
+                (point) => [point.longitude, point.latitude],
+              ),
+            );
           const dataSource = new atlas.source.DataSource();
 
           dataSource.add(new atlas.data.Feature(new atlas.data.LineString(routeCoordinates), {}));

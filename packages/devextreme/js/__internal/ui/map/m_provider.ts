@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -9,11 +8,12 @@ import { isDefined } from '@ts/core/utils/m_type';
 
 import type Map from './m_map';
 import type { MapProperties } from './m_map';
-import type { LocationOption, RouteOptions } from './m_provider.dynamic';
+import type { LocationOption, MarkerOptions, RouteOptions } from './m_provider.dynamic';
 
 class Provider {
   _mapWidget!: Map;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _map?: any;
 
   _$container!: dxElementWrapper;
@@ -36,18 +36,17 @@ class Provider {
   }
 
   render(
-    markerOptions,
-    routeOptions,
-  ): Promise<void> {
-    // @ts-expect-error ts-error
+    markerOptions: MarkerOptions[],
+    routeOptions: RouteOptions[],
+  ): Promise<unknown> {
     return this._renderImpl().then(() => Promise.all([
       this._applyFunctionIfNeeded('addMarkers', markerOptions),
       this._applyFunctionIfNeeded('addRoutes', routeOptions),
     ]).then(() => true));
   }
 
-  _renderImpl(): void {
-    Class.abstract();
+  _renderImpl(): Promise<unknown> {
+    return Promise.resolve();
   }
 
   updateDimensions(): void {
@@ -74,50 +73,63 @@ class Provider {
     Class.abstract();
   }
 
-  updateControls(): void {
-    Class.abstract();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
-  updateMarkers(markerOptionsToRemove, markerOptionsToAdd) {
-    // eslint-disable-next-line no-promise-executor-return
-    return new Promise((resolve) => this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove).then((removeValue) => {
-      this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd).then((addValue) => {
-        resolve(addValue || removeValue);
-      });
-    }));
+  updateMarkers(
+    markerOptionsToRemove: MarkerOptions[],
+    markerOptionsToAdd: MarkerOptions[],
+  ): Promise<unknown> {
+    return new Promise((resolve) => {
+      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+        .then((removeValue) => {
+          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
+            .then((addValue) => {
+              resolve(addValue || removeValue);
+            }).catch(() => {});
+        }).catch(() => {});
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addMarkers(options): void {
-    Class.abstract();
+  addMarkers(options: MarkerOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeMarkers(options): void {
-    Class.abstract();
+  removeMarkers(options: MarkerOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   adjustViewport(): void {
     Class.abstract();
   }
 
-  updateRoutes(routeOptionsToRemove, routeOptionsToAdd) {
-    // eslint-disable-next-line no-promise-executor-return
-    return new Promise((resolve) => this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove).then((removeValue) => {
-      this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd).then((addValue) => {
-        resolve(addValue || removeValue);
-      });
-    }));
+  updateRoutes(
+    routeOptionsToRemove: RouteOptions[],
+    routeOptionsToAdd: RouteOptions[],
+  ): Promise<unknown> {
+    return new Promise((resolve) => {
+      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
+        .then((removeValue) => {
+          this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
+            .then((addValue) => {
+              resolve(addValue || removeValue);
+            }).catch(() => {});
+        }).catch(() => {});
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addRoutes(options: RouteOptions[]): void {
-    Class.abstract();
+  addRoutes(options: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeRoutes(options: RouteOptions[]): void {
-    Class.abstract();
+  removeRoutes(options: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   clean(): void {
@@ -151,10 +163,15 @@ class Provider {
     return undefined;
   }
 
-  _keyOption(providerName: MapProvider) {
+  _keyOption(providerName: MapProvider): string {
     const key = this._option('apiKey') ?? '';
-
-    return key[providerName] === undefined ? key : key[providerName];
+    if (typeof key === 'string') {
+      return key;
+    }
+    if (isPlainObject(key)) {
+      return key[providerName] ?? '';
+    }
+    return '';
   }
 
   _parseTooltipOptions(
@@ -196,36 +213,49 @@ class Provider {
     return addNamespace(name, this._mapWidget.NAME);
   }
 
-  _applyFunctionIfNeeded(fnName, array: any[]) {
+  _applyFunctionIfNeeded(
+    fnName: 'addMarkers' | 'removeMarkers' | 'addRoutes' | 'removeRoutes',
+    array: MarkerOptions[] | RouteOptions[],
+  ): Promise<unknown> {
     if (!array.length) {
       return Promise.resolve();
     }
 
-    return this[fnName](array);
+    const isMarkersUpdate = fnName === 'addMarkers' || fnName === 'removeMarkers';
+    if (isMarkersUpdate) {
+      return this[fnName](array as MarkerOptions[]);
+    }
+    return this[fnName](array as RouteOptions[]);
   }
 
-  _fireAction(name, actionArguments): void {
-    this._mapWidget._createActionByOption(name)(actionArguments);
+  _fireClickAction(
+    actionArguments: { location?: { lat: number; lng: number }; event?: Event },
+  ): void {
+    this._mapWidget._createActionByOption('onClick')(actionArguments);
   }
 
-  _fireClickAction(actionArguments): void {
-    this._fireAction('onClick', actionArguments);
+  _fireMarkerAddedAction(
+    actionArguments: { options: MarkerOptions; originalMarker?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onMarkerAdded')(actionArguments);
   }
 
-  _fireMarkerAddedAction(actionArguments): void {
-    this._fireAction('onMarkerAdded', actionArguments);
+  _fireMarkerRemovedAction(
+    actionArguments: { options: MarkerOptions; originalMarker?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onMarkerRemoved')(actionArguments);
   }
 
-  _fireMarkerRemovedAction(actionArguments): void {
-    this._fireAction('onMarkerRemoved', actionArguments);
+  _fireRouteAddedAction(
+    actionArguments: { options: RouteOptions; originalRoute?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onRouteAdded')(actionArguments);
   }
 
-  _fireRouteAddedAction(actionArguments): void {
-    this._fireAction('onRouteAdded', actionArguments);
-  }
-
-  _fireRouteRemovedAction(actionArguments): void {
-    this._fireAction('onRouteRemoved', actionArguments);
+  _fireRouteRemovedAction(
+    actionArguments: { options: RouteOptions; originalRoute?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onRouteRemoved')(actionArguments);
   }
 }
 

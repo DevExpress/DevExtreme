@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -85,10 +83,12 @@ class DynamicProvider extends Provider {
       if (cachedLocation) {
         resolve(cachedLocation);
       } else {
-        this._geocodeLocationImpl(location).then((geocodedLocation) => {
-          cache[location] = geocodedLocation;
-          resolve(geocodedLocation);
-        });
+        this._geocodeLocationImpl(location)
+          .then((geocodedLocation) => {
+            cache[location] = geocodedLocation;
+            resolve(geocodedLocation);
+          })
+          .catch(() => {});
       }
     });
   }
@@ -102,6 +102,7 @@ class DynamicProvider extends Provider {
 
       // NOTE: setTimeout is needed by providers to correctly initialize bounds
       return new Promise<void>((resolve) => {
+        // eslint-disable-next-line no-restricted-globals
         const timeout = setTimeout(() => {
           clearTimeout(timeout);
           resolve();

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global google */
@@ -22,6 +21,7 @@ import type {
 } from './m_provider.dynamic';
 import DynamicProvider from './m_provider.dynamic';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let google: any;
 
 const window = getWindow();
@@ -30,6 +30,7 @@ const GOOGLE_MAP_READY = '_googleScriptReady';
 let GOOGLE_URL = `https://maps.googleapis.com/maps/api/js?callback=${GOOGLE_MAP_READY}&libraries=marker&loading=async`;
 const INFO_WINDOW_CLASS = 'gm-style-iw';
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let CustomMarker;
 
 export interface GoogleLocation {
@@ -37,8 +38,8 @@ export interface GoogleLocation {
   lng: () => number;
 }
 
-const initCustomMarkerClass = function () {
-  CustomMarker = function (options) {
+const initCustomMarkerClass = function initCustomMarkerClass(): void {
+  CustomMarker = function CreateCustomMarker(options): void {
     this._position = options.position;
     this._offset = options.offset;
 
@@ -55,7 +56,7 @@ const initCustomMarkerClass = function () {
 
   CustomMarker.prototype = new google.maps.OverlayView();
 
-  CustomMarker.prototype.onAdd = function () {
+  CustomMarker.prototype.onAdd = function onAdd(): void {
     const $pane = $(this.getPanes().overlayMouseTarget);
     $pane.append(this._$overlayContainer);
 
@@ -67,13 +68,13 @@ const initCustomMarkerClass = function () {
     this.draw();
   };
 
-  CustomMarker.prototype.onRemove = function () {
+  CustomMarker.prototype.onRemove = function onRemove(): void {
     google.maps.event.removeListener(this._clickListener);
 
     this._$overlayContainer.remove();
   };
 
-  CustomMarker.prototype.draw = function () {
+  CustomMarker.prototype.draw = function draw(): void {
     const position = this.getProjection().fromLatLngToDivPixel(this._position);
 
     this._$overlayContainer.css({
@@ -87,14 +88,15 @@ const initCustomMarkerClass = function () {
 // @ts-expect-error ts-error
 const googleMapsLoaded = (): boolean => Boolean(window.google?.maps);
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let googleMapsLoader;
 
 class GoogleProvider extends DynamicProvider {
-  _clickListener?: any;
+  _clickListener?: (e: { latLng: GoogleLocation; domEvent: Event }) => void;
 
-  _preventZoomChangeEvent?: any;
+  _preventZoomChangeEvent?: boolean;
 
-  _boundsChangeListener?: any;
+  _boundsChangeListener?: () => void;
 
   _mapType(type: MapType): unknown {
     const mapTypes = {

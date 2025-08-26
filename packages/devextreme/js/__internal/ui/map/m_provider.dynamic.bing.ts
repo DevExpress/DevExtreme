@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
@@ -22,6 +21,7 @@ const window = getWindow();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global Microsoft */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let Microsoft: any;
 
 const BING_MAP_READY = '_bingScriptReady';
@@ -38,11 +38,12 @@ export interface BingLocation {
   longitude: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let msMapsLoader;
 class BingProvider extends DynamicProvider {
-  _providerClickHandler?: any;
+  _providerClickHandler?: (e: { targetType: string; location: BingLocation }) => void;
 
-  _providerViewChangeHandler?: any;
+  _providerViewChangeHandler?: () => void;
 
   _preventZoomChangeEvent?: boolean;
 
@@ -90,7 +91,7 @@ class BingProvider extends DynamicProvider {
       const searchRequest = {
         where: location,
         count: 1,
-        callback(searchResponse) {
+        callback(searchResponse): void {
           const result = searchResponse.results[0];
           if (result) {
             const boundsBox = searchResponse.results[0].location;
@@ -282,10 +283,11 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateControls(): Promise<void> {
+  updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.clean();
-    // @ts-expect-error ts-error
-    return this.render.apply(this, arguments);
+
+    return this.render(markers, routes);
   }
 
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
@@ -311,6 +313,7 @@ class BingProvider extends DynamicProvider {
       this._map.entities.push(pushpin);
 
       const infobox = this._renderTooltip(location, options.tooltip);
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let handler;
       if (options.onClick || options.tooltip) {
         const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
@@ -336,9 +339,10 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _renderTooltip(location, options) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _renderTooltip(location: BingLocation, options: MarkerOptions['tooltip']): any {
     if (!options) {
-      return;
+      return undefined;
     }
 
     const parsedOptions = this._parseTooltipOptions(options);
