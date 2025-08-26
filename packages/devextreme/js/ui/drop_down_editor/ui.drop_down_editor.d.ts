@@ -38,6 +38,25 @@ export interface DropDownButtonTemplateDataModel {
 /**
  * @namespace DevExpress.ui
  * @docid
+ */
+export type FieldAddons = {
+    /**
+     * @docid
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
+     */
+    beforeTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @type_function_param1 data:object
+     * @type_function_return string|Element|jQuery
+     */
+    afterTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
+};
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
  * @hidden
  */
 export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
@@ -86,6 +105,12 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @public
      */
     dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    fieldAddons?: FieldAddons;
     /**
      * @docid
      * @default null

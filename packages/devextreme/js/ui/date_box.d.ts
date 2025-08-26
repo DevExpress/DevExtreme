@@ -294,7 +294,10 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
  * @docid
  * @namespace DevExpress.ui
  */
-export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
+export interface DateBoxBaseOptions<TComponent> extends Omit<
+    dxDropDownEditorOptions<TComponent>,
+    'fieldAddons'
+> {
     /**
      * @docid
      * @default "OK"

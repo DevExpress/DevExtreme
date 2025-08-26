@@ -1,7 +1,7 @@
 import $ from '@js/core/renderer';
 import type * as SortableTypes from '@js/ui/sortable_types';
 import type { Item as TreeViewItemProperties, SelectionChangedEvent } from '@js/ui/tree_view';
-import { computed, type ReadonlySignal, signal } from '@preact/signals-core';
+import { computed, type ReadonlySignal, signal } from '@ts/core/state_manager/index';
 import { sortColumns } from '@ts/grids/grid_core/columns_controller/m_columns_controller_utils';
 
 import type { DraggingColumnData } from '../../card_view/header_panel/column_sortable';

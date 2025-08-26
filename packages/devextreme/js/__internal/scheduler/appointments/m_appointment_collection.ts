@@ -86,8 +86,8 @@ class SchedulerAppointments extends CollectionWidget {
     return this.invoke('isVirtualScrolling');
   }
 
-  get appointmentDataProvider() {
-    return this.option('getAppointmentDataProvider')();
+  get appointmentDataSource() {
+    return this.option('getAppointmentDataSource')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -104,18 +104,17 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   notifyObserver(subject, args) {
-    const observer: any = this.option('observer');
-    if (observer) {
-      observer.fire(subject, args);
+    const notifyScheduler: any = this.option('notifyScheduler');
+    if (notifyScheduler) {
+      notifyScheduler.invoke(subject, args);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   invoke(funcName: string, ...args) {
-    const observer: any = this.option('observer');
+    const notifyScheduler: any = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (notifyScheduler) {
+      return notifyScheduler.invoke(funcName, ...args);
     }
   }
 
@@ -184,7 +183,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   private _getNavigatableItems(): dxElementWrapper {
     // @ts-expect-error
-    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
+    const appts = this._itemElements().not('.dx-state-disabled');
     // @ts-expect-error
     const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
     return appts.add(apptCollectors);
@@ -247,7 +246,7 @@ class SchedulerAppointments extends CollectionWidget {
   ): ViewModelDiff[] {
     const elementsInRenderOrder = previousValue
       .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
-    const diff = getViewModelDiff(previousValue, value, this.appointmentDataProvider);
+    const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
     diff
       .filter((item) => !isNeedToAdd(item))
       .forEach((item, index) => {
@@ -639,20 +638,15 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentAgendaViewModel,
   ): void {
-    const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
     const config: any = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
-      observer: this.option('observer'),
+      notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
-      direction: settings.direction || 'vertical',
       allowResize: false,
       allowDrag: false,
-      allDay,
-      cellWidth: this.invoke('getCellWidth'),
-      cellHeight: this.invoke('getCellHeight'),
       groups: this.option('groups'),
 
       dataAccessors: this.option('dataAccessors'),
@@ -675,7 +669,7 @@ class SchedulerAppointments extends CollectionWidget {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
       groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
-      observer: this.option('observer'),
+      notifyScheduler: this.option('notifyScheduler'),
       geometry: settings,
       direction: settings.direction || 'vertical',
       allowResize,
@@ -765,12 +759,12 @@ class SchedulerAppointments extends CollectionWidget {
     } else {
       const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
       const { endDate } = info.appointment;
-      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
       dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
-      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, [viewOffset]);
-      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, [viewOffset]);
+      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, viewOffset);
+      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, viewOffset);
     }
 
     this.updateResizedAppointment(
@@ -831,8 +825,8 @@ class SchedulerAppointments extends CollectionWidget {
     const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
     const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
 
-    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, [startDateDelta]);
-    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, [endDateDelta]);
+    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
+    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, endDateDelta);
 
     const data = gridAdapter
       .calculateDates(timeZoneCalculator, 'fromGrid')

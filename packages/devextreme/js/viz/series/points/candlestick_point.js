@@ -11,8 +11,6 @@ const _round = _math.round;
 const DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 
 export default _extend({}, barPoint, {
-    _calculateVisibility: symbolPoint._calculateVisibility,
-
     _getContinuousPoints: function(openCoord, closeCoord) {
         const that = this;
         const x = that.x;
@@ -265,19 +263,23 @@ export default _extend({}, barPoint, {
     },
 
     _translate: function() {
-        const that = this;
-        const rotated = that._options.rotated;
-        const valTranslator = that._getValTranslator();
-        const x = that._getArgTranslator().translate(that.argument);
+        const valTranslator = this._getValTranslator();
+        const x = this._getArgTranslator().translate(this.argument);
 
-        that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
-        that.openY = that.openValue !== null ? valTranslator.translate(that.openValue) : null;
-        that.highY = valTranslator.translate(that.highValue);
-        that.lowY = valTranslator.translate(that.lowValue);
-        that.closeY = that.closeValue !== null ? valTranslator.translate(that.closeValue) : null;
+        this.vx = this.vy = this.x = x === null ? x : x + (this.xCorrection || 0);
+        this.openY = this.openValue !== null ? valTranslator.translate(this.openValue) : null;
+        this.highY = valTranslator.translate(this.highValue);
+        this.lowY = valTranslator.translate(this.lowValue);
+        this.closeY = this.closeValue !== null ? valTranslator.translate(this.closeValue) : null;
 
-        const centerValue = _min(that.lowY, that.highY) + _abs(that.lowY - that.highY) / 2;
-        that._calculateVisibility(!rotated ? that.x : centerValue, !rotated ? centerValue : that.x);
+        const minValue = Math.min(this.lowY, this.highY);
+        const height = Math.abs(this.lowY - this.highY);
+
+        if(this._options.rotated) {
+            this._calculateVisibility(minValue, this.x, height, 0);
+        } else {
+            this._calculateVisibility(this.x, minValue, 0, height);
+        }
     },
 
     getCrosshairData: function(x, y) {

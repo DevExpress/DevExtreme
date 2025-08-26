@@ -7,7 +7,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { DEFAULT_TIMELINE_CELL_HEIGHT, setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 const dataSource = [
   {
@@ -96,16 +96,11 @@ const views = [
   },
 ];
 
-const getAppointments = (container: HTMLElement) => container.querySelectorAll('.dx-scheduler-appointment');
-const getTexts = (
-  cells: NodeListOf<Element>,
-) => Array.from(cells).map((cell) => cell.textContent?.trim());
-
 describe('scheduler', () => {
   it.each(views)('should render correct workspace in Santiago DST for view: $view.name', async ({ view, result }) => {
-    setupSchedulerTestEnvironment(true);
+    setupSchedulerTestEnvironment({ height: DEFAULT_TIMELINE_CELL_HEIGHT });
 
-    const { container } = await createScheduler({
+    const { POM } = await createScheduler({
       views: [view],
       currentView: view.name,
       currentDate: new Date(2024, 8, 8),
@@ -116,18 +111,15 @@ describe('scheduler', () => {
     });
 
     if (result.hasCellContent) {
-      const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');
-      expect(getTexts(cells)).toMatchSnapshot();
+      expect(POM.getDateTableContent()).toMatchSnapshot();
     }
     if (result.hasHeaderPanel) {
-      const cells = container.querySelectorAll('.dx-scheduler-header-panel-cell');
-      expect(getTexts(cells)).toMatchSnapshot();
+      expect(POM.getHeaderPanelContent()).toMatchSnapshot();
     }
     if (result.hasTimePanel) {
-      const cells = container.querySelectorAll('.dx-scheduler-time-panel-cell');
-      expect(getTexts(cells)).toMatchSnapshot();
+      expect(POM.getTimePanelContent()).toMatchSnapshot();
     }
 
-    expect(getAppointments(container)).toHaveLength(result.appointmentAmount);
+    expect(POM.getAppointments()).toHaveLength(result.appointmentAmount);
   });
 });

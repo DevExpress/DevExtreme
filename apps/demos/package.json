@@ -53,7 +53,7 @@
         "html-react-parser": "1.4.14",
         "inferno": "catalog:",
         "inferno-create-element": "catalog:",
-        "jquery": "3.6.3",
+        "jquery": "catalog:",
         "jspdf": "3.0.1",
         "jspdf-autotable": "5.0.2",
         "jszip": "^3.10.1",

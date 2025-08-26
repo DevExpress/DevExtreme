@@ -5,8 +5,6 @@ import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import dateUtils from '../../core/utils/date';
 import { globalCache } from './global_cache';
-import DateAdapter from './m_date_adapter';
-import timeZoneDataUtils from './timezones/m_utils_timezones_data';
 import timeZoneList from './timezones/timezone_list';
 
 export interface TimezoneLabel {
@@ -43,23 +41,14 @@ const createUTCDateWithLocalOffset = (date) => {
   ));
 };
 
-const createDateFromUTCWithLocalOffset = (date) => {
-  const result = DateAdapter(date);
-
-  const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
-  result.addTime(result.getTimezoneOffset('minute'));
-  result.subtractMinutes(timezoneOffsetBeforeInMin - result.getTimezoneOffset());
-
-  return result.source;
-};
-
-const createUTCDate = (date) => new Date(Date.UTC(
+const createDateFromUTCWithLocalOffset = (date: Date): Date => new Date(
   date.getUTCFullYear(),
   date.getUTCMonth(),
   date.getUTCDate(),
   date.getUTCHours(),
   date.getUTCMinutes(),
-));
+  date.getUTCSeconds(),
+);
 
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
 
@@ -68,16 +57,6 @@ const getTimezoneOffsetChangeInMs = (startDate, endDate, updatedStartDate, updat
 const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezoneOffset() - new Date(endDate).getTimezoneOffset();
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
-
-const calculateTimezoneByValueOld = (timezone: string, date = new Date()): number | undefined => {
-  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
-  if (customTimezones.length === 0) {
-    return undefined;
-  }
-
-  const dateUtc = createUTCDate(date);
-  return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
-};
 
 const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): number | undefined => {
   const offset = getStringOffset(timeZone, date);
@@ -113,12 +92,7 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
     return undefined;
   }
 
-  let result = calculateTimezoneByValueOld(timeZone, date);
-  if (result === undefined) {
-    result = calculateTimezoneByValueCore(timeZone, date);
-  }
-
-  return result;
+  return calculateTimezoneByValueCore(timeZone, date);
 };
 
 // 'GMT±XX:YY' or 'GMT' format
@@ -223,104 +197,23 @@ const getDiffBetweenClientTimezoneOffsets = (firstDate = new Date(), secondDate 
 
 const getMachineTimezoneName = () => globalCache.timezones.memo('localTimezone', () => dateUtils.getMachineTimezoneName());
 
-const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
+const isEqualLocalTimeZone = (timeZoneName: string) => {
   const localTimeZoneName = getMachineTimezoneName();
   if (localTimeZoneName && localTimeZoneName === timeZoneName) {
     return true;
   }
-
-  return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
-};
-
-// TODO: Not used anywhere, if it isn't use in the future, then it must be removed
-const hasDSTInLocalTimeZone = () => {
-  const [startDate, endDate] = getExtremeDates();
-  return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
-};
-
-const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
-
-const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - toMs('hour'));
-
-const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
-  const year = date.getFullYear();
-
-  const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
-  const [summerTime, winterTime] = configTuple;
-
-  const noDSTInTargetTimeZone = configTuple.length < 2;
-  if (noDSTInTargetTimeZone) {
-    const targetTimeZoneOffset = timeZoneDataUtils.getTimeZoneOffsetById(timeZoneName, date);
-    const localTimeZoneOffset = getOffset(date);
-
-    if (targetTimeZoneOffset !== localTimeZoneOffset) {
-      return false;
-    }
-
-    return !hasDSTInLocalTimeZone();
-  }
-
-  const localSummerOffset = getOffset(new Date(summerTime.date));
-  const localWinterOffset = getOffset(new Date(winterTime.date));
-
-  if (localSummerOffset !== summerTime.offset) {
-    return false;
-  }
-
-  if (localSummerOffset === getOffset(getDateAndMoveHourBack(summerTime.date))) {
-    return false;
-  }
-
-  if (localWinterOffset !== winterTime.offset) {
-    return false;
-  }
-
-  if (localWinterOffset === getOffset(getDateAndMoveHourBack(winterTime.date))) {
-    return false;
-  }
-
-  return true;
-};
-
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
-  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
-  const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
-
-  if (targetTimezoneData.length === 1) {
-    return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
-  }
-
   return false;
 };
 
-// Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
-const getExtremeDates = () => {
-  const nowDate = new Date(Date.now());
-
-  const startDate = new Date();
-  const endDate = new Date();
-
-  startDate.setFullYear(nowDate.getFullYear(), 0, 1);
-  endDate.setFullYear(nowDate.getFullYear(), 6, 1);
-
-  return [startDate, endDate];
-};
-
-// TODO Vinogradov refactoring: Change to date utils.
-const setOffsetsToDate = (targetDate, offsetsArray) => {
-  const newDateMs = offsetsArray.reduce((result, offset) => result + offset, targetDate.getTime());
-  return new Date(newDateMs);
-};
-
 const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
-  const newDate = dateUtilsTs.addOffsets(date, offsets);
+  const newDate = dateUtilsTs.addOffsets(date, ...offsets);
   const daylightShift = getDaylightOffsetInMs(date, newDate);
 
   if (!daylightShift) {
     return newDate;
   }
 
-  const correctLocalDate = dateUtilsTs.addOffsets(newDate, [-daylightShift]);
+  const correctLocalDate = dateUtilsTs.addOffsets(newDate, -daylightShift);
   const daylightSecondShift = getDaylightOffsetInMs(newDate, correctLocalDate);
 
   return !daylightSecondShift
@@ -374,16 +267,12 @@ const utils = {
 
   createUTCDateWithLocalOffset,
   createDateFromUTCWithLocalOffset,
-  createUTCDate,
 
   isTimezoneChangeInDate,
   getDateWithoutTimezoneChange,
-  hasDSTInLocalTimeZone,
   getMachineTimezoneName,
   isEqualLocalTimeZone,
-  isEqualLocalTimeZoneByDeclaration,
 
-  setOffsetsToDate,
   addOffsetsWithoutDST,
 
   getTimeZones,

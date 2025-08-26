@@ -25,7 +25,7 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -71,6 +71,7 @@ import { DxoDropDownBoxBoundaryOffsetModule } from 'devextreme-angular/ui/drop-d
 import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxCollisionModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownBoxFieldAddonsModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxMyModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -284,7 +285,22 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 
     /**
+     * [descr:dxDropDownEditorOptions.fieldAddons]
+    
+     */
+    @Input()
+    get fieldAddons(): FieldAddons {
+        return this._getOption('fieldAddons');
+    }
+    set fieldAddons(value: FieldAddons) {
+        this._setOption('fieldAddons', value);
+    }
+
+
+    /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
+    
+     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
     
      */
     @Input()
@@ -935,6 +951,13 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldAddonsChange: EventEmitter<FieldAddons>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
@@ -1241,6 +1264,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
             { emit: 'dropDownButtonTemplateChange' },
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'fieldAddonsChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
@@ -1369,6 +1393,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldAddonsModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,
@@ -1404,6 +1429,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxCollisionModule,
     DxoDropDownBoxDropDownOptionsModule,
+    DxoDropDownBoxFieldAddonsModule,
     DxoDropDownBoxFromModule,
     DxoDropDownBoxHideModule,
     DxoDropDownBoxMyModule,

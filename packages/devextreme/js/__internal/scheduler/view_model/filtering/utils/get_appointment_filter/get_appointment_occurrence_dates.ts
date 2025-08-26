@@ -12,14 +12,14 @@ export const getShiftedAllDayStartDate = (
   viewOffset: number,
 ): Date => {
   const trimmedDate = dateUtils.trimTime(originalStartDate);
-  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, [viewOffset]);
-  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, [DAY_WITHOUT_ONE_SECOND_MS, viewOffset]);
+  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, viewOffset);
+  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, DAY_WITHOUT_ONE_SECOND_MS, viewOffset);
 
   switch (true) {
     case originalStartDate > endOfDay:
-      return dateUtilsTs.addOffsets(endOfDay, [SECOND_MS]);
+      return dateUtilsTs.addOffsets(endOfDay, SECOND_MS);
     case originalStartDate < startOfDay:
-      return dateUtilsTs.addOffsets(startOfDay, [-DAY_MS]);
+      return dateUtilsTs.addOffsets(startOfDay, -DAY_MS);
     // NOTE: originalStartDate in interval [startOfDay, endOfDay]
     // (include border points)
     default:
@@ -32,14 +32,14 @@ export const getShiftedAllDayEndDate = (
   viewOffset: number,
 ): Date => {
   const trimmedDate = dateUtils.trimTime(originalEndDate);
-  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, [viewOffset]);
-  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, [DAY_WITHOUT_ONE_SECOND_MS, viewOffset]);
+  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, viewOffset);
+  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, DAY_WITHOUT_ONE_SECOND_MS, viewOffset);
 
   switch (true) {
     case originalEndDate > endOfDay:
-      return dateUtilsTs.addOffsets(endOfDay, [DAY_MS]);
+      return dateUtilsTs.addOffsets(endOfDay, DAY_MS);
     case originalEndDate < startOfDay:
-      return dateUtilsTs.addOffsets(startOfDay, [-SECOND_MS]);
+      return dateUtilsTs.addOffsets(startOfDay, -SECOND_MS);
     // NOTE: originalEndDate in interval [startOfDay, endOfDay]
     // (include border points)
     default:
@@ -70,7 +70,7 @@ export const getAppointmentOccurrenceDates = (
         startDate: dateUtils.trimTime(originalStartDate),
         endDate: dateUtilsTs.addOffsets(
           dateUtils.trimTime(originalEndDate),
-          [DAY_WITHOUT_ONE_SECOND_MS],
+          DAY_WITHOUT_ONE_SECOND_MS,
         ),
       };
     // NOTE: allDay appointment + viewOffset is set case

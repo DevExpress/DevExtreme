@@ -114,8 +114,8 @@ export class DateGeneratorBaseStrategy {
       ...item,
       source: {
         ...item.source,
-        startDate: dateUtilsTs.addOffsets(item.source.startDate, [viewOffset]),
-        endDate: dateUtilsTs.addOffsets(item.source.endDate, [viewOffset]),
+        startDate: dateUtilsTs.addOffsets(item.source.startDate, viewOffset),
+        endDate: dateUtilsTs.addOffsets(item.source.endDate, viewOffset),
       },
     }));
   }
@@ -170,8 +170,6 @@ export class DateGeneratorBaseStrategy {
 
       return {
         ...item,
-        // TODO: Check usages & delete this field.
-        exceptionDate: new Date(item.startDate),
       };
     });
 
@@ -189,7 +187,7 @@ export class DateGeneratorBaseStrategy {
       return false;
     }
 
-    return !timeZoneUtils.isEqualLocalTimeZone(this.timeZone, appointment.startDate);
+    return !timeZoneUtils.isEqualLocalTimeZone(this.timeZone);
   }
 
   _getDateOffsetDST(date) {
@@ -238,8 +236,6 @@ export class DateGeneratorBaseStrategy {
         ...item,
         startDate: newStartDate,
         endDate: newEndDate,
-        // TODO: Check usages & delete this field.
-        exceptionDate: new Date(newStartDate),
       };
     });
   }
@@ -319,14 +315,13 @@ export class DateGeneratorBaseStrategy {
       const offsetDifference = appointmentAdapter.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
       if (offsetDifference !== 0 && this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
-        source.startDate = dateUtilsTs.addOffsets(source.startDate, [offsetDifference * toMs('minute')]);
-        source.endDate = dateUtilsTs.addOffsets(source.endDate, [offsetDifference * toMs('minute')]);
-        source.exceptionDate = new Date(source.startDate);
+        source.startDate = dateUtilsTs.addOffsets(source.startDate, offsetDifference * toMs('minute'));
+        source.endDate = dateUtilsTs.addOffsets(source.endDate, offsetDifference * toMs('minute'));
       }
 
       const duration = source.endDate.getTime() - source.startDate.getTime();
       const startDate = this.timeZoneCalculator.createDate(source.startDate, 'toGrid');
-      const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
+      const endDate = dateUtilsTs.addOffsets(startDate, duration);
 
       return {
         startDate,
@@ -364,15 +359,15 @@ export class DateGeneratorBaseStrategy {
     const { viewOffset } = this.options;
     // NOTE: For creating a recurrent appointments,
     // we should use original appointment's dates (without view offset).
-    const originalAppointmentStartDate = dateUtilsTs.addOffsets(appointment.startDate, [viewOffset]);
-    const originalAppointmentEndDate = dateUtilsTs.addOffsets(appointment.endDate, [viewOffset]);
+    const originalAppointmentStartDate = dateUtilsTs.addOffsets(appointment.startDate, viewOffset);
+    const originalAppointmentEndDate = dateUtilsTs.addOffsets(appointment.endDate, viewOffset);
 
     const [
       minRecurrenceDate,
       maxRecurrenceDate,
     ] = this._createExtremeRecurrenceDates(groupIndex);
-    const shiftedMinRecurrenceDate = dateUtilsTs.addOffsets(minRecurrenceDate, [viewOffset]);
-    const shiftedMaxRecurrenceDate = dateUtilsTs.addOffsets(maxRecurrenceDate, [viewOffset]);
+    const shiftedMinRecurrenceDate = dateUtilsTs.addOffsets(minRecurrenceDate, viewOffset);
+    const shiftedMaxRecurrenceDate = dateUtilsTs.addOffsets(maxRecurrenceDate, viewOffset);
 
     return {
       rule: appointment.recurrenceRule,
@@ -434,8 +429,8 @@ export class DateGeneratorBaseStrategy {
       // NOTE: For the next calculations,
       // we should shift recurrence appointments by view offset.
       .map(({ startDate, endDate }) => ({
-        startDate: dateUtilsTs.addOffsets(startDate, [-viewOffset]),
-        endDate: dateUtilsTs.addOffsets(endDate, [-viewOffset]),
+        startDate: dateUtilsTs.addOffsets(startDate, -viewOffset),
+        endDate: dateUtilsTs.addOffsets(endDate, -viewOffset),
       }));
   }
 
@@ -444,15 +439,15 @@ export class DateGeneratorBaseStrategy {
     return appointments.map((appointment: any): Date => {
       const tableFirstDate = this._getAppointmentFirstViewDate({
         ...appointment,
-        startDate: dateUtilsTs.addOffsets(appointment.startDate, [viewOffset]),
-        endDate: dateUtilsTs.addOffsets(appointment.endDate, [viewOffset]),
+        startDate: dateUtilsTs.addOffsets(appointment.startDate, viewOffset),
+        endDate: dateUtilsTs.addOffsets(appointment.endDate, viewOffset),
       });
 
       if (!tableFirstDate) {
         return appointment.startDate as Date;
       }
 
-      const firstDate = dateUtilsTs.addOffsets(tableFirstDate, [-viewOffset]);
+      const firstDate = dateUtilsTs.addOffsets(tableFirstDate, -viewOffset);
 
       return firstDate > appointment.startDate
         ? firstDate

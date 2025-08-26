@@ -13,7 +13,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 import {
   addItem, convertToInnerStructure,

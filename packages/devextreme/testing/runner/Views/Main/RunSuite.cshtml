@@ -169,6 +169,10 @@
 
     <script nonce="IpCks6">
         (function() {
+            window.process = window.process || {};
+            window.process.env = window.process.env || {};
+            window.process.env.NODE_ENV = 'test';
+
             jQuery.noConflict();
 
             var cacheBuster = '@Url.CacheBuster()';

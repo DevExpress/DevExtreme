@@ -16,8 +16,8 @@ testStart(function() {
 });
 
 const createInstance = (options) => {
-    const observer = {
-        fire: (command, field, obj, value) => {
+    const notifyScheduler = {
+        invoke: (command, field, obj, value) => {
             switch(command) {
                 case 'getAppointmentGeometry':
                     return {
@@ -34,13 +34,13 @@ const createInstance = (options) => {
     };
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
-        observer,
+        notifyScheduler,
         ...options,
         dataAccessors: mockDataAccessor,
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
-        getAppointmentDataProvider: () => ({
+        getAppointmentDataSource: () => ({
             getUpdatedAppointment: () => false,
             getUpdatedAppointmentKeys: () => [],
         }),

@@ -2,6 +2,11 @@ window.exports = window.exports || {};
 window.config = {
   transpiler: 'plugin-babel',
   meta: {
+    '*': {
+      'globals': {
+        'process': 'process',
+      },
+    },
     '*.vue': {
       loader: 'vue-loader',
     },
@@ -46,6 +51,7 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
+    'process': '../../../../utils/shared/process.js',
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
