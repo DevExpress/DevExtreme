@@ -151,7 +151,7 @@ export const getValidCellDateForLocalTimeFormat = (
     viewOffset: number;
   },
 ): Date => {
-  const originDate = dateUtilsTs.addOffsets(date, [-viewOffset]);
+  const originDate = dateUtilsTs.addOffsets(date, -viewOffset);
   const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
 
   if (!localTimeZoneChangedInOriginDate) {
@@ -170,7 +170,9 @@ export const getValidCellDateForLocalTimeFormat = (
   const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
   return dateUtilsTs.addOffsets(
     startViewDateWithoutDST,
-    [viewOffset, cellIndexShift, -startViewDateOffset],
+    viewOffset,
+    cellIndexShift,
+    -startViewDateOffset,
   );
 };
 

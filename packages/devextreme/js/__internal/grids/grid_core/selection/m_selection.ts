@@ -21,7 +21,7 @@ import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_c
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
@@ -299,6 +299,7 @@ export class SelectionController extends modules.Controller {
   private _createSelection() {
     const options = this._getSelectionConfig();
 
+    // @ts-expect-error TKey
     return new Selection(options);
   }
 

@@ -368,4 +368,8 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1027
      */
     W1027: 'A prompt should be specified for a custom command.',
+    /**
+     * @name ErrorsUIWidgets.W1028
+     */
+    W1028: 'Nested/banded columns do not support the following properties: {0}.',
 });

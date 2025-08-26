@@ -60,7 +60,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoFieldAddonsModule } from 'devextreme-angular/ui/nested';
 
 import { DxoColorBoxAnimationModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxAtModule } from 'devextreme-angular/ui/color-box/nested';
@@ -1307,7 +1306,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoFieldAddonsModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
@@ -1343,7 +1341,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoFieldAddonsModule,
     DxoColorBoxAnimationModule,
     DxoColorBoxAtModule,
     DxoColorBoxBoundaryOffsetModule,
