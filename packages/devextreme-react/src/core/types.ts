@@ -36,8 +36,9 @@ export interface TemplateWrapperProps {
   data: any;
   index: number;
   container: HTMLElement;
+  componentKey: string;
   onRendered: () => void;
-  onRemoved: () => void;
+  onRemoved: (componentKey: string) => void;
 }
 
 export type TemplateFunc = (arg: TemplateArgs) => JSX.Element | ReactNode;
@@ -66,7 +67,8 @@ export interface TemplateInstantiationModel {
   componentKey: string;
   index: any;
   onRendered: () => void;
-  onRemoved: () => void;
+  onRemoved: (componentKey: string) => void;
+  onContainerRemoved: () => void;
 }
 
 export type GetRenderFuncFn = (templateKey: string) => RenderFunc;
