@@ -4,7 +4,7 @@ import { Scheduler, Resource, type SchedulerTypes, SchedulerRef } from 'devextre
 import { ContextMenu, type ContextMenuTypes } from 'devextreme-react/context-menu';
 
 import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
-import { data, resourcesData } from './data';
+import { data, resourcesData } from './data.ts';
 import type { ContextMenuItem } from './types';
 
 const views: SchedulerTypes.ViewType[] = ['day', 'month'];

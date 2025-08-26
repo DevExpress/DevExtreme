@@ -41,7 +41,7 @@ import { ref } from 'vue';
 import { DxScheduler, DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
 import { DxContextMenu, type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import ItemTemplate from './ItemTemplate.vue';
-import { resourcesData, data } from './data';
+import { resourcesData, data } from './data.ts';
 import type { ContextMenuItem } from './types';
 
 const views = ['day', 'month'];
