@@ -20,6 +20,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { getPublicElement } from '@ts/core/m_element';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { ClickableCollectionWidgetItem } from '@ts/ui/collection/item';
 import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type {
   ScrollView as ScrollViewType,
@@ -301,14 +302,14 @@ class MessageList extends Widget<Properties> {
     const editText = messageLocalization.format('dxChat-editingEditMessage');
     const deleteText = messageLocalization.format('dxChat-editingDeleteMessage');
 
-    const buttons: ContextMenuItem[] = [];
+    const buttons: ClickableCollectionWidgetItem<ContextMenuItem>[] = [];
 
     if (allowUpdating(message) && message.type !== 'image') {
       buttons.push({
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
-        // @ts-expect-error ts-error
+        // @ts-expect-error itemElement
         onClick: (e: ItemClick): void => {
           const onMessageEditStarted = onMessageEditingStart?.({
             event: e.event, message: message as TextMessage,
@@ -328,7 +329,7 @@ class MessageList extends Widget<Properties> {
       buttons.push({
         icon: 'trash',
         text: deleteText,
-        // @ts-expect-error ts-error
+        // @ts-expect-error itemElement
         onClick(e: ItemClick): void {
           onMessageDeleting?.({ event: e.event, message });
         },
