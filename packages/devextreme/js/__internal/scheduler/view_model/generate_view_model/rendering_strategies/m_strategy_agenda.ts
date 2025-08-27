@@ -17,9 +17,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   getAppointmentMinSize() {
   }
 
-  getDeltaTime() {
-  }
-
   keepAppointmentSettings() {
     return true;
   }
@@ -118,10 +115,6 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     return undefined;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getDeltaWidth(args, initialSize) {
   }
 
   _getAppointmentMaxWidth() {

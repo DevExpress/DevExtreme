@@ -1301,8 +1301,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (currentViewOptions.startDate) {
       this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
     }
-
-    this._appointments.option('_collectorOffset', this.getCollectorOffset());
   }
 
   _recalculateWorkspace() {
