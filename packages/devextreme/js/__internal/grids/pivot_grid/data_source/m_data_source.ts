@@ -369,7 +369,7 @@ class PivotGridDataSource {
         || (storeOptions instanceof Store)
         || Array.isArray(storeOptions)) {
         store = this.createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
-      } else if (storeOptions instanceof Class) {
+      } else if (storeOptions instanceof Class || storeOptions instanceof xmlaStore.XmlaStore) {
         store = storeOptions;
       }
     }
