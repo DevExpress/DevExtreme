@@ -1,49 +1,45 @@
-/* eslint-disable max-classes-per-file */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import ArrayStore from '@js/common/data/array_store';
 import { errors } from '@js/common/data/errors';
+import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import { getWindow } from '@js/core/utils/window';
-import Store from '@js/data/abstract_store';
 
 const window = getWindow();
-abstract class LocalStoreBackend {
-  _store: any;
+const { abstract } = Class;
 
-  _dirty: boolean;
+const LocalStoreBackend = Class.inherit({
 
-  _immediate: boolean;
-
-  constructor(store, storeOptions) {
+  ctor(store, storeOptions) {
     this._store = store;
     this._dirty = !!storeOptions.data;
     this.save();
 
-    this._immediate = storeOptions.immediate;
+    const immediate = this._immediate = storeOptions.immediate;
     const flushInterval = Math.max(100, storeOptions.flushInterval || 10 * 1000);
 
-    if (!this._immediate) {
+    if (!immediate) {
       const saveProxy = this.save.bind(this);
       setInterval(saveProxy, flushInterval);
       eventsEngine.on(window, 'beforeunload', saveProxy);
-      // @ts-expect-error Cordova environment hook
+      // @ts-expect-error
       if (window.cordova) {
         domAdapter.listen(domAdapter.getDocument(), 'pause', saveProxy, false);
       }
     }
-  }
+  },
 
   notifyChanged() {
     this._dirty = true;
     if (this._immediate) {
       this.save();
     }
-  }
+  },
 
   load() {
     this._store._array = this._loadImpl();
     this._dirty = false;
-  }
+  },
 
   save() {
     if (!this._dirty) {
@@ -52,32 +48,32 @@ abstract class LocalStoreBackend {
 
     this._saveImpl(this._store._array);
     this._dirty = false;
-  }
+  },
 
-  // impl in backends
-  abstract _loadImpl();
-  abstract _saveImpl(array);
-}
+  _loadImpl: abstract,
+  _saveImpl: abstract,
+});
 
-class DomLocalStoreBackend extends LocalStoreBackend {
-  _key: string;
+const DomLocalStoreBackend = LocalStoreBackend.inherit({
 
-  constructor(store, storeOptions) {
-    super(store, storeOptions);
+  ctor(store, storeOptions) {
     const { name } = storeOptions;
     if (!name) {
       throw errors.Error('E4013');
     }
     this._key = `dx-data-localStore-${name}`;
-  }
+
+    this.callBase(store, storeOptions);
+  },
 
   _loadImpl() {
     const raw = window.localStorage.getItem(this._key);
+
     if (raw) {
       return JSON.parse(raw);
     }
     return [];
-  }
+  },
 
   _saveImpl(array) {
     if (!array.length) {
@@ -85,55 +81,51 @@ class DomLocalStoreBackend extends LocalStoreBackend {
     } else {
       window.localStorage.setItem(this._key, JSON.stringify(array));
     }
-  }
-}
+  },
+
+});
 
 const localStoreBackends = {
   dom: DomLocalStoreBackend,
 };
-class LocalStore extends ArrayStore {
-  _backend: any;
+const LocalStore = ArrayStore.inherit({
 
-  constructor(options) {
+  ctor(options) {
     if (typeof options === 'string') {
       options = { name: options };
     } else {
       options = options || {};
     }
 
-    super(options);
+    this.callBase(options);
 
     this._backend = new localStoreBackends[options.backend || 'dom'](this, options);
     this._backend.load();
-  }
+  },
 
   _clearCache() {
     this._backend.load();
-  }
+  },
 
   clear() {
-    super.clear();
+    this.callBase();
     this._backend.notifyChanged();
-  }
+  },
 
   _insertImpl(values) {
     const b = this._backend;
-    return super._insertImpl(values).done(b.notifyChanged.bind(b));
-  }
+    return this.callBase(values).done(b.notifyChanged.bind(b));
+  },
 
   _updateImpl(key, values) {
     const b = this._backend;
-    return super._updateImpl(key, values).done(b.notifyChanged.bind(b));
-  }
+    return this.callBase(key, values).done(b.notifyChanged.bind(b));
+  },
 
   _removeImpl(key) {
     const b = this._backend;
-    return super._removeImpl(key).done(b.notifyChanged.bind(b));
-  }
-}
-
-// Preserve alias registration used by Store.create('local', ...)
-// @ts-expect-error register ES6 class with alias
-Store.registerClass(LocalStore as any, 'local');
+    return this.callBase(key).done(b.notifyChanged.bind(b));
+  },
+}, 'local');
 
 export default LocalStore;
