@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} اجباری می باشد",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "شروع مجدد",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "مقدار وارد شده می بایست عدد باشد",
         "dxNumberBox-noDataText": "(بدون داده)",

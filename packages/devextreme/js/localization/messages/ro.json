@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} este obligatoriu",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Resetare",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Valoarea trebuie sa fie un numră",
         "dxNumberBox-noDataText": "Nu există date",

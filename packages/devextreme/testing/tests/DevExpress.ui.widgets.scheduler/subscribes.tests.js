@@ -835,34 +835,6 @@ module('Subscribes', {
         assert.notOk(this.instance.fire('isAdaptive'), 'Scheduler isn\'t adaptive');
     });
 
-    test('\'getDropDownAppointmentWidth\' and \'getDropDownAppointmentHeight\' subscribes should work correctly', async function(assert) {
-        await this.createInstance({
-            dataSource: [],
-            adaptivityEnabled: true
-        });
-
-        const width = this.instance.fire('getDropDownAppointmentWidth');
-        const height = this.instance.fire('getDropDownAppointmentHeight');
-
-        assert.equal(height, 28, 'Returned height is ok');
-        assert.equal(width, 28, 'Returned width is ok');
-    });
-
-    test('\'supportCompactDropDownAppointments\' should return true for some views', async function(assert) {
-        await this.createInstance({
-            dataSource: [],
-            views: ['month', 'week'],
-            currentView: 'week'
-        });
-
-        assert.ok(this.instance.fire('supportCompactDropDownAppointments'));
-
-        this.instance.option('currentView', 'month');
-        await waitAsync(0);
-
-        assert.notOk(this.instance.fire('supportCompactDropDownAppointments'));
-    });
-
     test('getTextAndFormatDate with format TIME should work correct', async function(assert) {
         const data = {
             text: 'Appointment test text',

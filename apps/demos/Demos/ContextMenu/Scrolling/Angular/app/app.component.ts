@@ -1,9 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import notify from 'devextreme/ui/notify'; // Import notify correctly
-import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
-import { ContextMenuItems, Service } from './app.service';
+import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+
+import { Service, type ContextMenuItems } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -28,7 +30,7 @@ export class AppComponent {
     this.items = service.getMenuItems();
   }
 
-  itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
+  itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItems>) {
     if (!itemData.items) {
       notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
     }
