@@ -49,7 +49,7 @@ import {
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
-import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
+import type { ViewType } from '@ts/scheduler/types';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/m_widget_notify_scheduler';
@@ -840,10 +840,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
     this.virtualScrollingDispatcher.attachScrollableEvents();
     this.renderer = new VirtualScrollingRenderer(this);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDataSourceChanged(argument?: SafeAppointment[]): void {
   }
 
   isGroupedAllDayPanel() {

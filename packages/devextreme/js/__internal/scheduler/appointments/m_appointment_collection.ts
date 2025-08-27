@@ -25,7 +25,12 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
+import {
+  AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS,
+  APPOINTMENT_CONTENT_CLASSES,
+  APPOINTMENT_DRAG_SOURCE_CLASS,
+  APPOINTMENT_ITEM_CLASS,
+} from '../m_classes';
 import timeZoneUtils from '../m_utils_time_zone';
 import { generateDates } from '../recurrence/generate_dates';
 import type { CompactAppointmentOptions } from '../types';
@@ -658,6 +663,10 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentAgendaViewModel,
   ): void {
+    if (settings.isLastInGroup) {
+      element.addClass(AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS);
+    }
+
     const { groups, groupsLeafs, resourceById } = this.getResourceManager();
     const config: any = {
       data: settings.itemData,
