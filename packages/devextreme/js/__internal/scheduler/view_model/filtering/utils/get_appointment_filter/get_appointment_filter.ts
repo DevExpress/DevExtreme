@@ -1,11 +1,11 @@
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
 import { isAppointmentTakesAllDay } from '../../../../r1/utils/index';
 import type { AppointmentDataItem } from '../../../../types';
+import { isAppointmentMatchedResources } from '../../../../view_model_new/filtration/utils/filter_by_attributes/is_appointment_matched_resources';
+import { isAppointmentMatchedIntervals } from '../../../../view_model_new/filtration/utils/filter_by_intervals/is_appointment_matched_intervals';
+import { getAppointmentRecurrenceOccurrences } from '../../../../view_model_new/filtration/utils/split_by_recurrence/get_appointment_recurrence_occurrences';
 import type { FilterOptions } from '../type';
 import { getAppointmentOccurrenceDates } from './get_appointment_occurrence_dates';
-import { getAppointmentsOccurrences } from './get_appointments_occurrences';
-import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
-import { isAppointmentMatchedResources } from './is_appointment_matched_resources';
 
 export const getAppointmentFilter = (
   filterOptions: FilterOptions,
@@ -53,9 +53,11 @@ export const getAppointmentFilter = (
       min: viewIntervals[0].min,
       max: viewIntervals[viewIntervals.length - 1].max,
     };
-    const appointmentOccurrences = getAppointmentsOccurrences(
+    const appointmentOccurrences = getAppointmentRecurrenceOccurrences(
       {
         ...appointment,
+        startDate: appointment.startDate.getTime(),
+        endDate: appointment.endDate.getTime(),
         allDay: isAllDayAppointment,
       },
       { firstDayOfWeek, interval: recurrenceInterval },

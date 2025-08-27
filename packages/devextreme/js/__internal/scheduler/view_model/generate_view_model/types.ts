@@ -88,6 +88,7 @@ export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel, Ap
   direction: string;
   height: number;
   width: string;
+  isLastInGroup: boolean;
 }
 
 export interface AppointmentItemViewModel extends BaseAppointmentViewModel, AppointmentInfo {
