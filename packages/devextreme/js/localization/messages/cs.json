@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "volitelný",
         "dxForm-requiredMessage": "{0} je vyžadováno",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Reset",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Hodnota musí být číslo",
         "dxNumberBox-noDataText": "Žádná data",

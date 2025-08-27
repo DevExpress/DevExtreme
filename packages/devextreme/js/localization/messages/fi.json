@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "valinnainen",
         "dxForm-requiredMessage": "{0} on pakollinen",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Palauta",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Arvon on oltava numero",
         "dxNumberBox-noDataText": "Ei dataa",

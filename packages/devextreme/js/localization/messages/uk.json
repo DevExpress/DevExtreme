@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "необов'язково",
         "dxForm-requiredMessage": "{0} — обов'язкове поле",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Скинути",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Значення має бути числом",
         "dxNumberBox-noDataText": "Немає даних",
@@ -262,6 +265,7 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Повторювана подія",
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
+
 
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
