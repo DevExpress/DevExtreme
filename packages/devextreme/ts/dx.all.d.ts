@@ -10973,7 +10973,7 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxChat>;
     export type EmptyViewTemplateData = {
       readonly component: dxChat;
-      readonly data: {
+      readonly texts: {
         readonly message: string;
         readonly prompt: string;
       };
