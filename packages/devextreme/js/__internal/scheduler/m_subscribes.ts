@@ -7,6 +7,7 @@ import { isPlainObject } from '@js/core/utils/type';
 
 import { formatDates, getFormatType } from './appointments/m_text_utils';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
+import { VERTICAL_VIEW_TYPES } from './constants';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
@@ -16,7 +17,6 @@ import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adap
 import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
 const toMs = dateUtils.dateToMilliseconds;
-const VERTICAL_VIEW_TYPES = ['day', 'week', 'workWeek'];
 const isAllDay = (
   scheduler: Scheduler,
   appointmentData: SafeAppointment,

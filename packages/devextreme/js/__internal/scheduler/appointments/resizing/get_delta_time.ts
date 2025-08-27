@@ -1,9 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 
+import { VERTICAL_VIEW_TYPES } from '../../constants';
 import type { ViewType } from '../../types';
 
 const toMs = dateUtils.dateToMilliseconds;
-const VERTICAL_VIEW_TYPES = ['day', 'week', 'workWeek'];
 
 interface Size {
   width: number;
@@ -48,15 +48,13 @@ export const getDeltaTime = (
 ): number => {
   const { viewType, resizableStep, isAllDay } = options;
   switch (true) {
-    case ['timelineMonth', 'month'].includes(viewType):
+    case ['timelineMonth', 'month'].includes(viewType) || Boolean(isAllDay):
       return getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day');
     case viewType === 'agenda':
       return 0;
     case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDay:
       return getVerticalDeltaTime(args, initialSize, options);
     default:
-      return isAllDay
-        ? getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day')
-        : getHorizontalDeltaTime(args, initialSize, options);
+      return getHorizontalDeltaTime(args, initialSize, options);
   }
 };
