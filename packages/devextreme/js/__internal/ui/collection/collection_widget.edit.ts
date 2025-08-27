@@ -383,7 +383,8 @@ class CollectionWidget<
         break;
       }
       case 'selectedItem': {
-        const { selectedItem = {} as TItem, selectionRequired } = this.option();
+        const { selectedItem, selectionRequired } = this.option();
+        // @ts-expect-error
         const selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
         if (selectionRequired && !indexExists(selectedIndex)) {
