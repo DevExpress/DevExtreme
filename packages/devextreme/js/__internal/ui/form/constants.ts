@@ -21,6 +21,7 @@ export const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 export const GROUP_COL_COUNT_ATTR = 'group-col-count';
 export const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
 export const FORM_UNDERLINED_CLASS = 'dx-form-styling-mode-underlined';
-export const FORM_LOAD_INDICATOR_CLASS = 'dx-form-load-indicator';
+export const FORM_LOAD_PANEL_CLASS = 'dx-form-loadpanel';
+export const FORM_LOAD_PANEL_WRAPPER_CLASS = 'dx-form-loadpanel-wrapper';
 
 export const SIMPLE_ITEM_TYPE = 'simple';

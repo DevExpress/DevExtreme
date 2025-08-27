@@ -34,7 +34,6 @@ import type {
   SimpleItemTemplateData,
   TabbedItem,
 } from '@js/ui/form';
-import LoadIndicator from '@js/ui/load_indicator';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
 import type { Component } from '@ts/core/widget/component';
@@ -58,7 +57,6 @@ import {
   FORM_GROUP_CONTENT_CLASS,
   FORM_GROUP_CUSTOM_CAPTION_CLASS,
   FORM_GROUP_WITH_CAPTION_CLASS,
-  FORM_LOAD_INDICATOR_CLASS,
   FORM_UNDERLINED_CLASS, FORM_VALIDATION_SUMMARY,
   GROUP_COL_COUNT_ATTR,
   GROUP_COL_COUNT_CLASS,
@@ -77,6 +75,7 @@ import type {
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { ExtendedLayoutManagerProperties, LayoutManagerProperties } from '@ts/ui/form/form.layout_manager';
 import LayoutManager from '@ts/ui/form/form.layout_manager';
+import { FormLoadPanel } from '@ts/ui/form/form.load_panel';
 import {
   concatPaths,
   convertToLayoutManagerOptions,
@@ -89,8 +88,8 @@ import {
   isFullPathContainsTabs,
   tryGetTabPath,
 } from '@ts/ui/form/form.utils';
-import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
-import { AnimationType } from '@ts/ui/load_indicator';
+import type { LoadPanelProperties } from '@ts/ui/load_panel';
+import LoadPanel from '@ts/ui/load_panel';
 import ValidationEngine from '@ts/ui/m_validation_engine';
 import ValidationSummary from '@ts/ui/m_validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
@@ -116,8 +115,6 @@ interface AICommandWithParams<T extends FormAICommandName> {
 }
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
-
-const FORM_LOAD_INDICATOR_SIZE = 120;
 
 export interface FormProperties extends Properties {
   alignRootItemLabels?: boolean;
@@ -163,7 +160,7 @@ class Form extends Widget<FormProperties> {
 
   _$validationSummary?: dxElementWrapper;
 
-  _loadIndicator?: LoadIndicator;
+  _loadPanel!: FormLoadPanel;
 
   _init(): void {
     super._init();
@@ -173,7 +170,19 @@ class Form extends Widget<FormProperties> {
     this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
     this._groupsColCount = [];
 
+    this._initFormLoadPanel();
+
     this._attachSyncSubscriptions();
+  }
+
+  private _initFormLoadPanel(): void {
+    this._loadPanel = new FormLoadPanel({
+      $container: this.$element(),
+      onLoadPanelCreate: (
+        $element: dxElementWrapper,
+        options: LoadPanelProperties,
+      ): LoadPanel => this._createComponent($element, LoadPanel, options),
+    });
   }
 
   _getDefaultOptions(): FormProperties {
@@ -1662,47 +1671,20 @@ class Form extends Widget<FormProperties> {
     }
   }
 
-  private _renderLoadIndicator(): void {
-    if (this._loadIndicator) {
-      return;
-    }
-
-    const $indicatorElement = $('<div>')
-      .addClass(FORM_LOAD_INDICATOR_CLASS)
-      .appendTo(this.$element());
-
-    const options: LoadIndicatorProperties = {
-      animationType: AnimationType.Sparkle,
-      width: FORM_LOAD_INDICATOR_SIZE,
-      height: FORM_LOAD_INDICATOR_SIZE,
-    };
-
-    this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
-  }
-
-  private _disposeLoadIndicator(): void {
-    if (!this._loadIndicator) {
-      return;
-    }
-
-    this._loadIndicator.dispose();
-    this._loadIndicator.$element().remove();
-    this._loadIndicator = undefined;
-  }
-
-  private _showLoadIndicator(): void {
-    this._renderLoadIndicator();
+  private _showLoadPanel(): void {
     this.option('disabled', true);
+    this._loadPanel.show();
   }
 
-  private _hideLoadIndicator(): void {
-    this._disposeLoadIndicator();
+  private _hideLoadPanel(): void {
+    this._loadPanel.hide();
     this.option('disabled', false);
   }
 
   _dispose(): void {
     this._clearAutoColCountChangedTimeout();
-    this._disposeLoadIndicator();
+    this._processCommandCompletion();
+    this._loadPanel.dispose();
     ValidationEngine.removeGroup(this._getValidationGroup());
     super._dispose();
   }
@@ -1841,6 +1823,7 @@ class Form extends Widget<FormProperties> {
     this._abort?.();
     this._abort = undefined;
     this._currentAICommand = undefined;
+    this._hideLoadPanel();
   }
 
   private _processAIIntegrationUpdate(): void {
@@ -1876,15 +1859,19 @@ class Form extends Widget<FormProperties> {
           this._updateFieldValue(name, value);
         });
         this.endUpdate();
+        this._hideLoadPanel();
         this._processCommandCompletion();
       },
       onError: (): void => {
+        this._hideLoadPanel();
         this._processCommandCompletion();
       },
     };
   }
 
   async smartPaste(text?: string): Promise<void> {
+    this._showLoadPanel();
+
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map((item) => ({
       name: item.dataField,
@@ -1893,8 +1880,14 @@ class Form extends Widget<FormProperties> {
       instruction: item.aiOptions?.instruction,
     }));
 
+    const clipboardText = text ?? await navigator.clipboard?.readText();
+    if (!clipboardText) {
+      this._hideLoadPanel();
+      return;
+    }
+
     const smartPasteParams = {
-      text: text ?? await navigator.clipboard.readText(),
+      text: clipboardText,
       fields,
     };
     const smartPasteCallbacks = this._getSmartPasteCommandCallbacks();

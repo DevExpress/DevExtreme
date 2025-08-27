@@ -171,11 +171,8 @@
   position: relative;
 }
 
-.dx-form-load-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1500;
-  pointer-events: none;
+.dx-form-loadpanel-wrapper {
+  .dx-loadpanel-content {
+    padding: 0;
+  }
 }
