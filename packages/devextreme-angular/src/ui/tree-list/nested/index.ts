@@ -1,4 +1,4 @@
-export * from './ai-processing';
+export * from './ai-options';
 export * from './animation';
 export * from './async-rule-dxi';
 export * from './at';

@@ -18982,15 +18982,15 @@ declare module DevExpress.ui {
    */
   export interface dxFormSimpleItem {
     /**
-     * [descr:dxFormSimpleItem.aiProcessing]
+     * [descr:dxFormSimpleItem.aiOptions]
      */
-    aiProcessing?: {
+    aiOptions?: {
       /**
-       * [descr:dxFormSimpleItem.aiProcessing.instruction]
+       * [descr:dxFormSimpleItem.aiOptions.instruction]
        */
       instruction?: string | undefined;
       /**
-       * [descr:dxFormSimpleItem.aiProcessing.disabled]
+       * [descr:dxFormSimpleItem.aiOptions.disabled]
        */
       disabled?: boolean;
     };

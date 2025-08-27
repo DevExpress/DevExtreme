@@ -56,11 +56,11 @@ import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost, AfterContentInit  {
     @Input()
-    get aiProcessing(): { disabled?: boolean, instruction?: string | undefined } {
-        return this._getOption('aiProcessing');
+    get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
+        return this._getOption('aiOptions');
     }
-    set aiProcessing(value: { disabled?: boolean, instruction?: string | undefined }) {
-        this._setOption('aiProcessing', value);
+    set aiOptions(value: { disabled?: boolean, instruction?: string | undefined }) {
+        this._setOption('aiOptions', value);
     }
 
     @Input()

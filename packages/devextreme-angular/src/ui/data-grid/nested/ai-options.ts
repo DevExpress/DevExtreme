@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tree-list-ai-processing',
+    selector: 'dxo-data-grid-ai-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListAiProcessingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridAiOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -49,7 +49,7 @@ export class DxoTreeListAiProcessingComponent extends NestedOption implements On
 
 
     protected get _optionPath() {
-        return 'aiProcessing';
+        return 'aiOptions';
     }
 
 
@@ -74,10 +74,10 @@ export class DxoTreeListAiProcessingComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTreeListAiProcessingComponent
+    DxoDataGridAiOptionsComponent
   ],
   exports: [
-    DxoTreeListAiProcessingComponent
+    DxoDataGridAiOptionsComponent
   ],
 })
-export class DxoTreeListAiProcessingModule { }
+export class DxoDataGridAiOptionsModule { }

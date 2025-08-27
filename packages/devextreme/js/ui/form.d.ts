@@ -692,7 +692,7 @@ export interface dxFormSimpleItem {
      * @docid
      * @public
      */
-    aiProcessing?: {
+    aiOptions?: {
       /**
        * @docid
        * @default undefined

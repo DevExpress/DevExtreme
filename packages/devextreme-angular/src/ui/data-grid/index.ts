@@ -116,7 +116,7 @@ import { DxoValueFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiTotalItemModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-import { DxoDataGridAiProcessingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAiOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridAnimationModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridAsyncRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridAtModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -2349,7 +2349,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridAiProcessingModule,
+    DxoDataGridAiOptionsModule,
     DxoDataGridAnimationModule,
     DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,
@@ -2506,7 +2506,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
-    DxoDataGridAiProcessingModule,
+    DxoDataGridAiOptionsModule,
     DxoDataGridAnimationModule,
     DxiDataGridAsyncRuleModule,
     DxoDataGridAtModule,

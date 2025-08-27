@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-ai-processing',
+    selector: 'dxo-card-view-ai-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewAiProcessingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewAiOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -49,7 +49,7 @@ export class DxoCardViewAiProcessingComponent extends NestedOption implements On
 
 
     protected get _optionPath() {
-        return 'aiProcessing';
+        return 'aiOptions';
     }
 
 
@@ -74,10 +74,10 @@ export class DxoCardViewAiProcessingComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoCardViewAiProcessingComponent
+    DxoCardViewAiOptionsComponent
   ],
   exports: [
-    DxoCardViewAiProcessingComponent
+    DxoCardViewAiOptionsComponent
   ],
 })
-export class DxoCardViewAiProcessingModule { }
+export class DxoCardViewAiOptionsModule { }

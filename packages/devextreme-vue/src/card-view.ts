@@ -487,7 +487,7 @@ prepareComponentConfig(componentConfig);
 const DxCardView = defineComponent(componentConfig);
 
 
-const DxAiProcessingConfig = {
+const DxAiOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -500,11 +500,11 @@ const DxAiProcessingConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiProcessingConfig);
+prepareConfigurationComponentConfig(DxAiOptionsConfig);
 
-const DxAiProcessing = defineComponent(DxAiProcessingConfig);
+const DxAiOptions = defineComponent(DxAiOptionsConfig);
 
-(DxAiProcessing as any).$_optionName = "aiProcessing";
+(DxAiOptions as any).$_optionName = "aiOptions";
 
 const DxAnimationConfig = {
   emits: {
@@ -1817,7 +1817,7 @@ const DxFormItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aiProcessing": null,
+    "update:aiOptions": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -1834,7 +1834,7 @@ const DxFormItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    aiProcessing: Object as PropType<Record<string, any>>,
+    aiOptions: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -1858,7 +1858,7 @@ const DxFormItem = defineComponent(DxFormItemConfig);
 
 (DxFormItem as any).$_optionName = "formItem";
 (DxFormItem as any).$_expectedChildren = {
-  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -2083,7 +2083,7 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aiProcessing": null,
+    "update:aiOptions": null,
     "update:alignItemLabels": null,
     "update:badge": null,
     "update:buttonOptions": null,
@@ -2124,7 +2124,7 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
-    aiProcessing: Object as PropType<Record<string, any>>,
+    aiOptions: Object as PropType<Record<string, any>>,
     alignItemLabels: Boolean,
     badge: String,
     buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
@@ -2173,7 +2173,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
-  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
@@ -2730,7 +2730,7 @@ const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aiProcessing": null,
+    "update:aiOptions": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -2747,7 +2747,7 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    aiProcessing: Object as PropType<Record<string, any>>,
+    aiOptions: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -2775,7 +2775,7 @@ const DxSimpleItem = defineComponent(DxSimpleItemConfig);
   itemType: "simple"
 };
 (DxSimpleItem as any).$_expectedChildren = {
-  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -3246,7 +3246,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxCardView;
 export {
   DxCardView,
-  DxAiProcessing,
+  DxAiOptions,
   DxAnimation,
   DxAsyncRule,
   DxAt,

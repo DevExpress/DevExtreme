@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-form-ai-processing',
+    selector: 'dxo-form-ai-options',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFormAiProcessingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormAiOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -49,7 +49,7 @@ export class DxoFormAiProcessingComponent extends NestedOption implements OnDest
 
 
     protected get _optionPath() {
-        return 'aiProcessing';
+        return 'aiOptions';
     }
 
 
@@ -74,10 +74,10 @@ export class DxoFormAiProcessingComponent extends NestedOption implements OnDest
 
 @NgModule({
   imports: [
-    DxoFormAiProcessingComponent
+    DxoFormAiOptionsComponent
   ],
   exports: [
-    DxoFormAiProcessingComponent
+    DxoFormAiOptionsComponent
   ],
 })
-export class DxoFormAiProcessingModule { }
+export class DxoFormAiOptionsModule { }

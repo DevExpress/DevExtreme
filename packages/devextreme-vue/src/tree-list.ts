@@ -600,7 +600,7 @@ prepareComponentConfig(componentConfig);
 const DxTreeList = defineComponent(componentConfig);
 
 
-const DxAiProcessingConfig = {
+const DxAiOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -613,11 +613,11 @@ const DxAiProcessingConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiProcessingConfig);
+prepareConfigurationComponentConfig(DxAiOptionsConfig);
 
-const DxAiProcessing = defineComponent(DxAiProcessingConfig);
+const DxAiOptions = defineComponent(DxAiOptionsConfig);
 
-(DxAiProcessing as any).$_optionName = "aiProcessing";
+(DxAiOptions as any).$_optionName = "aiOptions";
 
 const DxAnimationConfig = {
   emits: {
@@ -1928,7 +1928,7 @@ const DxFormItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aiProcessing": null,
+    "update:aiOptions": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -1945,7 +1945,7 @@ const DxFormItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
-    aiProcessing: Object as PropType<Record<string, any>>,
+    aiOptions: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -1969,7 +1969,7 @@ const DxFormItem = defineComponent(DxFormItemConfig);
 
 (DxFormItem as any).$_optionName = "formItem";
 (DxFormItem as any).$_expectedChildren = {
-  aiProcessing: { isCollectionItem: false, optionName: "aiProcessing" },
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -3295,7 +3295,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxTreeList;
 export {
   DxTreeList,
-  DxAiProcessing,
+  DxAiOptions,
   DxAnimation,
   DxAsyncRule,
   DxAt,

@@ -176,20 +176,20 @@ const TreeList = memo(
 
 // owners:
 // FormItem
-type IAiProcessingProps = React.PropsWithChildren<{
+type IAiOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
 }>
-const _componentAiProcessing = (props: IAiProcessingProps) => {
-  return React.createElement(NestedOption<IAiProcessingProps>, {
+const _componentAiOptions = (props: IAiOptionsProps) => {
+  return React.createElement(NestedOption<IAiOptionsProps>, {
     ...props,
     elementDescriptor: {
-      OptionName: "aiProcessing",
+      OptionName: "aiOptions",
     },
   });
 };
 
-const AiProcessing = Object.assign<typeof _componentAiProcessing, NestedComponentMeta>(_componentAiProcessing, {
+const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
   componentType: "option",
 });
 
@@ -1416,7 +1416,7 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IFormItemProps = React.PropsWithChildren<{
-  aiProcessing?: Record<string, any> | {
+  aiOptions?: Record<string, any> | {
     disabled?: boolean;
     instruction?: string | undefined;
   };
@@ -1450,7 +1450,7 @@ const _componentFormItem = (props: IFormItemProps) => {
     elementDescriptor: {
       OptionName: "formItem",
       ExpectedChildren: {
-        aiProcessing: { optionName: "aiProcessing", isCollectionItem: false },
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -2672,8 +2672,8 @@ export {
   TreeList,
   ITreeListOptions,
   TreeListRef,
-  AiProcessing,
-  IAiProcessingProps,
+  AiOptions,
+  IAiOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,
