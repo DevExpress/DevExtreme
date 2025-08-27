@@ -1638,9 +1638,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     }
   }
 
-  focus() {
-    if (this._selectAllEnabled()) {
-      // @ts-expect-error
+  focus(): void {
+    const { items = [] } = this.option();
+    if (this._selectAllEnabled() && items.length) {
+      // @ts-expect-error ts-error
       eventsEngine.trigger(this._$selectAllItem, 'focus');
       return;
     }
