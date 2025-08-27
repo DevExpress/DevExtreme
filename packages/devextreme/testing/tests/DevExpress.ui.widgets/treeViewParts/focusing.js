@@ -298,7 +298,7 @@ QUnit.test('select all item should be focused on treeview focus', function(asser
     assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
 });
 
-QUnit.test('Treeview container should be focused on empty treeview focus (T1294524)', function(assert) {
+QUnit.testInActiveWindow('Treeview container should be focused on empty treeview focus (T1294524)', function(assert) {
     const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
         focusStateEnabled: true,
