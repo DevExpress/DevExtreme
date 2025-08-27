@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "Προαιρετικό",
         "dxForm-requiredMessage": "Το πεδίο {0} είναι απαιτούμενο",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Επαναφορά",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Η τιμή πρέπει να είναι αριθμητική",
         "dxNumberBox-noDataText": "Δεν υπάρχουν δεδομένα",

@@ -1636,7 +1636,7 @@ class Form extends Widget<FormProperties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  reset(editorsData: Record<string, any>): void {
+  reset(editorsData?: Record<string, any>): void {
     this.updateRunTimeInfoForEachEditor((editor) => {
       const { name = '' } = editor.option();
       if (editorsData && name in editorsData) {

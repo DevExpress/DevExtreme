@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "isteğe bağlı",
         "dxForm-requiredMessage": "{0} gerekli",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Sıfırla",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Değer bir sayı olmalı",
         "dxNumberBox-noDataText": "Veri yok",

@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "Valgfri",
         "dxForm-requiredMessage": "{0} er påkrevd",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Tilbakestill",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Verdien må være et tall",
         "dxNumberBox-noDataText": "Ingen data",

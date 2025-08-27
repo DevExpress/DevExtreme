@@ -41,14 +41,12 @@ export interface DropDownButtonTemplateDataModel {
  */
 export type FieldAddons = {
     /**
-     * @namespace DevExpress.ui
      * @docid
      * @type_function_param1 data:object
      * @type_function_return string|Element|jQuery
      */
     beforeTemplate?: template | ((data: any, element: DxElement) => string | UserDefinedElement);
     /**
-     * @namespace DevExpress.ui
      * @docid
      * @type_function_param1 data:object
      * @type_function_return string|Element|jQuery

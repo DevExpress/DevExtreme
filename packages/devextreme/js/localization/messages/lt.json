@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "neprivaloma",
         "dxForm-requiredMessage": "{0} privalomas",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Reset",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Reikšmė turi būti skaičius",
         "dxNumberBox-noDataText": "Nėra duomenų",

@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "اختياري",
         "dxForm-requiredMessage": "{0} مطلوب",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "إعادة تعيين",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "يجب أن تكون القيمة رقمًا",
         "dxNumberBox-noDataText": "لايوجد بيانات",
