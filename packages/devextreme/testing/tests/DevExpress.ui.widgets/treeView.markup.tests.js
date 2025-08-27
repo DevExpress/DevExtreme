@@ -9,6 +9,7 @@ QUnit.testStart(function() {
 
 import 'ui/tree_view';
 import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/m_tree_view.base';
+import localization from 'localization';
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
@@ -73,6 +74,30 @@ QUnit.module('aria accessibility', {
 
         assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
         assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
+    });
+
+    QUnit.test('aria-label for selectAll checkbox should be localized (T1299342)', function(assert) {
+        assert.expect(1);
+
+        const defaultLocale = localization.locale();
+        const localizedSelectAllText = 'Alles auswählen';
+
+        try {
+            localization.loadMessages({
+                'de': { 'dxList-selectAll': localizedSelectAllText }
+            });
+            localization.locale('de');
+
+            this.instance.option({ showCheckBoxesMode: 'selectAll' });
+
+            const $selectAllItem = this.$element.find(`.${SELECT_ALL_ITEM_CLASS}`);
+
+            assert.strictEqual($selectAllItem.attr('aria-label'), localizedSelectAllText, 'selectAll checkbox aria-label is localized');
+        } finally {
+            localization.locale(defaultLocale);
+        }
+
+
     });
 
     QUnit.test('aria role for item levels', function(assert) {
