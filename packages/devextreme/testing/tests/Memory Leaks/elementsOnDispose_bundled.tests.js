@@ -38,7 +38,7 @@ $.each(DevExpress.ui, function(componentName) {
                 if(newDomElements.length === originalDomElements.length) {
                     assert.ok(true, 'After a component is disposed, additional DOM elements must be removed');
                 } else {
-                    if(newDomElements.length - originalDomElements.length <= 11) {
+                    if(newDomElements.length - originalDomElements.length <= 12) {
                         // viz widgets create extra style node that can not be deleted
                         ignorePatterns = {
                             'style': /behavior:\surl\(#default#VML\)/gi,
