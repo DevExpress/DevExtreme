@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`agenda should contain a right quantity of grouped long-appointments 1`] = `
+[
+  "24 Wed",
+  "25 Thu",
+  "26 Fri",
+  "24 Wed",
+  "25 Thu",
+  "26 Fri",
+]
+`;
+
+exports[`agenda should contain a right quantity of long-appointments 1`] = `
+[
+  "24 Wed",
+  "25 Thu",
+  "26 Fri",
+  "27 Sat",
+  "28 Sun",
+  "29 Mon",
+  "1 Tue",
+]
+`;
+
+exports[`agenda should contain a right quantity of recurrence long-appointments 1`] = `
+[
+  "25 Thu",
+  "26 Fri",
+  "28 Sun",
+  "29 Mon",
+]
+`;
+
+exports[`agenda should contain a right quantity of recurrence long-appointments 2`] = `
+[
+  "24 Wed",
+  "25 Thu",
+  "27 Sat",
+  "28 Sun",
+  "1 Tue",
+]
+`;
+
+exports[`agenda should correct render grouped appointments 1`] = `
+[
+  "Low Priority",
+  "High Priority",
+]
+`;
+
+exports[`agenda should correct render grouped appointments 2`] = `
+[
+  "2 Tue",
+  "3 Wed",
+  "2 Tue",
+]
+`;
+
+exports[`agenda should correct render grouped appointments with emptiness between dates 1`] = `
+[
+  "One",
+  "Two",
+]
+`;
+
+exports[`agenda should correct render grouped appointments with emptiness between dates 2`] = `
+[
+  "1 Mon",
+  "4 Thu",
+  "6 Sat",
+  "7 Sun",
+  "1 Mon",
+  "6 Sat",
+]
+`;
+
+exports[`agenda should remove correct occurrence of recurrence appointment 1`] = `
+[
+  "2 Tue",
+  "3 Wed",
+  "4 Thu",
+  "5 Fri",
+  "6 Sat",
+  "7 Sun",
+  "8 Mon",
+]
+`;
+
+exports[`agenda should remove correct occurrence of recurrence appointment 2`] = `
+[
+  "2 Tue",
+  "4 Thu",
+  "5 Fri",
+  "6 Sat",
+  "7 Sun",
+  "8 Mon",
+]
+`;
+
+exports[`agenda should work after view changed 1`] = `
+[
+  "1 Tue",
+]
+`;

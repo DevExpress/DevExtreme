@@ -1,6 +1,10 @@
-import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
-import type { AppointmentDataItem } from '@ts/scheduler/types';
+
+interface AppointmentData {
+  allDay: boolean;
+  startDate: number;
+  endDate: number;
+}
 
 const toMs = dateUtils.dateToMilliseconds;
 const SECOND_MS = toMs('second');
@@ -8,18 +12,18 @@ const DAY_MS = toMs('day');
 const DAY_WITHOUT_ONE_SECOND_MS = toMs('day') - toMs('second');
 
 export const getShiftedAllDayStartDate = (
-  originalStartDate: Date,
+  originalStartDate: number,
   viewOffset: number,
-): Date => {
-  const trimmedDate = dateUtils.trimTime(originalStartDate);
-  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, viewOffset);
-  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, DAY_WITHOUT_ONE_SECOND_MS, viewOffset);
+): number => {
+  const trimmedDate = dateUtils.trimTime(new Date(originalStartDate)).getTime() as number;
+  const startOfDay = trimmedDate + viewOffset;
+  const endOfDay = trimmedDate + DAY_WITHOUT_ONE_SECOND_MS + viewOffset;
 
   switch (true) {
     case originalStartDate > endOfDay:
-      return dateUtilsTs.addOffsets(endOfDay, SECOND_MS);
+      return endOfDay + SECOND_MS;
     case originalStartDate < startOfDay:
-      return dateUtilsTs.addOffsets(startOfDay, -DAY_MS);
+      return startOfDay - DAY_MS;
     // NOTE: originalStartDate in interval [startOfDay, endOfDay]
     // (include border points)
     default:
@@ -28,18 +32,18 @@ export const getShiftedAllDayStartDate = (
 };
 
 export const getShiftedAllDayEndDate = (
-  originalEndDate: Date,
+  originalEndDate: number,
   viewOffset: number,
-): Date => {
-  const trimmedDate = dateUtils.trimTime(originalEndDate);
-  const startOfDay = dateUtilsTs.addOffsets(trimmedDate, viewOffset);
-  const endOfDay = dateUtilsTs.addOffsets(trimmedDate, DAY_WITHOUT_ONE_SECOND_MS, viewOffset);
+): number => {
+  const trimmedDate = dateUtils.trimTime(new Date(originalEndDate)).getTime() as number;
+  const startOfDay = trimmedDate + viewOffset;
+  const endOfDay = trimmedDate + DAY_WITHOUT_ONE_SECOND_MS + viewOffset;
 
   switch (true) {
     case originalEndDate > endOfDay:
-      return dateUtilsTs.addOffsets(endOfDay, DAY_MS);
+      return endOfDay + DAY_MS;
     case originalEndDate < startOfDay:
-      return dateUtilsTs.addOffsets(startOfDay, -SECOND_MS);
+      return startOfDay - SECOND_MS;
     // NOTE: originalEndDate in interval [startOfDay, endOfDay]
     // (include border points)
     default:
@@ -52,9 +56,9 @@ export const getAppointmentOccurrenceDates = (
     startDate: originalStartDate,
     endDate: originalEndDate,
     allDay,
-  }: AppointmentDataItem,
+  }: AppointmentData,
   viewOffset: number,
-): { startDate: Date; endDate: Date } => {
+): { startDate: number; endDate: number } => {
   switch (true) {
     // NOTE: For regular appointments -> return original dates
     case !allDay:
@@ -67,11 +71,9 @@ export const getAppointmentOccurrenceDates = (
     // -> ['2024-02-01T00:00:00', '2024-02-02T23:59:59']
     case viewOffset === 0:
       return {
-        startDate: dateUtils.trimTime(originalStartDate),
-        endDate: dateUtilsTs.addOffsets(
-          dateUtils.trimTime(originalEndDate),
-          DAY_WITHOUT_ONE_SECOND_MS,
-        ),
+        startDate: dateUtils.trimTime(new Date(originalStartDate)).getTime(),
+        endDate: dateUtils.trimTime(new Date(originalEndDate)).getTime()
+          + DAY_WITHOUT_ONE_SECOND_MS,
       };
     // NOTE: allDay appointment + viewOffset is set case
     default:

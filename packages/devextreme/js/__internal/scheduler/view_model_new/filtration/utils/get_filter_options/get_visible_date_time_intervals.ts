@@ -1,20 +1,18 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import { getDatesWithoutTime } from '../../../r1/utils/index';
-import type { CompareOptions, DateInterval } from './type';
-
-const toMs = dateUtils.dateToMilliseconds;
+import { getDatesWithoutTime } from '../../../../r1/utils/base';
+import type { CompareOptions, DateInterval } from '../../../types';
 
 export const getVisibleDateTimeIntervals = ({
   startDayHour,
   endDayHour,
   min,
   max,
-}: CompareOptions, isDateViewOnly: boolean): DateInterval[] => {
-  if (isDateViewOnly || (startDayHour === 0 && endDayHour === 24)) {
+}: CompareOptions, isDateViewOnly: boolean, isSplitByDays = false): DateInterval[] => {
+  if (isDateViewOnly || (!isSplitByDays && (startDayHour === 0 && endDayHour === 24))) {
     const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
-    return [{ min: trimMin, max: trimMax }];
+    return [{ min: trimMin.getTime(), max: trimMax.getTime() }];
   }
 
   if (startDayHour >= endDayHour) {
@@ -24,13 +22,13 @@ export const getVisibleDateTimeIntervals = ({
   const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 
-  const normalizedMin = dateUtils.trimTime(min) as Date;
+  const normalizedMin = new Date(min);
   normalizedMin.setHours(startTime.hours, startTime.minutes, 0, 0);
-  const normalizedMax = dateUtils.trimTime(max) as Date;
+  const normalizedMax = new Date(max);
   normalizedMax.setHours(endTime.hours, endTime.minutes, 0, 0);
 
-  let time = normalizedMin.getTime();
-  const maxTime = normalizedMax.getTime();
+  const time = normalizedMin;
+  const maxTime = normalizedMax;
   const result: DateInterval[] = [];
 
   while (time < maxTime) {
@@ -38,10 +36,10 @@ export const getVisibleDateTimeIntervals = ({
     intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
 
     result.push({
-      min: new Date(time),
-      max: intervalMax,
+      min: time.getTime(),
+      max: intervalMax.getTime(),
     });
-    time += toMs('day');
+    time.setDate(time.getDate() + 1);
   }
 
   return result;
