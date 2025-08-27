@@ -34,6 +34,7 @@ import type {
   SimpleItemTemplateData,
   TabbedItem,
 } from '@js/ui/form';
+import LoadIndicator from '@js/ui/load_indicator';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
 import type { Component } from '@ts/core/widget/component';
@@ -57,6 +58,7 @@ import {
   FORM_GROUP_CONTENT_CLASS,
   FORM_GROUP_CUSTOM_CAPTION_CLASS,
   FORM_GROUP_WITH_CAPTION_CLASS,
+  FORM_LOAD_INDICATOR_CLASS,
   FORM_UNDERLINED_CLASS, FORM_VALIDATION_SUMMARY,
   GROUP_COL_COUNT_ATTR,
   GROUP_COL_COUNT_CLASS,
@@ -87,6 +89,8 @@ import {
   isFullPathContainsTabs,
   tryGetTabPath,
 } from '@ts/ui/form/form.utils';
+import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
+import { AnimationType } from '@ts/ui/load_indicator';
 import ValidationEngine from '@ts/ui/m_validation_engine';
 import ValidationSummary from '@ts/ui/m_validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
@@ -112,6 +116,8 @@ interface AICommandWithParams<T extends FormAICommandName> {
 }
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
+
+const FORM_LOAD_INDICATOR_SIZE = 120;
 
 export interface FormProperties extends Properties {
   alignRootItemLabels?: boolean;
@@ -156,6 +162,8 @@ class Form extends Widget<FormProperties> {
   _isDataUpdating?: boolean;
 
   _$validationSummary?: dxElementWrapper;
+
+  _loadIndicator?: LoadIndicator;
 
   _init(): void {
     super._init();
@@ -1654,8 +1662,47 @@ class Form extends Widget<FormProperties> {
     }
   }
 
+  private _renderLoadIndicator(): void {
+    if (this._loadIndicator) {
+      return;
+    }
+
+    const $indicatorElement = $('<div>')
+      .addClass(FORM_LOAD_INDICATOR_CLASS)
+      .appendTo(this.$element());
+
+    const options: LoadIndicatorProperties = {
+      animationType: AnimationType.Sparkle,
+      width: FORM_LOAD_INDICATOR_SIZE,
+      height: FORM_LOAD_INDICATOR_SIZE,
+    };
+
+    this._loadIndicator = new LoadIndicator($indicatorElement[0], options);
+  }
+
+  private _disposeLoadIndicator(): void {
+    if (!this._loadIndicator) {
+      return;
+    }
+
+    this._loadIndicator.dispose();
+    this._loadIndicator.$element().remove();
+    this._loadIndicator = undefined;
+  }
+
+  private _showLoadIndicator(): void {
+    this._renderLoadIndicator();
+    this.option('disabled', true);
+  }
+
+  private _hideLoadIndicator(): void {
+    this._disposeLoadIndicator();
+    this.option('disabled', false);
+  }
+
   _dispose(): void {
     this._clearAutoColCountChangedTimeout();
+    this._disposeLoadIndicator();
     ValidationEngine.removeGroup(this._getValidationGroup());
     super._dispose();
   }

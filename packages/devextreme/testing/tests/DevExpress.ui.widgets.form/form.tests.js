@@ -37,7 +37,8 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
     FORM_UNDERLINED_CLASS,
-    FORM_VALIDATION_SUMMARY
+    FORM_VALIDATION_SUMMARY,
+    FORM_LOAD_INDICATOR_CLASS
 } from '__internal/ui/form/constants';
 
 import {
@@ -5239,5 +5240,106 @@ QUnit.module('reset', () => {
 
             assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
         });
+    });
+});
+
+QUnit.module('LoadIndicator', () => {
+    QUnit.test('_showLoadIndicator creates LoadIndicator and sets form to disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled initially');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 0, 'LoadIndicator is not present initially');
+
+        form._showLoadIndicator();
+
+        assert.strictEqual(form.option('disabled'), true, 'Form is disabled after showing LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 1, 'LoadIndicator is present after showing');
+    });
+
+    QUnit.test('_hideLoadIndicator removes LoadIndicator and sets form to not disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadIndicator();
+        assert.strictEqual(form.option('disabled'), true, 'Form is disabled after showing LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 1, 'LoadIndicator is present');
+
+        form._hideLoadIndicator();
+
+        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after hiding LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 0, 'LoadIndicator is removed after hiding');
+    });
+
+    QUnit.test('LoadIndicator is disposed when form is disposed', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadIndicator();
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 1, 'LoadIndicator is present');
+
+        form._dispose();
+
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 0, 'LoadIndicator is disposed with form');
+    });
+
+    QUnit.test('Multiple calls to _showLoadIndicator do not create multiple indicators', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadIndicator();
+        form._showLoadIndicator();
+        form._showLoadIndicator();
+
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`).length, 1, 'Only one LoadIndicator is present');
+        assert.strictEqual(form.option('disabled'), true, 'Form remains disabled');
+    });
+
+    QUnit.test('_hideLoadIndicator without _showLoadIndicator does not throw error', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        assert.expect(0);
+
+        form._hideLoadIndicator();
+        form._hideLoadIndicator();
+    });
+
+    QUnit.test('LoadIndicator has correct CSS class and animation type', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadIndicator();
+
+        const $indicator = form.$element().find(`.${FORM_LOAD_INDICATOR_CLASS}`);
+        assert.strictEqual($indicator.length, 1, 'LoadIndicator element is present');
+        assert.strictEqual($indicator.hasClass(FORM_LOAD_INDICATOR_CLASS), true, 'LoadIndicator has correct CSS class');
+
+        const loadIndicatorInstance = $indicator.children().first().data('dxLoadIndicator');
+        assert.strictEqual(!!loadIndicatorInstance, true, 'LoadIndicator widget instance exists');
+        assert.strictEqual(loadIndicatorInstance.option('animationType'), 'sparkle', 'LoadIndicator has sparkle animation');
+        assert.strictEqual(loadIndicatorInstance.option('width'), 120, 'LoadIndicator has correct width');
+        assert.strictEqual(loadIndicatorInstance.option('height'), 120, 'LoadIndicator has correct height');
+    });
+
+    QUnit.test('Form disabled state is preserved correctly when form was already disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }],
+            disabled: true
+        }).dxForm('instance');
+
+        assert.strictEqual(form.option('disabled'), true, 'Form is initially disabled');
+
+        form._showLoadIndicator();
+        assert.strictEqual(form.option('disabled'), true, 'Form remains disabled after showing LoadIndicator');
+
+        form._hideLoadIndicator();
+        assert.strictEqual(form.option('disabled'), false, 'Form becomes enabled after hiding LoadIndicator (original disabled state not preserved)');
     });
 });
