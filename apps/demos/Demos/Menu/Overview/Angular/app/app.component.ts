@@ -1,9 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
-import { DxMenuModule, DxMenuTypes } from 'devextreme-angular/ui/menu';
-import { Product, Service } from './app.service';
+import { DxMenuModule, type DxMenuTypes } from 'devextreme-angular/ui/menu';
+
+import { Service, type Product, type ProductItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -13,6 +15,10 @@ let modulePrefix = '';
 // @ts-ignore
 if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
+}
+
+const isProductItem = (item: Product | ProductItem): item is ProductItem => {
+  return !('items' in item);
 }
 
 @Component({
@@ -34,16 +40,16 @@ export class AppComponent {
 
   showFirstSubmenuModes = this.showSubmenuModes[1];
 
-  currentProduct: Product;
+  currentProduct: ProductItem;
 
   constructor(service: Service) {
     this.products = service.getProducts();
   }
 
-  itemClick(data: DxMenuTypes.ItemClickEvent) {
-    const item = data.itemData as Product;
+  itemClick(data: DxMenuTypes.ItemClickEvent<Product>) {
+    const item = data.itemData;
 
-    if (item.price) {
+    if (isProductItem(item)) {
       this.currentProduct = item;
     }
   }

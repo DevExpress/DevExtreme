@@ -31,11 +31,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
+import { DxContextMenu, type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
+import type { ContextMenuItem } from './types';
 
-function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
+function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
   if (!itemData.items) {
     notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
   }

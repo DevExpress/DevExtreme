@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView from 'devextreme-react/tree-view';
-import ContextMenu from 'devextreme-react/context-menu';
+import { TreeView } from 'devextreme-react/tree-view';
+import { ContextMenu } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
 import service from './data.js';
 
@@ -13,11 +13,11 @@ const App = () => {
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
   const treeViewItemContextMenu = useCallback((e) => {
     setSelectedTreeItem(e.itemData);
-    const isProduct = e.itemData.price !== undefined;
-    contextMenuRef.current.instance().option('items[0].visible', !isProduct);
-    contextMenuRef.current.instance().option('items[1].visible', !isProduct);
-    contextMenuRef.current.instance().option('items[2].visible', isProduct);
-    contextMenuRef.current.instance().option('items[3].visible', isProduct);
+    const isProductItem = !e.itemData.items;
+    contextMenuRef.current.instance().option('items[0].visible', !isProductItem);
+    contextMenuRef.current.instance().option('items[1].visible', !isProductItem);
+    contextMenuRef.current.instance().option('items[2].visible', isProductItem);
+    contextMenuRef.current.instance().option('items[3].visible', isProductItem);
     contextMenuRef.current.instance().option('items[0].disabled', e.node.expanded);
     contextMenuRef.current.instance().option('items[1].disabled', !e.node.expanded);
   }, []);
@@ -49,7 +49,7 @@ const App = () => {
       const updatedLogItems = [...logItems, logEntry];
       setLogItems(updatedLogItems);
     },
-    [logItems, selectedTreeItem, setLogItems],
+    [logItems, selectedTreeItem],
   );
   return (
     <div className="form">
