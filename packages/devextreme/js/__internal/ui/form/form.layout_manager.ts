@@ -704,7 +704,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
     const buttonConfigs = {
       smartPaste: {
-        icon: 'clipboardpastesmart',
+        icon: 'clipboardpastesparkle',
         text: messageLocalization.format('dxForm-smartPasteButtonText'),
         stylingMode: 'outlined',
         type: 'normal',
