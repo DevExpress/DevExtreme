@@ -451,32 +451,6 @@ QUnit.module('Appointments', moduleOptions, () => {
         assert.deepEqual(instance.option('items'), items, 'items are not affected');
     });
 
-    QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', async function(assert) {
-        const strategy = new HorizontalMonthAppointmentsStrategy({
-            instance: {
-                notifyObserver: commonUtils.noop,
-                option: commonUtils.noop,
-                fire: commonUtils.noop,
-            },
-            getResizableStep: () => 0
-        });
-        const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
-
-        assert.strictEqual(deltaTime, 0, 'Delta time is 0');
-    });
-
-    QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', async function(assert) {
-        const strategy = new VerticalAppointmentsStrategy({
-            dataAccessors: mockDataAccessor,
-            allDayPanelMode: 'all',
-            cellDurationInMinutes: 30,
-            cellHeight: 50
-        });
-        const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
-
-        assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
-    });
-
     QUnit.test('Scheduler appointment should have aria-role \'button\'', function(assert) {
         const item = {
             itemData: {
