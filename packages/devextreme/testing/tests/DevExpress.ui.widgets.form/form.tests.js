@@ -65,13 +65,11 @@ import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="form"></div>\
-        <div id="form2"></div>';
+        `<div id="form"></div>
+        <div id="form2"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
-
-import './formParts/form.aiIntegration.tests.js';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';

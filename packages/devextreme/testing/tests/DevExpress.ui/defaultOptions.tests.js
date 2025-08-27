@@ -1737,7 +1737,6 @@ testComponentDefaults(Form,
         scrollingEnabled: false,
         labelMode: 'outside',
         isDirty: false,
-        aiIntegration: undefined,
     },
 );
 

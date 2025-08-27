@@ -223,7 +223,7 @@ export default class FormItemsRunTimeInfo {
 
   _isItemAIEnabled(item: SimpleItem): boolean {
     // @ts-expect-error
-    return !item.aiProcessing?.disabled;
+    return !item.aiOptions?.disabled;
   }
 
   _isDataItem(item: PreparedItem): item is SimpleItemWithDataField {

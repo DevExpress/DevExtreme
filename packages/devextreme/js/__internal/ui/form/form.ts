@@ -199,7 +199,6 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
-      aiIntegration: undefined,
     };
   }
 
@@ -1844,7 +1843,7 @@ class Form extends Widget<FormProperties> {
       name: item.dataField,
       format: getItemFormatInfo(item),
       // @ts-expect-error
-      instruction: item.aiProcessing?.instruction,
+      instruction: item.aiOptions?.instruction,
     }));
 
     const smartPasteParams = {

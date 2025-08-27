@@ -1,5 +1,12 @@
 import 'generic_light.css!';
 import $ from 'jquery';
+import 'ui/form';
+
+QUnit.testStart(function() {
+    const markup = '<div id="form"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 const setupFormWithAi = (config) => {
     return $('#form').dxForm({
@@ -223,18 +230,18 @@ QUnit.module('SmartPaste', () => {
             assert.deepEqual(dataItems, expectedDataItems, 'Should exclude items items with editorOptions.visible=false');
         });
 
-        QUnit.test('Excludes items with aiProcessing.disabled=true', function(assert) {
+        QUnit.test('Excludes items with aiOptions.disabled=true', function(assert) {
             const items = [
                 { dataField: 'name' },
-                { dataField: 'surname', aiProcessing: { disabled: false } },
-                { dataField: 'birthdate', aiProcessing: { disabled: true } },
+                { dataField: 'surname', aiOptions: { disabled: false } },
+                { dataField: 'birthdate', aiOptions: { disabled: true } },
             ];
             const form = setupFormWithAi({ items });
             const dataItems = form._itemsRunTimeInfo.getItemsForDataExtraction();
 
             const expectedDataItems = [
                 { dataField: 'name' },
-                { dataField: 'surname', aiProcessing: { disabled: false } },
+                { dataField: 'surname', aiOptions: { disabled: false } },
             ];
 
             assert.deepEqual(dataItems, expectedDataItems, 'Should exclude items items with editorOptions.visible=false');
@@ -248,7 +255,7 @@ QUnit.module('SmartPaste', () => {
             const items = [
                 { itemType: 'simple', dataField: 'name' },
                 { itemType: 'simple', dataField: 'orderCount', editorType: 'dxNumberBox' },
-                { itemType: 'simple', dataField: 'date', editorType: 'dxDateBox', aiProcessing: { instruction: 'custom instruction' } },
+                { itemType: 'simple', dataField: 'date', editorType: 'dxDateBox', aiOptions: { instruction: 'custom instruction' } },
             ];
 
             const form = setupFormWithAi({ aiIntegration, items });
