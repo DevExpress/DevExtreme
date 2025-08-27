@@ -3,11 +3,11 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import { TREEVIEW_CLASS_PREFIX } from '__internal/ui/tree_view/tree_view.search';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
-const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
@@ -299,15 +299,12 @@ QUnit.test('select all item should be focused on treeview focus', function(asser
 });
 
 QUnit.test('Treeview container should be focused on empty treeview focus (T1294524)', function(assert) {
-    if(shouldSkipOnMobile(assert)) {
-        return;
-    }
-
-    initTree({
+    const $treeView = initTree({
         showCheckBoxesMode: 'selectAll',
-    }).dxTreeView('focus');
+        focusStateEnabled: true,
+    });
 
-    const $treeView = $(`.${TREEVIEW_CLASS_PREFIX}`);
+    $treeView.dxTreeView('focus');
 
     assert.strictEqual($treeView.hasClass(FOCUSED_STATE_CLASS), true, 'treeview is focused');
 });
