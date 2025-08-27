@@ -45,6 +45,16 @@
   inset-inline-start: $fluent-colorbox-preview-padding;
   border: 1px solid;
   border-color: $colorview-border-color;
+
+  .dx-icon-colordismiss {
+    color: $colorbox-preview-icon-color;
+  }
+
+  .dx-state-disabled & {
+    .dx-icon-colordismiss {
+      color: $base-foreground-disabled;
+    }
+  }
 }
 
 .dx-colorbox-overlay {

@@ -45,6 +45,11 @@
   border: 1px solid;
   border-color: $colorview-border-color;
   left: $material-colorbox-preview-left;
+
+  .dx-icon-colordismiss {
+    font-size: 17px;
+    color: $colorbox-preview-icon-color;
+  }
 }
 
 .dx-colorbox-overlay {
