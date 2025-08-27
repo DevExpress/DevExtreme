@@ -144,6 +144,7 @@ class AppointmentLayoutManager {
       intervalDuration: workspace.getIntervalDuration(),
       allDayIntervalDuration: workspace.getIntervalDuration(true),
       isVerticalGroupOrientation: workspace.isVerticalOrientation(),
+      _collectorOffset: this.instance.getCollectorOffset(),
       DOMMetaData,
       // agenda only
       instance: this.instance,
