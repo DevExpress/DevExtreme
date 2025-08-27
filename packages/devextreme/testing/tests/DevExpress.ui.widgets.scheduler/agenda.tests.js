@@ -32,7 +32,8 @@ module('Agenda', {}, () => {
 
         const config = {
             onContentReady: e => {
-                e.component.onDataSourceChanged(rows);
+                e.component._renderView();
+                e.component._recalculateAgenda(rows);
             },
             notifyScheduler: {
                 invoke: (functionName) => {

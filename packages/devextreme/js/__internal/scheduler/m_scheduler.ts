@@ -77,7 +77,7 @@ import { createResourceEditorModel } from './utils/resource_manager/popup_utils'
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
-import AppointmentLayoutManager from './view_model/m_appointments_layout_manager';
+import AppointmentLayoutManagerBridge from './view_model_new/m_appointments_layout_manager_bridge';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -204,7 +204,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _recurrenceDialog: any;
 
-  _layoutManager!: AppointmentLayoutManager;
+  _layoutManager!: AppointmentLayoutManagerBridge;
 
   _appointmentForm: any;
 
@@ -553,7 +553,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _isAgenda() {
-    return this._layoutManager.appointmentRenderingStrategyName === 'agenda';
+    return this.currentView.type === 'agenda';
   }
 
   _allowDragging() {
@@ -681,7 +681,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       if (isForce || (!isFixedHeight || !isFixedWidth)) {
         workspace.option('allDayExpanded', this._isAllDayExpanded());
         workspace._dimensionChanged();
-        const appointments = this._layoutManager.createAppointmentsMap();
+        const appointments = this._layoutManager.generateViewModel();
 
         this._appointments.option('items', appointments);
       }
@@ -848,10 +848,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _dataSourceChangedHandler(result?: Appointment[]) {
     if (this._readyToRenderAppointments) {
       this._workSpaceRecalculation.done(() => {
-        this._layoutManager.prepareItems(result);
+        this._layoutManager.prepareAppointments(result);
         this._renderAppointments();
         this._updateA11yStatus();
-        this.getWorkSpace().onDataSourceChanged(this._layoutManager.filteredItems);
+        if (this._isAgenda()) {
+          this._workSpace.renderAgendaLayout(this._layoutManager.filteredItems);
+        }
       });
     }
   }
@@ -884,7 +886,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
-    const appointmentsMap = this._layoutManager.createAppointmentsMap();
+    const appointmentsMap = this._layoutManager.generateViewModel();
     return appointmentsMap;
   }
 
@@ -1000,7 +1002,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderMainContainer();
     this._renderHeader();
 
-    this._layoutManager = new AppointmentLayoutManager(this);
+    this._layoutManager = new AppointmentLayoutManagerBridge(this);
 
     // @ts-expect-error
     this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
@@ -1267,16 +1269,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return 0;
   }
 
-  getAppointmentDurationInMinutes() {
-    return this.getViewOption('cellDuration');
-  }
-
   _renderWorkSpace() {
     const currentViewOptions = this.currentView;
     if (!currentViewOptions) {
       return;
     }
 
+    if (this._isAgenda()) {
+      this.renderAgendaWorkspace();
+    } else {
+      this.renderGridWorkspace();
+    }
+
+    this._recalculateWorkspace();
+    if (currentViewOptions.startDate) {
+      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+    }
+  }
+
+  renderGridWorkspace(): void {
     if (this._readyToRenderAppointments) {
       this._toggleSmallClass();
       // TODO(9): Get rid of it as soon as you can. Workspace didn't render
@@ -1287,20 +1298,24 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
     const $workSpace = $('<div>').appendTo(this._mainContainer);
 
-    const currentViewType = currentViewOptions.type;
+    const currentViewType = this.currentView.type;
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
-    const workSpaceConfig = this._workSpaceConfig(currentViewOptions);
+    const workSpaceConfig = this._workSpaceConfig(this.currentView);
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     this._allowDragging() && this._workSpace.initDragBehavior(this, this._all);
     this._workSpace._attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
+  }
 
-    this._recalculateWorkspace();
-    if (currentViewOptions.startDate) {
-      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
-    }
+  renderAgendaWorkspace(): void {
+    const $workSpace = $('<div>').appendTo(this._mainContainer);
+    const workSpaceConfig = this._workSpaceConfig(this.currentView);
+    const workSpaceComponent = VIEWS_CONFIG.agenda.workSpace;
+    // @ts-expect-error
+    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
+    this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
   _recalculateWorkspace() {
@@ -1327,7 +1342,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
-      getFilteredItems: () => this._layoutManager.filteredItems,
+      getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
 
       noDataText: this.option('noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1361,7 +1376,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: this._renderAppointments.bind(this),
+      onRenderAppointments: () => {
+        this._renderAppointments();
+      },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
       onScrollEnd: () => this._appointments.updateResizableArea(),

@@ -1,7 +1,6 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import type { AppointmentDataItem } from '@ts/scheduler/types';
 
 import {
   getAppointmentOccurrenceDates,
@@ -16,45 +15,45 @@ describe('getAppointmentOccurrenceDates', () => {
     it.each([
       {
         caseName: 'between start and end of day',
-        originalStartDate: new Date('2024-01-01T10:00:00'),
+        originalStartDate: new Date('2024-01-01T10:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's start of day date
-        expectedResult: new Date('2024-01-01T01:00:00'),
+        expectedResult: new Date('2024-01-01T01:00:00').getTime(),
       },
       {
         caseName: 'equal start of day',
-        originalStartDate: new Date('2024-01-01T01:00:00'),
+        originalStartDate: new Date('2024-01-01T01:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's start of day date
-        expectedResult: new Date('2024-01-01T01:00:00'),
+        expectedResult: new Date('2024-01-01T01:00:00').getTime(),
       },
       {
         caseName: 'equal end of day minus one ms',
-        originalStartDate: new Date('2024-01-02T00:59:59'),
+        originalStartDate: new Date('2024-01-02T00:59:59').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's start of day date
-        expectedResult: new Date('2024-01-01T01:00:00'),
+        expectedResult: new Date('2024-01-01T01:00:00').getTime(),
       },
       {
         caseName: 'equal end of day',
-        originalStartDate: new Date('2024-01-02T01:00:00'),
+        originalStartDate: new Date('2024-01-02T01:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's start of next day date
-        expectedResult: new Date('2024-01-02T01:00:00'),
+        expectedResult: new Date('2024-01-02T01:00:00').getTime(),
       },
       {
         caseName: 'before start of day',
-        originalStartDate: new Date('2024-01-01T10:00:00'),
+        originalStartDate: new Date('2024-01-01T10:00:00').getTime(),
         viewOffset: 720 * MS_IN_MINUTE,
         // NOTE: it's start of previous day date
-        expectedResult: new Date('2023-12-31T12:00:00'),
+        expectedResult: new Date('2023-12-31T12:00:00').getTime(),
       },
       {
         caseName: 'after end of day',
-        originalStartDate: new Date('2024-01-01T00:00:00'),
+        originalStartDate: new Date('2024-01-01T00:00:00').getTime(),
         viewOffset: -720 * MS_IN_MINUTE,
         // NOTE: it's start of next day date
-        expectedResult: new Date('2023-12-31T12:00:00'),
+        expectedResult: new Date('2023-12-31T12:00:00').getTime(),
       },
     ])(
       'should shift start date in case: $caseName',
@@ -73,45 +72,45 @@ describe('getAppointmentOccurrenceDates', () => {
     it.each([
       {
         caseName: 'between start and end of day',
-        originalEndDate: new Date('2024-01-01T10:00:00'),
+        originalEndDate: new Date('2024-01-01T10:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's end of day date
-        expectedResult: new Date('2024-01-02T00:59:59'),
+        expectedResult: new Date('2024-01-02T00:59:59').getTime(),
       },
       {
         caseName: 'equal start of day',
-        originalEndDate: new Date('2024-01-01T01:00:00'),
+        originalEndDate: new Date('2024-01-01T01:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's end of day date
-        expectedResult: new Date('2024-01-02T00:59:59'),
+        expectedResult: new Date('2024-01-02T00:59:59').getTime(),
       },
       {
         caseName: 'equal end of day minus one ms',
-        originalEndDate: new Date('2024-01-02T00:59:59'),
+        originalEndDate: new Date('2024-01-02T00:59:59').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's end of day date
-        expectedResult: new Date('2024-01-02T00:59:59'),
+        expectedResult: new Date('2024-01-02T00:59:59').getTime(),
       },
       {
         caseName: 'equal end of day',
-        originalEndDate: new Date('2024-01-02T01:00:00'),
+        originalEndDate: new Date('2024-01-02T01:00:00').getTime(),
         viewOffset: 60 * MS_IN_MINUTE,
         // NOTE: it's end of next day date
-        expectedResult: new Date('2024-01-03T00:59:59'),
+        expectedResult: new Date('2024-01-03T00:59:59').getTime(),
       },
       {
         caseName: 'before start of day',
-        originalEndDate: new Date('2024-01-01T10:00:00'),
+        originalEndDate: new Date('2024-01-01T10:00:00').getTime(),
         viewOffset: 720 * MS_IN_MINUTE,
         // NOTE: it's end of previous day date
-        expectedResult: new Date('2024-01-01T11:59:59'),
+        expectedResult: new Date('2024-01-01T11:59:59').getTime(),
       },
       {
         caseName: 'after end of day',
-        originalEndDate: new Date('2024-01-01T00:00:00'),
+        originalEndDate: new Date('2024-01-01T00:00:00').getTime(),
         viewOffset: -720 * MS_IN_MINUTE,
         // NOTE: it's end of next day date
-        expectedResult: new Date('2024-01-01T11:59:59'),
+        expectedResult: new Date('2024-01-01T11:59:59').getTime(),
       },
     ])(
       'should shift end date in case: $caseName',
@@ -131,55 +130,55 @@ describe('getAppointmentOccurrenceDates', () => {
       {
         caseName: 'regular appointment (not all-day)',
         dates: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T11:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T11:00:00').getTime(),
         },
         allDay: false,
         viewOffset: 0,
         expectedResult: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T11:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T11:00:00').getTime(),
         },
       },
       {
         caseName: 'regular appointment (not all-day) with offset',
         dates: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T11:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T11:00:00').getTime(),
         },
         allDay: false,
         viewOffset: 720 * MS_IN_MINUTE,
         expectedResult: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T11:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T11:00:00').getTime(),
         },
       },
       {
         caseName: 'all-day appointment',
         dates: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T11:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T11:00:00').getTime(),
         },
         allDay: true,
         viewOffset: 0,
         expectedResult: {
-          start: new Date('2024-01-01T00:00:00'),
-          end: new Date('2024-01-01T23:59:59'),
+          start: new Date('2024-01-01T00:00:00').getTime(),
+          end: new Date('2024-01-01T23:59:59').getTime(),
         },
       },
       {
         caseName: 'all-day appointment with offset',
         dates: {
-          start: new Date('2024-01-01T10:00:00'),
-          end: new Date('2024-01-01T13:00:00'),
+          start: new Date('2024-01-01T10:00:00').getTime(),
+          end: new Date('2024-01-01T13:00:00').getTime(),
         },
         allDay: true,
         viewOffset: 720 * MS_IN_MINUTE,
         expectedResult: {
           // NOTE: start of previous day
-          start: new Date('2023-12-31T12:00:00'),
+          start: new Date('2023-12-31T12:00:00').getTime(),
           // NOTE: shifted end of this day
-          end: new Date('2024-01-02T11:59:59'),
+          end: new Date('2024-01-02T11:59:59').getTime(),
         },
       },
     ])(
@@ -194,7 +193,7 @@ describe('getAppointmentOccurrenceDates', () => {
           startDate: dates.start,
           endDate: dates.end,
           allDay,
-        } as AppointmentDataItem, viewOffset);
+        }, viewOffset);
 
         expect([result.startDate, result.endDate])
           .toStrictEqual([expectedResult.start, expectedResult.end]);
