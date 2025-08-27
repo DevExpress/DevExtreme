@@ -12,8 +12,8 @@ describe('getVisibleDateTimeIntervals', () => {
       min: new Date(2000, 0, 10, 3),
       max: new Date(2000, 0, 15, 10),
     }, true)).toEqual([{
-      min: new Date(2000, 0, 10),
-      max: new Date(2000, 0, 16),
+      min: new Date(2000, 0, 10).getTime(),
+      max: new Date(2000, 0, 16).getTime(),
     }]);
   });
 
@@ -24,8 +24,8 @@ describe('getVisibleDateTimeIntervals', () => {
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 3),
     }, true)).toEqual([{
-      min: new Date(2000, 0, 10),
-      max: new Date(2000, 0, 16),
+      min: new Date(2000, 0, 10).getTime(),
+      max: new Date(2000, 0, 16).getTime(),
     }]);
   });
 
@@ -36,8 +36,29 @@ describe('getVisibleDateTimeIntervals', () => {
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 15),
     }, false)).toEqual([{
+      min: new Date(2000, 0, 10).getTime(),
+      max: new Date(2000, 0, 16).getTime(),
+    }]);
+  });
+
+  it('should return day by day interval for isSplitByDays=true', () => {
+    expect(getVisibleDateTimeIntervals({
+      startDayHour: 0,
+      endDayHour: 24,
       min: new Date(2000, 0, 10),
-      max: new Date(2000, 0, 16),
+      max: new Date(2000, 0, 13),
+    }, false, true)).toEqual([{
+      min: new Date(2000, 0, 10).getTime(),
+      max: new Date(2000, 0, 11).getTime(),
+    }, {
+      min: new Date(2000, 0, 11).getTime(),
+      max: new Date(2000, 0, 12).getTime(),
+    }, {
+      min: new Date(2000, 0, 12).getTime(),
+      max: new Date(2000, 0, 13).getTime(),
+    }, {
+      min: new Date(2000, 0, 13).getTime(),
+      max: new Date(2000, 0, 14).getTime(),
     }]);
   });
 
@@ -49,23 +70,23 @@ describe('getVisibleDateTimeIntervals', () => {
       max: new Date(2000, 0, 15, 5),
     }, false)).toEqual([
       {
-        min: new Date(2000, 0, 10, 3),
-        max: new Date(2000, 0, 10, 10),
+        min: new Date(2000, 0, 10, 3).getTime(),
+        max: new Date(2000, 0, 10, 10).getTime(),
       }, {
-        min: new Date(2000, 0, 11, 3),
-        max: new Date(2000, 0, 11, 10),
+        min: new Date(2000, 0, 11, 3).getTime(),
+        max: new Date(2000, 0, 11, 10).getTime(),
       }, {
-        min: new Date(2000, 0, 12, 3),
-        max: new Date(2000, 0, 12, 10),
+        min: new Date(2000, 0, 12, 3).getTime(),
+        max: new Date(2000, 0, 12, 10).getTime(),
       }, {
-        min: new Date(2000, 0, 13, 3),
-        max: new Date(2000, 0, 13, 10),
+        min: new Date(2000, 0, 13, 3).getTime(),
+        max: new Date(2000, 0, 13, 10).getTime(),
       }, {
-        min: new Date(2000, 0, 14, 3),
-        max: new Date(2000, 0, 14, 10),
+        min: new Date(2000, 0, 14, 3).getTime(),
+        max: new Date(2000, 0, 14, 10).getTime(),
       }, {
-        min: new Date(2000, 0, 15, 3),
-        max: new Date(2000, 0, 15, 10),
+        min: new Date(2000, 0, 15, 3).getTime(),
+        max: new Date(2000, 0, 15, 10).getTime(),
       },
     ]);
   });
@@ -78,17 +99,17 @@ describe('getVisibleDateTimeIntervals', () => {
       max: new Date(2000, 0, 13),
     }, false)).toEqual([
       {
-        min: new Date(2000, 0, 10, 0, 6),
-        max: new Date(2000, 0, 10, 23, 54),
+        min: new Date(2000, 0, 10, 0, 6).getTime(),
+        max: new Date(2000, 0, 10, 23, 54).getTime(),
       }, {
-        min: new Date(2000, 0, 11, 0, 6),
-        max: new Date(2000, 0, 11, 23, 54),
+        min: new Date(2000, 0, 11, 0, 6).getTime(),
+        max: new Date(2000, 0, 11, 23, 54).getTime(),
       }, {
-        min: new Date(2000, 0, 12, 0, 6),
-        max: new Date(2000, 0, 12, 23, 54),
+        min: new Date(2000, 0, 12, 0, 6).getTime(),
+        max: new Date(2000, 0, 12, 23, 54).getTime(),
       }, {
-        min: new Date(2000, 0, 13, 0, 6),
-        max: new Date(2000, 0, 13, 23, 54),
+        min: new Date(2000, 0, 13, 0, 6).getTime(),
+        max: new Date(2000, 0, 13, 23, 54).getTime(),
       },
     ]);
   });

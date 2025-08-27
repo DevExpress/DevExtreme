@@ -3,8 +3,8 @@ import {
 } from '@jest/globals';
 
 import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
-import { getVisibleDateTimeIntervals } from '../get_visible_date_time_intervals';
-import { shiftIntervals } from '../shift_intervals';
+import { getVisibleDateTimeIntervals } from '../../../../view_model_new/filtration/utils/get_filter_options/get_visible_date_time_intervals';
+import { shiftIntervals } from '../../../../view_model_new/filtration/utils/get_filter_options/shift_intervals';
 import type { FilterOptions } from '../type';
 import { getAppointmentFilter } from './get_appointment_filter';
 

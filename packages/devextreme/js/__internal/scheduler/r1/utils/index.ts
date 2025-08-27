@@ -1,6 +1,7 @@
 import { getThemeType } from '@ts/scheduler/r1/utils/themes';
 
 import {
+  calculateRows,
   calculateStartViewDate,
 } from './agenda';
 import {
@@ -87,6 +88,7 @@ export {
 
 export const agendaUtils = {
   calculateStartViewDate,
+  calculateRows,
 };
 
 export const dayUtils = {

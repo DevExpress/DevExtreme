@@ -44,7 +44,7 @@ class AppointmentLayoutManager {
     return appointmentRenderingStrategyMap[this.instance.currentView.type];
   }
 
-  public prepareItems(items?: Appointment[]): void {
+  public prepareAppointments(items?: Appointment[]): void {
     this.preparedItems = getAppointmentDataItems(
       items,
       this.instance._dataAccessors,
@@ -152,7 +152,7 @@ class AppointmentLayoutManager {
     };
   }
 
-  public createAppointmentsMap(): AppointmentViewModelPlain[] {
+  public generateViewModel(): AppointmentViewModelPlain[] {
     const renderingStrategyOptions = this._getRenderingStrategyOptions();
 
     const {
