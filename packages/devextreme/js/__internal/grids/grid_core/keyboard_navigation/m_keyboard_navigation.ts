@@ -1450,12 +1450,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         const $target = event
           && $(event.target).closest(`${NON_FOCUSABLE_ELEMENTS_SELECTOR}, td`);
         const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
-        const isEditCell = !!column
-          && !column.command
+        const isEditCell = !column?.command
           && isEditing
           && $cell.hasClass(EDITOR_CELL_CLASS);
-        const hasEditorAlways = !isEditing && column?.showEditorAlways;
-        const isDisabled = (!isEditCell || hasEditorAlways)
+
+        const isDisabled = !isEditCell
           && (!args.isHighlighted || skipFocusEvent);
         this._focus($cell, isDisabled, skipFocusEvent);
       }
