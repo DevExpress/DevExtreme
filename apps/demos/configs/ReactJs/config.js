@@ -8,11 +8,6 @@ window.config = {
     jsx: 'react',
   },
   meta: {
-    '*': {
-      globals: {
-        process: 'process',
-      },
-    },
     'react': {
       'esModule': true,
     },
@@ -54,7 +49,6 @@ window.config = {
   },
   defaultExtension: 'js',
   map: {
-    'process': '../../../../utils/shared/process.js',
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -208,6 +202,12 @@ window.config = {
     sourceMaps: false,
     stage0: true,
     react: true,
+  },
+};
+
+window.process = {
+  env: {
+    NODE_ENV: 'production',
   },
 };
 

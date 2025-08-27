@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "tùy chọn",
         "dxForm-requiredMessage": "{0} là bắt buộc",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Làm lại",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Giá trị phải là một số",
         "dxNumberBox-noDataText": "Không có dữ liệu",

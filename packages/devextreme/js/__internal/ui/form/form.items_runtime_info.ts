@@ -23,6 +23,7 @@ export type PreparedItem<T = Item> = T & {
 
 export type TabItem = NonNullable<TabbedItem['tabs']>[number];
 export type PreparedTabItem = PreparedItem<TabItem>;
+export type SimpleItemWithDataField = SimpleItem & Required<Pick<SimpleItem, 'dataField'>>;
 
 export interface PreparedGroupedItem extends PreparedItem<GroupItem> {
   _prepareGroupCaptionTemplate?: (captionTemplate?: template | ((
@@ -211,5 +212,36 @@ export default class FormItemsRunTimeInfo {
       return false;
     });
     filteredKeys.forEach((key) => this.removeItemByKey(key));
+  }
+
+  _isEditableItem(item: SimpleItem): boolean {
+    const { visible: itemVisible, editorOptions } = item;
+    const { readOnly, disabled, visible } = editorOptions ?? {};
+
+    return itemVisible !== false && !readOnly && !disabled && visible !== false;
+  }
+
+  _isItemAIEnabled(item: SimpleItem): boolean {
+    // @ts-expect-error
+    return !item.aiOptions?.disabled;
+  }
+
+  _isDataItem(item: PreparedItem): item is SimpleItemWithDataField {
+    return 'dataField' in item;
+  }
+
+  getVisibleItems(): FormItemRuntimeInfo[] {
+    const allItems = Object.values(this._map);
+
+    return allItems.filter(({ $itemContainer }) => $itemContainer?.css('visibility') === 'visible');
+  }
+
+  getItemsForDataExtraction(): SimpleItemWithDataField[] {
+    const visibleItems = this.getVisibleItems().map(({ item }) => item);
+
+    return visibleItems
+      .filter(this._isDataItem)
+      .filter(this._isItemAIEnabled)
+      .filter(this._isEditableItem);
   }
 }

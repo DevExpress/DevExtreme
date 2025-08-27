@@ -11,7 +11,7 @@ import TextBox from '@ts/ui/text_box/m_text_box';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 import TreeViewBase from '@ts/ui/tree_view/tree_view.base';
 
-const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
+export const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 
 SearchBoxController.setEditorClass(TextBox);
@@ -190,7 +190,8 @@ class TreeViewSearch extends TreeViewBase {
   _itemContainer(isSearchMode?: boolean, selectAllEnabled?: boolean): dxElementWrapper {
     const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
 
-    if (isSelectAllEnabled) {
+    const { items = [] } = this.option();
+    if (isSelectAllEnabled && items.length) {
       return this._getNodeContainer();
     }
 

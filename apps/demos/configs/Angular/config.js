@@ -98,11 +98,6 @@ window.config = {
     experimentalDecorators: true,
   },
   meta: {
-    '*': {
-      'globals': {
-        'process': 'process',
-      },
-    },
     'typescript': {
       'exports': 'ts',
     },
@@ -161,7 +156,6 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
-    'process': '../../../../utils/shared/process.js',
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -333,6 +327,12 @@ window.config = {
     'npm:@aspnet/*/package.json',
     /**/
   ],
+};
+
+window.process = {
+  env: {
+    NODE_ENV: 'production',
+  },
 };
 
 System.config(window.config);

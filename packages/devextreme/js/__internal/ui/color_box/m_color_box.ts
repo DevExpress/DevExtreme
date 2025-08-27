@@ -349,6 +349,11 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     return value;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _shouldLogFieldTemplateDeprecationWarning(): boolean {
+    return true;
+  }
+
   _clean(): void {
     super._clean();
     delete this._shouldSaveEmptyValue;

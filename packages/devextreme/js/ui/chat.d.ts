@@ -287,7 +287,7 @@ export type MessageTemplateData = {
 /** @public */
 export type EmptyViewTemplateData = {
     readonly component: dxChat;
-    readonly data: {
+    readonly texts: {
         readonly message: string;
         readonly prompt: string;
     };
