@@ -47,7 +47,7 @@ $.each(DevExpress.ui, function(componentName) {
                             'svg': /13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
                             'polygon': /$/,
                             'div': /For evaluation purposes only. Redistribution prohibited.|to continue use of DevExpress product libraries|points="13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
-                            'span': /For evaluation purposes only. Redistribution prohibited.|an existing license|to continue use of DevExpress product libraries/,
+                            'span': /For evaluation purposes only. Redistribution prohibited.|an existing license|to continue use of DevExpress product libraries|Included in Subscriptions/,
                             'a': /purchase a new license|register/,
                         };
                     }
