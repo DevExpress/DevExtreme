@@ -157,7 +157,8 @@
 .dx-icon-ratingoutline,
 .dx-icon-ratingfilled,
 .dx-icon-chatadd,
-.dx-icon-colordismiss {
+.dx-icon-colordismiss,
+.dx-icon-clipboardpastesmart {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -530,6 +531,7 @@ $icons: (
     "ungroupallcolumns":"\f199",
     "chatadd":"\f200",
     "colordismiss":"\f201",
+    "clipboardpastesmart":"\f202",
 );
 
 // stylelint-enable
