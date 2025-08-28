@@ -318,6 +318,7 @@ test('DataGrid - Focused cell appearance is applied to non-editable CheckBox cel
   ],
 }));
 
+// T1293309
 test('Focus method should focus the first data cell', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -344,6 +345,7 @@ test('Focus method should focus the first data cell', async (t) => {
   ],
 }));
 
+// T1293309
 test('Focus method should focus the first data row when focusedRowEnabled = true', async (t) => {
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
