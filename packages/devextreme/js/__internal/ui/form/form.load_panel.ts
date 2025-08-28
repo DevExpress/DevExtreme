@@ -49,6 +49,10 @@ export class FormLoadPanel {
     return this._loadPanel;
   }
 
+  option(name: string): unknown {
+    return this._loadPanel?.option(name);
+  }
+
   private _ensureLoadPanel(): void {
     if (this._loadPanel) {
       return;

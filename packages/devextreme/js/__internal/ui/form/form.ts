@@ -160,7 +160,7 @@ class Form extends Widget<FormProperties> {
 
   _$validationSummary?: dxElementWrapper;
 
-  _loadPanel!: FormLoadPanel;
+  _loadPanel?: FormLoadPanel;
 
   _init(): void {
     super._init();
@@ -170,19 +170,7 @@ class Form extends Widget<FormProperties> {
     this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
     this._groupsColCount = [];
 
-    this._initFormLoadPanel();
-
     this._attachSyncSubscriptions();
-  }
-
-  private _initFormLoadPanel(): void {
-    this._loadPanel = new FormLoadPanel({
-      $container: this.$element(),
-      onLoadPanelCreate: (
-        $element: dxElementWrapper,
-        options: LoadPanelProperties,
-      ): LoadPanel => this._createComponent($element, LoadPanel, options),
-    });
   }
 
   _getDefaultOptions(): FormProperties {
@@ -1671,20 +1659,33 @@ class Form extends Widget<FormProperties> {
     }
   }
 
+  private _ensureLoadPanel(): void {
+    if (!this._loadPanel) {
+      this._loadPanel = new FormLoadPanel({
+        $container: this.$element(),
+        onLoadPanelCreate: (
+          $element: dxElementWrapper,
+          options: LoadPanelProperties,
+        ): LoadPanel => this._createComponent($element, LoadPanel, options),
+      });
+    }
+  }
+
   private _showLoadPanel(): void {
+    this._ensureLoadPanel();
     this.option('disabled', true);
-    this._loadPanel.show();
+    this._loadPanel?.show();
   }
 
   private _hideLoadPanel(): void {
-    this._loadPanel.hide();
+    this._loadPanel?.hide();
     this.option('disabled', false);
   }
 
   _dispose(): void {
     this._clearAutoColCountChangedTimeout();
     this._processCommandCompletion();
-    this._loadPanel.dispose();
+    this._loadPanel?.dispose();
     ValidationEngine.removeGroup(this._getValidationGroup());
     super._dispose();
   }
@@ -1870,6 +1871,12 @@ class Form extends Widget<FormProperties> {
   }
 
   async smartPaste(text?: string): Promise<void> {
+    const smartPasteText = text ?? await navigator.clipboard?.readText();
+
+    if (!smartPasteText) {
+      return;
+    }
+
     this._showLoadPanel();
 
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
@@ -1880,14 +1887,8 @@ class Form extends Widget<FormProperties> {
       instruction: item.aiOptions?.instruction,
     }));
 
-    const clipboardText = text ?? await navigator.clipboard?.readText();
-    if (!clipboardText) {
-      this._hideLoadPanel();
-      return;
-    }
-
     const smartPasteParams = {
-      text: clipboardText,
+      text: smartPasteText,
       fields,
     };
     const smartPasteCallbacks = this._getSmartPasteCommandCallbacks();

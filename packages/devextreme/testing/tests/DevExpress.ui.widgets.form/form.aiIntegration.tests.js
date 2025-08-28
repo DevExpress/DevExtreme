@@ -334,7 +334,52 @@ QUnit.module('SmartPaste', () => {
         });
     });
 
-    QUnit.module('LoadPanel Integration', () => {
+    QUnit.module('LoadPanel Integration', {
+        beforeEach: function() {
+            this.clipboardStub = null;
+
+            this.createClipboardStub = function(text = 'test text') {
+                if(navigator.clipboard && navigator.clipboard.readText && navigator.clipboard.readText.restore) {
+                    navigator.clipboard.readText.restore();
+                }
+
+                if(!navigator.clipboard) {
+                    Object.defineProperty(navigator, 'clipboard', {
+                        value: { readText: sinon.stub().resolves(text) },
+                        configurable: true,
+                        writable: true
+                    });
+                    return navigator.clipboard.readText;
+                }
+
+                if(!navigator.clipboard.readText) {
+                    navigator.clipboard.readText = sinon.stub().resolves(text);
+                    return navigator.clipboard.readText;
+                }
+
+                if(navigator.clipboard.readText.isSinonProxy) {
+                    navigator.clipboard.readText.resolves(text);
+                    return navigator.clipboard.readText;
+                }
+
+                return sinon.stub(navigator.clipboard, 'readText').resolves(text);
+            };
+
+            this.restoreClipboardStub = function(stub) {
+                if(stub && typeof stub.restore === 'function') {
+                    stub.restore();
+                } else if(navigator.clipboard && navigator.clipboard.readText && navigator.clipboard.readText.restore) {
+                    navigator.clipboard.readText.restore();
+                }
+            };
+        },
+        afterEach: function() {
+            if(this.clipboardStub) {
+                this.restoreClipboardStub(this.clipboardStub);
+                this.clipboardStub = null;
+            }
+        }
+    }, () => {
         QUnit.test('LoadPanel is shown during smartPaste operation and hidden on completion', function(assert) {
             const done = assert.async();
             let completionCallback;
@@ -346,7 +391,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
             assert.strictEqual(form.option('disabled'), false, 'Form is not disabled initially');
@@ -360,10 +405,9 @@ QUnit.module('SmartPaste', () => {
 
                     setTimeout(() => {
                         assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
-                        assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel is hidden after completion');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after completion');
                         assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after completion');
 
-                        clipboardReadStub.restore();
                         done();
                     }, 10);
                 }, 10);
@@ -381,7 +425,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
 
@@ -394,10 +438,9 @@ QUnit.module('SmartPaste', () => {
 
                     setTimeout(() => {
                         assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
-                        assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel is hidden after error');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after error');
                         assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after error');
 
-                        clipboardReadStub.restore();
                         done();
                     }, 10);
                 }, 10);
@@ -415,7 +458,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             form.smartPaste().then(() => {
                 setTimeout(() => {
@@ -428,10 +471,9 @@ QUnit.module('SmartPaste', () => {
                     setTimeout(() => {
                         assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
                         assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
-                        assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel is hidden after abort');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after abort');
                         assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after abort');
 
-                        clipboardReadStub.restore();
                         done();
                     }, 10);
                 }, 10);
@@ -449,7 +491,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             form.smartPaste();
             form.smartPaste();
@@ -465,10 +507,9 @@ QUnit.module('SmartPaste', () => {
 
                 setTimeout(() => {
                     assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
-                    assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel is hidden after completion');
+                    assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after completion');
                     assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after completion');
 
-                    clipboardReadStub.restore();
                     done();
                 }, 10);
             }, 10);
@@ -480,16 +521,15 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('');
+            this.clipboardStub = this.createClipboardStub('');
 
             form.smartPaste().then(() => {
                 setTimeout(() => {
                     assert.strictEqual(smartPaste.called, false, 'AI operation should not be called with empty text');
-                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel exists but is hidden');
-                    assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel should be hidden');
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel DOM element should not be created for empty text');
+                    assert.strictEqual(form._loadPanel, undefined, 'LoadPanel should not be created for empty text');
                     assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled');
 
-                    clipboardReadStub.restore();
                     done();
                 }, 10);
             });
@@ -506,7 +546,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             form.smartPaste().then(() => {
                 setTimeout(() => {
@@ -521,7 +561,6 @@ QUnit.module('SmartPaste', () => {
                                 completionCallback();
 
                                 setTimeout(() => {
-                                    clipboardReadStub.restore();
                                     done();
                                 }, 10);
                             }, 10);
@@ -539,7 +578,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves('test text');
+            this.clipboardStub = this.createClipboardStub('test text');
 
             form.smartPaste().then(() => {
                 setTimeout(() => {
@@ -549,7 +588,6 @@ QUnit.module('SmartPaste', () => {
 
                     assert.strictEqual(abortSpy.calledOnce, true, 'Operation should be aborted on dispose');
 
-                    clipboardReadStub.restore();
                     done();
                 }, 10);
             });
