@@ -29,13 +29,12 @@ import type {
   HiddenEvent,
   HidingEvent,
   Item,
-  ItemClickEvent,
   PositioningEvent,
   Properties,
   ShowingEvent,
   ShownEvent,
 } from '@js/ui/context_menu';
-import type dxContextMenu from '@js/ui/context_menu';
+import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type {
   dxMenuBaseItem,
   SubmenuHiddenEvent,
@@ -45,10 +44,11 @@ import type {
 } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
-import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
+import type {
+  ClickEvent, HoverEvent, ItemClickActionArguments, MenuBaseProperties,
+} from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import Overlay from '@ts/ui/overlay/overlay';
@@ -109,8 +109,6 @@ interface SubmenuCreatedEvent<TItem extends dxMenuBaseItem = dxMenuBaseItem> {
   submenuElement: Element;
   itemData: TItem;
 }
-type ItemClickActionArguments =
-  ActionArguments<dxContextMenu<ContextMenuProperties>, ItemClickEvent>;
 
 interface ContextMenuActions {
   onShowing?: ((e: ShowingEvent | SubmenuShowingEvent | ChatMenuShowingEvent) => void);
@@ -127,20 +125,18 @@ interface ContextMenuActions {
 
 type ContextMenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
 
-export interface ContextMenuProperties<
-  TItem extends dxMenuBaseItem = Item,
-> extends
+export interface ContextMenuProperties<TItem extends Item = Item> extends
   MenuBaseProperties<TItem>,
   Pick<Properties<TItem>, ContextMenuPropertiesKeys> {
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
   overlayContainer?: string | Element | null;
   boundaryOffset?: PositionConfig['boundaryOffset'];
-  onSubmenuCreated?: ((e) => void) | null;
-  onLeftFirstItem?: ((e) => void) | null;
-  onLeftLastItem?: ((e) => void) | null;
-  onCloseRootSubmenu?: ((e) => void) | null;
-  onExpandLastSubmenu?: ((e) => void) | null;
+  onSubmenuCreated?: ((e: SubmenuCreatedEvent) => void) | null;
+  onLeftFirstItem?: (($item?: dxElementWrapper) => void) | null;
+  onLeftLastItem?: (($item?: dxElementWrapper) => void) | null;
+  onCloseRootSubmenu?: (($item?: dxElementWrapper) => void) | null;
+  onExpandLastSubmenu?: (($item?: dxElementWrapper) => void) | null;
 }
 
 class ContextMenu<
@@ -973,8 +969,9 @@ class ContextMenu<
   }
 
   // TODO: try to simplify it
-  // @ts-expect-error ts-error
-  _updateSubmenuVisibilityOnClick(actionArgs: ItemClickActionArguments): void {
+  _updateSubmenuVisibilityOnClick(
+    actionArgs: ItemClickActionArguments<dxMenuBase<ContextMenuProperties>, Item>,
+  ): void {
     if (!actionArgs.args?.length) {
       return;
     }
@@ -1005,7 +1002,6 @@ class ContextMenu<
       return;
     }
 
-    // @ts-expect-error ts-error
     this._updateSelectedItemOnClick(actionArgs);
 
     // T238943. Give the workaround with e.cancel and remove this hack

@@ -268,7 +268,7 @@ export default class ViewDataProvider {
 
   hasGroupAllDayPanel(groupIndex) {
     if (this._options.isVerticalGrouping) {
-      return !!this.groupedDataMap.dateTableGroupedMap[groupIndex]?.[0][0].cellData.allDay;
+      return Boolean(this.groupedDataMap.dateTableGroupedMap[groupIndex]?.[0][0].cellData.allDay);
     }
 
     return this.groupedDataMap.allDayPanelGroupedMap[groupIndex]?.length > 0;
@@ -299,7 +299,7 @@ export default class ViewDataProvider {
         } = cellData;
 
         if (groupIndex === currentGroupIndex
-                    && allDay === !!currentAllDay
+                    && allDay === Boolean(currentAllDay)
                     && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
           return {
             position: {

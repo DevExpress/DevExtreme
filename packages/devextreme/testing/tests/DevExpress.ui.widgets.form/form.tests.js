@@ -2199,7 +2199,7 @@ QUnit.module('Default button configuration integration', () => {
         assert.strictEqual(resetButton.option('text'), messageLocalization.format('dxForm-resetButtonText'), 'Reset button has localized text');
         assert.strictEqual(submitButton.option('text'), messageLocalization.format('dxForm-submitButtonText'), 'Submit button has localized text');
 
-        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesmart', 'Smart Paste button has default icon');
+        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesparkle', 'Smart Paste button has default icon');
         assert.strictEqual(resetButton.option('icon'), '', 'Reset button has no icon');
         assert.strictEqual(submitButton.option('icon'), '', 'Submit button has no icon');
 
@@ -2236,7 +2236,7 @@ QUnit.module('Default button configuration integration', () => {
         assert.strictEqual(smartPasteButton.option('disabled'), true, 'Smart Paste disabled via button option');
         assert.strictEqual(resetButton.option('width'), 200, 'Reset width changed via button option');
 
-        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesmart', 'Smart Paste default icon still preserved');
+        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesparkle', 'Smart Paste default icon still preserved');
         assert.strictEqual(resetButton.option('text'), messageLocalization.format('dxForm-resetButtonText'), 'Reset default text still preserved');
     });
 

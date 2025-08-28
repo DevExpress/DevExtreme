@@ -2631,7 +2631,7 @@ QUnit.module('Default button configuration', () => {
         {
             name: 'smartPaste',
             expectedText: 'Smart Paste',
-            expectedIcon: 'clipboardpastesmart',
+            expectedIcon: 'clipboardpastesparkle',
             expectedType: 'normal',
             expectedStylingMode: 'outlined',
             hasClickHandler: true,
@@ -2804,7 +2804,7 @@ QUnit.module('Default button configuration', () => {
         const { text, icon } = buttonInstance.option();
 
         assert.strictEqual(text, 'Smart Paste', 'Default text is applied when buttonOptions is undefined');
-        assert.strictEqual(icon, 'clipboardpastesmart', 'Default icon is applied when buttonOptions is undefined');
+        assert.strictEqual(icon, 'clipboardpastesparkle', 'Default icon is applied when buttonOptions is undefined');
     });
 
     test('Button with null buttonOptions works correctly', function(assert) {

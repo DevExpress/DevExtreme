@@ -13,7 +13,7 @@ import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertin
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
+import type { FormItemType, FormPredefinedButtonItem, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
@@ -23,6 +23,7 @@ import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDispla
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
+import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { event } from "devextreme/events/events.types";
 
 import type dxForm from "devextreme/ui/form";
@@ -164,6 +165,26 @@ const CardView = memo(
 
 
 // owners:
+// FormItem
+// SimpleItem
+type IAiOptionsProps = React.PropsWithChildren<{
+  disabled?: boolean;
+  instruction?: string | undefined;
+}>
+const _componentAiOptions = (props: IAiOptionsProps) => {
+  return React.createElement(NestedOption<IAiOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aiOptions",
+    },
+  });
+};
+
+const AiOptions = Object.assign<typeof _componentAiOptions, NestedComponentMeta>(_componentAiOptions, {
+  componentType: "option",
+});
+
+// owners:
 // LoadPanel
 type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
@@ -260,7 +281,7 @@ type IButtonItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
   horizontalAlignment?: HorizontalAlignment;
   itemType?: FormItemType;
-  name?: string | undefined;
+  name?: FormPredefinedButtonItem | string | undefined;
   verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number | undefined;
@@ -1270,6 +1291,7 @@ const FilterPanelTexts = Object.assign<typeof _componentFilterPanelTexts, Nested
 type IFormProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
+  aiIntegration?: AIIntegration | undefined;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
   colCount?: Mode | number;
@@ -1298,6 +1320,8 @@ type IFormProps = React.PropsWithChildren<{
   onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
   onInitialized?: ((e: FormInitializedEvent) => void);
   onOptionChanged?: ((e: FormOptionChangedEvent) => void);
+  onSmartPasted?: ((e: SmartPastedEvent) => void);
+  onSmartPasting?: ((e: SmartPastingEvent) => void);
   optionalMark?: string;
   readOnly?: boolean;
   requiredMark?: string;
@@ -1368,6 +1392,10 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 // owners:
 // Column
 type IFormItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -1398,6 +1426,7 @@ const _componentFormItem = (props: IFormItemProps) => {
     elementDescriptor: {
       OptionName: "formItem",
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -1644,7 +1673,7 @@ type IItemProps = React.PropsWithChildren<{
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: CardHeaderPredefinedItem | string | undefined | PredefinedToolbarItem;
+  name?: CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -1655,6 +1684,10 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   tabTemplate?: (() => string | any) | template;
   title?: string;
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   dataField?: string | undefined;
   editorOptions?: any | undefined;
@@ -1720,6 +1753,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
         colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
@@ -2279,6 +2313,10 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 // owners:
 // Form
 type ISimpleItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
   colSpan?: number | undefined;
   cssClass?: string | undefined;
   dataField?: string | undefined;
@@ -2310,6 +2348,7 @@ const _componentSimpleItem = (props: ISimpleItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -2782,6 +2821,8 @@ export {
   CardView,
   ICardViewOptions,
   CardViewRef,
+  AiOptions,
+  IAiOptionsProps,
   Animation,
   IAnimationProps,
   AsyncRule,

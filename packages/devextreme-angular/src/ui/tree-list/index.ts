@@ -106,6 +106,7 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
+import { DxoTreeListAiOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -2293,6 +2294,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
@@ -2428,6 +2430,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,

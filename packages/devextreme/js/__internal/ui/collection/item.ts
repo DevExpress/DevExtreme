@@ -1,8 +1,10 @@
+import type { ItemInfo, NativeEventInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { attachInstanceToElement, getInstanceByElement } from '@js/core/utils/public_component';
-import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import { isObject } from '@js/core/utils/type';
+import type { CollectionWidgetItem, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -50,6 +52,17 @@ export interface ItemExtraOption<TProperties> {
     callback: (value: TT) => void
   ) => () => void;
 }
+
+export type ItemClickEvent<TProperties> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  NativeEventInfo<any, KeyboardEvent | MouseEvent | PointerEvent>
+  & ItemInfo<TProperties>;
+
+export type ClickableCollectionWidgetItem<
+  TProperties extends CollectionWidgetItem = CollectionWidgetItem,
+> = TProperties & {
+  onClick: (e: ItemClickEvent<TProperties>) => void;
+};
 
 class CollectionItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,
@@ -159,8 +172,13 @@ class CollectionItem<
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance<T = CollectionItem<any>>($element: dxElementWrapper): T {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getInstanceByElement($element, this);
+  }
+
+  static isClickableItem(
+    item: ItemLike,
+  ): item is ClickableCollectionWidgetItem {
+    return isObject(item) && 'onClick' in item;
   }
 }
 

@@ -268,7 +268,7 @@ QUnit.module('SmartPaste', () => {
             ];
 
             assert.strictEqual(smartPaste.calledOnce, true, 'smartPaste command called');
-            assert.deepEqual(smartPaste.getCall(0).args[0].fields, fields, 'smartPaste command called with passed text');
+            assert.deepEqual(smartPaste.getCall(0).args[0].fields, fields, 'smartPaste command called with correct fields data');
         });
 
         QUnit.test('should call smartPaste command with passed text', function(assert) {
@@ -331,6 +331,23 @@ QUnit.module('SmartPaste', () => {
             } finally {
                 clipboardReadStub.restore();
             }
+        });
+
+        QUnit.test('update aiIntegration cancels active request and calls new one with same params', function(assert) {
+            const abortSpy = sinon.spy();
+            const smartPaste = sinon.stub().returns(abortSpy);
+            const aiIntegration = { smartPaste: smartPaste };
+
+            const form = setupFormWithAi({ aiIntegration });
+            form.smartPaste('test');
+
+            assert.strictEqual(smartPaste.calledOnce, true, 'smartPaste called');
+
+            form.smartPaste('second test');
+
+            assert.strictEqual(abortSpy.calledOnce, true, 'previous request aborted');
+            assert.strictEqual(smartPaste.getCalls().length, 2, 'smartPaste is called again');
+            assert.deepEqual(smartPaste.getCall(1).args[0].text, 'second test', 'smartPaste invoked with new text');
         });
     });
 });
