@@ -70,7 +70,7 @@ QUnit.module('Integration: Appointment templates', {
         };
     };
 
-    const createTestForRecurrenceData = (assert, scheduler) => {
+    const createTestForRecurrenceData = (assert, scheduler, isInsideTooltip) => {
         eventCallCount = 0;
 
         return (model, index, container) => {
@@ -85,7 +85,8 @@ QUnit.module('Integration: Appointment templates', {
             assert.equal(targetedAppointmentData[startDateExpr].getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
             assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `end date of targetedAppointmentData should be equal ${expectedEndDate}`);
 
-            assert.equal(index, 0, 'index argument should be 0');
+            const expectedIndex = isInsideTooltip ? 0 : eventCallCount;
+            assert.equal(index, expectedIndex, `index argument should be ${expectedIndex}`);
             assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], 'appointmentData.text and targetedAppointmentData.text arguments should be equal');
 
             eventCallCount++;
@@ -347,7 +348,7 @@ QUnit.module('Integration: Appointment templates', {
 
                 scheduler.option(
                     'appointmentTooltipTemplate',
-                    testCase.appointmentTooltip(assert, scheduler)
+                    testCase.appointmentTooltip(assert, scheduler, true)
                 );
 
                 const clock = sinon.useFakeTimers();

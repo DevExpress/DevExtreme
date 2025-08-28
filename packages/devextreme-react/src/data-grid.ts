@@ -1194,7 +1194,6 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
-  bindingOptions?: Record<string, any>;
   customOperations?: Array<dxFilterBuilderCustomOperation>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -1271,7 +1270,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1492,7 +1490,6 @@ type IFormProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
-  bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number | undefined;
@@ -2231,7 +2228,6 @@ type IPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;

@@ -138,7 +138,6 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   allowCanceling?: boolean;
   allowedFileExtensions?: Array<string>;
-  bindingOptions?: Record<string, any>;
   chunkSize?: number;
   dialogTrigger?: any | string | undefined;
   disabled?: boolean;

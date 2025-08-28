@@ -8,7 +8,7 @@ import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } f
 
 const _min = Math.min;
 const _max = Math.max;
-const MIN_SCROLL_BAR_SIZE = 2;
+const MIN_SCROLL_BAR_SIZE = 10;
 
 export const ScrollBar = function(renderer, group) {
     this._translator = new Translator2D({}, {}, {});
@@ -221,16 +221,48 @@ ScrollBar.prototype = {
         const that = this;
         const visibleArea = that._translator.getCanvasVisibleArea();
 
-        x1 = _max(x1, visibleArea.min);
-        x1 = _min(x1, visibleArea.max);
+        const min = visibleArea.min;
+        const max = visibleArea.max;
 
-        x2 = _min(x2, visibleArea.max);
-        x2 = _max(x2, visibleArea.min);
+        if(max <= min) {
+            return;
+        }
 
-        const height = Math.abs(x2 - x1);
+        if(x1 > x2) {
+            [x1, x2] = [x2, x1];
+        }
+
+        x1 = Math.max(x1, min);
+        x2 = Math.min(x2, max);
+
+        if(x2 - x1 < MIN_SCROLL_BAR_SIZE) {
+            if(max - min < MIN_SCROLL_BAR_SIZE) {
+                x1 = min;
+                x2 = max;
+            } else {
+                const center = (x1 + x2) / 2;
+
+                x1 = center - MIN_SCROLL_BAR_SIZE / 2;
+                x2 = center + MIN_SCROLL_BAR_SIZE / 2;
+
+                if(x1 < min) {
+                    x1 = min;
+                    x2 = min + MIN_SCROLL_BAR_SIZE;
+                } else if(x2 > max) {
+                    x2 = max;
+                    x1 = max - MIN_SCROLL_BAR_SIZE;
+                }
+            }
+        }
+
+        x1 = Math.max(x1, min);
+        x2 = Math.min(x2, max);
+
+        const height = Math.max(x2 - x1, 0);
+
         that._scroll.attr({
             y: x1,
-            height: height < MIN_SCROLL_BAR_SIZE ? MIN_SCROLL_BAR_SIZE : height
+            height,
         });
     }
 };

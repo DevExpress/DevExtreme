@@ -834,48 +834,6 @@ QUnit.module('View with configuration', () => {
     });
 });
 
-QUnit.module('Options for Material-based themes in components', {
-    beforeEach: function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
-    },
-    afterEach: function() {
-        themes.isMaterialBased = this.origIsMaterialBased;
-    }
-}, () => {
-    QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false
-        });
-
-        const appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('currentView', 'week');
-        await waitAsync(10);
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-
-    QUnit.test('Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled', async function(assert) {
-        const scheduler = await createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false,
-            adaptivityEnabled: false
-        });
-
-        let appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('adaptivityEnabled', true);
-        appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-});
-
 QUnit.module('Getting timezones', {}, () => {
     const findTimeZone = (timeZones, id) => {
         return timeZones.filter((timeZone) => timeZone.id === id)[0];

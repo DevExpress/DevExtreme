@@ -5,9 +5,6 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import { sortAppointmentsByStartDate } from '../../../appointments/utils/m_utils';
 import HorizontalAppointmentsStrategy from './m_strategy_horizontal';
 
-const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
-const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
@@ -46,10 +43,6 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return (adjustedDuration / dateUtils.dateToMilliseconds('day')) || ZERO_APPOINTMENT_DURATION_IN_DAYS;
   }
 
-  getDeltaTime(args, initialSize) {
-    return HOURS_IN_DAY * MINUTES_IN_HOUR * MILLISECONDS_IN_MINUTE * this._getDeltaWidth(args, initialSize);
-  }
-
   isAllDay() {
     return false;
   }
@@ -73,10 +66,6 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     }
 
     return result;
-  }
-
-  needCorrectAppointmentDates() {
-    return false;
   }
 
   getPositionShift(timeShift) {

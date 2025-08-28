@@ -173,12 +173,11 @@ const getAppointmentCellsInfo = (options: GetAppointmentDateRangeOptions): Cells
     ? [DOMMetaData.allDayPanelCellsMeta]
     : DOMMetaData.dateTableCellsMeta;
 
-  const { positionByMap } = appointmentSettings;
   const {
     height: cellHeight,
     width: cellWidth,
-  } = DOMMetaTable[positionByMap.rowIndex][positionByMap.columnIndex];
-  const cellCountInRow = DOMMetaTable[positionByMap.rowIndex].length;
+  } = DOMMetaTable[appointmentSettings.rowIndex][appointmentSettings.columnIndex];
+  const cellCountInRow = DOMMetaTable[appointmentSettings.rowIndex].length;
 
   return {
     cellWidth,

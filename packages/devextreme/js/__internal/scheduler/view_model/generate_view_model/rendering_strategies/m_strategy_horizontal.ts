@@ -99,15 +99,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     return this.cellWidth - DROP_DOWN_BUTTON_OFFSET * 2;
   }
 
-  getDeltaTime(args, initialSize) {
-    let deltaTime = 0;
-    const deltaWidth = args.width - initialSize.width;
-
-    deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.cellDurationInMinutes);
-
-    return deltaTime;
-  }
-
   isAllDay(appointmentData) {
     return this.dataAccessors.get('allDay', appointmentData);
   }

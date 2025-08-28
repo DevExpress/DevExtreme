@@ -135,7 +135,6 @@ const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_comp
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
