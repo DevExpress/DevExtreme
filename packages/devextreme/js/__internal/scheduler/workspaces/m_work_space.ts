@@ -423,7 +423,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       const selectedCells = this._getSelectedCellsData();
 
       if (selectedCells?.length) {
-        const selectedCellsElement = selectedCells.map((cellData) => this._getCellByData(cellData)).filter((cell) => !!cell);
+        const selectedCellsElement = selectedCells.map((cellData) => this._getCellByData(cellData)).filter((cell) => Boolean(cell));
 
         e.target = selectedCellsElement;
         this._showPopup = true;
@@ -616,11 +616,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _isVerticalGroupedWorkSpace() { // TODO move to the Model
-    return !!this.option('groups')?.length && this.option('groupOrientation') === 'vertical';
+    return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'vertical';
   }
 
   _isHorizontalGroupedWorkSpace() {
-    return !!this.option('groups')?.length && this.option('groupOrientation') === 'horizontal';
+    return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'horizontal';
   }
 
   _isWorkSpaceWithCount() {
@@ -1911,7 +1911,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       view: {
         type: this.type as ViewType,
       },
-      crossScrollingEnabled: !!this.option('crossScrollingEnabled'),
+      crossScrollingEnabled: Boolean(this.option('crossScrollingEnabled')),
     };
   }
 
@@ -3328,7 +3328,7 @@ const createDragBehaviorConfig = (
 
     const elements = getElementsFromPoint();
 
-    const isMoveUnderControl = !!elements.find((el) => el === rootElement.get(0));
+    const isMoveUnderControl = Boolean(elements.find((el) => el === rootElement.get(0)));
     const dateTables = getDateTables();
 
     const droppableCell = elements.find((el) => {

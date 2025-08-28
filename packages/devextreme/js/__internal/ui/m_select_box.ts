@@ -444,9 +444,10 @@ class SelectBox<
   }
 
   _updateField(item): void {
+    const { fieldTemplate: fieldTemplateOption } = this.option();
     const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
-    if (!(fieldTemplate && this.option('fieldTemplate'))) {
+    if (!(fieldTemplate && fieldTemplateOption)) {
       // @ts-expect-error ts-error
       const text = this._displayGetter(item);
 
@@ -961,6 +962,11 @@ class SelectBox<
     const displayValue = this._displayGetter(item).toString();
     inputElement.value = displayValue;
     this._caret({ start: valueLength, end: displayValue.length });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _shouldLogFieldTemplateDeprecationWarning(): boolean {
+    return true;
   }
 
   _dispose(): void {

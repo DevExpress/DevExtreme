@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} is required",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Reset",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Value must be a number",
         "dxNumberBox-noDataText": "No data",

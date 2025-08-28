@@ -25,18 +25,19 @@ import DxMenu, { type DxMenuTypes } from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
+import type { ProductType } from './types';
 
 const SUBMENU_HEIGHT = 200;
 const products = ref(service.getProducts());
 const limitSubmenuHeight = ref(false);
 
-function itemClick(e: DxMenuTypes.ItemClickEvent) {
+function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   if (!e.itemData.items) {
     notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
   }
 }
 
-function onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent) {
+function onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent<ProductType>) {
   submenuContainer.style.maxHeight = limitSubmenuHeight.value ? `${SUBMENU_HEIGHT}px` : '';
 }
 </script>

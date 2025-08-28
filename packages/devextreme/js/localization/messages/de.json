@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} ist ein Pflichtfeld",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Zurücksetzen",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
         "dxNumberBox-noDataText": "Keine Daten",
@@ -380,10 +383,10 @@
         "dxAvatar-defaultImageAlt": "Avatar",
 
         "dxChat-elementAriaLabel": "Chat",
-        "dxChat-cancelEditingButtonAriaLabel": "Abbrechen",
-        "dxChat-editingMessageCaption": "Nachricht bearbeiten",
         "dxChat-textareaPlaceholder": "Geben Sie eine Nachricht ein",
         "dxChat-sendButtonAriaLabel": "Senden",
+        "dxChat-cancelEditingButtonAriaLabel": "Abbrechen",
+        "dxChat-editingMessageCaption": "Nachricht bearbeiten",
         "dxChat-defaultUserName": "Unbekannter Benutzer",
         "dxChat-messageListAriaLabel": "Nachrichtenliste",
         "dxChat-alertListAriaLabel": "Fehlerliste",

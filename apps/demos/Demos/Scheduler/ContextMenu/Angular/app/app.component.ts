@@ -3,9 +3,15 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
-import { Appointment, Resource, Service } from './app.service';
+
+import {
+  DxSchedulerModule,
+  DxSchedulerComponent,
+  type DxSchedulerTypes
+} from 'devextreme-angular/ui/scheduler';
+import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+
+import { Service, type Appointment, type Resource, type ContextMenuItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -56,7 +62,7 @@ export class AppComponent {
     const resourceItems = this.resourcesData
       .map((item) => ({
         ...item,
-        onItemClick: ({ itemData }) => scheduler.updateAppointment(appointmentData, {
+        onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent<Resource>) => scheduler.updateAppointment(appointmentData, {
           ...appointmentData,
           ...{ roomId: [itemData.id] },
         }),
@@ -129,8 +135,8 @@ export class AppComponent {
     ];
   }
 
-  onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
-    (e.itemData as unknown & { onItemClick: Function }).onItemClick(e);
+  onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
+    e.itemData.onItemClick(e);
   }
 }
 

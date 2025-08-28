@@ -5,6 +5,7 @@ import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
+import messageLocalization from 'localization/message';
 import visibilityEventsModule from 'common/core/events/visibility_change';
 import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/form.layout_manager.utils';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
@@ -20,11 +21,11 @@ import 'ui/range_slider';
 
 import windowModule from '__internal/core/utils/m_window';
 import Form from 'ui/form';
+import Button from 'ui/button';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 import {
     TEXTEDITOR_INPUT_CLASS
 } from '__internal/ui/text_box/m_text_editor.base';
-
 
 import {
     FIELD_ITEM_CLASS,
@@ -64,6 +65,14 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import { isDefined } from 'core/utils/type.js';
 import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
+QUnit.testStart(function() {
+    const markup =
+        `<div id="form"></div>
+        <div id="form2"></div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
@@ -74,14 +83,6 @@ const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const TEXTBOX_CLASS = 'dx-textbox';
-
-QUnit.testStart(function() {
-    const markup =
-        '<div id="form"></div>\
-        <div id="form2"></div>';
-
-    $('#qunit-fixture').html(markup);
-});
 
 QUnit.module('Form');
 
@@ -2152,6 +2153,153 @@ QUnit.testInActiveWindow('Change \'Button.icon\'', function(assert) {
         if(device.real().deviceType === 'desktop') {
             assert.ok($('#form').find('.dx-button').is(':focus'), 'final focus');
         }
+    });
+});
+
+QUnit.module('Default button configuration integration', () => {
+    QUnit.test('Form getButton() API with default buttons', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { test: 'value' },
+            items: [
+                'test',
+                {
+                    itemType: 'button',
+                    name: 'smartPaste'
+                },
+                {
+                    itemType: 'button',
+                    name: 'reset'
+                },
+                {
+                    itemType: 'button',
+                    name: 'submit'
+                },
+                {
+                    itemType: 'button',
+                    name: 'customButton',
+                    buttonOptions: {
+                        text: 'Custom Action',
+                        icon: 'home'
+                    }
+                }
+            ]
+        }).dxForm('instance');
+
+        const smartPasteButton = form.getButton('smartPaste');
+        const resetButton = form.getButton('reset');
+        const submitButton = form.getButton('submit');
+        const customButton = form.getButton('customButton');
+
+        assert.ok(smartPasteButton, 'Smart Paste button instance retrieved');
+        assert.ok(resetButton, 'Reset button instance retrieved');
+        assert.ok(submitButton, 'Submit button instance retrieved');
+        assert.ok(customButton, 'Custom button instance retrieved');
+
+        assert.strictEqual(smartPasteButton.option('text'), messageLocalization.format('dxForm-smartPasteButtonText'), 'Smart Paste button has localized text');
+        assert.strictEqual(resetButton.option('text'), messageLocalization.format('dxForm-resetButtonText'), 'Reset button has localized text');
+        assert.strictEqual(submitButton.option('text'), messageLocalization.format('dxForm-submitButtonText'), 'Submit button has localized text');
+
+        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesparkle', 'Smart Paste button has default icon');
+        assert.strictEqual(resetButton.option('icon'), '', 'Reset button has no icon');
+        assert.strictEqual(submitButton.option('icon'), '', 'Submit button has no icon');
+
+        assert.strictEqual(customButton.option('text'), 'Custom Action', 'Custom button preserves custom text');
+        assert.strictEqual(customButton.option('icon'), 'home', 'Custom button preserves custom icon');
+    });
+
+    QUnit.test('Runtime buttonOptions changes via form.option()', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { test: 'value' },
+            items: [
+                'test',
+                {
+                    itemType: 'button',
+                    name: 'smartPaste'
+                },
+                {
+                    itemType: 'button',
+                    name: 'reset'
+                }
+            ]
+        }).dxForm('instance');
+
+        const smartPasteButton = form.getButton('smartPaste');
+        const resetButton = form.getButton('reset');
+
+        form.option('items[1].buttonOptions.text', 'Custom Smart Paste');
+
+        assert.strictEqual(smartPasteButton.option('text'), 'Custom Smart Paste', 'Smart Paste text changed via form option');
+
+        smartPasteButton.option('disabled', true);
+        resetButton.option('width', 200);
+
+        assert.strictEqual(smartPasteButton.option('disabled'), true, 'Smart Paste disabled via button option');
+        assert.strictEqual(resetButton.option('width'), 200, 'Reset width changed via button option');
+
+        assert.strictEqual(smartPasteButton.option('icon'), 'clipboardpastesparkle', 'Smart Paste default icon still preserved');
+        assert.strictEqual(resetButton.option('text'), messageLocalization.format('dxForm-resetButtonText'), 'Reset default text still preserved');
+    });
+
+    QUnit.test('Default buttons onClick handlers call form methods', function(assert) {
+        const smartPasteSpy = sinon.spy();
+        const resetSpy = sinon.spy();
+
+        const form = $('#form').dxForm({
+            formData: { test: 'value' },
+            items: [
+                'test',
+                {
+                    itemType: 'button',
+                    name: 'smartPaste'
+                },
+                {
+                    itemType: 'button',
+                    name: 'reset'
+                }
+            ]
+        }).dxForm('instance');
+
+        form.smartPaste = smartPasteSpy;
+        form.reset = resetSpy;
+
+        const smartPasteButton = form.getButton('smartPaste');
+        const resetButton = form.getButton('reset');
+
+        $(smartPasteButton.$element()).trigger('dxclick');
+        $(resetButton.$element()).trigger('dxclick');
+
+        assert.strictEqual(smartPasteSpy.calledOnce, true, 'Smart Paste method called when button clicked');
+        assert.strictEqual(resetSpy.calledOnce, true, 'Reset method called when button clicked');
+    });
+
+    QUnit.test('Button getInstance() vs getButton() consistency', function(assert) {
+        const form = $('#form').dxForm({
+            items: [
+                {
+                    itemType: 'button',
+                    name: 'smartPaste'
+                },
+                {
+                    itemType: 'button',
+                    name: 'reset'
+                }
+            ]
+        }).dxForm('instance');
+
+        const smartPasteViaGetButton = form.getButton('smartPaste');
+        const resetViaGetButton = form.getButton('reset');
+
+        const $smartPasteElement = $('#form').find('.dx-button').eq(0);
+        const $resetElement = $('#form').find('.dx-button').eq(1);
+
+        const smartPasteViaGetInstance = Button.getInstance($smartPasteElement[0]);
+        const resetViaGetInstance = Button.getInstance($resetElement[0]);
+
+        assert.strictEqual(smartPasteViaGetButton, smartPasteViaGetInstance, 'Smart Paste: getButton() and getInstance() return same instance');
+        assert.strictEqual(resetViaGetButton, resetViaGetInstance, 'Reset: getButton() and getInstance() return same instance');
+
+        assert.strictEqual(smartPasteViaGetButton.option('text'), smartPasteViaGetInstance.option('text'), 'Smart Paste text identical');
+        assert.strictEqual(resetViaGetButton.option('text'), resetViaGetInstance.option('text'), 'Reset text identical');
     });
 });
 

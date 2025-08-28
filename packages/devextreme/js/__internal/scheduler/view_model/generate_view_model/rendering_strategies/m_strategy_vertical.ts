@@ -14,18 +14,6 @@ const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 const toMs = dateUtils.dateToMilliseconds;
 
 class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
-  getDeltaTime(args, initialSize, appointment) {
-    let deltaTime = 0;
-
-    if (this.isAllDay(appointment)) {
-      deltaTime = this._getDeltaWidth(args, initialSize) * toMs('day');
-    } else {
-      const deltaHeight = args.height - initialSize.height;
-      deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.cellDurationInMinutes);
-    }
-    return deltaTime;
-  }
-
   _correctCollectorCoordinatesInAdaptive(coordinates, isAllDay) {
     if (isAllDay) {
       super._correctCollectorCoordinatesInAdaptive(coordinates, isAllDay);
@@ -380,7 +368,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   _sortCondition(a, b) {
-    if (!!a.allDay !== !!b.allDay) {
+    if (Boolean(a.allDay) !== Boolean(b.allDay)) {
       return a.allDay ? 1 : -1;
     }
 
@@ -433,15 +421,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
   _getMaxHeight() {
     return this.allDayHeight || this.getAppointmentMinSize();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  _needVerticalGroupBounds(allDay) {
-    return !allDay;
-  }
-
-  _needHorizontalGroupBounds() {
-    return false;
   }
 
   getPositionShift(timeShift, isAllDay) {

@@ -3,10 +3,12 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import { DxListModule } from 'devextreme-angular';
-import { DxTreeViewComponent, DxTreeViewModule, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { DxContextMenuModule, DxContextMenuComponent, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
-import { Product, Service, MenuItem } from './app.service';
+import { DxTreeViewComponent, DxTreeViewModule, type DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
+import { DxContextMenuModule, DxContextMenuComponent, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
+
+import { Service, type Product, type MenuItem } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,9 +27,9 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
+  @ViewChild(DxTreeViewComponent<Product>, { static: false }) treeView: DxTreeViewComponent<Product>;
 
-  @ViewChild(DxContextMenuComponent, { static: false }) contextMenu: DxContextMenuComponent;
+  @ViewChild(DxContextMenuComponent<Product>, { static: false }) contextMenu: DxContextMenuComponent<Product>;
 
   products: Product[];
 
@@ -45,21 +47,21 @@ export class AppComponent {
   treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
     this.selectedTreeItem = e.itemData;
 
-    const isProduct = e.itemData.price !== undefined;
+    const isProductItem = !e.itemData.items;
     const contextMenu = this.contextMenu.instance;
 
-    contextMenu.option('items[0].visible', !isProduct);
-    contextMenu.option('items[1].visible', !isProduct);
-    contextMenu.option('items[2].visible', isProduct);
-    contextMenu.option('items[3].visible', isProduct);
+    contextMenu.option('items[0].visible', !isProductItem);
+    contextMenu.option('items[1].visible', !isProductItem);
+    contextMenu.option('items[2].visible', isProductItem);
+    contextMenu.option('items[3].visible', isProductItem);
     contextMenu.option('items[0].disabled', e.node.expanded);
     contextMenu.option('items[1].disabled', !e.node.expanded);
   }
 
-  contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
+  contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<Product>) {
     let logEntry = '';
     const treeView = this.treeView.instance;
-    switch ((e.itemData as Product).id) {
+    switch (e.itemData.id) {
       case 'expand': {
         logEntry = `The '${this.selectedTreeItem.text}' group was expanded`;
         treeView.expandItem(this.selectedTreeItem.id);

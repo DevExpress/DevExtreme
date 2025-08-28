@@ -58,6 +58,14 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost, AfterContentInit  {
     @Input()
+    get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
+        return this._getOption('aiOptions');
+    }
+    set aiOptions(value: { disabled?: boolean, instruction?: string | undefined }) {
+        this._setOption('aiOptions', value);
+    }
+
+    @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
     }

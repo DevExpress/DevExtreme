@@ -903,11 +903,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const editing = this.option('editing');
 
     this._editing = {
-      allowAdding: !!editing,
-      allowUpdating: !!editing,
-      allowDeleting: !!editing,
-      allowResizing: !!editing,
-      allowDragging: !!editing,
+      allowAdding: Boolean(editing),
+      allowUpdating: Boolean(editing),
+      allowDeleting: Boolean(editing),
+      allowResizing: Boolean(editing),
+      allowDragging: Boolean(editing),
     };
 
     if (isObject(editing)) {
@@ -1301,8 +1301,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (currentViewOptions.startDate) {
       this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
     }
-
-    this._appointments.option('_collectorOffset', this.getCollectorOffset());
   }
 
   _recalculateWorkspace() {
