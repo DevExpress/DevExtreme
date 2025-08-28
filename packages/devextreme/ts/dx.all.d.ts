@@ -18581,6 +18581,10 @@ declare module DevExpress.ui {
      */
     reset(editorsData?: Record<string, any>): void;
     /**
+     * [descr:dxForm.smartPaste(text)]
+     */
+    smartPaste(text?: string): void;
+    /**
      * [descr:dxForm.updateData(data)]
      */
     updateData(data: any): void;
@@ -18598,6 +18602,7 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
+    export type AIResult = Record<string, string | string[]>;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
@@ -18658,6 +18663,7 @@ declare module DevExpress.ui {
       | 'tabbed'
       | 'button';
     export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+    export type FormPredefinedButtonItem = 'reset' | 'submit' | 'smartPaste';
     export type GroupCaptionTemplateData = {
       readonly caption?: string;
       readonly component: dxForm;
@@ -18690,6 +18696,28 @@ declare module DevExpress.ui {
       readonly editorType?: string;
       readonly name?: string;
     };
+    /**
+     * [descr:_ui_form_SmartPastedEvent]
+     */
+    export type SmartPastedEvent =
+      DevExpress.common.core.events.EventInfo<dxForm> & SmartPasteInfo;
+    /**
+     * [descr:SmartPasteInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type SmartPasteInfo = {
+      /**
+       * [descr:SmartPasteInfo.aiResult]
+       */
+      readonly aiResult: AIResult;
+    };
+    /**
+     * [descr:_ui_form_SmartPastingEvent]
+     */
+    export type SmartPastingEvent =
+      DevExpress.common.core.events.EventInfo<dxForm> &
+        DevExpress.common.core.events.AsyncCancelable &
+        SmartPasteInfo;
   }
   /**
    * @deprecated Use ButtonItem instead
@@ -18719,7 +18747,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.name]
      */
-    name?: string | undefined;
+    name?: DevExpress.ui.dxForm.FormPredefinedButtonItem | string | undefined;
     /**
      * [descr:dxFormButtonItem.verticalAlignment]
      */
@@ -18838,6 +18866,10 @@ declare module DevExpress.ui {
    */
   export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
+     * [descr:dxFormOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
+    /**
      * [descr:dxFormOptions.alignItemLabels]
      */
     alignItemLabels?: boolean;
@@ -18887,6 +18919,14 @@ declare module DevExpress.ui {
     onFieldDataChanged?: (
       e: DevExpress.ui.dxForm.FieldDataChangedEvent
     ) => void;
+    /**
+     * [descr:dxFormOptions.onSmartPasting]
+     */
+    onSmartPasting?: (e: DevExpress.ui.dxForm.SmartPastingEvent) => void;
+    /**
+     * [descr:dxFormOptions.onSmartPasted]
+     */
+    onSmartPasted?: (e: DevExpress.ui.dxForm.SmartPastedEvent) => void;
     /**
      * [descr:dxFormOptions.optionalMark]
      */
@@ -18941,6 +18981,19 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxFormSimpleItem {
+    /**
+     * [descr:dxFormSimpleItem.aiOptions]
+     */
+    aiOptions?: {
+      /**
+       * [descr:dxFormSimpleItem.aiOptions.instruction]
+       */
+      instruction?: string | undefined;
+      /**
+       * [descr:dxFormSimpleItem.aiOptions.disabled]
+       */
+      disabled?: boolean;
+    };
     /**
      * [descr:dxFormSimpleItem.colSpan]
      */

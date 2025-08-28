@@ -1124,7 +1124,6 @@ class Form extends Widget<FormProperties> {
         ValidationEngine.removeGroup(args.previousValue || this);
         this._invalidate();
         break;
-      // @ts-expect-error
       case 'aiIntegration': {
         this._processAIIntegrationUpdate();
         break;
@@ -1810,7 +1809,6 @@ class Form extends Widget<FormProperties> {
     params: AICommandParamsMap[T],
     callbacks: RequestCallbacks<AICommandResultMap[T]>,
   ): void {
-    // @ts-expect-error
     const { aiIntegration } = this.option();
 
     this._currentAICommand = {
@@ -1842,7 +1840,6 @@ class Form extends Widget<FormProperties> {
     const fields = dataItems.map((item) => ({
       name: item.dataField,
       format: getItemFormatInfo(item),
-      // @ts-expect-error
       instruction: item.aiOptions?.instruction,
     }));
 

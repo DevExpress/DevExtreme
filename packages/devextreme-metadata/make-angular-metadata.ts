@@ -12,6 +12,9 @@ Ng.makeMetadata({
   mutations: [
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
+    removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
+    removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
+    removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
