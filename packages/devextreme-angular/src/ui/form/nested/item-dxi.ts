@@ -21,7 +21,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import * as CommonTypes from 'devextreme/common';
-import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
@@ -131,6 +131,14 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
+    get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
+        return this._getOption('aiOptions');
+    }
+    set aiOptions(value: { disabled?: boolean, instruction?: string | undefined }) {
+        this._setOption('aiOptions', value);
+    }
+
+    @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
     }
@@ -203,10 +211,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string | undefined | FormPredefinedButtonItem {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string | undefined | FormPredefinedButtonItem) {
         this._setOption('name', value);
     }
 

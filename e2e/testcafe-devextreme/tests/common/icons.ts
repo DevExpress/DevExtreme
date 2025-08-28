@@ -299,7 +299,7 @@ const iconSet = {
   ungroupallcolumns: '\f199',
   chatadd: '\f200',
   colordismiss: '\f201',
-  clipboardpastesmart: '\f202',
+  clipboardpastesparkle: '\f202',
 };
 
 fixture.disablePageReloads`Icons`

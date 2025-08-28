@@ -3,18 +3,23 @@ import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
+import type {
+  LocationOption,
+  MarkerObject, MarkerOptions, RouteObject, RouteOptions,
+} from './m_provider.dynamic';
 import DynamicProvider from './m_provider.dynamic';
 
 const window = getWindow();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global Microsoft */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let Microsoft: any;
 
 const BING_MAP_READY = '_bingScriptReady';
@@ -23,30 +28,38 @@ let BING_URL_V8 = `https://www.bing.com/api/maps/mapcontrol?callback=${BING_MAP_
 const INFOBOX_V_OFFSET_V8 = 13;
 const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
-const msMapsLoaded = function () {
-  // @ts-expect-error
-  return window.Microsoft?.Maps;
-};
+// @ts-expect-error ts-error
+const msMapsLoaded = (): boolean => Boolean(window.Microsoft?.Maps);
 
+export interface BingLocation {
+  latitude: number;
+  longitude: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let msMapsLoader;
 class BingProvider extends DynamicProvider {
-  _providerClickHandler?: any;
+  _providerClickHandler?: (e: { targetType: string; location: BingLocation }) => void;
 
-  _providerViewChangeHandler?: any;
+  _providerViewChangeHandler?: () => void;
 
   _preventZoomChangeEvent?: boolean;
 
-  _mapType(type) {
+  _mapType(type?: MapType): unknown {
     const mapTypes = {
       roadmap: Microsoft.Maps.MapTypeId.road,
       hybrid: Microsoft.Maps.MapTypeId.aerial,
       satellite: Microsoft.Maps.MapTypeId.aerial,
     };
-    // @ts-expect-error
-    return mapTypes[type] || mapTypes.road;
+
+    if (!type) {
+      return mapTypes.roadmap;
+    }
+
+    return mapTypes[type] ?? mapTypes.roadmap;
   }
 
-  _movementMode(type) {
+  _movementMode(type: RouteMode | string = ''): unknown {
     if (!type) {
       return Microsoft.Maps.Directions.RouteMode.driving;
     }
@@ -54,20 +67,23 @@ class BingProvider extends DynamicProvider {
     return Microsoft.Maps.Directions.RouteMode[type];
   }
 
-  _resolveLocation(location) {
+  _resolveLocation(location?: LocationOption | null): Promise<BingLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new Microsoft.Maps.Location(latLng.lat, latLng.lng));
       } else {
-        this._geocodeLocation(location).then((geocodedLocation) => {
-          resolve(geocodedLocation);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._geocodeLocation(location as string).then((geocodedLocation) => {
+          resolve(geocodedLocation as BingLocation);
         });
       }
     });
   }
 
-  _geocodeLocationImpl(location) {
+  _geocodeLocationImpl(
+    location: string,
+  ): Promise<BingLocation> {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
         resolve(new Microsoft.Maps.Location(0, 0));
@@ -78,7 +94,7 @@ class BingProvider extends DynamicProvider {
       const searchRequest = {
         where: location,
         count: 1,
-        callback(searchResponse) {
+        callback(searchResponse): void {
           const result = searchResponse.results[0];
           if (result) {
             const boundsBox = searchResponse.results[0].location;
@@ -94,14 +110,21 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _normalizeLocation(location) {
+  _normalizeLocation(
+    location: BingLocation,
+  ): { lat: number; lng: number } {
     return {
       lat: location.latitude,
       lng: location.longitude,
     };
   }
 
-  _normalizeLocationRect(locationRect) {
+  _normalizeLocationRect(
+    locationRect: {
+      getNorthwest: () => BingLocation;
+      getSoutheast: () => BingLocation;
+    },
+  ): { northEast: { lat: number; lng: number }; southWest: { lat: number; lng: number } } {
     const northWest = this._normalizeLocation(locationRect.getNorthwest());
     const southEast = this._normalizeLocation(locationRect.getSoutheast());
 
@@ -117,10 +140,9 @@ class BingProvider extends DynamicProvider {
     };
   }
 
-  _loadImpl() {
-    return new Promise((resolve) => {
+  _loadImpl(): Promise<void> {
+    return new Promise<void>((resolve) => {
       if (msMapsLoaded()) {
-        // @ts-expect-error
         resolve();
       } else {
         if (!msMapsLoader) {
@@ -129,11 +151,11 @@ class BingProvider extends DynamicProvider {
 
         msMapsLoader.then(() => {
           if (msMapsLoaded()) {
-            // @ts-expect-error
             resolve();
             return;
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._loadMapScript().then(resolve);
         });
       }
@@ -144,10 +166,10 @@ class BingProvider extends DynamicProvider {
       new Promise((resolve) => {
         Microsoft.Maps.loadModule('Microsoft.Maps.Directions', { callback: resolve });
       }),
-    ]));
+    ])).then(() => {});
   }
 
-  _loadMapScript() {
+  _loadMapScript(): Promise<void> {
     return new Promise((resolve) => {
       window[BING_MAP_READY] = resolve;
       ajax.sendRequest({
@@ -164,13 +186,13 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _init() {
+  _init(): Promise<void> {
     this._createMap();
 
     return Promise.resolve();
   }
 
-  _createMap() {
+  _createMap(): void {
     const controls = this._option('controls');
 
     this._map = new Microsoft.Maps.Map(this._$container[0], {
@@ -182,12 +204,12 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _attachHandlers() {
+  _attachHandlers(): void {
     this._providerViewChangeHandler = Microsoft.Maps.Events.addHandler(this._map, 'viewchange', this._viewChangeHandler.bind(this));
     this._providerClickHandler = Microsoft.Maps.Events.addHandler(this._map, 'click', this._clickActionHandler.bind(this));
   }
 
-  _viewChangeHandler() {
+  _viewChangeHandler(): void {
     const bounds = this._map.getBounds();
     this._option('bounds', this._normalizeLocationRect(bounds));
 
@@ -199,13 +221,15 @@ class BingProvider extends DynamicProvider {
     }
   }
 
-  _clickActionHandler(e) {
+  _clickActionHandler(
+    e: { targetType: string; location: BingLocation },
+  ): void {
     if (e.targetType === 'map') {
       this._fireClickAction({ location: this._normalizeLocation(e.location) });
     }
   }
 
-  updateDimensions() {
+  updateDimensions(): Promise<void> {
     const $container = this._$container;
 
     this._map.setOptions({
@@ -216,7 +240,7 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateMapType() {
+  updateMapType(): Promise<void> {
     const type = this._option('type');
     const labelOverlay = Microsoft.Maps.LabelOverlay;
 
@@ -229,10 +253,11 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateBounds() {
+  updateBounds(): Promise<void> {
+    const boundsOption = this._option('bounds');
     return Promise.all([
-      this._resolveLocation(this._option('bounds.northEast')),
-      this._resolveLocation(this._option('bounds.southWest')),
+      this._resolveLocation(boundsOption?.northEast),
+      this._resolveLocation(boundsOption?.southWest),
     ]).then((result) => {
       // eslint-disable-next-line new-cap
       const bounds = new Microsoft.Maps.LocationRect.fromLocations(result[0], result[1]);
@@ -244,7 +269,7 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  updateCenter() {
+  updateCenter(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       this._map.setView({
         animate: false,
@@ -253,7 +278,7 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  updateZoom() {
+  updateZoom(): Promise<void> {
     this._map.setView({
       animate: false,
       zoom: this._option('zoom'),
@@ -262,15 +287,18 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  updateControls() {
+  updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.clean();
-    // @ts-expect-error ts-error
-    return this.render.apply(this, arguments);
+
+    return this.render(markers, routes);
   }
 
-  _renderMarker(options) {
-    return this._resolveLocation(options.location).then((location) => {
+  _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
+    const { location: markerLocation } = options;
+    return this._resolveLocation(markerLocation).then((location) => {
       const pushpinOptions = {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         icon: options.iconSrc || this._option('markerIconSrc'),
       };
       if (options.html) {
@@ -282,7 +310,7 @@ class BingProvider extends DynamicProvider {
 
         const { htmlOffset } = options;
         if (htmlOffset) {
-          // @ts-expect-error
+          // @ts-expect-error ts-error
           pushpinOptions.anchor = new Microsoft.Maps.Point(-htmlOffset.left, -htmlOffset.top);
         }
       }
@@ -291,9 +319,10 @@ class BingProvider extends DynamicProvider {
       this._map.entities.push(pushpin);
 
       const infobox = this._renderTooltip(location, options.tooltip);
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let handler;
       if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
         const markerNormalizedLocation = this._normalizeLocation(location);
 
         handler = Microsoft.Maps.Events.addHandler(pushpin, 'click', () => {
@@ -316,17 +345,18 @@ class BingProvider extends DynamicProvider {
     });
   }
 
-  _renderTooltip(location, options) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _renderTooltip(location: BingLocation, options: MarkerOptions['tooltip']): any {
     if (!options) {
-      return;
+      return undefined;
     }
 
-    options = this._parseTooltipOptions(options);
+    const parsedOptions = this._parseTooltipOptions(options);
 
     const infobox = new Microsoft.Maps.Infobox(location, {
-      description: options.text,
+      description: parsedOptions.text,
       offset: new Microsoft.Maps.Point(0, INFOBOX_V_OFFSET_V8),
-      visible: options.visible,
+      visible: parsedOptions.visible,
     });
 
     infobox.setMap(this._map);
@@ -334,7 +364,9 @@ class BingProvider extends DynamicProvider {
     return infobox;
   }
 
-  _destroyMarker(marker) {
+  _destroyMarker(marker: {
+    marker: unknown; infobox: { setMap: (arg: unknown) => void }; handler: () => void;
+  }): void {
     this._map.entities.remove(marker.marker);
     if (marker.infobox) {
       marker.infobox.setMap(null);
@@ -344,75 +376,81 @@ class BingProvider extends DynamicProvider {
     }
   }
 
-  _renderRoute(options) {
-    return Promise.all(map(options.locations, (point) => this._resolveLocation(point))).then((locations) => new Promise((resolve) => {
-      const direction = new Microsoft.Maps.Directions.DirectionsManager(this._map);
-      const color = new Color(options.color || this._defaultRouteColor()).toHex();
-      // eslint-disable-next-line new-cap
-      const routeColor = new Microsoft.Maps.Color.fromHex(color);
-      routeColor.a = (options.opacity || this._defaultRouteOpacity()) * 255;
+  _renderRoute(options: RouteOptions): Promise<RouteObject> {
+    const routeLocations = options.locations ?? [];
+    return Promise.all(routeLocations.map((point) => this._resolveLocation(point)))
+      .then((locations) => new Promise((resolve) => {
+        const direction = new Microsoft.Maps.Directions.DirectionsManager(this._map);
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        const color = new Color(options.color || this._defaultRouteColor()).toHex();
+        // eslint-disable-next-line new-cap
+        const routeColor = new Microsoft.Maps.Color.fromHex(color);
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        routeColor.a = (options.opacity || this._defaultRouteOpacity()) * 255;
 
-      direction.setRenderOptions({
-        autoUpdateMapView: false,
-        displayRouteSelector: false,
-        waypointPushpinOptions: { visible: false },
-        drivingPolylineOptions: {
-          strokeColor: routeColor,
-          strokeThickness: options.weight || this._defaultRouteWeight(),
-        },
-        walkingPolylineOptions: {
-          strokeColor: routeColor,
-          strokeThickness: options.weight || this._defaultRouteWeight(),
-        },
-      });
-      direction.setRequestOptions({
-        routeMode: this._movementMode(options.mode),
-        routeDraggable: false,
-      });
-
-      each(locations, (_, location) => {
-        const waypoint = new Microsoft.Maps.Directions.Waypoint({ location });
-        direction.addWaypoint(waypoint);
-      });
-
-      const directionHandlers = [];
-      // @ts-expect-error
-      directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', (args) => {
-        while (directionHandlers.length) {
-          Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
-        }
-
-        const routeSummary = args.routeSummary[0];
-
-        resolve({
-          instance: direction,
-          northEast: routeSummary.northEast,
-          southWest: routeSummary.southWest,
+        direction.setRenderOptions({
+          autoUpdateMapView: false,
+          displayRouteSelector: false,
+          waypointPushpinOptions: { visible: false },
+          drivingPolylineOptions: {
+            strokeColor: routeColor,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            strokeThickness: options.weight || this._defaultRouteWeight(),
+          },
+          walkingPolylineOptions: {
+            strokeColor: routeColor,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            strokeThickness: options.weight || this._defaultRouteWeight(),
+          },
         });
-      }));
-      // @ts-expect-error
-      directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsError', (args) => {
-        while (directionHandlers.length) {
-          Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
-        }
-
-        const status = `RouteResponseCode: ${args.responseCode} - ${args.message}`;
-        errors.log('W1006', status);
-
-        resolve({
-          instance: direction,
+        direction.setRequestOptions({
+          routeMode: this._movementMode(options.mode),
+          routeDraggable: false,
         });
-      }));
 
-      direction.calculateDirections();
-    }));
+        locations.forEach((location) => {
+          const waypoint = new Microsoft.Maps.Directions.Waypoint({ location });
+          direction.addWaypoint(waypoint);
+        });
+
+        const directionHandlers = [];
+        // @ts-expect-error ts-error
+        directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', (args) => {
+          while (directionHandlers.length) {
+            Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
+          }
+
+          const routeSummary = args.routeSummary[0];
+
+          resolve({
+            instance: direction,
+            northEast: routeSummary.northEast,
+            southWest: routeSummary.southWest,
+          });
+        }));
+        // @ts-expect-error ts-error
+        directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsError', (args) => {
+          while (directionHandlers.length) {
+            Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
+          }
+
+          const status = `RouteResponseCode: ${args.responseCode} - ${args.message}`;
+          errors.log('W1006', status);
+
+          resolve({
+            instance: direction,
+          });
+        }));
+
+        direction.calculateDirections();
+      }));
   }
 
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: { instance: { dispose: () => void } }): void {
     routeObject.instance.dispose();
   }
 
-  _fitBounds() {
+  _fitBounds(): Promise<void> {
     this._updateBounds();
 
     if (this._bounds && this._option('autoAdjust')) {
@@ -443,16 +481,24 @@ class BingProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _extendBounds(location): void {
+  _extendBounds(location: { latitude: number; longitude: number }): void {
     if (this._bounds) {
-      // eslint-disable-next-line @stylistic/max-len, new-cap
-      this._bounds = new Microsoft.Maps.LocationRect.fromLocations(this._bounds.getNorthwest(), this._bounds.getSoutheast(), location);
+      // eslint-disable-next-line new-cap
+      this._bounds = new Microsoft.Maps.LocationRect.fromLocations(
+        this._bounds.getNorthwest(),
+        this._bounds.getSoutheast(),
+        location,
+      );
     } else {
-      this._bounds = new Microsoft.Maps.LocationRect(location, MIN_LOCATION_RECT_LENGTH, MIN_LOCATION_RECT_LENGTH);
+      this._bounds = new Microsoft.Maps.LocationRect(
+        location,
+        MIN_LOCATION_RECT_LENGTH,
+        MIN_LOCATION_RECT_LENGTH,
+      );
     }
   }
 
-  clean() {
+  clean(): Promise<void> {
     if (this._map) {
       Microsoft.Maps.Events.removeHandler(this._providerViewChangeHandler);
       Microsoft.Maps.Events.removeHandler(this._providerClickHandler);
@@ -469,7 +515,7 @@ class BingProvider extends DynamicProvider {
 
 /// #DEBUG
 // @ts-expect-error ts-error
-BingProvider.remapConstant = function (newValue) {
+BingProvider.remapConstant = function remapConstant(newValue: string): void {
   BING_URL_V8 = newValue;
 };
 

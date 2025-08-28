@@ -7,7 +7,7 @@ import {
   resourceConfigMock,
   resourceIndexesMock,
   resourceItemsByIdMock,
-} from '@ts/scheduler/__mock__/resourceManager.mock';
+} from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { getAppointmentColor, getPaintedResource } from './appointment_color_utils';
 

@@ -241,7 +241,7 @@ export class GroupedDataMapProvider {
         startDate: this.getGroupStartDate(groupIndex),
         endDate: this.getGroupEndDate(groupIndex),
       };
-    }).filter(({ startDate }) => !!startDate);
+    }).filter(({ startDate }) => Boolean(startDate));
   }
 
   getGroupIndices() {

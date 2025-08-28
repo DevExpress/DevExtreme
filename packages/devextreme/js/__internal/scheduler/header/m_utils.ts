@@ -163,7 +163,7 @@ export const getNextIntervalDate = (options, direction: Direction): Date => {
   // eslint-disable-next-line default-case
   switch (step) {
     case 'day':
-      dayDuration = 1 * intervalCount;
+      dayDuration = Number(intervalCount);
       break;
     case 'week':
     case 'workWeek':

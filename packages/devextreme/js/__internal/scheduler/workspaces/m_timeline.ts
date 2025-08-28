@@ -228,14 +228,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
     if (!allDay) {
-      if (currentDate.getHours() < startDayHour) {
-        tailDelta = tailDuration - hiddenInterval + gapBeforeAppt;
-      } else if (currentDate.getHours() >= startDayHour && currentDate.getHours() < endDayHour) {
-        tailDelta = tailDuration;
-      } else if (currentDate.getHours() >= startDayHour && currentDate.getHours() >= endDayHour) {
-        tailDelta = tailDuration - (gapBeforeAppt - endDayHour * toMs('hour'));
-      } else if (!fullDays) {
-        result = fullInterval;
+      const hour = currentDate.getHours();
+
+      switch (true) {
+        case hour < startDayHour:
+          tailDelta = tailDuration - hiddenInterval + gapBeforeAppt;
+          break;
+        case hour >= startDayHour && hour < endDayHour:
+          tailDelta = tailDuration;
+          break;
+        case hour >= endDayHour:
+          tailDelta = tailDuration - (gapBeforeAppt - endDayHour * toMs('hour'));
+          break;
+        case !fullDays:
+          result = fullInterval;
+          break;
+        default:
+          break;
       }
 
       result += tailDelta;

@@ -145,7 +145,7 @@ class RecurrenceProcessor {
   }
 
   hasRecurrence(options) {
-    return !!this.generateDates(options).length;
+    return Boolean(this.generateDates(options).length);
   }
 
   evalRecurrenceRule(rule) {
@@ -179,8 +179,8 @@ class RecurrenceProcessor {
 
     return result.map((item) => {
       const match = item.match(/[A-Za-z]+/);
-      return !!match && match[0];
-    }).filter((item) => !!item);
+      return Boolean(match) && match[0];
+    }).filter((item) => Boolean(item));
   }
 
   getAsciiStringByDate(date) {

@@ -1124,7 +1124,6 @@ class Form extends Widget<FormProperties> {
         ValidationEngine.removeGroup(args.previousValue || this);
         this._invalidate();
         break;
-      // @ts-expect-error
       case 'aiIntegration': {
         this._processAIIntegrationUpdate();
         break;
@@ -1810,7 +1809,6 @@ class Form extends Widget<FormProperties> {
     params: AICommandParamsMap[T],
     callbacks: RequestCallbacks<AICommandResultMap[T]>,
   ): void {
-    // @ts-expect-error
     const { aiIntegration } = this.option();
 
     this._currentAICommand = {
@@ -1838,14 +1836,16 @@ class Form extends Widget<FormProperties> {
   }
 
   async smartPaste(text?: string): Promise<void> {
+    if (this._currentAICommand?.command === 'smartPaste') {
+      this._processCommandCompletion();
+    }
+
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map((item) => ({
       name: item.dataField,
       format: getItemFormatInfo(item),
-      // @ts-expect-error
       instruction: item.aiOptions?.instruction,
     }));
-
     const smartPasteParams = {
       text: text ?? await navigator.clipboard.readText(),
       fields,

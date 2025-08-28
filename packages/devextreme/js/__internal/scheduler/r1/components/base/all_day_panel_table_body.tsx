@@ -43,7 +43,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
     } = this.props;
     const classes = combineClasses({
       'dx-scheduler-all-day-table-row': true,
-      [className ?? '']: !!className,
+      [className ?? '']: Boolean(className),
     });
 
     return (

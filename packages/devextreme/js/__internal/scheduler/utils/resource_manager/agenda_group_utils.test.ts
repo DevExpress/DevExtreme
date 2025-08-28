@@ -1,7 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import { getResourceManagerMock, resourceItemsByIdMock } from '@ts/scheduler/__mock__/resourceManager.mock';
+import { getResourceManagerMock, resourceItemsByIdMock } from '@ts/scheduler/__mock__/resource_manager.mock';
 
 import { convertToOldTree, reduceResourcesTree } from './agenda_group_utils';
 
