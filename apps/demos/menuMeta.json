@@ -5878,10 +5878,10 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Splitter",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
-        ],
-        "ShowOnMainPage": true
+        ]
       },
       {
         "Name": "Gallery",
