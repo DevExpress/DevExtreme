@@ -75,6 +75,7 @@ import type {
 import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
 import type { ExtendedLayoutManagerProperties, LayoutManagerProperties } from '@ts/ui/form/form.layout_manager';
 import LayoutManager from '@ts/ui/form/form.layout_manager';
+import { FormLoadPanel } from '@ts/ui/form/form.load_panel';
 import {
   concatPaths,
   convertToLayoutManagerOptions,
@@ -87,6 +88,8 @@ import {
   isFullPathContainsTabs,
   tryGetTabPath,
 } from '@ts/ui/form/form.utils';
+import type { LoadPanelProperties } from '@ts/ui/load_panel';
+import LoadPanel from '@ts/ui/load_panel';
 import ValidationEngine from '@ts/ui/m_validation_engine';
 import ValidationSummary from '@ts/ui/m_validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
@@ -156,6 +159,8 @@ class Form extends Widget<FormProperties> {
   _isDataUpdating?: boolean;
 
   _$validationSummary?: dxElementWrapper;
+
+  _loadPanel?: FormLoadPanel;
 
   _init(): void {
     super._init();
@@ -1653,8 +1658,33 @@ class Form extends Widget<FormProperties> {
     }
   }
 
+  private _ensureLoadPanel(): void {
+    if (!this._loadPanel) {
+      this._loadPanel = new FormLoadPanel({
+        $container: this.$element(),
+        onLoadPanelCreate: (
+          $element: dxElementWrapper,
+          options: LoadPanelProperties,
+        ): LoadPanel => this._createComponent($element, LoadPanel, options),
+      });
+    }
+  }
+
+  private _showLoadPanel(): void {
+    this._ensureLoadPanel();
+    this.option('disabled', true);
+    this._loadPanel?.show();
+  }
+
+  private _hideLoadPanel(): void {
+    this._loadPanel?.hide();
+    this.option('disabled', false);
+  }
+
   _dispose(): void {
     this._clearAutoColCountChangedTimeout();
+    this._processCommandCompletion();
+    this._loadPanel?.dispose();
     ValidationEngine.removeGroup(this._getValidationGroup());
     super._dispose();
   }
@@ -1793,6 +1823,7 @@ class Form extends Widget<FormProperties> {
     this._abort?.();
     this._abort = undefined;
     this._currentAICommand = undefined;
+    this._hideLoadPanel();
   }
 
   private _processAIIntegrationUpdate(): void {
@@ -1827,9 +1858,11 @@ class Form extends Widget<FormProperties> {
           this._updateFieldValue(name, value);
         });
         this.endUpdate();
+        this._hideLoadPanel();
         this._processCommandCompletion();
       },
       onError: (): void => {
+        this._hideLoadPanel();
         this._processCommandCompletion();
       },
     };
@@ -1840,6 +1873,12 @@ class Form extends Widget<FormProperties> {
       this._processCommandCompletion();
     }
 
+    const smartPasteText = text ?? await navigator.clipboard?.readText();
+
+    if (isDefined(smartPasteText)) {
+      this._showLoadPanel();
+    }
+
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map((item) => ({
       name: item.dataField,
@@ -1847,7 +1886,7 @@ class Form extends Widget<FormProperties> {
       instruction: item.aiOptions?.instruction,
     }));
     const smartPasteParams = {
-      text: text ?? await navigator.clipboard.readText(),
+      text: smartPasteText,
       fields,
     };
     const smartPasteCallbacks = this._getSmartPasteCommandCallbacks();

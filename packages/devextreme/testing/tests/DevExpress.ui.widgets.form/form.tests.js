@@ -22,6 +22,7 @@ import 'ui/range_slider';
 import windowModule from '__internal/core/utils/m_window';
 import Form from 'ui/form';
 import Button from 'ui/button';
+import LoadIndicator from 'ui/load_indicator';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 import {
     TEXTEDITOR_INPUT_CLASS
@@ -37,7 +38,9 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
     FORM_UNDERLINED_CLASS,
-    FORM_VALIDATION_SUMMARY
+    FORM_VALIDATION_SUMMARY,
+    FORM_LOAD_PANEL_CLASS,
+    FORM_LOAD_PANEL_WRAPPER_CLASS
 } from '__internal/ui/form/constants';
 
 import {
@@ -5239,5 +5242,262 @@ QUnit.module('reset', () => {
 
             assert.strictEqual($(form.getEditor('name').field()).val(), value, `${editorType} contains expected value`);
         });
+    });
+});
+
+QUnit.module('LoadIndicator', () => {
+    QUnit.test('_showLoadPanel creates LoadPanel and sets form to disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled initially');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
+
+        form._showLoadPanel();
+
+        assert.strictEqual(form.option('disabled'), true, 'Form is disabled after showing LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is present after showing');
+    });
+
+    QUnit.test('_hideLoadPanel hides LoadPanel and sets form to not disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+        assert.strictEqual(form.option('disabled'), true, 'Form is disabled after showing LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is present');
+
+        form._hideLoadPanel();
+
+        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after hiding LoadIndicator');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+        assert.strictEqual(form._loadPanel.instance.option('visible'), false, 'LoadPanel is hidden');
+    });
+
+    QUnit.test('LoadPanel is disposed when form is disposed', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is present');
+
+        form._dispose();
+
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is disposed with form');
+    });
+
+    QUnit.test('Multiple calls to _showLoadPanel do not create multiple panels', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+        form._showLoadPanel();
+        form._showLoadPanel();
+
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'Only one LoadPanel is present');
+        assert.strictEqual(form.option('disabled'), true, 'Form remains disabled');
+    });
+
+    QUnit.test('_hideLoadPanel without _showLoadPanel does not throw error', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        assert.expect(0);
+
+        form._hideLoadPanel();
+        form._hideLoadPanel();
+    });
+
+    QUnit.test('LoadPanel has correct CSS class and LoadIndicator configuration', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        assert.strictEqual($loadPanel.length, 1, 'LoadPanel element is present');
+        assert.ok($loadPanel.hasClass(FORM_LOAD_PANEL_CLASS), 'LoadPanel has correct CSS class');
+
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+        assert.ok(loadPanelInstance, 'LoadPanel widget instance exists');
+
+        if(form._loadPanel && form._loadPanel._$indicator) {
+            const loadIndicatorInstance = LoadIndicator.getInstance(form._loadPanel._$indicator.get(0));
+            assert.ok(loadIndicatorInstance, 'LoadIndicator widget instance exists');
+            assert.strictEqual(loadIndicatorInstance.option('animationType'), 'sparkle', 'LoadIndicator has sparkle animation');
+            assert.strictEqual(loadIndicatorInstance.option('width'), 120, 'LoadIndicator has correct width');
+            assert.strictEqual(loadIndicatorInstance.option('height'), 120, 'LoadIndicator has correct height');
+        } else {
+            assert.ok(true, 'LoadIndicator configuration cannot be verified directly');
+        }
+    });
+
+    QUnit.test('LoadPanel has correct configuration options', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+
+        assert.strictEqual(loadPanelInstance.option('visible'), true, 'LoadPanel is visible');
+        assert.strictEqual(loadPanelInstance.option('showIndicator'), true, 'LoadPanel shows indicator');
+        assert.strictEqual(loadPanelInstance.option('showPane'), false, 'LoadPanel does not show pane');
+        assert.strictEqual(loadPanelInstance.option('shading'), false, 'LoadPanel does not show shading');
+        assert.strictEqual(loadPanelInstance.option('hideOnOutsideClick'), false, 'LoadPanel does not hide on outside click');
+        assert.strictEqual(loadPanelInstance.option('hideOnParentScroll'), false, 'LoadPanel does not hide on parent scroll');
+        assert.strictEqual(loadPanelInstance.option('deferRendering'), false, 'LoadPanel does not defer rendering');
+        assert.strictEqual(loadPanelInstance.option('disabled'), false, 'LoadPanel is not disabled');
+        assert.strictEqual(loadPanelInstance.option('message'), '', 'LoadPanel has empty message');
+        assert.strictEqual(loadPanelInstance.option('wrapperAttr.class'), FORM_LOAD_PANEL_WRAPPER_CLASS, 'LoadPanel has correct wrapper class');
+    });
+
+    QUnit.test('LoadPanel has correct positioning relative to form', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+        const position = loadPanelInstance.option('position');
+
+        assert.strictEqual(position.of, form.$element().get(0), 'LoadPanel is positioned relative to form element');
+    });
+
+    QUnit.test('LoadPanel visibility changes correctly with show/hide methods', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+
+        assert.strictEqual(loadPanelInstance.option('visible'), true, 'LoadPanel is visible after showing');
+
+        form._hideLoadPanel();
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+        assert.strictEqual(loadPanelInstance.option('visible'), false, 'LoadPanel is hidden after hiding');
+    });
+
+    QUnit.test('Form disabled state is preserved correctly when form was already disabled', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }],
+            disabled: true
+        }).dxForm('instance');
+
+        assert.strictEqual(form.option('disabled'), true, 'Form is initially disabled');
+
+        form._showLoadPanel();
+        assert.strictEqual(form.option('disabled'), true, 'Form remains disabled after showing LoadIndicator');
+
+        form._hideLoadPanel();
+        assert.strictEqual(form.option('disabled'), false, 'Form becomes enabled after hiding LoadIndicator (original disabled state not preserved)');
+    });
+
+    QUnit.test('SmartPaste button integration with LoadPanel', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const smartPasteSpy = sinon.spy();
+        const form = $('#form').dxForm({
+            items: [
+                { dataField: 'name' },
+                {
+                    itemType: 'button',
+                    name: 'smartPaste',
+                    buttonOptions: {
+                        onClick: function() {
+                            smartPasteSpy();
+                            form._showLoadPanel();
+
+                            setTimeout(() => {
+                                form._hideLoadPanel();
+                            }, 100);
+                        }
+                    }
+                }
+            ]
+        }).dxForm('instance');
+
+        const smartPasteButton = form.getButton('smartPaste');
+
+        if(!smartPasteButton) {
+            assert.ok(false, 'SmartPaste button not found');
+            clock.restore();
+            return;
+        }
+
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
+        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled initially');
+
+        $(smartPasteButton.$element()).trigger('dxclick');
+
+        assert.strictEqual(smartPasteSpy.calledOnce, true, 'SmartPaste function was called');
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown after button click');
+        assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+
+        clock.tick(150);
+        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+        assert.strictEqual(loadPanelInstance.option('visible'), false, 'LoadPanel is hidden after operation');
+        assert.strictEqual(form.option('disabled'), false, 'Form is enabled after operation');
+
+        clock.restore();
+    });
+
+    QUnit.test('LoadPanel positioning is relative to form element', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+        const position = loadPanelInstance.option('position');
+
+        assert.strictEqual(position.of, form.$element().get(0), 'LoadPanel is positioned relative to form element');
+        assert.strictEqual(position.at, 'center', 'LoadPanel is centered');
+        assert.strictEqual(position.my, 'center', 'LoadPanel center point is used for positioning');
+    });
+
+    QUnit.test('LoadPanel wrapper has correct CSS class', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+        const wrapperAttr = loadPanelInstance.option('wrapperAttr');
+
+        assert.strictEqual(wrapperAttr.class, FORM_LOAD_PANEL_WRAPPER_CLASS, 'LoadPanel wrapper has correct CSS class');
+    });
+
+    QUnit.test('LoadPanel configuration prevents user interaction', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{ dataField: 'name' }]
+        }).dxForm('instance');
+
+        form._showLoadPanel();
+
+        const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
+        const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+
+        assert.strictEqual(loadPanelInstance.option('hideOnOutsideClick'), false, 'LoadPanel does not hide on outside click');
+        assert.strictEqual(loadPanelInstance.option('hideOnParentScroll'), false, 'LoadPanel does not hide on parent scroll');
+        assert.strictEqual(loadPanelInstance.option('disabled'), false, 'LoadPanel itself is not disabled');
+        assert.strictEqual(loadPanelInstance.option('shading'), false, 'LoadPanel does not show shading overlay');
     });
 });

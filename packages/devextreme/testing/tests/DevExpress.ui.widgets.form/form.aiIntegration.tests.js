@@ -1,10 +1,10 @@
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/form';
+import { FORM_LOAD_PANEL_CLASS } from '__internal/ui/form/constants';
 
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
-
     $('#qunit-fixture').html(markup);
 });
 
@@ -348,6 +348,278 @@ QUnit.module('SmartPaste', () => {
             assert.strictEqual(abortSpy.calledOnce, true, 'previous request aborted');
             assert.strictEqual(smartPaste.getCalls().length, 2, 'smartPaste is called again');
             assert.deepEqual(smartPaste.getCall(1).args[0].text, 'second test', 'smartPaste invoked with new text');
+        });
+    });
+
+    QUnit.module('LoadPanel Integration', {
+        beforeEach: function() {
+            this.clipboardStub = null;
+
+            this.createClipboardStub = function(text = 'test text') {
+                if(navigator.clipboard && navigator.clipboard.readText && navigator.clipboard.readText.restore) {
+                    navigator.clipboard.readText.restore();
+                }
+
+                if(!navigator.clipboard) {
+                    Object.defineProperty(navigator, 'clipboard', {
+                        value: { readText: sinon.stub().resolves(text) },
+                        configurable: true,
+                        writable: true
+                    });
+                    return navigator.clipboard.readText;
+                }
+
+                if(!navigator.clipboard.readText) {
+                    navigator.clipboard.readText = sinon.stub().resolves(text);
+                    return navigator.clipboard.readText;
+                }
+
+                if(navigator.clipboard.readText.isSinonProxy) {
+                    navigator.clipboard.readText.resolves(text);
+                    return navigator.clipboard.readText;
+                }
+
+                return sinon.stub(navigator.clipboard, 'readText').resolves(text);
+            };
+
+            this.restoreClipboardStub = function(stub) {
+                if(stub && typeof stub.restore === 'function') {
+                    stub.restore();
+                } else if(navigator.clipboard && navigator.clipboard.readText && navigator.clipboard.readText.restore) {
+                    navigator.clipboard.readText.restore();
+                }
+            };
+        },
+        afterEach: function() {
+            if(this.clipboardStub) {
+                this.restoreClipboardStub(this.clipboardStub);
+                this.clipboardStub = null;
+            }
+        }
+    }, () => {
+        QUnit.test('LoadPanel is shown during smartPaste operation and hidden on completion', function(assert) {
+            const done = assert.async();
+            let completionCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                completionCallback = () => callbacks.onComplete([]);
+                return () => {};
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
+            assert.strictEqual(form.option('disabled'), false, 'Form is not disabled initially');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                    assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+
+                    completionCallback();
+
+                    setTimeout(() => {
+                        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after completion');
+                        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after completion');
+
+                        done();
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('LoadPanel is hidden on smartPaste error', function(assert) {
+            const done = assert.async();
+            let errorCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                errorCallback = () => callbacks.onError(new Error('Test error'));
+                return () => {};
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                    assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+
+                    errorCallback();
+
+                    setTimeout(() => {
+                        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after error');
+                        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after error');
+
+                        done();
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('LoadPanel is hidden when smartPaste operation is aborted', function(assert) {
+            const done = assert.async();
+            let abortCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                abortCallback = sinon.spy();
+                return abortCallback;
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                    assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+                    assert.ok(abortCallback, 'Abort callback was created');
+
+                    form.option('aiIntegration', { smartPaste: sinon.stub().callsFake(() => () => {}) });
+
+                    setTimeout(() => {
+                        assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
+                        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after abort');
+                        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after abort');
+
+                        done();
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('Multiple LoadPanel calls during smartPaste do not create multiple panels', function(assert) {
+            const done = assert.async();
+            const completionCallbacks = [];
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                completionCallbacks.push(() => callbacks.onComplete([]));
+                return () => {};
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            form.smartPaste();
+            form.smartPaste();
+            form.smartPaste();
+
+            setTimeout(() => {
+                assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'Only one LoadPanel is present');
+                assert.strictEqual(form.option('disabled'), true, 'Form remains disabled');
+
+                if(completionCallbacks.length > 0) {
+                    completionCallbacks[completionCallbacks.length - 1]();
+                }
+
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                    assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after completion');
+                    assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after completion');
+
+                    done();
+                }, 10);
+            }, 10);
+        });
+
+        QUnit.test('smartPaste handles empty clipboard text', function(assert) {
+            const done = assert.async();
+            let completionCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                completionCallback = () => callbacks.onComplete([]);
+                return () => {};
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(smartPaste.called, true, 'AI operation should be called with empty text');
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel DOM element should be created for empty text');
+                    assert.notStrictEqual(form._loadPanel, undefined, 'LoadPanel should be created for empty text');
+                    assert.strictEqual(form.option('disabled'), true, 'Form should be disabled during operation');
+
+                    completionCallback();
+
+                    setTimeout(() => {
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel should be hidden after completion');
+                        assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled after completion');
+
+                        done();
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('LoadPanel reuses existing instance on subsequent calls', function(assert) {
+            const done = assert.async();
+            let completionCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                completionCallback = () => callbacks.onComplete([]);
+                return () => {};
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown for first operation');
+                    completionCallback();
+
+                    setTimeout(() => {
+                        form.smartPaste().then(() => {
+                            setTimeout(() => {
+                                assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'Only one LoadPanel exists');
+
+                                completionCallback();
+
+                                setTimeout(() => {
+                                    done();
+                                }, 10);
+                            }, 10);
+                        });
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('Form dispose during active operation cleans up properly', function(assert) {
+            const done = assert.async();
+            const abortSpy = sinon.spy();
+
+            const smartPaste = sinon.stub().returns(abortSpy);
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown');
+
+                    form.dispose();
+
+                    assert.strictEqual(abortSpy.calledOnce, true, 'Operation should be aborted on dispose');
+
+                    done();
+                }, 10);
+            });
         });
     });
 });
