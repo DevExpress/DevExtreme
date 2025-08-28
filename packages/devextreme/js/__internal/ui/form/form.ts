@@ -1836,13 +1836,16 @@ class Form extends Widget<FormProperties> {
   }
 
   async smartPaste(text?: string): Promise<void> {
+    if (this._currentAICommand?.command === 'smartPaste') {
+      this._processCommandCompletion();
+    }
+
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map((item) => ({
       name: item.dataField,
       format: getItemFormatInfo(item),
       instruction: item.aiOptions?.instruction,
     }));
-
     const smartPasteParams = {
       text: text ?? await navigator.clipboard.readText(),
       fields,
