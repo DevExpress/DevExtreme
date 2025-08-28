@@ -1,4 +1,12 @@
-import type { DateInterval } from '../../../types';
+import type {
+  AllDayPanelOccupation,
+  AppointmentCollector,
+  DateInterval,
+  Level,
+  ListEntity,
+  MaxLevel,
+  Position,
+} from '../../../types';
 
 export interface Geometry {
   left: number;
@@ -31,15 +39,23 @@ export interface RawCollectorSize {
   marginBottom: string;
 }
 
+export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex'>
+  & Position
+  & Level
+  & MaxLevel
+  & AppointmentCollector
+  & AllDayPanelOccupation;
+
 export interface GeometryOptions {
   intervals: DateInterval[];
-  maxLevel: number;
+  maxAppointmentsPerCell: number;
   viewOrientation: 'horizontal' | 'vertical';
   groupOrientation?: 'horizontal' | 'vertical';
   isGroupByDate: boolean;
   isTimeline: boolean;
   isRTLEnabled: boolean;
   isAdaptivityEnabled: boolean;
+  collectorPosition: 'start' | 'end';
   groupCount: number;
   cellSize: RealSize;
   collectorSize: RealSize;

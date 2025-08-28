@@ -43,10 +43,11 @@ export const generateMonthViewModel = (
     allDayPanel: splitPanelOptions,
     regularPanel: splitPanelOptions,
   };
-  // TODO: for other views: isCompactCollector = adaptivityEnabled || !allDayPanel && vertical_view
-  const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
-  const isCompactCollector = isAdaptivityEnabled;
 
+  const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
+  const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
+  // TODO: for other views: isCompactCollector = adaptivityEnabled || !allDayPanel && vertical_view
+  const isCompactCollector = isAdaptivityEnabled;
   const workspace = schedulerStore.getWorkSpace();
   const workspaceDOMSize = workspace.getWorkspaceDOMSize();
   const DOMMetaData = workspace.getDOMElementsMetaData();
@@ -72,15 +73,16 @@ export const generateMonthViewModel = (
   });
   const geometryOptions: GeometryOptions = {
     intervals: monthPanel.intervals,
-    maxLevel,
+    maxAppointmentsPerCell: maxLevel,
     viewOrientation,
     groupOrientation,
     isGroupByDate,
     isTimeline: false,
-    isRTLEnabled: Boolean(schedulerStore.option('rtlEnabled')),
+    isRTLEnabled,
     isAdaptivityEnabled,
     groupCount,
     cellSize,
+    collectorPosition: 'start',
     ...collectorSizes,
     intervalSize: {
       width: cellSize.width * INTERVAL_CELLS_COUNT,
@@ -93,7 +95,9 @@ export const generateMonthViewModel = (
   const step2 = addPosition(step1, cells);
   const step3 = snapToCells(step2, cells);
   const step7 = addCollector(step3, {
-    cells, maxLevel, isCompact: isCompactCollector,
+    cells,
+    maxLevel,
+    isCompact: isCompactCollector,
   });
   const step9 = addSortedIndex(step7);
   const step10 = filterByVirtualScreen(step9);

@@ -324,16 +324,19 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     border-radius: $generic-scheduler-dropdown-button-height;
   }
 }
+
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
   .dx-scheduler-appointment-collector {
     margin-right: 33px;
   }
 }
+
 .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
   .dx-scheduler-appointment-collector {
     margin-right: 57px;
   }
 }
+
 .dx-scheduler-adaptive {
   .dx-scheduler-work-space.dx-scheduler-work-space-month,
   .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {

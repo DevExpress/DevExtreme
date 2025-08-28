@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { getSchedulerMock } from '@ts/scheduler/view_model_new/filtration/scheduler.mock';
 
+import { getSchedulerMock } from './__mock__/scheduler.mock';
 import { getFilterOptions } from './get_filter_options';
 
 const getSchedulerStore = (type: string): ReturnType<typeof getSchedulerMock> => getSchedulerMock({

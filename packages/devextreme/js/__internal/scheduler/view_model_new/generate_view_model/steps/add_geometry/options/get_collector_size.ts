@@ -3,12 +3,13 @@ import type {
   RealSize,
 } from '../types';
 
-const getPxValue = (value = ''): number => {
+const DEFAULT_COLLECTOR_HEIGHT = 20;
+const getPxValue = (value = '', defaultValue = 0): number => {
   if (!value.endsWith('px')) {
-    return 0;
+    return defaultValue;
   }
 
-  return parseInt(value, 10) || 0;
+  return parseInt(value, 10) || defaultValue;
 };
 
 export const getCollectorSize = (
@@ -19,7 +20,7 @@ export const getCollectorSize = (
   collectorWithMarginsSize: RealSize;
 } => {
   const parsedSize = {
-    height: getPxValue(rawCollectorSize.height),
+    height: getPxValue(rawCollectorSize.height, DEFAULT_COLLECTOR_HEIGHT),
     width: getPxValue(rawCollectorSize.width),
     marginRight: getPxValue(rawCollectorSize.marginRight),
     marginLeft: getPxValue(rawCollectorSize.marginLeft),
@@ -28,9 +29,7 @@ export const getCollectorSize = (
   };
   const marginHeight = parsedSize.marginTop + parsedSize.marginBottom;
   const marginWidth = parsedSize.marginLeft + parsedSize.marginRight;
-  const height = parsedSize.height
-    ? parsedSize.height + marginHeight
-    : cellSize.height;
+  const height = parsedSize.height + marginHeight;
   const width = parsedSize.width
     ? parsedSize.width + marginWidth
     : cellSize.width;

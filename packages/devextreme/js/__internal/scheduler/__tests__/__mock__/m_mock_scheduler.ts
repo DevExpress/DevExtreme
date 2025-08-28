@@ -26,15 +26,32 @@ export const setupSchedulerTestEnvironment = ({
     onScroll: jest.fn(),
     onEnd: jest.fn(),
   });
-  Element.prototype.getBoundingClientRect = jest.fn((): DOMRect => ({
-    width,
-    height,
-    top: 0,
-    left: 0,
-    bottom: height,
-    right: width,
-    x: 0,
-    y: 0,
-    toJSON: (): void => {},
-  }));
+  Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
+    switch (true) {
+      case this.classList.contains('dx-scheduler-date-table-cell'):
+        return {
+          width,
+          height,
+          top: 0,
+          left: 0,
+          bottom: height,
+          right: width,
+          x: 0,
+          y: 0,
+          toJSON: (): void => {},
+        };
+      default:
+        return {
+          width: 0,
+          height: 0,
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          x: 0,
+          y: 0,
+          toJSON: (): void => {},
+        };
+    }
+  });
 };

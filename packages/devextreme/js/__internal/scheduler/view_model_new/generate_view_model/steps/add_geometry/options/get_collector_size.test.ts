@@ -22,8 +22,8 @@ describe('getCollectorSize', () => {
         width: 'auto', height: 'auto', marginLeft: '3px', marginRight: '3px', marginTop: '5px', marginBottom: '5px',
       },
     )).toEqual({
-      collectorSize: { width: 144, height: 70 },
-      collectorWithMarginsSize: { width: 150, height: 80 },
+      collectorSize: { width: 144, height: 20 },
+      collectorWithMarginsSize: { width: 150, height: 30 },
     });
   });
 });
