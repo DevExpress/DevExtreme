@@ -291,7 +291,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
-      { demo: 'ContextMenu', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
   },
   React: {
