@@ -53,7 +53,7 @@ class BaseStrategy {
       });
 
       coordinates.forEach((item) => {
-        !!item && result.push(
+        Boolean(item) && result.push(
           this._prepareObject(item, index),
         );
       });

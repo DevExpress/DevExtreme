@@ -396,7 +396,7 @@ class BaseRenderingStrategy {
   }
 
   _isItemsCross(firstItem, secondItem) {
-    const areItemsInTheSameTable = !!firstItem.allDay === !!secondItem.allDay;
+    const areItemsInTheSameTable = Boolean(firstItem.allDay) === Boolean(secondItem.allDay);
     const areItemsAllDay = firstItem.allDay && secondItem.allDay;
 
     if (areItemsInTheSameTable) {

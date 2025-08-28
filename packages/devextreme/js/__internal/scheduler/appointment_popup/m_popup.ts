@@ -161,7 +161,7 @@ export class AppointmentPopup {
     return {
       ...rawAppointment,
       ...rawAppointmentGroupValues,
-      repeat: !!appointment.recurrenceRule,
+      repeat: Boolean(appointment.recurrenceRule),
     };
   }
 
@@ -251,7 +251,7 @@ export class AppointmentPopup {
       const clonedAdapter = adapter
         .clone()
         .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
-      const shouldClearRecurrenceRule = !repeat && !!clonedAdapter.recurrenceRule;
+      const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
 
       this._addMissingDSTTime(adapter, clonedAdapter);
 
