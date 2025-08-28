@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
@@ -63,11 +62,9 @@ FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
-      // eslint-disable-next-line spellcheck/spell-checker
       t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
       await t.resizeWindow(1000, 800);
     })
-    // eslint-disable-next-line spellcheck/spell-checker
     .afterEach((t) => clearTimeout(t.ctx.watchDogHandle))
     .clientScripts([
       { module: 'mockdate' },
