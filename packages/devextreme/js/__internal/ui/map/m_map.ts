@@ -1,3 +1,4 @@
+import type { DefaultOptionsRule } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -6,21 +7,22 @@ import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
-// @ts-expect-error
-import { fromPromise } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
-import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
+import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import type { LocationOption } from './m_provider.dynamic';
 import azure from './m_provider.dynamic.azure';
 import bing from './m_provider.dynamic.bing';
 import google from './m_provider.dynamic.google';
-// NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
+// NOTE external urls must have protocol explicitly specified
+// (because inside Cordova package the protocol is "file:")
 import googleStatic from './m_provider.google_static';
 
 const PROVIDERS = {
@@ -37,11 +39,18 @@ const MAP_SHIELD_CLASS = 'dx-map-shield';
 export interface MapProperties extends Properties {
   onUpdated?: () => {};
 
-  bounds?: Record<string, unknown>;
+  bounds?: {
+    southWest?: LocationOption | null;
+    northEast?: LocationOption | null;
+  };
 }
 
 class Map extends Widget<MapProperties> {
-  _optionChangeBag?: Record<string, unknown> | null;
+  _optionChangeBag?: {
+    resolve: (value?: unknown) => void;
+    added: MapProperties['markers'] | MapProperties['routes'];
+    removed: MapProperties['markers'] | MapProperties['routes'];
+  } | null;
 
   _lastAsyncAction!: Promise<void>;
 
@@ -51,9 +60,12 @@ class Map extends Widget<MapProperties> {
 
   _suppressAsyncAction?: boolean;
 
-  _rendered!: Record<string, unknown>;
+  _rendered!: {
+    markers?: MapProperties['markers'] | MapProperties['routes'];
+    routes?: MapProperties['routes'] | MapProperties['markers'];
+  };
 
-  _$container?: dxElementWrapper;
+  _$container!: dxElementWrapper;
 
   _getDefaultOptions(): MapProperties {
     return {
@@ -104,10 +116,10 @@ class Map extends Widget<MapProperties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<MapProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -117,7 +129,7 @@ class Map extends Widget<MapProperties> {
     ]);
   }
 
-  ctor(element, options) {
+  ctor(element: Element, options: MapProperties): void {
     super.ctor(element, options);
 
     if (options) {
@@ -165,7 +177,7 @@ class Map extends Widget<MapProperties> {
     return false;
   }
 
-  _checkOption(option): void {
+  _checkOption(option: 'markers' | 'routes' | 'provider'): void {
     const value = this.option(option);
 
     if (option === 'markers' && !Array.isArray(value)) {
@@ -190,16 +202,16 @@ class Map extends Widget<MapProperties> {
     eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));
   }
 
-  _cancelEvent(e): void {
-    const cancelByProvider = this._provider?.isEventsCanceled(e) && !this.option('disabled');
+  _cancelEvent(e: DxEvent): void {
+    const { disabled } = this.option();
+    const cancelByProvider = this._provider?.isEventsCanceled(e) && !disabled;
     if (cancelByProvider) {
       e.stopPropagation();
     }
   }
 
-  _saveRendered(option): void {
-    const value = this.option(option);
-    // @ts-expect-error ts-error
+  _saveRendered(option: 'markers' | 'routes'): void {
+    const { [option]: value = [] } = this.option();
     this._rendered[option] = value.slice();
   }
 
@@ -211,28 +223,34 @@ class Map extends Widget<MapProperties> {
     this._saveRendered('markers');
     this._saveRendered('routes');
 
-    const { provider } = this.option();
+    const { provider = 'google' } = this.option();
+    const Provider = PROVIDERS[provider];
 
-    // @ts-expect-error ts-error
-    this._provider = new PROVIDERS[provider](this, this._$container);
+    this._provider = new Provider(this, this._$container);
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
   }
 
   _renderShield(): void {
-    let $shield;
+    const { disabled } = this.option();
 
-    if (this.option('disabled')) {
-      $shield = $('<div>').addClass(MAP_SHIELD_CLASS);
+    if (disabled) {
+      const $shield = $('<div>').addClass(MAP_SHIELD_CLASS);
       this.$element().append($shield);
-    } else {
-      $shield = this.$element().find(`.${MAP_SHIELD_CLASS}`);
-      $shield.remove();
+
+      return;
     }
+
+    this.$element()
+      .find(`.${MAP_SHIELD_CLASS}`)
+      .remove();
   }
 
   _clean(): void {
     this._cleanFocusState();
     if (this._provider) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._provider.clean();
     }
     // @ts-expect-error ts-error
@@ -253,6 +271,7 @@ class Map extends Widget<MapProperties> {
       case 'disabled':
         this._renderShield();
         super._optionChanged(args);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateDisabled');
         break;
       case 'width':
@@ -271,21 +290,27 @@ class Map extends Widget<MapProperties> {
         errors.log('W1001');
         break;
       case 'bounds':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateBounds');
         break;
       case 'center':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateCenter');
         break;
       case 'zoom':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateZoom');
         break;
       case 'type':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateMapType');
         break;
       case 'controls':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateControls', this._rendered.markers, this._rendered.routes);
         break;
       case 'autoAdjust':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('adjustViewport');
         break;
       case 'markers':
@@ -294,19 +319,20 @@ class Map extends Widget<MapProperties> {
 
         const prevValue = this._rendered[name];
         this._saveRendered(name);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction(
-          `update${titleize(name)}`,
+          `${name === 'markers' ? 'updateMarkers' : 'updateRoutes'}`,
           changeBag ? changeBag.removed : prevValue,
           changeBag ? changeBag.added : this._rendered[name],
         ).then((result) => {
           if (changeBag) {
-            // @ts-expect-error ts-error
             changeBag.resolve(result);
           }
         });
         break;
       }
       case 'markerIconSrc':
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
         break;
       case 'providerConfig':
@@ -322,8 +348,7 @@ class Map extends Widget<MapProperties> {
       case 'onClick':
         break;
       default:
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
     }
   }
 
@@ -334,12 +359,16 @@ class Map extends Widget<MapProperties> {
   }
 
   _dimensionChanged(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._queueAsyncAction('updateDimensions');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _queueAsyncAction(name, markers?, routers?) {
-    const options = [].slice.call(arguments).slice(1);
+  _queueAsyncAction(
+    name: string,
+    markers?: MapProperties['markers'] | MapProperties['routes'],
+    routes?: MapProperties['routes'] | MapProperties['markers'],
+  ): Promise<void> {
+    const markerAndRoutes = [markers, routes].filter(Boolean);
     const isActionSuppressed = this._suppressAsyncAction;
 
     this._lastAsyncAction = this._lastAsyncAction.then(() => {
@@ -350,10 +379,11 @@ class Map extends Widget<MapProperties> {
         return Promise.resolve();
       }
 
-      return this._provider[name].apply(this._provider, options).then((result) => {
-        result = wrapToArray(result);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return this._provider[name](...markerAndRoutes).then((result) => {
+        const arrayResult = wrapToArray(result);
 
-        const mapRefreshed = result[0];
+        const mapRefreshed = arrayResult[0];
         if (mapRefreshed && !this._disposed) {
           this._triggerReadyAction();
         }
@@ -363,7 +393,8 @@ class Map extends Widget<MapProperties> {
         }
         /// #ENDDEBUG
 
-        return result[1];
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return arrayResult[1];
       });
     });
 
@@ -378,58 +409,84 @@ class Map extends Widget<MapProperties> {
     this._createActionByOption('onUpdated')();
   }
 
-  setOptionSilent(name, value): void {
+  setOptionSilent(name: string, value: unknown): void {
     this._setOptionWithoutOptionChange(name, value);
   }
 
-  addMarker(marker) {
+  addMarker(marker: MapProperties['markers']): Promise<unknown> {
     return this._addFunction('markers', marker);
   }
 
-  removeMarker(marker) {
+  removeMarker(marker: MapProperties['markers'] | number): Promise<void> {
     return this._removeFunction('markers', marker);
   }
 
-  addRoute(route) {
+  addRoute(route: MapProperties['routes']): Promise<unknown> {
     return this._addFunction('routes', route);
   }
 
-  removeRoute(route) {
+  removeRoute(route: MapProperties['routes'] | number): Promise<void> {
     return this._removeFunction('routes', route);
   }
 
-  _addFunction(optionName, addingValue) {
-    const optionValue = this.option(optionName);
+  _addFunction(
+    optionName: 'markers',
+    addingValue: MapProperties['markers']
+  ): Promise<unknown>;
+  _addFunction(
+    optionName: 'routes',
+    addingValue: MapProperties['routes']
+  ): Promise<unknown>;
+  _addFunction(
+    optionName: 'markers' | 'routes',
+    addingValue: MapProperties['markers'] | MapProperties['routes'],
+  ): Promise<unknown> {
+    const { [optionName]: optionValue = [] } = this.option();
     const addingValues = wrapToArray(addingValue);
-    // @ts-expect-error ts-error
-    optionValue.push.apply(optionValue, addingValues);
+    optionValue.push(...addingValues);
 
     return this._partialArrayOptionChange(optionName, optionValue, addingValues, []);
   }
 
-  _removeFunction(optionName, removingValue) {
-    const optionValue = this.option(optionName);
+  _removeFunction(
+    optionName: 'markers',
+    removingValue: MapProperties['markers'] | number,
+  ): Promise<void>;
+  _removeFunction(
+    optionName: 'routes',
+    removingValue: MapProperties['routes' ] | number,
+  ): Promise<void>;
+  _removeFunction(
+    optionName: 'markers' | 'routes',
+    removingValue: MapProperties['markers'] | MapProperties['routes' ] | number,
+  ): Promise<void> {
+    const { [optionName]: optionValue = [] } = this.option();
     const removingValues = wrapToArray(removingValue);
 
-    each(removingValues, (removingIndex, removingValue) => {
-      const index = isNumeric(removingValue)
-        ? removingValue
-      // @ts-expect-error ts-error
-        : optionValue?.indexOf(removingValue);
+    removingValues.forEach((value, removingIndex) => {
+      const index = isNumeric(value)
+        ? value
+        : optionValue.indexOf(value);
 
       if (index !== -1) {
-        // @ts-expect-error ts-error
         const removing = optionValue.splice(index, 1)[0];
         removingValues.splice(removingIndex, 1, removing);
       } else {
-        throw errors.log('E1021', titleize(optionName.substring(0, optionName.length - 1)), removingValue);
+        throw errors.log('E1021', titleize(optionName.substring(0, optionName.length - 1)), value);
       }
     });
 
     return this._partialArrayOptionChange(optionName, optionValue, [], removingValues);
   }
 
-  _partialArrayOptionChange(optionName, optionValue, addingValues, removingValues) {
+  _partialArrayOptionChange(
+    optionName: 'markers' | 'routes',
+    optionValue: MapProperties['markers'] | MapProperties['routes'],
+    addingValues: MapProperties['markers'] | MapProperties['routes'],
+    removingValues: MapProperties['markers'] | MapProperties['routes'],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<void> | Promise<any> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return fromPromise(new Promise((resolve) => {
       this._optionChangeBag = {
         resolve,
@@ -437,8 +494,12 @@ class Map extends Widget<MapProperties> {
         removed: removingValues,
       };
       this.option(optionName, optionValue);
-      // @ts-expect-error
-    }).then((result) => (result && result.length === 1 ? result[0] : result)), this);
+    }).then((result) => {
+      const resultArray = Array.isArray(result) ? result : [result];
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return resultArray.length === 1 ? resultArray[0] : resultArray;
+    }), this);
   }
 }
 
