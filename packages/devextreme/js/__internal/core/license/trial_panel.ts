@@ -9,7 +9,7 @@ export function showTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
-  subscriptions: string,
+  subscriptions?: string,
   customStyles?: CustomTrialPanelStyles,
 ): void {
   if (isClient()) {

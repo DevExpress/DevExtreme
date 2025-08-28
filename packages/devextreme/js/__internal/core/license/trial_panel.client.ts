@@ -193,8 +193,14 @@ class DxLicense extends SafeHTMLElement {
       this._createSpan(' an existing license or '),
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
-      this._createSpan(subscriptions ? ` Included in Subscriptions: ${subscriptions}.` : ''),
     );
+
+    if (subscriptions) {
+      contentContainer.append(
+        this._createSpan(` Included in Subscriptions: ${subscriptions}.`),
+      );
+    }
+
     return contentContainer;
   }
 
