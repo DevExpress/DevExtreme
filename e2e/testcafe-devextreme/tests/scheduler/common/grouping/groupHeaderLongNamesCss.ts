@@ -84,14 +84,6 @@ const DEFAULT_OPTIONS = {
 };
 
 const CELL_SIZE_CSS = `
-  #container .dx-scheduler-group-header {
-    width: auto;
-  }
-  #container .dx-scheduler-group-flex-container,
-  #container .dx-scheduler-work-space-vertical-group-table,
-  #container .dx-scheduler-sidebar-scrollable {
-    flex: 0 0 auto;
-  }
 `;
 
 const createScheduler = async (options = {}): Promise<void> => createWidget('dxScheduler', extend(DEFAULT_OPTIONS, options));
