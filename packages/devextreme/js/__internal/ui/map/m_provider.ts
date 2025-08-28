@@ -83,13 +83,15 @@ class Provider {
     markerOptionsToAdd: MarkerOptions[],
   ): Promise<unknown> {
     return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
         .then((removeValue) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
             .then((addValue) => {
               resolve(addValue || removeValue);
-            }).catch(() => {});
-        }).catch(() => {});
+            });
+        });
     });
   }
 
@@ -112,13 +114,15 @@ class Provider {
     routeOptionsToAdd: RouteOptions[],
   ): Promise<unknown> {
     return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
         .then((removeValue) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
             .then((addValue) => {
               resolve(addValue || removeValue);
-            }).catch(() => {});
-        }).catch(() => {});
+            });
+        });
     });
   }
 
@@ -185,7 +189,7 @@ class Provider {
     };
   }
 
-  _getLatLng(location: LocationOption | null | undefined): { lat: number; lng: number } | null {
+  _getLatLng(location?: LocationOption | null): { lat: number; lng: number } | null {
     if (typeof location === 'string') {
       const coords = location.split(',').map((item) => item.trim());
       const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;

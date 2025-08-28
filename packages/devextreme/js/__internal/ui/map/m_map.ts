@@ -61,8 +61,8 @@ class Map extends Widget<MapProperties> {
   _suppressAsyncAction?: boolean;
 
   _rendered!: {
-    markers?: MapProperties['markers'];
-    routes?: MapProperties['routes'];
+    markers?: MapProperties['markers'] | MapProperties['routes'];
+    routes?: MapProperties['routes'] | MapProperties['markers'];
   };
 
   _$container!: dxElementWrapper;
@@ -211,13 +211,8 @@ class Map extends Widget<MapProperties> {
   }
 
   _saveRendered(option: 'markers' | 'routes'): void {
-    if (option === 'markers') {
-      const { markers = [] } = this.option();
-      this._rendered.markers = [...markers];
-    } else if (option === 'routes') {
-      const { routes = [] } = this.option();
-      this._rendered.routes = [...routes];
-    }
+    const { [option]: value = [] } = this.option();
+    this._rendered[option] = value.slice();
   }
 
   _render(): void {
@@ -327,8 +322,7 @@ class Map extends Widget<MapProperties> {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction(
           `${name === 'markers' ? 'updateMarkers' : 'updateRoutes'}`,
-          // @ts-expect-error ts-error
-          changeBag?.removed ? changeBag.removed : prevValue,
+          changeBag ? changeBag.removed : prevValue,
           changeBag ? changeBag.added : this._rendered[name],
         ).then((result) => {
           if (changeBag) {
@@ -338,7 +332,6 @@ class Map extends Widget<MapProperties> {
         break;
       }
       case 'markerIconSrc':
-        // @ts-expect-error ts-error
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
         break;
@@ -372,10 +365,10 @@ class Map extends Widget<MapProperties> {
 
   _queueAsyncAction(
     name: string,
-    markers?: MapProperties['markers'],
-    routers?: MapProperties['routes'],
+    markers?: MapProperties['markers'] | MapProperties['routes'],
+    routes?: MapProperties['routes'] | MapProperties['markers'],
   ): Promise<void> {
-    const markerAndRoutes = [markers, routers].filter((option) => option !== undefined);
+    const markerAndRoutes = [markers, routes].filter(Boolean);
     const isActionSuppressed = this._suppressAsyncAction;
 
     this._lastAsyncAction = this._lastAsyncAction.then(() => {

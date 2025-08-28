@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import ajax from '@js/core/utils/ajax';
@@ -46,12 +45,16 @@ class BingProvider extends DynamicProvider {
 
   _preventZoomChangeEvent?: boolean;
 
-  _mapType(type: MapType): unknown {
+  _mapType(type?: MapType): unknown {
     const mapTypes = {
       roadmap: Microsoft.Maps.MapTypeId.road,
       hybrid: Microsoft.Maps.MapTypeId.aerial,
       satellite: Microsoft.Maps.MapTypeId.aerial,
     };
+
+    if (!type) {
+      return mapTypes.roadmap;
+    }
 
     return mapTypes[type] ?? mapTypes.roadmap;
   }
@@ -64,15 +67,16 @@ class BingProvider extends DynamicProvider {
     return Microsoft.Maps.Directions.RouteMode[type];
   }
 
-  _resolveLocation(location: LocationOption | null | undefined): Promise<BingLocation> {
+  _resolveLocation(location?: LocationOption | null): Promise<BingLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new Microsoft.Maps.Location(latLng.lat, latLng.lng));
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
           resolve(geocodedLocation as BingLocation);
-        }).catch(() => {});
+        });
       }
     });
   }
@@ -151,7 +155,8 @@ class BingProvider extends DynamicProvider {
             return;
           }
 
-          this._loadMapScript().then(resolve).catch(() => {});
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this._loadMapScript().then(resolve);
         });
       }
     }).then(() => Promise.all([
@@ -236,7 +241,7 @@ class BingProvider extends DynamicProvider {
   }
 
   updateMapType(): Promise<void> {
-    const type = this._option('type') ?? 'roadmap';
+    const type = this._option('type');
     const labelOverlay = Microsoft.Maps.LabelOverlay;
 
     this._map.setView({
@@ -290,8 +295,10 @@ class BingProvider extends DynamicProvider {
   }
 
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
-    return this._resolveLocation(options.location).then((location) => {
+    const { location: markerLocation } = options;
+    return this._resolveLocation(markerLocation).then((location) => {
       const pushpinOptions = {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         icon: options.iconSrc || this._option('markerIconSrc'),
       };
       if (options.html) {
@@ -315,7 +322,7 @@ class BingProvider extends DynamicProvider {
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let handler;
       if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
         const markerNormalizedLocation = this._normalizeLocation(location);
 
         handler = Microsoft.Maps.Events.addHandler(pushpin, 'click', () => {
@@ -358,7 +365,7 @@ class BingProvider extends DynamicProvider {
   }
 
   _destroyMarker(marker: {
-    marker: unknown; infobox: { setMap: (arg: unknown) => void }; handler: () => {};
+    marker: unknown; infobox: { setMap: (arg: unknown) => void }; handler: () => void;
   }): void {
     this._map.entities.remove(marker.marker);
     if (marker.infobox) {
@@ -374,9 +381,11 @@ class BingProvider extends DynamicProvider {
     return Promise.all(routeLocations.map((point) => this._resolveLocation(point)))
       .then((locations) => new Promise((resolve) => {
         const direction = new Microsoft.Maps.Directions.DirectionsManager(this._map);
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const color = new Color(options.color || this._defaultRouteColor()).toHex();
         // eslint-disable-next-line new-cap
         const routeColor = new Microsoft.Maps.Color.fromHex(color);
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         routeColor.a = (options.opacity || this._defaultRouteOpacity()) * 255;
 
         direction.setRenderOptions({
@@ -385,10 +394,12 @@ class BingProvider extends DynamicProvider {
           waypointPushpinOptions: { visible: false },
           drivingPolylineOptions: {
             strokeColor: routeColor,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             strokeThickness: options.weight || this._defaultRouteWeight(),
           },
           walkingPolylineOptions: {
             strokeColor: routeColor,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             strokeThickness: options.weight || this._defaultRouteWeight(),
           },
         });

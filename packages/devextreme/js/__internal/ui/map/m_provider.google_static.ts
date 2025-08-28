@@ -12,7 +12,8 @@ let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 class GoogleStaticProvider extends Provider {
   _locationToString(location: LocationOption): string {
     const latLng = this._getLatLng(location);
-    return latLng ? `${latLng.lat},${latLng.lng}` : (location as string).replace(/ /g, '+');
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    return latLng ? `${latLng.lat},${latLng.lng}` : location.toString().replace(/ /g, '+');
   }
 
   _renderImpl(): Promise<boolean> {

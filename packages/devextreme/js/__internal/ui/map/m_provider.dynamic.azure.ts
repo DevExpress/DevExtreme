@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import Color from '@js/color';
 import $ from '@js/core/renderer';
@@ -41,12 +40,17 @@ class AzureProvider extends DynamicProvider {
 
   _mapReadyPromise!: Promise<void>;
 
-  _mapType(type: MapType): string {
+  _mapType(type?: MapType): string {
     const mapTypes = {
       roadmap: 'road',
       satellite: 'satellite',
       hybrid: 'satellite_road_labels',
     };
+
+    if (!type) {
+      return mapTypes.roadmap;
+    }
+
     return mapTypes[type] ?? mapTypes.roadmap;
   }
 
@@ -63,15 +67,16 @@ class AzureProvider extends DynamicProvider {
     return movementTypes[type] ?? type;
   }
 
-  _resolveLocation(location: LocationOption | null | undefined): Promise<AzureLocation> {
+  _resolveLocation(location?: LocationOption | null): Promise<AzureLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new atlas.data.Position(latLng.lng, latLng.lat));
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
           resolve(geocodedLocation as AzureLocation);
-        }).catch(() => {});
+        });
       }
     });
   }
@@ -144,9 +149,9 @@ class AzureProvider extends DynamicProvider {
           return;
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._loadMapResources()
-          .then(resolve)
-          .catch(() => {});
+          .then(resolve);
       });
     });
   }
@@ -188,7 +193,7 @@ class AzureProvider extends DynamicProvider {
   }
 
   _createMap(): void {
-    const type = this._option('type') ?? 'roadmap';
+    const type = this._option('type');
     this._map = new atlas.Map(this._$container[0], {
       authOptions: {
         authType: 'subscriptionKey',
@@ -256,7 +261,7 @@ class AzureProvider extends DynamicProvider {
   }
 
   updateMapType(): Promise<void> {
-    const type = this._option('type') ?? 'roadmap';
+    const type = this._option('type');
     const newType = this._mapType(type);
     const currentType = this._map.getStyle().style;
 
@@ -324,11 +329,12 @@ class AzureProvider extends DynamicProvider {
   }
 
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
-    const markerLocation = options.location;
+    const { location: markerLocation } = options;
     return this._resolveLocation(markerLocation).then((location) => {
       const markerOptions: Record<string, unknown> = {
         position: location,
       };
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const icon = options.iconSrc || this._option('markerIconSrc');
       if (icon) {
         markerOptions.htmlContent = this._createIconTemplate(icon);
@@ -340,7 +346,7 @@ class AzureProvider extends DynamicProvider {
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let handler;
       if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
         const markerNormalizedLocation = this._normalizeLocation(location);
 
         handler = this._map.events.add('click', marker, () => {
@@ -391,7 +397,7 @@ class AzureProvider extends DynamicProvider {
     return popup;
   }
 
-  _destroyMarker(marker: { marker: unknown; popup: unknown; handler: () => {} }): void {
+  _destroyMarker(marker: { marker: unknown; popup: unknown; handler: () => void }): void {
     this._map.markers.remove(marker.marker);
     if (marker.popup) {
       this._map.popups.remove(marker.popup);
@@ -406,7 +412,9 @@ class AzureProvider extends DynamicProvider {
     return Promise.all(
       routeLocations.map((point) => this._resolveLocation(point)),
     ).then((locations) => new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const routeColor = new Color(options.color || this._defaultRouteColor()).toHex();
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const routeOpacity = options.opacity || this._defaultRouteOpacity();
       const queryCoordinates = locations.map((location) => `${location[1]},${location[0]}`);
       const query = queryCoordinates.join(':');
@@ -432,6 +440,7 @@ class AzureProvider extends DynamicProvider {
           const lineLayer = new atlas.layer.LineLayer(dataSource, null, {
             strokeColor: routeColor,
             strokeOpacity: routeOpacity,
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             strokeWidth: options.weight || this._defaultRouteWeight(),
           });
 

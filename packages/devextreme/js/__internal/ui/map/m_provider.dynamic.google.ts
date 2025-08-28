@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global google */
@@ -98,12 +97,17 @@ class GoogleProvider extends DynamicProvider {
 
   _boundsChangeListener?: () => void;
 
-  _mapType(type: MapType): unknown {
+  _mapType(type?: MapType): unknown {
     const mapTypes = {
       hybrid: google.maps.MapTypeId.HYBRID,
       roadmap: google.maps.MapTypeId.ROADMAP,
       satellite: google.maps.MapTypeId.SATELLITE,
     };
+
+    if (!type) {
+      return mapTypes.hybrid;
+    }
+
     return mapTypes[type] ?? mapTypes.hybrid;
   }
 
@@ -120,17 +124,16 @@ class GoogleProvider extends DynamicProvider {
     return movementTypes[type] ?? type;
   }
 
-  _resolveLocation(
-    location: LocationOption | null | undefined,
-  ): Promise<GoogleLocation> {
+  _resolveLocation(location?: LocationOption | null): Promise<GoogleLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new google.maps.LatLng(latLng.lat, latLng.lng));
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocation(location as string).then((geocodedLocation) => {
           resolve(geocodedLocation as GoogleLocation);
-        }).catch(() => {});
+        });
       }
     });
   }
@@ -278,7 +281,7 @@ class GoogleProvider extends DynamicProvider {
   }
 
   updateMapType(): Promise<void> {
-    const type = this._option('type') ?? 'hybrid';
+    const type = this._option('type');
     this._map.setMapTypeId(this._mapType(type));
 
     return Promise.resolve();
@@ -331,7 +334,7 @@ class GoogleProvider extends DynamicProvider {
   }
 
   _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
-    const markerLocation = options.location;
+    const { location: markerLocation } = options;
     return this._resolveLocation(markerLocation).then((location) => {
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let marker;
@@ -348,6 +351,7 @@ class GoogleProvider extends DynamicProvider {
       } else {
         const providerConfig = this._option('providerConfig');
         const useAdvancedMarkers = providerConfig?.useAdvancedMarkers ?? true;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const icon = options.iconSrc || this._option('markerIconSrc');
         if (useAdvancedMarkers) {
           const content = icon ? this._createIconTemplate(icon) : undefined;
@@ -373,7 +377,7 @@ class GoogleProvider extends DynamicProvider {
       // eslint-disable-next-line @typescript-eslint/init-declarations
       let listener;
       if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
         const markerNormalizedLocation = this._normalizeLocation(location);
 
         listener = google.maps.event.addListener(marker, 'click', () => {
@@ -438,6 +442,7 @@ class GoogleProvider extends DynamicProvider {
 
         new google.maps.DirectionsService().route(request, (response, status) => {
           if (status === google.maps.DirectionsStatus.OK) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
             const color = new Color(options.color || this._defaultRouteColor()).toHex();
             const directionOptions = {
               directions: response,
@@ -445,7 +450,9 @@ class GoogleProvider extends DynamicProvider {
               suppressMarkers: true,
               preserveViewport: true,
               polylineOptions: {
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 strokeWeight: options.weight || this._defaultRouteWeight(),
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                 strokeOpacity: options.opacity || this._defaultRouteOpacity(),
                 strokeColor: color,
               },

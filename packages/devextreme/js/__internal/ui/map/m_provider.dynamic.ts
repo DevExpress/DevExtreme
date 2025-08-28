@@ -83,12 +83,12 @@ class DynamicProvider extends Provider {
       if (cachedLocation) {
         resolve(cachedLocation);
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._geocodeLocationImpl(location)
           .then((geocodedLocation) => {
             cache[location] = geocodedLocation;
             resolve(geocodedLocation);
-          })
-          .catch(() => {});
+          });
       }
     });
   }
