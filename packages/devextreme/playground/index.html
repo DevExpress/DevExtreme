@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevExtreme HMR Playground</title>
+    <link rel="stylesheet" href="../artifacts/css/dx.light.css">
+</head>
+<body>
+    <div id="app">
+        <div id="container"></div>
+    </div>
+    <script type="module" src="./scheduler-example.ts"></script>
+    <script type="module">
+        if (import.meta.hot) {
+            import.meta.hot.accept('./scheduler-example.ts', () => {
+                console.log('HMR: Scheduler example updated');
+                location.reload();
+            });
+            console.log('HMR enabled for playground');
+        }
+    </script>
+</body>
+</html>
