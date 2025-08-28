@@ -49,9 +49,6 @@ export const skippedTests = {
       { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-    ],
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
@@ -117,7 +114,6 @@ export const skippedTests = {
       { demo: 'ContextMenu', themes: [THEME.material] },
     ],
     Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
