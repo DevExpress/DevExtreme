@@ -222,7 +222,6 @@ export default class FormItemsRunTimeInfo {
   }
 
   _isItemAIEnabled(item: SimpleItem): boolean {
-    // @ts-expect-error
     return !item.aiOptions?.disabled;
   }
 

@@ -268,7 +268,7 @@ QUnit.module('SmartPaste', () => {
             ];
 
             assert.strictEqual(smartPaste.calledOnce, true, 'smartPaste command called');
-            assert.deepEqual(smartPaste.getCall(0).args[0].fields, fields, 'smartPaste command called with passed text');
+            assert.deepEqual(smartPaste.getCall(0).args[0].fields, fields, 'smartPaste command called with correct fields data');
         });
 
         QUnit.test('should call smartPaste command with passed text', function(assert) {
@@ -331,6 +331,23 @@ QUnit.module('SmartPaste', () => {
             } finally {
                 clipboardReadStub.restore();
             }
+        });
+
+        QUnit.test('update aiIntegration cancels active request and calls new one with same params', function(assert) {
+            const abortSpy = sinon.spy();
+            const smartPaste = sinon.stub().returns(abortSpy);
+            const aiIntegration = { smartPaste: smartPaste };
+
+            const form = setupFormWithAi({ aiIntegration });
+            form.smartPaste('test');
+
+            assert.strictEqual(smartPaste.calledOnce, true, 'smartPaste called');
+
+            form.smartPaste('second test');
+
+            assert.strictEqual(abortSpy.calledOnce, true, 'previous request aborted');
+            assert.strictEqual(smartPaste.getCalls().length, 2, 'smartPaste is called again');
+            assert.deepEqual(smartPaste.getCall(1).args[0].text, 'second test', 'smartPaste invoked with new text');
         });
     });
 
@@ -517,7 +534,12 @@ QUnit.module('SmartPaste', () => {
 
         QUnit.test('smartPaste handles empty clipboard text', function(assert) {
             const done = assert.async();
-            const smartPaste = sinon.stub().returns(() => {});
+            let completionCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                completionCallback = () => callbacks.onComplete([]);
+                return () => {};
+            });
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
@@ -525,12 +547,19 @@ QUnit.module('SmartPaste', () => {
 
             form.smartPaste().then(() => {
                 setTimeout(() => {
-                    assert.strictEqual(smartPaste.called, false, 'AI operation should not be called with empty text');
-                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel DOM element should not be created for empty text');
-                    assert.strictEqual(form._loadPanel, undefined, 'LoadPanel should not be created for empty text');
-                    assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled');
+                    assert.strictEqual(smartPaste.called, true, 'AI operation should be called with empty text');
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel DOM element should be created for empty text');
+                    assert.notStrictEqual(form._loadPanel, undefined, 'LoadPanel should be created for empty text');
+                    assert.strictEqual(form.option('disabled'), true, 'Form should be disabled during operation');
 
-                    done();
+                    completionCallback();
+
+                    setTimeout(() => {
+                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel should be hidden after completion');
+                        assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled after completion');
+
+                        done();
+                    }, 10);
                 }, 10);
             });
         });

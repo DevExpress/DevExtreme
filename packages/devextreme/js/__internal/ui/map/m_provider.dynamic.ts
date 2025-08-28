@@ -1,48 +1,99 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import type { DxEvent } from '@js/events';
+import type { RouteMode } from '@js/ui/map';
 
+import type Map from './m_map';
 import Provider from './m_provider';
+import type { AzureLocation } from './m_provider.dynamic.azure';
+import type { BingLocation } from './m_provider.dynamic.bing';
+import type { GoogleLocation } from './m_provider.dynamic.google';
 
 const MAP_MARKER_CLASS = 'dx-map-marker';
 
+export type LocationOption = string | [number, number] | { lat: number; lng: number };
+
+export interface LocationCoords {
+  lat: number;
+  lng: number;
+}
+
+export interface MarkerOptions {
+  iconSrc?: string;
+  location?: LocationCoords;
+  onClick?: () => {};
+  tooltip?: string | {
+    isShown?: boolean;
+    text?: string;
+  };
+  html?: string;
+  htmlOffset?: { top: number; left: number };
+}
+
+export interface MarkerObject {
+  marker: unknown;
+  location: unknown;
+  listener?: () => void;
+  handler?: () => void;
+  infoBox?: unknown;
+  popup?: unknown;
+}
+
+export interface RouteOptions {
+  color?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  locations?: any[];
+  mode?: RouteMode | string;
+  opacity?: number;
+  weight?: number;
+}
+
+export interface RouteObject {
+  instance?: unknown;
+  northEast?: [number, number];
+  southWest?: [number, number];
+}
+
 class DynamicProvider extends Provider {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _bounds?: any;
 
-  _markers!: any[];
+  _markers!: (MarkerObject & { options: MarkerOptions })[];
 
-  _routes!: any[];
+  _routes!: (RouteObject & { options: RouteOptions })[];
 
-  _geocodedLocations?: any;
+  _geocodedLocations: Record<string, GoogleLocation | BingLocation | AzureLocation>;
 
-  _mapsLoader?: any;
+  _mapsLoader?: Promise<void>;
 
-  ctor(map, $container: dxElementWrapper): void {
+  constructor(map: Map, $container: dxElementWrapper) {
+    super(map, $container);
+
     this._geocodedLocations = {};
-
-    super.ctor(map, $container);
   }
 
-  _geocodeLocation(location) {
+  _geocodeLocation(
+    location: string,
+  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
     return new Promise((resolve) => {
       const cache = this._geocodedLocations;
       const cachedLocation = cache[location];
       if (cachedLocation) {
         resolve(cachedLocation);
       } else {
-        // @ts-expect-error ts-error
-        this._geocodeLocationImpl(location).then((geocodedLocation) => {
-          cache[location] = geocodedLocation;
-          resolve(geocodedLocation);
-        });
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._geocodeLocationImpl(location)
+          .then((geocodedLocation) => {
+            cache[location] = geocodedLocation;
+            resolve(geocodedLocation);
+          });
       }
     });
   }
 
-  _renderImpl() {
+  _renderImpl(): Promise<void> {
     return this._load().then(() => this._init()).then(() => Promise.all([
       this.updateMapType(),
       this._areBoundsSet() ? this.updateBounds() : this.updateCenter(),
@@ -50,17 +101,17 @@ class DynamicProvider extends Provider {
       this._attachHandlers();
 
       // NOTE: setTimeout is needed by providers to correctly initialize bounds
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
+        // eslint-disable-next-line no-restricted-globals
         const timeout = setTimeout(() => {
           clearTimeout(timeout);
-          // @ts-expect-error
           resolve();
         });
       });
     });
   }
 
-  _load() {
+  _load(): Promise<void> {
     if (!this._mapsLoader) {
       this._mapsLoader = this._loadImpl();
     }
@@ -71,29 +122,30 @@ class DynamicProvider extends Provider {
     return this._mapsLoader;
   }
 
-  _loadImpl() {
+  _loadImpl(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  _init(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  _attachHandlers(): void {
     Class.abstract();
   }
 
-  _init() {
-    Class.abstract();
+  addMarkers(markers: MarkerOptions[]): Promise<[boolean, unknown[]]> {
+    return Promise
+      .all(markers.map((options) => this._addMarker(options)))
+      .then((markerObjects: MarkerObject[]) => {
+        this._fitBounds();
+
+        return [false, markerObjects.map((markerObject) => markerObject.marker)];
+      });
   }
 
-  _attachHandlers() {
-    Class.abstract();
-  }
-
-  addMarkers(options) {
-    return Promise.all(map(options, (options) => this._addMarker(options))).then((markerObjects) => {
-      this._fitBounds();
-
-      return [false, map(markerObjects, (markerObject) => markerObject.marker)];
-    });
-  }
-
-  _addMarker(options) {
+  _addMarker(options: MarkerOptions): Promise<MarkerObject> {
     return this._renderMarker(options)
-      // @ts-expect-error ts-error
       .then((markerObject) => {
         this._markers.push(extend({
           options,
@@ -109,43 +161,42 @@ class DynamicProvider extends Provider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderMarker(options) {
-    Class.abstract();
+  _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
+    return Promise.resolve({
+      marker: {},
+      location: { lat: 0, lng: 0 },
+    });
   }
 
-  _createIconTemplate(iconSrc: string) {
+  _createIconTemplate(iconSrc: string): Element {
     const $img = $('<img>');
 
     $img.attr('src', iconSrc);
     $img.attr('alt', 'Marker icon');
     $img.addClass(MAP_MARKER_CLASS);
 
-    return $img[0];
+    return $img.get(0);
   }
 
-  removeMarkers(markersOptionsToRemove) {
-    const that = this;
-
-    each(markersOptionsToRemove, (_, markerOptionToRemove) => {
-      that._removeMarker(markerOptionToRemove);
+  removeMarkers(markersOptionsToRemove: MarkerOptions[]): Promise<void> {
+    markersOptionsToRemove.forEach((markerOptionToRemove) => {
+      this._removeMarker(markerOptionToRemove);
     });
 
     return Promise.resolve();
   }
 
-  _removeMarker(markersOptionToRemove) {
-    const that = this;
-
-    each(this._markers, (markerIndex, markerObject) => {
+  _removeMarker(markersOptionToRemove: MarkerOptions): void {
+    this._markers.forEach((markerObject, markerIndex) => {
       if (markerObject.options !== markersOptionToRemove) {
         return true;
       }
 
-      that._destroyMarker(markerObject);
+      this._destroyMarker(markerObject);
 
-      that._markers.splice(markerIndex, 1);
+      this._markers.splice(markerIndex, 1);
 
-      that._fireMarkerRemovedAction({
+      this._fireMarkerRemovedAction({
         options: markerObject.options,
       });
 
@@ -154,27 +205,26 @@ class DynamicProvider extends Provider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyMarker(marker) {
+  _destroyMarker(marker: unknown): void {
     Class.abstract();
   }
 
-  _clearMarkers() {
+  _clearMarkers(): void {
     while (this._markers.length > 0) {
       this._removeMarker(this._markers[0].options);
     }
   }
 
-  addRoutes(options) {
-    return Promise.all(map(options, (options) => this._addRoute(options))).then((routeObjects) => {
+  addRoutes(routes: RouteOptions[]): Promise<[boolean, unknown[]]> {
+    return Promise.all(routes.map((options) => this._addRoute(options))).then((routeObjects) => {
       this._fitBounds();
 
-      return [false, map(routeObjects, (routeObject) => routeObject.instance)];
+      return [false, routeObjects.map((routeObject) => routeObject.instance)];
     });
   }
 
-  _addRoute(options) {
-    // @ts-expect-error ts-error
-    return this._renderRoute(options).then((routeObject) => {
+  _addRoute(options: RouteOptions): Promise<RouteObject> {
+    return this._renderRoute(options).then((routeObject: RouteObject) => {
       this._routes.push(extend({
         options,
       }, routeObject));
@@ -188,34 +238,35 @@ class DynamicProvider extends Provider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderRoute(options) {
-    Class.abstract();
+  _renderRoute(options: RouteOptions): Promise<RouteObject> {
+    return Promise.resolve({
+      options,
+      instance: {},
+      northEast: [0, 0],
+      southWest: [0, 0],
+    });
   }
 
-  removeRoutes(options) {
-    const that = this;
-
-    each(options, (routeIndex, options) => {
-      that._removeRoute(options);
+  removeRoutes(routes: RouteOptions[] = []): Promise<void> {
+    routes.forEach((routeObject) => {
+      this._removeRoute(routeObject);
     });
 
     return Promise.resolve();
   }
 
-  _removeRoute(options) {
-    const that = this;
-
-    each(this._routes, (routeIndex, routeObject) => {
+  _removeRoute(options: RouteOptions): void {
+    const routes = this._routes;
+    routes.forEach((routeObject, routeIndex) => {
       if (routeObject.options !== options) {
         return true;
       }
 
-      that._destroyRoute(routeObject);
+      this._destroyRoute(routeObject);
 
-      that._routes.splice(routeIndex, 1);
+      this._routes.splice(routeIndex, 1);
 
-      that._fireRouteRemovedAction({
+      this._fireRouteRemovedAction({
         options,
       });
 
@@ -224,50 +275,54 @@ class DynamicProvider extends Provider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: RouteObject): void {
     Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _geocodeLocationImpl(location) {
-    Class.abstract();
+  _geocodeLocationImpl(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    location: string,
+  ): Promise<GoogleLocation | BingLocation | AzureLocation> {
+    return Promise.resolve([0, 0]);
   }
 
-  _clearRoutes() {
+  _clearRoutes(): void {
     while (this._routes.length > 0) {
       this._removeRoute(this._routes[0].options);
     }
   }
 
-  adjustViewport() {
+  adjustViewport(): void {
     return this._fitBounds();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isEventsCanceled(e): boolean {
+  isEventsCanceled(e: DxEvent): boolean {
     return true;
   }
 
-  _fitBounds() {
+  _fitBounds(): void {
     Class.abstract();
   }
 
-  _updateBounds() {
-    const that = this;
-
+  _updateBounds(): void {
     this._clearBounds();
 
     if (!this._option('autoAdjust')) {
       return;
     }
 
-    each(this._markers, (_, markerObject) => {
-      that._extendBounds(markerObject.location);
+    this._markers.forEach((markerObject) => {
+      this._extendBounds(markerObject.location);
     });
 
-    each(this._routes, (_, routeObject) => {
-      routeObject.northEast && that._extendBounds(routeObject.northEast);
-      routeObject.southWest && that._extendBounds(routeObject.southWest);
+    this._routes.forEach((routeObject) => {
+      if (routeObject.northEast) {
+        this._extendBounds(routeObject.northEast);
+      }
+      if (routeObject.southWest) {
+        this._extendBounds(routeObject.southWest);
+      }
     });
   }
 
@@ -276,7 +331,7 @@ class DynamicProvider extends Provider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _extendBounds(location): void {
+  _extendBounds(location: unknown): void {
     Class.abstract();
   }
 }
