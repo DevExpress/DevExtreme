@@ -21,7 +21,7 @@ import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
-import Widget from '@js/ui/widget/ui.widget';
+import Widget from '@ts/core/widget/widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
@@ -106,9 +106,61 @@ function clickedOnFieldsArea($targetElement) {
   return $targetElement.closest(`.${FIELDS_CLASS}`).length || $targetElement.find(`.${FIELDS_CLASS}`).length;
 }
 
-const PivotGrid = (Widget as any).inherit({
+class PivotGrid extends Widget {
+  _dataController: any;
+
+  _scrollLeft: any;
+
+  _scrollTop: any;
+
+  _actions: any;
+
+  _hideLoadingTimeoutID: any;
+
+  _hasHeight: any;
+
+  _scrollUpdating: any;
+
+  _pivotGridContainer: any;
+
+  _contextMenu: any;
+
+  _loadPanel: any;
+
+  _startLoadingTime: any;
+
+  _dataArea: any;
+
+  _fieldChooserPopup: any;
+
+  _fieldChooser: any;
+
+  _columnsArea: any;
+
+  _rowsArea: any;
+
+  _rowFields: any;
+
+  _columnFields: any;
+
+  _filterFields: any;
+
+  _dataFields: any;
+
+  _testResultWidths: any;
+
+  _testResultHeights: any;
+
+  showFilterFields: any;
+
+  __scrollBarUseNative: any;
+
+  __scrollBarWidth: any;
+
+  _createActionByOption: any;
+
   _getDefaultOptions() {
-    return extend(this.callBase(), {
+    return extend(super._getDefaultOptions(), {
 
       scrolling: {
         timeout: 300,
@@ -228,7 +280,7 @@ const PivotGrid = (Widget as any).inherit({
         },
       },
     });
-  },
+  }
 
   _updateCalculatedOptions(fields) {
     const that = this;
@@ -243,7 +295,7 @@ const PivotGrid = (Widget as any).inherit({
         }
       });
     });
-  },
+  }
 
   _getDataControllerOptions() {
     const that = this;
@@ -264,7 +316,7 @@ const PivotGrid = (Widget as any).inherit({
         that._updateCalculatedOptions(fields);
       },
     };
-  },
+  }
 
   _initDataController() {
     const that = this;
@@ -285,35 +337,37 @@ const PivotGrid = (Widget as any).inherit({
     });
 
     that._dataController.loadingChanged.add(() => {
+      // @ts-ignore
       that._updateLoading();
     });
 
     that._dataController.progressChanged.add(that._updateLoading.bind(that));
 
     that._dataController.dataSourceChanged.add(() => {
-      that._trigger('onChanged');
+      that._trigger('onChanged', undefined);
     });
 
     const expandValueChanging = that.option('onExpandValueChanging');
 
     if (expandValueChanging) {
       that._dataController.expandValueChanging.add((e) => {
+        // @ts-ignore
         expandValueChanging(e);
       });
     }
-  },
+  }
 
   _init() {
     const that = this;
 
-    that.callBase();
+    super._init();
     that._initDataController();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
 
     that._scrollLeft = that._scrollTop = null;
     that._initActions();
-  },
+  }
 
   _initActions() {
     const that = this;
@@ -324,11 +378,11 @@ const PivotGrid = (Widget as any).inherit({
       onExporting: that._createActionByOption('onExporting'),
       onCellPrepared: that._createActionByOption('onCellPrepared'),
     };
-  },
+  }
 
   _trigger(eventName, eventArg) {
     this._actions[eventName](eventArg);
-  },
+  }
 
   _optionChanged(args) {
     const that = this;
@@ -347,7 +401,7 @@ const PivotGrid = (Widget as any).inherit({
       case 'scrolling':
       case 'stateStoring':
         that._initDataController();
-        that._fieldChooserPopup.hide();
+        that.getFieldChooserPopup().hide();
         that._renderFieldChooser();
         that._invalidate();
         break;
@@ -366,7 +420,7 @@ const PivotGrid = (Widget as any).inherit({
       case 'renderCellCountLimit':
         break;
       case 'rtlEnabled':
-        that.callBase(args);
+        super._optionChanged(args);
         that._renderFieldChooser();
         that._renderContextMenu();
         hasWindow() && that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
@@ -423,13 +477,13 @@ const PivotGrid = (Widget as any).inherit({
       case 'height':
       case 'width':
         that._hasHeight = null;
-        that.callBase(args);
+        super._optionChanged(args);
         that.resize();
         break;
       default:
-        that.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   _updateScrollPosition(columnsArea, rowsArea, dataArea, force = false) {
     const that = this;
@@ -437,8 +491,10 @@ const PivotGrid = (Widget as any).inherit({
     let scrollLeft;
     const scrolled = that._scrollTop || that._scrollLeft;
 
+    // @ts-ignore
     if (that._scrollUpdating) return; // T645458
 
+    // @ts-ignore
     that._scrollUpdating = true;
 
     if (rowsArea && !rowsArea.hasScroll() && that._hasHeight) {
@@ -459,7 +515,7 @@ const PivotGrid = (Widget as any).inherit({
     }
 
     that._scrollUpdating = false;
-  },
+  }
 
   _subscribeToEvents(columnsArea, rowsArea, dataArea) {
     const that = this;
@@ -478,6 +534,7 @@ const PivotGrid = (Widget as any).inherit({
 
         that._updateScrollPosition(columnsArea, rowsArea, dataArea);
 
+        // @ts-ignore
         if (that.option('scrolling.mode') === 'virtual') {
           that._dataController.setViewportPosition(that._scrollLeft, that._scrollTop);
         }
@@ -489,19 +546,24 @@ const PivotGrid = (Widget as any).inherit({
     });
 
     !that._hasHeight && that._dataController.subscribeToWindowScrollEvents(dataArea.groupElement());
-  },
+  }
 
-  _clean: noop,
+  _clean() {
+    noop();
+  }
 
   _needDelayResizing(cellsInfo) {
     const cellsCount = cellsInfo.length * (cellsInfo.length ? cellsInfo[0].length : 0);
+    // @ts-ignore
     return cellsCount > this.option('renderCellCountLimit');
-  },
+  }
 
   _renderFieldChooser() {
     const that = this;
+    // @ts-ignore
     const container = that._pivotGridContainer;
     const fieldChooserOptions = that.option('fieldChooser') || {};
+    // @ts-ignore
     const toolbarItems = fieldChooserOptions.applyChangesMode === 'onDemand' ? [
       {
         toolbar: 'bottom',
@@ -510,8 +572,8 @@ const PivotGrid = (Widget as any).inherit({
         options: {
           text: localizationMessage.format('OK'),
           onClick() {
-            that._fieldChooserPopup.$content().dxPivotGridFieldChooser('applyChanges');
-            that._fieldChooserPopup.hide();
+            that.getFieldChooserPopup().$content().dxPivotGridFieldChooser('applyChanges');
+            that.getFieldChooserPopup().hide();
           },
         },
       },
@@ -522,21 +584,26 @@ const PivotGrid = (Widget as any).inherit({
         options: {
           text: localizationMessage.format('Cancel'),
           onClick() {
-            that._fieldChooserPopup.hide();
+            that.getFieldChooserPopup().hide();
           },
         },
       },
     ] : [];
     const fieldChooserComponentOptions = {
+      // @ts-ignore
       layout: fieldChooserOptions.layout,
+      // @ts-ignore
       texts: fieldChooserOptions.texts || {},
       dataSource: that.getDataSource(),
+      // @ts-ignore
       allowSearch: fieldChooserOptions.allowSearch,
+      // @ts-ignore
       searchTimeout: fieldChooserOptions.searchTimeout,
       width: undefined,
       height: undefined,
       headerFilter: that.option('headerFilter'),
       encodeHtml: that.option('fieldChooser.encodeHtml') ?? that.option('encodeHtml'),
+      // @ts-ignore
       applyChangesMode: fieldChooserOptions.applyChangesMode,
       onContextMenuPreparing(e) {
         that._trigger('onContextMenuPreparing', e);
@@ -544,12 +611,15 @@ const PivotGrid = (Widget as any).inherit({
     };
     const popupOptions = {
       shading: false,
+      // @ts-ignore
       title: fieldChooserOptions.title,
       width: fieldChooserOptions.width,
       height: fieldChooserOptions.height,
       showCloseButton: true,
       resizeEnabled: true,
+      // @ts-ignore
       minWidth: fieldChooserOptions.minWidth,
+      // @ts-ignore
       minHeight: fieldChooserOptions.minHeight,
       toolbarItems,
       onResize(e) {
@@ -569,19 +639,24 @@ const PivotGrid = (Widget as any).inherit({
       },
     };
 
+    // @ts-ignore
     if (that._fieldChooserPopup) {
+      // @ts-ignore
       that._fieldChooserPopup.option(popupOptions);
+      // @ts-ignore
       that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
     } else {
+      // @ts-ignore
       that._fieldChooserPopup = that._createComponent(
         $(DIV)
           .addClass(FIELD_CHOOSER_POPUP_CLASS)
           .appendTo(container),
         Popup,
+        // @ts-ignore
         popupOptions,
       );
     }
-  },
+  }
 
   _renderContextMenu() {
     const that = this;
@@ -619,7 +694,7 @@ const PivotGrid = (Widget as any).inherit({
       cssClass: PIVOTGRID_CLASS,
       target: that.$element(),
     });
-  },
+  }
 
   _getContextMenuItems(e) {
     const that = this;
@@ -636,12 +711,14 @@ const PivotGrid = (Widget as any).inherit({
         items.push({
           beginGroup: true,
           icon: 'none',
+          // @ts-ignore
           text: texts.expandAll,
           onItemClick() {
             dataSource.expandAll(field.index);
           },
         });
         items.push({
+          // @ts-ignore
           text: texts.collapseAll,
           icon: 'none',
           onItemClick() {
@@ -663,6 +740,7 @@ const PivotGrid = (Widget as any).inherit({
             }
 
             const showDataFieldCaption = !isDefined(e.cell.dataIndex) && e.dataFields.length > 1;
+            // @ts-ignore
             const textFormat = e.area === 'column' ? texts.sortColumnBySummary : texts.sortRowBySummary;
             const checked = findField(e.dataFields, field.sortBySummaryField) === dataIndex && (e.cell.path || []).join('/') === (field.sortBySummaryPath || []).join('/');
             const text = formatString(textFormat, showDataFieldCaption ? `${field.caption} - ${dataField.caption}` : field.caption);
@@ -690,6 +768,7 @@ const PivotGrid = (Widget as any).inherit({
           items.push({
             beginGroup: sortingBySummaryItemCount === 0,
             icon: 'none',
+            // @ts-ignore
             text: texts.removeAllSorting,
             onItemClick() {
               each(oppositeAreaFields, (_, field) => {
@@ -711,9 +790,10 @@ const PivotGrid = (Widget as any).inherit({
       items.push({
         beginGroup: true,
         icon: 'columnchooser',
+        // @ts-ignore
         text: texts.showFieldChooser,
         onItemClick() {
-          that._fieldChooserPopup.show();
+          that.getFieldChooserPopup().show();
         },
       });
     }
@@ -722,8 +802,10 @@ const PivotGrid = (Widget as any).inherit({
       items.push({
         beginGroup: true,
         icon: 'xlsxfile',
+        // @ts-ignore
         text: texts.exportToExcel,
         onItemClick() {
+          // @ts-ignore
           that.exportTo();
         },
       });
@@ -738,7 +820,7 @@ const PivotGrid = (Widget as any).inherit({
     }
 
     return undefined;
-  },
+  }
 
   _createEventArgs(targetElement, dxEvent) {
     const that = this;
@@ -754,7 +836,7 @@ const PivotGrid = (Widget as any).inherit({
       return extend(that._createFieldArgs(targetElement), args);
     }
     return extend(that._createCellArgs(targetElement), args);
-  },
+  }
 
   _createFieldArgs(targetElement) {
     const field = $(targetElement).children().data('field');
@@ -762,7 +844,7 @@ const PivotGrid = (Widget as any).inherit({
       field,
     };
     return isDefined(field) ? args : {};
-  },
+  }
 
   _createCellArgs(cellElement) {
     const $cellElement = $(cellElement);
@@ -779,7 +861,7 @@ const PivotGrid = (Widget as any).inherit({
       cell,
     };
     return args;
-  },
+  }
 
   _handleCellClick(e) {
     const that = this;
@@ -795,15 +877,19 @@ const PivotGrid = (Widget as any).inherit({
     cell && !args.cancel && isDefined(cell.expanded) && setTimeout(() => {
       that._dataController[cell.expanded ? 'collapseHeaderItem' : 'expandHeaderItem'](args.area, cell.path);
     });
-  },
+  }
 
   _getNoDataText() {
     return this.option('texts.noData');
-  },
+  }
 
-  _renderNoDataText: gridCoreUtils.renderNoDataText,
+  _renderNoDataText(element) {
+    return gridCoreUtils.renderNoDataText.apply(this, [element]);
+  }
 
-  _renderLoadPanel: gridCoreUtils.renderLoadPanel,
+  _renderLoadPanel(element, container) {
+    return gridCoreUtils.renderLoadPanel.apply(this, [element, container, undefined]);
+  }
 
   _updateLoading(progress) {
     const that = this;
@@ -843,7 +929,7 @@ const PivotGrid = (Widget as any).inherit({
       that._loadPanel.option(visibilityOptions);
       that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
     }
-  },
+  }
 
   _renderDescriptionArea() {
     const $element = this.$element();
@@ -855,8 +941,10 @@ const PivotGrid = (Widget as any).inherit({
 
     let $targetContainer;
 
+    // @ts-ignore
     if (fieldPanel.visible && fieldPanel.showFilterFields) {
       $targetContainer = $filterHeader;
+      // @ts-ignore
     } else if (fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)) {
       $targetContainer = $columnHeader;
     } else {
@@ -865,16 +953,19 @@ const PivotGrid = (Widget as any).inherit({
 
     $columnHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
+      // @ts-ignore
       !!(fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields)),
     );
     $filterHeader.toggleClass(
       BOTTOM_BORDER_CLASS,
+      // @ts-ignore
       !!(fieldPanel.visible && fieldPanel.showFilterFields),
     );
 
     $descriptionCell.toggleClass(
       'dx-pivotgrid-background',
       fieldPanel.visible
+      // @ts-ignore
       && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields),
     );
 
@@ -889,6 +980,7 @@ const PivotGrid = (Widget as any).inherit({
         .addClass('dx-pivotgrid-field-chooser-button');
       const buttonOptions: Properties = {
         icon: 'columnchooser',
+        // @ts-ignore
         hint: this.option('texts.showFieldChooser'),
         stylingMode,
         onClick: () => {
@@ -905,25 +997,29 @@ const PivotGrid = (Widget as any).inherit({
         .addClass('dx-pivotgrid-export-button');
       const buttonOptions: Properties = {
         icon: 'xlsxfile',
+        // @ts-ignore
         hint: this.option('texts.exportToExcel'),
         stylingMode,
         onClick: () => {
+          // @ts-ignore
           this.exportTo();
         },
       };
 
       this._createComponent($buttonElement, Button, buttonOptions);
     }
-  },
+  }
 
   _detectHasContainerHeight() {
     const that = this;
     const element = that.$element();
 
     if (isDefined(that._hasHeight)) {
+      // @ts-ignore
       const height = that.option('height') || that.$element().get(0).style.height;
 
-      if (height && (that._hasHeight ^ (height !== 'auto') as any)) {
+      // @ts-ignore
+      if (height && (that._hasHeight ^ (height !== 'auto'))) {
         that._hasHeight = null;
       }
     }
@@ -939,7 +1035,7 @@ const PivotGrid = (Widget as any).inherit({
     that._hasHeight = getHeight(element) !== TEST_HEIGHT;
     that._pivotGridContainer.removeClass('dx-hidden');
     testElement.remove();
-  },
+  }
 
   _renderHeaders(
     rowHeaderContainer,
@@ -962,8 +1058,9 @@ const PivotGrid = (Widget as any).inherit({
     that._dataFields = that._dataFields || new FieldsArea(that, 'data');
     that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields('data'));
 
+    // @ts-ignore
     that.$element().dxPivotGridFieldChooserBase('instance').renderSortable();
-  },
+  }
 
   _createTableElement() {
     const that = this;
@@ -975,7 +1072,7 @@ const PivotGrid = (Widget as any).inherit({
     eventsEngine.on($table, addNamespace(clickEventName, 'dxPivotGrid'), 'td', that._handleCellClick.bind(that));
 
     return $table;
-  },
+  }
 
   _renderDataArea(dataAreaElement) {
     const that = this;
@@ -984,7 +1081,7 @@ const PivotGrid = (Widget as any).inherit({
     dataArea.render(dataAreaElement, that._dataController.getCellsInfo());
 
     return dataArea;
-  },
+  }
 
   _renderRowsArea(rowsAreaElement) {
     const that = this;
@@ -993,7 +1090,7 @@ const PivotGrid = (Widget as any).inherit({
     rowsArea.render(rowsAreaElement, that._dataController.getRowsInfo());
 
     return rowsArea;
-  },
+  }
 
   _renderColumnsArea(columnsAreaElement) {
     const that = this;
@@ -1002,13 +1099,13 @@ const PivotGrid = (Widget as any).inherit({
     columnsArea.render(columnsAreaElement, that._dataController.getColumnsInfo());
 
     return columnsArea;
-  },
+  }
 
   _initMarkup() {
     const that = this;
-    that.callBase.apply(this, arguments);
+    super._initMarkup();
     that.$element().addClass(PIVOTGRID_CLASS);
-  },
+  }
 
   _renderContentImpl() {
     const that = this;
@@ -1067,6 +1164,7 @@ const PivotGrid = (Widget as any).inherit({
       that._pivotGridContainer.append(tableElement);
       that.$element().append(that._pivotGridContainer);
 
+      // @ts-ignore
       if (that.option('rowHeaderLayout') === 'tree') {
         rowsAreaElement.addClass('dx-area-tree-view');
       }
@@ -1080,6 +1178,7 @@ const PivotGrid = (Widget as any).inherit({
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
       headerFilter: that.option('headerFilter'),
       visible: that.option('visible'),
+      // @ts-ignore
       remoteSort: that.option('scrolling.mode') === 'virtual',
     });
 
@@ -1110,7 +1209,7 @@ const PivotGrid = (Widget as any).inherit({
     );
 
     that._update(isFirstDrawing);
-  },
+  }
 
   _update(isFirstDrawing) {
     const that = this;
@@ -1122,13 +1221,13 @@ const PivotGrid = (Widget as any).inherit({
     } else {
       updateHandler();
     }
-  },
+  }
 
   _fireContentReadyAction() {
     if (!this._dataController.isLoading()) {
-      this.callBase();
+      super._fireContentReadyAction();
     }
-  },
+  }
 
   getScrollPath(area) {
     const that = this;
@@ -1137,55 +1236,55 @@ const PivotGrid = (Widget as any).inherit({
       return that._columnsArea.getScrollPath(that._scrollLeft);
     }
     return that._rowsArea.getScrollPath(that._scrollTop);
-  },
+  }
 
   getDataSource() {
     return this._dataController.getDataSource();
-  },
+  }
 
   getFieldChooserPopup() {
     return this._fieldChooserPopup;
-  },
+  }
 
   hasScroll(area) {
     const that = this;
     return area === 'column' ? that._columnsArea.hasScroll() : that._rowsArea.hasScroll();
-  },
+  }
 
   _dimensionChanged() {
     this.updateDimensions();
-  },
+  }
 
   _visibilityChanged(visible) {
     if (visible) {
       this.updateDimensions();
     }
-  },
+  }
 
   _dispose() {
     const that = this;
     clearTimeout(that._hideLoadingTimeoutID);
-    that.callBase.apply(that, arguments);
+    super._dispose();
     if (that._dataController) {
       that._dataController.dispose();
     }
-  },
+  }
 
   _tableElement() {
     return this.$element().find('table').first();
-  },
+  }
 
   addWidgetPrefix(className) {
     return `dx-pivotgrid-${className}`;
-  },
+  }
 
   resize() {
     this.updateDimensions();
-  },
+  }
 
   isReady() {
-    return this.callBase() && !this._dataController.isLoading();
-  },
+    return super.isReady() && !this._dataController.isLoading();
+  }
 
   updateDimensions() {
     const that = this;
@@ -1212,6 +1311,7 @@ const PivotGrid = (Widget as any).inherit({
       return undefined;
     }
 
+    // @ts-ignore
     const needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option('rowHeaderLayout') !== 'tree';
 
     that._detectHasContainerHeight();
@@ -1407,6 +1507,8 @@ const PivotGrid = (Widget as any).inherit({
         }
 
         const scrollingOptions = that.option('scrolling');
+
+        // @ts-ignore
         if (scrollingOptions.mode === 'virtual') {
           that._setVirtualContentParams(
             scrollingOptions,
@@ -1433,6 +1535,7 @@ const PivotGrid = (Widget as any).inherit({
           updateScrollableResults.push(area && area.updateScrollable());
         });
 
+        // @ts-ignore
         that._updateLoading();
         that._renderNoDataText(dataAreaCell);
 
@@ -1449,7 +1552,7 @@ const PivotGrid = (Widget as any).inherit({
       });
     });
     return d;
-  },
+  }
 
   _setVirtualContentParams(
     scrollingOptions,
@@ -1489,14 +1592,15 @@ const PivotGrid = (Widget as any).inherit({
       width: virtualContentParams.width,
       height: getHeight(this._columnsArea.groupElement()),
     });
-  },
+  }
 
   applyPartialDataSource(area, path, dataSource) {
     this._dataController.applyPartialDataSource(area, path, dataSource);
-  },
-})
-  .inherit(ExportController)
-  .include(ChartIntegrationMixin);
+  }
+}
+
+Object.assign(PivotGrid.prototype, ExportController);
+Object.assign(PivotGrid.prototype, ChartIntegrationMixin);
 
 registerComponent('dxPivotGrid', PivotGrid);
 
