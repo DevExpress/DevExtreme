@@ -298,3 +298,22 @@ test('DataGrid - FocusedRowChanged event isnt raised when the push API is used t
     },
   }));
 });
+
+test('DataGrid - Focused cell appearance is applied to non-editable CheckBox cells on mouse clicks (T1282082)', async (t) => {
+  const grid = new DataGrid(GRID_SELECTOR);
+
+  await t
+    .click(grid.getDataCell(0, 0).element)
+    .click(grid.getDataCell(0, 1).element)
+    .click(grid.getDataCell(0, 0).element)
+    .expect(grid.getDataCell(0, 0).isFocused)
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { BoolOne: false, BoolTwo: false },
+  ],
+  columns: [
+    'BoolOne',
+    'BoolTwo',
+  ],
+}));
