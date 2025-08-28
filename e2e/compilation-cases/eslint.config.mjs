@@ -72,10 +72,6 @@ export default [
       'i18n/no-russian-character': ['error', {
         includeIdentifier: true,
       }],
-      '@typescript-eslint/no-unused-vars': ['error', {
-        "ignoreRestSiblings": true,
-        "caughtErrors": 'none',
-      }],
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-throw-literal': 'off',
@@ -85,10 +81,10 @@ export default [
       'import/no-relative-packages': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      'import/no-extraneous-dependencies': 'off'
+      'import/no-extraneous-dependencies': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 ];

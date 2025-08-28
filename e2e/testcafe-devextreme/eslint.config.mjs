@@ -10,7 +10,6 @@ import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
-import testcafePlugin from 'eslint-plugin-testcafe';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,11 +32,11 @@ export default [
     ],
   },
   ...compat.extends('devextreme/spell-check'),
+  ...compat.extends('devextreme/testcafe'),
   {
     plugins: {
       'no-only-tests': noOnlyTests,
       i18n: i18N,
-      testcafe: testcafePlugin,
     },
     settings: {
       'import/resolver': {
