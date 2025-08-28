@@ -70,6 +70,9 @@ export interface BaseAppointmentViewModel {
 export interface AppointmentCollectorViewModel extends BaseAppointmentViewModel {
   top: number;
   left: number;
+  height: number;
+  width: number;
+  isCompact: boolean;
   items: AppointmentItemViewModel[];
 }
 
