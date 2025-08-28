@@ -5,8 +5,7 @@ import type { Format } from '@js/localization';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { TooltipProperties } from '@ts/ui/m_tooltip';
 import Tooltip from '@ts/ui/m_tooltip';
-
-import { SliderTooltipPositionController } from './m_slider_tooltip_position_controller';
+import { SliderTooltipPositionController } from '@ts/ui/slider/slider_tooltip_position_controller';
 
 // NOTE: Visibility is contolled by the 'visible' option
 // and 'dx-slider-tooltip-visible-on-hover' class

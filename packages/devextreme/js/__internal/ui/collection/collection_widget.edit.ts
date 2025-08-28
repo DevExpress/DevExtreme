@@ -14,7 +14,7 @@ import {
   when,
 } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
@@ -29,7 +29,7 @@ import type {
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type DataController from '@ts/ui/collection/m_data_controller';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { CollectionItemIndex } from './collection_widget.edit.strategy';
 
@@ -76,7 +76,8 @@ class CollectionWidget<
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   static _userOptions = {};
 
-  _selection!: Selection;
+  // @ts-expect-error TItem
+  _selection!: Selection<TItem, TKey, false>;
 
   _editStrategy!: PlainEditStrategy<TItem, TKey>;
 
@@ -169,7 +170,7 @@ class CollectionWidget<
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
   }
 
-  _getKeyByIndex(index: CollectionItemIndex): unknown {
+  _getKeyByIndex(index: CollectionItemIndex): TKey {
     return this._editStrategy.getKeyByIndex(index);
   }
 
@@ -224,7 +225,8 @@ class CollectionWidget<
     const { itemsGetter } = this._editStrategy;
     const { selectionMode, maxFilterLengthInRequest } = this.option();
 
-    this._selection = new Selection({
+    // @ts-expect-error TItem
+    this._selection = new Selection<TItem, TKey, false>({
       allowNullValue: this._nullValueSelectionSupported(),
       mode: selectionMode,
       maxFilterLengthInRequest,
@@ -259,7 +261,7 @@ class CollectionWidget<
       },
       key: this.key.bind(this),
       keyOf: this.keyOf.bind(this),
-      load(options): DeferredObj<unknown> {
+      load(options): DeferredObj<TItem[]> {
         const dataController = that._dataController;
         options.customQueryParams = dataController.loadOptions()?.customQueryParams;
         options.userData = dataController.userData();
@@ -276,7 +278,7 @@ class CollectionWidget<
             dataController.applyMapFunction(items);
           });
         }
-        return Deferred().resolve(this.plainItems());
+        return Deferred<TItem[]>().resolve(this.plainItems());
       },
       // eslint-disable-next-line @stylistic/max-len
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-function-return-type
@@ -479,7 +481,8 @@ class CollectionWidget<
 
         const { grouped } = this.option();
 
-        if (grouped && normalizedSelection?.items) {
+        const hasSubItems = (item: TItem): item is TItem & { items: TItem[] } => isObject(item) && 'items' in item && Array.isArray(item.items);
+        if (grouped && hasSubItems(normalizedSelection)) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 

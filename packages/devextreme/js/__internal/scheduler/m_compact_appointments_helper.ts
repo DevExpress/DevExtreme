@@ -1,19 +1,16 @@
 import { locate, move } from '@js/common/core/animation/translator';
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
-import $ from '@js/core/renderer';
+import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import { AppointmentTooltipInfo } from './m_data_structures';
+import type { AppointmentTooltipItem } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
-
-const WEEK_VIEW_COLLECTOR_OFFSET = 5;
-const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 
 export class CompactAppointmentsHelper {
   elements: any[] = [];
@@ -21,7 +18,7 @@ export class CompactAppointmentsHelper {
   constructor(public instance) {
   }
 
-  render(options) {
+  render(options): dxElementWrapper {
     const { isCompact, items } = options;
 
     const template = this._createTemplate(items.data.length, isCompact);
@@ -52,7 +49,14 @@ export class CompactAppointmentsHelper {
         this.instance._dataAccessors.set('endDate', targeted, info.sourceAppointment.endDate);
       }
 
-      return new AppointmentTooltipInfo(appointment, targeted, items.colors[index], items.settings[index]);
+      const tooltipInfo: AppointmentTooltipItem = {
+        appointment,
+        targetedAppointment: targeted,
+        color: items.colors?.[index] ?? [],
+        settings: items.settings?.[index] ?? [],
+      };
+
+      return tooltipInfo;
     });
   }
 
@@ -102,16 +106,6 @@ export class CompactAppointmentsHelper {
 
       workSpace._createDragBehaviorBase($element, $schedulerElement, options);
     };
-  }
-
-  _getCollectorOffset(width, cellWidth) {
-    return cellWidth - width - this._getCollectorRightOffset();
-  }
-
-  _getCollectorRightOffset() {
-    return this.instance.getRenderingStrategyInstance()._isCompactTheme()
-      ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
-      : WEEK_VIEW_COLLECTOR_OFFSET;
   }
 
   _setPosition(element, position) {

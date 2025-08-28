@@ -7,6 +7,7 @@ const CLASS = {
   overlayWrapper: 'dx-overlay-wrapper',
   columnChooser: 'dx-datagrid-column-chooser',
   checkboxChecked: 'dx-checkbox-checked',
+  checkboxDisabled: 'dx-state-disabled',
   checkbox: 'dx-checkbox',
   treeViewItem: 'dx-treeview-item',
   treeView: 'dx-treeview',
@@ -47,6 +48,10 @@ export default class ColumnChooser extends FocusableElement {
 
   isCheckboxChecked(nth = 0): Promise<boolean> {
     return this.getCheckbox(nth).hasClass(CLASS.checkboxChecked);
+  }
+
+  isCheckboxDisabled(nth = 0): Promise<boolean> {
+    return this.getCheckbox(nth).hasClass(CLASS.checkboxDisabled);
   }
 
   getColumnsCount(): Promise<number> {

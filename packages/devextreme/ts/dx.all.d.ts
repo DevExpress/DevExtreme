@@ -714,10 +714,6 @@ declare module DevExpress {
       DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
     > {
     /**
-     * [descr:DOMComponentOptions.bindingOptions]
-     */
-    bindingOptions?: { [key: string]: any };
-    /**
      * [descr:DOMComponentOptions.elementAttr]
      */
     elementAttr?: { [key: string]: any };
@@ -7794,8 +7790,13 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type DxEvent<TNativeEvent = Event> = {} extends EventType
-    ? EventObject & TNativeEvent
-    : EventType;
+    ? EventObject<TNativeEvent> & TNativeEvent
+    : Omit<EventType, 'originalEvent'> & {
+        /**
+         * [descr:DxEvent.originalEvent]
+         */
+        originalEvent: TNativeEvent;
+      };
   /**
    * [descr:event]
    * @deprecated [depNote:event]
@@ -7805,7 +7806,7 @@ declare module DevExpress.events {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type EventObject = {
+  export type EventObject<TNativeEvent = Event> = {
     /**
      * [descr:EventObject.currentTarget]
      */
@@ -7820,6 +7821,11 @@ declare module DevExpress.events {
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
+    /**
+     * [descr:EventObject.originalEvent]
+     */
+    originalEvent: TNativeEvent;
 
     /**
      * [descr:EventObject.target]
@@ -33964,21 +33970,25 @@ declare module DevExpress.viz {
      * [descr:PointInteractionInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export interface PointInteractionInfo {
+    export interface PointInteractionInfo<
+      TPoint extends basePointObject = basePointObject
+    > {
       /**
        * [descr:PointInteractionInfo.target]
        */
-      readonly target: basePointObject;
+      readonly target: TPoint;
     }
     /**
      * [descr:_viz_chart_components_base_chart_TooltipInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export interface TooltipInfo {
+    export interface TooltipInfo<
+      TPoint extends basePointObject = basePointObject
+    > {
       /**
        * [descr:_viz_chart_components_base_chart_TooltipInfo.target]
        */
-      target?: basePointObject | dxChartAnnotationConfig | any;
+      target?: TPoint | dxChartAnnotationConfig | any;
     }
   }
   /**
@@ -34044,8 +34054,10 @@ declare module DevExpress.viz {
    * [descr:BaseChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartOptions<TComponent>
-    extends BaseWidgetOptions<TComponent> {
+  export interface BaseChartOptions<
+    TComponent,
+    TPoint extends basePointObject = basePointObject
+  > extends BaseWidgetOptions<TComponent> {
     /**
      * [descr:BaseChartOptions.adaptiveLayout]
      */
@@ -34102,7 +34114,7 @@ declare module DevExpress.viz {
             TComponent,
             MouseEvent | PointerEvent
           > &
-            DevExpress.viz.BaseChart.PointInteractionInfo
+            DevExpress.viz.BaseChart.PointInteractionInfo<TPoint>
         ) => void)
       | string;
     /**
@@ -34110,28 +34122,28 @@ declare module DevExpress.viz {
      */
     onPointHoverChanged?: (
       e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.viz.BaseChart.PointInteractionInfo
+        DevExpress.viz.BaseChart.PointInteractionInfo<TPoint>
     ) => void;
     /**
      * [descr:BaseChartOptions.onPointSelectionChanged]
      */
     onPointSelectionChanged?: (
       e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.viz.BaseChart.PointInteractionInfo
+        DevExpress.viz.BaseChart.PointInteractionInfo<TPoint>
     ) => void;
     /**
      * [descr:BaseChartOptions.onTooltipHidden]
      */
     onTooltipHidden?: (
       e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.viz.BaseChart.TooltipInfo
+        DevExpress.viz.BaseChart.TooltipInfo<TPoint>
     ) => void;
     /**
      * [descr:BaseChartOptions.onTooltipShown]
      */
     onTooltipShown?: (
       e: DevExpress.common.core.events.EventInfo<TComponent> &
-        DevExpress.viz.BaseChart.TooltipInfo
+        DevExpress.viz.BaseChart.TooltipInfo<TPoint>
     ) => void;
     /**
      * [descr:BaseChartOptions.palette]
@@ -36986,19 +36998,19 @@ declare module DevExpress.viz {
         dxChart,
         MouseEvent | PointerEvent
       > &
-      DevExpress.viz.BaseChart.PointInteractionInfo;
+      DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
      * [descr:_viz_chart_PointHoverChangedEvent]
      */
     export type PointHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
      * [descr:_viz_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     export type Properties = dxChartOptions;
     /**
      * [descr:_viz_chart_SeriesClickEvent]
@@ -37048,13 +37060,13 @@ declare module DevExpress.viz {
      */
     export type TooltipHiddenEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<chartPointObject>;
     /**
      * [descr:_viz_chart_TooltipShownEvent]
      */
     export type TooltipShownEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<chartPointObject>;
     /**
      * [descr:dxChartValueAxis]
      */
@@ -37426,7 +37438,8 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxChartOptions extends BaseChartOptions<dxChart> {
+  export interface dxChartOptions
+    extends BaseChartOptions<dxChart, chartPointObject> {
     /**
      * [descr:dxChartOptions.adjustOnZoom]
      */
@@ -40521,19 +40534,19 @@ declare module DevExpress.viz {
       dxPieChart,
       MouseEvent | PointerEvent
     > &
-      DevExpress.viz.BaseChart.PointInteractionInfo;
+      DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
      * [descr:_viz_pie_chart_PointHoverChangedEvent]
      */
     export type PointHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxPieChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
      * [descr:_viz_pie_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxPieChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     export type Properties = dxPieChartOptions;
     export type SmallValuesGroupingMode =
       | 'none'
@@ -40544,13 +40557,13 @@ declare module DevExpress.viz {
      */
     export type TooltipHiddenEvent =
       DevExpress.common.core.events.EventInfo<dxPieChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<piePointObject>;
     /**
      * [descr:_viz_pie_chart_TooltipShownEvent]
      */
     export type TooltipShownEvent =
       DevExpress.common.core.events.EventInfo<dxPieChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<piePointObject>;
   }
   /**
    * [descr:dxPieChartAnnotationConfig]
@@ -40613,7 +40626,8 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxPieChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
+  export interface dxPieChartOptions
+    extends BaseChartOptions<dxPieChart, piePointObject> {
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]
      */
@@ -41584,19 +41598,19 @@ declare module DevExpress.viz {
         dxPolarChart,
         MouseEvent | PointerEvent
       > &
-      DevExpress.viz.BaseChart.PointInteractionInfo;
+      DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
      * [descr:_viz_polar_chart_PointHoverChangedEvent]
      */
     export type PointHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
      * [descr:_viz_polar_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+        DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     export type PolarChartSeriesType =
       | 'area'
       | 'bar'
@@ -41653,13 +41667,13 @@ declare module DevExpress.viz {
      */
     export type TooltipHiddenEvent =
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<polarPointObject>;
     /**
      * [descr:_viz_polar_chart_TooltipShownEvent]
      */
     export type TooltipShownEvent =
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
-        DevExpress.viz.BaseChart.TooltipInfo;
+        DevExpress.viz.BaseChart.TooltipInfo<polarPointObject>;
     /**
      * [descr:dxPolarChartValueAxis]
      */
@@ -41963,7 +41977,8 @@ declare module DevExpress.viz {
    * @deprecated [depNote:dxPolarChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
+  export interface dxPolarChartOptions
+    extends BaseChartOptions<dxPolarChart, polarPointObject> {
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]
      */

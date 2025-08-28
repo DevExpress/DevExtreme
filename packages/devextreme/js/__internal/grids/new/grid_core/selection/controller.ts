@@ -8,7 +8,7 @@ import { computed, effect, signal } from '@preact/signals-core';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { CardInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
@@ -45,7 +45,8 @@ export class SelectionController {
 
   private readonly selectionOption: ReadonlySignal<SelectionOptions> = this.options.oneWay('selection');
 
-  private readonly selectionHelper: ReadonlySignal<Selection | undefined>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly selectionHelper: ReadonlySignal<Selection<any, any, false> | undefined>;
 
   private readonly _isCheckBoxesRendered = signal<boolean>(false);
 
@@ -365,12 +366,8 @@ export class SelectionController {
   }
 
   public getSelectedCardsData(): DataObject[] {
-    const selectedCardKey = this.getSelectedCardKeys();
-
-    return selectedCardKey
-      .map((key) => this.itemsController.getCardByKey(key))
-      .filter((item): item is CardInfo => !!item)
-      .map((item) => item.data);
+    // @ts-expect-error undefined is not assignable to DataObject[]
+    return this.selectionHelper?.peek()?.getSelectedItems();
   }
 
   public getSelectedCardKeys(): Key[] {
