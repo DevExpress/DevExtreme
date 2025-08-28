@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import {
-  Appointment, Service, Priority, Assignee,
+  Service, Priority, Assignee,
 } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Pipe({ name: 'demodate' })
-export class DemoDatePipe<TArgs, TReturn> implements PipeTransform {
+export class DemoDatePipe implements PipeTransform {
   transform(date: number) {
     return new Date(date);
   }

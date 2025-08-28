@@ -29,7 +29,6 @@ const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
   if (result && typeof result.then === 'function') {
-    // eslint-disable-next-line no-promise-executor-return
     return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
   }
 

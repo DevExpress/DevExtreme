@@ -4,7 +4,6 @@ import { DrillInfo } from './data.ts';
 
 interface TreeMapBreadcrumbsProps {
   className: string;
-  // eslint-disable-next-line no-unused-vars
   onItemClick: (node: DrillInfo['node']) => void;
   treeInfo: DrillInfo[];
 }

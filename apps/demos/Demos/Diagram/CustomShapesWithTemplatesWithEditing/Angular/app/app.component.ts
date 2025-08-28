@@ -54,7 +54,7 @@ export class AppComponent {
     });
   }
 
-  itemTypeExpr(obj) {
+  itemTypeExpr() {
     return 'employee';
   }
 

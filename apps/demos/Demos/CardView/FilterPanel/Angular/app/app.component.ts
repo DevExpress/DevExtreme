@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule, DxCardViewTypes } from 'devextreme-angular/ui/card-view';
+import { DxCardViewModule } from 'devextreme-angular/ui/card-view';
 import { Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 /* global RequestInit */
 import React, { useCallback, useState } from 'react';
 import {

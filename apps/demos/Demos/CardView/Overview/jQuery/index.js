@@ -1,5 +1,5 @@
 $(() => {
-  const cardView = $('#card-view').dxCardView({
+  $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'ID',
     cardMinWidth: 300,

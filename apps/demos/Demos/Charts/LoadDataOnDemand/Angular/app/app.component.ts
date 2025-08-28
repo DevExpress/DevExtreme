@@ -107,7 +107,7 @@ export class AppComponent {
 
           this.onVisualRangeChanged();
         })
-        .catch((error) => {
+        .catch(() => {
           this.packetsLock--;
           dataSource.reload();
         });

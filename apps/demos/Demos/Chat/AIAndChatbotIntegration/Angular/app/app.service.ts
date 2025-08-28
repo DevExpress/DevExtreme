@@ -111,7 +111,7 @@ export class AppService {
     return data.choices[0].message?.content;
   }
 
-  async processMessageSending(message, event) {
+  async processMessageSending(message) {
     this.messages.push({ role: 'user', content: message.text });
     this.typingUsersSubject.next([this.assistant]);
 

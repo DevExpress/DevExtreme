@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, PatternRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
+import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
 import 'devextreme-react/text-area';
 import { employees, Employee } from './data.ts';
 
