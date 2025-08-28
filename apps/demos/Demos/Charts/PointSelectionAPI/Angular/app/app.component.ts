@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
+import { DxChartModule, type DxChartTypes } from 'devextreme-angular/ui/chart';
 import { Service, CatBreed } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,16 +27,17 @@ export class AppComponent {
     this.catBreedsData = service.getCatBreedsData();
   }
 
-  pointClick({ target: point }: DxChartTypes.PointClickEvent) {
+  done(e: DxChartTypes.DoneEvent) {
+    e.component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
+  }
+
+  pointClick(e: DxChartTypes.PointClickEvent) {
+    const point = e.target;
     if (point.isSelected()) {
       point.clearSelection();
     } else {
       point.select();
     }
-  }
-
-  done(e: DxChartTypes.DoneEvent) {
-    e.component.getSeriesByPos(0).getPointsByArg('Siamese')[0].select();
   }
 }
 
