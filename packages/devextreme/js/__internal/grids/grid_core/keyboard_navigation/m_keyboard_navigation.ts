@@ -1483,10 +1483,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      activeElementSelector = '.dx-datagrid-rowsview .dx-row[tabindex]';
+      activeElementSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row[tabindex]`;
       if (!focusedRowEnabled) {
         activeElementSelector
-          += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
+          += `, .${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row > td[tabindex]`;
       }
       element = this.component.$element().find(activeElementSelector).first();
     }
