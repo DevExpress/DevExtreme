@@ -562,7 +562,7 @@ class Sortable extends DOMComponent<Sortable> {
       case 'direction':
         break;
       default:
-        that._optionChanged(args);
+        super._optionChanged(args);
     }
   }
 
