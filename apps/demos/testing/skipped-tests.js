@@ -114,6 +114,7 @@ export const skippedTests = {
       { demo: 'ContextMenu', themes: [THEME.material] },
     ],
     Scheduler: [
+      // NOTE: 'GroupByDate' demo has problems with rendering
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
