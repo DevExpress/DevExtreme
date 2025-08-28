@@ -24,7 +24,7 @@ import * as CommonTypes from 'devextreme/common';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { CardHeaderPredefinedItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
-import { FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { FormPredefinedButtonItem, FormItemComponent, FormItemType, LabelLocation, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
@@ -109,10 +109,10 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get name(): CardHeaderPredefinedItem | string | undefined | PredefinedToolbarItem {
+    get name(): CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: CardHeaderPredefinedItem | string | undefined | PredefinedToolbarItem) {
+    set name(value: CardHeaderPredefinedItem | string | undefined | FormPredefinedButtonItem | PredefinedToolbarItem) {
         this._setOption('name', value);
     }
 
@@ -194,6 +194,14 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
     }
     set title(value: string) {
         this._setOption('title', value);
+    }
+
+    @Input()
+    get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
+        return this._getOption('aiOptions');
+    }
+    set aiOptions(value: { disabled?: boolean, instruction?: string | undefined }) {
+        this._setOption('aiOptions', value);
     }
 
     @Input()
