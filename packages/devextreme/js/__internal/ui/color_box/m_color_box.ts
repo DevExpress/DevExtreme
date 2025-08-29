@@ -381,6 +381,9 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
   _clean(): void {
     super._clean();
     delete this._shouldSaveEmptyValue;
+
+    this._$noColorIcon?.remove();
+    this._$noColorIcon = undefined;
   }
 
   _valueOptionChangeHandler(): void {
