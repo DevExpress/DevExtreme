@@ -23,12 +23,6 @@ export default [
   {
     ignores: [
       'node_modules/**',
-      'wrappers/**',
-      'compilation-cases/wrappers/**',
-      'compilation-cases/T1263537.ts',
-      'compilation-cases/consts.ts',
-      'compilation-cases/core.ts',
-      'compilation-cases/data/*.ts',
     ],
   },
   ...compat.extends('devextreme/spell-check'),
