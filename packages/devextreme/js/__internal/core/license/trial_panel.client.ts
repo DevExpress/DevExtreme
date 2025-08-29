@@ -31,6 +31,7 @@ const attributeNames = {
   buyNow: 'buy-now',
   licensingDoc: 'licensing-doc',
   version: 'version',
+  subscriptions: 'subscriptions',
 };
 const commonStyles = {
   opacity: '1',
@@ -185,6 +186,7 @@ class DxLicense extends SafeHTMLElement {
   private _createContentContainer(): HTMLElement {
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
+    const subscriptions = this.getAttribute(attributeNames.subscriptions);
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution prohibited. Please '),
       this._createLink('register', this.getAttribute(attributeNames.licensingDoc) as string),
@@ -192,6 +194,13 @@ class DxLicense extends SafeHTMLElement {
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
     );
+
+    if (subscriptions) {
+      contentContainer.append(
+        this._createSpan(` Included in Subscriptions: ${subscriptions}.`),
+      );
+    }
+
     return contentContainer;
   }
 
@@ -255,20 +264,12 @@ class DxLicenseTrigger extends SafeHTMLElement {
     if (!licensePanel.length && !DxLicense.closed) {
       const license = document.createElement(componentNames.panel);
 
-      license.setAttribute(
-        attributeNames.version,
-        this.getAttribute(attributeNames.version) as string,
-      );
-
-      license.setAttribute(
-        attributeNames.buyNow,
-        this.getAttribute(attributeNames.buyNow) as string,
-      );
-
-      license.setAttribute(
-        attributeNames.licensingDoc,
-        this.getAttribute(attributeNames.licensingDoc) as string,
-      );
+      Object.values(attributeNames).forEach((attrName) => {
+        license.setAttribute(
+          attrName,
+          this.getAttribute(attrName) as string,
+        );
+      });
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
 
@@ -295,6 +296,7 @@ export function renderTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
+  subscriptions = '',
   customStyles?: CustomTrialPanelStyles,
 ): void {
   registerCustomComponents(customStyles);
@@ -304,6 +306,7 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
   trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
+  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions);
 
   document.body.appendChild(trialPanelTrigger);
 }

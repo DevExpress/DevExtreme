@@ -6,31 +6,41 @@ import { each } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 
 import { formatDates, getFormatType } from './appointments/m_text_utils';
+import { getDeltaTime } from './appointments/resizing/get_delta_time';
+import { VERTICAL_VIEW_TYPES } from './constants';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
+import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
+import { isAppointmentTakesAllDay } from './r1/utils/base';
+import type { SafeAppointment } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
 const toMs = dateUtils.dateToMilliseconds;
+const isAllDay = (
+  scheduler: Scheduler,
+  appointmentData: SafeAppointment,
+): boolean => {
+  const adapter = new AppointmentAdapter(appointmentData, scheduler._dataAccessors);
+
+  if (scheduler.currentView.type === 'agenda') {
+    return false;
+  }
+
+  if (VERTICAL_VIEW_TYPES.includes(scheduler.currentView.type)) {
+    return isAppointmentTakesAllDay(adapter, scheduler.option('allDayPanelMode'));
+  }
+
+  return adapter.allDay;
+};
 
 const subscribes = {
   isCurrentViewAgenda() {
     return this.currentView.type === 'agenda';
   },
-  currentViewUpdated(currentView) {
-    this.option('currentView', currentView);
-  },
-
-  currentDateUpdated(date) {
-    this.option('currentDate', date);
-  },
 
   getOption(name) {
     return this.option(name);
-  },
-
-  getWorkspaceOption(name) {
-    return this.getWorkSpace().option(name);
   },
 
   isVirtualScrolling() {
@@ -138,7 +148,7 @@ const subscribes = {
     const groups = this.getViewOption('groups');
 
     if (groups?.length) {
-      if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
+      if (allDay || !VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
@@ -148,7 +158,7 @@ const subscribes = {
         };
       }
 
-      if (this.getLayoutManager().getRenderingStrategyInstance()._needVerticalGroupBounds(allDay) && this._workSpace._isVerticalGroupedWorkSpace()) {
+      if (!allDay && VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace._isVerticalGroupedWorkSpace()) {
         const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: 0,
@@ -166,25 +176,21 @@ const subscribes = {
     return this.getWorkSpace().needRecalculateResizableArea();
   },
 
-  isAllDay(appointmentData) {
-    return this.getLayoutManager().getRenderingStrategyInstance().isAllDay(appointmentData);
+  isAllDay(appointmentData): boolean {
+    return isAllDay(this, appointmentData);
   },
 
   getDeltaTime(e, initialSize, itemData) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDeltaTime(e, initialSize, itemData);
-  },
-
-  getDropDownAppointmentWidth(isAllDay) {
-    return this.getLayoutManager()
-      .getRenderingStrategyInstance()
-      .getDropDownAppointmentWidth(
-        this.currentView.intervalCount,
-        isAllDay,
-      );
-  },
-
-  getDropDownAppointmentHeight() {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentHeight();
+    return getDeltaTime(e, initialSize, {
+      viewType: this.currentView.type,
+      cellSize: {
+        width: this.getWorkSpace().getCellWidth(),
+        height: this.getWorkSpace().getCellHeight(),
+      },
+      cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
+      resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
+      isAllDay: isAllDay(this, itemData),
+    });
   },
 
   getCellWidth() {
@@ -195,16 +201,12 @@ const subscribes = {
     return this.getWorkSpace().getCellHeight();
   },
 
-  getMaxAppointmentCountPerCellByType(isAllDay) {
-    return this.getLayoutManager().getRenderingStrategyInstance()._getMaxAppointmentCountPerCellByType(isAllDay);
-  },
-
   needCorrectAppointmentDates() {
-    return this.getLayoutManager().getRenderingStrategyInstance().needCorrectAppointmentDates();
+    return !['month', 'timelineMonth'].includes(this.currentView.type);
   },
 
   getRenderingStrategyDirection() {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDirection();
+    return VERTICAL_VIEW_TYPES.includes(this.currentView.type) ? 'vertical' : 'horizontal';
   },
 
   updateAppointmentEndDate(options) {
@@ -229,10 +231,6 @@ const subscribes = {
 
   clearCompactAppointments() {
     this._compactAppointmentsHelper.clear();
-  },
-
-  supportCompactDropDownAppointments() {
-    return this.getLayoutManager().getRenderingStrategyInstance().supportCompactDropDownAppointments();
   },
 
   getGroupCount() {
