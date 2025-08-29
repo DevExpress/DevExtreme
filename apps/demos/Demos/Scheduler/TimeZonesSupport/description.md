@@ -1,6 +1,6 @@
 Our DevExtreme Scheduler allows you to specify time zones for the component and its appointments. In this demo, you can change the component time zone using the [SelectBox](/Documentation/Guide/UI_Components/SelectBox/Overview/) above the Scheduler. The [getTimeZones()](/Documentation/ApiReference/Common/Utils/utils/#getTimeZonesdate_timeZones) method call populates the SelectBox with values.
 
-In this demo, you can change the component time zone with the [SelectBox](/Documentation/Guide/UI_Components/SelectBox/Overview/) above the Scheduler. To populate the SelectBox, this demo calls the [getTimeZones()](/Documentation/ApiReference/Common/Utils/utils/#getTimeZonesdate_timeZones) utility method.
+In this demo, you can use a [SelectBox](/Documentation/Guide/UI_Components/SelectBox/Overview/) to change the Scheduler time zone. This demo calls the [getTimeZones()](/Documentation/ApiReference/Common/Utils/utils/#getTimeZonesdate_timeZones) utility method to generate SelectBox items.
 <!--split-->
 
 To define the time zone on the component level, assign an <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">IANA time zone</a> value to the [timeZone](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#timeZone) property. To change time zones for appointments, enable the **editing**.[allowTimeZoneEditing](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/#allowTimeZoneEditing) option. 
