@@ -22,7 +22,7 @@ const packAndCopy = (outputDir: string) => {
 
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
-    // Inject descriptions
+
     const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
@@ -40,12 +40,13 @@ const injectDescriptions = () => {
 const monorepoVersion = sh.exec('npm pkg get version', { silent: true }).stdout.replaceAll('"', '');
 const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
-// Prepare metadata
 sh.cd(ROOT_DIR);
-sh.exec('npm run tools:discover-declarations');
-sh.exec(`npm run tools -- make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
 if (!devMode) {
+    sh.exec('npm run tools:discover-declarations');
+    // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
+    sh.exec(`npm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
+
     injectDescriptions();
 }
 
