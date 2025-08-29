@@ -50,7 +50,9 @@ describe('addCollectorByLevel', () => {
 
     expect(addCollectorByLevel(items as any[], {
       cells: monthCells,
+      minLevel: 3,
       maxLevel: 3,
+      collectBy: 'byStartDate',
       isCompact: false,
     })).toEqual([
       { ...items[0], items: [], isCompact: false },
@@ -106,7 +108,9 @@ describe('addCollectorByLevel', () => {
 
     expect(addCollectorByLevel(items as any[], {
       cells: monthCells,
+      minLevel: 3,
       maxLevel: 0,
+      collectBy: 'byStartDate',
       isCompact: false,
     })).toEqual([
       { ...items[0], items: [items[0], items[1]], isCompact: false },
@@ -159,7 +163,9 @@ describe('addCollectorByLevel', () => {
 
     expect(addCollectorByLevel(items as any[], {
       cells: monthCells,
+      minLevel: 3,
       maxLevel: 2,
+      collectBy: 'byStartDate',
       isCompact: true,
     })).toEqual([
       { ...items[0], items: [], isCompact: false },
@@ -228,7 +234,9 @@ describe('addCollectorByLevel', () => {
 
     expect(addCollectorByLevel(items as any[], {
       cells: monthCells,
+      minLevel: 3,
       maxLevel: -1,
+      collectBy: 'byStartDate',
       isCompact: true,
     })).toEqual([
       { ...items[0], items: [], isCompact: false },
@@ -237,6 +245,120 @@ describe('addCollectorByLevel', () => {
       { ...items[3], items: [], isCompact: false },
       { ...items[4], items: [], isCompact: false },
       { ...items[5], items: [], isCompact: false },
+    ]);
+  });
+
+  it('should collect overlapping appointments by occupation', () => {
+    const items = [{
+      startDate: new Date(2025, 0, 7).getTime(),
+      endDate: new Date(2025, 0, 12).getTime(),
+      duration: 3600_000,
+      cellIndex: 6,
+      endCellIndex: 11,
+      rowIndex: monthCells[6].rowIndex,
+      columnIndex: monthCells[6].columnIndex,
+      groupIndex: 0,
+      level: 0,
+      maxLevel: 1,
+    }, {
+      startDate: new Date(2025, 0, 8, 2).getTime(),
+      endDate: new Date(2025, 0, 10, 3).getTime(),
+      duration: 3600_000,
+      cellIndex: 7,
+      endCellIndex: 9,
+      rowIndex: monthCells[7].rowIndex,
+      columnIndex: monthCells[7].columnIndex,
+      groupIndex: 0,
+      level: 3,
+      maxLevel: 1,
+    }, {
+      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
+      endDate: new Date(2025, 0, 9, 5).getTime(),
+      duration: 3600_000,
+      cellIndex: 7,
+      endCellIndex: 8,
+      rowIndex: monthCells[7].rowIndex,
+      columnIndex: monthCells[7].columnIndex,
+      groupIndex: 0,
+      level: 2,
+      maxLevel: 1,
+    }, {
+      startDate: new Date(2025, 0, 8, 1).getTime(),
+      endDate: new Date(2025, 0, 8, 2).getTime(),
+      duration: 3600_000,
+      cellIndex: 7,
+      endCellIndex: 7,
+      rowIndex: monthCells[7].rowIndex,
+      columnIndex: monthCells[7].columnIndex,
+      groupIndex: 0,
+      level: 1,
+      maxLevel: 1,
+    }];
+
+    expect(addCollectorByLevel(items as any[], {
+      cells: monthCells,
+      minLevel: 3,
+      maxLevel: 1,
+      collectBy: 'byOccupation',
+      isCompact: true,
+    })).toEqual([
+      { ...items[0], items: [], isCompact: false },
+      {
+        ...items[1],
+        items: [items[1], items[2], items[3]],
+        isCompact: true,
+      },
+      {
+        ...items[1],
+        startDate: monthCells[8].min,
+        endDate: monthCells[8].max,
+        cellIndex: 8,
+        endCellIndex: 8,
+        rowIndex: monthCells[8].rowIndex,
+        columnIndex: monthCells[8].columnIndex,
+        items: [
+          {
+            ...items[1],
+            startDate: monthCells[8].min,
+            endDate: monthCells[8].max,
+            cellIndex: 8,
+            endCellIndex: 8,
+            rowIndex: monthCells[8].rowIndex,
+            columnIndex: monthCells[8].columnIndex,
+          },
+          {
+            ...items[2],
+            startDate: monthCells[8].min,
+            endDate: monthCells[8].max,
+            cellIndex: 8,
+            endCellIndex: 8,
+            rowIndex: monthCells[8].rowIndex,
+            columnIndex: monthCells[8].columnIndex,
+          },
+        ],
+        isCompact: true,
+      },
+      {
+        ...items[1],
+        startDate: monthCells[9].min,
+        endDate: monthCells[9].max,
+        cellIndex: 9,
+        endCellIndex: 9,
+        rowIndex: monthCells[9].rowIndex,
+        columnIndex: monthCells[9].columnIndex,
+        items: [
+          {
+            ...items[1],
+            startDate: monthCells[9].min,
+            endDate: monthCells[9].max,
+            cellIndex: 9,
+            endCellIndex: 9,
+            rowIndex: monthCells[9].rowIndex,
+            columnIndex: monthCells[9].columnIndex,
+          },
+        ],
+        isCompact: true,
+      },
     ]);
   });
 });

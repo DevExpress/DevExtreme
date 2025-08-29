@@ -1,3 +1,7 @@
+/**
+ * @timezone Europe/Belgrade
+ */
+
 import { describe, expect, it } from '@jest/globals';
 
 import { getAppointmentGeometry, getAppointmentX, getAppointmentY } from './get_appointment_geometry';
@@ -10,6 +14,20 @@ describe('appointment position utils', () => {
       expect(getAppointmentX(entity, {
         min: 0, max: 20, sizeX: 200, sizeY: 100,
       })).toEqual({ offsetX: 120, sizeX: 50 });
+    });
+
+    it('should return correct X position through DST', () => {
+      const entity = {
+        startDate: new Date(2019, 9, 26).getTime(),
+        endDate: new Date(2019, 9, 29).getTime(),
+      };
+
+      expect(getAppointmentX(entity, {
+        min: new Date(2019, 9, 20).getTime(),
+        max: new Date(2019, 9, 30).getTime(),
+        sizeX: 200,
+        sizeY: 100,
+      })).toEqual({ offsetX: 120, sizeX: 60 });
     });
   });
 

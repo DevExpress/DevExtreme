@@ -5,7 +5,7 @@ import type {
 } from '../../types';
 import { binarySearchCellIndex } from './binary_search_cell_index';
 
-export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate'>>(
+export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'allDay'>>(
   entities: T[],
   cells: CellInterval[],
 ): (T & Position)[] => entities.map((entity) => {
@@ -13,7 +13,10 @@ export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate'>>
     let endCellIndex = cellIndex;
     while (
       endCellIndex < cells.length - 2
-      && entity.endDate > cells[endCellIndex].max
+      && (
+        entity.endDate > cells[endCellIndex].max
+        || (entity.allDay && entity.endDate >= cells[endCellIndex].max)
+      )
       && entity.endDate >= cells[endCellIndex + 1].min
     ) { endCellIndex += 1; }
 

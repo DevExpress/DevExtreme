@@ -83,7 +83,7 @@ export interface OriginalAppointmentDates {
   };
 }
 
-export interface AppointmentPart extends Duration, OriginalAppointmentDates {
+export interface AppointmentPart extends OriginalAppointmentDates {
   reduced?: 'head' | 'body' | 'tail';
   partIndex: number;
   partCount: number;
@@ -91,7 +91,8 @@ export interface AppointmentPart extends Duration, OriginalAppointmentDates {
 
 export type ListEntity = MinimalAppointmentEntity
   & AllDayPanelOccupation
-  & GroupIndex;
+  & GroupIndex
+  & Duration;
 
 export interface LastInGroup {
   isLastInGroup: boolean;

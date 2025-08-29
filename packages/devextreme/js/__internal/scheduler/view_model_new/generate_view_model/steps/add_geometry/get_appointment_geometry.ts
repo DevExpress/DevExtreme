@@ -1,3 +1,5 @@
+import dateUtils from '@js/core/utils/date';
+
 import type { DateInterval } from '../../../types';
 import { getAbstractSizeByViewOrientation } from './swap_by_view_orientation';
 import type {
@@ -8,14 +10,17 @@ import type {
   Y,
 } from './types';
 
+const toMs = dateUtils.dateToMilliseconds;
+const minusDST = (date: number): number => date - new Date(date).getTimezoneOffset() * toMs('minute');
+
 export const getAppointmentX = (
   entity: Pick<GeometryMinimalEntity, 'startDate' | 'endDate'>,
   interval: AbstractSize & DateInterval,
 ): X => {
   const { min, max } = interval;
-  const intervalDuration = max - min;
-  const startTimeDelta = entity.startDate - min;
-  const entityDuration = entity.endDate - entity.startDate;
+  const intervalDuration = minusDST(max) - minusDST(min);
+  const startTimeDelta = minusDST(entity.startDate) - minusDST(min);
+  const entityDuration = minusDST(entity.endDate) - minusDST(entity.startDate);
   const offsetX = (startTimeDelta * interval.sizeX) / intervalDuration;
   const sizeX = (entityDuration * interval.sizeX) / intervalDuration;
 

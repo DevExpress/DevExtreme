@@ -16,6 +16,23 @@ import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type { AppointmentEntity, ListEntity, OriginalAppointmentDates } from './types';
 
+const toSource = (
+  itemData: SafeAppointment,
+  dates: { startDate: number; endDate: number },
+  schedulerStore: Scheduler,
+) => {
+  const adapter = new AppointmentAdapter(
+    itemData,
+    schedulerStore._dataAccessors,
+  ).clone();
+
+  adapter.startDate = new Date(dates.startDate);
+  adapter.endDate = new Date(dates.endDate);
+  adapter.calculateDates(schedulerStore.timeZoneCalculator, 'fromGrid');
+
+  return adapter.source as SafeAppointment;
+};
+
 class AppointmentLayoutManagerBridge {
   preparedItems: any[] = [];
 
@@ -72,21 +89,10 @@ class AppointmentLayoutManagerBridge {
       switch (this.schedulerStore.currentView.type) {
         case 'agenda': {
           const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
-          return viewModel.map((item) => {
-            const adapter = new AppointmentAdapter(
-              item.itemData,
-              this.schedulerStore._dataAccessors,
-            ).clone();
-
-            adapter.startDate = new Date(item.startDate);
-            adapter.endDate = new Date(item.endDate);
-            adapter.calculateDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
-
-            return {
-              ...item,
-              agendaSettings: adapter.source as SafeAppointment,
-            };
-          });
+          return viewModel.map((item) => ({
+            ...item,
+            agendaSettings: toSource(item.itemData, item, this.schedulerStore),
+          }));
         }
         case 'month': {
           const viewModel = generateMonthViewModel(this.schedulerStore, this.filteredItems);
@@ -109,16 +115,12 @@ class AppointmentLayoutManagerBridge {
             rowIndex: item.rowIndex,
             columnIndex: item.columnIndex,
             info: {
-              sourceAppointment: {
-                startDate: new Date(item.originalAppointmentDates.startDate),
-                endDate: new Date(item.originalAppointmentDates.endDate),
-                allDay: item.allDay,
-              },
               appointment: {
                 startDate: new Date(item.originalAppointmentDates.startDate),
                 endDate: new Date(item.originalAppointmentDates.endDate),
                 allDay: item.allDay,
               },
+              sourceAppointment: toSource(item.itemData, item.originalAppointmentDates, this.schedulerStore) as any,
             },
           });
           const toCollectedItem = (
@@ -130,16 +132,12 @@ class AppointmentLayoutManagerBridge {
             width: item.width,
             height: item.height,
             info: {
-              sourceAppointment: {
-                startDate: new Date(item.originalAppointmentDates.startDate),
-                endDate: new Date(item.originalAppointmentDates.endDate),
-                allDay: item.allDay,
-              },
               appointment: {
                 startDate: new Date(item.originalAppointmentDates.startDate),
                 endDate: new Date(item.originalAppointmentDates.endDate),
                 allDay: item.allDay,
               },
+              sourceAppointment: toSource(item.itemData, item.originalAppointmentDates, this.schedulerStore) as any,
             },
           } as unknown as AppointmentItemViewModel);
           return viewModel.map((item) => {

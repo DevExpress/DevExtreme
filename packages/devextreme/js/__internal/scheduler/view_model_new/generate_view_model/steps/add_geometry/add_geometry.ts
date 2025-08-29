@@ -10,11 +10,12 @@ import type {
 } from './types';
 
 const RTLSwap = (
-  entity: Geometry,
+  entity: GeometryMinimalEntity & Geometry,
   { panelSize, isRTLEnabled }: GeometryOptions,
 ): void => {
   if (isRTLEnabled) {
-    entity.left = panelSize.width - entity.left - entity.width;
+    const deltaWidth = entity.items.length ? 0 : entity.width;
+    entity.left = panelSize.width - entity.left - deltaWidth;
   }
 };
 

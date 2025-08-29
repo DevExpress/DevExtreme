@@ -58,8 +58,6 @@ $material-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$material-scheduler-compact-appointment-button-border-radius: 12px;
-
 $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -335,6 +333,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-appointment-collector {
     margin-top: $material-scheduler-dropdown-appointment-margin-top;
     margin-left: 52px;
+  }
+
+  &.dx-rtl .dx-scheduler-appointment-collector {
+    margin-left: 0;
+    margin-right: 52px;
   }
 
   .dx-scheduler-date-table-current-date {

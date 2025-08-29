@@ -1001,6 +1001,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderA11yStatus();
     this._renderMainContainer();
     this._renderHeader();
+    this._toggleAdaptiveClass();
 
     this._layoutManager = new AppointmentLayoutManagerBridge(this);
 
@@ -1183,8 +1184,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _render() {
-    this._toggleAdaptiveClass();
-
     this.getWorkSpace()?.updateHeaderEmptyCellWidth();
 
     // @ts-expect-error

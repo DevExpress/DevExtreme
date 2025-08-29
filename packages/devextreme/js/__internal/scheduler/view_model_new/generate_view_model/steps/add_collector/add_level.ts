@@ -1,31 +1,37 @@
 import type { Level, ListEntity, MaxLevel } from '../../../types';
+import type { CollectorOptions } from './types';
+
+const between = (
+  value: number,
+  min: number,
+  max: number,
+): number => Math.min(Math.max(value, min), max);
 
 export const addLevel = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex'>>(
   entities: T[],
-  maxLevel: number,
+  { minLevel, maxLevel }: Pick<CollectorOptions, 'minLevel' | 'maxLevel'>,
 ): (T & Level & MaxLevel)[] => {
+  const minMaxLevel = maxLevel === -1 ? 0 : Math.min(minLevel, maxLevel);
   let levelsEndDate: number[] = [];
   let stack: (T & Level & MaxLevel)[] = [];
   return entities.map((entity, entityIndex) => {
     const index = levelsEndDate.findIndex((endDate) => entity.startDate >= endDate);
     const level = index === -1 ? levelsEndDate.length : index;
-    const extended = { ...entity, level, maxLevel };
+    const extended = { ...entity, level, maxLevel: minMaxLevel };
 
-    if (maxLevel < 0) {
-      const isIntersectWithPrevious = levelsEndDate.some((endDate) => entity.startDate < endDate);
-      if (isIntersectWithPrevious) {
-        levelsEndDate[level] = extended.endDate;
-        stack.push(extended);
-        stack.forEach((item) => {
-          item.maxLevel = levelsEndDate.length;
-        });
-      } else {
-        extended.maxLevel = 0;
-        levelsEndDate = [extended.endDate];
-        stack = [extended];
-      }
-    } else {
+    const isIntersectWithPrevious = levelsEndDate.some((endDate) => entity.startDate < endDate);
+    if (isIntersectWithPrevious) {
       levelsEndDate[level] = extended.endDate;
+      stack.push(extended);
+      stack.forEach((item) => {
+        item.maxLevel = maxLevel === -1
+          ? levelsEndDate.length
+          : between(levelsEndDate.length, minMaxLevel, maxLevel);
+      });
+    } else {
+      extended.maxLevel = minMaxLevel;
+      levelsEndDate = [extended.endDate];
+      stack = [extended];
     }
 
     if (entities[entityIndex + 1]?.groupIndex !== entity.groupIndex) {

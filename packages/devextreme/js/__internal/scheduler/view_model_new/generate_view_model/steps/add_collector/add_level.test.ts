@@ -1,6 +1,15 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { addLevel } from './add_level';
+import type { CollectorOptions } from './types';
+
+const collectorOptions: CollectorOptions = {
+  cells: [],
+  minLevel: 3,
+  maxLevel: 3,
+  collectBy: 'byStartDate',
+  isCompact: false,
+};
 
 describe('addLevel', () => {
   it('should add 0 level for non-overlapping appointments', () => {
@@ -17,7 +26,7 @@ describe('addLevel', () => {
       groupIndex: 0,
     }];
 
-    expect(addLevel(items, 3)).toEqual([
+    expect(addLevel(items, collectorOptions)).toEqual([
       { ...items[0], level: 0, maxLevel: 3 },
       { ...items[1], level: 0, maxLevel: 3 },
     ]);
@@ -35,7 +44,7 @@ describe('addLevel', () => {
       groupIndex: 0,
     }];
 
-    expect(addLevel(items, 3)).toEqual([
+    expect(addLevel(items, collectorOptions)).toEqual([
       { ...items[0], level: 0, maxLevel: 3 },
       { ...items[1], level: 0, maxLevel: 3 },
     ]);
@@ -60,11 +69,58 @@ describe('addLevel', () => {
       groupIndex: 0,
     }];
 
-    expect(addLevel(items, 3)).toEqual([
+    expect(addLevel(items, collectorOptions)).toEqual([
       { ...items[0], level: 0, maxLevel: 3 },
       { ...items[1], level: 1, maxLevel: 3 },
       { ...items[2], level: 2, maxLevel: 3 },
       { ...items[3], level: 1, maxLevel: 3 },
+    ]);
+  });
+
+  it('should add levels from min to max for overlapping appointments', () => {
+    const items = [{
+      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
+      endDate: new Date(2025, 0, 8, 4, 15).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 8, 1).getTime(),
+      endDate: new Date(2025, 0, 8, 2).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
+      endDate: new Date(2025, 0, 8, 5).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 8, 2).getTime(),
+      endDate: new Date(2025, 0, 8, 3).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 17).getTime(),
+      endDate: new Date(2025, 0, 18).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 17).getTime(),
+      endDate: new Date(2025, 0, 18).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 17).getTime(),
+      endDate: new Date(2025, 0, 18).getTime(),
+      groupIndex: 0,
+    }, {
+      startDate: new Date(2025, 0, 17).getTime(),
+      endDate: new Date(2025, 0, 18).getTime(),
+      groupIndex: 0,
+    }];
+
+    expect(addLevel(items, { ...collectorOptions, maxLevel: 10 })).toEqual([
+      { ...items[0], level: 0, maxLevel: 3 },
+      { ...items[1], level: 1, maxLevel: 3 },
+      { ...items[2], level: 2, maxLevel: 3 },
+      { ...items[3], level: 1, maxLevel: 3 },
+      { ...items[4], level: 0, maxLevel: 4 },
+      { ...items[5], level: 1, maxLevel: 4 },
+      { ...items[6], level: 2, maxLevel: 4 },
+      { ...items[7], level: 3, maxLevel: 4 },
     ]);
   });
 
@@ -79,7 +135,7 @@ describe('addLevel', () => {
       groupIndex: 1,
     }];
 
-    expect(addLevel(items, 3)).toEqual([
+    expect(addLevel(items, collectorOptions)).toEqual([
       { ...items[0], level: 0, maxLevel: 3 },
       { ...items[1], level: 0, maxLevel: 3 },
     ]);
@@ -112,7 +168,7 @@ describe('addLevel', () => {
       groupIndex: 0,
     }];
 
-    expect(addLevel(items, -1)).toEqual([
+    expect(addLevel(items, { ...collectorOptions, maxLevel: -1 })).toEqual([
       { ...items[0], level: 0, maxLevel: 0 },
       { ...items[1], level: 0, maxLevel: 2 },
       { ...items[2], level: 1, maxLevel: 2 },

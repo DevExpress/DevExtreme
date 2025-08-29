@@ -1951,7 +1951,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     regularDayPenalSize: { width: number; height: number };
   } {
     return this.cache.memo('workspaceSize', () => ({
-      allDayPenalSize: getBoundingRect(this._$allDayPanel.get(0)),
+      allDayPenalSize: this._$allDayPanel ? getBoundingRect(this._$allDayPanel.get(0)) : {
+        width: 0,
+        height: 0,
+      },
       regularDayPenalSize: getBoundingRect(this._getDateTable().get(0)),
     }));
   }

@@ -14,6 +14,7 @@ import { addPosition } from './steps/add_position';
 import { addSortedIndex } from './steps/add_sorted_index';
 import { filterByVirtualScreen } from './steps/filter_by_virtual_screen';
 import { snapToCells } from './steps/snap_to_cells';
+import { sortByDuration, sortByGroupIndex, sortByStartDate } from './steps/sorting';
 import { splitByParts } from './steps/split_by_parts';
 
 const INTERVAL_CELLS_COUNT = 7;
@@ -21,13 +22,23 @@ const UNLIMITED_COLLECTOR_SIZES = {
   collectorSize: { width: 0, height: 0 },
   collectorWithMarginsSize: { width: 0, height: 0 },
 };
+const sortGridAppointments = <T extends {
+  duration: number;
+  startDate: number;
+  groupIndex: number;
+}>(entities: T[]): T[] => {
+  sortByDuration(entities);
+  sortByStartDate(entities);
+  sortByGroupIndex(entities);
+  return entities;
+};
 
 export const generateMonthViewModel = (
   schedulerStore: Scheduler,
   items: ListEntity[],
 ): AppointmentEntity[] => {
   const viewOffset = schedulerStore.getViewOffsetMs();
-  const { groupOrientation } = schedulerStore.currentView;
+  const { groupOrientation, type } = schedulerStore.currentView;
   const isGroupByDate = schedulerStore.getViewOption('groupByDate');
   const groupCount = schedulerStore.resourceManager.groupCount();
   const compareOptions = getCompareOptions(schedulerStore);
@@ -61,11 +72,18 @@ export const generateMonthViewModel = (
     false,
   );
   const maxAppointmentsPerCell = schedulerStore.getViewOption('maxAppointmentsPerCell');
-  const collectorSizes = maxAppointmentsPerCell === 'unlimited'
+  const collectorSizes = maxAppointmentsPerCell === 'unlimited' && type !== 'month'
     ? UNLIMITED_COLLECTOR_SIZES
     : getCollectorSize(cellSize, rawCollectorSize);
   const maxLevel = getMaxLevel({
     maxAppointmentsPerCell,
+    cellSize,
+    collectorSize: collectorSizes.collectorWithMarginsSize,
+    viewOrientation,
+    isAdaptivityEnabled,
+  });
+  const minLevel = getMaxLevel({
+    maxAppointmentsPerCell: 'auto',
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
     viewOrientation,
@@ -91,12 +109,15 @@ export const generateMonthViewModel = (
     panelSize: workspaceDOMSize.regularDayPenalSize,
   };
 
-  const step1 = splitByParts(items, splitOptions);
+  const step0 = sortGridAppointments(items);
+  const step1 = splitByParts(step0, splitOptions);
   const step2 = addPosition(step1, cells);
   const step3 = snapToCells(step2, cells);
   const step7 = addCollector(step3, {
     cells,
+    minLevel,
     maxLevel,
+    collectBy: 'byOccupation',
     isCompact: isCompactCollector,
   });
   const step9 = addSortedIndex(step7);

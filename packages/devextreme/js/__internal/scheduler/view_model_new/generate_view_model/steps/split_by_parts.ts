@@ -41,7 +41,7 @@ const getReduced = (
 const cropEntityByInterval = <T extends MinimalAppointmentEntity>(
   entity: T,
   interval: DateInterval,
-): T & Pick<AppointmentPart, 'originalAppointmentDates' | 'duration'> => {
+): T & Pick<AppointmentPart, 'originalAppointmentDates'> => {
   const startDate = entity.startDate < interval.min ? interval.min : entity.startDate;
   const endDate = entity.endDate > interval.max ? interval.max : entity.endDate;
 

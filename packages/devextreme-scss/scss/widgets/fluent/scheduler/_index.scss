@@ -399,6 +399,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     margin-left: 52px;
   }
 
+  &.dx-rtl .dx-scheduler-appointment-collector {
+    margin-left: 0;
+    margin-right: 52px;
+  }
+
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
   }
