@@ -9,7 +9,6 @@ import './m_grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
-import { isDefined } from '@js/core/utils/type';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -105,11 +104,7 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
   }
 
   public focus(element?) {
-    super.focus();
-
-    if (isDefined(element)) {
-      this.getController('keyboardNavigation').focus(element);
-    }
+    this.getController('keyboardNavigation').focus(element);
   }
 }
 
