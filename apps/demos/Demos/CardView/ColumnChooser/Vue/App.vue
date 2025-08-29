@@ -101,7 +101,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser,
+  DxColumnChooserSearch, DxColumnChooserSelection,
 } from 'devextreme-vue/card-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';

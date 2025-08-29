@@ -101,7 +101,9 @@ const newFileMenuOptions = getNewFileMenuOptions();
 const changeCategoryMenuOptions = getChangeCategoryMenuOptions();
 const fileManager = ref();
 
-function onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent) {
+function onItemClick(
+  { itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent,
+) {
   let updated = false;
   const { extension, category } = getItemInfo(itemData.text);
 

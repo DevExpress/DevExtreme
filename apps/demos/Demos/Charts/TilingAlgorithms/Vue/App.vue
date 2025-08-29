@@ -69,7 +69,9 @@ const customAlgorithm: CustomAlgorithm = ({ rect, sum, items }) => {
   });
 };
 
-function customizeTooltip({ node, node: { data: { name, value } }, valueText }: Record<string, any>) {
+function customizeTooltip({
+  node, node: { data: { name, value } }, valueText,
+}: Record<string, any>) {
   const parentData = node.getParent().data;
 
   return {

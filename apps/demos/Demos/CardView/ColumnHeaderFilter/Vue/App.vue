@@ -69,7 +69,9 @@ function getOrderDay(rowData: Order) {
   return new Date(rowData.OrderDate).getDay();
 }
 
-function calculateOrderDateFilterExpression(this: DxCardViewTypes.Column, value, selectedFilterOperations, target) {
+function calculateOrderDateFilterExpression(
+  this: DxCardViewTypes.Column, value, selectedFilterOperations, target,
+) {
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
