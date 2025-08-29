@@ -260,11 +260,11 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   }
 
   _renderAllDayClass() {
-    (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, !!this.option('allDay'));
+    (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, Boolean(this.option('allDay')));
   }
 
   _renderDragSourceClass() {
-    (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, !!this.option('isDragSource'));
+    (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, Boolean(this.option('isDragSource')));
   }
 
   _renderRecurrenceClass() {

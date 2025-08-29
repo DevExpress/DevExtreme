@@ -989,7 +989,7 @@ describe('data processor', () => {
         scheduler.repaint();
         const appts = scheduler._layoutManager.filteredItems;
 
-        expect(!!appts.length).toBe(expectedVisibility);
+        expect(Boolean(appts.length)).toBe(expectedVisibility);
       });
     });
 

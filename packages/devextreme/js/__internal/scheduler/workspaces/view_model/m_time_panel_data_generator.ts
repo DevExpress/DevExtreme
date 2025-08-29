@@ -168,7 +168,7 @@ export class TimePanelDataGenerator {
       if (currentGroupIndex !== previousGroupIndex) {
         previousGroupedData.push({
           dateTable: [],
-          isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!cellData.allDay, isVerticalGrouping),
+          isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(cellData.allDay), isVerticalGrouping),
           groupIndex: currentGroupIndex,
           key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
         });

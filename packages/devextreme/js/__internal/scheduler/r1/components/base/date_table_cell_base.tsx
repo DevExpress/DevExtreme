@@ -54,7 +54,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
         groups,
         groupIndex: groups ? groupIndex : undefined,
         text: '',
-        allDay: !!allDay || undefined,
+        allDay: Boolean(allDay) || undefined,
         ...contentTemplateProps?.data,
       },
       index,
@@ -92,7 +92,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const cellSizeHorizontalClass = renderUtils
       .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
     const cellSizeVerticalClass = renderUtils
-      .getCellSizeVerticalClass(!!allDay);
+      .getCellSizeVerticalClass(Boolean(allDay));
 
     const classes = combineClasses({
       [cellSizeHorizontalClass]: true,

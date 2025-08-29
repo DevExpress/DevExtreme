@@ -147,7 +147,7 @@ export class TooltipStrategyBase {
   }
 
   _createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
-    const isButtonClicked = !!this._extraOptions.isButtonClick;
+    const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
 
     const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
     // @ts-expect-error
