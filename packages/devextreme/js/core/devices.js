@@ -68,7 +68,6 @@ const UA_PARSERS = {
         const navigator = getNavigator();
         const isIpadOs = /Macintosh/i.test(userAgent) && navigator?.maxTouchPoints > 2;
         const isAppleDevice = /ip(hone|od|ad)/i.test(userAgent);
-
         if(!isAppleDevice && !isIpadOs) {
             return null;
         }
@@ -78,9 +77,9 @@ const UA_PARSERS = {
         const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [];
         const isIPhone4 = (window.screen.height === (960 / 2));
         const grade = isIPhone4 ? 'B' : 'A';
-
+        const isDesktopMode = /Macintosh/i.test(userAgent) && !/Mobile/i.test(userAgent);
         return {
-            deviceType: isPhone ? 'phone' : 'tablet',
+            deviceType: isDesktopMode ? 'desktop' : isPhone ? 'phone' : 'tablet',
             platform: 'ios',
             version,
             grade
