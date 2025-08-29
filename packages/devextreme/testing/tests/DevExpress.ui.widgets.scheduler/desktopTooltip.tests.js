@@ -342,39 +342,35 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
     assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
 });
 
-['appointmentTooltip', 'dropDownAppointment'].forEach(template => {
-    const templateName = template + 'Template';
+QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', async function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = ['data1', 'data2'];
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
-    QUnit.test(`${templateName} equal to "${templateName}"`, async function(assert) {
-        const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-        const dataList = ['data1', 'data2'];
-        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
+    const config = {};
+    config['appointmentTooltipTemplate'] = 'appointmentTooltipTemplate';
 
-        const config = {};
-        config[templateName] = templateName;
+    tooltip.show('target', dataList, extend(this.extraOptions, config));
+    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+    stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
-        tooltip.show('target', dataList, extend(this.extraOptions, config));
-        stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
-        stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
+    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
+    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
+});
 
-        assert.ok(stubAddDefaultTemplates.getCall(0).args[0][template] instanceof FunctionTemplate);
-        assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], templateName);
-    });
+QUnit.test('appointmentTooltipTemplate equal to custom template', async function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = ['data1', 'data2'];
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
-    QUnit.test(`${templateName} equal to custom template`, async function(assert) {
-        const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-        const dataList = ['data1', 'data2'];
-        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
+    const config = {};
+    config['appointmentTooltipTemplate'] = 'appointmentTooltipTemplate';
 
-        const config = {};
-        config[templateName] = templateName;
+    tooltip.show('target', dataList, extend(this.extraOptions, config));
+    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+    stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
-        tooltip.show('target', dataList, extend(this.extraOptions, config));
-        stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
-        stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
-
-        assert.ok(stubAddDefaultTemplates.getCall(0).args[0][template] instanceof FunctionTemplate);
-        assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], templateName);
-    });
+    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
+    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
 });
 

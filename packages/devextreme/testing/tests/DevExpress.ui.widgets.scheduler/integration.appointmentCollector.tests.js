@@ -166,22 +166,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         });
     };
 
-    const checkItemDataInDropDownTemplate = async(assert, dataSource, currentDate) => {
-        const scheduler = await createInstance({
-            dataSource: dataSource,
-            height: 600,
-            maxAppointmentsPerCell: 1,
-            currentDate: currentDate,
-            currentView: 'month',
-            views: ['month'],
-            dropDownAppointmentTemplate(itemData) {
-                assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
-            }
-        });
-
-        scheduler.appointments.compact.click();
-    };
-
     test('Appointment collector should have correct coordinates on month view', async function(assert) {
         const scheduler = await createInstance();
 
@@ -461,44 +445,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal(scheduler.tooltip.getItemCount(), 2, 'There are 3 drop down appts');
     });
 
-    test('Collapsed appointment should be rendered correctly with expressions on custom template', async function(assert) {
-        const startDate = new Date(2015, 1, 4, 1);
-        const endDate = new Date(2015, 1, 4, 2);
-        const appointments = [{
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 1'
-        }, {
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 2'
-        }, {
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 3'
-        }];
-
-        const scheduler = await createInstance({
-            currentDate: new Date(2015, 1, 4),
-            views: ['month'],
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            dataSource: appointments,
-            startDateExpr: 'Start',
-            endDateExpr: 'End',
-            textExpr: 'Text',
-            height: 490,
-            maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate(data) {
-                return `<div class='custom-title'>${data.Text}</div>`;
-            }
-        });
-
-        scheduler.appointments.compact.click();
-        assert.equal(scheduler.tooltip.getItemElement().find('.custom-title').text(), 'Item 2', 'Text is correct on init');
-    });
-
-
     test('Appointment collector should be rendered correctly when appointmentCollectorTemplate is used', async function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
@@ -537,54 +483,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal($collector.find('.button-title').text(), 'Appointment count is 2', 'Template is applied correctly');
     });
 
-    test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', async function(assert) {
-        const startDate = new Date(2015, 1, 4, 1);
-        const endDate = new Date(2015, 1, 4, 2);
-        const appointments = [{
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 1'
-        }, {
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 2'
-        }, {
-            Start: startDate.getTime(),
-            End: endDate.getTime(),
-            Text: 'Item 3'
-        }];
-
-        const scheduler = await createInstance({
-            currentDate: new Date(2015, 1, 4),
-            views: ['month'],
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            dataSource: appointments,
-            startDateExpr: 'Start',
-            endDateExpr: 'End',
-            textExpr: 'Text',
-            height: 500,
-            maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate: 'dropDownAppointmentTemplate',
-            integrationOptions: {
-                templates: {
-                    'dropDownAppointmentTemplate': {
-                        render(args) {
-                            const $element = $('<span>')
-                                .addClass('dx-template-wrapper')
-                                .text('text');
-
-                            return $element.get(0);
-                        }
-                    }
-                }
-            }
-        });
-
-        scheduler.appointments.compact.click();
-        assert.equal(scheduler.tooltip.getItemElement().text(), 'text', 'Text is correct on init');
-    });
-
     test('Appointment collector should have correct width on timeline view', async function(assert) {
         const scheduler = await createInstance({
             currentDate: new Date(2015, 2, 4),
@@ -608,49 +506,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, 'DropDown button has correct width');
-    });
-
-    test('The itemData argument of the drop down appointment template is should be instance of the data source', async function(assert) {
-        const dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            allDay: true,
-            text: 'Task 1'
-        }, {
-            startDate: new Date(2015, 4, 24, 15),
-            endDate: new Date(2015, 4, 24, 20),
-            allDay: true,
-            text: 'Task 2'
-        }, {
-            startDate: new Date(2015, 4, 24, 45),
-            endDate: new Date(2015, 4, 24, 55),
-            allDay: true,
-            text: 'Task 3'
-        }];
-        await checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
-    });
-
-    test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', async function(assert) {
-        const dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            recurrenceRule: 'FREQ=DAILY;COUNT=3',
-            allDay: true,
-            text: 'Task 1'
-        }, {
-            startDate: new Date(2015, 4, 24, 19),
-            endDate: new Date(2015, 4, 24, 31),
-            allDay: true,
-            recurrenceRule: 'FREQ=DAILY;COUNT=2',
-            text: 'Task 2'
-        }, {
-            startDate: new Date(2015, 4, 24, 24),
-            endDate: new Date(2015, 4, 24, 34),
-            allDay: true,
-            recurrenceRule: 'FREQ=DAILY;COUNT=4',
-            text: 'Task 3'
-        }];
-        await checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
     [{

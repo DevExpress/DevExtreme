@@ -26246,17 +26246,6 @@ declare module DevExpress.ui {
      */
     descriptionExpr?: string;
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-     */
-    dropDownAppointmentTemplate?:
-      | template
-      | ((
-          itemData: any,
-          itemIndex: number,
-          contentElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
      * [descr:dxSchedulerOptions.editing]
      */
     editing?:
@@ -26591,17 +26580,6 @@ declare module DevExpress.ui {
             | template
             | ((
                 model: DevExpress.ui.dxScheduler.AppointmentTooltipTemplateData,
-                itemIndex: number,
-                contentElement: DevExpress.core.DxElement
-              ) => string | DevExpress.core.UserDefinedElement);
-          /**
-           * [descr:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           * @deprecated [depNote:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           */
-          dropDownAppointmentTemplate?:
-            | template
-            | ((
-                itemData: any,
                 itemIndex: number,
                 contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);

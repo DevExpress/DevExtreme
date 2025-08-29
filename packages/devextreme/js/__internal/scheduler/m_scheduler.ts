@@ -481,7 +481,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateAppointmentDataSource();
         this.repaint();
         break;
-      case 'dropDownAppointmentTemplate':
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
       case '_appointmentCountPerCell':
