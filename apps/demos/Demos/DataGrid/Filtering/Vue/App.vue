@@ -169,7 +169,7 @@ const clearFilter = () => dataGridRef.value?.instance?.clearFilter();
 const getOrderDay = (rowData: Order) => (new Date(rowData.OrderDate)).getDay();
 
 function calculateFilterExpression(
-  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string, target: string,
+  this: DxDataGridTypes.Column, value: any, selectedFilterOperations: string | null, target: string,
 ) {
   const column = this;
 
