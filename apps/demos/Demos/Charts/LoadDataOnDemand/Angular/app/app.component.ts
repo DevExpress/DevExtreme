@@ -86,14 +86,17 @@ export class AppComponent {
       endBound: this.getDateString(bounded ? storage[storage.length - 1].date : null),
     };
 
-    if (ajaxArgs.startVisible !== ajaxArgs.startBound
-            && ajaxArgs.endVisible !== ajaxArgs.endBound && !this.packetsLock) {
-      this.packetsLock++;
+    if (
+      ajaxArgs.startVisible !== ajaxArgs.startBound
+      && ajaxArgs.endVisible !== ajaxArgs.endBound
+      && !this.packetsLock
+    ) {
+      this.packetsLock += 1;
       this.component.instance.showLoadingIndicator();
 
       this.getDataFrame(ajaxArgs)
         .then((dataFrame: Record<string, number | Date>[]) => {
-          this.packetsLock--;
+          this.packetsLock -= 1;
 
           const componentStorage = dataSource.store();
 
@@ -110,7 +113,7 @@ export class AppComponent {
           this.onVisualRangeChanged();
         })
         .catch(() => {
-          this.packetsLock--;
+          this.packetsLock -= 1;
           dataSource.reload();
         });
     }

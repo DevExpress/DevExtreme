@@ -27,7 +27,11 @@ const cache = {};
 export class Service {
   getData(country?: string): DataItem[] {
     if (country) {
-      return cache[country] = cache[country] || data.filter((item) => item.country === country);
+      if(!cache[country]) {
+        cache[country] = data.filter((item) => item.country === country);
+      }
+
+      return cache[country];
     }
     return data;
   }

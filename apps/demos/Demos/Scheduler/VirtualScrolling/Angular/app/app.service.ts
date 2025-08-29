@@ -219,7 +219,7 @@ export class Service {
   filterAppointmentsByTime(appointments, startDayHour, endDayHour): Appointment[] {
     const result = [];
 
-    for (let i = 0; i < appointments.length; i++) {
+    for (let i = 0; i < appointments.length; i += 1) {
       const startDate = appointments[i].startDate;
       const endDate = appointments[i].endDate;
 
@@ -240,7 +240,7 @@ export class Service {
     let durationState = 1;
     const durationIncrement = 19;
 
-    for (let i = 0; i < resources.length; i++) {
+    for (let i = 0; i < resources.length; i += 1) {
       let startDate = startDay;
 
       while (startDate.getTime() < endDay.getTime()) {
@@ -254,7 +254,7 @@ export class Service {
           humanId: resources[i].id,
         });
 
-        textIndex++;
+        textIndex += 1;
 
         durationState += durationIncrement;
         startDate = new Date(endDate.getTime() + this.getRandomDuration(durationState));

@@ -69,7 +69,7 @@ export class AppComponent {
   }
 
   onPivotCellClick(e: DxPivotGridTypes.CellClickEvent) {
-    if (e.area == 'data') {
+    if (e.area === 'data') {
       const rowPathLength = e.cell.rowPath.length;
       const rowPathName = e.cell.rowPath[rowPathLength - 1];
 

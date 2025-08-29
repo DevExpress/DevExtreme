@@ -118,7 +118,8 @@ export class AppComponent {
     } else {
       array = directory.dataItem.items;
       if (!array) {
-        directory.dataItem.items = array = [];
+        directory.dataItem.items = [];
+        array = [];
       }
     }
 

@@ -54,8 +54,7 @@ export class AppComponent {
     let totalSum = arg.sum;
 
     arg.items.forEach((item) => {
-      const size = Math.round((totalRect[side + 2]
-                    - totalRect[side]) * item.value / totalSum);
+      const size = Math.round((totalRect[side + 2] - totalRect[side]) * item.value / totalSum);
       const rect = totalRect.slice();
 
       totalSum -= item.value;

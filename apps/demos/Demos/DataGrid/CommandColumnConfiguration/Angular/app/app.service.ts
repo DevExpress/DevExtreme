@@ -344,7 +344,8 @@ export class Service {
   maxID = employees[employees.length - 1].ID;
 
   getMaxID() {
-    return ++this.maxID;
+    this.maxID += 1;
+    return this.maxID;
   }
 
   getEmployees(): Employee[] {

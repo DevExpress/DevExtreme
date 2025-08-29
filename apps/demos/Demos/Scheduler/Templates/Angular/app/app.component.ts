@@ -50,8 +50,8 @@ export class AppComponent {
   onAppointmentFormOpening = (data: DxSchedulerTypes.AppointmentFormOpeningEvent) => {
     const that = this;
     const form = data.form;
+    const startDate = data.appointmentData.startDate;
     let movieInfo = that.getMovieById(data.appointmentData.movieId) || {};
-    let startDate = data.appointmentData.startDate;
 
     form.option('items', [{
       label: {

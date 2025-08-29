@@ -36,9 +36,9 @@ export class AppComponent {
     let endIndex;
 
     data.forEach((item, index) => {
-      if (item.country == e.value[0]) {
+      if (item.country === e.value[0]) {
         startIndex = index;
-      } else if (item.country == e.value[1]) {
+      } else if (item.country === e.value[1]) {
         endIndex = index;
       }
     });

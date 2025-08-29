@@ -51,7 +51,7 @@ export class AppComponent {
     this.currentData = [];
 
     this.tasks.forEach((item, index) => {
-      if (item.priority == value) {
+      if (item.priority === value) {
         this.currentData.push(this.tasks[index].subject);
       }
     });

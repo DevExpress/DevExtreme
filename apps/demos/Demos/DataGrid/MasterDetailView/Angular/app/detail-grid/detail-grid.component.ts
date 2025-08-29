@@ -36,6 +36,6 @@ export class DetailGridComponent implements AfterViewInit {
   }
 
   completedValue(rowData) {
-    return rowData.Status == 'Completed';
+    return rowData.Status === 'Completed';
   }
 }
