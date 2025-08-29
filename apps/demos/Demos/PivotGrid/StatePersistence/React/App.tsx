@@ -115,7 +115,7 @@ const App = () => (
         the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
       </div>
       <Button
-        text={"Reset the PivotGrid's State"}
+        text="Reset the PivotGrid's State"
         onClick={onResetClick}
       />
       <PivotGrid

@@ -62,7 +62,7 @@ const App = () => (
     <Column dataField="Phone">
       <RequiredRule />
       <PatternRule
-        message={'Your phone must have "(555) 555-5555" format!'}
+        message='Your phone must have "(555) 555-5555" format!'
         pattern={/^\(\d{3}\) \d{3}-\d{4}$/i}
       />
     </Column>
