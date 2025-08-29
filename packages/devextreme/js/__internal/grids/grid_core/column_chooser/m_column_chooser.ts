@@ -18,7 +18,7 @@ import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
-import { defaultOptions } from './const';
+import { getDefaultOptions } from './m_column_chooser.utils';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
@@ -590,7 +590,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnC
 
 export const columnChooserModule = {
   defaultOptions() {
-    return defaultOptions;
+    return getDefaultOptions();
   },
   controllers: {
     columnChooser: ColumnChooserController,

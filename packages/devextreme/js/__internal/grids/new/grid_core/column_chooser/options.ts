@@ -1,6 +1,6 @@
 import type { ColumnChooser, ColumnChooserSelectionConfig } from '@js/common/grids';
 
-import { defaultOptions as columnChooserDefaultOptions } from '../../../grid_core/column_chooser/const';
+import { getDefaultOptions as getDefaultOptionsFromColumnChooser } from '../../../grid_core/column_chooser/m_column_chooser.utils';
 
 export interface Options {
   columnChooser?: Omit<ColumnChooser, 'selection'> & {
@@ -9,4 +9,4 @@ export interface Options {
   };
 }
 
-export const defaultOptions = columnChooserDefaultOptions as Options;
+export const defaultOptions = getDefaultOptionsFromColumnChooser() as Options;

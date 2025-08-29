@@ -1,7 +1,7 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { ColumnChooser } from '@js/common/grids';
 
-export const defaultOptions = {
+export const getDefaultOptions = (): { columnChooser: ColumnChooser } => ({
   columnChooser: {
     enabled: false,
     search: {
@@ -23,4 +23,4 @@ export const defaultOptions = {
     emptyPanelText: messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
     container: undefined,
   } as ColumnChooser,
-};
+});
