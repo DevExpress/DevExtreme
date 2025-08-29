@@ -10,6 +10,7 @@ import reactPerf from 'eslint-plugin-react-perf';
 import jest from 'eslint-plugin-jest';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 import js from '@eslint/js';
 import { fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -53,6 +54,8 @@ export default [
       'no-only-tests': noOnlyTests,
       deprecation,
       '@stylistic': stylistic,
+      jest,
+      '@typescript-eslint': tsPlugin
     },
     languageOptions: {
       globals: {
@@ -125,6 +128,7 @@ export default [
           'br', // <br> tag in html
           'Cldr',
           'canada',
+          'canvg', // canvg
           'ceil',
           'checkbox',
           'cityid',
@@ -269,6 +273,7 @@ export default [
           'readdir', // node js
           'realtor',
           'rect',
+          'rehype', // remark and rehype
           'req',
           'resellers',
           'resize',
@@ -310,6 +315,7 @@ export default [
           'td',
           'theatre',
           'timestamp',
+          'timestamps',
           'tmp',
           'tooltip',
           'tooltips',
@@ -333,6 +339,7 @@ export default [
           'viewport',
           'volumne', // stockMarket, rename to volume
           'vue',
+          'whitespace',
           'winloss',
           'xlsx', // ExcelJS
           'xhr',
@@ -354,13 +361,60 @@ export default [
       })(),
       'func-names': 0, // TODO warn (was warn) >500
       'import/extensions': 0,
+      'import/order': 0,
+      'no-shadow': 0,
+      'default-case': 0,
+      'new-cap': 0,
+      'prefer-exponentiation-operator': 0,
+      'no-bitwise': 0,
+      'array-callback-return': 0,
+      'camelcase': 0,
       'no-use-before-define': 0,
       'prefer-destructuring': 0,
       'no-param-reassign': ['error', {
         'props': false,
       }],
       'no-only-tests/no-only-tests': 'error',
+      'class-methods-use-this': 0,
+      'no-unsafe-optional-chaining': 0,
+      'no-promise-executor-return': 0,
+      '@stylistic/max-len': 0, // TODO enable this rule (was 100)
+      '@stylistic/indent': ['error', 2, {
+        SwitchCase: 1,
+        MemberExpression: 1,
+        CallExpression: {
+          arguments: 1,
+        },
+      }],
+      
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      '@stylistic/space-before-function-paren': ['error', {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
+      }],
+      '@stylistic/semi-spacing': 'error',
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/function-call-argument-newline': ['error', 'consistent'],
+      '@stylistic/eol-last': ['error', 'always'],
+      '@stylistic/operator-linebreak': 0,
+      '@stylistic/no-mixed-operators': 0,
+      '@stylistic/no-extra-parens': 0,
+      '@stylistic/function-paren-newline': 0,
+      '@stylistic/object-curly-newline': 0,
+      '@stylistic/no-confusing-arrow': 0,
+      '@stylistic/implicit-arrow-linebreak': 0,
     },
+  },
+
+  // .js and .jsx files
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    rules: {
+      'no-unused-vars': 'error',
+    }
   },
 
   // .ts and .tsx files
@@ -379,26 +433,20 @@ export default [
     },
     rules: {
       // TODO consider this rules
-      'quotes': ['error', 'single', { avoidEscape: true }],
       'eqeqeq': 0,
       'no-plusplus': 0,
-      '@stylistic/max-len': 0,
       'max-classes-per-file': 0,
-      'consistent-return': 0,
       'import/extensions': 0,
       'import/no-webpack-loader-syntax': 0,
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
       'spellcheck/spell-checker': 0,
-      '@stylistic/no-mixed-operators': 0,
       'no-useless-concat': 0,
       'no-self-assign': 0,
-      'default-case': 0,
       'no-var': 0,
       'no-return-assign': 0,
       'vars-on-top': 0,
       'no-sequences': 0,
-      'new-cap': 0,
       'no-param-reassign': 0,
       'no-multi-assign': 0,
       'no-restricted-syntax': 0,
@@ -416,14 +464,41 @@ export default [
       '@typescript-eslint/no-this-alias': 0,
       '@typescript-eslint/no-empty-function': 0,
       '@typescript-eslint/no-explicit-any': 0,
-      '@typescript-eslint/no-unused-vars': 0,
+      '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
       '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
       // 'deprecation/deprecation': 'error',
+      '@typescript-eslint/init-declarations': 0,
+      '@typescript-eslint/prefer-readonly': 0,
+      '@typescript-eslint/no-unsafe-return': 0,
+      '@typescript-eslint/prefer-for-of': 0,
+      '@typescript-eslint/require-await': 0,
+      '@typescript-eslint/no-misused-promises': 0,
+      '@typescript-eslint/member-ordering': 0,
+      '@typescript-eslint/no-base-to-string': 0,
+      '@typescript-eslint/no-non-null-assertion': 0,
+      '@typescript-eslint/no-invalid-this': 0,
+      '@typescript-eslint/no-unsafe-function-type': 0,
+      '@typescript-eslint/no-wrapper-object-types': 0,
+      '@typescript-eslint/prefer-regexp-exec': 0,
+      '@typescript-eslint/restrict-plus-operands': 0,
+      '@typescript-eslint/no-inferrable-types': 0,
+      '@typescript-eslint/dot-notation': 0,
+      '@typescript-eslint/prefer-reduce-type-parameter': 0,
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 0,
+      '@typescript-eslint/consistent-type-definitions': 0,
+      '@typescript-eslint/prefer-nullish-coalescing': 0,
+      '@typescript-eslint/explicit-function-return-type': 0,
+      '@typescript-eslint/prefer-ts-expect-error': 0,
+      '@typescript-eslint/prefer-includes': 0,
+      '@typescript-eslint/ban-ts-comment': 0,
+      '@typescript-eslint/no-extraneous-class': 0,
+      '@typescript-eslint/no-floating-promises': 0,
     },
   },
 
+  // ./configs directory
   {
     files: ['configs/**/*.js'],
     languageOptions: {
@@ -456,18 +531,6 @@ export default [
         ...globals.jquery,
         DevExpress: true,
       },
-    },
-  },
-  {
-    files: ['Demos/**/jQuery/**/data.js', 'utils/templates/jQuery/**/data.js'],
-    languageOptions: {
-      globals: {
-        ...globals.jquery,
-        DevExpress: true,
-      },
-    },
-    rules: {
-      'no-unused-vars': 0,
     },
   },
   {
@@ -511,46 +574,24 @@ export default [
     },
     rules: {
       ...changeRulesToStylistic(react.configs.recommended.rules),
-      '@stylistic/block-spacing': 'error',
       '@stylistic/comma-spacing': 'error',
       '@stylistic/computed-property-spacing': 'error',
       '@stylistic/comma-style': ['error', 'last'],
       '@stylistic/implicit-arrow-linebreak': 0,
-      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
       'no-irregular-whitespace': 'error',
-      '@stylistic/no-multi-spaces': 'error',
-      '@stylistic/no-trailing-spaces': 'error',
       'no-new-func': 'error',
       'no-eval': 'error',
       'no-undef': 'error',
       'no-unused-expressions': 'off',
-      'no-unused-vars': ['error'],
       'no-extend-native': 'error',
       'no-alert': 'error',
       '@stylistic/no-whitespace-before-property': 'error',
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-      '@stylistic/semi-spacing': 'error',
-      '@stylistic/semi': 'error',
-      '@stylistic/space-before-function-paren': ['error', 'never'],
-      '@stylistic/space-in-parens': 'error',
       '@stylistic/space-infix-ops': 'error',
       '@stylistic/space-unary-ops': 'error',
-      'eol-last': ['error', 'always'],
       'curly': ['error', 'multi-line', 'consistent'],
-      '@stylistic/indent': [
-        'error',
-        2,
-        {
-          SwitchCase: 1,
-          MemberExpression: 1,
-          CallExpression: {
-            arguments: 1,
-          },
-        },
-      ],
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
       'prefer-template': 'error',
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
+      'react/display-name': 'off',
       'react/jsx-curly-brace-presence': [
         'error',
         {
@@ -564,6 +605,7 @@ export default [
         {
           allowBind: true, // TODO false (was false)
           allowArrowFunctions: true, // TODO false (was false)
+          allowFunctions: true, // TODO false
           ignoreRefs: true,
         },
       ],
@@ -598,8 +640,14 @@ export default [
           nativeAllowList: 'all',
         },
       ],
+      'react-perf/jsx-no-new-array-as-prop': 0,
+      'react-perf/jsx-no-new-object-as-prop': 0,
+      'react/no-unescaped-entities': 0,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+
+      // TODO: consider these rules
+      'react/jsx-fragments': 0,
     },
   },
 
@@ -617,53 +665,39 @@ export default [
   {
     files: [
       'Demos/**/Vue/*.vue',
-      'Demos/**/Vue/*.js',
       'utils/templates/Vue/*.vue',
-      'utils/templates/Vue/*.js',
     ],
     languageOptions: {
       parser: vueParser,
       parserOptions: {
-        parser: '@typescript-eslint/parser',
+        parser: tsParser,
+        sourceType: 'module',
       },
       globals: {
         System: false,
       },
     },
     rules: {
-      '@stylistic/block-spacing': 'error',
       '@stylistic/comma-spacing': 'error',
       '@stylistic/computed-property-spacing': 'error',
       '@stylistic/comma-style': ['error', 'last'],
 
-      '@stylistic/no-multiple-empty-lines': ['error', {
-          max: 1,
-      }],
-
       'no-irregular-whitespace': 'error',
-      '@stylistic/no-multi-spaces': 'error',
-      '@stylistic/no-trailing-spaces': 'error',
       'no-new-func': 'error',
       'no-eval': 'error',
       'no-undef': 'error',
       'no-unused-expressions': 'off',
-      'no-unused-vars': ['error'],
       'no-extend-native': 'error',
       'no-alert': 'error',
       '@stylistic/no-whitespace-before-property': 'error',
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-      '@stylistic/semi-spacing': 'error',
-      '@stylistic/semi': 'error',
-      '@stylistic/space-before-function-paren': ['error', 'never'],
-      '@stylistic/space-in-parens': 'error',
+
+      // TODO: enable 'no-unused-vars', see these rules to configure it:
+      // 'no-unused-vars', 'vue/script-setup-uses-vars', '@typescript-eslint/no-unused-vars'
+      'no-unused-vars': 'off',
+      
       '@stylistic/space-infix-ops': 'error',
       '@stylistic/space-unary-ops': 'error',
-      '@stylistic/eol-last': ['error', 'always'],
       'curly': ['error', 'multi-line', 'consistent'],
-
-      '@stylistic/quotes': ['error', 'single', {
-          avoidEscape: true,
-      }],
 
       'prefer-template': 'error',
       'vue/camelcase': 'error',
@@ -671,33 +705,51 @@ export default [
       'vue/singleline-html-element-content-newline': 'off',
       'vue/multiline-html-element-content-newline': 'off',
       'vue/attributes-order': 'off',
-      'vue/no-unused-vars': 'off',
+      'vue/no-unused-vars': 'error',
       'vue/no-unused-components': 'off',
       'vue/no-template-shadow': 'off',
       'vue/no-v-html': 'off',
       'vue/no-v-model-argument': 'off',
+      'vue/v-on-event-hyphenation': 'off',
       'vue/valid-v-model': 'off',
-      '@stylistic/max-len': 0,
-
-      'vue/max-len': ['error', 100, 2, {
-          ignoreUrls: true,
-          ignoreComments: false,
-          ignoreRegExpLiterals: true,
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
+      'vue/valid-v-for': 'off',
+      'vue/attribute-hyphenation': 'off',
+      'vue/multi-word-component-names': 'off',
+      'vue/return-in-computed-property': 'off',
+      '@stylistic/max-len': 'off',
+      'vue/max-len': ['error', {
+        code: 100,
+        tabWidth: 2,
+        ignoreUrls: true,
+        ignoreComments: false,
+        ignoreRegExpLiterals: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
       }],
-
       'vue/html-closing-bracket-spacing': ['error', {
-          startTag: 'never',
-          endTag: 'never',
-          selfClosingTag: 'never',
+        startTag: 'never',
+        endTag: 'never',
+        selfClosingTag: 'never',
       }],
-
       'vue/html-closing-bracket-newline': ['error', {
-          'singleline': 'never',
-          multiline: 'always',
+        singleline: 'never',
+        multiline: 'always',
       }],
+      'import/no-unresolved': 0,
     },
+  },
+
+  // Demos data files
+  {
+    files: ['Demos/**/data.js', 'Demos/**/data.ts', 'Demos/**/app.service.ts'],
+    rules: {
+      '@stylistic/quotes': 0,
+      '@stylistic/quote-props': 0,
+      '@stylistic/max-len': 0,
+      'no-useless-escape': 0,
+      'no-unused-vars': 0,
+      '@typescript-eslint/no-unused-vars': 0,
+    }
   },
 
   // testcafe tests
@@ -726,9 +778,6 @@ export default [
   })),
   {
     files: ['utils/tests/**/*.*'],
-    plugins: {
-      jest,
-    },
   },
 
   // testcafe visual tests
@@ -741,14 +790,6 @@ export default [
     files: ['utils/visual-tests/**/*.*'],
     rules: {
       'curly': ['error', 'multi-line'],
-      'indent': ['error', 2],
-    },
-  },
-
-  {
-    files: ['**/UpdateBarGaugeDataAtRuntime/**/*.*'],
-    rules: {
-      'no-bitwise': 0,
     },
   },
 ];
