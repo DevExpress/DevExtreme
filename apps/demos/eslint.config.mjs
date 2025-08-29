@@ -4,7 +4,7 @@ import spellcheckDevextreme from 'eslint-config-devextreme/spell-check.js';
 import spellcheckPlugin from 'eslint-plugin-spellcheck';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import deprecation from 'eslint-plugin-deprecation';
-import react from 'eslint-plugin-react';
+import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
 import jest from 'eslint-plugin-jest';
@@ -52,10 +52,10 @@ export default [
     plugins: {
       spellcheck: spellcheckPlugin,
       'no-only-tests': noOnlyTests,
-      deprecation,
       '@stylistic': stylistic,
       jest,
-      '@typescript-eslint': tsPlugin
+      '@typescript-eslint': tsPlugin,
+      'deprecation': fixupPluginRules(deprecation),
     },
     languageOptions: {
       globals: {
@@ -455,6 +455,7 @@ export default [
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
       'prefer-const': 0,
+      'deprecation/deprecation': 'error',
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,
       '@typescript-eslint/no-use-before-define': 0,
@@ -468,7 +469,6 @@ export default [
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
       '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
-      // 'deprecation/deprecation': 'error',
       '@typescript-eslint/init-declarations': 0,
       '@typescript-eslint/prefer-readonly': 0,
       '@typescript-eslint/no-unsafe-return': 0,
@@ -484,7 +484,6 @@ export default [
       '@typescript-eslint/prefer-regexp-exec': 0,
       '@typescript-eslint/restrict-plus-operands': 0,
       '@typescript-eslint/no-inferrable-types': 0,
-      '@typescript-eslint/dot-notation': 0,
       '@typescript-eslint/prefer-reduce-type-parameter': 0,
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 0,
       '@typescript-eslint/consistent-type-definitions': 0,
@@ -554,9 +553,9 @@ export default [
       'utils/templates/React/*.*'
     ],
     plugins: {
-      'react-perf': fixupPluginRules(reactPerf),
-      'react-hooks': fixupPluginRules(reactHooks),
-      react: fixupPluginRules(react),
+      'react-perf': reactPerf,
+      'react-hooks': reactHooks,
+      react: reactPlugin
     },
     languageOptions: {
       globals: {
@@ -567,13 +566,13 @@ export default [
       react: {
         createClass: 'createReactClass',
         pragma: 'React',
-        version: '16.2',
+        version: '17.0.2',
         flowVersion: '0.53',
       },
       propWrapperFunctions: ['forbidExtraProps'],
     },
     rules: {
-      ...changeRulesToStylistic(react.configs.recommended.rules),
+      ...reactPlugin.configs.recommended.rules,
       '@stylistic/comma-spacing': 'error',
       '@stylistic/computed-property-spacing': 'error',
       '@stylistic/comma-style': ['error', 'last'],
@@ -599,7 +598,7 @@ export default [
           children: 'never',
         },
       ],
-      'react/jsx-fragments': ['error', 'element'],
+      'react/jsx-fragments': 0, // TODO was ['error', 'element']
       'react/jsx-no-bind': [
         'error',
         {
@@ -645,9 +644,6 @@ export default [
       'react/no-unescaped-entities': 0,
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-
-      // TODO: consider these rules
-      'react/jsx-fragments': 0,
     },
   },
 
