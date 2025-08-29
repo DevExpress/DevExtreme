@@ -242,9 +242,6 @@ const SKIPPED_TESTS = {
       { demo: 'Toolbar', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
-    Scheduler: [
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
     Sortable: [
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
@@ -290,9 +287,6 @@ const SKIPPED_TESTS = {
     FileUploader: [
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Scheduler: [
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
   },
   React: {
     Common: [
@@ -318,9 +312,6 @@ const SKIPPED_TESTS = {
       { demo: 'RecordGrouping', themes: [THEME.material] },
       { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Scheduler: [
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     FileUploader: [
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },

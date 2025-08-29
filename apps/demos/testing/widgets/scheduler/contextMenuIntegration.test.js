@@ -15,11 +15,13 @@ runManualTest('Scheduler', 'ContextMenu', (test) => {
     await testScreenshot(t, takeScreenshot, 'scheduler_contextMenu_init.png');
 
     await t
-      .rightClick('.dx-scheduler-appointment');
+      .rightClick('.dx-scheduler-appointment')
+      .expect(Selector('.dx-context-menu').exists).ok('Context menu should appear after right click');
     await testScreenshot(t, takeScreenshot, 'scheduler_contextMenu_click.png');
 
     await t
-      .rightClick(Selector('.dx-scheduler-date-table-cell').nth(6));
+      .rightClick(Selector('.dx-scheduler-date-table-cell').nth(6))
+      .expect(Selector('.dx-context-menu').exists).ok('Context menu should appear after right click on cell');
     await testScreenshot(t, takeScreenshot, 'scheduler_contextMenu_cell_click.png');
 
     await t
