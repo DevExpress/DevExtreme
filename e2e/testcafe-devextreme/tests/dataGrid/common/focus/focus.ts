@@ -317,3 +317,58 @@ test('DataGrid - Focused cell appearance is applied to non-editable CheckBox cel
     'BoolTwo',
   ],
 }));
+
+// T1293309
+test('Focus method should focus the first data cell', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiFocus();
+
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'name 1' },
+    { id: 2, name: 'name 2' },
+    { id: 3, name: 'name 3' },
+  ],
+  keyExpr: 'id',
+  columns: [
+    'id',
+    {
+      dataField: 'name',
+      cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
+    },
+  ],
+}));
+
+// T1293309
+test('Focus method should focus the first data row when focusedRowEnabled = true', async (t) => {
+  const dataGrid = new DataGrid(GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiFocus();
+
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'name 1' },
+    { id: 2, name: 'name 2' },
+    { id: 3, name: 'name 3' },
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  columns: [
+    'id',
+    {
+      dataField: 'name',
+      cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
+    },
+  ],
+}));
