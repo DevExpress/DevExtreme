@@ -58,7 +58,6 @@
   </div>
 </template>
 <script setup lang="ts">
-/* eslint-disable import/no-webpack-loader-syntax */
 import { onBeforeMount, ref } from 'vue';
 import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,

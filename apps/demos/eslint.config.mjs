@@ -78,18 +78,12 @@ export default [
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
   })),
-  ...compat.extends('devextreme/typescript').map(config => {
-    const newConfig = {
-      ...config,
-      files: ['**/*.ts', '**/*.tsx'],
-    };
 
-    if (config.rules) {
-      newConfig.rules = changeRulesToStylistic(config.rules);
-    }
-
-    return newConfig;
-  }),
+  ...compat.extends('devextreme/typescript').map(config => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: changeRulesToStylistic(config.rules || {}),
+  })),
 
   // General rules
   {
@@ -97,264 +91,18 @@ export default [
       'spellcheck/spell-checker': (() => {
         spellcheckRule[1].skipWords = [
           ...spellcheckRule[1].skipWords,
-          'acc', // DXHotelsNetApi\Client\views\currentHotel.js ?
-          'accessor',
-          'adaptivity',
-          'adrs',
-          'africa',
-          'ajax',
-          'antialiasing',
-          'api',
-          'ar', // arabic
-          'arabic',
-          'arg',
-          'argb', // ExcelJS
-          'args',
-          'asia',
-          'assignee',
-          'assignees',
-          'async',
-          'attr',
-          'attrs',
-          'aug',
-          'autocomplete',
           'axe',
-          'backorder',
-          'backordered', // DevAV NetCore
-          'bing',
-          'bkg',
-          'bool',
-          'bg', // ExcelJS
-          'br', // <br> tag in html
-          'Cldr',
-          'canada',
-          'canvg', // canvg
-          'ceil',
-          'checkbox',
-          'cityid',
-          'cluster',
-          'cnstl',
-          'colorizer',
-          'comparer',
-          'concat',
-          'coord',
-          'coords',
-          'cordova',
-          'cpu',
-          'crosshair',
-          'ctrl',
-          'datebox',
-          'de',
-          'ru',
-          'democase',
-          'democases',
-          'desc',
-          'dest', // gulp
-          'dev', // DevAV
-          'devexpress',
+          'canvg',
           'devextreme',
-          'devextremeaddon',
-          'dialogs',
-          'docurl',
-          'draggable',
-          'dropzone',
-          'dto',
-          'dx',
-          'dxkey', // for React templates
-          'emp',
-          'evt',
-          'english',
-          'etalon',
-          'etalons',
-          'eurasia',
-          'europe',
-          'european',
-          'exe',
-          'expr',
-          'fav',
-          'faved',
-          'femalemiddle',
-          'femaleolder',
-          'femaleyoung',
-          'filename', // DXHotelsNetApi\Client\views\booking.js from db
-          'fitted',
-          'fg', // ExcelJS
-          'formatter',
-          'func',
-          'gantt',
-          'gdp', // gross domestic product
-          'geolocation',
-          'getter',
-          'getters',
-          'globals',
-          'mapGetters',
-          'gif',
-          'goto',
-          'guid',
-          'hotelid',
-          'href',
-          'html',
-          'http',
-          'https',
-          'ie',
-          'iframe',
-          'img',
-          'init',
-          'inited',
-          'ity', // DXHotelsNetApi\Client\views\home.js  CIty_Image from db
-          'Fmt', // ExcelJS
-          'jan',
-          'js',
-          'jspdf',
-          'jszip',
-          'jsonp',
-          'jsserver',
-          'jul',
-          'july',
-          'jun',
-          'june',
+          'dxo',
           'jsx',
-          'Kanban',
-          'lang',
-          'latinamerica',
-          'len',
-          'li',
-          'lng',
-          'loc',
-          'lookups',
-          'longtabs',
           'luxon',
-          'malemiddle',
-          'maleolder',
-          'maleyoung',
-          'maximumfractiondigits',
-          'metadata',
-          'mmp',
-          'monday',
-          'msg',
-          'multiline',
-          'mvc',
-          'na', // NaN
-          'namespace',
-          'nav',
-          'nbsp',
-          'nd',
-          'nighly', // DXHotelsNetApi\Client\views\booking.js from db
-          'noop',
-          'northamerica',
-          'num',
-          'objs',
-          'occured',
-          'oceania',
-          'ok',
-          'olympic',
-          'onclick',
-          'onhashchange',
-          'onreadystatechange',
-          'orderby',
-          'pageview',
-          'pangaea',
-          'param',
-          'params',
-          'perc',
-          'perf',
-          'pdf',
-          'pivotgrid',
-          'png', // DataGrid CustomEditors for image format
-          'popup',
-          'popups',
-          'pos',
-          'postfix',
-          'prec',
-          'pregrouped',
-          'prepend',
-          'prev',
-          'rangebar',
-          'readdir', // node js
-          'realtor',
-          'rect',
-          'rehype', // remark and rehype
-          'req',
-          'resellers',
-          'resize',
-          'resizing',
-          'roomid',
-          'rowspan',
-          'rtl',
-          'sankey',
-          'sclass', // CSSClass
-          'scrollable',
-          'scrollbar',
-          'setted',
-          'skype',
-          'smp',
-          'sonee',
-          'sortable',
-          'sparkline',
-          'splashscreen',
-          'splinearea',
-          'sqlite',
-          'sqrt',
-          'src',
-          'stacktrace',
-          'startswith',
-          'steparea',
-          'stepline',
-          'str',
-          'stringify',
-          'strikethrough',
-          'submenu',
-          'substr',
-          'substring',
-          'subvalue',
-          'subvalues',
-          'svg',
-          'swfobject',
-          'tbody',
-          'th',
-          'td',
-          'theatre',
-          'timestamp',
+          'sanitizer',
+          'rehype',
           'timestamps',
-          'tmp',
-          'tooltip',
-          'tooltips',
-          'transpile',
-          'transpiler',
-          'treeview',
-          'ui', // User Interface
-          'ul',
-          'ungrouped',
-          'unlink',
-          'unordered',
-          'unselect', // unselectAll()
-          'unshift',
-          'uploader',
-          'uri',
-          'urlencoded',
-          'usa',
-          'util',
-          'utils',
-          'validator',
-          'viewport',
-          'volumne', // stockMarket, rename to volume
-          'vue',
+          'urls',
           'whitespace',
-          'winloss',
-          'xlsx', // ExcelJS
-          'xhr',
-          'Xmla',
-          'xmla',
           'yargs',
-          'youtube',
-          'ytd',
-          'zipcode',
-          'Serializer', // XMLSerializer
-          // VectorMap Demos
-          'Kosovo',
-          'Macau',
-          'Niue',
-          'Palau',
         ];
 
         return spellcheckRule;
@@ -362,6 +110,7 @@ export default [
       'func-names': 0, // TODO warn (was warn) >500
       'import/extensions': 0,
       'import/order': 0,
+      'import/no-webpack-loader-syntax': 0,
       'no-shadow': 0,
       'default-case': 0,
       'new-cap': 0,
@@ -371,9 +120,18 @@ export default [
       'camelcase': 0,
       'no-use-before-define': 0,
       'prefer-destructuring': 0,
+      'no-irregular-whitespace': 'error',
+      'no-new-func': 'error',
+      'no-eval': 'error',
+      'no-undef': 'error',
+      'no-unused-expressions': 'off',
+      'no-extend-native': 'error',
+      'no-alert': 'error',
       'no-param-reassign': ['error', {
         'props': false,
       }],
+      'prefer-template': 'error',
+      'curly': ['error', 'multi-line', 'consistent'],
       'no-only-tests/no-only-tests': 'error',
       'class-methods-use-this': 0,
       'no-unsafe-optional-chaining': 0,
@@ -406,6 +164,12 @@ export default [
       '@stylistic/object-curly-newline': 0,
       '@stylistic/no-confusing-arrow': 0,
       '@stylistic/implicit-arrow-linebreak': 0,
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/space-unary-ops': 'error',
+      '@stylistic/no-whitespace-before-property': 'error',
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/computed-property-spacing': 'error',
+      '@stylistic/comma-style': ['error', 'last'],
     },
   },
 
@@ -436,18 +200,14 @@ export default [
       'eqeqeq': 0,
       'no-plusplus': 0,
       'max-classes-per-file': 0,
-      'import/extensions': 0,
-      'import/no-webpack-loader-syntax': 0,
       'no-restricted-properties': 0,
       'no-restricted-globals': 0,
-      'spellcheck/spell-checker': 0,
       'no-useless-concat': 0,
       'no-self-assign': 0,
       'no-var': 0,
       'no-return-assign': 0,
       'vars-on-top': 0,
       'no-sequences': 0,
-      'no-param-reassign': 0,
       'no-multi-assign': 0,
       'no-restricted-syntax': 0,
       'prefer-rest-params': 0,
@@ -455,6 +215,7 @@ export default [
       'no-underscore-dangle': 0,
       'operator-assignment': 0,
       'prefer-const': 0,
+
       'deprecation/deprecation': 'error',
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,
@@ -511,17 +272,6 @@ export default [
     },
   },
 
-  {
-    files: ['**/test-code.js', '**/client-script.js'],
-    languageOptions: {
-      globals: {
-        DevExpress: true,
-        testUtils: true,
-        MockDate: true,
-      },
-    },
-  },
-
   // jQuery demos
   {
     files: ['Demos/**/jQuery/*.*', 'utils/templates/jQuery/**/*.*'],
@@ -573,22 +323,6 @@ export default [
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
-      '@stylistic/comma-spacing': 'error',
-      '@stylistic/computed-property-spacing': 'error',
-      '@stylistic/comma-style': ['error', 'last'],
-      '@stylistic/implicit-arrow-linebreak': 0,
-      'no-irregular-whitespace': 'error',
-      'no-new-func': 'error',
-      'no-eval': 'error',
-      'no-undef': 'error',
-      'no-unused-expressions': 'off',
-      'no-extend-native': 'error',
-      'no-alert': 'error',
-      '@stylistic/no-whitespace-before-property': 'error',
-      '@stylistic/space-infix-ops': 'error',
-      '@stylistic/space-unary-ops': 'error',
-      'curly': ['error', 'multi-line', 'consistent'],
-      'prefer-template': 'error',
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
       'react/display-name': 'off',
       'react/jsx-curly-brace-presence': [
@@ -608,37 +342,12 @@ export default [
           ignoreRefs: true,
         },
       ],
-      'react/jsx-tag-spacing': [
-        'error',
-        {
-          beforeClosing: 'never',
-        },
-      ],
-      'react/jsx-no-undef': [
-        'error',
-        {
-          allowGlobals: true,
-        },
-      ],
+      'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
+      'react/jsx-no-undef': ['error', { allowGlobals: true }],
       'react/prop-types': 'off',
-      'react/jsx-no-target-blank': [
-        'error',
-        {
-          enforceDynamicLinks: 'never',
-        },
-      ],
-      'react-perf/jsx-no-new-object-as-prop': [
-        'error',
-        {
-          nativeAllowList: 'all',
-        },
-      ],
-      'react-perf/jsx-no-new-array-as-prop': [
-        'error',
-        {
-          nativeAllowList: 'all',
-        },
-      ],
+      'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
+      'react-perf/jsx-no-new-object-as-prop': ['error', { nativeAllowList: 'all' }],
+      'react-perf/jsx-no-new-array-as-prop': ['error', { nativeAllowList: 'all' }],
       'react-perf/jsx-no-new-array-as-prop': 0,
       'react-perf/jsx-no-new-object-as-prop': 0,
       'react/no-unescaped-entities': 0,
@@ -653,9 +362,7 @@ export default [
     rules: changeRulesToStylistic(config.rules || {}),
     files: [
       'Demos/**/Vue/*.vue',
-      'Demos/**/Vue/*.js',
       'utils/templates/Vue/*.vue',
-      'utils/templates/Vue/*.js',
     ],
   })),
   {
@@ -674,28 +381,10 @@ export default [
       },
     },
     rules: {
-      '@stylistic/comma-spacing': 'error',
-      '@stylistic/computed-property-spacing': 'error',
-      '@stylistic/comma-style': ['error', 'last'],
-
-      'no-irregular-whitespace': 'error',
-      'no-new-func': 'error',
-      'no-eval': 'error',
-      'no-undef': 'error',
-      'no-unused-expressions': 'off',
-      'no-extend-native': 'error',
-      'no-alert': 'error',
-      '@stylistic/no-whitespace-before-property': 'error',
-
       // TODO: enable 'no-unused-vars', see these rules to configure it:
       // 'no-unused-vars', 'vue/script-setup-uses-vars', '@typescript-eslint/no-unused-vars'
       'no-unused-vars': 'off',
-      
-      '@stylistic/space-infix-ops': 'error',
-      '@stylistic/space-unary-ops': 'error',
-      'curly': ['error', 'multi-line', 'consistent'],
 
-      'prefer-template': 'error',
       'vue/camelcase': 'error',
       'vue/component-name-in-template-casing': 'error',
       'vue/singleline-html-element-content-newline': 'off',
@@ -712,7 +401,6 @@ export default [
       'vue/attribute-hyphenation': 'off',
       'vue/multi-word-component-names': 'off',
       'vue/return-in-computed-property': 'off',
-      '@stylistic/max-len': 'off',
       'vue/max-len': ['error', {
         code: 100,
         tabWidth: 2,
@@ -752,8 +440,9 @@ export default [
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
-    files: ['testing/**/*.js'],
+    files: ['testing/**/*.js', 'utils/visual-tests/**/*.*'],
   })),
+
   {
     files: ['testing/**/*.js'],
     languageOptions: {
@@ -761,8 +450,16 @@ export default [
         testUtils: true,
       },
     },
-    rules: {
-      'curly': ['error', 'multi-line'],
+  },
+
+  {
+    files: ['**/test-code.js', '**/client-script.js'],
+    languageOptions: {
+      globals: {
+        DevExpress: true,
+        testUtils: true,
+        MockDate: true,
+      },
     },
   },
 
@@ -772,20 +469,4 @@ export default [
     rules: changeRulesToStylistic(config.rules || {}),
     files: ['utils/tests/**/*.*'],
   })),
-  {
-    files: ['utils/tests/**/*.*'],
-  },
-
-  // testcafe visual tests
-  ...compat.extends('devextreme/testcafe').map(config => ({
-    ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
-    files: ['utils/visual-tests/**/*.*'],
-  })),
-  {
-    files: ['utils/visual-tests/**/*.*'],
-    rules: {
-      'curly': ['error', 'multi-line'],
-    },
-  },
 ];
