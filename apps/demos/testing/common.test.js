@@ -84,7 +84,7 @@ FRAMEWORKS.forEach((approach) => {
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
-    // eslint-disable-next-line max-len
+
     const readFrom = (relativePath, mapCallback) => globalReadFrom(demoPath, relativePath, mapCallback);
 
     const testParts = demoPath.split(/[/\\]/);
