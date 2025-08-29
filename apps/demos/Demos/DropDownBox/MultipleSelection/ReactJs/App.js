@@ -9,6 +9,7 @@ import 'whatwg-fetch';
 
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 const ownerLabel = { 'aria-label': 'Owner' };
+
 const makeAsyncDataSource = (jsonFile) =>
   new CustomStore({
     loadMode: 'raw',
@@ -17,52 +18,15 @@ const makeAsyncDataSource = (jsonFile) =>
       return fetch(`../../../../data/${jsonFile}`).then((response) => response.json());
     },
   });
+
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
+
 function App() {
   const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
   const [gridBoxValue, setGridBoxValue] = useState([3]);
   const treeViewRef = useRef();
-  const treeViewRender = useCallback(
-    () => (
-      <TreeView
-        dataSource={treeDataSource}
-        ref={treeViewRef}
-        dataStructure="plain"
-        keyExpr="ID"
-        parentIdExpr="categoryId"
-        selectionMode="multiple"
-        showCheckBoxesMode="normal"
-        selectNodesRecursive={false}
-        displayExpr="name"
-        selectByClick={true}
-        onContentReady={syncTreeViewSelection}
-        onItemSelectionChanged={treeViewItemSelectionChanged}
-      />
-    ),
-    [treeDataSource],
-  );
-  const dataGridRender = useCallback(
-    () => (
-      <DataGrid
-        height={345}
-        dataSource={gridDataSource}
-        columns={gridColumns}
-        hoverStateEnabled={true}
-        selectedRowKeys={gridBoxValue}
-        onSelectionChanged={dataGridOnSelectionChanged}
-      >
-        <Selection mode="multiple" />
-        <Scrolling mode="virtual" />
-        <Paging
-          enabled={true}
-          pageSize={10}
-        />
-        <FilterRow visible={true} />
-      </DataGrid>
-    ),
-    [gridDataSource, gridBoxValue],
-  );
+
   const syncTreeViewSelection = useCallback(
     (e) => {
       const treeView = (e.component.selectItem && e.component)
@@ -87,12 +51,57 @@ function App() {
   const syncDataGridSelection = useCallback((e) => {
     setGridBoxValue(e.value || []);
   }, []);
+
   const treeViewItemSelectionChanged = useCallback((e) => {
     setTreeBoxValue(e.component.getSelectedNodeKeys());
   }, []);
+
   const dataGridOnSelectionChanged = useCallback((e) => {
     setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
   }, []);
+
+  const treeViewRender = useCallback(
+    () => (
+      <TreeView
+        dataSource={treeDataSource}
+        ref={treeViewRef}
+        dataStructure="plain"
+        keyExpr="ID"
+        parentIdExpr="categoryId"
+        selectionMode="multiple"
+        showCheckBoxesMode="normal"
+        selectNodesRecursive={false}
+        displayExpr="name"
+        selectByClick={true}
+        onContentReady={syncTreeViewSelection}
+        onItemSelectionChanged={treeViewItemSelectionChanged}
+      />
+    ),
+    [syncTreeViewSelection, treeViewItemSelectionChanged],
+  );
+
+  const dataGridRender = useCallback(
+    () => (
+      <DataGrid
+        height={345}
+        dataSource={gridDataSource}
+        columns={gridColumns}
+        hoverStateEnabled={true}
+        selectedRowKeys={gridBoxValue}
+        onSelectionChanged={dataGridOnSelectionChanged}
+      >
+        <Selection mode="multiple" />
+        <Scrolling mode="virtual" />
+        <Paging
+          enabled={true}
+          pageSize={10}
+        />
+        <FilterRow visible={true} />
+      </DataGrid>
+    ),
+    [gridBoxValue, dataGridOnSelectionChanged],
+  );
+
   return (
     <div className="dx-fieldset">
       <div className="dx-field">

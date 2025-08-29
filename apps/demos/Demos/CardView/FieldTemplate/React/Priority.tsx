@@ -8,7 +8,7 @@ interface PriorityProps {
 const Priority = ({ priorityID }: PriorityProps) => {
   const priority = useMemo<Priority>(
     () => priorities.find((p) => p.id === priorityID),
-    [priorityID, priorities]
+    [priorityID]
   );
 
   return (

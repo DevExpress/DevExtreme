@@ -41,7 +41,7 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'utils', // TODO
+      'utils', // TODO unignore this
 
       '**/*.{png,json,mjs,css,html,md}',
     ],
@@ -213,6 +213,7 @@ export default [
       'operator-assignment': 0,
 
       'deprecation/deprecation': 'error',
+
       '@typescript-eslint/naming-convention': 0,
       '@typescript-eslint/no-throw-literal': 0,
       '@typescript-eslint/no-use-before-define': 0,
