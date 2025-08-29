@@ -108,9 +108,7 @@ export default [
         return spellcheckRule;
       })(),
       'func-names': 0, // TODO warn (was warn) >500
-      'import/extensions': 0,
-      'import/order': 0,
-      'import/no-webpack-loader-syntax': 0,
+
       'no-shadow': 0,
       'default-case': 0,
       'new-cap': 0,
@@ -124,7 +122,7 @@ export default [
       'no-new-func': 'error',
       'no-eval': 'error',
       'no-undef': 'error',
-      'no-unused-expressions': 'off',
+      'no-unused-expressions': 0,
       'no-extend-native': 'error',
       'no-alert': 'error',
       'no-param-reassign': ['error', {
@@ -132,10 +130,16 @@ export default [
       }],
       'prefer-template': 'error',
       'curly': ['error', 'multi-line', 'consistent'],
-      'no-only-tests/no-only-tests': 'error',
       'class-methods-use-this': 0,
       'no-unsafe-optional-chaining': 0,
       'no-promise-executor-return': 0,
+
+      'no-only-tests/no-only-tests': 'error',
+
+      'import/extensions': 0,
+      'import/order': 0,
+      'import/no-webpack-loader-syntax': 0,
+
       '@stylistic/max-len': 0, // TODO enable this rule (was 100)
       '@stylistic/indent': ['error', 2, {
         SwitchCase: 1,
@@ -259,8 +263,8 @@ export default [
       },
     },
     rules: {
-      '@stylistic/quote-props': ['error', 'consistent'],
       'no-dupe-keys': 0,
+      '@stylistic/quote-props': ['error', 'consistent'],
     },
   },
 
@@ -316,7 +320,10 @@ export default [
     rules: {
       ...reactPlugin.configs.recommended.rules,
       'func-style': ['error', 'declaration', { 'allowArrowFunctions': true }],
-      'react/display-name': 'off',
+
+      'react/display-name': 0,
+      'react/prop-types': 0,
+      'react/no-unescaped-entities': 0,
       'react/jsx-curly-brace-presence': [
         'error',
         {
@@ -336,13 +343,13 @@ export default [
       ],
       'react/jsx-tag-spacing': ['error', { beforeClosing: 'never' }],
       'react/jsx-no-undef': ['error', { allowGlobals: true }],
-      'react/prop-types': 'off',
       'react/jsx-no-target-blank': ['error', { enforceDynamicLinks: 'never' }],
+
       'react-perf/jsx-no-new-object-as-prop': ['error', { nativeAllowList: 'all' }],
       'react-perf/jsx-no-new-array-as-prop': ['error', { nativeAllowList: 'all' }],
       'react-perf/jsx-no-new-array-as-prop': 0,
       'react-perf/jsx-no-new-object-as-prop': 0,
-      'react/no-unescaped-entities': 0,
+
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
     },
@@ -375,24 +382,27 @@ export default [
     rules: {
       // TODO: enable 'no-unused-vars', see these rules to configure it:
       // 'no-unused-vars', 'vue/script-setup-uses-vars', '@typescript-eslint/no-unused-vars'
-      'no-unused-vars': 'off',
+      'no-unused-vars': 0,
+
+      // TODO: enable this rule, when imports in Vue are fixed
+      'import/no-unresolved': 0,
 
       'vue/camelcase': 'error',
       'vue/component-name-in-template-casing': 'error',
-      'vue/singleline-html-element-content-newline': 'off',
-      'vue/multiline-html-element-content-newline': 'off',
-      'vue/attributes-order': 'off',
+      'vue/singleline-html-element-content-newline': 0,
+      'vue/multiline-html-element-content-newline': 0,
+      'vue/attributes-order': 0,
       'vue/no-unused-vars': 'error',
-      'vue/no-unused-components': 'off',
-      'vue/no-template-shadow': 'off',
-      'vue/no-v-html': 'off',
-      'vue/no-v-model-argument': 'off',
-      'vue/v-on-event-hyphenation': 'off',
-      'vue/valid-v-model': 'off',
-      'vue/valid-v-for': 'off',
-      'vue/attribute-hyphenation': 'off',
-      'vue/multi-word-component-names': 'off',
-      'vue/return-in-computed-property': 'off',
+      'vue/no-unused-components': 0,
+      'vue/no-template-shadow': 0,
+      'vue/no-v-html': 0,
+      'vue/no-v-model-argument': 0,
+      'vue/v-on-event-hyphenation': 0,
+      'vue/valid-v-model': 0,
+      'vue/valid-v-for': 0,
+      'vue/attribute-hyphenation': 0,
+      'vue/multi-word-component-names': 0,
+      'vue/return-in-computed-property': 0,
       'vue/max-len': ['error', {
         code: 100,
         tabWidth: 2,
@@ -411,7 +421,6 @@ export default [
         singleline: 'never',
         multiline: 'always',
       }],
-      'import/no-unresolved': 0,
     },
   },
 
@@ -419,11 +428,13 @@ export default [
   {
     files: ['Demos/**/data.js', 'Demos/**/data.ts', 'Demos/**/app.service.ts'],
     rules: {
+      'no-useless-escape': 0,
+      'no-unused-vars': 0,
+
       '@stylistic/quotes': 0,
       '@stylistic/quote-props': 0,
       '@stylistic/max-len': 0,
-      'no-useless-escape': 0,
-      'no-unused-vars': 0,
+
       '@typescript-eslint/no-unused-vars': 0,
     }
   },
