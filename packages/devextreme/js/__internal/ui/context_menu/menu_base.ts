@@ -12,7 +12,6 @@ import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type {
   dxMenuBaseItem,
   Item,
-  ItemClickEvent as MenuItemClickEvent,
   SubmenuShowMode,
 } from '@js/ui/menu';
 import type { ActionArguments } from '@ts/core/m_action';
@@ -51,20 +50,22 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
-type BaseItemClickEvent =
-  NativeEventInfo<dxMenuBase<MenuBaseProperties>, MouseEvent | PointerEvent | TouchEvent>
-  & ItemInfo<dxMenuBaseItem>;
+type ItemClickEvent<TComponent, TItem> =
+  NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent>
+  & ItemInfo<TItem>;
 export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
 export type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
-export type ItemClickActionArguments = ActionArguments<
-  dxMenuBase<MenuBaseProperties>,
-  BaseItemClickEvent | MenuItemClickEvent<Item>
+export type ItemClickActionArguments<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionArguments<
+  TComponent,
+  ItemClickEvent<TComponent, TItem>
 >;
 type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
 export interface MenuBaseProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TItem extends dxMenuBaseItem | any = any,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
   focusedElement?: Element | null;
@@ -359,7 +360,7 @@ class MenuBase<
     }
   }
 
-  _hoverStartHandler(e: DxEvent<HoverEvent>): void {
+  _hoverStartHandler(e: HoverEvent): void {
     const $itemElement = this._getItemElementByEventArgs(e);
 
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
@@ -419,7 +420,7 @@ class MenuBase<
   }
 
   _getItemElementByEventArgs(
-    eventArgs: HoverEvent | ClickEvent | DxEvent<KeyboardEvent>,
+    eventArgs: DxEvent,
   ): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
@@ -439,7 +440,7 @@ class MenuBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverEndHandler(event: DxEvent<HoverEvent>): void {
+  _hoverEndHandler(event: HoverEvent): void {
     clearTimeout(this._showSubmenusTimeout);
   }
 

@@ -10,7 +10,7 @@
     "@babel/eslint-parser": "catalog:eslint8",
     "@babel/plugin-transform-runtime": "7.19.6",
     "@testcafe-community/axe": "3.5.0",
-    "@types/jquery": "3.5.29",
+    "@types/jquery": "catalog:",
     "axe-core": "4.10.3",
     "devextreme": "workspace:*",
     "devextreme-screenshot-comparer": "2.0.17",

@@ -3,6 +3,7 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
+import { TREEVIEW_CLASS_PREFIX } from '__internal/ui/tree_view/tree_view.search';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
@@ -295,6 +296,17 @@ QUnit.test('select all item should be focused on treeview focus', function(asser
     const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
 
     assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.testInActiveWindow('Treeview container should be focused on empty treeview focus (T1294524)', function(assert) {
+    const $treeView = initTree({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+    });
+
+    $treeView.dxTreeView('focus');
+
+    assert.strictEqual($treeView.hasClass(FOCUSED_STATE_CLASS), true, 'treeview is focused');
 });
 
 QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {

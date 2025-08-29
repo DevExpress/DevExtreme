@@ -272,7 +272,7 @@ class Chat extends Widget<Properties> {
     if (templateOption) {
       return (data, $container): void => {
         const template = this._getTemplateByOption(optionName);
-        const dataFieldName = optionName === 'messageTemplate' ? 'message' : 'data';
+        const dataFieldName = optionName === 'messageTemplate' ? 'message' : 'texts';
 
         template.render({
           container: $container,

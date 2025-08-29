@@ -562,7 +562,8 @@ class TagBox<
   }
 
   _renderField(): void {
-    const isDefaultFieldTemplate = !isDefined(this.option('fieldTemplate'));
+    const { fieldTemplate } = this.option();
+    const isDefaultFieldTemplate = !isDefined(fieldTemplate);
 
     this.$element()
       .toggleClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS, isDefaultFieldTemplate)

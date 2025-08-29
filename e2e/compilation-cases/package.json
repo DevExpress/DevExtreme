@@ -8,9 +8,10 @@
   },
   "devDependencies": {
     "@angular/common": "11.2.14",
-    "@types/jquery": "3.5.29",
+    "@types/jquery": "catalog:",
     "devextreme": "workspace:*",
-    "jquery": "3.7.1",
+    "typescript": "4.9.5",
+    "jquery": "catalog:",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",

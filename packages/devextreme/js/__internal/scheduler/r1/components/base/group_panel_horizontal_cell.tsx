@@ -37,7 +37,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       'dx-scheduler-group-header': true,
       'dx-scheduler-first-group-cell': isFirstGroupCell,
       'dx-scheduler-last-group-cell': isLastGroupCell,
-      [className ?? '']: !!className,
+      [className ?? '']: Boolean(className),
     });
 
     return (

@@ -807,16 +807,16 @@ QUnit.module('Chat', () => {
                 this.reinit({ emptyViewTemplate });
             });
 
-            QUnit.test('emptyViewTemplate function argument should include data with localized message and prompt', function(assert) {
+            QUnit.test('emptyViewTemplate function argument should include texts field with localized message and prompt', function(assert) {
                 assert.expect(2);
 
                 const defaultLocale = localization.locale();
                 const localizedEmptyListMessage = 'Lista wiadomości jest pusta';
                 const localizedEmptyListPrompt = 'Napisz swoją pierwszą wiadomość';
 
-                const emptyViewTemplate = ({ data }) => {
-                    assert.strictEqual(data.message, localizedEmptyListMessage, 'localized message is passed');
-                    assert.strictEqual(data.prompt, localizedEmptyListPrompt, 'localized prompt is passed');
+                const emptyViewTemplate = ({ texts }) => {
+                    assert.strictEqual(texts.message, localizedEmptyListMessage, 'localized message is passed');
+                    assert.strictEqual(texts.prompt, localizedEmptyListPrompt, 'localized prompt is passed');
                 };
 
                 try {

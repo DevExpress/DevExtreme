@@ -14,7 +14,7 @@ import {
 
 import { dxButtonOptions } from 'devextreme/ui/button';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { FormItemType } from 'devextreme/ui/form';
+import { FormItemType, FormPredefinedButtonItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -73,10 +73,10 @@ export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): FormPredefinedButtonItem | string | undefined {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: FormPredefinedButtonItem | string | undefined) {
         this._setOption('name', value);
     }
 

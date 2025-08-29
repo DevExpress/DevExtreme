@@ -63,7 +63,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoFieldAddonsModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoDropDownBoxAnimationModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -1387,7 +1386,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoFieldAddonsModule,
     DxiItemModule,
     DxoDropDownBoxAnimationModule,
     DxoDropDownBoxAtModule,
@@ -1424,7 +1422,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoFieldAddonsModule,
     DxiItemModule,
     DxoDropDownBoxAnimationModule,
     DxoDropDownBoxAtModule,

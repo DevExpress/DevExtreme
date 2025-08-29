@@ -4,6 +4,9 @@ import { prepareComponentConfig } from "./core/index";
 import Form, { Properties } from "devextreme/ui/form";
 import  DataSource from "devextreme/data/data_source";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  Mode,
  ValidationRuleType,
  HorizontalAlignment,
@@ -29,7 +32,10 @@ import {
  FieldDataChangedEvent,
  InitializedEvent,
  OptionChangedEvent,
+ SmartPastedEvent,
+ SmartPastingEvent,
  FormItemType,
+ FormPredefinedButtonItem,
  FormItemComponent,
 } from "devextreme/ui/form";
 import {
@@ -69,6 +75,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiIntegration" |
   "alignItemLabels" |
   "alignItemLabelsInAllGroups" |
   "colCount" |
@@ -92,6 +99,8 @@ type AccessibleOptions = Pick<Properties,
   "onFieldDataChanged" |
   "onInitialized" |
   "onOptionChanged" |
+  "onSmartPasted" |
+  "onSmartPasting" |
   "optionalMark" |
   "readOnly" |
   "requiredMark" |
@@ -117,6 +126,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<AIIntegration>,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
     colCount: [String, Number] as PropType<Mode | number>,
@@ -140,6 +150,8 @@ const componentConfig = {
     onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
+    onSmartPasted: Function as PropType<((e: SmartPastedEvent) => void)>,
+    onSmartPasting: Function as PropType<((e: SmartPastingEvent) => void)>,
     optionalMark: String,
     readOnly: Boolean,
     requiredMark: String,
@@ -161,6 +173,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
     "update:colCount": null,
@@ -184,6 +197,8 @@ const componentConfig = {
     "update:onFieldDataChanged": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
+    "update:onSmartPasted": null,
+    "update:onSmartPasting": null,
     "update:optionalMark": null,
     "update:readOnly": null,
     "update:requiredMark": null,
@@ -224,6 +239,25 @@ prepareComponentConfig(componentConfig);
 
 const DxForm = defineComponent(componentConfig);
 
+
+const DxAiOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:disabled": null,
+    "update:instruction": null,
+  },
+  props: {
+    disabled: Boolean,
+    instruction: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxAiOptionsConfig);
+
+const DxAiOptions = defineComponent(DxAiOptionsConfig);
+
+(DxAiOptions as any).$_optionName = "aiOptions";
 
 const DxAsyncRuleConfig = {
   emits: {
@@ -274,7 +308,7 @@ const DxButtonItemConfig = {
     cssClass: String,
     horizontalAlignment: String as PropType<HorizontalAlignment>,
     itemType: String as PropType<FormItemType>,
-    name: String,
+    name: String as PropType<FormPredefinedButtonItem | string>,
     verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
@@ -546,6 +580,7 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiOptions": null,
     "update:alignItemLabels": null,
     "update:badge": null,
     "update:buttonOptions": null,
@@ -580,6 +615,7 @@ const DxItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiOptions: Object as PropType<Record<string, any>>,
     alignItemLabels: Boolean,
     badge: String,
     buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
@@ -601,7 +637,7 @@ const DxItemConfig = {
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
     itemType: String as PropType<FormItemType>,
     label: Object as PropType<Record<string, any>>,
-    name: String,
+    name: String as PropType<string | FormPredefinedButtonItem>,
     tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
     tabs: Array as PropType<Array<Record<string, any>>>,
     tabTemplate: {},
@@ -622,6 +658,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
@@ -778,6 +815,7 @@ const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:aiOptions": null,
     "update:colSpan": null,
     "update:cssClass": null,
     "update:dataField": null,
@@ -794,6 +832,7 @@ const DxSimpleItemConfig = {
     "update:visibleIndex": null,
   },
   props: {
+    aiOptions: Object as PropType<Record<string, any>>,
     colSpan: Number,
     cssClass: String,
     dataField: String,
@@ -821,6 +860,7 @@ const DxSimpleItem = defineComponent(DxSimpleItemConfig);
   itemType: "simple"
 };
 (DxSimpleItem as any).$_expectedChildren = {
+  aiOptions: { isCollectionItem: false, optionName: "aiOptions" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -1130,6 +1170,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxForm;
 export {
   DxForm,
+  DxAiOptions,
   DxAsyncRule,
   DxButtonItem,
   DxButtonOptions,

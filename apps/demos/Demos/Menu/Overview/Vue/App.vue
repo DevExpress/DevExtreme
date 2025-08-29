@@ -50,10 +50,11 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import DxMenu, { type DxMenuTypes } from 'devextreme-vue/menu';
+import { DxMenu, type DxMenuTypes } from 'devextreme-vue/menu';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
+import type { ProductItemType, ProductType } from './types';
 
 const showSubmenuModes = [{
   name: 'onHover',
@@ -69,10 +70,14 @@ const showFirstSubmenuModes = computed(() => showSubmenuModes.find(
 ));
 const orientation = ref<DxMenuTypes.Orientation>('horizontal');
 const hideSubmenuOnMouseLeave = ref(false);
-const currentProduct = ref(null);
+const currentProduct = ref<ProductItemType>(null);
 
-function itemClick(e) {
-  if (e.itemData.price) {
+function isProductItem(item: ProductType | ProductItemType): item is ProductItemType {
+  return !('items' in item);
+}
+
+function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType> ) {
+  if (isProductItem(e.itemData)) {
     currentProduct.value = e.itemData;
   }
 }

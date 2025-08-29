@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +51,223 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div class="dx-viewport demo-container">
+            <div id="data-grid-demo">
+                <div id="gridContainer"></div>
+                <div class="options">
+                    <div class="caption">Options</div>
+                    <div class="option">
+                        <label for="selectInput">Language</label>
+                        <div id="selectBox"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
-                });
+                const dictionary = {
+                    en: {
+                        Number: 'Number',
+                        Contact: 'Contact',
+                        Company: 'Company',
+                        Amount: 'Amount',
+                        PaymentDate: 'Payment Date',
+                    },
+                    de: {
+                        Number: 'Nummer',
+                        Contact: 'Ansprechpartner',
+                        Company: 'Firma',
+                        Amount: 'Betrag',
+                        PaymentDate: 'Zahlungsdatum',
+                        "dxDataGrid-columnChooserTitle": "Spaltenauswahl"
+                    },
+                    ru: {
+                        Number: 'Номер',
+                        Contact: 'Имя',
+                        Company: 'Организация',
+                        Amount: 'Сумма',
+                        PaymentDate: 'Дата оплаты',
+                    },
+                };
+                DevExpress.localization.loadMessages(dictionary);
+
+                const locales = [
+                    { name: 'English', value: 'en' },
+                    { name: 'Deutsch', value: 'de' },
+                    { name: 'Русский', value: 'ru' },
+                ];
+                const locale = getLocale();
+                DevExpress.localization.locale(locale);
+
+                const { formatMessage } = DevExpress.localization;
+
+                const dataGridOptions = {
+                    columnChooser: {
+                        height: "340px",
+                        enabled: true,
+                        mode: "select",
+                        position: {
+                            my: 'right top',
+                            at: 'right bottom',
+                            of: '.dx-datagrid-column-chooser-button',
+                        },
+                        search: {
+                            enabled: true,
+                            editorOptions: { placeholder: 'Search column' },
+                        },
+                        selection: {
+                            recursive: true,
+                            selectByClick: true,
+                            allowSelectAll: true,
+                        },
+                    },
+                    dataSource: payments,
+                    columns: [{
+                        dataField: 'PaymentId',
+                        caption: formatMessage('Number'),
+                        allowEditing: false,
+                        width: '100px',
+                    }, {
+                        dataField: 'ContactName',
+                        caption: formatMessage('Contact'),
+                    }, {
+                        dataField: 'CompanyName',
+                        caption: formatMessage('Company'),
+                    }, {
+                        dataField: 'Amount',
+                        caption: formatMessage('Amount'),
+                        dataType: 'number',
+                        format: 'currency',
+                        editorOptions: {
+                            format: 'currency',
+                            showClearButton: true,
+                            inputAttr: {
+                                'aria-label': 'Filter cell'
+                            }
+                        },
+                    }, {
+                        dataField: 'PaymentDate',
+                        caption: formatMessage('PaymentDate'),
+                        dataType: 'date',
+                    }],
+                    filterRow: {
+                        visible: true,
+                        applyFilter: 'auto',
+                    },
+                    editing: {
+                        mode: 'popup',
+                        allowUpdating: true,
+                        popup: {
+                            width: 700,
+                            height: 345,
+                        },
+                    },
+                };
+
+                const selectBoxOptions = {
+                    inputAttr: { id: 'selectInput' },
+                    dataSource: locales,
+                    displayExpr: 'name',
+                    valueExpr: 'value',
+                    value: locale,
+                    onValueChanged: changeLocale,
+                };
+
+                function changeLocale(data) {
+                    setLocale(data.value);
+                    window.location.href = window.location.href;
+                }
+
+                function getLocale() {
+                    const storageLocale = sessionStorage.getItem('locale');
+                    return storageLocale != null ? storageLocale : 'en';
+                }
+
+                function setLocale(savingLocale) {
+                    sessionStorage.setItem('locale', savingLocale);
+                }
+
+                $('#gridContainer').dxDataGrid(dataGridOptions);
+                $('#selectBox').dxSelectBox(selectBoxOptions);
             });
+
+
+            const payments = [{
+                PaymentId: 1,
+                ContactName: 'Nancy Davolio',
+                CompanyName: 'Premier Buy',
+                Amount: 1740,
+                PaymentDate: '2013/01/06',
+            },
+            {
+                PaymentId: 2,
+                ContactName: 'Andrew Fuller',
+                CompanyName: 'ElectrixMax',
+                Amount: 850,
+                PaymentDate: '2013/01/13',
+            },
+            {
+                PaymentId: 3,
+                ContactName: 'Janet Leverling',
+                CompanyName: 'Video Emporium',
+                Amount: 2235,
+                PaymentDate: '2013/01/07',
+            },
+            {
+                PaymentId: 4,
+                ContactName: 'Margaret Peacock',
+                CompanyName: 'Screen Shop',
+                Amount: 1965,
+                PaymentDate: '2013/01/03',
+            },
+            {
+                PaymentId: 5,
+                ContactName: 'Steven Buchanan',
+                CompanyName: 'Braeburn',
+                Amount: 880,
+                PaymentDate: '2013/01/10',
+            },
+            {
+                PaymentId: 6,
+                ContactName: 'Michael Suyama',
+                CompanyName: 'PriceCo',
+                Amount: 5260,
+                PaymentDate: '2013/01/17',
+            },
+            {
+                PaymentId: 7,
+                ContactName: 'Robert King',
+                CompanyName: 'Ultimate Gadget',
+                Amount: 2790,
+                PaymentDate: '2013/01/21',
+            },
+            {
+                PaymentId: 8,
+                ContactName: 'Laura Callahan',
+                CompanyName: 'EZ Stop',
+                Amount: 3140,
+                PaymentDate: '2013/01/01',
+            },
+            {
+                PaymentId: 9,
+                ContactName: 'Anne Dodsworth',
+                CompanyName: 'Clicker',
+                Amount: 6175,
+                PaymentDate: '2013/01/24',
+            },
+            {
+                PaymentId: 10,
+                ContactName: 'Clark Morgan',
+                CompanyName: 'Store of America',
+                Amount: 4575,
+                PaymentDate: '2013/01/11',
+            }];
+
+
         </script>
     </div>
 </body>
+
 </html>

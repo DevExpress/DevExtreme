@@ -53,8 +53,8 @@ export class Table extends BaseInfernoComponent<TableProps> {
       tableRef,
       virtualCellsCount,
     } = this.props;
-    const hasTopVirtualRow = !!topVirtualRowHeight;
-    const hasBottomVirtualRow = !!bottomVirtualRowHeight;
+    const hasTopVirtualRow = Boolean(topVirtualRowHeight);
+    const hasBottomVirtualRow = Boolean(bottomVirtualRowHeight);
     const resultStyles = this.getResultStyles();
 
     return (

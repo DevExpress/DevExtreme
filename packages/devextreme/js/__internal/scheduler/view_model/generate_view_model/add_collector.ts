@@ -61,6 +61,9 @@ const processVirtualAppointment = (
       sortedIndex: appointmentSetting.sortedIndex,
       top: virtualAppointment.top,
       left: virtualAppointment.left,
+      width: virtualAppointment.width,
+      height: virtualAppointment.height,
+      isCompact: virtualAppointment.isCompact,
       items: [],
     };
   }

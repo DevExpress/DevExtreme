@@ -53,7 +53,7 @@ class BaseStrategy {
       });
 
       coordinates.forEach((item) => {
-        !!item && result.push(
+        Boolean(item) && result.push(
           this._prepareObject(item, index),
         );
       });
@@ -208,7 +208,7 @@ class BaseStrategy {
     const { cellDuration, viewOffset } = this.options;
     const { rowIndex, columnIndex } = positionByMap;
     const matchedCell = this.viewDataProvider.viewDataMap.dateTableMap[rowIndex][columnIndex];
-    const matchedCellStartDate = dateUtilsTs.addOffsets(matchedCell.cellData.startDate, [-viewOffset]);
+    const matchedCellStartDate = dateUtilsTs.addOffsets(matchedCell.cellData.startDate, -viewOffset);
 
     const result = (appointmentDate.getTime() - matchedCellStartDate.getTime()) / cellDuration;
     // NOTE: Hande DST summer time change issue.

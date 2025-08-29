@@ -2,11 +2,13 @@
 import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import { RRule, RRuleSet } from 'rrule';
 
 import timeZoneUtils from './m_utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
+const { addOffsets } = dateUtilsTs;
 
 const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
@@ -81,11 +83,11 @@ class RecurrenceProcessor {
     const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
 
     // NOTE: Remove local timezone offsets from Rrule date params.
-    const startIntervalDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentTimezoneOffset]);
+    const startIntervalDate = addOffsets(options.start, -clientOffsets.startDate, appointmentTimezoneOffset);
     const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
     // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
     const minViewDate = new Date(minViewTime - duration);
-    const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentTimezoneOffset]);
+    const maxViewDate = addOffsets(options.max, -clientOffsets.maxViewDate, appointmentTimezoneOffset);
 
     // NOTE: Check DST after start date without local timezone offset conversion.
     const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
@@ -102,14 +104,15 @@ class RecurrenceProcessor {
   }
 
   _convertRruleResult(rruleIntervalParams, options, rruleDate) {
-    const convertedBackDate = timeZoneUtils.setOffsetsToDate(rruleDate, [
+    const convertedBackDate = addOffsets(
+      rruleDate,
       ...this._getLocalMachineOffset(rruleDate),
       -options.appointmentTimezoneOffset,
       rruleIntervalParams.startIntervalDateDSTShift,
-    ]);
+    );
     const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
     const switchToSummerTime = convertedDateDSTShift < 0;
-    const resultDate = timeZoneUtils.setOffsetsToDate(convertedBackDate, [convertedDateDSTShift]);
+    const resultDate = addOffsets(convertedBackDate, convertedDateDSTShift);
     const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
 
     if (resultDateDSTShift && switchToSummerTime) {
@@ -142,7 +145,7 @@ class RecurrenceProcessor {
   }
 
   hasRecurrence(options) {
-    return !!this.generateDates(options).length;
+    return Boolean(this.generateDates(options).length);
   }
 
   evalRecurrenceRule(rule) {
@@ -176,8 +179,8 @@ class RecurrenceProcessor {
 
     return result.map((item) => {
       const match = item.match(/[A-Za-z]+/);
-      return !!match && match[0];
-    }).filter((item) => !!item);
+      return Boolean(match) && match[0];
+    }).filter((item) => Boolean(item));
   }
 
   getAsciiStringByDate(date) {
@@ -281,9 +284,10 @@ class RecurrenceProcessor {
     }
 
     if (until) {
-      ruleOptions.until = timeZoneUtils.setOffsetsToDate(
+      ruleOptions.until = addOffsets(
         until,
-        [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset],
+        -timeZoneUtils.getClientTimezoneOffset(until),
+        options.appointmentTimezoneOffset,
       );
     }
 
@@ -299,9 +303,9 @@ class RecurrenceProcessor {
         const rruleTimezoneOffsets = typeof options.getExceptionDateTimezoneOffsets === 'function'
           ? options.getExceptionDateTimezoneOffsets(date)
           : [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset];
-        const exceptionDateInPseudoUtc = timeZoneUtils.setOffsetsToDate(
+        const exceptionDateInPseudoUtc = addOffsets(
           date,
-          rruleTimezoneOffsets,
+          ...rruleTimezoneOffsets,
         );
 
         this.rRuleSet!.exdate(exceptionDateInPseudoUtc);

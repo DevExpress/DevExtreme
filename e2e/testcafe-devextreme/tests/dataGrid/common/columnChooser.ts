@@ -190,3 +190,48 @@ test('Check the behavior of pressing the Esc button when dragging a column from 
     mode: 'dragAndDrop',
   },
 }));
+
+test(
+  'Should take into account column options change during general option change (T1267471)',
+  async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const columnChooserBtn = dataGrid.getColumnChooserButton();
+
+    await t.click(columnChooserBtn);
+
+    const columnChooser = dataGrid.getColumnChooser();
+    const lastItemCheckbox = columnChooser.getCheckbox(1);
+
+    await t.expect(columnChooser.isCheckboxDisabled(0)).notOk();
+    await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
+
+    await t.click(lastItemCheckbox);
+
+    await t.expect(columnChooser.isCheckboxDisabled(0)).ok();
+    await t.expect(columnChooser.isCheckboxDisabled(1)).notOk();
+  },
+).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 0, A: 'A', B: 'B' },
+  ],
+  keyExpr: 'id',
+  columns: ['A', 'B'],
+  columnChooser: {
+    enabled: true,
+    mode: 'select',
+  },
+  onOptionChanged: ({ component, fullName }) => {
+    if (!/columns\[\d+\]\.visible/.test(fullName)) {
+      return;
+    }
+
+    const visibleColumns = component.getVisibleColumns();
+    const [{ dataField: lastColumnDataField }] = visibleColumns;
+
+    if (!lastColumnDataField) {
+      return;
+    }
+
+    component.columnOption(lastColumnDataField, 'allowHiding', false);
+  },
+}));

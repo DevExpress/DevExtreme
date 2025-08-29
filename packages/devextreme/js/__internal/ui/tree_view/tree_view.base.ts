@@ -1496,7 +1496,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const isAllSelected = this._dataAdapter.isAllSelected();
     this._createComponent(this._$selectAllItem, CheckBox, {
       value: isAllSelected,
-      elementAttr: { 'aria-label': 'Select All' },
+      elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
       text: selectAllText,
       focusStateEnabled,
       onValueChanged: (event: ValueChangedEvent) => {
@@ -1911,7 +1911,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   focus(): void {
-    if (this._selectAllEnabled()) {
+    const { items = [] } = this.option();
+    if (this._selectAllEnabled() && items.length) {
       // @ts-expect-error ts-error
       eventsEngine.trigger(this._$selectAllItem, 'focus');
       return;

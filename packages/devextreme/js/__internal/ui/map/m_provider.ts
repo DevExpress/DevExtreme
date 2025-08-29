@@ -1,16 +1,27 @@
 import { addNamespace } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
-import { map } from '@js/core/utils/iterator';
 import { isNumeric, isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
+import type { MapProvider } from '@js/ui/map';
+import { isDefined } from '@ts/core/utils/m_type';
 
-// @ts-expect-error dxClass inheritance issue
-class Provider extends (Class.inherit({}) as new() => {}) {
-  _mapWidget?: any;
+import type Map from './m_map';
+import type { MapProperties } from './m_map';
+import type { LocationOption, MarkerOptions, RouteOptions } from './m_provider.dynamic';
 
+class Provider {
+  _mapWidget!: Map;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _map?: any;
 
   _$container!: dxElementWrapper;
+
+  constructor(map: Map, $container: dxElementWrapper) {
+    this._mapWidget = map;
+    this._$container = $container;
+  }
 
   _defaultRouteWeight(): number {
     return 5;
@@ -24,21 +35,18 @@ class Provider extends (Class.inherit({}) as new() => {}) {
     return '#0000FF';
   }
 
-  ctor(map, $container: dxElementWrapper): void {
-    this._mapWidget = map;
-    this._$container = $container;
-  }
-
-  render(markerOptions, routeOptions) {
-    // @ts-expect-error ts-error
+  render(
+    markerOptions: MarkerOptions[],
+    routeOptions: RouteOptions[],
+  ): Promise<unknown> {
     return this._renderImpl().then(() => Promise.all([
       this._applyFunctionIfNeeded('addMarkers', markerOptions),
       this._applyFunctionIfNeeded('addRoutes', routeOptions),
     ]).then(() => true));
   }
 
-  _renderImpl(): void {
-    Class.abstract();
+  _renderImpl(): Promise<unknown> {
+    return Promise.resolve();
   }
 
   updateDimensions(): void {
@@ -65,141 +73,193 @@ class Provider extends (Class.inherit({}) as new() => {}) {
     Class.abstract();
   }
 
-  updateControls(): void {
-    Class.abstract();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateControls(markers: MarkerOptions[], routes: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
-  updateMarkers(markerOptionsToRemove, markerOptionsToAdd) {
-    // eslint-disable-next-line no-promise-executor-return
-    return new Promise((resolve) => this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove).then((removeValue) => {
-      this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd).then((addValue) => {
-        resolve(addValue || removeValue);
-      });
-    }));
+  updateMarkers(
+    markerOptionsToRemove: MarkerOptions[],
+    markerOptionsToAdd: MarkerOptions[],
+  ): Promise<unknown> {
+    return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+        .then((removeValue) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd)
+            .then((addValue) => {
+              resolve(addValue || removeValue);
+            });
+        });
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addMarkers(options): void {
-    Class.abstract();
+  addMarkers(options: MarkerOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeMarkers(options): void {
-    Class.abstract();
+  removeMarkers(options: MarkerOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   adjustViewport(): void {
     Class.abstract();
   }
 
-  updateRoutes(routeOptionsToRemove, routeOptionsToAdd) {
-    // eslint-disable-next-line no-promise-executor-return
-    return new Promise((resolve) => this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove).then((removeValue) => {
-      this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd).then((addValue) => {
-        resolve(addValue || removeValue);
-      });
-    }));
+  updateRoutes(
+    routeOptionsToRemove: RouteOptions[],
+    routeOptionsToAdd: RouteOptions[],
+  ): Promise<unknown> {
+    return new Promise((resolve) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove)
+        .then((removeValue) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd)
+            .then((addValue) => {
+              resolve(addValue || removeValue);
+            });
+        });
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  addRoutes(options) {
-    Class.abstract();
+  addRoutes(options: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeRoutes(options) {
-    Class.abstract();
+  removeRoutes(options: RouteOptions[]): Promise<unknown> {
+    return Promise.resolve();
   }
 
   clean(): void {
     Class.abstract();
   }
 
-  map() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  map(): any {
     return this._map;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isEventsCanceled(e) {
+  isEventsCanceled(e: DxEvent): boolean {
     return false;
   }
 
-  _option(name?, value?) {
+  _option<K extends keyof MapProperties>(name: K): MapProperties[K];
+  _option<K extends keyof MapProperties>(name: K, value: MapProperties[K]): undefined;
+  _option<K extends keyof MapProperties>(
+    name: K,
+    value?: MapProperties[K],
+  ): MapProperties[K] | undefined {
     if (value === undefined) {
-      return this._mapWidget.option(name);
+      const mapOptions = this._mapWidget.option();
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return mapOptions[name];
     }
 
     this._mapWidget.setOptionSilent(name, value);
+
+    return undefined;
   }
 
-  _keyOption(providerName) {
-    const key = this._option('apiKey');
-
-    return key[providerName] === undefined ? key : key[providerName];
+  _keyOption(providerName: MapProvider): string {
+    const key = this._option('apiKey') ?? '';
+    if (typeof key === 'string') {
+      return key;
+    }
+    if (isPlainObject(key)) {
+      return key[providerName] ?? '';
+    }
+    return '';
   }
 
-  _parseTooltipOptions(option) {
+  _parseTooltipOptions(
+    option: string | { text?: string; isShown?: boolean },
+  ): { text: string; visible: boolean } {
+    const isStringOption = typeof option === 'string';
+
     return {
-      text: option.text || option,
-      visible: option.isShown || false,
+      text: isStringOption ? option : option.text ?? '',
+      visible: isStringOption ? false : option.isShown ?? false,
     };
   }
 
-  _getLatLng(location) {
+  _getLatLng(location?: LocationOption | null): { lat: number; lng: number } | null {
     if (typeof location === 'string') {
-      const coords = map(location.split(','), (item) => item.trim());
+      const coords = location.split(',').map((item) => item.trim());
       const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
 
-      if (coords.length === 2 && coords[0].match(numericRegex) && coords[1].match(numericRegex)) {
+      if (coords.length === 2 && numericRegex.exec(coords[0]) && numericRegex.exec(coords[1])) {
         return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
       }
     } else if (Array.isArray(location) && location.length === 2) {
       return { lat: location[0], lng: location[1] };
     } else if (isPlainObject(location) && isNumeric(location.lat) && isNumeric(location.lng)) {
-      return location;
+      return location as { lat: number; lng: number };
     }
 
     return null;
   }
 
-  _areBoundsSet() {
-    return this._option('bounds.northEast') && this._option('bounds.southWest');
+  _areBoundsSet(): boolean {
+    const bounds = this._option('bounds');
+
+    return isDefined(bounds?.northEast) && isDefined(bounds?.southWest);
   }
 
-  _addEventNamespace(name) {
+  _addEventNamespace(name: string): string {
+    // @ts-expect-error ts-error
     return addNamespace(name, this._mapWidget.NAME);
   }
 
-  _applyFunctionIfNeeded(fnName, array) {
+  _applyFunctionIfNeeded(
+    fnName: 'addMarkers' | 'removeMarkers' | 'addRoutes' | 'removeRoutes',
+    array: MarkerOptions[] | RouteOptions[],
+  ): Promise<unknown> {
     if (!array.length) {
       return Promise.resolve();
     }
 
-    return this[fnName](array);
+    const isMarkersUpdate = fnName === 'addMarkers' || fnName === 'removeMarkers';
+    if (isMarkersUpdate) {
+      return this[fnName](array as MarkerOptions[]);
+    }
+    return this[fnName](array as RouteOptions[]);
   }
 
-  _fireAction(name, actionArguments): void {
-    this._mapWidget._createActionByOption(name)(actionArguments);
+  _fireClickAction(
+    actionArguments: { location?: { lat: number; lng: number }; event?: Event },
+  ): void {
+    this._mapWidget._createActionByOption('onClick')(actionArguments);
   }
 
-  _fireClickAction(actionArguments): void {
-    this._fireAction('onClick', actionArguments);
+  _fireMarkerAddedAction(
+    actionArguments: { options: MarkerOptions; originalMarker?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onMarkerAdded')(actionArguments);
   }
 
-  _fireMarkerAddedAction(actionArguments): void {
-    this._fireAction('onMarkerAdded', actionArguments);
+  _fireMarkerRemovedAction(
+    actionArguments: { options: MarkerOptions; originalMarker?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onMarkerRemoved')(actionArguments);
   }
 
-  _fireMarkerRemovedAction(actionArguments): void {
-    this._fireAction('onMarkerRemoved', actionArguments);
+  _fireRouteAddedAction(
+    actionArguments: { options: RouteOptions; originalRoute?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onRouteAdded')(actionArguments);
   }
 
-  _fireRouteAddedAction(actionArguments): void {
-    this._fireAction('onRouteAdded', actionArguments);
-  }
-
-  _fireRouteRemovedAction(actionArguments): void {
-    this._fireAction('onRouteRemoved', actionArguments);
+  _fireRouteRemovedAction(
+    actionArguments: { options: RouteOptions; originalRoute?: unknown },
+  ): void {
+    this._mapWidget._createActionByOption('onRouteRemoved')(actionArguments);
   }
 }
 

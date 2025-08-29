@@ -128,16 +128,8 @@ class BaseRenderingStrategy {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDeltaTime(args, initialSize, appointment) {
-  }
-
   getAppointmentGeometry(coordinates) {
     return coordinates;
-  }
-
-  needCorrectAppointmentDates() {
-    return true;
   }
 
   getDirection() {
@@ -173,13 +165,6 @@ class BaseRenderingStrategy {
     const resultPositions = this._getResultPositions(positionArray);
 
     return this._getExtendedPositionMap(map, resultPositions);
-  }
-
-  _getDeltaWidth(args, initialSize): any {
-    const intervalWidth = this.resizableStep || this.getAppointmentMinSize();
-    const initialWidth = initialSize.width;
-
-    return Math.round((args.width - initialWidth) / intervalWidth);
   }
 
   _correctRtlCoordinates(coordinates) {
@@ -411,7 +396,7 @@ class BaseRenderingStrategy {
   }
 
   _isItemsCross(firstItem, secondItem) {
-    const areItemsInTheSameTable = !!firstItem.allDay === !!secondItem.allDay;
+    const areItemsInTheSameTable = Boolean(firstItem.allDay) === Boolean(secondItem.allDay);
     const areItemsAllDay = firstItem.allDay && secondItem.allDay;
 
     if (areItemsInTheSameTable) {
@@ -611,8 +596,8 @@ class BaseRenderingStrategy {
     endDate: Date,
   ): number {
     const { viewOffset } = this.options;
-    const originalStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
-    const originalEndDate = dateUtilsTs.addOffsets(endDate, [viewOffset]);
+    const originalStartDate = dateUtilsTs.addOffsets(startDate, viewOffset);
+    const originalEndDate = dateUtilsTs.addOffsets(endDate, viewOffset);
     const daylightDiff = timeZoneUtils.getDaylightOffset(originalStartDate, originalEndDate);
     const correctedDuration: number = this._needAdjustDuration(daylightDiff)
       ? this._calculateDurationByDaylightDiff(duration, daylightDiff)
@@ -647,11 +632,14 @@ class BaseRenderingStrategy {
     if ((coordinates.count - countFullWidthAppointmentInCell) > 0) {
       const { top, left } = coordinates;
       const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
+      const width = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay) - this.options._collectorOffset;
+      const height = this.getDropDownAppointmentHeight();
+      const rtlOffset = this.rtlEnabled ? width : 0;
       coordinates.virtual = {
-        left: left + this._getCollectorLeftOffset(isAllDay),
+        left: left + this._getCollectorLeftOffset(isAllDay) + rtlOffset,
         top,
-        width: this.getDropDownAppointmentWidth(this.intervalCount, isAllDay),
-        height: this.getDropDownAppointmentHeight(),
+        width,
+        height,
         index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
         isAllDay,
         groupIndex: coordinates.groupIndex,
@@ -854,15 +842,6 @@ class BaseRenderingStrategy {
     return this._getAppointmentDefaultWidth();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _needVerticalGroupBounds(allDay) {
-    return false;
-  }
-
-  _needHorizontalGroupBounds() {
-    return false;
-  }
-
   getAppointmentDurationInMs(apptStartDate, apptEndDate, allDay) {
     if (allDay) {
       const appointmentDuration = apptEndDate.getTime() - apptStartDate.getTime();
@@ -909,8 +888,8 @@ class BaseRenderingStrategy {
     let startDate = this.dataAccessors.get('startDate', appointment);
     let endDate = this.dataAccessors.get('endDate', appointment);
 
-    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-    endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+    startDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
+    endDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
     return {
       ...appointment,

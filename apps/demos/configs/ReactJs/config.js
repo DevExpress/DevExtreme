@@ -205,4 +205,10 @@ window.config = {
   },
 };
 
+window.process = {
+  env: {
+    NODE_ENV: 'production',
+  },
+};
+
 System.config(window.config);

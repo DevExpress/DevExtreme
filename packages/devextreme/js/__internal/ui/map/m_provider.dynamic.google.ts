@@ -8,13 +8,19 @@ import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
+import type { MapType, RouteMode } from '@js/ui/map';
 import errors from '@js/ui/widget/ui.errors';
 
+import type {
+  LocationOption,
+  MarkerObject, MarkerOptions, RouteObject, RouteOptions,
+} from './m_provider.dynamic';
 import DynamicProvider from './m_provider.dynamic';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let google: any;
 
 const window = getWindow();
@@ -23,10 +29,16 @@ const GOOGLE_MAP_READY = '_googleScriptReady';
 let GOOGLE_URL = `https://maps.googleapis.com/maps/api/js?callback=${GOOGLE_MAP_READY}&libraries=marker&loading=async`;
 const INFO_WINDOW_CLASS = 'gm-style-iw';
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let CustomMarker;
 
-const initCustomMarkerClass = function () {
-  CustomMarker = function (options) {
+export interface GoogleLocation {
+  lat: () => number;
+  lng: () => number;
+}
+
+const initCustomMarkerClass = function initCustomMarkerClass(): void {
+  CustomMarker = function CreateCustomMarker(options): void {
     this._position = options.position;
     this._offset = options.offset;
 
@@ -43,7 +55,7 @@ const initCustomMarkerClass = function () {
 
   CustomMarker.prototype = new google.maps.OverlayView();
 
-  CustomMarker.prototype.onAdd = function () {
+  CustomMarker.prototype.onAdd = function onAdd(): void {
     const $pane = $(this.getPanes().overlayMouseTarget);
     $pane.append(this._$overlayContainer);
 
@@ -55,13 +67,13 @@ const initCustomMarkerClass = function () {
     this.draw();
   };
 
-  CustomMarker.prototype.onRemove = function () {
+  CustomMarker.prototype.onRemove = function onRemove(): void {
     google.maps.event.removeListener(this._clickListener);
 
     this._$overlayContainer.remove();
   };
 
-  CustomMarker.prototype.draw = function () {
+  CustomMarker.prototype.draw = function draw(): void {
     const position = this.getProjection().fromLatLngToDivPixel(this._position);
 
     this._$overlayContainer.css({
@@ -72,30 +84,34 @@ const initCustomMarkerClass = function () {
   };
 };
 
-const googleMapsLoaded = function () {
-  // @ts-expect-error
-  return window.google?.maps;
-};
+// @ts-expect-error ts-error
+const googleMapsLoaded = (): boolean => Boolean(window.google?.maps);
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let googleMapsLoader;
 
 class GoogleProvider extends DynamicProvider {
-  _clickListener?: any;
+  _clickListener?: (e: { latLng: GoogleLocation; domEvent: Event }) => void;
 
-  _preventZoomChangeEvent?: any;
+  _preventZoomChangeEvent?: boolean;
 
-  _boundsChangeListener?: any;
+  _boundsChangeListener?: () => void;
 
-  _mapType(type) {
+  _mapType(type?: MapType): unknown {
     const mapTypes = {
       hybrid: google.maps.MapTypeId.HYBRID,
       roadmap: google.maps.MapTypeId.ROADMAP,
       satellite: google.maps.MapTypeId.SATELLITE,
     };
-    return mapTypes[type] || mapTypes.hybrid;
+
+    if (!type) {
+      return mapTypes.hybrid;
+    }
+
+    return mapTypes[type] ?? mapTypes.hybrid;
   }
 
-  _movementMode(type) {
+  _movementMode(type: RouteMode | string = ''): unknown {
     const movementTypes = {
       driving: google.maps.TravelMode.DRIVING,
       walking: google.maps.TravelMode.WALKING,
@@ -108,20 +124,23 @@ class GoogleProvider extends DynamicProvider {
     return movementTypes[type] ?? type;
   }
 
-  _resolveLocation(location) {
+  _resolveLocation(location?: LocationOption | null): Promise<GoogleLocation> {
     return new Promise((resolve) => {
       const latLng = this._getLatLng(location);
       if (latLng) {
         resolve(new google.maps.LatLng(latLng.lat, latLng.lng));
       } else {
-        this._geocodeLocation(location).then((geocodedLocation) => {
-          resolve(geocodedLocation);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this._geocodeLocation(location as string).then((geocodedLocation) => {
+          resolve(geocodedLocation as GoogleLocation);
         });
       }
     });
   }
 
-  _geocodeLocationImpl(location) {
+  _geocodeLocationImpl(
+    location: string,
+  ): Promise<GoogleLocation> {
     return new Promise((resolve) => {
       if (!isDefined(location)) {
         resolve(new google.maps.LatLng(0, 0));
@@ -140,24 +159,33 @@ class GoogleProvider extends DynamicProvider {
     });
   }
 
-  _normalizeLocation(location) {
+  _normalizeLocation(
+    location: GoogleLocation,
+  ): { lat: number; lng: number } {
     return {
       lat: location.lat(),
       lng: location.lng(),
     };
   }
 
-  _normalizeLocationRect(locationRect) {
+  _normalizeLocationRect(
+    locationRect: {
+      getNorthEast: () => GoogleLocation;
+      getSouthWest: () => GoogleLocation;
+    },
+  ): {
+      northEast: { lat: number; lng: number };
+      southWest: { lat: number; lng: number };
+    } {
     return {
       northEast: this._normalizeLocation(locationRect.getNorthEast()),
       southWest: this._normalizeLocation(locationRect.getSouthWest()),
     };
   }
 
-  _loadImpl() {
-    return new Promise((resolve) => {
+  _loadImpl(): Promise<void> {
+    return new Promise<void>((resolve) => {
       if (googleMapsLoaded()) {
-        // @ts-expect-error
         resolve();
       } else {
         if (!googleMapsLoader) {
@@ -166,12 +194,13 @@ class GoogleProvider extends DynamicProvider {
 
         googleMapsLoader.then(() => {
           if (googleMapsLoaded()) {
-            // @ts-expect-error
             resolve();
             return;
           }
 
-          this._loadMapScript().then(resolve);
+          this._loadMapScript()
+            .then(resolve)
+            .catch(() => { });
         });
       }
     }).then(() => {
@@ -179,7 +208,7 @@ class GoogleProvider extends DynamicProvider {
     });
   }
 
-  _loadMapScript() {
+  _loadMapScript(): Promise<void> {
     return new Promise((resolve) => {
       const key = this._keyOption('google');
 
@@ -198,7 +227,7 @@ class GoogleProvider extends DynamicProvider {
     });
   }
 
-  _init() {
+  _init(): Promise<void> {
     return new Promise((resolve) => {
       this._resolveLocation(this._option('center')).then((center) => {
         const disableDefaultUI = !this._option('controls');
@@ -214,7 +243,7 @@ class GoogleProvider extends DynamicProvider {
         const listener = google.maps.event.addListener(this._map, 'idle', () => {
           resolve(listener);
         });
-      });
+      }).catch(() => { });
     }).then((listener) => {
       google.maps.event.removeListener(listener);
     });
@@ -237,11 +266,13 @@ class GoogleProvider extends DynamicProvider {
     }
   }
 
-  _clickActionHandler(e) {
+  _clickActionHandler(
+    e: { latLng: GoogleLocation; domEvent: Event },
+  ): void {
     this._fireClickAction({ location: this._normalizeLocation(e.latLng), event: e.domEvent });
   }
 
-  updateDimensions() {
+  updateDimensions(): Promise<void> {
     const center = this._option('center');
     google.maps.event.trigger(this._map, 'resize');
     this._option('center', center);
@@ -249,39 +280,41 @@ class GoogleProvider extends DynamicProvider {
     return this.updateCenter();
   }
 
-  updateMapType() {
-    this._map.setMapTypeId(this._mapType(this._option('type')));
+  updateMapType(): Promise<void> {
+    const type = this._option('type');
+    this._map.setMapTypeId(this._mapType(type));
 
     return Promise.resolve();
   }
 
-  updateBounds() {
+  updateBounds(): Promise<void> {
+    const bounds = this._option('bounds');
     return Promise.all([
-      this._resolveLocation(this._option('bounds.northEast')),
-      this._resolveLocation(this._option('bounds.southWest')),
+      this._resolveLocation(bounds?.northEast),
+      this._resolveLocation(bounds?.southWest),
     ]).then((result) => {
-      const bounds = new google.maps.LatLngBounds();
-      bounds.extend(result[0]);
-      bounds.extend(result[1]);
+      const mapBounds = new google.maps.LatLngBounds();
+      mapBounds.extend(result[0]);
+      mapBounds.extend(result[1]);
 
-      this._map.fitBounds(bounds);
+      this._map.fitBounds(mapBounds);
     });
   }
 
-  updateCenter() {
+  updateCenter(): Promise<void> {
     return this._resolveLocation(this._option('center')).then((center) => {
       this._map.setCenter(center);
       this._option('center', this._normalizeLocation(center));
     });
   }
 
-  updateZoom() {
+  updateZoom(): Promise<void> {
     this._map.setZoom(this._option('zoom'));
 
     return Promise.resolve();
   }
 
-  updateControls() {
+  updateControls(): Promise<void> {
     const showDefaultUI = this._option('controls');
 
     this._map.setOptions({
@@ -291,17 +324,19 @@ class GoogleProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  isEventsCanceled(e): boolean {
+  isEventsCanceled(e: DxEvent): boolean {
     const gestureHandling = this._map?.get('gestureHandling');
     const isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
-    if (isInfoWindowContent || devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative') {
+    if (isInfoWindowContent || (devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative')) {
       return false;
     }
     return super.isEventsCanceled(e);
   }
 
-  _renderMarker(options) {
-    return this._resolveLocation(options.location).then((location) => {
+  _renderMarker(options: MarkerOptions): Promise<MarkerObject> {
+    const { location: markerLocation } = options;
+    return this._resolveLocation(markerLocation).then((location) => {
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let marker;
       if (options.html) {
         marker = new CustomMarker({
@@ -316,6 +351,7 @@ class GoogleProvider extends DynamicProvider {
       } else {
         const providerConfig = this._option('providerConfig');
         const useAdvancedMarkers = providerConfig?.useAdvancedMarkers ?? true;
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const icon = options.iconSrc || this._option('markerIconSrc');
         if (useAdvancedMarkers) {
           const content = icon ? this._createIconTemplate(icon) : undefined;
@@ -333,10 +369,15 @@ class GoogleProvider extends DynamicProvider {
         }
       }
 
-      const infoWindow = this._renderTooltip(marker, options.tooltip);
+      const infoWindow = this._renderTooltip(
+        marker,
+        options.tooltip,
+      ) as { open: (map: unknown, marker: unknown) => void };
+
+      // eslint-disable-next-line @typescript-eslint/init-declarations
       let listener;
       if (options.onClick || options.tooltip) {
-        const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+        const markerClickAction = this._mapWidget._createAction(options.onClick ?? noop);
         const markerNormalizedLocation = this._normalizeLocation(location);
 
         listener = google.maps.event.addListener(marker, 'click', () => {
@@ -358,82 +399,88 @@ class GoogleProvider extends DynamicProvider {
     });
   }
 
-  _renderTooltip(marker, options) {
+  _renderTooltip(marker: unknown, options: MarkerOptions['tooltip']): unknown {
     if (!options) {
-      return;
+      return undefined;
     }
 
-    options = this._parseTooltipOptions(options);
+    const parsedOptions = this._parseTooltipOptions(options);
 
     const infoWindow = new google.maps.InfoWindow({
-      content: options.text,
+      content: parsedOptions.text,
     });
-    if (options.visible) {
+    if (parsedOptions.visible) {
       infoWindow.open(this._map, marker);
     }
 
     return infoWindow;
   }
 
-  _destroyMarker(marker) {
+  _destroyMarker(marker: { marker: { setMap: (arg: unknown) => void }; listener?: unknown }): void {
     marker.marker.setMap(null);
     if (marker.listener) {
       google.maps.event.removeListener(marker.listener);
     }
   }
 
-  _renderRoute(options) {
-    return Promise.all(map(options.locations, (point) => this._resolveLocation(point))).then((locations) => new Promise((resolve) => {
-      const origin = locations.shift();
-      const destination = locations.pop();
-      const waypoints = map(locations, (location) => ({ location, stopover: true }));
+  _renderRoute(options: RouteOptions): Promise<RouteObject> {
+    const locations = options.locations ?? [];
+    return Promise
+      .all(locations.map((point) => this._resolveLocation(point)))
+      .then((resolvedLocations) => new Promise((resolve) => {
+        const origin = resolvedLocations.shift();
+        const destination = resolvedLocations.pop();
+        const waypoints = resolvedLocations.map((location) => ({ location, stopover: true }));
 
-      const request = {
-        origin,
-        destination,
-        waypoints,
-        optimizeWaypoints: true,
-        travelMode: this._movementMode(options.mode),
-      };
+        const request = {
+          origin,
+          destination,
+          waypoints,
+          optimizeWaypoints: true,
+          travelMode: this._movementMode(options.mode ?? ''),
+        };
 
-      new google.maps.DirectionsService().route(request, (response, status) => {
-        if (status === google.maps.DirectionsStatus.OK) {
-          const color = new Color(options.color || this._defaultRouteColor()).toHex();
-          const directionOptions = {
-            directions: response,
-            map: this._map,
-            suppressMarkers: true,
-            preserveViewport: true,
-            polylineOptions: {
-              strokeWeight: options.weight || this._defaultRouteWeight(),
-              strokeOpacity: options.opacity || this._defaultRouteOpacity(),
-              strokeColor: color,
-            },
-          };
+        new google.maps.DirectionsService().route(request, (response, status) => {
+          if (status === google.maps.DirectionsStatus.OK) {
+            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+            const color = new Color(options.color || this._defaultRouteColor()).toHex();
+            const directionOptions = {
+              directions: response,
+              map: this._map,
+              suppressMarkers: true,
+              preserveViewport: true,
+              polylineOptions: {
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                strokeWeight: options.weight || this._defaultRouteWeight(),
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                strokeOpacity: options.opacity || this._defaultRouteOpacity(),
+                strokeColor: color,
+              },
+            };
 
-          const route = new google.maps.DirectionsRenderer(directionOptions);
-          const { bounds } = response.routes[0];
+            const route = new google.maps.DirectionsRenderer(directionOptions);
+            const { bounds } = response.routes[0];
 
-          resolve({
-            instance: route,
-            northEast: bounds.getNorthEast(),
-            southWest: bounds.getSouthWest(),
-          });
-        } else {
-          errors.log('W1006', status);
-          resolve({
-            instance: new google.maps.DirectionsRenderer({}),
-          });
-        }
-      });
-    }));
+            resolve({
+              instance: route,
+              northEast: bounds.getNorthEast(),
+              southWest: bounds.getSouthWest(),
+            });
+          } else {
+            errors.log('W1006', status);
+            resolve({
+              instance: new google.maps.DirectionsRenderer({}),
+            });
+          }
+        });
+      }));
   }
 
-  _destroyRoute(routeObject) {
+  _destroyRoute(routeObject: { instance: { setMap: (arg: unknown) => void } }): void {
     routeObject.instance.setMap(null);
   }
 
-  _fitBounds() {
+  _fitBounds(): Promise<void> {
     this._updateBounds();
 
     if (this._bounds && this._option('autoAdjust')) {
@@ -455,7 +502,7 @@ class GoogleProvider extends DynamicProvider {
     return Promise.resolve();
   }
 
-  _extendBounds(location) {
+  _extendBounds(location: { lat: () => number; lng: () => number }): void {
     if (this._bounds) {
       this._bounds.extend(location);
     } else {
@@ -464,7 +511,7 @@ class GoogleProvider extends DynamicProvider {
     }
   }
 
-  clean() {
+  clean(): Promise<void> {
     if (this._map) {
       google.maps.event.removeListener(this._boundsChangeListener);
       google.maps.event.removeListener(this._clickListener);
@@ -482,7 +529,7 @@ class GoogleProvider extends DynamicProvider {
 
 /// #DEBUG
 // @ts-expect-error ts-error
-GoogleProvider.remapConstant = function (newValue) {
+GoogleProvider.remapConstant = (newValue: string): void => {
   GOOGLE_URL = newValue;
 };
 

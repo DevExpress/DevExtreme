@@ -234,7 +234,6 @@ class SchedulerAppointments extends CollectionWidget {
       allowResize: true,
       allowAllDayResize: true,
       onAppointmentDblClick: null,
-      _collectorOffset: 0,
       groups: [],
       resources: [],
     });
@@ -759,12 +758,12 @@ class SchedulerAppointments extends CollectionWidget {
     } else {
       const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
       const { endDate } = info.appointment;
-      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
       dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
-      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, [viewOffset]);
-      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, [viewOffset]);
+      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, viewOffset);
+      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, viewOffset);
     }
 
     this.updateResizedAppointment(
@@ -825,8 +824,8 @@ class SchedulerAppointments extends CollectionWidget {
     const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
     const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
 
-    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, [startDateDelta]);
-    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, [endDateDelta]);
+    gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, startDateDelta);
+    gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, endDateDelta);
 
     const data = gridAdapter
       .calculateDates(timeZoneCalculator, 'fromGrid')
@@ -983,10 +982,6 @@ class SchedulerAppointments extends CollectionWidget {
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
     const virtualItems = appointment.items;
-    const buttonWidth = this.invoke('getDropDownAppointmentWidth', appointment.allDay);
-    const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-    const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
-    const isGroupCompact = !appointment.allDay && this.invoke('supportCompactDropDownAppointments');
     const items: any = { data: [], colors: [], settings: [] };
     virtualItems.forEach((item) => {
       const appointmentConfig = {
@@ -1005,17 +1000,16 @@ class SchedulerAppointments extends CollectionWidget {
       $container: $fragment,
       coordinates: {
         top: appointment.top,
-        left: appointment.left + rtlOffset,
+        left: appointment.left,
       },
       items,
       buttonColor: items.colors[0],
       sortedIndex: appointment.sortedIndex,
-      width: buttonWidth - this.option('_collectorOffset'),
-      height: buttonHeight,
+      width: appointment.width,
+      height: appointment.height,
       onAppointmentClick: this.option('onItemClick'),
       allowDrag: this.option('allowDrag'),
-      cellWidth: this.invoke('getCellWidth'),
-      isCompact: this.invoke('isAdaptive') || isGroupCompact,
+      isCompact: appointment.isCompact,
     });
     this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
 

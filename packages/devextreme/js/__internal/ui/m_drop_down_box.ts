@@ -311,6 +311,11 @@ class DropDownBox<
   // eslint-disable-next-line class-methods-use-this
   _setCollectionWidgetOption(): void {}
 
+  // eslint-disable-next-line class-methods-use-this
+  _shouldLogFieldTemplateDeprecationWarning(): boolean {
+    return true;
+  }
+
   _optionChanged(args) {
     // @ts-expect-error ts-error
     this._dataExpressionOptionChanged(args);

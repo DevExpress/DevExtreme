@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "storybook dev -p 6006",
-    "build": "storybook build"
+    "build": "storybook build",
+    "serve": "http-server storybook-static -p 6006 -c-1"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "@storybook/react": "7.6.19",
     "@storybook/react-webpack5": "7.6.19",
     "@storybook/test": "7.6.19",
+    "http-server": "14.1.1",
     "prop-types": "15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",

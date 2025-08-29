@@ -119,8 +119,8 @@ export class GroupedDataMapProvider {
         const cellData = isAppointmentRender
           ? {
             ...originCellData,
-            startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, [-viewOffset]),
-            endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, [-viewOffset]),
+            startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, -viewOffset),
+            endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, -viewOffset),
           }
           : originCellData;
 
@@ -178,7 +178,7 @@ export class GroupedDataMapProvider {
     cellStartDate: Date,
     cellEndDate: Date,
   ): number {
-    const nextHourCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [toMs('hour')]);
+    const nextHourCellStartDate = dateUtilsTs.addOffsets(cellStartDate, toMs('hour'));
     const cellTimezoneDiff = timezoneUtils.getDaylightOffset(cellStartDate, cellEndDate);
     const cellNextHourTimezoneDiff = timezoneUtils.getDaylightOffset(
       cellStartDate,
@@ -199,8 +199,8 @@ export class GroupedDataMapProvider {
     cellStartDate: Date,
     cellEndDate: Date,
   ): boolean {
-    const nextIntervalCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [secondIntervalOffset]);
-    const nextIntervalCellEndDate = dateUtilsTs.addOffsets(cellEndDate, [secondIntervalOffset]);
+    const nextIntervalCellStartDate = dateUtilsTs.addOffsets(cellStartDate, secondIntervalOffset);
+    const nextIntervalCellEndDate = dateUtilsTs.addOffsets(cellEndDate, secondIntervalOffset);
 
     const isInOriginInterval = startDate >= cellStartDate
       && startDate < cellEndDate;
@@ -241,7 +241,7 @@ export class GroupedDataMapProvider {
         startDate: this.getGroupStartDate(groupIndex),
         endDate: this.getGroupEndDate(groupIndex),
       };
-    }).filter(({ startDate }) => !!startDate);
+    }).filter(({ startDate }) => Boolean(startDate));
   }
 
   getGroupIndices() {

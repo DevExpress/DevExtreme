@@ -7,7 +7,7 @@ import type { HorizontalAlignment, VerticalAlignment } from '@js/ui/form';
 import type Button from '@ts/ui/button/wrapper';
 import type { TemplatesInfo } from '@ts/ui/form/form.layout_manager';
 
-const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
+export const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 
 type ButtonItemRenderInfo = TemplatesInfo & {
   validationGroup?: string;

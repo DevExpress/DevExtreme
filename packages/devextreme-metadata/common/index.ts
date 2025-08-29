@@ -1,8 +1,7 @@
 import {
   AddMutation,
-  ArrayDataType,
   DataType,
-  MemberRefDataType,
+  DataTypes,
   Mutation,
   RemoveMutation,
 } from 'devextreme-internal-tools/metadata';
@@ -37,13 +36,13 @@ export function replaceTypes({ uid, types }: { uid: string; types: DataType[] })
 }
 
 export const types = {
-  array(...itemTypes: ArrayDataType['itemTypes']): ArrayDataType {
+  array(...itemTypes: DataTypes.Array['itemTypes']): DataTypes.Array {
     return { kind: 'array', itemTypes };
   },
 
-  memberRef(uid: string): MemberRefDataType {
-    return { kind: 'memberRef', uid };
+  uidRef(uid: string): DataTypes.UidRef {
+    return { kind: 'uidRef', uid };
   },
 
-  object: { kind: 'object' } as any,
+  object: { kind: 'object' } as DataTypes.Object,
 };

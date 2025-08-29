@@ -96,6 +96,9 @@
 
         "dxForm-optionalMark": "необязательный",
         "dxForm-requiredMessage": " Поле {0} должно быть заполнено",
+        "dxForm-smartPasteButtonText": "Smart Paste",
+        "dxForm-resetButtonText": "Сбросить",
+        "dxForm-submitButtonText": "Submit",
 
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
         "dxNumberBox-noDataText": "Нет данных",

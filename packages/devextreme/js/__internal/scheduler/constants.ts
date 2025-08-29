@@ -4,3 +4,5 @@ export const APPOINTMENT_SETTINGS_KEY = 'dxAppointmentSettings';
 
 export const VERTICAL_GROUP_ORIENTATION = 'vertical';
 export const HORIZONTAL_GROUP_ORIENTATION = 'horizontal';
+
+export const VERTICAL_VIEW_TYPES = ['day', 'week', 'workWeek'];

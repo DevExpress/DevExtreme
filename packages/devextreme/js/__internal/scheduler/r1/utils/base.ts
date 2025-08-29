@@ -151,7 +151,7 @@ export const getValidCellDateForLocalTimeFormat = (
     viewOffset: number;
   },
 ): Date => {
-  const originDate = dateUtilsTs.addOffsets(date, [-viewOffset]);
+  const originDate = dateUtilsTs.addOffsets(date, -viewOffset);
   const localTimeZoneChangedInOriginDate = timeZoneUtils.isTimezoneChangeInDate(originDate);
 
   if (!localTimeZoneChangedInOriginDate) {
@@ -170,7 +170,9 @@ export const getValidCellDateForLocalTimeFormat = (
   const startViewDateOffset = getStartViewDateTimeOffset(startViewDate, startDayHour);
   return dateUtilsTs.addOffsets(
     startViewDateWithoutDST,
-    [viewOffset, cellIndexShift, -startViewDateOffset],
+    viewOffset,
+    cellIndexShift,
+    -startViewDateOffset,
   );
 };
 
@@ -198,7 +200,7 @@ export const isVerticalGroupingApplied = (
   groups: unknown[],
   groupOrientation?: GroupOrientation,
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && !!groups.length;
+  && Boolean(groups.length);
 
 // TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
@@ -331,7 +333,7 @@ export const getKeyByGroup = (
   groupIndex: number | undefined,
   isVerticalGrouping: boolean,
 ): string => {
-  if (isVerticalGrouping && !!groupIndex) {
+  if (isVerticalGrouping && groupIndex !== undefined) {
     return groupIndex.toString();
   }
 
@@ -355,7 +357,7 @@ export const getCalculatedFirstDayOfWeek = (
 export const isHorizontalGroupingApplied = (
   groups: unknown[],
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && Boolean(groups.length);
 
 export const isGroupingByDate = (
   groups: unknown[],
@@ -398,22 +400,34 @@ export const getSkippedHoursInRange = (
   const endDateHours = endDate.getHours() + (endDate.getTime() % HOUR_IN_MS) / HOUR_IN_MS;
 
   if (viewDataProvider.isSkippedDate(startDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (startDateHours < startDayHour) {
-      result += dayHours;
-    } else if (startDateHours < endDayHour) {
-      result += endDayHour - startDateHours;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case startDateHours < startDayHour:
+        result += dayHours;
+        break;
+      case startDateHours < endDayHour:
+        result += endDayHour - startDateHours;
+        break;
+      default:
+        break;
     }
   }
 
   if (viewDataProvider.isSkippedDate(endDate)) {
-    if (isAllDay) {
-      result += DAY_HOURS;
-    } else if (endDateHours > endDayHour) {
-      result += dayHours;
-    } else if (endDateHours > startDayHour) {
-      result += endDateHours - startDayHour;
+    switch (true) {
+      case isAllDay:
+        result += DAY_HOURS;
+        break;
+      case endDateHours > endDayHour:
+        result += dayHours;
+        break;
+      case endDateHours > startDayHour:
+        result += endDateHours - startDayHour;
+        break;
+      default:
+        break;
     }
   }
 
