@@ -1,5 +1,5 @@
 interface ProductItemType {
-    text: string;
+  text: string;
 }
 
 export interface ProductType {
