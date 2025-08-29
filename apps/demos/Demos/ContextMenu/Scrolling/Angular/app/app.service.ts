@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export class ContextMenuItems {
   text: string;
+
   items?: ContextMenuItems[];
 }
 

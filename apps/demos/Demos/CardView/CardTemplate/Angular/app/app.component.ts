@@ -30,6 +30,7 @@ export class AppComponent {
   vehicles: Vehicle[];
 
   popupVisible = false;
+
   currentVehicle: Vehicle | null = null;
 
   constructor(service: Service) {

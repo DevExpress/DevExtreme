@@ -14,6 +14,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class EmployeeComponent implements OnChanges {
   employees: Employee[];
+
   text: string;
 
   @Input() employeeID: number;

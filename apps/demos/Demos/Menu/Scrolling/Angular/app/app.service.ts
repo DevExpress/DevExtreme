@@ -5,6 +5,7 @@ class ProductItem {
 }
 export class Product {
   text: string;
+
   items: (Product | ProductItem)[];
 }
 

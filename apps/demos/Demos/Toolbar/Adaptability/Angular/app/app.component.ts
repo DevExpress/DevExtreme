@@ -49,6 +49,7 @@ export class AppComponent {
   fontSizes: FontSize[] = this.customService.getFontSizes();
 
   lineHeights: LineHeight[] = this.customService.getLineHeights();
+
   lineHeight: number[] = [this.lineHeights[1].lineHeight];
 
   fontFamilies: FontFamily[] = this.customService.getFontFamilies();

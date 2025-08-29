@@ -74,11 +74,12 @@ export default [
     },
   },
 
-  ...compat.extends('eslint:recommended', 'devextreme/javascript', 'devextreme/spell-check').map(config => ({
+  ...compat.extends('eslint:recommended', 'devextreme/spell-check'),
+
+  ...compat.extends('devextreme/javascript').map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
   })),
-
   ...compat.extends('devextreme/typescript').map(config => ({
     ...config,
     files: ['**/*.ts', '**/*.tsx'],
@@ -168,10 +169,10 @@ export default [
       '@stylistic/object-curly-newline': 0,
       '@stylistic/no-confusing-arrow': 0,
       '@stylistic/implicit-arrow-linebreak': 0,
+      '@stylistic/member-delimiter-style': 0,
       '@stylistic/space-infix-ops': 'error',
       '@stylistic/space-unary-ops': 'error',
       '@stylistic/no-whitespace-before-property': 'error',
-      '@stylistic/comma-spacing': 'error',
       '@stylistic/computed-property-spacing': 'error',
       '@stylistic/comma-style': ['error', 'last'],
     },
@@ -227,6 +228,8 @@ export default [
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-useless-constructor': 0,
       '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
+
+      // TODO: consider these rules
       '@typescript-eslint/init-declarations': 0,
       '@typescript-eslint/prefer-readonly': 0,
       '@typescript-eslint/no-unsafe-return': 0,
@@ -359,7 +362,6 @@ export default [
   // Vue demos
   ...compat.extends('plugin:vue/vue3-recommended').map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
     files: [
       'Demos/**/Vue/*.vue',
       'utils/templates/Vue/*.vue',
@@ -470,7 +472,6 @@ export default [
   // jest tests
   ...compat.extends('plugin:jest/recommended', 'plugin:jest/style').map(config => ({
     ...config,
-    rules: changeRulesToStylistic(config.rules || {}),
     files: ['utils/tests/**/*.*'],
   })),
 ];

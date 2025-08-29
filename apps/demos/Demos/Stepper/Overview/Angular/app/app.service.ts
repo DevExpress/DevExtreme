@@ -6,7 +6,9 @@ import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 })
 export class AppService {
   steps: DxStepperTypes.Item[] = [];
+
   orientations = [];
+
   navigationModes = [];
 
   constructor() {

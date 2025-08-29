@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-/* global RequestInit */
+/* global */
 import React, { useCallback, useState } from 'react';
 import {
   DataGrid,

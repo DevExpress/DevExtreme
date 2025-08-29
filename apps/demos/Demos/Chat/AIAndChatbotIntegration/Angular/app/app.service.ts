@@ -40,6 +40,7 @@ export class AppService {
   store: any[] = [];
 
   messages: any[] = [];
+
   alerts: DxChatTypes.Alert[] = [];
 
   customStore: CustomStore;

@@ -1,7 +1,7 @@
 $(() => {
   const currentDate = new Date(2021, 3, 27);
 
-  const getTimeZones = (date) => DevExpress.utils.getTimeZones(date, locations)
+  const getTimeZones = (date) => DevExpress.utils.getTimeZones(date, locations);
 
   const timeZones = getTimeZones(currentDate);
 

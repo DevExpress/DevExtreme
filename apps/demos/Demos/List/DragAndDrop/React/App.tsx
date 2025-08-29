@@ -49,8 +49,7 @@ const App = () => {
       } else {
         setDoingTasksState((prevTasks) => updateTasks(prevTasks));
       }
-    }
-    else {
+    } else {
       onRemove(e);
       onAdd(e);
     }

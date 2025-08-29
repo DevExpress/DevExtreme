@@ -14,7 +14,9 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class PriorityComponent implements OnChanges {
   priorities: Priority[];
+
   text: string;
+
   className: string;
 
   @Input() priorityID: number;
