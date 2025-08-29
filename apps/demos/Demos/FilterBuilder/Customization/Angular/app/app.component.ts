@@ -21,6 +21,8 @@ const anyOfOperation = {
   ).slice(0, -1),
 } as const;
 
+const TAB_SIZE = 4;
+
 let modulePrefix = '';
 // @ts-ignore
 if (window && window.config?.packageConfigPaths) {
@@ -60,12 +62,8 @@ export class AppComponent {
     this.dataSourceText = AppComponent.formatValue(e.component.getFilterExpression());
   }
 
-  private static formatValue(value: FilterBuilderValue, spaces = 0) {
+  private static formatValue(value: FilterBuilderValue, spaces = TAB_SIZE) {
     if (value && Array.isArray(value[0])) {
-      const TAB_SIZE = 4;
-
-      spaces = spaces || TAB_SIZE;
-
       return `[${AppComponent.getLineBreak(spaces)}${
         (value as string[]).map(
           (item: FilterBuilderValue) => (Array.isArray(item[0])
@@ -74,6 +72,7 @@ export class AppComponent {
         ).join(`,${AppComponent.getLineBreak(spaces)}`)
       }${AppComponent.getLineBreak(spaces - TAB_SIZE)}]`;
     }
+
     return JSON.stringify(value);
   }
 

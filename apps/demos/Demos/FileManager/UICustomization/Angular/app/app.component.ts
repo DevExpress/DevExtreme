@@ -97,7 +97,10 @@ export class AppComponent {
     }
   }
 
-  createFile(fileExtension, directory) {
+  createFile(
+    fileExtension,
+    directory = this.fileManager.instance.getCurrentDirectory()
+  ) {
     const newItem = {
       __KEY__: Date.now(),
       name: `New file${fileExtension}`,
@@ -105,7 +108,6 @@ export class AppComponent {
       size: 0,
     };
 
-    directory = directory || this.fileManager.instance.getCurrentDirectory();
     if (!directory.isDirectory) {
       return false;
     }
