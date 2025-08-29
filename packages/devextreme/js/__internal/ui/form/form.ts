@@ -32,10 +32,13 @@ import type {
   LabelLocation,
   Properties,
   SimpleItemTemplateData,
+  SmartPastedEvent,
+  SmartPastingEvent,
   TabbedItem,
 } from '@js/ui/form';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
+import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
@@ -162,6 +165,10 @@ class Form extends Widget<FormProperties> {
 
   _loadPanel?: FormLoadPanel;
 
+  _smartPastingAction?: (e: Partial<SmartPastingEvent>) => void;
+
+  _smartPastedAction?: (e: Partial<SmartPastedEvent>) => void;
+
   _init(): void {
     super._init();
 
@@ -171,6 +178,8 @@ class Form extends Widget<FormProperties> {
     this._groupsColCount = [];
 
     this._attachSyncSubscriptions();
+    this._createSmartPastingAction();
+    this._createSmartPastedAction();
   }
 
   _getDefaultOptions(): FormProperties {
@@ -204,6 +213,10 @@ class Form extends Widget<FormProperties> {
       stylingMode: config().editorStylingMode,
       labelMode: 'outside',
       isDirty: false,
+      // @ts-expect-error ts-error
+      onSmartPasting: null,
+      // @ts-expect-error ts-error
+      onSmartPasted: null,
     };
   }
 
@@ -1052,6 +1065,20 @@ class Form extends Widget<FormProperties> {
     });
   }
 
+  _createSmartPastingAction(): void {
+    this._smartPastingAction = this._createActionByOption(
+      'onSmartPasting',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createSmartPastedAction(): void {
+    this._smartPastedAction = this._createActionByOption(
+      'onSmartPasted',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
   _optionChanged(args: OptionChanged<FormProperties>): void {
     const { fullName } = args;
     const splitFullName = fullName.split('.');
@@ -1129,10 +1156,15 @@ class Form extends Widget<FormProperties> {
         ValidationEngine.removeGroup(args.previousValue || this);
         this._invalidate();
         break;
-      case 'aiIntegration': {
+      case 'aiIntegration':
         this._processAIIntegrationUpdate();
         break;
-      }
+      case 'onSmartPasting':
+        this._createSmartPastingAction();
+        break;
+      case 'onSmartPasted':
+        this._createSmartPastedAction();
+        break;
       default:
         super._optionChanged(args);
     }
@@ -1853,12 +1885,27 @@ class Form extends Widget<FormProperties> {
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
     return {
       onComplete: (fieldsData: SmartPasteCommandResult): void => {
-        this.beginUpdate();
-        fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
-          this._updateFieldValue(name, value);
-        });
-        this.endUpdate();
-        this._hideLoadPanel();
+        const aiResult = Object.fromEntries(fieldsData.map((field) => [field.name, field.value]));
+
+        const smartPastingArgs: Pick<SmartPastingEvent, 'aiResult' | 'cancel'> = {
+          aiResult,
+          cancel: false,
+        };
+        this._smartPastingAction?.(smartPastingArgs);
+
+        invokeConditionally(
+          smartPastingArgs.cancel,
+          (): void => {
+            this.beginUpdate();
+            fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
+              this._updateFieldValue(name, value);
+            });
+            this.endUpdate();
+
+            this._smartPastedAction?.({ aiResult });
+          },
+        );
+
         this._processCommandCompletion();
       },
       onError: (): void => {

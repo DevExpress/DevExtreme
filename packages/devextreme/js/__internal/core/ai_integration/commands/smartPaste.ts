@@ -24,8 +24,12 @@ export class SmartPasteCommand extends BaseCommand<
     const result: SmartPasteCommandResult = [];
 
     response.split(';;;').forEach((data: string) => {
+      if (!data) {
+        return;
+      }
+
       const [name, ...values] = data.split(':::');
-      const value = values.length === 1 ? values[0] : values;
+      const value = values.length <= 1 ? values[0] : values;
 
       if (value) {
         result.push({
