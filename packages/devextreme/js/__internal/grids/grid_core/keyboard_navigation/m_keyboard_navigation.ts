@@ -88,6 +88,7 @@ import {
   isDetailRow,
   isEditForm,
   isEditorCell,
+  isEditRow,
   isElementDefined,
   isGroupFooterRow,
   isGroupRow,
@@ -1482,10 +1483,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      activeElementSelector = '.dx-datagrid-rowsview .dx-row[tabindex]';
+      activeElementSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row[tabindex]`;
       if (!focusedRowEnabled) {
         activeElementSelector
-          += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
+          += `, .${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row > td[tabindex]`;
       }
       element = this.component.$element().find(activeElementSelector).first();
     }
@@ -1533,6 +1534,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         isHighlighted,
       );
       $element = args.$newCellElement;
+
       if (isRowFocusType && !args.isHighlighted) {
         this.setRowFocusType();
       }
@@ -1540,7 +1542,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (!args.cancel) {
       this._focus($element, !args.isHighlighted);
-      this._focusInteractiveElement($element);
+
+      if (this._getElementType($element) !== 'row' || isEditRow($element)) {
+        this._focusInteractiveElement($element);
+      }
     }
   }
 
