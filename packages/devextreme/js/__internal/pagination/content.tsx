@@ -159,10 +159,25 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getPagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
-      return 'hidden';
-    }
-    return undefined;
+    const {
+      pagesNavigatorVisible,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons,
+      showPageSizeSelector,
+    } = this.props;
+
+    // Only hide if pageCount=1 AND none of the explicit show props are true
+    const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
+
+    const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)
+    || Boolean(showPageSizeSelector);
+
+    const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
+    const result = shouldHide ? 'hidden' : undefined;
+
+    return result;
   }
 
   getIsLargeDisplayMode(): boolean {
@@ -258,47 +273,47 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         { ...elementAttr as object }
       >
         {showPageSizeSelector && (
-          <PageSizeSelector
-            rootElementRef={allowedPageSizesRef}
-            isLargeDisplayMode={this.getIsLargeDisplayMode()}
-            pageSize={pageSize}
+            <PageSizeSelector
+              rootElementRef={allowedPageSizesRef}
+              isLargeDisplayMode={this.getIsLargeDisplayMode()}
+              pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
             allowedPageSizes={allowedPageSizes}
           />
         )}
         {this.getPagesContainerVisible() && (
-          <div
-            className={PAGINATION_PAGES_CLASS}
-            style={{ visibility: this.getPagesContainerVisibility() }}
-          >
+            <div
+              className={PAGINATION_PAGES_CLASS}
+              style={{ visibility: this.getPagesContainerVisibility() }}
+            >
             {this.getInfoVisible() && (
-              <InfoText
-                rootElementRef={infoTextRef}
-                infoText={infoText}
-                pageCount={pageCount}
-                pageIndex={pageIndex}
-                itemCount={itemCount}
-              />
+                  <InfoText
+                    rootElementRef={infoTextRef}
+                    infoText={infoText}
+                    pageCount={pageCount}
+                    pageIndex={pageIndex}
+                    itemCount={itemCount}
+                  />
             )}
             {this.getPageIndexSelectorVisible() && (
-              <div
-                className={PAGINATION_PAGE_INDEXES_CLASS}
-                ref={pagesRef as any}
-              >
-                <PageIndexSelector
-                  hasKnownLastPage={hasKnownLastPage}
-                  isLargeDisplayMode={this.getIsLargeDisplayMode()}
-                  maxPagesCount={maxPagesCount}
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
-                  pageIndexChangedInternal={pageIndexChangedInternal}
-                  pagesCountText={pagesCountText}
-                  showNavigationButtons={showNavigationButtons}
-                  itemCount={itemCount}
-                />
-              </div>
+                  <div
+                    className={PAGINATION_PAGE_INDEXES_CLASS}
+                    ref={pagesRef as any}
+                  >
+                    <PageIndexSelector
+                      hasKnownLastPage={hasKnownLastPage}
+                      isLargeDisplayMode={this.getIsLargeDisplayMode()}
+                      maxPagesCount={maxPagesCount}
+                      pageCount={pageCount}
+                      pageIndex={pageIndex}
+                      pageIndexChangedInternal={pageIndexChangedInternal}
+                      pagesCountText={pagesCountText}
+                      showNavigationButtons={showNavigationButtons}
+                      itemCount={itemCount}
+                    />
+                  </div>
             )}
-          </div>
+            </div>
         )}
       </Widget>
     );
