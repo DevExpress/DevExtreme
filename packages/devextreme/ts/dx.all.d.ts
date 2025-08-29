@@ -25658,11 +25658,6 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
-     * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
-     * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
-     */
-    scrollToTime(hours: number, minutes: number, date?: Date): void;
-    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(

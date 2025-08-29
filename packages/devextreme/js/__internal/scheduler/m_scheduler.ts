@@ -1985,11 +1985,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointmentTooltip?.hide();
   }
 
-  scrollToTime(hours, minutes, date) {
-    errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
-    this._workSpace.scrollToTime(hours, minutes, date);
-  }
-
   scrollTo(date, groupValues, allDay) {
     this._workSpace.scrollTo(date, groupValues, allDay);
   }
