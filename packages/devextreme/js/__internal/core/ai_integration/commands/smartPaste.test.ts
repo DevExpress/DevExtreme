@@ -90,8 +90,40 @@ describe('SmartPasteCommand', () => {
       expect(result).toStrictEqual(expectedResult);
     });
 
+    it('should parse array values correctly', () => {
+      const response = 'Field1:::value1:::value2;;;Field2:::value3:::value4:::value5';
+      // @ts-expect-error Access to protected property for a test
+      const result = command.parseResult(response);
+
+      const expectedResult = [
+        {
+          name: 'Field1',
+          value: ['value1', 'value2'],
+        },
+        {
+          name: 'Field2',
+          value: ['value3', 'value4', 'value5'],
+        },
+      ];
+
+      expect(result).toStrictEqual(expectedResult);
+    });
+
     it('should not include an empty fields into parsed result', () => {
       const response = 'Field1:::value1;;;Field2:::';
+      // @ts-expect-error Access to protected property for a test
+      const result = command.parseResult(response);
+
+      const expectedResult = [{
+        name: 'Field1',
+        value: 'value1',
+      }];
+
+      expect(result).toStrictEqual(expectedResult);
+    });
+
+    it('should process multiple delimiters and malformed field data correctly', () => {
+      const response = 'Field1:::value1;;;;;;Field2';
       // @ts-expect-error Access to protected property for a test
       const result = command.parseResult(response);
 

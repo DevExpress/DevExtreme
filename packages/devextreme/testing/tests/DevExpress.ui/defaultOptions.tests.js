@@ -1737,6 +1737,8 @@ testComponentDefaults(Form,
         scrollingEnabled: false,
         labelMode: 'outside',
         isDirty: false,
+        onSmartPasted: null,
+        onSmartPasting: null,
     },
 );
 

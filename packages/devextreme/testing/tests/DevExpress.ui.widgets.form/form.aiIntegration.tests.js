@@ -622,4 +622,201 @@ QUnit.module('SmartPaste', () => {
             });
         });
     });
+
+    QUnit.module('Events', {
+        beforeEach: function() {
+            this.aiResult = [{
+                name: 'fieldName',
+                value: 'fieldValue',
+            }];
+
+            this.smartPasteResult = {
+                fieldName: 'fieldValue',
+            };
+
+            this.smartPaste = (_, callbacks) => {
+                callbacks.onComplete([this.aiResult[0]]);
+            };
+
+            this.aiIntegration = { smartPaste: this.smartPaste };
+        }
+    }, () => {
+        QUnit.module('onSmartPasting', () => {
+            QUnit.test('should be called after getting a response from AI integration module', function(assert) {
+                const onSmartPasting = sinon.spy();
+
+                const form = setupFormWithAi({
+                    aiIntegration: this.aiIntegration,
+                    onSmartPasting,
+                });
+
+                form.smartPaste('text');
+
+                assert.strictEqual(onSmartPasting.calledOnce, true, 'onSmartPasting event has been invoked');
+            });
+
+            QUnit.test('should pass correct arguments to the event', function(assert) {
+                const form = setupFormWithAi({
+                    aiIntegration: this.aiIntegration,
+                    onSmartPasting: (e) => {
+                        const { component, element, aiResult, cancel } = e;
+
+                        assert.strictEqual(component, form, 'e.component is correct');
+                        assert.strictEqual($(element).is(form.element()), true, 'e.element is correct');
+                        assert.strictEqual(cancel, false, 'e.cancel is correct');
+                        assert.deepEqual(aiResult, this.smartPasteResult, 'e.data is correct');
+                    },
+                });
+
+                form.smartPaste('text');
+            });
+
+            [false, true].forEach((isPromise) => {
+                [false, true].forEach((cancel) => {
+                    QUnit.test(`should be possible to cancel the aiResult processing based on event cancel property: isPromise=${isPromise} cancel=${cancel}`, function(assert) {
+                        const done = assert.async();
+
+                        const onSmartPasted = sinon.spy();
+
+                        const form = setupFormWithAi({
+                            aiIntegration: this.aiIntegration,
+                            onSmartPasting: (e) => { e.cancel = isPromise ? Promise.resolve(cancel) : cancel; },
+                            onSmartPasted,
+                        });
+
+                        form.smartPaste('text');
+
+                        setTimeout(() => {
+                            assert.strictEqual(onSmartPasted.called, !cancel, `processing has ${cancel ? '' : 'not '}been cancelled`);
+                            done();
+                        });
+                    });
+                });
+            });
+
+            QUnit.test('should process Promise.reject correctly', function(assert) {
+                const done = assert.async();
+
+                const onSmartPasted = sinon.spy();
+
+                const form = setupFormWithAi({
+                    aiIntegration: this.aiIntegration,
+                    onSmartPasting: (e) => { e.cancel = Promise.reject(); },
+                    onSmartPasted,
+                });
+
+                form.smartPaste('text');
+
+                setTimeout(() => {
+                    assert.strictEqual(onSmartPasted.called, true, 'processing has not been cancelled');
+                    done();
+                });
+            });
+
+            QUnit.test('should allow updating onSmartPasting handler at runtime', function(assert) {
+                const form = setupFormWithAi({ aiIntegration: this.aiIntegration });
+
+                const onSmartPasting = sinon.spy();
+                form.option({ onSmartPasting });
+
+                form.smartPaste('text');
+
+                assert.strictEqual(onSmartPasting.calledOnce, true, 'onSmartPasting event has been invoked after its change at runtime');
+            });
+        });
+
+        QUnit.module('onSmartPasted', () => {
+            QUnit.test('should be called after processing a response from AI integration module', function(assert) {
+                const onSmartPasted = sinon.spy();
+
+                const form = setupFormWithAi({
+                    aiIntegration: this.aiIntegration,
+                    onSmartPasted,
+                });
+
+                form.smartPaste('text');
+
+                assert.strictEqual(onSmartPasted.calledOnce, true, 'onSmartPasted event has been invoked');
+            });
+
+            QUnit.test('should pass correct arguments to the event', function(assert) {
+                const form = setupFormWithAi({
+                    aiIntegration: this.aiIntegration,
+                    onSmartPasted: (e) => {
+                        const { component, element, aiResult } = e;
+
+                        assert.strictEqual(component, form, 'e.component is correct');
+                        assert.strictEqual($(element).is(form.element()), true, 'e.element is correct');
+                        assert.deepEqual(aiResult, this.smartPasteResult, 'e.data is correct');
+                    },
+                });
+
+                form.smartPaste('text');
+            });
+
+            QUnit.test('should allow updating onSmartPasted handler at runtime', function(assert) {
+                const form = setupFormWithAi({ aiIntegration: this.aiIntegration });
+
+                const onSmartPasted = sinon.spy();
+                form.option({ onSmartPasted });
+
+                form.smartPaste('text');
+
+                assert.strictEqual(onSmartPasted.calledOnce, true, 'onSmartPasted event has been invoked after its change at runtime');
+            });
+        });
+    });
+
+    QUnit.module('aiOptions', {
+        beforeEach: function() {
+            this.smartPaste = (_, callbacks) => {
+                callbacks.onComplete([{}]);
+            };
+        }
+    }, () => {
+        QUnit.test('should be possible to change aiOptions at runtime', function(assert) {
+            const form = setupFormWithAi({
+                items: [{
+                    dataField: 'test',
+                    aiOptions: {
+                        disabled: true,
+                        instruction: 'custom instruction',
+                    },
+                }]
+            });
+
+            let aiOptions = form.itemOption('test').aiOptions;
+
+            assert.deepEqual(aiOptions, { disabled: true, instruction: 'custom instruction' });
+
+            form.itemOption('test', 'aiOptions', { disabled: false, instruction: 'new instruction' });
+            aiOptions = form.itemOption('test').aiOptions;
+
+            assert.deepEqual(aiOptions, { disabled: false, instruction: 'new instruction' });
+        });
+
+        [undefined, null, {}].forEach((aiOptions) => {
+            const aiOptionsLabel = JSON.stringify(aiOptions) ? JSON.stringify(aiOptions) : String(aiOptions);
+            QUnit.test(`items with aiOptions=${aiOptionsLabel} should be processed by AI module`, function(assert) {
+                const aiIntegration = {
+                    smartPaste: (params) => {
+                        assert.strictEqual(params.fields.length, 2, 'items are processed as usual');
+                    },
+                };
+
+                const form = setupFormWithAi({
+                    aiIntegration,
+                    items: [{
+                        dataField: 'test',
+                        aiOptions,
+                    }, {
+                        dataField: 'test',
+                        aiOptions,
+                    }],
+                });
+
+                form.smartPaste('text');
+            });
+        });
+    });
 });

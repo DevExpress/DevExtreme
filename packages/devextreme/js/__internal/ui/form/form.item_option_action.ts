@@ -14,7 +14,6 @@ export interface ItemOptionActionOptions<T = Item> {
   optionName?: string;
   value?: unknown;
   previousValue?: unknown;
-
 }
 
 export interface ValidationRulesItemOptionActionOption extends ItemOptionActionOptions<SimpleItem> {
