@@ -30,7 +30,7 @@ export class AppComponent {
 
   enterKeyDirections: string[];
 
-  editOnkeyPress = true;
+  editOnKeyPress = true;
 
   enterKeyAction: DxDataGridTypes.EnterKeyAction = 'moveFocus';
 

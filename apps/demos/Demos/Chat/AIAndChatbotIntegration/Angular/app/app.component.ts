@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxChatModule , DxButtonModule } from 'devextreme-angular';
+import { DxChatModule, DxButtonModule } from 'devextreme-angular';
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';

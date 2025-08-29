@@ -206,8 +206,8 @@ export class Service {
 
   get appointmentsText() { return appointmentsText; }
 
-  getRandomDuration(duratiuonState): number {
-    const durationMin = Math.floor((duratiuonState % 23) / 3 + 5) * 15;
+  getRandomDuration(durationState): number {
+    const durationMin = Math.floor((durationState % 23) / 3 + 5) * 15;
 
     return durationMin * 60 * 1000;
   }
