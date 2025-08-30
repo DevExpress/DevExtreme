@@ -8,6 +8,9 @@ import type {
   Position,
 } from '../../../types';
 
+export interface Empty {
+  empty: boolean;
+}
 export interface Geometry {
   left: number;
   top: number;

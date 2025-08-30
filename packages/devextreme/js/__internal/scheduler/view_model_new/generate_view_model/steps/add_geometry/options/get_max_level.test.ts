@@ -19,6 +19,7 @@ describe('getMaxLevel', () => {
       cellSize: { width: 150, height: 80 },
       collectorSize: { width: 25, height: 20 },
       viewOrientation: 'horizontal',
+      isTimeline: false,
       isAdaptivityEnabled: false,
     })).toBe(3);
   });
@@ -29,8 +30,9 @@ describe('getMaxLevel', () => {
       cellSize: { width: 150, height: 80 },
       collectorSize: { width: 25, height: 20 },
       viewOrientation: 'vertical',
+      isTimeline: false,
       isAdaptivityEnabled: false,
-    })).toBe(6);
+    })).toBe(3);
   });
 
   it('should return calculated value for maxAppointmentsPerCell=auto, adaptivityEnabled=true, viewOrientation=horizontal', () => {
@@ -39,6 +41,7 @@ describe('getMaxLevel', () => {
       cellSize: { width: 150, height: 80 },
       collectorSize: { width: 25, height: 20 },
       viewOrientation: 'horizontal',
+      isTimeline: false,
       isAdaptivityEnabled: true,
     })).toBe(0);
   });
@@ -49,7 +52,19 @@ describe('getMaxLevel', () => {
       cellSize: { width: 150, height: 80 },
       collectorSize: { width: 25, height: 20 },
       viewOrientation: 'vertical',
+      isTimeline: false,
       isAdaptivityEnabled: true,
     })).toBe(5);
+  });
+
+  it('should return calculated value for timeline view, maxAppointmentsPerCell=auto, adaptivityEnabled=false, viewOrientation=horizontal', () => {
+    expect(getMaxLevel({
+      maxAppointmentsPerCell: 'auto',
+      cellSize: { width: 150, height: 400 },
+      collectorSize: { width: 25, height: 20 },
+      viewOrientation: 'horizontal',
+      isTimeline: true,
+      isAdaptivityEnabled: false,
+    })).toBe(10);
   });
 });

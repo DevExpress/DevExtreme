@@ -6,6 +6,7 @@ import { getMonthCells } from './options/get_month_cells';
 import { getMonthPanelIntervals } from './options/get_month_panel_intervals';
 import { addCollector } from './steps/add_collector/add_collector';
 import { addDirection } from './steps/add_direction';
+import { addEmptiness } from './steps/add_geometry/add_emptiness';
 import { addGeometry } from './steps/add_geometry/add_geometry';
 import { getCollectorSize } from './steps/add_geometry/options/get_collector_size';
 import { getMaxLevel } from './steps/add_geometry/options/get_max_level';
@@ -55,6 +56,7 @@ export const generateMonthViewModel = (
     regularPanel: splitPanelOptions,
   };
 
+  const isTimeline = false;
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
   // TODO: for other views: isCompactCollector = adaptivityEnabled || !allDayPanel && vertical_view
@@ -80,6 +82,7 @@ export const generateMonthViewModel = (
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
     viewOrientation,
+    isTimeline,
     isAdaptivityEnabled,
   });
   const minLevel = getMaxLevel({
@@ -87,6 +90,7 @@ export const generateMonthViewModel = (
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
     viewOrientation,
+    isTimeline,
     isAdaptivityEnabled,
   });
   const geometryOptions: GeometryOptions = {
@@ -95,7 +99,7 @@ export const generateMonthViewModel = (
     viewOrientation,
     groupOrientation,
     isGroupByDate,
-    isTimeline: false,
+    isTimeline,
     isRTLEnabled,
     isAdaptivityEnabled,
     groupCount,
@@ -124,6 +128,7 @@ export const generateMonthViewModel = (
   const step10 = filterByVirtualScreen(step9);
   const step11 = addGeometry(step10, geometryOptions);
   const step12 = addDirection(step11, 'horizontal', 'horizontal');
+  const step13 = addEmptiness(step12, { isTimeline, isAdaptivityEnabled });
 
-  return step12;
+  return step13;
 };

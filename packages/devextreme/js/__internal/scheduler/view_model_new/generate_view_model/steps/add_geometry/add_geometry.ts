@@ -45,7 +45,7 @@ export const addGeometry = <T extends GeometryMinimalEntity>(
       : addGeometryInsideInterval(rawEntity, options);
     addPanelOffset(entity, options);
     addGroupingOffset(entity, options);
-    resizeToWorkspace(entity, options);
+    // resizeToWorkspace(entity, options);
     RTLSwap(entity, options);
 
     return entity;

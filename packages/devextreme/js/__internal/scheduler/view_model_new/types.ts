@@ -5,6 +5,7 @@ import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
 import type {
+  Empty,
   Geometry,
   RealSize,
 } from './generate_view_model/steps/add_geometry/types';
@@ -137,6 +138,7 @@ export type AppointmentEntity = ListEntity
   & MaxLevel
   & Position
   & Direction
+  & Empty
   & SortedIndex
   & Geometry
   & AppointmentCollectorWithGeometry;

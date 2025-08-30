@@ -1248,6 +1248,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowAllDayResize: this._allowAllDayResizing(),
       rtlEnabled: this.option('rtlEnabled'),
       groups: this.getViewOption('groups'),
+      groupByDate: this.getViewOption('groupByDate'),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),

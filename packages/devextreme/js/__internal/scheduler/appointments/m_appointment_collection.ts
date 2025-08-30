@@ -674,6 +674,7 @@ class SchedulerAppointments extends CollectionWidget {
     const allowDrag = this.option('allowDrag');
     const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
+    const isGroupByDate = this.option('groupByDate');
     const config: any = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
@@ -684,7 +685,8 @@ class SchedulerAppointments extends CollectionWidget {
       allowResize,
       allowDrag,
       allDay,
-      reduced: settings.reduced,
+      // NOTE: hide reduced icon for grouped by date workspace
+      reduced: isGroupByDate ? undefined : settings.reduced,
       startDate: new Date(settings.info?.appointment.startDate),
       cellWidth: this.invoke('getCellWidth'),
       cellHeight: this.invoke('getCellHeight'),

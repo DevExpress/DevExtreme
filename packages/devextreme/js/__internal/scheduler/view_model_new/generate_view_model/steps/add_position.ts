@@ -12,7 +12,7 @@ export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate' |
     const cellIndex = binarySearchCellIndex(cells, entity.startDate);
     let endCellIndex = cellIndex;
     while (
-      endCellIndex < cells.length - 2
+      endCellIndex < cells.length - 1
       && (
         entity.endDate > cells[endCellIndex].max
         || (entity.allDay && entity.endDate >= cells[endCellIndex].max)
