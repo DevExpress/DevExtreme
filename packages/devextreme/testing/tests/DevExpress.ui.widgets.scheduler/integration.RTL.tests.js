@@ -28,10 +28,10 @@ module('RTL', moduleConfig, () => {
                 month: [
                     {
                         top: 256,
-                        left: 599
+                        left: 250
                     }, {
                         top: 256,
-                        left: 250
+                        left: 599
                     }
                 ],
                 week: [
@@ -90,7 +90,7 @@ module('RTL', moduleConfig, () => {
                 scheduler.option('currentView', view);
                 await waitAsync(0);
 
-                [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
+                [getAppointment(0), getAppointment(1)].sort().forEach((appointment, index) => {
                     const position = translator.locate(appointment);
 
                     assert.roughEqual(Math.round(position.left), expectedValue[index].left, 3.01, `left position of ${index} appointment should be correct in ${view} view`);

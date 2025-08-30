@@ -103,7 +103,7 @@ createTestCafe(TESTCAFE_CONFIG)
             }
         });
 
-        // runner.concurrency(args.concurrency || 3);
+        runner.concurrency(args.concurrency || 3);
 
         const split = (array, chunkCount) => {
             const fixturesInChunkCount = Math.ceil(array.length / chunkCount);

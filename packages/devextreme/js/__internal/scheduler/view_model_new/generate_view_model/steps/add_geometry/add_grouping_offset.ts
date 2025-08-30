@@ -4,8 +4,6 @@ import type {
   GeometryOptions,
 } from './types';
 
-const GAP_BETWEEN_GROUPS = 1;
-
 export const addGroupingOffset = (
   entity: GeometryMinimalEntity & Geometry,
   {
