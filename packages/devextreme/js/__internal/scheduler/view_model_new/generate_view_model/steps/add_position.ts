@@ -13,10 +13,7 @@ export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate' |
     let endCellIndex = cellIndex;
     while (
       endCellIndex < cells.length - 1
-      && (
-        entity.endDate > cells[endCellIndex].max
-        || (entity.allDay && entity.endDate >= cells[endCellIndex].max)
-      )
+      && entity.endDate > cells[endCellIndex].max
       && entity.endDate >= cells[endCellIndex + 1].min
     ) { endCellIndex += 1; }
 

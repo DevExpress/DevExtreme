@@ -23,16 +23,10 @@ const UNLIMITED_COLLECTOR_SIZES = {
   collectorSize: { width: 0, height: 0 },
   collectorWithMarginsSize: { width: 0, height: 0 },
 };
-const sortGridAppointments = <T extends {
-  duration: number;
-  startDate: number;
-  groupIndex: number;
-}>(entities: T[]): T[] => {
-  sortByDuration(entities);
-  sortByStartDate(entities);
-  sortByGroupIndex(entities);
-  return entities;
-};
+const addOneMsToAllDay = <T extends ListEntity>(entities: T[]): T[] => entities.map((entity) => ({
+  ...entity,
+  endDate: entity.allDay ? entity.endDate + 1 : entity.endDate,
+}));
 
 export const generateMonthViewModel = (
   schedulerStore: Scheduler,
@@ -113,22 +107,28 @@ export const generateMonthViewModel = (
     panelSize: workspaceDOMSize.regularDayPenalSize,
   };
 
-  const step0 = sortGridAppointments(items);
-  const step1 = splitByParts(step0, splitOptions);
-  const step2 = addPosition(step1, cells);
-  const step3 = snapToCells(step2, cells);
-  const step7 = addCollector(step3, {
+  // NOTE: if all day starts at 00:00 make it on one ms longer to occupy next cell
+  const step0 = addOneMsToAllDay(items);
+  sortByDuration(step0);
+  sortByStartDate(step0);
+  sortByGroupIndex(step0);
+  const step2 = splitByParts(step0, splitOptions);
+  sortByStartDate(step2);
+  sortByGroupIndex(step2);
+  const step3 = addPosition(step2, cells);
+  const step4 = snapToCells(step3, cells);
+  const step5 = addCollector(step4, {
     cells,
     minLevel,
     maxLevel,
     collectBy: 'byOccupation',
     isCompact: isCompactCollector,
   });
-  const step9 = addSortedIndex(step7);
-  const step10 = filterByVirtualScreen(step9);
-  const step11 = addGeometry(step10, geometryOptions);
-  const step12 = addDirection(step11, 'horizontal', 'horizontal');
-  const step13 = addEmptiness(step12, { isTimeline, isAdaptivityEnabled });
+  const step6 = addSortedIndex(step5);
+  const step7 = filterByVirtualScreen(step6);
+  const step8 = addGeometry(step7, geometryOptions);
+  const step9 = addDirection(step8, 'horizontal', 'horizontal');
+  const step10 = addEmptiness(step9, { isTimeline, isAdaptivityEnabled });
 
-  return step13;
+  return step10;
 };

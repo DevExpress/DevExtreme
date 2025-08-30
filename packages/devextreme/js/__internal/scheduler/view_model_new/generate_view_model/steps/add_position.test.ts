@@ -59,28 +59,4 @@ describe('addPosition', () => {
       },
     ]);
   });
-
-  it('should add cell indexes for all day appointments', () => {
-    const items = [
-      {
-        allDay: true,
-        startDate: new Date(2025, 0, 1).getTime(),
-        endDate: new Date(2025, 0, 1, 1).getTime(),
-      },
-      {
-        allDay: true,
-        startDate: new Date(2025, 0, 10).getTime(),
-        endDate: new Date(2025, 0, 11).getTime(),
-      },
-    ];
-
-    expect(addPosition(items, monthCells)).toEqual([
-      {
-        ...items[0], cellIndex: 0, endCellIndex: 0, rowIndex: 0, columnIndex: 0,
-      },
-      {
-        ...items[1], cellIndex: 9, endCellIndex: 10, rowIndex: 1, columnIndex: 2,
-      },
-    ]);
-  });
 });
