@@ -423,6 +423,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-appointment-collector {
   height: $fluent-scheduler-dropdown-button-height;
   margin-top: $fluent-scheduler-dropdown-day-margin;
+  margin-bottom: 1px;
   position: absolute;
 
   &.dx-button {
