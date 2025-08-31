@@ -335,7 +335,7 @@ export default [
           children: 'never',
         },
       ],
-      'react/jsx-fragments': 0, // TODO was ['error', 'element']
+      'react/jsx-fragments': ['error', 'element'],
       'react/jsx-no-bind': [
         'error',
         {

@@ -10,7 +10,7 @@ const gdpFormat = {
 const renderAreaCellHeader = () => <div>Area, km<sup>2</sup></div>;
 
 const App = () => (
-  <>
+  <React.Fragment>
     <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
     </div>
@@ -67,7 +67,7 @@ const App = () => (
         </Column>
       </Column>
     </DataGrid>
-  </>
+  </React.Fragment>
 );
 
 export default App;

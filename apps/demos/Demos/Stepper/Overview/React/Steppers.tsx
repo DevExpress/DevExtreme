@@ -39,7 +39,7 @@ export default function Steppers({
   rtlMode,
 }: SteppersProps) {
   return (
-    <>
+    <React.Fragment>
       {stepperConfigs.map(({ id, labelId, title, fields }) => (
         <div key={id} className="stepper-wrapper">
           <div id={labelId} className="stepper-label">{title}</div>
@@ -63,6 +63,6 @@ export default function Steppers({
           </Stepper>
         </div>
       ))}
-    </>
+    </React.Fragment>
   );
 }

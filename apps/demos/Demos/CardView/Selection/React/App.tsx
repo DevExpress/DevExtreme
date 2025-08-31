@@ -29,7 +29,7 @@ const App = () => {
     cardViewRef.current!.instance().clearSelection();
   }, []);
 
-  return <>
+  return <React.Fragment>
     <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
@@ -103,7 +103,7 @@ const App = () => {
         dataField="Email"
       />
     </CardView>
-  </>;
+  </React.Fragment>;
 };
 
 export default App;

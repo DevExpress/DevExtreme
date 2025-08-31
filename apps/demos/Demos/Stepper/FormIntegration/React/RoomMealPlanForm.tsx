@@ -6,7 +6,7 @@ import { FormProps } from './types.ts';
 import { mealPlans, roomTypes } from './data.ts';
 
 const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => (
-  <>
+  <React.Fragment>
     <p>
       Review room types that can accommodate your group size and make your selection. You can also choose a meal plan, whether it's breakfast only or full board.
     </p>
@@ -33,7 +33,7 @@ const RoomMealPlanForm: FC<FormProps> = memo(({ formData, validationGroup }) => 
         }}
       />
     </Form>
-  </>
+  </React.Fragment>
 ));
 
 RoomMealPlanForm.displayName = 'RoomMealPlanForm';

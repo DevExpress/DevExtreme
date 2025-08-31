@@ -24,7 +24,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <CardView
         dataSource={vehicles}
         height={1120}
@@ -89,7 +89,7 @@ const App = () => {
       >
         <Position at="center" my="center" collision="fit" />
       </Popup>
-    </>
+    </React.Fragment>
   );
 };
 

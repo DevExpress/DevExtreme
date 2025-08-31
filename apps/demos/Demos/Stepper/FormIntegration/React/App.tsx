@@ -142,7 +142,7 @@ export default function App() {
   );
 
   return (
-    <>
+    <React.Fragment>
       <Stepper
         className={ isStepperReadonly ? 'readonly' : ''}
         focusStateEnabled={!isStepperReadonly}
@@ -171,11 +171,11 @@ export default function App() {
         <div className="nav-panel">
           <div className="current-step">
             {!isConfirmed && (
-              <>
+              <React.Fragment>
                 Step <span className="selected-index">{selectedIndex + 1}</span>
                 {' of '}
                 {steps.length}
-              </>
+              </React.Fragment>
             )}
           </div>
 
@@ -199,6 +199,6 @@ export default function App() {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
