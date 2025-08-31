@@ -29,9 +29,8 @@ const App = () => {
       setFocusedRowKey(e.value);
     }
   }, []);
-
   const onFocusedRowChanged = useCallback(async (e) => {
-    const rowData = e.row && e.row.data;
+    const rowData = e.row?.data;
     if (rowData) {
       const progress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';
       const cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');

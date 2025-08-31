@@ -20,7 +20,8 @@ const ariaDescription = () => {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      }));
+      }),
+    );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;
   }
@@ -88,7 +89,6 @@ const App = () => {
     ),
     [currentView],
   );
-
   return (
     <Scheduler
       dataSource={data}

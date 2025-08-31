@@ -7,11 +7,12 @@ import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
 import sales from './data.js';
 
 const customizeTooltip = (args) => {
-  const valueText = args.seriesName.indexOf('Total') !== -1
-    ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(
-      args.originalValue,
-    )
-    : args.originalValue;
+  const valueText =
+    args.seriesName.indexOf('Total') !== -1
+      ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(
+        args.originalValue,
+      )
+      : args.originalValue;
   return {
     html: `${args.seriesName}<div class='currency'>${valueText}</div>`,
   };

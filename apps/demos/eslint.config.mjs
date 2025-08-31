@@ -166,7 +166,7 @@ export default [
       '@stylistic/no-mixed-operators': 0,
       '@stylistic/no-extra-parens': 0,
       '@stylistic/function-paren-newline': 0,
-      '@stylistic/object-curly-newline': 0,
+      '@stylistic/object-curly-newline': ['error', { consistent: true }],
       '@stylistic/no-confusing-arrow': 0,
       '@stylistic/implicit-arrow-linebreak': 0,
       '@stylistic/member-delimiter-style': 0,
@@ -439,6 +439,20 @@ export default [
       '@stylistic/max-len': 0,
 
       '@typescript-eslint/no-unused-vars': 0,
+    }
+  },
+  {
+    files: ['Demos/**/ReactJs/*.js'],
+    rules: {
+      // Our data files are inconsistent: some files use double quotes, others use single quotes.
+      // We need this rule, so that linter will not complain a lot about it.
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      '@stylistic/object-curly-newline': ['error', { 
+        "multiline": true, 
+        "consistent": true, 
+        "minProperties": 4 
+      }],
+      'no-unused-vars': 0,
     }
   },
 

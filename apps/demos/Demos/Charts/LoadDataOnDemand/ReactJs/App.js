@@ -93,9 +93,9 @@ const uploadDataByVisualRange = (visualRange, component) => {
     endBound: getDateString(storage.length ? storage[storage.length - 1].date : null),
   };
   if (
-    ajaxArgs.startVisible !== ajaxArgs.startBound
-    && ajaxArgs.endVisible !== ajaxArgs.endBound
-    && !packetsLock
+    ajaxArgs.startVisible !== ajaxArgs.startBound &&
+    ajaxArgs.endVisible !== ajaxArgs.endBound &&
+    !packetsLock
   ) {
     packetsLock += 1;
     component.showLoadingIndicator();
@@ -122,9 +122,9 @@ const uploadDataByVisualRange = (visualRange, component) => {
 const onVisualRangeChanged = (visualRange, component) => {
   const items = component.getDataSource().items();
   if (
-    !items.length
-    || items[0].date - visualRange.startValue.getTime() >= HALFDAY
-    || visualRange.endValue.getTime() - items[items.length - 1].date >= HALFDAY
+    !items.length ||
+    items[0].date - visualRange.startValue.getTime() >= HALFDAY ||
+    visualRange.endValue.getTime() - items[items.length - 1].date >= HALFDAY
   ) {
     uploadDataByVisualRange(visualRange, component);
   }

@@ -5,7 +5,7 @@ import { categories, categoryLabel } from './data.js';
 export const EditorComponent = (props) => {
   const onValueChanged = useCallback(
     (e) => {
-      props.data.setValue(e.value && e.value.length ? e.value : null);
+      props.data.setValue(e.value?.length ? e.value : null);
     },
     [props.data],
   );

@@ -9,7 +9,6 @@ import 'whatwg-fetch';
 
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 const ownerLabel = { 'aria-label': 'Owner' };
-
 const makeAsyncDataSource = (jsonFile) =>
   new CustomStore({
     loadMode: 'raw',
@@ -18,28 +17,23 @@ const makeAsyncDataSource = (jsonFile) =>
       return fetch(`../../../../data/${jsonFile}`).then((response) => response.json());
     },
   });
-
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
-
 function App() {
   const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
   const [gridBoxValue, setGridBoxValue] = useState([3]);
   const treeViewRef = useRef();
-
   const syncTreeViewSelection = useCallback(
     (e) => {
-      const treeView = (e.component.selectItem && e.component)
-        || (treeViewRef.current && treeViewRef.current.instance());
+      const treeView = (e.component.selectItem && e.component) || treeViewRef.current?.instance();
       if (treeView) {
         if (e.value === null) {
           treeView.unselectAll();
         } else {
           const values = e.value || treeBoxValue;
-          values
-            && values.forEach((value) => {
-              treeView.selectItem(value);
-            });
+          values?.forEach((value) => {
+            treeView.selectItem(value);
+          });
         }
       }
       if (e.value !== undefined) {
@@ -51,15 +45,12 @@ function App() {
   const syncDataGridSelection = useCallback((e) => {
     setGridBoxValue(e.value || []);
   }, []);
-
   const treeViewItemSelectionChanged = useCallback((e) => {
     setTreeBoxValue(e.component.getSelectedNodeKeys());
   }, []);
-
   const dataGridOnSelectionChanged = useCallback((e) => {
     setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
   }, []);
-
   const treeViewRender = useCallback(
     () => (
       <TreeView
@@ -79,7 +70,6 @@ function App() {
     ),
     [syncTreeViewSelection, treeViewItemSelectionChanged],
   );
-
   const dataGridRender = useCallback(
     () => (
       <DataGrid
@@ -101,7 +91,6 @@ function App() {
     ),
     [gridBoxValue, dataGridOnSelectionChanged],
   );
-
   return (
     <div className="dx-fieldset">
       <div className="dx-field">

@@ -40,12 +40,12 @@ const dataSource = new PivotGridDataSource({
 });
 const isDataCell = (cell) => cell.rowType === 'D' && cell.columnType === 'D';
 const isTotalCell = (cell) =>
-  cell.type === 'T'
-  || cell.type === 'GT'
-  || cell.rowType === 'T'
-  || cell.rowType === 'GT'
-  || cell.columnType === 'T'
-  || cell.columnType === 'GT';
+  cell.type === 'T' ||
+  cell.type === 'GT' ||
+  cell.rowType === 'T' ||
+  cell.rowType === 'GT' ||
+  cell.columnType === 'T' ||
+  cell.columnType === 'GT';
 const getExcelCellFormat = ({ fill, font, bold }) => ({
   fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: fill } },
   font: { color: { argb: font }, bold },

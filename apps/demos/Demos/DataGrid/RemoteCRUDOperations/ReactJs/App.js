@@ -1,4 +1,4 @@
-/* global */
+/* global RequestInit */
 import React, { useCallback, useState } from 'react';
 import {
   DataGrid,
@@ -68,7 +68,6 @@ const App = () => {
     const request = [time, method, url.slice(URL.length), args].join(' ');
     setRequests((prevRequests) => [request].concat(prevRequests));
   }, []);
-
   const sendRequest = useCallback(
     async (url, method = 'GET', data = {}) => {
       logRequest(method, url, data);

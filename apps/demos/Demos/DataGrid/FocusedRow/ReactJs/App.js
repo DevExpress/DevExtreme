@@ -37,7 +37,6 @@ const App = () => {
       setFocusedRowKey(e.value);
     }
   }, []);
-
   const onFocusedRowChanging = useCallback(async (e) => {
     const rowsCount = e.component.getVisibleRows().length;
     const pageCount = e.component.pageCount();

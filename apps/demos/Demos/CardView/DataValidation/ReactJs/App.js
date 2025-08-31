@@ -23,7 +23,8 @@ function imageExpr({ picture }) {
 function calculateFullName({ firstName, lastName }) {
   return `${firstName} ${lastName}`;
 }
-const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+const emailValidationUrl =
+  'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 async function emailValidationCallback(params) {
   const response = await fetch(emailValidationUrl, {
     method: 'POST',
