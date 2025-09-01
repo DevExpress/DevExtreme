@@ -2,7 +2,7 @@ Our next major update (v25.2) will include a new SpeechToText component. This co
 
 We also plan to integrate our new SpeechToText component into [Chat](https://js.devexpress.com/jQuery/Demos/WidgetsGallery/Demo/Chat/Overview/MaterialBlueLight/) component for faster, hands-free communication.
 <!--split-->
-- SpeechToText will enhance accessibility of DevExtreme-powered applications, improve user-efficiency, and support new interaction scenarios (such as hands-free voice input). You will be able to use it for: 
+SpeechToText will enhance accessibility of DevExtreme-powered applications, improve user-efficiency, and support new interaction scenarios (such as hands-free voice input). You will be able to use it for: 
 - Chats or any prompt-based interface 
 - Search components 
 - Populating app forms 
