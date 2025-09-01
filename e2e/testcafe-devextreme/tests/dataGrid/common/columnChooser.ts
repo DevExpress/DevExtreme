@@ -238,18 +238,18 @@ test(
   },
 }));
 
-test('Column Choozer should receive and render custom texts', async (t) => {
+test('ColumnChooser should receive and render custom texts', async (t) => {
   const dataGrid = new DataGrid('#container');
   await dataGrid.isReady();
   const columnChooserBtn = dataGrid.getColumnChooserButton();
   await t.click(columnChooserBtn);
   const columnChooser = dataGrid.getColumnChooser();
-  const title = columnChooser.element.find('.dx-item-content.dx-toolbar-item-content').nth(0);
-  const emptyPanel = columnChooser.element.find('.dx-empty-message');
+  const title = columnChooser.getTitle();
+  const emptyMessage = columnChooser.getEmptyMessage();
   const titleText = await title.innerText;
-  const emptyPanelText = await emptyPanel.innerText;
+  const emptyMessageText = await emptyMessage.innerText;
   await t.expect(titleText).eql('customTitle');
-  await t.expect(emptyPanelText).eql('customEmptyText');
+  await t.expect(emptyMessageText).eql('customEmptyText');
 }).before(async (t) => {
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
