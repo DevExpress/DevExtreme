@@ -146,11 +146,6 @@ class XmlaStore {
     return elements.length > 1 ? stringFormat(MDX_CROSS_JOIN_TEMPLATE, elementsString) : elementsString;
   }
 
-  union(elements) {
-    const elementsString = elements.join(',');
-    return elements.length > 1 ? `Union(${elementsString})` : elementsString;
-  }
-
   generateCrossJoin(
     path,
     expandLevel,
@@ -329,7 +324,7 @@ class XmlaStore {
     }
 
     if (crossJoins.length) {
-      let expression = this.union(crossJoins);
+      let expression = union(crossJoins);
       if (axisName === 'rows' && options.rowTake) {
         expression = stringFormat(
           MDX_SUBSET_TEMPLATE,
