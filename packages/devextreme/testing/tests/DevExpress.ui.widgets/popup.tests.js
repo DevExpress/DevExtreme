@@ -2775,7 +2775,7 @@ QUnit.module('rendering', {
 
             popup.show();
 
-            const $toolbarItemContent = popup.$wrapper().find(TOOLBAR_ITEM_CONTENT_CLASS);
+            const $toolbarItemContent = popup.$wrapper().find(`.${TOOLBAR_ITEM_CONTENT_CLASS}`);
 
             assert.strictEqual($toolbarItemContent.text(), 'second', 'toolbar with the correct element rendered after toolbarItems cleaning');
         });
