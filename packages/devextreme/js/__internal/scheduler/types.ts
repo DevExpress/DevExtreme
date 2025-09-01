@@ -15,6 +15,10 @@ export interface SafeAppointment extends Appointment {
   startDate: Date | string;
   endDate: Date | string;
 }
+export interface TargetedAppointment extends SafeAppointment {
+  displayStartDate: Date;
+  displayEndDate: Date;
+}
 
 export interface AppointmentDataItem {
   startDate: Date;
@@ -247,6 +251,6 @@ export interface ViewDataProviderType {
 export interface AppointmentTooltipItem {
   appointment: Appointment;
   targetedAppointment?: Appointment;
-  color?: string;
+  color: PromiseLike<string>;
   settings: AppointmentItemViewModel[];
 }

@@ -1361,7 +1361,9 @@ module('Integration: Agenda', moduleConfig, () => {
                 const targetedAppointmentData = e.targetedAppointmentData;
                 const originalAppointmentData = e.appointmentData;
 
-                assert.deepEqual(targetedAppointmentData, originalAppointmentData, 'Targeted appointment data is ok');
+                assert.deepEqual(targetedAppointmentData.startDate, originalAppointmentData.startDate, 'Targeted appointment startDate is ok');
+                assert.deepEqual(targetedAppointmentData.endDate, originalAppointmentData.endDate, 'Targeted appointment endDate is ok');
+                assert.equal(targetedAppointmentData.text, originalAppointmentData.text, 'Targeted appointment text is ok');
             },
             dataSource: [
                 { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 11, 30), text: 'a' }

@@ -6,7 +6,7 @@ import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import type { AppointmentTooltipItem } from './types';
+import type { AppointmentTooltipItem, TargetedAppointment } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
@@ -41,12 +41,14 @@ export class CompactAppointmentsHelper {
 
   _createTooltipInfos(items) {
     return items.data.map((appointment, index) => {
-      const targeted = { ...appointment };
+      const targeted: TargetedAppointment = { ...appointment };
 
       if (items.settings?.length > 0) {
         const { info } = items.settings[index];
         this.instance._dataAccessors.set('startDate', targeted, info.sourceAppointment.startDate);
         this.instance._dataAccessors.set('endDate', targeted, info.sourceAppointment.endDate);
+        targeted.displayStartDate = new Date(info.appointment.startDate);
+        targeted.displayEndDate = new Date(info.appointment.endDate);
       }
 
       const tooltipInfo: AppointmentTooltipItem = {

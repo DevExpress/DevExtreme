@@ -1,4 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
+import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { plainViewModel } from './plain_view_model';
@@ -73,12 +74,23 @@ const processVirtualAppointment = (
 
 export const addCollector = (
   viewModel: AppointmentViewModelInternal[],
+  timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentViewModelPlain[] => {
   const settings = plainViewModel(viewModel);
   const result: AppointmentViewModelPlain[] = [];
   const virtualAppointments: Record<string, AppointmentCollectorViewModel> = {};
 
-  settings.forEach((setting) => {
+  settings.map((setting) => ({
+    ...setting,
+    info: {
+      sourceAppointment: setting.info.sourceAppointment,
+      appointment: {
+        ...setting.info.appointment,
+        startDate: timeZoneCalculator.createDate(setting.info.sourceAppointment.startDate, 'toGrid'),
+        endDate: timeZoneCalculator.createDate(setting.info.sourceAppointment.endDate, 'toGrid'),
+      },
+    },
+  })).forEach((setting) => {
     switch (true) {
       case Boolean(setting.virtual):
         processVirtualAppointment(virtualAppointments, setting);

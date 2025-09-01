@@ -30,6 +30,7 @@ import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import { getTargetedAppointment } from '../utils/get_targeted_appointment';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type {
@@ -463,10 +464,23 @@ class SchedulerAppointments extends CollectionWidget {
         ? appointment.html : undefined,
     };
 
+    let { targetedAppointmentData } = model;
+    if (this._currentAppointmentSettings && 'isAgendaModel' in this._currentAppointmentSettings) {
+      targetedAppointmentData = getTargetedAppointment(
+        this._currentAppointmentSettings.itemData,
+        {
+          info: this._currentAppointmentSettings.info,
+          groupIndex: this._currentAppointmentSettings.groupIndex,
+        },
+        this.dataAccessors,
+        this.option('timeZoneCalculator'),
+        this.option('getResourceManager')(),
+      );
+    }
+
     const formatText = this.invoke(
       'getTextAndFormatDate',
-      model.appointmentData,
-      (this._currentAppointmentSettings as any)?.agendaSettings || model.targetedAppointmentData,
+      targetedAppointmentData,
       'TIME',
     );
 

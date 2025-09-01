@@ -12,7 +12,7 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
-import type { SafeAppointment } from './types';
+import type { SafeAppointment, TargetedAppointment } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
@@ -51,7 +51,7 @@ const subscribes = {
     return this.getWorkSpace().isGroupedByDate();
   },
 
-  showAppointmentTooltip(options) {
+  showAppointmentTooltip(options: { data: SafeAppointment; target: dxElementWrapper }) {
     const targetedAppointment = this.getTargetedAppointment(options.data, options.target);
     this.showAppointmentTooltip(options.data, options.target, targetedAppointment);
   },
@@ -118,16 +118,14 @@ const subscribes = {
     this.hideAppointmentTooltip();
   },
 
-  getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-    const targetedAppointment = {
-      ...appointmentRaw,
-      ...targetedAppointmentRaw,
-    };
-    // pull out time zone converting from appointment adapter for knockout(T947938)
-    const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
-    const { startDate, endDate } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
-
-    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
+  getTextAndFormatDate(
+    targetedAppointmentRaw: TargetedAppointment,
+    format?: string,
+  ) {
+    // TODO: rename to createFormattedDateText
+    const adapter = new AppointmentAdapter(targetedAppointmentRaw, this._dataAccessors);
+    const { displayStartDate: startDate, displayEndDate: endDate } = targetedAppointmentRaw;
+    const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
 
     return {
       text: adapter.text,

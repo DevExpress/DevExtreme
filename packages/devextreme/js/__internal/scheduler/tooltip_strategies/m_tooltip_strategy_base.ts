@@ -192,7 +192,7 @@ export class TooltipStrategyBase {
     const { editing } = this._extraOptions;
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this._createItemListMarker(color));
-    $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
+    $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(targetedAppointment)));
 
     const disabled = this._options.getAppointmentDisabled(appointment);
 
