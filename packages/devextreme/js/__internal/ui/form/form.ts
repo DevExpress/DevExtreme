@@ -1855,15 +1855,20 @@ class Form extends Widget<FormProperties> {
     this._abort?.();
     this._abort = undefined;
     this._currentAICommand = undefined;
-    this._hideLoadPanel();
   }
 
   private _processAIIntegrationUpdate(): void {
     if (this._currentAICommand) {
       const { command, params, callbacks } = this._currentAICommand;
+      const { aiIntegration } = this.option();
 
       this._processCommandCompletion();
-      this._executeAICommand(command, params, callbacks);
+
+      if (!aiIntegration) {
+        this._hideLoadPanel();
+      } else {
+        this._executeAICommand(command, params, callbacks);
+      }
     }
   }
 
@@ -1896,6 +1901,7 @@ class Form extends Widget<FormProperties> {
         invokeConditionally(
           smartPastingArgs.cancel,
           (): void => {
+            this._hideLoadPanel();
             this.beginUpdate();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
               this._updateFieldValue(name, value);
