@@ -379,11 +379,6 @@ QUnit.module('SmartPaste', () => {
 
     QUnit.module('LoadPanel Integration', {
         beforeEach: function() {
-            if(!navigator.clipboard) {
-                assert.ok(true, 'clipboard not supported in this environment');
-                return;
-            }
-
             this.clipboardStub = null;
 
             this.createClipboardStub = function(text = 'test text') {
@@ -429,6 +424,11 @@ QUnit.module('SmartPaste', () => {
         }
     }, () => {
         QUnit.test('LoadPanel is shown during smartPaste operation and hidden on completion', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             let completionCallback;
 
@@ -463,6 +463,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('LoadPanel is hidden on smartPaste error', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             let errorCallback;
 
@@ -496,6 +501,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('LoadPanel not hidden on aiIntegration update during command execution', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             let abortCallback;
 
@@ -528,6 +538,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('LoadPanel is hidden on aiIntegration remove during command execution', async function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             let abortCallback;
 
             const smartPaste = sinon.stub().callsFake((params, callbacks) => {
@@ -555,6 +570,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('Multiple LoadPanel calls during smartPaste do not create multiple panels', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             const completionCallbacks = [];
 
@@ -590,6 +610,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('smartPaste handles empty clipboard text', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             let completionCallback;
 
@@ -622,6 +647,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('LoadPanel reuses existing instance on subsequent calls', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             let completionCallback;
 
@@ -657,6 +687,11 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.test('Form dispose during active operation cleans up properly', function(assert) {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             const done = assert.async();
             const abortSpy = sinon.spy();
 
