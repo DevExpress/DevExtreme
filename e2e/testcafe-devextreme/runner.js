@@ -162,7 +162,7 @@ createTestCafe(TESTCAFE_CONFIG)
         }
 
         const runOptions = {
-            quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+            quarantineMode: { successThreshold: 1, attemptLimit: 5 },
         };
 
         runOptions.hooks = {
