@@ -28,7 +28,7 @@ import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
-import type { AppointmentTooltipItem } from '../types';
+import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import {
@@ -1002,7 +1002,7 @@ class SchedulerAppointments extends CollectionWidget {
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
     const virtualItems = appointment.items;
-    const items: AppointmentTooltipItem[] = [];
+    const items: CompactAppointmentOptions['items'] = [];
     virtualItems.forEach((item) => {
       const appointmentConfig = {
         itemData: item.itemData,
@@ -1021,6 +1021,7 @@ class SchedulerAppointments extends CollectionWidget {
           resourceManager,
         ),
         color: resourceManager.getAppointmentColor(appointmentConfig),
+        settings: item,
       });
     });
 

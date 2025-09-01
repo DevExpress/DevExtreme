@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { AppointmentViewModelPlain } from '@ts/scheduler/view_model/generate_view_model/types';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 
@@ -257,7 +258,9 @@ export interface AppointmentTooltipItem {
 export interface CompactAppointmentOptions {
   $container: dxElementWrapper;
   coordinates: { top: number; left: number };
-  items: AppointmentTooltipItem[];
+  items: (AppointmentTooltipItem & {
+    settings: AppointmentViewModelPlain;
+  })[];
   buttonColor: Promise<string | undefined>;
   sortedIndex: number;
   width: number;
