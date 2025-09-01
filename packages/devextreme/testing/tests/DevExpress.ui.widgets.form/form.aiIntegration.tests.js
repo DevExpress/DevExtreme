@@ -47,6 +47,28 @@ QUnit.module('aiIntegration option', () => {
             aiIntegration: undefined,
         });
         const done = assert.async();
+        const errorsSpy = sinon.spy(errors, 'Error');
+
+        form.smartPaste('').then(() => {
+            assert.ok(false, 'smartPaste should fail');
+            done();
+        }).catch(() => {
+            assert.strictEqual(errorsSpy.calledOnce, true, 'one error was thrown');
+            assert.strictEqual(errorsSpy.lastCall.args[0], 'E1063', 'the error had correct number');
+            done();
+        });
+    });
+
+    QUnit.test('smartPaste method should not try to read clipboard, if aiIntegration is not set', function(assert) {
+        if(!navigator.clipboard) {
+            assert.ok(true, 'clipboard not supported in this environment');
+            return;
+        }
+
+        const form = setupFormWithAi({
+            aiIntegration: undefined,
+        });
+        const done = assert.async();
         const expectedClipboardText = 'mocked clipboard content';
         const clipboardReadStub = sinon.stub(navigator.clipboard, 'readText').resolves(expectedClipboardText);
         const errorsSpy = sinon.spy(errors, 'Error');
