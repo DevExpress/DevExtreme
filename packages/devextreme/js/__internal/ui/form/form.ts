@@ -38,7 +38,9 @@ import type {
 } from '@js/ui/form';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
+import errors from '@js/ui/widget/ui.errors';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
+import { logger } from '@ts/core/utils/m_console';
 import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
@@ -65,7 +67,7 @@ import {
   GROUP_COL_COUNT_CLASS,
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
-import { getItemFormatInfo } from '@ts/ui/form/form.ai.utils';
+import { getItemFormatInfo, parseResultForEditorType } from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
@@ -1879,12 +1881,32 @@ class Form extends Widget<FormProperties> {
   ): void {
     const { aiIntegration } = this.option();
 
+    if (!aiIntegration) {
+      this._hideLoadPanel();
+      throw errors.Error('W1026');
+    }
+
     this._currentAICommand = {
       command,
       params,
       callbacks,
     };
-    this._abort = aiIntegration?.[command](params, callbacks);
+    this._abort = aiIntegration[command](params, callbacks);
+  }
+
+  private _updateFieldWithSmartPasteValue(dataField: string, value: SmartPasteCommandResult[number]['value']): void {
+    const { formData } = this.option();
+
+    if (isDefined(formData)) {
+      let resultValue: string | string[] | boolean = value;
+
+      const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
+      const currentItem = dataItems.find((item) => item.dataField === dataField);
+      resultValue = parseResultForEditorType(dataField, currentItem?.editorType, value);
+      if (typeof resultValue !== undefined) {
+        this._updateFieldValue(dataField, resultValue);
+      }
+    }
   }
 
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
@@ -1904,7 +1926,11 @@ class Form extends Widget<FormProperties> {
             this._hideLoadPanel();
             this.beginUpdate();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
-              this._updateFieldValue(name, value);
+              try {
+                this._updateFieldWithSmartPasteValue(name, value);
+              } catch (error) {
+                logger.error(error);
+              }
             });
             this.endUpdate();
 
@@ -1914,7 +1940,8 @@ class Form extends Widget<FormProperties> {
 
         this._processCommandCompletion();
       },
-      onError: (): void => {
+      onError: (error): void => {
+        logger.error(error);
         this._hideLoadPanel();
         this._processCommandCompletion();
       },
@@ -1926,7 +1953,12 @@ class Form extends Widget<FormProperties> {
       this._processCommandCompletion();
     }
 
-    const smartPasteText = text ?? await navigator.clipboard?.readText();
+    const { aiIntegration } = this.option();
+    if (!aiIntegration) {
+      throw errors.Error('E1063');
+    }
+
+    const smartPasteText = text ?? await navigator.clipboard.readText();
 
     if (isDefined(smartPasteText)) {
       this._showLoadPanel();
@@ -1938,6 +1970,7 @@ class Form extends Widget<FormProperties> {
       format: getItemFormatInfo(item),
       instruction: item.aiOptions?.instruction,
     }));
+
     const smartPasteParams = {
       text: smartPasteText,
       fields,
