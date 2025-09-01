@@ -4774,7 +4774,7 @@
             "Widget": "SpeechToText",
             "DemoType": "Web",
             "Badge": "Roadmap",
-            "ShowOnMainPage": false,
+            "ShowOnMainPage": true,
             "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-speech-to-text.xml"
           }
         ]
