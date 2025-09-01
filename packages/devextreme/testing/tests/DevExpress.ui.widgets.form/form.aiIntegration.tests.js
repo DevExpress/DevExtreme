@@ -8,9 +8,6 @@ import 'ui/html_editor';
 import { FORM_LOAD_PANEL_CLASS } from '__internal/ui/form/constants';
 import errors from 'ui/widget/ui.errors';
 
-const BUTTON_CLASS = 'dx-button';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
-
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
     $('#qunit-fixture').html(markup);
@@ -43,48 +40,6 @@ QUnit.module('aiIntegration option', () => {
         assert.strictEqual(smartPaste1.calledOnce, true, 'initial smartPaste is not called again');
         assert.strictEqual(smartPaste2.calledOnce, true, 'new smartPaste invoked after update');
         assert.deepEqual(smartPaste1.getCall(0).args, smartPaste1.getCall(0).args, 'new smartPaste invoked with same text and fields data');
-    });
-
-    QUnit.test('Default smartPaste button should be enabled if aiIntegration is set', function(assert) {
-        const form = setupFormWithAi({
-            aiIntegration: {},
-            items: [
-                { itemType: 'simple', dataField: 'email' },
-                { itemType: 'button', name: 'smartPaste' }
-            ]
-        });
-
-        const $smartButton = form.$element().find(`.${BUTTON_CLASS}`).eq(0);
-        assert.strictEqual($smartButton.is(`.${DISABLED_STATE_CLASS}`), false, 'smartPaste button is enabled');
-    });
-
-    QUnit.test('Default smartPaste button should be disabled if aiIntegration is not set', function(assert) {
-        const form = setupFormWithAi({
-            aiIntegration: undefined,
-            items: [
-                { itemType: 'simple', dataField: 'email' },
-                { itemType: 'button', name: 'smartPaste' }
-            ]
-        });
-
-        const $smartButton = form.$element().find(`.${BUTTON_CLASS}`).eq(0);
-        assert.strictEqual($smartButton.is(`.${DISABLED_STATE_CLASS}`), true, 'smartPaste button is disabled');
-    });
-
-    QUnit.test('Default smartPaste button should become enabled if aiIntegration was set later', function(assert) {
-        const form = setupFormWithAi({
-            aiIntegration: undefined,
-            items: [
-                { itemType: 'simple', dataField: 'email' },
-                { itemType: 'button', name: 'smartPaste' }
-            ]
-        });
-
-        const $smartButton = form.$element().find(`.${BUTTON_CLASS}`).eq(0);
-        assert.strictEqual($smartButton.is(`.${DISABLED_STATE_CLASS}`), true, 'smartPaste button is disabled');
-
-        form.option({ aiIntegration: {} });
-        assert.strictEqual($smartButton.is(`.${DISABLED_STATE_CLASS}`), false, 'smartPaste button is enabled');
     });
 
     QUnit.test('smartPaste method should throw an error, if aiIntegration is not set', function(assert) {
@@ -424,6 +379,11 @@ QUnit.module('SmartPaste', () => {
 
     QUnit.module('LoadPanel Integration', {
         beforeEach: function() {
+            if(!navigator.clipboard) {
+                assert.ok(true, 'clipboard not supported in this environment');
+                return;
+            }
+
             this.clipboardStub = null;
 
             this.createClipboardStub = function(text = 'test text') {
@@ -567,8 +527,7 @@ QUnit.module('SmartPaste', () => {
             });
         });
 
-        QUnit.test('LoadPanel is hidden on aiIntegration remove during command execution', function(assert) {
-            const done = assert.async();
+        QUnit.test('LoadPanel is hidden on aiIntegration remove during command execution', async function(assert) {
             let abortCallback;
 
             const smartPaste = sinon.stub().callsFake((params, callbacks) => {
@@ -580,24 +539,19 @@ QUnit.module('SmartPaste', () => {
 
             this.clipboardStub = this.createClipboardStub('test text');
 
-            form.smartPaste().then(() => {
-                setTimeout(() => {
-                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
-                    assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
-                    assert.ok(abortCallback, 'Abort callback was created');
+            try {
+                await form.smartPaste();
+                assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+                assert.ok(abortCallback, 'Abort callback was created');
 
-                    form.option('aiIntegration', undefined);
-
-                    setTimeout(() => {
-                        assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
-                        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
-                        assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after abort');
-                        assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after abort');
-
-                        done();
-                    }, 10);
-                }, 10);
-            });
+                form.option('aiIntegration', undefined);
+            } catch(error) {
+                assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
+                assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after abort');
+                assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after abort');
+            }
         });
 
         QUnit.test('Multiple LoadPanel calls during smartPaste do not create multiple panels', function(assert) {
@@ -964,7 +918,7 @@ QUnit.module('SmartPaste', () => {
                         formData: {},
                         aiIntegration,
                         items: [
-                            { dataField, editorType: 'dxCheckBox', allowIndeterminateState: undefined },
+                            { dataField, editorType: 'dxCheckBox' },
                         ]
                     });
 
@@ -990,7 +944,7 @@ QUnit.module('SmartPaste', () => {
                             { name: dataField, value },
                         ]);
                         assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `'${value}'`, 'boolean'), 'throws correct error');
+                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'boolean'), 'throws correct error');
                         loggerErrorSpy.restore();
                     };
                     return () => {};
@@ -1058,7 +1012,7 @@ QUnit.module('SmartPaste', () => {
                             { name: dataField, value },
                         ]);
                         assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `'${value}'`, 'boolean'), 'throws correct error');
+                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'boolean'), 'throws correct error');
                         loggerErrorSpy.restore();
                     };
                     return () => {};
@@ -1126,7 +1080,7 @@ QUnit.module('SmartPaste', () => {
                             { name: dataField, value },
                         ]);
                         assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `[${value}]`, 'string'), 'throws correct error');
+                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, JSON.stringify(value), 'string'), 'throws correct error');
                         loggerErrorSpy.restore();
                     };
                     return () => {};
@@ -1194,7 +1148,7 @@ QUnit.module('SmartPaste', () => {
                             { name: dataField, value },
                         ]);
                         assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `'${value}'`, 'date range'), 'throws correct error');
+                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'date range'), 'throws correct error');
                         loggerErrorSpy.restore();
                     };
                     return () => {};

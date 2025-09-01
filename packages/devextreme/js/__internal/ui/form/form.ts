@@ -31,6 +31,7 @@ import type {
   Item,
   LabelLocation,
   Properties,
+  SimpleItem,
   SimpleItemTemplateData,
   SmartPastedEvent,
   SmartPastingEvent,
@@ -1895,15 +1896,13 @@ class Form extends Widget<FormProperties> {
     this._abort = aiIntegration[command](params, callbacks);
   }
 
-  private _updateFieldWithSmartPasteValue(dataField: string, value: SmartPasteCommandResult[number]['value']): void {
+  private _updateFieldWithSmartPasteValue(dataField: string, value: SmartPasteCommandResult[number]['value'], item?: SimpleItem): void {
     const { formData } = this.option();
 
     if (isDefined(formData)) {
       let resultValue: string | string[] | boolean = value;
 
-      const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
-      const currentItem = dataItems.find((item) => item.dataField === dataField);
-      resultValue = parseResultForEditorType(dataField, currentItem?.editorType, value);
+      resultValue = parseResultForEditorType(dataField, item?.editorType, value);
       if (typeof resultValue !== undefined) {
         this._updateFieldValue(dataField, resultValue);
       }
@@ -1926,9 +1925,12 @@ class Form extends Widget<FormProperties> {
           (): void => {
             this._hideLoadPanel();
             this.beginUpdate();
+
+            const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
               try {
-                this._updateFieldWithSmartPasteValue(name, value);
+                const currentItem = dataItems.find((item) => item.dataField === name);
+                this._updateFieldWithSmartPasteValue(name, value, currentItem);
               } catch (error) {
                 logger.error(error);
               }

@@ -32,7 +32,7 @@ export const parseResultForEditorType = (
   editorType: FormItemComponent | undefined,
   value: SmartPasteCommandResult[number]['value'],
 ): string | string[] | boolean => {
-  const errorValue = Array.isArray(value) ? `[${value}]` : `'${value}'`;
+  const errorValue = JSON.stringify(value);
   switch (editorType) {
     case 'dxDateBox':
     case 'dxCalendar':

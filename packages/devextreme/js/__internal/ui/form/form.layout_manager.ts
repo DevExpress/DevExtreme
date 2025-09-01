@@ -734,25 +734,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         ...config,
         ...item.buttonOptions ?? {},
       };
-      if (item.name === 'smartPaste') {
-        const form = this._getFormOrThis();
-        const { aiIntegration } = form.option();
-        if (!aiIntegration && item.buttonOptions && !isDefined(item.buttonOptions.disabled)) {
-          item.buttonOptions.disabled = true;
-        }
-      }
-    }
-  }
-
-  _attachDefaultButtonsSubscriptions(item: ButtonItem, buttonInstance: Button): void {
-    if (item.name === 'smartPaste') {
-      const form = this._getFormOrThis();
-      form.on('optionChanged', (args) => {
-        const { name, value } = args;
-        if (name === 'aiIntegration') {
-          buttonInstance.option('disabled', !value);
-        }
-      });
     }
   }
 
@@ -772,8 +753,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         options: Properties,
       ) => super._createComponent<Button, ButtonProperties>($element, Button, options),
     });
-
-    this._attachDefaultButtonsSubscriptions(item, buttonInstance);
 
     // TODO: try to remove '_itemsRunTimeInfo' from 'render' function
     this._itemsRunTimeInfo.add({
