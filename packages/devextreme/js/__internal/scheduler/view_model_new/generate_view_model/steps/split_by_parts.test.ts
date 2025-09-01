@@ -57,7 +57,7 @@ describe('splitByParts', () => {
     expect(splitByParts(items, filterOptions)).toEqual([
       {
         ...items[0],
-        originalAppointmentDates: items[0],
+        gridAppointmentDates: items[0],
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 5).getTime(),
         duration: 2 * 3600_000,
@@ -65,7 +65,7 @@ describe('splitByParts', () => {
         partCount: 0,
       }, {
         ...items[1],
-        originalAppointmentDates: items[1],
+        gridAppointmentDates: items[1],
         startDate: new Date(2000, 0, 10, 7).getTime(),
         endDate: new Date(2000, 0, 10, 8).getTime(),
         duration: 3600_000,
@@ -73,7 +73,7 @@ describe('splitByParts', () => {
         partCount: 0,
       }, {
         ...items[2],
-        originalAppointmentDates: items[2],
+        gridAppointmentDates: items[2],
         startDate: new Date(2000, 0, 10, 8).getTime(),
         endDate: new Date(2000, 0, 10, 10).getTime(),
         duration: 2 * 3600_000,
@@ -96,7 +96,7 @@ describe('splitByParts', () => {
 
     expect(splitByParts(items, filterOptions)).toEqual([
       {
-        originalAppointmentDates: items[0],
+        gridAppointmentDates: items[0],
         startDate: new Date(2000, 0, 10, 3).getTime(),
         endDate: new Date(2000, 0, 10, 5).getTime(),
         duration: 2 * 3600_000,
@@ -104,7 +104,7 @@ describe('splitByParts', () => {
         partCount: 0,
         reduced: 'tail',
       }, {
-        originalAppointmentDates: items[1],
+        gridAppointmentDates: items[1],
         startDate: new Date(2000, 0, 12, 8).getTime(),
         endDate: new Date(2000, 0, 12, 10).getTime(),
         duration: 2 * 3600_000,
@@ -139,7 +139,7 @@ describe('splitByParts', () => {
     expect(splitByParts(items, filterOptions)).toEqual([
       {
         ...items[0],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[0].startDate,
           endDate: items[0].endDate,
         },
@@ -151,7 +151,7 @@ describe('splitByParts', () => {
         reduced: 'body',
       }, {
         ...items[0],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[0].startDate,
           endDate: items[0].endDate,
         },
@@ -163,7 +163,7 @@ describe('splitByParts', () => {
         reduced: 'tail',
       }, {
         ...items[1],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[1].startDate,
           endDate: items[1].endDate,
         },
@@ -175,7 +175,7 @@ describe('splitByParts', () => {
         reduced: 'head',
       }, {
         ...items[1],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[1].startDate,
           endDate: items[1].endDate,
         },
@@ -187,7 +187,7 @@ describe('splitByParts', () => {
         reduced: 'tail',
       }, {
         ...items[2],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[2].startDate,
           endDate: items[2].endDate,
         },
@@ -199,7 +199,7 @@ describe('splitByParts', () => {
         reduced: 'head',
       }, {
         ...items[2],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[2].startDate,
           endDate: items[2].endDate,
         },
@@ -211,7 +211,7 @@ describe('splitByParts', () => {
         reduced: 'body',
       }, {
         ...items[3],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[3].startDate,
           endDate: items[3].endDate,
         },
@@ -223,7 +223,7 @@ describe('splitByParts', () => {
         reduced: 'head',
       }, {
         ...items[3],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[3].startDate,
           endDate: items[3].endDate,
         },
@@ -244,7 +244,7 @@ describe('splitByParts', () => {
     }] as Entity[];
 
     expect(splitByParts(items, filterOptions)).toEqual([{
-      originalAppointmentDates: items[0],
+      gridAppointmentDates: items[0],
       startDate: new Date(2000, 0, 10, 3).getTime(),
       endDate: new Date(2000, 0, 10, 10).getTime(),
       duration: 7 * 3600_000,
@@ -277,7 +277,7 @@ describe('splitByParts', () => {
     };
 
     expect(splitByParts(items, filterOptions24Hours)).toEqual([{
-      originalAppointmentDates: items[0],
+      gridAppointmentDates: items[0],
       startDate: new Date(2000, 0, 10).getTime(),
       endDate: new Date(2000, 0, 11).getTime(),
       duration: 24 * 3600_000,
@@ -295,7 +295,7 @@ describe('splitByParts', () => {
 
     expect(splitByParts(items, filterOptions)).toEqual([{
       ...items[0],
-      originalAppointmentDates: {
+      gridAppointmentDates: {
         startDate: items[0].startDate,
         endDate: items[0].endDate,
       },
@@ -335,7 +335,7 @@ describe('splitByParts', () => {
     expect(splitByParts(items, filterOptions)).toEqual([
       {
         ...items[0],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[0].startDate,
           endDate: items[0].endDate,
         },
@@ -347,7 +347,7 @@ describe('splitByParts', () => {
         reduced: 'tail',
       }, {
         ...items[1],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[1].startDate,
           endDate: items[1].endDate,
         },
@@ -358,7 +358,7 @@ describe('splitByParts', () => {
         partCount: 0,
       }, {
         ...items[2],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[2].startDate,
           endDate: items[2].endDate,
         },
@@ -369,7 +369,7 @@ describe('splitByParts', () => {
         partCount: 0,
       }, {
         ...items[3],
-        originalAppointmentDates: {
+        gridAppointmentDates: {
           startDate: items[3].startDate,
           endDate: items[3].endDate,
         },
