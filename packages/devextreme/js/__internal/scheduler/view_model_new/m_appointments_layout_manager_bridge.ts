@@ -13,6 +13,7 @@ import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateMonthViewModel } from './generate_view_model/generate_month_view_model';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
+import { getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type { AppointmentEntity, ListEntity, OriginalAppointmentDates } from './types';
 
@@ -91,29 +92,6 @@ class AppointmentLayoutManagerBridge {
         }
         case 'month': {
           const viewModel = generateMonthViewModel(this.schedulerStore, this.filteredItems);
-          const getInfo = (item: ListEntity & OriginalAppointmentDates) => {
-            const adapter = new AppointmentAdapter(
-              item.itemData,
-              this.schedulerStore._dataAccessors,
-            ).clone();
-
-            adapter.startDate = new Date(item.originalAppointmentDates.startDate);
-            adapter.endDate = new Date(item.originalAppointmentDates.endDate);
-            const dates = adapter.getCalculatedDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
-
-            return {
-              appointment: {
-                allDay: item.allDay,
-                startDate: adapter.startDate,
-                endDate: adapter.endDate,
-              },
-              sourceAppointment: {
-                allDay: item.allDay,
-                startDate: dates.startDate,
-                endDate: dates.endDate,
-              },
-            };
-          };
           const toItem = (item: AppointmentEntity): AppointmentItemViewModel => ({
             itemData: item.itemData,
             allDay: false, // otherwise all day appointment will not render
@@ -132,7 +110,10 @@ class AppointmentLayoutManagerBridge {
             partTotalCount: item.partCount,
             rowIndex: item.rowIndex,
             columnIndex: item.columnIndex,
-            info: getInfo(item),
+            info: getAppointmentInfo(
+              item,
+              this.schedulerStore.timeZoneCalculator,
+            ),
           });
           const toCollectedItem = (
             item: ListEntity & OriginalAppointmentDates & RealSize,
@@ -142,7 +123,10 @@ class AppointmentLayoutManagerBridge {
             groupIndex: item.groupIndex,
             width: item.width,
             height: item.height,
-            info: getInfo(item),
+            info: getAppointmentInfo(
+              item,
+              this.schedulerStore.timeZoneCalculator,
+            ),
           } as unknown as AppointmentItemViewModel);
           return viewModel.map((item) => {
             if (item.items.length) {

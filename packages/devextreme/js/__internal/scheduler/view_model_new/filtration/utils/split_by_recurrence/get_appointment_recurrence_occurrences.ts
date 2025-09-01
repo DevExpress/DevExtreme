@@ -34,7 +34,6 @@ export const getAppointmentRecurrenceOccurrences = <T extends AppointmentData>(
   const appointmentEndDate = new Date(appointment.endDate);
   const recurrenceException = getRecurrenceException(
     appointment.recurrenceException,
-    appointmentStartDate,
     timeZoneCalculator,
   );
   const startDates = recurrenceProcessor.generateDates({
