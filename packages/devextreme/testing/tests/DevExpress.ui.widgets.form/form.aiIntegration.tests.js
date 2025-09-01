@@ -56,6 +56,8 @@ QUnit.module('aiIntegration option', () => {
             assert.strictEqual(errorsSpy.calledOnce, true, 'one error was thrown');
             assert.strictEqual(errorsSpy.lastCall.args[0], 'E1063', 'the error had correct number');
             done();
+        }).finally(() => {
+            errorsSpy.restore();
         });
     });
 
@@ -80,8 +82,10 @@ QUnit.module('aiIntegration option', () => {
             assert.strictEqual(clipboardReadStub.called, false, 'clipboard.readText was not called');
             assert.strictEqual(errorsSpy.calledOnce, true, 'one error was thrown');
             assert.strictEqual(errorsSpy.lastCall.args[0], 'E1063', 'the error had correct number');
-            clipboardReadStub.restore();
             done();
+        }).finally(() => {
+            clipboardReadStub.restore();
+            errorsSpy.restore();
         });
     });
 });
