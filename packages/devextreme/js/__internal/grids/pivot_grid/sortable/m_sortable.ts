@@ -193,7 +193,7 @@ class Sortable extends DOMComponent<Sortable> {
     let $item;
 
     if (itemRender) {
-      // @ts-ignore
+      // @ts-expect-error ts-error
       $item = itemRender($sourceItem, target);
     } else {
       $item = $sourceItem.clone();
@@ -278,7 +278,7 @@ class Sortable extends DOMComponent<Sortable> {
     const groupSelector = this.option('groupSelector');
     const element = this.$element();
 
-    // @ts-ignore
+    // @ts-expect-error ts-error
     return groupSelector ? element.find(groupSelector) : element;
   }
 
@@ -310,16 +310,16 @@ class Sortable extends DOMComponent<Sortable> {
     };
 
     const createGroups = function () {
-      // @ts-ignore
+      // @ts-expect-error ts-error
       const root: any = domAdapter.getRootNode(that.$element().get(0));
 
       if (!groupSelector) {
         return element;
       }
       return groupFilter
-        // @ts-ignore
+        // @ts-expect-error ts-error
         ? $(root).find(groupSelector).filter(groupFilter)
-        // @ts-ignore
+        // @ts-expect-error ts-error
         : element.find(groupSelector);
     };
 
@@ -337,7 +337,7 @@ class Sortable extends DOMComponent<Sortable> {
         targetIndex: $targetGroup.find(itemSelector).index($targetItem),
       };
 
-      // @ts-ignore
+      // @ts-expect-error ts-error
       onDragging && onDragging(draggingArgs);
 
       if (draggingArgs.cancel) {
@@ -503,7 +503,7 @@ class Sortable extends DOMComponent<Sortable> {
           $targetGroup.removeClass(targetClass);
           changedArgs.targetGroup = $targetGroup.attr('group');
           if (sourceGroup !== changedArgs.targetGroup || targetIndex > -1) {
-            // @ts-ignore
+            // @ts-expect-error ts-error
             onChanged && onChanged(changedArgs);
             changedArgs.removeSourceElement && $sourceItem.remove();
           }
@@ -572,7 +572,7 @@ class Sortable extends DOMComponent<Sortable> {
 }
 
 /// #DEBUG
-// @ts-ignore
+// @ts-expect-error ts-error
 Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 /// #ENDDEBUG
 
