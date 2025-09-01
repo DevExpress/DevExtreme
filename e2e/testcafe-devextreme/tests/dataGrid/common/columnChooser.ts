@@ -240,38 +240,31 @@ test(
 
 test('Column Choozer should receive and render custom texts', async (t) => {
   const dataGrid = new DataGrid('#container');
-
+  await dataGrid.isReady();
   const columnChooserBtn = dataGrid.getColumnChooserButton();
-
   await t.click(columnChooserBtn);
-
   const columnChooser = dataGrid.getColumnChooser();
   const title = columnChooser.element.find('.dx-item-content.dx-toolbar-item-content').nth(0);
   const emptyPanel = columnChooser.element.find('.dx-empty-message');
-
   const titleText = await title.innerText;
-  const emptyPaneltext = await emptyPanel.innerText;
-
+  const emptyPanelText = await emptyPanel.innerText;
   await t.expect(titleText).eql('customTitle');
-  await t.expect(emptyPaneltext).eql('customEmptyText');
-
-  await dataGrid.isReady();
-
+  await t.expect(emptyPanelText).eql('customEmptyText');
 }).before(async (t) => {
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
       en: {
-        "dxDataGrid-columnChooserTitle": "customTitle",
-        "dxDataGrid-columnChooserEmptyText": "customEmptyText"
+        'dxDataGrid-columnChooserTitle': 'customTitle',
+        'dxDataGrid-columnChooserEmptyText': 'customEmptyText',
       },
     });
   });
 
   return createWidget('dxDataGrid', {
     columnChooser: {
-      height: "340px",
+      height: '340px',
       enabled: true,
-      mode: "dragAndDrop",
+      mode: 'dragAndDrop',
       position: {
         my: 'right top',
         at: 'right bottom',
