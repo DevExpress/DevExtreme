@@ -878,11 +878,11 @@ class PivotGrid extends Widget {
   }
 
   _renderNoDataText(element) {
-    return gridCoreUtils.renderNoDataText.apply(this, [element]);
+    return gridCoreUtils.renderNoDataText.call(this, element);
   }
 
   _renderLoadPanel(element, container) {
-    return gridCoreUtils.renderLoadPanel.apply(this, [element, container, undefined]);
+    return gridCoreUtils.renderLoadPanel.call(this, element, container, undefined);
   }
 
   _updateLoading(progress) {
