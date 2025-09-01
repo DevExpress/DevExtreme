@@ -1263,7 +1263,6 @@ class DataController {
 
       this.foreachRowInfo(
         newRowsInfo,
-        // - @ts-expect-error
         (rowInfo, visibleIndex, rowIndex, columnIndex, realColumnIndex) => {
           const colspan = rowInfo.colspan || 1;
 
