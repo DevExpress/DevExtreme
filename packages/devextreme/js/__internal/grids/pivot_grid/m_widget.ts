@@ -552,8 +552,7 @@ class PivotGrid extends Widget {
 
   _needDelayResizing(cellsInfo) {
     const cellsCount = cellsInfo.length * (cellsInfo.length ? cellsInfo[0].length : 0);
-    // @ts-expect-error ts-error
-    return cellsCount > this.option('renderCellCountLimit');
+    return cellsCount > Number(this.option('renderCellCountLimit'));
   }
 
   _renderFieldChooser() {
