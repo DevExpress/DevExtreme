@@ -4,6 +4,4 @@ With v25.2, DevExtreme TreeList will be able to display AI-generated columns. Tr
 Potential usage scenarios include: 
 - Data Enrichment. Add missing contextual information without modifying the underlying dataset. 
 - Categorization/Tagging. Assign categories or tags based on row information. 
-- Prediction & Estimation. Generate estimated delivery times, sale insights, or performance ratings (based on AI model). 
-
- 
+- Prediction & Estimation. Generate estimated delivery times, sale insights, or performance ratings (based on AI model).
