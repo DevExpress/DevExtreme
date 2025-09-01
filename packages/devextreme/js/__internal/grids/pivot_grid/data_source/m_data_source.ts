@@ -641,16 +641,6 @@ class PivotGridDataSource {
     return d;
   }
 
-  //  getAreaFields(fields, area) {
-  //   const areaFields: any = [];
-  //   each(fields, function () {
-  //     if (isAreaField(this, area)) {
-  //       areaFields.push(this);
-  //     }
-  //   });
-  //   return areaFields;
-  // }
-
   getData() {
     return this._data;
   }
