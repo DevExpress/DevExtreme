@@ -243,11 +243,7 @@ const SKIPPED_TESTS = {
       { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
-      'DragAndDrop',
-      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Resources', themes: [THEME.fluent] },
-      { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      // NOTE: Context menu appearance is different in comparison to other frameworks
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Sortable: [
@@ -296,7 +292,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Scheduler: [
-      { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
+        // NOTE: Context menu item position is different across themes
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
   },
@@ -326,8 +322,7 @@ const SKIPPED_TESTS = {
       { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-      { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+      // NOTE: Context menu item position is different across themes
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     FileUploader: [
