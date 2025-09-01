@@ -68,7 +68,11 @@ import {
   GROUP_COL_COUNT_CLASS,
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
-import { getItemFormatInfo, parseResultForEditorType } from '@ts/ui/form/form.ai.utils';
+import {
+  getItemFormatInfo,
+  type ParsedAiValue,
+  parseResultForEditorType,
+} from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
@@ -1900,7 +1904,7 @@ class Form extends Widget<FormProperties> {
     const { formData } = this.option();
 
     if (isDefined(formData)) {
-      let resultValue: string | string[] | boolean = value;
+      let resultValue: ParsedAiValue = value;
 
       resultValue = parseResultForEditorType(dataField, item?.editorType, value);
       if (typeof resultValue !== undefined) {
