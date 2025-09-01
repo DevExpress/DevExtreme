@@ -2664,7 +2664,10 @@ QUnit.module('Default button configuration', () => {
             const layoutManager = $testContainer.dxLayoutManager({
                 items: [{
                     itemType: 'button',
-                    name
+                    name,
+                    buttonOptions: {
+                        disabled: false,
+                    },
                 }]
             }).dxLayoutManager('instance');
 

@@ -737,7 +737,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       if (item.name === 'smartPaste') {
         const form = this._getFormOrThis();
         const { aiIntegration } = form.option();
-        if (!aiIntegration && item.buttonOptions) {
+        if (!aiIntegration && item.buttonOptions && !isDefined(item.buttonOptions.disabled)) {
           item.buttonOptions.disabled = true;
         }
       }
