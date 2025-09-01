@@ -1,4 +1,7 @@
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
@@ -37,7 +40,7 @@ function createLabelWithConnector() {
 
 function environmentWithStubLabels() {
     const that = this;
-    this.renderer = new vizMocks.Renderer();
+    this.renderer = new Renderer();
     this.group = this.renderer.g();
     this.translateData = { 0: 300, 10: 270, 20: 240 };
     this.angleTranslator = new MockAngularTranslator({
@@ -484,7 +487,7 @@ QUnit.test('getMarkerVisibility', function(assert) {
 QUnit.module('Draw Point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translateData = { 0: 300, 10: 270, 20: 240 };
         this.angleTranslator = new MockAngularTranslator({
@@ -892,7 +895,7 @@ QUnit.module('Tooltip', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -1301,7 +1304,7 @@ QUnit.test('Inside. Label width more that visible area - fit in visible area', f
 QUnit.module('Connector', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translateData = { 0: 300, 10: 270, 20: 240 };
         this.angleTranslator = new MockAngularTranslator({

@@ -1,5 +1,12 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Legend,
+    Series,
+    Tooltip,
+    Point,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { events as eventsConsts } from 'viz/components/consts';
 import axisModule from 'viz/axes/base_axis';
@@ -19,7 +26,7 @@ function getEvent(type, params) {
 }
 
 const createLegend = function() {
-    const legend = new vizMocks.Legend();
+    const legend = new Legend();
     legend.stub('coordsIn').returns(false);
     legend.stub('getItemByCoord').returns(false);
 
@@ -32,7 +39,7 @@ const createLegend = function() {
 };
 
 const createSeries = function() {
-    const series = new vizMocks.Series();
+    const series = new Series();
 
     series.setHoverState = sinon.spy(function(_, hoverMode) {
         series.lastHoverMode = hoverMode;
@@ -50,7 +57,7 @@ const createSeries = function() {
 };
 
 const createPoint = function(series, argument) {
-    const point = new vizMocks.Point();
+    const point = new Point();
     point.stub('getTooltipFormatObject').returns({ valueText: 'pointValue' });
 
     point.stub('isVisible').returns(true);
@@ -71,7 +78,7 @@ const createPoint = function(series, argument) {
 };
 
 const createTooltip = function() {
-    const tooltip = new vizMocks.Tooltip();
+    const tooltip = new Tooltip();
 
     tooltip.stub('show').returns(true);
     tooltip.stub('isEnabled').returns(true);
@@ -80,7 +87,7 @@ const createTooltip = function() {
 };
 
 const createAxis = function(translator) {
-    const Stub = vizMocks.stubClass(axisModule.Axis);
+    const Stub = stubClass(axisModule.Axis);
     const axis = new Stub();
 
     axis._translator = translator;
@@ -96,7 +103,7 @@ const createAxis = function(translator) {
 };
 
 const createCrosshair = function(startPoint, endPoint) {
-    const subCrosshair = vizMocks.stubClass(Crosshair);
+    const subCrosshair = stubClass(Crosshair);
     const crosshair = new subCrosshair();
 
     crosshair.stub('hide');
@@ -137,7 +144,7 @@ const chartEnvironment = {
         const that = this;
 
         that.clock = sinon.useFakeTimers();
-        that.renderer = new vizMocks.Renderer();
+        that.renderer = new Renderer();
         that.renderer.draw();
         that.series = createSeries();
         that.legend = createLegend();
@@ -2134,7 +2141,7 @@ QUnit.module('Root events. Pie chart', {
         const that = this;
 
         that.clock = sinon.useFakeTimers();
-        that.renderer = new vizMocks.Renderer();
+        that.renderer = new Renderer();
         that.renderer.draw();
         that.series = createSeries();
         that.legend = createLegend();
@@ -2818,8 +2825,8 @@ QUnit.test('show tooltip on point. Point with tooltip is invisible', function(as
 // Utility functions
 function createCompleteTracker(options) {
     const that = {};
-    const renderer = new vizMocks.Renderer();
-    const legend = new vizMocks.Legend();
+    const renderer = new Renderer();
+    const legend = new Legend();
     const series1 = createSeries();
     const series2 = createSeries();
     const point1 = createPoint(series1, 1);

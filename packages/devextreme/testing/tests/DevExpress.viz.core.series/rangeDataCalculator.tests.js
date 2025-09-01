@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
 
@@ -41,7 +43,7 @@ function getDefaultAxis() {
 
 const createSeries = function(options, renderSettings, widgetType) {
     renderSettings = renderSettings || {};
-    renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    renderSettings.renderer = renderSettings.renderer || new Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || getDefaultAxis();
     renderSettings.valueAxis = renderSettings.valueAxis || {
         getViewport: function() { return {}; },

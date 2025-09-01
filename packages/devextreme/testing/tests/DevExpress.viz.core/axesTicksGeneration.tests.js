@@ -1,11 +1,14 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import vizUtilsModule from 'viz/core/utils';
 import { Axis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 
-const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
         this.getBusinessRange.returns(range);
     }
@@ -28,7 +31,7 @@ const environment = {
         sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.translator = new StubTranslator();
         this.translator.stub('getBusinessRange').returns(new Range());

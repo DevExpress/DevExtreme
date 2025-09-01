@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
@@ -66,7 +68,7 @@ const environment = {
         });
 
         this.data = { argument: 1, value: 2 };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
     },
     afterEach: function() {
         this.createLabel.restore();

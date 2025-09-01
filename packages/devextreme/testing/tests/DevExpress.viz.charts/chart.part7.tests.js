@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    stubIncidentOccurredCreation,
+    restoreIncidentOccurredCreation,
+} from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import commons from './chartParts/commons.js';
 import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
@@ -989,13 +992,13 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
     QUnit.module('incidentOccurred errors and warnings', $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.call(this);
-            vizMocks.stubIncidentOccurredCreation();
+            stubIncidentOccurredCreation();
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
             this.clock.restore();
             commons.environment.afterEach.call(this);
-            vizMocks.restoreIncidentOccurredCreation();
+            restoreIncidentOccurredCreation();
         }
     }));
 

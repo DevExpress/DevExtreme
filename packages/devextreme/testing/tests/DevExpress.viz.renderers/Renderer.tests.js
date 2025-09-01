@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import animation from 'viz/core/renderers/animation';
 import renderers from 'viz/core/renderers/renderer';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    stubClass
+} from '../../helpers/vizMocks.js';
 import utils from 'viz/core/utils';
 
 $('<div>')
@@ -28,7 +30,7 @@ const origMethods = {};
 
 function setMockElements() {
     function wrapElement(elementName) {
-        renderers[`DEBUG_set_${elementName}`](sinon.spy(vizMocks.stubClass(renderers[elementName], null, {
+        renderers[`DEBUG_set_${elementName}`](sinon.spy(stubClass(renderers[elementName], null, {
             $constructor: function() {
                 this.renderer = arguments[0];
                 this.element = getMockElement();
@@ -52,7 +54,7 @@ function resetMockElements() {
     });
 }
 
-animation.AnimationController = vizMocks.stubClass(animation.AnimationController);
+animation.AnimationController = stubClass(animation.AnimationController);
 
 const Renderer = renderers.Renderer;
 

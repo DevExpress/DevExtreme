@@ -6,7 +6,10 @@
 // It is not used in map and requesting frame is just suppressed
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
 import eventEmitterModule from 'viz/vector_map/event_emitter';
 import animationFrame from 'common/core/animation/frame';
@@ -43,7 +46,7 @@ const EVENTS = {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.root = this.renderer.g();
         this.root.element = $('<div>').appendTo('#test-root')[0];
         trackerModule._DEBUG_forceEventMode(this.eventMode);
@@ -474,7 +477,7 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
     });
 });
 
-const StubFocus = vizMocks.stubClass(new trackerModule.Focus(), null, {
+const StubFocus = stubClass(new trackerModule.Focus(), null, {
     $constructor: function() {
         currentTest().focus = this;
     }

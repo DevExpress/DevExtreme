@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
@@ -17,7 +20,7 @@ const createPoint = function(series, data, options) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.data = {
@@ -619,7 +622,7 @@ QUnit.test('Point is on bottom border', function(assert) {
 QUnit.module('Draw point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -1518,7 +1521,7 @@ QUnit.test('Draw point with errorBar. Rotated', function(assert) {
 QUnit.module('Update point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -1997,7 +2000,7 @@ QUnit.test('Update errorBars - hide errorBar', function(assert) {
 QUnit.module('Point visibility', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.data = {
             argument: 1,
@@ -2222,7 +2225,7 @@ QUnit.test('keep style after redraw', function(assert) {
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         const axis = this.axis = new MockAxis({ renderer: this.renderer });
         this.data = {
@@ -2248,7 +2251,7 @@ QUnit.module('Tooltip', {
             _valueChecker: function() { return true; },
             getStackName: function() { return undefined; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             },
@@ -3147,7 +3150,7 @@ QUnit.test('Update label location', function(assert) {
 QUnit.module('Calculate tracker size', {
     beforeEach: function() {
         this.realTouchDevice = ('ontouchstart' in window) || (window.navigator.msPointerEnabled && window.navigator.msMaxTouchPoints > 0) || (window.navigator.pointerEnabled && window.navigator.maxTouchPoints > 0);
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.options = {
             widgetType: 'chart',
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -3188,7 +3191,7 @@ QUnit.test('Tracker with point.r > minTrackerSize', function(assert) {
 
 QUnit.module('Tracker size calculation on MS Touch Devices', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             widgetType: 'chart',
@@ -3257,7 +3260,7 @@ QUnit.test('Tracker on ms devices with point.r > minTrackerSize. pointerEnabled'
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -3333,7 +3336,7 @@ QUnit.test('symbol point is triangleUp', function(assert) {
 QUnit.module('API', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             visible: true,

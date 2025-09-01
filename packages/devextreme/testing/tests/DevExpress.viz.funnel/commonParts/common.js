@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../../helpers/vizMocks.js';
+import {
+    Renderer
+} from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import tiling from 'viz/funnel/tiling';
 
@@ -29,7 +31,7 @@ export function createFunnel(options) {
 export const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         stubAlgorithm.normalizeValues.reset();
         stubAlgorithm.getFigures.reset();

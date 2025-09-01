@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Point } from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import { MockTranslator, MockSeries, MockPoint } from '../../helpers/chartMocks.js';
 import { SeriesFamily } from 'viz/core/series_family';
@@ -3825,7 +3825,7 @@ QUnit.module('Stacked series. Negatives as zeroes');
 
 QUnit.test('When negativesAsZeroes true - all negative values treated as zeroes', function(assert) {
     function createPoint(arg, val) {
-        const p = new vizMocks.Point();
+        const p = new Point();
         p.argument = arg;
         p.initialValue = val;
         return p;

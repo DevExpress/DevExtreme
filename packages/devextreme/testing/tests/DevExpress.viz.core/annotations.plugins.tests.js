@@ -2,7 +2,11 @@ import $ from 'jquery';
 import { __test_utils, plugins } from 'viz/core/annotations';
 import rendererModule from 'viz/core/renderers/renderer';
 import TooltipModule from 'viz/core/tooltip';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Tooltip,
+} from '../../helpers/vizMocks.js';
+
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
@@ -892,7 +896,7 @@ QUnit.test('Get coordinates using argument and location `edge`', function(assert
 
 QUnit.module('Lifecycle', {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
         this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy(), plaque: { clear: sinon.spy() } }]);
@@ -1289,11 +1293,11 @@ QUnit.module('Lifecycle', {
 
 const environment = {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
         TooltipModule.Tooltip = sinon.spy((options) => {
-            this.tooltip = new vizMocks.Tooltip(options);
+            this.tooltip = new Tooltip(options);
             this.tooltip.show = sinon.stub().returns(true);
             this.tooltip.hide = sinon.spy();
             this.tooltip.move = sinon.spy();

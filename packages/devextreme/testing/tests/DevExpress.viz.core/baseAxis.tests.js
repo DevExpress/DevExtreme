@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis as originalAxis } from 'viz/axes/base_axis';
@@ -8,7 +11,7 @@ import { Range } from 'viz/translators/range';
 import xyMethods from 'viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';
 
-const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
         this.getBusinessRange.returns(range);
     }
@@ -16,7 +19,7 @@ const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         const that = this;
         this.tickGeneratorSpy = sinon.spy(function() {

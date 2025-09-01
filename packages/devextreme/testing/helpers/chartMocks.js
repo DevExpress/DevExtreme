@@ -9,7 +9,11 @@ import pointModule from 'viz/series/points/base_point';
 import translator2DModule from 'viz/translators/translator2d';
 import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
-import vizMocks from './vizMocks.js';
+import {
+    Renderer,
+    incidentOccurred,
+    LoadingIndicator,
+} from './vizMocks.js';
 import { Range } from 'viz/translators/range';
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
@@ -227,10 +231,10 @@ const defaultAxisYOptions = $.extend(true, {}, {
 });
 
 export const createHorizontalAxis = function createHorizontalAxis(translatorData, orthogonalTranslatorData, allOptions) {
-    return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisXOptions, { incidentOccurred: vizMocks.incidentOccurred() }, allOptions), true);
+    return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisXOptions, { incidentOccurred: incidentOccurred() }, allOptions), true);
 };
 export const createVerticalAxis = function createVerticalAxis(translatorData, orthogonalTranslatorData, allOptions) {
-    return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisYOptions, { incidentOccurred: vizMocks.incidentOccurred() }, allOptions));
+    return createAxis(translatorData, orthogonalTranslatorData, $.extend(true, {}, defaultAxisYOptions, { incidentOccurred: incidentOccurred() }, allOptions));
 };
 
 function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHorizontal) {
@@ -256,7 +260,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     const mergedOptions = $.extend(true, {}, allOptions);
 
     const axis = new axisModule.Axis({
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         stripsGroup: allOptions.stripsGroup,
         stripLabelAxesGroup: allOptions.stripLabelAxesGroup,
         constantLinesGroup: allOptions.constantLinesGroup,
@@ -371,7 +375,7 @@ export const insertMockFactory = function insertMockFactory() {
     });
 
     loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
-        return new vizMocks.LoadingIndicator(parameters);
+        return new LoadingIndicator(parameters);
     });
 };
 

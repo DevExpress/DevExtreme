@@ -3,9 +3,12 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis } from 'viz/axes/base_axis';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 
-const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
         this.getBusinessRange.returns(range);
     }
@@ -40,7 +43,7 @@ const environment = {
         sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return function() {

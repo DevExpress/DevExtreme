@@ -1,11 +1,16 @@
 /* global currentTest, createTestContainer */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+    forceThemeOptions,
+} from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
 import rendererModule from 'viz/core/renderers/renderer';
 import { isFunction } from 'core/utils/type';
+
 const TOOLTIP_TABLE_BORDER_SPACING = 0;
 const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
 
@@ -16,21 +21,21 @@ $('<div>')
     .css({ width: 250, height: 10 })
     .appendTo('#qunit-fixture');
 
-const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+const StubThemeManager = stubClass(baseThemeManagerModule.BaseThemeManager);
+const StubTooltip = stubClass(tooltipModule.Tooltip, {
     isEnabled: function() { return true; },
     formatValue: function(value, format) { return value + ':' + format; }
 });
 
 StubThemeManager.prototype.setTheme = function() {
-    vizMocks.forceThemeOptions(this);
+    forceThemeOptions(this);
 };
 
 tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
 });
 rendererModule.Renderer = function() {
-    return new vizMocks.Renderer();
+    return new Renderer();
 };
 
 baseThemeManagerModule.BaseThemeManager = function() {

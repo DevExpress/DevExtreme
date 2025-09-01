@@ -1,6 +1,12 @@
 import $ from 'jquery';
 import legendModule, { Legend } from 'viz/components/legend';
-import vizMocks, { stubClass } from '../../helpers/vizMocks.js';
+import vizMocks, {
+    Renderer,
+    Title,
+    Tooltip,
+    LoadingIndicator,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
@@ -11,7 +17,7 @@ import 'viz/gauges/bar_gauge';
 
 const environment = {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         sinon.stub(rendererModule, 'Renderer').callsFake(() => {
             return this.renderer;
@@ -40,13 +46,13 @@ $('<div id="test-container"></div>')
 
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
-titleModule.DEBUG_set_title(vizMocks.Title);
-tooltipModule.Tooltip = vizMocks.Tooltip;
-loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
+titleModule.DEBUG_set_title(Title);
+tooltipModule.Tooltip = Tooltip;
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
 
 QUnit.module('Misc', {
     beforeEach: function() {
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
@@ -127,7 +133,7 @@ QUnit.test('Change theme when loading indicator is shown', function(assert) {
 
         assert.ok(true, 'no errors');
     } finally {
-        loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
+        loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
     }
 });
 
@@ -161,7 +167,7 @@ QUnit.test('Too many bars. Animation true', function(assert) {
 
 QUnit.module('Legend', {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         sinon.stub(rendererModule, 'Renderer').callsFake(() => {
             return this.renderer;

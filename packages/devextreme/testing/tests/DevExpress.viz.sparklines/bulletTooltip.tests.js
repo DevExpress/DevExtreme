@@ -1,7 +1,11 @@
 /* global currentTest, createTestContainer */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+    forceThemeOptions,
+} from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 import rendererModule from 'viz/core/renderers/renderer';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
@@ -16,8 +20,8 @@ $('<div>')
     .css({ width: 250, height: 20 })
     .appendTo('#qunit-fixture');
 
-const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
+const StubThemeManager = stubClass(baseThemeManagerModule.BaseThemeManager);
+const StubTooltip = stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
 
 tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
@@ -31,7 +35,7 @@ baseThemeManagerModule.BaseThemeManager = function() {
 };
 
 StubThemeManager.prototype.setTheme = function() {
-    vizMocks.forceThemeOptions(this);
+    forceThemeOptions(this);
 };
 
 function getBulletTooltip(bullet) {
@@ -78,7 +82,7 @@ const environment = {
             enabled: true,
             font: {}
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.$container = $(createTestContainer('#container'));
     },
     afterEach: function() {

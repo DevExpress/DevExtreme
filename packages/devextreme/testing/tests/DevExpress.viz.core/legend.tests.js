@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import legendModule from 'viz/components/legend';
 import module from 'viz/core/title';
 
@@ -12,7 +14,7 @@ const defaultMarkerBBox = { x: 0, y: 0, height: 14, width: 14 };
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.bBoxes = [];
         this.markerBBoxes = [];
 

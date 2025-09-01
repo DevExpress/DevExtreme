@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
@@ -361,7 +363,7 @@ QUnit.test('Update close value of financial point', function(assert) {
 
 QUnit.module('Update type of point', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -523,7 +525,7 @@ QUnit.test('Update range to range', function(assert) {
 
 QUnit.module('Draw', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.labelsGroup = this.renderer.g();
@@ -603,7 +605,7 @@ QUnit.test('Point is visible', function(assert) {
 
 QUnit.module('Label', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
@@ -737,7 +739,7 @@ QUnit.test('Update data with null value after data with value', function(assert)
 
 QUnit.module('Deleting', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             styles: { normal: { r: 6 }, hover: { r: 6 } },
@@ -793,7 +795,7 @@ QUnit.test('Delete marker', function(assert) {
 
 QUnit.module('Point views', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.series.isVisible.returns(true);
@@ -1055,7 +1057,7 @@ QUnit.test('apply view with selected state in \'none\' mode', function(assert) {
 
 QUnit.module('states and styles', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.series.isVisible.returns(true);
@@ -1153,7 +1155,7 @@ QUnit.test('Release hover state check background when state is selected', functi
 
 QUnit.module('Event binding', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.series = sinon.createStubInstance(Series);
         this.options = {
@@ -1238,7 +1240,7 @@ QUnit.test('Point hideTooltip selection event passed to series', function(assert
 
 QUnit.module('Dispose', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.labelsGroup = this.renderer.g();
 
@@ -1325,7 +1327,7 @@ QUnit.test('Dispose', function(assert) {
 
 QUnit.module('API', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.labelsGroup = {};
         this.data = { argument: 5, value: 5 };

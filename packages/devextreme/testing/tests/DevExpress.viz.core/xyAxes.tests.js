@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import translator2DModule from 'viz/translators/translator2d';
 import rangeModule from 'viz/translators/range';
@@ -33,7 +36,7 @@ const environment = {
     beforeEach: function() {
         const that = this;
 
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.tickGeneratorSpy = sinon.spy(function(_a, _b, _c, _d, _e, _f, _g, breaks) {
             return {
                 ticks: that.generatedTicks || [],
@@ -3962,7 +3965,7 @@ QUnit.module('Auto scale breaks', $.extend({}, environment2DTranslator, {
         this.axis.setBusinessRange({ min: opt.min, max: opt.max });
     },
     stubSeries: function(values) {
-        const series = new vizMocks.stubClass();
+        const series = new stubClass();
 
         series.getPointsInViewPort = sinon.stub().returns(values);
         return series;

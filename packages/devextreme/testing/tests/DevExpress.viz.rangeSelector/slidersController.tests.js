@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
 import { SlidersController } from 'viz/range_selector/sliders_controller';
 import rendererModule from 'viz/core/renderers/renderer';
 import translator2DModule from 'viz/translators/translator2d';
@@ -7,15 +10,15 @@ import support from '__internal/core/utils/m_support';
 
 const environment = {
     beforeEach: function() {
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
 
         rendererModule.Renderer = function() {
             return renderer;
         };
         this.translator = new translator2DModule.Translator2D({}, {});
         this.translator.update({ min: 10, max: 30 }, { left: 1000, width: 3000 }, { isHorizontal: true });
-        this.root = new vizMocks.Element();
-        this.trackersGroup = new vizMocks.Element();
+        this.root = new Element();
+        this.trackersGroup = new Element();
         const notifications = this.notifications = [];
         this.controller = new SlidersController({
             renderer: renderer,

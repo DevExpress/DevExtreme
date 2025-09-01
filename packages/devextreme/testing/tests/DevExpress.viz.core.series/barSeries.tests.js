@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import Color from 'color';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
@@ -8,7 +10,7 @@ import { MockAxis, MockTranslator } from '../../helpers/chartMocks.js';
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         widgetType: 'chart',
@@ -61,7 +63,7 @@ const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), 
 const environment = {
     beforeEach: function() {
         let mockPointIndex = 0;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {

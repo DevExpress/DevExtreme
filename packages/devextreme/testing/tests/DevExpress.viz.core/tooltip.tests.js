@@ -1,7 +1,9 @@
 /* global currentTest */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 const Tooltip = tooltipModule.Tooltip;
 import vizUtils from 'viz/core/utils';
@@ -54,7 +56,7 @@ function getInitialOptions() {
 }
 
 rendererModule.Renderer = function(parameters) {
-    const renderer = new vizMocks.Renderer(parameters);
+    const renderer = new Renderer(parameters);
     currentTest().renderer = renderer;
     return renderer;
 };

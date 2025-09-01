@@ -1,10 +1,12 @@
 import $ from 'jquery';
 import { environment, stubAlgorithm } from './common.js';
 import labelModule from 'viz/series/points/label';
-import vizMocks from '../../../helpers/vizMocks.js';
+import {
+    stubClass
+} from '../../../helpers/vizMocks.js';
 
 const Label = labelModule.Label;
-const stubLabel = vizMocks.stubClass(Label);
+const stubLabel = stubClass(Label);
 import labels from 'viz/funnel/label';
 
 import dxFunnel from 'viz/funnel/funnel';

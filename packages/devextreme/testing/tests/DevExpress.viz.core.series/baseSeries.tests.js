@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Point,
+} from '../../helpers/vizMocks.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import pointModule from 'viz/series/points/base_point';
@@ -13,7 +16,7 @@ const chartSeriesNS = mixins.chart;
 
 const createSeries = function(options, settings) {
     settings = settings || {};
-    settings.renderer = settings.renderer || new vizMocks.Renderer();
+    settings.renderer = settings.renderer || new Renderer();
     const seriesGroup = settings.renderer.g();
     const labelsGroup = settings.renderer.g();
 
@@ -61,7 +64,7 @@ const environment = {
         _this.pointsCreatingCount = 0;
         insertMockFactory();
 
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         _this.realCreatePoint = pointModule.Point;
         pointModule.Point = function() {
             _this.pointsCreatingCount++;
@@ -1516,7 +1519,7 @@ QUnit.module('Disposing', {
     beforeEach: function() {
         const _this = this;
         environment.beforeEach.call(_this);
-        _this.renderer = new vizMocks.Renderer();
+        _this.renderer = new Renderer();
         _this.seriesGroup = _this.renderer.g();
 
         _this.series = createSeries({
@@ -1670,7 +1673,7 @@ QUnit.module('Apply clipping', {
     beforeEach: function() {
         const _this = this;
         environmentWithSinonStubPoint.beforeEach.call(_this);
-        _this.renderer = new vizMocks.Renderer();
+        _this.renderer = new Renderer();
         _this.seriesGroup = _this.renderer.g();
         _this.series = createSeries({}, {
             renderer: _this.renderer,
@@ -2026,7 +2029,7 @@ QUnit.module('Point visibility', {
     beforeEach: function() {
         const _this = this;
         environmentWithSinonStubPoint.beforeEach.call(_this);
-        _this.renderer = new vizMocks.Renderer();
+        _this.renderer = new Renderer();
         _this.seriesGroup = _this.renderer.g();
 
         _this.series = createSeries({}, {
@@ -4180,7 +4183,7 @@ QUnit.module('API', {
         environmentWithSinonStubPoint.beforeEach.call(this);
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
 
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.trigger = sinon.spy();
         $(this.seriesGroup.element).on({
@@ -5020,7 +5023,7 @@ QUnit.module('Legend states', {
         this.legendCallback = sinon.stub();
         environment.beforeEach.call(this);
         sinon.stub(pointModule, 'Point').callsFake(function(series) {
-            const point = new vizMocks.Point();
+            const point = new Point();
             point.argument = 1;
             point.series = series;
             return point;

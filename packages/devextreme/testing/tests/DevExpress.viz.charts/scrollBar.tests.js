@@ -1,11 +1,15 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+    Element,
+} from '../../helpers/vizMocks.js';
 import { ScrollBar } from 'viz/chart_components/scroll_bar';
 import translator2DModule from 'viz/translators/translator2d';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/drag';
 
-const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
+const Translator = stubClass(translator2DModule.Translator2D);
 
 const canvas = {
     top: 10,
@@ -26,7 +30,7 @@ const range = {
 };
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.group = this.renderer.g();
 
@@ -59,7 +63,7 @@ const environment = {
 QUnit.module('_applyPosition method tests', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.group = new vizMocks.Element();
+        this.group = new Element();
         this.scrollBar = new ScrollBar(this.renderer, this.group);
         this.scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
     },
@@ -469,7 +473,7 @@ QUnit.module('_applyPosition method tests', {
 QUnit.module('ScrollBar integration tests', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.group = new vizMocks.Element();
+        this.group = new Element();
         this.scrollBar = new ScrollBar(this.renderer, this.group);
         this.scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
     },
@@ -526,7 +530,7 @@ QUnit.module('ScrollBar integration tests', {
 QUnit.module('dxChart scrollBar', environment);
 
 QUnit.test('create scrollBar', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     // act
     const scrollBar = new ScrollBar(this.renderer, group);
     // assert
@@ -542,7 +546,7 @@ QUnit.test('create scrollBar', function(assert) {
 });
 
 QUnit.test('init scrollBar', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     scrollBar.update(this.options).updateSize(canvas);
     // act
@@ -569,7 +573,7 @@ QUnit.test('init scrollBar', function(assert) {
 });
 
 QUnit.test('init scrollBar. Rotated', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
     scrollBar.update(this.options).updateSize(canvas);
@@ -597,7 +601,7 @@ QUnit.test('init scrollBar. Rotated', function(assert) {
 });
 
 QUnit.test('init scrollBar. Remove min and max ', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const discreteRange = $.extend({}, range, { axisType: 'discrete' });
     scrollBar.update(this.options).updateSize(canvas);
@@ -626,7 +630,7 @@ QUnit.test('init scrollBar. Remove min and max ', function(assert) {
 });
 
 QUnit.test('update scrollBar', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     // act
     scrollBar.update(this.options);
@@ -649,7 +653,7 @@ QUnit.test('update scrollBar', function(assert) {
 });
 
 QUnit.test('update scrollBar. Rotated', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
     // act
@@ -673,7 +677,7 @@ QUnit.test('update scrollBar. Rotated', function(assert) {
 });
 
 QUnit.test('setPosition by arguments. Both arguments in range', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -694,7 +698,7 @@ QUnit.test('setPosition by arguments. Both arguments in range', function(assert)
 });
 
 QUnit.test('setPosition by arguments. Discrete axis. stick false', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
         axisType: 'discrete'
     }), false);
@@ -725,7 +729,7 @@ QUnit.test('setPosition by arguments. Discrete axis. stick false', function(asse
 });
 
 QUnit.test('setPosition by arguments. Discrete axis. stick true', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
         axisType: 'discrete'
     }), true);
@@ -756,7 +760,7 @@ QUnit.test('setPosition by arguments. Discrete axis. stick true', function(asser
 });
 
 QUnit.test('setPosition by arguments. Stick false', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), false);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -785,7 +789,7 @@ QUnit.test('setPosition by arguments. Stick false', function(assert) {
 });
 
 QUnit.test('setPosition by arguments.Stick true', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), true);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -815,7 +819,7 @@ QUnit.test('setPosition by arguments.Stick true', function(assert) {
 
 QUnit.test('setPosition by arguments. Both arguments are undefined', function(assert) {
 
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -840,7 +844,7 @@ QUnit.test('setPosition by arguments. Both arguments are undefined', function(as
 });
 
 QUnit.test('setPosition by arguments. Both arguments out of canvas', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -865,7 +869,7 @@ QUnit.test('setPosition by arguments. Both arguments out of canvas', function(as
 });
 
 QUnit.test('setPosition by arguments. min = max', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -885,7 +889,7 @@ QUnit.test('setPosition by arguments. min = max', function(assert) {
 });
 
 QUnit.test('setPosition by arguments. minSize', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -906,7 +910,7 @@ QUnit.test('setPosition by arguments. minSize', function(assert) {
 });
 
 QUnit.test('Disposing', function(assert) {
-    const group = new vizMocks.Element();
+    const group = new Element();
     const scrollBar = new ScrollBar(this.renderer, group);
     const element = group.children[0];
     // act
@@ -921,7 +925,7 @@ QUnit.test('Disposing', function(assert) {
 QUnit.module('Scroll moving', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.group = new vizMocks.Element();
+        this.group = new Element();
         this.scrollBar = new ScrollBar(this.renderer, this.group).update(this.options);
 
         this.scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;

@@ -1,10 +1,12 @@
 import $ from 'jquery';
 import { createAnnotations, plugins } from 'viz/core/annotations';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 
 const environment = {
     beforeEach() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
 
         this.widget = {

@@ -1,7 +1,11 @@
 /* global createTestContainer */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Title,
+    Legend,
+} from '../../helpers/vizMocks.js';
 import dxChart from 'viz/chart';
 import axisModule from 'viz/axes/base_axis';
 import scrollBarModule from 'viz/chart_components/scroll_bar';
@@ -16,11 +20,11 @@ rendererModule.Renderer = sinon.stub();
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.container = $(createTestContainer('#qunit-fixture', { width: '800px', height: '600px' }));
         rendererModule.Renderer.onCall(0).returns(this.renderer);
-        rendererModule.Renderer.onCall(1).returns(new vizMocks.Renderer());
-        rendererModule.Renderer.onCall(2).returns(new vizMocks.Renderer());
+        rendererModule.Renderer.onCall(1).returns(new Renderer());
+        rendererModule.Renderer.onCall(2).returns(new Renderer());
     },
     setupScrollBar: function() {
         const originalScrollBar = scrollBarModule.ScrollBar;
@@ -54,8 +58,8 @@ const environment = {
             return axis;
         });
 
-        this.title = new vizMocks.Title();
-        this.legend = new vizMocks.Legend();
+        this.title = new Title();
+        this.legend = new Legend();
 
         this.legendStub = sinon.stub(legendModule, 'Legend').callsFake(() =>{
             this.legend.getTemplatesGroups = sinon.spy(function() {

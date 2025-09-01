@@ -1,7 +1,13 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { isFunction } from 'core/utils/type';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Point,
+    ObjectPool,
+    stubClass,
+    stubIncidentOccurredCreation,
+} from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import commons from './chartParts/commons.js';
 import seriesModule from 'viz/series/base_series';
@@ -23,7 +29,7 @@ import graphicObjects from '__internal/common/m_charts';
 import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
 
-const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);
+const LabelCtor = new ObjectPool(labelModule.Label);
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
@@ -32,10 +38,9 @@ const dataSourceTemplate = [
     { cat: 'Second', val: 200 },
     { cat: 'Third', val: 300 }
 ];
-const Point = vizMocks.Point;
 
 commons.rendererModule.Renderer = sinon.spy(function(parameters) {
-    return new vizMocks.Renderer(parameters);
+    return new Renderer(parameters);
 });
 
 function createPieChart(options) {
@@ -49,7 +54,7 @@ function createPieChart(options) {
 
 function setupMocks() {
     insertMockFactory();
-    vizMocks.stubIncidentOccurredCreation();
+    stubIncidentOccurredCreation();
 
     this.dataSource = $.extend(true, [], dataSourceTemplate);
     this.stubPoints = [
@@ -829,7 +834,7 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.module('Axes and Series', {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -888,7 +893,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
             this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -1070,7 +1075,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             environment.beforeEach.apply(this, arguments);
             this.mockSeries1 = new MockSeries({ argumentField: 'arg' });
             this.mockSeries2 = new MockSeries({ argumentField: 'arg' });
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -2069,7 +2074,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             seriesMockData.series.push(new MockSeries({ name: 'Pie series' }));
             executeAsyncMock.setup();
 
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
