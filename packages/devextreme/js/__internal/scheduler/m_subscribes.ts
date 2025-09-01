@@ -12,7 +12,12 @@ import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
 import { isAppointmentTakesAllDay } from './r1/utils/base';
-import type { SafeAppointment, TargetedAppointment } from './types';
+import type {
+  AppointmentTooltipItem,
+  CompactAppointmentOptions,
+  SafeAppointment,
+  TargetedAppointment,
+} from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
@@ -118,13 +123,19 @@ const subscribes = {
     this.hideAppointmentTooltip();
   },
 
-  getTextAndFormatDate(
-    targetedAppointmentRaw: TargetedAppointment,
+  createFormattedDateText(
+    appointment: AppointmentTooltipItem['appointment'],
+    targetedAppointmentRaw: AppointmentTooltipItem['targetedAppointment'],
     format?: string,
   ) {
-    // TODO: rename to createFormattedDateText
-    const adapter = new AppointmentAdapter(targetedAppointmentRaw, this._dataAccessors);
-    const { displayStartDate: startDate, displayEndDate: endDate } = targetedAppointmentRaw;
+    const targetedAppointment = {
+      ...appointment,
+      ...targetedAppointmentRaw,
+    } as TargetedAppointment;
+    const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
+    // pull out time zone converting from appointment adapter for knockout (T947938)
+    const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
+    const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
     const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
 
     return {
@@ -223,7 +234,7 @@ const subscribes = {
     return updatedEndDate;
   },
 
-  renderCompactAppointments(options): dxElementWrapper {
+  renderCompactAppointments(options: CompactAppointmentOptions): dxElementWrapper {
     return this._compactAppointmentsHelper.render(options);
   },
 

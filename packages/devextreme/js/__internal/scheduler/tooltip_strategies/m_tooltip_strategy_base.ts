@@ -192,7 +192,7 @@ export class TooltipStrategyBase {
     const { editing } = this._extraOptions;
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this._createItemListMarker(color));
-    $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(targetedAppointment)));
+    $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
 
     const disabled = this._options.getAppointmentDisabled(appointment);
 
@@ -208,7 +208,11 @@ export class TooltipStrategyBase {
     const $markerBody = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY);
 
     $marker.append($markerBody);
-    color && color.done((value) => $markerBody.css('background', value));
+    color.then((value) => {
+      if (value) {
+        $markerBody.css('background', value);
+      }
+    });
 
     return $marker;
   }

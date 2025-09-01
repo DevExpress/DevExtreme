@@ -28,11 +28,13 @@ import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import type { AppointmentTooltipItem } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import { getTargetedAppointment } from '../utils/get_targeted_appointment';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type {
   AppointmentAgendaViewModel,
   AppointmentCollectorViewModel,
@@ -97,6 +99,10 @@ class SchedulerAppointments extends CollectionWidget {
 
   get appointmentsCount(): number {
     return countVisibleAppointments(this.option('items') ?? []);
+  }
+
+  getResourceManager(): ResourceManager {
+    return this.option('getResourceManager')();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -474,12 +480,13 @@ class SchedulerAppointments extends CollectionWidget {
         },
         this.dataAccessors,
         this.option('timeZoneCalculator'),
-        this.option('getResourceManager')(),
+        this.getResourceManager(),
       );
     }
 
     const formatText = this.invoke(
-      'getTextAndFormatDate',
+      'createFormattedDateText',
+      appointment,
       targetedAppointmentData,
       'TIME',
     );
@@ -651,7 +658,7 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentAgendaViewModel,
   ): void {
-    const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
+    const { groups, groupsLeafs, resourceById } = this.getResourceManager();
     const config: any = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
@@ -677,7 +684,7 @@ class SchedulerAppointments extends CollectionWidget {
     const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
     const allowDrag = this.option('allowDrag');
     const { allDay } = settings;
-    const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
+    const { groups, groupsLeafs, resourceById } = this.getResourceManager();
     const config: any = {
       data: settings.itemData,
       groupIndex: settings.groupIndex,
@@ -708,7 +715,7 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _applyResourceDataAttr($appointment) {
-    const { resources } = this.option('getResourceManager')();
+    const { resources } = this.getResourceManager();
     const rawAppointment = (this as any)._getItemData($appointment);
     const appointmentGroups = getAppointmentGroupValues(rawAppointment, resources);
 
@@ -996,18 +1003,26 @@ class SchedulerAppointments extends CollectionWidget {
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
     const virtualItems = appointment.items;
-    const items: any = { data: [], colors: [], settings: [] };
+    const items: AppointmentTooltipItem[] = [];
     virtualItems.forEach((item) => {
       const appointmentConfig = {
         itemData: item.itemData,
         groupIndex: appointment.groupIndex,
         groups: this.option('groups'),
       };
-      const buttonColor = this.option('getAppointmentColor')(appointmentConfig);
+      const resourceManager = this.getResourceManager();
 
-      items.data.push(item.itemData);
-      items.colors.push(buttonColor);
-      items.settings.push(item);
+      items.push({
+        appointment: item.itemData,
+        targetedAppointment: getTargetedAppointment(
+          item.itemData,
+          item,
+          this.dataAccessors,
+          this.option('timeZoneCalculator'),
+          resourceManager,
+        ),
+        color: resourceManager.getAppointmentColor(appointmentConfig),
+      });
     });
 
     const $item = this.invoke('renderCompactAppointments', {
@@ -1017,7 +1032,7 @@ class SchedulerAppointments extends CollectionWidget {
         left: appointment.left,
       },
       items,
-      buttonColor: items.colors[0],
+      buttonColor: items[0].color,
       sortedIndex: appointment.sortedIndex,
       width: appointment.width,
       height: appointment.height,

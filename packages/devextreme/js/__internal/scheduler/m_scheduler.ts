@@ -59,7 +59,11 @@ import {
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
-import type { AppointmentTooltipItem, SafeAppointment, TargetedAppointment } from './types';
+import type {
+  AppointmentTooltipItem,
+  SafeAppointment,
+  TargetedAppointment,
+} from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
@@ -178,7 +182,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _createActionByOption: any;
 
-  _appointmentTooltip: any;
+  _appointmentTooltip!: MobileTooltipStrategy | DesktopTooltipStrategy;
 
   _readyToRenderAppointments?: boolean;
 
@@ -1099,7 +1103,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
-      createFormattedDateText: (targetedAppointment, format) => (this.fire as any)('getTextAndFormatDate', targetedAppointment, format),
+      createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('createFormattedDateText', appointment, targetedAppointment, format),
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
@@ -1226,7 +1230,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _appointmentsConfig() {
     const config = {
       getResourceManager: () => this.resourceManager,
-      getAppointmentColor: this.createGetAppointmentColor(),
 
       getAppointmentDataSource: () => this.appointmentDataSource,
       dataAccessors: this._dataAccessors,
@@ -1931,36 +1934,27 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
+  // NOTE: public API
   showAppointmentTooltip(
     appointment: SafeAppointment,
     element: dxElementWrapper,
-    targetedAppointment: TargetedAppointment,
+    targetedAppointment?: SafeAppointment,
   ) {
     if (appointment) {
       const settings: any = utils.dataAccessors.getAppointmentSettings(element);
       const appointmentConfig = {
-        itemData: targetedAppointment || appointment,
+        itemData: targetedAppointment ?? appointment,
         groupIndex: settings?.groupIndex,
-        groups: this.option('groups'),
       };
-
-      const getAppointmentColor = this.createGetAppointmentColor();
-      const deferredColor = getAppointmentColor(appointmentConfig) as any;
 
       const info: AppointmentTooltipItem = {
         appointment,
         targetedAppointment,
-        color: deferredColor,
-        settings: [],
+        color: this.resourceManager.getAppointmentColor(appointmentConfig),
       };
+
       this.showAppointmentTooltipCore(element, [info]);
     }
-  }
-
-  createGetAppointmentColor() {
-    return (appointmentConfig) => fromPromise(
-      this.resourceManager.getAppointmentColor(appointmentConfig),
-    );
   }
 
   showAppointmentTooltipCore(target: dxElementWrapper, data: AppointmentTooltipItem[], options?: any) {
@@ -1969,7 +1963,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointments: data.map((item) => ({
         appointmentData: item.appointment,
         currentAppointmentData: { ...item.targetedAppointment },
-        color: item.color,
+        color: item.color as Promise<string>,
       })),
       targetElement: getPublicElement(target),
     };

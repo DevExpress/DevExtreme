@@ -1479,7 +1479,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             onAppointmentClick: ({ targetedAppointmentData }) => {
                 const expectedAppointment = {
                     startDate: new Date(2020, 11, 3, 9),
+                    displayStartDate: new Date(2020, 11, 3, 9),
                     endDate: new Date(2020, 11, 3, 9, 30),
+                    displayEndDate: new Date(2020, 11, 3, 9, 30),
                     recurrenceRule: 'FREQ=DAILY',
                 };
                 assert.deepEqual(targetedAppointmentData, expectedAppointment, 'Correct targeted appointment');
