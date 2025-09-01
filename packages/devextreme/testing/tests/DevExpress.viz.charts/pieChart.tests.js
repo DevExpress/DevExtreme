@@ -9,7 +9,12 @@ import {
     stubIncidentOccurredCreation,
 } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import commons from './chartParts/commons.js';
+import {
+    rendererModule,
+    resetModules,
+    getLegendStub,
+    getTrackerStub
+} from './chartParts/commons.js';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
 import labelModule from 'viz/series/points/label';
@@ -39,7 +44,7 @@ const dataSourceTemplate = [
     { cat: 'Third', val: 300 }
 ];
 
-commons.rendererModule.Renderer = sinon.spy(function(parameters) {
+rendererModule.Renderer = sinon.spy(function(parameters) {
     return new Renderer(parameters);
 });
 
@@ -175,7 +180,7 @@ const environment = {
         this.themeManager.getOptions.reset();
         this.themeManager = null;
 
-        commons.resetModules();
+        resetModules();
         resetMockFactory();
         restoreMockFactory();
     }
@@ -239,7 +244,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         const chart = createPieChart.call(this, {});
 
         assert.ok(chart);
-        assert.strictEqual(commons.rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
+        assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
     });
 
     QUnit.test('Theme manager with no settings', function(assert) {
@@ -352,11 +357,11 @@ const overlappingEnvironment = $.extend({}, environment, {
             seriesGroup: chart._seriesGroup,
             renderer: chart._renderer,
             tooltip: chart._tooltip,
-            legend: commons.getLegendStub(),
+            legend: getLegendStub(),
             eventTrigger: chart._eventTrigger
         }, 'create tracker arguments');
 
-        const tracker = commons.getTrackerStub(true);
+        const tracker = getTrackerStub(true);
         assert.ok(tracker.stub('update').calledOnce, 'tracker updating was called once');
 
         const updateArg0 = tracker.stub('update').lastCall.args[0];
@@ -586,8 +591,8 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
-        commons.getTrackerStub(true).stub('updateSeries').reset();
+        const oldSeries = getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        getTrackerStub(true).stub('updateSeries').reset();
 
         // act
         chart.option({
@@ -595,7 +600,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
 
         // assert
-        assert.strictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.strictEqual(oldSeries, getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('T400246. After series update tracker gets new series', function(assert) {
@@ -605,8 +610,8 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
-        commons.getTrackerStub(true).stub('updateSeries').reset();
+        const oldSeries = getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        getTrackerStub(true).stub('updateSeries').reset();
 
         seriesMockData.series.push(new MockSeries({ points: this.points1 }));
         seriesMockData.series.push(new MockSeries({ points: this.points2 }));
@@ -617,7 +622,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
 
         // assert
-        assert.notStrictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.notStrictEqual(oldSeries, getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('create tracker, with series', function(assert) {
@@ -629,7 +634,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         // assert
         assert.equal(chart.series.length, 2, 'Series length');
-        assert.equal(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0].length, 2, 'updateSeries args');
+        assert.equal(getTrackerStub(true).stub('updateSeries').lastCall.args[0].length, 2, 'updateSeries args');
     });
 
     QUnit.module('dxChart simple series creation', environment);
@@ -1172,7 +1177,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             type: 'pie'
         });
 
-        const legend = commons.getLegendStub();
+        const legend = getLegendStub();
 
         const getLegendData = function(passedData) {
             return {
@@ -1224,7 +1229,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: {}
         });
         // assert
-        const legend = commons.getLegendStub();
+        const legend = getLegendStub();
         const updateArgs = legend.update.lastCall.args;
 
         assert.equal(updateArgs[1]._incidentOccurred, chart._incidentOccurred, 'incidentOccurred');
@@ -1255,7 +1260,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         const points = this.stubPoints;
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 3, 'update args');
         updateArgs[0].forEach(function(args, i) {
@@ -1287,7 +1292,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 5, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1330,7 +1335,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 7, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1366,7 +1371,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
         assert.deepEqual(updateArgs[0][0].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][1].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][2].states, { hover: { opacity: 0.3 }, selection: { opacity: 0.3 }, normal: { opacity: 0.3 } }, 'Legend states');
@@ -1473,7 +1478,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const legendData = commons.getLegendStub().stub('update').lastCall.args[0];
+        const legendData = getLegendStub().stub('update').lastCall.args[0];
 
         assert.strictEqual(legendData.length, 7);
         assert.equal(legendData[0].argumentIndex, 0);
@@ -1564,7 +1569,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
         // act
         legendCallback();
@@ -1635,7 +1640,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        commons.getLegendStub().stub('getActionCallback').returns(action);
+        getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
         // act
         legendCallback();
@@ -1701,7 +1706,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        commons.getLegendStub().stub('getActionCallback').returns(action);
+        getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
         // act
         legendCallback();
@@ -1733,7 +1738,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
         // act
         legendCallback({
@@ -1771,7 +1776,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
         // act
         legendCallback({
@@ -1984,7 +1989,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         // assert
         assert.ok(chart.seriesDisposed, 'Series should be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].type, 'donut', 'series type');
@@ -2010,7 +2015,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.innerRadius, 0.8, 'inner radius');
@@ -2036,7 +2041,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.startAngle, 20, 'start angle');
@@ -2062,7 +2067,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.segmentsDirection, 'anticlockwise', 'segment direction');
@@ -2191,7 +2196,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         // act
         chart.clearSelection();
         // assert
-        assert.ok(commons.getTrackerStub(true).stub('clearSelection').called, 'Selection should be cleared through tracker');
+        assert.ok(getTrackerStub(true).stub('clearSelection').called, 'Selection should be cleared through tracker');
     });
 
     QUnit.test('dxChart - get all series', function(assert) {

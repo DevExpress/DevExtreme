@@ -4,7 +4,12 @@ import {
     restoreIncidentOccurredCreation,
 } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import commons from './chartParts/commons.js';
+import {
+    environment,
+    getTrackerStub,
+    createChartInstance,
+    LabelCtor,
+} from './chartParts/commons.js';
 import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
 import seriesModule from 'viz/series/base_series';
 import dataValidatorModule from 'viz/components/data_validator';
@@ -14,14 +19,14 @@ import graphicObjects from '__internal/common/m_charts';
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
 (function seriesCreationTests() {
-    QUnit.module('dxChart simple series creation', $.extend({}, commons.environment, {
+    QUnit.module('dxChart simple series creation', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.call(this);
+            environment.beforeEach.call(this);
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
             this.clock.restore();
-            commons.environment.afterEach.call(this);
+            environment.afterEach.call(this);
         }
     }));
 
@@ -674,7 +679,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             }]
         });
 
-        assert.ok(commons.getTrackerStub().repairTooltip.calledOnce, 'repairTooltip called once');
+        assert.ok(getTrackerStub().repairTooltip.calledOnce, 'repairTooltip called once');
     });
 
     QUnit.test('tracker repaired tooltip. after data updating', function(assert) {
@@ -690,11 +695,11 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             }]
         });
 
-        commons.getTrackerStub().repairTooltip.reset();
+        getTrackerStub().repairTooltip.reset();
         chart.getDataSource().store().insert({ arg: '3', val: 3 });
         chart.getDataSource().reload();
 
-        assert.ok(commons.getTrackerStub().repairTooltip.calledOnce, 'repairTooltip called after data updating');
+        assert.ok(getTrackerStub().repairTooltip.calledOnce, 'repairTooltip called after data updating');
     });
 
     QUnit.test('Chart with two series. Default series names', function(assert) {
@@ -742,14 +747,14 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(series[0].name, 'Series 1');
     });
 
-    QUnit.module('dxChart seriesTemplates creation', $.extend({}, commons.environment, {
+    QUnit.module('dxChart seriesTemplates creation', $.extend({}, environment, {
         beforeEach: function() {
             executeAsyncMock.setup();
-            commons.environment.beforeEach.call(this);
+            environment.beforeEach.call(this);
         },
         afterEach: function() {
             executeAsyncMock.teardown();
-            commons.environment.afterEach.call(this);
+            environment.afterEach.call(this);
         },
         mockValidateData: function() {
             this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
@@ -787,9 +792,9 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
 (function API() {
 
-    QUnit.module('API', $.extend({}, commons.environment, {
+    QUnit.module('API', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.call(this);
+            environment.beforeEach.call(this);
             this.clock = sinon.useFakeTimers();
 
             const stubSeries1 = new MockSeries({
@@ -804,7 +809,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         },
         afterEach: function() {
             this.clock.restore();
-            commons.environment.afterEach.call(this);
+            environment.afterEach.call(this);
         }
     }));
 
@@ -818,7 +823,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         // act
         chart.clearSelection();
         // assert
-        assert.ok(commons.getTrackerStub().stub('clearSelection').called, 'Selection should be cleared through tracker');
+        assert.ok(getTrackerStub().stub('clearSelection').called, 'Selection should be cleared through tracker');
     });
 
     QUnit.test('dxChart - get all series', function(assert) {
@@ -924,7 +929,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
         chart.hideTooltip();
 
-        assert.ok(commons.getTrackerStub().stub('_hideTooltip').called, 'tracker hide tooltip was called');
+        assert.ok(getTrackerStub().stub('_hideTooltip').called, 'tracker hide tooltip was called');
     });
 
     QUnit.test('dxChart - clear hover', function(assert) {
@@ -932,12 +937,12 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
         chart.clearHover();
 
-        assert.ok(commons.getTrackerStub().stub('clearHover').called, 'tracker clear hover was called');
+        assert.ok(getTrackerStub().stub('clearHover').called, 'tracker clear hover was called');
     });
 
     QUnit.test('dxChart - render', function(assert) {
         // arrange
-        const chart = commons.createChartInstance({}, this.$container);
+        const chart = createChartInstance({}, this.$container);
         let renderCalled = false;
         let drawOptions = null;
 
@@ -989,15 +994,15 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 })();
 
 (function incidentOccurred() {
-    QUnit.module('incidentOccurred errors and warnings', $.extend({}, commons.environment, {
+    QUnit.module('incidentOccurred errors and warnings', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.call(this);
+            environment.beforeEach.call(this);
             stubIncidentOccurredCreation();
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
             this.clock.restore();
-            commons.environment.afterEach.call(this);
+            environment.afterEach.call(this);
             restoreIncidentOccurredCreation();
         }
     }));
@@ -1091,7 +1096,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         seriesModule.Series = function() { return { isUpdated: false }; };
 
         // act
-        const chart = commons.createChartInstance({
+        const chart = createChartInstance({
             series: {
                 type: 'unknown',
             }
@@ -1107,7 +1112,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
     });
 
     QUnit.test('Two axis with duplicate name', function(assert) {
-        const chart = commons.createChartInstance({
+        const chart = createChartInstance({
             valueAxis: [
                 { name: 'axisName' },
                 { name: 'axisName' }
@@ -1156,7 +1161,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         // arrange
         seriesMockData.series.push(new MockSeries({}));
         // act
-        const chart = commons.createChartInstance({
+        const chart = createChartInstance({
             series: [{
                 axis: 'axis',
                 type: 'line'
@@ -1175,14 +1180,14 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 })();
 
 (function resolveOverlapping() {
-    QUnit.module('resolveLabelOverlapping. hide', $.extend({}, commons.environment, {
+    QUnit.module('resolveLabelOverlapping. hide', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.apply(this, arguments);
-            commons.LabelCtor.resetIndex();
+            environment.beforeEach.apply(this, arguments);
+            LabelCtor.resetIndex();
             this.labels = [];
         },
         afterEach: function() {
-            commons.environment.afterEach.apply(this, arguments);
+            environment.afterEach.apply(this, arguments);
         },
         createFakeSeriesWithLabels: function(bBoxes, isRange) {
             const series = new MockSeries();
@@ -1209,7 +1214,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         createStubLabels: function(bBoxes) {
             const that = this;
             $.each(bBoxes, function(_, BBox) {
-                const label = new commons.LabelCtor();
+                const label = new LabelCtor();
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
                     return !this.draw.calledWith(false);
@@ -1344,10 +1349,10 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
-    QUnit.module('resolveLabelOverlapping. stack', $.extend({}, commons.environment, {
+    QUnit.module('resolveLabelOverlapping. stack', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.apply(this, arguments);
-            commons.LabelCtor.resetIndex();
+            environment.beforeEach.apply(this, arguments);
+            LabelCtor.resetIndex();
             this.labels = [];
         },
         createFakeSeriesWithLabels: function(bBoxes, seriesOptions) {
@@ -1377,7 +1382,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             const that = this;
             const labels = [];
             $.each(bBoxes, function(_, BBox) {
-                const label = new commons.LabelCtor();
+                const label = new LabelCtor();
                 label.getData.returns({ value: BBox.value });
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
@@ -1968,10 +1973,10 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.ok(!this.labels[2].shift.called);
     });
 
-    QUnit.module('resolveLabelOverlapping. stack. range series', $.extend({}, commons.environment, {
+    QUnit.module('resolveLabelOverlapping. stack. range series', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.apply(this, arguments);
-            commons.LabelCtor.resetIndex();
+            environment.beforeEach.apply(this, arguments);
+            LabelCtor.resetIndex();
             this.labels = [];
         },
         createFakeSeriesWithLabels: function(bBoxPairs, seriesOptions) {
@@ -1999,7 +2004,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         },
         createStubLabels: function(bBoxes) {
             return $.map(bBoxes, function(bBox) {
-                const label = new commons.LabelCtor();
+                const label = new LabelCtor();
                 label.getData.returns({ value: bBox.value });
                 label.getBoundingRect.returns(bBox);
                 label.isVisible = sinon.spy(function() {
@@ -2091,9 +2096,9 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(this.labels[3].draw.callCount, 0);
     });
 
-    QUnit.module('Graphic objects render', $.extend({}, commons.environment, {
+    QUnit.module('Graphic objects render', $.extend({}, environment, {
         beforeEach: function() {
-            commons.environment.beforeEach.call(this);
+            environment.beforeEach.call(this);
             this.clock = sinon.useFakeTimers();
 
             this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects').callsFake(function() {
@@ -2107,7 +2112,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         },
         afterEach: function() {
             this.clock.restore();
-            commons.environment.afterEach.call(this);
+            environment.afterEach.call(this);
             this.fakeGraphicObjects.restore();
         },
     }));

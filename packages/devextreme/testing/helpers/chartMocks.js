@@ -15,6 +15,7 @@ import {
     LoadingIndicator,
 } from './vizMocks.js';
 import { Range } from 'viz/translators/range';
+
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
 const firstCategory = 'First';
