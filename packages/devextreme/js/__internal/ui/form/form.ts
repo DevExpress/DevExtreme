@@ -1868,6 +1868,7 @@ class Form extends Widget<FormProperties> {
 
       if (!aiIntegration) {
         this._hideLoadPanel();
+        throw errors.Error('E1063');
       } else {
         this._executeAICommand(command, params, callbacks);
       }
@@ -1883,7 +1884,7 @@ class Form extends Widget<FormProperties> {
 
     if (!aiIntegration) {
       this._hideLoadPanel();
-      throw errors.Error('W1026');
+      throw errors.Error('E1063');
     }
 
     this._currentAICommand = {

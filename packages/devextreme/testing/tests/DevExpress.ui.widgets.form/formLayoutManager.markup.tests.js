@@ -2712,7 +2712,8 @@ QUnit.module('Default button configuration', () => {
                 buttonOptions: {
                     text: 'Custom Smart Text',
                     icon: 'custom-icon',
-                    onClick: customClickHandler
+                    onClick: customClickHandler,
+                    disabled: false,
                 }
             }]
         });
