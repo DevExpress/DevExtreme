@@ -77,14 +77,14 @@ export interface Duration {
   duration: number;
 }
 
-export interface OriginalAppointmentDates {
-  originalAppointmentDates: {
+export interface GridAppointmentDates {
+  gridAppointmentDates: {
     startDate: number;
     endDate: number;
   };
 }
 
-export interface AppointmentPart extends OriginalAppointmentDates {
+export interface AppointmentPart extends GridAppointmentDates {
   reduced?: 'head' | 'body' | 'tail';
   partIndex: number;
   partCount: number;
@@ -119,12 +119,12 @@ export interface MaxLevel {
 }
 
 export interface AppointmentCollector {
-  items: (ListEntity & OriginalAppointmentDates)[];
+  items: (ListEntity & GridAppointmentDates)[];
   isCompact: boolean;
 }
 
 export interface AppointmentCollectorWithGeometry {
-  items: (ListEntity & OriginalAppointmentDates & RealSize)[];
+  items: (ListEntity & GridAppointmentDates & RealSize)[];
   isCompact: boolean;
 }
 

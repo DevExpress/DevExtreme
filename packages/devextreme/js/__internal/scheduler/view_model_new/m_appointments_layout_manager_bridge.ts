@@ -15,7 +15,7 @@ import { generateMonthViewModel } from './generate_view_model/generate_month_vie
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
-import type { AppointmentEntity, ListEntity, OriginalAppointmentDates } from './types';
+import type { AppointmentEntity, GridAppointmentDates, ListEntity } from './types';
 
 class AppointmentLayoutManagerBridge {
   preparedItems: any[] = [];
@@ -116,7 +116,7 @@ class AppointmentLayoutManagerBridge {
             ),
           });
           const toCollectedItem = (
-            item: ListEntity & OriginalAppointmentDates & RealSize,
+            item: ListEntity & GridAppointmentDates & RealSize,
           ): AppointmentItemViewModel => ({
             itemData: item.itemData,
             allDay: false, // otherwise all day appointment will not render
