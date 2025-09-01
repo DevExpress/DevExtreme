@@ -22,7 +22,7 @@ const NOT_AVAILABLE = '#N/A';
 const CHANGING_DURATION_IF_PAGINATE = 300;
 
 const proxyMethod = function (type, methodName, defaultResult?) {
-  const target = type && type.prototype ? type.prototype : type;
+  const target = type.prototype;
   if (!target[methodName]) {
     target[methodName] = function () {
       const dataSource = this._dataSource;
