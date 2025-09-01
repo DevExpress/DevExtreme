@@ -327,7 +327,11 @@ function() {
     QUnit.test('PagesChooser is not visible if pages count equal one', function(assert) {
         const testElement = $('#container');
 
-        testElement.dxPagination({ maxPagesCount: 7, pageCount: 1 });
+        testElement.dxPagination({
+            maxPagesCount: 7,
+            pageCount: 1,
+            showPageSizeSelector: false
+        });
         const $pages = testElement.find('.dx-page');
 
         assert.equal($pages.length, 1, '$pages count');
@@ -337,7 +341,12 @@ function() {
     QUnit.test('PagesChooser is visible always if pageNavigatorVisible is true', function(assert) {
         const testElement = $('#container');
 
-        testElement.dxPagination({ maxPagesCount: 7, pageCount: 1, pagesNavigatorVisible: true });
+        testElement.dxPagination({
+            maxPagesCount: 7,
+            pageCount: 1,
+            pagesNavigatorVisible: true,
+            showPageSizeSelector: false
+        });
         const $pages = testElement.find('.dx-page');
 
         assert.equal($pages.length, 1, '$pages count');
@@ -347,7 +356,12 @@ function() {
     QUnit.test('PagesChooser is not visible  if pageNavigatorVisible is false', function(assert) {
         const testElement = $('#container');
 
-        testElement.dxPagination({ maxPagesCount: 7, pageCount: 1, pagesNavigatorVisible: false });
+        testElement.dxPagination({
+            maxPagesCount: 7,
+            pageCount: 1,
+            pagesNavigatorVisible: false,
+            showPageSizeSelector: false
+        });
         const $pages = testElement.find('.dx-page');
 
         assert.equal($pages.length, 0, '$pages count');
@@ -356,7 +370,12 @@ function() {
     QUnit.test('PagesChooser is not visible when pageNavigatorVisible is false', function(assert) {
         const testElement = $('#container');
 
-        const pagination = testElement.dxPagination({ maxPagesCount: 7, pageCount: 1, pagesNavigatorVisible: true }).dxPagination('instance');
+        const pagination = testElement.dxPagination({
+            maxPagesCount: 7,
+            pageCount: 1,
+            pagesNavigatorVisible: true,
+            showPageSizeSelector: false
+        }).dxPagination('instance');
         pagination.option('pagesNavigatorVisible', false);
         const $pages = testElement.find('.dx-page');
 
@@ -836,7 +855,8 @@ function() {
             itemCount: 50,
             pageIndex: 1,
             pageSize: 5,
-            allowedPageSizes: [5, 10, 20]
+            allowedPageSizes: [5, 10, 20],
+            showPageSizeSelector: false
         });
 
         const pagination = $pagination.dxPagination('instance');
