@@ -491,10 +491,8 @@ class PivotGrid extends Widget {
     let scrollLeft;
     const scrolled = that._scrollTop || that._scrollLeft;
 
-    // @ts-expect-error ts-error
     if (that._scrollUpdating) return; // T645458
 
-    // @ts-expect-error ts-error
     that._scrollUpdating = true;
 
     if (rowsArea && !rowsArea.hasScroll() && that._hasHeight) {
@@ -560,7 +558,7 @@ class PivotGrid extends Widget {
 
   _renderFieldChooser() {
     const that = this;
-    // @ts-expect-error ts-error
+
     const container = that._pivotGridContainer;
     const fieldChooserOptions = that.option('fieldChooser') || {};
     // @ts-expect-error ts-error
@@ -639,14 +637,10 @@ class PivotGrid extends Widget {
       },
     };
 
-    // @ts-expect-error ts-error
-    if (that._fieldChooserPopup) {
-      // @ts-expect-error ts-error
+    if (that.getFieldChooserPopup()) {
       that._fieldChooserPopup.option(popupOptions);
-      // @ts-expect-error ts-error
       that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
     } else {
-      // @ts-expect-error ts-error
       that._fieldChooserPopup = that._createComponent(
         $(DIV)
           .addClass(FIELD_CHOOSER_POPUP_CLASS)
