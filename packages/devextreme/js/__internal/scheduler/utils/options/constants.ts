@@ -14,7 +14,6 @@ const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 
 export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   indicatorTime: undefined,
-  renovateRender: true,
   _draggingMode: 'outlook',
   _appointmentTooltipOffset: { x: 0, y: 0 },
   _appointmentCountPerCell: 2,

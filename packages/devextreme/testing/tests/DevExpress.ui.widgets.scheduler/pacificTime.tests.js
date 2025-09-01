@@ -255,59 +255,55 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             { view: 'timelineWeek', times: expectedAllTimes, dates: expectedDateResults }
         ];
 
-        [true, false].forEach((renovateRender) => {
-            module('timeCellTemplate', () => {
-                testCases.forEach(testCase => {
-                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, async function(assert) {
-                        let index = 0;
+        module('timeCellTemplate', () => {
+            testCases.forEach(testCase => {
+                test(`arguments should be valid in '${testCase.view}' view`, async function(assert) {
+                    let index = 0;
 
-                        await createWrapper({
-                            dataSource: [],
-                            timeCellTemplate: arg => {
-                                if(index < expectedAllTimes.length) {
-                                    assert.equal(arg.date.valueOf(), testCase.dates[index].valueOf(), 'arg.date should be valid');
-                                    assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
+                    await createWrapper({
+                        dataSource: [],
+                        timeCellTemplate: arg => {
+                            if(index < expectedAllTimes.length) {
+                                assert.equal(arg.date.valueOf(), testCase.dates[index].valueOf(), 'arg.date should be valid');
+                                assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
 
-                                    index++;
-                                }
-                            },
-                            views: testCases.map(testCases => testCases.view),
-                            currentView: testCase.view,
-                            startDayHour: 0,
-                            currentDate: summerDSTDate,
-                            height: 600,
-                            renovateRender,
-                        });
-
-                        assert.expect(expectedAllTimes.length * 2);
+                                index++;
+                            }
+                        },
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
+                        startDayHour: 0,
+                        currentDate: summerDSTDate,
+                        height: 600,
                     });
 
-                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
-                        let index = 0;
+                    assert.expect(expectedAllTimes.length * 2);
+                });
 
-                        const validExpectedDateResults = testCase.dates.slice(4);
-                        const times = testCase.times.slice(4);
+                test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
+                    let index = 0;
 
-                        await createWrapper({
-                            dataSource: [],
-                            timeCellTemplate: ({ date, text }) => {
-                                if(index < validExpectedDateResults.length) {
-                                    assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
-                                    assert.equal(text, times[index], 'correct text');
+                    const validExpectedDateResults = testCase.dates.slice(4);
+                    const times = testCase.times.slice(4);
 
-                                    index++;
-                                }
-                            },
-                            views: testCases.map(testCases => testCases.view),
-                            currentView: testCase.view,
-                            startDayHour: 2,
-                            currentDate: summerDSTDate,
-                            height: 600,
-                            renovateRender,
-                        });
+                    await createWrapper({
+                        dataSource: [],
+                        timeCellTemplate: ({ date, text }) => {
+                            if(index < validExpectedDateResults.length) {
+                                assert.equal(date.valueOf(), validExpectedDateResults[index].valueOf(), 'correct date');
+                                assert.equal(text, times[index], 'correct text');
 
-                        assert.expect(times.length * 2);
+                                index++;
+                            }
+                        },
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
+                        startDayHour: 2,
+                        currentDate: summerDSTDate,
+                        height: 600,
                     });
+
+                    assert.expect(times.length * 2);
                 });
             });
 
@@ -320,7 +316,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         });
                     })
                     .forEach((testCase) => {
-                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
+                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change`, async function(assert) {
                             let index = 0;
 
                             const validExpectedDateResults = expectedDateResults.slice(4);
@@ -349,7 +345,6 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                                 startDayHour: 2,
                                 currentDate: summerDSTDate,
                                 height: 600,
-                                renovateRender,
                             });
 
                             assert.expect(validExpectedDateResults.length);

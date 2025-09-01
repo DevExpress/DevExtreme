@@ -200,7 +200,6 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData', async function(assert) {
         this.instance.option({
-            renovateRender: false,
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
             startDayHour: 5,
@@ -209,21 +208,21 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
 
-        assert.deepEqual(dataUtils.data($cells.get(0), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
             startDate: new Date(2015, 9, 21, 5),
             endDate: new Date(2015, 9, 21, 6),
             allDay: false,
             groupIndex: 0,
         }, 'data of first cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(5)), {
             startDate: new Date(2015, 9, 21, 10),
             endDate: new Date(2015, 9, 21, 11),
             allDay: false,
             groupIndex: 0,
         }, 'data of 5th cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(10), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(10)), {
             startDate: new Date(2015, 9, 21, 15),
             endDate: new Date(2015, 9, 21, 16),
             allDay: false,
@@ -242,7 +241,6 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
         }]);
         this.instance.option({
-            renovateRender: false,
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
             startDayHour: 5,
@@ -250,14 +248,9 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             ...resourceConfig,
         });
 
-        if(this.instance.option('renovateRender')) {
-            assert.ok(true, 'This test is not for renovated render');
-            return;
-        }
-
         const $cells = this.instance.$element().find('.dx-scheduler-date-table-row').eq(2).find('.' + CELL_CLASS);
 
-        assert.deepEqual(dataUtils.data($cells.get(0), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
             startDate: new Date(2015, 9, 21, 5),
             endDate: new Date(2015, 9, 21, 6),
             allDay: false,
@@ -268,7 +261,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             groupIndex: 2,
         }, 'data of first cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(5)), {
             startDate: new Date(2015, 9, 21, 10),
             endDate: new Date(2015, 9, 21, 11),
             allDay: false,
@@ -279,7 +272,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             groupIndex: 2,
         }, 'data of 5th cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(10), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(10)), {
             startDate: new Date(2015, 9, 21, 15),
             endDate: new Date(2015, 9, 21, 16),
             allDay: false,
@@ -361,13 +354,16 @@ QUnit.module('TimelineDay with intervalCount markup', timelineDayModuleConfig, (
     });
 
     QUnit.test('TimelineDay Day view cells have right cellData with view option intervalCount=2', async function(assert) {
-        this.instance.option('renovateRender', false);
+
 
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
-        const firstCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(0), 'dxCellData');
-        const secondCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(95), 'dxCellData');
+        const $firstCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const $secondCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(95);
+
+        const firstCellData = this.instance.getCellData($firstCell);
+        const secondCellData = this.instance.getCellData($secondCell);
 
         assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 29, 0), 'cell has right startDate');
         assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 29, 0, 30), 'cell has right endtDate');
@@ -456,8 +452,6 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
     });
 
     QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData, groupOrientation = horizontal', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -468,7 +462,7 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
 
-        assert.deepEqual(dataUtils.data($cells.get(0), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
             startDate: new Date(2015, 9, 21, 5),
             endDate: new Date(2015, 9, 21, 6),
             allDay: false,
@@ -478,7 +472,7 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
             groupIndex: 0,
         }, 'data of first cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(5)), {
             startDate: new Date(2015, 9, 21, 7),
             endDate: new Date(2015, 9, 21, 8),
             allDay: false,
@@ -670,13 +664,14 @@ QUnit.module('TimelineWeek with intervalCount markup', timelineWeekModuleConfig,
     });
 
     QUnit.test('TimelineWeek view cells have right cellData with view option intervalCount=2', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
-        const firstCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(7 * 48), 'dxCellData');
-        const secondCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(2 * 7 * 48 - 1), 'dxCellData');
+        const $firstCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(7 * 48);
+        const $secondCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(2 * 7 * 48 - 1);
+
+        const firstCellData = this.instance.getCellData($firstCell);
+        const secondCellData = this.instance.getCellData($secondCell);
 
         assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 2, 0), 'cell has right startDate');
         assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 2, 0, 30), 'cell has right endtDate');
@@ -730,7 +725,7 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
     });
 
     QUnit.test('Each cell of scheduler timeline week should contain correct jQuery dxCellData, groupOrientation = horizontal', async function(assert) {
-        this.instance.option('renovateRender', false);
+
 
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
@@ -742,7 +737,7 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
 
-        assert.deepEqual(dataUtils.data($cells.get(0), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(0)), {
             startDate: new Date(2015, 9, 19, 5),
             endDate: new Date(2015, 9, 19, 6),
             allDay: false,
@@ -752,7 +747,7 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
             groupIndex: 0,
         }, 'data of first cell is correct');
 
-        assert.deepEqual(dataUtils.data($cells.get(25), 'dxCellData'), {
+        assert.deepEqual(this.instance.getCellData($cells.eq(25)), {
             startDate: new Date(2015, 9, 20, 6),
             endDate: new Date(2015, 9, 20, 7),
             allDay: false,
@@ -881,13 +876,14 @@ QUnit.module('TimelineWorkWeek with intervalCount markup', timelineWorkWeekModul
     });
 
     QUnit.test('TimelineWorkWeek view cells have right cellData with view option intervalCount=2', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
-        const firstCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(5 * 48), 'dxCellData');
-        const secondCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(2 * 5 * 48 - 1), 'dxCellData');
+        const $firstCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(5 * 48);
+        const $secondCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(2 * 5 * 48 - 1);
+
+        const firstCellData = this.instance.getCellData($firstCell);
+        const secondCellData = this.instance.getCellData($secondCell);
 
         assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), 'cell has right startDate');
         assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 0, 30), 'cell has right endtDate');
@@ -979,8 +975,6 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -990,8 +984,9 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
 
+        const instance = this.instance;
         $cells.each(function(index) {
-            assert.deepEqual(dataUtils.data($(this)[0], 'dxCellData'), {
+            assert.deepEqual(instance.getCellData($(this)), {
                 startDate: new Date(2015, 3, 1 + index, 1),
                 endDate: new Date(2015, 3, 1 + index, 10),
                 allDay: false,
@@ -1001,7 +996,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
     });
 
     QUnit.test('Cells should have right date', async function(assert) {
-        this.instance.option('renovateRender', false);
+
 
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
@@ -1012,7 +1007,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
         });
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
-        assert.deepEqual(dataUtils.data($cells.get(25), 'dxCellData').startDate, new Date(2016, 3, 26, 8), 'Date is OK');
+        assert.deepEqual(this.instance.getCellData($cells.eq(25)).startDate, new Date(2016, 3, 26, 8), 'Date is OK');
     });
 });
 
@@ -1039,13 +1034,14 @@ QUnit.module('TimelineMonth with intervalCount', timelineMonthModuleConfig, () =
     });
 
     QUnit.test('TimelineMonth view cells have right cellData with view option intervalCount=2', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option('intervalCount', 2);
         this.instance.option('currentDate', new Date(2017, 5, 29));
 
-        const firstCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').get(0), 'dxCellData');
-        const secondCellData = dataUtils.data(this.instance.$element().find('.dx-scheduler-date-table-cell').last().get(0), 'dxCellData');
+        const $firstCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const $secondCell = this.instance.$element().find('.dx-scheduler-date-table-cell').last();
+
+        const firstCellData = this.instance.getCellData($firstCell);
+        const secondCellData = this.instance.getCellData($secondCell);
 
         assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), 'cell has right startDate');
         assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), 'cell has right endtDate');
@@ -1104,8 +1100,6 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1115,11 +1109,12 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
 
+        const instance = this.instance;
         $cells.each(function(index) {
             const dateIndex = index % 30;
             const groupIndex = index < 30 ? 1 : 2;
 
-            assert.deepEqual(dataUtils.data($(this)[0], 'dxCellData'), {
+            assert.deepEqual(instance.getCellData($(this)), {
                 startDate: new Date(2015, 3, 1 + dateIndex, 1),
                 endDate: new Date(2015, 3, 1 + dateIndex, 10),
                 allDay: false,
@@ -1132,8 +1127,6 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('Cells should have right date', async function(assert) {
-        this.instance.option('renovateRender', false);
-
         this.instance.option({
             currentDate: new Date(2016, 3, 21),
             firstDayOfWeek: 1,
@@ -1143,8 +1136,8 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
         });
 
         const $cells = this.instance.$element().find('.' + CELL_CLASS);
-        assert.deepEqual(dataUtils.data($cells.get(25), 'dxCellData').startDate, new Date(2016, 3, 26, 8), 'Date is OK');
-        assert.deepEqual(dataUtils.data($cells.get(55), 'dxCellData').startDate, new Date(2016, 3, 26, 8), 'Date is OK');
+        assert.deepEqual(this.instance.getCellData($cells.eq(25)).startDate, new Date(2016, 3, 26, 8), 'Date is OK');
+        assert.deepEqual(this.instance.getCellData($cells.eq(55)).startDate, new Date(2016, 3, 26, 8), 'Date is OK');
     });
 
     QUnit.test('TimelineMonth shoud render date cells correctly', async function(assert) {
@@ -1180,190 +1173,183 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
         }
     };
 
-    [true, false].forEach((isRenovatedRender) => {
-        const moduleName = isRenovatedRender
-            ? 'Renovated Render'
-            : 'Non-Renovated Render';
+    const groupClassesModuleConfig = {
+        beforeEach: function() {
+            this.createInstance = (workspaceClass, options = {}) => {
+                const instance = $('#scheduler-timeline')[workspaceClass]({
+                    startDayHour: 12,
+                    endDayHour: 14,
+                    currentDate: new Date(2020, 8, 27),
+                    groupOrientation: 'horizontal',
+                    intervalCount: 2,
+                    getResourceManager: getEmptyResourceManager,
+                    ...options,
+                })[workspaceClass]('instance');
 
-        const groupClassesModuleConfig = {
-            beforeEach: function() {
-                this.createInstance = (workspaceClass, options = {}) => {
-                    const instance = $('#scheduler-timeline')[workspaceClass]({
-                        renovateRender: isRenovatedRender,
-                        startDayHour: 12,
-                        endDayHour: 14,
-                        currentDate: new Date(2020, 8, 27),
-                        groupOrientation: 'horizontal',
-                        intervalCount: 2,
-                        getResourceManager: getEmptyResourceManager,
-                        ...options,
-                    })[workspaceClass]('instance');
+                return instance;
+            };
+        }
+    };
 
-                    return instance;
-                };
-            }
-        };
+    QUnit.module('Timeline Group Classes', groupClassesModuleConfig, () => {
+        [{
+            view: TIMELINE_DAY,
+            columnCountInGroup: 8,
+            rowCountInGroup: 1,
+        }, {
+            view: TIMELINE_WEEK,
+            columnCountInGroup: 56,
+            rowCountInGroup: 1,
+        }, {
+            view: TIMELINE_MONTH,
+            columnCountInGroup: 61,
+            rowCountInGroup: 1,
+        }].forEach(({ view, columnCountInGroup, rowCountInGroup }) => {
+            QUnit.test(`first-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
+                const instance = await this.createInstance(view.class);
 
-        QUnit.module(moduleName, groupClassesModuleConfig, () => {
-            [{
-                view: TIMELINE_DAY,
-                columnCountInGroup: 8,
-                rowCountInGroup: 1,
-            }, {
-                view: TIMELINE_WEEK,
-                columnCountInGroup: 56,
-                rowCountInGroup: 1,
-            }, {
-                view: TIMELINE_MONTH,
-                columnCountInGroup: 61,
-                rowCountInGroup: 1,
-            }].forEach(({ view, columnCountInGroup, rowCountInGroup }) => {
-                QUnit.test(`first-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
-                    const instance = await this.createInstance(view.class);
+                instance.$element().find(`.${CELL_CLASS}`).each(function() {
+                    assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
+                });
 
-                    instance.$element().find(`.${CELL_CLASS}`).each(function() {
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
+                });
+            });
+
+            QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped horizontally`, async function(assert) {
+                const instance = await this.createInstance(view.class);
+
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
+
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Date table');
+                });
+
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function(index) {
+                    checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
+                });
+            });
+
+            QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, async function(assert) {
+                const instance = await this.createInstance(view.class, {
+                    groupByDate: true,
+                });
+
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
+
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
+                });
+
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
+                });
+            });
+
+            QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, async function(assert) {
+                const instance = await this.createInstance(view.class, {
+                    groupOrientation: 'vertical',
+                });
+
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
+
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    if(Math.floor(index / columnCountInGroup) % rowCountInGroup === 0) {
                         assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
-                    });
+                    } else {
+                        assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell does not have first-group class');
+                    }
                 });
 
-                QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped horizontally`, async function(assert) {
-                    const instance = await this.createInstance(view.class);
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell does not have first-group class');
+                });
+            });
 
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
+            QUnit.test(`last-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
+                const instance = await this.createInstance(view.class);
 
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Date table');
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function(index) {
-                        checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
-                    });
+                instance.$element().find(`.${CELL_CLASS}`).each(function() {
+                    assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
                 });
 
-                QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, async function(assert) {
-                    const instance = await this.createInstance(view.class, {
-                        groupByDate: true,
-                    });
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
+                });
+            });
 
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
+            QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped horizontally`, async function(assert) {
+                const instance = await this.createInstance(view.class);
 
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
-                    });
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
 
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
-                    });
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    checkLastGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                 });
 
-                QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, async function(assert) {
-                    const instance = await this.createInstance(view.class, {
-                        groupOrientation: 'vertical',
-                    });
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function(index) {
+                    checkLastGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
+                });
+            });
 
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
-
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        if(Math.floor(index / columnCountInGroup) % rowCountInGroup === 0) {
-                            assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
-                        } else {
-                            assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell does not have first-group class');
-                        }
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell does not have first-group class');
-                    });
+            QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, async function(assert) {
+                const instance = await this.createInstance(view.class, {
+                    groupByDate: true,
                 });
 
-                QUnit.test(`last-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
-                    const instance = await this.createInstance(view.class);
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
 
-                    instance.$element().find(`.${CELL_CLASS}`).each(function() {
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
+                });
+
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell has last-group class');
+                });
+            });
+
+            QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, async function(assert) {
+                const instance = await this.createInstance(view.class, {
+                    groupOrientation: 'vertical',
+                });
+
+                await applyWorkspaceGroups(instance, [{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
+
+                instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
+                    if((Math.floor(index / columnCountInGroup) + 1) % rowCountInGroup === 0) {
                         assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
-                    });
+                    } else {
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell does not have last-group class');
+                    }
                 });
 
-                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped horizontally`, async function(assert) {
-                    const instance = await this.createInstance(view.class);
-
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
-
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        checkLastGroupCell(assert, this, index, columnCountInGroup, 'Date table');
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function(index) {
-                        checkLastGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
-                    });
-                });
-
-                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, async function(assert) {
-                    const instance = await this.createInstance(view.class, {
-                        groupByDate: true,
-                    });
-
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
-
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell has last-group class');
-                    });
-                });
-
-                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, async function(assert) {
-                    const instance = await this.createInstance(view.class, {
-                        groupOrientation: 'vertical',
-                    });
-
-                    await applyWorkspaceGroups(instance, [{
-                        label: 'one',
-                        fieldExpr: 'one',
-                        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    }]);
-
-                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
-                        if((Math.floor(index / columnCountInGroup) + 1) % rowCountInGroup === 0) {
-                            assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
-                        } else {
-                            assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell does not have last-group class');
-                        }
-                    });
-
-                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
-                    });
+                instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`).each(function() {
+                    assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
                 });
             });
         });

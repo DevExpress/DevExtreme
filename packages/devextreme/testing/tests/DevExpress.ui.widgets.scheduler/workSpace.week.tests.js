@@ -175,7 +175,6 @@ module('Work Space Week', () => {
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
                 startDayHour: 5,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
@@ -193,7 +192,6 @@ module('Work Space Week', () => {
                 currentDate: new Date(2015, 2, 4),
                 firstDayOfWeek: 1,
                 endDayHour: 10,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find(CLASSES.dateTableCell).eq(8);
@@ -268,7 +266,6 @@ module('Work Space Week', () => {
                 currentDate: new Date(2016, 10, 6),
                 firstDayOfWeek: 0,
                 startDayHour: 1,
-                renovateRender: false,
             });
 
             const cellData = this.instance.$element().find('.dx-scheduler-date-table-row').eq(1).find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -403,7 +400,6 @@ module('Work Space Week', () => {
                 groupOrientation: 'vertical',
                 startDayHour: 9,
                 ...resourceConfig,
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(25).data('dxCellData');
@@ -533,7 +529,6 @@ module('Work Space Week', () => {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(6).data('dxCellData');
@@ -553,7 +548,6 @@ module('Work Space Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
                 startDate: new Date(2017, 6, 4),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -577,7 +571,6 @@ module('Work Space Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
                 startDate: new Date(2017, 6, 26),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -716,7 +709,6 @@ module('Work Space Work Week', () => {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 25),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(4).data('dxCellData');
@@ -740,7 +732,6 @@ module('Work Space Work Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 26),
                 startDate: new Date(2017, 6, 4),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -764,7 +755,6 @@ module('Work Space Work Week', () => {
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
                 startDate: new Date(2017, 6, 26),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -799,7 +789,6 @@ module('Work Space Work Week', () => {
                 hoursInterval: 1,
                 firstDayOfWeek: 1,
                 currentDate: new Date(2017, 6, 4),
-                renovateRender: false,
                 getResourceManager: getEmptyResourceManager,
             });
 
