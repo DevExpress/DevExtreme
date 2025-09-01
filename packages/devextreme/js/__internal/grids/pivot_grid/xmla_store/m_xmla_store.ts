@@ -1,6 +1,7 @@
 import { getLanguageId } from '@js/common/core/localization/language_codes';
 import { errors } from '@js/common/data/errors';
 import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
@@ -18,49 +19,47 @@ import pivotGridUtils, {
 
 const window = getWindow();
 
+const XMLA_DISCOVER_TEMPLATE = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>';
+
+const XMLA_EXECUTE_TEMPLATE = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>';
+
+const MDX_SELECT_TEMPLATE = 'SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS';
+
+const MDX_FILTER_SELECT_TEMPLATE = '(SELECT {0} FROM {1})';
+
+const MDX_SUBSET_TEMPLATE = 'Subset({0}, {1}, {2})';
+
+const MDX_ORDER_TEMPLATE = 'Order({0}, {1}, {2})';
+
+const MDX_WITH_TEMPLATE = '{0} {1} as {2}';
+
+const MDX_SLICE_TEMPLATE = 'WHERE ({0})';
+
+const MDX_NON_EMPTY_TEMPLATE = 'NonEmpty({0}, {1})';
+
+const MDX_AXIS_TEMPLATE = '{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}';
+
+const MDX_CROSS_JOIN_TEMPLATE = 'CrossJoin({0})';
+
+const MDX_SET_TEMPLATE = '{{0}}';
+
+const MEASURE_DIMENSION_KEY = 'DX_MEASURES';
+
+const MD_DIMTYPE_MEASURE = '2';
+
 class XmlaStore {
-  discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>';
-
-  execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>';
-
-  mdx = 'SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS';
-
-  mdxFilterSelect = '(SELECT {0} FROM {1})';
-
-  mdxSubset = 'Subset({0}, {1}, {2})';
-
-  mdxOrder = 'Order({0}, {1}, {2})';
-
-  mdxWith = '{0} {1} as {2}';
-
-  mdxSlice = 'WHERE ({0})';
-
-  mdxNonEmpty = 'NonEmpty({0}, {1})';
-
-  mdxAxis = '{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}';
-
-  mdxCrossJoin = 'CrossJoin({0})';
-
-  mdxSet = '{{0}}';
-
-  MEASURE_DEMENSION_KEY = 'DX_MEASURES';
-
-  MD_DIMTYPE_MEASURE = '2';
-
   _options: any;
 
   constructor(options: any) {
     this._options = options;
   }
 
-  key(): any {
-    // @ts-expect-error
-    return new Deferred().resolve();
+  key() {
+    noop();
   }
 
-  filter(): any {
-    // @ts-expect-error
-    return new Deferred().resolve();
+  filter() {
+    noop();
   }
 
   execXMLA(requestOptions, data) {
@@ -144,7 +143,7 @@ class XmlaStore {
 
   crossJoinElements(elements) {
     const elementsString = elements.join(',');
-    return elements.length > 1 ? stringFormat(this.mdxCrossJoin, elementsString) : elementsString;
+    return elements.length > 1 ? stringFormat(MDX_CROSS_JOIN_TEMPLATE, elementsString) : elementsString;
   }
 
   union(elements) {
@@ -222,10 +221,10 @@ class XmlaStore {
         }
       }
       if (arg) {
-        arg = stringFormat(this.mdxSet, arg);
+        arg = stringFormat(MDX_SET_TEMPLATE, arg);
         if (take) {
           const sortBy = (field.hierarchyName || field.dataField) + (field.sortBy === 'displayText' ? '.MEMBER_CAPTION' : '.MEMBER_VALUE');
-          arg = stringFormat(this.mdxOrder, arg, sortBy, field.sortOrder === 'desc' ? 'DESC' : 'ASC');
+          arg = stringFormat(MDX_ORDER_TEMPLATE, arg, sortBy, field.sortOrder === 'desc' ? 'DESC' : 'ASC');
         }
         crossJoinArgs.push(arg);
       }
@@ -264,7 +263,7 @@ class XmlaStore {
         take,
       );
       if (!take && !totalsOnly) {
-        crossJoin = stringFormat(this.mdxNonEmpty, crossJoin, cellsString);
+        crossJoin = stringFormat(MDX_NON_EMPTY_TEMPLATE, crossJoin, cellsString);
       }
       crossJoins.push(crossJoin);
     } while (
@@ -278,7 +277,7 @@ class XmlaStore {
     name = name || `[DX_Set_${withArray.length}]`;
     type = type || 'set';
 
-    withArray.push(stringFormat(this.mdxWith, type, name, expression));
+    withArray.push(stringFormat(MDX_WITH_TEMPLATE, type, name, expression));
     return name;
   }
 
@@ -290,7 +289,7 @@ class XmlaStore {
     let expandIndex = 0;
     let expandLevel = 0;
     const result: any = [];
-    const cellsString = stringFormat(this.mdxSet, cells.join(','));
+    const cellsString = stringFormat(MDX_SET_TEMPLATE, cells.join(','));
 
     if (dimensions && dimensions.length) {
       if (options.headerName === axisName) {
@@ -333,7 +332,7 @@ class XmlaStore {
       let expression = this.union(crossJoins);
       if (axisName === 'rows' && options.rowTake) {
         expression = stringFormat(
-          this.mdxSubset,
+          MDX_SUBSET_TEMPLATE,
           expression,
           options.rowSkip > 0
             ? options.rowSkip + 1
@@ -345,7 +344,7 @@ class XmlaStore {
       }
       if (axisName === 'columns' && options.columnTake) {
         expression = stringFormat(
-          this.mdxSubset,
+          MDX_SUBSET_TEMPLATE,
           expression,
           options.columnSkip > 0
             ? options.columnSkip + 1
@@ -368,7 +367,7 @@ class XmlaStore {
       result.push(cellsString);
     }
 
-    return stringFormat(this.mdxAxis, this.crossJoinElements(result), axisName);
+    return stringFormat(MDX_AXIS_TEMPLATE, this.crossJoinElements(result), axisName);
   }
 
   generateAxisFieldsFilter(fields) {
@@ -395,7 +394,7 @@ class XmlaStore {
       });
 
       if (filterValues.length) {
-        filterStringExpression = stringFormat(this.mdxSet, filterExpression.join(','));
+        filterStringExpression = stringFormat(MDX_SET_TEMPLATE, filterExpression.join(','));
 
         if (field.filterType === 'exclude') {
           filterStringExpression = `Except(${this.getAllMembers(field)},${filterStringExpression})`;
@@ -413,7 +412,7 @@ class XmlaStore {
 
     each([columnsFilter, rowsFilter, filter], (_, filter) => {
       if (filter) {
-        from = stringFormat(this.mdxFilterSelect, `${filter}on 0`, from);
+        from = stringFormat(MDX_FILTER_SELECT_TEMPLATE, `${filter}on 0`, from);
       }
     });
 
@@ -448,14 +447,14 @@ class XmlaStore {
         select = axisStrings.join(',');
       }
       mdxString = withString + stringFormat(
-        this.mdx,
+        MDX_SELECT_TEMPLATE,
         this.generateFrom(
           this.generateAxisFieldsFilter(columns),
           this.generateAxisFieldsFilter(rows),
           this.generateAxisFieldsFilter(filters || []),
           cubeName,
         ),
-        slice.length ? stringFormat(this.mdxSlice, slice.join(',')) : '',
+        slice.length ? stringFormat(MDX_SLICE_TEMPLATE, slice.join(',')) : '',
         select,
       );
     }
@@ -909,8 +908,8 @@ class XmlaStore {
         displayFolder = translatedDisplayFolders[displayFolder] || displayFolder;
       }
 
-      if ((levelNumber !== '0' || this.getFirstChildText(row, `${schema}_IS_VISIBLE`) !== 'true') && (this.getFirstChildText(row, 'DIMENSION_TYPE') !== this.MD_DIMTYPE_MEASURE)) {
-        const dimension = isMeasure ? this.MEASURE_DEMENSION_KEY : this.getFirstChildText(row, 'DIMENSION_UNIQUE_NAME');
+      if ((levelNumber !== '0' || this.getFirstChildText(row, `${schema}_IS_VISIBLE`) !== 'true') && (this.getFirstChildText(row, 'DIMENSION_TYPE') !== MD_DIMTYPE_MEASURE)) {
+        const dimension = isMeasure ? MEASURE_DIMENSION_KEY : this.getFirstChildText(row, 'DIMENSION_UNIQUE_NAME');
         const dataField = this.getFirstChildText(row, `${schema}_UNIQUE_NAME`);
         result.push({
           dimension: dimensions.names[dimension] || dimension,
@@ -943,12 +942,10 @@ class XmlaStore {
       defaultHierarchies: {},
     };
 
-    const { MD_DIMTYPE_MEASURE, MEASURE_DEMENSION_KEY } = this;
-
     each($(xml).find('row'), function () {
       const $row = $(this);
       const type = $row.children('DIMENSION_TYPE').text();
-      const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DEMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
+      const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DIMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
 
       result.names[dimensionName] = $row.children('DIMENSION_CAPTION').text();
       result.defaultHierarchies[$row.children('DEFAULT_HIERARCHY').text()] = true;
@@ -996,7 +993,7 @@ class XmlaStore {
     mdxString = ($('<div>') as any).text(mdxString).html();
     return this.execXMLA(
       storeOptions,
-      stringFormat(this.execute, mdxString, storeOptions.catalog, this.getLocaleIdProperty()),
+      stringFormat(XMLA_EXECUTE_TEMPLATE, mdxString, storeOptions.catalog, this.getLocaleIdProperty()),
     );
   }
 
@@ -1047,16 +1044,16 @@ class XmlaStore {
     const { catalog } = options;
     const { cube } = options;
     const localeIdProperty = this.getLocaleIdProperty();
-    const dimensionsRequest = this.execXMLA(options, stringFormat(this.discover, catalog, cube, 'MDSCHEMA_DIMENSIONS', localeIdProperty));
-    const measuresRequest = this.execXMLA(options, stringFormat(this.discover, catalog, cube, 'MDSCHEMA_MEASURES', localeIdProperty));
-    const hierarchiesRequest = this.execXMLA(options, stringFormat(this.discover, catalog, cube, 'MDSCHEMA_HIERARCHIES', localeIdProperty));
-    const levelsRequest = this.execXMLA(options, stringFormat(this.discover, catalog, cube, 'MDSCHEMA_LEVELS', localeIdProperty));
+    const dimensionsRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_DIMENSIONS', localeIdProperty));
+    const measuresRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_MEASURES', localeIdProperty));
+    const hierarchiesRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_HIERARCHIES', localeIdProperty));
+    const levelsRequest = this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_LEVELS', localeIdProperty));
     // @ts-expect-error
     const result = new Deferred();
 
     when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest)
       .then((dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) => {
-        this.execXMLA(options, stringFormat(this.discover, catalog, cube, 'MDSCHEMA_MEASUREGROUPS', localeIdProperty))
+        this.execXMLA(options, stringFormat(XMLA_DISCOVER_TEMPLATE, catalog, cube, 'MDSCHEMA_MEASUREGROUPS', localeIdProperty))
           .done((measureGroupsResponse) => {
             const dimensions = this.parseDimensionsDiscoverRowSet(dimensionsResponse);
             const hierarchies = this.parseDiscoverRowSet(hierarchiesResponse, 'HIERARCHY', dimensions);
