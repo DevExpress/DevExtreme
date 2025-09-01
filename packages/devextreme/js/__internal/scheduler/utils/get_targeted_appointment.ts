@@ -22,6 +22,34 @@ const setTargetedAppointmentResources = <T extends Appointment>(
   }
 };
 
+export const getTargetedAppointmentFromInfo = <T extends Appointment>(
+  rawAppointment: T,
+  settings: Pick<AppointmentAgendaViewModel | AppointmentItemViewModel, 'info' | 'groupIndex'>,
+  dataAccessor: AppointmentDataAccessor,
+  resourceManager: ResourceManager,
+): T & {
+  displayStartDate: Date;
+  displayEndDate: Date;
+} => {
+  const targetedAdapter = new AppointmentAdapter(
+    rawAppointment,
+    dataAccessor,
+  ).clone();
+
+  const { info } = settings;
+  targetedAdapter.startDate = new Date(info.sourceAppointment.startDate);
+  targetedAdapter.endDate = new Date(info.sourceAppointment.endDate);
+
+  const rawTargetedAppointment = targetedAdapter.source as T;
+  setTargetedAppointmentResources(rawTargetedAppointment, settings, resourceManager);
+
+  return {
+    ...rawTargetedAppointment,
+    displayStartDate: new Date(info.appointment.startDate),
+    displayEndDate: new Date(info.appointment.endDate),
+  };
+};
+
 export const getTargetedAppointment = <T extends Appointment>(
   rawAppointment: T,
   settings: Pick<AppointmentItemViewModel, 'info' | 'groupIndex'>
@@ -59,16 +87,10 @@ export const getTargetedAppointment = <T extends Appointment>(
     return rawTargetedAppointment;
   }
 
-  const { info } = settings;
-  targetedAdapter.startDate = new Date(info.sourceAppointment.startDate);
-  targetedAdapter.endDate = new Date(info.sourceAppointment.endDate);
-
-  const rawTargetedAppointment = targetedAdapter.source as T;
-  setTargetedAppointmentResources(rawTargetedAppointment, settings, resourceManager);
-
-  return {
-    ...rawTargetedAppointment,
-    displayStartDate: new Date(info.appointment.startDate),
-    displayEndDate: new Date(info.appointment.endDate),
-  };
+  return getTargetedAppointmentFromInfo(
+    rawAppointment,
+    settings,
+    dataAccessor,
+    resourceManager,
+  );
 };

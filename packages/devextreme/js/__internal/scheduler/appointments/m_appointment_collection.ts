@@ -31,7 +31,10 @@ import timeZoneUtils from '../m_utils_time_zone';
 import type { AppointmentTooltipItem } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
-import { getTargetedAppointment } from '../utils/get_targeted_appointment';
+import {
+  getTargetedAppointment,
+  getTargetedAppointmentFromInfo,
+} from '../utils/get_targeted_appointment';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
@@ -472,14 +475,10 @@ class SchedulerAppointments extends CollectionWidget {
 
     let { targetedAppointmentData } = model;
     if (this._currentAppointmentSettings && 'isAgendaModel' in this._currentAppointmentSettings) {
-      targetedAppointmentData = getTargetedAppointment(
+      targetedAppointmentData = getTargetedAppointmentFromInfo(
         this._currentAppointmentSettings.itemData,
-        {
-          info: this._currentAppointmentSettings.info,
-          groupIndex: this._currentAppointmentSettings.groupIndex,
-        },
+        this._currentAppointmentSettings,
         this.dataAccessors,
-        this.option('timeZoneCalculator'),
         this.getResourceManager(),
       );
     }
