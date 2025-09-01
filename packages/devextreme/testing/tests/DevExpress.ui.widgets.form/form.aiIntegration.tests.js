@@ -464,7 +464,7 @@ QUnit.module('SmartPaste', () => {
             });
         });
 
-        QUnit.test('LoadPanel is hidden when smartPaste operation is aborted', function(assert) {
+        QUnit.test('LoadPanel not hidden on aiIntegration update during command execution', function(assert) {
             const done = assert.async();
             let abortCallback;
 
@@ -484,6 +484,38 @@ QUnit.module('SmartPaste', () => {
                     assert.ok(abortCallback, 'Abort callback was created');
 
                     form.option('aiIntegration', { smartPaste: sinon.stub().callsFake(() => () => {}) });
+
+                    setTimeout(() => {
+                        assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
+                        assert.strictEqual(form._loadPanel.option('visible'), true, 'LoadPanel is hidden after abort');
+                        assert.strictEqual(form.option('disabled'), true, 'Form is not disabled after abort');
+
+                        done();
+                    }, 10);
+                }, 10);
+            });
+        });
+
+        QUnit.test('LoadPanel is hidden on aiIntegration remove during command execution', function(assert) {
+            const done = assert.async();
+            let abortCallback;
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                abortCallback = sinon.spy();
+                return abortCallback;
+            });
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('test text');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                    assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+                    assert.ok(abortCallback, 'Abort callback was created');
+
+                    form.option('aiIntegration', undefined);
 
                     setTimeout(() => {
                         assert.strictEqual(abortCallback.calledOnce, true, 'Previous operation was aborted');
@@ -764,6 +796,30 @@ QUnit.module('SmartPaste', () => {
 
                 assert.strictEqual(onSmartPasted.calledOnce, true, 'onSmartPasted event has been invoked after its change at runtime');
             });
+        });
+
+        QUnit.test('should invoke onDataFieldChanged for each updated field after smartPaste', function(assert) {
+            const aiResult = [
+                { name: 'field1', value: 'value1' },
+                { name: 'field2', value: 'value2' },
+            ];
+            const smartPaste = (_, callbacks) => {
+                callbacks.onComplete(aiResult);
+            };
+            const onFieldDataChanged = sinon.spy();
+
+            const form = setupFormWithAi({
+                aiIntegration: { smartPaste },
+                onFieldDataChanged
+            });
+
+            form.smartPaste('text');
+
+            const onFieldDataChangedCalls = onFieldDataChanged.getCalls();
+
+            assert.strictEqual(onFieldDataChangedCalls.length, 2, 'onFieldDataChanged called twice');
+            assert.propContains(onFieldDataChangedCalls[0].args[0], { dataField: 'field1', value: 'value1' }, 'onFieldDataChanged called for 1st field with correct args');
+            assert.propContains(onFieldDataChangedCalls[1].args[0], { dataField: 'field2', value: 'value2' }, 'onFieldDataChanged called for 2nd field with correct args');
         });
     });
 
