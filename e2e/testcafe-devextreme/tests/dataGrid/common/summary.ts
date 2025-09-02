@@ -70,6 +70,42 @@ test('Total summary should be focusable', async (t) => {
   },
 }));
 
+test('Focused total summary should have right appearance with sticky columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.click(dataGrid.getDataRow(3).element);
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(await takeScreenshot('total-summary-focused-with-sticky.png', dataGrid.element)).ok()
+    .expect(compareResults.isValid()).ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, value1: 1, value2: 2 },
+    { id: 2, value1: 1, value2: 2 },
+    { id: 3, value1: 1, value2: 2 },
+    { id: 4, value1: 1, value2: 2 },
+  ],
+  columns: [
+    { dataField: 'value1', fixed: true },
+    { dataField: 'value2' },
+  ],
+  summary: {
+    totalItems: [
+      {
+        column: 'value1',
+        summaryType: 'count',
+      },
+      {
+        column: 'value2',
+        summaryType: 'count',
+      },
+    ],
+  },
+}));
+
 test('Group footer navigation should work without keyboard trap', async (t) => {
   const dataGrid = new DataGrid('#container');
 

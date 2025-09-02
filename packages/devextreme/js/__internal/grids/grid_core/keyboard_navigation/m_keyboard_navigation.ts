@@ -82,6 +82,7 @@ import {
   isDetailRow,
   isEditForm,
   isEditorCell,
+  isEditRow,
   isElementDefined,
   isFixedColumnIndexOffsetRequired,
   isGroupFooterRow,
@@ -1363,6 +1364,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   private _clickTargetCellHandler(event, $cell) {
     const column = this._getColumnByCellElement($cell);
     const isCellEditMode = this._isCellEditMode();
+    const isEditing = this._editingController.isEditing();
 
     this.setCellFocusType();
 
@@ -1397,14 +1399,18 @@ export class KeyboardNavigationController extends modules.ViewController {
         const $target = event
           && $(event.target).closest(`${NON_FOCUSABLE_ELEMENTS_SELECTOR}, td`);
         const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
-        const isEditor = !!column && !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
-        const isDisabled = !isEditor && (!args.isHighlighted || skipFocusEvent);
+        const isEditCell = !column?.command
+          && isEditing
+          && $cell.hasClass(EDITOR_CELL_CLASS);
+
+        const isDisabled = !isEditCell
+          && (!args.isHighlighted || skipFocusEvent);
         this._focus($cell, isDisabled, skipFocusEvent);
       }
     } else {
       this.setRowFocusType();
       this.setFocusedRowIndex(args.prevRowIndex);
-      if (this._editingController.isEditing() && isCellEditMode) {
+      if (isEditing && isCellEditMode) {
         this._closeEditCell();
       }
     }
@@ -1425,10 +1431,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      activeElementSelector = '.dx-datagrid-rowsview .dx-row[tabindex]';
+      activeElementSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row[tabindex]`;
       if (!focusedRowEnabled) {
         activeElementSelector
-          += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';
+          += `, .${this.addWidgetPrefix(ROWS_VIEW_CLASS)} .dx-row > td[tabindex]`;
       }
       element = this.component.$element().find(activeElementSelector).first();
     }
@@ -1472,6 +1478,7 @@ export class KeyboardNavigationController extends modules.ViewController {
         isHighlighted,
       );
       $element = args.$newCellElement;
+
       if (isRowFocusType && !args.isHighlighted) {
         this.setRowFocusType();
       }
@@ -1479,7 +1486,10 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (!args.cancel) {
       this._focus($element, !args.isHighlighted);
-      this._focusInteractiveElement($element);
+
+      if (this._getElementType($element) !== 'row' || isEditRow($element)) {
+        this._focusInteractiveElement($element);
+      }
     }
   }
 
