@@ -1,6 +1,3 @@
-/* eslint-disable no-new */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -64,14 +61,13 @@ export function loadAcceptsAjaxResult() {
 export function loadAcceptsAngularHttpClient() {
   const http: HttpClient = ANY;
   const options: StoreOptions = {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     load: () => http.get(ANY).toPromise(),
   };
 }
 
 export function loadAcceptsPromiseOfObject() {
   const options: StoreOptions = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     load: () => new Promise<object>(ANY),
   };
 }
