@@ -517,6 +517,7 @@
           {
             "Name": "Columns",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Auto-Populated Columns",
@@ -586,6 +587,22 @@
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "TagBox Columns",
+                "Name": "TagBoxColumns",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-tagbox-columns.xml"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai-column.xml"
               }
             ]
           },
@@ -1291,6 +1308,7 @@
           {
             "Name": "Columns",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "Column Reordering",
@@ -1332,6 +1350,22 @@
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "TagBox Columns",
+                "Name": "TagBoxColumns",
+                "Widget": "TreeList",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-tagbox-columns.xml"
+              },
+              {
+                "Title": "AI Column",
+                "Name": "AIColumn",
+                "Widget": "TreeList",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai-column.xml"
               }
             ]
           },
@@ -4114,6 +4148,32 @@
             ]
           },
           {
+            "Name": "File Attachments",
+            "Demos": [
+              {
+                "Title": "File Attachments",
+                "Name": "FileAttachments",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-file-attachments.xml"
+              }
+            ]
+          },
+          {
+            "Name": "Empty View Template",
+            "Demos": [
+              {
+                "Title": "Empty View Template",
+                "Name": "EmptyViewTemplate",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-empty-view-template.xml"
+              }
+            ]
+          },
+          {
             "Name": "Customization",
             "Equivalents": "Settings, Options",
             "Demos": [
@@ -4269,6 +4329,7 @@
         "Name": "Form",
         "Breadcrumb": true,
         "Equivalents": "dxForm, dx-form",
+        "Badge": "Updated",
         "Demos": [
           {
             "Title": "Overview",
@@ -4289,6 +4350,13 @@
             "Title": "Grouping",
             "Name": "Grouping",
             "Widget": "Form"
+          },
+          {
+            "Title": "AI Smart Paste",
+            "Name": "AISmartPaste",
+            "Widget": "Form",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-smart-paste.xml"
           },
           {
             "Title": "Adaptability",
@@ -4692,6 +4760,22 @@
             "Name": "Overview",
             "Widget": "Slider",
             "ShowOnMainPage": true
+          }
+        ]
+      },
+      {
+        "Name": "Speech To Text",
+        "Badge": "Roadmap",
+        "Equivalents": "SpeechToText, Speech Recognition, Dictation, Voice Input, dxSpeechToText, dx-speech-to-text",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "SpeechToText",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "ShowOnMainPage": true,
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-speech-to-text.xml"
           }
         ]
       },
