@@ -103,17 +103,6 @@ QUnit.module('parseResultForEditorType', () => {
             expectedType: 'date',
         },
         {
-            editorType: 'dxDateRangeBox',
-            correctValue: ['2025-08-29', '2025-08-29'],
-            incorrectValues: [
-                { value: '{}', description: 'string' },
-                { value: ['2025-08-29'], description: 'array of one item' },
-                { value: ['2025-08-29', '{}'], description: 'array with not a date' },
-                { value: ['2025-08-29', '2025-08-29', '2025-08-29'], description: 'array of more than two items' },
-            ],
-            expectedType: 'date range'
-        },
-        {
             editorType: 'dxHtmlEditor',
             correctValue: 'string',
             incorrectValues: [{ value: ['string'], description: 'array' }],
@@ -131,22 +120,55 @@ QUnit.module('parseResultForEditorType', () => {
             incorrectValues: [{ value: 'five', description: 'not a number' }],
             expectedType: 'number',
         },
-        {
-            editorType: 'dxRangeSlider',
-            correctValue: ['3.14', '3.14'],
-            incorrectValues: [
-                { value: '{}', description: 'string' },
-                { value: ['3.14'], description: 'array of one item' },
-                { value: ['3.14', 'five'], description: 'array with not a number' },
-                { value: ['3.14', '3.14', '3.14'], description: 'array of more than two items' },
-            ],
-            expectedType: 'number range'
-        }
     ].forEach(({ editorType, correctValue, incorrectValues, expectedType }) => {
         QUnit.test(`should return correct value for ${editorType}`, function(assert) {
             const value = correctValue;
 
             assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
+        });
+
+        incorrectValues.forEach(({ value, description }) => {
+            QUnit.test(`should throw an error for ${description} value for ${editorType}`, function(assert) {
+                assert.throws(
+                    () => parseResultForEditorType('dataField', editorType, value),
+                    errors.Error('E1064', 'dataField', JSON.stringify(value), expectedType),
+                    `error for ${JSON.stringify(value)} is thrown with correct parameters`,
+                );
+            });
+        });
+    });
+
+    [{
+        editorType: 'dxDateRangeBox',
+        correctValues: [
+            { value: ['2025-08-29', '2025-08-29'], description: 'two dates' },
+            { value: ['2025-08-29'], description: 'one date' },
+            { value: [], description: 'an empty array' },
+        ],
+        incorrectValues: [
+            { value: '{}', description: 'string' },
+            { value: ['2025-08-29', '{}'], description: 'array with not a date' },
+            { value: ['2025-08-29', '2025-08-29', '2025-08-29'], description: 'array of more than two items' },
+        ],
+        expectedType: 'date range'
+    }, {
+        editorType: 'dxRangeSlider',
+        correctValues: [
+            { value: ['3.14', '3.14'], description: 'two numbers' },
+            { value: ['3.14'], description: 'one number' },
+            { value: [], description: 'an empty array' },
+        ],
+        incorrectValues: [
+            { value: '{}', description: 'string' },
+            { value: ['3.14', 'five'], description: 'array with not a number' },
+            { value: ['3.14', '3.14', '3.14'], description: 'array of more than two items' },
+        ],
+        expectedType: 'number range'
+    }].forEach(({ editorType, correctValues, incorrectValues, expectedType }) => {
+        correctValues.forEach(({ value, description }) => {
+            QUnit.test(`should return correct value for ${description} for ${editorType}`, function(assert) {
+                assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
+            });
         });
 
         incorrectValues.forEach(({ value, description }) => {

@@ -46,9 +46,8 @@ export const parseResultForEditorType = (
     case 'dxDateRangeBox':
       if (
         !Array.isArray(value)
-        || value.length !== 2
-        || !dateUtilsTs.isValidDate(value[0])
-        || !dateUtilsTs.isValidDate(value[1])
+        || value.length > 2
+        || value.some((item) => !dateUtilsTs.isValidDate(item))
       ) {
         throw errors.Error('E1064', dataField, errorValue, 'date range');
       }
@@ -77,9 +76,8 @@ export const parseResultForEditorType = (
     case 'dxRangeSlider':
       if (
         !Array.isArray(value)
-        || value.length !== 2
-        || isNaN(parseFloat(value[0]))
-        || isNaN(parseFloat(value[1]))
+        || value.length > 2
+        || value.some((item) => isNaN(parseFloat(item)))
       ) {
         throw errors.Error('E1064', dataField, errorValue, 'number range');
       }

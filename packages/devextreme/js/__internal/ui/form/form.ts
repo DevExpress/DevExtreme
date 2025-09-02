@@ -1913,6 +1913,14 @@ class Form extends Widget<FormProperties> {
     }
   }
 
+  private _getEditorItemsMap(): Record<string, SimpleItem> {
+    const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
+    return dataItems.reduce((itemsMap, item) => {
+      itemsMap[item.dataField] = item;
+      return itemsMap;
+    }, {});
+  }
+
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
     return {
       onComplete: (fieldsData: SmartPasteCommandResult): void => {
@@ -1930,10 +1938,10 @@ class Form extends Widget<FormProperties> {
             this._hideLoadPanel();
             this.beginUpdate();
 
-            const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
+            const editorTypesMap = this._getEditorItemsMap();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
               try {
-                const currentItem = dataItems.find((item) => item.dataField === name);
+                const currentItem = editorTypesMap[name];
                 this._updateFieldWithSmartPasteValue(name, value, currentItem);
               } catch (error) {
                 logger.error(error);
