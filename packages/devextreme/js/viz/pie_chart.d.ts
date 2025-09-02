@@ -19,17 +19,19 @@ import {
 } from '../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
+  BasePointInfo,
+  basePointObject,
+  baseSeriesObject,
 } from './chart';
 
 import {
-    BaseChart,
-    BaseChartAdaptiveLayout,
-    BaseChartLegend,
-    BaseChartOptions,
-    PointInteractionInfo,
-    TooltipInfo,
+  BaseChart,
+  BaseChartAdaptiveLayout,
+  BaseChartLegend,
+  BaseChartOptions,
+  BaseChartTooltip,
+  PointInteractionInfo,
+  TooltipInfo,
 } from './chart_components/base_chart';
 
 import {
@@ -410,6 +412,12 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
      * @public
      */
     customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig) | undefined;
+    /**
+     * @docid
+     * @type object
+     * @public
+     */
+    tooltip?: BaseChartTooltip<PointInfo>;
 }
 
 /**
@@ -982,6 +990,30 @@ export interface pieChartSeriesObject extends baseSeriesObject {
    */
   isHovered(): boolean;
 }
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type PointInfo = BasePointInfo<piePointObject> & {
+  /**
+   * @docid
+   * @public
+   */
+  percent?: number;
+  /**
+   * @docid
+   * @public
+   */
+  percentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  points?: PointInfo;
+};
 
 /** @public */
 export type Properties = dxPieChartOptions;

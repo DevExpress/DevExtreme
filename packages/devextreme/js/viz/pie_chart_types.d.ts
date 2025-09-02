@@ -31,5 +31,6 @@ export {
   LegendItem,
   AdaptiveLayout,
   Legend,
+  PointInfo,
   Properties,
 } from './pie_chart';

@@ -399,6 +399,325 @@ export interface baseLabelObject {
 
 /**
  * @docid
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type BasePointInfo<TPoint extends basePointObject> = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  argumentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  highErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  lowErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalValue?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  point?: TPoint;
+  /**
+   * @docid
+   * @public
+   */
+  points?: BasePointInfo<TPoint>[];
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  value?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type StackedPointInfo = BasePointInfo<chartPointObject> & {
+  /**
+   * @docid
+   * @public
+   */
+  percent?: number;
+  /**
+   * @docid
+   * @public
+   */
+  percentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  points?: StackedPointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  total?: number;
+  /**
+   * @docid
+   * @public
+   */
+  totalText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type BubblePointInfo = BasePointInfo<chartPointObject> & {
+  /**
+   * @docid
+   * @public
+   */
+  points?: BubblePointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  size?: number;
+  /**
+   * @docid
+   * @public
+   */
+  sizeText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type CandleStickPointInfo = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  closeValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  closeValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  highValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  highValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  lowValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  lowValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  openValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  openValueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalCloseValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalHighValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalLowValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  originalOpenValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  point?: chartPointObject;
+  /**
+   * @docid
+   * @public
+   */
+  points?: CandleStickPointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  reductionValue?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  value?: number | string;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type RangePointInfo = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  argumentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue1?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue1Text?: string;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue12?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  rangeValue2Text?: string;
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  point?: chartPointObject;
+  /**
+   * @docid
+   * @public
+   */
+  points?: RangePointInfo[];
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalMinValue?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalValue?: string | number | Date;
+};
+
+/**
+ * @public
+ */
+export type BaseChartPointInfo = BasePointInfo<chartPointObject>;
+
+/**
+ * public
+ */
+export type PointInfo =
+  | BaseChartPointInfo
+  | StackedPointInfo
+  | BubblePointInfo
+  | CandleStickPointInfo
+  | RangePointInfo;
+
+/**
+ * @docid
  * @publicName Point
  * @type object
  * @namespace DevExpress.viz
@@ -2427,7 +2746,7 @@ export type Panes = CommonPaneSettings & {
  * @bublic
  * @docid dxChartTooltip
  */
-export type Tooltip = BaseChartTooltip & {
+export type Tooltip = BaseChartTooltip<PointInfo> & {
     /**
      * @docid dxChartOptions.tooltip.location
      * @default 'center'

@@ -20,10 +20,10 @@ import {
   } from '../../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
-    chartSeriesObject,
-    dxChartAnnotationConfig,
+  basePointObject,
+  baseSeriesObject,
+  chartSeriesObject,
+  dxChartAnnotationConfig,
 } from '../chart';
 
 import {
@@ -285,7 +285,7 @@ export interface BaseChartLegend extends BaseLegend {
  * @docid
  * @namespace DevExpress.viz
  */
-export interface BaseChartTooltip extends BaseWidgetTooltip {
+export interface BaseChartTooltip<TPointInfo = any> extends BaseWidgetTooltip {
     /**
      * @docid BaseChartOptions.tooltip.argumentFormat
      * @default undefined
@@ -299,7 +299,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @default undefined
      * @public
      */
-    contentTemplate?: template | ((pointInfo: any, element: DxElement) => string | UserDefinedElement) | undefined;
+    contentTemplate?: template | ((pointInfo: TPointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
      * @type_function_param1 pointInfo:object
@@ -308,7 +308,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @notUsedInTheme
      * @public
      */
-    customizeTooltip?: ((pointInfo: any) => any) | undefined;
+    customizeTooltip?: ((pointInfo: TPointInfo) => any) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.shared
      * @default false

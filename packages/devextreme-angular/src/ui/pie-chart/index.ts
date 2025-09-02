@@ -579,7 +579,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:BaseChartOptions.tooltip]
+     * [descr:dxPieChartOptions.tooltip]
     
      */
     @Input()

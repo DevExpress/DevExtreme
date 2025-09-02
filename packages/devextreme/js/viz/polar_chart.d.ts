@@ -16,9 +16,10 @@ import {
 } from '../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
-    chartAxisObject,
+  BasePointInfo,
+  basePointObject,
+  baseSeriesObject,
+  chartAxisObject,
 } from './chart';
 
 import {
@@ -1211,11 +1212,17 @@ export type Legend = BaseChartLegend & {
      */
     hoverMode?: LegendHoverMode;
 };
+
+/**
+ * @public
+ */
+export type PointInfo = BasePointInfo<polarPointObject>;
+
 /**
  * @public
  * @docid dxPolarChartTooltip
  */
-export type Tooltip = BaseChartTooltip & {
+export type Tooltip = BaseChartTooltip<PointInfo> & {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
      * @default false
