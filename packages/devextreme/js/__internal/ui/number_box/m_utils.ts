@@ -41,7 +41,11 @@ const splitByIndex = function (str, index) {
 };
 
 const adjustPercentValue = function (rawValue, precision) {
-  return rawValue && adjust(rawValue / 100, precision);
+  if (!rawValue) {
+    return rawValue;
+  }
+
+  return adjust(rawValue, precision) / 100;
 };
 
 export {
