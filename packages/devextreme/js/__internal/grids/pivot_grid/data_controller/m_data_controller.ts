@@ -124,7 +124,6 @@ class DataController {
             if (that._dataSource.paginate()) {
               that._dataSource.load();
             } else {
-              // - @ts-expect-error
               virtualScrollControllerChanged.apply(this, arguments);
             }
           });
@@ -1162,7 +1161,6 @@ class DataController {
     });
 
     const notifyProgress = function (progress) {
-      // - @ts-expect-error
       this.progress = progress;
       that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
     };
