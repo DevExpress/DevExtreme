@@ -246,6 +246,7 @@ export interface MapLayer {
 
 /**
  * @docid
+ * @public
  * @publicName Layer Element
  * @namespace DevExpress.viz
  */
