@@ -97,7 +97,6 @@ class DataController {
             if (that._dataSource.paginate()) {
               that._dataSource.load();
             } else {
-              // - @ts-expect-error
               virtualScrollControllerChanged.apply(this, arguments);
             }
           });
