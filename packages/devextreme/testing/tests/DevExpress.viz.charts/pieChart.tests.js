@@ -89,6 +89,7 @@ const environment = {
     beforeEach: function() {
         setupMocks.call(this);
         const that = this;
+
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
         that.templateManager = new TemplateManagerModule.TemplateManager();
@@ -235,7 +236,6 @@ const overlappingEnvironment = $.extend({}, environment, {
 });
 
 (function mainTest() {
-
     QUnit.module('Pie dxChart', environment);
 
     QUnit.test('dxChart creation', function(assert) {
@@ -1071,7 +1071,6 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries2.getPointsCount = sinon.stub().returns(3);
             seriesMockData.series.push(this.mockSeries1);
             seriesMockData.series.push(this.mockSeries2);
-
         },
         afterEach: function() {
             environment.afterEach.apply(this, arguments);
@@ -2122,7 +2121,6 @@ const overlappingEnvironment = $.extend({}, environment, {
 }());
 
 (function API() {
-
     QUnit.module('Selection API', {
         beforeEach: function() {
             environment.beforeEach.call(this);

@@ -111,7 +111,6 @@ QUnit.test('Adding and removing', function(assert) {
 QUnit.module('Themes', environment);
 
 QUnit.test('default theme', function(assert) {
-
     this.themeManager.setTheme();
     const theme = this.themeManager.theme();
 
@@ -125,7 +124,6 @@ QUnit.test('default theme', function(assert) {
 });
 
 QUnit.test('default theme with groupName', function(assert) {
-
     this.themeManager._themeSection = 'rangeSelector';
     this.themeManager.setTheme('generic');
     const theme = this.themeManager.theme();
@@ -138,7 +136,6 @@ QUnit.test('default theme with groupName', function(assert) {
 });
 
 QUnit.test('default theme with complex groupName', function(assert) {
-
     this.themeManager._themeSection = 'rangeSelector.scale';
     this.themeManager.setTheme('generic.light');
     const theme = this.themeManager.theme();
@@ -150,7 +147,6 @@ QUnit.test('default theme with complex groupName', function(assert) {
 });
 
 QUnit.test('customize default theme', function(assert) {
-
     this.themeManager.setTheme({
         chart: {
             legend: {
@@ -168,7 +164,6 @@ QUnit.test('customize default theme', function(assert) {
 });
 
 QUnit.test('customize theme with groupName', function(assert) {
-
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme({
         legend: {
@@ -184,7 +179,6 @@ QUnit.test('customize theme with groupName', function(assert) {
 });
 
 QUnit.test('customize custom theme', function(assert) {
-
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme({
         name: 'custom',
@@ -205,7 +199,6 @@ QUnit.test('customize custom theme', function(assert) {
 });
 
 QUnit.test('global customized theme', function(assert) {
-
     themeModule.getTheme('custom').chart.isGlobalCustomized = true;
 
     this.themeManager._themeSection = 'chart';
@@ -219,7 +212,6 @@ QUnit.test('global customized theme', function(assert) {
 });
 
 QUnit.test('theme by name', function(assert) {
-
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
     const theme = this.themeManager.theme();
@@ -349,7 +341,6 @@ QUnit.test('theme getter', function(assert) {
 });
 
 QUnit.test('initializeFont via font fields', function(assert) {
-
     this.themeManager = new BaseThemeManager({ fontFields: ['testLabel1.font', 'testObject2.testLabel2.font'] });
     this.themeManager.setCallback(this.callback);
     this.themeManager.setTheme({

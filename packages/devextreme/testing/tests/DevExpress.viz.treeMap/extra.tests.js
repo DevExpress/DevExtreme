@@ -1,13 +1,17 @@
-import common from './commonParts/common.js';
+import {
+    environment,
+    createRenderer,
+    createWidget,
+} from './commonParts/common.js';
 import $ from 'jquery';
 
 import 'viz/tree_map/api';
 import 'viz/tree_map/tracker';
 
-QUnit.module('T438413, two widgets', common.environment);
+QUnit.module('T438413, two widgets', environment);
 
 QUnit.test('After change options that reset nodes (e.g. maxDepth)', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -19,7 +23,7 @@ QUnit.test('After change options that reset nodes (e.g. maxDepth)', function(ass
     const args = this.tile(3).data.lastCall.args;
     const renderer = this.renderer;
 
-    common.createRenderer();
+    createRenderer();
     $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: []
     });
@@ -32,7 +36,7 @@ QUnit.test('After change options that reset nodes (e.g. maxDepth)', function(ass
 });
 
 QUnit.test('Change valueField option', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -43,7 +47,7 @@ QUnit.test('Change valueField option', function(assert) {
     });
     const renderer = this.renderer;
 
-    common.createRenderer();
+    createRenderer();
     $('<div>').css({ width: 600, height: 400 }).appendTo('#qunit-fixture').dxTreeMap({
         dataSource: []
     });

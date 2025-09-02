@@ -330,7 +330,6 @@ class TestPointerElement extends TestElement {
             top: 0,
             width: 800
         }, 'new canvas for scale');
-
     });
 
     QUnit.test('Scale vertical orientation = top', function(assert) {

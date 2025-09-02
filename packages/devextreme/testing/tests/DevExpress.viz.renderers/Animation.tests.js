@@ -47,7 +47,6 @@ import {
             this.srcRequestAnimationFrame && (animationFrame.requestAnimationFrame = this.srcRequestAnimationFrame);
             this.srcCancelAnimationFrame && (animationFrame.cancelAnimationFrame = this.srcCancelAnimationFrame);
             this.animationController.dispose();
-
         },
         mockRequestAnimationFrame: function(callback) {
             this.srcRequestAnimationFrame = animationFrame.requestAnimationFrame;
@@ -100,7 +99,6 @@ import {
         };
 
         animationController.addAnimation(animation);
-
 
         function doAssert() {
             assert.equal(animationController._animationCount, 1);
@@ -212,7 +210,6 @@ import {
 
         animationController.lock();
 
-
         assert.equal(animation1.stopArguments.length, 1, 'stop does called');
         assert.ok(!animation2.stopArguments, 'stop doesn\'t called');
         assert.ok(!animationController.stop.called);
@@ -235,7 +232,6 @@ import {
         animationController.addAnimation(animation2);
 
         animationController.lock();
-
 
         assert.equal(animation1.stopArguments.length, 1, 'stop does called');
         assert.equal(animation2.stopArguments.length, 1, 'stop does called');
@@ -374,7 +370,6 @@ import {
         const oldAnimation = new this.Animation();
         element.animation = oldAnimation;
 
-
         animationController.animateElement(element, params, options);
 
         assert.ok(oldAnimation.stopped, 'old animation must be stopped');
@@ -481,7 +476,6 @@ import {
                         that.animateAttributeParameters.baseArguments = that.animateAttributeParameters.baseArguments || [];
                         that.animateAttributeParameters.baseArguments.push($.extend(true, {}, $.makeArray(arguments)));
                         currentParams.baseProgress = progress;
-
                     },
                     complete: function(element, currentParams) {
                         that.animateAttributeParameters.completeArguments = that.animateAttributeParameters.completeArguments || [];
@@ -502,7 +496,6 @@ import {
                     css: function() { return this; },
                     append: function() { return this; }
                 }))();
-
         }
     };
     QUnit.module('Animation', environment);
@@ -522,7 +515,6 @@ import {
     QUnit.test('Start', function(assert) {
         const animation = new this.Animation(this.element, this.params, this.options);
         const firstTick = animation.tick;
-
 
         const result = animation.tick(new Date().getTime());
         const secondTick = animation.tick;
@@ -706,7 +698,6 @@ import {
         assert.expect(2);
         const that = this;
         const animation = this.createAnimation(this.element, this.params, $.extend(this.options, {
-
             complete: function() {
                 const completeAction = that.animateAttributeParameters.completeArguments[0];
                 assert.equal(completeAction[0], that.element);
@@ -773,7 +764,6 @@ import {
             }));
         animation.tick(new Date().getTime());
         this.clock.tick(10);
-
 
         animation.tick(new Date().getTime());
         this.clock.tick(10);
@@ -872,7 +862,6 @@ QUnit.test('Transformations step. translateX, translateY', function(assert) {
 QUnit.test('Transformations step. Rotate with xy', function(assert) {
     const step = this.animationStep;
 
-
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
@@ -894,7 +883,6 @@ QUnit.test('Transformations step. Rotate with xy', function(assert) {
 
 QUnit.test('Transformations step. Rotate without xy', function(assert) {
     const step = this.animationStep;
-
 
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
@@ -975,7 +963,6 @@ QUnit.test('Arc step', function(assert) {
             endAngle: -180
         }
     }, 0.5, this.easing(assert), this.currentParams, 'arc');
-
 
     assert.deepEqual(this.currentParams, {});
 

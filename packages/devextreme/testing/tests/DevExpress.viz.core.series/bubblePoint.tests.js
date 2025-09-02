@@ -187,7 +187,6 @@ QUnit.test('animate without graphic', function(assert) {
 });
 
 QUnit.test('pass diameter to correctCoordinates', function(assert) {
-
     const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
     const diameter = 10;
 

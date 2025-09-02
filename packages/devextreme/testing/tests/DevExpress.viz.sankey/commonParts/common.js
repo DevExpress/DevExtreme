@@ -143,6 +143,13 @@ const testData = {
         { source: 'M', target: 'Y', weight: 5 }
     ]
 };
-export { createSankey, testData, environment, layoutBuilder, spiesLayoutBuilder, find };
-const common = { createSankey, testData, environment, layoutBuilder, spiesLayoutBuilder, find };
-export default common;
+
+export {
+    createSankey,
+    testData,
+    environment,
+    layoutBuilder,
+    spiesLayoutBuilder,
+    find
+};
+

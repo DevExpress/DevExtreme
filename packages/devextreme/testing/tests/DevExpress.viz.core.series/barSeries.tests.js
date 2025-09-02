@@ -834,7 +834,6 @@ QUnit.test('customize point color. all', function(assert) {
                         dashStyle: 's-b-dashStyle'
                     }
                 }
-
             };
         }
     });

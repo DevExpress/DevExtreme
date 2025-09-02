@@ -1464,7 +1464,6 @@ QUnit.test('Two ranges for two series with two value axis on single pane', funct
                 position: 'top'
             }
         ]
-
     });
 
     assert.equal(chart._valueAxes.length, 2);
@@ -1721,7 +1720,6 @@ QUnit.test('Group Series by panes and axes. two pane, one value axis, three seri
 });
 
 QUnit.test('Group Series by panes and axes. two pane, three value axis, three series', function(assert) {
-
     seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
 
     const chart = this.createChart({
@@ -1739,7 +1737,6 @@ QUnit.test('Group Series by panes and axes. two pane, three value axis, three se
 });
 
 QUnit.test('Axes. Axis has no panes. no series has axis (axis2)', function(assert) {
-
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {

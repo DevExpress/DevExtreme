@@ -26,7 +26,6 @@ const environment = {
 QUnit.module('registerPalette', environment);
 
 QUnit.test('Register palette', function(assert) {
-
     this.registerPalette('Custom Palette', ['red', 'green', 'blue']);
 
     assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['red', 'green', 'blue'], accentColor: 'red' });
@@ -48,7 +47,6 @@ QUnit.test('Register palette (new style)', function(assert) {
 });
 
 QUnit.test('Register palette with same name', function(assert) {
-
     this.registerPalette('Custom Palette', ['red', 'green', 'blue']);
     this.registerPalette('Custom Palette', ['black', 'grey']);
 

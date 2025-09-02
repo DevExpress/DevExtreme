@@ -8001,7 +8001,6 @@ QUnit.test('Strips. endValue === startValue', function(assert) {
             endValue: 5,
             color: 'red',
             label: { horizontalAlignment: 'center', text: 'text' }
-
         }]
     });
 
@@ -9196,7 +9195,6 @@ QUnit.test('Horizontal with title that is more that canvas', function(assert) {
 
     this.updateOptions({
         title: 'Title text',
-
     });
     renderer.g.getCall(5).returnValue.getBBox = sinon.stub().returns({ x: 0, y: 90, width: 100, height: 50 });// title group
 
@@ -9354,7 +9352,6 @@ QUnit.test('Axis with constant lines with ouside labels; One of them behind seri
                 verticalAlignment: 'top'
             },
             displayBehindSeries: true
-
         }, {
             value: 0,
             label: {

@@ -146,7 +146,6 @@ QUnit.test('Two ranges for two panes - data from series, indents from common axi
                 name: 'otherPane'
             }
         ]
-
     });
 
     const range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
@@ -398,7 +397,6 @@ QUnit.test('Two panes canvas creation. Bottom Border visible', function(assert) 
     const chart = this.createChart({
         panes: [{
             name: 'topPane'
-
         }, {
             name: 'bottomPane',
             border: {
@@ -441,7 +439,6 @@ QUnit.test('Two panes canvas creation. Bottom Border visible. Rotated', function
         rotated: true,
         panes: [{
             name: 'topPane'
-
         }, {
             name: 'bottomPane',
             border: {

@@ -852,7 +852,6 @@ QUnit.test('RS with async dataSource. value when dadaSource changed to sync', fu
             assert.deepEqual(rangeSelector.getValue(), [1, 7]);
             done();
         }, 20);
-
     });
 });
 

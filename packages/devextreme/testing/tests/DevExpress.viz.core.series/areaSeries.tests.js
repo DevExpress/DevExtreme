@@ -123,7 +123,6 @@ const environmentWithSinonStubPoint = {
     }
 };
 
-
 function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord, comment) {
     assert.ok(elementPoints, comment);
     assert.equal(elementPoints.length, expectedPoints.length, comment + '- point length');
@@ -134,7 +133,6 @@ function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord,
             assert.equal(p.y.toFixed(2), expectedPoints[i][1], comment + ' point.y ' + i);
         }
         assert.equal(p.x.toFixed(2), expectedPoints[i][0], comment + ' point.x ' + i);
-
     });
 }
 
@@ -220,7 +218,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.draw(false);
@@ -234,7 +231,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series._argumentAxis.getAxisPosition = function() { return 0; };
         series.updateData(this.data);
@@ -265,7 +261,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -323,7 +318,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -367,7 +361,6 @@ function setDiscreteType(series) {
             selectionStyle: {
                 border: { visible: false }
             }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -395,7 +388,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 3.5, val: 40 }]);
@@ -655,7 +647,6 @@ function setDiscreteType(series) {
             this.series = createSeries({
                 type: seriesType,
                 point: { visible: false }
-
             }, {
                 renderer: this.renderer,
                 argumentAxis: new MockAxis({ renderer: this.renderer }),
@@ -1253,7 +1244,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1281,7 +1271,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1328,7 +1317,6 @@ function setDiscreteType(series) {
             type: seriesType,
             rotated: true,
             point: { visible: false }
-
         });
         series._argumentAxis.getAxisPosition = function() { return 3; };
         series._argumentAxis.getAxisShift = function() { return 1; };
@@ -1377,7 +1365,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1474,7 +1461,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -1536,7 +1522,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
@@ -1585,7 +1570,6 @@ function setDiscreteType(series) {
             type: seriesType,
             rotated: true,
             point: { visible: false }
-
         });
         series.updateData([{ arg: 1, val: 10 }]);
         series.createPoints();
@@ -1651,7 +1635,6 @@ function setDiscreteType(series) {
                     color: 'h color'
                 }
             };
-
         },
         afterEach: environmentWithSinonStubPoint.afterEach
     });
@@ -1749,7 +1732,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.draw(false);
@@ -1763,7 +1745,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1793,7 +1774,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1841,7 +1821,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1879,7 +1858,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1904,7 +1882,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1934,7 +1911,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         this.data.splice(2, 1, { arg: 2, val: null });
         series.updateData(this.data);
@@ -1996,7 +1972,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -2129,7 +2104,6 @@ function setDiscreteType(series) {
         checkElementPoints(assert, this.renderer.stub('path').getCall(0).args[0], [[10, 0], [10, 0], [15, 0], [15, 0], [15, 0], [20, 0], [20, 0]], false, 'spline points');
         checkElementPoints(assert, this.renderer.stub('path').getCall(1).args[0], [[10, 0], [10, 0], [15, 0], [15, 0], [15, 0], [20, 0], [20, 0], [20, 0],
             [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], false, 'area points');
-
     });
 
     QUnit.test('Points preparation (rotated)', function(assert) {
@@ -2166,7 +2140,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData([{ arg: 1, val: 10 }]);
         series.createPoints();
@@ -2192,7 +2165,6 @@ function setDiscreteType(series) {
             type: seriesType,
             rotated: true,
             point: { visible: false }
-
         });
         series.updateData([{ arg: 1, val: 10 }]);
         series.createPoints();
@@ -2326,7 +2298,6 @@ function setDiscreteType(series) {
                     color: 'h color'
                 }
             };
-
         },
         afterEach: environmentWithSinonStubPoint.afterEach
     });
@@ -2404,7 +2375,6 @@ function setDiscreteType(series) {
             this.series = createSeries({
                 type: seriesType,
                 point: { visible: false }
-
             }, {
                 renderer: this.renderer,
                 argumentAxis: new MockAxis({ renderer: this.renderer }),
@@ -2498,12 +2468,10 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -2550,12 +2518,10 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         this.data[2].val = null;
@@ -2609,12 +2575,10 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         this.data1[2].val = null;
@@ -2668,12 +2632,10 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         this.data[2].val = null;
@@ -2737,17 +2699,14 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         const series2 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         this.data1[2].val = null;
@@ -2903,7 +2862,6 @@ function setDiscreteType(series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -2979,7 +2937,6 @@ function setDiscreteType(series) {
         const series1 = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);

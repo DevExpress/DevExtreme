@@ -2819,7 +2819,6 @@ QUnit.test('Multicolor bars', function(assert) {
             'year': '1954',
             'Africa': 51,
             'America': 25
-
         }],
         animation: { enabled: false }
     });

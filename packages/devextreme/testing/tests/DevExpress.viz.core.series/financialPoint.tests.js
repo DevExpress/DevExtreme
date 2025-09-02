@@ -48,13 +48,11 @@ QUnit.module('Point coordinates translation. Financial', {
                         'stroke-width': 2
                     }
                 }
-
             },
             label: {
                 visible: false
             }
         };
-
     },
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 },
@@ -222,7 +220,6 @@ QUnit.module('Point coordinates correction. Candlestick', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'candlestick',
                 label: { visible: false }
@@ -327,7 +324,6 @@ QUnit.module('Point coordinates correction. Stock', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'stock',
                 label: { visible: false }

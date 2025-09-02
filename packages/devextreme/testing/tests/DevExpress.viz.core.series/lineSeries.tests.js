@@ -125,7 +125,6 @@ function checkElementPoints(assert, elementPoints, expectedPoints, defaultCoord,
             assert.equal(p.y.toFixed(2), expectedPoints[i][1], comment + ' point.y ' + i);
         }
         assert.equal(p.x.toFixed(2), expectedPoints[i][0], comment + ' point.x ' + i);
-
     });
 }
 

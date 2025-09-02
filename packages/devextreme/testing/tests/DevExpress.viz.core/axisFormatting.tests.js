@@ -54,7 +54,6 @@ const environment = {
                 };
             };
         });
-
     },
     createAxis: function(options) {
         this.translator = new StubTranslator();
@@ -92,7 +91,6 @@ const environment = {
         this.axis.validate();
     },
     testFormat: function(assert, options, ticks, tickInterval, texts, constantLineValue) {
-
         this.createAxis(options);
         this.axis.setBusinessRange({ min: 0, max: 10 });
 
@@ -105,7 +103,6 @@ const environment = {
         });
 
         this.renderer.resetStub('text');
-
 
         this.axis.draw(this.canvas);
 
@@ -1508,14 +1505,12 @@ QUnit.module('Format numeric range.', {
 });
 
 QUnit.test('Numeric axis. Format range', function(assert) {
-
     this.createAxis();
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000), '10K - 15K');
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000, 'currency'), '$10,000 - $15,000');
 });
 
 QUnit.test('Logarithmic axis. Format range', function(assert) {
-
     this.createAxis({
         logarithmBase: 2,
         argumentType: 'numeric',
@@ -1525,7 +1520,6 @@ QUnit.test('Logarithmic axis. Format range', function(assert) {
 });
 
 QUnit.test('Discrete axis. Format range', function(assert) {
-
     this.createAxis({
         logarithmBase: 2,
         argumentType: 'numeric',

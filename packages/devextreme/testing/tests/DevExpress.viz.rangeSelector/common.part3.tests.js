@@ -72,7 +72,6 @@ QUnit.test('set range as numeric and datetime without valueType', function(asser
         scale: {
             startValue: 43875893457,
             endValue: new Date(438758934573),
-
         }
     });
 
@@ -337,7 +336,6 @@ QUnit.test('set ArgumentType in options of chart invalid startValue', function(a
         scale: {
             startValue: 'b',
             valueType: 'dateTime',
-
         },
         chart: {
             series: [
@@ -1398,7 +1396,6 @@ QUnit.test('initialization theme options by customized theme', function(assert) 
         }
     });
 
-
     assert.deepEqual(rangeSelector.option('theme').chart, {
         defaultSeriesOptions: {
             type: 'line'
@@ -1564,7 +1561,6 @@ QUnit.test('Labels and markers visible', function(assert) {
             label: {
                 topIndent: 12,
                 visible: true
-
             }
         }
     });
@@ -1586,7 +1582,6 @@ QUnit.test('Labels and markers visible, but placeholderHeight is specified - tak
             label: {
                 topIndent: 12,
                 visible: true
-
             }
         }
     });
@@ -1607,7 +1602,6 @@ QUnit.test('Compact mode. all is visible - take constant height', function(asser
             label: {
                 topIndent: 12,
                 visible: true
-
             }
         }
     });

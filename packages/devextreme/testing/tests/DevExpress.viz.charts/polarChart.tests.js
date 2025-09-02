@@ -44,7 +44,6 @@ legendModule.Legend = sinon.spy(function(parameters) {
     return legend;
 });
 
-
 function stubExport() {
     const exportMenuInstance = new ExportMenu();
     exportMenuInstance.stub('measure').returns([0, 0]);

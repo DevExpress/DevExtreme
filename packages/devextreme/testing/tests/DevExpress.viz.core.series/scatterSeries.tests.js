@@ -124,7 +124,6 @@ const checkTwoGroups = function(assert, series) {
 const seriesType = 'scatter';
 
 (function ScatterSeries() {
-
     QUnit.module('Points creation', environment);
 
     QUnit.test('Creation simple point', function(assert) {
@@ -240,7 +239,6 @@ const seriesType = 'scatter';
         afterEach: function() {
             environment.afterEach.call(this);
         }
-
     });
 
     QUnit.test('Creation simple point with valueErrorBar', function(assert) {
@@ -1702,7 +1700,6 @@ const seriesType = 'scatter';
                             width: 's-b-width'
                         }
                     }
-
                 };
             }
         });
@@ -2636,7 +2633,6 @@ const seriesType = 'scatter';
             };
 
             return series;
-
         }
     });
 
@@ -2669,7 +2665,6 @@ const seriesType = 'scatter';
 
         assert.equal(series.getNeighborPoint(5, 200), null);
         assert.equal(series.getNeighborPoint(10, 100), null);
-
     });
 
     QUnit.test('getNeighborPoint when few point has equal coord', function(assert) {
@@ -2701,7 +2696,6 @@ const seriesType = 'scatter';
         assert.equal(series.getNeighborPoint(16, 300), series.getPointsByArg(20)[1]);
         assert.equal(series.getNeighborPoint(16, 400), series.getPointsByArg(20)[2], 'a');
         assert.equal(series.getNeighborPoint(16, 500), series.getPointsByArg(20)[2], 'b');
-
     });
 
     QUnit.test('getNeighborPoint when point coords non integer', function(assert) {

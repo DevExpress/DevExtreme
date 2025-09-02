@@ -130,7 +130,6 @@ class TestPointerElement extends TestElement {
             rendererModule.Renderer.onCall(0).returns(this.renderer);
             const tooltipRender = new Renderer();
             rendererModule.Renderer.onCall(1).returns(tooltipRender);
-
         },
         afterEach: function() {
             this.renderer = null;

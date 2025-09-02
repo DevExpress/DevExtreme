@@ -1,4 +1,7 @@
-import common from './commonParts/common.js';
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 import $ from 'jquery';
 
 import 'viz/tree_map/hover';
@@ -6,7 +9,7 @@ import 'viz/tree_map/selection';
 
 QUnit.module('Basics', $.extend({
     create: function(options) {
-        return common.createWidget($.extend(true, {
+        return createWidget($.extend(true, {
             dataSource: [{ value: 1 }, { value: 2 }],
             tile: {
                 color: 'red',
@@ -19,7 +22,7 @@ QUnit.module('Basics', $.extend({
             }
         }, options));
     }
-}, common.environment));
+}, environment));
 
 QUnit.test('Hover selected tile', function(assert) {
     const node = this.create().getRootNode().getChild(0);

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import common from './commonParts/common.js';
+import { environment, createWidget } from './commonParts/common.js';
 import themeModule from 'viz/themes';
 import { DataSource } from 'common/data/data_source/data_source';
 
@@ -11,9 +11,9 @@ function createDataSource(value) {
     });
 }
 
-const environment = $.extend({
+const moduleSetup = $.extend({
     create: function(options) {
-        return common.createWidget($.extend(true, {
+        return createWidget($.extend(true, {
             tile: {
                 border: { width: 1 }
             },
@@ -31,12 +31,12 @@ const environment = $.extend({
     labelsGroup: function() {
         return this.renderer.g.returnValues[1];
     }
-}, common.environment);
+}, environment);
 
-QUnit.module('TreeMap', environment);
+QUnit.module('TreeMap', moduleSetup);
 
 QUnit.test('One level hierarchy (plain)', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 10
         }, {
@@ -54,7 +54,7 @@ QUnit.test('One level hierarchy (plain)', function(assert) {
 });
 
 QUnit.test('Two level hierarchy', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -80,7 +80,7 @@ QUnit.test('Two level hierarchy', function(assert) {
 });
 
 QUnit.test('Three level hierarchy', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             items: [{
                 items: [{
@@ -175,7 +175,7 @@ QUnit.test('Two level tiling with custom group values', function(assert) {
 });
 
 QUnit.test('Simple tiles coloring', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             val: 1, col: 'red'
         }, {
@@ -232,7 +232,7 @@ QUnit.test('Headers default height', function(assert) {
 });
 
 QUnit.test('Default colorizing', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ name: '1', value: 1 }, { name: '2', value: 2 }]
     });
 
@@ -296,7 +296,7 @@ QUnit.test('Headers height when explicitly defined', function(assert) {
 });
 
 QUnit.test('Simple headers coloring', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -327,7 +327,7 @@ QUnit.test('Simple headers coloring', function(assert) {
 });
 
 QUnit.test('Tile color is taken from its group color', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             color: 'blue',
             items: [{
@@ -357,7 +357,7 @@ QUnit.test('Tile color is taken from its group color', function(assert) {
 });
 
 QUnit.test('null data source', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: null
     });
 
@@ -365,7 +365,7 @@ QUnit.test('null data source', function(assert) {
 });
 
 QUnit.test('Degenerate data source with labels', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ name: 'Tile 1' }]
     });
 
@@ -374,7 +374,7 @@ QUnit.test('Degenerate data source with labels', function(assert) {
 });
 
 QUnit.test('Async data source', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: createDataSource($.Deferred().promise())
     });
 
@@ -383,7 +383,7 @@ QUnit.test('Async data source', function(assert) {
 
 QUnit.test('Async data source / success', function(assert) {
     const deferred = $.Deferred();
-    common.createWidget({
+    createWidget({
         dataSource: createDataSource(deferred.promise())
     });
 
@@ -398,7 +398,7 @@ QUnit.test('Async data source / success', function(assert) {
 
 QUnit.test('Async data source / error', function(assert) {
     const deferred = $.Deferred();
-    common.createWidget({
+    createWidget({
         dataSource: createDataSource(deferred.promise())
     });
 
@@ -479,7 +479,7 @@ QUnit.test('Max depth', function(assert) {
 });
 
 QUnit.test('Max depth option changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{ value: 3 }, { value: 1 }]
         }, {
@@ -500,10 +500,10 @@ QUnit.test('Max depth option changing', function(assert) {
     assert.strictEqual(this.tile(0).attr.callCount, 2, 'tile 2 settings');
 });
 
-QUnit.module('Option change handling', environment);
+QUnit.module('Option change handling', moduleSetup);
 
 QUnit.test('Size', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
     });
     this.resetTilesAttr();
@@ -521,7 +521,7 @@ QUnit.test('Size', function(assert) {
 });
 
 QUnit.test('dataSource', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
     });
     this.tilesGroup().clear.resetHistory();
@@ -540,7 +540,7 @@ QUnit.test('dataSource', function(assert) {
 
 QUnit.test('dataSource / async', function(assert) {
     const deferred = $.Deferred();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
     });
     this.tilesGroup().clear.resetHistory();
@@ -564,7 +564,7 @@ QUnit.test('dataSource / external reloading', function(assert) {
             return data;
         }
     });
-    common.createWidget({
+    createWidget({
         dataSource: ds
     });
     this.tilesGroup().clear.resetHistory();
@@ -582,7 +582,7 @@ QUnit.test('dataSource / external reloading', function(assert) {
 });
 
 QUnit.test('valueField', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1, val: 4 }, { value: 2, val: 5 }, { value: 3 }, { value: 4, val: 6 }]
     });
     this.tilesGroup().clear.resetHistory();
@@ -599,13 +599,12 @@ QUnit.test('valueField', function(assert) {
 });
 
 QUnit.test('childrenField', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 4,
             items2: [{
                 value: 3
             }]
-
         }, {
             value: 5,
             items: [{
@@ -627,11 +626,10 @@ QUnit.test('childrenField', function(assert) {
     for(i = 1; i < this.tileCount(); ++i) {
         assert.strictEqual(this.tile(i).attr.callCount, 2, 'tile ' + (i + 1) + ' settings call count');
     }
-
 });
 
 QUnit.test('colorField', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1, color: 'a1', color2: 'b1'
         }, {
@@ -660,7 +658,7 @@ QUnit.test('colorField', function(assert) {
 });
 
 QUnit.test('tile', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1, val: 4 }, { value: 2, val: 5 }, { value: 3 }, { value: 4, val: 6 }],
         tile: { border: { color: 'black', width: 1 }, color: 'blue' },
         colorizer: {
@@ -686,7 +684,7 @@ QUnit.test('tile', function(assert) {
 });
 
 QUnit.test('group', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -716,7 +714,7 @@ QUnit.test('group', function(assert) {
 });
 
 QUnit.test('group / header height is changed', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -749,7 +747,7 @@ QUnit.test('group / header height is changed', function(assert) {
 });
 
 QUnit.test('colorizer', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -777,7 +775,7 @@ QUnit.test('colorizer', function(assert) {
 });
 
 QUnit.test('layoutAlgorithm', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }]
     });
     let i;
@@ -795,7 +793,7 @@ QUnit.test('layoutAlgorithm', function(assert) {
 });
 
 QUnit.test('Appearance is not applied twice when \'dataSource\' and some appearance option are changed', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1, val: 4 }, { value: 2, val: 5 }, { value: 3 }, { value: 4, val: 6 }],
         tile: { border: { color: 'black', width: 1 }, color: 'blue' },
         colorizer: {
@@ -832,7 +830,7 @@ QUnit.test('Appearance is not applied twice when \'dataSource\' and some appeara
 });
 
 QUnit.test('Positioning is not changed twice when size and \'dataSource\' are changed', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }],
         tile: { border: { color: 'black', width: 1 }, color: 'red' },
         colorizer: {
@@ -867,7 +865,7 @@ QUnit.test('Positioning is not changed twice when size and \'dataSource\' are ch
 });
 
 QUnit.test('Appearance is reapplied when \'theme\' is changed', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tile: { border: { color: 'black', width: 1 }, color: 'white' },
         colorizer: {
@@ -890,7 +888,7 @@ QUnit.test('Appearance is reapplied when \'theme\' is changed', function(assert)
 });
 
 QUnit.test('Appearance is reapplied when current theme is updated', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tile: { border: { color: 'black', width: 1 }, color: 'white' },
         colorizer: {
@@ -913,7 +911,7 @@ QUnit.test('Appearance is reapplied when current theme is updated', function(ass
 });
 
 QUnit.test('layout labels after resize', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1, name: '1' }]
     });
 
@@ -924,7 +922,7 @@ QUnit.test('layout labels after resize', function(assert) {
 });
 
 QUnit.test('recreating labels after dataSource changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: []
     });
 
@@ -934,7 +932,7 @@ QUnit.test('recreating labels after dataSource changing', function(assert) {
 });
 
 QUnit.test('recreating labels after labelField changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1, name: '1' }, { value: 2, newName: '2' }]
     });
 
@@ -947,7 +945,7 @@ QUnit.test('recreating labels after labelField changing', function(assert) {
 });
 
 QUnit.test('layoutDirection changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         size: { width: 100, height: 100 },
         dataSource: [{ value: 10 }, { value: 7 }, { value: 3 }]
     });
@@ -970,7 +968,7 @@ QUnit.test('layoutDirection changing', function(assert) {
 
 QUnit.test('Passing \'wordWrap\' and \'overflow\' options to texts for tiles', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
-    common.createWidget({
+    createWidget({
         tile: {
             label: {
                 wordWrap: 'wordWrap_1',
@@ -989,7 +987,7 @@ QUnit.test('Passing \'wordWrap\' and \'overflow\' options to texts for tiles', f
 
 QUnit.test('Passing \'overflow\' option to texts for group', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 5 };
-    common.createWidget({
+    createWidget({
         size: {
             width: 30
         },
@@ -1005,10 +1003,10 @@ QUnit.test('Passing \'overflow\' option to texts for group', function(assert) {
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args, [12, 9, { textOverflow: 'overflow_1', wordWrap: 'none' }]);
 });
 
-QUnit.module('labels', environment);
+QUnit.module('labels', moduleSetup);
 
 QUnit.test('clear labels group on creation', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1, name: '1' }]
     });
 
@@ -1018,7 +1016,7 @@ QUnit.test('clear labels group on creation', function(assert) {
 });
 
 QUnit.test('simple labels creation', function(assert) {
-    common.createWidget({
+    createWidget({
         tile: {
             label: {
                 font: {
@@ -1052,7 +1050,7 @@ QUnit.test('simple labels creation', function(assert) {
 });
 
 QUnit.test('invisible labels', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1, name: 'text' }],
         tile: {
             label: {
@@ -1065,7 +1063,7 @@ QUnit.test('invisible labels', function(assert) {
 });
 
 QUnit.test('treeMap without texts', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1 }]
     });
 
@@ -1094,7 +1092,7 @@ QUnit.test('texts location', function(assert) {
 });
 
 QUnit.test('texts changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 2,
             name: '2'
@@ -1125,7 +1123,7 @@ QUnit.test('texts changing', function(assert) {
 });
 
 QUnit.test('texts positions correcting after font options changing', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 2, name: '2' }],
         tile: {
             label: {
@@ -1145,7 +1143,7 @@ QUnit.test('texts positions correcting after font options changing', function(as
 });
 
 QUnit.test('custom textField', function(assert) {
-    common.createWidget({
+    createWidget({
         labelField: 'myLabel',
         dataSource: [{ value: 2, myLabel: 2 }]
     });
@@ -1175,7 +1173,7 @@ QUnit.test('label in header', function(assert) {
 });
 
 QUnit.test('draw only header labels', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ items: [{ value: 2 }], name: 'header' }, { value: 2 }],
         label: {
             visible: false
@@ -1187,7 +1185,7 @@ QUnit.test('draw only header labels', function(assert) {
 });
 
 QUnit.test('toggle visibility by \'visible\' option - 1', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1, name: 'tile 1'
         }, {
@@ -1206,7 +1204,7 @@ QUnit.test('toggle visibility by \'visible\' option - 1', function(assert) {
 });
 
 QUnit.test('toggle visibility by \'visible\' option - 2', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             name: 'tile 1',
             items: [{
@@ -1232,7 +1230,7 @@ QUnit.test('toggle visibility by \'visible\' option - 2', function(assert) {
 
 // T378407
 QUnit.test('creation widget on non-appended container', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1, name: 'text' }]
     });
 
@@ -1242,7 +1240,7 @@ QUnit.test('creation widget on non-appended container', function(assert) {
 
 QUnit.test('ellipsis mode, change width from small to big - reapply ellipsis', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
-    const widget = common.createWidget({
+    const widget = createWidget({
         size: {
             width: 30
         },
@@ -1259,9 +1257,9 @@ QUnit.test('ellipsis mode, change width from small to big - reapply ellipsis', f
     assert.equal(this.renderer.text.lastCall.returnValue.stub('setMaxSize').called, true);
 });
 
-QUnit.module('\'onDrawn\' event', $.extend({}, environment, {
+QUnit.module('\'onDrawn\' event', $.extend({}, moduleSetup, {
     beforeEach: function() {
-        environment.beforeEach.apply(this, arguments);
+        moduleSetup.beforeEach.apply(this, arguments);
         this.renderer.onEndAnimation = function(callback) {
             callback();
         };
@@ -1270,7 +1268,7 @@ QUnit.module('\'onDrawn\' event', $.extend({}, environment, {
 
 QUnit.test('Common data source', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onDrawn: spy
     });
@@ -1281,7 +1279,7 @@ QUnit.test('Common data source', function(assert) {
 
 QUnit.test('Empty data source', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: null,
         onDrawn: spy
     });
@@ -1292,7 +1290,7 @@ QUnit.test('Empty data source', function(assert) {
 
 QUnit.test('Async data source - waiting', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: createDataSource($.Deferred().promise()),
         onDrawn: spy
     });
@@ -1304,7 +1302,7 @@ QUnit.test('Async data source - waiting', function(assert) {
 QUnit.test('Async data source - loaded', function(assert) {
     const deferred = $.Deferred();
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: createDataSource(deferred.promise()),
         onDrawn: spy
     });
@@ -1315,13 +1313,13 @@ QUnit.test('Async data source - loaded', function(assert) {
 });
 
 QUnit.module('rtl support', $.extend({},
-    environment,
+    moduleSetup,
     {
         create: function(options) {
             $.extend(options, {
                 rtlEnabled: true
             });
-            environment.create.apply(this, arguments);
+            moduleSetup.create.apply(this, arguments);
         }
     }
 ));

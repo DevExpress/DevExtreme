@@ -2413,7 +2413,6 @@ QUnit.module('Get margins', $.extend(true, {}, environment, {
         this.renderSettings.axisType = 'polarAxes';
         this.renderSettings.drawingType = 'circular';
         this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0, isEmpty: true };
-
     },
     afterEach: function() {
         environment.afterEach.call(this);

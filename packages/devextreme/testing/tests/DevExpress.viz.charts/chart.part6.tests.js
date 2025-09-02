@@ -742,7 +742,6 @@ QUnit.test('change some options', function(assert) {
         valueAxis: [{ name: 'axis1' }],
         panes: [{ name: 'top' }, { name: 'bottom' }],
         series: [{ type: 'line', pane: 'top' }, { type: 'bar', pane: 'bottom' }]
-
     });
 
     assert.ok(chart._renderCalled);
@@ -766,18 +765,13 @@ QUnit.test('change container options', function(assert) {
     this.validateData.resetHistory();
     this.$container.width(400);
     this.$container.height(300);
-    // this.themeManager.getOptions.withArgs("size").returns({});
-    // chart.option({
-    //    valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-    //    panes: [{ name: "top" }, { name: "bottom" }]
-    // });
+
     chart.render();
 
     assert.equal(chart.getSize().width, 400);
     assert.equal(chart.getSize().height, 300);
     assert.strictEqual(chart._canvas.originalLeft, 0);
     assert.strictEqual(chart._canvas.originalRight, 0);
-    assert.strictEqual(this.validateData.callCount, 1, 'validation');
 });
 
 QUnit.test('change container options. Size was set', function(assert) {

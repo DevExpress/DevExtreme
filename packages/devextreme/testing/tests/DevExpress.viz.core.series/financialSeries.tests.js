@@ -108,7 +108,6 @@ const checkGroups = function(assert, series) {
 };
 
 (function StockSeries() {
-
     const seriesType = 'stock';
 
     QUnit.module('Creation', environment);
@@ -263,7 +262,6 @@ const checkGroups = function(assert, series) {
         series.draw(false);
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test('Draw simple data without animation', function(assert) {
@@ -308,7 +306,6 @@ const checkGroups = function(assert, series) {
         $.each(series._points, function(i, p) {
             assert.equal(p.animate.callCount, 0, i + ' point draw with animate');
         });
-
     });
 
     QUnit.test('Create groups without animation. T101152', function(assert) {
@@ -407,7 +404,6 @@ const checkGroups = function(assert, series) {
                 { date: null, o: 5, h: 5, l: 3, c: 3 },
                 { date: 4, o: 4, h: 9, l: 2, c: null },
                 { date: 5, o: 4, h: 9, l: 2, c: 5 }];
-
         },
         afterEach: environment.afterEach
     });
@@ -648,7 +644,6 @@ const checkGroups = function(assert, series) {
                 },
                 normal: {
                     'stroke-width': 'n-width'
-
                 },
                 selection: {
                     fill: 'innerColor',
@@ -1279,7 +1274,6 @@ const checkGroups = function(assert, series) {
                     fill: 'innerColor',
                     'stroke-width': 'c-n-width',
                     stroke: 'reduction',
-
                 },
                 selection: {
                     fill: 'innerColor',
@@ -1450,7 +1444,6 @@ const checkGroups = function(assert, series) {
                 displayMode: 'all'
             }
         }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
     });
 
     QUnit.module('Null points', {
@@ -1607,7 +1600,6 @@ const checkGroups = function(assert, series) {
 })();
 
 (function CandleStick() {
-
     const seriesType = 'candlestick';
 
     QUnit.module('CandleStick series. Draw', {
@@ -1658,7 +1650,6 @@ const checkGroups = function(assert, series) {
         const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
         series.updateData(this.data);
         series.createPoints();
@@ -1675,7 +1666,6 @@ const checkGroups = function(assert, series) {
         $.each(series._points, function(i, p) {
             assert.equal(p.animate.callCount, 0, i + ' point draw with animate');
         });
-
     });
 
     QUnit.module('CandleStick. Points animation', {
@@ -1883,7 +1873,6 @@ const checkGroups = function(assert, series) {
                 { date: null, o: 5, h: 5, l: 3, c: 3 },
                 { date: 4, o: 4, h: 9, l: 2, c: null },
                 { date: 5, o: 4, h: 9, l: 2, c: 5 }];
-
         },
         afterEach: environment.afterEach
     });
@@ -1951,7 +1940,6 @@ const checkGroups = function(assert, series) {
                 },
                 normal: {
                     'stroke-width': 'n-width'
-
                 },
                 selection: {
                     fill: 'innerColor',

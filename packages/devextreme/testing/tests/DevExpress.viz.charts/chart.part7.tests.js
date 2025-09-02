@@ -362,7 +362,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
                 pane: 'pane1',
                 axis: 'axis1',
                 type: 'line'
-
             }],
             valueAxis: [{
                 name: 'axis2',
@@ -387,7 +386,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         const verticalAxes = chart._valueAxes;
         assert.equal(verticalAxes[0].getOptions().name, 'axis2');
         assert.equal(verticalAxes[1].getOptions().name, 'axis1');
-
     });
 
     QUnit.test('dxChart with two panes and argument axis has default position', function(assert) {
@@ -465,7 +463,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.deepEqual(axisOptions.label, {});
         assert.deepEqual(axisOptions.minorTick, {});
         assert.equal(axisOptions.title, 'Title');
-
     });
 
     QUnit.test('dxChart with two panes and argument axis has invalid position', function(assert) {
@@ -544,7 +541,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.deepEqual(axisOptions.label, {});
         assert.deepEqual(axisOptions.minorTick, {});
         assert.equal(axisOptions.title, 'Title');
-
     });
 
     QUnit.test('Rotated chart with two panes and argument axis has right position', function(assert) {
@@ -585,7 +581,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.deepEqual(axisOptions.label, {});
         assert.deepEqual(axisOptions.minorTick, {});
         assert.equal(axisOptions.title, 'Title');
-
     });
 
     QUnit.test('Rotated chart with two panes and argument axis has invalid position', function(assert) {
@@ -746,7 +741,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
 })();
 
 (function API() {
-
     QUnit.module('API', $.extend({}, environment, {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -760,7 +754,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             });
             seriesMockData.series.push(stubSeries1);
             seriesMockData.series.push(stubSeries2);
-
         },
         afterEach: function() {
             this.clock.restore();
@@ -1666,7 +1659,6 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         $.each(chart.getAllSeries()[0].getPoints(), function(_, point) {
             assert.ok(!point.stackPoints);
         });
-
     });
 
     QUnit.test('kill middle label.', function(assert) {

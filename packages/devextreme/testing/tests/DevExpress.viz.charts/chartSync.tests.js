@@ -224,7 +224,7 @@ const environment = {
         });
 
         seriesMockData.series.push(new MockSeries());
-        seriesMockData.series.push(new MockSeries());
+
         this.createChart({
             series: {
                 type: 'line'
@@ -248,14 +248,6 @@ const environment = {
             environment.beforeEach.call(this);
             const stubSeries = new MockSeries();
             seriesMockData.series.push(stubSeries);
-            seriesMockData.series.push(stubSeries);
-            seriesMockData.series.push(new MockSeries());
-            seriesMockData.series.push(stubSeries);
-            seriesMockData.series.push(stubSeries);
-            seriesMockData.series.push(stubSeries);
-            seriesMockData.series.push(new MockSeries());
-            seriesMockData.series.push(stubSeries);
-
         },
         afterEach: function() {
             environment.afterEach.call(this);
@@ -804,15 +796,6 @@ const environment = {
         const series = chart.getAllSeries();
 
         const stubSeries = new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) });
-        seriesMockData.series.push(stubSeries);
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
-        seriesMockData.series.push(stubSeries);
-        seriesMockData.series.push(new MockSeries());
         seriesMockData.series.push(stubSeries);
 
         this.themeManager.getOptions.withArgs('barGroupPadding').returns(0.8);

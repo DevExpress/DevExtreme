@@ -578,7 +578,6 @@ const checkSeries = function(assert, series, expectedWidth, expectedOffset) {
 
         assert.roughEqual(point.coordinatesCorrection.width, expectedWidth, 0.01, 'Correct width was calculated');
         assert.roughEqual(point.coordinatesCorrection.offset, expectedOffset, 0.01, 'Correct offset was set');
-
     });
 };
 

@@ -124,7 +124,6 @@ const checkTwoGroups = function(assert, series) {
 };
 
 (function Pie() {
-
     QUnit.module('Pie series. Draw', environment);
 
     const checkGroups = checkTwoGroups;
@@ -134,46 +133,39 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({
             type: 'doughnut',
             point: { visible: false }
-
         });
 
         series.draw(false);
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test('Draw donut', function(assert) {
         const series = createSeries({
             type: 'donut',
             point: { visible: false }
-
         });
 
         series.draw(false);
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test('Draw without data', function(assert) {
         const series = createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.draw(false);
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test('Update to empty data', function(assert) {
         const series = createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -190,7 +182,6 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 10 }, { arg: 3, val: 4 }]);
@@ -216,7 +207,6 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({
             type: seriesType,
             point: { visible: false }
-
         });
 
         series.updateData([{ arg: new Date(1000), val: 10 }, { arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 4 }]);
@@ -286,7 +276,6 @@ const checkTwoGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false },
             label: { visible: false }
-
         });
 
         series.updateData(this.data);
@@ -1836,7 +1825,6 @@ const checkTwoGroups = function(assert, series) {
                 displayMode: 'all'
             }
         }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
     });
 
     QUnit.test('drawLabelsWOPoints', function(assert) {
@@ -2090,7 +2078,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All points with ellipsis', function(assert) {
-
         mockPoints.forEach(p => {
             p.applyWordWrap = sinon.spy(a => true);
         });
@@ -2108,7 +2095,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Not all points with ellipsis', function(assert) {
-
         mockPoints.forEach(p => {
             p.applyWordWrap = sinon.spy(a => false);
         });

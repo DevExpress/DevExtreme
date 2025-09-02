@@ -1169,7 +1169,6 @@ QUnit.test('Hide error bar', function(assert) {
         edgeLength: 8,
         opacity: 1,
         color: 'red',
-
     };
     const point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
 
@@ -1276,7 +1275,6 @@ QUnit.test('Draw point with errorBar. odd edgeLength', function(assert) {
         edgeLength: 7,
         opacity: 1,
         color: 'red',
-
     };
     const point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
 

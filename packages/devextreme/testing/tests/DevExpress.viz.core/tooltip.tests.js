@@ -1114,7 +1114,6 @@ QUnit.test('Show. W/o params', function(assert) {
     } finally {
         destroySizeMocks();
     }
-
 });
 
 QUnit.test('Show. W/o params. Html', function(assert) {
@@ -1767,9 +1766,7 @@ QUnit.test('Center-top side of page, Html', function(assert) {
         this.tooltip._textGroupHtml.css = sinon.spy();
         implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 59.2; });
 
-
         this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 80, offset: 30 });
-
 
         assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
         assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 135 }]);
@@ -1848,9 +1845,7 @@ QUnit.test('Center-center side of page, Html', function(assert) {
         sinon.spy(this.tooltip._textHtml, 'css');
         implementationsMap.for(this.tooltip._textHtml).getWidth = sinon.spy(function() { return 60; });
 
-
         this.tooltip.show({ valueText: 'some-text' }, { x: 400, y: 300, offset: 30 });
-
 
         assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroup move');
         assert.deepEqual(this.tooltip._textGroupHtml.css.getCall(1).args, [{ left: 370, top: 205 }]);
@@ -1924,7 +1919,6 @@ QUnit.test('Center-bootom side of page', function(assert) {
 });
 
 QUnit.test('RB corner of page', function(assert) {
-
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
 

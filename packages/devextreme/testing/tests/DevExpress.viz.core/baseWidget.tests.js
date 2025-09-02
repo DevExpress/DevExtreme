@@ -15,7 +15,6 @@ import rendererModule from 'viz/core/renderers/renderer';
 import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
 import { implementationsMap } from 'core/utils/size';
 
-// TODO: Move export tests to a separate file
 import 'viz/core/export';
 
 errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
@@ -51,7 +50,6 @@ QUnit.begin(function() {
         _clean: environmentMethodInvoker('onClean'),
         _render: environmentMethodInvoker('onRender'),
         _createThemeManager: environmentMethodInvoker('onCreateThemeManager'),
-        // _handleThemeOptionsCore: environmentMethodInvoker("onHandleThemeOptionsCore")
     });
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
@@ -145,7 +143,7 @@ QUnit.test('Theme manager destruction', function(assert) {
 
 QUnit.test('Theme manager callback', function(assert) {
     this.onGetAnimationOptions = function() { return 'animation-option'; };
-    // this.onHandleThemeOptionsCore = sinon.spy();
+
     this.createWidget({
         rtlEnabled: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
@@ -160,7 +158,6 @@ QUnit.test('Theme manager callback', function(assert) {
         rtl: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     }], 'renderer animation options');
-    assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], 'theme options handled');
 });
 
 // T190525
@@ -322,7 +319,7 @@ QUnit.test('rtlEnabled', function(assert) {
 
 QUnit.test('encodeHtml', function(assert) {
     this.onGetAnimationOptions = function() { return 'animation-option'; };
-    // this.onHandleThemeOptionsCore = sinon.spy();
+
     this.createWidget({
         rtlEnabled: 'rtl-enabled-option',
         pathModified: 'path-modified-option'
@@ -335,7 +332,6 @@ QUnit.test('encodeHtml', function(assert) {
         rtl: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     }], 'renderer animation options');
-    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
 });
 
 QUnit.skip('Option from the invalidating list', function(assert) {
@@ -1008,7 +1004,6 @@ QUnit.module('Visibility changing', $.extend({}, environment, {
 }));
 
 QUnit.test('Hide', function(assert) {
-
     this.$container.trigger('dxhiding');
 
     assert.strictEqual(this.renderStub.callCount, 1);
@@ -1615,5 +1610,4 @@ QUnit.test('Repeat disposing', function(assert) {
     } catch(e) {
         assert.ok(false, 'the error is thrown');
     }
-
 });

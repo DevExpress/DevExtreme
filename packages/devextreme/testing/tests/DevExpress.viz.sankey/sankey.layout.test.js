@@ -52,7 +52,6 @@ QUnit.module('Layout Sankey element', $.extend({}, environment, {
             horizontalAlignment: 'center',
             verticalAlignment: 'top'
         });
-
     },
     afterEach: function() {
         environment.afterEach.call(this);

@@ -57,7 +57,6 @@ const environment = {
         this.options = null;
         translator2DModule.Translator2D.restore();
     }
-
 };
 
 QUnit.module('_applyPosition method tests', {

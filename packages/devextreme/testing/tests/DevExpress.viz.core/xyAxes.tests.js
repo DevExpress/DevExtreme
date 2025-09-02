@@ -2818,7 +2818,6 @@ QUnit.module('Coords In', $.extend({}, environment2DTranslator, {
         environment2DTranslator.beforeEach.call(this);
         this.axis = this.createSimpleAxis();
         this.axis.updateCanvas(this.canvas);
-
     },
     afterEach: function() {
         environment2DTranslator.afterEach.call(this);

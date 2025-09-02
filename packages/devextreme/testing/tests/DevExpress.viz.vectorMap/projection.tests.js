@@ -917,7 +917,6 @@ QUnit.module('Mercator - project', {
     doTest: function(assert, arg, expected) {
         const actual = this.engine.project(arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
-
     },
 
     bounds: function(bounds) {

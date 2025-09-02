@@ -1115,7 +1115,6 @@ QUnit.test('T333557', function(assert) {
     point.update(this.data, this.options);
     point.draw(this.renderer, this.groups);
 
-
     assert.deepEqual(point.graphic.stub('attr').lastCall.args[0].style, 'newStyle');
     assert.deepEqual(point.graphic.stub('attr').lastCall.args[0].fill, 'green');
 });
@@ -1124,7 +1123,6 @@ QUnit.test('Draw point without state', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.translate();
     point.draw(this.renderer, this.groups);
-
 
     assert.deepEqual(point.graphic.stub('attr').firstCall.args[0].style, 'normal');
 });
@@ -1187,7 +1185,6 @@ QUnit.test('Point selection event passed to series', function(assert) {
 
     point.select();
 
-
     assert.ok(this.series.selectPoint.calledOnce);
     assert.strictEqual(this.series.selectPoint.lastCall.args[0], point, 'Point should be selectied on series level');
 });
@@ -1195,7 +1192,6 @@ QUnit.test('Point selection event passed to series', function(assert) {
 QUnit.test('Point clear selection event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.clearSelection();
-
 
     assert.ok(this.series.deselectPoint.calledOnce);
     assert.strictEqual(this.series.deselectPoint.lastCall.args[0], point, 'Point selection should be cleared on series level');
@@ -1206,7 +1202,6 @@ QUnit.test('Point clear hover passed to series', function(assert) {
 
     point.clearHover();
 
-
     assert.ok(this.series.clearPointHover.calledOnce);
 });
 
@@ -1215,7 +1210,6 @@ QUnit.test('Point showTooltip event passed to series', function(assert) {
 
     point.showTooltip();
 
-
     assert.ok(this.series.showPointTooltip.calledOnce);
     assert.strictEqual(this.series.showPointTooltip.lastCall.args[0], point, 'Point should be selection on series level');
 });
@@ -1223,7 +1217,6 @@ QUnit.test('Point showTooltip event passed to series', function(assert) {
 QUnit.test('Point hideTooltip selection event passed to series', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.hideTooltip();
-
 
     assert.ok(this.series.hidePointTooltip.calledOnce);
     assert.strictEqual(this.series.hidePointTooltip.lastCall.args[0], point, 'Point selected should be cleared on series level');
@@ -1284,7 +1277,6 @@ QUnit.module('Dispose', {
             markers: this.group,
             labels: this.labelsGroup,
             errorBars: this.renderer.g()
-
         };
     },
     afterEach: function() {

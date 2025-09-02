@@ -177,7 +177,6 @@ QUnit.test('Draw without data', function(assert) {
     const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
-
     });
     series.draw(false);
 
@@ -188,7 +187,6 @@ QUnit.test('Draw simple data without animation', function(assert) {
     const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
-
     });
     series.updateData(this.data);
     series.createPoints();
@@ -640,7 +638,6 @@ QUnit.test('customize point color. all', function(assert) {
                         dashStyle: 's-b-dashStyle'
                     }
                 }
-
             };
         }
     });

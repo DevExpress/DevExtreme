@@ -696,7 +696,6 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     themeModule.currentTheme('someTheme.light');
 
     try {
-
         exportModule.exportFromMarkup(markup, options);
 
         assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, 'some_theme_color');

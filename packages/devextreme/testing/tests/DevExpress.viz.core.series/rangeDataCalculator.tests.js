@@ -2130,7 +2130,6 @@ QUnit.module('Get range data. Financial series. For each types', {
                 position: 'outside'
             }
         };
-
     }
 });
 

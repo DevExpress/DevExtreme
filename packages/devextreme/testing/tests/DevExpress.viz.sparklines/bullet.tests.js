@@ -1112,7 +1112,6 @@ QUnit.module('drawn', {
 });
 
 QUnit.test('call drawn in BaseWidget', function(assert) {
-
     this.createBullet({});
 
     assert.strictEqual(BaseWidget.prototype._drawn.calledOnce, true);

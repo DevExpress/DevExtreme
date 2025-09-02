@@ -1,11 +1,14 @@
-import common from './commonParts/common.js';
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
 import 'viz/tree_map/api';
 
-QUnit.module('Basics', common.environment);
+QUnit.module('Basics', environment);
 
 QUnit.test('root', function(assert) {
-    const root = common.createWidget().getRootNode();
+    const root = createWidget().getRootNode();
 
     assert.strictEqual(root.getParent(), null, 'parent');
     assert.strictEqual(root.getChildrenCount(), 0, 'count');
@@ -13,7 +16,7 @@ QUnit.test('root', function(assert) {
 });
 
 QUnit.test('elements / one level', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }]
     }).getRootNode();
 
@@ -24,7 +27,7 @@ QUnit.test('elements / one level', function(assert) {
 });
 
 QUnit.test('elements / two levels', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -38,7 +41,7 @@ QUnit.test('elements / two levels', function(assert) {
 });
 
 QUnit.test('all nodes', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -51,7 +54,7 @@ QUnit.test('all nodes', function(assert) {
 });
 
 QUnit.test('root fields', function(assert) {
-    const root = common.createWidget().getRootNode();
+    const root = createWidget().getRootNode();
 
     assert.strictEqual(root.level, -1, 'root level');
     assert.strictEqual(root.index, -1, 'root index');
@@ -64,7 +67,7 @@ QUnit.test('elements fields', function(assert) {
     }, {
         items: [{ value: 2 }, { value: 3 }]
     }];
-    const root = common.createWidget({ dataSource: dataSource }).getRootNode();
+    const root = createWidget({ dataSource: dataSource }).getRootNode();
 
     assert.strictEqual(root.getChild(0).level, 0, 'tile 1 - level');
     assert.strictEqual(root.getChild(0).index, 0, 'tile 1 - index');
@@ -88,7 +91,7 @@ QUnit.test('elements fields', function(assert) {
 });
 
 QUnit.test('isLeaf and isActive', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -105,7 +108,7 @@ QUnit.test('isLeaf and isActive', function(assert) {
 });
 
 QUnit.test('isLeaf and isActive with max depth', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -123,7 +126,7 @@ QUnit.test('isLeaf and isActive with max depth', function(assert) {
 });
 
 QUnit.test('get value and label', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             value: 1, name: 'Text 1'
         }, {
@@ -140,7 +143,7 @@ QUnit.test('get value and label', function(assert) {
 });
 
 QUnit.test('Update values - batch update (non completed)', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -164,7 +167,7 @@ QUnit.test('Update values - batch update (non completed)', function(assert) {
 });
 
 QUnit.test('Update values - batch update (completed)', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -185,7 +188,7 @@ QUnit.test('Update values - batch update (completed)', function(assert) {
 });
 
 QUnit.test('Update values - non batch update', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -204,7 +207,7 @@ QUnit.test('Update values - non batch update', function(assert) {
 });
 
 QUnit.test('Update labels', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1, name: 'old 1'
         }, {
@@ -230,7 +233,7 @@ QUnit.test('Update labels', function(assert) {
 });
 
 QUnit.test('Reset nodes', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1, name: 'Text 1'
         }, {
@@ -245,7 +248,7 @@ QUnit.test('Reset nodes', function(assert) {
 });
 
 QUnit.test('Customize node / tile', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -271,7 +274,7 @@ QUnit.test('Customize node / tile', function(assert) {
 });
 
 QUnit.test('Customize node / group', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -305,7 +308,7 @@ QUnit.test('Customize node / group', function(assert) {
 });
 
 QUnit.test('Customize / changes are accumulated', function(assert) {
-    const node = common.createWidget({
+    const node = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -342,7 +345,7 @@ QUnit.test('Customize / changes are accumulated', function(assert) {
 
 QUnit.test('Nodes initialized event', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -356,7 +359,7 @@ QUnit.test('Nodes initialized event', function(assert) {
 });
 
 QUnit.test('Reset customization', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -374,7 +377,7 @@ QUnit.test('Reset customization', function(assert) {
 });
 
 QUnit.test('Nodes rendering event', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             items: [{
                 items: [{
@@ -400,7 +403,7 @@ QUnit.test('Nodes rendering event', function(assert) {
 });
 
 QUnit.test('Customize - disabled labels', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }],
@@ -420,7 +423,7 @@ QUnit.test('Customize - disabled labels', function(assert) {
 });
 
 QUnit.test('Customize - hide label', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }]
@@ -435,7 +438,7 @@ QUnit.test('Customize - hide label', function(assert) {
 });
 
 QUnit.test('Customize - show initially hidden label', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }],

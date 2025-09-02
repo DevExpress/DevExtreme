@@ -116,12 +116,10 @@ QUnit.test('No events hendling after dispose', function(assert) {
     this.trigger(pointerEvents.move, tracker, 10, 15);
     tooltipShown.resetHistory();
 
-
     this.$container.remove();
 
     this.triggerDocument(pointerEvents.move);
     this.triggerDocument(pointerEvents.down);
-
 
     assert.strictEqual(tooltipShown.callCount, 0);
     assert.strictEqual(tooltipHidden.callCount, 0);
@@ -147,7 +145,6 @@ QUnit.test('Tooltip should not hide if in the canvas with margins', function(ass
     this.trigger(pointerEvents.move, tracker, 10, 15);
     this.trigger(pointerEvents.move, tracker, 3, 5);
     this.trigger(pointerEvents.move, tracker, 253, 35);
-
 
     assert.strictEqual(tooltipShown.callCount, 1);
     assert.strictEqual(tooltipHidden.callCount, 0);

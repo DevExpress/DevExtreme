@@ -30,7 +30,6 @@ import {
     resetMockFactory,
     restoreMockFactory,
 } from '../../../helpers/chartMocks.js';
-
 import exportModule from 'viz/core/export';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
 
@@ -42,15 +41,15 @@ const ScrollBarClass = scrollBarClassModule.ScrollBar;
 const LabelCtor = new ObjectPool(Label);
 const tooltipOrig = tooltipModule.Tooltip;
 
-function stubExport() {
-    this.export = new ExportMenu();
-    this.export.stub('measure').returns([0, 0]);
+function stubExport(that) {
+    that.export = new ExportMenu();
+    that.export.stub('measure').returns([0, 0]);
     exportModule.DEBUG_set_ExportMenu(sinon.spy(() => {
-        return this.export;
+        return that.export;
     }));
 }
 
-stubExport.call(this);
+stubExport(this);
 
 Element.prototype.updateRectangle = sinon.spy(Element.prototype.updateRectangle);
 
@@ -165,6 +164,7 @@ const environment = {
         const that = this;
         baseEnvironment.beforeEach.apply(that, arguments);
 
+        stubExport(that);
         setupMocks(that.$container);
         that.tooltip = new StubTooltip();
         that.themeManager = new ThemeManager();
@@ -202,7 +202,6 @@ const environment = {
         });
 
         sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
-            debugger;
             const ScrollBar = stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);

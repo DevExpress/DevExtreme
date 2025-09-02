@@ -108,7 +108,6 @@ const environment = {
             touchEnabled: true,
             wheelEnabled: true
         });
-
     },
     triggerEvent: function($target, type, x, y, originalEventData) {
         const event = $.Event(type);

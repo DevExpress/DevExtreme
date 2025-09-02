@@ -72,6 +72,3 @@ QUnit.assert.checkTile = function(actual, expected, message) {
         message: message
     });
 };
-
-// Default export for use in TreeMap tests
-export default { createRenderer, createWidget, returnValue, environment };

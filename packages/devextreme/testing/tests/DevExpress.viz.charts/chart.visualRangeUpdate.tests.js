@@ -990,7 +990,6 @@ QUnit.test('No data -> set Data(one point)', function(assert) {
 QUnit.module('Visual range on updates. Argument axis. Auto mode. Discrete', moduleSetup);
 
 QUnit.test('No data -> set visualRange - take given range', function(assert) {
-
     // Case 1
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: {

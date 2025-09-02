@@ -331,7 +331,6 @@ const environmentWithSinonStubPoint = {
                 displayMode: 'all'
             }
         }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
     });
 
     QUnit.module('Null points', {

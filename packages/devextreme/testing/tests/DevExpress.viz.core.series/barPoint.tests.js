@@ -124,7 +124,6 @@ QUnit.module('Point coordinates translation', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-
     },
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, 'canvas_position_default': 70 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, 'canvas_position_default': 600 },
@@ -2533,7 +2532,6 @@ QUnit.module('get point radius', {
         this.groups = {
             markers: this.group
         };
-
     }
 });
 

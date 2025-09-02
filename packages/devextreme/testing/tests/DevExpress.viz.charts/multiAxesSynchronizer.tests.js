@@ -313,7 +313,6 @@ QUnit.test('No syncronize axis if viewport have field \'action\' with value \'zo
                     maxVisible: 10
                 },
                 tickValues: [2, 4, 6, 8]
-
             },
             {
                 range: {
@@ -358,7 +357,6 @@ QUnit.test('No syncronize axis if viewport action is "pan"', function(assert) {
                     maxVisible: 10
                 },
                 tickValues: [2, 4, 6, 8]
-
             },
             {
                 range: {
@@ -1530,7 +1528,6 @@ QUnit.test('No synchronization for 2 axis. Both axis has discrete type', functio
                     categories: ['5', '6', '7', '8', '9', '10', '11']
                 },
                 tickValues: ['5', '6', '7', '8', '9', '10', '11']
-
             },
             {
                 range: {

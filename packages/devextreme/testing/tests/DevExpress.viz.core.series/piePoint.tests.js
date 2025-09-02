@@ -1413,7 +1413,6 @@ QUnit.module('show/hide API', {
                 legendStyles: {
                     isLegendStyles: true
                 }
-
             }
         };
         this.translateData = { 0: 100, 5: 150, 10: 200 };

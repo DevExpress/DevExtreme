@@ -1209,7 +1209,6 @@ function createThemeManager(options, themeGroupName) {
 })();
 
 (function chart() {
-
     QUnit.module('Theme Manager - pie theme');
 
     QUnit.test('applyPieSeriesTheme with userOptions & commonSettings & commonUserSettings. B237181', function(assert) {
@@ -1719,7 +1718,6 @@ function createThemeManager(options, themeGroupName) {
 
         assert.strictEqual(themeManager.getOptions('series', {}).type, 'themetype');
         assert.strictEqual(themeManager.getOptions('series', { type: 'usertype' }).type, 'usertype');
-
     });
 
     QUnit.test('calculate series type from commonSeriesSettings', function(assert) {
@@ -1732,7 +1730,6 @@ function createThemeManager(options, themeGroupName) {
 
         assert.strictEqual(themeManager.getOptions('series', {}).type, 'commontype');
         assert.strictEqual(themeManager.getOptions('series', { type: 'usertype' }).type, 'usertype');
-
     });
 
     QUnit.test('Process crosshair label font options', function(assert) {
@@ -2037,7 +2034,6 @@ function createThemeManager(options, themeGroupName) {
             enabled: true,
             maxPointCountSupported: 300
         });
-
     });
 
     QUnit.test('Animation. boolean false', function(assert) {
@@ -2051,7 +2047,6 @@ function createThemeManager(options, themeGroupName) {
             enabled: false,
             maxPointCountSupported: 300
         });
-
     });
 
     QUnit.test('Animation. undefined', function(assert) {
@@ -2064,7 +2059,6 @@ function createThemeManager(options, themeGroupName) {
             enabled: true,
             maxPointCountSupported: 300
         });
-
     });
 
     QUnit.test('Animation. object', function(assert) {
@@ -2083,7 +2077,6 @@ function createThemeManager(options, themeGroupName) {
             enabled: true,
             maxPointCountSupported: 400
         });
-
     });
 
     QUnit.test('get valueAxis for rangeSelector', function(assert) {

@@ -126,7 +126,6 @@ QUnit.test('No matter what type - return ticks in pixels', function(assert) {
 
         this.axis.setBusinessRange({ });
 
-
         this.axis.createTicks($.extend(canvas(300), { left: 21, right: 21 }));
 
         assert.deepEqual(this.axis._majorTicks.map(value), [0, 51.6, 103.2, 154.8, 206.4, 258]);
