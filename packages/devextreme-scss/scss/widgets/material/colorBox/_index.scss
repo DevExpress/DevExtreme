@@ -20,12 +20,6 @@
       padding-inline-start: $material-colorbox-preview-width;
     }
 
-    &.dx-colorbox-color-is-not-defined {
-      .dx-colorbox-color-result-preview {
-        background: $colorbox-preview-empty-bg no-repeat 0 0;
-      }
-    }
-
     &::after {
       left: $material-colorbox-preview-left + 1;
     }
@@ -51,6 +45,11 @@
   border: 1px solid;
   border-color: $colorview-border-color;
   left: $material-colorbox-preview-left;
+
+  .dx-icon-colordismiss {
+    font-size: 17px;
+    color: $colorbox-preview-icon-color;
+  }
 }
 
 .dx-colorbox-overlay {

@@ -9,7 +9,7 @@ import { getArraysDiff } from './get_arrays_diff';
 const getObjectToCompare = (
   item: AppointmentViewModelPlain,
 ): object => {
-  if ('agendaSettings' in item) {
+  if ('isAgendaModel' in item) {
     return {};
   }
 

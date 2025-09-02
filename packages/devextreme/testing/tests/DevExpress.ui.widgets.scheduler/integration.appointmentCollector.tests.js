@@ -92,7 +92,10 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
 
     const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
         const helper = new CompactAppointmentsHelper(widgetMock);
-        items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
+        items = items || [{
+            appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+            color: Promise.resolve(undefined),
+        }];
 
         return helper.render({
             ...options,
@@ -118,14 +121,13 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
 
         const $collector = renderAppointmentsCollectorContainer({
             widgetMock,
-            items: {
-                data: [
-                    { text: 'a', startDate: new Date(2015, 1, 1) },
-                    { text: 'b', startDate: new Date(2015, 1, 1) }
-                ],
-                colors: ['#fff000', '#000fff'],
-                settings: []
-            },
+            items: [{
+                appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#fff000'),
+            }, {
+                appointment: [{ text: 'b', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#000fff'),
+            }],
             color
         });
 

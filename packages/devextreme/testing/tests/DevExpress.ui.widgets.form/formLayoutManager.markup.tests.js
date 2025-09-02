@@ -2664,7 +2664,10 @@ QUnit.module('Default button configuration', () => {
             const layoutManager = $testContainer.dxLayoutManager({
                 items: [{
                     itemType: 'button',
-                    name
+                    name,
+                    buttonOptions: {
+                        disabled: false,
+                    },
                 }]
             }).dxLayoutManager('instance');
 
@@ -2709,7 +2712,8 @@ QUnit.module('Default button configuration', () => {
                 buttonOptions: {
                     text: 'Custom Smart Text',
                     icon: 'custom-icon',
-                    onClick: customClickHandler
+                    onClick: customClickHandler,
+                    disabled: false,
                 }
             }]
         });

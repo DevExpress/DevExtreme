@@ -1,7 +1,8 @@
-import type { Appointment } from '@js/ui/scheduler';
+import type { dxElementWrapper } from '@js/core/renderer';
+import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { AppointmentViewModelPlain } from '@ts/scheduler/view_model/generate_view_model/types';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
-import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -14,6 +15,10 @@ export type HeaderCellTextFormat = string | ((date: Date) => string);
 export interface SafeAppointment extends Appointment {
   startDate: Date | string;
   endDate: Date | string;
+}
+export interface TargetedAppointment extends SafeAppointment {
+  displayStartDate: Date;
+  displayEndDate: Date;
 }
 
 export interface AppointmentDataItem {
@@ -246,7 +251,21 @@ export interface ViewDataProviderType {
 
 export interface AppointmentTooltipItem {
   appointment: Appointment;
-  targetedAppointment?: Appointment;
-  color?: string;
-  settings: AppointmentItemViewModel[];
+  targetedAppointment?: Appointment | TargetedAppointment;
+  color: Promise<string | undefined>;
+}
+
+export interface CompactAppointmentOptions {
+  $container: dxElementWrapper;
+  coordinates: { top: number; left: number };
+  items: (AppointmentTooltipItem & {
+    settings: AppointmentViewModelPlain;
+  })[];
+  buttonColor: Promise<string | undefined>;
+  sortedIndex: number;
+  width: number;
+  height: number;
+  onAppointmentClick: Properties['onAppointmentClick'];
+  allowDrag: boolean;
+  isCompact: boolean;
 }

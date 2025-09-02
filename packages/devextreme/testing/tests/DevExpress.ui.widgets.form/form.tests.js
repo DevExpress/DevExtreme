@@ -2249,11 +2249,12 @@ QUnit.module('Default button configuration integration', () => {
 
         const form = $('#form').dxForm({
             formData: { test: 'value' },
+            aiIntegration: {},
             items: [
                 'test',
                 {
                     itemType: 'button',
-                    name: 'smartPaste'
+                    name: 'smartPaste',
                 },
                 {
                     itemType: 'button',
@@ -5409,6 +5410,7 @@ QUnit.module('LoadIndicator', () => {
         const clock = sinon.useFakeTimers();
         const smartPasteSpy = sinon.spy();
         const form = $('#form').dxForm({
+            aiIntegration: {},
             items: [
                 { dataField: 'name' },
                 {

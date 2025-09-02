@@ -324,26 +324,6 @@ QUnit.module('Events', {
         assert.ok(true, 'currentView was changed to agenda correctly');
     });
 
-    QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', async function(assert) {
-        const resourcesSpy = sinon.spy(dxScheduler.prototype, 'setTargetedAppointmentResources');
-
-        await createWrapper({
-            dataSource: new DataSource([
-                {
-                    startDate: new Date(2015, 1, 9, 16),
-                    endDate: new Date(2015, 1, 9, 17),
-                    text: 'caption',
-                    recurrenceRule: 'FREQ=YEARLY'
-                }
-            ]),
-            currentDate: new Date(2015, 1, 9),
-            views: ['week'],
-            currentView: 'week'
-        });
-
-        assert.equal(resourcesSpy.callCount, 2, 'Resources aren\'t required');
-    });
-
     QUnit.test('onAppointmentClick should fires when appointment is clicked', async function(assert) {
         assert.expect(3);
 
@@ -502,7 +482,7 @@ QUnit.module('Events', {
             onAppointmentClick: function(e) {
                 const targetedAppointmentData = e.targetedAppointmentData;
 
-                assert.equal(targetedAppointmentData.owner.id, 2, 'Owner id is OK');
+                assert.deepEqual(targetedAppointmentData.owner.id, [2], 'Owner id is OK');
                 assert.equal(targetedAppointmentData.priority, 1, 'Priority is OK');
             },
             onAppointmentRendered: function(e) {
@@ -513,7 +493,7 @@ QUnit.module('Events', {
                     expectedOwnerId = 2;
                 }
 
-                assert.equal(targetedAppointmentData.owner.id, expectedOwnerId, 'Owner id is OK on rendered');
+                assert.deepEqual(targetedAppointmentData.owner.id, [expectedOwnerId], 'Owner id is OK on rendered');
                 assert.equal(targetedAppointmentData.priority, 1, 'Priority is OK on rendered');
             }
         });

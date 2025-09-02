@@ -15,13 +15,3 @@ $colorview-border-color: $base-border-color !default;
 $colorview-label-color: $base-label-color !default;
 $colorview-handle-color: $base-bg !default;
 $colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
-$colorbox-preview-empty-bg: null !default;
-
-
-@if $mode == "light" {
-  $colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/light/colorbox/nocolor.png') !default;
-}
-
-@if $mode == "dark" {
-  $colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/dark/colorbox/nocolor.png') !default;
-}
