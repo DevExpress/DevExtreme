@@ -27,6 +27,10 @@ export const countVisibleAppointments = (items: AppointmentViewModelPlain[]): nu
       return count + item.items.filter(countPart).length;
     }
 
+    if ('isAgendaModel' in item) {
+      return count + 1;
+    }
+
     if ('info' in item && !countPart(item)) {
       return count;
     }
