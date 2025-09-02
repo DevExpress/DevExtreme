@@ -1,6 +1,5 @@
-import { dateUtils } from '@ts/core/utils/m_date';
-
-import { getDatesWithoutTime } from '../../../../r1/utils/base';
+import { splitIntervalByDay } from '../../../common/split_interval_by_days';
+import { trimInterval } from '../../../common/trim_interval';
 import type { CompareOptions, DateInterval } from '../../../types';
 
 export const getVisibleDateTimeIntervals = ({
@@ -8,40 +7,15 @@ export const getVisibleDateTimeIntervals = ({
   endDayHour,
   min,
   max,
-}: CompareOptions, isDateViewOnly: boolean, isSplitByDays = false): DateInterval[] => {
-  const isContinuousIntervals = startDayHour === 0 && endDayHour === 24;
-  if (isDateViewOnly || (!isSplitByDays && isContinuousIntervals)) {
-    const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-
-    return [{ min: trimMin.getTime(), max: trimMax.getTime() }];
+}: CompareOptions, isDateViewOnly: boolean): DateInterval[] => {
+  if (isDateViewOnly || (startDayHour === 0 && endDayHour === 24)) {
+    return [trimInterval({ min, max })];
   }
 
-  if (startDayHour >= endDayHour) {
-    return [];
-  }
-
-  const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-  const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
-
-  const normalizedMin = new Date(min);
-  normalizedMin.setHours(startTime.hours, startTime.minutes, 0, 0);
-  const normalizedMax = new Date(max);
-  normalizedMax.setHours(endTime.hours, endTime.minutes, 0, 0);
-
-  const time = normalizedMin;
-  const maxTime = normalizedMax;
-  const result: DateInterval[] = [];
-
-  while (time < maxTime) {
-    const intervalMax = new Date(time);
-    intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
-
-    result.push({
-      min: time.getTime(),
-      max: intervalMax.getTime(),
-    });
-    time.setDate(time.getDate() + 1);
-  }
-
-  return result;
+  return splitIntervalByDay({
+    startDayHour,
+    endDayHour,
+    min,
+    max,
+  });
 };

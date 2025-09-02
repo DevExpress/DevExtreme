@@ -3,8 +3,8 @@ import {
 } from '@jest/globals';
 
 import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import { shiftIntervals } from '../../../../view_model_new/common/shift_intervals';
 import { getVisibleDateTimeIntervals } from '../../../../view_model_new/filtration/utils/get_filter_options/get_visible_date_time_intervals';
-import { shiftIntervals } from '../../../../view_model_new/filtration/utils/get_filter_options/shift_intervals';
 import type { FilterOptions } from '../type';
 import { getAppointmentFilter } from './get_appointment_filter';
 
@@ -13,8 +13,8 @@ const maxDay = 20;
 const compareOptions = {
   startDayHour: 0,
   endDayHour: 24,
-  min: new Date(2000, 0, minDay),
-  max: new Date(2000, 0, maxDay),
+  min: new Date(2000, 0, minDay).getTime(),
+  max: new Date(2000, 0, maxDay).getTime(),
 };
 const getViewportOptions = (options: Partial<FilterOptions>): FilterOptions => ({
   ...compareOptions,

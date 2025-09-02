@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import { DEFAULT_CELL_WIDTH, setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 describe('month', () => {
   it('should render long appointments with parts and hide smaller ones into spread collectors', async () => {
@@ -45,5 +45,27 @@ describe('month', () => {
     const texts = appointments.map((item) => item.getText());
     expect(texts).toEqual(['4', '4', '4']);
     expect(POM.getCollectorTexts()).toMatchSnapshot();
+  });
+
+  ['month', 'timelineMonth'].forEach((currentView) => {
+    it(`should render appointment cropped by startDayHour and endDayHour to occupy only one cell [${currentView}]`, async () => {
+      setupSchedulerTestEnvironment();
+      const { POM } = await createScheduler({
+        dataSource: [{
+          startDate: new Date(2020, 11, 12, 22),
+          endDate: new Date(2020, 11, 14, 5),
+          text: '1',
+        }],
+        startDayHour: 10,
+        endDayHour: 20,
+        views: [currentView],
+        currentView,
+        currentDate: new Date(2020, 11, 25),
+        height: 600,
+      });
+
+      const appointment = POM.getAppointment();
+      expect(appointment?.style.width).toBe(`${DEFAULT_CELL_WIDTH}px`);
+    });
   });
 });

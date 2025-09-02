@@ -10,6 +10,8 @@ import type {
   RealSize,
 } from './generate_view_model/steps/add_geometry/types';
 
+export type PanelName = 'allDayPanel' | 'regularPanel';
+
 export interface Position {
   cellIndex: number;
   endCellIndex: number;
@@ -22,17 +24,17 @@ export interface DateInterval {
 }
 export interface CellInterval extends DateInterval, Omit<Position, 'endCellIndex'> {}
 
-export interface DateIntervalsExtended {
-  intervals: DateInterval[];
-  prevIntervalEndDate: number;
-  nextIntervalStartDate: number;
-}
-
 export interface CompareOptions {
   startDayHour: number;
   endDayHour: number;
-  min: Date;
-  max: Date;
+  min: number;
+  max: number;
+}
+
+export interface LayoutIntervals {
+  intervals: DateInterval[];
+  cells: CellInterval[];
+  intervalCellsCount: RealSize;
 }
 
 export interface FilterOptions {
@@ -77,17 +79,31 @@ export interface Duration {
   duration: number;
 }
 
-export interface GridAppointmentDates {
-  gridAppointmentDates: {
+export interface AppointmentPart {
+  reduced?: 'head' | 'body' | 'tail';
+  partIndex: number;
+  partCount: number;
+}
+
+export interface DatesBeforeSplit {
+  sourceDatesBeforeSplit: {
+    allDay: boolean;
+    startDate: number;
+    endDate: number;
+  };
+  datesBeforeSplit: {
+    allDay: boolean;
     startDate: number;
     endDate: number;
   };
 }
 
-export interface AppointmentPart extends GridAppointmentDates {
-  reduced?: 'head' | 'body' | 'tail';
-  partIndex: number;
-  partCount: number;
+export interface DatesAfterSplit {
+  datesAfterSplit: {
+    allDay: boolean;
+    startDate: number;
+    endDate: number;
+  };
 }
 
 export type ListEntity = MinimalAppointmentEntity
@@ -105,6 +121,8 @@ export interface AgendaGeometry {
 }
 
 export type AgendaEntity = ListEntity
+  & DatesBeforeSplit
+  & DatesAfterSplit
   & AppointmentPart
   & AgendaGeometry
   & LastInGroup
@@ -118,13 +136,17 @@ export interface MaxLevel {
   maxLevel: number;
 }
 
+export type CollectorItemEntity = ListEntity
+  & DatesBeforeSplit
+  & RealSize;
+
 export interface AppointmentCollector {
-  items: (ListEntity & GridAppointmentDates)[];
+  items: (ListEntity & DatesBeforeSplit)[];
   isCompact: boolean;
 }
 
 export interface AppointmentCollectorWithGeometry {
-  items: (ListEntity & GridAppointmentDates & RealSize)[];
+  items: CollectorItemEntity[];
   isCompact: boolean;
 }
 
@@ -133,6 +155,7 @@ export interface Direction {
 }
 
 export type AppointmentEntity = ListEntity
+  & DatesBeforeSplit
   & AppointmentPart
   & Level
   & MaxLevel

@@ -409,7 +409,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this._refreshWorkSpace();
           if (this._readyToRenderAppointments) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
+            this._appointments.option('items', this._layoutManager.generateViewModel());
           }
         });
         break;
@@ -418,7 +418,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this._readyToRenderAppointments) {
           this._updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this._getAppointmentsToRepaint());
+          this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'tabIndex':
@@ -876,7 +876,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this._getAppointmentsToRepaint()
+      ? this._layoutManager.generateViewModel()
       : [];
 
     this._appointments.option('items', viewModel);
@@ -884,11 +884,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (this._isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
-  }
-
-  _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
-    const appointmentsMap = this._layoutManager.generateViewModel();
-    return appointmentsMap;
   }
 
   _initExpressions(fields: IFieldExpr) {

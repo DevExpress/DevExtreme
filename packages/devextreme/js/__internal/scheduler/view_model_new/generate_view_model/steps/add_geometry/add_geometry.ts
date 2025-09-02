@@ -2,7 +2,6 @@ import type { AppointmentCollectorWithGeometry } from '../../../types';
 import { addAdaptivityGeometryInsideInterval } from './add_adaptivity_geometry_inside_interval';
 import { addGeometryInsideInterval } from './add_geometry_inside_interval';
 import { addGroupingOffset } from './add_grouping_offset';
-import { resizeToWorkspace } from './resize_to_workspace';
 import type {
   Geometry,
   GeometryMinimalEntity,
@@ -45,7 +44,6 @@ export const addGeometry = <T extends GeometryMinimalEntity>(
       : addGeometryInsideInterval(rawEntity, options);
     addPanelOffset(entity, options);
     addGroupingOffset(entity, options);
-    resizeToWorkspace(entity, options);
     RTLSwap(entity, options);
 
     return entity;

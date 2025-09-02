@@ -491,7 +491,7 @@ module('Integration: Appointments in Month view', {
                     height: 600
                 });
 
-                const appointments = scheduler.instance._getAppointmentsToRepaint();
+                const appointments = scheduler.instance._layoutManager.generateViewModel();
                 const parts = appointments.map((item) => ({
                     level: item.level,
                     maxLevel: item.maxLevel,

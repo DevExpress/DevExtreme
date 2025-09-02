@@ -56,8 +56,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       const compareOptions: CompareOptions = {
         startDayHour,
         endDayHour,
-        min: groupStartDate,
-        max: groupEndDate,
+        min: groupStartDate.getTime(),
+        max: groupEndDate.getTime(),
       };
 
       filterOptions.push({

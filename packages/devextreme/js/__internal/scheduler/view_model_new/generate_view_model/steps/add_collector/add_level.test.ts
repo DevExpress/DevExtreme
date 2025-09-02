@@ -177,4 +177,47 @@ describe('addLevel', () => {
       { ...items[5], level: 0, maxLevel: 0 },
     ]);
   });
+
+  it('should add levels for overlapping appointments with zero duration', () => {
+    const items = [{
+      id: 1,
+      startDate: 0,
+      endDate: 10,
+      groupIndex: 0,
+    }, {
+      id: 2,
+      startDate: 0,
+      endDate: 15,
+      groupIndex: 0,
+    }, {
+      id: 3,
+      startDate: 10,
+      endDate: 15,
+      groupIndex: 0,
+    }, {
+      id: 4,
+      startDate: 10,
+      endDate: 10,
+      groupIndex: 0,
+    }, {
+      id: 5,
+      startDate: 10,
+      endDate: 10,
+      groupIndex: 0,
+    }, {
+      id: 6,
+      startDate: 10,
+      endDate: 10,
+      groupIndex: 0,
+    }];
+
+    expect(addLevel(items, collectorOptions)).toEqual([
+      { ...items[0], level: 0, maxLevel: 3 },
+      { ...items[1], level: 1, maxLevel: 3 },
+      { ...items[2], level: 0, maxLevel: 3 },
+      { ...items[3], level: 2, maxLevel: 3 },
+      { ...items[4], level: 3, maxLevel: 3 },
+      { ...items[5], level: 4, maxLevel: 3 },
+    ]);
+  });
 });

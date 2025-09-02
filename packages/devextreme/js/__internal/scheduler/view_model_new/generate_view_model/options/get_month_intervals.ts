@@ -1,0 +1,58 @@
+import { shiftIntervals } from '../../common/shift_intervals';
+import { trimInterval } from '../../common/trim_interval';
+import type { CompareOptions, DateInterval, LayoutIntervals } from '../../types';
+import { getIntervalDaysCount } from './get_interval_days_count';
+import { getOneDayCellIntervals } from './get_one_day_cell_intervals';
+
+const MONTH_INTERVAL_DAYS_COUNT = 7;
+
+const splitBy7Days = (intervals: DateInterval): DateInterval[] => {
+  const result: DateInterval[] = [];
+  const date = new Date(intervals.min);
+
+  while (date.getTime() < intervals.max) {
+    const min = date.getTime();
+    date.setDate(date.getDate() + MONTH_INTERVAL_DAYS_COUNT);
+    result.push({ min, max: date.getTime() });
+  }
+
+  return result;
+};
+
+const cropIntervalsByDayHours = (
+  intervals: DateInterval[],
+  startDayHour: number,
+  endDayHour: number,
+): DateInterval[] => intervals.map((item) => ({
+  ...item,
+  min: new Date(item.min).setHours(startDayHour, 0, 0, 0),
+  max: new Date(item.max - 1).setHours(endDayHour, 0, 0, 0),
+}));
+
+export const getMonthIntervals = (
+  { startDayHour, endDayHour, ...dateInterval }: CompareOptions,
+  viewOffset: number,
+  isTimeline: boolean,
+): LayoutIntervals => {
+  const trimmedInterval = trimInterval(dateInterval);
+  const intervals = isTimeline ? [trimmedInterval] : splitBy7Days(trimmedInterval);
+  const croppedIntervals = cropIntervalsByDayHours(intervals, startDayHour, endDayHour);
+  const shiftedIntervals = shiftIntervals(croppedIntervals, viewOffset);
+
+  const cells = getOneDayCellIntervals({
+    intervals,
+    startDayHour,
+    endDayHour,
+  });
+  const shiftedCells = shiftIntervals(cells, viewOffset);
+  const intervalDaysCount = getIntervalDaysCount(intervals[0]);
+
+  return {
+    cells: shiftedCells,
+    intervals: shiftedIntervals,
+    intervalCellsCount: {
+      width: intervalDaysCount,
+      height: 1,
+    },
+  };
+};

@@ -9,8 +9,8 @@ export interface DateInterval {
 export interface CompareOptions {
   startDayHour: number;
   endDayHour: number;
-  min: Date;
-  max: Date;
+  min: number;
+  max: number;
 }
 
 export interface FilterOptions {
@@ -19,8 +19,8 @@ export interface FilterOptions {
   viewOffset: number;
   resources: ResourceLoader[];
   firstDayOfWeek: number;
-  min: Date;
-  max: Date;
+  min: number;
+  max: number;
   allDayPanelFilter?: boolean;
   allDayPanelMode: AllDayPanelModeType;
   supportAllDayRow: boolean;

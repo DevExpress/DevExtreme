@@ -15,13 +15,14 @@ export const addLevel = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'g
   let levelsEndDate: number[] = [];
   let stack: (T & Level & MaxLevel)[] = [];
   return entities.map((entity, entityIndex) => {
+    const entityEndDate = entity.endDate === entity.startDate ? entity.endDate + 1 : entity.endDate;
     const index = levelsEndDate.findIndex((endDate) => entity.startDate >= endDate);
     const level = index === -1 ? levelsEndDate.length : index;
     const extended = { ...entity, level, maxLevel: minMaxLevel };
 
     const isIntersectWithPrevious = levelsEndDate.some((endDate) => entity.startDate < endDate);
     if (isIntersectWithPrevious) {
-      levelsEndDate[level] = extended.endDate;
+      levelsEndDate[level] = entityEndDate;
       stack.push(extended);
       stack.forEach((item) => {
         item.maxLevel = maxLevel === -1
@@ -30,7 +31,7 @@ export const addLevel = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'g
       });
     } else {
       extended.maxLevel = minMaxLevel;
-      levelsEndDate = [extended.endDate];
+      levelsEndDate = [entityEndDate];
       stack = [extended];
     }
 

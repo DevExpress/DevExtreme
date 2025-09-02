@@ -8,6 +8,7 @@ describe('addGeometryInsideInterval', () => {
       rowIndex: 1,
       startDate: 20,
       endDate: 30,
+      duration: 10,
       level: 0,
       maxLevel: 0,
       items: [],
@@ -35,6 +36,7 @@ describe('addGeometryInsideInterval', () => {
       rowIndex: 2,
       startDate: 40,
       endDate: 60,
+      duration: 20,
       level: 2,
       maxLevel: 4,
       items: [],
@@ -63,9 +65,10 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 2,
       startDate: 20,
       endDate: 30,
+      duration: 10,
       level: 0,
       maxLevel: 0,
-      items: [{ startDate: 23, endDate: 33 }],
+      items: [{ startDate: 23, endDate: 33, duration: 10 }],
     };
 
     expect(addGeometryInsideInterval(entity as any, {
@@ -87,7 +90,7 @@ describe('addGeometryInsideInterval', () => {
       height: 20,
       left: 200,
       items: [{
-        startDate: 23, endDate: 33, width: 350, height: 20,
+        startDate: 23, endDate: 33, width: 350, height: 56, duration: 10,
       }],
     });
   });
@@ -98,9 +101,10 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 1,
       startDate: 40,
       endDate: 60,
+      duration: 20,
       level: 2,
       maxLevel: 4,
-      items: [{ startDate: 23, endDate: 38 }],
+      items: [{ startDate: 23, endDate: 38, duration: 15 }],
     };
 
     expect(addGeometryInsideInterval(entity as any, {
@@ -122,7 +126,7 @@ describe('addGeometryInsideInterval', () => {
       height: 20,
       left: 82,
       items: [{
-        startDate: 23, endDate: 38, width: 18, height: 600,
+        startDate: 23, endDate: 38, width: 20, height: 600, duration: 15,
       }],
     });
   });

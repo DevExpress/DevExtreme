@@ -11,11 +11,11 @@ import type {
 import AppointmentLayoutManagerDeprecated from '../view_model/m_appointments_layout_manager';
 import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
-import { generateMonthViewModel } from './generate_view_model/generate_month_view_model';
+import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
-import type { AppointmentEntity, GridAppointmentDates, ListEntity } from './types';
+import type { AppointmentEntity, DatesBeforeSplit, ListEntity } from './types';
 
 class AppointmentLayoutManagerBridge {
   preparedItems: any[] = [];
@@ -34,12 +34,9 @@ class AppointmentLayoutManagerBridge {
   }
 
   protected useNewViewModel(): boolean {
-    const viewType = this.schedulerStore.currentView.type;
-    const isVirtualScrolling = this.schedulerStore.isVirtualScrolling();
-    return viewType === 'agenda' || (
-      !isVirtualScrolling
+    return this.schedulerStore.currentView.type === 'agenda' || (
+      !this.schedulerStore.isVirtualScrolling()
       && this.schedulerStore.resourceManager.groupCount() === 0
-      && ['month'].includes(this.schedulerStore.currentView.type)
     );
   }
 
@@ -63,7 +60,7 @@ class AppointmentLayoutManagerBridge {
 
   public hasAllDayAppointments(): boolean {
     if (this.useNewViewModel()) {
-      return false;
+      return this.filteredItems.filter((item: ListEntity) => item.isAllDayPanelOccupied).length > 0;
     }
 
     return this.oldLayoutManager.hasAllDayAppointments();
@@ -71,7 +68,8 @@ class AppointmentLayoutManagerBridge {
 
   public generateViewModel(): AppointmentViewModelPlain[] {
     if (this.useNewViewModel()) {
-      switch (this.schedulerStore.currentView.type) {
+      const viewType = this.schedulerStore.currentView.type;
+      switch (viewType) {
         case 'agenda': {
           const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
           return viewModel.map((item) => {
@@ -80,9 +78,8 @@ class AppointmentLayoutManagerBridge {
               this.schedulerStore._dataAccessors,
             ).clone();
 
-            adapter.startDate = new Date(item.startDate);
-            adapter.endDate = new Date(item.endDate);
-            adapter.calculateDates(this.schedulerStore.timeZoneCalculator, 'fromGrid');
+            adapter.startDate = new Date(item.sourceDatesBeforeSplit.startDate);
+            adapter.endDate = new Date(item.sourceDatesBeforeSplit.endDate);
 
             return {
               ...item,
@@ -90,11 +87,11 @@ class AppointmentLayoutManagerBridge {
             };
           });
         }
-        case 'month': {
-          const viewModel = generateMonthViewModel(this.schedulerStore, this.filteredItems);
+        default: {
+          const viewModel = generateGridViewModel(this.schedulerStore, this.filteredItems);
           const toItem = (item: AppointmentEntity): AppointmentItemViewModel => ({
             itemData: item.itemData,
-            allDay: false, // otherwise all day appointment will not render
+            allDay: item.isAllDayPanelOccupied,
             groupIndex: item.groupIndex,
             sortedIndex: item.sortedIndex,
             direction: item.direction,
@@ -110,29 +107,23 @@ class AppointmentLayoutManagerBridge {
             partTotalCount: item.partCount,
             rowIndex: item.rowIndex,
             columnIndex: item.columnIndex,
-            info: getAppointmentInfo(
-              item,
-              this.schedulerStore.timeZoneCalculator,
-            ),
+            info: getAppointmentInfo(item),
           });
           const toCollectedItem = (
-            item: ListEntity & GridAppointmentDates & RealSize,
+            item: ListEntity & DatesBeforeSplit & RealSize,
           ): AppointmentItemViewModel => ({
             itemData: item.itemData,
-            allDay: false, // otherwise all day appointment will not render
+            allDay: item.isAllDayPanelOccupied,
             groupIndex: item.groupIndex,
             width: item.width,
             height: item.height,
-            info: getAppointmentInfo(
-              item,
-              this.schedulerStore.timeZoneCalculator,
-            ),
+            info: getAppointmentInfo(item),
           } as unknown as AppointmentItemViewModel);
           return viewModel.map((item) => {
             if (item.items.length) {
               return {
                 itemData: item.itemData,
-                allDay: false, // otherwise all day appointment will not render
+                allDay: item.isAllDayPanelOccupied,
                 groupIndex: item.groupIndex,
                 sortedIndex: item.sortedIndex,
                 top: item.top,
@@ -147,7 +138,6 @@ class AppointmentLayoutManagerBridge {
             return toItem(item);
           });
         }
-        default:
       }
     }
 

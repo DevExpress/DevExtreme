@@ -1,6 +1,7 @@
 import type {
   AllDayPanelOccupation,
   AppointmentCollector,
+  CellInterval,
   DateInterval,
   Level,
   ListEntity,
@@ -33,7 +34,7 @@ export interface AbstractSize {
   sizeX: number; // abstract width
   sizeY: number; // abstract height
 }
-export interface RawCollectorSize {
+export interface CollectorCSS {
   height: string;
   width: string;
   marginRight: string;
@@ -42,7 +43,7 @@ export interface RawCollectorSize {
   marginBottom: string;
 }
 
-export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex'>
+export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex' | 'duration'>
   & Position
   & Level
   & MaxLevel
@@ -51,6 +52,7 @@ export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | '
 
 export interface GeometryOptions {
   intervals: DateInterval[];
+  cells: CellInterval[];
   maxAppointmentsPerCell: number;
   viewOrientation: 'horizontal' | 'vertical';
   groupOrientation?: 'horizontal' | 'vertical';

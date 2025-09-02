@@ -1,9 +1,9 @@
 import type Scheduler from '../../../../m_scheduler';
 import { getCompareOptions } from '../../../common/get_compare_options';
+import { shiftIntervals } from '../../../common/shift_intervals';
 import { VIEWS_WITH_ALL_DAY_PANEL } from '../../../constants';
 import type { FilterOptions } from '../../../types';
 import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
-import { shiftIntervals } from './shift_intervals';
 
 export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
   const compareOptions = getCompareOptions(schedulerStore);
