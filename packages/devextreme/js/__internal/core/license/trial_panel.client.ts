@@ -113,33 +113,6 @@ class DxLicense extends SafeHTMLElement {
 
   private _subscriptionsSpan?: HTMLSpanElement;
 
-  private _getSubscriptionsArray(subscriptions: string | null): string[] {
-    return subscriptions?.split(",").map(x => x.trim()) ?? [];
-  }
-
-  public updateSubscriptions(newSubscriptions: string): void {
-    if (!this._subscriptionsSpan || !newSubscriptions) return;
-    const currentSubscriptions = this._getSubscriptionsArray(this.getAttribute(attributeNames.subscriptions));
-    if (!currentSubscriptions.length) {
-      this._updateSubscriptionsText(newSubscriptions);
-      return;
-    }
-
-    const newSubscriptionsArray = this._getSubscriptionsArray(newSubscriptions);
-    const mergedSubscriptions: string[] = [];
-
-    for (let i = 0; i < newSubscriptionsArray.length; i++) {
-      if (currentSubscriptions.some(x => x === newSubscriptionsArray[i]))
-        mergedSubscriptions.push(newSubscriptionsArray[i]);
-    }
-
-    this._updateSubscriptionsText(
-      mergedSubscriptions.length !== 0
-        ? mergedSubscriptions.join(", ")
-        : [...currentSubscriptions, ...newSubscriptionsArray].join(", ")
-    );
-  }
-
   constructor() {
     super();
 
@@ -162,16 +135,44 @@ class DxLicense extends SafeHTMLElement {
     );
   }
 
+  private _getSubscriptionsArray(subscriptions: string | null): string[] {
+    return subscriptions?.split(',').map((x) => x.trim()) ?? [];
+  }
+
+  public updateSubscriptions(newSubscriptions: string): void {
+    if (!this._subscriptionsSpan || !newSubscriptions) return;
+    const currentSubscriptionsStr = this.getAttribute(attributeNames.subscriptions);
+    const currentSubscriptions = this._getSubscriptionsArray(currentSubscriptionsStr);
+    if (!currentSubscriptions.length) {
+      this._updateSubscriptionsText(newSubscriptions);
+      return;
+    }
+
+    const newSubscriptionsArray = this._getSubscriptionsArray(newSubscriptions);
+    const mergedSubscriptions: string[] = [];
+
+    newSubscriptionsArray.forEach((subscription) => {
+      if (currentSubscriptions.some((x) => x === subscription)) {
+        mergedSubscriptions.push(subscription);
+      }
+    });
+
+    this._updateSubscriptionsText(
+      mergedSubscriptions.length !== 0
+        ? mergedSubscriptions.join(', ')
+        : [...currentSubscriptions, ...newSubscriptionsArray].join(', '),
+    );
+  }
 
   private _updateSubscriptionsText(subscriptions: string | null): void {
-    if (subscriptions) {
+    if (subscriptions && this._subscriptionsSpan) {
       this.setAttribute(attributeNames.subscriptions, subscriptions);
-      this._subscriptionsSpan!.innerText = ` Included in Subscriptions: ${subscriptions}`;
+      this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
     }
   }
 
   private _createSubscriptionsSpan(): HTMLSpanElement {
-    this._subscriptionsSpan = this._createSpan("");
+    this._subscriptionsSpan = this._createSpan('');
     this._updateSubscriptionsText(this.getAttribute(attributeNames.subscriptions));
     return this._subscriptionsSpan;
   }
@@ -235,7 +236,7 @@ class DxLicense extends SafeHTMLElement {
       this._createSpan(' an existing license or '),
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
-      this._createSubscriptionsSpan()
+      this._createSubscriptionsSpan(),
     );
 
     return contentContainer;
@@ -313,7 +314,8 @@ class DxLicenseTrigger extends SafeHTMLElement {
 
       document.body.prepend(license);
     } else {
-      (licensePanel[0] as DxLicense).updateSubscriptions(this.getAttribute(attributeNames.subscriptions) as string);
+      const subscriptions = this.getAttribute(attributeNames.subscriptions) as string;
+      (licensePanel[0] as DxLicense).updateSubscriptions(subscriptions);
     }
   }
 }
