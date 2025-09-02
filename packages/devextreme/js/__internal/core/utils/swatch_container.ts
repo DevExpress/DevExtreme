@@ -2,7 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { value } from '@js/core/utils/view_port';
 
-const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
+export const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
 
 const getSwatchContainer = (
   element: Element | dxElementWrapper,

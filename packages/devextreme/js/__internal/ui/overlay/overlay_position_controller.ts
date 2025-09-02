@@ -10,7 +10,8 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
-import swatch from '@ts/core/utils/swatch_container';
+import { value as viewportValue } from '@js/core/utils/view_port';
+import swatch, { SWATCH_CONTAINER_CLASS_PREFIX } from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
@@ -214,6 +215,7 @@ export class OverlayPositionController<
       this._$markupContainer = $(element);
     } else if (this._$root) {
       this._$markupContainer = swatch.getSwatchContainer(this._$root);
+      this._positionMarkupContainer();
     }
 
     this.updateVisualContainer(this._properties.visualContainer);
@@ -270,6 +272,25 @@ export class OverlayPositionController<
     const positionStyle = useFixed ? 'fixed' : 'absolute';
 
     this._$wrapper?.css('position', positionStyle);
+  }
+
+  _positionMarkupContainer(): void {
+    if (this._$markupContainer?.is(`[class*="${SWATCH_CONTAINER_CLASS_PREFIX}"]`)) {
+      const viewport: dxElementWrapper = viewportValue();
+
+      viewport.css({
+        position: 'relative',
+      });
+
+      this._$markupContainer.css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        'pointer-events': 'none',
+      });
+    }
   }
 
   _updateVisualPositionValue(): void {
