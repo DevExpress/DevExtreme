@@ -15,6 +15,8 @@ const TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = `${TOOLTIP_APPOINTMENT_ITEM}-marker
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button-container`;
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button`;
 
+const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
+
 export class TooltipStrategyBase {
   protected asyncTemplatePromises = new Set<Promise<void>>();
 
@@ -142,7 +144,7 @@ export class TooltipStrategyBase {
       }),
     });
 
-    const template = this._options.getAppointmentTemplate('appointmentTooltipTemplate');
+    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this._createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 

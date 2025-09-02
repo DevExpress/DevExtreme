@@ -345,12 +345,9 @@ QUnit.test('isAlreadyShown method, tooltip is hide', async function(assert) {
 QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
 
-    const config = {};
-    config['appointmentTooltipTemplate'] = 'appointmentTooltipTemplate';
-
-    tooltip.show('target', dataList, extend(this.extraOptions, config));
+    tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
@@ -361,12 +358,9 @@ QUnit.test('appointmentTooltipTemplate equal to "appointmentTooltipTemplate"', a
 QUnit.test('appointmentTooltipTemplate equal to custom template', async function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
     const dataList = ['data1', 'data2'];
-    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { then: sinon.spy() } };
 
-    const config = {};
-    config['appointmentTooltipTemplate'] = 'appointmentTooltipTemplate';
-
-    tooltip.show('target', dataList, extend(this.extraOptions, config));
+    tooltip.show('target', dataList, this.extraOptions);
     stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
     stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
 
