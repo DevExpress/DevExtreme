@@ -694,7 +694,6 @@ QUnit.test('Numeric from dates', function(assert) {
             arg: [1, 2, 3, 4, 5]
         }
     }, { assert: assert });
-
 });
 
 QUnit.test('Datetime from dates', function(assert) {
@@ -1162,7 +1161,6 @@ QUnit.test('ArgumentType & ValueType merge. Different fields', function(assert) 
     const groupData1 = createGroupsData({ argumentType: 'string', valueType: 'string' });
     const groupData2 = createGroupsData({ argumentType: 'string', valueType: 'numeric' });
     const groupsData = {};
-
 
     groupsData.groups = groupData1.groups.concat(groupData2.groups);
     groupsData.argumentOptions = groupData1.argumentOptions;

@@ -3,12 +3,12 @@
 import $ from 'jquery';
 import { Axis as VizMocksAxis, Renderer as VizMocksRenderer } from '../../helpers/vizMocks.js';
 import dxLinearGauge from 'viz/linear_gauge';
-const factory = dxLinearGauge.prototype._factory;
 import axisModule from 'viz/axes/base_axis';
 import rendererModule from 'viz/core/renderers/renderer';
 
-$('<div id="test-container">').appendTo('#qunit-fixture');
+const factory = dxLinearGauge.prototype._factory;
 
+$('<div id="test-container">').appendTo('#qunit-fixture');
 
 factory.RangeContainer = function(parameters) {
     parameters.className = 'test-range-container';

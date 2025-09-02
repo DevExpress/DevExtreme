@@ -184,10 +184,9 @@ QUnit.test('Check pass correct borderOptions to axes', function(assert) {
     chart._argumentAxes[1].draw = draw;
     chart._valueAxes[0].draw = draw;
     chart._valueAxes[1].draw = draw;
-    // Act
 
     chart._doRender({ force: true });
-    // Assert
+
     assert.ok(chart.panes);
     assert.equal(chart.panes.length, 2);
     assert.equal(chart._argumentAxes.length, 2);
@@ -197,7 +196,6 @@ QUnit.test('Check pass correct borderOptions to axes', function(assert) {
     assert.deepEqual(chart._argumentAxes[0].borderOptions, topPaneExpectedBorder);
     assert.equal(chart._argumentAxes[1].pane, 'bottomPane');
     assert.deepEqual(chart._argumentAxes[1].borderOptions, bottomPaneExpectedBorder);
-
 
     assert.equal(chart._valueAxes[1].pane, 'bottomPane');
     assert.deepEqual(chart._valueAxes[1].borderOptions, bottomPaneExpectedBorder);
@@ -259,7 +257,6 @@ QUnit.test('Create negative width and height clipRects', function(assert) {
     assert.equal(chart._renderer.clipRect.callCount, 1);
 
     assert.ok(chart._canvasClipRect);
-
 
     assert.strictEqual(chart._canvasClipRect.stub('attr').lastCall, null);
 });
@@ -717,7 +714,6 @@ QUnit.test('Create clipRects. With financial series. Two panes. Rotated', functi
     assert.equal(chart._panesClipRects.fixed.length, 2);
     assert.equal(chart._panesClipRects.base.length, 2);
     assert.equal(chart._panesClipRects.wide.length, 2);
-
 });
 
 QUnit.test('Create clipRects. With financial series. For second panes. Rotated', function(assert) {
@@ -1093,7 +1089,6 @@ QUnit.test('Create clipRects with visible pane borders. With financial series', 
     assert.equal(chart._renderer.path.getCall(0).args[0][1], 20);
     assert.equal(chart._renderer.path.getCall(0).args[0][2], 780 - 60 - 70);
     assert.equal(chart._renderer.path.getCall(0).args[0][3], 780 - 20 - 70);
-
 });
 
 QUnit.test('Get clipRect ID for series without pane border', function(assert) {
@@ -1254,12 +1249,10 @@ QUnit.test('Three axis without names', function(assert) {
 });
 
 QUnit.test('dxChart with two value axis check default names', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{}, {}]
     });
 
-    // assert
     assert.ok(chart._valueAxes);
     const verticalAxes = chart._valueAxes;
 
@@ -1268,9 +1261,7 @@ QUnit.test('dxChart with two value axis check default names', function(assert) {
     assert.equal(verticalAxes[1].getOptions().name, 'defaultAxisName1');
 });
 
-
 QUnit.test('Show all axis grid for not synchronizeMultiAxes', function(assert) {
-    // act
     const chart = this.createChart({
         synchronizeMultiAxes: false,
         valueAxis: [{
@@ -1290,7 +1281,6 @@ QUnit.test('Show all axis grid for not synchronizeMultiAxes', function(assert) {
         }]
     });
 
-    // assert
     assert.ok(chart._valueAxes);
     const verticalAxes = chart._valueAxes;
 
@@ -1303,12 +1293,12 @@ QUnit.test('Show all axis grid for not synchronizeMultiAxes', function(assert) {
 });
 
 QUnit.test('dxChart with two Series on one pane and different value axis', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({});
     const stubSeries2 = new MockSeries({});
+
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
-    // act
+
     const chart = this.createChart({
         argumentAxis: {
             categories: categories
@@ -1339,7 +1329,7 @@ QUnit.test('dxChart with two Series on one pane and different value axis', funct
             }
         }]
     });
-    // assert
+
     assert.ok(chart.series);
     assert.equal(chart.series.length, 2);
     assert.equal(chart.series[0], stubSeries1);
@@ -1353,14 +1343,13 @@ QUnit.test('dxChart with two Series on one pane and different value axis', funct
 });
 
 QUnit.test('dxChart with two Series on one pane and different value axis check Ranges', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({});
     const stubSeries2 = new MockSeries({});
+
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
-    // act
-    const chart = this.createChart({
 
+    const chart = this.createChart({
         argumentAxis: {
             categories: categories
         },
@@ -1394,7 +1383,7 @@ QUnit.test('dxChart with two Series on one pane and different value axis check R
             }
         }]
     });
-    // assert
+
     assert.equal(chart._valueAxes.length, 2);
     const range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assert.equal(range1.pane, 'pane1');
@@ -1409,7 +1398,6 @@ QUnit.test('dxChart with two Series on one pane and different value axis check R
 });
 
 QUnit.test('Two ranges for two series with two value axis on single pane', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -1426,7 +1414,7 @@ QUnit.test('Two ranges for two series with two value axis on single pane', funct
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         dataSource: [{ x: 'one', y: 1 }],
         series: [{
@@ -1478,7 +1466,7 @@ QUnit.test('Two ranges for two series with two value axis on single pane', funct
         ]
 
     });
-    // assert
+
     assert.equal(chart._valueAxes.length, 2);
 
     const range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
@@ -1501,7 +1489,6 @@ QUnit.test('Two ranges for two series with two value axis on single pane', funct
 });
 
 QUnit.test('Two series, two value axis, one pane (check default)', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -1518,7 +1505,7 @@ QUnit.test('Two series, two value axis, one pane (check default)', function(asse
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: [{
             axis: 'axis1',
@@ -1549,7 +1536,7 @@ QUnit.test('Two series, two value axis, one pane (check default)', function(asse
         }
         ]
     });
-    // assert
+
     assert.equal(chart._valueAxes.length, 2);
 
     const range1 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
@@ -1581,7 +1568,6 @@ QUnit.test('Two series, two value axis, one pane (check default)', function(asse
 });
 
 QUnit.test('dxChart with two panes and one value axis with pointer to bottom pane. Two series on different panes and single axis', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -1598,7 +1584,7 @@ QUnit.test('dxChart with two panes and one value axis with pointer to bottom pan
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: [{
             pane: 'top',
@@ -1626,7 +1612,7 @@ QUnit.test('dxChart with two panes and one value axis with pointer to bottom pan
             { name: 'bottom' }
         ]
     });
-    // assert
+
     assert.equal(chart._valueAxes.length, 2);
 
     const range1 = chart._valueAxes[1].setBusinessRange.lastCall.args[0];
@@ -1653,7 +1639,6 @@ QUnit.test('dxChart with two panes and one value axis with pointer to bottom pan
 });
 
 QUnit.test('Group Series by panes and axes. One pane, one value axis, one series', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -1662,14 +1647,14 @@ QUnit.test('Group Series by panes and axes. One pane, one value axis, one series
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: { type: 'line' },
         valueAxis: [{
             name: 'axis1'
         }]
     });
-    // assert
+
     const chartSeries = chart.series;
     assert.equal(chartSeries.length, 1);
 
@@ -1677,16 +1662,15 @@ QUnit.test('Group Series by panes and axes. One pane, one value axis, one series
 });
 
 QUnit.test('Group Series by panes and axes. One pane, one value axis, four series', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}), new MockSeries({}));
-    // act
+
     const chart = createChartInstance({
         series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }, { type: 'line' }],
         valueAxis: [{
             name: 'axis1'
         }]
     }, this.$container);
-    // assert
+
     const chartSeries = chart.series;
     assert.equal(chartSeries.length, 4);
     assert.equal(this.validateData.lastCall.args[1].groups.length, 1);
@@ -1698,9 +1682,8 @@ QUnit.test('Group Series by panes and axes. One pane, one value axis, four serie
 });
 
 QUnit.test('Group Series by panes and axes. One pane, two value axis, three series', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({ type: 'line' }), new MockSeries({ type: 'line' }), new MockSeries({ type: 'line' }));
-    // act
+
     const chart = this.createChart({
         series: [{ axis: 'axis2', type: 'line' }, { type: 'line' }, { type: 'line' }],
         valueAxis: [{
@@ -1709,7 +1692,6 @@ QUnit.test('Group Series by panes and axes. One pane, two value axis, three seri
             name: 'axis2'
         }]
     });
-    // assert
     const chartSeries = chart.series;
 
     assert.equal(chartSeries.length, 3);
@@ -1724,15 +1706,13 @@ QUnit.test('Group Series by panes and axes. One pane, two value axis, three seri
 });
 
 QUnit.test('Group Series by panes and axes. two pane, one value axis, three series', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
-    // act
+
     const chart = this.createChart({
         series: [{ pane: 'pane1', type: 'line' }, { type: 'line' }, { type: 'line' }],
         valueAxis: {},
         panes: [{ name: 'pane1' }, { name: 'pane2' }]
     });
-    // assert
     const chartSeries = chart.series;
     assert.equal(chartSeries.length, 3);
     assert.equal(this.validateData.lastCall.args[1].groups.length, 2);
@@ -1741,15 +1721,14 @@ QUnit.test('Group Series by panes and axes. two pane, one value axis, three seri
 });
 
 QUnit.test('Group Series by panes and axes. two pane, three value axis, three series', function(assert) {
-    // arrange
+
     seriesMockData.series.push(new MockSeries({}), new MockSeries({}), new MockSeries({}));
-    // act
+
     const chart = this.createChart({
         series: [{ pane: 'pane1', axis: 'axis1', type: 'line' }, { axis: 'axis2', pane: 'pane1', type: 'line' }, { pane: 'pane2', name: 'axis2', type: 'line' }],
         valueAxis: [{ pane: 'pane1', name: 'axis1' }, { pane: 'pane1', name: 'axis2' }, { pane: 'pane2', name: 'axis2' }],
         panes: [{ name: 'pane1' }, { name: 'pane2' }]
     });
-    // assert
     const chartSeries = chart.series;
 
     assert.equal(chartSeries.length, 3);
@@ -1760,7 +1739,7 @@ QUnit.test('Group Series by panes and axes. two pane, three value axis, three se
 });
 
 QUnit.test('Axes. Axis has no panes. no series has axis (axis2)', function(assert) {
-    // arrange
+
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -1777,7 +1756,7 @@ QUnit.test('Axes. Axis has no panes. no series has axis (axis2)', function(asser
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: [{
             pane: 'top',
@@ -1800,8 +1779,9 @@ QUnit.test('Axes. Axis has no panes. no series has axis (axis2)', function(asser
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
+
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has three axis');
 
@@ -1817,10 +1797,9 @@ QUnit.test('Axes. Axis has no panes. no series has axis (axis2)', function(asser
 });
 
 QUnit.test('Axes. There are series with axis and has no pane. axis has no pane', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({}));
     seriesMockData.series.push(new MockSeries({}));
-    // act
+
     const chart = this.createChart({
         series: [{
             pane: 'top',
@@ -1841,8 +1820,9 @@ QUnit.test('Axes. There are series with axis and has no pane. axis has no pane',
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
+
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has three axis');
 
@@ -1852,10 +1832,9 @@ QUnit.test('Axes. There are series with axis and has no pane. axis has no pane',
 });
 
 QUnit.test('Axes. There are series with axis and pane. axis has no pane', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({}));
     seriesMockData.series.push(new MockSeries({}));
-    // act
+
     const chart = this.createChart({
         series: [{
             pane: 'top',
@@ -1878,7 +1857,7 @@ QUnit.test('Axes. There are series with axis and pane. axis has no pane', functi
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has three axis');
@@ -1895,7 +1874,6 @@ QUnit.test('Axes. There are series with axis and pane. axis has no pane', functi
 });
 
 QUnit.test('Axes. dxChart without series. Axis has panes', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -1911,17 +1889,15 @@ QUnit.test('Axes. dxChart without series. Axis has panes', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 2, 'chart must has two axis');
     checkAxis(assert, verticalAxis, 0, 'axis1', 'bottom', 0);
     checkAxis(assert, verticalAxis, 1, 'axis2', 'top', 1);
-
 });
 
 QUnit.test('Axes. default axis', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: { title: { text: 'Title' } },
         panes: [
@@ -1929,7 +1905,7 @@ QUnit.test('Axes. default axis', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 2);
@@ -1940,7 +1916,6 @@ QUnit.test('Axes. default axis', function(assert) {
 });
 
 QUnit.test('Axes. Axis with panes', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -1954,18 +1929,16 @@ QUnit.test('Axes. Axis with panes', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has three axis');
     checkAxis(assert, verticalAxis, 0, 'axis1', 'top', 0);
     checkAxis(assert, verticalAxis, 1, 'axis1', 'middle', 0);
     checkAxis(assert, verticalAxis, 2, 'axis2', 'bottom', 1);
-
 });
 
 QUnit.test('Axes. Merge old and new notations of axis panes', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -1981,8 +1954,9 @@ QUnit.test('Axes. Merge old and new notations of axis panes', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
+
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 4, 'chart must has four axis');
 
@@ -1990,11 +1964,9 @@ QUnit.test('Axes. Merge old and new notations of axis panes', function(assert) {
     checkAxis(assert, verticalAxis, 1, 'axis1', 'top', 0);
     checkAxis(assert, verticalAxis, 2, 'axis1', 'middle', 0);
     checkAxis(assert, verticalAxis, 3, 'axis2', 'bottom', 1);
-
 });
 
 QUnit.test('Axes. Merge old a new notations of axis panes with duplicate.', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -2010,8 +1982,9 @@ QUnit.test('Axes. Merge old a new notations of axis panes with duplicate.', func
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
+
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 4, 'chart must has four axis');
 
@@ -2022,7 +1995,6 @@ QUnit.test('Axes. Merge old a new notations of axis panes with duplicate.', func
 });
 
 QUnit.test('Axes. axis has invalid pane', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -2033,7 +2005,7 @@ QUnit.test('Axes. axis has invalid pane', function(assert) {
             { name: 'default' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 1, 'chart must has four axis');
@@ -2042,7 +2014,6 @@ QUnit.test('Axes. axis has invalid pane', function(assert) {
 });
 
 QUnit.test('Axes. axis has several panes valid and invalid', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -2057,7 +2028,7 @@ QUnit.test('Axes. axis has several panes valid and invalid', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has four axis');
@@ -2065,11 +2036,9 @@ QUnit.test('Axes. axis has several panes valid and invalid', function(assert) {
     checkAxis(assert, verticalAxis, 0, 'axis1', 'top', 0);
     checkAxis(assert, verticalAxis, 1, 'defaultAxisName0', 'middle', 1);
     checkAxis(assert, verticalAxis, 2, 'defaultAxisName1', 'bottom', 2);
-
 });
 
 QUnit.test('Axes. axis has invalid panes', function(assert) {
-    // act
     const chart = this.createChart({
         valueAxis: [{
             name: 'axis1',
@@ -2085,7 +2054,7 @@ QUnit.test('Axes. axis has invalid panes', function(assert) {
             { name: 'bottom' }
         ]
     });
-    // assert
+
     const verticalAxis = chart._valueAxes;
     assert.ok(verticalAxis, 'chart must has vertical axis');
     assert.equal(verticalAxis.length, 3, 'chart must has four axis');
@@ -2093,11 +2062,9 @@ QUnit.test('Axes. axis has invalid panes', function(assert) {
     checkAxis(assert, verticalAxis, 0, 'defaultAxisName0', 'top', 1);
     checkAxis(assert, verticalAxis, 1, 'defaultAxisName1', 'middle', 2);
     checkAxis(assert, verticalAxis, 2, 'defaultAxisName2', 'bottom', 3);
-
 });
 
 QUnit.test('Series. Series with invalid Pane', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -2114,7 +2081,7 @@ QUnit.test('Series. Series with invalid Pane', function(assert) {
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: [{
             type: 'line'
@@ -2125,15 +2092,15 @@ QUnit.test('Series. Series with invalid Pane', function(assert) {
             { name: 'default' }
         ]
     });
-    // assert
+
     const series = chart.series;
+
     assert.ok(series);
     assert.equal(series.length, 1);
     assert.equal(series[0].pane, chart.defaultPane);
 });
 
 QUnit.test('Series. Series with invalid axis', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -2143,7 +2110,6 @@ QUnit.test('Series. Series with invalid axis', function(assert) {
         }
     }));
 
-    // act
     const chart = this.createChart({
         dataSource: [{ x: 'one', y: 1 }],
         series: [{
@@ -2153,14 +2119,14 @@ QUnit.test('Series. Series with invalid axis', function(assert) {
             type: 'line'
         }]
     });
-    // assert
+
     const series = chart.series;
+
     assert.ok(series);
     assert.equal(series.length, 1);
     assert.equal(series[0].pane, chart.defaultPane);
     assert.equal(chart._valueAxes[1].name, 'axis');
 });
-
 
 QUnit.test('B251248. Break animations chart on update', function(assert) {
     const stubSeries1 = new MockSeries();

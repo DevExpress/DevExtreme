@@ -290,7 +290,6 @@ QUnit.test('getCrosshair data', function(assert) {
         yValue: 'default',
         axis: 'valueAxisName'
     });
-
 });
 
 QUnit.test('Width and height, not rotated, null values', function(assert) {
@@ -3472,7 +3471,6 @@ QUnit.test('Value < minValue, inside. Overlay corrections', function(assert) {
     assert.equal(bottomLabel.shift.firstCall.args[1], 44);
     assert.equal(topLabel.shift.firstCall.args[0], 33 - 10);
     assert.equal(topLabel.shift.firstCall.args[1], 54);
-
 });
 
 QUnit.test('Value < minValue, inside, rotated. Overlay corrections', function(assert) {

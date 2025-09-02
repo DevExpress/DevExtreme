@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import {
     Renderer,
-    stubClass
 } from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
@@ -328,7 +327,6 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
 
         const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: visibleAreaX[1], 7: 600, 'canvas_position_default': 100 };
         const translateYData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 295 };
-
 
         this.continuousTranslators = {
             arg: new MockTranslator({
@@ -1010,7 +1008,6 @@ QUnit.test('draw errorBar', function(assert) {
     assert.ok(point.graphic);
 
     assert.equal(this.renderer.stub('path').callCount, 0);
-
 });
 
 QUnit.test('draw errorBar when argument out of the canvas', function(assert) {
@@ -1530,7 +1527,6 @@ QUnit.test('Get Graphic Settings', function(assert) {
     const renderer = new Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
-    // act
     const settings = point.getGraphicSettings();
 
     assert.equal(settings.x, 250);
@@ -2501,7 +2497,6 @@ QUnit.test('coordsIn', function(assert) {
     assert.ok(point.coordsIn(210, 590), 'bottom inside');
     assert.ok(point.coordsIn(210, 600), 'bottom side');
     assert.ok(!point.coordsIn(210, 601), 'bottom side out');
-
 });
 
 QUnit.test('getCenterCoord', function(assert) {

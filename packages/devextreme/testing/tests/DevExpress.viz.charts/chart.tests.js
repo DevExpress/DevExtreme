@@ -9,14 +9,15 @@ import dataValidatorModule from 'viz/components/data_validator';
 import legendModule from 'viz/components/legend';
 import rangeModule from 'viz/translators/range';
 import layoutManagerModule from 'viz/chart_components/layout_manager';
+import { DataSource } from 'common/data/data_source/data_source';
+
+import 'viz/chart';
+
 const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
 // Legend and ChartTitle imported from vizMocks
 const Axis = stubClass(axisModule.Axis);
 const Range = stubClass(rangeModule.Range);
-import { DataSource } from 'common/data/data_source/data_source';
 const DataSourceMock = stubClass(DataSource);
-
-import 'viz/chart';
 
 const environment = {
     beforeEach: function() {

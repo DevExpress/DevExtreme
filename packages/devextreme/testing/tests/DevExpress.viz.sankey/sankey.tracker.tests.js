@@ -6,9 +6,8 @@ import { name as clickEventName } from 'common/core/events/click';
 import pointerEvents from 'common/core/events/pointer';
 import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
 import domAdapter from '__internal/core/m_dom_adapter';
-
-
 import dxSankey from 'viz/sankey/sankey';
+
 dxSankey.addPlugin({
     name: 'tracker-test',
     init: function() {
@@ -131,7 +130,6 @@ QUnit.test('Click on link', function(assert) {
 
     assert.strictEqual(spy.callCount, 1, 'call count');
     assert.strictEqual(spy.lastCall.args[0].target, widget.getAllLinks()[0], 'target');
-
 });
 
 QUnit.module('Tooltip', trackerEnvironment);
@@ -225,7 +223,6 @@ QUnit.test('Show custom tooltip (html) on hovered link', function(assert) {
     assert.ok(stub.called);
     assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
 });
-
 
 QUnit.test('Tooltip with template. Hover node - call node template', function(assert) {
     const nodeTooltipTemplate = sinon.spy();

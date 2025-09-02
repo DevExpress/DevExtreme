@@ -66,7 +66,6 @@ QUnit.begin(function() {
                     }
                 }
 
-
                 if(arguments[1] && typeof arguments[1].step === 'function') {
                     that = this;
                     step = arguments[1].step;
@@ -135,7 +134,6 @@ QUnit.test('Groups creation', function(assert) {
     const group = this.getBarsGroup();
     assert.deepEqual(group.attr.firstCall.args, [{ 'class': 'dxbg-bars' }], 'bars group settings');
     assert.deepEqual(group.linkOn.lastCall.args, [this.renderer.root, 'bars'], 'bars group is linked to container');
-
 });
 
 QUnit.test('Groups disposing', function(assert) {
@@ -1761,7 +1759,6 @@ QUnit.module('Label overlapping behavior', function(hooks) {
         assert.equal(secondLabelSettings.visibility, 'hidden', 'second label should be hidden');
         assert.strictEqual(lines[1]._stored_settings.visibility, 'hidden', 'second line should be hidden');
     });
-
 });
 
 QUnit.module('Checking intersection of labels', function() {
@@ -1980,5 +1977,4 @@ QUnit.module('Checking intersection of labels', function() {
 
         assert.ok(!currentBar.checkIntersect(otherBar), 'current bar doesn\'t intersect with other');
     });
-
 });

@@ -51,7 +51,6 @@ QUnit.module('Shutter zoom plugin', {
 });
 
 QUnit.test('Create detached shutter rect with given options on init', function(assert) {
-    // act
     this.initWidget({
         shutterZoom: {
             enabled: true,
@@ -62,7 +61,6 @@ QUnit.test('Create detached shutter rect with given options on init', function(a
         }
     });
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         enabled: true,
@@ -85,10 +83,8 @@ QUnit.test('Append shutter rect with right size on start dragging', function(ass
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart();
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 100,
@@ -110,10 +106,8 @@ QUnit.test('Change shutter rect x and width on dragging', function(assert) {
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50);
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 300,
@@ -132,10 +126,8 @@ QUnit.test('Change shutter rect with right x and width on dragging when cursor m
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(1000, 50);
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 300,
@@ -155,10 +147,8 @@ QUnit.test('Change shutter rect y and height on dragging if chart is rotated', f
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 200 + 5).dragStart().drag(5, 100);
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         y: 200,
@@ -178,10 +168,8 @@ QUnit.test('Change shutter rect with right y and height on dragging if chart is 
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 200 + 5).dragStart().drag(5, 500);
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         y: 200,
@@ -200,10 +188,8 @@ QUnit.test('Detach shutter rect on end dragging', function(assert) {
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50).dragEnd();
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.strictEqual(rect.remove.callCount, 1);
 });
@@ -215,10 +201,8 @@ QUnit.test('Fire zoomStart event on start dragging', function(assert) {
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart();
 
-    // assert
     assert.deepEqual(this.eventSpy.firstCall.args, ['zoomStart']);
 });
 
@@ -229,10 +213,8 @@ QUnit.test('Fire zoomEnd event on end dragging', function(assert) {
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50).dragEnd();
 
-    // assert
     assert.deepEqual(this.eventSpy.lastCall.args, ['zoomEnd', { rangeStart: 2, rangeEnd: 6 }]);
 });
 
@@ -244,10 +226,8 @@ QUnit.test('Fire zoomEnd event on end dragging, rotated', function(assert) {
         }
     });
 
-    // act
     this.pointer.down(300 + 10, 100 + 5).dragStart().drag(400, 200).dragEnd();
 
-    // assert
     assert.deepEqual(this.eventSpy.lastCall.args, ['zoomEnd', { rangeStart: 0, rangeEnd: 2 }]);
 });
 
@@ -258,10 +238,8 @@ QUnit.test('Fire zoomEnd event with ordered params when drag from end to start',
         }
     });
 
-    // act
     this.pointer.down(700 + 10, 250 + 5).dragStart().drag(-400, 50).dragEnd();
 
-    // assert
     assert.deepEqual(this.eventSpy.lastCall.args, ['zoomEnd', { rangeStart: 2, rangeEnd: 6 }]);
 });
 
@@ -272,10 +250,8 @@ QUnit.test('Do nothing if start dragging out of canvas on left', function(assert
         }
     });
 
-    // act
     this.pointer.down(50, 250).dragStart();
 
-    // assert
     assert.strictEqual(this.eventSpy.callCount, 0);
     assert.strictEqual(this.pointer.lastEvent().cancel, true);
     assert.strictEqual(this.renderer.rect.lastCall.returnValue.stub('append').callCount, 0);
@@ -288,10 +264,8 @@ QUnit.test('Do nothing if start dragging out of canvas on right', function(asser
         }
     });
 
-    // act
     this.pointer.down(1150, 250).dragStart();
 
-    // assert
     assert.strictEqual(this.eventSpy.callCount, 0);
     assert.strictEqual(this.pointer.lastEvent().cancel, true);
     assert.strictEqual(this.renderer.rect.lastCall.returnValue.stub('append').callCount, 0);
@@ -304,10 +278,8 @@ QUnit.test('Do nothing if start dragging out of canvas on top', function(assert)
         }
     });
 
-    // act
     this.pointer.down(300, 25).dragStart();
 
-    // assert
     assert.strictEqual(this.eventSpy.callCount, 0);
     assert.strictEqual(this.pointer.lastEvent().cancel, true);
     assert.strictEqual(this.renderer.rect.lastCall.returnValue.stub('append').callCount, 0);
@@ -320,10 +292,8 @@ QUnit.test('Do nothing if start dragging out of canvas on bottom', function(asse
         }
     });
 
-    // act
     this.pointer.down(700, 575).dragStart();
 
-    // assert
     assert.strictEqual(this.eventSpy.callCount, 0);
     assert.strictEqual(this.pointer.lastEvent().cancel, true);
     assert.strictEqual(this.renderer.rect.lastCall.returnValue.stub('append').callCount, 0);
@@ -336,10 +306,8 @@ QUnit.test('Do not draw anything nor triger events if shutterZoom is disabled', 
         }
     });
 
-    // act
     this.pointer.down(50, 250).dragStart();
 
-    // assert
     assert.strictEqual(this.eventSpy.callCount, 0);
     assert.strictEqual(this.renderer.stub('rect').callCount, 0);
 });
@@ -356,10 +324,8 @@ QUnit.test('Dispose shutter an widget dispose', function(assert) {
     });
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50);
 
-    // act
     shutterPlugin.dispose.call(chart);
 
-    // assert
     const rect = this.renderer.rect.lastCall.returnValue;
     assert.strictEqual(rect.dispose.callCount, 1);
 });

@@ -3,6 +3,7 @@ import {
     Renderer,
 } from '../../helpers/vizMocks.js';
 import SeriesModule from 'viz/series/base_series';
+
 const Series = SeriesModule.Series;
 
 function getOriginalData(data) {
@@ -1599,10 +1600,8 @@ QUnit.module('Get range data. Fullstacked series', {
         series.updateData(data);
         series.createPoints();
 
-        // act
         const rangeData = series.getRangeData();
 
-        // assert
         assert.ok(rangeData, 'Range data should be created');
         assert.strictEqual(rangeData.arg.min, undefined, 'Min x should be undefined');
         assert.strictEqual(rangeData.arg.max, undefined, 'Max x should be undefined');
@@ -1618,10 +1617,9 @@ QUnit.module('Get range data. Fullstacked series', {
         series.getRangeData();
         series.updateData(data2);
         series.createPoints();
-        // act
+
         const rangeData = series.getRangeData();
 
-        // assert
         assert.ok(rangeData, 'Range data should be created');
         assert.strictEqual(rangeData.arg.min, minArg, 'Min x should be undefined');
         assert.strictEqual(rangeData.arg.max, maxArg, 'Max x should be undefined');
@@ -1910,7 +1908,6 @@ QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', val1: '11', val2: '110' }, { arg: '2', val1: '22', val2: '100' }, { arg: '3', val1: '3', val2: '4' }, { arg: '4', val1: '15', val2: '115' }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' }));
 
-
     series.updateData(data);
     series.createPoints();
     const rangeData = series.getRangeData();
@@ -2100,7 +2097,6 @@ QUnit.test('Datetime. Categories', function(assert) {
 QUnit.test('String.', function(assert) {
     const data = [{ arg: '1', l: '11', h: '110', o: '11', c: '110' }, { arg: '2', l: '22', h: '100', o: '22', c: '100' }, { arg: '3', l: '3', h: '4', o: '3', c: '4' }, { arg: '4', l: '15', h: '115', o: '15', c: '115' }];
     const series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: 'discrete', valueAxisType: 'discrete' }));
-
 
     series.updateData(data);
     series.createPoints();
@@ -2483,7 +2479,6 @@ QUnit.test('Numeric. Area', function(assert) {
     // assert.strictEqual(rangeData.arg.interval, 1);
 });
 
-
 QUnit.test('Range data has viewport', function(assert) {
     const data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }];
     const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
@@ -2501,7 +2496,6 @@ QUnit.test('Range data has viewport', function(assert) {
 
     assert.equal(rangeData.val.min, 10, 'min y');
     assert.equal(rangeData.val.max, 60, 'max y');
-
 });
 
 QUnit.test('T179635. With error bars', function(assert) {

@@ -89,7 +89,6 @@ QUnit.test('Process values from dataSource with custom sourceField, targetField,
     assert.equal(spiesLayoutBuilder.computeLayout.lastCall.args[0].length, data.length);
 });
 
-
 QUnit.test('Trigger error on invalid source data', function(assert) {
     const invalidDataSets = [
         [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
@@ -200,7 +199,6 @@ QUnit.test('Number of cascades with simplest dataSource possible', function(asse
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].cascades.length, 2);
 });
 
-
 QUnit.test('Number of nodes with simplest dataSource possible', function(assert) {
     createSankey({
         layoutBuilder: layoutBuilder,
@@ -212,7 +210,6 @@ QUnit.test('Number of nodes with simplest dataSource possible', function(assert)
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes.length, 2);
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes[0].length, 1);
     assert.equal(spiesLayoutBuilder.computeLayout.returnValues[0].nodes[1].length, 1);
-
 });
 
 QUnit.test('Number of links with simplest dataSource possible', function(assert) {
@@ -670,7 +667,6 @@ QUnit.test('Align option as <Array>', function(assert) {
         const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
-
 });
 
 QUnit.test('Default alignment value for cascade which is not mentioned in options.alignment', function(assert) {
@@ -850,5 +846,4 @@ QUnit.test('layout.overlap utility method', function(assert) {
         { x: 10, y: 10, width: 20, height: 10 },
         { x: 10, y: 30, width: 10, height: 10 }
     ), false);
-
 });

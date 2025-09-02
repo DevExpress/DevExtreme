@@ -12,7 +12,6 @@ themeModule.registerTheme({
         }
     } }, 'generic.light');
 
-
 QUnit.module('Items: nodes', environment);
 
 QUnit.test('Creation', function(assert) {
@@ -297,7 +296,6 @@ QUnit.test('disable hover', function(assert) {
 
     assert.ok(!nodes[0].isHovered());
 });
-
 
 QUnit.test('isHovered method', function(assert) {
     const sankey = createSankey({

@@ -488,7 +488,6 @@ QUnit.test('With pixel coordinates', function(assert) {
     });
 });
 
-
 QUnit.test('Should subscribe on change move and zoom events', function(assert) {
     this.createMap({ annotations: [{ type: 'text' }] });
 

@@ -200,7 +200,6 @@ QUnit.test('Update translator on setTypes', function(assert) {
     });
     sinon.spy(translator, 'update');
 
-    // act
     axis.setTypes('discrete', 'string', 'valueType');
 
     assert.strictEqual(translator.update.lastCall.args[2].stick, false);
@@ -2392,7 +2391,6 @@ QUnit.test('Do not apply margins two times', function(assert) {
     axis.draw(this.canvas);
     this.tickGenerator.lastCall.returnValue.resetHistory();
 
-    // act
     axis.draw(this.canvas);
 
     const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
@@ -2408,7 +2406,6 @@ QUnit.test('Do not apply margins two times', function(assert) {
     assert.equal(tickGeneratorOptions.min, -10);
     assert.equal(tickGeneratorOptions.max, 120);
 });
-
 
 QUnit.module('Get margins', $.extend(true, {}, environment, {
     beforeEach: function() {
@@ -2429,7 +2426,6 @@ QUnit.module('Get margins', $.extend(true, {}, environment, {
 }));
 
 QUnit.test('Without labels - returns canvas margins', function(assert) {
-    // arrange
     const axis = this.createSimpleAxis({
         label: {
             visible: false
@@ -2444,9 +2440,9 @@ QUnit.test('Without labels - returns canvas margins', function(assert) {
         height: 606
     };
     axis.draw(this.canvas);
-    // act
+
     const margins = axis.getMargins();
-    // assert
+
     assert.strictEqual(margins.bottom, 0, 'bottom');
     assert.strictEqual(margins.left, 0, 'left');
     assert.strictEqual(margins.right, 0, 'right');
@@ -2455,7 +2451,6 @@ QUnit.test('Without labels - returns canvas margins', function(assert) {
 
 QUnit.test('With labels - calculate margins from labels', function(assert) {
     this.generatedTicks = [1, 2, 3, 4];
-    // arrange
     const axis = this.createSimpleAxis({
         label: {
             visible: true
@@ -2477,9 +2472,9 @@ QUnit.test('With labels - calculate margins from labels', function(assert) {
         { x: 594, width: 15, y: 10, height: 5 },
         { x: 40, width: 5, y: -20, height: 5 }
     ]);
-    // act
+
     const margins = axis.getMargins();
-    // assert
+
     assert.strictEqual(margins.bottom, 14, 'bottom');
     assert.strictEqual(margins.left, 10, 'left');
     assert.strictEqual(margins.right, 9, 'right');
@@ -2488,7 +2483,6 @@ QUnit.test('With labels - calculate margins from labels', function(assert) {
 
 QUnit.test('Without labels and with ticks - take into account length and shift', function(assert) {
     this.generatedTicks = [1, 2, 3, 4];
-    // arrange
     const axis = this.createSimpleAxis({
         label: {
             visible: false
@@ -2509,19 +2503,17 @@ QUnit.test('Without labels and with ticks - take into account length and shift',
         height: 600
     };
     axis.draw(this.canvas);
-    // act
+
     const margins = axis.getMargins();
-    // assert
+
     assert.strictEqual(margins.bottom, 11, 'bottom');
     assert.strictEqual(margins.left, 11, 'left');
     assert.strictEqual(margins.right, 11, 'right');
     assert.strictEqual(margins.top, 11, 'right');
 });
 
-
 QUnit.test('Without labels and with inside ticks - do not take into ticks', function(assert) {
     this.generatedTicks = [1, 2, 3, 4];
-    // arrange
     const axis = this.createSimpleAxis({
         label: {
             visible: false
@@ -2542,15 +2534,14 @@ QUnit.test('Without labels and with inside ticks - do not take into ticks', func
         height: 600
     };
     axis.draw(this.canvas);
-    // act
+
     const margins = axis.getMargins();
-    // assert
+
     assert.strictEqual(margins.bottom, 0, 'bottom');
     assert.strictEqual(margins.left, 0, 'left');
     assert.strictEqual(margins.right, 0, 'right');
     assert.strictEqual(margins.top, 0, 'right');
 });
-
 
 QUnit.module('Circular axis. UpdateSize', $.extend({}, environment, {
     beforeEach: function() {

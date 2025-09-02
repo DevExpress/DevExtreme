@@ -1,11 +1,6 @@
 /* global currentTest */
 
 import errorsModule from 'viz/core/errors_warnings';
-
-errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
-errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
-errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
-
 import $ from 'jquery';
 import { version } from 'core/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -17,14 +12,19 @@ import BaseWidget from '__internal/viz/core/m_base_widget';
 import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from 'viz/core/base_widget.utils';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
 import rendererModule from 'viz/core/renderers/renderer';
-let dxBaseWidgetTester;
-let StubThemeManager;
-let StubTitle;
 import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
 import { implementationsMap } from 'core/utils/size';
 
 // TODO: Move export tests to a separate file
 import 'viz/core/export';
+
+errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
+errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
+errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
+
+let dxBaseWidgetTester;
+let StubThemeManager;
+let StubTitle;
 
 QUnit.testStart(function() {
     const markup =
@@ -59,7 +59,6 @@ QUnit.begin(function() {
     sinon.stub(rendererModule, 'Renderer').callsFake(function() {
         return currentTest().renderer;
     });
-
 });
 
 const environment = {
@@ -161,10 +160,7 @@ QUnit.test('Theme manager callback', function(assert) {
         rtl: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     }], 'renderer animation options');
-
-    // assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], "theme options handled");
-    // assert.ok(this.renderer.lock.firstCall.calledBefore(this.title.update.lastCall), "renderer is locked");
-    // assert.ok(this.renderer.unlock.lastCall.calledAfter(this.onHandleThemeOptionsCore.lastCall), "renderer is unlocked")
+    assert.deepEqual(this.onHandleThemeOptionsCore.lastCall.args, [], 'theme options handled');
 });
 
 // T190525
@@ -753,7 +749,6 @@ QUnit.test('Call render after container is resized', function(assert) {
 
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 400);
     assert.equal(size.height, 300);
 });
@@ -772,10 +767,8 @@ QUnit.test('size option changed', function(assert) {
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 300);
     assert.equal(size.height, 300);
 });
@@ -796,10 +789,8 @@ QUnit.test('size option changed with initial size. negative width', function(ass
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -820,10 +811,8 @@ QUnit.test('size option changed with initial size. negative height', function(as
         }
     });
 
-    // Act
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -838,10 +827,9 @@ QUnit.test('size option changed with container size. negative height', function(
             height: -100
         }
     });
-    // Act
+
     const size = this.widget.getSize();
 
-    // assert
     assert.equal(size.width, 0);
     assert.equal(size.height, 0);
 });
@@ -1020,18 +1008,16 @@ QUnit.module('Visibility changing', $.extend({}, environment, {
 }));
 
 QUnit.test('Hide', function(assert) {
-    // act
+
     this.$container.trigger('dxhiding');
 
     assert.strictEqual(this.renderStub.callCount, 1);
 });
 
 QUnit.test('Show', function(assert) {
-    // arrange
     this.$container.trigger('dxhiding').hide();
     this.renderStub.reset();
 
-    // act
     this.$container.show().trigger('dxshown');
 
     assert.strictEqual(this.renderStub.callCount, 1);
@@ -1164,25 +1150,19 @@ QUnit.module('drawn', $.extend({}, environment, {
 }));
 
 QUnit.test('without set drawn handler', function(assert) {
-    // arrange
     this.createWidget();
 
-    // act
     this.triggerDrawn();
 
-    // assert
     assert.ok(true, 'no exceptions');
 });
 
 QUnit.test('with set drawn handler', function(assert) {
-    // arrange
     const onDrawnCallback = sinon.spy();
     this.createWidget({ onDrawn: onDrawnCallback });
 
-    // act
     this.triggerDrawn();
 
-    // assert
     assert.deepEqual(onDrawnCallback.lastCall.args, [{
         component: this.widget,
         element: this.widget.element()
@@ -1204,7 +1184,6 @@ QUnit.test('Callback for event attached with on() must calls only once with own 
     widget1._eventTrigger('drawn', {});
     widget2._eventTrigger('drawn', {});
 
-    // assert
     assert.equal(onDrawnOneCallback.callCount, 1);
     assert.deepEqual(onDrawnOneCallback.lastCall.args, [{
         component: widget1,
@@ -1228,25 +1207,21 @@ QUnit.module('isReady', $.extend({}, environment, {
 }));
 
 QUnit.test('isReady on drawn', function(assert) {
-    // arrange
     this.createWidget();
 
-    // act
     this.triggerDrawn();
-    // assert
+
     assert.ok(this.renderer.onEndAnimation.calledOnce);
     assert.ok(!this.widget.isReady());
 });
 
 QUnit.test('isReady after call ready callback', function(assert) {
-    // arrange
     this.createWidget();
     this.renderer.onEndAnimation = function(complete) {
         complete();
     };
-    // act
+
     this.triggerDrawn();
-    // assert
 
     assert.ok(this.widget.isReady());
 });
@@ -1290,7 +1265,6 @@ QUnit.test('Trigger event with complete', function(assert) {
 
     assert.ok(callback.calledOnce);
     assert.ok(complete.calledOnce);
-
 });
 
 QUnit.test('Only option', function(assert) {
@@ -1546,11 +1520,10 @@ QUnit.module('Misc API', $.extend({}, environment, {
 }));
 
 QUnit.test('get widget markup', function(assert) {
-    // arrange
     this.renderer.svg = function() {
         return 'some markup';
     };
-    // act
+
     assert.equal(this.widget.svg(), 'some markup', 'markup, returned from element');
 });
 

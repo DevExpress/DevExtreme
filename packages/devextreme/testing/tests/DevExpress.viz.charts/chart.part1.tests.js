@@ -101,7 +101,6 @@ QUnit.test('Refresh chart when series hovered', function(assert) {
 
     getTrackerStub().stub('clearHover').reset();
 
-    // act
     chart.refresh();
 
     assert.equal(getTrackerStub().stub('clearHover').callCount, 0);
@@ -191,7 +190,6 @@ QUnit.test('Boolean animation options. True', function(assert) {
 });
 
 QUnit.test('actions sequence on render chart', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({}));
 
     this.createChart({
@@ -203,13 +201,12 @@ QUnit.test('actions sequence on render chart', function(assert) {
         }
     });
     const updatePanesCanvasesSpy = vizUtils.updatePanesCanvases;
-    // assert
+
     assert.equal(updatePanesCanvasesSpy.callCount, 1);
     assert.ok(updatePanesCanvasesSpy.lastCall.calledAfter(getTitleStub().move.lastCall), 'second call updatePanes after draw title');
 });
 
 QUnit.test('Actions sequence with series on render chart', function(assert) {
-    // arrange
     const stubSeries = new MockSeries({
         range: {
             arg: {
@@ -256,7 +253,6 @@ QUnit.test('Actions sequence with series on render chart', function(assert) {
 });
 
 QUnit.test('Recreate series points on zooming if aggregation is enabled', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -278,7 +274,6 @@ QUnit.test('Recreate series points on zooming if aggregation is enabled', functi
 });
 
 QUnit.test('Recreate series points on scrolling if aggregation is enabled', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -297,7 +292,6 @@ QUnit.test('Recreate series points on scrolling if aggregation is enabled', func
 });
 
 QUnit.test('Recreate series points on zooming if aggregation is enabled (discrete argument axis)', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -328,7 +322,6 @@ QUnit.test('Recreate series points on zooming if aggregation is enabled (discret
 });
 
 QUnit.test('Do not recreate series points on scrolling if aggregation is enabled and all points exists (logarithmic argument axis)', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -368,7 +361,6 @@ QUnit.test('Do not recreate series points on scrolling if aggregation is enabled
 });
 
 QUnit.test('Do not recreate series points on scrolling if aggregation is enabled and all points exists', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -396,7 +388,6 @@ QUnit.test('Do not recreate series points on scrolling if aggregation is enabled
 });
 
 QUnit.test('Do not recreate series points on zooming if aggregation is not enabled', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(false);
 
@@ -414,7 +405,6 @@ QUnit.test('Do not recreate series points on zooming if aggregation is not enabl
 });
 
 QUnit.test('Recreate points on resize if aggregation is enabled', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries());
     seriesMockData.series[0].useAggregation.returns(true);
 
@@ -447,8 +437,8 @@ QUnit.test('Can call public API on onInitialized', function(assert) {
         onInitialized: function(e) {
             const chart = e.component;
 
-            // act, assert
             chart.zoomArgument(1, 3);
+
             assert.deepEqual(chart.getAllSeries(), []);
             assert.equal(chart.getSeriesByName('non_existent_series'), undefined);
             assert.equal(chart.getSeriesByPos(1), undefined);
@@ -470,22 +460,20 @@ QUnit.module('LoadingIndicator', $.extend({}, environment, {
 }));
 
 QUnit.test('hide on reinit', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [{}]
     });
     chart.showLoadingIndicator();
     chart._loadingIndicator.scheduleHiding.reset();
     chart._loadingIndicator.fulfillHiding.reset();
-    // act
+
     chart.option('zoomAndPan', {});
-    // assert
+
     assert.deepEqual(chart._loadingIndicator.scheduleHiding.lastCall.args, []);
     assert.deepEqual(chart._loadingIndicator.fulfillHiding.lastCall.args, []);
 });
 
 QUnit.test('not hide on reinit, when dataSource is not loaded', function(assert) {
-    // arrange
     const ds = new DataSource();
     const chart = this.createChart({
         dataSource: ds
@@ -494,9 +482,9 @@ QUnit.test('not hide on reinit, when dataSource is not loaded', function(assert)
     chart._loadingIndicator.scheduleHiding.reset();
     chart._loadingIndicator.fulfillHiding.reset();
     ds.isLoaded = sinon.stub().returns(false);
-    // act
+
     chart.option('zoomAndPan', {});
-    // assert
+
     assert.deepEqual(chart._loadingIndicator.scheduleHiding.lastCall.args, []);
     assert.strictEqual(chart._loadingIndicator.fulfillHiding.lastCall, null);
 });
@@ -572,7 +560,6 @@ QUnit.test('Loading indicator is kept shown when data source is not defined', fu
 });
 
 QUnit.test('Stop all animations on resize callback when container is resized', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [{}],
         redrawOnResize: 'windowOnly'
@@ -580,34 +567,28 @@ QUnit.test('Stop all animations on resize callback when container is resized', f
     chart._renderer.stopAllAnimations.reset();
     this.$container.width(500);
 
-    // act
     resizeCallbacks.fire();
     this.clock.tick(300);
 
-    // assert
     assert.strictEqual(chart._renderer.stopAllAnimations.callCount, 2);
     assert.deepEqual(chart._renderer.stopAllAnimations.lastCall.args, [true]);
 });
 
 QUnit.test('Stop all animations on resize callback when container is not resized', function(assert) {
-    // arrange
     const chart = this.createChart({
         dataSource: [{}]
     });
     chart._renderer.stopAllAnimations.reset();
 
-    // act
     resizeCallbacks.fire();
     this.clock.tick(300);
 
-    // assert
     assert.ok(!chart._renderer.stopAllAnimations.called);
 });
 
 QUnit.module('dxChart user options of strips', environment);
 
 QUnit.test('set strips options in argument axis ', function(assert) {
-    // act
     const chart = this.createChart({
         commonAxisSettings: {
             stripStyle: {
@@ -632,7 +613,6 @@ QUnit.test('set strips options in argument axis ', function(assert) {
         },
         valueAxis: [{}, {}]
     });
-    // assert
 
     const stripLabel = chart._argumentAxes[0].getOptions().strips[0].label;
     assert.ok(stripLabel);
@@ -643,7 +623,6 @@ QUnit.test('set strips options in argument axis ', function(assert) {
 });
 
 QUnit.test('set strips options in value axis ', function(assert) {
-    // act
     const chart = createChartInstance({
         commonAxisSettings: {
             stripStyle: {
@@ -669,7 +648,6 @@ QUnit.test('set strips options in value axis ', function(assert) {
             }]
         }
     }, this.$container);
-    // assert
 
     const stripLabel = chart.getValueAxis().getOptions().strips[0].label;
     assert.ok(stripLabel);
@@ -682,7 +660,6 @@ QUnit.test('set strips options in value axis ', function(assert) {
 QUnit.module('dxChart user options of constant lines', environment);
 
 QUnit.test('set constant lines options in argument axis', function(assert) {
-    // act
     const chart = this.createChart({
         commonAxisSettings: {
             constantLinesStyle: {
@@ -717,7 +694,6 @@ QUnit.test('set constant lines options in argument axis', function(assert) {
         },
         valueAxis: [{}, {}]
     });
-    // assert
 
     const constantLine = chart._argumentAxes[0].getOptions().constantLines[0];
     assert.ok(constantLine);
@@ -733,7 +709,6 @@ QUnit.test('set constant lines options in argument axis', function(assert) {
 });
 
 QUnit.test('set constant lines options in value axis', function(assert) {
-    // act
     const chart = this.createChart({
         commonAxisSettings: {
             constantLinesStyle: {
@@ -769,8 +744,9 @@ QUnit.test('set constant lines options in value axis', function(assert) {
             categories: categories
         }
     });
-    // assert
+
     const constantLine = chart.getValueAxis().getOptions().constantLines[0];
+
     assert.ok(constantLine);
     assert.equal(constantLine.label.horizontalAlignment, 'left');
     assert.equal(constantLine.label.verticalAlignment, 'center');
@@ -796,11 +772,10 @@ QUnit.module('Render Complete callback', $.extend({}, environment, {
 }));
 
 QUnit.test('handle render complete without series', function(assert) {
-    // act
     this.createChart({
         onDone: this.done
     });
-    // assert
+
     assert.ok(this.done.calledOnce);
 });
 
@@ -809,13 +784,12 @@ QUnit.test('handle render complete when series inited', function(assert) {
     const stubSeries2 = new MockSeries({});
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
-    // act
+
     this.createChart({
         onDone: this.done,
         series: [stubSeries1, stubSeries2]
     });
 
-    // assert
     assert.ok(this.done.calledOnce);
 });
 
@@ -830,10 +804,8 @@ QUnit.test('handle render complete when series inited after second render', func
         series: [stubSeries1, stubSeries2]
     });
 
-    // act
     chart._renderCompleteHandler();
 
-    // assert
     assert.ok(this.done.calledOnce);
 });
 
@@ -849,13 +821,11 @@ QUnit.test('handle render complete when series not inited', function(assert) {
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
 
-    // act
     const chart = this.createChart({
         onDone: this.done,
         series: [stubSeries1, stubSeries2]
     });
 
-    // assert
     assert.strictEqual(chart._needHandleRenderComplete, true);
     assert.equal(this.done.callCount, 0);
 });
@@ -871,13 +841,11 @@ QUnit.test('handle render complete when one series not inited', function(assert)
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
 
-    // act
     this.createChart({
         onDone: this.done,
         series: [stubSeries1, stubSeries2]
     });
 
-    // assert
     assert.equal(this.done.callCount, 0);
 });
 
@@ -888,7 +856,6 @@ QUnit.test('handle render complete when created with dataSource and no async ren
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
 
-    // act
     createChartInstance({
         dataSource: [{ val: 1, arg: 1 }, { val: 1, arg: 1 }],
         onDone: function() {
@@ -897,7 +864,6 @@ QUnit.test('handle render complete when created with dataSource and no async ren
         series: [stubSeries1, stubSeries2]
     }, this.$container);
 
-    // assert
     assert.ok(result);
 });
 
@@ -917,11 +883,9 @@ QUnit.test('handle render complete after dataSource changed', function(assert) {
         series: [stubSeries1, stubSeries2]
     }, this.$container);
 
-    // act
     chart.option('dataSource', [{ val: 1, arg: 1 }, { val: 1, arg: 1 }]);
     chart._renderCompleteHandler();
 
-    // assert
     assert.equal(renderCompleteHandledCount, 2);
     assert.equal(completeCallbackObject, chart);
 });
@@ -941,11 +905,9 @@ QUnit.test('handle render complete after series changed', function(assert) {
         series: [stubSeries1, stubSeries2]
     }, this.$container);
 
-    // act
     chart.option('series', []);
     chart._renderCompleteHandler();
 
-    // assert
     assert.equal(renderCompleteHandledCount, 2);
     assert.equal(completeCallbackObject, chart);
 });
@@ -961,11 +923,9 @@ QUnit.test('handle render complete after any option changed', function(assert) {
         series: [stubSeries1, stubSeries2]
     }, this.$container);
 
-    // act
     chart.option('title', 'Title');
     chart._renderCompleteHandler();
 
-    // assert
     assert.ok(this.done.calledOnce);
     assert.equal(this.done.getCall(0).thisValue, chart);
 });

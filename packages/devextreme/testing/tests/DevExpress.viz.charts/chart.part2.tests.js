@@ -101,7 +101,6 @@ QUnit.test('Calculate business range for categories from Axis and continuous val
 });
 
 QUnit.test('Two ranges for two panes - data from series, indents from common axis', function(assert) {
-    // arrange
     seriesMockData.series.push(new MockSeries({
         range: {
             val: {
@@ -118,7 +117,7 @@ QUnit.test('Two ranges for two panes - data from series, indents from common axi
             }
         }
     }));
-    // act
+
     const chart = this.createChart({
         series: [{
             // doesn't matter as range goes from predefined series above
@@ -149,7 +148,6 @@ QUnit.test('Two ranges for two panes - data from series, indents from common axi
         ]
 
     });
-    // assert
 
     const range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
@@ -186,7 +184,6 @@ const assertRange = commonMethodsForTests.assertRange;
 QUnit.module('dxChart Canvas', environment);
 
 QUnit.test('Canvas creation from options', function(assert) {
-
     const chartOptions = {
         left: 80,
         right: 90,
@@ -256,7 +253,6 @@ QUnit.test('Canvas creation, zero container size', function(assert) {
     const chart = this.createChart({
     });
 
-    // assert.ok(chart.canvas);
     assert.ok(chart._canvas);
 });
 
@@ -281,9 +277,6 @@ QUnit.test('Canvas creation, custom negative width option', function(assert) {
         size: { width: -100, height: 445 }
     });
 
-    // assert.ok(chart.canvas);
-    // assert.equal(chart.canvas.width, 0);
-    // assert.equal(chart.canvas.height, 445);
     assert.ok(chart._canvas);
     assert.equal(this.$container.width(), css.width);
     assert.equal(this.$container.height(), css.height);
@@ -296,9 +289,6 @@ QUnit.test('Canvas creation, custom negative height option', function(assert) {
         size: { width: 555, height: -445 }
     });
 
-    // assert.ok(chart.canvas);
-    // assert.equal(chart.canvas.width, 555);
-    // assert.equal(chart.canvas.height, 0);
     assert.ok(chart._canvas);
     assert.equal(this.$container.width(), css.width);
     assert.equal(this.$container.height(), css.height);
@@ -313,10 +303,7 @@ QUnit.test('Canvas creation, custom container size with zero width and height', 
 });
 
 QUnit.test('Canvas creation from options merged with default', function(assert) {
-
     const chartOptions = {
-        // width: 800,
-        // height: 800,
         left: 80,
         right: 0,
         top: 0,
@@ -385,7 +372,6 @@ QUnit.test('Two panes canvas creation. All Border visible', function(assert) {
     assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'topPane', 'Top pane from user options');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'bottomPane', 'Bottom pane from user options');
-
 });
 
 QUnit.test('Two panes canvas creation. Top Border visible', function(assert) {
@@ -470,7 +456,6 @@ QUnit.test('Two panes canvas creation. Bottom Border visible. Rotated', function
     assert.ok(vizUtils.updatePanesCanvases.called, 'Panes were created');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][0].name, 'bottomPane', 'Top pane from user options');
     assert.strictEqual(vizUtils.updatePanesCanvases.lastCall.args[0][1].name, 'topPane', 'Bottom pane from user options');
-
 });
 // /////////////////////////////////////////////////////
 // ////      Panes creation

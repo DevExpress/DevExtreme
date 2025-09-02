@@ -162,7 +162,6 @@ QUnit.test('initialize with logarithmic axis', function(assert) {
     assert.equal(range.base, 10, 'base');
 });
 
-
 QUnit.test('Pass series dataType to range', function(assert) {
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new StubRange(),

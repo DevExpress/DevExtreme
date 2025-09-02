@@ -14,6 +14,7 @@ import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer';
 import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
 import { Deferred } from 'core/utils/deferred';
+
 const TitleOrig = titleModule.Title;
 
 rendererModule.Renderer = sinon.stub();
@@ -136,7 +137,6 @@ QUnit.test('Pass canvas to axis\' estimateMargins', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.deepEqual(this.axisStub.getCall(0).returnValue.estimateMargins.lastCall.args[0], {
         left: 0,
         right: 0,
@@ -163,7 +163,6 @@ QUnit.test('Take into account max margin on each side of pane', function(assert)
     valAxis
         .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
 
-
     this.setupAxes([argAxis, valAxis]);
 
     new dxChart(this.container, {
@@ -172,7 +171,6 @@ QUnit.test('Take into account max margin on each side of pane', function(assert)
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
@@ -265,7 +263,6 @@ QUnit.test('Multiple value axes - margins are accumulated on left and right', fu
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     // valAxis_inner
@@ -378,7 +375,6 @@ QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bo
     valAxis_outer
         .getMargins.returns({ bottom: 8, right: 8, top: 5, left: 4 });
 
-
     this.setupAxes([argAxis,
         valAxis_inner,
         valAxis_outer]);
@@ -397,7 +393,6 @@ QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bo
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     // argAxis
@@ -548,7 +543,6 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     // valAxis_bottomPane_right_inner
@@ -792,7 +786,6 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     // argAxis_leftPane
@@ -1153,7 +1146,6 @@ QUnit.test('Multiple axes - shift only to the right/left, multipleAxesSpacing is
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -1240,7 +1232,6 @@ QUnit.test('Rotated. Multiple axes - shift only to the top/bottom, multipleAxesS
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -1439,7 +1430,6 @@ QUnit.test('Draw - pass correct pane borders', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.strictEqual(argAxis_topPane.draw.lastCall.args[1].color, 'red');
 
     assert.strictEqual(argAxis_bottomPane.draw.lastCall.args[1].color, 'blue');
@@ -1489,7 +1479,6 @@ QUnit.test('Update panes canvases', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.deepEqual(chart.panes[0].canvas, {
         left: 8,
         right: 6,
@@ -1565,7 +1554,6 @@ QUnit.test('Calculate panes canvases (by percentage)', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.equal(argAxis_topPane.getMargins.callCount, 2);
 
     assert.deepEqual(chart.panes[0].canvas, {
@@ -1656,7 +1644,6 @@ QUnit.test('Calculate panes canvases (mixed)', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.equal(argAxis_topPane.getMargins.callCount, 2);
 
     assert.deepEqual(chart.panes[0].canvas, {
@@ -1730,7 +1717,6 @@ QUnit.test('Calculate panes canvases (pixels). Rotated. ScrollBar on left', func
         legend: { visible: false }
     });
 
-    // assert
     assert.equal(argAxis1.getMargins.callCount, 3);
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
@@ -1786,10 +1772,8 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
 
     scrollBar.updateSize.resetHistory();
 
-    // act
     chart.zoomArgument(2, 9);
 
-    // assert
     assert.deepEqual(valAxisStub.createTicks_test_arg, {
         left: 18,
         right: 20,
@@ -1859,10 +1843,8 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas, resizePanes
 
     scrollBar.updateSize.resetHistory();
 
-    // act
     chart.zoomArgument(2, 9);
 
-    // assert
     assert.deepEqual(valAxisStub.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -1932,10 +1914,8 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas (support of 
 
     scrollBar.updateSize.resetHistory();
 
-    // act
     chart.zoomArgument(2, 9);
 
-    // assert
     assert.deepEqual(valAxisStub.createTicks_test_arg, {
         left: 0,
         right: 0,
@@ -2095,7 +2075,6 @@ QUnit.test('Animation to axes on first redrawing', function(assert) {
     assert.deepEqual(valAxis.resetApplyingAnimation.lastCall.args, [true]);
 });
 
-
 QUnit.test('Animation to axes on second redrawing', function(assert) {
     const defs = [];
     function getDeferred() {
@@ -2160,7 +2139,6 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized', funct
         legend: { visible: false }
     });
 
-    // assert
     const valAxis1 = this.axisStub.getCall(1).returnValue;
     const valAxis2 = this.axisStub.getCall(2).returnValue;
 
@@ -2204,7 +2182,6 @@ QUnit.test('synchronizeMultiAxes true - only value axes are synchronized. Rotate
         legend: { visible: false }
     });
 
-    // assert
     const valAxis1 = this.axisStub.getCall(1).returnValue;
     const valAxis2 = this.axisStub.getCall(2).returnValue;
 
@@ -2247,7 +2224,6 @@ QUnit.test('synchronizeMultiAxes false - do not synchronize', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.equal(synchronize.callCount, 0);
 });
 
@@ -2278,7 +2254,6 @@ QUnit.test('synchronizeMultiAxes false - do not synchronize. Rotated', function(
         legend: { visible: false }
     });
 
-    // assert
     assert.equal(synchronize.callCount, 0);
 });
 
@@ -2306,7 +2281,6 @@ QUnit.test('ScrollBar margins accumulated with argument axis margins', function(
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(1).returnValue.createTicks_test_arg, {
@@ -2395,7 +2369,6 @@ QUnit.test('Multiple panes. ScrollBar on top. ScrollBar placed in correct pane',
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -2455,7 +2428,6 @@ QUnit.test('Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
         legend: { visible: false }
     });
 
-    // assert
     // 1. estimate horizontal axes margins
     // 2. draw vertical axes
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -2512,7 +2484,6 @@ QUnit.test('Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
         legend: { visible: false }
     });
 
-    // assert
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 30,
@@ -2568,7 +2539,6 @@ QUnit.test('Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
         legend: { visible: false }
     });
 
-    // assert
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 10,
@@ -2612,7 +2582,6 @@ QUnit.test('ScrollBar on top. Shift argument axis by ScrollBar margin', function
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2638,7 +2607,6 @@ QUnit.test('ScrollBar on bottom. Shift argument axis by ScrollBar margin', funct
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2665,7 +2633,6 @@ QUnit.test('Rotated. ScrollBar on right. Shift argument axis by ScrollBar margin
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2692,7 +2659,6 @@ QUnit.test('Rotated. ScrollBar on left. Shift argument axis by ScrollBar margin'
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2722,7 +2688,6 @@ QUnit.test('ScrollBar on top. Don\'t shift argument axis (axis position is top, 
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2754,7 +2719,6 @@ QUnit.test('ScrollBar on bottom. Don\'t shift argument axis (axis position is bo
         legend: { visible: false }
     });
 
-    // assert
     // 6. shift horizontal axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2787,7 +2751,6 @@ QUnit.test('Rotated. ScrollBar on right. Don\'t shift argument axis (axis positi
         legend: { visible: false }
     });
 
-    // assert
     // 7. shift vertical axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2820,7 +2783,6 @@ QUnit.test('Rotated. ScrollBar on left. Don\'t shift argument axis (axis positio
         legend: { visible: false }
     });
 
-    // assert
     // 7. shift vertical axes
     // argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.shift_test_arg, {
@@ -2855,7 +2817,6 @@ QUnit.test('UpdateSize - scrollBar gets canvas', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     assert.deepEqual(scrollBar.updateSize.getCall(0).args, [{
         left: 0,
         right: 0,
@@ -2902,7 +2863,6 @@ QUnit.test('Multiple panes - hide title and labels for horizontal axes', functio
         legend: { visible: false }
     });
 
-    // assert
     // argAxis_bottom
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 1);
@@ -2942,7 +2902,6 @@ QUnit.test('Multiple panes - should not hide title and labels of axis, height of
         legend: { visible: false }
     });
 
-    // assert
     // argAxis_bottom
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
@@ -2982,7 +2941,6 @@ QUnit.test('Multiple panes - not hide all for horizontal axes (pane sized for ad
         legend: { visible: false }
     });
 
-    // assert
     // argAxis_bottom
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
@@ -3037,7 +2995,6 @@ QUnit.test('Multiple axes, vertical axes without titles are fit, horizontal axis
         legend: { visible: false }
     });
 
-    // assert
     // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
@@ -3096,7 +3053,6 @@ QUnit.test('Multiple axes, horizontal axes without titles are fit, vertical axis
         legend: { visible: false }
     });
 
-    // assert
     // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 1);
@@ -3160,7 +3116,6 @@ QUnit.test('Update axes size and shift with new margins (there is also scrollBar
         legend: { visible: false }
     });
 
-    // assert
     // valAxis_inner
     assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSize_test_arg, {
         left: 18,
@@ -3302,10 +3257,8 @@ QUnit.test('Recalculate canvas on zooming, axis labels hide due to adaptiveLayou
 
     scrollBar.updateSize.resetHistory();
 
-    // act
     chart.zoomArgument(2, 9);
 
-    // assert
     assert.strictEqual(valAxisStub.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
@@ -3354,10 +3307,8 @@ QUnit.test('Recalculate panes canvas on reset visual range, axis labels hide due
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    // act
     chart.resetVisualRange();
 
-    // assert
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 0,
         right: 0,
@@ -3409,10 +3360,8 @@ QUnit.test('Hide legend and title - free space is enought for axis - canvas shou
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    // act
     chart.resetVisualRange();
 
-    // assert
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 0,
         right: 0,
@@ -3465,7 +3414,6 @@ QUnit.test('Hide legend and title - free space is enought for axis - no hide ele
         legend: { visible: false }
     });
 
-    // assert
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
@@ -3516,7 +3464,6 @@ QUnit.test('Hide legend and title - free space is not enought for axis - hide el
         legend: { visible: false }
     });
 
-    // assert
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
 
@@ -3576,7 +3523,6 @@ QUnit.test('Stretch chart by pane size', function(assert) {
         dataSource: [{ arg: 1, val: 10 }]
     });
 
-    // assert
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
 
@@ -3636,7 +3582,6 @@ QUnit.test('Hide legend and title by pane size', function(assert) {
         dataSource: [{ arg: 1, val: 10 }]
     });
 
-    // assert
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
 
@@ -3660,7 +3605,6 @@ QUnit.test('Pass animate true flag to the updateSize method', function(assert) {
         dataSource: [{ arg: 1, val: 10 }]
     });
 
-    // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
 });
@@ -3679,7 +3623,6 @@ QUnit.test('Pass animate false flag to the updateSize method if animation is dis
         dataSource: [{ arg: 1, val: 10 }]
     });
 
-    // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], false);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
 });
@@ -3705,7 +3648,6 @@ QUnit.test('Pass animate false flag to the updateSize method if points limit is 
         dataSource: dataSource
     });
 
-    // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], false);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], false);
 });
@@ -3731,7 +3673,6 @@ QUnit.test('Pass animate false flag to the updateSize method if points limit is 
         dataSource: dataSource
     });
 
-    // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
 });
@@ -3791,7 +3732,6 @@ QUnit.test('With a pane; Position is right', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis = createAxisStubs();
 
-
     valAxis.hasWrap = () => true;
     valAxis.getTitle = sinon.stub();
     valAxis.getTitle.onCall(0).returns({ bBox: { width: 10 } });
@@ -3808,7 +3748,6 @@ QUnit.test('With a pane; Position is right', function(assert) {
         }
     });
 
-    // assert
     const axis = this.axisStub.getCall(1).returnValue;
 
     assert.equal(axis.updateSizeArgs[0].right, 0);
@@ -3818,7 +3757,6 @@ QUnit.test('With a pane; Position is right', function(assert) {
 QUnit.test('With a pane', function(assert) {
     const argAxis = createAxisStubs();
     const valAxis = createAxisStubs();
-
 
     valAxis.hasWrap = () => true;
     valAxis.getTitle = sinon.stub();
@@ -3833,7 +3771,6 @@ QUnit.test('With a pane', function(assert) {
         legend: { visible: false }
     });
 
-    // assert
     const axis = this.axisStub.getCall(1).returnValue;
     assert.equal(axis.updateSize.callCount, 2);
 
@@ -3851,7 +3788,6 @@ QUnit.test('With two panes', function(assert) {
     const argAxis2 = createAxisStubs();
     const valAxis1 = createAxisStubs();
     const valAxis2 = createAxisStubs();
-
 
     valAxis1.hasWrap = valAxis2.hasWrap = () => true;
     valAxis1.getTitle = sinon.stub();
@@ -3874,7 +3810,6 @@ QUnit.test('With two panes', function(assert) {
         legend: { visible: true }
     });
 
-    // assert
     const axis = this.axisStub.getCall(1).returnValue;
     assert.equal(axis.updateSize.callCount, 3);
 

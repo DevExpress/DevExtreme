@@ -397,7 +397,6 @@ QUnit.test('Skip points with undefined and NaN values, Range series', function(a
     assert.equal(points.length, 0);
 });
 
-
 QUnit.test('Skip points with undefined and NaN values, Financial series', function(assert) {
     const points = this.aggregateData('custom', this.data, 'candlestick', {
         aggregation: {

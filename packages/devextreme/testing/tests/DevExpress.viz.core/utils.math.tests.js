@@ -92,13 +92,11 @@ QUnit.test('getCosAndSin', function(assert) {
     testGetCosAndSin(765, cos(PI * 17 / 4), sin(PI * 17 / 4));
 });
 
-
 QUnit.test('getDistance', function(assert) {
     assert.equal(vizUtils.getDistance(0, 0, 3, 4), 5, 'egypt triangle');
     assert.equal(vizUtils.getDistance(3, 4, 0, 0), 5, 'egypt triangle');
     assert.equal(vizUtils.getDistance(20, 20, 10, 10), Math.sqrt(200));
 });
-
 
 QUnit.module('Number utils');
 

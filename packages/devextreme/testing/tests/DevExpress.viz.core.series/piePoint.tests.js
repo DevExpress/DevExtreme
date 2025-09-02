@@ -422,7 +422,6 @@ QUnit.test('toAngle > fromAngle', function(assert) {
     assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
     assert.ok(point.coordsIn(50, 40));
 
-
     const sinFrom = Math.sin(point.fromAngle * Math.PI / 180);
     const sinTo = Math.sin(point.toAngle * Math.PI / 180);
     const cosFrom = Math.cos(point.fromAngle * Math.PI / 180);
@@ -475,7 +474,6 @@ QUnit.test('circle point', function(assert) {
     assert.ok(point.coordsIn(30, 60));
 
     assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
-
 });
 
 QUnit.test('getMarkerVisibility', function(assert) {
@@ -1396,7 +1394,6 @@ QUnit.module('show/hide API', {
                 return this._options;
             },
             _options: {
-
             },
             getLabelVisibility: function() { return false; },
             hidePointTooltip: function() { },

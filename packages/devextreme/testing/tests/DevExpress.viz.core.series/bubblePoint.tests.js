@@ -187,13 +187,12 @@ QUnit.test('animate without graphic', function(assert) {
 });
 
 QUnit.test('pass diameter to correctCoordinates', function(assert) {
-    // arrange
+
     const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
     const diameter = 10;
 
-    // act
     point.correctCoordinates(diameter);
-    // assert
+
     assert.strictEqual(point.bubbleSize, diameter / 2);
 });
 

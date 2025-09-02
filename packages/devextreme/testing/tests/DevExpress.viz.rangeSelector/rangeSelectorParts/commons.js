@@ -15,6 +15,7 @@ import {
     forceThemeOptions,
     Renderer,
 } from '../../../helpers/vizMocks.js';
+import 'viz/range_selector/range_selector';
 
 const StubThemeManager = stubClass(themeManagerModule.BaseThemeManager);
 const StubRangeView = stubClass(rangeViewModule.RangeView);
@@ -42,8 +43,6 @@ const StubTranslator2D = stubClass(translator2DModule.Translator2D, {
         return new StubRange();
     }
 });
-
-import 'viz/range_selector/range_selector';
 
 StubThemeManager.prototype.setTheme = function() {
     forceThemeOptions(this);

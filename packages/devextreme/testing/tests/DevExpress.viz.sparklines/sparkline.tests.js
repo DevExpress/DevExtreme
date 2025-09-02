@@ -1184,7 +1184,6 @@ QUnit.begin(function() {
         ]);
     });
 
-
     QUnit.test('Extremum points when mode is minMax. Bar, winloss', function(assert) {
         this.createSparkline({
             dataSource: [4, 9, 8, 6],

@@ -16,7 +16,6 @@ import {
     restoreIncidentOccurredCreation,
 } from '../../helpers/vizMocks.js';
 import gaugeModule from 'viz/gauges/common';
-const dxGauge = gaugeModule.dxGauge;
 import { createPalette } from 'viz/palette';
 import axisModule from 'viz/axes/base_axis';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
@@ -25,6 +24,8 @@ import rangeModule from 'viz/translators/range';
 import translator1DModule from 'viz/translators/translator1d';
 import rendererModule from 'viz/core/renderers/renderer';
 import themeManagerModule from 'viz/gauges/theme_manager';
+
+const dxGauge = gaugeModule.dxGauge;
 const stubRange = stubClass(rangeModule.Range);
 
 $('<div id="test-container">').appendTo('#qunit-fixture');

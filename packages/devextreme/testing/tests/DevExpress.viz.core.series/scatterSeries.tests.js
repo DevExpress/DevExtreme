@@ -6,8 +6,9 @@ import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { insertMockFactory, MockAxis, restoreMockFactory } from '../../helpers/chartMocks.js';
+
+const Series = SeriesModule.Series;
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -448,9 +449,8 @@ const seriesType = 'scatter';
             renderer: this.renderer,
             seriesGroup: this.seriesGroup
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
     });
@@ -469,9 +469,9 @@ const seriesType = 'scatter';
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         checkGroups(assert, series);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 1);
         $.each(series._points, function(i, p) {
@@ -494,9 +494,9 @@ const seriesType = 'scatter';
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(true);
-        // assert
+
         checkGroups(assert, series);
 
         assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -531,9 +531,9 @@ const seriesType = 'scatter';
             pt.y = pt.value;
         });
         series._points[2].isInVisibleArea.returns(false);
-        // act
+
         series.draw(true);
-        // assert
+
         assert.ok(!series.getPointByPos(2).animate.called);
         assert.ok(series.getPointByPos(0).animate.called);
         assert.ok(series.getPointByPos(1).animate.called);
@@ -564,9 +564,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -580,7 +578,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -622,9 +619,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(true);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -638,7 +633,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -689,9 +683,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(true);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -705,7 +697,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -756,9 +747,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -772,7 +761,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -789,7 +777,6 @@ const seriesType = 'scatter';
             assert.equal(p.animate.callCount, 0, i + ' point draw without animate');
         });
     });
-
 
     QUnit.test('Draw series when errorBars enabled. forceClipping is true', function(assert) {
         const series = createSeries({
@@ -815,9 +802,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', true);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -831,7 +816,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -873,9 +857,7 @@ const seriesType = 'scatter';
         series.updateDataType({ valueAxisType: 'discrete' });
         series.setClippingParams('clipId', 'wideClipId', true);
 
-        // act
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
 
@@ -884,7 +866,6 @@ const seriesType = 'scatter';
             assert.equal(p.animate.callCount, 0, i + ' point draw without animate');
         });
     });
-
 
     QUnit.module('Scatter. Points animation', {
         beforeEach: function() {
@@ -903,9 +884,9 @@ const seriesType = 'scatter';
 
     QUnit.test('Draw without animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(false);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -916,9 +897,9 @@ const seriesType = 'scatter';
 
     QUnit.test('Draw with animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(true);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -1963,7 +1944,6 @@ const seriesType = 'scatter';
         series.updateData(this.data);
         series.createPoints();
 
-
         const labels = this.createPoint.firstCall.args[2].label;
         assert.ok(labels);
         assert.ok(labels.visible);
@@ -2037,7 +2017,6 @@ const seriesType = 'scatter';
 
         series.updateData(this.data);
         series.createPoints();
-
 
         const labels = series._getPointOptions().label;
         assert.ok(labels);
@@ -2141,7 +2120,6 @@ const seriesType = 'scatter';
         const labels = series._getPointOptions().label;
         assert.equal(labels.customizeText, undefined);
     });
-
 
     QUnit.module('Scatter. Customize Label', {
         beforeEach: function() {

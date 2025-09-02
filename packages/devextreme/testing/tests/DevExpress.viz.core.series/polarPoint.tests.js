@@ -5,6 +5,7 @@ import {
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
+
 const Series = SeriesModule.Series;
 
 const defaultStyle = {

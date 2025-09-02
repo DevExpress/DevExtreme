@@ -3,15 +3,14 @@ import {
     Renderer,
 } from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
+import 'viz/sankey/sankey';
+import 'viz/themes';
+import { layout as layoutBuilder } from 'viz/sankey/layout';
 
 const find = function(array, predicate) {
     return array.filter(predicate)[0];
 };
 
-import 'viz/sankey/sankey';
-import 'viz/themes';
-
-import { layout as layoutBuilder } from 'viz/sankey/layout';
 const spiesLayoutBuilder = {
     computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
     _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')

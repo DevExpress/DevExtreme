@@ -170,20 +170,16 @@ QUnit.module('utils graphic', {
 });
 
 QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo([]);
 
-    // assert
     assert.deepEqual(info, {
         categories: []
     });
 });
 
 QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');
 
-    // assert
     assert.deepEqual(info, {
         start: 'a3',
         end: 'a5',
@@ -193,10 +189,8 @@ QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo (inverted)', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, 'a5', 'a3');
 
-    // assert
     assert.deepEqual(info, {
         start: 'a5',
         end: 'a3',
@@ -206,10 +200,8 @@ QUnit.test('getCategoriesInfo (inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, undefined, 'a3');
 
-    // assert
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
         end: 'a3',
@@ -219,10 +211,8 @@ QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, 'a3', undefined);
 
-    // assert
     assert.deepEqual(info, {
         categories: ['a3', 'a4', 'a5', 'a6', 'a7'],
         start: 'a3',
@@ -232,10 +222,8 @@ QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains start categories', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, 'someCategories', 'a3');
 
-    // assert
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
         end: 'a3',
@@ -245,10 +233,8 @@ QUnit.test('getCategoriesInfo. categories is not contains start categories', fun
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains end categories', function(assert) {
-    // arrange,act
     const info = utils.getCategoriesInfo(this.categories, 'a5', 'someCategories');
 
-    // assert
     assert.deepEqual(info, {
         categories: ['a5', 'a6', 'a7'],
         end: 'a7',
@@ -431,7 +417,6 @@ QUnit.test('Single pane - main case (no specific options provided)', function(as
     assert.strictEqual(this.canvas.top, 10, 'No change of main canvas on top margin');
     assert.strictEqual(this.canvas.bottom, 20, 'No change of main canvas on bottom margin');
 
-
     assert.strictEqual(pane.canvas.left, this.canvas.left, 'Pane Canvas Left margin should be equal to main canvas');
     assert.strictEqual(pane.canvas.right, this.canvas.right, 'Pane Canvas Right margin should be equal to main canvas');
     assert.strictEqual(pane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
@@ -457,7 +442,6 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
     utils.setCanvasValues(this.canvas);
     utils.normalizePanesHeight([topPane, bottomPane]);
     utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
-
 
     assert.ok(topPane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, topPane.canvas, 'Pane canvas should not reference the main object in memory');
@@ -621,5 +605,4 @@ QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
     assert.strictEqual(rightPane.canvas.originalRight, this.canvas.right, 'Pane Canvas Right margin should be equal to main canvas');
     assert.strictEqual(rightPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(rightPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
-
 });

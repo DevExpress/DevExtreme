@@ -5,6 +5,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import mapLayerModule from 'viz/vector_map/map_layer';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
+
 let StubMapLayerCollection;
 
 QUnit.begin(function() {

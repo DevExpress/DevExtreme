@@ -88,10 +88,8 @@ function checkAxesSynchronization(assert, options) {
 
     const axes = createAxes(axesOptions);
 
-    // act
     multiAxesSynchronizer.synchronize(axes);
 
-    // assert
     $.each(axes, function(i, axis) {
         if(axesOptionsAfterSync[i].minorTickValues) {
             assert.deepEqual(axis.getTicksValues().minorTicksValues, axesOptionsAfterSync[i].minorTickValues, 'minorTicks after synchronization for axis ' + i);
@@ -1093,7 +1091,6 @@ QUnit.test('Synchronization for 2 axis with paddings and with different tickValu
         syncIndexes: [[0, 1]]
     });
 });
-
 
 QUnit.test('Synchronization for 3 axis with paddings and with different tickValues count', function(assert) {
     checkAxesSynchronization(assert, {

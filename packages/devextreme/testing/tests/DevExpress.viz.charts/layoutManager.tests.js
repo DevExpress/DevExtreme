@@ -57,7 +57,6 @@ function createLayoutManager(options) {
 function getStubSeries(type, innerRadius, points) {
     const stubSeries = new Series();
 
-
     stubSeries.type = type;
 
     stubSeries.stub('getVisiblePoints').returns(points || [createFakePointsWithStubLabels({}, true, false)]);

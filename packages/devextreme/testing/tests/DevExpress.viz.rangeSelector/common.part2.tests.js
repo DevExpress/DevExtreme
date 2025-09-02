@@ -822,7 +822,7 @@ QUnit.test('range when background is changed', function(assert) {
 
     range.option('background', { image: { url: 'test2.png' } });
 
-    // assert
+
     const options = this.rangeView.update.lastCall.args[0];
     assert.strictEqual(options.image.url, 'test2.png');
 });

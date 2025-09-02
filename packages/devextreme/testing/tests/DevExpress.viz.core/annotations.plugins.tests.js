@@ -6,7 +6,6 @@ import {
     Renderer,
     Tooltip,
 } from '../../helpers/vizMocks.js';
-
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
@@ -1055,7 +1054,6 @@ QUnit.module('Lifecycle', {
         ];
         chart.option({ annotations: newItems });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'options');
@@ -1086,7 +1084,6 @@ QUnit.module('Lifecycle', {
         };
         chart.option({ commonAnnotationSettings: newAnnotationOptions });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'otherOptions');
@@ -1245,7 +1242,6 @@ QUnit.module('Lifecycle', {
         ];
         polarChart.option({ annotations: newItems });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'options');
@@ -1276,7 +1272,6 @@ QUnit.module('Lifecycle', {
         };
         polarChart.option({ commonAnnotationSettings: newAnnotationOptions });
 
-        // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
         assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'otherOptions');

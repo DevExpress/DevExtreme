@@ -9,7 +9,6 @@ const tooltipOrig = tooltipModule.Tooltip;
 
 dxFunnel.addPlugin(funnelTooltip.plugin);
 
-
 const tooltipEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         const that = this;

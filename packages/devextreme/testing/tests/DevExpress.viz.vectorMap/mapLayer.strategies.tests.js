@@ -5,6 +5,7 @@ import {
     Element,
 } from '../../helpers/vizMocks.js';
 import mapLayerModule from 'viz/vector_map/map_layer';
+
 const selectStrategy = mapLayerModule._TESTS_selectStrategy;
 
 const emptyStrategy = selectStrategy({}, createData(0));

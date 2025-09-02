@@ -697,7 +697,6 @@ QUnit.test('measuring label on axis with empty range - do not render texts', fun
 
     const measurements = axis.measureLabels(this.canvas);
 
-    // assert
     assert.deepEqual(measurements, {
         width: 0,
         height: 0,
@@ -1483,7 +1482,6 @@ QUnit.test('Do not update removed label position on update size', function(asser
 
     removedLabel.attr.resetHistory();
 
-    // act
     axis.updateSize(this.canvas);
 
     assert.equal(removedLabel.attr.callCount, 0);
@@ -1722,7 +1720,6 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
         };
     }
 
-    // act. second draw
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
@@ -1781,7 +1778,6 @@ QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset 
         };
     }
 
-    // act. second draw
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
@@ -1838,7 +1834,6 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
     }
     this.translator.translate.withArgs(5).returns(30);
 
-    // act. second draw
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
@@ -2446,7 +2441,6 @@ QUnit.test('Estimate top/bottom margin. Axis with title', function(assert) {
         }
     });
 
-
     this.bBoxes.push({
         height: 14
     });
@@ -2850,7 +2844,6 @@ QUnit.test('getTemplatesDef. State after remove some labels by resolveOverlappin
 
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     this.axis.getTemplatesDef().done(function() {
@@ -3344,10 +3337,9 @@ QUnit.test('Remove groups on disposing', function(assert) {
     this.renderer.g.resetHistory();
 
     axis.drawScaleBreaks();
-    // act
+
     axis.dispose();
 
-    // assert
     assert.ok(this.renderer.g.getCall(0).returnValue.dispose.called);
     assert.ok(this.renderer.clipRect.getCall(0).returnValue.dispose.called);
 
@@ -3413,7 +3405,6 @@ QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, enviro
         });
     },
     updateOptions: function(opt) {
-
         const options = $.extend(true, this.options, {
             dataType: 'datetime',
             breakStyle: { width: 0 },
@@ -3440,7 +3431,7 @@ QUnit.test('Breaks generation on empty range', function(assert) {
         dataType: 'datetime',
         workdaysOnly: true
     });
-    // act
+
     axis.setBusinessRange({});
 
     assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].userBreaks, []);
@@ -3818,11 +3809,9 @@ QUnit.test('Recalculate the breaks on zoom', function(assert) {
 
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.visualRange(new Date(2017, 8, 8, 8, 0, 0), new Date(2017, 8, 11));
     this.axis.createTicks(this.canvas);
 
-    // assert
     const breaks = this.tickGeneratorSpy.lastCall.args[7];
     assert.deepEqual(breaks, [
         {
@@ -4501,7 +4490,6 @@ QUnit.test('Size margins with scale breaks', function(assert) {
     });
 });
 
-
 QUnit.test('Interval margins with scale breaks', function(assert) {
     this.testMargins(assert, {
         options: {
@@ -4594,7 +4582,6 @@ QUnit.test('Calculate correct margins if scale breaks in range start and end', f
         }
     });
 });
-
 
 QUnit.test('Calculate correct margins if scalebreks in range start and end. Inverted', function(assert) {
     this.testMargins(assert, {
@@ -5456,7 +5443,6 @@ QUnit.module('Axis templates with overlapping behavior', overlappingEnvironment)
 QUnit.test('Axis template was removed before rendered', function(assert) {
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', template() {} } });
 
-    // act
     const count = this.templateRender.callCount;
     for(let i = 0; i < count; i++) {
         this.templateRender.getCall(i).args[0].onRendered();

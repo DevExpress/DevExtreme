@@ -7,7 +7,6 @@ import dxPieChart from 'viz/pie_chart';
 import { MockSeries, MockPoint, insertMockFactory, restoreMockFactory, resetMockFactory, seriesMockData } from '../../helpers/chartMocks.js';
 import { rendererModule, resetModules } from './chartParts/commons.js';
 
-
 function getContainer(hidden) {
     const div = $('<div>').appendTo('#qunit-fixture');
     hidden && div.hide();
@@ -456,7 +455,6 @@ QUnit.test('Hide labes after first measuring render', function(assert) {
     assert.equal(series.drawLabelsWOPoints.callCount, 1);
     assert.equal(series.hideLabels.callCount, 1);
     assert.ok(series.hideLabels.lastCall.calledAfter(pie.layoutManager.applyPieChartSeriesLayout.lastCall));
-
 });
 
 QUnit.test('Create pie with group but w/o series. Do not ask for common layout. T602149', function(assert) {

@@ -4223,7 +4223,6 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, 'valueAxis.visualRange', 'Case 4');
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [10, 30], 'Case 4');
 
-
     // Case 5
     [chart, onOptionChanged] = this.createChart({
         dataSource,

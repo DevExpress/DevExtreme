@@ -145,7 +145,6 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
 });
 
 QUnit.test('Labels customize text', function(assert) {
-
     const customizeText = function(node) {
         return 'test text ' + node.label;
     };
@@ -194,7 +193,6 @@ QUnit.test('Labels alignment through cascades with rtlEnabled', function(assert)
     assert.ok(nodes[1].attr.firstCall.args[0].x < this.label(1).attr.lastCall.args[0].translateX, 'First cascade');
     assert.ok(nodes[2].attr.firstCall.args[0].x > this.label(2).attr.lastCall.args[0].translateX, 'Last cascade');
 });
-
 
 QUnit.test('Labels offsets', function(assert) {
     createSankey({

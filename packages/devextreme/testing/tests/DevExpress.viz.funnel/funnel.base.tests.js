@@ -15,7 +15,6 @@ themeModule.registerTheme({
         }
     } }, 'generic.light');
 
-
 QUnit.module('Initialization', environment);
 
 QUnit.test('Create empty widget', function(assert) {
@@ -843,7 +842,6 @@ QUnit.test('Can select an item in onDrawn enven', function(assert) {
         }
     });
 
-
     const item = this.items()[1];
 
     assert.equal(item.smartAttr.lastCall.args[0].fill, '#234234');
@@ -907,7 +905,6 @@ QUnit.test('Single selection', function(assert) {
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[0].select(true);
 
-
     assert.equal(funnel.getAllItems()[0].isSelected(), true);
     assert.equal(funnel.getAllItems()[1].isSelected(), false);
 });
@@ -920,7 +917,6 @@ QUnit.test('Multiple selection', function(assert) {
 
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[0].select(true);
-
 
     assert.equal(funnel.getAllItems()[0].isSelected(), true);
     assert.equal(funnel.getAllItems()[1].isSelected(), true);

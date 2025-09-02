@@ -11,10 +11,10 @@ import baseThemeManagerModule from 'viz/core/base_theme_manager';
 import rendererModule from 'viz/core/renderers/renderer';
 import { isFunction } from 'core/utils/type';
 
+import 'viz/sparkline';
+
 const TOOLTIP_TABLE_BORDER_SPACING = 0;
 const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
-
-import 'viz/sparkline';
 
 $('<div>')
     .attr('id', 'container')
@@ -279,7 +279,6 @@ QUnit.test('Default template should be used when customizeTooltip is not defined
         textAlign: 'right',
         lineHeight: '14px'
     });
-
 });
 
 QUnit.test('Default customizeTooltip callback. Custom linespacing', function(assert) {
@@ -378,7 +377,6 @@ QUnit.test('Winloss sparkline get TooltipFormatObject', function(assert) {
     });
     showSparklineTooltip(sparkline);
     const tooltip = getSparklineTooltip(sparkline);
-
 
     assert.deepEqual(tooltip.show.lastCall.args, [{
         firstValue: '4:undefined',

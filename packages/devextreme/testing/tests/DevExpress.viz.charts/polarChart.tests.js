@@ -17,6 +17,7 @@ import layoutManagerModule from 'viz/chart_components/layout_manager';
 import exportModule from 'viz/core/export';
 
 import 'viz/chart';
+
 const stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip);
 const stubRange = sinon.createStubInstance(rangeModule.Range);
 const stubSeriesFamily = createStubSeriesFamily();
@@ -392,7 +393,6 @@ QUnit.test('render', function(assert) {
 });
 
 QUnit.test('Actions sequence with series on render chart', function(assert) {
-    // arrange
     const chart = this.createSimplePolarChart();
     const argumentAxis = chart._argumentAxes[0];
     const series = chart.getAllSeries()[0];
@@ -566,7 +566,6 @@ QUnit.test('Adaptive layout', function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
     stubThemeManager.getOptions.withArgs('adaptiveLayout').returns({ width: 1000, keepLabels: false });
 
-
     stubAxes[0].getMargins.onCall(1).returns({ left: 2, right: 2, top: 2, bottom: 2 });
     stubAxes[0].getMargins.onCall(2).returns({ left: 2, right: 2, top: 2, bottom: 2 });
     stubAxes[0].getCanvas.returns({ stubAxisCanvas: true });
@@ -627,18 +626,11 @@ QUnit.test('create correct seriesFamily', function(assert) {
 
 QUnit.test('adjust series dimension in seriesFamily', function(assert) {
     const chart = this.createSimplePolarChart(); // ,
-    // translators = {
-    //     arg: chart.translator,
-    //     val: chart.translator
-    // };
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
     assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-    // assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
-
     assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-    // assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
 });
 
 QUnit.test('require not need more space in canvas', function(assert) {
@@ -656,7 +648,6 @@ QUnit.test('set value axes spider ticks from argument axis', function(assert) {
     assert.ok(valueAxis.setSpiderTicks.calledWith(argumentAxis.getSpiderTicks.returnValues[0]));
     assert.ok(valueAxis.setSpiderTicks.calledAfter(argumentAxis.draw));
 });
-
 
 QUnit.test('create axis with correct options', function(assert) {
     this.createSimplePolarChart({});

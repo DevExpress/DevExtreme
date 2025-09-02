@@ -43,14 +43,13 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('First series theme - default', function(assert) {
-        // arrange
         const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'unknown'
         });
-        // assert series theme
+
         assert.equal(theme.containerBackgroundColor, backgroundColor);
         assert.equal(theme.color, undefined);
         assert.equal(theme.mainSeriesColor, defaultColor);
@@ -138,16 +137,14 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.widgetType, 'chart');
     });
 
-
     QUnit.test('First series theme - area', function(assert) {
-        // arrange
         const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'area'
         });
-        // assert series theme
+
         assert.equal(theme.containerBackgroundColor, backgroundColor);
         assert.equal(theme.color, undefined);
         assert.equal(theme.border.width, 2);
@@ -234,12 +231,11 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Pass series count to palette', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             palette: ['red', 'green']
         });
         themeManager.setTheme({});
-        // act
+
         themeManager.getOptions('series', {
             type: 'line'
         }, 3);
@@ -256,13 +252,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Pass paletteExtensionMode to palette params', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             palette: ['red', 'green'],
             paletteExtensionMode: 'alternate'
         });
         themeManager.setTheme({});
-        // act
+
         themeManager.getOptions('series', {
             type: 'line'
         }, 3);
@@ -279,12 +274,10 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('First series theme', function(assert) {
-        // arrange
         const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {});
-        // assert series theme
         assert.equal(theme.containerBackgroundColor, backgroundColor);
         assert.equal(theme.color, undefined);
         assert.equal(theme.border.width, 2);
@@ -372,18 +365,14 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.widgetType, 'chart');
     });
 
-
     QUnit.test('Change theme palette from user options', function(assert) {
-        // arrange
         const palette = 'Soft Pastel';
         const themeManager = createThemeManager({
             palette: palette
         });
         themeManager.setTheme({});
 
-        // act
         const theme = themeManager.getOptions('series', {});
-        // assert series theme
         assert.ok(theme);
         assert.equal(theme.mainSeriesColor, '#60a69f');
         assert.ok(theme.hoverStyle);
@@ -398,7 +387,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Change theme palette dynamically', function(assert) {
-        // arrange
         const palette = 'Soft Pastel';
         const options = {
             palette: palette
@@ -407,11 +395,9 @@ function createThemeManager(options, themeGroupName) {
 
         themeManager.setTheme({});
 
-        // act
         options.palette = ['#ffffff'];
         themeManager.resetOptions('palette');
         themeManager.updatePalette();
-        // assert series theme
         const theme = themeManager.getOptions('series', {});
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
@@ -429,7 +415,7 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('Pass color as object', function(assert) {
         const themeManager = createThemeManager({});
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: {
@@ -437,7 +423,6 @@ function createThemeManager(options, themeGroupName) {
                 fillId: 'id_pattern'
             }
         });
-        // assert series theme
         assert.deepEqual(theme.color, {
             base: 'red',
             fillId: 'id_pattern'
@@ -448,14 +433,13 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('Pass color as object, base color is not set', function(assert) {
         const themeManager = createThemeManager({});
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: {
                 fillId: 'id_pattern'
             }
         });
-        // assert series theme
         assert.deepEqual(theme.color, {
             fillId: 'id_pattern'
         });
@@ -463,16 +447,14 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Wrong palette fall back to default', function(assert) {
-        // arrange
         const palette = 'nonexisting';
         const themeManager = createThemeManager({
             palette: palette
         });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
@@ -490,12 +472,10 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Palette and Default palette', function(assert) {
-        // arrange
         paletteModule.registerPalette('Custom Palette', ['#0f0f0f']);
         paletteModule.registerPalette('Default Palette', ['#f0f0f0']);
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
-        // act
         const options = {
             theme: 'Super Theme',
             palette: 'Custom Palette'
@@ -504,17 +484,14 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme(options.theme);
         const theme = themeManager.getOptions('series', {});
 
-        // assert series theme
         assert.equal(theme.mainSeriesColor, '#0f0f0f');
     });
 
     QUnit.test('No Palette and Default palette', function(assert) {
-        // arrange
         paletteModule.registerPalette('Custom Palette', ['#0f0f0f']);
         paletteModule.registerPalette('Default Palette', ['#f0f0f0']);
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
-        // act
         const options = {
             theme: 'Super Theme'
         };
@@ -522,16 +499,14 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme(options.theme);
         const theme = themeManager.getOptions('series', {});
 
-        // assert series theme
         assert.equal(theme.mainSeriesColor, '#f0f0f0');
     });
 
     QUnit.test('Current palette', function(assert) {
-        // arrange
         paletteModule.registerPalette('Current Palette', ['#f0f0f0', '#0f0f0f', '#111111']);
         themeModule.registerTheme({ name: 'Super Theme', }, 'default');
         paletteModule.currentPalette('Current Palette');
-        // act
+
         const options = {
             theme: 'Super Theme'
         };
@@ -539,7 +514,6 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme(options.theme);
         const theme = themeManager.getOptions('series', {});
 
-        // assert series theme
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
         assert.ok(theme.selectionStyle);
@@ -556,17 +530,14 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Set theme palette from user options', function(assert) {
-        // arrange
         const palette = ['red', 'blue', 'green'];
         const themeManager = createThemeManager({
             palette: palette
         });
         themeManager.setTheme({});
 
-        // act
         const theme = themeManager.getOptions('series', {
         });
-        // assert series theme
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
         assert.ok(theme.selectionStyle);
@@ -583,15 +554,13 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Modify custom color', function(assert) {
-        // arrange
         const themeManager = createThemeManager({});
         const customColor = '#777777';
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             color: customColor
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
@@ -629,21 +598,18 @@ function createThemeManager(options, themeGroupName) {
     };
 
     QUnit.test('Apply default series theme from parameters', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate)
         });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', { color: 'customColor' });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.customTheme, 'Custom theme from parameter was applied');
     });
 
     QUnit.test('Apply type-specific default series theme from parameters', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {
                 area: {
@@ -654,19 +620,17 @@ function createThemeManager(options, themeGroupName) {
             }, commonSeriesThemeTemplate)
         });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'area',
             color: 'customColor'
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.point.areaMerged, 'Params from line type specific-branch were applied');
     });
 
     QUnit.test('Apply type-specific default series theme from parameters (case-insensitive)', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {
                 area: {
@@ -677,19 +641,17 @@ function createThemeManager(options, themeGroupName) {
             }, commonSeriesThemeTemplate)
         });
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'AREa',
             color: 'customColor'
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.point.areaMerged, 'Params from line type specific-branch were applied');
     });
 
     QUnit.test('Apply user commonSeriesSetting (without line) with more priority then theme commonSeriesSetting.line', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 width: 10
@@ -704,17 +666,15 @@ function createThemeManager(options, themeGroupName) {
                 }
             }, commonSeriesThemeTemplate)
         };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'line'
         });
-        // assert series theme
         assert.ok(theme);
         assert.strictEqual(theme.width, 10, 'Params from user-defined common series setting were were applied');
     });
 
     QUnit.test('Apply user commonSeriesSetting (with line) with more priority then theme commonSeriesSetting.line', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 width: 10,
@@ -731,18 +691,16 @@ function createThemeManager(options, themeGroupName) {
         }, commonSeriesThemeTemplate);
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: mergedCommonSeriesSettings };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'line'
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.strictEqual(theme.width, 12, 'Params from user-defined common series setting were were applied');
     });
 
     QUnit.test('Apply user commonSeriesSetting color', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 border: { color: '#000001' },
@@ -758,9 +716,8 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', {});
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.mainSeriesColor, defaultColor);
@@ -779,7 +736,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply user series point color', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             containerBackgroundColor: '#111116',
             commonSeriesSettings: {
@@ -794,9 +750,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
-        // act
         const theme = themeManager.getOptions('series', {});
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.mainSeriesColor, defaultColor);
@@ -900,7 +854,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#000000',
@@ -920,9 +873,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
-        // act
         const theme = themeManager.getOptions('series', { type: 'bar' });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.visible, true);
@@ -942,13 +893,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme when there is bar point options', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'bar',
             color: '#000000',
@@ -998,7 +948,6 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.color, '#222220', 'Theme color should be like point color');
@@ -1016,13 +965,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme when there is bubble point options', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'bubble',
             color: '#000000',
@@ -1072,7 +1020,6 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.color, '#222220', 'Theme color should be like point color');
@@ -1090,7 +1037,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings field', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#000000',
@@ -1107,9 +1053,8 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', { type: 'bar' });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.color, '#000000', 'Theme color should be correct');
@@ -1127,7 +1072,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings point field', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 point: {
@@ -1140,9 +1084,8 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', { type: 'bar' });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.point.color, '#000000', 'Theme point color should be correct');
@@ -1154,7 +1097,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings series and point field', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#111110',
@@ -1171,9 +1113,8 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', { type: 'bar' });
-        // assert series theme
 
         assert.ok(theme);
         assert.equal(theme.point.color, '#000000', 'Theme point color should be correct');
@@ -1207,13 +1148,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Check visible option for scatter. Series visible = true', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: true,
@@ -1221,7 +1161,6 @@ function createThemeManager(options, themeGroupName) {
                 visible: false
             }
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(theme.visible, 'series visibility');
@@ -1229,13 +1168,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Check visible option for scatter. Series visible = false', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
-        // act
+
         const theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: false,
@@ -1243,7 +1181,6 @@ function createThemeManager(options, themeGroupName) {
                 visible: true
             }
         });
-        // assert series theme
 
         assert.ok(theme);
         assert.ok(!theme.visible, 'series visibility');
@@ -1251,7 +1188,6 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Theme chart manager for custom theme group', function(assert) {
-        // arrange
         themeModule.registerTheme({
             name: 'RangeSelectorChartTheme',
             rangeSelector: {
@@ -1260,17 +1196,16 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         }, 'default');
-        // act
+
         const options = {
             theme: 'RangeSelectorChartTheme'
         };
         const themeManager = createThemeManager(options, 'rangeSelector.chart');
         themeManager.setTheme(options.theme);
         const theme = themeManager.theme();
-        // assert
+
         assert.ok(theme.test);
     });
-
 })();
 
 (function chart() {
@@ -1278,7 +1213,6 @@ function createThemeManager(options, themeGroupName) {
     QUnit.module('Theme Manager - pie theme');
 
     QUnit.test('applyPieSeriesTheme with userOptions & commonSettings & commonUserSettings. B237181', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 pie: {
@@ -1309,7 +1243,7 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         };
-        // act
+
         const theme = themeManager.getOptions('series',
             {
                 type: 'pie',
@@ -1317,7 +1251,7 @@ function createThemeManager(options, themeGroupName) {
                     color: '#ffffff'
                 }
             }, true);
-        // assert pie theme
+
         assert.ok(theme, 'Theme are created');
 
         assert.ok(theme.border.visible, 'Border visibility was applied');
@@ -1330,12 +1264,11 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('applyPieSeriesTheme, type - donut', function(assert) {
-        // arrange
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', { type: 'donut' }, true);
-        // assert pie theme
+
         assert.ok(theme);
         assert.ok(!theme.border.visible);
         assert.equal(theme.border.width, 2);
@@ -1351,12 +1284,11 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('applyPieSeriesTheme, type - doughnut', function(assert) {
-        // arrange
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
-        // act
+
         const theme = themeManager.getOptions('series', { type: 'doughnut' }, true);
-        // assert pie theme
+
         assert.ok(theme);
         assert.ok(!theme.border.visible);
         assert.equal(theme.border.width, 2);
@@ -1372,10 +1304,9 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('applyPieSeriesTheme, donut theme equal doughnut theme', function(assert) {
-        // arrange
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
-        // act
+
         const doughnutTheme = themeManager.getOptions('series', { type: 'doughnut' }, true);
         const donutTheme = themeManager.getOptions('series', { type: 'donut' }, true);
 
@@ -1390,12 +1321,10 @@ function createThemeManager(options, themeGroupName) {
         doughnutTheme.mainSeriesColor = null,
         donutTheme.mainSeriesColor = null;
 
-        // assert pie theme
         assert.deepEqual(donutTheme, doughnutTheme, 'Donut theme should be equal doughnut theme');
     });
 
     QUnit.test('applyPieSeriesTheme, type in root', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             commonSeriesSettings: {
                 pie: {
@@ -1427,14 +1356,14 @@ function createThemeManager(options, themeGroupName) {
                 }
             }
         };
-        // act
+
         const theme = themeManager.getOptions('series',
             {
                 border: {
                     color: '#ffffff'
                 }
             }, true);
-        // assert pie theme
+
         assert.ok(theme, 'Theme are created');
 
         assert.ok(theme.border.visible, 'Border visibility was applied');
@@ -1469,14 +1398,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('series options for pie. mainSeriesColor. resetPalette', function(assert) {
-        // arrange
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
             palette: 'office'
         });
         const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
-        // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
         assert.strictEqual(seriesSettings.mainSeriesColor('b', 2), '#ba4d51');
         themeManager.resetPalette();
@@ -1487,14 +1414,12 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('series options for pie. mainSeriesColor', function(assert) {
-        // arrange
         const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
             palette: 'office'
         });
         const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
-        // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
         assert.strictEqual(seriesSettings.mainSeriesColor('b', 2), '#ba4d51');
 
@@ -1503,28 +1428,24 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             palette: ['red', 'green'],
         }, 'pie');
         themeManager.setTheme({});
         const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
-        // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1, 3), 'red');
         assert.strictEqual(seriesSettings.mainSeriesColor('b', 2, 3), 'green');
         assert.strictEqual(seriesSettings.mainSeriesColor('c', 3, 3), '#804000');
     });
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor. numeric argument', function(assert) {
-        // arrange
         const themeManager = createThemeManager({
             palette: ['red', 'green'],
         }, 'pie');
         themeManager.setTheme({});
         const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
-        // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor(0, 1, 3), 'red');
         assert.strictEqual(seriesSettings.mainSeriesColor(1, 0, 3), 'green');
     });
@@ -1538,10 +1459,8 @@ function createThemeManager(options, themeGroupName) {
 
         themeManager.palette.dispose = function() { paletteDisposed = true; };
 
-        // act
         themeManager.dispose();
 
-        // assert
         assert.ok(paletteDisposed);
         assert.strictEqual(themeManager.palette, null);
         assert.strictEqual(themeManager._theme, null);
@@ -1571,22 +1490,18 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Do not patch theme', function(assert) {
-        // act
         const options = { theme: 'rtlTheme' };
         const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
 
-        // assert
         assert.deepEqual(themeManager.getOptions('someOption'), { rtl: false });
     });
 
     QUnit.test('Patch theme based on user options', function(assert) {
-        // act
         const options = { theme: 'rtlTheme', rtlEnabled: true };
         const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme, true);
 
-        // assert
         assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 
@@ -1606,12 +1521,10 @@ function createThemeManager(options, themeGroupName) {
             }
         }, 'generic');
 
-        // act
         const options = { theme: 'rtlTheme1' };
         const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
 
-        // assert
         assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 
@@ -1631,12 +1544,10 @@ function createThemeManager(options, themeGroupName) {
             }
         }, 'generic');
 
-        // act
         const options = { theme: 'rtlTheme1', rtlEnabled: false };
         const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme, false);
 
-        // assert
         assert.deepEqual(themeManager.getOptions('someOption'), { rtl: false });
     });
 
@@ -1658,10 +1569,9 @@ function createThemeManager(options, themeGroupName) {
 
         const themeManager = createThemeManager({ theme: 'rtlTheme' });
         themeManager.setTheme('rtlTheme1');
-        // act
+
         themeManager.setTheme('rtlTheme1');
 
-        // assert
         assert.deepEqual(themeManager.getOptions('someOption'), { rtl: true });
     });
 }());
@@ -1714,7 +1624,6 @@ function createThemeManager(options, themeGroupName) {
             };
         },
         afterEach: function() {
-
         }
     });
 
@@ -2092,10 +2001,8 @@ function createThemeManager(options, themeGroupName) {
         }));
         themeManager.setTheme('getOptionsTheme');
 
-        // act
         const result = themeManager.getOptions('valueAxis', {});
 
-        // assert
         assert.ok(result.label, 'Axis have option label');
         assert.ok(result.label.userAlignment, 'option label have flag userAlignment');
         assert.ok(result.label, 'Axis have option label');
@@ -2105,14 +2012,14 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('set label alignment in axisSettings ', function(assert) {
         const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
-        // act
+
         const result = themeManager.getOptions('valueAxis', {
             label: {
                 rotationAngle: -90,
                 alignment: 'right'
             }
         });
-        // assert
+
         assert.ok(result.label, 'Axis have option label');
         assert.ok(result.label.userAlignment, 'option label have flag userAlignment');
         assert.ok(result.label, 'Axis have option label');

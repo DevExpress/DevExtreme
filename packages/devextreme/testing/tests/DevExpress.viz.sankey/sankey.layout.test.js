@@ -7,6 +7,7 @@ import { createSankey, environment } from './commonParts/common.js';
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
 import dxSankey from 'viz/sankey/sankey';
+
 const TitleOrig = titleModule.Title;
 const ExportMenuOrig = exportModule.ExportMenu;
 
@@ -116,7 +117,6 @@ QUnit.test('hide title', function(assert) {
     assert.deepEqual(this.nodes()[1].attr.firstCall.args[0], { _name: 'Z', width: 15, height: 600, x: 785, y: 0 });
     assert.ok(this.title.freeSpace.called);
 });
-
 
 QUnit.test('hide export menu', function(assert) {
     this.export.stub('layoutOptions').returns({

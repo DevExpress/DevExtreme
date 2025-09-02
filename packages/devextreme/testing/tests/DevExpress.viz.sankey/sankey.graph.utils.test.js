@@ -36,7 +36,6 @@ QUnit.test('Vertices extracting from links', function(assert) {
     assert.deepEqual(['A', 'B'], vertices);
 });
 
-
 QUnit.test('Adjacent vertices extracting from links', function(assert) {
     let links = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2]];
     let vertices = logicModule.getAdjacentVertices(links, 'A');

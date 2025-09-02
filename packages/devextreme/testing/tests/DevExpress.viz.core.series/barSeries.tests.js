@@ -5,8 +5,9 @@ import {
 import Color from 'color';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { MockAxis, MockTranslator } from '../../helpers/chartMocks.js';
+
+const Series = SeriesModule.Series;
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -103,7 +104,6 @@ const environment = {
     }
 };
 
-
 const checkTwoGroups = function(assert, series) {
     const parentGroup = series._group;
     const renderer = series._renderer;
@@ -188,9 +188,7 @@ QUnit.test('Draw without data', function(assert) {
         type: seriesType,
         point: { visible: false }
     });
-    // act
     series.draw(false);
-    // assert
 
     checkGroups(assert, series);
 });
@@ -206,9 +204,8 @@ QUnit.test('Draw simple data without animation', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(false);
-    // assert
+
     checkGroups(assert, series);
 
     assert.deepEqual(series._markersGroup._stored_settings.scaleX, 1);
@@ -219,7 +216,6 @@ QUnit.test('Draw simple data without animation', function(assert) {
     $.each(series._points, function(i, p) {
         assert.equal(p.animate.callCount, 0, i + ' point draw without animate');
     });
-
 });
 
 QUnit.test('Draw simple data with animation. first draw', function(assert) {
@@ -233,10 +229,9 @@ QUnit.test('Draw simple data with animation. first draw', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
 
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -262,7 +257,6 @@ QUnit.test('Draw simple data with animation. first draw', function(assert) {
 
     assert.equal(series._labelsGroup.stub('animate').lastCall.args[0].opacity, 1);
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
-
 });
 
 QUnit.test('Draw simple data with animation. draw after draw without data', function(assert) {
@@ -277,9 +271,8 @@ QUnit.test('Draw simple data with animation. draw after draw without data', func
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -305,7 +298,6 @@ QUnit.test('Draw simple data with animation. draw after draw without data', func
 
     assert.equal(series._labelsGroup.stub('animate').lastCall.args[0].opacity, 1);
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
-
 });
 
 QUnit.test('Draw simple data with animation. first draw. Rotated', function(assert) {
@@ -320,10 +312,9 @@ QUnit.test('Draw simple data with animation. first draw. Rotated', function(asse
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
 
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -349,7 +340,6 @@ QUnit.test('Draw simple data with animation. first draw. Rotated', function(asse
 
     assert.equal(series._labelsGroup.stub('animate').lastCall.args[0].opacity, 1);
     assert.deepEqual(series._labelsGroup.stub('animate').lastCall.args[1], { duration: 400 });
-
 });
 
 QUnit.test('Draw simple data with animation. second draw', function(assert) {
@@ -364,11 +354,10 @@ QUnit.test('Draw simple data with animation. second draw', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
 
     series.draw(true);
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -416,9 +405,8 @@ QUnit.module('Bar. Points animation', {
 
 QUnit.test('Draw without animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(false);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -429,10 +417,9 @@ QUnit.test('Draw without animation', function(assert) {
 
 QUnit.test('Draw with animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(true);
     series.draw(true);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledTwice);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -461,11 +448,10 @@ QUnit.test('Draw aggregated points with animation', function(assert) {
         this._points = aggregatedPoints;
         this._lastPointIndex = aggregatedPoints.length - 1;
     };
-    // act
     series.resamplePoints();
     series.draw(true);
     series.draw(true);
-    // assert
+
     assert.ok(series._points.length);
     $.each(series._originalPoints, function(i, p) {
         assert.ok(!p.draw.calledOnce);

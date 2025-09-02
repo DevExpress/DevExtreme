@@ -10,9 +10,7 @@ import rendererModule from 'viz/core/renderers/renderer';
 import translator2DModule from 'viz/translators/translator2d';
 import tooltipModule from 'viz/core/tooltip';
 import BaseWidget from '__internal/viz/core/m_base_widget';
-
 import 'viz/bullet';
-
 
 let StubTranslator;
 const StubTooltip = Tooltip;
@@ -1114,7 +1112,7 @@ QUnit.module('drawn', {
 });
 
 QUnit.test('call drawn in BaseWidget', function(assert) {
-    // arrange
+
     this.createBullet({});
 
     assert.strictEqual(BaseWidget.prototype._drawn.calledOnce, true);

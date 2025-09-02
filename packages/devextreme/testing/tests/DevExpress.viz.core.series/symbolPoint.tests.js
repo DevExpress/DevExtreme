@@ -220,7 +220,6 @@ QUnit.test('Null value', function(assert) {
 });
 
 QUnit.test('create point with index', function(assert) {
-
     const point = createPoint(this.series, { argument: 'cat5', value: 10, index: 'index' }, this.opt);
 
     assert.strictEqual(point.index, 'index');
@@ -293,9 +292,8 @@ QUnit.test('Point has datetime value - do correction', function(assert) {
 QUnit.test('Reset correction', function(assert) {
     const point = createPoint(this.series, this.data, this.options);
     point.correctValue(12);
-    // act
     point.resetCorrection();
-    // assert
+
     assert.equal(point.value, 10);
     assert.equal(point.properValue, 10);
     assert.equal(point.minValue, 'canvas_position_default');
@@ -504,7 +502,6 @@ QUnit.test('Positive', function(assert) {
     const result = point.hasValue();
 
     assert.strictEqual(result, true);
-
 });
 
 QUnit.test('Negative', function(assert) {
@@ -1063,16 +1060,13 @@ QUnit.test('double drawing without animation', function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    // act
     point.draw(this.renderer, this.groups, false);
-    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
 
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateX, 20);
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateY, 50);
-
 });
 
 QUnit.test('double drawing with animation', function(assert) {
@@ -1090,16 +1084,13 @@ QUnit.test('double drawing with animation', function(assert) {
     point.y = 50,
     point.defaultY = 0;
     point.visible = true;
-    // act
     point.draw(this.renderer, this.groups, true);
-    // assert
 
     assert.ok(point);
     assert.ok(point.graphic);
 
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateX, undefined);
     assert.equal(point.graphic.stub('attr').lastCall.args[0].translateY, undefined);
-
 });
 
 QUnit.test('Animate point', function(assert) {
@@ -1121,7 +1112,6 @@ QUnit.test('Animate point', function(assert) {
 
     assert.ok(!point.graphic.stub('animate').lastCall.args[2]);
     assert.equal(point.graphic.stub('append').lastCall.args[0], this.group);
-
 });
 
 QUnit.test('Animate point with complete', function(assert) {
@@ -1138,9 +1128,8 @@ QUnit.test('Animate point with complete', function(assert) {
 
     point.animate(stubComplete, { translate: { x: point.x, y: point.y } });
     const complete = point.graphic.stub('animate').lastCall.args[2];
-    // act
     complete();
-    // assert
+
     assert.ok(stubComplete.calledOnce);
 });
 
@@ -1186,9 +1175,8 @@ QUnit.test('Hide error bar', function(assert) {
 
     point.translate();
     point.draw(this.renderer, this.groups);
-    // act
     point.setInvisibility();
-    // assert
+
     assert.ok(point.graphic);
     assert.strictEqual(this.renderer.path.callCount, 1);
     assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0], {
@@ -1257,7 +1245,6 @@ QUnit.test('Draw only low errorBar. Rotated', function(assert) {
 
     assert.ok(point.graphic);
 
-
     assert.strictEqual(this.renderer.path.callCount, 1);
     assert.deepEqual(this.renderer.path.lastCall.args[0], [[24, 11, 22, 11], [24, 7, 24, 15]]);
 });
@@ -1275,7 +1262,6 @@ QUnit.test('Draw only high errorBar when defined only highError', function(asser
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
-
 
     assert.strictEqual(this.renderer.path.callCount, 1);
 
@@ -1374,7 +1360,6 @@ QUnit.test('No draw errorBar when defined only highError and display low only', 
 
     assert.ok(point.graphic);
     assert.strictEqual(this.renderer.stub('path').callCount, 0);
-
 });
 
 QUnit.test('No draw errorBar when displayMode is \'none\'', function(assert) {
@@ -1958,7 +1943,6 @@ QUnit.test('Update errorBars', function(assert) {
         points: [[11, 23, 11, 23], [11, 23, 11, 22], [11, 22, 11, 22]],
         visibility: 'visible'
     });
-
 });
 
 QUnit.test('Update errorBars - hide errorBar', function(assert) {
@@ -3214,7 +3198,6 @@ QUnit.test('Get navigator', function(assert) {
 
     assert.equal(point.__debug_browserNavigator, window.navigator);
 });
-
 
 QUnit.test('Tracker on ms devices with point.r < minTrackerSize. msPointer', function(assert) {
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);

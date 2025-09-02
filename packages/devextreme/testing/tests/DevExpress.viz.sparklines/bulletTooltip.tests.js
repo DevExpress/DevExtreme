@@ -231,7 +231,6 @@ QUnit.test('Default template should be used when customizeTooltip is not specifi
     });
 });
 
-
 QUnit.test('Default tooltip template should have valid text align when rtl is enabled', function(assert) {
     const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
     const templateArg = { valueText: ['Cell11', 'Cell12', 'Cell21', 'Cell22'] };

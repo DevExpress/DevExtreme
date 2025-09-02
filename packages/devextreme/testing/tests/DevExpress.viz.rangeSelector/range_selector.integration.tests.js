@@ -406,7 +406,6 @@ QUnit.module('onValueChanged event', function(assert) {
         assert.strictEqual(valueChanged.callCount, 1);
     });
 
-
     QUnit.test('Triggered only once on axis\' date marker click', function(assert) {
         const valueChanged = sinon.spy();
         $('#container').width(600).dxRangeSelector({
@@ -457,7 +456,6 @@ QUnit.module('onValueChanged event', function(assert) {
 
     // T717643
     QUnit.test('Do not rise valueChanged handler on change scale range', function(assert) {
-        // arrange
         const eventHandler = sinon.stub();
         const rangeSelector = $('#container').dxRangeSelector({
             scale: {
@@ -467,14 +465,11 @@ QUnit.module('onValueChanged event', function(assert) {
             onValueChanged: eventHandler
         }).dxRangeSelector('instance');
 
-
         rangeSelector.option('scale.endValue', 25000);
         eventHandler.reset();
 
-        // act
         rangeSelector.option('scale.endValue', 40000000);
 
-        // assert
         assert.strictEqual(eventHandler.callCount, 0);
     });
 });
@@ -550,7 +545,6 @@ QUnit.test('Range selector with aggregation when dataSource is set after widget 
         }
     }).dxRangeSelector('instance');
 
-    // act
     rangeSelector.option({
         dataSource: [
             { arg: 53, val: 1 },

@@ -4,9 +4,10 @@ import {
 } from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 import { noop } from 'core/utils/common';
+
+const Series = SeriesModule.Series;
 
 const originalPoint = pointModule.Point;
 let seriesType;
@@ -432,9 +433,9 @@ const environmentWithSinonStubPoint = {
             type: seriesType,
             point: { visible: false }
         });
-        // act
+
         series.draw(false);
-        // assert
+
         assert.equal(this.renderer.stub('path').callCount, 0);
     });
 
@@ -455,9 +456,9 @@ const environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         assert.equal(this.renderer.stub('path').callCount, 3);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
         assert.equal(this.renderer.stub('path').getCall(1).args[1], 'area');
@@ -483,7 +484,7 @@ const environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(false);
-        // act
+
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }]);
         series.createPoints();
         $.each(series._points, function(i, pt) {
@@ -495,7 +496,7 @@ const environmentWithSinonStubPoint = {
         });
 
         series.draw(false);
-        // assert
+
         assert.equal(this.renderer.stub('path').callCount, 3);
 
         let element = this.renderer.stub('path').getCall(0).returnValue;
@@ -554,9 +555,9 @@ const environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
             sinon.spy(pt, 'draw');
         });
-        // act
+
         series.draw(true);
-        // assert
+
         assert.equal(this.renderer.stub('path').callCount, 3);
 
         const element = this.renderer.stub('path').getCall(0).returnValue;
@@ -579,7 +580,6 @@ const environmentWithSinonStubPoint = {
         assert.equal(bottomAnimatePoints[1].y, 0);
         assert.equal(bottomAnimatePoints[2].x, 3);
         assert.equal(bottomAnimatePoints[2].y, 0);
-
 
         $.each(series.getPoints(), function(i, pt) {
             assert.deepEqual(pt.draw.lastCall.args.length, 2);
@@ -616,7 +616,6 @@ const environmentWithSinonStubPoint = {
         const element5 = this.renderer.stub('path').getCall(4).returnValue;
         const element6 = this.renderer.stub('path').getCall(5).returnValue;
 
-        // act
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {
@@ -627,7 +626,7 @@ const environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         series.draw(true);
-        // assert
+
         assert.equal(this.renderer.stub('path').callCount, 6);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
         assert.equal(this.renderer.stub('path').getCall(1).args[1], 'area');

@@ -179,12 +179,9 @@ QUnit.test('Draw without data', function(assert) {
         point: { visible: false }
 
     });
-    // act
     series.draw(false);
-    // assert
 
     checkGroups(assert, series);
-
 });
 
 QUnit.test('Draw simple data without animation', function(assert) {
@@ -199,9 +196,8 @@ QUnit.test('Draw simple data without animation', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(false);
-    // assert
+
     checkGroups(assert, series);
 
     $.each(series._points, function(i, p) {
@@ -221,9 +217,8 @@ QUnit.test('Draw simple data with animation', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -263,9 +258,8 @@ QUnit.module('Bubble. Points animation', {
 
 QUnit.test('Draw without animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(false);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -276,9 +270,8 @@ QUnit.test('Draw without animation', function(assert) {
 
 QUnit.test('Draw with animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(true);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -847,7 +840,6 @@ QUnit.test('areErrorBarsVisible', function(assert) {
             displayMode: 'all'
         }
     }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
 });
 
 QUnit.module('Null points', {

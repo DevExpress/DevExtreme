@@ -1,4 +1,5 @@
 import '../../../helpers/trackerMock.js';
+import 'viz/chart';
 
 import $ from 'jquery';
 import {
@@ -41,24 +42,19 @@ const ScrollBarClass = scrollBarClassModule.ScrollBar;
 const LabelCtor = new ObjectPool(Label);
 const tooltipOrig = tooltipModule.Tooltip;
 
-export { LabelCtor };
-export { rendererModule };
-
 function stubExport() {
-    const that = this;
-    that.export = new ExportMenu();
-    that.export.stub('measure').returns([0, 0]);
-    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
-        return that.export;
+    this.export = new ExportMenu();
+    this.export.stub('measure').returns([0, 0]);
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(() => {
+        return this.export;
     }));
 }
 
-stubExport.bind(this)();
+stubExport.call(this);
 
 Element.prototype.updateRectangle = sinon.spy(Element.prototype.updateRectangle);
 
 const categories = ['First', 2005, 'Last'];
-export { categories };
 
 const baseEnvironment = {
     beforeEach: function() {
@@ -118,28 +114,23 @@ const resetModules = function() {
     exportModule.ExportMenu.resetHistory();
     titleModule.Title.resetHistory();
 };
-export { resetModules };
 
 // stubs getters
 function getTitleStub() {
     return titleModule.Title.lastCall.returnValue;
 }
-export { getTitleStub };
 
 function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
 }
-export { getLegendStub };
 
 function getTrackerStub(isPie) {
     return trackerModule[isPie ? 'PieTracker' : 'ChartTracker'].lastCall.returnValue;
 }
-export { getTrackerStub };
 
 function createChartInstance(options, chartContainer) {
     return chartContainer.dxChart(options).dxChart('instance');
 }
-export { createChartInstance };
 
 function setupMocks($container) {
     $container.width(300);
@@ -294,8 +285,6 @@ const environment = {
         this.tooltip = null;
 
         tooltipModule.DEBUG_set_tooltip(null);
-
-
     },
     mockValidateData: function() {
         this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
@@ -315,6 +304,14 @@ const environment = {
     }
 };
 
-import 'viz/chart';
-
-export { environment };
+export {
+    LabelCtor,
+    categories,
+    rendererModule,
+    environment,
+    resetModules,
+    getTitleStub,
+    getLegendStub,
+    getTrackerStub,
+    createChartInstance,
+};

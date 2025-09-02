@@ -26,10 +26,9 @@ const environment = {
 QUnit.module('registerPalette', environment);
 
 QUnit.test('Register palette', function(assert) {
-    // act
+
     this.registerPalette('Custom Palette', ['red', 'green', 'blue']);
 
-    // assert
     assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['red', 'green', 'blue'], accentColor: 'red' });
 });
 
@@ -49,11 +48,10 @@ QUnit.test('Register palette (new style)', function(assert) {
 });
 
 QUnit.test('Register palette with same name', function(assert) {
-    // act
+
     this.registerPalette('Custom Palette', ['red', 'green', 'blue']);
     this.registerPalette('Custom Palette', ['black', 'grey']);
 
-    // assert
     assert.deepEqual(this.palettes['custom palette'], { simpleSet: ['black', 'grey'], accentColor: 'black' });
 });
 
@@ -188,13 +186,10 @@ QUnit.module('Palette', $.extend({}, environment, {
 }));
 
 QUnit.test('Disposing', function(assert) {
-    // arrange
     const palette = this.createPalette(['green', 'red'], { useHighlight: true });
 
-    // act
     palette.dispose();
 
-    // assert
     assert.strictEqual(palette._extensionStrategy, null);
 });
 
@@ -232,10 +227,8 @@ QUnit.test('Custom palette by array', function(assert) {
 });
 
 QUnit.test('Lightening palette', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
     assert.strictEqual(palette.getNextColor(), '#32b232');
@@ -243,10 +236,8 @@ QUnit.test('Lightening palette', function(assert) {
 });
 
 QUnit.test('Darkening palette after lightening', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
 
@@ -261,10 +252,8 @@ QUnit.test('Darkening palette after lightening', function(assert) {
 });
 
 QUnit.test('Extrapolate without passing count', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -272,10 +261,8 @@ QUnit.test('Extrapolate without passing count', function(assert) {
 });
 
 QUnit.test('Extrapolate with passing count', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(6), '#007300');
     assert.strictEqual(palette.getNextColor(6), '#e60000');
     assert.strictEqual(palette.getNextColor(6), '#008000');
@@ -285,22 +272,17 @@ QUnit.test('Extrapolate with passing count', function(assert) {
 });
 
 QUnit.test('Blend without passing count', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
     assert.strictEqual(palette.getNextColor(), 'yellow');
     assert.strictEqual(palette.getNextColor(), 'green');
 });
 
-
 QUnit.test('Blend with passing count', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(6), 'green');
     assert.strictEqual(palette.getNextColor(6), '#804000');
     assert.strictEqual(palette.getNextColor(6), 'red');
@@ -310,12 +292,10 @@ QUnit.test('Blend with passing count', function(assert) {
 });
 
 QUnit.test('Recalculate palette if extension count is changed', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
     palette.getNextColor(6);
     palette.reset();
 
-    // assert
     assert.strictEqual(palette.getNextColor(8), 'green');
     assert.strictEqual(palette.getNextColor(8), '#555500');
     assert.strictEqual(palette.getNextColor(8), '#aa2b00');
@@ -327,10 +307,8 @@ QUnit.test('Recalculate palette if extension count is changed', function(assert)
 });
 
 QUnit.test('Blend with passing count. Keep last color in the end', function(assert) {
-    // act
     const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend', keepLastColorInEnd: true });
 
-    // assert
     assert.strictEqual(palette.getNextColor(6), 'green');
     assert.strictEqual(palette.getNextColor(6), '#555500');
     assert.strictEqual(palette.getNextColor(6), '#aa2b00');
@@ -340,19 +318,15 @@ QUnit.test('Blend with passing count. Keep last color in the end', function(asse
 });
 
 QUnit.test('Lightening palette when color is too light', function(assert) {
-    // act
     const palette = this.createPalette(['white'], { useHighlight: true, extensionMode: 'Alternate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'white');
     assert.strictEqual(palette.getNextColor(), '#e6e6e6');
 });
 
 QUnit.test('Darken palette when color is too dark', function(assert) {
-    // act
     const palette = this.createPalette(['black'], { useHighlight: true, extensionMode: 'alternate' });
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'black');
     assert.strictEqual(palette.getNextColor(), '#000000');
     assert.strictEqual(palette.getNextColor(), '#191919');
@@ -360,16 +334,13 @@ QUnit.test('Darken palette when color is too dark', function(assert) {
 });
 
 QUnit.test('Reset palette', function(assert) {
-    // arrange
     const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
     palette.getNextColor();
     palette.getNextColor();
     palette.getNextColor();
 
-    // act
     palette.reset();
 
-    // assert
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
 
@@ -607,7 +578,6 @@ QUnit.test('Create palette with current case', function(assert) {
     const p = this.createPalette(undefined, { extensionMode: 'alternate' });
 
     assert.strictEqual(p.getNextColor(), 'c1');
-
 });
 
 QUnit.module('generateColors', environment);

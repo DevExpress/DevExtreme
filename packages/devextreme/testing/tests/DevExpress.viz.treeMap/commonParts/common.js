@@ -9,13 +9,12 @@ import rendererModule from 'viz/core/renderers/renderer';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
+// Load TreeMap module
+import 'viz/tree_map/tree_map.base';
 
 titleModule.DEBUG_set_title(Title);
 tooltipModule.DEBUG_set_tooltip(Tooltip);
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
-
-// Load TreeMap module
-import 'viz/tree_map/tree_map.base';
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 $('#test-container').css({ width: '600px', height: '400px' });

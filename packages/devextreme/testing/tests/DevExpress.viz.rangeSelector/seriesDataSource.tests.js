@@ -136,7 +136,7 @@ QUnit.test('theme manager', function(assert) {
 
 // B253717
 QUnit.test('datetime in chart valueAxis', function(assert) {
-    // arrange
+
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { y: new Date(1980, 5, 17), x: new Date(1980, 5, 18) },
@@ -156,7 +156,7 @@ QUnit.test('datetime in chart valueAxis', function(assert) {
         argumentAxis: this.argumentAxis
     });
 
-    // act
+
     const range = seriesDataSource.getBoundRange();
 
     assert.strictEqual(range.val.min.toUTCString(), (new Date(1980, 5, 11)).toUTCString());
@@ -364,7 +364,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent', function(assert) {
             topIndent: 0.2,
             bottomIndent: 0.1,
             series: {
-
             }
         },
         renderer: new Renderer(),
@@ -391,7 +390,6 @@ QUnit.test('getBoundRange with topIndent>1, bottomIndent<0', function(assert) {
             topIndent: 1.2,
             bottomIndent: -0.1,
             series: {
-
             }
         },
         renderer: new Renderer(),
@@ -440,7 +438,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis min', function
                 min: 100
             },
             series: {
-
             }
         },
         renderer: new Renderer(),
@@ -1254,7 +1251,6 @@ QUnit.test('Calculated valueType - numeric', function(assert) {
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'numeric');
-
 });
 
 QUnit.test('Calculated valueType - datetime', function(assert) {
@@ -1277,7 +1273,6 @@ QUnit.test('Calculated valueType - datetime', function(assert) {
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'datetime');
-
 });
 
 QUnit.test('Calculated valueType - string', function(assert) {
@@ -1300,7 +1295,6 @@ QUnit.test('Calculated valueType - string', function(assert) {
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'string');
-
 });
 
 QUnit.test('seriesDataSource with bubbleSize option', function(assert) {
@@ -1444,7 +1438,7 @@ QUnit.test('Create series points before series families processing', function(as
 QUnit.module('Merge marginOptions', environment);
 
 QUnit.test('Return max size', function(assert) {
-    // arrange
+
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
@@ -1462,7 +1456,7 @@ QUnit.test('Return max size', function(assert) {
         renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
 
     assert.deepEqual(marginOptions, {
@@ -1474,7 +1468,7 @@ QUnit.test('Return max size', function(assert) {
 });
 
 QUnit.test('If there is bar series return checkInterval option', function(assert) {
-    // arrange
+
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
@@ -1492,7 +1486,7 @@ QUnit.test('If there is bar series return checkInterval option', function(assert
         renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
 
     assert.deepEqual(marginOptions, {
@@ -1504,7 +1498,7 @@ QUnit.test('If there is bar series return checkInterval option', function(assert
 });
 
 QUnit.test('Calculate size for bubble - height < width', function(assert) {
-    // arrange
+
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
@@ -1522,7 +1516,7 @@ QUnit.test('Calculate size for bubble - height < width', function(assert) {
         renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 50 });
 
     assert.deepEqual(marginOptions, {
@@ -1534,7 +1528,7 @@ QUnit.test('Calculate size for bubble - height < width', function(assert) {
 });
 
 QUnit.test('Calculate size for bubble - height > width', function(assert) {
-    // arrange
+
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
@@ -1552,7 +1546,7 @@ QUnit.test('Calculate size for bubble - height > width', function(assert) {
         renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 150 });
 
     assert.deepEqual(marginOptions, {

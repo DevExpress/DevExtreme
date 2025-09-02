@@ -9,6 +9,7 @@ import 'viz/funnel/funnel';
 import 'viz/themes';
 
 export const stubAlgorithm = { normalizeValues: sinon.stub(), getFigures: sinon.stub() };
+
 tiling.addAlgorithm('stub', stubAlgorithm);
 
 QUnit.testStart(function() {

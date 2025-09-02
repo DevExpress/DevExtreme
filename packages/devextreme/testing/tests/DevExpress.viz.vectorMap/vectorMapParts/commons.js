@@ -19,6 +19,13 @@ import legendModule from 'viz/vector_map/legend';
 import layoutModule from 'viz/vector_map/layout';
 import mapLayerModule from 'viz/vector_map/map_layer';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
+import rendererModule from 'viz/core/renderers/renderer';
+import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
+import tooltipModule from 'viz/core/tooltip';
+import { implementationsMap } from 'core/utils/size';
+
+import 'viz/vector_map';
 
 const StubProjection = stubClass(projectionModule.Projection);
 const StubControlBar = stubClass(controlBarModule.ControlBar);
@@ -30,15 +37,6 @@ const StubLegendsControl = stubClass(legendModule.LegendsControl);
 const StubLayoutControl = stubClass(layoutModule.LayoutControl);
 const StubMapLayerCollection = stubClass(mapLayerModule.MapLayerCollection);
 const StubTooltipViewer = stubClass(tooltipViewerModule.TooltipViewer);
-
-import rendererModule from 'viz/core/renderers/renderer';
-import titleModule from 'viz/core/title';
-import exportModule from 'viz/core/export';
-import tooltipModule from 'viz/core/tooltip';
-import { implementationsMap } from 'core/utils/size';
-
-import 'viz/vector_map';
-
 const StubExportMenu = stubClass(exportModule.ExportMenu);
 
 export function returnValue(value) {
@@ -51,9 +49,6 @@ StubThemeManager.prototype.setTheme = function() {
 
 function stubComponentConstructors(test) {
     rendererModule.Renderer = returnValue(test.renderer);
-    // $.extend(DevExpress.viz, {
-    //     LoadingIndicator: returnValue(test.loadingIndicator)
-    // });
     titleModule.DEBUG_set_title(returnValue(test.title));
     tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
     exportModule.DEBUG_set_ExportMenu(returnValue(test.exportMenu));

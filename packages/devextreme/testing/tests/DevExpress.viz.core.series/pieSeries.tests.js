@@ -6,6 +6,7 @@ import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
+
 const Series = SeriesModule.Series;
 
 const createSeries = function(options, renderSettings) {
@@ -135,9 +136,8 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
 
@@ -149,9 +149,8 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
 
@@ -163,9 +162,8 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
 
@@ -177,13 +175,12 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.updateData(this.data);
         series.createPoints();
         series.draw(false);
         series.updateData([]);
         series.createPoints();
-        // assert
 
         assert.equal(series._points.length, 0);
         assert.equal(series.getAllPoints().length, 0);
@@ -195,14 +192,13 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 10 }, { arg: 3, val: 4 }]);
         series.createPoints();
         series.draw(false);
         series.updateData([{ arg: 2, val: 10 }, { arg: 3, val: 10 }]);
         series.createPoints();
         series.draw(false);
-        // assert
 
         assert.equal(this.createPoint.callCount, 3);
 
@@ -222,14 +218,13 @@ const checkTwoGroups = function(assert, series) {
             point: { visible: false }
 
         });
-        // act
+
         series.updateData([{ arg: new Date(1000), val: 10 }, { arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 4 }]);
         series.createPoints();
         series.draw(false);
         series.updateData([{ arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 10 }]);
         series.createPoints();
         series.draw(false);
-        // assert
 
         assert.equal(this.createPoint.callCount, 3);
 
@@ -250,7 +245,6 @@ const checkTwoGroups = function(assert, series) {
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
         series.createPoints();
 
-        // assert
         assert.equal(series.getPoints().length, 1);
     });
 
@@ -262,7 +256,6 @@ const checkTwoGroups = function(assert, series) {
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
         series.createPoints();
 
-        // assert
         assert.equal(series.getPoints().length, 1);
     });
 
@@ -274,7 +267,6 @@ const checkTwoGroups = function(assert, series) {
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
         series.createPoints();
 
-        // assert
         assert.equal(series.getPoints().length, 2);
     });
 
@@ -286,7 +278,6 @@ const checkTwoGroups = function(assert, series) {
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
         series.createPoints();
 
-        // assert
         assert.equal(series.getPoints().length, 1);
     });
 
@@ -305,9 +296,9 @@ const checkTwoGroups = function(assert, series) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         checkGroups(assert, series);
 
         $.each(series._points, function(i, p) {
@@ -332,7 +323,6 @@ const checkTwoGroups = function(assert, series) {
 
         series.draw(true);
 
-        // assert
         function assertAnimationArguments(point, duration, delay, completeShouldBePassed) {
             assert.strictEqual(point.animate.callCount, 1, 'animate called');
             if(completeShouldBePassed) {
@@ -372,16 +362,14 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 };
 
-
         series.draw();
         series.updateData([]);
         series.draw();
         series.updateData(this.data);
         series.createPoints();
-        // act
+
         series.draw();
 
-        // assert
         $.each(series.getPoints(), function(i, p) {
             assert.strictEqual(p.draw.getCall(0).args[3], true, 'firstDrawing flag on first call');
         });
@@ -402,10 +390,9 @@ const checkTwoGroups = function(assert, series) {
             p.animate.reset();
             p.draw.reset();
         });
-        // Act
+
         series.draw(true);
 
-        // assert
         $.each(series.getPoints(), function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.strictEqual(p.draw.lastCall.args[0], series._renderer, 'renderer passed to point');
@@ -483,9 +470,9 @@ const checkTwoGroups = function(assert, series) {
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
-        // act
+
         series.draw(false);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -496,12 +483,12 @@ const checkTwoGroups = function(assert, series) {
 
     QUnit.test('Draw with animation', function(assert) {
         const series = this.series;
-        // act
+
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
         series.draw(true);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -512,7 +499,7 @@ const checkTwoGroups = function(assert, series) {
 
     QUnit.test('Draw when some points is invisible', function(assert) {
         const series = this.series;
-        // act
+
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
@@ -521,7 +508,7 @@ const checkTwoGroups = function(assert, series) {
         series._points[2].isVisible.returns(false);
 
         series.draw(true);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -1051,7 +1038,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All defaults', function(assert) {
-        // arrange
         const data = [
             { arg: 1, val: 100 },
             { arg: 2, val: 200 },
@@ -1066,9 +1052,8 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
 
-        // act
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].minValue, 0);
@@ -1083,7 +1068,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All negative', function(assert) {
-        // arrange
         const data = [
             { arg: 1, val: -100 },
             { arg: 2, val: -200 },
@@ -1098,9 +1082,8 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
 
-        // act
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].minValue, 0);
@@ -1115,7 +1098,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All defaults. double arrange points with passed points', function(assert) {
-        // arrange
         const data = [
             { arg: 1, val: 100 },
             { arg: 2, val: 200 },
@@ -1130,9 +1112,9 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
         series.arrangePoints();
-        // act
+
         series.arrangePoints(series._points);
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].minValue, 0);
@@ -1146,7 +1128,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All defaults. arrange after point visibility changed', function(assert) {
-        // arrange
         const data = [
             { arg: 1, val: 100 },
             { arg: 2, val: 200 },
@@ -1166,9 +1147,9 @@ const checkTwoGroups = function(assert, series) {
         points[2].isVisible = function() {
             return false;
         };
-        // act
+
         series.arrangePoints(series.getVisiblePoints());
-        // assert
+
         assert.strictEqual(points[2].value, 1.5);
         assert.strictEqual(points[2].minValue, 0.75);
 
@@ -1184,7 +1165,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Draw zero points', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 10 },
             { arg: 2, val: 20 },
             { arg: 3, val: 0 },
@@ -1194,9 +1174,9 @@ const checkTwoGroups = function(assert, series) {
         const minShownValue = 180 / 40 / 358;
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1215,7 +1195,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Dispose series arrange zero points', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 10 },
             { arg: 2, val: 20 },
             { arg: 3, val: 0 },
@@ -1233,9 +1212,7 @@ const checkTwoGroups = function(assert, series) {
 
         series.arrangePoints();
 
-        // act
         series.dispose();
-        // assert
 
         $.each(points, function(i, p) {
             assert.equal(p.dispose.callCount, 1, i + '-th point');
@@ -1243,7 +1220,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Draw zero points when point invisible', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 10 },
             { arg: 2, val: 20 },
             { arg: 3, val: 0 },
@@ -1256,9 +1232,9 @@ const checkTwoGroups = function(assert, series) {
         series._points[1].isVisible = function() {
             return false;
         };
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1275,7 +1251,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('One point with value and hidden, other points with zero value', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 1 },
             { arg: 2, val: 0 },
             { arg: 3, val: 0 },
@@ -1286,9 +1261,8 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
         series._points[0].isVisible = function() { return false; };
 
-        // act
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 5);
         assert.strictEqual(points[0].minValue, 0);
@@ -1304,7 +1278,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All points with zero value', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 0 },
             { arg: 2, val: 0 },
             { arg: 3, val: 0 },
@@ -1314,9 +1287,8 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
 
-        // act
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5, 'All points should be showed');
@@ -1333,7 +1305,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All points with zero value, minSegmentSize is specify', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 0 },
             { arg: 2, val: 0 },
             { arg: 3, val: 0 },
@@ -1342,9 +1313,9 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints(series.getPoints());
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1362,7 +1333,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All points with zero value, minSegmentSize is specify. Double arrange point', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 0 },
             { arg: 2, val: 0 },
             { arg: 3, val: 0 },
@@ -1372,9 +1342,9 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
         series.arrangePoints();
-        // act
+
         series.arrangePoints(series.getPoints());
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1392,7 +1362,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('minSegmentSize more than 360', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 300 },
             { arg: 2, val: 400 },
             { arg: 3, val: 2 },
@@ -1402,9 +1371,9 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1422,7 +1391,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('minSegmentSize less than 360', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 300 },
             { arg: 2, val: 400 },
             { arg: 3, val: 3 },
@@ -1433,9 +1401,9 @@ const checkTwoGroups = function(assert, series) {
         const minShownValue = 30 * 1400 / 500 / 330;
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
@@ -1452,15 +1420,14 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('minSegmentSize = 360', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 300 },
             { arg: 2, val: 4 }];
         const series = createSeries({ type: seriesType, minSegmentSize: 360 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 2);
@@ -1471,16 +1438,15 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('minSegmentSize = 180', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 300 },
             { arg: 2, val: 400 },
             { arg: 3, val: 3 }];
         const series = createSeries({ type: seriesType, minSegmentSize: 180 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 3);
@@ -1493,7 +1459,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Remove negative points defaults', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 10 },
             { arg: 2, val: 20 },
             { arg: 3, val: -50 },
@@ -1503,9 +1468,8 @@ const checkTwoGroups = function(assert, series) {
         series.updateData(data);
         series.createPoints();
 
-        // act
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 4, 'One point should be removed');
@@ -1522,14 +1486,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Percents are filled', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].percent, 0.10);
@@ -1539,7 +1502,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Percents are filled, one of points has zero value', function(assert) {
-        // arrange
         const data = [
             { arg: 1, val: 300 },
             { arg: 2, val: 0 },
@@ -1549,9 +1511,9 @@ const checkTwoGroups = function(assert, series) {
         const series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].percent, 0.30);
@@ -1561,16 +1523,15 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Percents are filled and last one is corrected to have strict equal to 100', function(assert) {
-        // arrange
         const data = [{ arg: 1, val: 1 },
             { arg: 2, val: 1 },
             { arg: 3, val: 1 }];
         const series = createSeries({ type: seriesType });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 3, 'Every point should be corrected');
         assert.roughEqual(points[0].percent, 0.33333, 0.00001);
@@ -1579,14 +1540,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Direction of segments is anticlockwise', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, segmentsDirection: 'anticlockwise' });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4, 'Every point should be corrected');
         assert.strictEqual(points[0].value, 2.5);
@@ -1600,14 +1560,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('startAngle is defined', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, startAngle: 90 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4);
         assert.strictEqual(points[0].shiftedAngle, 90);
@@ -1617,14 +1576,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('startAngle is not defined', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4);
         assert.strictEqual(points[0].shiftedAngle, 0);
@@ -1634,14 +1592,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('startAngle is negative value', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, startAngle: -90 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4);
         assert.strictEqual(points[0].shiftedAngle, 270);
@@ -1651,14 +1608,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('startAngle is more 360', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, startAngle: 450 });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4);
         assert.strictEqual(points[0].shiftedAngle, 90);
@@ -1668,14 +1624,13 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('startAngle is invalid value', function(assert) {
-        // arrange
         const data = this.data;
         const series = createSeries({ type: seriesType, startAngle: 'test' });
         series.updateData(data);
         series.createPoints();
-        // act
+
         series.arrangePoints();
-        // assert
+
         const points = series.getPoints();
         assert.strictEqual(points.length, 4);
         assert.strictEqual(points[0].shiftedAngle, 0);
@@ -2074,7 +2029,6 @@ const checkTwoGroups = function(assert, series) {
     QUnit.module('adjust labels', environment);
 
     QUnit.test('adjust labels', function(assert) {
-        // arrange
         const series = createSeries();
 
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
@@ -2082,11 +2036,9 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
-        // act
         series.draw();
         series.adjustLabels(true);
 
-        // assert
         $.each(series.getPoints(), function(i, point) {
             assert.ok(point.applyWordWrap.called, 'label ellipsis, point ' + i);
             assert.deepEqual(point.applyWordWrap.lastCall.args, [true], 'move labels from center');
@@ -2097,7 +2049,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('adjust labels, lables has no text', function(assert) {
-        // arrange
         const series = createSeries();
 
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
@@ -2108,11 +2059,9 @@ const checkTwoGroups = function(assert, series) {
         });
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
-        // act
         series.draw();
         series.adjustLabels();
 
-        // assert
         $.each(series.getPoints(), function(i, point) {
             assert.ok(!point.applyWordWrap.called, 'label ellipsis, point ' + i);
             assert.ok(!point.setLabelTrackerData.called, 'label tracker data, point ' + i);
@@ -2121,7 +2070,6 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('adjust labels, position is inside', function(assert) {
-        // arrange
         const series = createSeries();
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
         series.updateData(this.data);
@@ -2131,11 +2079,9 @@ const checkTwoGroups = function(assert, series) {
         });
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
-        // act
         series.draw();
         series.adjustLabels();
 
-        // arrange
         $.each(series.getPoints(), function(i, point) {
             assert.ok(point.applyWordWrap.called, 'label ellipsis, point ' + i);
             assert.ok(point.setLabelTrackerData.called, 'label tracker data, point ' + i);
@@ -2144,7 +2090,7 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('All points with ellipsis', function(assert) {
-        // arrange
+
         mockPoints.forEach(p => {
             p.applyWordWrap = sinon.spy(a => true);
         });
@@ -2155,7 +2101,6 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
-        // act
         series.draw();
         const labelsWithEllipsis = series.adjustLabels(true);
 
@@ -2163,7 +2108,7 @@ const checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test('Not all points with ellipsis', function(assert) {
-        // arrange
+
         mockPoints.forEach(p => {
             p.applyWordWrap = sinon.spy(a => false);
         });
@@ -2174,7 +2119,6 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
         series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
 
-        // act
         series.draw();
         const labelsWithEllipsis = series.adjustLabels(true);
 

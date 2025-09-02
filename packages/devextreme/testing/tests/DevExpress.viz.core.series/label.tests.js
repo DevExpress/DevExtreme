@@ -194,7 +194,6 @@ QUnit.test('Hide', function(assert) {
     label.show();
     label._group.stub('attr').resetHistory();
 
-    // act
     label.hide();
 
     assert.equal(label._group.stub('attr').callCount, 1);
@@ -272,7 +271,6 @@ QUnit.test('Draw() - hide label', function(assert) {
 QUnit.test('Draw(true) after hide() - draw label', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.hide();
     label.draw(true);
 
@@ -282,7 +280,6 @@ QUnit.test('Draw(true) after hide() - draw label', function(assert) {
 QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.hide(true);
     label.draw(true);
 
@@ -292,7 +289,6 @@ QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
 QUnit.test('Draw() after show() - hide label', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.show();
     label.draw();
 
@@ -302,7 +298,6 @@ QUnit.test('Draw() after show() - hide label', function(assert) {
 QUnit.test('Draw() after show(true) - keep visible state', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.show(true);
     label.draw();
 
@@ -1489,7 +1484,6 @@ QUnit.test('Fixed point', function(assert) {
             value: 10,
             valueText: '10.00'
         });
-
 });
 
 QUnit.module('Is visible', environment);

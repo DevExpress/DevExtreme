@@ -12,12 +12,10 @@ const fixture = $('<div>')
     .attr('id', 'qunit-fixture')
     .appendTo($('body'));
 
-
 $('<div>')
     .attr('id', 'container')
     .css({ width: 250, height: 100 })
     .appendTo(fixture);
-
 
 QUnit.begin(function() {
     rendererModule.Renderer = function() {
@@ -72,10 +70,8 @@ function createTest(name, actions, asserts) {
 
             actions.arrange.call(this, pointerEvents[act], sparkline._tooltipTracker);
 
-            // act
             actions.act.call(this, pointerEvents[act], sparkline._tooltipTracker);
 
-            // assert
             assert.strictEqual(tooltipShown.callCount, asserts.tooltipShownCallCount);
             assert.strictEqual(tooltipHidden.callCount, asserts.tooltipHiddenCallCount);
         });
@@ -120,13 +116,13 @@ QUnit.test('No events hendling after dispose', function(assert) {
     this.trigger(pointerEvents.move, tracker, 10, 15);
     tooltipShown.resetHistory();
 
-    // act
+
     this.$container.remove();
 
     this.triggerDocument(pointerEvents.move);
     this.triggerDocument(pointerEvents.down);
 
-    // assert
+
     assert.strictEqual(tooltipShown.callCount, 0);
     assert.strictEqual(tooltipHidden.callCount, 0);
 });
@@ -152,7 +148,7 @@ QUnit.test('Tooltip should not hide if in the canvas with margins', function(ass
     this.trigger(pointerEvents.move, tracker, 3, 5);
     this.trigger(pointerEvents.move, tracker, 253, 35);
 
-    // assert
+
     assert.strictEqual(tooltipShown.callCount, 1);
     assert.strictEqual(tooltipHidden.callCount, 0);
 });

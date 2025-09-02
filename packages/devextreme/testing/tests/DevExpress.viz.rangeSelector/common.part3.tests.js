@@ -1398,7 +1398,7 @@ QUnit.test('initialization theme options by customized theme', function(assert) 
         }
     });
 
-    // assert
+
     assert.deepEqual(rangeSelector.option('theme').chart, {
         defaultSeriesOptions: {
             type: 'line'
