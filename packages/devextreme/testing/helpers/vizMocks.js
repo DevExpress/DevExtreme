@@ -3,13 +3,13 @@
 import $ from 'jquery';
 import * as tooltipModule from 'viz/core/tooltip';
 import * as titleModule from 'viz/core/title';
-import * as legendModule from 'viz/components/legend';
-import * as axisModule from 'viz/axes/base_axis';
+import legendModule from 'viz/components/legend';
+import axisModule from 'viz/axes/base_axis';
 import * as pointModule from 'viz/series/points/base_point';
 import { Series } from 'viz/series/base_series';
 import * as loadingIndicatorModule from 'viz/core/loading_indicator';
 import * as exportMenuModule from 'viz/core/export';
-import * as rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer';
 import * as errors from 'viz/core/errors_warnings';
 import * as baseWidgetUtils from 'viz/core/base_widget.utils';
 import * as typeUtils from 'core/utils/type';

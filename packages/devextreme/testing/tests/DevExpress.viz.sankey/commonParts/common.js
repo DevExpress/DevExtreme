@@ -1,14 +1,17 @@
-const $ = require('jquery');
-const vizMocks = require('../../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
+import $ from 'jquery';
+import {
+    Renderer,
+} from '../../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+
 const find = function(array, predicate) {
     return array.filter(predicate)[0];
 };
 
-require('viz/sankey/sankey');
-require('viz/themes');
+import 'viz/sankey/sankey';
+import 'viz/themes';
 
-const layoutBuilder = require('viz/sankey/layout').layout;
+import { layout as layoutBuilder } from 'viz/sankey/layout';
 const spiesLayoutBuilder = {
     computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
     _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
@@ -32,7 +35,7 @@ function createSankey(options) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.linksGroupIndex = 0;
         this.nodesGroupIndex = 1;
@@ -141,9 +144,6 @@ const testData = {
         { source: 'M', target: 'Y', weight: 5 }
     ]
 };
-module.exports.createSankey = createSankey;
-module.exports.testData = testData;
-module.exports.environment = environment;
-module.exports.layoutBuilder = layoutBuilder;
-module.exports.spiesLayoutBuilder = spiesLayoutBuilder;
-module.exports.find = find;
+export { createSankey, testData, environment, layoutBuilder, spiesLayoutBuilder, find };
+const common = { createSankey, testData, environment, layoutBuilder, spiesLayoutBuilder, find };
+export default common;

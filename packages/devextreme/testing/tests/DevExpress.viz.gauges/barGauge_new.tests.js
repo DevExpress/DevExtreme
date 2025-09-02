@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import legendModule, { Legend } from 'viz/components/legend';
-import vizMocks, {
+import {
     Renderer,
     Title,
     Tooltip,

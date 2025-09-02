@@ -12,23 +12,17 @@ import {
     Legend,
 } from '../../../helpers/vizMocks.js';
 import { Label } from 'viz/series/points/label';
-const LabelCtor = new ObjectPool(Label);
 import chartThemeManagerModule from 'viz/components/chart_theme_manager';
-const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);
 import layoutManagerModule from 'viz/chart_components/layout_manager';
-const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
 import vizUtils from 'viz/core/utils';
-const StubTooltip = Tooltip;
 import seriesFamilyModule from 'viz/core/series_family';
 import legendModule from 'viz/components/legend';
 import rendererModule from 'viz/core/renderers/renderer';
-import * as tooltipModule from 'viz/core/tooltip';
+import tooltipModule from 'viz/core/tooltip';
 import titleModule from 'viz/core/title';
 import crosshairModule from 'viz/chart_components/crosshair';
-const Crosshair = crosshairModule.Crosshair;
 import scrollBarClassModule from 'viz/chart_components/scroll_bar';
-const ScrollBarClass = scrollBarClassModule.ScrollBar;
-import * as trackerModule from 'viz/chart_components/tracker';
+import trackerModule from 'viz/chart_components/tracker';
 import dataValidatorModule from 'viz/components/data_validator';
 import {
     insertMockFactory,
@@ -39,6 +33,12 @@ import {
 import exportModule from 'viz/core/export';
 import { _test_prepareSegmentRectPoints } from 'viz/utils';
 
+const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);
+const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
+const StubTooltip = Tooltip;
+const Crosshair = crosshairModule.Crosshair;
+const ScrollBarClass = scrollBarClassModule.ScrollBar;
+const LabelCtor = new ObjectPool(Label);
 const tooltipOrig = tooltipModule.Tooltip;
 
 export { LabelCtor };
@@ -211,6 +211,7 @@ const environment = {
         });
 
         sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
+            debugger;
             const ScrollBar = stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
@@ -296,7 +297,6 @@ const environment = {
 
 
     },
-
     mockValidateData: function() {
         this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
             const categories = [];
@@ -309,7 +309,6 @@ const environment = {
             return { arg: data || [] };
         });
     },
-
     restoreValidateData: function() {
         this.validateData.reset();
         this.validateData.restore();

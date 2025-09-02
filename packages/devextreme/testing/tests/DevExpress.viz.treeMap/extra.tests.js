@@ -1,8 +1,8 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import $ from 'jquery';
 
-require('viz/tree_map/api');
-require('viz/tree_map/tracker');
+import 'viz/tree_map/api';
+import 'viz/tree_map/tracker';
 
 QUnit.module('T438413, two widgets', common.environment);
 

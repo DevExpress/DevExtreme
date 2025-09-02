@@ -25,7 +25,10 @@ export function createFunnel(options) {
         valueField: 'value',
         argumentField: 'argument'
     };
-    return $('#test-container').dxFunnel($.extend({}, defaultOptions, options)).dxFunnel('instance');
+
+    return $('#test-container')
+        .dxFunnel($.extend({}, defaultOptions, options))
+        .dxFunnel('instance');
 }
 
 export const environment = {

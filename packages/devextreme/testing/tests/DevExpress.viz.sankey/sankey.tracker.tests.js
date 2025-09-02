@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import common, { createSankey, environment } from './commonParts/common.js';
+import { createSankey, environment } from './commonParts/common.js';
 import trackerModule from 'viz/sankey/tracker';
 import tooltipModule from 'viz/core/tooltip';
 import { name as clickEventName } from 'common/core/events/click';
@@ -22,7 +22,7 @@ setTooltipCustomOptions(dxSankey);
 
 const trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        common.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.linksGroupIndex = 0;
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
@@ -181,7 +181,7 @@ QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
+QUnit.test('Tooltip with template. Hover link - call link template', function(assert) {
     const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],

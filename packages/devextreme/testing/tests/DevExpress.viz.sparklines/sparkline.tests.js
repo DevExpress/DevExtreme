@@ -1,17 +1,21 @@
 /* global currentTest, createTestContainer */
 
-const $ = require('jquery');
-const typeUtils = require('core/utils/type');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
-const BaseWidget = require('__internal/viz/core/m_base_widget').default;
-const rendererModule = require('viz/core/renderers/renderer');
-const dataValidatorModule = require('viz/components/data_validator');
-const translator2DModule = require('viz/translators/translator2d');
-const seriesModule = require('viz/series/base_series');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-
-require('viz/sparkline');
+import $ from 'jquery';
+import typeUtils from 'core/utils/type';
+import {
+    Renderer,
+    stubClass,
+    Series,
+    Tooltip
+} from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
+import BaseWidget from '__internal/viz/core/m_base_widget';
+import rendererModule from 'viz/core/renderers/renderer';
+import dataValidatorModule from 'viz/components/data_validator';
+import translator2DModule from 'viz/translators/translator2d';
+import seriesModule from 'viz/series/base_series';
+import { DataSource } from 'common/data/data_source/data_source';
+import 'viz/sparkline';
 
 $('<div>')
     .attr('id', 'container')
@@ -19,12 +23,12 @@ $('<div>')
     .appendTo('#qunit-fixture');
 
 QUnit.begin(function() {
-    const FakeTranslator = vizMocks.stubClass({
+    const FakeTranslator = stubClass({
         getCanvasVisibleArea: function() { return {}; },
         update: sinon.spy()
     });
-    const StubSeries = vizMocks.Series;
-    const StubTooltip = vizMocks.Tooltip;
+    const StubSeries = Series;
+    const StubTooltip = Tooltip;
 
     rendererModule.Renderer = sinon.spy(function() {
         return currentTest().renderer;
@@ -53,7 +57,7 @@ QUnit.begin(function() {
             this.clock = sinon.useFakeTimers();
 
             this.$container = $(createTestContainer('#container'));
-            this.renderer = new vizMocks.Renderer();
+            this.renderer = new Renderer();
             this.translator = new FakeTranslator();
             this.series = new StubSeries();
             this.tooltip = new StubTooltip();

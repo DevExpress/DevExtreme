@@ -1,14 +1,16 @@
-const common = require('./commonParts/common.js');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
+import common from './commonParts/common.js';
+import {
+    Tooltip,
+} from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
 
-require('viz/tree_map/tooltip');
+import 'viz/tree_map/tooltip';
 
 QUnit.module('Basics', {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
         this.renderer.offsetTemplate = { left: 40, top: 30 };
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new Tooltip();
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.tooltip.stub('formatValue').returns('formatted');

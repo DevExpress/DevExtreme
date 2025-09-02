@@ -1,15 +1,15 @@
-const testGlobalExports = require('../../helpers/publicModulesHelper.js');
-const AdvancedChartModule = require('__internal/viz/chart_components/m_advanced_chart');
-const baseChartModule = require('__internal/viz/chart_components/m_base_chart');
-const CrosshairModule = require('viz/chart_components/crosshair');
-const LayoutManagerModule = require('viz/chart_components/layout_manager');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const ScrollBarModule = require('viz/chart_components/scroll_bar');
-const trackerModule = require('viz/chart_components/tracker');
+import testGlobalExports from '../../helpers/publicModulesHelper.js';
+import AdvancedChartModule from '__internal/viz/chart_components/m_advanced_chart';
+import baseChartModule from '__internal/viz/chart_components/m_base_chart';
+import CrosshairModule from 'viz/chart_components/crosshair';
+import LayoutManagerModule from 'viz/chart_components/layout_manager';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import ScrollBarModule from 'viz/chart_components/scroll_bar';
+import trackerModule from 'viz/chart_components/tracker';
 
-require('viz/chart');
-require('viz/pie_chart');
-require('viz/polar_chart');
+import 'viz/chart';
+import 'viz/pie_chart';
+import 'viz/polar_chart';
 
 testGlobalExports({
     'AdvancedChart module': AdvancedChartModule

@@ -1,12 +1,12 @@
 /* global createTestContainer */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const pointerEvents = require('common/core/events/pointer');
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import pointerEvents from 'common/core/events/pointer';
 
-require('viz/sparkline');
-require('viz/bullet');
+import 'viz/sparkline';
+import 'viz/bullet';
 
 const fixture = $('<div>')
     .attr('id', 'qunit-fixture')
@@ -21,7 +21,7 @@ $('<div>')
 
 QUnit.begin(function() {
     rendererModule.Renderer = function() {
-        return new vizMocks.Renderer();
+        return new Renderer();
     };
 });
 

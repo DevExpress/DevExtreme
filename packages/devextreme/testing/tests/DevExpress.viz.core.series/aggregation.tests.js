@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 
 import { Series } from 'viz/series/base_series';
 
@@ -14,7 +16,7 @@ function checkResult(assert, result, fusionPoints, num) {
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         widgetType: 'chart',

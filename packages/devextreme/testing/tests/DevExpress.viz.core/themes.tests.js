@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const themeModule = require('viz/themes');
-const uiThemeModule = require('ui/themes');
+import $ from 'jquery';
+import themeModule from 'viz/themes';
+import uiThemeModule from 'ui/themes';
 
 uiThemeModule.setDefaultTimeout(0);
 

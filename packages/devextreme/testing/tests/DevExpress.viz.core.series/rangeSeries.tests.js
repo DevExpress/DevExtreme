@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
@@ -11,7 +13,7 @@ let seriesType;
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         containerBackgroundColor: 'containerColor',
@@ -52,7 +54,7 @@ const createSeries = function(options, renderSettings) {
 const environment = {
     beforeEach: function() {
         insertMockFactory();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val1: 10, val2: 10 }, { arg: 2, val1: 20, val2: 20 }, { arg: 3, val1: 30, val2: 30 }, { arg: 4, val1: 40 }];
         this.points = [[1, 10], [2, 20], [3, 30], [4, 40]];

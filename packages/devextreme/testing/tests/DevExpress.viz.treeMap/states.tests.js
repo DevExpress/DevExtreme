@@ -1,8 +1,8 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import $ from 'jquery';
 
-require('viz/tree_map/hover');
-require('viz/tree_map/selection');
+import 'viz/tree_map/hover';
+import 'viz/tree_map/selection';
 
 QUnit.module('Basics', $.extend({
     create: function(options) {

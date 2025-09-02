@@ -1,14 +1,13 @@
-require('viz/tree_map/tree_map');
-
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const clientExporter = require('exporter');
-const exportModule = require('viz/core/export');
-const Deferred = require('core/utils/deferred').Deferred;
-const logger = require('core/utils/console').logger;
-const { isFunction } = require('core/utils/type');
-const getWindow = require('core/utils/window').getWindow;
+import 'viz/tree_map/tree_map';
+import $ from 'jquery';
+import { Renderer, ExportMenu } from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import clientExporter from 'exporter';
+import exportModule from 'viz/core/export';
+import { Deferred } from 'core/utils/deferred';
+import { logger } from 'core/utils/console';
+import { isFunction } from 'core/utils/type';
+import { getWindow } from 'core/utils/window';
 
 const window = getWindow();
 
@@ -22,12 +21,12 @@ $('#test-container').css({
 QUnit.module('Export', {
     beforeEach: function() {
         this.$container = $('#test-container');
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() {
             return renderer;
         };
 
-        const exportMenu = this.exportMenu = new vizMocks.ExportMenu();
+        const exportMenu = this.exportMenu = new ExportMenu();
         exportModule.DEBUG_set_ExportMenu(sinon.spy(function() { return exportMenu; }));
 
         sinon.stub(clientExporter, 'export').returns(new Deferred());

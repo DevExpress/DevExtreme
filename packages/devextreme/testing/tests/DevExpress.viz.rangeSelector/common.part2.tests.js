@@ -1,16 +1,24 @@
-const $ = require('jquery');
-const commons = require('./rangeSelectorParts/commons.js');
-const seriesDataSourceModule = require('viz/range_selector/series_data_source');
-const dataSourceModule = require('common/data/data_source/data_source');
+import $ from 'jquery';
+import {
+    environment,
+    StubRange,
+    returnValue,
+} from './rangeSelectorParts/commons.js';
+import seriesDataSourceModule from 'viz/range_selector/series_data_source';
+import { DataSource } from 'common/data/data_source/data_source';
+import dateUtils from 'core/utils/date';
+import {
+    Title,
+    stubClass
+} from '../../helpers/vizMocks.js';
+import axisModule from 'viz/axes/base_axis';
+import titleModule from 'viz/core/title';
+
 const _SeriesDataSource = seriesDataSourceModule.SeriesDataSource;
-const dateUtils = require('core/utils/date');
-const vizMocks = require('../../helpers/vizMocks.js');
-const dataSource = vizMocks.stubClass(dataSourceModule.DataSource);
-const axisModule = require('viz/axes/base_axis');
-const titleModule = require('viz/core/title');
+const dataSource = stubClass(DataSource);
 const TitleOrig = titleModule.Title;
 
-QUnit.module('LoadingIndicator', commons.environment);
+QUnit.module('LoadingIndicator', environment);
 
 QUnit.test('Not hide on refresh - when dataSource is not loaded', function(assert) {
     const ds = new dataSource();
@@ -19,8 +27,8 @@ QUnit.test('Not hide on refresh - when dataSource is not loaded', function(asser
     ds.isLoaded = sinon.stub().returns(false);
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
 
     widget.option('scale', {});
@@ -35,8 +43,8 @@ QUnit.test('Hide on refresh - when dataSource is loaded', function(assert) {
     ds.isLoaded = sinon.stub().returns(true);
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
 
     widget.option('scale', {});
@@ -44,9 +52,9 @@ QUnit.test('Hide on refresh - when dataSource is loaded', function(assert) {
     assert.deepEqual(spy.lastCall.args, []);
 });
 
-const environmentWithDataSource = $.extend({}, commons.environment, {
+const environmentWithDataSource = $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         const test = this;
         seriesDataSourceModule.SeriesDataSource = function(params) {
             test.seriesDataSource = new _SeriesDataSource(params);
@@ -893,14 +901,14 @@ QUnit.test('containerBackgroundColor updating. shutter color was set', function(
 });
 
 QUnit.test('title updating', function(assert) {
-    const title = new vizMocks.Title();
+    const title = new Title();
     title.layoutOptions = function() {
         return { horizontalAlignment: 'center', verticalAlignment: 'top' };
     };
     title.measure = function() {
         return [100, 50];
     };
-    titleModule.DEBUG_set_title(sinon.spy(commons.returnValue(title)));
+    titleModule.DEBUG_set_title(sinon.spy(returnValue(title)));
     try {
         const range = this.createWidget({
             title: 'title'

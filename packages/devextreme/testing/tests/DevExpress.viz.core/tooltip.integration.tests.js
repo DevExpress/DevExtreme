@@ -1,8 +1,8 @@
-require('viz/tree_map/tree_map');
+import 'viz/tree_map/tree_map';
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
+import $ from 'jquery';
+import { Tooltip as MockTooltip } from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
@@ -13,7 +13,7 @@ $('#test-container').css({
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        const tooltip = this.tooltip = new vizMocks.Tooltip();
+        const tooltip = this.tooltip = new MockTooltip();
         tooltipModule.DEBUG_set_tooltip(sinon.spy(function() { return tooltip; }));
         this.$container = $('#test-container');
     },

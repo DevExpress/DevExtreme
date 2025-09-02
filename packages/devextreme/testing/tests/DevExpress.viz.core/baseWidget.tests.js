@@ -1,32 +1,30 @@
 /* global currentTest */
 
-const errorsModule = require('viz/core/errors_warnings');
+import errorsModule from 'viz/core/errors_warnings';
 
 errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
 errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
 errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
 
-const $ = require('jquery');
-const { version } = require('core/version');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const registerComponent = require('core/component_registrator');
-const logger = require('core/utils/console').logger;
-const resizeObserverSingleton = require('core/resize_observer');
-const isFunction = require('core/utils/type').isFunction;
-// const errors = require('viz/core/errors_warnings');
-const BaseWidget = require('__internal/viz/core/m_base_widget').default;
-const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
-const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
-const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
-const rendererModule = require('viz/core/renderers/renderer');
+import $ from 'jquery';
+import { version } from 'core/version';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import registerComponent from 'core/component_registrator';
+import { logger } from 'core/utils/console';
+import resizeObserverSingleton from 'core/resize_observer';
+import { isFunction } from 'core/utils/type';
+import BaseWidget from '__internal/viz/core/m_base_widget';
+import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from 'viz/core/base_widget.utils';
+import { BaseThemeManager } from 'viz/core/base_theme_manager';
+import rendererModule from 'viz/core/renderers/renderer';
 let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
-const vizMocks = require('../../helpers/vizMocks.js');
-const { implementationsMap } = require('core/utils/size');
+import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
+import { implementationsMap } from 'core/utils/size';
 
 // TODO: Move export tests to a separate file
-require('viz/core/export');
+import 'viz/core/export';
 
 QUnit.testStart(function() {
     const markup =
@@ -36,8 +34,8 @@ QUnit.testStart(function() {
 });
 
 QUnit.begin(function() {
-    StubThemeManager = vizMocks.stubClass(BaseThemeManager);
-    StubTitle = vizMocks.Title;
+    StubThemeManager = stubClass(BaseThemeManager);
+    StubTitle = Title;
     dxBaseWidgetTester = BaseWidget.inherit({
         NAME: 'dxBaseWidgetTester',
         _rootClassPrefix: '_rootClassPrefix',
@@ -45,15 +43,15 @@ QUnit.begin(function() {
         _eventsMap: $.extend({}, BaseWidget.prototype._eventsMap, {
             'onTestEvent': { name: 'testEvent' }
         }),
-        _getAnimationOptions: vizMocks.environmentMethodInvoker('onGetAnimationOptions'),
-        _initCore: vizMocks.environmentMethodInvoker('onInitCore'),
-        _disposeCore: vizMocks.environmentMethodInvoker('onDisposeCore'),
-        _getDefaultSize: vizMocks.environmentMethodInvoker('onGetDefaultSize'),
-        _applySize: vizMocks.environmentMethodInvoker('onApplySize'),
-        _clean: vizMocks.environmentMethodInvoker('onClean'),
-        _render: vizMocks.environmentMethodInvoker('onRender'),
-        _createThemeManager: vizMocks.environmentMethodInvoker('onCreateThemeManager'),
-        // _handleThemeOptionsCore: vizMocks.environmentMethodInvoker("onHandleThemeOptionsCore")
+        _getAnimationOptions: environmentMethodInvoker('onGetAnimationOptions'),
+        _initCore: environmentMethodInvoker('onInitCore'),
+        _disposeCore: environmentMethodInvoker('onDisposeCore'),
+        _getDefaultSize: environmentMethodInvoker('onGetDefaultSize'),
+        _applySize: environmentMethodInvoker('onApplySize'),
+        _clean: environmentMethodInvoker('onClean'),
+        _render: environmentMethodInvoker('onRender'),
+        _createThemeManager: environmentMethodInvoker('onCreateThemeManager'),
+        // _handleThemeOptionsCore: environmentMethodInvoker("onHandleThemeOptionsCore")
     });
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
@@ -68,10 +66,10 @@ const environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
         this.title = new StubTitle();
-        this.loadingIndicator = new vizMocks.LoadingIndicator();
+        this.loadingIndicator = new LoadingIndicator();
         this.clock = sinon.useFakeTimers();
         this.createContainer();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
     },
     afterEach: function() {
         this.$container.remove();

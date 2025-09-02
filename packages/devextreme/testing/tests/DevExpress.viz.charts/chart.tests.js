@@ -1,24 +1,22 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const seriesModule = require('viz/series/base_series');
-const pointModule = require('viz/series/points/base_point');
-const axisModule = require('viz/axes/base_axis');
-const titleModule = require('viz/core/title');
-const dataValidatorModule = require('viz/components/data_validator');
-const legendModule = require('viz/components/legend');
-const errors = require('core/errors.js');
-const rangeModule = require('viz/translators/range');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
-const Legend = vizMocks.Legend;
-const ChartTitle = vizMocks.Title;
-const Axis = vizMocks.stubClass(axisModule.Axis);
-const Range = vizMocks.stubClass(rangeModule.Range);
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const DataSourceMock = vizMocks.stubClass(DataSource);
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import { stubClass, Legend, Title as ChartTitle, Series, Point } from '../../helpers/vizMocks.js';
+import seriesModule from 'viz/series/base_series';
+import pointModule from 'viz/series/points/base_point';
+import axisModule from 'viz/axes/base_axis';
+import titleModule from 'viz/core/title';
+import dataValidatorModule from 'viz/components/data_validator';
+import legendModule from 'viz/components/legend';
+import rangeModule from 'viz/translators/range';
+import layoutManagerModule from 'viz/chart_components/layout_manager';
+const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
+// Legend and ChartTitle imported from vizMocks
+const Axis = stubClass(axisModule.Axis);
+const Range = stubClass(rangeModule.Range);
+import { DataSource } from 'common/data/data_source/data_source';
+const DataSourceMock = stubClass(DataSource);
 
-require('viz/chart');
+import 'viz/chart';
 
 const environment = {
     beforeEach: function() {
@@ -115,13 +113,12 @@ const environment = {
     },
     _stubSeriesAndPoint: function() {
         sinon.stub(seriesModule, 'Series').callsFake(function() {
-            const series = new vizMocks.Series();
-
+            const series = new Series();
             return series;
         });
 
         sinon.stub(pointModule, 'Point').callsFake(function() {
-            return new vizMocks.Point();
+            return new Point();
         });
     },
     _stubValidateData: function() {

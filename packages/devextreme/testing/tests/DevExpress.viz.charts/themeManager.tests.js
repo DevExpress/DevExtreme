@@ -1,9 +1,10 @@
-const $ = require('jquery');
-const themeManagerModule = require('viz/components/chart_theme_manager');
+import $ from 'jquery';
+import themeManagerModule from 'viz/components/chart_theme_manager';
+import paletteModule from 'viz/palette';
+import themeModule from 'viz/themes';
+
 const backgroundColor = '#ffffff';
 const defaultColor = '#1db2f5';
-const paletteModule = require('viz/palette');
-const themeModule = require('viz/themes');
 
 function createThemeManager(options, themeGroupName) {
     return new themeManagerModule.ThemeManager({

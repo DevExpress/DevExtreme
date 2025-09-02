@@ -1,4 +1,4 @@
-const eventEmitterModule = require('viz/vector_map/event_emitter');
+import eventEmitterModule from 'viz/vector_map/event_emitter';
 
 QUnit.module('eventEmitterMethods', {
     beforeEach: function() {

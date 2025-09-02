@@ -1,13 +1,15 @@
-const common = require('./commonParts/common.js');
-const vizMocks = require('../../helpers/vizMocks.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import {
+    Tooltip
+} from '../../helpers/vizMocks.js';
+import $ from 'jquery';
 
-const trackerModule = require('viz/tree_map/tracker');
-const tooltipModule = require('viz/core/tooltip');
-const clickEventName = require('common/core/events/click').name;
-const pointerEvents = require('common/core/events/pointer');
+import trackerModule from 'viz/tree_map/tracker';
+import tooltipModule from 'viz/core/tooltip';
+import { name as clickEventName } from 'common/core/events/click';
+import pointerEvents from 'common/core/events/pointer';
 
-const dxTreeMap = require('viz/tree_map/tree_map');
+import dxTreeMap from 'viz/tree_map/tree_map';
 
 dxTreeMap.addPlugin({
     name: 'tracker-test',
@@ -285,7 +287,7 @@ QUnit.module('Tooltip', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.renderer.offsetTemplate = { left: 40, top: 30 };
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new Tooltip();
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.__Tooltip = tooltipModule.Tooltip;

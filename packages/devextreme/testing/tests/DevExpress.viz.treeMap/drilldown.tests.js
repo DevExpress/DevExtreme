@@ -1,7 +1,7 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import $ from 'jquery';
 
-require('viz/tree_map/drilldown');
+import 'viz/tree_map/drilldown';
 
 QUnit.module('Drilldown', $.extend({
     create: function(options) {

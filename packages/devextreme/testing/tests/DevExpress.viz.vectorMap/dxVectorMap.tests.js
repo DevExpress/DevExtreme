@@ -1,25 +1,29 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const commons = require('./vectorMapParts/commons.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const projectionModule = require('viz/vector_map/projection.main');
-const controlBarModule = require('viz/vector_map/control_bar/control_bar');
-const gestureHandlerModule = require('viz/vector_map/gesture_handler');
-const trackerModule = require('viz/vector_map/tracker');
-const dataExchangerModule = require('viz/vector_map/data_exchanger');
-const legendModule = require('viz/vector_map/legend');
-const layoutModule = require('viz/vector_map/layout');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
-const vizMocks = require('../../helpers/vizMocks.js');
-const typeUtils = require('core/utils/type');
-const plaqueModule = require('viz/core/plaque');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    environment
+} from './vectorMapParts/commons.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import projectionModule from 'viz/vector_map/projection.main';
+import controlBarModule from 'viz/vector_map/control_bar/control_bar';
+import gestureHandlerModule from 'viz/vector_map/gesture_handler';
+import trackerModule from 'viz/vector_map/tracker';
+import dataExchangerModule from 'viz/vector_map/data_exchanger';
+import legendModule from 'viz/vector_map/legend';
+import layoutModule from 'viz/vector_map/layout';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
+import {
+    forceThemeOptions
+} from '../../helpers/vizMocks.js';
+import typeUtils from 'core/utils/type';
+import plaqueModule from 'viz/core/plaque';
 
-require('viz/vector_map/vector_map');
+import 'viz/vector_map/vector_map';
 
-const stubLayersEnvironment = $.extend({}, commons.environment, {
+const stubLayersEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         this.tracker.on = sinon.stub().returns(noop);
         sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
@@ -53,7 +57,7 @@ QUnit.test('Background', function(assert) {
     this.createMap({
         background: { borderWidth: 2, color: 'green' }
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ color: 'green', borderColor: 'red', borderWidth: 2 }], 'options');
 });
@@ -64,7 +68,7 @@ QUnit.test('Layer collection', function(assert) {
     this.createMap({
         layers: [{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.strictEqual(spy.lastCall.args.length, 1, 'parameters count');
     const arg = spy.lastCall.args[0];
@@ -221,7 +225,7 @@ QUnit.test('Layer collection - object option', function(assert) {
     this.createMap({
         layers: { tag: 'layer', dataSource: 'data' }
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [{ tag: 'layer', dataSource: 'data' }], 'data is passed');
     assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [{ tag: 'layer', dataSource: 'data' }], 'options are passed');
@@ -266,7 +270,7 @@ QUnit.test('GestureHandler', function(assert) {
         panningEnabled: 1,
         zoomingEnabled: 0
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(spy.lastCall.args, [{
         projection: this.projection,
@@ -299,7 +303,7 @@ QUnit.test('Tracker', function(assert) {
         touchEnabled: 0,
         wheelEnabled: 1
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(spy.lastCall.args, [{
         root: this.renderer.root,
@@ -319,7 +323,7 @@ QUnit.test('Control bar', function(assert) {
         panningEnabled: 0,
         zoomingEnabled: 1
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(spy.lastCall.args, [{
         renderer: this.renderer,
@@ -342,7 +346,7 @@ QUnit.test('Legends', function(assert) {
             option: 'option'
         }
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(spy.lastCall.args, [{
         renderer: this.renderer,
@@ -661,7 +665,7 @@ QUnit.test('convertToXY', function(assert) {
 
 QUnit.module('Map - option changing', $.extend({}, stubLayersEnvironment, {
     createMap: function() {
-        commons.environment.createMap.apply(this, arguments);
+        environment.createMap.apply(this, arguments);
         this.invalidate = sinon.spy(this.map, '_invalidate');
     }
 }));

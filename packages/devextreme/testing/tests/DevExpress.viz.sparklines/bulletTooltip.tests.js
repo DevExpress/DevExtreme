@@ -10,10 +10,10 @@ import tooltipModule from 'viz/core/tooltip';
 import rendererModule from 'viz/core/renderers/renderer';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
 import { isFunction } from 'core/utils/type';
+import 'viz/bullet';
+
 const TOOLTIP_TABLE_BORDER_SPACING = 0;
 const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
-
-import 'viz/bullet';
 
 $('<div>')
     .attr('id', 'container')

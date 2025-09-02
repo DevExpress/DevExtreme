@@ -1,14 +1,11 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const translator2DModule = require('viz/translators/translator2d');
-const rangeModule = require('viz/translators/range');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const chartMocks = require('../../helpers/chartMocks.js');
-const MockAxis = chartMocks.MockAxis;
-const insertMockFactory = chartMocks.insertMockFactory;
-const restoreMockFactory = chartMocks.restoreMockFactory;
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import translator2DModule from 'viz/translators/translator2d';
+import rangeModule from 'viz/translators/range';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 
-require('viz/chart');
+import 'viz/chart';
 
 QUnit.testStart(function() {
     const markup = '<div id="chartContainer"></div>';
@@ -44,7 +41,7 @@ function checkAxesSynchronization(assert, options) {
                 height: 400
             };
             const range = new rangeModule.Range(options.range);
-            const axis = new MockAxis({ renderer: new vizMocks.Renderer() });
+            const axis = new MockAxis({ renderer: new Renderer() });
             const translator = new translator2DModule.Translator2D({}, canvas, { shiftZeroValue: true });
             translator.updateBusinessRange(range);
             const visibleArea = translator.getCanvasVisibleArea();

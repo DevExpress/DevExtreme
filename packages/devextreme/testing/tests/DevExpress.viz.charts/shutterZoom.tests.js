@@ -1,11 +1,11 @@
-const pointerMock = require('../../helpers/pointerMock.js');
-const vizMocks = require('../../helpers/vizMocks.js');
-const shutterPlugin = require('viz/chart_components/shutter_zoom');
+import pointerMock from '../../helpers/pointerMock.js';
+import { Renderer } from '../../helpers/vizMocks.js';
+import shutterPlugin from 'viz/chart_components/shutter_zoom';
 
 QUnit.module('Shutter zoom plugin', {
     initWidget: function(options) {
         this.eventSpy = sinon.spy();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.offsetTemplate = { left: 10, top: 5 };
 
         const chartMock = {

@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
@@ -13,7 +16,7 @@ const createPoint = function(series, data, options) {
 };
 
 function getMockAxisFunction(renderer, getTranslator, visibleArea) {
-    const axis = new MockAxis({ renderer: renderer || new vizMocks.Renderer({}) });
+    const axis = new MockAxis({ renderer: renderer || new Renderer({}) });
 
     axis.getTranslator = getTranslator;
     if(visibleArea) {
@@ -25,7 +28,7 @@ function getMockAxisFunction(renderer, getTranslator, visibleArea) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
 
@@ -870,7 +873,7 @@ QUnit.test('Null value. Rotated', function(assert) {
 
 QUnit.module('Draw point', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
         this.options = {
@@ -1524,7 +1527,7 @@ QUnit.module('Graphic Settings', {
 
 QUnit.test('Get Graphic Settings', function(assert) {
     const point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
-    const renderer = new vizMocks.Renderer();
+    const renderer = new Renderer();
     point.graphic = renderer.rect(250, 100, 430, 133);
 
     // act
@@ -2512,7 +2515,7 @@ QUnit.test('getCenterCoord', function(assert) {
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             visible: true,

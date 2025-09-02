@@ -1,11 +1,14 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const axisModule = require('viz/axes/base_axis');
-const Crosshair = require('viz/chart_components/crosshair').Crosshair;
-const Axis = vizMocks.stubClass(axisModule.Axis);
+import $ from 'jquery';
+import { stubClass, Renderer } from '../../helpers/vizMocks.js';
+import axisModule from 'viz/axes/base_axis';
+import { Crosshair } from 'viz/chart_components/crosshair';
+
+import 'viz/chart';
+
+const Axis = stubClass(axisModule.Axis);
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { y: 10, height: 20, x: 30, width: 40 };
         this.canvas = {
             width: 800,

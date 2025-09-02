@@ -1,6 +1,6 @@
-const noop = require('core/utils/common').noop;
-const config = require('core/config');
-const parseUtils = require('viz/components/parse_utils');
+import { noop } from 'core/utils/common';
+import config from 'core/config';
+import parseUtils from 'viz/components/parse_utils';
 
 QUnit.module('valueType');
 
@@ -10,11 +10,6 @@ QUnit.test('check type = "numeric"', function(assert) {
     assert.equal(result, 'numeric');
 });
 
-QUnit.test('check type = "datetime"', function(assert) {
-    const result = parseUtils.correctValueType('datetime');
-
-    assert.equal(result, 'datetime');
-});
 
 QUnit.test('check type = "datetime"', function(assert) {
     const result = parseUtils.correctValueType('datetime');

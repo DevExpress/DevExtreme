@@ -1,46 +1,52 @@
-const $ = require('jquery');
-const vizMocks = require('../../../helpers/vizMocks.js');
-const dxVectorMapUtils = require('viz/vector_map/vector_map.utils');
+import $ from 'jquery';
+import {
+    stubClass,
+    forceThemeOptions,
+    Renderer,
+    LoadingIndicator,
+    Tooltip,
+    Title,
+} from '../../../helpers/vizMocks.js';
+import dxVectorMapUtils from 'viz/vector_map/vector_map.utils';
 
-const projectionModule = require('viz/vector_map/projection.main');
-const controlBarModule = require('viz/vector_map/control_bar/control_bar');
-const gestureHandlerModule = require('viz/vector_map/gesture_handler');
-const trackerModule = require('viz/vector_map/tracker');
-const themeManagerModule = require('viz/core/base_theme_manager');
-const dataExchangerModule = require('viz/vector_map/data_exchanger');
-const legendModule = require('viz/vector_map/legend');
-const layoutModule = require('viz/vector_map/layout');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
+import projectionModule from 'viz/vector_map/projection.main';
+import controlBarModule from 'viz/vector_map/control_bar/control_bar';
+import gestureHandlerModule from 'viz/vector_map/gesture_handler';
+import trackerModule from 'viz/vector_map/tracker';
+import themeManagerModule from 'viz/core/base_theme_manager';
+import dataExchangerModule from 'viz/vector_map/data_exchanger';
+import legendModule from 'viz/vector_map/legend';
+import layoutModule from 'viz/vector_map/layout';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
 
-const StubProjection = vizMocks.stubClass(projectionModule.Projection);
-const StubControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
-const StubGestureHandler = vizMocks.stubClass(gestureHandlerModule.GestureHandler);
-const StubTracker = vizMocks.stubClass(trackerModule.Tracker);
-const StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager);
-const StubDataExchanger = vizMocks.stubClass(dataExchangerModule.DataExchanger);
-const StubLegendsControl = vizMocks.stubClass(legendModule.LegendsControl);
-const StubLayoutControl = vizMocks.stubClass(layoutModule.LayoutControl);
-const StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection);
-const StubTooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer);
+const StubProjection = stubClass(projectionModule.Projection);
+const StubControlBar = stubClass(controlBarModule.ControlBar);
+const StubGestureHandler = stubClass(gestureHandlerModule.GestureHandler);
+const StubTracker = stubClass(trackerModule.Tracker);
+const StubThemeManager = stubClass(themeManagerModule.BaseThemeManager);
+const StubDataExchanger = stubClass(dataExchangerModule.DataExchanger);
+const StubLegendsControl = stubClass(legendModule.LegendsControl);
+const StubLayoutControl = stubClass(layoutModule.LayoutControl);
+const StubMapLayerCollection = stubClass(mapLayerModule.MapLayerCollection);
+const StubTooltipViewer = stubClass(tooltipViewerModule.TooltipViewer);
 
-const rendererModule = require('viz/core/renderers/renderer');
-const titleModule = require('viz/core/title');
-const exportModule = require('viz/core/export');
-const tooltipModule = require('viz/core/tooltip');
-const { implementationsMap } = require('core/utils/size');
+import rendererModule from 'viz/core/renderers/renderer';
+import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
+import tooltipModule from 'viz/core/tooltip';
+import { implementationsMap } from 'core/utils/size';
 
-require('viz/vector_map');
+import 'viz/vector_map';
 
-const StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
+const StubExportMenu = stubClass(exportModule.ExportMenu);
 
-function returnValue(value) {
+export function returnValue(value) {
     return function() { return value; };
 }
-exports.returnValue = returnValue;
 
 StubThemeManager.prototype.setTheme = function() {
-    vizMocks.forceThemeOptions(this);
+    forceThemeOptions(this);
 };
 
 function stubComponentConstructors(test) {
@@ -63,13 +69,13 @@ function stubComponentConstructors(test) {
     mapLayerModule.MapLayerCollection = returnValue(test.layerCollection);
     tooltipViewerModule.TooltipViewer = returnValue(test.tooltipViewer);
 }
-exports.stubComponentConstructors = stubComponentConstructors;
+export { stubComponentConstructors };
 
-exports.environment = {
+export const environment = {
     beforeEach: function() {
         dxVectorMapUtils._TESTS_resetDataKey();
         this.$container = $('<div id="test-container"></div>');
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.themeManager = new StubThemeManager();
         this.themeManager.stub('theme').returns({});
         this.dataExchanger = new StubDataExchanger();
@@ -81,10 +87,10 @@ exports.environment = {
         this.controlBar = new StubControlBar();
         this.legendsControl = new StubLegendsControl();
         this.tooltipViewer = new StubTooltipViewer();
-        this.loadingIndicator = new vizMocks.LoadingIndicator();
-        this.title = new vizMocks.Title();
+        this.loadingIndicator = new LoadingIndicator();
+        this.title = new Title();
         this.exportMenu = new StubExportMenu();
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new Tooltip();
         this._$fn_width = implementationsMap.getWidth;
         this._$fn_height = implementationsMap.getHeight;
         implementationsMap.getWidth = returnValue(400);

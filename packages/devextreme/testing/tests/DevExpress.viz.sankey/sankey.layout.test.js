@@ -1,11 +1,12 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const common = require('./commonParts/common.js');
-const environment = common.environment;
-const createSankey = common.createSankey;
-const titleModule = require('viz/core/title');
-const exportModule = require('viz/core/export');
-const dxSankey = require('viz/sankey/sankey');
+import $ from 'jquery';
+import {
+    Title,
+    ExportMenu,
+} from '../../helpers/vizMocks.js';
+import { createSankey, environment } from './commonParts/common.js';
+import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
+import dxSankey from 'viz/sankey/sankey';
 const TitleOrig = titleModule.Title;
 const ExportMenuOrig = exportModule.ExportMenu;
 
@@ -14,7 +15,7 @@ dxSankey.addPlugin(exportModule.plugin);
 
 function stubTitle() {
     const that = this;
-    that.title = new vizMocks.Title();
+    that.title = new Title();
     that.title.stub('measure').returns([200, 50]);
     titleModule.DEBUG_set_title(sinon.spy(function() {
         return that.title;
@@ -23,7 +24,7 @@ function stubTitle() {
 
 function stubExport() {
     const that = this;
-    that.export = new vizMocks.ExportMenu();
+    that.export = new ExportMenu();
     that.export.stub('measure').returns([50, 50]);
     exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;

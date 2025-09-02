@@ -1,6 +1,6 @@
-const common = require('./commonParts/common.js');
+import common from './commonParts/common.js';
 
-require('viz/tree_map/hover');
+import 'viz/tree_map/hover';
 
 QUnit.module('Basics', common.environment);
 

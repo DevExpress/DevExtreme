@@ -1,20 +1,24 @@
 /* global currentTest */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const translator2DModule = require('viz/translators/translator2d');
-const tooltipModule = require('viz/core/tooltip');
-const BaseWidget = require('__internal/viz/core/m_base_widget').default;
+import $ from 'jquery';
+import {
+    Renderer,
+    stubClass,
+    Tooltip,
+} from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import translator2DModule from 'viz/translators/translator2d';
+import tooltipModule from 'viz/core/tooltip';
+import BaseWidget from '__internal/viz/core/m_base_widget';
 
-require('viz/bullet');
+import 'viz/bullet';
 
 
 let StubTranslator;
-const StubTooltip = vizMocks.Tooltip;
+const StubTooltip = Tooltip;
 
 QUnit.begin(function() {
-    StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+    StubTranslator = stubClass(translator2DModule.Translator2D, {
         getCanvasVisibleArea: function() { return {}; }
     });
 
@@ -33,7 +37,7 @@ QUnit.testStart(function() {
 });
 
 rendererModule.Renderer = sinon.spy(function(parameters) {
-    currentTest().renderer = new vizMocks.Renderer(parameters);
+    currentTest().renderer = new Renderer(parameters);
     return currentTest().renderer;
 });
 

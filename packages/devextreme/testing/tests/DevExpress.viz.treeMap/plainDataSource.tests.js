@@ -1,7 +1,7 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import $ from 'jquery';
 
-require('viz/tree_map/plain_data_source');
+import 'viz/tree_map/plain_data_source';
 
 QUnit.module('Basic', $.extend({
     checkLayout: function(assert, expected) {

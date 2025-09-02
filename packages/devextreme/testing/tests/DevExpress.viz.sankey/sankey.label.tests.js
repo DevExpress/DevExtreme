@@ -1,7 +1,5 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const environment = common.environment;
+import $ from 'jquery';
+import { createSankey, environment } from './commonParts/common.js';
 
 const getHorizontalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateX);
 const getVerticalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateY);

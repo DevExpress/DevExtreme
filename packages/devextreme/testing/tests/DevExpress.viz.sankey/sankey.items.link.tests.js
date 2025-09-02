@@ -1,8 +1,5 @@
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const environment = common.environment;
-const themeModule = require('viz/themes');
-const find = common.find;
+import { createSankey, environment, find } from './commonParts/common.js';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',

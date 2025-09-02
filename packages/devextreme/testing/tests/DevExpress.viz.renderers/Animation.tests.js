@@ -1,12 +1,14 @@
 /* global currentAssert */
 
-const $ = require('jquery');
-const animationFrame = require('common/core/animation/frame');
-const commonUtils = require('core/utils/common');
-const typeUtils = require('core/utils/type');
-const animationModule = require('viz/core/renderers/animation');
-const rendererModule = require('viz/core/renderers/renderer');
-const vizMocks = require('../../helpers/vizMocks.js');
+import $ from 'jquery';
+import animationFrame from 'common/core/animation/frame';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
+import animationModule from 'viz/core/renderers/animation';
+import rendererModule from 'viz/core/renderers/renderer';
+import {
+    stubClass
+} from '../../helpers/vizMocks.js';
 
 (function() {
     QUnit.module('AnimationController', {
@@ -495,7 +497,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
                 }
             };
 
-            this.element = new (vizMocks.stubClass(rendererModule.SvgElement,
+            this.element = new (stubClass(rendererModule.SvgElement,
                 {
                     attr: function() { return this; },
                     css: function() { return this; },
@@ -816,7 +818,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 QUnit.module('SvgAnimationStep', {
     beforeEach: function() {
         this.animationStep = animationModule.animationSvgStep;
-        this.element = new (vizMocks.stubClass(rendererModule.SvgElement))();
+        this.element = new (stubClass(rendererModule.SvgElement))();
         this.element._transforms = {};
         this.currentParams = {};
     },

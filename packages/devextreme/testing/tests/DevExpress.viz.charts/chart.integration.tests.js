@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import legendModule from 'viz/components/legend';
@@ -3217,7 +3217,7 @@ QUnit.module('Option changing in onDrawn after zooming', {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
         sinon.stub(rendererModule, 'Renderer').callsFake(function() {
-            return new vizMocks.Renderer();
+            return new Renderer();
         });
     },
     afterEach: function() {

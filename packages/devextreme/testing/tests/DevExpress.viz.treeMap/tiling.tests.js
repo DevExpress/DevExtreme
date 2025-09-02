@@ -1,5 +1,10 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import common from './commonParts/common.js';
+import $ from 'jquery';
+import 'viz/tree_map/tiling.squarified';
+import 'viz/tree_map/tiling.strip';
+import 'viz/tree_map/tiling.slice_and_dice';
+import 'viz/tree_map/tiling.rotated_slice_and_dice';
+
 const environment = {
     beforeEach: common.environment.beforeEach,
 
@@ -24,11 +29,6 @@ const environment = {
         });
     }
 };
-
-require('viz/tree_map/tiling.squarified');
-require('viz/tree_map/tiling.strip');
-require('viz/tree_map/tiling.slice_and_dice');
-require('viz/tree_map/tiling.rotated_slice_and_dice');
 
 QUnit.module('Algorithms', environment);
 

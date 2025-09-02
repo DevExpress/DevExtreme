@@ -1,12 +1,12 @@
 /* global currentTest */
 
-const vizMocks = require('../../helpers/vizMocks.js');
-const circularIndicatorsModule = require('viz/gauges/circular_indicators');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { Renderer } from '../../helpers/vizMocks.js';
+import circularIndicatorsModule from 'viz/gauges/circular_indicators';
+import { Translator1D } from 'viz/translators/translator1d';
 
 QUnit.module('CircularRangeBar', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },

@@ -1,6 +1,6 @@
-const common = require('./commonParts/common.js');
+import common from './commonParts/common.js';
 
-require('viz/tree_map/selection');
+import 'viz/tree_map/selection';
 
 QUnit.module('Basics', common.environment);
 

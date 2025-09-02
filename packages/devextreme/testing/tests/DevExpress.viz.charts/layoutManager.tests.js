@@ -1,8 +1,11 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const labelModule = require('viz/series/points/label');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const layoutElementModule = require('viz/core/layout_element');
+import $ from 'jquery';
+import {
+    Series,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import { Label } from 'viz/series/points/label';
+import { LayoutManager } from 'viz/chart_components/layout_manager';
+import { LayoutElement as LayoutElementClass, WrapperLayoutElement } from 'viz/core/layout_element';
 
 const canvasTemplate = {
     width: 1000,
@@ -13,7 +16,8 @@ const canvasTemplate = {
     right: 40
 };
 let canvas;
-const LayoutElement = vizMocks.stubClass(layoutElementModule.LayoutElement);
+
+const LayoutElement = stubClass(LayoutElementClass);
 
 const environment = {
     beforeEach: function() {
@@ -26,7 +30,7 @@ const environment = {
     afterEach: function() {
     },
     createLayoutManager: function(options) {
-        const layoutManager = new layoutManagerModule.LayoutManager();
+        const layoutManager = new LayoutManager();
         layoutManager.setOptions(options || { width: 10, height: 10 });
         return layoutManager;
     },
@@ -45,13 +49,13 @@ function setupCanvas() {
     canvas = $.extend(true, {}, canvasTemplate);
 }
 function createLayoutManager(options) {
-    const layoutManager = new layoutManagerModule.LayoutManager(options);
+    const layoutManager = new LayoutManager(options);
     layoutManager.setOptions(options || { width: 160, height: 160 });
     return layoutManager;
 }
 
 function getStubSeries(type, innerRadius, points) {
-    const stubSeries = new vizMocks.Series();
+    const stubSeries = new Series();
 
 
     stubSeries.type = type;
@@ -72,7 +76,7 @@ function getNStubSeries(type, innerRadius, arrPoints) {
 }
 
 function createFakePointsWithStubLabels(bBox, isVisible, hasText, options) {
-    const stubLabel = sinon.createStubInstance(labelModule.Label);
+    const stubLabel = sinon.createStubInstance(Label);
     const fakePoint = {
         _label: stubLabel,
     };
@@ -94,7 +98,7 @@ function checkLayout(assert, layout, canvas, inner, outer) {
 QUnit.module('Lifecycle', environment);
 
 QUnit.test('create layout manager', function(assert) {
-    assert.ok(this.createLayoutManager() instanceof layoutManagerModule.LayoutManager);
+    assert.ok(this.createLayoutManager() instanceof LayoutManager);
 });
 
 QUnit.module('Pie series', {
@@ -759,7 +763,7 @@ QUnit.test('position legend, vertical, bottom', function(assert) {
     LM.layoutInsideLegend(LE, this.canvas);
 
     assert.deepEqual(LE.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 100, height: 80 }),
+        of: new WrapperLayoutElement(null, { x: 0, y: 0, width: 100, height: 80 }),
         my: { horizontal: 'center', vertical: 'top' },
         at: { horizontal: 'center', vertical: 'bottom' },
     });
@@ -772,7 +776,7 @@ QUnit.test('position legend, horizontal, left', function(assert) {
     LM.layoutInsideLegend(LE, this.canvas);
 
     assert.deepEqual(LE.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 20, y: 0, width: 80, height: 100 }),
+        of: new WrapperLayoutElement(null, { x: 20, y: 0, width: 80, height: 100 }),
         my: { horizontal: 'right', vertical: 'top' },
         at: { horizontal: 'left', vertical: 'top' },
     });

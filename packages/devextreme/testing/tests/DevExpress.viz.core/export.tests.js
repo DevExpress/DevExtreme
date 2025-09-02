@@ -1,8 +1,10 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const exportModule = require('viz/core/export');
-const themeModule = require('viz/themes');
-const clientExporter = require('exporter');
-const $ = require('jquery');
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import exportModule from 'viz/core/export';
+import themeModule from 'viz/themes';
+import clientExporter from 'exporter';
+import localization from 'localization';
+
 const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({
@@ -22,7 +24,7 @@ function createMockWidget(size, option) {
 
 QUnit.module('Creation', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
         this.options = {
@@ -864,7 +866,7 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
 
 QUnit.module('API', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
         sinon.stub(clientExporter, 'export');
@@ -1116,7 +1118,7 @@ QUnit.test('Dispose', function(assert) {
 
 QUnit.module('Events', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
         sinon.stub(clientExporter, 'export');
@@ -1455,9 +1457,6 @@ QUnit.test('Printing by menu - close list', function(assert) {
 
 // T397838
 QUnit.test('Localization', function(assert) {
-    // assert
-    const localization = require('localization');
-
     localization.loadMessages({
         it: {
             'vizExport-printingButtonText': 'Stampa',
@@ -1479,7 +1478,7 @@ QUnit.test('Localization', function(assert) {
 
 QUnit.module('Layout', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.incidentOccurred = sinon.spy();
 
         sinon.stub(clientExporter, 'export');

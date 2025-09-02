@@ -1,8 +1,8 @@
-const common = require('./commonParts/common.js');
+import common from './commonParts/common.js';
 
-require('viz/tree_map/colorizing.discrete');
-require('viz/tree_map/colorizing.gradient');
-require('viz/tree_map/colorizing.range');
+import 'viz/tree_map/colorizing.discrete';
+import 'viz/tree_map/colorizing.gradient';
+import 'viz/tree_map/colorizing.range';
 
 QUnit.module('Coloring', common.environment);
 

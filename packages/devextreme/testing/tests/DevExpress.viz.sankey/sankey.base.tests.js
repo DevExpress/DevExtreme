@@ -1,13 +1,8 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const layoutBuilder = common.layoutBuilder;
-const spiesLayoutBuilder = common.spiesLayoutBuilder;
-const environment = common.environment;
-const find = common.find;
-const rendererModule = require('viz/core/renderers/renderer');
-const paletteModule = require('viz/palette');
-const themeModule = require('viz/themes');
+import $ from 'jquery';
+import common, { createSankey, layoutBuilder, spiesLayoutBuilder, environment, find } from './commonParts/common.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import paletteModule from 'viz/palette';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',

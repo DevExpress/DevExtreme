@@ -1,10 +1,10 @@
-const rangeModule = require('viz/translators/range');
+import { Range } from 'viz/translators/range';
 
 QUnit.module('Life cycle');
 
 QUnit.test('Create empty', function(assert) {
     // act
-    const range = new rangeModule.Range();
+    const range = new Range();
 
     // assert
     assert.ok(range);
@@ -19,7 +19,7 @@ QUnit.test('Create empty', function(assert) {
 
 QUnit.test('Create with range', function(assert) {
     // act
-    const range = new rangeModule.Range({
+    const range = new Range({
         min: 0,
         max: 100,
         minVisible: 10,
@@ -41,7 +41,7 @@ QUnit.test('Create with range', function(assert) {
 QUnit.module('Add range. Numeric', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
     }
 });
@@ -311,7 +311,7 @@ QUnit.test('Merge categories', function(assert) {
 QUnit.module('Add range. DateTime', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
     }
 });
@@ -429,7 +429,7 @@ QUnit.test('Merge categories', function(assert) {
 QUnit.module('Add range. Extend by visible range. Numeric', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
 
         this.checkRanges = function(assert, expected) {
@@ -632,7 +632,7 @@ QUnit.test('minVisible = undefined, maxVisible < min < max', function(assert) {
 QUnit.module('Add range. Extend by visible range. DateTime', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
 
         this.checkRanges = function(assert, expected) {
@@ -835,7 +835,7 @@ QUnit.test('minVisible = undefined, maxVisible < min < max', function(assert) {
 QUnit.module('Add range. Extend by visible range. Special cases for RS. Min/max undefined. Numeric', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
 
         this.checkRanges = function(assert, expected) {
@@ -900,7 +900,7 @@ QUnit.test('min/minVisible/maxVisible != undefined, max = undefined', function(a
 QUnit.module('Add range. Extend by visible range. Special cases for RS. Min/max undefined. DateTime', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
 
         this.checkRanges = function(assert, expected) {
@@ -965,7 +965,7 @@ QUnit.test('min/minVisible/maxVisible != undefined, max = undefined', function(a
 QUnit.module('isEmpty functionality', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
-            this.range = new rangeModule.Range(rangeData);
+            this.range = new Range(rangeData);
         };
     }
 });
@@ -1024,7 +1024,7 @@ QUnit.test('With categories that is empty', function(assert) {
 QUnit.module('Correct Zero level functionality', {
     beforeEach: function() {
         function createRange(rangeData) {
-            return new rangeModule.Range(rangeData);
+            return new Range(rangeData);
         }
 
         function checkRangeBounds(assert, range, originalRange) {
@@ -1127,7 +1127,7 @@ QUnit.module('discrete zooming');
 
 QUnit.test('min/max categories after create range with min and max categories', function(assert) {
     // arrange,act
-    const range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
+    const range = new Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
 
     // arrange
     assert.strictEqual(range.minVisible, 'someStartCategories');
@@ -1136,7 +1136,7 @@ QUnit.test('min/max categories after create range with min and max categories', 
 
 QUnit.test('min/max categories after call add range (create without min/max categories)', function(assert) {
     // arrange
-    const range = new rangeModule.Range({ axisType: 'discrete' });
+    const range = new Range({ axisType: 'discrete' });
 
     // act
     range.addRange({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories' });
@@ -1148,7 +1148,7 @@ QUnit.test('min/max categories after call add range (create without min/max cate
 
 QUnit.test('min/max categories after call add range (create with min/max categories)', function(assert) {
     // arrange
-    const range = new rangeModule.Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
+    const range = new Range({ minVisible: 'someStartCategories', maxVisible: 'someEndCategories', axisType: 'discrete' });
 
     // act
     range.addRange({ minVisible: 'anotherStartCategories', maxVisible: 'someEndCategories' });
@@ -1161,7 +1161,7 @@ QUnit.test('min/max categories after call add range (create with min/max categor
 // T888028
 QUnit.test('Ignote minVisible/maxVisible for discrete scale', function(assert) {
     // arrange
-    const range = new rangeModule.Range({ minVisible: 'a2', min: 'a2', maxVisible: '', max: '', axisType: 'discrete', categories: ['a1', 'a2', 'a3', '', 'a5', ] });
+    const range = new Range({ minVisible: 'a2', min: 'a2', maxVisible: '', max: '', axisType: 'discrete', categories: ['a1', 'a2', 'a3', '', 'a5', ] });
 
     // act
     range.addRange({});

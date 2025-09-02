@@ -1,11 +1,8 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
-const stubAlgorithm = common.stubAlgorithm;
-const rendererModule = require('viz/core/renderers/renderer');
-const paletteModule = require('viz/palette');
-const themeModule = require('viz/themes');
+import $ from 'jquery';
+import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import paletteModule from 'viz/palette';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',

@@ -1,8 +1,5 @@
 import $ from 'jquery';
-import {
-    Renderer,
-    Element,
-} from '../../helpers/vizMocks.js';
+import { Renderer, Element } from '../../helpers/vizMocks.js';
 import translator2DModule from 'viz/translators/translator2d';
 import rangeViewModule from 'viz/range_selector/range_view';
 import { MockAxis } from '../../helpers/chartMocks.js';

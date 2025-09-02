@@ -1,6 +1,5 @@
-const logicModule = require('viz/sankey/graph');
-const common = require('./commonParts/common.js');
-const environment = common.environment;
+import logicModule from 'viz/sankey/graph';
+import { environment } from './commonParts/common.js';
 
 const noCycle0 = [['A', 'B', 2], ['B', 'C', 2], ['C', 'D', 2], ['D', 'F', 2]];
 const noCycle1 = [['A', 'B', 2], ['B', 'C1', 2], ['B', 'C2', 2], ['C1', 'D', 2], ['C2', 'D', 2], ['D', 'F', 2]];

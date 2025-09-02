@@ -1,5 +1,8 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
@@ -16,7 +19,7 @@ const createPoint = function(series, data, options) {
 };
 
 function getMockAxisFunction(renderer, getTranslator, visibleArea) {
-    const axis = new MockAxis({ renderer: renderer || new vizMocks.Renderer({}) });
+    const axis = new MockAxis({ renderer: renderer || new Renderer({}) });
 
     axis.getTranslator = getTranslator;
     if(visibleArea) {
@@ -28,7 +31,7 @@ function getMockAxisFunction(renderer, getTranslator, visibleArea) {
 const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
 
@@ -364,7 +367,7 @@ QUnit.test('getCrosshair data. rotated', function(assert) {
 QUnit.module('Draw Point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             widgetType: 'chart',
@@ -1062,7 +1065,7 @@ QUnit.test('get bounding rect, rangebar', function(assert) {
 QUnit.module('Update Point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.options = {
             widgetType: 'chart',
@@ -1914,7 +1917,7 @@ QUnit.module('Tooltip', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }

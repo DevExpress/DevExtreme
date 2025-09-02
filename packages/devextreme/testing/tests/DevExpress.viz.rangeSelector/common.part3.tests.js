@@ -2,7 +2,11 @@ import { setHeight, getHeight } from 'core/utils/size';
 import { isNumeric } from 'core/utils/type';
 import $ from 'jquery';
 import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
-import commons from './rangeSelectorParts/commons.js';
+import {
+    environment,
+    returnValue,
+    StubRange,
+} from './rangeSelectorParts/commons.js';
 import slidersControllerModule from 'viz/range_selector/sliders_controller';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -16,9 +20,9 @@ const formatsAreEqual = function(format1, format2) {
     return dateLocalization.format(testDate, format1) === dateLocalization.format(testDate, format2);
 };
 
-QUnit.module('Parsing data', $.extend({}, commons.environment, {
+QUnit.module('Parsing data', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
         this.dataSource = [
             { x: '10', y1: 0, y2: 10 },
@@ -39,12 +43,12 @@ QUnit.module('Parsing data', $.extend({}, commons.environment, {
             { x: 'g', y1: 8, y2: 10 }
         ];
         this.incidentOccurred = sinon.spy();
-        DEBUG_stub_createIncidentOccurred(commons.returnValue(this.incidentOccurred));
+        DEBUG_stub_createIncidentOccurred(returnValue(this.incidentOccurred));
     },
 
     afterEach: function() {
         DEBUG_restore_createIncidentOccurred();
-        commons.environment.afterEach.apply(this, arguments);
+        environment.afterEach.apply(this, arguments);
     }
 }));
 
@@ -395,9 +399,9 @@ QUnit.test('rangeSelector with scale.valueType and dataSourceField and without c
     assert.equal(this.axis.setBusinessRange.getCall(0).args[0].dataType, 'numeric');
 });
 
-QUnit.module('Semidiscrete scale', $.extend({}, commons.environment, {
+QUnit.module('Semidiscrete scale', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         seriesDataSourceModule.SeriesDataSource = _SeriesDataSource;
 
         this.$container.width(1000);
@@ -1038,7 +1042,7 @@ QUnit.test('ticks should be correct', function(assert) {
     assert.deepEqual(this.axis.updateOptions.lastCall.args[0].customTicks, [1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2], 'ticks are correct');
 });
 
-QUnit.module('Initialization', commons.environment);
+QUnit.module('Initialization', environment);
 
 QUnit.test('Axis creation - check axis parameters', function(assert) {
     this.createWidget();
@@ -1245,8 +1249,8 @@ QUnit.test('rangeContainer canvas where scale label and sliderMarker not visible
 QUnit.test('rangeContainer canvas, it has dataSource and series', function(assert) {
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.createWidget({
         dataSource: [{ arg: 1, val: 2 }, { arg: 3, val: 4 }],
@@ -1260,8 +1264,8 @@ QUnit.test('rangeContainer canvas, it has dataSource and series', function(asser
 
 QUnit.test('rangeContainer canvas, it has dataSource and empty series', function(assert) {
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.createWidget({
         dataSource: [{ arg: 1, val: 2 }, { arg: 3, val: 4 }],
@@ -1444,8 +1448,8 @@ QUnit.test('custom backgroundColor', function(assert) {
 QUnit.test('With chart - pass marginOptions to axis', function(assert) {
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.seriesDataSource.stub('getMarginOptions').returns({
         margin: 'options'
@@ -1479,8 +1483,8 @@ QUnit.test('With chart - pass marginOptions to axis', function(assert) {
 QUnit.test('Without chart - do not pass marginOptions to axis', function(assert) {
     this.seriesDataSource.stub('isShowChart').returns(false);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.createWidget({
         dataSource: [{ x: 1, y1: 4 }, { x: 5, y1: 6 }],
@@ -1515,7 +1519,7 @@ QUnit.test('Generate minor ticks even if minorTicks are not visible', function(a
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].calculateMinors, true);
 });
 
-QUnit.module('Scale labels rea height calculation', commons.environment);
+QUnit.module('Scale labels rea height calculation', environment);
 
 QUnit.test('Only labels visible', function(assert) {
     this.createWidget({
@@ -1662,7 +1666,7 @@ QUnit.test('Draw first tick to measure height. Semidiscrete', function(assert) {
     assert.strictEqual(spy.getCall(2).args[0].value, 5);
 });
 
-QUnit.module('API', commons.environment);
+QUnit.module('API', environment);
 
 QUnit.test('Render. Container size is changed - redraw widget', function(assert) {
     const spy = sinon.spy();
@@ -1685,13 +1689,13 @@ QUnit.test('Render. Container size is not changed - do not redraw widget', funct
     assert.strictEqual(spy.callCount, 0);
 });
 
-QUnit.module('dataSource integration', commons.environment);
+QUnit.module('dataSource integration', environment);
 
 QUnit.test('dataSource creation', function(assert) {
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     const widget = this.createWidget({
         dataSource: [{}],
@@ -1706,8 +1710,8 @@ QUnit.test('dataSource creation', function(assert) {
 
 QUnit.test('update dataSource after option changing', function(assert) {
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     const widget = this.createWidget();
 
