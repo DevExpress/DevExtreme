@@ -981,6 +981,7 @@ class PivotGrid extends Widget {
         },
       };
 
+      // @ts-expect-error ts-error
       this._createComponent($buttonElement, Button, buttonOptions);
     }
 
@@ -999,6 +1000,7 @@ class PivotGrid extends Widget {
         },
       };
 
+      // @ts-expect-error ts-error
       this._createComponent($buttonElement, Button, buttonOptions);
     }
   }
