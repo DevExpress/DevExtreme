@@ -298,8 +298,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     this._$colorBoxInputContainer.toggleClass(COLOR_BOX_COLOR_IS_NOT_DEFINED, !hasValue);
 
     if (hasValue) {
-      this._$noColorIcon?.remove();
-      this._$noColorIcon = undefined;
+      this._cleanNoColorIcon();
 
       colorUtils.makeTransparentBackground(this._$colorResultPreview, value);
     } else {
@@ -378,12 +377,16 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     return true;
   }
 
+  _cleanNoColorIcon(): void {
+    this._$noColorIcon?.remove();
+    this._$noColorIcon = undefined;
+  }
+
   _clean(): void {
     super._clean();
     delete this._shouldSaveEmptyValue;
 
-    this._$noColorIcon?.remove();
-    this._$noColorIcon = undefined;
+    this._cleanNoColorIcon();
   }
 
   _valueOptionChangeHandler(): void {
