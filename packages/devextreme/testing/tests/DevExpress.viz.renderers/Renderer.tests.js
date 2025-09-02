@@ -72,8 +72,6 @@ QUnit.module('Renderer common API', {
 });
 
 QUnit.test('Creation', function(assert) {
-
-
     const renderer = this.createRenderer({
         cssClass: 'my-super-class',
         pathModified: 'yes',
@@ -580,8 +578,6 @@ QUnit.test('clipRect disposing', function(assert) {
 });
 
 QUnit.test('shadowFilter with params', function(assert) {
-
-
     const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
 
     // main filter
@@ -764,8 +760,6 @@ QUnit.test('getGrayScaleFilter. call twice - only one filter created', function(
 });
 
 QUnit.test('path without params', function(assert) {
-
-
     const path = this.renderer.path();
 
     assert.ok(path, 'path element is created');
@@ -792,8 +786,6 @@ QUnit.test('path with params', function(assert) {
 });
 
 QUnit.test('arc without params', function(assert) {
-
-
     const arc = this.renderer.arc();
 
     assert.ok(arc, 'arc element is created');
@@ -813,8 +805,6 @@ QUnit.test('arc without params', function(assert) {
 });
 
 QUnit.test('arc with params', function(assert) {
-
-
     const arc = this.renderer.arc(1000, 2000, 50, 100, 90, 180);
 
     assert.ok(arc, 'arc element is created');
@@ -834,8 +824,6 @@ QUnit.test('arc with params', function(assert) {
 });
 
 QUnit.test('text without params', function(assert) {
-
-
     const text = this.renderer.text();
 
     assert.ok(text, 'text element is created');
@@ -848,8 +836,6 @@ QUnit.test('text without params', function(assert) {
 });
 
 QUnit.test('text with params', function(assert) {
-
-
     const text = this.renderer.text('simple text', 10, 20);
 
     assert.ok(text, 'text element is created');
@@ -862,8 +848,6 @@ QUnit.test('text with params', function(assert) {
 });
 
 QUnit.test('text with params. text argument is 0', function(assert) {
-
-
     const text = this.renderer.text(0, 10, 20);
 
     assert.ok(text, 'text element is created');
@@ -876,8 +860,6 @@ QUnit.test('text with params. text argument is 0', function(assert) {
 });
 
 QUnit.test('text with params. text argument is null', function(assert) {
-
-
     const text = this.renderer.text(null, 10, 20);
 
     assert.ok(text, 'text element is created');

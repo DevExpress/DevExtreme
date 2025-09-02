@@ -110,7 +110,6 @@ const environment = {
             this.axis._drawConstantLineLabels(constantLineValue, {}, 0, this.renderer.g());
         }
 
-
         const renderer = this.renderer;
         const actualTexts = getArray(texts.length).map(function(_, i) {
             return renderer.text.getCall(i).args[0];

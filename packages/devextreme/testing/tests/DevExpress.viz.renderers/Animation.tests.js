@@ -147,7 +147,6 @@ import {
             animationController.addAnimation(animations[i]);
         }
 
-
         function doAssert() {
             assert.equal(animationController._animationCount, 4);
             assert.deepEqual(animationController._animations, { '0': animations[0], '1': animations[1], '2': animations[2], '3': animations[3] });

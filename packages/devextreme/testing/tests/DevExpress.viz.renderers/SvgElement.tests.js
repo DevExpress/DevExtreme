@@ -43,8 +43,6 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Creation', function(assert) {
-
-
         const elem = new this.Element(this.rendererStub, 'svg');
 
         assert.ok(elem);

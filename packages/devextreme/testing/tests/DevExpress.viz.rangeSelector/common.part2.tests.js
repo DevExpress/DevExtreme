@@ -1165,7 +1165,6 @@ QUnit.test('T576618. axis division factors are undefined, no tick intervals - co
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, 'shorttime', 'slider marker');
 });
 
-
 // B251771
 QUnit.test('scale.marker.label.customizeText is not a function', function(assert) {
     this.createWidget({

@@ -40,16 +40,16 @@ const Crosshair = crosshairModule.Crosshair;
 const ScrollBarClass = scrollBarClassModule.ScrollBar;
 const LabelCtor = new ObjectPool(Label);
 const tooltipOrig = tooltipModule.Tooltip;
+const { ExportMenu: ExportMenuOrig } = exportModule;
 
-function stubExport(that) {
+function stubExport() {
+    const that = this;
     that.export = new ExportMenu();
     that.export.stub('measure').returns([0, 0]);
-    exportModule.DEBUG_set_ExportMenu(sinon.spy(() => {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
     }));
 }
-
-stubExport(this);
 
 Element.prototype.updateRectangle = sinon.spy(Element.prototype.updateRectangle);
 
@@ -164,7 +164,7 @@ const environment = {
         const that = this;
         baseEnvironment.beforeEach.apply(that, arguments);
 
-        stubExport(that);
+        stubExport.call(this);
         setupMocks(that.$container);
         that.tooltip = new StubTooltip();
         that.themeManager = new ThemeManager();
@@ -280,6 +280,7 @@ const environment = {
 
         resetModules();
         tooltipModule.DEBUG_set_tooltip(tooltipOrig);
+        exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);
 
         this.tooltip = null;
 
