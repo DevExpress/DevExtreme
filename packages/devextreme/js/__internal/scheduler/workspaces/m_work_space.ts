@@ -273,8 +273,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _$timePanel: any;
 
-  _activeStateUnit: any;
-
   positionHelper!: PositionHelper;
 
   _$headerPanelContainer: any;
@@ -312,6 +310,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   renovatedGroupPanel: any;
 
   renovatedHeaderPanel: any;
+
+  readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return CELL_SELECTOR;
+  }
 
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   get type(): string {
@@ -382,8 +387,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   get verticalGroupTableClass() { return WORKSPACE_VERTICAL_GROUP_TABLE_CLASS; }
-
-  readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
   get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
@@ -2436,7 +2439,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._scrollSync = {};
     this._viewDataProvider = null;
     this._cellsSelectionState = null;
-    this._activeStateUnit = CELL_SELECTOR;
 
     // @ts-expect-error
     super._init();

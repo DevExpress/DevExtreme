@@ -70,12 +70,6 @@ export interface WidgetProperties<TComponent = any> extends WidgetOptions<TCompo
 class Widget<
   TProperties extends WidgetProperties = WidgetProperties,
 > extends DOMComponent<Widget<TProperties>, TProperties> {
-  public _activeStateUnit!: string;
-
-  public _feedbackHideTimeout = 400;
-
-  private readonly _feedbackShowTimeout: number = 30;
-
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
   protected _keyboardListenerId?: string | null;
@@ -95,6 +89,18 @@ class Widget<
     }
 
     return options;
+  }
+
+  protected _activeStateUnit(): string {
+    return '';
+  }
+
+  protected _feedbackHideTimeout(): number {
+    return 400;
+  }
+
+  protected _feedbackShowTimeout(): number {
+    return 30;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -291,13 +297,13 @@ class Widget<
   }
 
   _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
-    return $element.find(this._activeStateUnit).not(`.${DISABLED_STATE_CLASS}`);
+    return $element.find(this._activeStateUnit()).not(`.${DISABLED_STATE_CLASS}`);
   }
 
   _getActiveElement(): dxElementWrapper {
     const activeElement = this._eventBindingTarget();
 
-    if (this._activeStateUnit) {
+    if (this._activeStateUnit()) {
       return this._findActiveTarget(activeElement);
     }
 
@@ -440,7 +446,7 @@ class Widget<
 
   _attachHoverEvents(): void {
     const { hoverStateEnabled } = this.option();
-    const selector = this._activeStateUnit;
+    const selector = this._activeStateUnit();
     const namespace = 'UIFeedback';
     const $el = this._eventBindingTarget();
 
@@ -459,7 +465,7 @@ class Widget<
 
   _attachFeedbackEvents(): void {
     const { activeStateEnabled } = this.option();
-    const selector = this._activeStateUnit;
+    const selector = this._activeStateUnit();
     const namespace = 'UIFeedback';
     const $el = this._eventBindingTarget();
 
@@ -474,8 +480,8 @@ class Widget<
           { excludeValidators: ['disabled', 'readOnly'] },
         ),
         {
-          showTimeout: this._feedbackShowTimeout,
-          hideTimeout: this._feedbackHideTimeout,
+          showTimeout: this._feedbackShowTimeout(),
+          hideTimeout: this._feedbackHideTimeout(),
           selector,
           namespace,
         },
@@ -527,7 +533,7 @@ class Widget<
   }
 
   _findHoverTarget($el?: dxElementWrapper): dxElementWrapper | undefined {
-    return $el?.closest(this._activeStateUnit || this._eventBindingTarget());
+    return $el?.closest(this._activeStateUnit() || this._eventBindingTarget());
   }
 
   _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
