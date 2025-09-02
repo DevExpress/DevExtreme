@@ -43,23 +43,23 @@ const cropSettingsProps = (
 
 const processVirtualAppointment = (
   virtualAppointments: Record<string, AppointmentCollectorViewModel>,
-  appointmentSetting: AppointmentViewModelSettingsInternal & {
+  internalViewModelItem: AppointmentViewModelSettingsInternal & {
     itemData: SafeAppointment;
   },
 ): void => {
-  if (!appointmentSetting.virtual) {
+  if (!internalViewModelItem.virtual) {
     return;
   }
 
-  const virtualAppointment = appointmentSetting.virtual;
+  const virtualAppointment = internalViewModelItem.virtual;
   const virtualGroupIndex = virtualAppointment.index;
 
   if (!isDefined(virtualAppointments[virtualGroupIndex])) {
     virtualAppointments[virtualGroupIndex] = {
-      itemData: appointmentSetting.itemData,
+      itemData: internalViewModelItem.itemData,
       allDay: Boolean(virtualAppointment.isAllDay),
-      groupIndex: appointmentSetting.groupIndex,
-      sortedIndex: appointmentSetting.sortedIndex,
+      groupIndex: internalViewModelItem.groupIndex,
+      sortedIndex: internalViewModelItem.sortedIndex,
       top: virtualAppointment.top,
       left: virtualAppointment.left,
       width: virtualAppointment.width,
@@ -69,34 +69,34 @@ const processVirtualAppointment = (
     };
   }
 
-  virtualAppointments[virtualGroupIndex].items.push(cropSettingsProps(appointmentSetting));
+  virtualAppointments[virtualGroupIndex].items.push(cropSettingsProps(internalViewModelItem));
 };
 
 export const addCollector = (
   viewModel: AppointmentViewModelInternal[],
   timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentViewModelPlain[] => {
-  const settings = plainViewModel(viewModel);
+  const internalViewModelItems = plainViewModel(viewModel);
   const result: AppointmentViewModelPlain[] = [];
   const virtualAppointments: Record<string, AppointmentCollectorViewModel> = {};
 
-  settings.map((setting) => ({
-    ...setting,
+  internalViewModelItems.map((item) => ({
+    ...item,
     info: {
-      sourceAppointment: setting.info.sourceAppointment,
+      sourceAppointment: item.info.sourceAppointment,
       appointment: {
-        ...setting.info.appointment,
-        startDate: timeZoneCalculator.createDate(setting.info.sourceAppointment.startDate, 'toGrid'),
-        endDate: timeZoneCalculator.createDate(setting.info.sourceAppointment.endDate, 'toGrid'),
+        ...item.info.appointment,
+        startDate: timeZoneCalculator.createDate(item.info.sourceAppointment.startDate, 'toGrid'),
+        endDate: timeZoneCalculator.createDate(item.info.sourceAppointment.endDate, 'toGrid'),
       },
     },
-  })).forEach((setting) => {
+  })).forEach((item) => {
     switch (true) {
-      case Boolean(setting.virtual):
-        processVirtualAppointment(virtualAppointments, setting);
+      case Boolean(item.virtual):
+        processVirtualAppointment(virtualAppointments, item);
         break;
       default:
-        result.push(cropSettingsProps(setting));
+        result.push(cropSettingsProps(item));
     }
   });
 

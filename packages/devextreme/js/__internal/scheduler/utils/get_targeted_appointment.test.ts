@@ -14,11 +14,11 @@ import { getTargetedAppointment } from './get_targeted_appointment';
 
 const dataAccessor = new AppointmentDataAccessor(mockUppercaseFieldExpressions, true);
 const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
-const appointment = {
+const appointment: any = {
   StartDate: new Date(200, 0, 0),
   EndDate: new Date(200, 0, 1),
 };
-const appointmentRecurrence = {
+const appointmentRecurrence: any = {
   ...appointment,
   RecurrenceRule: 'FREQ=DAILY',
 };
@@ -54,7 +54,7 @@ describe('getTargetedAppointment', () => {
       {
         info: getInfo(),
         groupIndex: 0,
-      },
+      } as any,
       dataAccessor,
       timeZoneCalculator,
       getResourceManagerMock(),
@@ -74,8 +74,8 @@ describe('getTargetedAppointment', () => {
       appointmentRecurrence,
       {
         info: getInfo(),
-        groupIndex: 5,
-      },
+        groupIndex: 5, // 0,1; 0,2; 0,3; 0,4; 1,1; 1,2; <- 5
+      } as any,
       dataAccessor,
       timeZoneCalculator,
       resourceManager,
@@ -97,7 +97,7 @@ describe('getTargetedAppointment', () => {
         isAgendaModel: true,
         info: getInfo(),
         groupIndex: 0,
-      },
+      } as any,
       dataAccessor,
       timeZoneCalculator,
       getResourceManagerMock(),
@@ -117,7 +117,7 @@ describe('getTargetedAppointment', () => {
         isAgendaModel: true,
         info: getInfo(),
         groupIndex: 0,
-      },
+      } as any,
       dataAccessor,
       timeZoneCalculator,
       getResourceManagerMock(),
@@ -136,15 +136,15 @@ describe('getTargetedAppointment', () => {
       {
         isAgendaModel: true,
         info: getInfo(),
-        groupIndex: 5,
-      },
+        groupIndex: 3, // 0,1; 0,2; 0,3; 0,4; <- 3
+      } as any,
       dataAccessor,
       timeZoneCalculator,
       resourceManager,
     )).toEqual({
       ...appointment,
-      assigneeId: [2],
-      roomId: 1,
+      assigneeId: [4],
+      roomId: 0,
       displayStartDate: appointment.StartDate,
       displayEndDate: appointment.EndDate,
     });
