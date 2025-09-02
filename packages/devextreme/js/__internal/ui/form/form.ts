@@ -70,7 +70,7 @@ import {
 } from '@ts/ui/form/constants';
 import {
   getItemFormatInfo,
-  type ParsedAiValue,
+  type ParsedAIValue,
   parseResultForEditorType,
 } from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
@@ -1904,7 +1904,7 @@ class Form extends Widget<FormProperties> {
     const { formData } = this.option();
 
     if (isDefined(formData)) {
-      let resultValue: ParsedAiValue = value;
+      let resultValue: ParsedAIValue = value;
 
       resultValue = parseResultForEditorType(dataField, item?.editorType, value);
       if (typeof resultValue !== undefined) {

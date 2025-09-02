@@ -5,7 +5,7 @@ import type { FormItemComponent, SimpleItem } from '@js/ui/form';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-export type ParsedAiValue = string | string[] | boolean;
+export type ParsedAIValue = string | string[] | boolean;
 
 const getEditorTypeInfo = (editorType: FormItemComponent | undefined): string => {
   switch (editorType) {
@@ -33,7 +33,7 @@ export const parseResultForEditorType = (
   dataField: string,
   editorType: FormItemComponent | undefined,
   value: SmartPasteCommandResult[number]['value'],
-): ParsedAiValue => {
+): ParsedAIValue => {
   const errorValue = JSON.stringify(value);
   switch (editorType) {
     case 'dxDateBox':
