@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibility/utils';

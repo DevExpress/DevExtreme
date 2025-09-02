@@ -1,3 +1,5 @@
+/* eslint-disable keyword-spacing */
+
 const { spawnSync } = require('child_process');
 const parseArgs = require('minimist');
 
@@ -28,23 +30,23 @@ const matrix = [
 ];
 
 (async() => {
-    // eslint-disable-next-line no-undef
+
     const parsedArgs = parseArgs(process.argv);
     const componentFolderName = parsedArgs.componentFolder;
     let testParts = matrix;
 
-    if(componentFolderName != null) {
+    if (componentFolderName != null) {
         testParts = testParts.filter(({ componentFolder }) => componentFolder === componentFolderName);
     }
 
-    if(testParts.length === 0) {
+    if (testParts.length === 0) {
         const variants = [...new Set(matrix.map(({ componentFolder }) => componentFolder))];
         throw new Error(`componentFolder "${componentFolderName}" was not found. Use one of next variants: ${variants}`);
     }
 
     // eslint-disable-next-line no-restricted-syntax
-    for(const { name, ...args } of testParts) {
-        // eslint-disable-next-line no-console,no-undef
+    for (const { name, ...args } of testParts) {
+        // eslint-disable-next-line no-console
         console.log(`Started test: ${name}`);
 
         const startupParams = Object.entries(args).map(([key, value]) => `--${key}=${value}`);

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 const testCafe = require('testcafe');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
                 const $widgetElement = $(element);
                 const widgetNames = $widgetElement.data().dxComponents;
                 widgetNames?.forEach((name) => {
-                    if($widgetElement.hasClass('dx-widget')) {
+                    if ($widgetElement.hasClass('dx-widget')) {
                         $widgetElement[name]?.('dispose');
                     }
                 });
@@ -23,7 +23,7 @@ module.exports = {
             const body = document.querySelector('body');
             const parentContainer = document.getElementById('parentContainer');
 
-            if(shadowDom) {
+            if (shadowDom) {
                 parentContainer?.remove();
             } else {
                 $(parentContainer).remove();

@@ -1,3 +1,5 @@
+/* eslint-disable @stylistic/indent */
+
 import type {
   Appointment,
   Orientation,
@@ -43,8 +45,8 @@ const getGroupAppointmentDates = (viewType: ViewType): Date[] => {
       dayCount,
       startDate,
     ] = isWorkWeek
-      ? [5, new Date(2024, 0, 1, 8)]
-      : [7, new Date(2023, 11, 31, 8)];
+        ? [5, new Date(2024, 0, 1, 8)]
+        : [7, new Date(2023, 11, 31, 8)];
 
     return Array.from(
       { length: 12 * dayCount },
@@ -204,11 +206,11 @@ testOptions.forEach(({
     const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
       appointmentDates
         .map<Appointment>((date) => ({
-        text: resource.text,
-        startDate: date,
-        endDate: new Date(date.getTime() + HOUR / 2),
-        groupId: resource.id,
-      })),
+          text: resource.text,
+          startDate: date,
+          endDate: new Date(date.getTime() + HOUR / 2),
+          groupId: resource.id,
+        })),
     ), []);
 
     await createWidget('dxScheduler', {

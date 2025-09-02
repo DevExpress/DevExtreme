@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/extensions
 import { DEFAULT_BROWSER_SIZE } from './const.js';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 type BrowserSizeType = [width: number, height: number];
 
 const restoreBrowserSize = async (t: TestController):

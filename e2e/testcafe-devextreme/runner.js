@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable keyword-spacing */
 /* eslint-env node */
 
 const createTestCafe = require('testcafe');
@@ -21,9 +21,9 @@ const TESTCAFE_CONFIG = {
 };
 
 const changeTheme = async(t, themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
-    // eslint-disable-next-line no-undef
+
     window.DevExpress.ui.themes.ready(resolve);
-    // eslint-disable-next-line no-undef
+
     window.DevExpress.ui.themes.current(themeName);
 }),
 { dependencies: { themeName } }).with({ boundTestRun: t })();
@@ -33,7 +33,7 @@ const addShadowRootTree = async(t) => {
         const root = document.querySelector('#parentContainer');
         const childNodes = root.childNodes;
 
-        if(!root.shadowRoot) {
+        if (!root.shadowRoot) {
             root.attachShadow({ mode: 'open' });
         }
 
@@ -49,7 +49,7 @@ const wait = async(timeout) => new Promise(resolve => setTimeout(resolve, timeou
 const retry = async(action, attempt) => {
     return await action()
         .catch(async(error) => {
-            if(attempt <= 1) {
+            if (attempt <= 1) {
                 throw error;
             }
 
@@ -81,7 +81,7 @@ createTestCafe(TESTCAFE_CONFIG)
         setShadowDom(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-        if(fs.existsSync('./screenshots')) {
+        if (fs.existsSync('./screenshots')) {
             fs.rmSync('./screenshots', { recursive: true });
         }
 
@@ -110,7 +110,7 @@ createTestCafe(TESTCAFE_CONFIG)
             const [...arr] = array;
             const res = [];
 
-            while(arr.length) {
+            while (arr.length) {
                 res.push(arr.splice(0, fixturesInChunkCount));
             }
 
@@ -119,7 +119,7 @@ createTestCafe(TESTCAFE_CONFIG)
 
         const filters = [];
 
-        if(indices) {
+        if (indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
             const fixtureChunks = split(fixtures, total);
@@ -139,25 +139,25 @@ createTestCafe(TESTCAFE_CONFIG)
             });
         }
 
-        if(testName) {
+        if (testName) {
             filters.push(name => name === testName);
         }
-        if(args.skipUnstable) {
+        if (args.skipUnstable) {
             filters.push((testName, fixtureName, fixturePath, testMeta) => {
                 return !testMeta.unstable;
             });
         }
-        if(filters.length) {
+        if (filters.length) {
             runner.filter((...args) => {
-                for(let i = 0; i < filters.length; i++) {
-                    if(!filters[i](...args)) {
+                for (let i = 0; i < filters.length; i++) {
+                    if (!filters[i](...args)) {
                         return false;
                     }
                 }
                 return true;
             });
         }
-        if(args.cache) {
+        if (args.cache) {
             runner.cache = args.cache;
         }
 
@@ -171,11 +171,11 @@ createTestCafe(TESTCAFE_CONFIG)
                     const [width, height] = DEFAULT_BROWSER_SIZE;
                     await t.resizeWindow(width, height);
 
-                    if(args.shadowDom) {
+                    if (args.shadowDom) {
                         await addShadowRootTree(t);
                     }
 
-                    if(args.theme) {
+                    if (args.theme) {
                         await changeTheme(t, args.theme);
                     }
                 },
@@ -185,7 +185,7 @@ createTestCafe(TESTCAFE_CONFIG)
             },
         };
 
-        if(args.browsers === 'chrome:docker') {
+        if (args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;
         }
 
@@ -210,7 +210,7 @@ function setShadowDom(args) {
 }
 
 function expandBrowserAlias(browser, componentFolder) {
-    switch(browser) {
+    switch (browser) {
         case 'chrome:devextreme-shr2':
             return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
         case 'chrome:docker':
