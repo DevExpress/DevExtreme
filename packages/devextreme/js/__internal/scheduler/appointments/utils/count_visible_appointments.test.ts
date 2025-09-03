@@ -10,9 +10,9 @@ const createAppointment = (date: number) => ({
 describe('countVisibleAppointments', () => {
   it('should return correct number of agenda appointments', () => {
     expect(countVisibleAppointments([
-      { itemData: 1, agendaSettings: createAppointment(0) } as any,
-      { itemData: 2, agendaSettings: createAppointment(1) } as any,
-      { itemData: 3, agendaSettings: createAppointment(2) } as any,
+      { itemData: 1, isAgendaModel: true } as any,
+      { itemData: 2, isAgendaModel: true } as any,
+      { itemData: 3, isAgendaModel: true } as any,
     ])).toBe(3);
   });
 
