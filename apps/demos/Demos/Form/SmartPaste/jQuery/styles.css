@@ -1,0 +1,42 @@
+.demo-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-columns: calc((100% - 60px) / 3) calc(100% - 40px - ((100% - 60px) / 3));
+  grid-template-rows: auto auto;
+  gap: 24px 40px;
+  min-width: 720px;
+  max-width: 900px;
+  margin: auto;
+}
+
+p {
+  color: var(--dx-texteditor-color-label);
+}
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dx-layout-manager .dx-field-item.dx-last-row {
+  padding-top: 4px;
+}
+
+.buttons-group {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.buttons-group .dx-item-content {
+  gap: 8px;
+}
+
+.buttons-group .dx-field-item {
+  padding: 0 !important;
+}
+
+.buttons-group .dx-item {
+  flex: unset!important;
+}
