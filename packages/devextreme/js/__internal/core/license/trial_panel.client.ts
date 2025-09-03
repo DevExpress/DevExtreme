@@ -111,6 +111,8 @@ class DxLicense extends SafeHTMLElement {
 
   private readonly _buttonStyles: string;
 
+  private _subscriptionsSpan?: HTMLSpanElement;
+
   constructor() {
     super();
 
@@ -131,6 +133,48 @@ class DxLicense extends SafeHTMLElement {
       buttonStyles,
       DxLicense.customStyles?.contentStyles,
     );
+  }
+
+  private _getSubscriptionsArray(subscriptions: string | null): string[] {
+    return subscriptions?.split(',').map((x) => x.trim()) ?? [];
+  }
+
+  public updateSubscriptions(newSubscriptions: string): void {
+    if (!this._subscriptionsSpan || !newSubscriptions) return;
+    const currentSubscriptionsStr = this.getAttribute(attributeNames.subscriptions);
+    const currentSubscriptions = this._getSubscriptionsArray(currentSubscriptionsStr);
+    if (!currentSubscriptions.length) {
+      this._updateSubscriptionsText(newSubscriptions);
+      return;
+    }
+
+    const newSubscriptionsArray = this._getSubscriptionsArray(newSubscriptions);
+    const mergedSubscriptions: string[] = [];
+
+    newSubscriptionsArray.forEach((subscription) => {
+      if (currentSubscriptions.some((x) => x === subscription)) {
+        mergedSubscriptions.push(subscription);
+      }
+    });
+
+    this._updateSubscriptionsText(
+      mergedSubscriptions.length !== 0
+        ? mergedSubscriptions.join(', ')
+        : [...currentSubscriptions, ...newSubscriptionsArray].join(', '),
+    );
+  }
+
+  private _updateSubscriptionsText(subscriptions: string | null): void {
+    if (subscriptions && this._subscriptionsSpan) {
+      this.setAttribute(attributeNames.subscriptions, subscriptions);
+      this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
+    }
+  }
+
+  private _createSubscriptionsSpan(): HTMLSpanElement {
+    this._subscriptionsSpan = this._createSpan('');
+    this._updateSubscriptionsText(this.getAttribute(attributeNames.subscriptions));
+    return this._subscriptionsSpan;
   }
 
   private _createSpan(text: string): HTMLSpanElement {
@@ -186,20 +230,14 @@ class DxLicense extends SafeHTMLElement {
   private _createContentContainer(): HTMLElement {
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
-    const subscriptions = this.getAttribute(attributeNames.subscriptions);
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution prohibited. Please '),
       this._createLink('register', this.getAttribute(attributeNames.licensingDoc) as string),
       this._createSpan(' an existing license or '),
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+      this._createSubscriptionsSpan(),
     );
-
-    if (subscriptions) {
-      contentContainer.append(
-        this._createSpan(` Included in Subscriptions: ${subscriptions}.`),
-      );
-    }
 
     return contentContainer;
   }
@@ -261,7 +299,8 @@ class DxLicenseTrigger extends SafeHTMLElement {
     });
 
     const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (!licensePanel.length && !DxLicense.closed) {
+    if (DxLicense.closed) return;
+    if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
 
       Object.values(attributeNames).forEach((attrName) => {
@@ -274,6 +313,9 @@ class DxLicenseTrigger extends SafeHTMLElement {
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
 
       document.body.prepend(license);
+    } else {
+      const subscriptions = this.getAttribute(attributeNames.subscriptions) as string;
+      (licensePanel[0] as DxLicense).updateSubscriptions(subscriptions);
     }
   }
 }
