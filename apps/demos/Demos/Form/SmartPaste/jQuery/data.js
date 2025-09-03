@@ -46,14 +46,12 @@ const items = [{
     dataField: 'First Name',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter First Name',
       stylingMode: 'filled',
     },
   }, {
     dataField: 'Last Name',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter Last Name',
       stylingMode: 'filled',
     },
   }, {
@@ -70,7 +68,6 @@ const items = [{
     dataField: 'Email',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter Email',
       stylingMode: 'filled',
     },
     validationRules: [{ type: 'email' }],
@@ -91,28 +88,24 @@ const items = [{
     dataField: 'Street Address',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter Street Address',
       stylingMode: 'filled',
     },
   }, {
     dataField: 'City',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter City',
       stylingMode: 'filled',
     },
   }, {
     dataField: 'State/Province/Region',
     editorType: 'dxTextBox',
     editorOptions: {
-      placeholder: 'Enter State/Province/Region',
       stylingMode: 'filled',
     },
   }, {
     dataField: 'ZIP',
     editorType: 'dxNumberBox',
     editorOptions: {
-      placeholder: 'Enter ZIP',
       stylingMode: 'filled',
       mode: 'text',
       value: null,
