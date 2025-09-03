@@ -31,6 +31,10 @@ export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
+const EMPTY_ACTIVE_STATE_UNIT = '';
+const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
+const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
+
 export type SupportedKeyHandler = (
   e: DxEvent<KeyboardEvent>,
   options?: KeyboardKeyDownEvent
@@ -92,15 +96,15 @@ class Widget<
   }
 
   protected _activeStateUnit(): string {
-    return '';
+    return EMPTY_ACTIVE_STATE_UNIT;
   }
 
   protected _feedbackHideTimeout(): number {
-    return 400;
+    return DEFAULT_FEEDBACK_HIDE_TIMEOUT;
   }
 
   protected _feedbackShowTimeout(): number {
-    return 30;
+    return DEFAULT_FEEDBACK_SHOW_TIMEOUT;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
