@@ -1,15 +1,18 @@
-const common = require('./commonParts/common.js');
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
-require('viz/tree_map/hover');
+import 'viz/tree_map/hover';
 
-QUnit.module('Basics', common.environment);
+QUnit.module('Basics', environment);
 
 QUnit.test('Turn tile hover on', function(assert) {
     function onHoverChanged(e) {
         assert.strictEqual(e.node.isHovered(), true, 'state inside callback');
     }
     const spy = sinon.spy(onHoverChanged);
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         tile: {
             border: {
@@ -47,7 +50,7 @@ QUnit.test('Turn tile hover off', function(assert) {
         assert.strictEqual(e.node.isHovered(), false, 'state inside callback');
     }
     const spy = sinon.spy(onHoverChanged);
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         colorizer: {
             type: 'none'
@@ -83,7 +86,7 @@ QUnit.test('Turn tile hover off', function(assert) {
 
 QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         colorizer: {
             type: 'none'
@@ -119,7 +122,7 @@ QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
 
 QUnit.test('Turn group hover on', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }, { value: 2 }]
         }, {
@@ -169,7 +172,7 @@ QUnit.test('Turn group hover on', function(assert) {
 
 QUnit.test('Turn group hover off', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             items: [{ value: 1, color: 'green' }, { value: 2, color: 'grey' }]
         }, {
@@ -215,7 +218,7 @@ QUnit.test('Turn group hover off', function(assert) {
 
 QUnit.test('Turn group hover on when another group is hovered', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }, { value: 2 }]
         }, {
@@ -251,7 +254,7 @@ QUnit.test('Turn group hover on when another group is hovered', function(assert)
 
 QUnit.test('Disabled hover', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         hoverEnabled: false,
         onHoverChanged: spy
@@ -264,7 +267,7 @@ QUnit.test('Disabled hover', function(assert) {
 
 QUnit.test('Disabled hover for group', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }, { value: 2 }]
         }, {
@@ -296,7 +299,7 @@ QUnit.test('Disabled hover for group', function(assert) {
 
 QUnit.test('Turn tile hover on with disabled hover for group', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }, { value: 2 }]
         }, {
@@ -328,7 +331,7 @@ QUnit.test('Turn tile hover on with disabled hover for group', function(assert) 
 
 QUnit.test('Hover group after hover tile with disabled hover for group', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 1 }, { value: 2 }]
         }, {
@@ -362,7 +365,7 @@ QUnit.test('Hover group after hover tile with disabled hover for group', functio
 
 QUnit.test('Change hover mode', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onHoverChanged: spy
     });
@@ -378,7 +381,7 @@ QUnit.test('Change hover mode', function(assert) {
 
 QUnit.test('Change hover mode of the group', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onHoverChanged: spy
     });
@@ -394,7 +397,7 @@ QUnit.test('Change hover mode of the group', function(assert) {
 
 QUnit.test('Hover state is not applied until endUpdate', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         tile: {
             hoverStyle: {
@@ -413,7 +416,7 @@ QUnit.test('Hover state is not applied until endUpdate', function(assert) {
 });
 
 QUnit.test('State inside callback', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onHoverChanged: function(e) {
             assert.strictEqual(e.node.isHovered(), true, 'state');

@@ -305,7 +305,7 @@ export const plugin = {
     name: 'title',
     init: function() {
         const that = this;
-        // "exports" is used for testing purposes.
+
         that._title = new Title({
             renderer: that._renderer,
             cssClass: that._rootClassPrefix + '-title',

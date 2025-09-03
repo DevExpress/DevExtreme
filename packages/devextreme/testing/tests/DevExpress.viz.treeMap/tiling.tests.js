@@ -1,10 +1,18 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
-const environment = {
-    beforeEach: common.environment.beforeEach,
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
+import $ from 'jquery';
+import 'viz/tree_map/tiling.squarified';
+import 'viz/tree_map/tiling.strip';
+import 'viz/tree_map/tiling.slice_and_dice';
+import 'viz/tree_map/tiling.rotated_slice_and_dice';
+
+const moduleSetup = {
+    beforeEach: environment.beforeEach,
 
     create: function(options) {
-        return common.createWidget($.extend(true, {
+        return createWidget($.extend(true, {
             tile: {
                 border: {
                     width: 0
@@ -25,12 +33,7 @@ const environment = {
     }
 };
 
-require('viz/tree_map/tiling.squarified');
-require('viz/tree_map/tiling.strip');
-require('viz/tree_map/tiling.slice_and_dice');
-require('viz/tree_map/tiling.rotated_slice_and_dice');
-
-QUnit.module('Algorithms', environment);
+QUnit.module('Algorithms', moduleSetup);
 
 QUnit.test('Squarified', function(assert) {
     this.create({
@@ -296,7 +299,7 @@ QUnit.test('Rotated sliceAndDice', function(assert) {
     ]);
 });
 
-QUnit.module('algorithmDirections', environment);
+QUnit.module('algorithmDirections', moduleSetup);
 
 QUnit.test('leftBottomRightTop', function(assert) {
     this.create({

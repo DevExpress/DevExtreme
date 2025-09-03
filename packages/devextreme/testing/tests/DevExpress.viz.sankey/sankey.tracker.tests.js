@@ -1,14 +1,13 @@
 import $ from 'jquery';
-import common, { createSankey, environment } from './commonParts/common.js';
+import { createSankey, environment } from './commonParts/common.js';
 import trackerModule from 'viz/sankey/tracker';
 import tooltipModule from 'viz/core/tooltip';
 import { name as clickEventName } from 'common/core/events/click';
 import pointerEvents from 'common/core/events/pointer';
 import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
 import domAdapter from '__internal/core/m_dom_adapter';
-
-
 import dxSankey from 'viz/sankey/sankey';
+
 dxSankey.addPlugin({
     name: 'tracker-test',
     init: function() {
@@ -22,7 +21,7 @@ setTooltipCustomOptions(dxSankey);
 
 const trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        common.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.linksGroupIndex = 0;
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
@@ -131,7 +130,6 @@ QUnit.test('Click on link', function(assert) {
 
     assert.strictEqual(spy.callCount, 1, 'call count');
     assert.strictEqual(spy.lastCall.args[0].target, widget.getAllLinks()[0], 'target');
-
 });
 
 QUnit.module('Tooltip', trackerEnvironment);
@@ -181,7 +179,7 @@ QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
     assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
-QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
+QUnit.test('Tooltip with template. Hover link - call link template', function(assert) {
     const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -225,7 +223,6 @@ QUnit.test('Show custom tooltip (html) on hovered link', function(assert) {
     assert.ok(stub.called);
     assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
 });
-
 
 QUnit.test('Tooltip with template. Hover node - call node template', function(assert) {
     const nodeTooltipTemplate = sinon.spy();

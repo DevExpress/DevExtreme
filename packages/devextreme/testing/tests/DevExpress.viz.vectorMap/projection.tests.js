@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const eventEmitterModule = require('viz/vector_map/event_emitter');
-const projectionModule = require('viz/vector_map/projection.main');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import eventEmitterModule from 'viz/vector_map/event_emitter';
+import projectionModule from 'viz/vector_map/projection.main';
+import { projection } from 'viz/vector_map/projection';
+
 const Projection = projectionModule.Projection;
-const projectionEnginesModule = require('viz/vector_map/projection');
-const projection = projectionEnginesModule.projection;
 
 function returnValue(value) {
     return function() {
@@ -917,7 +917,6 @@ QUnit.module('Mercator - project', {
     doTest: function(assert, arg, expected) {
         const actual = this.engine.project(arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
-
     },
 
     bounds: function(bounds) {

@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
@@ -7,7 +9,7 @@ import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/c
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         widgetType: 'chart',
@@ -60,7 +62,7 @@ const environment = {
     beforeEach: function() {
         insertMockFactory();
         let mockPointIndex = 0;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10, size: 1 }, { arg: 2, val: 20, size: 1 }, { arg: 3, val: 30, size: 1 }, { arg: 4, val: 40, size: 1 }];
 
@@ -175,21 +177,16 @@ QUnit.test('Draw without data', function(assert) {
     const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
-
     });
-    // act
     series.draw(false);
-    // assert
 
     checkGroups(assert, series);
-
 });
 
 QUnit.test('Draw simple data without animation', function(assert) {
     const series = this.createSeries({
         type: seriesType,
         point: { visible: false }
-
     });
     series.updateData(this.data);
     series.createPoints();
@@ -197,9 +194,8 @@ QUnit.test('Draw simple data without animation', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(false);
-    // assert
+
     checkGroups(assert, series);
 
     $.each(series._points, function(i, p) {
@@ -219,9 +215,8 @@ QUnit.test('Draw simple data with animation', function(assert) {
         pt.x = pt.argument;
         pt.y = pt.value;
     });
-    // act
     series.draw(true);
-    // assert
+
     checkGroups(assert, series);
 
     assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -261,9 +256,8 @@ QUnit.module('Bubble. Points animation', {
 
 QUnit.test('Draw without animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(false);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -274,9 +268,8 @@ QUnit.test('Draw without animation', function(assert) {
 
 QUnit.test('Draw with animation', function(assert) {
     const series = this.series;
-    // act
     series.draw(true);
-    // assert
+
     $.each(series._points, function(i, p) {
         assert.ok(p.draw.calledOnce);
         assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -645,7 +638,6 @@ QUnit.test('customize point color. all', function(assert) {
                         dashStyle: 's-b-dashStyle'
                     }
                 }
-
             };
         }
     });
@@ -845,7 +837,6 @@ QUnit.test('areErrorBarsVisible', function(assert) {
             displayMode: 'all'
         }
     }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
-
 });
 
 QUnit.module('Null points', {

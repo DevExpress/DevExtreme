@@ -1,13 +1,16 @@
-const common = require('./commonParts/common.js');
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
-require('viz/tree_map/colorizing.discrete');
-require('viz/tree_map/colorizing.gradient');
-require('viz/tree_map/colorizing.range');
+import 'viz/tree_map/colorizing.discrete';
+import 'viz/tree_map/colorizing.gradient';
+import 'viz/tree_map/colorizing.range';
 
-QUnit.module('Coloring', common.environment);
+QUnit.module('Coloring', environment);
 
 QUnit.test('Discrete', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -34,7 +37,7 @@ QUnit.test('Discrete', function(assert) {
 });
 
 QUnit.test('Discrete. Pass correct leafs count to palette', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 10,
             items: [
@@ -71,7 +74,7 @@ QUnit.test('Discrete. Pass correct leafs count to palette', function(assert) {
 });
 
 QUnit.test('Gradient', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1, col: 10
         }, {
@@ -99,7 +102,7 @@ QUnit.test('Gradient', function(assert) {
 });
 
 QUnit.test('Gradient without range', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1, col: 10
         }, {
@@ -132,7 +135,7 @@ QUnit.test('Gradient without range', function(assert) {
 });
 
 QUnit.test('Range', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1, col: 10
         }, {
@@ -163,7 +166,7 @@ QUnit.test('Range', function(assert) {
 });
 
 QUnit.test('Discrete group', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [
             { items: [{ value: 1 }, { value: 2 }] },
             { items: [{ value: 1 }, { value: 2 }] }
@@ -183,7 +186,7 @@ QUnit.test('Discrete group', function(assert) {
 });
 
 QUnit.test('Discrete group. Pass correct group count to palette', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [
             { items: [{ value: 1 }, { value: 2 }] },
             { items: [{ value: 1 }, { value: 2 }] },
@@ -205,7 +208,7 @@ QUnit.test('Discrete group. Pass correct group count to palette', function(asser
 });
 
 QUnit.test('Gradient group', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             col: 1,
             items: [{ value: 1, col: 5 }, { value: 2, col: 3 }]
@@ -235,7 +238,7 @@ QUnit.test('Gradient group', function(assert) {
 });
 
 QUnit.test('Range group', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             col: 1,
             items: [{ value: 1, col: 5 }, { value: 2, col: 3 }]
@@ -265,7 +268,7 @@ QUnit.test('Range group', function(assert) {
 });
 
 QUnit.test('Complex discrete group', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -306,7 +309,7 @@ QUnit.test('Complex discrete group', function(assert) {
 });
 
 QUnit.test('Using value as color code', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             val: 1
         }, {

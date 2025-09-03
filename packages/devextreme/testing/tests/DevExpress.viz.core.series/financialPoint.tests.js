@@ -1,4 +1,7 @@
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockSeries } from '../../helpers/chartMocks.js';
@@ -45,13 +48,11 @@ QUnit.module('Point coordinates translation. Financial', {
                         'stroke-width': 2
                     }
                 }
-
             },
             label: {
                 visible: false
             }
         };
-
     },
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 },
@@ -219,7 +220,6 @@ QUnit.module('Point coordinates correction. Candlestick', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'candlestick',
                 label: { visible: false }
@@ -324,7 +324,6 @@ QUnit.module('Point coordinates correction. Stock', {
                             'stroke-width': 2
                         }
                     }
-
                 },
                 type: 'stock',
                 label: { visible: false }
@@ -681,7 +680,7 @@ QUnit.test('Point is visible on the bottom border', function(assert) {
 QUnit.module('Draw point. Candlestick', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -1086,7 +1085,7 @@ QUnit.test('Marker without state', function(assert) {
 QUnit.module('Draw point. Stock', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
         this.group.reductionMarkersGroup = this.renderer.g();
@@ -1349,7 +1348,7 @@ QUnit.module('Tooltip', {
                 failOnWrongData: true
             })
         };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
         this.group.reductionMarkersGroup = this.renderer.g();
@@ -1388,7 +1387,7 @@ QUnit.module('Tooltip', {
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
             getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -1685,7 +1684,7 @@ QUnit.module('Styles', {
             getArgumentAxis: function() { return { getTranslator: function() { return new MockTranslator({ translate: {} }); } }; },
             getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = {
             defaultMarkersGroup: this.renderer.g(),
             reductionMarkersGroup: this.renderer.g(),
@@ -1768,7 +1767,7 @@ QUnit.module('Draw label', {
             label.getBoundingRect.returns({ height: 10, width: 20 });
             return label;
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -2081,7 +2080,7 @@ QUnit.test('Draw label, rotated (point.high > maxX area of series)', function(as
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.options = {
             widgetType: 'chart',
