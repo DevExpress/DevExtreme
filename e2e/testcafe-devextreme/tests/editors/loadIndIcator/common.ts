@@ -49,7 +49,7 @@ fixture.disablePageReloads`LoadIndicator`
       }
 
       .${LOADINDICATOR_SEGMENT_CLASS} {
-        transform: scale(1);
+        transform: scale(1) !important;
       }
     `);
 

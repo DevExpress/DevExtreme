@@ -109,7 +109,7 @@ test('generating state', async (t) => {
     }
 
     .${LOADINDICATOR_SEGMENT_CLASS} {
-      transform: scale(1);
+      transform: scale(1) !important;
     }
   `);
 
