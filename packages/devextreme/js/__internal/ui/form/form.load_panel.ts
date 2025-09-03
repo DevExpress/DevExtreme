@@ -63,6 +63,10 @@ export class FormLoadPanel {
       .appendTo(this._dependencies.$container);
 
     this._loadPanel = this._dependencies.onLoadPanelCreate($loadPanel, {
+      width: FORM_LOAD_INDICATOR_SIZE,
+      height: FORM_LOAD_INDICATOR_SIZE,
+      maxHeight: undefined,
+      maxWidth: undefined,
       position: {
         of: this._dependencies.$container.get(0),
       },
