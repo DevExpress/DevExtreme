@@ -55,6 +55,10 @@ class Switch extends Editor<Properties> {
 
   _clickAction?: (event?: Record<string, unknown>) => void;
 
+  protected _feedbackHideTimeout(): number {
+    return 0;
+  }
+
   _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
@@ -111,7 +115,6 @@ class Switch extends Editor<Properties> {
   _init(): void {
     super._init();
 
-    this._feedbackHideTimeout = 0;
     this._animating = false;
   }
 

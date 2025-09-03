@@ -153,6 +153,14 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
 
   _$wrapper!: dxElementWrapper;
 
+  protected _activeStateUnit(): string {
+    return `.${TABS_ITEM_CLASS}`;
+  }
+
+  protected _feedbackHideTimeout(): number {
+    return FEEDBACK_HIDE_TIMEOUT;
+  }
+
   _getDefaultOptions(): TabsProperties {
     return {
       ...super._getDefaultOptions(),
@@ -231,7 +239,6 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
 
     super._init();
 
-    this._activeStateUnit = `.${TABS_ITEM_CLASS}`;
     this.setAria('role', 'tablist');
     this.$element().addClass(TABS_CLASS);
     this._toggleScrollingEnabledClass(scrollingEnabled);
@@ -241,8 +248,6 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     this._toggleStylingModeClass(stylingMode);
     this._renderWrapper();
     this._renderMultiple();
-
-    this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {

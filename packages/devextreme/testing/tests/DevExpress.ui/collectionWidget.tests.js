@@ -35,9 +35,9 @@ class TestComponent extends CollectionWidget {
     constructor(element, options) {
         super(element, options);
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
     }
 
+    _activeStateUnit() { return '.item'; }
     _itemClass() { return ITEM_CUSTOM_CLASS; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
