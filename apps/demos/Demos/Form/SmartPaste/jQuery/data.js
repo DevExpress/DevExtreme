@@ -30,7 +30,7 @@ const items = [{
       stylingMode: 'filled',
     },
     aiOptions: {
-      instruction: 'format date mm/dd/yyyy',
+      instruction: 'format date like mm/dd/yyyy',
     },
   }],
 }, {
