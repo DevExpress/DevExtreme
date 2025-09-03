@@ -81,6 +81,10 @@ class MenuBase<
   // eslint-disable-next-line no-restricted-globals
   _showSubmenusTimeout?: ReturnType<typeof setTimeout>;
 
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
+
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
@@ -176,7 +180,6 @@ class MenuBase<
 
   _init(): void {
     super._init();
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._renderSelectedItem();
     this._initActions();

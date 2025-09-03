@@ -150,6 +150,10 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
   _$indicator?: dxElementWrapper;
 
+  protected _activeStateUnit(): string {
+    return GALLERY_ITEM_SELECTOR;
+  }
+
   _getDefaultOptions(): GalleryProperties {
     return {
       ...super._getDefaultOptions(),
@@ -196,7 +200,6 @@ class Gallery extends CollectionWidget<GalleryProperties, Item, CollectionItemKe
 
     const { loop } = this.option();
 
-    this._activeStateUnit = GALLERY_ITEM_SELECTOR;
     this.option('loopItemFocus', loop);
   }
 
