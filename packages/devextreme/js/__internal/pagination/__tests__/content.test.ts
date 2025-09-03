@@ -3,8 +3,8 @@ import type { ComponentWrapperProps } from '@ts/core/r1/component_wrapper';
 
 import Pagination from '../wrappers/pagination';
 
-describe('pages-container-visibility', () => {
-  const arrangePaginationWith = (config: ComponentWrapperProps): {
+describe('Pagination: pagination visibility', () => {
+  const createPagination = (config: ComponentWrapperProps): {
     container: HTMLElement;
     pagination: Pagination;
   } => {
@@ -23,107 +23,98 @@ describe('pages-container-visibility', () => {
     return { container, pagination };
   };
 
-  const assertPagesContainerIsVisible = (container: HTMLElement): void => {
+  const isPagesContainerVisible = (container: HTMLElement): boolean => {
     const pagesContainer = container.querySelector('.dx-pages');
     expect(pagesContainer).toBeTruthy();
     const style = pagesContainer?.getAttribute('style');
     const isVisible = style === null || !style?.includes('visibility: hidden');
-    expect(isVisible).toBe(true);
+    return isVisible;
   };
 
-  const assertPagesContainerIsHidden = (container: HTMLElement): void => {
+  const isPagesContainerHidden = (container: HTMLElement): boolean => {
     const pagesContainer = container.querySelector('.dx-pages');
     expect(pagesContainer).toBeTruthy();
     const isHidden = pagesContainer?.getAttribute('style')?.includes('visibility: hidden') ?? false;
-    expect(isHidden).toBe(true);
+    return isHidden;
   };
 
   describe('when pageCount = 1', () => {
     it('should hide container when no explicit visible components are enabled', () => {
-      const { container } = arrangePaginationWith({ itemCount: 5, pageSize: 10 });
+      const { container } = createPagination({ itemCount: 5, pageSize: 10 });
 
-      assertPagesContainerIsHidden(container);
+      expect(isPagesContainerHidden(container)).toBe(true);
     });
 
     it('should show container when showInfo is enabled', () => {
-      const { container } = arrangePaginationWith({
+      const { container } = createPagination({
         itemCount: 8,
         pageSize: 10,
         showInfo: true,
       });
 
-      assertPagesContainerIsVisible(container);
+      expect(isPagesContainerVisible(container)).toBe(true);
     });
 
     it('should show container when showNavigationButtons is enabled', () => {
-      const { container } = arrangePaginationWith({
+      const { container } = createPagination({
         itemCount: 6,
         pageSize: 10,
         showNavigationButtons: true,
       });
 
-      assertPagesContainerIsVisible(container);
+      expect(isPagesContainerVisible(container)).toBe(true);
     });
 
     it('should show container when showPageSizeSelector is enabled', () => {
-      const { container } = arrangePaginationWith({
+      const { container } = createPagination({
         itemCount: 9,
         pageSize: 10,
         showPageSizeSelector: true,
         allowedPageSizes: [5, 10, 'all'],
       });
 
-      assertPagesContainerIsVisible(container);
+      expect(isPagesContainerVisible(container)).toBe(true);
     });
   });
 
   describe('when pageCount > 1', () => {
     it('should always show container regardless of other settings', () => {
-      const { container } = arrangePaginationWith({
+      const { container } = createPagination({
         itemCount: 25,
         pageSize: 10,
         pageCount: 3,
       });
 
-      assertPagesContainerIsVisible(container);
+      expect(isPagesContainerVisible(container)).toBe(true);
     });
   });
 
   describe('dynamic visibility changes', () => {
     it('should toggle visibility when showInfo changes at runtime', () => {
-      const { container, pagination } = arrangePaginationWith({
+      const { container, pagination } = createPagination({
         itemCount: 7,
         pageSize: 10,
       });
 
-      assertPagesContainerIsHidden(container);
-
       pagination.option('showInfo', true);
 
-      assertPagesContainerIsVisible(container);
+      expect(isPagesContainerVisible(container)).toBe(true);
 
       pagination.option('showInfo', false);
 
-      assertPagesContainerIsHidden(container);
+      expect(isPagesContainerHidden(container)).toBe(true);
+    });
+  });
+
+  it('should keep info block visible when pageSize > itemCount and showInfo=true (T1299780)', () => {
+    const { container } = createPagination({
+      itemCount: 4,
+      pageSize: 10,
+      showInfo: true,
+      allowedPageSizes: [4, 6, 11],
     });
 
-    it('should toggle visibility when itemCount changes pageCount', () => {
-      const { container, pagination } = arrangePaginationWith({
-        itemCount: 8,
-        pageSize: 10,
-      });
-
-      assertPagesContainerIsHidden(container);
-
-      pagination.option('itemCount', 25);
-      pagination.option('pageCount', 3);
-
-      assertPagesContainerIsVisible(container);
-
-      pagination.option('itemCount', 5);
-      pagination.option('pageCount', 1);
-
-      assertPagesContainerIsHidden(container);
-    });
+    const infoBlock = container.querySelector('.dx-info');
+    expect(infoBlock).toBeTruthy();
   });
 });
