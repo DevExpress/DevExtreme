@@ -14,7 +14,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import exportMenuModule from 'viz/core/export';
 import rendererModule from 'viz/core/renderers/renderer';
 
-import 'viz/vector_map/vector_map';
+import '__internal/viz/vector_map/vector_map';
 
 $('#qunit-fixture').append('<div id="container"></div>');
 

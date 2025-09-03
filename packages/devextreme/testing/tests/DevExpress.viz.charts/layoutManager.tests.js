@@ -5,7 +5,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import { Label } from 'viz/series/points/label';
 import { LayoutManager } from 'viz/chart_components/layout_manager';
-import { LayoutElement as LayoutElementClass, WrapperLayoutElement } from 'viz/core/layout_element';
+import { LayoutElement as LayoutElementClass, WrapperLayoutElement } from '__internal/viz/core/layout_element';
 
 const canvasTemplate = {
     width: 1000,

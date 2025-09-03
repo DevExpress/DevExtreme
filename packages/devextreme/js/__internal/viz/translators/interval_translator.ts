@@ -1,152 +1,161 @@
-import { isNumeric as isNumber, isDefined } from '../../core/utils/type';
-import dateUtils from '../../core/utils/date';
-const floor = Math.floor;
-import { adjust } from '../../core/utils/math';
+/* eslint-disable @typescript-eslint/no-this-alias */
+/* eslint-disable @typescript-eslint/init-declarations */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @stylistic/max-len */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import dateUtils from '@js/core/utils/date';
+import { adjust } from '@js/core/utils/math';
+import { isDefined, isNumeric as isNumber } from '@js/core/utils/type';
+
+const { floor } = Math;
 
 export default {
-    _intervalize: function(value, interval) {
-        if(!isDefined(value)) {
-            return undefined;
-        }
-        if(this._businessRange.dataType === 'datetime') {
-            if(isNumber(value)) {
-                value = new Date(value);
-            } else {
-                value = new Date(value.getTime());
-            }
-            value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
-        } else {
-            value = adjust(floor(adjust(value / interval)) * interval, interval);
-        }
-        return value;
-    },
+  _intervalize(value, interval) {
+    if (!isDefined(value)) {
+      return undefined;
+    }
+    if (this._businessRange.dataType === 'datetime') {
+      if (isNumber(value)) {
+        value = new Date(value);
+      } else {
+        value = new Date(value.getTime());
+      }
+      value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
+    } else {
+      value = adjust(floor(adjust(value / interval)) * interval, interval);
+    }
+    return value;
+  },
 
-    translate: function(bp, direction, skipRound, interval) {
-        const that = this;
-        const specialValue = that.translateSpecialCase(bp);
+  translate(bp, direction, skipRound, interval) {
+    const that = this;
+    const specialValue = that.translateSpecialCase(bp);
 
-        if(isDefined(specialValue)) {
-            return Math.round(specialValue);
-        }
-        interval = interval || that._options.interval;
+    if (isDefined(specialValue)) {
+      return Math.round(specialValue);
+    }
+    interval = interval || that._options.interval;
 
-        // TODO B253861
-        if(!that.isValid(bp, interval)) {
-            return null;
-        }
+    // TODO B253861
+    if (!that.isValid(bp, interval)) {
+      return null;
+    }
 
-        return that.to(bp, direction, skipRound, interval);
-    },
+    return that.to(bp, direction, skipRound, interval);
+  },
 
-    getInterval: function() {
-        return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
-    },
+  getInterval() {
+    return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+  },
 
-    zoom: function() { },
+  zoom() { },
 
-    getMinScale: function() { },
+  getMinScale() { },
 
-    getScale: function() { },
+  getScale() { },
 
-    _parse: function(value) {
-        return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
-    },
+  _parse(value) {
+    return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
+  },
 
-    fromValue: function(value) {
-        return this._parse(value);
-    },
+  fromValue(value) {
+    return this._parse(value);
+  },
 
-    toValue: function(value) {
-        return this._parse(value);
-    },
+  toValue(value) {
+    return this._parse(value);
+  },
 
-    isValid: function(value, interval) {
-        const that = this;
-        const co = that._canvasOptions;
-        let rangeMin = co.rangeMin;
-        let rangeMax = co.rangeMax;
+  isValid(value, interval) {
+    const that = this;
+    const co = that._canvasOptions;
+    let { rangeMin } = co;
+    let { rangeMax } = co;
 
-        interval = interval || that._options.interval;
-        if(value === null || isNaN(value)) {
-            return false;
-        }
+    interval = interval || that._options.interval;
+    if (value === null || isNaN(value)) {
+      return false;
+    }
 
-        value = that._businessRange.dataType === 'datetime' && isNumber(value) ? new Date(value) : value;
+    value = that._businessRange.dataType === 'datetime' && isNumber(value) ? new Date(value) : value;
 
-        if(interval !== that._options.interval) {
-            rangeMin = that._intervalize(rangeMin, interval);
-            rangeMax = that._intervalize(rangeMax, interval);
-        }
+    if (interval !== that._options.interval) {
+      rangeMin = that._intervalize(rangeMin, interval);
+      rangeMax = that._intervalize(rangeMax, interval);
+    }
 
-        if(value.valueOf() < rangeMin || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)) {
-            return false;
-        }
+    if (value.valueOf() < rangeMin || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)) {
+      return false;
+    }
 
-        return true;
-    },
+    return true;
+  },
 
-    to: function(bp, direction, skipRound, interval) {
-        const that = this;
+  to(bp, direction, skipRound, interval) {
+    const that = this;
 
-        interval = interval || that._options.interval;
-        const v1 = that._intervalize(bp, interval);
-        const v2 = dateUtils.addInterval(v1, interval);
-        let res = that._to(v1, skipRound);
-        const p2 = that._to(v2, skipRound);
+    interval = interval || that._options.interval;
+    const v1 = that._intervalize(bp, interval);
+    const v2 = dateUtils.addInterval(v1, interval);
+    let res = that._to(v1, skipRound);
+    const p2 = that._to(v2, skipRound);
 
-        if(!direction) {
-            res = floor((res + p2) / 2);
-        } else if(direction > 0) {
-            res = p2;
-        }
-        return res;
-    },
+    if (!direction) {
+      res = floor((res + p2) / 2);
+    } else if (direction > 0) {
+      res = p2;
+    }
+    return res;
+  },
 
-    _to: function(value, skipRound) {
-        const co = this._canvasOptions;
-        const rMin = co.rangeMinVisible;
-        const rMax = co.rangeMaxVisible;
-        let offset = value - rMin;
+  _to(value, skipRound) {
+    const co = this._canvasOptions;
+    const rMin = co.rangeMinVisible;
+    const rMax = co.rangeMaxVisible;
+    let offset = value - rMin;
 
-        if(value < rMin) {
-            offset = 0;
-        } else if(value > rMax) {
-            offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
-        }
+    if (value < rMin) {
+      offset = 0;
+    } else if (value > rMax) {
+      offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
+    }
 
-        const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
+    const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
 
-        return this._conversionValue(projectedValue, skipRound);
-    },
+    return this._conversionValue(projectedValue, skipRound);
+  },
 
-    from: function(position, direction) {
-        const that = this;
-        const origInterval = that._options.interval;
-        let interval = origInterval;
-        const co = that._canvasOptions;
-        const rMin = co.rangeMinVisible;
-        const rMax = co.rangeMaxVisible;
-        let value;
+  from(position, direction) {
+    const that = this;
+    const origInterval = that._options.interval;
+    let interval = origInterval;
+    const co = that._canvasOptions;
+    const rMin = co.rangeMinVisible;
+    const rMax = co.rangeMaxVisible;
+    let value;
 
-        if(that._businessRange.dataType === 'datetime') {
-            interval = dateUtils.dateToMilliseconds(origInterval);
-        }
+    if (that._businessRange.dataType === 'datetime') {
+      interval = dateUtils.dateToMilliseconds(origInterval);
+    }
 
-        value = (that._calculateUnProjection((position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange));
-        value = that._intervalize(dateUtils.addInterval(value, interval / 2, direction > 0), origInterval);
+    value = that._calculateUnProjection((position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange);
+    value = that._intervalize(dateUtils.addInterval(value, interval / 2, direction > 0), origInterval);
 
-        if(value < rMin) {
-            value = rMin;
-        } else if(value > rMax) {
-            value = rMax;
-        }
+    if (value < rMin) {
+      value = rMin;
+    } else if (value > rMax) {
+      value = rMax;
+    }
 
-        return value;
-    },
+    return value;
+  },
 
-    _add: function() {
-        return NaN;
-    },
+  _add() {
+    return NaN;
+  },
 
-    isValueProlonged: true
+  isValueProlonged: true,
 };

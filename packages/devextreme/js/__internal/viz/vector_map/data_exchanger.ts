@@ -1,39 +1,45 @@
-import Callbacks from '../../core/utils/callbacks';
+/* eslint-disable no-return-assign */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+
+import Callbacks from '@js/core/utils/callbacks';
 
 export function DataExchanger() {
-    this._store = {};
+  this._store = {};
 }
 
 DataExchanger.prototype = {
-    constructor: DataExchanger,
+  constructor: DataExchanger,
 
-    dispose: function() {
-        this._store = null;
-        return this;
-    },
+  dispose() {
+    this._store = null;
+    return this;
+  },
 
-    _get: function(category, name) {
-        const store = this._store[category] || (this._store[category] = {});
-        return store[name] || (store[name] = { callbacks: Callbacks() });
-    },
+  _get(category, name) {
+    const store = this._store[category] || (this._store[category] = {});
+    return store[name] || (store[name] = { callbacks: Callbacks() });
+  },
 
-    set: function(category, name, data) {
-        const item = this._get(category, name);
-        item.data = data;
-        item.callbacks.fire(data);
-        return this;
-    },
+  set(category, name, data) {
+    const item = this._get(category, name);
+    item.data = data;
+    item.callbacks.fire(data);
+    return this;
+  },
 
-    bind: function(category, name, callback) {
-        const item = this._get(category, name);
-        item.callbacks.add(callback);
-        item.data && callback(item.data);
-        return this;
-    },
+  bind(category, name, callback) {
+    const item = this._get(category, name);
+    item.callbacks.add(callback);
+    item.data && callback(item.data);
+    return this;
+  },
 
-    unbind: function(category, name, callback) {
-        const item = this._get(category, name);
-        item.callbacks.remove(callback);
-        return this;
-    }
+  unbind(category, name, callback) {
+    const item = this._get(category, name);
+    item.callbacks.remove(callback);
+    return this;
+  },
 };

@@ -3,9 +3,9 @@ import {
     createWidget,
 } from './commonParts/common.js';
 
-import 'viz/tree_map/colorizing.discrete';
-import 'viz/tree_map/colorizing.gradient';
-import 'viz/tree_map/colorizing.range';
+import '__internal/viz/tree_map/colorizing.discrete';
+import '__internal/viz/tree_map/colorizing.gradient';
+import '__internal/viz/tree_map/colorizing.range';
 
 QUnit.module('Coloring', environment);
 

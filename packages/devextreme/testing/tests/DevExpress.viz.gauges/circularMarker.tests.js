@@ -2,9 +2,9 @@ import { noop } from 'core/utils/common';
 import {
     Renderer,
 } from '../../helpers/vizMocks.js';
-import circularIndicatorsModule from 'viz/gauges/circular_indicators';
-import { getTextCloudInfo } from 'viz/gauges/base_indicators';
-import { Translator1D } from 'viz/translators/translator1d';
+import * as circularIndicatorsModule from '__internal/viz/gauges/circular_indicators';
+import { getTextCloudInfo } from '__internal/viz/gauges/base_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('TriangleMarker', {
     beforeEach: function() {

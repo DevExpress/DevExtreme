@@ -4,7 +4,7 @@ import {
     createWidget,
 } from './commonParts/common.js';
 
-import 'viz/tree_map/plain_data_source';
+import '__internal/viz/tree_map/plain_data_source';
 
 QUnit.module('Basic', $.extend({
     checkLayout: function(assert, expected) {

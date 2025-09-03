@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import legendModule from 'viz/components/legend';
-import dxFunnel from 'viz/funnel/funnel';
+import dxFunnel from '__internal/viz/funnel/funnel';
 import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
 import { stubClass } from '../../helpers/vizMocks.js';
 

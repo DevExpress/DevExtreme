@@ -1,4 +1,4 @@
-import 'viz/tree_map/tree_map';
+import '__internal/viz/tree_map/tree_map';
 import $ from 'jquery';
 import { Title as MockTitle } from '../../helpers/vizMocks.js';
 import titleModule from 'viz/core/title';

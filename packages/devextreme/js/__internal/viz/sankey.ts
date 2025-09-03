@@ -1,11 +1,10 @@
-import dxSankey from './sankey/sankey';
-import { setTooltipCustomOptions } from './sankey/tooltip';
-
-import { plugin as pluginExport } from './core/export';
-import { plugin as pluginTitle } from './core/title';
-import { plugin as pluginTracker } from './sankey/tracker';
-import { plugin as pluginTooltip } from './core/tooltip';
-import { plugin as pluginLoadingIndicator } from './core/loading_indicator';
+import { plugin as pluginExport } from '@ts/viz/core/export';
+import { plugin as pluginLoadingIndicator } from '@ts/viz/core/loading_indicator';
+import { plugin as pluginTitle } from '@ts/viz/core/title';
+import { plugin as pluginTooltip } from '@ts/viz/core/tooltip';
+import dxSankey from '@ts/viz/sankey/sankey';
+import { setTooltipCustomOptions } from '@ts/viz/sankey/tooltip';
+import { plugin as pluginTracker } from '@ts/viz/sankey/tracker';
 
 dxSankey.addPlugin(pluginExport);
 dxSankey.addPlugin(pluginTitle);

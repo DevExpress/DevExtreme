@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import eventEmitterModule from 'viz/vector_map/event_emitter';
+import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
 import projectionModule from 'viz/vector_map/projection.main';
 import { projection } from 'viz/vector_map/projection';
 
@@ -188,7 +188,7 @@ QUnit.test('setEngine / non invertible', function(assert) {
 
 QUnit.test('Event emitter methods are injected', function(assert) {
     const projection = this.projection;
-    $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
+    $.each(_TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(projection[name], method, name);
     });
 });

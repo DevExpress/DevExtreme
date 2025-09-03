@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
-import { LayoutElement, WrapperLayoutElement } from 'viz/core/layout_element';
+import { LayoutElement, WrapperLayoutElement } from '__internal/viz/core/layout_element';
 
 const environmentLE = {
     createLayoutElement: function(options) {

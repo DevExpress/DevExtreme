@@ -8,7 +8,7 @@ import {
     stubClass
 } from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { events as eventsConsts } from 'viz/components/consts';
+import { events as eventsConsts } from '__internal/viz/components/consts';
 import axisModule from 'viz/axes/base_axis';
 import { Crosshair } from 'viz/chart_components/crosshair';
 import trackers from 'viz/chart_components/tracker';
