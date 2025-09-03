@@ -47,6 +47,10 @@ fixture.disablePageReloads`LoadIndicator`
         animation: none !important;
         opacity: 1 !important;
       }
+
+      .${LOADINDICATOR_SEGMENT_CLASS} {
+        transform: scale(1);
+      }
     `);
 
     return createWidget('dxLoadIndicator', {

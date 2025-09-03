@@ -107,6 +107,10 @@ test('generating state', async (t) => {
       animation: none !important;
       opacity: 1 !important;
     }
+
+    .${LOADINDICATOR_SEGMENT_CLASS} {
+      transform: scale(1);
+    }
   `);
 
   await createWidget('dxHtmlEditor', {
