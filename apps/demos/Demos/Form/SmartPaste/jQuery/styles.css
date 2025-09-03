@@ -9,7 +9,7 @@
   margin: auto;
 }
 
-p {
+.instruction {
   color: var(--dx-texteditor-color-label);
 }
 
@@ -33,8 +33,9 @@ p {
   gap: 8px;
 }
 
-.buttons-group .dx-field-item {
-  padding: 0 !important;
+.buttons-group .dx-field-item:not(.dx-first-col),
+.buttons-group .dx-field-item:not(.dx-last-col) {
+  padding: 0;
 }
 
 .buttons-group .dx-item {
