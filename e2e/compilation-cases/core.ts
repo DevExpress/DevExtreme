@@ -51,7 +51,7 @@ import { Scalar } from 'devextreme/core';
   interface TestInterface { i: any }
   class TestClass { c: any; }
   type TestType = { t: any };
-  function testFunction() { }
+  function testFunction() {}
 
   const scalar1: string extends Scalar ? true : false = true;
   const scalar2: string extends Scalar ? true : false = true;

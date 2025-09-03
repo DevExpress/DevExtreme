@@ -1,4 +1,3 @@
-
 const testCafe = require('testcafe');
 
 module.exports = {

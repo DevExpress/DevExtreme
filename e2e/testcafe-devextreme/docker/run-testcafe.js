@@ -28,7 +28,6 @@ const matrix = [
     { componentFolder: 'renovation', name: 'renovation (jquery)', platform: 'jquery' },
     { componentFolder: 'renovation', name: 'renovation (react)', platform: 'react' },
 ];
-
 (async() => {
 
     const parsedArgs = parseArgs(process.argv);

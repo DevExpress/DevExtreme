@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-misused-promises, @stylistic/max-len */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
@@ -700,6 +700,7 @@ safeSizeTest('toIndex should not be corrected when source item gets removed from
       allowReordering: true,
       onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line @stylistic/max-len
         const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
         const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
         items.splice(fromIndex, 1);
@@ -755,6 +756,7 @@ safeSizeTest('Item should appear in a correct spot when dragging to a different 
       allowReordering: true,
       onReorder: ClientFunction((e) => {
         const visibleRows = e.component.getVisibleRows();
+        // eslint-disable-next-line @stylistic/max-len
         const toIndex = items.findIndex((item) => item.field1 === visibleRows[e.toIndex].data.field1);
         const fromIndex = items.findIndex((item) => item.field1 === e.itemData.field1);
         items.splice(fromIndex, 1);

@@ -61,7 +61,6 @@ export function loadAcceptsAjaxResult() {
 export function loadAcceptsAngularHttpClient() {
   const http: HttpClient = ANY;
   const options: StoreOptions = {
-
     load: () => http.get(ANY).toPromise(),
   };
 }
