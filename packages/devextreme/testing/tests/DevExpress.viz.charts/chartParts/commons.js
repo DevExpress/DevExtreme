@@ -110,7 +110,6 @@ const resetModules = function() {
     legendModule.Legend.resetHistory();
 
     rendererModule.Renderer.resetHistory();
-    exportModule.ExportMenu.resetHistory();
     titleModule.Title.resetHistory();
 };
 
@@ -278,6 +277,7 @@ const environment = {
 
         this.restoreValidateData();
 
+        exportModule.ExportMenu.resetHistory();
         resetModules();
         tooltipModule.DEBUG_set_tooltip(tooltipOrig);
         exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);

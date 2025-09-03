@@ -1101,7 +1101,7 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.module('dxHtmlEditor', () => {
-            QUnit.skip('should set text value', async function(assert) {
+            QUnit.test('should set text value', async function(assert) {
                 let completionCallback;
                 const dataField = 'Hobbies';
                 const value = 'text hobby value';

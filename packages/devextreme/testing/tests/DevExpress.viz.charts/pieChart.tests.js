@@ -7,6 +7,7 @@ import {
     ObjectPool,
     stubClass,
     stubIncidentOccurredCreation,
+    ExportMenu,
 } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import {
@@ -15,6 +16,7 @@ import {
     getLegendStub,
     getTrackerStub
 } from './chartParts/commons.js';
+import exportModule from 'viz/core/export';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
 import labelModule from 'viz/series/points/label';
@@ -84,6 +86,16 @@ function createPoint(options) {
 
     return point;
 }
+
+function stubExport() {
+    const exportMenuInstance = new ExportMenu();
+    exportMenuInstance.stub('measure').returns([0, 0]);
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
+        return exportMenuInstance;
+    }));
+}
+
+stubExport();
 
 const environment = {
     beforeEach: function() {
