@@ -23,6 +23,10 @@
   padding-top: 4px;
 }
 
+.dx-toast-icon {
+  display: none;
+}
+
 .buttons-group {
   display: flex;
   width: 100%;
