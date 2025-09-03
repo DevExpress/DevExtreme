@@ -324,12 +324,12 @@ export function registerCustomComponents(customStyles?: CustomTrialPanelStyles):
   if (!customElements.get(componentNames.trigger)) {
     DxLicense.customStyles = customStyles;
     customElements.define(
-      componentNames.trigger,
-      DxLicenseTrigger,
-    );
-    customElements.define(
       componentNames.panel,
       DxLicense,
+    );
+    customElements.define(
+      componentNames.trigger,
+      DxLicenseTrigger,
     );
   }
 }
