@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { DiagramContextMenu } from 'ui/diagram/ui.diagram.context_menu.js';
+import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
 export const Consts = {
     SIMPLE_DIAGRAM: '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }',
@@ -80,7 +81,7 @@ export function findPropertiesPanelToolbarItem($diagramElement, label) {
         });
 }
 export function getToolbarIcon($button) {
-    return $button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+    return $button.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`).find('.dx-diagram-i, .dx-icon');
 }
 export function getContextMenuItemCheck($button) {
     return $button.find('.dx-icon-check');
