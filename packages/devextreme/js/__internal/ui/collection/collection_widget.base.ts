@@ -179,6 +179,10 @@ class CollectionWidget<
     }) => void;
   };
 
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
+
   _supportedKeys(): SupportedKeys {
     const space = (e: DxEvent<KeyboardEvent>): void => {
       e.preventDefault();
@@ -281,8 +285,6 @@ class CollectionWidget<
     // @ts-expect-error ts-error
     this._initDataController();
     super._init();
-
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._cleanRenderedItems();
     // @ts-expect-error ts-error
@@ -432,7 +434,7 @@ class CollectionWidget<
   }
 
   _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
-    return $element.find(this._activeStateUnit);
+    return $element.find(this._activeStateUnit());
   }
 
   _getActiveItem(last?: boolean): dxElementWrapper {

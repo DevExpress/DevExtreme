@@ -53,6 +53,10 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
 
   _deferredItems!: DeferredObj<unknown>[];
 
+  protected _activeStateUnit(): string {
+    return `.${ACCORDION_ITEM_CLASS}`;
+  }
+
   _getDefaultOptions(): AccordionProperties {
     return {
       ...super._getDefaultOptions(),
@@ -101,7 +105,6 @@ class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, Co
   _init(): void {
     super._init();
 
-    this._activeStateUnit = `.${ACCORDION_ITEM_CLASS}`;
     const { collapsible, multiple } = this.option();
 
     this.option('selectionRequired', !collapsible);

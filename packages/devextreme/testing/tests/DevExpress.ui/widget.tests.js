@@ -734,7 +734,7 @@ QUnit.module('ui feedback', {
             .append(item1)
             .append(item2);
 
-        instance._activeStateUnit = '.widget-item-hover';
+        instance._activeStateUnit = () => '.widget-item-hover';
         instance.option('hoverStateEnabled', true);
 
         element.trigger({ target: item1.get(0), type: 'dxpointerenter', pointerType: 'mouse' });

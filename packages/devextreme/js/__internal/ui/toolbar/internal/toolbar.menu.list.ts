@@ -19,12 +19,8 @@ const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 type ActionableComponents = Extract<ToolbarItemComponent, 'dxButton' | 'dxButtonGroup'>;
 export default class ToolbarMenuList extends ListBase {
-  _activeStateUnit!: string;
-
-  _init(): void {
-    super._init();
-
-    this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
+  protected _activeStateUnit(): string {
+    return `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
   }
 
   _initMarkup(): void {
