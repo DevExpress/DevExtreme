@@ -8,7 +8,7 @@ import LoadIndicator, { AnimationType } from '@ts/ui/load_indicator';
 import type { LoadPanelProperties } from '@ts/ui/load_panel';
 import type LoadPanel from '@ts/ui/load_panel';
 
-const FORM_LOAD_INDICATOR_SIZE = 120;
+export const FORM_LOAD_INDICATOR_SIZE = 120;
 
 interface FormLoadPanelDependencies {
   $container: dxElementWrapper;
