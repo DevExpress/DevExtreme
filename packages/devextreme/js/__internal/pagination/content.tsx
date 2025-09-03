@@ -282,38 +282,38 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
           />
         )}
         {this.getPagesContainerVisible() && (
-            <div
-              className={PAGINATION_PAGES_CLASS}
-              style={{ visibility: this.getPagesContainerVisibility() }}
-            >
+          <div
+            className={PAGINATION_PAGES_CLASS}
+            style={{ visibility: this.getPagesContainerVisibility() }}
+          >
             {this.getInfoVisible() && (
-                  <InfoText
-                    rootElementRef={infoTextRef}
-                    infoText={infoText}
-                    pageCount={pageCount}
-                    pageIndex={pageIndex}
-                    itemCount={itemCount}
-                  />
+              <InfoText
+                rootElementRef={infoTextRef}
+                infoText={infoText}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+                itemCount={itemCount}
+              />
             )}
             {this.getPageIndexSelectorVisible() && (
-                  <div
-                    className={PAGINATION_PAGE_INDEXES_CLASS}
-                    ref={pagesRef as any}
-                  >
-                    <PageIndexSelector
-                      hasKnownLastPage={hasKnownLastPage}
-                      isLargeDisplayMode={this.getIsLargeDisplayMode()}
-                      maxPagesCount={maxPagesCount}
-                      pageCount={pageCount}
-                      pageIndex={pageIndex}
-                      pageIndexChangedInternal={pageIndexChangedInternal}
-                      pagesCountText={pagesCountText}
-                      showNavigationButtons={showNavigationButtons}
-                      itemCount={itemCount}
-                    />
-                  </div>
+              <div
+                className={PAGINATION_PAGE_INDEXES_CLASS}
+                ref={pagesRef as any}
+              >
+                <PageIndexSelector
+                  hasKnownLastPage={hasKnownLastPage}
+                  isLargeDisplayMode={this.getIsLargeDisplayMode()}
+                  maxPagesCount={maxPagesCount}
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                  pageIndexChangedInternal={pageIndexChangedInternal}
+                  pagesCountText={pagesCountText}
+                  showNavigationButtons={showNavigationButtons}
+                  itemCount={itemCount}
+                />
+              </div>
             )}
-            </div>
+          </div>
         )}
       </Widget>
     );
