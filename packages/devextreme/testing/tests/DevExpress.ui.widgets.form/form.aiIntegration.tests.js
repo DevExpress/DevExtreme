@@ -1127,6 +1127,8 @@ QUnit.module('SmartPaste', () => {
                     assert.strictEqual(form.getEditor(dataField).option('value'), `<p>${value}</p>`, 'text value was set');
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                } finally {
+                    form.dispose();
                 }
             });
 
