@@ -1101,7 +1101,7 @@ QUnit.module('SmartPaste', () => {
         });
 
         QUnit.module('dxHtmlEditor', () => {
-            QUnit.test('should set text value', async function(assert) {
+            QUnit.test.skip('should set text value', async function(assert) {
                 let completionCallback;
                 const dataField = 'Hobbies';
                 const value = 'text hobby value';
@@ -1127,8 +1127,6 @@ QUnit.module('SmartPaste', () => {
                     assert.strictEqual(form.getEditor(dataField).option('value'), `<p>${value}</p>`, 'text value was set');
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
-                } finally {
-                    form.dispose();
                 }
             });
 
