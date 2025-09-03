@@ -3,7 +3,7 @@ import { noop } from 'core/utils/common';
 import {
     Renderer,
 } from '../../helpers/vizMocks.js';
-import controlBarModule from 'viz/vector_map/control_bar/control_bar';
+import * as controlBarModule from 'viz/vector_map/control_bar/control_bar';
 
 function returnValue(value) {
     return function() {

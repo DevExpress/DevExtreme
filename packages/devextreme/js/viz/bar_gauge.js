@@ -1,2 +1,2 @@
-import { dxBarGauge } from './gauges/bar_gauge';
+import { dxBarGauge } from '../__internal/viz/gauges/bar_gauge';
 export default dxBarGauge;

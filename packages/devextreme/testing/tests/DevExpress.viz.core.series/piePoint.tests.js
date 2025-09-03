@@ -6,7 +6,7 @@ import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockAngularTranslator } from '../../helpers/chartMocks.js';
-import { states as statesConsts } from 'viz/components/consts';
+import consts from '__internal/viz/components/consts';
 import tooltipModule from 'viz/core/tooltip';
 
 const originalLabel = labelModule.Label;
@@ -680,7 +680,7 @@ QUnit.test('Draw point without state', function(assert) {
 
     assert.ok(!point.selectedState);
     assert.ok(!point.hoveredState);
-    assert.strictEqual(point.fullState, statesConsts.normalMark);
+    assert.strictEqual(point.fullState, consts.states.normalMark);
 });
 
 QUnit.test('Animation. Draw point when animation enabled. First drawing', function(assert) {

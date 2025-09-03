@@ -23,11 +23,11 @@ export const hideCallback = (function() {
         hasCallback: function() {
             return callbacks.length > 0;
         }
-        ///#DEBUG
+        /// #DEBUG
         // eslint-disable-next-line comma-style
         , reset: function() {
             callbacks = [];
         }
-        ///#ENDDEBUG
+        /// #ENDDEBUG
     };
 })();

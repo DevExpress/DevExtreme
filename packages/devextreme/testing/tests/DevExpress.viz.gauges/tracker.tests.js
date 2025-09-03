@@ -4,7 +4,7 @@ import {
     Renderer,
     Element,
 } from '../../helpers/vizMocks.js';
-import Tracker from 'viz/gauges/tracker';
+import Tracker from '__internal/viz/gauges/tracker';
 import pointerEvents from 'common/core/events/pointer';
 
 QUnit.module('Tracker', {

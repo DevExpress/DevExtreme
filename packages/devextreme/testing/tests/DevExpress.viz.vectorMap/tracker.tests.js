@@ -11,7 +11,7 @@ import {
     stubClass
 } from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
-import eventEmitterModule from 'viz/vector_map/event_emitter';
+import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
 import animationFrame from 'common/core/animation/frame';
 
 const FOCUS_OFF_DELAY = 100;
@@ -165,7 +165,7 @@ QUnit.test('Subscription to projection', function(assert) {
 
 QUnit.test('Event emitter methods are injected', function(assert) {
     const tracker = this.tracker;
-    $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
+    $.each(_TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(tracker[name], method, name);
     });
 });

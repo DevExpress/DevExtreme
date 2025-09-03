@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { createAnnotations, plugins } from 'viz/core/annotations';
+import { createAnnotations, plugins } from '__internal/viz/core/annotations';
 import {
     Renderer,
 } from '../../helpers/vizMocks.js';

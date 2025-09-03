@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { environment, getTrackerStub } from './chartParts/commons.js';
-import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
 import { MockSeries, seriesMockData } from '../../helpers/chartMocks.js';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'viz/range_selector/range_selector';
+import '__internal/viz/range_selector/range_selector';
 import { DataSource } from 'common/data/data_source/data_source';
 import browser from 'core/utils/browser';
 import devices from '__internal/core/m_devices';

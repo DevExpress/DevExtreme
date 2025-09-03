@@ -4,7 +4,7 @@ import {
 } from './commonParts/common.js';
 
 // The following list is to be manually kept synchronized with the registry
-import 'viz/tree_map/tree_map';
+import '__internal/viz/tree_map/tree_map';
 
 QUnit.module('Integration', environment);
 

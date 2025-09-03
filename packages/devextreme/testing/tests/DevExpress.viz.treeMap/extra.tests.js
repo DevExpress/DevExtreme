@@ -5,8 +5,8 @@ import {
 } from './commonParts/common.js';
 import $ from 'jquery';
 
-import 'viz/tree_map/api';
-import 'viz/tree_map/tracker';
+import '__internal/viz/tree_map/api';
+import '__internal/viz/tree_map/tracker';
 
 QUnit.module('T438413, two widgets', environment);
 

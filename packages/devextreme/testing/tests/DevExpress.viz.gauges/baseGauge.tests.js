@@ -11,15 +11,15 @@ import {
 } from '../../helpers/vizMocks.js';
 import registerComponent from 'core/component_registrator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { BaseGauge, formatValue, getSampleText } from 'viz/gauges/base_gauge';
+import { BaseGauge, formatValue, getSampleText } from '__internal/viz/gauges/base_gauge';
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import rendererModule from 'viz/core/renderers/renderer';
 import tooltipModule from 'viz/core/tooltip';
 import translator1DModule from 'viz/translators/translator1d';
-import themeManagerModule from 'viz/gauges/theme_manager';
-import Tracker from 'viz/gauges/tracker';
+import themeManagerModule from '__internal/viz/gauges/theme_manager';
+import Tracker from '__internal/viz/gauges/tracker';
 import graphicObjects from '__internal/common/m_charts';
 
 registerComponent('BaseGauge', BaseGauge);

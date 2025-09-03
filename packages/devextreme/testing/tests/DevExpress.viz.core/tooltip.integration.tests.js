@@ -1,4 +1,4 @@
-import 'viz/tree_map/tree_map';
+import '__internal/viz/tree_map/tree_map';
 
 import $ from 'jquery';
 import { Tooltip as MockTooltip } from '../../helpers/vizMocks.js';

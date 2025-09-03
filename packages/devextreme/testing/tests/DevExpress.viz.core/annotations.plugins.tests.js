@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { __test_utils, plugins } from 'viz/core/annotations';
+import { __test_utils, plugins } from '__internal/viz/core/annotations';
 import rendererModule from 'viz/core/renderers/renderer';
 import TooltipModule from 'viz/core/tooltip';
 import {
