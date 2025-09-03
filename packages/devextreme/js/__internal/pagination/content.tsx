@@ -172,7 +172,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
     const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
 
     const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)
-    || Boolean(showPageSizeSelector);
+    || showPageSizeSelector === true;
 
     const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
     const result = shouldHide ? 'hidden' : undefined;
