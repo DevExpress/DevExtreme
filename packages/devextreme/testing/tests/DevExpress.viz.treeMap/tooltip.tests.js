@@ -1,23 +1,29 @@
-const common = require('./commonParts/common.js');
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
+import {
+    returnValue,
+    createWidget,
+    environment,
+} from './commonParts/common.js';
+import {
+    Tooltip,
+} from '../../helpers/vizMocks.js';
+import tooltipModule from 'viz/core/tooltip';
 
-require('viz/tree_map/tooltip');
+import 'viz/tree_map/tooltip';
 
 QUnit.module('Basics', {
     beforeEach: function() {
-        common.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.renderer.offsetTemplate = { left: 40, top: 30 };
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new Tooltip();
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.tooltip.stub('formatValue').returns('formatted');
-        tooltipModule.DEBUG_set_tooltip(common.returnValue(this.tooltip));
+        tooltipModule.DEBUG_set_tooltip(returnValue(this.tooltip));
     }
 });
 
 QUnit.test('Show tooltip', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
 
@@ -32,7 +38,7 @@ QUnit.test('Show tooltip', function(assert) {
 
 QUnit.test('Show tooltip, async render', function(assert) {
     this.tooltip.stub('show').returns(undefined);
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
 
@@ -44,7 +50,7 @@ QUnit.test('Show tooltip, async render', function(assert) {
 
 QUnit.test('Hide tooltip if it does not render, async render', function(assert) {
     this.tooltip.stub('show').returns(undefined);
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
 
@@ -56,7 +62,7 @@ QUnit.test('Hide tooltip if it does not render, async render', function(assert) 
 });
 
 QUnit.test('Show tooltip / coords', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
 
@@ -70,7 +76,7 @@ QUnit.test('Show tooltip / coords', function(assert) {
 });
 
 QUnit.test('Show tooltip / disabled by customization', function(assert) {
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     }).getRootNode();
     this.tooltip.stub('show').returns(false);
@@ -88,7 +94,7 @@ QUnit.test('Show tooltip / disabled by customization', function(assert) {
 });
 
 QUnit.test('Hide tooltip', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
     widget.getRootNode().getChild(1).showTooltip();
@@ -99,7 +105,7 @@ QUnit.test('Hide tooltip', function(assert) {
 });
 
 QUnit.test('Tooltip is hidden when data source is updated', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }]
     });
     widget.getRootNode().getChild(0).showTooltip();
@@ -110,7 +116,7 @@ QUnit.test('Tooltip is hidden when data source is updated', function(assert) {
 });
 
 QUnit.test('Tooltip is shown during customization', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -126,7 +132,7 @@ QUnit.test('Tooltip is shown during customization', function(assert) {
 });
 
 QUnit.test('Tooltip is moved if shown when tiling is performed', function(assert) {
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{
             value: 1
         }, {

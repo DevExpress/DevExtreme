@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import vizMocks from '../../../helpers/vizMocks.js';
+import {
+    Renderer
+} from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import tiling from 'viz/funnel/tiling';
 
@@ -7,6 +9,7 @@ import 'viz/funnel/funnel';
 import 'viz/themes';
 
 export const stubAlgorithm = { normalizeValues: sinon.stub(), getFigures: sinon.stub() };
+
 tiling.addAlgorithm('stub', stubAlgorithm);
 
 QUnit.testStart(function() {
@@ -23,13 +26,16 @@ export function createFunnel(options) {
         valueField: 'value',
         argumentField: 'argument'
     };
-    return $('#test-container').dxFunnel($.extend({}, defaultOptions, options)).dxFunnel('instance');
+
+    return $('#test-container')
+        .dxFunnel($.extend({}, defaultOptions, options))
+        .dxFunnel('instance');
 }
 
 export const environment = {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         stubAlgorithm.normalizeValues.reset();
         stubAlgorithm.getFigures.reset();

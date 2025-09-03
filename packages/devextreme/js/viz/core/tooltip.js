@@ -419,7 +419,6 @@ export const plugin = {
     members: {
         // The method exists only to be overridden in sparklines.
         _initTooltip: function() {
-            // "exports" is used for testing purposes.
             this._tooltip = new Tooltip({
                 cssClass: this._rootClassPrefix + '-tooltip',
                 eventTrigger: this._eventTrigger,

@@ -5,6 +5,7 @@ import { each } from '../../core/utils/iterator';
 import { adjust, sign } from '../../core/utils/math';
 import dateUtils from '../../core/utils/date';
 import Color from '../../color';
+
 const { PI, LN10, abs, log, floor, ceil, pow, sqrt, atan2 } = Math;
 const _min = Math.min;
 const _max = Math.max;
