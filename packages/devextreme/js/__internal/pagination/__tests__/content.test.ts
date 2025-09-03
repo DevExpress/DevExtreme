@@ -1,13 +1,10 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import { describe, expect, it } from '@jest/globals';
 import type { ComponentWrapperProps } from '@ts/core/r1/component_wrapper';
-import { rerender } from 'inferno';
 
 import Pagination from '../wrappers/pagination';
 
-describe('pagination-container-visibility', () => {
-  const createPagination = (config: ComponentWrapperProps): {
+describe('pages-container-visibility', () => {
+  const arrangePaginationWith = (config: ComponentWrapperProps): {
     container: HTMLElement;
     pagination: Pagination;
   } => {
@@ -23,99 +20,110 @@ describe('pagination-container-visibility', () => {
       showPageSizeSelector: false,
       ...config,
     });
-    rerender();
     return { container, pagination };
   };
 
-  const isVisible = (container: HTMLElement): boolean | undefined => {
+  const assertPagesContainerIsVisible = (container: HTMLElement): void => {
     const pagesContainer = container.querySelector('.dx-pages');
     expect(pagesContainer).toBeTruthy();
     const style = pagesContainer?.getAttribute('style');
-    return style === null || !style?.includes('visibility: hidden');
+    const isVisible = style === null || !style?.includes('visibility: hidden');
+    expect(isVisible).toBe(true);
   };
 
-  const isHidden = (container: HTMLElement): boolean | undefined => {
+  const assertPagesContainerIsHidden = (container: HTMLElement): void => {
     const pagesContainer = container.querySelector('.dx-pages');
     expect(pagesContainer).toBeTruthy();
-    return pagesContainer?.getAttribute('style')?.includes('visibility: hidden');
+    const isHidden = pagesContainer?.getAttribute('style')?.includes('visibility: hidden') ?? false;
+    expect(isHidden).toBe(true);
   };
 
-  it('should hide when itemCount < pageSize', () => {
-    const { container } = createPagination({ itemCount: 5, pageSize: 10 });
-    expect(isHidden(container)).toBe(true);
-  });
+  describe('when pageCount = 1', () => {
+    it('should hide container when no explicit visible components are enabled', () => {
+      const { container } = arrangePaginationWith({ itemCount: 5, pageSize: 10 });
 
-  it('should hide when itemCount = pageSize', () => {
-    const { container } = createPagination({ itemCount: 10, pageSize: 10 });
-    expect(isHidden(container)).toBe(true);
-  });
-
-  it('should show when itemCount <= pageSize but showInfo=true', () => {
-    const { container } = createPagination({ itemCount: 8, pageSize: 10, showInfo: true });
-    expect(isVisible(container)).toBe(true);
-  });
-
-  it('should show when itemCount <= pageSize but showNavigationButtons=true', () => {
-    const { container } = createPagination({
-      itemCount: 6,
-      pageSize: 10,
-      showNavigationButtons: true,
-    });
-    expect(isVisible(container)).toBe(true);
-  });
-
-  it('should show when itemCount <= pageSize but showPageSizeSelector=true', () => {
-    const { container } = createPagination({
-      itemCount: 9,
-      pageSize: 10,
-      showPageSizeSelector: true,
-      allowedPageSizes: [5, 10, 'all'],
-    });
-    expect(isVisible(container)).toBe(true);
-  });
-
-  it('should always show when itemCount > pageSize', () => {
-    const { container } = createPagination({
-      itemCount: 15,
-      pageSize: 10,
-      pageCount: 2,
-    });
-    expect(isVisible(container)).toBe(true);
-  });
-
-  it('should toggle visibility when showInfo changes', () => {
-    const { container, pagination } = createPagination({
-      itemCount: 7,
-      pageSize: 10,
+      assertPagesContainerIsHidden(container);
     });
 
-    expect(isHidden(container)).toBe(true);
+    it('should show container when showInfo is enabled', () => {
+      const { container } = arrangePaginationWith({
+        itemCount: 8,
+        pageSize: 10,
+        showInfo: true,
+      });
 
-    pagination.option('showInfo', true);
-    rerender();
-    expect(isVisible(container)).toBe(true);
-
-    pagination.option('showInfo', false);
-    rerender();
-    expect(isHidden(container)).toBe(true);
-  });
-
-  it('should toggle visibility when itemCount changes', () => {
-    const { container, pagination } = createPagination({
-      itemCount: 8,
-      pageSize: 10,
+      assertPagesContainerIsVisible(container);
     });
 
-    expect(isHidden(container)).toBe(true);
+    it('should show container when showNavigationButtons is enabled', () => {
+      const { container } = arrangePaginationWith({
+        itemCount: 6,
+        pageSize: 10,
+        showNavigationButtons: true,
+      });
 
-    pagination.option('itemCount', 15);
-    pagination.option('pageCount', 2);
-    rerender();
-    expect(isVisible(container)).toBe(true);
+      assertPagesContainerIsVisible(container);
+    });
 
-    pagination.option('itemCount', 5);
-    pagination.option('pageCount', 1);
-    rerender();
-    expect(isHidden(container)).toBe(true);
+    it('should show container when showPageSizeSelector is enabled', () => {
+      const { container } = arrangePaginationWith({
+        itemCount: 9,
+        pageSize: 10,
+        showPageSizeSelector: true,
+        allowedPageSizes: [5, 10, 'all'],
+      });
+
+      assertPagesContainerIsVisible(container);
+    });
+  });
+
+  describe('when pageCount > 1', () => {
+    it('should always show container regardless of other settings', () => {
+      const { container } = arrangePaginationWith({
+        itemCount: 25,
+        pageSize: 10,
+        pageCount: 3,
+      });
+
+      assertPagesContainerIsVisible(container);
+    });
+  });
+
+  describe('dynamic visibility changes', () => {
+    it('should toggle visibility when showInfo changes at runtime', () => {
+      const { container, pagination } = arrangePaginationWith({
+        itemCount: 7,
+        pageSize: 10,
+      });
+
+      assertPagesContainerIsHidden(container);
+
+      pagination.option('showInfo', true);
+
+      assertPagesContainerIsVisible(container);
+
+      pagination.option('showInfo', false);
+
+      assertPagesContainerIsHidden(container);
+    });
+
+    it('should toggle visibility when itemCount changes pageCount', () => {
+      const { container, pagination } = arrangePaginationWith({
+        itemCount: 8,
+        pageSize: 10,
+      });
+
+      assertPagesContainerIsHidden(container);
+
+      pagination.option('itemCount', 25);
+      pagination.option('pageCount', 3);
+
+      assertPagesContainerIsVisible(container);
+
+      pagination.option('itemCount', 5);
+      pagination.option('pageCount', 1);
+
+      assertPagesContainerIsHidden(container);
+    });
   });
 });
