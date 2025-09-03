@@ -47,6 +47,11 @@ class SchedulerAgenda extends WorkSpace {
 
   _$noDataContainer: any;
 
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return '';
+  }
+
   get type() { return VIEWS.AGENDA; }
 
   get renderingStrategy() { return (this.invoke as any)('getLayoutManager').getRenderingStrategyInstance(); }
@@ -57,7 +62,6 @@ class SchedulerAgenda extends WorkSpace {
 
   _init() {
     super._init();
-    this._activeStateUnit = undefined;
   }
 
   _getDefaultOptions() {
