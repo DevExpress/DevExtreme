@@ -15,10 +15,8 @@ $(() => {
       temperature: 0.7,
     };
 
-    console.log('messages', messages, signal);
     const response = await aiService.chat.completions.create(params, { signal });
     const result = response.choices[0].message?.content;
-    console.log('result', result);
 
     return result;
   }
@@ -86,7 +84,7 @@ $(() => {
         width: 'fit-content',
         maxWidth: 'fit-content',
         minWidth: 'fit-content',
-      }, 'info', 15000);
+      }, 'info', 1500);
     }
   });
 
