@@ -1,7 +1,10 @@
-const common = require('./commonParts/common.js');
-const $ = require('jquery');
+import $ from 'jquery';
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
-require('viz/tree_map/plain_data_source');
+import 'viz/tree_map/plain_data_source';
 
 QUnit.module('Basic', $.extend({
     checkLayout: function(assert, expected) {
@@ -12,7 +15,7 @@ QUnit.module('Basic', $.extend({
     },
 
     create: function(options) {
-        return common.createWidget($.extend(true, {
+        return createWidget($.extend(true, {
             tile: {
                 border: { width: 0 }
             },
@@ -22,7 +25,7 @@ QUnit.module('Basic', $.extend({
             }
         }, options));
     }
-}, common.environment));
+}, environment));
 
 QUnit.test('creation without dataSource', function(assert) {
     const widget = this.create();

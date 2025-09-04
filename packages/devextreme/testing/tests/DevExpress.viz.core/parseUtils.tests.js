@@ -1,6 +1,6 @@
-const noop = require('core/utils/common').noop;
-const config = require('core/config');
-const parseUtils = require('viz/components/parse_utils');
+import { noop } from 'core/utils/common';
+import config from 'core/config';
+import parseUtils from 'viz/components/parse_utils';
 
 QUnit.module('valueType');
 
@@ -8,12 +8,6 @@ QUnit.test('check type = "numeric"', function(assert) {
     const result = parseUtils.correctValueType('numeric');
 
     assert.equal(result, 'numeric');
-});
-
-QUnit.test('check type = "datetime"', function(assert) {
-    const result = parseUtils.correctValueType('datetime');
-
-    assert.equal(result, 'datetime');
 });
 
 QUnit.test('check type = "datetime"', function(assert) {
@@ -47,20 +41,18 @@ QUnit.test('string parser', function(assert) {
 });
 
 QUnit.test('string parser - invalid argument = "undefined"', function(assert) {
-    // Arrange
     const parser = parseUtils.getParser('string');
-    // Act
+
     const result = parser();
-    // Assert
+
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('string parser - argument = "null"', function(assert) {
-    // Arrange
     const parser = parseUtils.getParser('string');
-    // Act
+
     const result = parser(null);
-    // Assert
+
     assert.strictEqual(result, null);
 });
 
@@ -83,29 +75,26 @@ QUnit.test('numeric parser', function(assert) {
 });
 
 QUnit.test('numeric parser - invalid argument', function(assert) {
-    // Arrange
     const parser = parseUtils.getParser('numeric');
-    // Act
+
     const result = parser('f4956');
-    // Assert
+
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('numeric parser - invalid argument="undefined"', function(assert) {
-    // Arrange
     const parser = parseUtils.getParser('numeric');
-    // Act
+
     const result = parser();
-    // Assert
+
     assert.strictEqual(result, undefined);
 });
 
 QUnit.test('numeric parser - argument="null"', function(assert) {
-    // Arrange
     const parser = parseUtils.getParser('numeric');
-    // Act
+
     const result = parser(null);
-    // Assert
+
     assert.strictEqual(result, null);
 });
 

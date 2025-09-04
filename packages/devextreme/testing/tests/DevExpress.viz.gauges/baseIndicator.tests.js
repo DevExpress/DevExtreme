@@ -1,41 +1,38 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const BaseIndicator = require('viz/gauges/base_indicators').BaseIndicator;
-const animation = require('viz/core/renderers/animation');
-const translator1DModule = require('viz/translators/translator1d');
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+import { BaseIndicator } from 'viz/gauges/base_indicators';
+import animation from 'viz/core/renderers/animation';
+import { Translator1D } from 'viz/translators/translator1d';
 
-const BaseIndicatorTester = BaseIndicator.inherit({
-    _isEnabled: function() {
+class BaseIndicatorTester extends BaseIndicator {
+    _isEnabled() {
         return 'enabled' in this ? !!this.enabled : true;
-    },
-
-    _isVisible: function() {
+    }
+    _isVisible() {
         return 'visible' in this ? !!this.visible : true;
-    },
-
-    _render: function() {
+    }
+    _render() {
         this._element = this._element || this._renderer.g().append(this._rootElement);
-    },
-
-    _clear: function() {
+    }
+    _clear() {
         delete this._element;
-    },
-
-    _move: function() {
+    }
+    _move() {
         this._element.attr({ value: this._actualValue, position: this._actualPosition });
-    },
-
-    _getTrackerPoints: function() {
+    }
+    _getTrackerPoints() {
         return { tag: 'tracker-points' };
     }
-});
-
+}
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.patchRenderer();
-        this.owner = (new vizMocks.Element()).attr({ 'class': 'test-root' }).append(this.renderer.root);
+        this.owner = (new Element()).attr({ 'class': 'test-root' }).append(this.renderer.root);
         this.tracker = {
             attach: function(element) {
                 this.attached = element;
@@ -46,7 +43,7 @@ const environment = {
         };
         this.target = new BaseIndicatorTester({
             renderer: this.renderer,
-            translator: new translator1DModule.Translator1D(0, 100, 200, 300),
+            translator: new Translator1D(0, 100, 200, 300),
             owner: this.owner,
             tracker: this.tracker,
             className: 'root-class'

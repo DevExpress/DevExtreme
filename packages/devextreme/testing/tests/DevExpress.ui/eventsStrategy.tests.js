@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const Widget = require('ui/widget/ui.widget');
-const registerComponent = require('core/component_registrator');
-const EventsStrategy = require('core/events_strategy').EventsStrategy;
+import $ from 'jquery';
+import Widget from 'ui/widget/ui.widget';
+import registerComponent from 'core/component_registrator';
+import { EventsStrategy } from 'core/events_strategy';
 
 QUnit.testStart(function() {
     const markup =

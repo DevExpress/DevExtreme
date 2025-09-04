@@ -9,6 +9,7 @@ import pointerEvents from '../../common/core/events/pointer';
 import { addNamespace } from '../../common/core/events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
+
 const _floor = Math.floor;
 const eventsConsts = consts.events;
 const statesConsts = consts.states;

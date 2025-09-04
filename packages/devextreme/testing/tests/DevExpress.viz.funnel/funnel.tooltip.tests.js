@@ -1,31 +1,27 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
-const vizMocks = require('../../helpers/vizMocks.js');
-const tooltipModule = require('viz/core/tooltip');
-const funnelTooltip = require('viz/funnel/tooltip');
-const dxFunnel = require('viz/funnel/funnel');
+import $ from 'jquery';
+import dxFunnel from 'viz/funnel/funnel';
+import tooltipModule from 'viz/core/tooltip';
+import funnelTooltip from 'viz/funnel/tooltip';
+import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
+import { Tooltip as TooltipMock } from '../../helpers/vizMocks.js';
+
 const tooltipOrig = tooltipModule.Tooltip;
 
 dxFunnel.addPlugin(funnelTooltip.plugin);
 
-
 const tooltipEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         const that = this;
-
-        environment.beforeEach.apply(this, arguments);
-
-        common.stubAlgorithm.getFigures.returns([[0, 0, 1, 0, 0, 1, 1, 1]]);
-        common.stubAlgorithm.normalizeValues.returns([0.2, 0.5, 0.3]);
+        environment.beforeEach.call(this);
+        stubAlgorithm.getFigures.returns([[0, 0, 1, 0, 0, 1, 1, 1]]);
+        stubAlgorithm.normalizeValues.returns([0.2, 0.5, 0.3]);
 
         $('#test-container').css({
             width: 800,
             height: 600
         });
         this.renderer.offsetTemplate = { left: 40, top: 30 };
-        this.tooltip = new vizMocks.Tooltip();
+        this.tooltip = new TooltipMock();
         this.tooltip.stub('isEnabled').returns(true);
         this.tooltip.stub('show').returns(true);
         this.tooltip.stub('formatValue').returns('formatted');
@@ -111,7 +107,7 @@ QUnit.test('Only move tooltip if it shown on item', function(assert) {
 });
 
 QUnit.test('Show tooltip on different items', function(assert) {
-    common.stubAlgorithm.getFigures.returns([[1], [1]]);
+    stubAlgorithm.getFigures.returns([[1], [1]]);
     const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }, { value: 2 }]
