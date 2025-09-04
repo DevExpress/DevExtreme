@@ -1,5 +1,4 @@
 /* eslint-disable spellcheck/spell-checker */
-
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
@@ -9,7 +8,6 @@ import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,25 +17,6 @@ const compatibility = new FlatCompatibility({
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all
 });
-
-const defaultJsOptions = {
-    files: ['**/*.js'],
-    languageOptions: {
-      globals: {
-        setInterval: true,
-        setTimeout: true,
-        clearInterval: true,
-        clearTimeout: true,
-        require: true,
-        module: true,
-        exports: true,
-      },
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-      },
-    },
-};
 
 export default [
   {
@@ -60,19 +39,27 @@ export default [
       },
     },
   },
+  ...compatibility.extends('eslint/recommended', 'plugin:import/recommended').map(config => ({
+    ...config,
+    files: ['**/*.js']
+  })),
   {
-    ...js.configs.recommended,
-    ...defaultJsOptions,
-  },
-  {
-    ...importPlugin.flatConfigs.recommended,
-    ...defaultJsOptions,
-    plugins: {
-      'import': importPlugin,
-    }
-  },
-  {
-    ...defaultJsOptions,
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        setInterval: true,
+        setTimeout: true,
+        clearInterval: true,
+        clearTimeout: true,
+        require: true,
+        module: true,
+        exports: true,
+      },
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+      },
+    },
     plugins: {
       '@stylistic': stylistic,
     },
