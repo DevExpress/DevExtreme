@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import GoogleStaticProvider from '__internal/ui/map/m_provider.google_static';
+import GoogleStaticProvider from '__internal/ui/map/provider.google_static';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 

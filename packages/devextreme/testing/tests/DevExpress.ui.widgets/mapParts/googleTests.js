@@ -5,7 +5,7 @@ import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import devices from '__internal/core/m_devices';
 import errorsLogger from 'core/errors';
 import errors from 'ui/widget/ui.errors';
-import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
+import GoogleProvider from '__internal/ui/map/provider.dynamic.google';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
 import 'ui/map';
