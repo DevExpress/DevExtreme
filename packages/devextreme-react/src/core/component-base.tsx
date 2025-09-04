@@ -1,5 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import * as React from 'react';
 import * as events from 'devextreme/events';
 

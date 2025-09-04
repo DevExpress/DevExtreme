@@ -1,5 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-
 import { buildNodeFullName } from './config-node';
 import { IConfigNode, ITemplate } from '../types';
 import { buildNode, buildTemplates } from './tree';

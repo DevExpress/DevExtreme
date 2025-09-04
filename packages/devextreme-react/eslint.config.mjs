@@ -17,6 +17,25 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
+const defaultJsOptions = {
+  files: ['**/*.js'],
+  languageOptions: {
+    globals: {
+      setInterval: true,
+      setTimeout: true,
+      clearInterval: true,
+      clearTimeout: true,
+      require: true,
+      module: true,
+      exports: true,
+    },
+    parser: babelParser,
+    parserOptions: {
+      requireConfigFile: false,
+    },
+  },
+}
+
 export default [
   {
     ignores: [
@@ -24,7 +43,36 @@ export default [
       '**/__tests__/**',
     ],
   },
-  ...compat.extends('devextreme/spell-check'),
+  ...compat.extends('devextreme/spell-check').map(config => {
+
+    const newConfig = {
+      ...config
+    }
+
+    if (config.rules) {
+      newConfig.rules = {
+        ...changeRulesToStylistic(config.rules),
+        "spellcheck/spell-checker": [1, {
+        "skipWords": [
+          "unschedule",
+          "subscribable",
+          "renderer",
+          "rerender",
+          "dx",
+          "descr",
+          "params",
+          "typings",
+          "wildcard",
+          "metadata",
+          "namespace",
+          "namespaces"
+        ]
+      }]
+      };
+    }
+
+    return newConfig
+  }),
   {
     plugins: {
       i18n: i18N,
@@ -39,22 +87,19 @@ export default [
   },
   {
     ...js.configs.recommended,
+    ...defaultJsOptions,
+  },
+  {
     ...importPlugin.flatConfigs.recommended,
-    files: ['**/*.js'],
-    languageOptions: {
-      globals: {
-        setInterval: true,
-        setTimeout: true,
-        clearInterval: true,
-        clearTimeout: true,
-        require: true,
-        module: true,
-        exports: true,
-      },
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-      },
+    ...defaultJsOptions,
+    plugins: {
+      'import': importPlugin,
+    }
+  },
+  {
+    ...defaultJsOptions,
+     plugins: {
+      '@stylistic': stylistic,
     },
     rules: {
       'i18n/no-russian-character': ['error', {
@@ -150,10 +195,7 @@ export default [
       "import/extensions": "warn",
       "max-len": ["error", { "code": 150 }],
     },
-    plugins: {
-      '@stylistic': stylistic,
-      'import': importPlugin,
-    }
+   
   },
   ...compat.extends('devextreme/typescript').map(config => {
     const newConfig = {
@@ -205,7 +247,7 @@ export default [
       'import/extensions': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       'no-underscore-dangle': 'off',
-      '@typescript-eslint/naming-convention': 'off'
+      '@typescript-eslint/naming-convention': 'off',
     },
   },
   ...compat.extends('devextreme/typescript').map(config => {
