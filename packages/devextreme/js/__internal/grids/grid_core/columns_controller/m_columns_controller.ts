@@ -84,6 +84,9 @@ import {
 
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
+  index?: number;
+  groupIndex?: number;
+  type?: string;
 }
 
 export class ColumnsController extends modules.Controller {
