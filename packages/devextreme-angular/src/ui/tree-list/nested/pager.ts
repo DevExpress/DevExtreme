@@ -79,10 +79,10 @@ export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get showPageSizeSelector(): boolean | "auto" {
+    get showPageSizeSelector(): boolean | Mode {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean | "auto") {
+    set showPageSizeSelector(value: boolean | Mode) {
         this._setOption('showPageSizeSelector', value);
     }
 

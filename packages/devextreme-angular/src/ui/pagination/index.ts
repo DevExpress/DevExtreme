@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 
 
-import { DisplayMode } from 'devextreme/common';
+import { DisplayMode, Mode } from 'devextreme/common';
 import { EventInfo } from 'devextreme/common/core/events';
 
 import DxPagination from 'devextreme/ui/pagination';
@@ -298,10 +298,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get showPageSizeSelector(): boolean | "auto" {
+    get showPageSizeSelector(): boolean | Mode {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean | "auto") {
+    set showPageSizeSelector(value: boolean | Mode) {
         this._setOption('showPageSizeSelector', value);
     }
 
@@ -507,7 +507,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showPageSizeSelectorChange: EventEmitter<boolean | "auto">;
+    @Output() showPageSizeSelectorChange: EventEmitter<boolean | Mode>;
 
     /**
     
