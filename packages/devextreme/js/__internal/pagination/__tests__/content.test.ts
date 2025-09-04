@@ -3,7 +3,7 @@ import type { ComponentWrapperProps } from '@ts/core/r1/component_wrapper';
 
 import Pagination from '../wrappers/pagination';
 
-describe('Pagination: pagination visibility', () => {
+describe('Pagination visibility', () => {
   const createPagination = (config: ComponentWrapperProps): {
     container: HTMLElement;
     pagination: Pagination;
@@ -24,7 +24,6 @@ describe('Pagination: pagination visibility', () => {
 
   const isPagesContainerVisible = (container: HTMLElement): boolean => {
     const pagesContainer = container.querySelector('.dx-pages');
-    expect(pagesContainer).toBeTruthy();
     const style = pagesContainer?.getAttribute('style');
     const isVisible = style === null || !style?.includes('visibility: hidden');
     return isVisible;
@@ -32,7 +31,6 @@ describe('Pagination: pagination visibility', () => {
 
   const isPagesContainerHidden = (container: HTMLElement): boolean => {
     const pagesContainer = container.querySelector('.dx-pages');
-    expect(pagesContainer).toBeTruthy();
     const isHidden = pagesContainer?.getAttribute('style')?.includes('visibility: hidden') ?? false;
     return isHidden;
   };
