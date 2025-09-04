@@ -44,9 +44,8 @@ $(() => {
     value: products[3].ID,
     fieldAddons: {
       beforeTemplate: (data) => {
-        const result = $(`<div class='custom-addon'><img alt='Product name' src='${
-          data ? data.ImageSrc : ''
-        }' /></div>`);
+        const src = data?.ImageSrc ?? '';
+        const result = $(`<div class="custom-addon"><img alt="Product name" src="${src}"/></div>`);
 
         return result;
       }

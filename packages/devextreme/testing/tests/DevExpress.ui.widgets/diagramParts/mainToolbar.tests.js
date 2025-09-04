@@ -7,10 +7,6 @@ import { Consts, getMainToolbarInstance, findMainToolbarItem, getToolbarIcon, fi
 import { getActiveElement } from '../../../helpers/shadowDom.js';
 import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
-const TEXT_EDITOR_INPUT_CONTAINER = 'dx-texteditor-input-container';
-const IMAGE_DROP_DOWN_ITEM = 'dx-diagram-image-dropdown-item';
-const COLOR_EDIT_ITEM = 'dx-diagram-color-edit-item';
-
 const moduleConfig = {
     beforeEach: function() {
         this.onCustomCommand = sinon.spy();
@@ -119,22 +115,22 @@ QUnit.module('Main Toolbar', {
         assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial Black');
     });
     test('selectboxes with icon items should be replaced with select buttons', function(assert) {
-        const $imageDropDownItem = this.$element.find(`.${IMAGE_DROP_DOWN_ITEM}`);
+        const $imageDropDownItem = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find(`.${Consts.IMAGE_DROP_DOWN_ITEM}`);
         const $selectButtonBeforeTemplate = $imageDropDownItem.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
         const selectButtonsCount = $selectButtonBeforeTemplate.length;
 
-        assert.strictEqual($selectButtonBeforeTemplate.length, 4, 'select buttons are rendered');
-        assert.equal($selectButtonBeforeTemplate.find('.dx-diagram-i').length, selectButtonsCount, 'icons are rendered');
-        assert.equal($imageDropDownItem.find(`.${TEXT_EDITOR_INPUT_CONTAINER}`)[0].offsetWidth, 0, 'textbox is hidden');
+        assert.strictEqual(selectButtonsCount, 4, 'select buttons are rendered');
+        assert.strictEqual($selectButtonBeforeTemplate.find(`.${Consts.DIAGRAM_ICON}`).length, selectButtonsCount, 'icons are rendered');
+        assert.strictEqual($imageDropDownItem.find(`.${Consts.TEXT_EDITOR_INPUT_CONTAINER}`)[0].offsetWidth, 0, 'textbox is hidden');
     });
     test('colorboxes should be replaced with color buttons', function(assert) {
-        const $colorEditItem = this.$element.find(`.${COLOR_EDIT_ITEM}`);
+        const $colorEditItem = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find(`.${Consts.COLOR_EDIT_ITEM}`);
         const $colorBoxBeforeTemplate = $colorEditItem.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
         const colorBoxCount = $colorBoxBeforeTemplate.length;
 
-        assert.strictEqual($colorBoxBeforeTemplate.length, 3, 'color buttons are rendered');
-        assert.equal($colorBoxBeforeTemplate.find('.dx-diagram-i, .dx-icon').length, colorBoxCount, 'icons are rendered');
-        assert.equal($colorEditItem.find(`.${TEXT_EDITOR_INPUT_CONTAINER}`)[0].offsetWidth, 0, 'textbox is hidden');
+        assert.strictEqual(colorBoxCount, 3, 'color buttons are rendered');
+        assert.strictEqual($colorBoxBeforeTemplate.find(`.${Consts.DIAGRAM_ICON}, .${Consts.DX_ICON}`).length, colorBoxCount, 'icons are rendered');
+        assert.strictEqual($colorEditItem.find(`.${Consts.TEXT_EDITOR_INPUT_CONTAINER}`)[0].offsetWidth, 0, 'textbox is hidden');
     });
     test('colorbuttons should show an active color', function(assert) {
         const colorButton = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-diagram-color-edit-item').first();

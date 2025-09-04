@@ -242,7 +242,7 @@ $transparent-border: 1px solid transparent;
 
     .dx-texteditor-input-container {
       width: 0;
-      visibility: hidden;
+      overflow: hidden;
     }
 
     .dx-dropdowneditor-field-before-template-wrapper {

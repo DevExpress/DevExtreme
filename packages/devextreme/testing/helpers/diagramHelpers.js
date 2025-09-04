@@ -18,7 +18,12 @@ export const Consts = {
     TOOLBOX_INPUT_CONTAINER_SELECTOR: '.dx-diagram-toolbox-input-container',
     TOOLBOX_SCROLLVIEW_SELECTOR: '.dx-diagram-toolbox-panel .dx-scrollview',
     TOOLBOX_ACCORDION_SELECTOR: '.dx-diagram-toolbox-panel .dx-accordion',
-    FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
+    FULLSCREEN_CLASS: 'dx-diagram-fullscreen',
+    TEXT_EDITOR_INPUT_CONTAINER: 'dx-texteditor-input-container',
+    IMAGE_DROP_DOWN_ITEM: 'dx-diagram-image-dropdown-item',
+    COLOR_EDIT_ITEM: 'dx-diagram-color-edit-item',
+    DIAGRAM_ICON: 'dx-diagram-i',
+    DX_ICON: 'dx-icon',
 };
 
 export function getMainToolbarElement($diagramElement) {
