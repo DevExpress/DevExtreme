@@ -5,11 +5,11 @@ import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
 import type { RouteMode } from '@js/ui/map';
 
-import type Map from './m_map';
-import Provider from './m_provider';
-import type { AzureLocation } from './m_provider.dynamic.azure';
-import type { BingLocation } from './m_provider.dynamic.bing';
-import type { GoogleLocation } from './m_provider.dynamic.google';
+import type Map from './map';
+import Provider from './provider';
+import type { AzureLocation } from './provider.dynamic.azure';
+import type { BingLocation } from './provider.dynamic.bing';
+import type { GoogleLocation } from './provider.dynamic.google';
 
 const MAP_MARKER_CLASS = 'dx-map-marker';
 
