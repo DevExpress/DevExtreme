@@ -1,6 +1,5 @@
-/* eslint-disable import/no-cycle */
 import { ITemplateMeta, ITemplateProps } from 'src/core/template';
-import { ITemplate } from '../config-node';
+import { ITemplate } from '../../types';
 
 function getAnonymousTemplate(
   props: Record<string, any>,

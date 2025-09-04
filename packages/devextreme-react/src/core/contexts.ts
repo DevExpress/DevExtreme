@@ -1,12 +1,10 @@
-/* eslint-disable import/no-cycle */
-
 import {
   Context,
   createContext,
 } from 'react';
 
 import { IExpectedChild, IOptionDescriptor } from './configuration/react/element';
-import { IConfigNode, ITemplate } from './configuration/config-node';
+import { IConfigNode, ITemplate } from './types';
 
 export interface UpdateLocker {
   lock: () => void;

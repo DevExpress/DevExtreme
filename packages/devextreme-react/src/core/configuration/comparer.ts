@@ -1,6 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 
-import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
+import { buildNodeFullName } from './config-node';
+import { IConfigNode, ITemplate } from '../types';
 import { buildNode, buildTemplates } from './tree';
 import { mergeNameParts } from './utils';
 

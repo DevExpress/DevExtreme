@@ -3,8 +3,13 @@ import { compareValues, getChanges } from './configuration/comparer';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
-import type { IConfigNode, ITemplate } from './configuration/config-node';
-import { DXTemplateCollection, GuardObject } from './types';
+
+import type {
+  DXTemplateCollection,
+  GuardObject,
+  IConfigNode,
+  ITemplate,
+} from './types';
 
 const optionsManagers = new Set<OptionsManager>();
 let guardTimeoutHandler = -1;

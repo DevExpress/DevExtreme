@@ -17,6 +17,7 @@ import {
   DXTemplateCollection,
   TemplateFunc,
   TemplateManagerUpdateContext,
+  ITemplate,
 } from './types';
 
 import { TemplateWrapper } from './template-wrapper';
@@ -24,7 +25,6 @@ import { TemplateInstantiationModels, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
-import { ITemplate } from './configuration/config-node';
 
 function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['data'] {
   if (getConfigOption('useLegacyTemplateEngine')) {

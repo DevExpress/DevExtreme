@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { ITemplateMeta, Template as TemplateComponent } from '../../template';
 import { NestedComponentMeta } from '../../types';
 

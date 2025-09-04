@@ -1,7 +1,23 @@
-/* eslint-disable import/no-cycle */
-
 import { ReactNode } from 'react';
-import { ITemplate } from './configuration/config-node';
+
+export interface ITemplate {
+  optionName: string;
+  isAnonymous: boolean;
+  type: 'component' | 'render' | 'children';
+  content: any;
+}
+
+export interface IConfigNode {
+  parentNode?: IConfigNode | undefined;
+  index?: number | undefined;
+  templates: ITemplate[];
+  readonly name: string;
+  readonly predefinedOptions: Record<string, any>;
+  readonly initialOptions: Record<string, any>;
+  readonly options: Record<string, any>;
+  readonly configs: Record<string, IConfigNode>;
+  readonly configCollections: Record<string, IConfigNode[]>;
+}
 
 interface DXTemplate {
   render: RenderFunc;
