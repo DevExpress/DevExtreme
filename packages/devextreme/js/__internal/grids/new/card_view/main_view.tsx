@@ -10,6 +10,7 @@ import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType, RefObject } from 'inferno';
 
 import { A11yStatusContainer, AccessibilityController } from '../grid_core/accessibility/index';
+import { CommonPropsContext } from '../grid_core/core/common_props_context';
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { EditPopupView } from '../grid_core/editing/popup/view';
@@ -58,6 +59,7 @@ function MainViewComponent({
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
+      <CommonPropsContext.Provider value={{ rootElementRef }}>
         <RootElementUpdater
           rootElementRef={rootElementRef}
           className={CLASSES.cardView}
@@ -91,6 +93,7 @@ function MainViewComponent({
             <ContextMenu/>
           </div>
         </RootElementUpdater>
+        </CommonPropsContext.Provider>
     </ConfigContext.Provider>
   </>);
 }
