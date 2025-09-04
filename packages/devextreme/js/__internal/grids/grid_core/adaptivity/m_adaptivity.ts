@@ -628,7 +628,9 @@ export class AdaptiveColumnsController extends modules.ViewController {
             hasHiddenColumns = true;
             continue;
           }
-          if (!columnWidth && !visibleColumn.command && !visibleColumn.fixed) {
+
+          // if (!columnWidth && !visibleColumn.command && !visibleColumn.fixed) {
+          if (!visibleColumn.command && !visibleColumn.fixed) {
             needHideColumn = true;
             break;
           }
