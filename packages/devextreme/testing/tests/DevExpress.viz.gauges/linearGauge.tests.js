@@ -1,15 +1,14 @@
 /* global createTestContainer */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const dxLinearGauge = require('viz/linear_gauge');
+import $ from 'jquery';
+import { Axis as VizMocksAxis, Renderer as VizMocksRenderer } from '../../helpers/vizMocks.js';
+import dxLinearGauge from 'viz/linear_gauge';
+import axisModule from 'viz/axes/base_axis';
+import rendererModule from 'viz/core/renderers/renderer';
+
 const factory = dxLinearGauge.prototype._factory;
-const axisModule = require('viz/axes/base_axis');
-const Class = require('core/class');
-const rendererModule = require('viz/core/renderers/renderer');
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
-
 
 factory.RangeContainer = function(parameters) {
     parameters.className = 'test-range-container';
@@ -44,8 +43,8 @@ factory.createIndicator = function(parameters) {
     return item;
 };
 
-const TestElement = Class.inherit({
-    ctor: function(parameters) {
+class TestElement {
+    constructor(parameters) {
         this.renderer = parameters.renderer;
         this.translator = parameters.translator;
         this.container = parameters.container;
@@ -54,40 +53,40 @@ const TestElement = Class.inherit({
         this.tracker = parameters.tracker;
         this.className = parameters.className;
         this.root = this.renderer.g().attr({ 'class': parameters.className });
-    },
+    }
 
-    dispose: function() {
+    dispose() {
         this.disposed = true;
         return this;
-    },
+    }
 
-    render: function(options) {
+    render(options) {
         this.root = this.root || this.renderer.g().attr({ 'class': this.className });
         this.options = options;
         this.enabled = true;
         this.root.append(this.owner || this.container);
         return this;
-    },
+    }
 
-    clean: function() {
+    clean() {
         if(this.root) {
             this.root.remove();
             delete this.root;
         }
         return this;
-    },
+    }
 
-    getOffset: function() {
+    getOffset() {
         return Number(this.options.offset) || 0;
-    },
+    }
 
-    resize: function(layout) {
+    resize(layout) {
         $.extend(this.options, layout);
     }
-});
+}
 
-const TestPointerElement = TestElement.inherit({
-    value: function(val) {
+class TestPointerElement extends TestElement {
+    value(val) {
         if(arguments.length) {
             val = Number(val);
             if(Number(this.options.currentValue) !== val && isFinite(this.translator.translate(val))) {
@@ -98,13 +97,13 @@ const TestPointerElement = TestElement.inherit({
         }
         return this.options ? Number(this.options.currentValue) : NaN;
     }
-});
+}
 
 (function linearGauge() {
     rendererModule.Renderer = sinon.stub();
 
     sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
-        const axis = new vizMocks.Axis(parameters);
+        const axis = new VizMocksAxis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,
             height: 15,
@@ -120,10 +119,10 @@ const TestPointerElement = TestElement.inherit({
 
     const environment = {
         beforeEach: function() {
-            this.renderer = new vizMocks.Renderer();
+            this.renderer = new VizMocksRenderer();
             this.container = $(createTestContainer('#test-container', { width: '800px', height: '600px' }));
             rendererModule.Renderer.onCall(0).returns(this.renderer);
-            const tooltipRenderer = new vizMocks.Renderer();
+            const tooltipRenderer = new VizMocksRenderer();
             rendererModule.Renderer.onCall(1).returns(tooltipRenderer);
         },
         afterEach: function() {
@@ -331,7 +330,6 @@ const TestPointerElement = TestElement.inherit({
             top: 0,
             width: 800
         }, 'new canvas for scale');
-
     });
 
     QUnit.test('Scale vertical orientation = top', function(assert) {

@@ -1,19 +1,18 @@
-const $ = require('jquery');
-const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
-const commons = require('./chartParts/commons.js');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const chartMocks = require('../../helpers/chartMocks.js');
-const MockSeries = chartMocks.MockSeries;
+import $ from 'jquery';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import { environment, getTrackerStub } from './chartParts/commons.js';
+import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import { MockSeries, seriesMockData } from '../../helpers/chartMocks.js';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
-QUnit.module('dxChart options changed', $.extend({}, commons.environment, {
+QUnit.module('dxChart options changed', $.extend({}, environment, {
     beforeEach: function() {
         executeAsyncMock.setup();
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
     },
     afterEach: function() {
-        commons.environment.afterEach.apply(this, arguments);
+        environment.afterEach.apply(this, arguments);
         executeAsyncMock.teardown();
     }
 }));
@@ -44,7 +43,7 @@ QUnit.test('refresh chart without _refreshData', function(assert) {
 
 QUnit.test('change dataSource only - reinitialized series data', function(assert) {
     const stubSeries1 = new MockSeries({ argumentField: 'arg', range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const dataSource1 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
     const dataSource2 = [{ x: 'First', y: 1 }, { x: 'Second', y: 2 }, { x: 'Third', y: 3 }];
     const chart = this.createChart({
@@ -57,9 +56,7 @@ QUnit.test('change dataSource only - reinitialized series data', function(assert
 
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
-    // Act
     chart.option('dataSource', dataSource2);
-    // Assert
 
     assert.equal(chart.series, oldChartSeries);
     assert.equal(chart.series.length, 1);
@@ -70,7 +67,7 @@ QUnit.test('change dataSource only - reinitialized series data', function(assert
 
 QUnit.test('change dataSource only. render call', function(assert) {
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const dataSource1 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
     const dataSource2 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
     const chart = this.createChart({
@@ -85,7 +82,6 @@ QUnit.test('change dataSource only. render call', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // act
     chart.option('dataSource', dataSource2);
 
     assert.ok(chart._renderCalled);
@@ -98,7 +94,7 @@ QUnit.test('change dataSource only. render call', function(assert) {
 QUnit.test('change dataSource after zoomArgument with gesture and useAggregation', function(assert) {
     const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries, stubSeries1);
+    seriesMockData.series.push(stubSeries, stubSeries1);
     const dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
     const chartOptions = {
         series: [{
@@ -110,7 +106,6 @@ QUnit.test('change dataSource after zoomArgument with gesture and useAggregation
     };
     const chart = this.createChart(chartOptions);
 
-    // act
     chart.zoomArgument(2, 3);
     chart.option(chartOptions);
 
@@ -118,12 +113,11 @@ QUnit.test('change dataSource after zoomArgument with gesture and useAggregation
 });
 
 QUnit.test('change series options only - populateSeries', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -136,17 +130,15 @@ QUnit.test('change series options only - populateSeries', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [{ name: 'first', type: 'spline' }]
     });
 
-    // Assert
     assert.notStrictEqual(oldSeries, chart.series, 'new series');
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
 
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'there is one series');
     assert.equal(chart.series[0].options.name, 'first', 'series name');
     assert.equal(chart.series[0].type, 'spline', 'series type');
@@ -155,12 +147,11 @@ QUnit.test('change series options only - populateSeries', function(assert) {
 });
 
 QUnit.test('change series options only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -174,15 +165,14 @@ QUnit.test('change series options only', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [{ name: 'first', type: 'spline' }]
     });
-    // Assert
+
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'series length');
     assert.equal(chart.series[0].options.name, 'first', 'name');
     assert.equal(chart.series[0].type, 'spline', 'type');
@@ -192,12 +182,11 @@ QUnit.test('change series options only', function(assert) {
 });
 
 QUnit.test('change series order only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' },
@@ -212,30 +201,28 @@ QUnit.test('change series order only', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [
             { name: 'Second series', type: 'line' },
             { name: 'First series', type: 'line' }
         ]
     });
-    // Assert
+
     assert.ok(!chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 2, 'series length');
     assert.equal(chart.series[0].options.name, 'Second series', 'name');
     assert.equal(chart.series[1].options.name, 'First series', 'name');
 });
 
 QUnit.test('change series - pass less series than chart has', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' },
@@ -250,28 +237,26 @@ QUnit.test('change series - pass less series than chart has', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [
             { name: 'Second series', type: 'line' }
         ]
     });
-    // Assert
+
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'series length');
     assert.equal(chart.series[0].options.name, 'Second series', 'name');
 });
 
 QUnit.test('change series - pass more series than chart has', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -285,30 +270,28 @@ QUnit.test('change series - pass more series than chart has', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [
             { name: 'First series', type: 'line' },
             { name: 'Second series', type: 'line' }
         ]
     });
-    // Assert
+
     assert.ok(!chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 2, 'series length');
     assert.equal(chart.series[0].options.name, 'First series', 'name');
     assert.equal(chart.series[1].options.name, 'Second series', 'name');
 });
 
 QUnit.test('change rotated option only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -325,16 +308,14 @@ QUnit.test('change rotated option only', function(assert) {
 
     this.themeManager.getOptions.withArgs('rotated').returns(true);
 
-    // Act
     chart.option({
         rotated: true
     });
 
-    // Assert
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledTwice, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'length');
     assert.equal(chart.series[0].options.name, 'First series', 'name');
     assert.equal(chart.series[0].type, 'line', 'type');
@@ -345,13 +326,12 @@ QUnit.test('change rotated option only', function(assert) {
 });
 
 QUnit.test('change customizePoint option only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const customizePoint = function() { };
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -363,15 +343,15 @@ QUnit.test('change customizePoint option only', function(assert) {
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
     this.themeManager.getOptions.withArgs('customizePoint').returns(customizePoint);
-    // act
+
     chart.option({
         customizePoint: customizePoint
     });
-    // Assert
+
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledTwice, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'length');
     assert.equal(chart.series[0].options.name, 'First series', 'name');
     assert.equal(chart.series[0].type, 'line', 'type');
@@ -381,13 +361,12 @@ QUnit.test('change customizePoint option only', function(assert) {
 });
 
 QUnit.test('change customizeLabel option only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const customizeLabel = function() { };
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -399,15 +378,15 @@ QUnit.test('change customizeLabel option only', function(assert) {
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
     this.themeManager.getOptions.withArgs('customizeLabel').returns(customizeLabel);
-    // act
+
     chart.option({
         customizeLabel: customizeLabel
     });
-    // Assert
+
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledTwice, 'SeriesFamilies should adjust series values');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.equal(chart.series.length, 1, 'length');
     assert.equal(chart.series[0].options.name, 'First series', 'name');
     assert.equal(chart.series[0].type, 'line', 'type');
@@ -421,7 +400,7 @@ QUnit.test('change series options only. render called', function(assert) {
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -440,11 +419,10 @@ QUnit.test('change series options only. render called', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         series: [{ name: 'first', type: 'spline' }]
     });
-    // Assert
+
     assert.ok(chart._renderCalled);
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
@@ -457,7 +435,7 @@ QUnit.test('change series options only. render called', function(assert) {
 QUnit.test('change containerBackgroundColor option only', function(assert) {
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+    seriesMockData.series.push(stubSeries1, stubSeries2);
     const chart = this.createChart({
         containerBackgroundColor: 'green',
         series: { name: 'series1', type: 'line' }
@@ -468,11 +446,11 @@ QUnit.test('change containerBackgroundColor option only', function(assert) {
     const argAxis = chart._argumentAxes[0];
 
     this.validateData.resetHistory();
-    // Act
+
     chart.option({
         containerBackgroundColor: 'red'
     });
-    // assert
+
     assert.equal(chart.option('containerBackgroundColor'), 'red', 'Container background color should be correct');
     assert.ok(!series.disposed);
     assert.ok(!seriesFamily.dispose.called);
@@ -487,7 +465,7 @@ QUnit.test('change containerBackgroundColor option only', function(assert) {
 QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+    seriesMockData.series.push(stubSeries1, stubSeries2);
     const chart = this.createChart({
         resolveLabelsOverlapping: true,
         series: { name: 'series1', type: 'line' }
@@ -499,11 +477,11 @@ QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
     const argAxis = chart._argumentAxes[0];
 
     this.validateData.resetHistory();
-    // Act
+
     chart.option({
         resolveLabelsOverlapping: false
     });
-    // assert
+
     assert.ok(!series.disposed);
     assert.ok(!seriesFamily.dispose.called);
     assert.strictEqual(stubSeries1, chart.getAllSeries()[0], 'Series should be updated');
@@ -512,7 +490,6 @@ QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
 });
 
 QUnit.test('change title option only. change title settings', function(assert) {
-
     const chart = this.createChart({
         title: {
             text: 'original',
@@ -524,7 +501,7 @@ QUnit.test('change title option only. change title settings', function(assert) {
     chart._dataSourceChangedHandler = function() {
         this._dataSourceChangedHandlerCalled = true;
     };
-    // Act
+
     this.validateData.resetHistory();
     chart.option({
         title: {
@@ -534,7 +511,7 @@ QUnit.test('change title option only. change title settings', function(assert) {
             horizontalAlignment: 'top'
         }
     });
-    // assert
+
     assert.ok(!chart._dataSourceChangedHandlerCalled);
     assert.equal(chart.option('title.text'), 'changed title');
     assert.equal(chart.option('title.verticalAlignment'), 'center');
@@ -544,25 +521,25 @@ QUnit.test('change title option only. change title settings', function(assert) {
 
 // T906065
 QUnit.test('change commonPanesSettings option only', function(assert) {
-    // arrange
     const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const commonPaneSettings = { backgroundColor: 'red', border: {} };
-    chartMocks.seriesMockData.series.push(stubSeries);
+    seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
         series: { name: 'series1', type: 'line' }
     });
     this.themeManager.getOptions.withArgs('commonPaneSettings').returns(commonPaneSettings);
-    // Act
+
     chart.option({ commonPaneSettings });
-    // assert
+
     assert.strictEqual(chart.panesBackground[0], chart._renderer.rect.getCall(1).returnValue);
 });
 
 QUnit.test('change panes option only', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
     const chart = this.createChart({
         title: {
             text: 'original',
@@ -578,11 +555,11 @@ QUnit.test('change panes option only', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('panes').returns([{ name: 'pane1' }]);
-    // Act
+
     chart.option({
         panes: [{ name: 'pane1' }]
     });
-    // assert
+
     assert.equal(chart.panes.length, 1, 'panes length');
     assert.equal(chart.panes[0].name, 'pane1', 'pane name');
     assert.equal(chart.defaultPane, 'pane1', 'default pane');
@@ -590,7 +567,7 @@ QUnit.test('change panes option only', function(assert) {
     assert.equal(chart.series[0].pane, 'pane1', 'pane in series');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(chart.horizontalAxesDisposed, 'Horizontal axes should be disposed');
     assert.ok(chart.verticalAxesDisposed, 'Vertical axes should be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -598,10 +575,11 @@ QUnit.test('change panes option only', function(assert) {
 });
 
 QUnit.test('change default Pane', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
     const chart = this.createChart({
         panes: [{ name: 'top' }, { name: 'bottom' }],
         defaultPane: 'bottom',
@@ -615,11 +593,11 @@ QUnit.test('change default Pane', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('defaultPane').returns('top');
-    // Act
+
     chart.option({
         defaultPane: 'top'
     });
-    // assert
+
     assert.equal(chart.panes.length, 2, 'panes length');
     assert.equal(chart.panes[0].name, 'top', 'first pane name');
     assert.equal(chart.panes[1].name, 'bottom', 'second pane name');
@@ -628,7 +606,7 @@ QUnit.test('change default Pane', function(assert) {
     assert.equal(chart.series[0].pane, 'top', 'series pane');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(!chart.horizontalAxesDisposed, 'Horizontal axes should not be disposed');
     assert.ok(!chart.verticalAxesDisposed, 'Vertical axes should not be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -636,12 +614,11 @@ QUnit.test('change default Pane', function(assert) {
 });
 
 QUnit.test('change valueAxis option', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
 
     const chart = this.createChart({
         series: [
@@ -658,7 +635,7 @@ QUnit.test('change valueAxis option', function(assert) {
 
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
-    // Act
+
     chart.option({
         valueAxis: {
             color: 'red',
@@ -667,12 +644,12 @@ QUnit.test('change valueAxis option', function(assert) {
             }
         }
     });
-    // Assert
+
     assert.equal(chart.series.length, 1, 'series length');
     assert.equal(chart.series[0].getValueAxis().getOptions().color, 'red', 'series axis');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(!chart.horizontalAxesDisposed, 'Horizontal axes should not be disposed');
     assert.ok(!chart.verticalAxesDisposed, 'Vertical axes should not be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -680,16 +657,16 @@ QUnit.test('change valueAxis option', function(assert) {
 });
 
 QUnit.test('Change valueAxis.title', function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries());
+    seriesMockData.series.push(new MockSeries());
 
     const chart = this.createChart({
         series: [
             { type: 'line' }
         ]
     });
-    // Act
+
     chart.option('valueAxis.title', 'new title');
-    // Assert
+
     assert.equal(chart.series[0].getValueAxis().getOptions().title, 'new title', 'series axis');
 });
 
@@ -703,12 +680,12 @@ QUnit.test('change panes option only. no additional panes created', function(ass
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
     this.themeManager.getOptions.withArgs('panes').returns([{ name: 'pane1' }]);
-    // Act
+
     this.validateData.resetHistory();
     chart.option({
         panes: [{ name: 'pane1' }]
     });
-    // assert
+
     assert.strictEqual(chart._valueAxes[0].pane, 'pane1');
     assert.ok(chart.horizontalAxesDisposed, 'Horizontal axes should be disposed');
     assert.ok(chart.verticalAxesDisposed, 'Vertical axes should be disposed');
@@ -733,10 +710,10 @@ QUnit.test('change some options check calls', function(assert) {
     };
 
     const spy = chart._doRender = sinon.spy();
-    // Act
+
     this.validateData.resetHistory();
     chart.option($.extend({}, newOptions));
-    // assert
+
     assert.equal(spy.callCount, 1);
     assert.deepEqual(spy.lastCall.args, [{ force: true }]);
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -747,9 +724,9 @@ QUnit.test('change some options', function(assert) {
     const stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries1);
-    chartMocks.seriesMockData.series.push(stubSeries2);
-    chartMocks.seriesMockData.series.push(stubSeries3);
+    seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries2);
+    seriesMockData.series.push(stubSeries3);
     const chart = this.createChart({
         series: [{
             type: 'spline'
@@ -759,15 +736,14 @@ QUnit.test('change some options', function(assert) {
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs('panes').returns([{ name: 'top' }, { name: 'bottom' }]);
-    // Act
+
     this.validateData.resetHistory();
     chart.option({
         valueAxis: [{ name: 'axis1' }],
         panes: [{ name: 'top' }, { name: 'bottom' }],
         series: [{ type: 'line', pane: 'top' }, { type: 'bar', pane: 'bottom' }]
-
     });
-    // assert
+
     assert.ok(chart._renderCalled);
     assert.ok(!('_seriesInitializing' in chart));
     assert.equal(chart._valueAxes.length, 2);
@@ -785,23 +761,17 @@ QUnit.test('change container options', function(assert) {
         this._dataSourceChangedHandlerCalled = true;
     };
     this.themeManager.getOptions.withArgs('size').returns({});
-    // Act
+
     this.validateData.resetHistory();
     this.$container.width(400);
     this.$container.height(300);
-    // this.themeManager.getOptions.withArgs("size").returns({});
-    // chart.option({
-    //    valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-    //    panes: [{ name: "top" }, { name: "bottom" }]
-    // });
+
     chart.render();
-    // assert
+
     assert.equal(chart.getSize().width, 400);
     assert.equal(chart.getSize().height, 300);
     assert.strictEqual(chart._canvas.originalLeft, 0);
     assert.strictEqual(chart._canvas.originalRight, 0);
-
-    // assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
 QUnit.test('change container options. Size was set', function(assert) {
@@ -814,7 +784,7 @@ QUnit.test('change container options. Size was set', function(assert) {
     chart._dataSourceChangedHandler = function() {
         this._dataSourceChangedHandlerCalled = true;
     };
-    // Act
+
     this.validateData.resetHistory();
     this.$container.width(200);
     this.$container.height(200);
@@ -822,7 +792,7 @@ QUnit.test('change container options. Size was set', function(assert) {
         valueAxis: [{ name: 'axis1' }, { name: 'axis2' }],
         panes: [{ name: 'top' }, { name: 'bottom' }]
     });
-    // assert
+
     assert.equal(chart.getSize().width, 300);
     assert.equal(chart.getSize().height, 300);
 
@@ -839,7 +809,7 @@ QUnit.test('size option changed', function(assert) {
             height: 500
         }
     });
-    // Act
+
     this.validateData.resetHistory();
     this.themeManager.getOptions.withArgs('size').returns({
         width: 300,
@@ -854,7 +824,6 @@ QUnit.test('size option changed', function(assert) {
         panes: [{ name: 'top' }, { name: 'bottom' }]
     });
 
-    // assert
     assert.equal(chart.getSize().width, 300);
     assert.equal(chart.getSize().height, 300);
 
@@ -866,10 +835,9 @@ QUnit.test('size option changed', function(assert) {
 });
 
 QUnit.test('palette option changed', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+    seriesMockData.series.push(stubSeries1, stubSeries2);
     const chart = this.createChart({
         palette: 'default',
         series: { name: 'series1', type: 'line' }
@@ -883,15 +851,14 @@ QUnit.test('palette option changed', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         palette: 'Soft Pastel'
     });
-    // assert
+
     assert.ok(chart._themeManager.updatePalette.calledOnce, 'palette');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(!chart.horizontalAxesDisposed, 'Horizontal Axes should not be disposed');
     assert.ok(!chart.verticalAxesDisposed, 'Vertical Axes should not be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -899,10 +866,9 @@ QUnit.test('palette option changed', function(assert) {
 });
 
 QUnit.test('paletteExtensionMode option changed', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+    seriesMockData.series.push(stubSeries1, stubSeries2);
     const chart = this.createChart({
         palette: 'default',
         paletteExtensionMode: 'blend',
@@ -917,15 +883,14 @@ QUnit.test('paletteExtensionMode option changed', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
-    // Act
     chart.option({
         paletteExtensionMode: 'alternate'
     });
-    // assert
+
     assert.ok(chart._themeManager.updatePalette.calledOnce, 'palette');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(!chart.horizontalAxesDisposed, 'Horizontal Axes should not be disposed');
     assert.ok(!chart.verticalAxesDisposed, 'Vertical Axes should not be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -933,10 +898,11 @@ QUnit.test('paletteExtensionMode option changed', function(assert) {
 });
 
 QUnit.test('palette option changed. palette as array', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
     const chart = this.createChart({
         palette: ['red', 'green'],
         series: { name: 'series1', type: 'line' }
@@ -949,16 +915,16 @@ QUnit.test('palette option changed. palette as array', function(assert) {
 
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
-    // Act
+
     chart.option({
         palette: ['black', 'blue']
     });
-    // assert
+
     assert.deepEqual(chart.option('palette'), ['black', 'blue'], 'palette');
     assert.ok(chart._themeManager.updatePalette.calledOnce, 'palette updated');
     assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
     assert.ok(!chart.seriesFamiliesDisposed, 'SeriesFamilies should not be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.ok(!chart.horizontalAxesDisposed, 'Horizontal Axes should not be disposed');
     assert.ok(!chart.verticalAxesDisposed, 'Vertical Axes should not be disposed');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -966,9 +932,8 @@ QUnit.test('palette option changed. palette as array', function(assert) {
 });
 
 QUnit.test('Reject data initialiazation after options updating. Axis strips', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const chart = this.createChart({
         series: { name: 'series1', type: 'line' },
         argumentAxis: {
@@ -982,7 +947,6 @@ QUnit.test('Reject data initialiazation after options updating. Axis strips', fu
     chart._change_AXES_AND_PANES = sinon.spy();
     chart._tracker.update.reset();
 
-    // Act
     chart.option({
         argumentAxis: {
             strips: [{
@@ -1020,7 +984,7 @@ QUnit.test('Reject data initialiazation after options updating. Axis strips', fu
             color: '#d7ebf9'
         }]
     }]);
-    // assert
+
     let updateCount = 0;
     chart._tracker.update.getCalls().forEach(function(c) {
         c.args[1] === 'undefined' && updateCount++;
@@ -1032,9 +996,10 @@ QUnit.test('Reject data initialiazation after options updating. Axis strips', fu
 });
 
 QUnit.test('Reject data initialiazation after options updating. Axis constant lines', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1);
+
+    seriesMockData.series.push(stubSeries1);
+
     const chart = this.createChart({
         series: { name: 'series1', type: 'line' },
         argumentAxis: {
@@ -1048,7 +1013,6 @@ QUnit.test('Reject data initialiazation after options updating. Axis constant li
     chart._change_AXES_AND_PANES = sinon.spy();
     chart._tracker.update.reset();
 
-    // Act
     chart.option({
         argumentAxis: {
             constantLines: [{
@@ -1072,7 +1036,7 @@ QUnit.test('Reject data initialiazation after options updating. Axis constant li
             value: 3
         }]
     }]);
-    // assert
+
     let updateCount = 0;
     chart._tracker.update.getCalls().forEach(function(c) {
         c.args[1] === 'undefined' && updateCount++;
@@ -1086,7 +1050,7 @@ QUnit.test('Reject data initialiazation after options updating. Axis constant li
 QUnit.test('animation option changed', function(assert) {
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
+    seriesMockData.series.push(stubSeries1, stubSeries2);
     const chart = this.createChart({
         series: { name: 'series1', type: 'line' },
         animation: {
@@ -1104,7 +1068,7 @@ QUnit.test('animation option changed', function(assert) {
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('animation').returns({ newOptions: true });
-    // Act
+
     chart.option({
         animation: newAnimOpt
     });
@@ -1112,7 +1076,7 @@ QUnit.test('animation option changed', function(assert) {
     chart._render = function() {
         chartReRendered = true;
     };
-    // assert
+
     assert.deepEqual(chart._renderer.updateAnimationOptions.lastCall.args[0], {
         newOptions: true
     });
@@ -1146,11 +1110,10 @@ QUnit.test('CommonSettings changed. commonSeriesSettings', function(assert) {
         return [];
     };
 
-    // act
     chart.option({
         commonSeriesSettings: newOptions
     });
-    // assert
+
     assert.ok(populateSeriesCalled);
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
 });
@@ -1166,7 +1129,7 @@ QUnit.test('CommonSettings changed. commonAxisSettings', function(assert) {
     });
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
-    // Act
+
     this.validateData.resetHistory();
     const newOptions = {
         grid: {
@@ -1177,7 +1140,6 @@ QUnit.test('CommonSettings changed. commonAxisSettings', function(assert) {
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
 
     assert.ok(chart._valueAxes[0]);
     assert.ok(chart._valueAxes[0]);
@@ -1187,29 +1149,28 @@ QUnit.test('CommonSettings changed. commonAxisSettings', function(assert) {
 });
 
 QUnit.test('SeriesTemplate.', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     const stubSeries4 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, isUpdated: false });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
     const chart = this.createChart({
         dataSource: [{ series: 's1', x: 1, y: 1 }, { series: 's2', x: 2, y: 2 }, { series: 's3', x: 3, y: 3 }, { series: 's4', x: 3, y: 3 }],
         seriesTemplate: { nameField: 'series', type: 'line', customizeSeries: function(sName) { return { type: 'line-' + sName }; } }
     });
-    chartMocks.seriesMockData.currentSeries = 0;
+    seriesMockData.currentSeries = 0;
     $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
     $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
 
     this.validateData.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('seriesTemplate').returns({ nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } });
-    // Act
+
     chart.option({
         seriesTemplate: { nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } }
     });
-    // Assert
+
     assert.equal(chart.series.length, 3, 'series length');
     assert.equal(chart.series[0].options.name, 's1', 'first series name');
     assert.equal(chart.series[0].type, 'spline-s1', 'first series type');
@@ -1219,22 +1180,21 @@ QUnit.test('SeriesTemplate.', function(assert) {
     assert.equal(chart.series[2].type, 'spline-s3', 'third series type');
     assert.ok(chart.seriesDisposed, 'Series should be disposed');
     assert.ok(chart.seriesFamiliesDisposed, 'SeriesFamilies should be disposed');
-    assert.equal(commons.getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+    assert.equal(getTrackerStub().stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, 'SeriesFamilies should adjust series values');
 });
 // seriesTemplate with incorrect nameField
 QUnit.test('SeriesTemplate. B239844', function(assert) {
-    // arrange
     const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
 
-    chartMocks.seriesMockData.series.push(stubSeries);
-    // act
+    seriesMockData.series.push(stubSeries);
+
     const chart = this.createChart({
         dataSource: [{ series: 's1', x: 1, y: 1 }],
         seriesTemplate: { nameField: 'incorrectNameField' }
     });
-    // Assert
+
     assert.equal(chart.seriesFamilies.length, 0, 'seriesFamilies length');
     assert.ok(chart.series);
     assert.equal(chart.series.length, 0, 'chart series length');
@@ -1245,24 +1205,24 @@ QUnit.test('SeriesTemplate. render called', function(assert) {
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: 'line' });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: 'line' });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         dataSource: [{ series: 's1', x: 1, y: 1 }, { series: 's2', x: 2, y: 2 }, { series: 's3', x: 3, y: 3 }],
         seriesTemplate: { nameField: 'series', customizeSeries: function(sName) { return { type: 'line-' + sName }; } }
     });
 
-    chartMocks.seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
+    seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
 
     chart._doRender = function() {
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs('seriesTemplate').returns({ nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } });
-    // Act
+
     this.validateData.resetHistory();
     chart.option({
         seriesTemplate: { nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } }
     });
-    // Assert
+
     assert.ok(chart._renderCalled);
     assert.ok(!('_seriesInitializing' in chart));
     assert.strictEqual(this.validateData.callCount, 1, 'validation');
@@ -1273,18 +1233,18 @@ QUnit.test('Ignore Series update if SeriesTemplate presents.', function(assert) 
     const stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: 'line' });
     const stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } }, type: 'line' });
 
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     const chart = this.createChart({
         dataSource: [{ series: 's1', x: 1, y: 1 }, { series: 's2', x: 2, y: 2 }, { series: 's3', x: 3, y: 3 }],
         seriesTemplate: { nameField: 'series', customizeSeries: function(sName) { return { type: 'line' }; } }
     });
-    chartMocks.seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
-    // Act
+    seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
+
     this.validateData.resetHistory();
     chart.option({
         series: [{ name: 'first', type: 'spline' }]
     });
-    // Assert
+
     assert.ok(chart.series);
     assert.equal(chart.series.length, 3);
     assert.equal(chart.series[0].options.name, 's1');
@@ -1302,7 +1262,7 @@ QUnit.test('change tooltip option', function(assert) {
         some_new: 'options'
     };
 
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const chart = this.createChart({
         series: [
             { name: 'First series', type: 'line' }
@@ -1310,24 +1270,24 @@ QUnit.test('change tooltip option', function(assert) {
         tooltip: { some: 'options' }
     });
     this.themeManager.getOptions.withArgs('tooltip').returns({ some_new: 'options' });
-    // Act
+
     chart.option('tooltip', options);
-    // Assert
+
     assert.deepEqual(this.tooltip.update.lastCall.args[0], options);
 });
 
 // T273635
 QUnit.test('\'done\' event is triggered after all \'_render\' calls when async series rendering is disabled', function(assert) {
-    chartMocks.seriesMockData.series.push(new MockSeries());
-    chartMocks.seriesMockData.series.push(new MockSeries());
+    seriesMockData.series.push(new MockSeries());
+    seriesMockData.series.push(new MockSeries());
     const onDone = sinon.spy();
     const chart = this.createChart({
         series: { type: 'line' },
         onDone: onDone
     });
     onDone.resetHistory();
-    commons.getTrackerStub().stub('update').reset();
-    chartMocks.seriesMockData.series[1].canRenderCompleteHandle = function() {
+    getTrackerStub().stub('update').reset();
+    seriesMockData.series[1].canRenderCompleteHandle = function() {
         this.canRenderCompleteHandle = function() {
             return false;
         };
@@ -1340,34 +1300,33 @@ QUnit.test('\'done\' event is triggered after all \'_render\' calls when async s
         'test': 100
     });
 
-    assert.ok(onDone.lastCall.calledAfter(commons.getTrackerStub().stub('update').lastCall), 'correct order');
+    assert.ok(onDone.lastCall.calledAfter(getTrackerStub().stub('update').lastCall), 'correct order');
 });
 
-QUnit.module('Change options - force render, series and axes are not recreated', commons.environment);
+QUnit.module('Change options - force render, series and axes are not recreated', environment);
 
 QUnit.test('stickyHovering option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
 
     const chart = this.createChart({
         series: [
             { type: 'line' }
         ]
     });
-    commons.getTrackerStub().stub('update').reset();
+    getTrackerStub().stub('update').reset();
     chart._themeManager.getOptions.withArgs('stickyHovering').returns(true);
-    // Act
+
     chart.option({
         stickyHovering: true
     });
-    // Assert
-    assert.strictEqual(commons.getTrackerStub().stub('update').lastCall.args[0].stickyHovering, true, 'new stick value');
+
+    assert.strictEqual(getTrackerStub().stub('update').lastCall.args[0].stickyHovering, true, 'new stick value');
 });
 
 QUnit.test('title option', function(assert) {
-    // arrange
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const onDrawn = sinon.spy();
     const chart = this.createChart({
         title: {
@@ -1380,11 +1339,11 @@ QUnit.test('title option', function(assert) {
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
     onDrawn.resetHistory();
-    // Act
+
     chart.option({
         title: 'changed title'
     });
-    // assert
+
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
     assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
     assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
@@ -1393,7 +1352,7 @@ QUnit.test('title option', function(assert) {
 
 QUnit.test('adaptiveLayout option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const chart = this.createChart({
         adaptiveLayout: {
             width: 20,
@@ -1418,7 +1377,7 @@ QUnit.test('adaptiveLayout option', function(assert) {
 
 QUnit.test('crosshair option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
     const chart = this.createChart({
         crosshair: { enabled: false },
         series: { type: 'line' }
@@ -1431,7 +1390,7 @@ QUnit.test('crosshair option', function(assert) {
 
     chart.option({ crosshair: { enabled: true } });
 
-    assert.strictEqual(commons.getTrackerStub().update.lastCall.args[0].crosshair, chart._crosshair);
+    assert.strictEqual(getTrackerStub().update.lastCall.args[0].crosshair, chart._crosshair);
 
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
     assert.strictEqual(valAxis, chart._valueAxes[0], 'Val axis should not be recreated');
@@ -1440,7 +1399,7 @@ QUnit.test('crosshair option', function(assert) {
 
 QUnit.test('adjustOnZoom option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
 
     stubSeries1.getViewport.returns({
         min: 10,
@@ -1467,12 +1426,10 @@ QUnit.test('adjustOnZoom option', function(assert) {
 
     valAxis.adjust.resetHistory();
 
-    // act
     chart.option({
         adjustOnZoom: true
     });
 
-    // assert
     assert.strictEqual(stubSeries1.getValueAxis().adjust.callCount, 1);
 
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should not be recreated');
@@ -1480,11 +1437,11 @@ QUnit.test('adjustOnZoom option', function(assert) {
     assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
-QUnit.module('Change options - recreate series but not axes', commons.environment);
+QUnit.module('Change options - recreate series but not axes', environment);
 
 QUnit.test('pointSelectionMode option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
 
     const chart = this.createChart({
         pointSelectionMode: 'point-selection-mode',
@@ -1498,13 +1455,11 @@ QUnit.test('pointSelectionMode option', function(assert) {
     const argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs('pointSelectionMode').returns('new-point-selection-mode');
 
-    // act
     chart.option({
         pointSelectionMode: 'new-point-selection-mode'
     });
 
-    // assert
-    assert.equal(commons.getTrackerStub().stub('update').lastCall.args[0].pointSelectionMode, 'new-point-selection-mode');
+    assert.equal(getTrackerStub().stub('update').lastCall.args[0].pointSelectionMode, 'new-point-selection-mode');
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.pointSelectionMode, 'new-point-selection-mode');
 
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
@@ -1514,7 +1469,7 @@ QUnit.test('pointSelectionMode option', function(assert) {
 
 QUnit.test('seriesSelectionMode option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
 
     const chart = this.createChart({
         seriesSelectionMode: 'series-selection-mode',
@@ -1528,13 +1483,11 @@ QUnit.test('seriesSelectionMode option', function(assert) {
     const argAxis = chart._argumentAxes[0];
     this.themeManager.getOptions.withArgs('seriesSelectionMode').returns('new-series-selection-mode');
 
-    // act
     chart.option({
         seriesSelectionMode: 'new-series-selection-mode'
     });
 
-    // assert
-    assert.equal(commons.getTrackerStub().stub('update').lastCall.args[0].seriesSelectionMode, 'new-series-selection-mode');
+    assert.equal(getTrackerStub().stub('update').lastCall.args[0].seriesSelectionMode, 'new-series-selection-mode');
     assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.seriesSelectionMode, 'new-series-selection-mode');
 
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
@@ -1544,7 +1497,7 @@ QUnit.test('seriesSelectionMode option', function(assert) {
 
 QUnit.test('synchronizeMultiAxes option', function(assert) {
     const stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
+    seriesMockData.series.push(stubSeries1);
 
     multiAxesSynchronizer.synchronize = sinon.spy();
 
@@ -1561,12 +1514,10 @@ QUnit.test('synchronizeMultiAxes option', function(assert) {
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
 
-    // act
     chart.option({
         synchronizeMultiAxes: true
     });
 
-    // assert
     assert.equal(multiAxesSynchronizer.synchronize.callCount, 1);
 
     assert.strictEqual(series, chart.getAllSeries()[0], 'Series should be updated');
@@ -1574,14 +1525,14 @@ QUnit.test('synchronizeMultiAxes option', function(assert) {
     assert.strictEqual(argAxis, chart._argumentAxes[0], 'Arg axis should not be recreated');
 });
 
-QUnit.module('Change Strips of axes. Q499381', $.extend({}, commons.environment, {
+QUnit.module('Change Strips of axes. Q499381', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.call(this);
+        environment.beforeEach.call(this);
         executeAsyncMock.setup.call(this);
     },
     afterEach: function() {
-        commons.environment.afterEach.call(this);
         executeAsyncMock.teardown();
+        environment.afterEach.call(this);
     }
 }));
 
@@ -1592,11 +1543,11 @@ QUnit.test('Common axis settings strips are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), {
         name: 'axis',
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
@@ -1614,11 +1565,11 @@ QUnit.test('Common axis settings more strips', function(assert) {
             { startValue: 30, endValue: 40, color: 'red' },
             { startValue: 50, endValue: 60, color: 'red' }]
     };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), newOptions));
 });
 
@@ -1633,11 +1584,11 @@ QUnit.test('Common axis settings less strips', function(assert) {
     const newOptions = {
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
     };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), newOptions));
 });
 
@@ -1648,11 +1599,11 @@ QUnit.test('Argument axis strips are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis'), {
         name: 'axis',
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
@@ -1670,11 +1621,11 @@ QUnit.test('Argument axis more strips', function(assert) {
             { startValue: 30, endValue: 40, color: 'red' },
             { startValue: 50, endValue: 60, color: 'red' }]
     };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis').strips, newOptions.strips);
 });
 
@@ -1689,11 +1640,11 @@ QUnit.test('Argument axis less strips', function(assert) {
     const newOptions = {
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
     };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis').strips, newOptions.strips);
 });
 
@@ -1704,11 +1655,11 @@ QUnit.test('Value axis strips are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), {
         name: 'axis',
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
@@ -1726,11 +1677,11 @@ QUnit.test('Value axis more strips', function(assert) {
             { startValue: 30, endValue: 40, color: 'red' },
             { startValue: 50, endValue: 60, color: 'red' }]
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis').strips, newOptions.strips);
 });
 
@@ -1745,11 +1696,11 @@ QUnit.test('Value axis less strips', function(assert) {
     const newOptions = {
         strips: [{ startValue: 250, endValue: 350, color: 'red' }]
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis').strips, newOptions.strips);
 });
 
@@ -1770,11 +1721,11 @@ QUnit.test('Multiple Value axis more strips', function(assert) {
             { startValue: 90, endValue: 100, color: 'red' },
             { startValue: 110, endValue: 120, color: 'red' }]
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -1795,11 +1746,11 @@ QUnit.test('Multiple Value axis less strips', function(assert) {
     }, {
         strips: [{ startValue: 300, endValue: 500, color: 'red' }]
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -1818,11 +1769,11 @@ QUnit.test('Single Value axis to multiple with strips', function(assert) {
             { startValue: 90, endValue: 100, color: 'red' },
             { startValue: 110, endValue: 120, color: 'red' }]
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -1841,22 +1792,22 @@ QUnit.test('Multiple Value axis to single with strips', function(assert) {
     const newOptions = {
         strips: [{ startValue: 100, endValue: 200, color: 'green' }]
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
-QUnit.module('Change Categories of axes. Q499381', $.extend({}, commons.environment, {
+QUnit.module('Change Categories of axes. Q499381', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.call(this);
-        executeAsyncMock.setup();
+        environment.beforeEach.call(this);
+        executeAsyncMock.setup.call(this);
     },
     afterEach: function() {
         executeAsyncMock.teardown();
-        commons.environment.afterEach.call(this);
+        environment.afterEach.call(this);
     }
 }));
 
@@ -1867,11 +1818,11 @@ QUnit.test('Common axis settings Categories are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), {
         name: 'axis',
         categories: ['A', 'B', 'C']
@@ -1887,11 +1838,11 @@ QUnit.test('Common axis settings more Categories', function(assert) {
     const newOptions = {
         categories: ['AA', 'BB', 'CC']
     };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), newOptions));
 });
 
@@ -1904,11 +1855,11 @@ QUnit.test('Common axis settings less Categories', function(assert) {
     const newOptions = {
         categories: ['A', 'B']
     };
-    // Act
+
     chart.option({
         commonAxisSettings: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('commonAxisSettings'), $.extend(true, chart.initialOption('commonAxisSettings'), newOptions));
 });
 
@@ -1919,11 +1870,11 @@ QUnit.test('Argument axis Categories are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis'), {
         name: 'axis',
         categories: ['A', 'B']
@@ -1939,11 +1890,11 @@ QUnit.test('Argument axis more Categories', function(assert) {
     const newOptions = {
         categories: ['AA', 'BB', 'CC']
     };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis').categories, newOptions.categories);
 });
 
@@ -1956,11 +1907,11 @@ QUnit.test('Argument axis less Categories', function(assert) {
     const newOptions = {
         categories: ['A', 'B']
     };
-    // Act
+
     chart.option({
         argumentAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('argumentAxis').categories, newOptions.categories);
 });
 
@@ -1971,11 +1922,11 @@ QUnit.test('Value axis Categories are not changed', function(assert) {
         }
     });
     const newOptions = { name: 'axis' };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), {
         name: 'axis',
         categories: ['AA', 'BB', 'CC']
@@ -1991,11 +1942,11 @@ QUnit.test('Value axis more Categories', function(assert) {
     const newOptions = {
         categories: ['AA', 'BB', 'CC']
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis').categories, newOptions.categories);
 });
 
@@ -2008,11 +1959,11 @@ QUnit.test('Value axis less Categories', function(assert) {
     const newOptions = {
         categories: ['A', 'B']
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis').categories, newOptions.categories);
 });
 
@@ -2029,11 +1980,11 @@ QUnit.test('Multiple Value axis more Categories', function(assert) {
     }, {
         categories: ['QQ', 'WW', 'EE']
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -2050,11 +2001,11 @@ QUnit.test('Multiple Value axis less Categories', function(assert) {
     }, {
         categories: ['Q', 'W']
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -2069,11 +2020,11 @@ QUnit.test('Single Value axis to multiple with Categories', function(assert) {
     }, {
         categories: ['QQ', 'WW', 'EE']
     }];
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });
 
@@ -2088,10 +2039,10 @@ QUnit.test('Multiple Value axis to single with Categories', function(assert) {
     const newOptions = {
         categories: ['A', 'B']
     };
-    // Act
+
     chart.option({
         valueAxis: newOptions
     });
-    // assert
+
     assert.deepEqual(chart.option('valueAxis'), newOptions);
 });

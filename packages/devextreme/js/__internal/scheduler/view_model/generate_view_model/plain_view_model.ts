@@ -10,19 +10,9 @@ export const plainViewModel = (
   viewModel: AppointmentViewModelInternal[],
 ): (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal & {
   itemData: SafeAppointment;
-})[] => {
-  const result: (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal & {
-    itemData: SafeAppointment;
-  })[] = [];
-
-  viewModel.forEach((appointment) => {
-    appointment.settings.forEach((setting) => {
-      result.push({
-        ...setting,
-        itemData: appointment.itemData,
-      });
-    });
-  });
-
-  return result;
-};
+})[] => viewModel.flatMap((appointment) => appointment.settings.map(
+  (setting) => ({
+    ...setting,
+    itemData: appointment.itemData,
+  }),
+));

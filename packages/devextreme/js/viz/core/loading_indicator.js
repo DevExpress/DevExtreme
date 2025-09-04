@@ -107,7 +107,7 @@ export const plugin = {
     name: 'loading_indicator',
     init: function() {
         const that = this;
-        // "exports" is used for testing purposes.
+
         that._loadingIndicator = new LoadingIndicator({ eventTrigger: that._eventTrigger, renderer: that._renderer, notify: notify });
         that._scheduleLoadingIndicatorHiding();
         function notify(state) {

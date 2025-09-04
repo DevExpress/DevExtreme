@@ -3,9 +3,12 @@ import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis } from 'viz/axes/base_axis';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 
-const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
         this.getBusinessRange.returns(range);
     }
@@ -40,7 +43,7 @@ const environment = {
         sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return function() {
@@ -51,7 +54,6 @@ const environment = {
                 };
             };
         });
-
     },
     createAxis: function(options) {
         this.translator = new StubTranslator();
@@ -89,7 +91,6 @@ const environment = {
         this.axis.validate();
     },
     testFormat: function(assert, options, ticks, tickInterval, texts, constantLineValue) {
-        // arrange
         this.createAxis(options);
         this.axis.setBusinessRange({ min: 0, max: 10 });
 
@@ -103,14 +104,12 @@ const environment = {
 
         this.renderer.resetStub('text');
 
-        // act
         this.axis.draw(this.canvas);
 
         if(constantLineValue) {
             this.axis._drawConstantLineLabels(constantLineValue, {}, 0, this.renderer.g());
         }
 
-        // assert
         const renderer = this.renderer;
         const actualTexts = getArray(texts.length).map(function(_, i) {
             return renderer.text.getCall(i).args[0];
@@ -234,7 +233,6 @@ QUnit.test('No formats for logarithmic ticks with logarithmBase !== 10', functio
 });
 
 QUnit.test('Label\'s hint - use auto formatter', function(assert) {
-    // arrange
     const spy = sinon.spy();
     this.createAxis({
         isHorizontal: true,
@@ -249,10 +247,8 @@ QUnit.test('Label\'s hint - use auto formatter', function(assert) {
     this.generatedTicks = [1500];
     this.generatedTickInterval = 100;
 
-    // act
     this.axis.draw(this.canvas);
 
-    // assert
     assert.strictEqual(spy.getCall(0).args[0].valueText, '1.5K');
 });
 
@@ -1309,7 +1305,6 @@ QUnit.test('T297683. Pass options and point - check customizeText arguments', fu
 QUnit.module('Date markers', environment);
 
 QUnit.test('No custom format - use auto formatting', function(assert) {
-    // arrange
     const date0 = new Date(2011, 5, 29, 0, 0, 0);
     const date1 = new Date(2011, 5, 30, 0, 0, 0);
     const date2 = new Date(2011, 6, 1, 0, 0, 0);
@@ -1330,7 +1325,6 @@ QUnit.test('No custom format - use auto formatting', function(assert) {
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = 'hour';
 
-    // act
     this.axis.draw(this.canvas);
 
     const text = this.renderer.text;
@@ -1341,7 +1335,6 @@ QUnit.test('No custom format - use auto formatting', function(assert) {
 });
 
 QUnit.test('Custom format - use custom format', function(assert) {
-    // arrange
     const date0 = new Date(2011, 5, 29, 0, 0, 0);
     const date1 = new Date(2011, 5, 30, 0, 0, 0);
     const date2 = new Date(2011, 6, 1, 0, 0, 0);
@@ -1364,7 +1357,6 @@ QUnit.test('Custom format - use custom format', function(assert) {
     this.generatedTicks = [date0, date1, date2, date3, date4];
     this.generatedTickInterval = 'hour';
 
-    // act
     this.axis.draw(this.canvas);
 
     const text = this.renderer.text;
@@ -1376,7 +1368,6 @@ QUnit.test('Custom format - use custom format', function(assert) {
 });
 
 QUnit.test('Tick labels do not show date transition', function(assert) {
-    // arrange
     const date0 = new Date(2011, 5, 30, 0, 0, 0);
     const date1 = new Date(2011, 5, 30, 12, 0, 0);
     const date2 = new Date(2011, 6, 1, 0, 0, 0);
@@ -1399,7 +1390,6 @@ QUnit.test('Tick labels do not show date transition', function(assert) {
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = 'hour';
 
-    // act
     this.axis.draw(this.canvas);
 
     const text = this.renderer.text;
@@ -1410,7 +1400,6 @@ QUnit.test('Tick labels do not show date transition', function(assert) {
 });
 
 QUnit.test('Custom format for tick labels - use custom format', function(assert) {
-    // arrange
     const date0 = new Date(2011, 5, 30, 0, 0, 0);
     const date1 = new Date(2011, 5, 30, 12, 0, 0);
     const date2 = new Date(2011, 6, 1, 0, 0, 0);
@@ -1434,7 +1423,6 @@ QUnit.test('Custom format for tick labels - use custom format', function(assert)
     this.generatedTicks = [date0, date1, date2, date3];
     this.generatedTickInterval = 'hour';
 
-    // act
     this.axis.draw(this.canvas);
 
     const text = this.renderer.text;
@@ -1516,14 +1504,12 @@ QUnit.module('Format numeric range.', {
 });
 
 QUnit.test('Numeric axis. Format range', function(assert) {
-    // act
     this.createAxis();
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000), '10K - 15K');
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000, 'currency'), '$10,000 - $15,000');
 });
 
 QUnit.test('Logarithmic axis. Format range', function(assert) {
-    // act
     this.createAxis({
         logarithmBase: 2,
         argumentType: 'numeric',
@@ -1533,7 +1519,6 @@ QUnit.test('Logarithmic axis. Format range', function(assert) {
 });
 
 QUnit.test('Discrete axis. Format range', function(assert) {
-    // act
     this.createAxis({
         logarithmBase: 2,
         argumentType: 'numeric',

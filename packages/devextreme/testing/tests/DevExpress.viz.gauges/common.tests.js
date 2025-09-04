@@ -1,22 +1,32 @@
 /* global createTestContainer, currentTest */
 
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const Class = require('core/class');
-const registerComponent = require('core/component_registrator');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const objectUtils = require('core/utils/object');
-const vizMocks = require('../../helpers/vizMocks.js');
-const dxGauge = require('viz/gauges/common').dxGauge;
-const createPalette = require('viz/palette').createPalette;
-const axisModule = require('viz/axes/base_axis');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const tooltipModule = require('viz/core/tooltip');
-const rangeModule = require('viz/translators/range');
-const translator1DModule = require('viz/translators/translator1d');
-const rendererModule = require('viz/core/renderers/renderer');
-const stubRange = vizMocks.stubClass(rangeModule.Range);
-const themeManagerModule = require('viz/gauges/theme_manager');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import registerComponent from 'core/component_registrator';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import objectUtils from 'core/utils/object';
+import {
+    Renderer,
+    Tooltip,
+    Axis,
+    stubClass,
+    forceThemeOptions,
+    LoadingIndicator,
+    stubIncidentOccurredCreation,
+    restoreIncidentOccurredCreation,
+} from '../../helpers/vizMocks.js';
+import gaugeModule from 'viz/gauges/common';
+import { createPalette } from 'viz/palette';
+import axisModule from 'viz/axes/base_axis';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import tooltipModule from 'viz/core/tooltip';
+import rangeModule from 'viz/translators/range';
+import translator1DModule from 'viz/translators/translator1d';
+import rendererModule from 'viz/core/renderers/renderer';
+import themeManagerModule from 'viz/gauges/theme_manager';
+
+const dxGauge = gaugeModule.dxGauge;
+const stubRange = stubClass(rangeModule.Range);
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
@@ -70,26 +80,26 @@ const factory = dxTestGauge.prototype._factory = objectUtils.clone(dxGauge.proto
 
 registerComponent('dxTestGauge', dxTestGauge);
 
-const StubTooltip = vizMocks.Tooltip;
+const StubTooltip = Tooltip;
 tooltipModule.Tooltip = function(parameters) {
     return new StubTooltip(parameters);
 };
 
 sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
-    return new vizMocks.Axis(parameters);
+    return new Axis(parameters);
 });
 
-themeManagerModule.ThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager, {
+themeManagerModule.ThemeManager = stubClass(themeManagerModule.ThemeManager, {
     theme: function() { return {}; },
     themeName: function() { return 'theme-name'; },
     createPalette: function(palette) { return createPalette(palette); },
     setTheme: function() {
-        vizMocks.forceThemeOptions(this);
+        forceThemeOptions(this);
     }
 });
 
-const TestElement = Class.inherit({
-    ctor: function(parameters) {
+class TestElement {
+    constructor(parameters) {
         this.parameters = parameters;
         this.renderer = parameters.renderer;
         this.translator = parameters.translator;
@@ -98,46 +108,45 @@ const TestElement = Class.inherit({
         this.incidentOccurred = parameters.incidentOccurred;
         this.tracker = parameters.tracker;
         this.root = this.renderer.g().attr({ 'class': parameters.className });
-    },
+    }
 
-    dispose: function() {
+    dispose() {
         this.disposed = true;
         delete this.root;
         return true;
-    },
+    }
 
-    clean: function() {
+    clean() {
         this.root.remove();
         return this;
-    },
+    }
 
-    render: function(options) {
+    render(options) {
         this.options = options;
         this.enabled = true;
         this.owner && this.root.append(this.owner);
         return this;
-    },
-
-    getOffset: function() {
-        return this.options.offset;
-    },
-
-    resize: function(options) {
-        $.extend(this.options, options);
-    },
-
-    measure: function() {
     }
-});
 
-const TestPointerElement = TestElement.inherit({
-    render: function() {
-        this.callBase.apply(this, arguments);
+    getOffset() {
+        return this.options.offset;
+    }
+
+    resize(options) {
+        $.extend(this.options, options);
+    }
+
+    measure() { }
+}
+
+class TestPointerElement extends TestElement {
+    render(options) {
+        super.render(options);
         this._currentValue = Number(this.options.currentValue);
         return this;
-    },
+    }
 
-    value: function(val) {
+    value(val) {
         this.valueCalls = this.valueCalls || [];
         this.valueCalls.push(val);
         if(arguments.length) {
@@ -150,7 +159,7 @@ const TestPointerElement = TestElement.inherit({
         }
         return this._currentValue;
     }
-});
+}
 
 function combineOptions(gauge, name, options) {
     return $.extend(true, {}, gauge._themeManager.theme()[name], options);
@@ -170,7 +179,7 @@ factory.createIndicator = function(parameters, type) {
 };
 
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
-    return new vizMocks.LoadingIndicator(parameters);
+    return new LoadingIndicator(parameters);
 });
 
 sinon.stub(rendererModule, 'Renderer').callsFake(function() {
@@ -179,26 +188,25 @@ sinon.stub(rendererModule, 'Renderer').callsFake(function() {
 
 const environment = {
     beforeEach: function() {
-        vizMocks.stubIncidentOccurredCreation();
+        stubIncidentOccurredCreation();
         rangeModule.Range.resetHistory();
         axisModule.Axis.resetHistory();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.container = $(createTestContainer('#test-container', { width: '800px', height: '600px' }));
     },
     createTestGauge: function(options) {
-        return new dxTestGauge(this.container, $.extend(true, {}, {
+        const defaultConfig = {
             scale: {
-                label: {
-                    overlappingBehavior: 'hide',
-                    indentFromTick: 10
-                },
+                label: { overlappingBehavior: 'hide', indentFromTick: 10 },
                 minorTick: {},
                 tick: {}
             }
-        }, options));
+        };
+        const finalConfig = $.extend(true, {}, defaultConfig, options);
+        return new dxTestGauge(this.container, finalConfig);
     },
     afterEach: function() {
-        vizMocks.restoreIncidentOccurredCreation();
+        restoreIncidentOccurredCreation();
         this.container.remove();
         delete this.container;
     }

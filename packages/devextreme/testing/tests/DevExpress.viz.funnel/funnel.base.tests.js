@@ -1,11 +1,8 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
-const stubAlgorithm = common.stubAlgorithm;
-const rendererModule = require('viz/core/renderers/renderer');
-const paletteModule = require('viz/palette');
-const themeModule = require('viz/themes');
+import $ from 'jquery';
+import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import paletteModule from 'viz/palette';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -17,7 +14,6 @@ themeModule.registerTheme({
             }
         }
     } }, 'generic.light');
-
 
 QUnit.module('Initialization', environment);
 
@@ -846,7 +842,6 @@ QUnit.test('Can select an item in onDrawn enven', function(assert) {
         }
     });
 
-
     const item = this.items()[1];
 
     assert.equal(item.smartAttr.lastCall.args[0].fill, '#234234');
@@ -910,7 +905,6 @@ QUnit.test('Single selection', function(assert) {
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[0].select(true);
 
-
     assert.equal(funnel.getAllItems()[0].isSelected(), true);
     assert.equal(funnel.getAllItems()[1].isSelected(), false);
 });
@@ -923,7 +917,6 @@ QUnit.test('Multiple selection', function(assert) {
 
     funnel.getAllItems()[1].select(true);
     funnel.getAllItems()[0].select(true);
-
 
     assert.equal(funnel.getAllItems()[0].isSelected(), true);
     assert.equal(funnel.getAllItems()[1].isSelected(), true);

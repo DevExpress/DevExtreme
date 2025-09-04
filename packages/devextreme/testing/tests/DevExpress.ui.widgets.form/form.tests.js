@@ -43,6 +43,8 @@ import {
     FORM_LOAD_PANEL_WRAPPER_CLASS
 } from '__internal/ui/form/constants';
 
+import { FORM_LOAD_INDICATOR_SIZE } from '__internal/ui/form/form.load_panel';
+
 import {
     GET_LABEL_WIDTH_BY_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
@@ -2249,11 +2251,12 @@ QUnit.module('Default button configuration integration', () => {
 
         const form = $('#form').dxForm({
             formData: { test: 'value' },
+            aiIntegration: {},
             items: [
                 'test',
                 {
                     itemType: 'button',
-                    name: 'smartPaste'
+                    name: 'smartPaste',
                 },
                 {
                     itemType: 'button',
@@ -5348,16 +5351,27 @@ QUnit.module('LoadIndicator', () => {
         const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
         const loadPanelInstance = $loadPanel.data('dxLoadPanel');
 
-        assert.strictEqual(loadPanelInstance.option('visible'), true, 'LoadPanel is visible');
-        assert.strictEqual(loadPanelInstance.option('showIndicator'), true, 'LoadPanel shows indicator');
-        assert.strictEqual(loadPanelInstance.option('showPane'), false, 'LoadPanel does not show pane');
-        assert.strictEqual(loadPanelInstance.option('shading'), false, 'LoadPanel does not show shading');
-        assert.strictEqual(loadPanelInstance.option('hideOnOutsideClick'), false, 'LoadPanel does not hide on outside click');
-        assert.strictEqual(loadPanelInstance.option('hideOnParentScroll'), false, 'LoadPanel does not hide on parent scroll');
-        assert.strictEqual(loadPanelInstance.option('deferRendering'), false, 'LoadPanel does not defer rendering');
-        assert.strictEqual(loadPanelInstance.option('disabled'), false, 'LoadPanel is not disabled');
-        assert.strictEqual(loadPanelInstance.option('message'), '', 'LoadPanel has empty message');
-        assert.strictEqual(loadPanelInstance.option('wrapperAttr.class'), FORM_LOAD_PANEL_WRAPPER_CLASS, 'LoadPanel has correct wrapper class');
+
+        const expectedOptions = {
+            visible: true,
+            showIndicator: true,
+            showPane: false,
+            shading: false,
+            hideOnOutsideClick: false,
+            hideOnParentScroll: false,
+            deferRendering: false,
+            disabled: false,
+            message: '',
+            'wrapperAttr.class': FORM_LOAD_PANEL_WRAPPER_CLASS,
+            width: FORM_LOAD_INDICATOR_SIZE,
+            height: FORM_LOAD_INDICATOR_SIZE,
+            maxWidth: undefined,
+            maxHeight: undefined
+        };
+
+        Object.entries(expectedOptions).forEach(([optionName, value]) => {
+            assert.strictEqual(loadPanelInstance.option(optionName), value, `${optionName} option has correct default value`);
+        });
     });
 
     QUnit.test('LoadPanel has correct positioning relative to form', function(assert) {
@@ -5409,6 +5423,7 @@ QUnit.module('LoadIndicator', () => {
         const clock = sinon.useFakeTimers();
         const smartPasteSpy = sinon.spy();
         const form = $('#form').dxForm({
+            aiIntegration: {},
             items: [
                 { dataField: 'name' },
                 {
@@ -5446,9 +5461,12 @@ QUnit.module('LoadIndicator', () => {
         assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
 
         clock.tick(150);
+
         assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+
         const $loadPanel = form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`);
         const loadPanelInstance = $loadPanel.data('dxLoadPanel');
+
         assert.strictEqual(loadPanelInstance.option('visible'), false, 'LoadPanel is hidden after operation');
         assert.strictEqual(form.option('disabled'), false, 'Form is enabled after operation');
 

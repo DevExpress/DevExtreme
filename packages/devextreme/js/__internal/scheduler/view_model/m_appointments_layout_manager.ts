@@ -94,7 +94,7 @@ class AppointmentLayoutManager {
     return {
       resources: this.instance.option('resources'),
       getResourceManager: (): ResourceManager => this.instance.resourceManager,
-      getAppointmentColor: this.instance.createGetAppointmentColor(),
+      getAppointmentColor: (config) => this.instance.resourceManager.getAppointmentColor(config),
       dataAccessors: this.instance._dataAccessors,
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
       adaptivityEnabled: this.instance.option('adaptivityEnabled'),

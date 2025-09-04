@@ -1,8 +1,8 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import type { RenderStrategyName, SafeAppointment } from '@ts/scheduler/types';
 
+import { adaptAgendaSettings } from './adapt_agenda_settings';
 import { addCollector } from './add_collector';
-import { plainViewModel } from './plain_view_model';
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import type BaseAppointmentsStrategy from './rendering_strategies/m_strategy_base';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
@@ -34,7 +34,12 @@ export class AppointmentViewModelGenerator {
   }
 
   generate(filteredItems: SafeAppointment[], options) {
-    const { viewOffset } = options;
+    const {
+      viewOffset,
+      appointmentRenderingStrategyName,
+      dataAccessors,
+      timeZoneCalculator,
+    } = options;
     const appointments = filteredItems
       ? filteredItems.slice()
       : [];
@@ -47,14 +52,14 @@ export class AppointmentViewModelGenerator {
     const viewModel = this.unshiftViewModelAppointmentsByViewOffset(shiftedViewModel, viewOffset);
     viewModel.forEach((item) => {
       item.settings.forEach((settings) => {
-        settings.geometry = options.appointmentRenderingStrategyName === 'agenda'
+        settings.geometry = appointmentRenderingStrategyName === 'agenda'
           ? undefined
           : renderingStrategy.getAppointmentGeometry(settings);
       });
     });
-    const viewModelPlain = options.appointmentRenderingStrategyName === 'agenda'
-      ? plainViewModel(viewModel)
-      : addCollector(viewModel);
+    const viewModelPlain = appointmentRenderingStrategyName === 'agenda'
+      ? adaptAgendaSettings(viewModel, dataAccessors, timeZoneCalculator)
+      : addCollector(viewModel, timeZoneCalculator);
 
     return {
       positionMap,

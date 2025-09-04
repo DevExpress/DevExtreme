@@ -677,8 +677,6 @@ module('Subscribes', {
     });
 
     test('"getAppointmentColor" by certain group', async function(assert) {
-        let appointmentColor;
-
         await this.createInstance({
             currentView: 'workWeek',
             views: ['week', {
@@ -696,9 +694,7 @@ module('Subscribes', {
             }]
         });
 
-        const done = assert.async();
-        const getAppointmentColor = this.instance.createGetAppointmentColor();
-        const result = getAppointmentColor({
+        const appointmentColor = await this.instance.resourceManager.getAppointmentColor({
             itemData: {
                 typeId: 1,
                 priorityId: 1
@@ -706,16 +702,10 @@ module('Subscribes', {
             groupIndex: 0,
         });
 
-        result.done(function(color) {
-            appointmentColor = color;
-            done();
-            assert.strictEqual(appointmentColor, 'red', 'appointment color');
-        });
+        assert.strictEqual(appointmentColor, 'red', 'appointment color');
     });
 
     test('"getAppointmentColor" with fieldExpr for complex resource', async function(assert) {
-        let appointmentColor;
-
         await this.createInstance({
             currentView: 'workWeek',
             views: ['week', {
@@ -746,9 +736,7 @@ module('Subscribes', {
             }]
         });
 
-        const done = assert.async();
-        const getAppointmentColor = this.instance.createGetAppointmentColor();
-        const result = getAppointmentColor({
+        const appointmentColor = await this.instance.resourceManager.getAppointmentColor({
             itemData: {
                 'Price': 10,
                 'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -761,11 +749,7 @@ module('Subscribes', {
             groupIndex: 0
         });
 
-        result.done(function(color) {
-            appointmentColor = color;
-            done();
-            assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
-        });
+        assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
     });
 
     test('"maxAppointmentsPerCell" should return correct value in accordance with scheduler configuration', async function(assert) {
@@ -835,7 +819,7 @@ module('Subscribes', {
         assert.notOk(this.instance.fire('isAdaptive'), 'Scheduler isn\'t adaptive');
     });
 
-    test('getTextAndFormatDate with format TIME should work correct', async function(assert) {
+    test('createFormattedDateText with format TIME should work correct', async function(assert) {
         const data = {
             text: 'Appointment test text',
             startDate: new Date(2018, 2, 1, 10),
@@ -847,13 +831,13 @@ module('Subscribes', {
             currentView: 'week'
         });
 
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data, 'TIME'), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', data, data, 'TIME'), {
             formatDate: '10:00 AM - 11:00 AM',
             text: 'Appointment test text'
         });
     });
 
-    test('getTextAndFormatDate, appointment with allDay option, without format', async function(assert) {
+    test('createFormattedDateText, appointment with allDay option, without format', async function(assert) {
         const data = {
             text: 'Appointment test text',
             startDate: new Date(2018, 2, 1, 10),
@@ -866,13 +850,13 @@ module('Subscribes', {
             currentView: 'week'
         });
 
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', data, data), {
             formatDate: 'March 1',
             text: 'Appointment test text'
         });
     });
 
-    test('getTextAndFormatDate, with expr fields', async function(assert) {
+    test('createFormattedDateText, with expr fields', async function(assert) {
         const data = {
             Text: 'Appointment test text',
             StartDate: new Date(2018, 2, 1, 10),
@@ -889,13 +873,13 @@ module('Subscribes', {
             allDayExpr: 'AllDay',
         });
 
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', data, data), {
             formatDate: 'March 1',
             text: 'Appointment test text'
         });
     });
 
-    test('getTextAndFormatDate, simple appointment, without format', async function(assert) {
+    test('createFormattedDateText, simple appointment, without format', async function(assert) {
         const data = {
             text: 'Appointment test text',
             startDate: new Date(2018, 2, 1, 10),
@@ -907,13 +891,13 @@ module('Subscribes', {
             currentView: 'week'
         });
 
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', data, data), {
             formatDate: '10:00 AM - 11:00 AM',
             text: 'Appointment test text'
         });
     });
 
-    test('getTextAndFormatDate, simple appointment, month view, without format', async function(assert) {
+    test('createFormattedDateText, simple appointment, month view, without format', async function(assert) {
         const data = {
             text: 'Appointment test text',
             startDate: new Date(2018, 2, 1, 10),
@@ -925,7 +909,7 @@ module('Subscribes', {
             currentView: 'month'
         });
 
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', data, data), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', data, data), {
             formatDate: 'March 1 10:00 AM - 11:00 AM',
             text: 'Appointment test text'
         });
@@ -946,7 +930,7 @@ module('Subscribes', {
             views: ['month'],
             currentView: 'month'
         });
-        assert.deepEqual(this.instance.fire('getTextAndFormatDate', initialData, dataRecur), {
+        assert.deepEqual(this.instance.fire('createFormattedDateText', initialData, dataRecur), {
             formatDate: 'March 2 10:00 AM - 11:00 AM',
             text: 'Appointment test text'
         });

@@ -155,6 +155,10 @@ class Calendar<
 
   _valueSelected?: boolean;
 
+  protected _activeStateUnit(): string {
+    return `.${CALENDAR_CELL_CLASS}`;
+  }
+
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
@@ -547,7 +551,6 @@ class Calendar<
   _init(): void {
     super._init();
 
-    this._activeStateUnit = `.${CALENDAR_CELL_CLASS}`;
     this._initSelectionStrategy();
     this._correctZoomLevel();
     this._initCurrentDate();

@@ -72,6 +72,10 @@ class MultiView<
 
   _itemWidthValue?: number;
 
+  protected _activeStateUnit(): string {
+    return `.${MULTIVIEW_ITEM_CLASS}`;
+  }
+
   _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     return {
       ...super._supportedKeys(),
@@ -186,8 +190,6 @@ class MultiView<
 
   _init(): void {
     super._init();
-
-    this._activeStateUnit = `.${MULTIVIEW_ITEM_CLASS}`;
 
     const $element = this.$element();
 
