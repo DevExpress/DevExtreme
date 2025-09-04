@@ -79,10 +79,10 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get showPageSizeSelector(): boolean {
+    get showPageSizeSelector(): boolean | "auto" {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean) {
+    set showPageSizeSelector(value: boolean | "auto") {
         this._setOption('showPageSizeSelector', value);
     }
 

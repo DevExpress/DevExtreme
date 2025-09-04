@@ -70,7 +70,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | "auto">,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<((() => number | string)) | number | string>

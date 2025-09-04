@@ -54,10 +54,10 @@ export abstract class DxoPager extends NestedOption {
         this._setOption('showNavigationButtons', value);
     }
 
-    get showPageSizeSelector(): boolean {
+    get showPageSizeSelector(): boolean | string {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean) {
+    set showPageSizeSelector(value: boolean | string) {
         this._setOption('showPageSizeSelector', value);
     }
 

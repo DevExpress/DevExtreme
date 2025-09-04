@@ -298,10 +298,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get showPageSizeSelector(): boolean {
+    get showPageSizeSelector(): boolean | "auto" {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean) {
+    set showPageSizeSelector(value: boolean | "auto") {
         this._setOption('showPageSizeSelector', value);
     }
 
@@ -507,7 +507,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showPageSizeSelectorChange: EventEmitter<boolean>;
+    @Output() showPageSizeSelectorChange: EventEmitter<boolean | "auto">;
 
     /**
     
