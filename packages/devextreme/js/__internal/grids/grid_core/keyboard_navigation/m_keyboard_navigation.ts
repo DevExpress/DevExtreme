@@ -2820,11 +2820,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     const { operationTypes, repaintChangesOnly } = change ?? {};
     const { fullReload, pageSize } = operationTypes ?? {};
 
-    const hasInsertsOrRemoves = !!change?.changeTypes?.find(
-      (changeType) => changeType === 'insert' || changeType === 'remove',
-    );
-
-    if (!change || !repaintChangesOnly || fullReload || pageSize || hasInsertsOrRemoves) {
+    if (!change || !repaintChangesOnly || fullReload || pageSize) {
       const preventScroll = shouldPreventScroll(this);
       this.renderFocusState({
         preventScroll,
