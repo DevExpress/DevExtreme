@@ -4,8 +4,8 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { getHeight, getWidth } from '@js/core/utils/size';
 
-import Provider from './m_provider';
-import type { LocationOption, MarkerOptions, RouteOptions } from './m_provider.dynamic';
+import Provider from './provider';
+import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
 let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 

@@ -17,8 +17,8 @@ import errors from '@js/ui/widget/ui.errors';
 import type {
   LocationOption,
   MarkerObject, MarkerOptions, RouteObject, RouteOptions,
-} from './m_provider.dynamic';
-import DynamicProvider from './m_provider.dynamic';
+} from './provider.dynamic';
+import DynamicProvider from './provider.dynamic';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let google: any;

@@ -17,13 +17,13 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import type { LocationOption } from './m_provider.dynamic';
-import azure from './m_provider.dynamic.azure';
-import bing from './m_provider.dynamic.bing';
-import google from './m_provider.dynamic.google';
+import type { LocationOption } from './provider.dynamic';
+import azure from './provider.dynamic.azure';
+import bing from './provider.dynamic.bing';
+import google from './provider.dynamic.google';
 // NOTE external urls must have protocol explicitly specified
 // (because inside Cordova package the protocol is "file:")
-import googleStatic from './m_provider.google_static';
+import googleStatic from './provider.google_static';
 
 const PROVIDERS = {
   azure,
