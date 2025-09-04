@@ -44,6 +44,12 @@ describe('Pagination: pagination visibility', () => {
       expect(isPagesContainerHidden(container)).toBe(true);
     });
 
+    it('should hide container when showPageSizeSelector is set to auto', () => {
+      const { container } = createPagination({ itemCount: 5, pageSize: 10, showPageSizeSelector: 'auto' });
+
+      expect(isPagesContainerHidden(container)).toBe(true);
+    });
+
     it('should show container when showInfo is enabled', () => {
       const { container } = createPagination({
         itemCount: 8,

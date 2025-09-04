@@ -2694,7 +2694,7 @@ const DxPagerConfig = {
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | Mode>,
     visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
