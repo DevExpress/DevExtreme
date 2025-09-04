@@ -1,5 +1,3 @@
-/* eslint-disable @stylistic/indent */
-
 import type {
   Appointment,
   Orientation,
@@ -45,8 +43,8 @@ const getGroupAppointmentDates = (viewType: ViewType): Date[] => {
       dayCount,
       startDate,
     ] = isWorkWeek
-        ? [5, new Date(2024, 0, 1, 8)]
-        : [7, new Date(2023, 11, 31, 8)];
+      ? [5, new Date(2024, 0, 1, 8)]
+      : [7, new Date(2023, 11, 31, 8)];
 
     return Array.from(
       { length: 12 * dayCount },

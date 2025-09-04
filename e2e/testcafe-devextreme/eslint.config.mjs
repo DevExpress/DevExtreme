@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
@@ -6,43 +7,20 @@ import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import { FlatCompat as FlatCompatibility } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
+const compatibility = new FlatCompatibility({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
   allConfig: js.configs.all
 });
 
-export default [
-  {
-    ignores: [
-      'node_modules/**',
-    ],
-  },
-  ...compat.extends('devextreme/spell-check'),
-  ...compat.extends('devextreme/testcafe'),
-  {
-    plugins: {
-      'no-only-tests': noOnlyTests,
-      i18n: i18N,
-    },
-    settings: {
-      'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
-        },
-      },
-    },
-  },
-  {
-    ...js.configs.recommended,
-    ...importPlugin.flatConfigs.recommended,
+const defaultJsOptions = {
     files: ['**/*.js'],
     languageOptions: {
       globals: {
@@ -58,6 +36,45 @@ export default [
       parserOptions: {
         requireConfigFile: false,
       },
+    },
+};
+
+export default [
+  {
+    ignores: [
+      'node_modules/**',
+    ],
+  },
+  ...compatibility.extends('devextreme/spell-check'),
+  ...compatibility.extends('devextreme/testcafe'),
+  {
+    plugins: {
+      'no-only-tests': noOnlyTests,
+      i18n: i18N,
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+        },
+      },
+    },
+  },
+  {
+    ...js.configs.recommended,
+    ...defaultJsOptions,
+  },
+  {
+    ...importPlugin.flatConfigs.recommended,
+    ...defaultJsOptions,
+    plugins: {
+      'import': importPlugin,
+    }
+  },
+  {
+    ...defaultJsOptions,
+    plugins: {
+      '@stylistic': stylistic,
     },
     rules: {
       'i18n/no-russian-character': ['error', {
@@ -149,13 +166,9 @@ export default [
       'import/named': 2,
       'import/default': 2,
       'import/no-duplicates': 2,
-    },
-    plugins: {
-      '@stylistic': stylistic,
-      'import': importPlugin,
     }
   },
-  ...compat.extends('devextreme/typescript').map(config => {
+  ...compatibility.extends('devextreme/typescript').map(config => {
     const newConfig = {
       ...config,
       files: ['**/*.ts?(x)'],
@@ -200,6 +213,11 @@ export default [
         considerDefaultExhaustiveForUnions: true,
       }],
       'no-only-tests/no-only-tests': 'error',
+      /*  
+        TODO: Consider these rules comment before these rules, 
+        because these rules were disabled during the migration 
+        and may need consideration in the future
+      */
       'no-param-reassign': 'off',
       'import/no-extraneous-dependencies': 'off',
       'no-restricted-globals': 'off',
@@ -214,7 +232,7 @@ export default [
       '@typescript-eslint/no-base-to-string': 'off'
     },
   },
-  ...compat.extends('devextreme/typescript').map(config => {
+  ...compatibility.extends('devextreme/typescript').map(config => {
     const newConfig = {
       ...config,
       files: ['**/*.d.ts'],
@@ -228,9 +246,6 @@ export default [
   }),
   {
     files: ['**/*.d.ts'],
-    plugins: {
-      '@stylistic': stylistic,
-    },
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 6,

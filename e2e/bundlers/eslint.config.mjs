@@ -17,6 +17,25 @@ const compatibility = new FlatCompatibility({
   allConfig: js.configs.all
 });
 
+const defaultJsOptions = {
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        setInterval: true,
+        setTimeout: true,
+        clearInterval: true,
+        clearTimeout: true,
+        require: true,
+        module: true,
+        exports: true,
+      },
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+      },
+    },
+};
+
 export default [
   {
     ignores: [
@@ -39,22 +58,19 @@ export default [
   },
   {
     ...js.configs.recommended,
+    ...defaultJsOptions,
+  },
+  {
     ...importPlugin.flatConfigs.recommended,
-    files: ['**/*.js'],
-    languageOptions: {
-      globals: {
-        setInterval: true,
-        setTimeout: true,
-        clearInterval: true,
-        clearTimeout: true,
-        require: true,
-        module: true,
-        exports: true,
-      },
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-      },
+    ...defaultJsOptions,
+    plugins: {
+      'import': importPlugin,
+    }
+  },
+  {
+    ...defaultJsOptions,
+    plugins: {
+      '@stylistic': stylistic,
     },
     rules: {
       'i18n/no-russian-character': ['error', {
@@ -147,11 +163,12 @@ export default [
       'import/named': 2,
       'import/default': 2,
       'import/no-duplicates': 2,
+      /*  
+        TODO: Consider these rules comment before these rules, 
+        because these rules were disabled during the migration 
+        and may need consideration in the future
+      */
       'import/no-unresolved': 'off',
     },
-    plugins: {
-      '@stylistic': stylistic,
-      'import': importPlugin,
-    }
   },
 ];

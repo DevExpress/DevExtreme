@@ -72,6 +72,11 @@ export default [
       'i18n/no-russian-character': ['error', {
         includeIdentifier: true,
       }],
+      /*  
+        TODO: Consider these rules comment before these rules, 
+        because these rules were disabled during the migration 
+        and may need consideration in the future
+      */
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-throw-literal': 'off',
