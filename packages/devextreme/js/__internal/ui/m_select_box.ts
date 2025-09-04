@@ -445,7 +445,7 @@ class SelectBox<
 
   _updateField(item): void {
     const { fieldTemplate: fieldTemplateOption } = this.option();
-    const fieldTemplate = this._getTemplateByOption('fieldTemplate');
+    const fieldTemplate = this._getTemplate(fieldTemplateOption);
 
     if (!(fieldTemplate && fieldTemplateOption)) {
       // @ts-expect-error ts-error

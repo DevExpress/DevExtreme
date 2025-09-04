@@ -42,18 +42,13 @@ $(() => {
     displayExpr: 'Name',
     valueExpr: 'ID',
     value: products[3].ID,
-    fieldTemplate(data, container) {
-      const result = $(`<div class='custom-item'><img alt='Product name' src='${
-        data ? data.ImageSrc : ''
-      }' /><div class='product-name'></div></div>`);
-      result
-        .find('.product-name')
-        .dxTextBox({
-          value: data && data.Name,
-          readOnly: true,
-          inputAttr: { 'aria-label': 'Name' },
-        });
-      container.append(result);
+    fieldAddons: {
+      beforeTemplate: (data) => {
+        const src = data?.ImageSrc ?? '';
+        const result = $(`<div class="custom-addon"><img alt="Product name" src="${src}"/></div>`);
+
+        return result;
+      }
     },
     itemTemplate(data) {
       return `<div class='custom-item'><img alt='Product name' src='${

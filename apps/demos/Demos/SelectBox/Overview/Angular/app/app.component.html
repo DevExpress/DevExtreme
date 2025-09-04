@@ -60,20 +60,14 @@
         id="custom-templates"
         displayExpr="Name"
         valueExpr="ID"
-        fieldTemplate="field"
         [dataSource]="products"
         [inputAttr]="{ 'aria-label': 'Templated Product' }"
         [value]="products[3].ID"
+        [fieldAddons]="{ beforeTemplate: 'before' }"
       >
-        <div *dxTemplate="let data of 'field'">
-          <div class="custom-item">
+        <div *dxTemplate="let data of 'before'">
+          <div class="custom-addon">
             <img alt="Product name" src="{{ data && data.ImageSrc }}" />
-            <dx-text-box
-              class="product-name"
-              [value]="data && data.Name"
-              [inputAttr]="{ 'aria-label': 'Name' }"
-              [readOnly]="true"
-            ></dx-text-box>
           </div>
         </div>
         <div *dxTemplate="let data of 'item'">

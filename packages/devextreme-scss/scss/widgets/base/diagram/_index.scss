@@ -240,22 +240,17 @@ $transparent-border: 1px solid transparent;
       width: auto;
     }
 
-    .dx-dropdowneditor-field-template-wrapper {
+    .dx-texteditor-input-container {
+      width: 0;
+      overflow: hidden;
+    }
+
+    .dx-dropdowneditor-field-before-template-wrapper {
       display: flex;
       align-items: center;
 
       .dx-diagram-i {
         display: block;
-      }
-
-      .dx-textbox {
-        width: 0;
-        max-width: 0;
-
-        .dx-texteditor-input {
-          width: 0;
-          padding-left: 0;
-        }
       }
     }
   }

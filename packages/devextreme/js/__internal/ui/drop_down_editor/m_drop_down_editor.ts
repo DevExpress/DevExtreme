@@ -47,8 +47,8 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
-export const DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON = 'dx-dropdowneditor-field-before-template';
-export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after-template';
+export const DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON = 'dx-dropdowneditor-field-before-template-wrapper';
+export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after-template-wrapper';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
