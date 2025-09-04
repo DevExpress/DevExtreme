@@ -11,6 +11,9 @@ const CLASS = {
   checkbox: 'dx-checkbox',
   treeViewItem: 'dx-treeview-item',
   treeView: 'dx-treeview',
+  itemContent: 'dx-item-content',
+  itemContentToolbar: 'dx-toolbar-item-content',
+  emptyMessage: 'dx-empty-message',
 };
 
 export default class ColumnChooser extends FocusableElement {
@@ -60,5 +63,13 @@ export default class ColumnChooser extends FocusableElement {
 
   getColumn(index = 0): Selector {
     return this.content.find(`.${CLASS.treeViewItem}`).nth(index);
+  }
+
+  getTitle(): Selector {
+    return this.content.find(`.${CLASS.itemContent}.${CLASS.itemContentToolbar}`).nth(0);
+  }
+
+  getEmptyMessage(): Selector {
+    return this.content.find(`.${CLASS.emptyMessage}`);
   }
 }
