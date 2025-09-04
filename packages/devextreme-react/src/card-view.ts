@@ -1985,7 +1985,7 @@ type IPagerProps = React.PropsWithChildren<{
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | Mode;
   visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
