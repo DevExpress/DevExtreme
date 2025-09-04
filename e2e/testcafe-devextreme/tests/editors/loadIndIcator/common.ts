@@ -47,11 +47,15 @@ fixture.disablePageReloads`LoadIndicator`
         animation: none !important;
         opacity: 1 !important;
       }
-
-      .${LOADINDICATOR_SEGMENT_CLASS} {
-        transform: scale(1) !important;
-      }
     `);
+
+    if (animationType === 'sparkle') {
+      await insertStylesheetRulesToPage(`
+        .${LOADINDICATOR_SEGMENT_CLASS} {
+          transform: scale(1) !important;
+        }
+      `);
+    }
 
     return createWidget('dxLoadIndicator', {
       width: 128,
