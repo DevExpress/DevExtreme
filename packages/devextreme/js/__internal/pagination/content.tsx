@@ -168,7 +168,6 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
       showPageSizeSelector,
     } = this.props;
 
-    // Only hide if pageCount=1 AND none of the explicit show props are true
     const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
 
     const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)

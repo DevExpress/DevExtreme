@@ -12,7 +12,6 @@ describe('Pagination: pagination visibility', () => {
     const pagination = new Pagination(container, {
       pageSize: 10,
       pageIndex: 1,
-      pageCount: 1,
       pagesNavigatorVisible: 'auto',
       hasKnownLastPage: true,
       showInfo: false,
@@ -82,7 +81,6 @@ describe('Pagination: pagination visibility', () => {
       const { container } = createPagination({
         itemCount: 25,
         pageSize: 10,
-        pageCount: 3,
       });
 
       expect(isPagesContainerVisible(container)).toBe(true);
