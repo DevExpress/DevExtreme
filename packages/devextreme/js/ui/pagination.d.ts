@@ -40,9 +40,9 @@ export type PagerBase = {
     /**
      * @docid
      * @public
-     * @default false
+     * @default "auto"
      */
-    showPageSizeSelector?: boolean;
+    showPageSizeSelector?: boolean | 'auto';
     /**
      * @docid
      * @public
