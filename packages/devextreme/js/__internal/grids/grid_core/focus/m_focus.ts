@@ -84,28 +84,16 @@ export class FocusController extends core.ViewController {
     if (!this.option('focusedRowEnabled')) {
       return;
     }
-    const isEmptyData = this.getDataController().isEmpty();
-    const currentIndex = this._getCurrentFocusRowIndex(isEmptyData, index);
+
+    const currentIndex = index !== undefined ? index : this.option('focusedRowIndex');
 
     if (currentIndex < 0) {
-      if (isEmptyData || this.isAutoNavigateToFocusedRow()) {
+      if (this.isAutoNavigateToFocusedRow()) {
         this._resetFocusedRow();
       }
     } else {
       this._focusRowByIndexCore(currentIndex, operationTypes);
     }
-  }
-
-  private _getCurrentFocusRowIndex(isEmptyData, index?): number {
-    let currentIndex = index;
-    if (currentIndex === undefined) {
-      if (isEmptyData) {
-        currentIndex = -1;
-      } else {
-        currentIndex = this.option('focusedRowIndex');
-      }
-    }
-    return currentIndex;
   }
 
   private _focusRowByIndexCore(index, operationTypes) {
@@ -560,7 +548,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class FocusColumnsExten
 };
 
 const data = (Base: ModuleType<DataController>) => class FocusDataControllerExtender extends Base {
-  private _needToUpdateFocusedRowByIndex = false;
+  private _isDataPushed = false;
 
   protected _applyChange(change) {
     if (change && change.changeType === 'updateFocusedRow') return;
@@ -572,20 +560,23 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
   protected _fireChanged(e) {
     super._fireChanged(e);
 
+    const forceUpdateFocusedRow = this._isDataPushed;
+
+    this._isDataPushed = false;
+
     if (this.option('focusedRowEnabled') && this._dataSource) {
       const isPartialUpdate = e.changeType === 'update' && e.repaintChangesOnly;
       const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
 
-      if (this._needToUpdateFocusedRowByIndex) {
-        this._needToUpdateFocusedRowByIndex = false;
-        this._focusController._focusRowByIndex();
+      if (forceUpdateFocusedRow && this.isEmpty()) {
+        this._focusController._resetFocusedRow();
       } else if (e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
         this._updatePageIndexes();
-        this._updateFocusedRow(e);
+        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
       } else if (e.changeType === 'append' || e.changeType === 'prepend') {
         this._updatePageIndexes();
-      } else if (e.changeType === 'update' && e.repaintChangesOnly) {
-        this._updateFocusedRow(e);
+      } else if (isPartialUpdate) {
+        this._updateFocusedRowIfNeeded(e, forceUpdateFocusedRow);
       }
     }
   }
@@ -595,7 +586,7 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
 
     const focusedRowKey = this.option('focusedRowKey');
 
-    this._needToUpdateFocusedRowByIndex = changes?.some((change) => change.type === 'remove' && equalByValue(change.key, focusedRowKey));
+    this._isDataPushed = isDefined(focusedRowKey) && !!changes.length;
   }
 
   private _updatePageIndexes() {
@@ -610,7 +601,7 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
     return this._isPagingByRendering;
   }
 
-  private _updateFocusedRow(e) {
+  private _updateFocusedRowIfNeeded(e, forceUpdate = false) {
     const operationTypes = e.operationTypes || {};
     const {
       reload, fullReload, pageIndex, paging,
@@ -620,30 +611,44 @@ const data = (Base: ModuleType<DataController>) => class FocusDataControllerExte
     const focusedRowKey = this.option('focusedRowKey');
     const isAutoNavigate = this._focusController.isAutoNavigateToFocusedRow();
     const isReload = reload && pageIndex === false;
-    if (isReload && !fullReload && isDefined(focusedRowKey)) {
-      this._focusController._navigateToRow(focusedRowKey, true)
-        .done((focusedRowIndex) => {
-          if (focusedRowIndex < 0) {
-            this._focusController._focusRowByIndex(undefined, operationTypes);
-          }
-        });
-    } else if (pagingWithoutVirtualScrolling && isAutoNavigate) {
-      const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
-      const focusedRowIndex = this.option('focusedRowIndex')!;
-      const isValidRowIndexByKey = rowIndexByKey >= 0;
-      const isValidFocusedRowIndex = focusedRowIndex >= 0;
-      const isSameRowIndex = focusedRowIndex === rowIndexByKey;
-      if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
-        this._focusController._focusRowByIndex(focusedRowIndex, operationTypes);
+    const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
+
+    switch (true) {
+      case forceUpdate: {
+        this._focusController._focusRowByKeyOrIndex();
+        break;
       }
-    } else if (
-      pagingWithoutVirtualScrolling
-                  && !isAutoNavigate
-                  && (this.getRowIndexByKey(focusedRowKey) < 0)
-    ) {
-      this.option('focusedRowIndex', -1);
-    } else if (operationTypes.fullReload) {
-      this._focusController._focusRowByKeyOrIndex();
+      case isReload && !fullReload && isDefined(focusedRowKey): {
+        this._focusController._navigateToRow(focusedRowKey, true)
+          .done((focusedRowIndex) => {
+            if (focusedRowIndex < 0) {
+              this._focusController._focusRowByIndex(undefined, operationTypes);
+            }
+          });
+        break;
+      }
+      case pagingWithoutVirtualScrolling && isAutoNavigate: {
+        const focusedRowIndex = this.option('focusedRowIndex')!;
+        const isValidRowIndexByKey = rowIndexByKey >= 0;
+        const isValidFocusedRowIndex = focusedRowIndex >= 0;
+        const isSameRowIndex = focusedRowIndex === rowIndexByKey;
+
+        if (isValidFocusedRowIndex && (isSameRowIndex || !isValidRowIndexByKey)) {
+          this._focusController._focusRowByIndex(focusedRowIndex, operationTypes);
+        }
+        break;
+      }
+      case pagingWithoutVirtualScrolling && !isAutoNavigate && (rowIndexByKey < 0): {
+        this.option('focusedRowIndex', -1);
+        break;
+      }
+      case operationTypes.fullReload: {
+        this._focusController._focusRowByKeyOrIndex();
+        break;
+      }
+      default: {
+        break;
+      }
     }
   }
 
