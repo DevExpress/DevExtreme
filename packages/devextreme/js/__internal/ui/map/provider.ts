@@ -6,9 +6,9 @@ import type { DxEvent } from '@js/events';
 import type { MapProvider } from '@js/ui/map';
 import { isDefined } from '@ts/core/utils/m_type';
 
-import type Map from './m_map';
-import type { MapProperties } from './m_map';
-import type { LocationOption, MarkerOptions, RouteOptions } from './m_provider.dynamic';
+import type Map from './map';
+import type { MapProperties } from './map';
+import type { LocationOption, MarkerOptions, RouteOptions } from './provider.dynamic';
 
 class Provider {
   _mapWidget!: Map;
