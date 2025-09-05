@@ -2,6 +2,7 @@
  * @docid
  * @type object
  * @namespace DevExpress
+ * @hidden
  */
 export interface ExportLoadPanel {
   /**
