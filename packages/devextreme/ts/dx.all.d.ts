@@ -32798,7 +32798,7 @@ declare module DevExpress.ui {
     /**
      * [descr:Editor.reset(value)]
      */
-    reset(value?: any): void;
+    reset(value?: DevExpress.ui.Editor.ResetValue<TProperties>): void;
   }
   module Editor {
     /**
@@ -32809,6 +32809,15 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type Properties = EditorOptions<EditorInstance>;
+    /**
+     * [descr:ResetValue]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type ResetValue<TProperties> = TProperties extends {
+      value?: infer V;
+    }
+      ? V
+      : never;
     /**
      * [descr:ValueChangedInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
