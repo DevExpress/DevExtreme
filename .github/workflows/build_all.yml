@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
 
     steps:
       - name: Get sources
