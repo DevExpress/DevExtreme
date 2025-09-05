@@ -1,4 +1,7 @@
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator } from '../../helpers/chartMocks.js';
@@ -15,7 +18,7 @@ const createPoint = function(series, data, options) {
 QUnit.module('Draw point. Bubble', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.translators = {
             arg: new MockTranslator({
@@ -184,19 +187,17 @@ QUnit.test('animate without graphic', function(assert) {
 });
 
 QUnit.test('pass diameter to correctCoordinates', function(assert) {
-    // arrange
     const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
     const diameter = 10;
 
-    // act
     point.correctCoordinates(diameter);
-    // assert
+
     assert.strictEqual(point.bubbleSize, diameter / 2);
 });
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.data = {
             value: 10,
@@ -209,7 +210,7 @@ QUnit.module('Tooltip', {
             label: {},
             styles: { normal: {} }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -294,7 +295,7 @@ QUnit.test('Get tooltip format object', function(assert) {
 QUnit.module('Draw Label', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
         this.translators = {
@@ -447,7 +448,7 @@ QUnit.test('Draw label inside', function(assert) {
 
 QUnit.module('get point radius', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         this.group = this.renderer.g();
         this.options = {

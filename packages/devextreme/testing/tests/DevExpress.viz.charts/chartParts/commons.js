@@ -1,53 +1,59 @@
-require('../../../helpers/trackerMock.js');
+import '../../../helpers/trackerMock.js';
+import 'viz/chart';
 
-const $ = require('jquery');
-const vizMocks = require('../../../helpers/vizMocks.js');
-const { Label } = require('viz/series/points/label');
-const LabelCtor = new vizMocks.ObjectPool(Label);
-const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
-const vizUtils = require('viz/core/utils');
-const StubTooltip = vizMocks.Tooltip;
-const seriesFamilyModule = require('viz/core/series_family');
-const legendModule = require('viz/components/legend');
-const rendererModule = require('viz/core/renderers/renderer');
-const tooltipModule = require('viz/core/tooltip');
-const titleModule = require('viz/core/title');
-const crosshairModule = require('viz/chart_components/crosshair');
+import $ from 'jquery';
+import {
+    Renderer,
+    stubClass,
+    ObjectPool,
+    Tooltip,
+    ExportMenu,
+    Element,
+    Title,
+    Legend,
+} from '../../../helpers/vizMocks.js';
+import { Label } from 'viz/series/points/label';
+import chartThemeManagerModule from 'viz/components/chart_theme_manager';
+import layoutManagerModule from 'viz/chart_components/layout_manager';
+import vizUtils from 'viz/core/utils';
+import seriesFamilyModule from 'viz/core/series_family';
+import legendModule from 'viz/components/legend';
+import rendererModule from 'viz/core/renderers/renderer';
+import tooltipModule from 'viz/core/tooltip';
+import titleModule from 'viz/core/title';
+import crosshairModule from 'viz/chart_components/crosshair';
+import scrollBarClassModule from 'viz/chart_components/scroll_bar';
+import trackerModule from 'viz/chart_components/tracker';
+import dataValidatorModule from 'viz/components/data_validator';
+import {
+    insertMockFactory,
+    resetMockFactory,
+    restoreMockFactory,
+} from '../../../helpers/chartMocks.js';
+import exportModule from 'viz/core/export';
+import { _test_prepareSegmentRectPoints } from 'viz/utils';
+
+const ThemeManager = stubClass(chartThemeManagerModule.ThemeManager);
+const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
+const StubTooltip = Tooltip;
 const Crosshair = crosshairModule.Crosshair;
-const chartThemeManagerModule = require('viz/components/chart_theme_manager');
-const scrollBarClassModule = require('viz/chart_components/scroll_bar');
 const ScrollBarClass = scrollBarClassModule.ScrollBar;
-const trackerModule = require('viz/chart_components/tracker');
-const dataValidatorModule = require('viz/components/data_validator');
-const chartMocks = require('../../../helpers/chartMocks.js');
-const insertMockFactory = chartMocks.insertMockFactory;
-const resetMockFactory = chartMocks.resetMockFactory;
-const exportModule = require('viz/core/export');
-const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
-const restoreMockFactory = chartMocks.restoreMockFactory;
-
+const LabelCtor = new ObjectPool(Label);
 const tooltipOrig = tooltipModule.Tooltip;
-
-exports.LabelCtor = LabelCtor;
-exports.rendererModule = rendererModule;
+const { ExportMenu: ExportMenuOrig } = exportModule;
 
 function stubExport() {
     const that = this;
-    that.export = new vizMocks.ExportMenu();
+    that.export = new ExportMenu();
     that.export.stub('measure').returns([0, 0]);
     exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
     }));
 }
 
-stubExport();
-
-vizMocks.Element.prototype.updateRectangle = sinon.spy(window.vizMocks.Element.prototype.updateRectangle);
+Element.prototype.updateRectangle = sinon.spy(Element.prototype.updateRectangle);
 
 const categories = ['First', 2005, 'Last'];
-exports.categories = categories;
 
 const baseEnvironment = {
     beforeEach: function() {
@@ -72,19 +78,19 @@ const defaultCrosshairOptions = {
 };
 
 // stubs
-rendererModule.Renderer = sinon.spy(function(parameters) {
-    return new vizMocks.Renderer(parameters);
+sinon.stub(rendererModule, 'Renderer').callsFake((parameters) => {
+    return new Renderer(parameters);
 });
 
 titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
-    const title = new vizMocks.Title(parameters);
+    const title = new Title(parameters);
     title.stub('layoutOptions').returns({ horizontalAlignment: 'center', verticalAlignment: 'top' });
     title.stub('measure').returns([0, 0]);
     return title;
 }));
 
-legendModule.Legend = sinon.spy(function(parameters) {
-    const legend = new vizMocks.Legend(parameters);
+sinon.stub(legendModule, 'Legend').callsFake((parameters) => {
+    const legend = new Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
@@ -97,14 +103,13 @@ legendModule.Legend = sinon.spy(function(parameters) {
     return legend;
 });
 
-const resetModules = exports.resetModules = function() {
+const resetModules = function() {
     trackerModule.ChartTracker.resetHistory();
     trackerModule.PieTracker.resetHistory();
 
     legendModule.Legend.resetHistory();
 
     rendererModule.Renderer.resetHistory();
-    exportModule.ExportMenu.resetHistory();
     titleModule.Title.resetHistory();
 };
 
@@ -112,22 +117,18 @@ const resetModules = exports.resetModules = function() {
 function getTitleStub() {
     return titleModule.Title.lastCall.returnValue;
 }
-exports.getTitleStub = getTitleStub;
 
 function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
 }
-exports.getLegendStub = getLegendStub;
 
 function getTrackerStub(isPie) {
     return trackerModule[isPie ? 'PieTracker' : 'ChartTracker'].lastCall.returnValue;
 }
-exports.getTrackerStub = getTrackerStub;
 
 function createChartInstance(options, chartContainer) {
     return chartContainer.dxChart(options).dxChart('instance');
 }
-exports.createChartInstance = createChartInstance;
 
 function setupMocks($container) {
     $container.width(300);
@@ -157,11 +158,12 @@ function setupMocks($container) {
 */
 const NON_OVERRIDING_PROPERTIES = ['valueAxis', 'series'];
 
-exports.environment = {
+const environment = {
     beforeEach: function() {
         const that = this;
         baseEnvironment.beforeEach.apply(that, arguments);
 
+        stubExport.call(this);
         setupMocks(that.$container);
         that.tooltip = new StubTooltip();
         that.themeManager = new ThemeManager();
@@ -199,7 +201,7 @@ exports.environment = {
         });
 
         sinon.stub(scrollBarClassModule, 'ScrollBar').callsFake(function() {
-            const ScrollBar = vizMocks.stubClass(ScrollBarClass);
+            const ScrollBar = stubClass(ScrollBarClass);
             const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
             scrollBar.stub('update').returns(scrollBar);
@@ -258,7 +260,7 @@ exports.environment = {
         resetMockFactory();
         this.createThemeManager.reset();
         this.createThemeManager.restore();
-        window.vizMocks.Element.prototype.updateRectangle.resetHistory();
+        Element.prototype.updateRectangle.resetHistory();
         scrollBarClassModule.ScrollBar.restore();
         this.createSeriesFamily.restore();
         this.prepareSegmentRectPoints.restore();
@@ -275,16 +277,15 @@ exports.environment = {
 
         this.restoreValidateData();
 
+        exportModule.ExportMenu.resetHistory();
         resetModules();
         tooltipModule.DEBUG_set_tooltip(tooltipOrig);
+        exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);
 
         this.tooltip = null;
 
         tooltipModule.DEBUG_set_tooltip(null);
-
-
     },
-
     mockValidateData: function() {
         this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
             const categories = [];
@@ -297,11 +298,20 @@ exports.environment = {
             return { arg: data || [] };
         });
     },
-
     restoreValidateData: function() {
         this.validateData.reset();
         this.validateData.restore();
     }
 };
 
-require('viz/chart');
+export {
+    LabelCtor,
+    categories,
+    rendererModule,
+    environment,
+    resetModules,
+    getTitleStub,
+    getLegendStub,
+    getTrackerStub,
+    createChartInstance,
+};

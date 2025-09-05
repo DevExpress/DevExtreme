@@ -1,13 +1,16 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const Tracker = require('viz/gauges/tracker');
-const pointerEvents = require('common/core/events/pointer');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+import Tracker from 'viz/gauges/tracker';
+import pointerEvents from 'common/core/events/pointer';
 
 QUnit.module('Tracker', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.root = new vizMocks.Element();
+        this.renderer = new Renderer();
+        this.root = new Element();
         this.tracker = new Tracker({ renderer: this.renderer, container: this.root });
     },
     afterEach: function() {
@@ -59,7 +62,7 @@ QUnit.test('Element is detached from group on detach', function(assert) {
 const tooltipEnvironment = {
     beforeEach: function() {
         Tracker._DEBUG_reset();
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.draw(document.createElement('div'));
         this.root = this.renderer.g().append(this.renderer.root);
         this.tracker = new Tracker({ renderer: this.renderer, container: this.root });
