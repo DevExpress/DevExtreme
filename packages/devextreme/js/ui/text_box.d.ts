@@ -7,6 +7,7 @@ import {
 
 import {
     ValueChangedInfo,
+    EditorValueContainer,
 } from './editor/editor';
 
 import dxTextEditor, {
@@ -171,14 +172,9 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> {
-    /**
-     * @docid
-     * @publicName reset(value)
-     * @public
-     */
-    reset(value?: string): void;
-}
+export default class dxTextBox<
+    TProperties extends EditorValueContainer = Properties,
+> extends dxTextEditor<TProperties> { }
 
 interface TextBoxInstance extends dxTextBox<Properties> { }
 

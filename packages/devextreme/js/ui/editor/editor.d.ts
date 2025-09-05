@@ -112,13 +112,24 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      */
     readonly isDirty?: boolean;
 }
+
+/**
+ * @docid
+ * @hidden
+ */
+export interface EditorValueContainer {
+    value?: unknown;
+}
+
 /**
  * @docid
  * @inherits Widget
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class Editor<TProperties = Properties> extends Widget<TProperties> {
+export default class Editor<
+    TProperties extends EditorValueContainer = Properties,
+> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName clear()
@@ -131,14 +142,8 @@ export default class Editor<TProperties = Properties> extends Widget<TProperties
      * @publicName reset(value)
      * @public
      */
-    reset(value?: ResetValue<TProperties>): void;
+    reset(value?: TProperties['value']): void;
 }
-
-/**
- * @docid
- * @hidden
- */
-export type ResetValue<TProperties> = TProperties extends { value: infer V } ? V : never;
 
 interface EditorInstance extends Editor<Properties> { }
 

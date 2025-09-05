@@ -29293,13 +29293,8 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties = DevExpress.ui.dxTextBox.Properties
-  > extends dxTextEditor<TProperties> {
-    /**
-     * [descr:dxTextBox.reset(value)]
-     */
-    reset(value?: string): void;
-  }
+    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxTextBox.Properties
+  > extends dxTextEditor<TProperties> {}
   module dxTextBox {
     /**
      * [descr:_ui_text_box_ChangeEvent]
@@ -29443,7 +29438,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -32788,7 +32783,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -32798,7 +32793,7 @@ declare module DevExpress.ui {
     /**
      * [descr:Editor.reset(value)]
      */
-    reset(value?: DevExpress.ui.Editor.ResetValue<TProperties>): void;
+    reset(value?: TProperties['value']): void;
   }
   module Editor {
     /**
@@ -32806,16 +32801,16 @@ declare module DevExpress.ui {
      */
     interface EditorInstance extends Editor<Properties> {}
     /**
+     * [descr:EditorValueContainer]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface EditorValueContainer {
+      value?: unknown;
+    }
+    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     type Properties = EditorOptions<EditorInstance>;
-    /**
-     * [descr:ResetValue]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type ResetValue<TProperties> = TProperties extends { value: infer V }
-      ? V
-      : never;
     /**
      * [descr:ValueChangedInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
