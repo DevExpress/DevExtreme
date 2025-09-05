@@ -3,31 +3,11 @@ import dxPivotGrid from '../../ui/pivot_grid';
 import dxDataGrid from '../../ui/data_grid';
 
 import {
+    CellRange,
     ExcelDataGridCell,
     ExcelExportBaseOptions,
     ExcelPivotGridCell,
 } from '../../excel_exporter.types';
-
-import type {
-    CellAddress as CellAddressInternal,
-    CellRange as CellRangeInternal,
-} from './excel.types';
-
-/**
- * @docid
- * @namespace DevExpress.excelExporter
- * @type object
- * @public
- */
-export type CellAddress = CellAddressInternal;
-
-/**
- * @docid
- * @namespace DevExpress.excelExporter
- * @type object
- * @public
- */
-export type CellRange = CellRangeInternal;
 
 /**
  * @public

@@ -28,7 +28,6 @@ export interface PromiseType<T> { }
 /**
  * @docid
  * @type Promise<void>
- * @hidden
  * @namespace DevExpress.core.utils
  */
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type

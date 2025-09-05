@@ -1,6 +1,4 @@
 export {
-    CellAddress,
-    CellRange,
     DataGridCell,
     DataGridExportOptions,
     exportDataGrid,

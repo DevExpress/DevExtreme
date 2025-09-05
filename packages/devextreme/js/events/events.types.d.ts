@@ -86,7 +86,7 @@ export interface EventType { }
 /**
  * @docid
  * @type EventObject|jQuery.Event
- * @hidden
+ *
  */
 export type DxEvent<TNativeEvent = Event> = {} extends EventType
   ? (EventObject<TNativeEvent> & TNativeEvent)
