@@ -13,7 +13,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    Optional
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -33,6 +34,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiHtmlEditorCommandComponent } from './command-dxi';
+import { ParentTracker, ParentTrackerToken } from './parent-tracker';
 
 
 @Component({
@@ -240,7 +242,9 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
             private renderer: Renderer2,
             @Inject(DOCUMENT) private document: any,
             @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            private element: ElementRef,
+            @Optional() @Inject(ParentTrackerToken) private tracker: ParentTracker<DxiHtmlEditorItemComponent>
+        ) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
@@ -250,6 +254,11 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     setTemplate(template: DxTemplateDirective) {
         this.template = template;
     }
+
+    ngOnInit() {
+        this.tracker?.register(this);
+    }
+
     ngAfterViewInit() {
         extractTemplate(this, this.element, this.renderer, this.document);
     }
@@ -258,6 +267,7 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
 
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
+        this.tracker?.unregister(this);
     }
 
 }
