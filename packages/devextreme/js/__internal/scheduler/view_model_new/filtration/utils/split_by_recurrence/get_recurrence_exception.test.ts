@@ -13,7 +13,6 @@ describe('getRecurrenceException', () => {
   ])('should convert exception dates to client timezones ($timezone)', ({ timezone, result }) => {
     expect(getRecurrenceException(
       '20000111T090000Z,20000112T090000Z,20000113T090000Z',
-      new Date('2000-01-11T09:00:00.000Z'),
       createTimeZoneCalculator(timezone),
     )).toBe(result);
   });

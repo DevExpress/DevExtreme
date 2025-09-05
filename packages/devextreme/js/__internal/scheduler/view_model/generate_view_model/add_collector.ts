@@ -33,7 +33,6 @@ const cropSettingsProps = (
   top: setting.geometry.top,
   height: setting.geometry.height,
   width: setting.geometry.width,
-  isCompact: setting.isCompact,
   reduced: setting.appointmentReduced,
   partIndex: setting.partIndex,
   partTotalCount: setting.partTotalCount,
