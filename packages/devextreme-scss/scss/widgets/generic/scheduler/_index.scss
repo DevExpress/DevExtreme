@@ -312,16 +312,38 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-appointment-collector {
-  height: $generic-scheduler-appointment-collector-height;
+  height: $generic-scheduler-dropdown-button-height;
+  margin-bottom: $generic-scheduler-dropdown-button-margin-bottom;
 
   &.dx-state-hover {
     &::before {
-      border-radius: $generic-scheduler-appointment-collector-height;
+      border-radius: $generic-scheduler-dropdown-button-height;
     }
   }
 
   &.dx-button.dx-button-default {
-    border-radius: $generic-scheduler-appointment-collector-height;
+    border-radius: $generic-scheduler-dropdown-button-height;
+  }
+}
+
+.dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-appointment-collector {
+    margin-right: 33px;
+  }
+}
+
+.dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
+  .dx-scheduler-appointment-collector {
+    margin-right: 57px;
+  }
+}
+
+.dx-scheduler-adaptive {
+  .dx-scheduler-work-space.dx-scheduler-work-space-month,
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
+    .dx-scheduler-appointment-collector {
+      margin-right: 0;
+    }
   }
 }
 

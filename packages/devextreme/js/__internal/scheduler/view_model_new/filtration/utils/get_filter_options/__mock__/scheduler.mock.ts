@@ -1,6 +1,6 @@
-import type Scheduler from '../../m_scheduler';
-import { createTimeZoneCalculator } from '../../r1/timezone_calculator';
-import { ResourceManager } from '../../utils/resource_manager/resource_manager';
+import type Scheduler from '../../../../../m_scheduler';
+import { createTimeZoneCalculator } from '../../../../../r1/timezone_calculator';
+import { ResourceManager } from '../../../../../utils/resource_manager/resource_manager';
 
 export const getSchedulerMock = ({
   type,

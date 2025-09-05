@@ -71,7 +71,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       const width = this.calculateAppointmentWidth(appointment, currentSetting);
 
       let resultHeight = height;
-      let appointmentReduced: any = null;
+      let appointmentReduced: any;
       let multiDaysAppointmentParts = [];
       const currentMaxAllowedPosition = currentSetting.vMax;
 

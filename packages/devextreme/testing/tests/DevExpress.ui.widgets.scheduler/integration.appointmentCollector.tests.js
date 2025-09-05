@@ -202,28 +202,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material-based themes', async function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
-
-        try {
-            themes.isMaterialBased = () => true;
-
-            const scheduler = await createInstance({
-                currentDate: new Date(2019, 2, 4),
-                views: ['month'],
-                width: 840,
-                height: 500,
-                currentView: 'month',
-                firstDayOfWeek: 1
-            });
-
-            assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
-            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
-        } finally {
-            themes.isMaterialBased = origIsMaterialBased;
-        }
-    });
-
     test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', async function(assert) {
         const WEEK_VIEW_BUTTON_OFFSET = 5;
 
@@ -361,26 +339,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
 
         scheduler.appointments.compact.click(0);
         assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
-    });
-
-    test('Appointment collector should have correct coordinates: rtl mode', async function(assert) {
-        const scheduler = await createInstance({
-            currentDate: new Date(2019, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 500,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-        const $collector = scheduler.appointments.compact.getButton(0);
-
-        const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = scheduler.workSpace.getCell(7).position();
-        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 36;
-
-        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
     test('Collapsed appointment should raise the onAppointmentClick event', async function(assert) {

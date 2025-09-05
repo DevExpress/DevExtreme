@@ -18,7 +18,7 @@ export const replaceIncorrectEndDate = (
   const startDate = dataAccessors.get('startDate', rawAppointment);
   const endDate = dataAccessors.get('endDate', rawAppointment);
 
-  // NOTE: error E1032
+  // TODO: figure out maybe remove this error E1032 "startDate is undefined"
   if (!dateUtilsTs.isValidDate(startDate)) {
     return false;
   }

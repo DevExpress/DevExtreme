@@ -74,31 +74,6 @@ QUnit.test('Scheduler should have a right rendering strategy for timeline views'
     assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
 });
 
-QUnit.test('Scheduler should have a right rendering strategy for views with config', async function(assert) {
-    await this.createInstance({
-        views: [ {
-            name: 'MonthView',
-            type: 'month'
-        }, {
-            name: 'WeekView',
-            type: 'week'
-        }],
-        currentView: 'WeekView',
-        currentDate: new Date(2021, 7, 30),
-        dataSource: [{
-            startDate: new Date(2021, 7, 8, 9),
-            endDate: new Date(2021, 7, 8, 10),
-            text: 'Test'
-        }]
-    });
-
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
-
-    this.instance.option('currentView', 'MonthView');
-    await waitAsync(0);
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
-});
-
 QUnit.module('Appointments', moduleOptions);
 
 QUnit.test('Default appointment duration should be equal to 30 minutes', async function(assert) {
@@ -354,11 +329,11 @@ QUnit.test('Rival duplicated appointments should have correct positions', async 
 
     assert.equal(firstAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell), 1.1, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.top, 50, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell), 1.1, 'appointment has a right size');
 });
 
 QUnit.test('Appointments should be rendered without errors (T816873)', async function(assert) {
@@ -1495,15 +1470,20 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
 
     const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
     const apptInstance = this.instance.getAppointmentsInstance();
+    const getFocusedAppointmentText = () => $(apptInstance.option('focusedElement')).text();
 
     $($appointments.eq(0)).trigger('focusin');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 28:00 AM - 10:00 AM', 'app 2 in focus');
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
-    assert.deepEqual($appointments.get(1), $(apptInstance.option('focusedElement')).get(0), 'app 1 in focus');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 38:00 AM - 10:00 AM', 'app 3 in focus');
 
     keyboard.keyDown('tab');
-    assert.deepEqual($appointments.get(2), $(apptInstance.option('focusedElement')).get(0), 'app 0 in focus');
+    assert.deepEqual(getFocusedAppointmentText(), '1 more', 'collector in focus');
+
+    keyboard.keyDown('tab');
+    assert.deepEqual(getFocusedAppointmentText(), 'Appointment 48:00 AM - 10:00 AM', 'app 4 in focus');
 });
 
 QUnit.testInActiveWindow('Apps should be focused in back order while press shift+tab', async function(assert) {

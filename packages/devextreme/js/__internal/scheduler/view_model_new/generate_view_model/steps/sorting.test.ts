@@ -52,7 +52,7 @@ describe('sorting', () => {
   });
 
   describe('sortByDuration', () => {
-    it('should sort items by duration', () => {
+    it('should sort items by duration, long first', () => {
       const items = [
         { id: 1, duration: 10 },
         { id: 2, duration: 100 },
@@ -64,13 +64,13 @@ describe('sorting', () => {
       ];
 
       expect(sortByDuration(items)).toEqual([
-        { id: 5, duration: 5 },
-        { id: 1, duration: 10 },
-        { id: 7, duration: 10 },
-        { id: 3, duration: 20 },
+        { id: 6, duration: 500 },
         { id: 2, duration: 100 },
         { id: 4, duration: 100 },
-        { id: 6, duration: 500 },
+        { id: 3, duration: 20 },
+        { id: 1, duration: 10 },
+        { id: 7, duration: 10 },
+        { id: 5, duration: 5 },
       ]);
     });
   });
