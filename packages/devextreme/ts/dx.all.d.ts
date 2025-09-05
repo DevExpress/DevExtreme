@@ -9831,7 +9831,7 @@ declare module DevExpress.ui {
      * [descr:dxCalendar.reset(value)]
      */
     reset(
-      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
+      value?: DevExpress.common.DateLike | DevExpress.common.DateLike[]
     ): void;
   }
   module dxCalendar {
