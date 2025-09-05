@@ -3,7 +3,11 @@ import {
 } from '@jest/globals';
 
 import { createScheduler } from './__mock__/create_scheduler';
-import { DEFAULT_CELL_WIDTH, setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+import {
+  DEFAULT_CELL_WIDTH,
+  DEFAULT_TIMELINE_CELL_HEIGHT,
+  setupSchedulerTestEnvironment,
+} from './__mock__/m_mock_scheduler';
 
 describe('month', () => {
   it('should render long appointments with parts and hide smaller ones into spread collectors', async () => {
@@ -49,7 +53,7 @@ describe('month', () => {
 
   ['month', 'timelineMonth'].forEach((currentView) => {
     it(`should render appointment cropped by startDayHour and endDayHour to occupy only one cell [${currentView}]`, async () => {
-      setupSchedulerTestEnvironment();
+      setupSchedulerTestEnvironment({ height: DEFAULT_TIMELINE_CELL_HEIGHT });
       const { POM } = await createScheduler({
         dataSource: [{
           startDate: new Date(2020, 11, 12, 22),
@@ -60,7 +64,7 @@ describe('month', () => {
         endDayHour: 20,
         views: [currentView],
         currentView,
-        currentDate: new Date(2020, 11, 25),
+        currentDate: new Date(2020, 11, 12),
         height: 600,
       });
 
