@@ -79,7 +79,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
     strategy:
