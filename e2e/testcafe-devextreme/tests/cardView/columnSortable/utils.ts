@@ -125,6 +125,7 @@ export const expectColumns = async (
   const actualColumns: string[] = [];
 
   for (let i = 0; i < expectedColumns.length; i += 1) {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let column: Selector;
 
     if (source === 'headerPanel') {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/require-await */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
@@ -137,7 +136,7 @@ test('The focused state of a row with the 0 key should be restored (T1252962)', 
 test('DataGrid - Cannot read properties of undefined (reading \'done\') error occurs when column fixing and state storing are used (T1283168)', async (t) => {
   await t.eval(() => location.reload());
   await createWidget('dxDataGrid', { ...dataGridConfig });
-  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @stylistic/max-len
   // DataGrid is expected to load normally with the given configuration, so no other checks are required.
 }).before(async () => {
   await createWidget('dxDataGrid', { ...dataGridConfig });

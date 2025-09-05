@@ -1,10 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable import/first */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-type-alias */
+/* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable no-inner-declarations */
 
 import {
   ANY,
@@ -56,22 +53,22 @@ import { Scalar } from 'devextreme/core';
   type TestType = { t: any };
   function testFunction() {}
 
-  const scalar1: String extends Scalar ? true : false = true;
+  const scalar1: string extends Scalar ? true : false = true;
   const scalar2: string extends Scalar ? true : false = true;
   const scalar3: number extends Scalar ? true : false = true;
-  const scalar4: Number extends Scalar ? true : false = true;
+  const scalar4: number extends Scalar ? true : false = true;
   const scalar5: bigint extends Scalar ? true : false = true;
   const scalar6: BigInteger extends Scalar ? true : false = true;
   const scalar7: Date extends Scalar ? true : false = true;
   const scalar8: boolean extends Scalar ? true : false = true;
-  const scalar9: Boolean extends Scalar ? true : false = true;
+  const scalar9: boolean extends Scalar ? true : false = true;
   const scalar10: null extends Scalar ? true : false = true;
   const scalar11: undefined extends Scalar ? true : false = true;
-  const scalar12: Symbol extends Scalar ? true : false = true;
+  const scalar12: symbol extends Scalar ? true : false = true;
   const scalar13: [] extends Scalar ? true : false = true;
   const scalar14: (() => {}) extends Scalar ? true : false = true;
   const scalar15: typeof testFunction extends Scalar ? true : false = true;
-  const scalar16: Symbol extends Scalar ? true : false = true;
+  const scalar16: symbol extends Scalar ? true : false = true;
 
   const nonScalar1: TestInterface extends Scalar ? true : false = false;
   const nonScalar2: TestClass extends Scalar ? true : false = false;
@@ -90,13 +87,13 @@ import { PropertyType } from 'devextreme/core';
       x: number;
     } | { e: string };
   }
-  | string
-  | {
-    d: boolean | string;
-    f: string | {
-      g: number | Record<number, boolean>;
-    }[];
-  };
+    | string
+    | {
+      d: boolean | string;
+      f: string | {
+        g: number | Record<number, boolean>;
+      }[];
+    };
 
   type AExpected = {
     b?: BExpected;
@@ -143,10 +140,10 @@ import { PropertyType } from 'devextreme/core';
 
   assertType<boolean>(toAssertion(false));
   assertType<PropertyType<ComplexType, 'a.b.c'>>(toAssertion(false));
-  assertType < PropertyType<PropertyType<PropertyType<ComplexType, 'a'>, 'b'>, 'c'>>(toAssertion(false));
+  assertType<PropertyType<PropertyType<PropertyType<ComplexType, 'a'>, 'b'>, 'c'>>(toAssertion(false));
   assertType<boolean>(toAssertion(true));
   assertType<PropertyType<ComplexType, 'a.b.c'>>(toAssertion(true));
-  assertType < PropertyType<PropertyType<PropertyType<ComplexType, 'a'>, 'b'>, 'c'>>(toAssertion(true));
+  assertType<PropertyType<PropertyType<PropertyType<ComplexType, 'a'>, 'b'>, 'c'>>(toAssertion(true));
 
   assertType<boolean | string>(toAssertion(true));
   assertType<PropertyType<ComplexType, 'd'>>(toAssertion(true));
