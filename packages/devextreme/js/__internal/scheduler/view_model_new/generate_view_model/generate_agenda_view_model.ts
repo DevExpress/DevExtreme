@@ -1,6 +1,5 @@
 import type Scheduler from '../../m_scheduler';
 import { getCompareOptions } from '../common/get_compare_options';
-import { shiftIntervals } from '../common/shift_intervals';
 import { splitIntervalByDay } from '../common/split_interval_by_days';
 import type { AgendaEntity, AgendaGeometry, ListEntity } from '../types';
 import { addLastInGroup } from './steps/add_last_in_group';
@@ -24,12 +23,10 @@ export const generateAgendaViewModel = (
 ): AgendaEntity[] => {
   const height = schedulerStore.fire('getAgendaVerticalStepHeight');
   const compareOptions = getCompareOptions(schedulerStore);
-  const viewOffset = schedulerStore.getViewOffsetMs();
   const intervals = splitIntervalByDay(compareOptions);
-  const shiftedIntervals = shiftIntervals(intervals, viewOffset);
 
   let entities = saveDatesBeforeSplit(items, schedulerStore.timeZoneCalculator);
-  entities = splitByParts(entities, shiftedIntervals);
+  entities = splitByParts(entities, intervals);
   entities = saveDatesAfterSplit(entities);
   entities = addAgendaGeometry(entities, height);
   entities = sortByStartDate(entities);

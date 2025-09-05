@@ -22,6 +22,7 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   _appointmentOffset: 26,
   appointmentPopupTemplate: 'appointmentPopup',
   disabledExpr: 'disabled',
+  visibleExpr: 'visible',
   allowMultipleCellSelection: true,
 };
 

@@ -737,6 +737,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       recurrenceRuleExpr: this.option('recurrenceRuleExpr'),
       recurrenceExceptionExpr: this.option('recurrenceExceptionExpr'),
       disabledExpr: this.option('disabledExpr'),
+      visibleExpr: this.option('visibleExpr'),
     } as IFieldExpr);
 
     super._init();
@@ -1693,7 +1694,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointment,
       settings,
       this._dataAccessors,
-      this.timeZoneCalculator,
       this.resourceManager,
     );
   }

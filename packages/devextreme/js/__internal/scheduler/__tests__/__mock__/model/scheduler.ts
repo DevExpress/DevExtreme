@@ -14,7 +14,7 @@ const getTexts = (
 ): string[] => Array.from(cells).map((cell) => cell.textContent?.trim() ?? '');
 
 export interface SchedulerModel {
-  getAppointment: () => HTMLDivElement | null;
+  getAppointment: () => AppointmentModel<HTMLDivElement | null>;
   getAppointments: () => AppointmentModel[];
   getCollectorTexts: () => string[];
   getAppointmentColor: (view: string) => string;
@@ -25,8 +25,8 @@ export interface SchedulerModel {
 }
 
 export const createSchedulerModel = (container: HTMLDivElement): SchedulerModel => ({
-  getAppointment(): HTMLDivElement | null {
-    return container.querySelector('.dx-scheduler-appointment');
+  getAppointment(): AppointmentModel<HTMLDivElement | null> {
+    return createAppointmentModel(container.querySelector('.dx-scheduler-appointment'));
   },
   getAppointments(): AppointmentModel[] {
     return [...container.querySelectorAll('.dx-scheduler-appointment')].map(

@@ -9,7 +9,7 @@ import type {
 } from './types';
 
 export const getAppointmentCollectorGeometry = (
-  entity: Pick<GeometryMinimalEntity, 'columnIndex' | 'isAllDayPanelOccupied'>,
+  entity: Pick<GeometryMinimalEntity, 'columnIndex' >,
   {
     collectorPosition,
     cellSize,
@@ -22,7 +22,7 @@ export const getAppointmentCollectorGeometry = (
   const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
   const abstractGeometry = {
     offsetX: entity.columnIndex * cellAbstractSize.sizeX,
-    offsetY: collectorPosition === 'start' || entity.isAllDayPanelOccupied ? 0 : cellAbstractSize.sizeY - getAbstractSizeByViewOrientation(
+    offsetY: collectorPosition === 'start' ? 0 : cellAbstractSize.sizeY - getAbstractSizeByViewOrientation(
       collectorWithMarginsSize,
       viewOrientation,
     ).sizeY,

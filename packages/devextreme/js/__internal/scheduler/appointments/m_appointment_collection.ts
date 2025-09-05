@@ -18,9 +18,7 @@ import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
-import {
-  isDeferred, isDefined, isPlainObject, isString,
-} from '@js/core/utils/type';
+import { isDeferred, isPlainObject } from '@js/core/utils/type';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -485,6 +483,7 @@ class SchedulerAppointments extends CollectionWidget {
         this._currentAppointmentSettings,
         this.dataAccessors,
         this.getResourceManager(),
+        true,
       );
     }
 
@@ -689,7 +688,7 @@ class SchedulerAppointments extends CollectionWidget {
     element: dxElementWrapper,
     settings: AppointmentItemViewModel,
   ): void {
-    const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
+    const allowResize = this.option('allowResize') && !settings.skipResizing;
     const allowDrag = this.option('allowDrag');
     const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.getResourceManager();
@@ -1027,7 +1026,6 @@ class SchedulerAppointments extends CollectionWidget {
           item.itemData,
           item,
           this.dataAccessors,
-          this.option('timeZoneCalculator'),
           resourceManager,
         ),
         color: resourceManager.getAppointmentColor(appointmentConfig),

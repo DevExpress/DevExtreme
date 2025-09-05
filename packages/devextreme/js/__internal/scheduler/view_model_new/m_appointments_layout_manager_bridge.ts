@@ -1,8 +1,7 @@
 import type { Appointment } from '@js/ui/scheduler';
 
 import type Scheduler from '../m_scheduler';
-import type { RenderStrategyName, SafeAppointment } from '../types';
-import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { RenderStrategyName } from '../types';
 import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
@@ -69,23 +68,24 @@ class AppointmentLayoutManagerBridge {
   public generateViewModel(): AppointmentViewModelPlain[] {
     if (this.useNewViewModel()) {
       const viewType = this.schedulerStore.currentView.type;
+      const isSkipResizing = (appointment: ListEntity) => appointment.isAllDayPanelOccupied
+        && viewType === 'day'
+        && this.schedulerStore.currentView.intervalCount === 1;
       switch (viewType) {
         case 'agenda': {
           const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
-          return viewModel.map((item) => {
-            const adapter = new AppointmentAdapter(
-              item.itemData,
-              this.schedulerStore._dataAccessors,
-            ).clone();
-
-            adapter.startDate = new Date(item.sourceDatesBeforeSplit.startDate);
-            adapter.endDate = new Date(item.sourceDatesBeforeSplit.endDate);
-
-            return {
-              ...item,
-              agendaSettings: adapter.source as SafeAppointment,
-            };
-          });
+          return viewModel.map((item) => ({
+            ...item,
+            isAgendaModel: true,
+            info: {
+              ...getAppointmentInfo(item),
+              partialDates: {
+                allDay: item.allDay,
+                startDate: new Date(item.datesAfterSplit.startDate),
+                endDate: new Date(item.datesAfterSplit.endDate),
+              },
+            },
+          }));
         }
         default: {
           const viewModel = generateGridViewModel(this.schedulerStore, this.filteredItems);
@@ -107,6 +107,7 @@ class AppointmentLayoutManagerBridge {
             partTotalCount: item.partCount,
             rowIndex: item.rowIndex,
             columnIndex: item.columnIndex,
+            skipResizing: isSkipResizing(item),
             info: getAppointmentInfo(item),
           });
           const toCollectedItem = (

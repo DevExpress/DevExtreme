@@ -65,7 +65,7 @@ describe('appointment position utils', () => {
 
   describe('getAppointmentY', () => {
     it('should return Y position inside interval according to level for collector at the start', () => {
-      const entity = { level: 4, maxLevel: 10, isAllDayPanelOccupied: false };
+      const entity = { level: 4, maxLevel: 10 };
 
       expect(getAppointmentY(
         entity,
@@ -76,7 +76,7 @@ describe('appointment position utils', () => {
     });
 
     it('should return Y position inside interval according to level for collector at the end', () => {
-      const entity = { level: 7, maxLevel: 10, isAllDayPanelOccupied: false };
+      const entity = { level: 7, maxLevel: 10 };
 
       expect(getAppointmentY(
         entity,
@@ -84,17 +84,6 @@ describe('appointment position utils', () => {
         5,
         'end',
       )).toEqual({ offsetY: 70, sizeY: 10 });
-    });
-
-    it('should return Y position inside all day interval according to level for collector at the end', () => {
-      const entity = { level: 7, maxLevel: 10, isAllDayPanelOccupied: true };
-
-      expect(getAppointmentY(
-        entity,
-        { sizeX: 200, sizeY: 105 },
-        5,
-        'end',
-      )).toEqual({ offsetY: 75, sizeY: 10 });
     });
   });
 });

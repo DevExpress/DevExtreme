@@ -12,8 +12,6 @@ import type {
 export const getAppointmentGeometry = (
   entity: GeometryMinimalEntity,
   {
-    intervals,
-    intervalSize,
     collectorPosition,
     cellSize,
     collectorWithMarginsSize,
@@ -21,9 +19,6 @@ export const getAppointmentGeometry = (
     cells,
   }: GeometryOptions,
 ): Geometry => {
-  const dateInterval = intervals[entity.rowIndex];
-  const intervalAbstractSize = getAbstractSizeByViewOrientation(intervalSize, viewOrientation);
-  const interval = { ...dateInterval, ...intervalAbstractSize };
   const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
   const collectorFullAbstractSize = getAbstractSizeByViewOrientation(
     collectorWithMarginsSize,
@@ -31,7 +26,12 @@ export const getAppointmentGeometry = (
   );
   const abstractGeometry = {
     ...getAppointmentX(entity, cellAbstractSize, cells),
-    ...getAppointmentY(entity, interval, collectorFullAbstractSize.sizeY, collectorPosition),
+    ...getAppointmentY(
+      entity,
+      cellAbstractSize,
+      collectorFullAbstractSize.sizeY,
+      collectorPosition,
+    ),
   };
   const entityGeometry = getRealSizeByViewOrientation(
     abstractGeometry,

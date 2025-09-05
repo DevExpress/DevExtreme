@@ -28,6 +28,7 @@ export interface SchedulerInternalOptions {
   _appointmentOffset: number;
   appointmentPopupTemplate: template;
   disabledExpr: string;
+  visibleExpr: string;
   allowMultipleCellSelection: boolean;
 }
 
