@@ -1934,6 +1934,19 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }));
   }
 
+  getWorkspaceDOMSize(): {
+    allDayPenalSize: { width: number; height: number };
+    regularDayPenalSize: { width: number; height: number };
+  } {
+    return this.cache.memo('workspaceSize', () => ({
+      allDayPenalSize: this._$allDayPanel ? getBoundingRect(this._$allDayPanel.get(0)) : {
+        width: 0,
+        height: 0,
+      },
+      regularDayPenalSize: getBoundingRect(this._getDateTable().get(0)),
+    }));
+  }
+
   _getDateTableDOMElementsInfo() {
     const dateTableCells = this._getAllCells(false);
     if (!dateTableCells.length || !hasWindow()) {

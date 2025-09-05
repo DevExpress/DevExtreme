@@ -4,7 +4,7 @@ export const sortByGroupIndex = <T extends { groupIndex: number }>(
 
 export const sortByDuration = <T extends { duration: number }>(
   entities: T[],
-): T[] => entities.sort((a, b) => a.duration - b.duration);
+): T[] => entities.sort((a, b) => b.duration - a.duration);
 
 export const sortByStartDate = <T extends { startDate: number }>(
   entities: T[],

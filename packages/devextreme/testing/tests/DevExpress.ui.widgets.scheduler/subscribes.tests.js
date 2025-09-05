@@ -10,6 +10,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
+import translator from 'common/core/animation/translator';
 
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
@@ -1103,12 +1104,11 @@ module('Grouping By Date', {
             const cellWidth = $cell.getBoundingClientRect().width;
             const cellHeight = $cell.getBoundingClientRect().height;
 
-            const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = this.instance.getAppointmentsInstance().option('items').sort();
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
         });
 
         test(`createAppointmentSettings' should work correct for recurrenceAppointment when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
@@ -1154,16 +1154,15 @@ module('Grouping By Date', {
             const cellWidth = $cell.getBoundingClientRect().width;
             const cellHeight = $cell.getBoundingClientRect().height;
 
-            const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = this.instance.getAppointmentsInstance().option('items').sort();
 
             assert.equal(results.length, 6, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[2], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[3], 9, 3, cellHeight * 3, cellWidth * 9, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[4], 9, 3, cellHeight * 3, cellWidth * 9, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[5], 11, 3, cellHeight * 3, cellWidth * 11, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], undefined, undefined, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[2], 7, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[3], undefined, undefined, cellHeight * 3, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[4], 9, 3, cellHeight * 3 + 26, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[5], 11, 3, cellHeight * 3 + 26, cellWidth * 11, 1.5);
         });
 
         // NOTE: It was false positive test. This usage scenario broken for long time.

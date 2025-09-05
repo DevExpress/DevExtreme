@@ -510,9 +510,9 @@ module('Integration: Appointments in Month view', {
                     {
                         level: 1,
                         maxLevel: 2,
-                        partIndex: undefined,
-                        partTotalCount: undefined,
-                        reduced: null,
+                        partIndex: 0,
+                        partTotalCount: 0,
+                        reduced: undefined,
                     },
                     {
                         level: 0,
@@ -524,9 +524,9 @@ module('Integration: Appointments in Month view', {
                     {
                         level: 1,
                         maxLevel: 2,
-                        partIndex: undefined,
-                        partTotalCount: undefined,
-                        reduced: null,
+                        partIndex: 0,
+                        partTotalCount: 0,
+                        reduced: undefined,
                     }
                 ], 'Parts  should be correct');
             });

@@ -14,7 +14,7 @@ interface Options {
   cellSize: Size;
   cellDurationInMinutes: number;
   resizableStep: number;
-  isAllDay: boolean;
+  isAllDayPanel: boolean;
 }
 
 const MIN_RESIZABLE_STEP = 2;
@@ -46,13 +46,13 @@ export const getDeltaTime = (
   initialSize: Size,
   options: Options,
 ): number => {
-  const { viewType, resizableStep, isAllDay } = options;
+  const { viewType, resizableStep, isAllDayPanel } = options;
   switch (true) {
-    case ['timelineMonth', 'month'].includes(viewType) || Boolean(isAllDay):
+    case ['timelineMonth', 'month'].includes(viewType) || Boolean(isAllDayPanel):
       return getAllDayDeltaWidth(args, initialSize, resizableStep) * toMs('day');
     case viewType === 'agenda':
       return 0;
-    case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDay:
+    case VERTICAL_VIEW_TYPES.includes(viewType) && !isAllDayPanel:
       return getVerticalDeltaTime(args, initialSize, options);
     default:
       return getHorizontalDeltaTime(args, initialSize, options);
