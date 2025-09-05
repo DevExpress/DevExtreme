@@ -612,14 +612,23 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
         await waitAsync(0);
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+        const leftOffsets = [
+            translator.locate($appointments.eq(0)).left,
+            translator.locate($appointments.eq(1)).left,
+            translator.locate($appointments.eq(2)).left,
+            translator.locate($appointments.eq(3)).left,
+            translator.locate($appointments.eq(4)).left,
+            translator.locate($appointments.eq(5)).left
+        ].sort();
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 7, 1.001, 'The second head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 2.001, 'The first head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 7, 1.001, 'The second body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 14, 1.001, 'The first body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 12, 2.001, 'The second tail is OK');
-        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 19, 2.001, 'The first tail is OK');
-
+        assert.deepEqual(leftOffsets, [
+            cellWidth * 7,
+            cellWidth * 7,
+            cellWidth * 12,
+            cellWidth * 14,
+            cellWidth * 14,
+            cellWidth * 19,
+        ]);
     });
 });
 

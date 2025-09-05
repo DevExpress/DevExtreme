@@ -1,10 +1,18 @@
+import type { Orientation } from '@js/common';
+
 import type { TimeZoneCalculator } from '../r1/timezone_calculator';
 import type { AllDayPanelModeType, SafeAppointment } from '../types';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
+import type {
+  Empty,
+  Geometry,
+  RealSize,
+} from './generate_view_model/steps/add_geometry/types';
 
 export interface Position {
   cellIndex: number;
+  endCellIndex: number;
   rowIndex: number;
   columnIndex: number;
 }
@@ -12,19 +20,19 @@ export interface DateInterval {
   min: number;
   max: number;
 }
-export interface CellInterval extends DateInterval, Position {}
+export interface CellInterval extends DateInterval, Omit<Position, 'endCellIndex'> {}
+
+export interface DateIntervalsExtended {
+  intervals: DateInterval[];
+  prevIntervalEndDate: number;
+  nextIntervalStartDate: number;
+}
 
 export interface CompareOptions {
   startDayHour: number;
   endDayHour: number;
   min: Date;
   max: Date;
-}
-
-export interface PanelOptions {
-  intervals: DateInterval[];
-  prevIntervalEndDate: number;
-  nextIntervalStartDate: number;
 }
 
 export interface FilterOptions {
@@ -35,8 +43,8 @@ export interface FilterOptions {
   timeZoneCalculator: TimeZoneCalculator;
   viewOffset: number;
   firstDayOfWeek?: number;
-  allDayPanel: PanelOptions;
-  regularPanel: PanelOptions;
+  allDayIntervals: DateInterval[];
+  regularIntervals: DateInterval[];
 }
 
 export interface SortedIndex {
@@ -65,20 +73,27 @@ export interface MinimalAppointmentEntity {
   itemData: SafeAppointment;
 }
 
-export interface AppointmentPart {
-  originalAppointmentDates: {
+export interface Duration {
+  duration: number;
+}
+
+export interface GridAppointmentDates {
+  gridAppointmentDates: {
     startDate: number;
     endDate: number;
   };
+}
+
+export interface AppointmentPart extends GridAppointmentDates {
   reduced?: 'head' | 'body' | 'tail';
   partIndex: number;
   partCount: number;
 }
 
-export type ListEntity<T = MinimalAppointmentEntity> = T
+export type ListEntity = MinimalAppointmentEntity
   & AllDayPanelOccupation
   & GroupIndex
-  & AppointmentPart;
+  & Duration;
 
 export interface LastInGroup {
   isLastInGroup: boolean;
@@ -90,6 +105,40 @@ export interface AgendaGeometry {
 }
 
 export type AgendaEntity = ListEntity
+  & AppointmentPart
   & AgendaGeometry
   & LastInGroup
   & SortedIndex;
+
+export interface Level {
+  level: number;
+}
+
+export interface MaxLevel {
+  maxLevel: number;
+}
+
+export interface AppointmentCollector {
+  items: (ListEntity & GridAppointmentDates)[];
+  isCompact: boolean;
+}
+
+export interface AppointmentCollectorWithGeometry {
+  items: (ListEntity & GridAppointmentDates & RealSize)[];
+  isCompact: boolean;
+}
+
+export interface Direction {
+  direction: Orientation;
+}
+
+export type AppointmentEntity = ListEntity
+  & AppointmentPart
+  & Level
+  & MaxLevel
+  & Position
+  & Direction
+  & Empty
+  & SortedIndex
+  & Geometry
+  & AppointmentCollectorWithGeometry;

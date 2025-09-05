@@ -58,8 +58,6 @@ $material-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$material-scheduler-compact-appointment-button-border-radius: 12px;
-
 $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -337,6 +335,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     margin-left: 52px;
   }
 
+  &.dx-rtl .dx-scheduler-appointment-collector {
+    margin-left: 0;
+    margin-right: 52px;
+  }
+
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
   }
@@ -354,12 +357,14 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-collector {
+  height: $material-scheduler-dropdown-button-height;
   margin-top: $material-scheduler-dropdown-day-margin;
+  margin-bottom: 1px;
   position: absolute;
 
   &.dx-button {
     box-shadow: none;
-    border-radius: $material-scheduler-compact-appointment-button-border-radius;
+    border-radius: $material-scheduler-dropdown-button-height;
     height: $material-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;

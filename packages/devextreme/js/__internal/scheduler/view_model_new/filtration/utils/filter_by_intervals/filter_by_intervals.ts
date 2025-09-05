@@ -3,11 +3,11 @@ import { isAppointmentMatchedIntervals } from './is_appointment_matched_interval
 
 export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],
-  { regularPanel, allDayPanel }: FilterOptions,
+  { allDayIntervals, regularIntervals }: FilterOptions,
 ): T[] => entities.filter((appointment) => {
     const intervals = appointment.allDay || appointment.isAllDayPanelOccupied
-      ? allDayPanel.intervals
-      : regularPanel.intervals;
+      ? allDayIntervals
+      : regularIntervals;
     return isAppointmentMatchedIntervals(
       appointment,
       intervals,
