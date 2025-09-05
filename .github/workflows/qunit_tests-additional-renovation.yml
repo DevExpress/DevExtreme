@@ -77,7 +77,7 @@ jobs:
 
   qunit-tests-timezones:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: ${{ matrix.constel }}-${{ matrix.timezone }}
     timeout-minutes: 25
     strategy:
@@ -117,7 +117,7 @@ jobs:
 
 #  qunit-tests-performance:
 #    needs: build
-#    runs-on: devextreme-shr2
+#    runs-on: devextreme-shr2 | ubuntu-latest
 #    name: Performance
 #    timeout-minutes: 25
 #    steps:
@@ -136,7 +136,7 @@ jobs:
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: ${{ matrix.constel }}-${{ matrix.kind }}
     timeout-minutes: 25
     strategy:
@@ -188,7 +188,7 @@ jobs:
 
   qunit-tests-firefox:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: ${{ matrix.constel }}-firefox
     timeout-minutes: 25
     strategy:
@@ -226,7 +226,7 @@ jobs:
 
   qunit-tests-common:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: ${{ matrix.constel }}-chrome
     timeout-minutes: 25
     strategy:
@@ -250,7 +250,7 @@ jobs:
 
   qunit-tests-no-csp:
     needs: build
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: ${{ matrix.constel }}-no-csp
     timeout-minutes: 25
     strategy:
