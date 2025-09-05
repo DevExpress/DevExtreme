@@ -1,3 +1,6 @@
+import type { AppointmentModel } from './appointment';
+import { createAppointmentModel } from './appointment';
+
 const getAppointmentColor = (container: HTMLDivElement): string => {
   const appointment = container.querySelector('.dx-scheduler-appointment') as HTMLDivElement;
   return appointment.style.backgroundColor;
@@ -12,7 +15,8 @@ const getTexts = (
 
 export interface SchedulerModel {
   getAppointment: () => HTMLDivElement | null;
-  getAppointments: () => NodeListOf<HTMLDivElement>;
+  getAppointments: () => AppointmentModel[];
+  getCollectorTexts: () => string[];
   getAppointmentColor: (view: string) => string;
   getDateTableContent: () => string[];
   getHeaderPanelContent: () => string[];
@@ -24,8 +28,14 @@ export const createSchedulerModel = (container: HTMLDivElement): SchedulerModel 
   getAppointment(): HTMLDivElement | null {
     return container.querySelector('.dx-scheduler-appointment');
   },
-  getAppointments(): NodeListOf<HTMLDivElement> {
-    return container.querySelectorAll('.dx-scheduler-appointment');
+  getAppointments(): AppointmentModel[] {
+    return [...container.querySelectorAll('.dx-scheduler-appointment')].map(
+      (element) => createAppointmentModel(element as HTMLDivElement),
+    );
+  },
+  getCollectorTexts(): string[] {
+    const collectors = container.querySelectorAll('.dx-scheduler-appointment-collector');
+    return getTexts(collectors);
   },
   getAppointmentColor(view: string): string {
     return view === 'agenda'

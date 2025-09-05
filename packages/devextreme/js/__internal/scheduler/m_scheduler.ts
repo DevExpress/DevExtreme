@@ -492,6 +492,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'dateSerializationFormat':
         break;
       case 'maxAppointmentsPerCell':
+        this.repaint();
         break;
       case 'startDateExpr':
       case 'endDateExpr':
@@ -851,9 +852,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._layoutManager.prepareAppointments(result);
         this._renderAppointments();
         this._updateA11yStatus();
-        if (this._isAgenda()) {
-          this._workSpace.renderAgendaLayout(this._layoutManager.filteredItems);
-        }
       });
     }
   }
@@ -883,6 +881,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
+    if (this._isAgenda()) {
+      this._workSpace.renderAgendaLayout(viewModel);
+    }
   }
 
   _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
@@ -1001,6 +1002,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderA11yStatus();
     this._renderMainContainer();
     this._renderHeader();
+    this._toggleAdaptiveClass();
 
     this._layoutManager = new AppointmentLayoutManagerBridge(this);
 
@@ -1183,8 +1185,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _render() {
-    this._toggleAdaptiveClass();
-
     this.getWorkSpace()?.updateHeaderEmptyCellWidth();
 
     // @ts-expect-error
@@ -1248,6 +1248,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowAllDayResize: this._allowAllDayResizing(),
       rtlEnabled: this.option('rtlEnabled'),
       groups: this.getViewOption('groups'),
+      groupByDate: this.getViewOption('groupByDate'),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),

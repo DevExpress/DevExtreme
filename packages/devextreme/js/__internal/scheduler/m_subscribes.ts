@@ -196,7 +196,7 @@ const subscribes = {
       },
       cellDurationInMinutes: this.getWorkSpace().option('cellDuration'),
       resizableStep: this.getWorkSpace().positionHelper.getResizableStep(),
-      isAllDay: isAllDay(this, itemData),
+      isAllDayPanel: isAllDay(this, itemData),
     });
   },
 

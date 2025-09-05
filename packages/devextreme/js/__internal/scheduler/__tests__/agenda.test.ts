@@ -44,7 +44,7 @@ describe('agenda', () => {
     expect(appointments.length).toBe(7);
     expect(POM.getTimePanelContent()).toMatchSnapshot();
 
-    const appointment = appointments.item(1);
+    const appointment = appointments[1].element;
     keydown(appointment, 'Delete');
 
     expect(POM.getAppointments().length).toBe(6);

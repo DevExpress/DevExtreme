@@ -2,7 +2,7 @@ import type {
   AllDayPanelOccupation,
   AppointmentPart,
   DateInterval,
-  FilterOptions,
+  DateIntervalsExtended,
   MinimalAppointmentEntity,
 } from '../../types';
 
@@ -22,10 +22,26 @@ const getSingleReduced = (
   }
 };
 
+const getReduced = (
+  isFirstItem: boolean,
+  isLastItem: boolean,
+  isStartOnPrevInterval: boolean,
+  isEndOnNextInterval: boolean,
+): 'head' | 'body' | 'tail' => {
+  switch (true) {
+    case isFirstItem && !isStartOnPrevInterval:
+      return 'head';
+    case isLastItem && !isEndOnNextInterval:
+      return 'tail';
+    default:
+      return 'body';
+  }
+};
+
 const cropEntityByInterval = <T extends MinimalAppointmentEntity>(
   entity: T,
   interval: DateInterval,
-): T & Pick<AppointmentPart, 'originalAppointmentDates'> => {
+): T & Pick<AppointmentPart, 'gridAppointmentDates'> => {
   const startDate = entity.startDate < interval.min ? interval.min : entity.startDate;
   const endDate = entity.endDate > interval.max ? interval.max : entity.endDate;
 
@@ -33,16 +49,34 @@ const cropEntityByInterval = <T extends MinimalAppointmentEntity>(
     ...entity,
     startDate,
     endDate,
-    originalAppointmentDates: {
+    duration: endDate - startDate,
+    gridAppointmentDates: {
       startDate: entity.startDate,
       endDate: entity.endDate,
     },
   };
 };
 
+const getEndIndex = (intervals: DateInterval[], endDateMs: number): number => {
+  const lastIdx = intervals.length - 1;
+
+  for (let idx = 0; idx < lastIdx; idx += 1) {
+    const nextInterval = intervals[idx + 1];
+
+    if (nextInterval.min >= endDateMs) {
+      return idx;
+    }
+  }
+
+  return lastIdx;
+};
+
 export const splitByParts = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],
-  { allDayPanel, regularPanel }: Pick<FilterOptions, 'allDayPanel' | 'regularPanel'>,
+  { allDayPanel, regularPanel }: {
+    allDayPanel: DateIntervalsExtended;
+    regularPanel: DateIntervalsExtended;
+  },
 ): (T & AppointmentPart)[] => entities
     .reduce<(T & AppointmentPart)[]>((result, entity) => {
       const panelOptions = entity.isAllDayPanelOccupied
@@ -50,31 +84,31 @@ export const splitByParts = <T extends MinimalAppointmentEntity & AllDayPanelOcc
         : regularPanel;
       const { intervals, prevIntervalEndDate, nextIntervalStartDate } = panelOptions;
       const startIndex = intervals.findIndex(({ max }) => entity.startDate < max);
-      let endIndex = intervals.findIndex(
-        (_, index) => index < intervals.length - 1 && entity.endDate <= intervals[index + 1].min,
-      );
-      endIndex = endIndex === -1 ? intervals.length - 1 : endIndex;
+      const endIndex = getEndIndex(intervals, entity.endDate);
       const partCount = endIndex - startIndex + 1;
-      const isStartOnPrevInterval = entity.startDate < prevIntervalEndDate;
-      const isEndOnNextInterval = entity.endDate > nextIntervalStartDate;
+      const isStartOnPrevView = entity.startDate < prevIntervalEndDate;
+      const isEndOnNextView = entity.endDate > nextIntervalStartDate;
 
       if (partCount <= 1) {
         result.push({
           ...cropEntityByInterval(entity, intervals[startIndex]),
           partIndex: 0,
           partCount: 0,
-          reduced: getSingleReduced(isStartOnPrevInterval, isEndOnNextInterval),
+          reduced: getSingleReduced(isStartOnPrevView, isEndOnNextView),
         });
       } else {
         const parts: (T & AppointmentPart)[] = Array.from({ length: partCount })
-          .map((_, partIndex) => ({
-            ...cropEntityByInterval(entity, intervals[startIndex + partIndex]),
-            partIndex,
-            partCount,
-            reduced: 'body',
-          }));
-        parts[0].reduced = isStartOnPrevInterval ? 'body' : 'head';
-        parts[parts.length - 1].reduced = isEndOnNextInterval ? 'body' : 'tail';
+          .map((_, partIndex) => {
+            const isFirstIdx = partIndex === 0;
+            const isLastIdx = partIndex === partCount - 1;
+
+            return {
+              ...cropEntityByInterval(entity, intervals[startIndex + partIndex]),
+              partIndex,
+              partCount,
+              reduced: getReduced(isFirstIdx, isLastIdx, isStartOnPrevView, isEndOnNextView),
+            };
+          });
         result.push(...parts);
       }
 

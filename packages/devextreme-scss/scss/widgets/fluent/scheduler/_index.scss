@@ -55,8 +55,6 @@ $fluent-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$fluent-scheduler-compact-appointment-button-border-radius: 12px;
-
 $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -401,6 +399,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     margin-left: 52px;
   }
 
+  &.dx-rtl .dx-scheduler-appointment-collector {
+    margin-left: 0;
+    margin-right: 52px;
+  }
+
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
   }
@@ -418,11 +421,13 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-collector {
+  height: $fluent-scheduler-dropdown-button-height;
   margin-top: $fluent-scheduler-dropdown-day-margin;
+  margin-bottom: 1px;
   position: absolute;
 
   &.dx-button {
-    border-radius: $fluent-scheduler-compact-appointment-button-border-radius;
+    border-radius: $fluent-scheduler-dropdown-button-height;
     height: $fluent-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;

@@ -195,7 +195,7 @@ class BaseRenderingStrategy {
       const width = this.calculateAppointmentWidth(appointment, position[j]);
 
       let resultWidth = width;
-      let appointmentReduced: any = null;
+      let appointmentReduced: any;
       let multiWeekAppointmentParts = [];
       let initialRowIndex = position[j].rowIndex;
       let initialColumnIndex = position[j].columnIndex;
@@ -239,6 +239,8 @@ class BaseRenderingStrategy {
         rowIndex: initialRowIndex,
         columnIndex: initialColumnIndex,
         appointmentReduced,
+        partIndex: 0,
+        partTotalCount: 0,
       });
       result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
     }
