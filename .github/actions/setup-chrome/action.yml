@@ -32,7 +32,8 @@ runs:
         CHROME_VERSION: ${{ inputs.chrome-version }}
         RUNNER_TYPE: ${{ inputs.runner-type }}
       run: |
-        if [ -n "$CHROME_VERSION" ]; then
+        CURRENT_CHROME_VERSION=$(google-chrome-stable --product-version)
+        if [[ -n "$CHROME_VERSION" && "$CURRENT_CHROME_VERSION" != "CHROME_VERSION" ]]; then
           if [ "$RUNNER_TYPE" = "github_hosted" ]; then
             sudo apt-get update
             sudo apt-get -y install libu2f-udev
