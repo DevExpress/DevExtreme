@@ -12,7 +12,7 @@ import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
-import { LoadPanel } from '../loadPanel';
+import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
