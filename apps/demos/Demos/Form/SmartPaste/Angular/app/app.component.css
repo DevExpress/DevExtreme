@@ -1,0 +1,46 @@
+#form-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: auto auto;
+  gap: 24px 40px;
+  min-width: 720px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.instruction {
+  color: var(--dx-texteditor-color-label);
+}
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+::ng-deep .dx-layout-manager .dx-field-item.dx-last-row {
+  padding-top: 4px;
+}
+
+::ng-deep .dx-toast-info .dx-toast-icon {
+  display: none;
+}
+
+::ng-deep .buttons-group {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+::ng-deep .buttons-group .dx-item-content {
+  gap: 8px;
+}
+
+::ng-deep .buttons-group .dx-field-item:not(.dx-first-col),
+::ng-deep .buttons-group .dx-field-item:not(.dx-last-col) {
+  padding: 0;
+}
+
+::ng-deep .buttons-group .dx-item {
+  flex: unset!important;
+}
