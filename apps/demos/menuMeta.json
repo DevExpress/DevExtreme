@@ -4324,7 +4324,8 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "DemoType": "Web",
-            "Badge": "New"
+            "Badge": "New",
+            "Modules": "openai"
           }
         ]
       },

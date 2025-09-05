@@ -44,17 +44,38 @@ $(() => {
     },
   });
 
+  const showNotification = (message, of, offset) => {
+    DevExpress.ui.notify({
+      message,
+      position: {
+        my: "bottom center",
+        at: "bottom center",
+        of,
+        offset: offset ?? '0 -50',
+      },
+      width: 'fit-content',
+      maxWidth: 'fit-content',
+      minWidth: 'fit-content',
+    }, 'info', 1500);
+  }
+
   const customSmartPasteHandler = () => {
     navigator.clipboard.readText()
       .then((text) => {
         if (text) {
           form.smartPaste(text);
         } else {
-          DevExpress.ui.notify('Clipboard is empty', 'error', 1500);
+          showNotification(
+            'Copy the text to paste into the form',
+            '#form'
+          );
         }
       })
       .catch(() => {
-        DevExpress.ui.notify('Could not access the clipboard', 'error', 1500);
+        showNotification(
+          'Could not access the clipboard',
+          '#form'
+        );
       });
   }
 
@@ -191,9 +212,6 @@ $(() => {
         buttonOptions: {
           stylingMode: 'contained',
           type: 'default',
-          onClick: () => {
-            customSmartPasteHandler();
-          },
         },
       }, {
         itemType: 'button',
@@ -222,18 +240,11 @@ $(() => {
       const { value } = textarea.option();
       navigator.clipboard.writeText(value);
 
-      DevExpress.ui.notify({
-        message: 'Text copied to clipboard',
-        position: {
-          my: "bottom center",
-          at: "bottom center",
-          of: "#textarea",
-          offset: '0 -20',
-        },
-        width: 'fit-content',
-        maxWidth: 'fit-content',
-        minWidth: 'fit-content',
-      }, 'info', 1500);
+      showNotification(
+        'Text copied to clipboard',
+        '#textarea',
+        '0 -20',
+      );
     }
   });
 
