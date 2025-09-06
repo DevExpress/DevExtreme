@@ -38,7 +38,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   minLevel: number;
 } => {
   const cellDOM = panelName === 'allDayPanel'
-    ? DOMMetaData.allDayPanelCellsMeta[0]
+    ? DOMMetaData.allDayPanelCellsMeta.length[0] || DOMMetaData.dateTableCellsMeta[0][0]
     : DOMMetaData.dateTableCellsMeta[0][0];
   const cellSize = {
     width: cellDOM.width ?? 0,

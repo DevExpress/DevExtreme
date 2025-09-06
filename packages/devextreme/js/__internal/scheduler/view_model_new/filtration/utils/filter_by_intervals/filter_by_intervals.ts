@@ -1,5 +1,5 @@
+import { isAppointmentMatchedIntervals } from '../../../common/is_appointment_matched_intervals';
 import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../../types';
-import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
 
 export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],

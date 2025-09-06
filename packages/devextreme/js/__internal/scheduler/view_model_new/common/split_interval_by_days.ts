@@ -8,10 +8,6 @@ export const splitIntervalByDay = ({
   min,
   max,
 }: CompareOptions): DateInterval[] => {
-  if (startDayHour >= endDayHour) {
-    return [];
-  }
-
   const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 

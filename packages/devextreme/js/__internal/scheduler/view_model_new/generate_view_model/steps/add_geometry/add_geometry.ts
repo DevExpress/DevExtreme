@@ -20,13 +20,13 @@ const RTLSwap = (
 
 const addPanelOffset = <T extends GeometryMinimalEntity & Geometry>(
   entity: T,
-  { intervalSize, viewOrientation, isTimeline }: GeometryOptions,
+  { intervalSize, viewOrientation, isTimelineView }: GeometryOptions,
 ): void => {
   switch (true) {
-    case viewOrientation === 'horizontal' && !isTimeline: // month
+    case viewOrientation === 'horizontal' && !isTimelineView: // month
       entity.top += entity.rowIndex * intervalSize.height;
       break;
-    case viewOrientation === 'horizontal' && isTimeline: // timelineX
+    case viewOrientation === 'horizontal' && isTimelineView: // timelineX
     case viewOrientation === 'vertical': // day, week, workWeek
       entity.left += entity.rowIndex * intervalSize.width;
       break;

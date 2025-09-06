@@ -47,7 +47,10 @@ export const generateGridViewModel = (
     return output;
   });
   const step4 = addSortedIndex(step3);
-  const step5 = filterByVirtualScreen(step4);
+  const step5 = filterByVirtualScreen(step4, {
+    viewDataProvider: schedulerStore._workSpace.viewDataProvider,
+    viewOffset: schedulerStore.getViewOffsetMs(),
+  });
   const step6 = maybeSplit(step5, hasAllDayPanel, (entities, panelName) => {
     const output = addGeometry(entities, optionManager.getGeometryOptions(panelName));
     return output;

@@ -41,4 +41,17 @@ describe('getCollectorSize', () => {
       collectorWithMarginsSize: { width: 106, height: 30 },
     });
   });
+
+  it('should return size no less then 20x20', () => {
+    expect(getCollectorSize(
+      { width: 150, height: 80 },
+      {
+        width: 'auto', height: 'auto', marginLeft: '300px', marginRight: '3px', marginTop: '500px', marginBottom: '5px',
+      },
+      0,
+    )).toEqual({
+      collectorSize: { width: 20, height: 20 },
+      collectorWithMarginsSize: { width: 323, height: 525 },
+    });
+  });
 });

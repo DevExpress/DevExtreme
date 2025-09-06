@@ -4,6 +4,7 @@ import type {
 } from '../steps/add_geometry/types';
 
 const DEFAULT_COLLECTOR_HEIGHT = 20;
+const MIN_COLLECTOR_SIZE = 20;
 const getPxValue = (value = '', defaultValue = 0): number => {
   if (!value.endsWith('px')) {
     return defaultValue;
@@ -30,13 +31,11 @@ export const getCollectorSize = (
   };
   const marginHeight = parsedSize.marginTop + parsedSize.marginBottom;
   const marginWidth = parsedSize.marginLeft + parsedSize.marginRight;
-  const height = parsedSize.height + marginHeight;
-  const width = parsedSize.width
-    ? parsedSize.width + marginWidth
-    : cellSize.width;
+  const height = Math.max(MIN_COLLECTOR_SIZE, parsedSize.height);
+  const width = Math.max(MIN_COLLECTOR_SIZE, parsedSize.width || cellSize.width - marginWidth);
 
   return {
-    collectorSize: { width: width - marginWidth, height: height - marginHeight },
-    collectorWithMarginsSize: { width, height },
+    collectorSize: { width, height },
+    collectorWithMarginsSize: { width: width + marginWidth, height: height + marginHeight },
   };
 };

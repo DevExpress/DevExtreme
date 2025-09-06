@@ -9,12 +9,14 @@ export const addGroupingOffset = (
   {
     groupCount,
     groupOrientation,
+    viewOrientation,
+    hasAllDayPanel,
     isGroupByDate,
-    isTimeline,
+    isTimelineView,
     cellSize,
     intervalSize,
     intervals,
-  }: Pick<GeometryOptions, 'groupCount' | 'groupOrientation' | 'isGroupByDate' | 'isTimeline' | 'cellSize' | 'intervalSize' | 'intervals'>,
+  }: GeometryOptions,
 ): void => {
   if (groupCount) {
     const intervalsCount = intervals.length;
@@ -26,13 +28,18 @@ export const addGroupingOffset = (
           + cellSize.width * entity.groupIndex; // cells inside date
         break;
       case groupOrientation === 'horizontal':
-        entity.left += entity.groupIndex * intervalSize.width; // intervals before
+        entity.left += entity.groupIndex * intervalSize.width * (
+          viewOrientation === 'vertical' ? intervalsCount : 1
+        ); // intervals before
         break;
       default:
-        entity.top += entity.groupIndex * intervalSize.height * intervalsCount;
+        entity.top += entity.groupIndex * (
+          intervalSize.height
+          + Number(hasAllDayPanel) * cellSize.height
+        );
     }
 
-    if (isTimeline) {
+    if (isTimelineView) {
       switch (true) {
         case groupOrientation === 'horizontal' && isGroupByDate:
           // grouped intervals before

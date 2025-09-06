@@ -1,4 +1,4 @@
-import type { DateInterval } from '../../../../view_model/filtering/utils/type';
+import type { DateInterval } from '../../view_model/filtering/utils/type';
 
 export const isAppointmentMatchedIntervals = (
   { startDate, endDate }: {

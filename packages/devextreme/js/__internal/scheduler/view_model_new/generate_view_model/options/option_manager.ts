@@ -51,11 +51,12 @@ export class OptionManager {
     const workspace = this.schedulerStore.getWorkSpace();
     const panelDOMSize = workspace.getPanelDOMSize(panelName);
 
-    return this.cache.memo(`${panelName}.${panelDOMSize.width}.${panelDOMSize.height}`, () => {
+    return this.cache.memo(panelName, () => {
       const {
         type,
         viewOffset,
         groupOrientation,
+        viewOrientation: nativeViewOrientation,
         isGroupByDate,
         groupCount,
         compareOptions,
@@ -64,9 +65,9 @@ export class OptionManager {
         isAdaptivityEnabled,
         cellDurationMinutes,
         isTimelineView,
+        hasAllDayPanel,
       } = this.options;
-      const isTimeline = isTimelineView || panelName === 'allDayPanel';
-      const viewOrientation = panelName === 'allDayPanel' ? 'horizontal' : this.options.viewOrientation;
+      const viewOrientation = panelName === 'allDayPanel' ? 'horizontal' : nativeViewOrientation;
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
       const collectorCSS = workspace.getCollectorDimension(isCompactCollector, panelName);
       const {
@@ -92,7 +93,7 @@ export class OptionManager {
         compareOptions,
         cellDurationMinutes,
         viewOffset,
-        isTimeline,
+        isTimelineView || panelName === 'allDayPanel',
         isMonthView,
         panelName,
       );
@@ -102,10 +103,11 @@ export class OptionManager {
         intervals,
         cells,
         maxAppointmentsPerCell: maxLevel,
+        hasAllDayPanel,
         viewOrientation,
         groupOrientation,
         isGroupByDate,
-        isTimeline,
+        isTimelineView,
         isRTLEnabled,
         isAdaptivityEnabled,
         groupCount,

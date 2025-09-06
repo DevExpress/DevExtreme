@@ -1,4 +1,4 @@
-import { getDatesWithoutTime } from '../../r1/utils';
+import { getDatesWithoutTime } from '../../r1/utils/base';
 import type { DateInterval } from '../types';
 
 export const trimInterval = ({

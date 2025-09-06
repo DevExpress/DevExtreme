@@ -34,8 +34,7 @@ class AppointmentLayoutManagerBridge {
 
   protected useNewViewModel(): boolean {
     return this.schedulerStore.currentView.type === 'agenda' || (
-      !this.schedulerStore.isVirtualScrolling()
-      && this.schedulerStore.resourceManager.groupCount() === 0
+      this.schedulerStore.resourceManager.groupCount() === 0
     );
   }
 
