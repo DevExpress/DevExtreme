@@ -15,6 +15,7 @@ describe('splitIntervalByDay', () => {
       endDayHour: 24,
       min: new Date(2016, 8, 6).getTime(),
       max: new Date(2016, 8, 8, 23, 59).getTime(),
+      skippedDays: [],
     })).toEqual([{
       min: new Date(2016, 8, 6).getTime(),
       max: new Date(2016, 8, 7).getTime(),
@@ -33,6 +34,7 @@ describe('splitIntervalByDay', () => {
       endDayHour: 24,
       min: new Date(2016, 3, 3).getTime(),
       max: new Date(2016, 3, 5, 23, 59).getTime(),
+      skippedDays: [],
     })).toEqual([{
       min: new Date(2016, 3, 3).getTime(),
       max: new Date(2016, 3, 4).getTime(),

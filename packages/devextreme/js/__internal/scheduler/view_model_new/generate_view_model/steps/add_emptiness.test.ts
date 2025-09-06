@@ -17,9 +17,13 @@ describe('addEmptiness', () => {
     expect(addEmptiness([
       { height: 34, width: 39 },
       { height: 36, width: 41 },
+      { height: 20, width: 20, isAllDayPanelOccupied: true },
     ] as any, { isTimelineView: false, isAdaptivityEnabled: false })).toEqual([
       { height: 34, width: 39, empty: true },
       { height: 36, width: 41, empty: false },
+      {
+        height: 20, width: 20, isAllDayPanelOccupied: true, empty: false,
+      },
     ]);
   });
 

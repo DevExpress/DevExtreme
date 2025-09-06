@@ -1,7 +1,3 @@
-import {
-  getGroupSize,
-} from '@ts/scheduler/view_model_new/generate_view_model/options/get_group_size';
-
 import { Cache } from '../../../global_cache';
 import type Scheduler from '../../../m_scheduler';
 import type {
@@ -13,6 +9,7 @@ import type {
 } from '../../types';
 import type { CollectorOptions } from '../steps/add_collector/types';
 import type { GeometryOptions } from '../steps/add_geometry/types';
+import { getGroupSize } from './get_group_size';
 import { getMonthIntervals } from './get_month_intervals';
 import { getPanelCollectorOptions } from './get_panel_collector_options';
 import type { ViewModelOptions } from './get_view_model_options';
@@ -31,9 +28,14 @@ const getLayoutIntervals = (
     case isMonthView:
       return getMonthIntervals(compareOptions, viewOffset, isTimeline);
     case panelName === 'allDayPanel':
-      return getMonthIntervals(compareOptions, viewOffset, false);
+      return getMonthIntervals(compareOptions, viewOffset, true);
     default:
-      return getWeekIntervals(compareOptions, cellDurationMinutes, viewOffset, isTimeline);
+      return getWeekIntervals(
+        compareOptions,
+        cellDurationMinutes,
+        viewOffset,
+        isTimeline,
+      );
   }
 };
 

@@ -7,7 +7,12 @@ export const splitIntervalByDay = ({
   endDayHour,
   min,
   max,
+  skippedDays,
 }: CompareOptions): DateInterval[] => {
+  if (endDayHour < startDayHour) {
+    return [];
+  }
+
   const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 
@@ -21,13 +26,16 @@ export const splitIntervalByDay = ({
   const result: DateInterval[] = [];
 
   while (time < maxTime) {
-    const intervalMax = new Date(time);
-    intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
+    if (!skippedDays.includes(time.getDay())) {
+      const intervalMax = new Date(time);
+      intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
 
-    result.push({
-      min: time.getTime(),
-      max: intervalMax.getTime(),
-    });
+      result.push({
+        min: time.getTime(),
+        max: intervalMax.getTime(),
+      });
+    }
+
     time.setDate(time.getDate() + 1);
   }
 

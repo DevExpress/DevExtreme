@@ -29,7 +29,9 @@ const cropIntervalsByDayHours = (
 }));
 
 export const getMonthIntervals = (
-  { startDayHour, endDayHour, ...dateInterval }: CompareOptions,
+  {
+    startDayHour, endDayHour, skippedDays, ...dateInterval
+  }: CompareOptions,
   viewOffset: number,
   isTimeline: boolean,
 ): LayoutIntervals => {
@@ -42,6 +44,7 @@ export const getMonthIntervals = (
     intervals,
     startDayHour,
     endDayHour,
+    skippedDays,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
 

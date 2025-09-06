@@ -333,10 +333,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-appointment-collector {
     margin-top: $material-scheduler-dropdown-appointment-margin-top;
     margin-left: 52px;
+    margin-right: $material-scheduler-dropdown-margin-right;
   }
 
   &.dx-rtl .dx-scheduler-appointment-collector {
-    margin-left: 0;
+    margin-left: $material-scheduler-dropdown-margin-left;
     margin-right: 52px;
   }
 
@@ -347,10 +348,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 
 .dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-appointment-collector {
-    margin: 0;
-  }
-
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
     white-space: nowrap;
   }
@@ -358,8 +355,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-appointment-collector {
   height: $material-scheduler-dropdown-button-height;
-  margin-top: $material-scheduler-dropdown-day-margin;
-  margin-bottom: 1px;
+  margin: $material-scheduler-dropdown-margin-top $material-scheduler-dropdown-margin-right $material-scheduler-dropdown-margin-bottom $material-scheduler-dropdown-margin-left;
   position: absolute;
 
   &.dx-button {

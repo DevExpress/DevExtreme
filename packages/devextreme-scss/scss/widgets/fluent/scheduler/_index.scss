@@ -397,10 +397,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-appointment-collector {
     margin-top: $fluent-scheduler-dropdown-appointment-margin-top;
     margin-left: 52px;
+    margin-right: $fluent-scheduler-dropdown-margin-right;
   }
 
   &.dx-rtl .dx-scheduler-appointment-collector {
-    margin-left: 0;
+    margin-left: $fluent-scheduler-dropdown-margin-left;
     margin-right: 52px;
   }
 
@@ -411,10 +412,6 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 
 .dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-appointment-collector {
-    margin: 0;
-  }
-
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
     white-space: nowrap;
   }
@@ -422,8 +419,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-appointment-collector {
   height: $fluent-scheduler-dropdown-button-height;
-  margin-top: $fluent-scheduler-dropdown-day-margin;
-  margin-bottom: 1px;
+  margin: $fluent-scheduler-dropdown-margin-top $fluent-scheduler-dropdown-margin-right $fluent-scheduler-dropdown-margin-bottom $fluent-scheduler-dropdown-margin-left;
   position: absolute;
 
   &.dx-button {

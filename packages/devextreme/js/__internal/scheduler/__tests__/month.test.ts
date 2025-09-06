@@ -69,7 +69,7 @@ describe('month', () => {
       });
 
       const appointment = POM.getAppointment();
-      expect(appointment?.style.width).toBe(`${DEFAULT_CELL_WIDTH}px`);
+      expect(appointment.getGeometry().width).toBe(DEFAULT_CELL_WIDTH);
     });
   });
 });

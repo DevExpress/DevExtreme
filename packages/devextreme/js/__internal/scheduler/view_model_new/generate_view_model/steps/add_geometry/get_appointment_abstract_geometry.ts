@@ -28,11 +28,19 @@ export const getAppointmentX = (
 };
 
 export const getAppointmentY = (
-  entity: Pick<GeometryMinimalEntity, 'level' | 'maxLevel'>,
+  entity: Pick<GeometryMinimalEntity, 'level' | 'maxLevel' | 'isAllDayPanelOccupied' | 'inStackWithCollector'>,
   cellSize: AbstractSize,
   collectorSizeY: number,
   collectorPosition: GeometryOptions['collectorPosition'],
 ): Y => {
+  if (entity.isAllDayPanelOccupied && !entity.inStackWithCollector) {
+    const sizeY = entity.maxLevel === 0
+      ? cellSize.sizeY - collectorSizeY
+      : (cellSize.sizeY - collectorSizeY) / entity.maxLevel;
+    const offsetY = entity.level * sizeY;
+    return { sizeY, offsetY };
+  }
+
   const maxSizeY = cellSize.sizeY - collectorSizeY;
   const sizeY = entity.maxLevel === 0
     ? maxSizeY

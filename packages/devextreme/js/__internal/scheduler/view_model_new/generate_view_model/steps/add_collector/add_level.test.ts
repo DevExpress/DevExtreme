@@ -27,8 +27,12 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 0, maxLevel: 3 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -45,8 +49,12 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 0, maxLevel: 3 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -70,10 +78,18 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 1, maxLevel: 3 },
-      { ...items[2], level: 2, maxLevel: 3 },
-      { ...items[3], level: 1, maxLevel: 3 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 1, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[2], level: 2, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[3], level: 1, maxLevel: 3, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -113,14 +129,30 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, { ...collectorOptions, maxLevel: 10 })).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 1, maxLevel: 3 },
-      { ...items[2], level: 2, maxLevel: 3 },
-      { ...items[3], level: 1, maxLevel: 3 },
-      { ...items[4], level: 0, maxLevel: 4 },
-      { ...items[5], level: 1, maxLevel: 4 },
-      { ...items[6], level: 2, maxLevel: 4 },
-      { ...items[7], level: 3, maxLevel: 4 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 1, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[2], level: 2, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[3], level: 1, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[4], level: 0, maxLevel: 4, inStackWithCollector: false,
+      },
+      {
+        ...items[5], level: 1, maxLevel: 4, inStackWithCollector: false,
+      },
+      {
+        ...items[6], level: 2, maxLevel: 4, inStackWithCollector: false,
+      },
+      {
+        ...items[7], level: 3, maxLevel: 4, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -136,8 +168,12 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 0, maxLevel: 3 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 0, maxLevel: 3, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -169,12 +205,24 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, { ...collectorOptions, maxLevel: -1 })).toEqual([
-      { ...items[0], level: 0, maxLevel: 0 },
-      { ...items[1], level: 0, maxLevel: 2 },
-      { ...items[2], level: 1, maxLevel: 2 },
-      { ...items[3], level: 0, maxLevel: 2 },
-      { ...items[4], level: 0, maxLevel: 2 },
-      { ...items[5], level: 0, maxLevel: 0 },
+      {
+        ...items[0], level: 0, maxLevel: 0, inStackWithCollector: false,
+      },
+      {
+        ...items[1], level: 0, maxLevel: 2, inStackWithCollector: false,
+      },
+      {
+        ...items[2], level: 1, maxLevel: 2, inStackWithCollector: false,
+      },
+      {
+        ...items[3], level: 0, maxLevel: 2, inStackWithCollector: false,
+      },
+      {
+        ...items[4], level: 0, maxLevel: 2, inStackWithCollector: false,
+      },
+      {
+        ...items[5], level: 0, maxLevel: 0, inStackWithCollector: false,
+      },
     ]);
   });
 
@@ -212,12 +260,24 @@ describe('addLevel', () => {
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
-      { ...items[0], level: 0, maxLevel: 3 },
-      { ...items[1], level: 1, maxLevel: 3 },
-      { ...items[2], level: 0, maxLevel: 3 },
-      { ...items[3], level: 2, maxLevel: 3 },
-      { ...items[4], level: 3, maxLevel: 3 },
-      { ...items[5], level: 4, maxLevel: 3 },
+      {
+        ...items[0], level: 0, maxLevel: 3, inStackWithCollector: true,
+      },
+      {
+        ...items[1], level: 1, maxLevel: 3, inStackWithCollector: true,
+      },
+      {
+        ...items[2], level: 0, maxLevel: 3, inStackWithCollector: true,
+      },
+      {
+        ...items[3], level: 2, maxLevel: 3, inStackWithCollector: true,
+      },
+      {
+        ...items[4], level: 3, maxLevel: 3, inStackWithCollector: true,
+      },
+      {
+        ...items[5], level: 4, maxLevel: 3, inStackWithCollector: true,
+      },
     ]);
   });
 });

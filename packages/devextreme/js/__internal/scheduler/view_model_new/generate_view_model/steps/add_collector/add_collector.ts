@@ -5,7 +5,6 @@ import type {
   Duration,
   Level,
   ListEntity,
-  MaxLevel,
   Position,
 } from '../../../types';
 import { addCollectorByLevel } from './add_collector_by_level';
@@ -17,7 +16,7 @@ export const addCollector = <
 >(
     entities: T[],
     options: CollectorOptions,
-  ): (T & Level & MaxLevel & AppointmentCollector)[] => {
+  ): (T & Level & AppointmentCollector)[] => {
   const step1 = addLevel(entities, options);
   const step2 = addCollectorByLevel(step1, options);
   return step2;

@@ -24,16 +24,15 @@ export const getMaxLevel = ({
 }: Options): number => {
   switch (maxAppointmentsPerCell) {
     case 'auto': {
+      if (isAdaptivityEnabled && viewOrientation === 'horizontal') {
+        return 0;
+      }
+
       const defaultAppointmentSize = getDefaultAppointmentSize({
         isTimelineView,
         isAdaptivityEnabled,
+        viewOrientation,
       });
-      if (isAdaptivityEnabled) {
-        return viewOrientation === 'vertical'
-          ? Math.floor(cellSize.width / defaultAppointmentSize.width)
-          : 0;
-      }
-
       const minAbstractSize = getAbstractSizeByViewOrientation(
         defaultAppointmentSize,
         viewOrientation,

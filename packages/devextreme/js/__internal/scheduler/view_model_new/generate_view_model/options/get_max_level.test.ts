@@ -32,7 +32,7 @@ describe('getMaxLevel', () => {
       viewOrientation: 'vertical',
       isTimelineView: false,
       isAdaptivityEnabled: false,
-    })).toBe(3);
+    })).toBe(2);
   });
 
   it('should return calculated value for maxAppointmentsPerCell=auto, adaptivityEnabled=true, viewOrientation=horizontal', () => {

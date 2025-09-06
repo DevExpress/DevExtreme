@@ -7,7 +7,6 @@ import type {
   DateInterval,
   Level,
   ListEntity,
-  MaxLevel,
   Position,
 } from '../../../types';
 
@@ -48,7 +47,6 @@ export interface CollectorCSS {
 export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex' | 'duration'>
   & Position
   & Level
-  & MaxLevel
   & AppointmentCollector
   & AllDayPanelOccupation;
 

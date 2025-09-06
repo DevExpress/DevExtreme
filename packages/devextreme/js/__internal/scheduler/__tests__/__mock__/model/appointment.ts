@@ -7,13 +7,13 @@ export interface AppointmentModel<T = HTMLDivElement> {
   element: T;
   getText: () => string;
   getDisplayDate: () => string;
-  getPosition: () => Position;
+  getGeometry: () => Position;
   getSnapshot: () => object;
 }
 
 const getText = (element: HTMLDivElement | null): string => element?.querySelector('.dx-scheduler-appointment-title')?.textContent ?? '';
 const getDisplayDate = (element: HTMLDivElement | null): string => element?.querySelector('.dx-scheduler-appointment-content-date')?.textContent ?? '';
-const getPosition = (element: HTMLDivElement | null): Position => {
+const getGeometry = (element: HTMLDivElement | null): Position => {
   if (!element) {
     return EMPTY_POSITION;
   }
@@ -37,10 +37,10 @@ export const createAppointmentModel = <T extends HTMLDivElement | null>(
     element,
     getText: () => getText(element),
     getDisplayDate: () => getDisplayDate(element),
-    getPosition: () => getPosition(element),
+    getGeometry: () => getGeometry(element),
     getSnapshot: (): object => ({
       text: getText(element),
       date: getDisplayDate(element),
-      ...getPosition(element),
+      ...getGeometry(element),
     }),
   });

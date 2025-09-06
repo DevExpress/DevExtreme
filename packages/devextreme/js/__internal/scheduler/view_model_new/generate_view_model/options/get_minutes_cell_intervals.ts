@@ -1,3 +1,4 @@
+import { filterBySkippedDays } from '../../common/filter_by_skipped_days';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -6,6 +7,7 @@ interface Options {
   startDayHour: number;
   endDayHour: number;
   durationMinutes: number;
+  skippedDays: number[];
 }
 
 export const getMinutesCellIntervals = ({
@@ -13,11 +15,14 @@ export const getMinutesCellIntervals = ({
   startDayHour,
   endDayHour,
   durationMinutes,
+  skippedDays,
 }: Options): CellInterval[] => intervals.reduce<CellInterval[]>((result, interval, rowIndex) => {
-  const dayIntervals = splitIntervalByDay({ ...interval, startDayHour, endDayHour });
+  const dayIntervals = splitIntervalByDay({
+    ...interval, startDayHour, endDayHour, skippedDays,
+  });
 
   let columnIndex = 0;
-  dayIntervals.forEach((dayInterval) => {
+  filterBySkippedDays(dayIntervals, skippedDays).forEach((dayInterval) => {
     const date = new Date(dayInterval.min);
     while (date.getTime() < dayInterval.max) {
       const min = date.getTime();

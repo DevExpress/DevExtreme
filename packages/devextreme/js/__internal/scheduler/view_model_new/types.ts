@@ -29,6 +29,7 @@ export interface CompareOptions {
   endDayHour: number;
   min: number;
   max: number;
+  skippedDays: number[];
 }
 
 export interface LayoutIntervals {
@@ -129,10 +130,8 @@ export type AgendaEntity = ListEntity
 
 export interface Level {
   level: number;
-}
-
-export interface MaxLevel {
   maxLevel: number;
+  inStackWithCollector: boolean;
 }
 
 export type CollectorItemEntity = ListEntity
@@ -157,7 +156,6 @@ export type AppointmentEntity = ListEntity
   & DatesBeforeSplit
   & AppointmentPart
   & Level
-  & MaxLevel
   & Position
   & Direction
   & Empty

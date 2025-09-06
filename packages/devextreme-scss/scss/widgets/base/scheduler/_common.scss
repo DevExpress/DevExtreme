@@ -75,6 +75,22 @@ $scheduler-popup-scrollable-content-padding: 20px;
   }
 }
 
+.dx-scheduler-work-space.dx-scheduler-work-space-day,
+.dx-scheduler-work-space.dx-scheduler-work-space-week,
+.dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+  .dx-scheduler-fixed-appointments,
+  .dx-scheduler-date-table-container {
+    .dx-scheduler-appointment-collector {
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+  }
+}
+
+.dx-scheduler-adaptive .dx-scheduler-appointment-collector {
+  margin: 0 3px;
+}
+
 .dx-scheduler-work-space-mouse-selection {
   .dx-scheduler-fixed-appointments,
   .dx-scheduler-scrollable-appointments,
@@ -109,7 +125,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
   .dx-scheduler-appointment-collector.dx-scheduler-appointment-collector-compact {
     height: 28px;
     width: 28px;
-    margin: 0;
+    margin: 0 3px;
   }
 
   .dx-scheduler-work-space.dx-scheduler-timeline {

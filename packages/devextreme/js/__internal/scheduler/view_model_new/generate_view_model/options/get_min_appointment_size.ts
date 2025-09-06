@@ -1,3 +1,4 @@
+import type { Orientation } from '@js/common';
 import { current as currentTheme } from '@js/ui/themes';
 
 import type { RealSize } from '../steps/add_geometry/types';
@@ -9,7 +10,8 @@ interface Options {
 
 const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 const APPOINTMENT_DEFAULT_HEIGHT = 20;
-const APPOINTMENT_DEFAULT_WIDTH = 40;
+const APPOINTMENT_DEFAULT_HORIZONTAL_WIDTH = 40;
+const APPOINTMENT_DEFAULT_VERTICAL_WIDTH = 50;
 const APPOINTMENT_MIN_HEIGHT = 35;
 const APPOINTMENT_MIN_WIDTH = 40;
 const TIMELINE_APPOINTMENT_DEFAULT_HEIGHT = 60;
@@ -43,7 +45,10 @@ export const getMinAppointmentSize = ({
 export const getDefaultAppointmentSize = ({
   isTimelineView,
   isAdaptivityEnabled,
-}: Options): RealSize => {
+  viewOrientation,
+}: Options & {
+  viewOrientation: Orientation;
+}): RealSize => {
   if (isAdaptivityEnabled) {
     return {
       width: ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH,
@@ -52,7 +57,9 @@ export const getDefaultAppointmentSize = ({
   }
 
   return {
-    width: APPOINTMENT_DEFAULT_WIDTH,
+    width: viewOrientation === 'vertical'
+      ? APPOINTMENT_DEFAULT_VERTICAL_WIDTH
+      : APPOINTMENT_DEFAULT_HORIZONTAL_WIDTH,
     height: isTimelineView ? TIMELINE_APPOINTMENT_DEFAULT_HEIGHT : getMinAppointmentHeightByTheme(),
   };
 };

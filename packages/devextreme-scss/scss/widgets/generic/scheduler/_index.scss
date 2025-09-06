@@ -313,7 +313,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-appointment-collector {
   height: $generic-scheduler-dropdown-button-height;
-  margin-bottom: $generic-scheduler-dropdown-button-margin-bottom;
+  margin: $generic-scheduler-dropdown-margin-top $generic-scheduler-dropdown-margin-right $generic-scheduler-dropdown-margin-bottom $generic-scheduler-dropdown-margin-left;
 
   &.dx-state-hover {
     &::before {
@@ -335,15 +335,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
   .dx-scheduler-appointment-collector {
     margin-right: 57px;
-  }
-}
-
-.dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month,
-  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
-    .dx-scheduler-appointment-collector {
-      margin-right: 0;
-    }
   }
 }
 

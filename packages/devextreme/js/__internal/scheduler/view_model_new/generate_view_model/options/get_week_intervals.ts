@@ -14,9 +14,8 @@ export const getWeekIntervals = (
   const shiftedIntervals = shiftIntervals(intervals, viewOffset);
 
   const cells = getMinutesCellIntervals({
+    ...compareOptions,
     intervals,
-    startDayHour,
-    endDayHour,
     durationMinutes: cellDurationMinutes,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
