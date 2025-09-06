@@ -1,5 +1,6 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -13,7 +14,7 @@ safeSizeTest('Default render', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('load-panel.png', cardView.element);
+  await testScreenshot(t, takeScreenshot, 'load-panel.png', { element: cardView.element });
 
   await t
     .expect(compareResults.isValid())
@@ -31,7 +32,7 @@ safeSizeTest('Default render', async (t) => {
 safeSizeTest('Default render when CardView has a large height', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await takeScreenshot('load-panel-with-large-height.png');
+  await testScreenshot(t, takeScreenshot, 'load-panel-with-large-height.png');
 
   await t
     .expect(compareResults.isValid())
