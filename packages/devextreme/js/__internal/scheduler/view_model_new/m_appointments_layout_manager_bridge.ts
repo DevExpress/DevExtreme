@@ -33,9 +33,7 @@ class AppointmentLayoutManagerBridge {
   }
 
   protected useNewViewModel(): boolean {
-    return this.schedulerStore.currentView.type === 'agenda' || (
-      this.schedulerStore.resourceManager.groupCount() === 0
-    );
+    return true;
   }
 
   public prepareAppointments(items?: Appointment[]): void {

@@ -68,6 +68,6 @@ export interface GeometryOptions {
   cellSize: RealSize;
   collectorSize: RealSize;
   collectorWithMarginsSize: RealSize;
-  intervalSize: RealSize;
+  groupSize: RealSize;
   panelSize: RealSize;
 }

@@ -1,7 +1,6 @@
 import { shiftIntervals } from '../../common/shift_intervals';
 import { trimInterval } from '../../common/trim_interval';
 import type { CompareOptions, DateInterval, LayoutIntervals } from '../../types';
-import { getIntervalDaysCount } from './get_interval_days_count';
 import { getOneDayCellIntervals } from './get_one_day_cell_intervals';
 
 const MONTH_INTERVAL_DAYS_COUNT = 7;
@@ -45,14 +44,9 @@ export const getMonthIntervals = (
     endDayHour,
   });
   const shiftedCells = shiftIntervals(cells, viewOffset);
-  const intervalDaysCount = getIntervalDaysCount(intervals[0]);
 
   return {
     cells: shiftedCells,
     intervals: shiftedIntervals,
-    intervalCellsCount: {
-      width: intervalDaysCount,
-      height: 1,
-    },
   };
 };

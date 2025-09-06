@@ -1,3 +1,7 @@
+import {
+  getGroupSize,
+} from '@ts/scheduler/view_model_new/generate_view_model/options/get_group_size';
+
 import { Cache } from '../../../global_cache';
 import type Scheduler from '../../../m_scheduler';
 import type {
@@ -88,7 +92,6 @@ export class OptionManager {
       const {
         cells,
         intervals,
-        intervalCellsCount,
       } = getLayoutIntervals(
         compareOptions,
         cellDurationMinutes,
@@ -110,14 +113,18 @@ export class OptionManager {
         isTimelineView,
         isRTLEnabled,
         isAdaptivityEnabled,
-        groupCount,
         cellSize,
         collectorPosition: viewOrientation === 'vertical' ? 'end' : 'start',
         ...collectorSizes,
-        intervalSize: {
-          width: cellSize.width * intervalCellsCount.width,
-          height: cellSize.height * intervalCellsCount.height,
-        },
+        groupCount,
+        groupSize: getGroupSize({
+          ...compareOptions,
+          cellSize,
+          cellDurationMinutes,
+          intervals,
+          cells,
+          viewType: type,
+        }),
         panelSize: panelDOMSize,
       };
       const collectorOptions: CollectorOptions = {

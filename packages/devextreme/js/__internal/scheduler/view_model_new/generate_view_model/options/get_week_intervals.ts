@@ -24,9 +24,5 @@ export const getWeekIntervals = (
   return {
     cells: shiftedCells,
     intervals: shiftedIntervals,
-    intervalCellsCount: {
-      width: isTimeline ? cells.length : 1,
-      height: isTimeline ? 1 : (endDayHour - startDayHour) * (60 / cellDurationMinutes),
-    },
   };
 };

@@ -2,16 +2,9 @@ import type ViewDataProvider from '../../../workspaces/view_model/m_view_data_pr
 import { isAppointmentMatchedIntervals } from '../../common/is_appointment_matched_intervals';
 import type { ListEntity } from '../../types';
 
-interface Options {
-  viewDataProvider: ViewDataProvider;
-  viewOffset: number;
-}
-
 export const filterByVirtualScreen = <T extends ListEntity>(
   entities: T[],
-  {
-    viewDataProvider,
-  }: Options,
+  viewDataProvider: ViewDataProvider,
 ): T[] => {
   const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
   // NOTE: all groups are the same because screen is rectangle

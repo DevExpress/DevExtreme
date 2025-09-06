@@ -12,7 +12,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: false,
       isTimelineView: false,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 80, height: 800 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
@@ -20,7 +20,7 @@ describe('addGroupingOffset', () => {
       ],
     } as any);
 
-    expect(entity).toEqual({ left: 7, top: 2 * 80 + 9, groupIndex: 2 });
+    expect(entity).toEqual({ left: 7, top: 2 * 800 + 9, groupIndex: 2 });
   });
 
   it('should add grouping offset for vertical grouping with all day panel', () => {
@@ -32,7 +32,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: false,
       isTimelineView: false,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 80, height: 800 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
@@ -40,7 +40,31 @@ describe('addGroupingOffset', () => {
       ],
     } as any);
 
-    expect(entity).toEqual({ left: 7, top: 4 * 80 + 9, groupIndex: 2 });
+    expect(entity).toEqual({ left: 7, top: 2 * 800 + 3 * 80 + 9, groupIndex: 2 });
+  });
+
+  it('should add grouping offset for vertical grouping with all day panel, all day appointment', () => {
+    const entity = {
+      isAllDayPanelOccupied: true, left: 7, top: 9, groupIndex: 2,
+    } as any;
+    addGroupingOffset(entity, {
+      hasAllDayPanel: true,
+      groupCount: 10,
+      groupOrientation: 'vertical',
+      isGroupByDate: false,
+      isTimelineView: false,
+      cellSize: { width: 100, height: 80 },
+      groupSize: { width: 80, height: 800 },
+      intervals: [
+        { min: 0, max: 20 },
+        { min: 20, max: 40 },
+        { min: 40, max: 60 },
+      ],
+    } as any);
+
+    expect(entity).toEqual({
+      isAllDayPanelOccupied: true, left: 7, top: 2 * 800 + 2 * 80 + 9, groupIndex: 2,
+    });
   });
 
   it('should add grouping offset for horizontal grouping', () => {
@@ -51,7 +75,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: false,
       isTimelineView: false,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 800, height: 80 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
@@ -72,7 +96,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: true,
       isTimelineView: false,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 800, height: 80 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
@@ -93,7 +117,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: false,
       isTimelineView: true,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 800, height: 80 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
@@ -114,7 +138,7 @@ describe('addGroupingOffset', () => {
       isGroupByDate: true,
       isTimelineView: true,
       cellSize: { width: 100, height: 80 },
-      intervalSize: { width: 800, height: 80 },
+      groupSize: { width: 800, height: 80 },
       intervals: [
         { min: 0, max: 20 },
         { min: 20, max: 40 },
