@@ -40,40 +40,6 @@ const moduleOptions = {
     }
 };
 
-QUnit.module('LayoutManager', moduleOptions);
-
-QUnit.test('RenderingStrategy should be initialized', async function(assert) {
-    await this.createInstance();
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'AppointmentLayoutManager was initialized');
-});
-
-QUnit.test('Scheduler should have a right rendering strategy for timeline views', async function(assert) {
-    await this.createInstance({
-        views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-        currentView: 'timelineDay',
-        currentDate: new Date(2021, 7, 30),
-        dataSource: [{
-            startDate: new Date(2021, 7, 8, 9),
-            endDate: new Date(2021, 7, 8, 10),
-            text: 'Test'
-        }]
-    });
-
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
-
-    this.instance.option('currentView', 'timelineWeek');
-    await waitAsync(0);
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
-
-    this.instance.option('currentView', 'timelineWorkWeek');
-    await waitAsync(0);
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
-
-    this.instance.option('currentView', 'timelineMonth');
-    await waitAsync(0);
-    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
-});
-
 QUnit.module('Appointments', moduleOptions);
 
 QUnit.test('Default appointment duration should be equal to 30 minutes', async function(assert) {
@@ -1644,8 +1610,10 @@ QUnit.test('Full-size appointment should have correct height, "auto" mode', asyn
 });
 
 QUnit.test('Full-size appointment should not have empty class in "auto" mode', async function(assert) {
-    const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
-        { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
+    const items = [
+        { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+    ];
 
     await this.createInstance(
         {
@@ -1660,22 +1628,14 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', a
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getLayoutManager().getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
-        return 18;
-    });
+    this.instance.option('dataSource', items);
+    await waitAsync(0);
 
-    try {
-        this.instance.option('dataSource', items);
-        await waitAsync(0);
+    const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
+    const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
 
-        const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
-        const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
-
-        assert.ok(!$firstAppointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
-        assert.ok(!$secondAppointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
-    } finally {
-        getHeightStub.restore();
-    }
+    assert.ok(!$firstAppointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
+    assert.ok(!$secondAppointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
 });
 
 QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, week view', async function(assert) {
@@ -2329,28 +2289,4 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const $dropDownMenu = $(this.instance.$element()).find('.dx-scheduler-appointment-collector');
 
     assert.equal($dropDownMenu.length, 0, 'ddAppointment isn\'t rendered');
-});
-
-QUnit.test('_isAppointmentEmpty should work correctly in different strategies', async function(assert) {
-    await this.createInstance({
-        views: ['timelineDay', 'week'],
-        currentView: 'timelineDay'
-    });
-
-    const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
-
-    this.instance.option('currentView', 'week');
-    await waitAsync(0);
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
-
-    this.instance.option('currentView', 'month');
-    await waitAsync(0);
-
-    assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), 'Appointment is empty');
-    assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 });

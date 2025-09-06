@@ -77,7 +77,7 @@ import { createResourceEditorModel } from './utils/resource_manager/popup_utils'
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
-import AppointmentLayoutManagerBridge from './view_model_new/m_appointments_layout_manager_bridge';
+import AppointmentLayoutManager from './view_model_new/appointments_layout_manager';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -204,7 +204,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _recurrenceDialog: any;
 
-  _layoutManager!: AppointmentLayoutManagerBridge;
+  _layoutManager!: AppointmentLayoutManager;
 
   _appointmentForm: any;
 
@@ -1000,7 +1000,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderHeader();
     this._toggleAdaptiveClass();
 
-    this._layoutManager = new AppointmentLayoutManagerBridge(this);
+    this._layoutManager = new AppointmentLayoutManager(this);
 
     // @ts-expect-error
     this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());

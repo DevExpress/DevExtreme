@@ -58,48 +58,6 @@ module('Subscribes', {
         assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, 'Targeted endDate is OK');
     });
 
-    [
-        {
-            scrollingMode: 'standard',
-            expectedType: DateGeneratorBaseStrategy
-        },
-        {
-            scrollingMode: 'virtual',
-            expectedType: DateGeneratorVirtualStrategy
-        }
-    ].forEach(option => {
-        test(`Appointment dates generator strategy should has correct type if scrolling.mode: ${option.scrollingMode}`, async function(assert) {
-            await this.createInstance({
-                currentView: 'day',
-                scrolling: {
-                    mode: option.scrollingMode
-                }
-            });
-
-            const layoutManager = this.instance.getLayoutManager();
-            const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
-            const { dateSettingsStrategy } = appointmentRenderingStrategy.getAppointmentSettingsGenerator();
-
-            assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
-        });
-    });
-
-    test('\'createAppointmentSettings\' should return workSpace date table scrollable', async function(assert) {
-        await this.createInstance({
-            currentView: 'day',
-            startDayHour: 2,
-            endDayHour: 10,
-            currentDate: 1425416400000
-        });
-
-        const layoutManager = this.instance.getLayoutManager();
-        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
-        const coordinate = appointmentRenderingStrategy.generateAppointmentSettings({
-            startDate: new Date(2015, 2, 3, 22),
-            endDate: new Date(2015, 2, 17, 10, 30)
-        });
-        assert.roughEqual(coordinate[0].top, 0, 1.001, 'Top coordinate is OK');
-    });
 
     test('\'needRecalculateResizableArea\' should return false for horizontal grouped workspace', async function(assert) {
         await this.createInstance({
@@ -173,10 +131,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
-
-        assert.equal(_positionMap[0].length, 7, 'count is OK');
+        assert.equal(this.instance.getLayoutManager().filteredItems.length, 7, 'count is OK');
     });
 
     test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment, allDay = true', async function(assert) {
@@ -196,41 +151,7 @@ module('Subscribes', {
         });
         await waitAsync(0);
 
-        const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
-
-        assert.equal(_positionMap[0].length, 7, 'count is OK');
-    });
-
-    test('"createAppointmentSettings" should not change dateRange', async function(assert) {
-        await this.createInstance({
-            currentView: 'week',
-            startDayHour: 2,
-            endDayHour: 10,
-            currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1,
-            dataSource: [{
-                'startDate': new Date(2015, 2, 2, 0),
-                'endDate': new Date(2015, 2, 3, 0),
-                'recurrenceRule': 'FREQ=DAILY',
-                allDay: true
-            }]
-        });
-
-        const instance = this.instance;
-        const dateRange = instance._workSpace.getDateRange();
-
-        const layoutManager = this.instance.getLayoutManager();
-        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
-
-        appointmentRenderingStrategy.generateAppointmentSettings({
-            'startDate': new Date(2015, 2, 2, 1),
-            'endDate': new Date(2015, 2, 3, 1),
-            'recurrenceRule': 'FREQ=DAILY',
-            allDay: true
-        });
-
-        assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
+        assert.equal(this.instance.getLayoutManager().filteredItems.length, 7, 'count is OK');
     });
 
     test('Long appointment in Timeline view should have right left coordinate', async function(assert) {
@@ -244,13 +165,11 @@ module('Subscribes', {
             }]
         });
 
-        const layoutManager = this.instance.getLayoutManager();
-        const { _positionMap } = layoutManager;
-
+        const items = this.instance.getAppointmentsInstance().option('items');
         const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1);
         const expectedLeftCoordinate = $expectedCell.position().left;
 
-        assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
+        assert.equal(items[0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
     test('"mapAppointmentFields" should call getTargetedAppointment', async function(assert) {
@@ -560,123 +479,6 @@ module('Subscribes', {
         assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
     });
 
-    test('"getAppointmentDurationInMs" should return visible appointment duration', async function(assert) {
-        await this.createInstance();
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 8),
-            new Date(2015, 2, 2, 20)
-        );
-
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible appointment duration considering startDayHour and endDayHour', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            endDayHour: 20
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 8),
-            new Date(2015, 2, 4, 20)
-        );
-
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            endDayHour: 20
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 8),
-            new Date(2015, 2, 3, 0)
-        );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible appointment duration considering hours of startDate and endDate', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 1,
-            endDayHour: 22
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 4, 25, 21),
-            new Date(2015, 4, 26, 3)
-        );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible long appointment duration considering hours of startDate and endDate', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            endDayHour: 20
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 10),
-            new Date(2015, 2, 4, 17)
-        );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible appointment duration considering hours of ultraboundary startDate and endDate', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            endDayHour: 20
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 7),
-            new Date(2015, 2, 4, 21),
-        );
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
-    });
-
-    test('"getAppointmentDurationInMs" should return visible allDay appointment duration', async function(assert) {
-        await this.createInstance();
-
-        this.instance.option({
-            startDayHour: 8,
-            endDayHour: 20
-        });
-        await waitAsync(0);
-
-        const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
-        const result = renderingStrategy.getAppointmentDurationInMs(
-            new Date(2015, 2, 2, 7),
-            new Date(2015, 2, 4, 21),
-            true,
-        );
-
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
-    });
-
     test('"getAppointmentColor" by certain group', async function(assert) {
         await this.createInstance({
             currentView: 'workWeek',
@@ -936,24 +738,6 @@ module('Subscribes', {
             text: 'Appointment test text'
         });
     });
-
-    [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
-        test(`Appointments should not contains groupIndex if recurrenceRule: ${recurrenceRule}`, async function(assert) {
-            await this.createInstance({
-                currentDate: new Date(2015, 2, 2),
-                dataSource: [{
-                    startDate: new Date(2015, 2, 2, 0),
-                    endDate: new Date(2015, 2, 3, 0),
-                    recurrenceRule: undefined
-                }]
-            });
-
-            const layoutManager = this.instance.getLayoutManager();
-            const { _positionMap } = layoutManager;
-
-            assert.notOk(_positionMap[0][0].groupIndex, 'no groupIndex');
-        });
-    });
 });
 
 module('Grouping By Date', {
@@ -1053,8 +837,7 @@ module('Grouping By Date', {
                 }]
             });
 
-            const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = this.instance.getAppointmentsInstance().option('items').sort();
 
             assert.equal(results.length, 3, 'Result length is OK');
             this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 96, 1.1);
@@ -1208,9 +991,7 @@ module('Grouping By Date', {
             });
 
             const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
-
-            const layoutManager = this.instance.getLayoutManager();
-            const results = layoutManager._positionMap[0];
+            const results = this.instance.getAppointmentsInstance().option('items').sort();
 
             this.checkNeedCoordinatesResult(assert, results[0], 5, 0, 0, cellWidth * 5, 1.5);
             this.checkNeedCoordinatesResult(assert, results[1], 7, 0, 0, cellWidth * 7, 1.5);
