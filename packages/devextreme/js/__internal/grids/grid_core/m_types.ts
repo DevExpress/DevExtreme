@@ -255,4 +255,5 @@ export interface Module {
 export interface KeyDownEvent {
   originalEvent: KeyboardEvent;
   keyName: string;
+  shift: boolean;
 }
