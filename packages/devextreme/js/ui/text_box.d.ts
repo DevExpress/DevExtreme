@@ -174,7 +174,15 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  */
 export default class dxTextBox<
     TProperties extends EditorValuableObject = Properties,
-> extends dxTextEditor<TProperties> { }
+> extends dxTextEditor<TProperties> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     * @param1 value:string | undefined
+     */
+    reset(value?: TProperties['value']): void;
+}
 
 interface TextBoxInstance extends dxTextBox<Properties> { }
 
