@@ -1,9 +1,9 @@
 <template>
-  <div class="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
+  <div class="instruction" id="textarea-label">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
   <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
   <div class="textarea-container">
     <DxButton text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" @click="onCopy()" />
-    <DxTextArea id="textarea" v-model:value="text" stylingMode="filled" height="100%" />
+    <DxTextArea id="textarea" aria-labelledby="textarea-label" v-model:value="text" stylingMode="filled" height="100%" />
   </div>
   <DxForm
     id="form"

@@ -99,11 +99,11 @@ const App = () => {
 
   return (
     <>
-      <div className="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
+      <div id="textarea-label" className="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
       <div className="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
       <div className="textarea-container">
         <Button text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" onClick={onCopy} />
-        <TextArea id="textarea" value={text} stylingMode="filled" height="100%" onValueChanged={onTextAreaValueChanged} />
+        <TextArea id="textarea" aria-labelledby="textarea-label" value={text} stylingMode="filled" height="100%" onValueChanged={onTextAreaValueChanged} />
       </div>
       <Form
         id="form"

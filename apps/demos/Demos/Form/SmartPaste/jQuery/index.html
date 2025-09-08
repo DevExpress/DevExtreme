@@ -20,11 +20,11 @@
   </head>
   <body class="dx-viewport">
     <div class="demo-container">
-      <div class="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
+      <div class="instruction" id="textarea-label">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
       <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
       <div class="textarea-container">
         <div id="copy"></div>
-        <div id="textarea"></div>
+        <div id="textarea" aria-labelledby="textarea-label"></div>
       </div>
       <div id="form"></div>
     </div>

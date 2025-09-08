@@ -33,10 +33,14 @@ $(() => {
 
       const promise = getAIResponse(aiPrompt, signal);
 
+      promise.catch((e) => {
+        showNotification('Something went wrong. Please try again.', '#form', true);
+      });
+
       const result = {
         promise,
         abort: () => {
-            controller.abort();
+          controller.abort();
         },
       };
 
@@ -44,7 +48,7 @@ $(() => {
     },
   });
 
-  const showNotification = (message, of, offset) => {
+  const showNotification = (message, of, isError, offset) => {
     DevExpress.ui.notify({
       message,
       position: {
@@ -56,7 +60,7 @@ $(() => {
       width: 'fit-content',
       maxWidth: 'fit-content',
       minWidth: 'fit-content',
-    }, 'info', 1500);
+    }, isError ? 'error' : 'info', 1500);
   }
 
   const customSmartPasteHandler = () => {
@@ -231,6 +235,7 @@ $(() => {
       showNotification(
         'Text copied to clipboard',
         '#textarea',
+        false,
         '0 -20',
       );
     }

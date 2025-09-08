@@ -1,5 +1,5 @@
 <div id="form-container">
-  <div class="instruction"
+  <div class="instruction" id="textarea-label"
     >Copy text from the editor below to the clipboard. Edit the text to see how
     your changes affect Smart Paste result.</div
   >
@@ -19,6 +19,7 @@
     ></dx-button>
     <dx-text-area
       id="textarea"
+      aria-labelledby="textarea-label"
       [value]="text"
       stylingMode="filled"
       height="100%"
