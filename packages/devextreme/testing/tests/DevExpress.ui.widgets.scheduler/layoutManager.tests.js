@@ -16,7 +16,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 28;
 
 const checkAppointmentUpdatedCallbackArgs = (assert, actual, expected) => {
     assert.deepEqual(actual.old, expected.old, 'Old data is OK');
@@ -1230,8 +1230,7 @@ QUnit.test('Four rival appointments with three columns should have correct posit
 
     const cellHeight = this.scheduler.workSpace.getCellHeight();
     const cellWidth = this.scheduler.workSpace.getCellWidth();
-    const unlimitedModeOffset = 5;
-    const expectedAppWidth = (cellWidth - unlimitedModeOffset) / 3;
+    const expectedAppWidth = cellWidth / 3;
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 4, 'All appointments are rendered');
 
@@ -1889,8 +1888,8 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         const appointmentWidth = getOuterWidth($appointment.eq(i));
         const appointmentHeight = getOuterHeight($appointment.eq(i));
 
-        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, 'appointment is full-size');
-        assert.roughEqual(appointmentHeight, (tableCellHeight - 10) / 5, 1.5, 'appointment is full-size');
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, 'appointment width is full-size');
+        assert.roughEqual(appointmentHeight, tableCellHeight / 5, 1.5, 'appointment height is full-size');
     }
 });
 
@@ -1951,7 +1950,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 2, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 3, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 2, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '2 more', 'DropDown menu has correct text');
 });
@@ -1980,14 +1979,14 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment'));
     const tableCellHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
-    for(let i = 0; i < 5; i++) {
+    for(let i = 0; i < 4; i++) {
         const appointmentHeight = getOuterHeight($appointment.eq(i));
 
         assert.roughEqual(appointmentHeight, (tableCellHeight - 26) / 3, 1.5, 'appointment is full-size');
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 4, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 6, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 1, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1 more', 'DropDown menu has correct text');
 });
@@ -2023,7 +2022,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 8, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 6, 'ddAppointment is rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 3, 'DropDown menu has correct items');
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '3 more', 'DropDown menu has correct text');
 });
@@ -2087,15 +2086,15 @@ QUnit.test('Full-size appointment should have minWidth, narrow width', async fun
             views: [{
                 type: 'week'
             }],
-            width: 160,
+            width: 100,
             dataSource: items
         }
     );
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
-    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 4, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 4, 1.1, 'Appointment has min width');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', async function(assert) {
@@ -2223,7 +2222,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and wi
     tableCellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     appointmentWidth = getOuterWidth($appointment.eq(0));
 
-    assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, 'One appointment is full-size');
+    assert.roughEqual(appointmentWidth, tableCellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.5, 'One appointment is full-size');
 
     this.scheduler.appointments.compact.click();
     assert.ok(this.scheduler.tooltip.isVisible(), 'ddAppointment is rendered');
