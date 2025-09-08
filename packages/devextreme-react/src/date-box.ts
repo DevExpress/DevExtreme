@@ -51,9 +51,9 @@ type IDateBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDa
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
-  defaultValue?: Date | null | number | string;
+  defaultValue?: Date | null | number | string | undefined;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: Date | null | number | string) => void;
+  onValueChange?: (value: Date | null | number | string | undefined) => void;
 }>
 
 interface DateBoxRef {
