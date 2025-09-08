@@ -49,9 +49,9 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
   const { isTimelineView, isMonthView, viewOrientation } = configByView[type];
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
-  const cellDurationMinutes = schedulerStore.option('cellDuration');
-  const allDayPanelMode = schedulerStore.option('allDayPanelMode');
-  const showAllDayPanel = schedulerStore.option('showAllDayPanel');
+  const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
+  const allDayPanelMode = schedulerStore.getViewOption('allDayPanelMode');
+  const showAllDayPanel = schedulerStore.getViewOption('showAllDayPanel');
 
   return {
     type,

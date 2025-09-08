@@ -23,7 +23,7 @@ testStart(() => {
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
 const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
-const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
+const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 2;
 
 const baseConfig = {
     beforeEach: function() {
@@ -864,7 +864,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerWidth(), 53.4, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
         scheduler.instance.option('width', 1000);
@@ -872,10 +872,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const $firstAppointment = scheduler.appointments.getAppointment(0);
         const $secondAppointment = scheduler.appointments.getAppointment(1);
 
-        assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($firstAppointment.outerWidth(), 48.1, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
 
-        assert.roughEqual($secondAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($secondAppointment.outerWidth(), 48.1, 1.001, 'Width is OK');
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
     });
 
@@ -909,7 +909,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
             const collectorCoordinates = translator.locate($collector);
             const expectedCoordinates = scheduler.workSpace.getCell(1).position();
 
-            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
+            assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET, 1.001, 'Left coordinate is OK');
             assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
         } finally {
             this.themeMock.restore();

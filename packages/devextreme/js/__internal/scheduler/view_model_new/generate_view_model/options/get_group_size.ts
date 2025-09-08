@@ -11,6 +11,7 @@ interface Options {
   cellDurationMinutes: number;
   endDayHour: number;
   startDayHour: number;
+  isAllDayPanel: boolean;
 }
 
 export const getGroupSize = ({
@@ -21,6 +22,7 @@ export const getGroupSize = ({
   cells,
   intervals,
   viewType,
+  isAllDayPanel,
 }: Options): RealSize => {
   switch (viewType) {
     case 'month':
@@ -43,7 +45,7 @@ export const getGroupSize = ({
     case 'week':
     case 'workWeek':
       return {
-        width: cellSize.width * intervals.length,
+        width: isAllDayPanel ? cellSize.width * cells.length : cellSize.width * intervals.length,
         height: cellSize.height * (endDayHour - startDayHour) * (60 / cellDurationMinutes),
       };
     default:

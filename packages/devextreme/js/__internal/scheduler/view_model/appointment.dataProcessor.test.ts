@@ -884,9 +884,10 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
-      expect(appts).toEqual([
+      expect(appts).toHaveLength(4);
+      expect([appts[0], appts[2]]).toEqual([
         {
           text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4,
         },

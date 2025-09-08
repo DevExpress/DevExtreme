@@ -598,7 +598,7 @@ export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
     }
 
     return groupIndices.filter(
-      (groupIndex) => viewDataGroupIndices.indexOf(groupIndex) !== -1,
+      (groupIndex) => viewDataGroupIndices.includes(groupIndex),
     );
   }
 

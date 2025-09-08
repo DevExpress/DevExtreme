@@ -39,7 +39,7 @@ export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
   month: getView('month', 'horizontal'),
   timelineDay: getView('timelineDay', 'vertical'),
   timelineWeek: getView('timelineWeek', 'vertical'),
-  timelineWorkWeek: getView('timelineWorkWeek', 'vertical'),
+  timelineWorkWeek: getView('timelineWorkWeek', 'vertical', WEEKENDS),
   timelineMonth: getView('timelineMonth', 'vertical'),
   agenda: {
     agendaDuration: 7,

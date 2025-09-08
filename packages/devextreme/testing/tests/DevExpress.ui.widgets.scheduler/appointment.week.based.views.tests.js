@@ -1200,7 +1200,7 @@ module('Integration: Appointment Day, Week views', {
             }],
         });
 
-        const appointments = scheduler.appointmentList;
+        const appointments = scheduler.appointmentList.sort((a, b) => a.position.left - b.position.left);
 
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
@@ -1247,7 +1247,7 @@ module('Integration: Appointment Day, Week views', {
             }],
         });
 
-        const appointments = scheduler.appointmentList;
+        const appointments = scheduler.appointmentList.sort((a, b) => a.position.left - b.position.left);
 
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 

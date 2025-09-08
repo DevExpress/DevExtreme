@@ -504,6 +504,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'recurrenceRuleExpr':
       case 'recurrenceExceptionExpr':
       case 'disabledExpr':
+      case 'visibleExpr':
         this._updateExpression(name, value);
         this._initAppointmentTemplate();
         this.repaint();

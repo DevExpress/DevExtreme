@@ -1,4 +1,3 @@
-import { filterBySkippedDays } from '../../common/filter_by_skipped_days';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -9,6 +8,11 @@ interface Options {
   durationMinutes: number;
   skippedDays: number[];
 }
+
+const filterBySkippedDays = <T extends DateInterval>(
+  intervals: T[],
+  skippedDays: number[],
+): T[] => intervals.filter((item) => !skippedDays.includes(new Date(item.min).getDay()));
 
 export const getMinutesCellIntervals = ({
   intervals,

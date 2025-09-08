@@ -14,6 +14,9 @@ interface Options {
   isAdaptivityEnabled: boolean;
 }
 
+const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
+const MIN_APPOINTMENT_COUNT = 1;
+
 export const getMaxLevel = ({
   maxAppointmentsPerCell,
   cellSize,
@@ -25,7 +28,7 @@ export const getMaxLevel = ({
   switch (maxAppointmentsPerCell) {
     case 'auto': {
       if (isAdaptivityEnabled && viewOrientation === 'horizontal') {
-        return 0;
+        return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 
       const defaultAppointmentSize = getDefaultAppointmentSize({
@@ -39,7 +42,14 @@ export const getMaxLevel = ({
       );
       const cellSizeY = getAbstractSizeByViewOrientation(cellSize, viewOrientation).sizeY;
       const collectorSizeY = getAbstractSizeByViewOrientation(collectorSize, viewOrientation).sizeY;
-      return Math.floor((cellSizeY - collectorSizeY) / minAbstractSize.sizeY);
+      const calculated = Math.floor(
+        Math.max(0, cellSizeY - collectorSizeY) / minAbstractSize.sizeY,
+      );
+
+      return Math.max(
+        calculated,
+        isAdaptivityEnabled ? ADAPTIVITY_MIN_APPOINTMENT_COUNT : MIN_APPOINTMENT_COUNT,
+      );
     }
     case 'unlimited':
       return -1;

@@ -1,6 +1,6 @@
 import type { ListEntity } from '../../types';
 
-// NOTE: if all day ends at 00:00 make it on one ms longer to occupy next cell
+// NOTE: if all day appointment ends at 00:00 make it longer to occupy next cell
 export const expandAllDay = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'allDay' | 'isAllDayPanelOccupied'>>(
   entities: T[],
   isMonthView: boolean,
@@ -11,7 +11,7 @@ export const expandAllDay = <T extends Pick<ListEntity, 'startDate' | 'endDate' 
     if (isMonthView || entity.isAllDayPanelOccupied) {
       return {
         ...entity,
-        endDate: entity.endDate + 1,
+        endDate: new Date(entity.endDate).setHours(24, 0, 0, 0),
       };
     }
 

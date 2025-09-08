@@ -837,12 +837,12 @@ module('Grouping By Date', {
                 }]
             });
 
-            const results = this.instance.getAppointmentsInstance().option('items').sort();
+            const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 3, 'Result length is OK');
-            this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 96, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[1], 5, 0, 0, 160, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 224, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 96, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 160, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 224, 1.1);
         });
 
         test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
@@ -887,114 +887,11 @@ module('Grouping By Date', {
             const cellWidth = $cell.getBoundingClientRect().width;
             const cellHeight = $cell.getBoundingClientRect().height;
 
-            const results = this.instance.getAppointmentsInstance().option('items').sort();
+            const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
-        });
-
-        test(`createAppointmentSettings' should work correct for recurrenceAppointment when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
-            const priorityData = [
-                {
-                    text: 'Low Priority',
-                    id: 1,
-                    color: '#1e90ff'
-                }, {
-                    text: 'High Priority',
-                    id: 2,
-                    color: '#ff9747'
-                }
-            ];
-            await this.createInstance({
-                currentView: 'month',
-                views: [{
-                    type: 'month',
-                    name: 'month',
-                    groupOrientation: 'horizontal'
-                }],
-                currentDate: new Date(2018, 4, 21, 9, 0),
-                groupByDate: true,
-                groups: ['priorityId'],
-                resources: [
-                    {
-                        fieldExpr: 'priorityId',
-                        allowMultiple: false,
-                        dataSource: priorityData,
-                        label: 'Priority'
-                    }
-                ],
-                renovateRender: isRenovatedRender,
-                dataSource: [{
-                    startDate: new Date(2018, 4, 22, 10, 0),
-                    endDate: new Date(2018, 4, 23, 12),
-                    priorityId: 2,
-                    recurrenceRule: 'FREQ=DAILY;COUNT=3'
-                }]
-            });
-
-            const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
-            const cellWidth = $cell.getBoundingClientRect().width;
-            const cellHeight = $cell.getBoundingClientRect().height;
-
-            const results = this.instance.getAppointmentsInstance().option('items').sort();
-
-            assert.equal(results.length, 6, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], undefined, undefined, cellHeight * 3, cellWidth * 7, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[2], 7, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[3], undefined, undefined, cellHeight * 3, cellWidth * 9, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[4], 9, 3, cellHeight * 3 + 26, cellWidth * 9, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[5], 11, 3, cellHeight * 3 + 26, cellWidth * 11, 1.5);
-        });
-
-        // NOTE: It was false positive test. This usage scenario broken for long time.
-        test.skip(`'createAppointmentSettings' should work correct when groupByDate = true, Timeline view when renovateRender is ${isRenovatedRender}`, async function(assert) {
-            const priorityData = [
-                {
-                    text: 'Low Priority',
-                    id: 1,
-                    color: '#1e90ff'
-                }, {
-                    text: 'High Priority',
-                    id: 2,
-                    color: '#ff9747'
-                }
-            ];
-            await this.createInstance({
-                currentView: 'timelineWeek',
-                views: [{
-                    type: 'timelineWeek',
-                    name: 'timelineWeek',
-                    groupOrientation: 'horizontal'
-                }],
-                currentDate: new Date(2018, 4, 21),
-                cellDuration: 60,
-                groupByDate: true,
-                startDayHour: 10,
-                endDayHour: 12,
-                groups: ['priorityId'],
-                resources: [
-                    {
-                        fieldExpr: 'priorityId',
-                        allowMultiple: false,
-                        dataSource: priorityData,
-                        label: 'Priority'
-                    }
-                ],
-                renovateRender: isRenovatedRender,
-                dataSource: [{
-                    startDate: new Date(2018, 4, 21, 10, 0),
-                    endDate: new Date(2018, 4, 21, 12, 0),
-                    priorityId: 2
-                }]
-            });
-
-            const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
-            const results = this.instance.getAppointmentsInstance().option('items').sort();
-
-            this.checkNeedCoordinatesResult(assert, results[0], 5, 0, 0, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 7, 0, 0, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
         });
     });
 

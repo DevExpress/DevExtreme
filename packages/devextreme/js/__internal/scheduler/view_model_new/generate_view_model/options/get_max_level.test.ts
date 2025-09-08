@@ -54,7 +54,18 @@ describe('getMaxLevel', () => {
       viewOrientation: 'vertical',
       isTimelineView: false,
       isAdaptivityEnabled: true,
-    })).toBe(5);
+    })).toBe(4);
+  });
+
+  it('should return 0 for cell size less then collector size, viewOrientation=vertical', () => {
+    expect(getMaxLevel({
+      maxAppointmentsPerCell: 'auto',
+      cellSize: { width: 20, height: 20 },
+      collectorSize: { width: 30, height: 30 },
+      viewOrientation: 'vertical',
+      isTimelineView: false,
+      isAdaptivityEnabled: true,
+    })).toBe(0);
   });
 
   it('should return calculated value for timeline view, maxAppointmentsPerCell=auto, adaptivityEnabled=false, viewOrientation=horizontal', () => {

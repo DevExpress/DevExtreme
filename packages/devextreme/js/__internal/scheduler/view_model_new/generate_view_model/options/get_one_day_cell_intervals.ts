@@ -1,4 +1,3 @@
-import { filterBySkippedDays } from '../../common/filter_by_skipped_days';
 import { splitIntervalByDay } from '../../common/split_interval_by_days';
 import type { CellInterval, DateInterval } from '../../types';
 
@@ -20,7 +19,7 @@ export const getOneDayCellIntervals = ({
   });
 
   let columnIndex = 0;
-  filterBySkippedDays(cells, skippedDays).forEach((cell) => {
+  cells.forEach((cell) => {
     result.push({
       min: cell.min,
       max: cell.max,
