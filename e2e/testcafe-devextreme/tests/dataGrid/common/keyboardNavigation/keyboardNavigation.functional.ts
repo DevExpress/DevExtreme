@@ -5969,7 +5969,7 @@ test('The row edit mode - Tab navigation through interactive elements in an edit
   await dataGrid.apiEditRow(0);
 
   // act - focus the first cell
-  await t.click(dataCell.element)
+  await t.click(dataCell.element);
 
   // assert
   await t
@@ -5980,26 +5980,28 @@ test('The row edit mode - Tab navigation through interactive elements in an edit
   await t.pressKey('tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
 
   // act - navigate to the editor of the second cell
   await t.pressKey('tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
 
   // act - navigate to the third cell
   await t.pressKey('tab');
 
   // assert
-  await  t
+  await t
     .expect(dataGrid.getDataCell(0, 2).isEditCell).ok()
     .expect(dataGrid.getDataCell(0, 2).isFocused).ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
     width: 800,
     dataSource: [
-      { id: 0, field1: 'test1', field2: 'test2', field3: 'test3', },
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
     ],
     keyExpr: 'id',
     editing: {
@@ -6018,9 +6020,9 @@ test('The row edit mode - Tab navigation through interactive elements in an edit
           $('<input type="text"/>')
             .addClass('my-editor')
             .appendTo(cellElement);
-        }
+        },
       },
-      'field3'
+      'field3',
     ],
   });
 });
@@ -6034,7 +6036,7 @@ test('The row edit mode - Shift + Tab navigation through interactive elements in
   await dataGrid.apiEditRow(0);
 
   // act - focus the third cell
-  await t.click(dataCell.element)
+  await t.click(dataCell.element);
 
   // assert
   await t
@@ -6045,26 +6047,28 @@ test('The row edit mode - Shift + Tab navigation through interactive elements in
   await t.pressKey('shift+tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
 
   // act - navigate to the button of the second cell
   await t.pressKey('shift+tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
 
   // act - navigate to the first cell
   await t.pressKey('shift+tab');
 
   // assert
-  await  t
+  await t
     .expect(dataGrid.getDataCell(0, 0).isEditCell).ok()
     .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
     width: 800,
     dataSource: [
-      { id: 0, field1: 'test1', field2: 'test2', field3: 'test3', },
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
     ],
     keyExpr: 'id',
     editing: {
@@ -6083,9 +6087,9 @@ test('The row edit mode - Shift + Tab navigation through interactive elements in
           $('<input type="text"/>')
             .addClass('my-editor')
             .appendTo(cellElement);
-        }
+        },
       },
-      'field3'
+      'field3',
     ],
   });
 });
@@ -6097,7 +6101,7 @@ test('The batch edit mode - Tab navigation through interactive elements in an ed
   const dataCell = dataGrid.getDataCell(0, 0);
 
   // act - focus the first cell
-  await t.click(dataCell.element)
+  await t.click(dataCell.element);
 
   // assert
   await t
@@ -6108,27 +6112,29 @@ test('The batch edit mode - Tab navigation through interactive elements in an ed
   await t.pressKey('tab');
 
   // assert
-  await  t
+  await t
     .expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
 
   // act - navigate to the editor of the second cell
   await t.pressKey('tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
 
   // act - navigate to the third cell
   await t.pressKey('tab');
 
   // assert
-  await  t
+  await t
     .expect(dataGrid.getDataCell(0, 2).isEditCell).ok()
     .expect(dataGrid.getDataCell(0, 2).isFocused).ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
     width: 800,
     dataSource: [
-      { id: 0, field1: 'test1', field2: 'test2', field3: 'test3', },
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
     ],
     keyExpr: 'id',
     editing: {
@@ -6147,9 +6153,9 @@ test('The batch edit mode - Tab navigation through interactive elements in an ed
           $('<input type="text"/>')
             .addClass('my-editor')
             .appendTo(cellElement);
-        }
+        },
       },
-      'field3'
+      'field3',
     ],
   });
 });
@@ -6161,7 +6167,7 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   const dataCell = dataGrid.getDataCell(0, 2);
 
   // act - focus the third cell
-  await t.click(dataCell.element)
+  await t.click(dataCell.element);
 
   // assert
   await t
@@ -6172,20 +6178,22 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   await t.pressKey('shift+tab');
 
   // assert
-  await  t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
 
   // act - navigate to the first cell
   await t.pressKey('shift+tab');
 
   // assert
-  await  t
+  await t
     .expect(dataGrid.getDataCell(0, 0).isEditCell).ok()
     .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
     width: 800,
     dataSource: [
-      { id: 0, field1: 'test1', field2: 'test2', field3: 'test3', },
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
     ],
     keyExpr: 'id',
     editing: {
@@ -6204,9 +6212,9 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
           $('<input type="text"/>')
             .addClass('my-editor')
             .appendTo(cellElement);
-        }
+        },
       },
-      'field3'
+      'field3',
     ],
   });
 });
