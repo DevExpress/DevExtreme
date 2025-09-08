@@ -3,9 +3,9 @@ import {
     Renderer,
 } from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
-import 'viz/sankey/sankey';
+import '__internal/viz/sankey/sankey';
 import 'viz/themes';
-import { layout as layoutBuilder } from 'viz/sankey/layout';
+import { layout as layoutBuilder } from '__internal/viz/sankey/layout';
 
 const find = function(array, predicate) {
     return array.filter(predicate)[0];

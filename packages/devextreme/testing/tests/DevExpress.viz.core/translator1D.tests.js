@@ -1,4 +1,4 @@
-import { Translator1D } from 'viz/translators/translator1d';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 const EPSILON = 1E-8;
 

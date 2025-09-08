@@ -4,8 +4,8 @@ import labelModule from 'viz/series/points/label';
 import {
     stubClass
 } from '../../../helpers/vizMocks.js';
-import labels from 'viz/funnel/label';
-import dxFunnel from 'viz/funnel/funnel';
+import * as labels from '__internal/viz/funnel/label';
+import dxFunnel from '__internal/viz/funnel/funnel';
 
 const Label = labelModule.Label;
 const stubLabel = stubClass(Label);

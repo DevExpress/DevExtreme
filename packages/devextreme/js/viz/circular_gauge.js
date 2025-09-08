@@ -1,2 +1,2 @@
-import CircularGauge from './gauges/circular_gauge';
+import CircularGauge from '../__internal/viz/gauges/circular_gauge';
 export default CircularGauge;

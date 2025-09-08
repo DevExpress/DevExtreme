@@ -8,7 +8,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 
-import 'viz/tree_map/tooltip';
+import '__internal/viz/tree_map/tooltip';
 
 QUnit.module('Basics', {
     beforeEach: function() {

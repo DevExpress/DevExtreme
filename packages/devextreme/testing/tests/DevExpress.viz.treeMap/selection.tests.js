@@ -3,7 +3,7 @@ import {
     createWidget,
 } from './commonParts/common.js';
 
-import 'viz/tree_map/selection';
+import '__internal/viz/tree_map/selection';
 
 QUnit.module('Basics', environment);
 

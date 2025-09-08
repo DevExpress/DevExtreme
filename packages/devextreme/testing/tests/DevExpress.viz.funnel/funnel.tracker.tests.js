@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import dxFunnel from 'viz/funnel/funnel';
-import trackerModule from 'viz/funnel/tracker';
+import dxFunnel from '__internal/viz/funnel/funnel';
+import * as trackerModule from '__internal/viz/funnel/tracker';
 import { name as clickEventName } from 'common/core/events/click';
 import { move } from 'common/core/events/pointer';
-import labels from 'viz/funnel/label';
+import * as labels from '__internal/viz/funnel/label';
 import legendModule from 'viz/components/legend';
 import { createFunnel, environment } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';

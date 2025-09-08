@@ -15,7 +15,7 @@ import rendererModule from 'viz/core/renderers/renderer';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
-import barGaugeModule from 'viz/gauges/bar_gauge';
+import * as barGaugeModule from '__internal/viz/gauges/bar_gauge';
 import exportModule from 'viz/core/export';
 import themeModule from 'viz/themes';
 

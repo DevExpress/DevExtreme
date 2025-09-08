@@ -1,23 +1,27 @@
 import { noop } from 'core/utils/common';
 import config from 'core/config';
-import parseUtils from 'viz/components/parse_utils';
+import {
+    correctValueType,
+    getParser,
+    parsers,
+} from '__internal/viz/components/parse_utils';
 
 QUnit.module('valueType');
 
 QUnit.test('check type = "numeric"', function(assert) {
-    const result = parseUtils.correctValueType('numeric');
+    const result = correctValueType('numeric');
 
     assert.equal(result, 'numeric');
 });
 
 QUnit.test('check type = "datetime"', function(assert) {
-    const result = parseUtils.correctValueType('datetime');
+    const result = correctValueType('datetime');
 
     assert.equal(result, 'datetime');
 });
 
 QUnit.test('check invalid type', function(assert) {
-    const result = parseUtils.correctValueType('asfa');
+    const result = correctValueType('asfa');
 
     assert.equal(result, '');
 });
@@ -25,14 +29,14 @@ QUnit.test('check invalid type', function(assert) {
 QUnit.module('parsers');
 
 QUnit.test('can get string parser', function(assert) {
-    const parser = parseUtils.getParser('string');
+    const parser = getParser('string');
 
     assert.ok(parser);
-    assert.strictEqual(parser, parseUtils.parsers.string);
+    assert.strictEqual(parser, parsers.string);
 });
 
 QUnit.test('string parser', function(assert) {
-    const parser = parseUtils.getParser('string');
+    const parser = getParser('string');
 
     const result = parser(10);
 
@@ -41,7 +45,7 @@ QUnit.test('string parser', function(assert) {
 });
 
 QUnit.test('string parser - invalid argument = "undefined"', function(assert) {
-    const parser = parseUtils.getParser('string');
+    const parser = getParser('string');
 
     const result = parser();
 
@@ -49,7 +53,7 @@ QUnit.test('string parser - invalid argument = "undefined"', function(assert) {
 });
 
 QUnit.test('string parser - argument = "null"', function(assert) {
-    const parser = parseUtils.getParser('string');
+    const parser = getParser('string');
 
     const result = parser(null);
 
@@ -57,14 +61,14 @@ QUnit.test('string parser - argument = "null"', function(assert) {
 });
 
 QUnit.test('can get numeric parser', function(assert) {
-    const parser = parseUtils.getParser('numeric');
+    const parser = getParser('numeric');
 
     assert.ok(parser);
-    assert.strictEqual(parser, parseUtils.parsers.numeric);
+    assert.strictEqual(parser, parsers.numeric);
 });
 
 QUnit.test('numeric parser', function(assert) {
-    const parser = parseUtils.getParser('numeric');
+    const parser = getParser('numeric');
 
     const result29 = parser('29');
     const result0 = parser('0');
@@ -75,7 +79,7 @@ QUnit.test('numeric parser', function(assert) {
 });
 
 QUnit.test('numeric parser - invalid argument', function(assert) {
-    const parser = parseUtils.getParser('numeric');
+    const parser = getParser('numeric');
 
     const result = parser('f4956');
 
@@ -83,7 +87,7 @@ QUnit.test('numeric parser - invalid argument', function(assert) {
 });
 
 QUnit.test('numeric parser - invalid argument="undefined"', function(assert) {
-    const parser = parseUtils.getParser('numeric');
+    const parser = getParser('numeric');
 
     const result = parser();
 
@@ -91,7 +95,7 @@ QUnit.test('numeric parser - invalid argument="undefined"', function(assert) {
 });
 
 QUnit.test('numeric parser - argument="null"', function(assert) {
-    const parser = parseUtils.getParser('numeric');
+    const parser = getParser('numeric');
 
     const result = parser(null);
 
@@ -99,14 +103,14 @@ QUnit.test('numeric parser - argument="null"', function(assert) {
 });
 
 QUnit.test('can get datetime parser', function(assert) {
-    const parser = parseUtils.getParser('datetime');
+    const parser = getParser('datetime');
 
     assert.ok(parser);
-    assert.strictEqual(parser, parseUtils.parsers.datetime);
+    assert.strictEqual(parser, parsers.datetime);
 });
 
 QUnit.test('datetime parser', function(assert) {
-    const parser = parseUtils.getParser('datetime');
+    const parser = getParser('datetime');
     const date = new Date();
     const stringDate = date.toDateString();
 
@@ -121,7 +125,7 @@ QUnit.test('datetime parser with ISO8601 without forceIsoDateParsing', function(
     config().forceIsoDateParsing = false;
 
     try {
-        const parser = parseUtils.getParser('datetime');
+        const parser = getParser('datetime');
         const stringDate = '2017-03-02T11:12:30';
 
         const result = parser(stringDate);
@@ -138,7 +142,7 @@ QUnit.test('datetime parser with ISO8601 with forceIsoDateParsing', function(ass
     config().forceIsoDateParsing = true;
 
     try {
-        const parser = parseUtils.getParser('datetime');
+        const parser = getParser('datetime');
         const stringDate = '2017-03-02T11:12:30';
 
         const result = parser(stringDate);
@@ -151,7 +155,7 @@ QUnit.test('datetime parser with ISO8601 with forceIsoDateParsing', function(ass
 });
 
 QUnit.test('datetime parser - invalid argument', function(assert) {
-    const parser = parseUtils.getParser('datetime');
+    const parser = getParser('datetime');
 
     const result = parser({});
 
@@ -159,7 +163,7 @@ QUnit.test('datetime parser - invalid argument', function(assert) {
 });
 
 QUnit.test('datetime parser - invalid argument = "undefined"', function(assert) {
-    const parser = parseUtils.getParser('datetime');
+    const parser = getParser('datetime');
 
     const result = parser();
 
@@ -167,7 +171,7 @@ QUnit.test('datetime parser - invalid argument = "undefined"', function(assert) 
 });
 
 QUnit.test('datetime parser - argument = "null"', function(assert) {
-    const parser = parseUtils.getParser('datetime');
+    const parser = getParser('datetime');
 
     const result = parser(null);
 
@@ -175,14 +179,14 @@ QUnit.test('datetime parser - argument = "null"', function(assert) {
 });
 
 QUnit.test('getParser with invalid value of argument', function(assert) {
-    const parser = parseUtils.getParser('1');
+    const parser = getParser('1');
 
     assert.ok(parser);
     assert.equal(parser, noop);
 });
 
 QUnit.test('getParser with invalid value of argument and entity', function(assert) {
-    const parser = parseUtils.getParser('1', 'argumentAxis');
+    const parser = getParser('1', 'argumentAxis');
 
     assert.ok(parser);
     assert.equal(parser, noop);

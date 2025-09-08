@@ -12,7 +12,7 @@ import scrollBarModule from 'viz/chart_components/scroll_bar';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer';
-import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
 import { Deferred } from 'core/utils/deferred';
 
 const TitleOrig = titleModule.Title;

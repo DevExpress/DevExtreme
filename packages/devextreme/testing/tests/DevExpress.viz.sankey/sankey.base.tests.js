@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import common, { testData, createSankey, layoutBuilder, spiesLayoutBuilder, environment, find } from './commonParts/common.js';
+import { testData, createSankey, layoutBuilder, spiesLayoutBuilder, environment, find } from './commonParts/common.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import paletteModule from 'viz/palette';
 import themeModule from 'viz/themes';
