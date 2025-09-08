@@ -1,20 +1,17 @@
-import {
-  isAppointmentTakesAllDay,
-} from '../../r1/utils/index';
+import { isAppointmentTakesAllDay } from '../../r1/utils/base';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { shiftIntervals } from '../../view_model_new/common/shift_intervals';
 import { getVisibleDateTimeIntervals } from '../../view_model_new/filtration/utils/get_filter_options/get_visible_date_time_intervals';
+import type { CompareOptions, DateInterval } from '../../view_model_new/types';
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
 import {
   filterArray,
   getAppointmentFilter,
   getRawAppointments,
 } from './utils/index';
-import type {
-  CombinedFilter, CompareOptions, DateInterval, FilterOptions,
-} from './utils/type';
+import type { CombinedFilter, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -85,6 +82,7 @@ export class AppointmentFilterBaseStrategy {
       endDayHour: this.viewEndDayHour,
       min: new Date(min).getTime(),
       max: new Date(max).getTime(),
+      skippedDays: [],
     };
 
     return {

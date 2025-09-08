@@ -17,6 +17,7 @@ const compareOptions = {
   endDayHour,
   min: new Date(2000, 0, minDay, startDayHour).getTime(),
   max: new Date(2000, 0, maxDay, endDayHour).getTime(),
+  skippedDays: [],
 };
 const viewportOptions = {
   ...compareOptions,

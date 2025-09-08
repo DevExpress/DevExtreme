@@ -11,6 +11,7 @@ describe('getOneDayCellIntervals', () => {
       ],
       startDayHour: 0,
       endDayHour: 24,
+      skippedDays: [],
     })).toEqual([
       {
         min: new Date(2000, 0, 1).getTime(),
@@ -43,6 +44,33 @@ describe('getOneDayCellIntervals', () => {
     ]);
   });
 
+  it('should return cells and skip days', () => {
+    expect(getOneDayCellIntervals({
+      intervals: [
+        { min: new Date(2000, 0, 1).getTime(), max: new Date(2000, 0, 3).getTime() },
+        { min: new Date(2000, 0, 3).getTime(), max: new Date(2000, 0, 5).getTime() },
+      ],
+      startDayHour: 0,
+      endDayHour: 24,
+      skippedDays: [0, 6],
+    })).toEqual([
+      {
+        min: new Date(2000, 0, 3).getTime(),
+        max: new Date(2000, 0, 4).getTime(),
+        cellIndex: 0,
+        columnIndex: 0,
+        rowIndex: 1,
+      },
+      {
+        min: new Date(2000, 0, 4).getTime(),
+        max: new Date(2000, 0, 5).getTime(),
+        cellIndex: 1,
+        columnIndex: 1,
+        rowIndex: 1,
+      },
+    ]);
+  });
+
   it('should return cells for week intervals [3, 23]', () => {
     expect(getOneDayCellIntervals({
       intervals: [
@@ -51,6 +79,7 @@ describe('getOneDayCellIntervals', () => {
       ],
       startDayHour: 3,
       endDayHour: 23,
+      skippedDays: [],
     })).toEqual([
       {
         min: new Date(2000, 0, 1, 3).getTime(),

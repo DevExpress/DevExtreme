@@ -1,17 +1,6 @@
 import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
-
-export interface DateInterval {
-  min: number;
-  max: number;
-}
-
-export interface CompareOptions {
-  startDayHour: number;
-  endDayHour: number;
-  min: number;
-  max: number;
-}
+import type { DateInterval } from '../../../view_model_new/types';
 
 export interface FilterOptions {
   startDayHour: number;

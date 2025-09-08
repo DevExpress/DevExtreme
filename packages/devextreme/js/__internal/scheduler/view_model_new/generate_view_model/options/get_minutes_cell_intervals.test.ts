@@ -12,6 +12,7 @@ describe('getMinutesCellIntervals', () => {
       startDayHour: 4,
       endDayHour: 16,
       durationMinutes: 6 * 60,
+      skippedDays: [],
     })).toEqual([{
       min: new Date(2021, 8, 26, 4).getTime(),
       max: new Date(2021, 8, 26, 10).getTime(),
@@ -60,6 +61,7 @@ describe('getMinutesCellIntervals', () => {
       startDayHour: 0,
       endDayHour: 24,
       durationMinutes: 12 * 60,
+      skippedDays: [],
     })).toEqual([{
       min: new Date(2021, 8, 26, 0).getTime(),
       max: new Date(2021, 8, 26, 12).getTime(),
@@ -96,6 +98,7 @@ describe('getMinutesCellIntervals', () => {
       startDayHour: 4,
       endDayHour: 4 + 12,
       durationMinutes: 4 * 60,
+      skippedDays: [],
     })).toEqual([{
       min: new Date(2021, 8, 26, 4).getTime(),
       max: new Date(2021, 8, 26, 8).getTime(),
@@ -117,30 +120,31 @@ describe('getMinutesCellIntervals', () => {
     }]);
   });
 
-  it('should return cells in range of [0, 24] for one day interval', () => {
+  it('should return cells in range of [0, 24] and skip days', () => {
     expect(getMinutesCellIntervals({
       intervals: [{
         min: new Date(2021, 8, 26).getTime(),
-        max: new Date(2021, 8, 27).getTime(),
+        max: new Date(2021, 8, 28).getTime(),
       }],
       startDayHour: 0,
       endDayHour: 24,
       durationMinutes: 8 * 60,
+      skippedDays: [0, 6],
     })).toEqual([{
-      min: new Date(2021, 8, 26, 0).getTime(),
-      max: new Date(2021, 8, 26, 8).getTime(),
+      min: new Date(2021, 8, 27, 0).getTime(),
+      max: new Date(2021, 8, 27, 8).getTime(),
       cellIndex: 0,
       columnIndex: 0,
       rowIndex: 0,
     }, {
-      min: new Date(2021, 8, 26, 8).getTime(),
-      max: new Date(2021, 8, 26, 16).getTime(),
+      min: new Date(2021, 8, 27, 8).getTime(),
+      max: new Date(2021, 8, 27, 16).getTime(),
       cellIndex: 1,
       columnIndex: 1,
       rowIndex: 0,
     }, {
-      min: new Date(2021, 8, 26, 16).getTime(),
-      max: new Date(2021, 8, 26, 24).getTime(),
+      min: new Date(2021, 8, 27, 16).getTime(),
+      max: new Date(2021, 8, 27, 24).getTime(),
       cellIndex: 2,
       columnIndex: 2,
       rowIndex: 0,
