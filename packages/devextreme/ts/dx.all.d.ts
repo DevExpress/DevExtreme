@@ -16504,7 +16504,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownEditor<
-    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxDropDownEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValuableObject = DevExpress.ui.dxDropDownEditor.Properties
   > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
@@ -16621,7 +16621,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownList<
-    TProperties extends DevExpress.ui.Editor.EditorValueContainer
+    TProperties extends DevExpress.ui.Editor.EditorValuableObject
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.common.data.DataSource;
   }
@@ -28985,7 +28985,7 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValuableObject = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {}
   module dxTextBox {
     /**
@@ -29130,7 +29130,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValuableObject = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -32432,7 +32432,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorValuableObject = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -32450,10 +32450,10 @@ declare module DevExpress.ui {
      */
     interface EditorInstance extends Editor<Properties> {}
     /**
-     * [descr:EditorValueContainer]
+     * [descr:EditorValuableObject]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export interface EditorValueContainer {
+    export interface EditorValuableObject {
       value?: unknown;
     }
     /**

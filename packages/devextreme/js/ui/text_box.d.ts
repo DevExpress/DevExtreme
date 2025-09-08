@@ -7,7 +7,7 @@ import {
 
 import {
     ValueChangedInfo,
-    EditorValueContainer,
+    EditorValuableObject,
 } from './editor/editor';
 
 import dxTextEditor, {
@@ -173,7 +173,7 @@ export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TCompo
  * @public
  */
 export default class dxTextBox<
-    TProperties extends EditorValueContainer = Properties,
+    TProperties extends EditorValuableObject = Properties,
 > extends dxTextEditor<TProperties> { }
 
 interface TextBoxInstance extends dxTextBox<Properties> { }
