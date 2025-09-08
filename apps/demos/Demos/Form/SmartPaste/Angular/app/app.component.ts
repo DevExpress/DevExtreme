@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AzureOpenAI, type OpenAI } from 'openai';
 
-import { DxButtonModule } from 'devextreme-angular';
+import { DxButtonModule, DxTextAreaModule } from 'devextreme-angular';
 import type { ButtonStyle } from 'devextreme-angular/common';
 import {
   AIIntegration,
@@ -12,7 +12,6 @@ import {
   Response,
 } from 'devextreme-angular/common/ai-integration';
 import { DxFormModule, DxFormComponent } from 'devextreme-angular/ui/form';
-import { DxTextAreaModule, type DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
 import notify from 'devextreme/ui/notify';
 
 import { Service } from './app.service';
@@ -32,7 +31,6 @@ const stylingMode = 'filled';
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
 };
-console.log('AAA');
 
 const sendNotification = (message: string, of: string, offset?: string) => {
   notify({
@@ -169,10 +167,6 @@ export class AppComponent {
   onCopy() {
     navigator.clipboard.writeText(this.text);
     sendNotification('Text copied to clipboard', '#textarea');
-  }
-
-  onTextareaValueChangedEvent(event: DxTextAreaTypes.ValueChangedEvent) {
-    this.text = event.value;
   }
 }
 

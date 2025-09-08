@@ -20,10 +20,9 @@
     <dx-text-area
       id="textarea"
       [elementAttr]="{ 'aria-labelledby': 'textarea-label' }"
-      [value]="text"
+      [(value)]="text"
       stylingMode="filled"
       height="100%"
-      (onValueChanged)="onTextareaValueChangedEvent($event)"
     ></dx-text-area>
   </div>
   <dx-form
