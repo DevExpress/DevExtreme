@@ -117,7 +117,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
  * @docid
  * @hidden
  */
-export interface EditorValueContainer {
+export interface EditorValuableObject {
     value?: unknown;
 }
 
@@ -128,7 +128,7 @@ export interface EditorValueContainer {
  * @namespace DevExpress.ui
  */
 export default class Editor<
-    TProperties extends EditorValueContainer = Properties,
+    TProperties extends EditorValuableObject = Properties,
 > extends Widget<TProperties> {
     /**
      * @docid
