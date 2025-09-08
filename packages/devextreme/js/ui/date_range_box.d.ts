@@ -298,7 +298,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     startDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.value
-     * @type Array<Date|number|string|null>
+     * @type Array<Date | number | string | null> | undefined
      * @default [null,null]
      * @public
      */
@@ -335,8 +335,9 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
    * @docid
    * @publicName reset(value)
    * @public
+   * @param1 value:Array<Date | number | string | null> | undefined
    */
-  reset(value?: Array<Date | number | string | null>): void;
+  reset(value?: Properties['value']): void;
 }
 
 /// #DEBUG

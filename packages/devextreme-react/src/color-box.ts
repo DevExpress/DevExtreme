@@ -51,9 +51,9 @@ type IColorBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   fieldRender?: (...params: any) => React.ReactNode;
   fieldComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
-  defaultValue?: string;
+  defaultValue?: null | string;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: null | string) => void;
 }>
 
 interface ColorBoxRef {

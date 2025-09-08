@@ -232,7 +232,7 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @public
      * @param1 value:Date | number | string | Array<Date | number | string | null> | null | undefined
      */
-    reset(value?: DateLike | DateLike[]): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

@@ -53,11 +53,11 @@ type IDateRangeBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties
   defaultEndDate?: Date | null | number | string;
   defaultOpened?: boolean;
   defaultStartDate?: Date | null | number | string;
-  defaultValue?: Array<Date | null | number | string>;
+  defaultValue?: Array<Date | null | number | string> | undefined;
   onEndDateChange?: (value: Date | null | number | string) => void;
   onOpenedChange?: (value: boolean) => void;
   onStartDateChange?: (value: Date | null | number | string) => void;
-  onValueChange?: (value: Array<Date | null | number | string>) => void;
+  onValueChange?: (value: Array<Date | null | number | string> | undefined) => void;
 }>
 
 interface DateRangeBoxRef {

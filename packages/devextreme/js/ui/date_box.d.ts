@@ -22,6 +22,7 @@ import dxDropDownEditor, {
 
 import {
     ValueChangedInfo,
+    EditorValuableObject,
 } from './editor/editor';
 
 import {
@@ -283,7 +284,7 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default null
-     * @type Date|number|string|null
+     * @type Date | number | string | null | undefined
      * @public
      */
     value?: DateLike;
@@ -366,7 +367,9 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
  * @hidden
  * @options DateBoxBaseOptions
  */
-export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
+export class DateBoxBase<
+    TProperties extends EditorValuableObject = Properties,
+> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -393,9 +396,9 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Date|number|string|null
+     * @param1 value:Date | number | string | null | undefined
      */
-    reset(value?: DateLike): void;
+    reset(value?: Properties['value']): void;
 }
 
 /**

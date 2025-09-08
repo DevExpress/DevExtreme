@@ -169,6 +169,13 @@ export default class dxDropDownEditor<
      * @public
      */
     open(): void;
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     * @param1 value:any | undefined
+     */
+    reset(value?: TProperties['value']): void;
 }
 
 interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }
