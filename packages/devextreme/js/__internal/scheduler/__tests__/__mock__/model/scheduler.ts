@@ -1,19 +1,13 @@
-const getAppointmentColor = (container: HTMLDivElement): string => {
-  const appointment = container.querySelector('.dx-scheduler-appointment') as HTMLDivElement;
-  return appointment.style.backgroundColor;
-};
-const getAgendaAppointmentColor = (container: HTMLDivElement): string => {
-  const appointment = container.querySelector('.dx-scheduler-agenda-appointment-marker') as HTMLDivElement;
-  return appointment.style.backgroundColor;
-};
+import type { AppointmentModel } from './appointment';
+import { createAppointmentModel } from './appointment';
+
 const getTexts = (
   cells: NodeListOf<Element>,
 ): string[] => Array.from(cells).map((cell) => cell.textContent?.trim() ?? '');
 
 export interface SchedulerModel {
-  getAppointment: () => HTMLDivElement | null;
-  getAppointments: () => NodeListOf<HTMLDivElement>;
-  getAppointmentColor: (view: string) => string;
+  getAppointment: () => AppointmentModel<HTMLDivElement | null>;
+  getAppointments: () => AppointmentModel[];
   getDateTableContent: () => string[];
   getHeaderPanelContent: () => string[];
   getTimePanelContent: () => string[];
@@ -21,16 +15,13 @@ export interface SchedulerModel {
 }
 
 export const createSchedulerModel = (container: HTMLDivElement): SchedulerModel => ({
-  getAppointment(): HTMLDivElement | null {
-    return container.querySelector('.dx-scheduler-appointment');
+  getAppointment(): AppointmentModel<HTMLDivElement | null> {
+    return createAppointmentModel(container.querySelector('.dx-scheduler-appointment'));
   },
-  getAppointments(): NodeListOf<HTMLDivElement> {
-    return container.querySelectorAll('.dx-scheduler-appointment');
-  },
-  getAppointmentColor(view: string): string {
-    return view === 'agenda'
-      ? getAgendaAppointmentColor(container)
-      : getAppointmentColor(container);
+  getAppointments(): AppointmentModel[] {
+    return [...container.querySelectorAll('.dx-scheduler-appointment')].map(
+      (element) => createAppointmentModel(element as HTMLDivElement),
+    );
   },
   getDateTableContent(): string[] {
     const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');
