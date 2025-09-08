@@ -949,7 +949,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const elementType = this._getElementType(eventTarget);
     const $lastInteractiveElements = getInteractiveElements($cell);
 
-    if (elementType !== 'cell' || $lastInteractiveElements?.length <= 1) {
+    if (elementType !== 'cell' || $lastInteractiveElements.length === 0) {
       return false;
     }
 
