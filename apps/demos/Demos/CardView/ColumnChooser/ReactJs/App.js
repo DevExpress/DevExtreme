@@ -24,9 +24,9 @@ const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 const columnChooserModes = ['dragAndDrop', 'select'];
 const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState('select');
-  const [searchEnabled, setSearchEnabled] = useState(true);
+  const [searchEnabled, setSearchEnabled] = useState(true);;;
   const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
+  const [selectByClick, setSelectByClick] = useState(true)
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
   return (
     <React.Fragment>

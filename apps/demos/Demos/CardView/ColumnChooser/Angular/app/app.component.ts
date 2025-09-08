@@ -34,6 +34,7 @@ export class AppComponent {
   selectByClick = true;
 
   constructor(service: Service) {
+    const a = 123;
     this.employees = service.getEmployees();
   }
 
