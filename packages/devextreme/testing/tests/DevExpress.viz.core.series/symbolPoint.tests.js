@@ -7,7 +7,7 @@ import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator, MockAxis } from '../../helpers/chartMocks.js';
 import tooltipModule from 'viz/core/tooltip';
-import { states as statesConsts } from 'viz/components/consts';
+import consts from '__internal/viz/components/consts';
 
 const originalLabel = labelModule.Label;
 
@@ -998,7 +998,7 @@ QUnit.test('With animation enabled. Rotated', function(assert) {
 QUnit.test('Draw point with selected state', function(assert) {
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.fullState = statesConsts.selectedMark;
+    point.fullState = consts.states.selectedMark;
 
     point.draw(this.renderer, this.groups);
 
@@ -1012,7 +1012,7 @@ QUnit.test('Draw point with selected state', function(assert) {
 QUnit.test('Draw point with hover state', function(assert) {
     this.options.symbol = 'circle';
     const point = createPoint(this.series, { argument: '4', value: 3 }, this.options);
-    point.fullState = statesConsts.hoverMark;
+    point.fullState = consts.states.hoverMark;
 
     point.draw(this.renderer, this.groups);
 

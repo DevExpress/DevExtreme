@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import translator2DModule from 'viz/translators/translator2d';
 import rangeModule from 'viz/translators/range';
-import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 
 import 'viz/chart';

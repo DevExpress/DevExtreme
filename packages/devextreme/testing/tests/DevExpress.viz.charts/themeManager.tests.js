@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import themeManagerModule from 'viz/components/chart_theme_manager';
-import paletteModule from 'viz/palette';
+import {
+    currentPalette,
+    registerPalette,
+} from 'viz/palette';
 import themeModule from 'viz/themes';
 
 const backgroundColor = '#ffffff';
@@ -38,7 +41,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.module('Get options - series', {
         afterEach: function() {
-            paletteModule.currentPalette(null);
+            currentPalette(null);
         }
     });
 
@@ -472,8 +475,8 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Palette and Default palette', function(assert) {
-        paletteModule.registerPalette('Custom Palette', ['#0f0f0f']);
-        paletteModule.registerPalette('Default Palette', ['#f0f0f0']);
+        registerPalette('Custom Palette', ['#0f0f0f']);
+        registerPalette('Default Palette', ['#f0f0f0']);
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
         const options = {
@@ -488,8 +491,8 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No Palette and Default palette', function(assert) {
-        paletteModule.registerPalette('Custom Palette', ['#0f0f0f']);
-        paletteModule.registerPalette('Default Palette', ['#f0f0f0']);
+        registerPalette('Custom Palette', ['#0f0f0f']);
+        registerPalette('Default Palette', ['#f0f0f0']);
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
         const options = {
@@ -503,9 +506,9 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Current palette', function(assert) {
-        paletteModule.registerPalette('Current Palette', ['#f0f0f0', '#0f0f0f', '#111111']);
+        registerPalette('Current Palette', ['#f0f0f0', '#0f0f0f', '#111111']);
         themeModule.registerTheme({ name: 'Super Theme', }, 'default');
-        paletteModule.currentPalette('Current Palette');
+        currentPalette('Current Palette');
 
         const options = {
             theme: 'Super Theme'

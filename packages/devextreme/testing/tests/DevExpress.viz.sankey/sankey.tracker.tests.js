@@ -4,9 +4,9 @@ import trackerModule from 'viz/sankey/tracker';
 import tooltipModule from 'viz/core/tooltip';
 import { name as clickEventName } from 'common/core/events/click';
 import pointerEvents from 'common/core/events/pointer';
-import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
+import { setTooltipCustomOptions } from '__internal/viz/sankey/tooltip';
 import domAdapter from '__internal/core/m_dom_adapter';
-import dxSankey from 'viz/sankey/sankey';
+import dxSankey from '__internal/viz/sankey/sankey';
 
 dxSankey.addPlugin({
     name: 'tracker-test',

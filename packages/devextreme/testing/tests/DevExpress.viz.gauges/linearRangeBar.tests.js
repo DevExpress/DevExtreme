@@ -3,8 +3,8 @@
 import {
     Renderer
 } from '../../helpers/vizMocks.js';
-import linearIndicatorsModule from 'viz/gauges/linear_indicators';
-import { Translator1D } from 'viz/translators/translator1d';
+import * as linearIndicatorsModule from '__internal/viz/gauges/linear_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('LinearRangeBar', {
     beforeEach: function() {

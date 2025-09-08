@@ -8,11 +8,11 @@ import {
     Tooltip
 } from '../../helpers/vizMocks.js';
 import $ from 'jquery';
-import trackerModule from 'viz/tree_map/tracker';
+import * as trackerModule from '__internal/viz/tree_map/tracker';
 import tooltipModule from 'viz/core/tooltip';
 import { name as clickEventName } from 'common/core/events/click';
 import pointerEvents from 'common/core/events/pointer';
-import dxTreeMap from 'viz/tree_map/tree_map';
+import dxTreeMap from '__internal/viz/tree_map/tree_map';
 
 dxTreeMap.addPlugin({
     name: 'tracker-test',

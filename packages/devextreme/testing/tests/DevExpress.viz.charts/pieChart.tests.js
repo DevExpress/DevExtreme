@@ -19,7 +19,7 @@ import {
 import exportModule from 'viz/core/export';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
-import labelModule from 'viz/series/points/label';
+import * as labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
 import { CustomStore } from 'common/data/custom_store';

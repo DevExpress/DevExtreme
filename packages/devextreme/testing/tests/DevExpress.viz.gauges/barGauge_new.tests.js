@@ -13,7 +13,7 @@ import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import dxBarGauge from 'viz/bar_gauge';
 
-import 'viz/gauges/bar_gauge';
+import '__internal/viz/gauges/bar_gauge';
 
 const environment = {
     beforeEach() {

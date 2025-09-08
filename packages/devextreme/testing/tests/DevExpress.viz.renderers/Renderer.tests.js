@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import animation from 'viz/core/renderers/animation';
+import animationModule from 'viz/core/renderers/animation';
 import renderers from 'viz/core/renderers/renderer';
 import {
     stubClass
@@ -54,7 +54,7 @@ function resetMockElements() {
     });
 }
 
-animation.AnimationController = stubClass(animation.AnimationController);
+animationModule.AnimationController = stubClass(animationModule.AnimationController);
 
 const Renderer = renderers.Renderer;
 

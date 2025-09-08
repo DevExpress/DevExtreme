@@ -41,7 +41,7 @@ function decodeHtmlEntities(markup) {
 
 export const HIDDEN_FOR_EXPORT = 'hidden-for-export';
 
-export function getSvgMarkup(element, backgroundColor) {
+export function getSvgMarkup(element, backgroundColor?) {
   return fixNamespaces(decodeHtmlEntities(getMarkup(element, backgroundColor)));
 }
 

@@ -3,9 +3,9 @@ import {
     Renderer
 } from '../../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
-import tiling from 'viz/funnel/tiling';
+import * as tiling from '__internal/viz/funnel/tiling';
 
-import 'viz/funnel/funnel';
+import '__internal/viz/funnel/funnel';
 import 'viz/themes';
 
 export const stubAlgorithm = { normalizeValues: sinon.stub(), getFigures: sinon.stub() };

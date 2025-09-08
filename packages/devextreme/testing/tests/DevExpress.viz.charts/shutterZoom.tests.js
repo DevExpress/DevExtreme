@@ -1,6 +1,6 @@
 import pointerMock from '../../helpers/pointerMock.js';
 import { Renderer } from '../../helpers/vizMocks.js';
-import shutterPlugin from 'viz/chart_components/shutter_zoom';
+import shutterPlugin from '__internal/viz/chart_components/shutter_zoom';
 
 QUnit.module('Shutter zoom plugin', {
     initWidget: function(options) {

@@ -3,9 +3,9 @@ import {
     Renderer,
     Element,
 } from '../../helpers/vizMocks.js';
-import { BaseIndicator } from 'viz/gauges/base_indicators';
-import animation from 'viz/core/renderers/animation';
-import { Translator1D } from 'viz/translators/translator1d';
+import { BaseIndicator } from '__internal/viz/gauges/base_indicators';
+import animationModule from 'viz/core/renderers/animation';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 class BaseIndicatorTester extends BaseIndicator {
     _isEnabled() {
@@ -243,7 +243,7 @@ QUnit.test('Show indicator with not-null value', function(assert) {
 
 QUnit.module('BaseIndicator - animation', {
     beforeEach: function() {
-        this.animationController = new animation.AnimationController();
+        this.animationController = new animationModule.AnimationController();
         environment.beforeEach.apply(this, arguments);
         this.target.render({ currentValue: 50, animation: { enabled: true, duration: 50 } }).resize();
     },

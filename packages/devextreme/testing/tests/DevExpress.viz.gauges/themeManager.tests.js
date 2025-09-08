@@ -1,10 +1,10 @@
 import { noop } from 'core/utils/common';
 import themeModule from 'viz/themes';
-import { ThemeManager } from 'viz/gauges/theme_manager';
+import themeManagerModule from '__internal/viz/gauges/theme_manager';
 
 QUnit.module('ThemeManager', {
     createThemeManager: function() {
-        return new ThemeManager({ themeSection: 'gauge' });
+        return new themeManagerModule.ThemeManager({ themeSection: 'gauge' });
     }
 });
 

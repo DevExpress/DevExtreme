@@ -15,7 +15,7 @@ import {
     forceThemeOptions,
     Renderer,
 } from '../../../helpers/vizMocks.js';
-import 'viz/range_selector/range_selector';
+import '__internal/viz/range_selector/range_selector';
 
 const StubThemeManager = stubClass(themeManagerModule.BaseThemeManager);
 const StubRangeView = stubClass(rangeViewModule.RangeView);

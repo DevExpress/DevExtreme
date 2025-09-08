@@ -3,7 +3,7 @@ import {
     createWidget,
 } from './commonParts/common.js';
 
-import 'viz/tree_map/hover';
+import '__internal/viz/tree_map/hover';
 
 QUnit.module('Basics', environment);
 
