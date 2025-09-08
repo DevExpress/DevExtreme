@@ -35,7 +35,7 @@ describe('views', () => {
     await new Promise(process.nextTick);
 
     const appointment = POM.getAppointment();
-    expect(appointment !== null).toBe(true);
+    expect(appointment.element !== null).toBe(true);
   });
 
   it('should render all-day appointment correctly with fractional cell values', async () => {

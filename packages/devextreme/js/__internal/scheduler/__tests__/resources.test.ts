@@ -53,7 +53,7 @@ describe('Resources', () => {
       await dataPromise;
       await new Promise(process.nextTick);
 
-      expect(POM.getAppointmentColor(view)).toBe(rooms[0].color);
+      expect(POM.getAppointment().getColor(view)).toBe(rooms[0].color);
     });
 
     it('should render correct appointment color for local datasource (T1300252)', async () => {
@@ -71,7 +71,7 @@ describe('Resources', () => {
         }],
       });
 
-      expect(POM.getAppointmentColor(view)).toBe(rooms[0].color);
+      expect(POM.getAppointment().getColor(view)).toBe(rooms[0].color);
     });
 
     it('should render appointments after resources update (T1301345)', async () => {
@@ -95,7 +95,7 @@ describe('Resources', () => {
       }]);
       await new Promise(process.nextTick);
 
-      expect(POM.getAppointmentColor(view)).toBe(rooms2[0].color);
+      expect(POM.getAppointment().getColor(view)).toBe(rooms2[0].color);
     });
   });
 });
