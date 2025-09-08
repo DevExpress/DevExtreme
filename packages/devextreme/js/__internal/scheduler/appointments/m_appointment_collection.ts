@@ -487,7 +487,6 @@ class SchedulerAppointments extends CollectionWidget {
       'createFormattedDateText',
       appointment,
       targetedAppointmentData,
-      'TIME',
     );
 
     $container.append(this.isAgendaView
