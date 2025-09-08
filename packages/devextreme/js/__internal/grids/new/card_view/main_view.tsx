@@ -35,7 +35,9 @@ interface MainViewProps {
   EditPopup: ComponentType;
   ContextMenu: ComponentType;
   config: Config;
-  rootElementRef: RefObject<HTMLDivElement>;
+  commonProps: {
+    rootElementRef: RefObject<HTMLDivElement>;
+  };
   accessibilityDescription: string;
   accessibilityStatus: string;
   onKeyDown: (event: KeyboardEvent) => void;
@@ -52,16 +54,16 @@ function MainViewComponent({
   ContextMenu,
   EditPopup,
   config,
-  rootElementRef,
+  commonProps,
   accessibilityDescription,
   accessibilityStatus,
   onKeyDown,
 }: MainViewProps): JSX.Element {
   return (<>
     <ConfigContext.Provider value={config}>
-      <CommonPropsContext.Provider value={{ rootElementRef }}>
+      <CommonPropsContext.Provider value={commonProps}>
         <RootElementUpdater
-          rootElementRef={rootElementRef}
+          rootElementRef={commonProps.rootElementRef}
           className={CLASSES.cardView}
         >
           <div
@@ -93,7 +95,7 @@ function MainViewComponent({
             <ContextMenu/>
           </div>
         </RootElementUpdater>
-        </CommonPropsContext.Provider>
+      </CommonPropsContext.Provider>
     </ConfigContext.Provider>
   </>);
 }
@@ -106,6 +108,10 @@ export class MainView extends View<MainViewProps> {
     disabled: this.options.oneWay('disabled').value,
     templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
   }));
+
+  private readonly commonProps = {
+    rootElementRef: { current: this.root! },
+  };
 
   public static dependencies = [
     ContentView,
@@ -142,6 +148,8 @@ export class MainView extends View<MainViewProps> {
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   protected override getProps() {
+    this.commonProps.rootElementRef.current = this.root!;
+
     return computed(() => ({
       Toolbar: this.toolbar.asInferno(),
       Content: this.content.asInferno(),
@@ -153,7 +161,7 @@ export class MainView extends View<MainViewProps> {
       EditPopup: this.editPopup.asInferno(),
       ContextMenu: this.contextMenu.asInferno(),
       config: this.config.value,
-      rootElementRef: { current: this.root! },
+      commonProps: this.commonProps,
       onKeyDown: (event: KeyboardEvent): void => {
         this.keyboardNavigation.onKeyDown(event);
       },
