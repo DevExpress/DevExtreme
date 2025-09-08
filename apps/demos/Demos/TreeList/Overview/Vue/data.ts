@@ -17,8 +17,7 @@ export type Task = {
   Task_Assigned_Employee?: Employee
 };
 
-export const tasks: Task[] = [
-    {
+export const tasks: Task[] = [{
   Task_ID: 1,
   Task_Assigned_Employee_ID: 1,
   Task_Subject: 'Plans 2015',
@@ -2030,7 +2029,7 @@ export const employees: Employee[] = [{
   ID: 50,
   Name: 'Dallas Lou',
   Picture: '../../../../images/employees/41.png',
-}
+},
 ];
 
 export const priorities = [

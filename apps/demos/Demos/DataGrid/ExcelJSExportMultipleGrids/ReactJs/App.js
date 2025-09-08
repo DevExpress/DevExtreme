@@ -66,7 +66,8 @@ const App = () => {
           customizeCell: ({ gridCell, excelCell }) => {
             setAlternatingRowsBackground(gridCell, excelCell);
           },
-        }))
+        }),
+      )
       .then(() => {
         workbook.xlsx.writeBuffer().then((buffer) => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');

@@ -34,7 +34,8 @@ export default function App() {
       message: `This item has been ${updatedCurrentHouse.Favorite ? 'added to' : 'removed from'} the Favorites list!`,
       width: 450,
     },
-    updatedCurrentHouse.Favorite ? 'success' : 'error', 2000);
+    updatedCurrentHouse.Favorite ? 'success' : 'error',
+    2000);
   }, [houses, currentHouse, setHouses]);
 
   const renderPopup = useCallback(() => (

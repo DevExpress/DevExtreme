@@ -1,11 +1,11 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
-import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
+import { DxDiagramModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 
@@ -42,14 +42,17 @@ export class AppComponent {
     });
   }
 
+  // eslint-disable-next-line consistent-return
   itemTypeExpr(obj, value) {
     if (value) { obj.Type = (value === 'rectangle') ? undefined : 'group'; } else { return obj.Type === 'group' ? 'ellipse' : 'rectangle'; }
   }
 
+  // eslint-disable-next-line consistent-return
   itemWidthExpr(obj, value) {
     if (value) { obj.Width = value; } else { return obj.Width || (obj.Type === 'group' && 1.5) || 1; }
   }
 
+  // eslint-disable-next-line consistent-return
   itemHeightExpr(obj, value) {
     if (value) { obj.Height = value; } else { return obj.Height || (obj.Type === 'group' && 1) || 0.75; }
   }
@@ -65,15 +68,15 @@ export class AppComponent {
     return style;
   }
 
-  linkStyleExpr(obj) {
+  linkStyleExpr() {
     return { stroke: '#444444' };
   }
 
-  linkFromLineEndExpr(obj) {
+  linkFromLineEndExpr() {
     return 'none';
   }
 
-  linkToLineEndExpr(obj) {
+  linkToLineEndExpr() {
     return 'none';
   }
 }

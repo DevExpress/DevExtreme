@@ -90,7 +90,7 @@ export const tabsWithIcon = [
 
 export const orientations: Orientation[] = ['horizontal', 'vertical'];
 
-export const stylingModes: DxTabsTypes.TabsStyle[]  = [
+export const stylingModes: DxTabsTypes.TabsStyle[] = [
   'primary',
   'secondary',
 ];

@@ -1,4 +1,3 @@
-
 export const complaintsData = [
   { complaint: 'Cold pizza', count: 780 },
   { complaint: 'Not enough cheese', count: 120 },

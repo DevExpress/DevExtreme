@@ -7,7 +7,10 @@
           :key="config.id"
           class="stepper-wrapper"
         >
-          <div :id="config.labelId" class="stepper-label">
+          <div
+            :id="config.labelId"
+            class="stepper-label"
+          >
             {{ config.title }}
           </div>
           <DxStepper
@@ -51,7 +54,7 @@
           @item-click="onNavigationModeClick"
         />
       </div>
-      <div class="option-separator" />
+      <div class="option-separator"/>
       <div class="option">
         <DxCheckBox
           id="selectOnFocus"

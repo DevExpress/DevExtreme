@@ -103,7 +103,7 @@ $(() => {
     }
   }
 
-  function sendRequest(url, method = 'GET', data) {
+  function sendRequest(url, method = 'GET', data = {}) {
     const d = $.Deferred();
 
     $.ajax(url, {

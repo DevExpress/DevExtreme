@@ -4509,7 +4509,7 @@ const sales: Sale[] = [{
   date: '2015/05/07',
 }];
 
-const layouts:Layout[] = [{
+const layouts: Layout[] = [{
   key: 0,
   name: 'Layout0',
 }, {

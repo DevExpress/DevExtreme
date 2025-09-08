@@ -54,7 +54,7 @@ import { type Order, orders } from './data.ts';
 
 function getOrderDay({ OrderDate }: Order): number {
   return (new Date(OrderDate)).getDay();
-};
+}
 
 const customOperations = [{
   name: 'weekends',

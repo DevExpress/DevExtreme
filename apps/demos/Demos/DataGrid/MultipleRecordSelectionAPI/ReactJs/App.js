@@ -9,9 +9,9 @@ import { employees, titleLabel } from './data.js';
 const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
 const getEmployeeNames = (selectedRowsData) =>
-  (selectedRowsData.length
+  selectedRowsData.length
     ? selectedRowsData.map(getEmployeeName).join(', ')
-    : 'Nobody has been selected');
+    : 'Nobody has been selected';
 const App = () => {
   const [prefix, setPrefix] = useState('');
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -31,9 +31,10 @@ const App = () => {
   const onSelectionFilterChanged = useCallback(({ value }) => {
     const newPrefix = value;
     if (newPrefix) {
-      const filteredEmployees = newPrefix === 'All'
-        ? employees
-        : employees.filter((employee) => employee.Prefix === newPrefix);
+      const filteredEmployees =
+        newPrefix === 'All'
+          ? employees
+          : employees.filter((employee) => employee.Prefix === newPrefix);
       const changedRowKeys = filteredEmployees.map((employee) => employee.ID);
       setPrefix(newPrefix);
       setSelectedRowKeys(changedRowKeys);

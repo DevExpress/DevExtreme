@@ -23,7 +23,7 @@ const ItemTemplate = (itemData: ContextMenuItem) => (
 const App = () => (
   <React.Fragment>
     <div className="label">
-          Right click an image to display the context menu:
+      Right click an image to display the context menu:
     </div>
     <img id="image" alt="product" src="../../../../images/products/5.png" />
     <ContextMenu

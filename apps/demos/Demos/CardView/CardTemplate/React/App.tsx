@@ -6,7 +6,7 @@ import VehicleCard from './VehicleCard.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
 
 const getFormattedPrice = (card: any): string => {
-  const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+  const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
   return priceText?.text ?? '';
 };
 
@@ -24,7 +24,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <CardView
         dataSource={vehicles}
         height={1120}
@@ -42,7 +42,7 @@ const App = () => {
             bodyStyleName={vehicle.BodyStyleName}
             horsepower={vehicle.Horsepower}
             onShowInfo={showInfo}
-          />
+          />;
         }}
       >
         <HeaderFilter visible={true} />
@@ -89,7 +89,7 @@ const App = () => {
       >
         <Position at="center" my="center" collision="fit" />
       </Popup>
-    </>
+    </React.Fragment>
   );
 };
 

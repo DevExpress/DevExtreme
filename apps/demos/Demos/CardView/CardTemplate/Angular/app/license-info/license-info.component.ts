@@ -17,6 +17,6 @@ export class LicenseInfo {
   @Input() vehicle: Vehicle;
 
   ngOnChanges(): void {
-    this.vehicleLink = `https://${ this.vehicle.Source }`;
+    this.vehicleLink = `https://${this.vehicle.Source}`;
   }
 }

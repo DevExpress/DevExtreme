@@ -75,8 +75,8 @@ const customizeTooltip = (arg) => {
   return {
     text: arg.node.isLeaf()
       ? `<span class='country'>${parentData.name}</span><br />${data.name}<br />${arg.valueText}(${(
-        (100 * data.value)
-          / parentData.total
+        (100 * data.value) /
+          parentData.total
       ).toFixed(1)}%)`
       : `<span class='country'>${data.name}</span>`,
   };

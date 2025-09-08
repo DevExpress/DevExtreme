@@ -92,7 +92,7 @@ import { ref, computed } from 'vue';
 import { DxButton } from 'devextreme-vue/button';
 import { DxMultiView, DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
 import { DxStepper, DxItem as DxStepperItem, type DxStepperTypes } from 'devextreme-vue/stepper';
-import validationEngine from 'devextreme/ui/validation_engine';;
+import validationEngine from 'devextreme/ui/validation_engine';
 import DatesTemplate from './DatesTemplate.vue';
 import GuestsTemplate from './GuestsTemplate.vue';
 import RoomMealPlanTemplate from './RoomMealPlanTemplate.vue';

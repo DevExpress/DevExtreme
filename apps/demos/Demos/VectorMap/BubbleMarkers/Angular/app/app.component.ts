@@ -35,6 +35,7 @@ export class AppComponent {
 
   customizeItems = (items: unknown[]) => items.reverse();
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip({ layer: { type }, attribute }) {
     if (type === 'marker') {
       return {

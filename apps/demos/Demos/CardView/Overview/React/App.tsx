@@ -52,14 +52,14 @@ function CardFooterComponent() {
       stylingMode="contained"
       onClick={notifySendEmail}
     />
-  </div>
+  </div>;
 }
 
-function StatusComponent({ data: { field: { value }}}) {
+function StatusComponent({ data: { field: { value } } }) {
   const classNameMap = {
-    'Salaried': 'status--salaried',
-    'Commission': 'status--commission',
-    'Terminated': 'status--terminated',
+    Salaried: 'status--salaried',
+    Commission: 'status--commission',
+    Terminated: 'status--terminated',
   };
 
   const className = classNameMap[value];
@@ -72,7 +72,7 @@ function StatusComponent({ data: { field: { value }}}) {
   );
 }
 
-function EmailComponent({ data: { field: { value, text }}}) {
+function EmailComponent({ data: { field: { value, text } } }) {
   return (
     <a href={`mailto:${value}`}>{text}</a>
   );
@@ -139,6 +139,6 @@ function App() {
       />
     </CardView>
   );
-};
+}
 
 export default App;

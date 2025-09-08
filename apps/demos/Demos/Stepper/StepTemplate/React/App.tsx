@@ -8,7 +8,7 @@ import IconOnly from './IconOnly.tsx';
 
 export default function App() {
   return (
-    <>
+    <React.Fragment>
       <div id="label-customStepShape" className="stepper-label">Custom Step Shape</div>
       <Stepper
         id="customStepShape"
@@ -36,6 +36,6 @@ export default function App() {
         linear={false}
         itemRender={IconOnly}
       />
-    </>
+    </React.Fragment>
   );
 }

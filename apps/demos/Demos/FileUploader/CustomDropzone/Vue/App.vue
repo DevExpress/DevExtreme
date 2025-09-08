@@ -61,7 +61,9 @@ const progressVisible = ref(false);
 const progressValue = ref(0);
 const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
-function onDropZoneEnter({ component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent) {
+function onDropZoneEnter(
+  { component, dropZoneElement, event }: DxFileUploaderTypes.DropZoneEnterEvent,
+) {
   if (dropZoneElement.id === 'dropzone-external') {
     const items = (event as any).originalEvent.dataTransfer.items;
 

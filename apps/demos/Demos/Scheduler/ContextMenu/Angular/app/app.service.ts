@@ -18,7 +18,7 @@ export interface Resource {
 
 export type ContextMenuItem = DxContextMenuTypes.Item & Resource & {
   onItemClick?: (e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void
-}
+};
 
 const appointments: Appointment[] = [
   {

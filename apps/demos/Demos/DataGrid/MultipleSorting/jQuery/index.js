@@ -11,7 +11,7 @@ $(() => {
         dataField: 'Prefix',
         caption: 'Title',
         width: 100,
-        sortOrder: 'asc'
+        sortOrder: 'asc',
       }, {
         dataField: 'FirstName',
         sortOrder: 'asc',

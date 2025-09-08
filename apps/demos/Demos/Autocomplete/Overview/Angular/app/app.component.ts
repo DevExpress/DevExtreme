@@ -70,7 +70,7 @@ export class AppComponent {
           .then(({ data }: { data: Record<string, unknown>[] }) => ({
             data,
           }))
-          .catch((error) => { throw 'Data Loading Error'; });
+          .catch(() => { throw 'Data Loading Error'; });
       },
     });
     this.states = new ODataStore({

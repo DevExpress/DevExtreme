@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxRangeSelectorModule } from 'devextreme-angular';
 import { DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
-import { Service, ChemicalComposition, SerieDescription } from './app.service';
+import { Service, ChemicalComposition, SeriesDescription } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,7 +24,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   chemicalComposition: ChemicalComposition[];
 
-  seriesSource: SerieDescription[];
+  seriesSource: SeriesDescription[];
 
   constructor(service: Service) {
     this.chemicalComposition = service.getChemicalComposition();

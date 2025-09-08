@@ -15,7 +15,6 @@ import { customers } from './data.ts';
 const exportFormats = ['pdf'];
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

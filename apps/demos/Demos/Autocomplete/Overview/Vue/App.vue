@@ -101,7 +101,6 @@ import { DxAutocomplete } from 'devextreme-vue/autocomplete';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
 
-
 const statesStore = new ODataStore({
   version: 2,
   url:

@@ -44,7 +44,7 @@ export class AppComponent {
     this.currentTimeZone = this.timeZones[0].id;
   }
 
-  getDefaultTimeZones = (date: Date) => getTimeZones(date, this.service.getLocations())
+  getDefaultTimeZones = (date: Date) => getTimeZones(date, this.service.getLocations());
 
   onAppointmentFormOpening({ form }: DxSchedulerTypes.AppointmentFormOpeningEvent) {
     const startDateDataSource = form.getEditor('startDateTimeZone').option('dataSource') as DataSource;

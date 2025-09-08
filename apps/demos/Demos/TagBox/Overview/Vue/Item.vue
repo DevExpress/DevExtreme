@@ -11,7 +11,7 @@
 </template>
 <script setup lang="ts">
 withDefaults(defineProps<{
-  itemData?: {[key:string]: string}
+  itemData?: { [key: string]: string }
 }>(), {
   itemData: () => ({ Name: '' }),
 });

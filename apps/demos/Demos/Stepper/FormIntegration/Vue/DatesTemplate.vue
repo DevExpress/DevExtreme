@@ -1,6 +1,8 @@
 <template>
   <p>
-    Select your check-in and check-out dates. If your dates are flexible, include that information in Additional Requests. We will do our best to suggest best pricing options, depending on room availability.
+    Select your check-in and check-out dates.
+    If your dates are flexible, include that information in Additional Requests.
+    We will do our best to suggest best pricing options, depending on room availability.
   </p>
   <DxForm
     :form-data="formData"

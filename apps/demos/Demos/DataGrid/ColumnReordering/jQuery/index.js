@@ -40,6 +40,6 @@ $(() => {
       'MobilePhone',
       'Email',
       'Skype',
-    ]
+    ],
   });
 });

@@ -24,11 +24,11 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  tasks: Array<Task>;
+  tasks: Task[];
 
-  employees: Array<Employee>;
+  employees: Employee[];
 
-  statuses: Array<Status>;
+  statuses: Status[];
 
   showDragIcons = true;
 

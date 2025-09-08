@@ -1,4 +1,3 @@
-
 export const populationData = [{
   arg: 1960,
   val: 3032019978,

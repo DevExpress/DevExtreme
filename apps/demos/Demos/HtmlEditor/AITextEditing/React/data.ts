@@ -1,8 +1,8 @@
 import { type HtmlEditorTypes } from 'devextreme-react/html-editor';
 import {
-    AIIntegration,
-    RequestParams,
-    Response,
+  AIIntegration,
+  RequestParams,
+  Response,
 } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 
@@ -40,8 +40,8 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system, },
-      { role: 'user', content: prompt.user, },
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
@@ -90,5 +90,5 @@ export const markup = `
     </ul>
 `;
 
-export const extractKeywordsPrompt: HtmlEditorTypes.AICustomCommand['prompt'] = () => 
+export const extractKeywordsPrompt: HtmlEditorTypes.AICustomCommand['prompt'] = () =>
   'Extract a list of keywords from the text and return it as a comma-separated string';

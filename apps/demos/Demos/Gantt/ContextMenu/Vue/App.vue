@@ -65,7 +65,7 @@ import {
   DxColumn,
   DxEditing,
   DxContextMenu,
-  type DxGanttTypes
+  type DxGanttTypes,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import {

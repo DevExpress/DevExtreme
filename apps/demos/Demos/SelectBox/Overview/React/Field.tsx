@@ -8,7 +8,7 @@ export default function Field(data: { ImageSrc: any; Name: any }) {
     <div className="custom-addon">
       <img
         alt="Product name"
-        src={data && data.ImageSrc}
+        src={data?.ImageSrc}
       />
     </div>
   );

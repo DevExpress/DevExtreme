@@ -24,7 +24,7 @@ $(() => {
       },
     ],
     sorting: {
-      mode: 'multiple'
+      mode: 'multiple',
     },
   });
 });

@@ -32,6 +32,7 @@ export class AppComponent {
     this.customizeLayers = this.customizeLayers.bind(this);
   }
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip({ attribute }: { attribute: Function }) {
     if (attribute('population')) {
       return {
@@ -47,7 +48,7 @@ export class AppComponent {
   }
 
   customizeText({ index, start, end }: Record<string, number>) {
-    let text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;
+    const text = (index === 0) ? '< 0.5%' : `${start}% to ${end}%`;
 
     return (index === 5) ? '> 3%' : text;
   }

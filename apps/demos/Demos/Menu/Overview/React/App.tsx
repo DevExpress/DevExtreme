@@ -30,9 +30,8 @@ const showSubmenuModes: showSubmenuModesType[] = [
   },
 ];
 
-const isProductItem = (item: ProductType | ProductItemType): item is ProductItemType => {
-  return !('items' in item);
-}
+const isProductItem = (item: ProductType | ProductItemType): item is ProductItemType =>
+  !('items' in item);
 
 const App = () => {
   const [showFirstSubmenuModes, setShowFirstSubmenuModes] = useState(showSubmenuModes[1]);

@@ -15,7 +15,7 @@ export type Order = {
 
   CustomerStoreCity: string;
 
-  Employee:string;
+  Employee: string;
 };
 
 export const orders: Order[] = [{

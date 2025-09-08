@@ -27,7 +27,7 @@ export class AppComponent {
 
   silverCosts: CostInfo[];
 
-  years: Array<number>;
+  years: number[];
 
   constructor(service: Service) {
     this.oilCosts = service.getOilCosts();

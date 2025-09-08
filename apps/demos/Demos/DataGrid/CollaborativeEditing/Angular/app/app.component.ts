@@ -23,7 +23,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [CollaborativeEditingService],
 })
 export class AppComponent {
-  dataSources: Array<CustomStore>;
+  dataSources: CustomStore[];
 
   stateDataSource: CustomStore;
 

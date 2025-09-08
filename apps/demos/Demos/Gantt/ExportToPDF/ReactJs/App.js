@@ -230,9 +230,10 @@ class App extends React.Component {
     const gantt = this.ganttRef.current.instance();
     const format = this.state.formatBoxValue.toLowerCase();
     const isLandscape = this.state.landscapeCheckBoxValue;
-    const exportMode = this.state.exportModeBoxValue === 'Tree List'
-      ? 'treeList'
-      : this.state.exportModeBoxValue.toLowerCase();
+    const exportMode =
+      this.state.exportModeBoxValue === 'Tree List'
+        ? 'treeList'
+        : this.state.exportModeBoxValue.toLowerCase();
     const dataRangeMode = this.state.dateRangeBoxValue.toLowerCase();
     let dataRange;
     if (dataRangeMode === 'custom') {
@@ -248,7 +249,6 @@ class App extends React.Component {
     pdfExporter
       .exportGantt({
         component: gantt,
-        // eslint-disable-next-line new-cap
         createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,

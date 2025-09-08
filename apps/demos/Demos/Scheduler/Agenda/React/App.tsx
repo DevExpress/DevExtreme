@@ -1,14 +1,14 @@
 import React from 'react';
 import Scheduler, { Resource, type SchedulerTypes } from 'devextreme-react/scheduler';
-import ArrayStore from "devextreme/data/array_store"
+import ArrayStore from 'devextreme/data/array_store';
 import { assignees, data, priorities } from './data.ts';
 
 const currentDate = new Date(2021, 4, 11);
 const views: SchedulerTypes.ViewType[] = ['agenda'];
 const store = new ArrayStore({
   key: 'id',
-  data
-})
+  data,
+});
 
 const App = () => (
   <Scheduler

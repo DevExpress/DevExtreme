@@ -57,4 +57,3 @@ function setSlideshowDelay(e) {
   slideshowDelay.value = e.value ? 2000 : 0;
 }
 </script>
-

@@ -26,11 +26,11 @@ export class AppComponent {
 
   employees: Employee[];
 
-  enterKeyActions: Array<string>;
+  enterKeyActions: string[];
 
-  enterKeyDirections: Array<string>;
+  enterKeyDirections: string[];
 
-  editOnkeyPress = true;
+  editOnKeyPress = true;
 
   enterKeyAction: DxDataGridTypes.EnterKeyAction = 'moveFocus';
 

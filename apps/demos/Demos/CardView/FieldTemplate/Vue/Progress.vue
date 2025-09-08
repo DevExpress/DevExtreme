@@ -1,11 +1,11 @@
 <template>
-    <div className="task__progress">
-        <DxProgressBar
-            :value="value"
-            :element-attr="{ 'aria-label': 'Progress Bar' }"
-            :statusFormat="(_, value: number) => `${value}%`"
-        />
-    </div>
+  <div className="task__progress">
+    <DxProgressBar
+      :value="value"
+      :element-attr="{ 'aria-label': 'Progress Bar' }"
+      :statusFormat="(_, value: number) => `${value}%`"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

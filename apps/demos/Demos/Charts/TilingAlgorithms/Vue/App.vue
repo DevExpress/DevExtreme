@@ -41,18 +41,18 @@ import DxTreeMap,
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { populationByAge } from './data.ts';
 
-type CustomAlgorithm = (e:  { items: any[]; rect: number[]; sum: number; }) => void;
+type CustomAlgorithm = (e: { items: any[]; rect: number[]; sum: number; }) => void;
 type SelectedAlgorithm = DxTreeMapTypes.TreeMapLayoutAlgorithm | 'custom';
 
-const algorithms: SelectedAlgorithm[] =  ['sliceanddice', 'squarified', 'strip', 'custom'];
+const algorithms: SelectedAlgorithm[] = ['sliceanddice', 'squarified', 'strip', 'custom'];
 const selectedAlgorithm = ref(algorithms[2]);
 const currentAlgorithm = computed(() => (
-    (selectedAlgorithm.value === 'custom')
-        ? customAlgorithm
-        : selectedAlgorithm.value)
+  (selectedAlgorithm.value === 'custom')
+    ? customAlgorithm
+    : selectedAlgorithm.value),
 );
 
-const customAlgorithm: CustomAlgorithm = ({ rect, sum, items } ) => {
+const customAlgorithm: CustomAlgorithm = ({ rect, sum, items }) => {
   const totalRect = rect.slice();
   let totalSum = sum;
   let side = 0;
@@ -67,9 +67,11 @@ const customAlgorithm: CustomAlgorithm = ({ rect, sum, items } ) => {
     item.rect = itemRect;
     side = 1 - side;
   });
-}
+};
 
-function customizeTooltip({ node, node: { data: { name, value } }, valueText }: Record<string, any>) {
+function customizeTooltip({
+  node, node: { data: { name, value } }, valueText,
+}: Record<string, any>) {
   const parentData = node.getParent().data;
 
   return {

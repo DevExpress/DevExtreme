@@ -84,7 +84,7 @@ export class AppComponent {
   }
 
   calculateToIndex(e: DxSortableTypes.DragEndEvent | DxSortableTypes.DragChangeEvent) {
-    if (e.fromComponent != e.toComponent || e.dropInsideItem) {
+    if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
       return e.toIndex;
     }
 
@@ -102,13 +102,13 @@ export class AppComponent {
   }
 
   findNodeById(nodes: Node[], id: string): Node {
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].itemData.id == id) {
+    for (let i = 0; i < nodes.length; i += 1) {
+      if (nodes[i].itemData.id === id) {
         return nodes[i];
       }
       if (nodes[i].children) {
         const node = this.findNodeById(nodes[i].children, id);
-        if (node != null) {
+        if (node !== null) {
           return node;
         }
       }
@@ -118,7 +118,7 @@ export class AppComponent {
 
   moveNode(fromNode: Node, toNode: Node, fromItems: Item[], toItems: Item[], isDropInsideItem: boolean) {
     const fromNodeContainingArray = this.getNodeContainingArray(fromNode, fromItems);
-    const fromIndex = fromNodeContainingArray.findIndex((item) => item.id == fromNode.itemData.id);
+    const fromIndex = fromNodeContainingArray.findIndex((item) => item.id === fromNode.itemData.id);
     fromNodeContainingArray.splice(fromIndex, 1);
 
     if (isDropInsideItem) {
@@ -127,12 +127,13 @@ export class AppComponent {
       const toNodeContainingArray = this.getNodeContainingArray(toNode, toItems);
       const toIndex = toNode === null
         ? toNodeContainingArray.length
-        : toNodeContainingArray.findIndex((item) => item.id == toNode.itemData.id);
+        : toNodeContainingArray.findIndex((item) => item.id === toNode.itemData.id);
       toNodeContainingArray.splice(toIndex, 0, fromNode.itemData);
     }
   }
 
   getNodeContainingArray(node: Node, rootArray: Item[]) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return node === null || node.parent === null
       ? rootArray
       : node.parent.itemData.items;
@@ -153,7 +154,7 @@ export class AppComponent {
     const treeViewElement = component.element();
     const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
     const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i += 1) {
       const nodeTopPosition = nodes[i].getBoundingClientRect().top;
       if (nodeTopPosition >= treeViewTopPosition) {
         return nodes[i];

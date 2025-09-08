@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <DxPieChart
@@ -71,4 +70,3 @@ function onRegionChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   display: inline-block;
 }
 </style>
-
