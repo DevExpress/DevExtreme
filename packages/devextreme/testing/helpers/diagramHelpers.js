@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { DiagramContextMenu } from 'ui/diagram/ui.diagram.context_menu.js';
+import { DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON } from '__internal/ui/drop_down_editor/m_drop_down_editor';
 
 export const Consts = {
     SIMPLE_DIAGRAM: '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }',
@@ -17,7 +18,12 @@ export const Consts = {
     TOOLBOX_INPUT_CONTAINER_SELECTOR: '.dx-diagram-toolbox-input-container',
     TOOLBOX_SCROLLVIEW_SELECTOR: '.dx-diagram-toolbox-panel .dx-scrollview',
     TOOLBOX_ACCORDION_SELECTOR: '.dx-diagram-toolbox-panel .dx-accordion',
-    FULLSCREEN_CLASS: 'dx-diagram-fullscreen'
+    FULLSCREEN_CLASS: 'dx-diagram-fullscreen',
+    TEXT_EDITOR_INPUT_CONTAINER: 'dx-texteditor-input-container',
+    IMAGE_DROP_DOWN_ITEM: 'dx-diagram-image-dropdown-item',
+    COLOR_EDIT_ITEM: 'dx-diagram-color-edit-item',
+    DIAGRAM_ICON: 'dx-diagram-i',
+    DX_ICON: 'dx-icon',
 };
 
 export function getMainToolbarElement($diagramElement) {
@@ -80,7 +86,7 @@ export function findPropertiesPanelToolbarItem($diagramElement, label) {
         });
 }
 export function getToolbarIcon($button) {
-    return $button.find('.dx-dropdowneditor-field-template-wrapper').find('.dx-diagram-i, .dx-icon');
+    return $button.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`).find('.dx-diagram-i, .dx-icon');
 }
 export function getContextMenuItemCheck($button) {
     return $button.find('.dx-icon-check');

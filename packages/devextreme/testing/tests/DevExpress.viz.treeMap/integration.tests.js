@@ -1,12 +1,15 @@
-const common = require('./commonParts/common.js');
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
-// The following list is to be manually kept synchronized with the contents of "Registry.data" treemap section - that part which follows after treeMap.js.
-require('viz/tree_map/tree_map');
+// The following list is to be manually kept synchronized with the registry
+import 'viz/tree_map/tree_map';
 
-QUnit.module('Integration', common.environment);
+QUnit.module('Integration', environment);
 
 QUnit.test('Customize on initialized event', function(assert) {
-    common.createWidget({
+    createWidget({
         dataSource: [{
             value: 1
         }, {

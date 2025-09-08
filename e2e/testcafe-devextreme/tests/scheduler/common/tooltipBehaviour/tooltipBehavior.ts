@@ -162,7 +162,6 @@ safeSizeTest('Tooltip on mobile devices should have enough hight if there are as
           render(args) {
             const deferred = $.Deferred();
             (window as any).deferreds.push(deferred);
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             deferred.done(() => {
               args.container.append(
                 $('<div>')

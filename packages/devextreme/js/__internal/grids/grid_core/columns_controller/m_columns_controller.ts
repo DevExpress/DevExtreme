@@ -85,6 +85,7 @@ import {
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
   index?: number;
+  groupIndex?: number;
   type?: string;
   visibleWidth?: string | number;
 }

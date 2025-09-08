@@ -252,6 +252,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1062: 'The "cellDuration" must be a positive integer, evenly dividing the ("endDayHour" - "startDayHour") interval into minutes.',
 
     /**
+     * @name ErrorsUIWidgets.E1063
+     */
+    E1063: 'The \'smartPaste(text)\' method was called, but \'aiIntegration\' is not configured.',
+
+    /**
+     * @name ErrorsUIWidgets.E1064
+     */
+    E1064: 'AI returned {1} for the {0} field, but this field only accepts {2} values. Update the \'instruction\' for this field.',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',

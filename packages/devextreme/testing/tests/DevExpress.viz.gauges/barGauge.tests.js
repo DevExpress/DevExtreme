@@ -1,28 +1,34 @@
 /* global createTestContainer, currentTest */
 
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const dxBarGauge = require('viz/bar_gauge');
-const rendererModule = require('viz/core/renderers/renderer');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const titleModule = require('viz/core/title');
-const tooltipModule = require('viz/core/tooltip');
-const barGaugeModule = require('viz/gauges/bar_gauge');
-const exportModule = require('viz/core/export');
-const themeModule = require('viz/themes');
-const BarWrapper = barGaugeModule.BarWrapper;
-const stubBarWrapper = barGaugeModule.stubBarWrapper;
-const restoreBarWrapper = barGaugeModule.restoreBarWrapper;
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+    LoadingIndicator,
+    Title,
+    ExportMenu,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import dxBarGauge from 'viz/bar_gauge';
+import rendererModule from 'viz/core/renderers/renderer';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import barGaugeModule from 'viz/gauges/bar_gauge';
+import exportModule from 'viz/core/export';
+import themeModule from 'viz/themes';
+
+const { BarWrapper, stubBarWrapper, restoreBarWrapper } = barGaugeModule;
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 let renderer;
 QUnit.begin(function() {
     rendererModule.Renderer = sinon.spy(function() {
         const test = currentTest();
-        test.renderer = renderer || new vizMocks.Renderer();
+        test.renderer = renderer || new Renderer();
         test.renderer.g = sinon.spy(function() {
-            const group = new vizMocks.Element();
+            const group = new Element();
             group.animate = function(settings, options) {
                 let that;
                 let step;
@@ -60,7 +66,6 @@ QUnit.begin(function() {
                     }
                 }
 
-
                 if(arguments[1] && typeof arguments[1].step === 'function') {
                     that = this;
                     step = arguments[1].step;
@@ -80,19 +85,19 @@ QUnit.begin(function() {
         return test.renderer;
     });
     titleModule.DEBUG_set_title(sinon.spy(function() {
-        const title = new vizMocks.Title();
+        const title = new Title();
         title.getLayoutOptions = () => ({
             height: 30, width: 188, x: -94, y: -3,
         });
         return title;
     }));
     loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
-        return new vizMocks.LoadingIndicator(parameters);
+        return new LoadingIndicator(parameters);
     });
     exportModule.DEBUG_set_ExportMenu(function(parameters) {
-        return new vizMocks.ExportMenu(parameters);
+        return new ExportMenu(parameters);
     });
-    const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
+    const StubTooltip = stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
 
     tooltipModule.DEBUG_set_tooltip(function(parameters) {
         return new StubTooltip(parameters);
@@ -129,7 +134,6 @@ QUnit.test('Groups creation', function(assert) {
     const group = this.getBarsGroup();
     assert.deepEqual(group.attr.firstCall.args, [{ 'class': 'dxbg-bars' }], 'bars group settings');
     assert.deepEqual(group.linkOn.lastCall.args, [this.renderer.root, 'bars'], 'bars group is linked to container');
-
 });
 
 QUnit.test('Groups disposing', function(assert) {
@@ -1347,7 +1351,7 @@ QUnit.test('Redraw after render to invisible container', function(assert) {
 
 let StubBarWrapper = null;
 QUnit.begin(function() {
-    StubBarWrapper = vizMocks.stubClass(BarWrapper, null, {
+    StubBarWrapper = stubClass(BarWrapper, null, {
         $constructor: function() {
             StubBarWrapper.instances.push(this);
         }
@@ -1542,7 +1546,7 @@ QUnit.module('Label overlapping behavior', function(hooks) {
             { x: 0, y: 0, width: 10, height: 10 }
         ];
         let i = 0;
-        renderer = new vizMocks.Renderer();
+        renderer = new Renderer();
         renderer.bBoxTemplate = function() {
             const bBox = bBoxes[i];
             i++;
@@ -1648,7 +1652,7 @@ QUnit.module('Label overlapping behavior', function(hooks) {
             { x: 0, y: 0, width: 10, height: 10 }
         ];
         let i = 0;
-        renderer = new vizMocks.Renderer();
+        renderer = new Renderer();
         renderer.bBoxTemplate = function() {
             const bBox = bBoxes[i];
             i++;
@@ -1719,7 +1723,7 @@ QUnit.module('Label overlapping behavior', function(hooks) {
             { x: 0, y: 0, width: 10, height: 10 }
         ];
         let i = 0;
-        renderer = new vizMocks.Renderer();
+        renderer = new Renderer();
         renderer.bBoxTemplate = function() {
             const bBox = bBoxes[i];
             i++;
@@ -1755,7 +1759,6 @@ QUnit.module('Label overlapping behavior', function(hooks) {
         assert.equal(secondLabelSettings.visibility, 'hidden', 'second label should be hidden');
         assert.strictEqual(lines[1]._stored_settings.visibility, 'hidden', 'second line should be hidden');
     });
-
 });
 
 QUnit.module('Checking intersection of labels', function() {
@@ -1771,13 +1774,13 @@ QUnit.module('Checking intersection of labels', function() {
             }
         };
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() { return coords; };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() { return coords; };
@@ -1787,7 +1790,7 @@ QUnit.module('Checking intersection of labels', function() {
 
     QUnit.test('Other bar shift on right and top of current bar', function(assert) {
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() {
@@ -1804,7 +1807,7 @@ QUnit.module('Checking intersection of labels', function() {
         };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() {
@@ -1825,7 +1828,7 @@ QUnit.module('Checking intersection of labels', function() {
 
     QUnit.test('Other bar shift on left and top of current bar', function(assert) {
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() {
@@ -1842,7 +1845,7 @@ QUnit.module('Checking intersection of labels', function() {
         };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() {
@@ -1863,7 +1866,7 @@ QUnit.module('Checking intersection of labels', function() {
 
     QUnit.test('Other bar shift on right and bottom of current bar', function(assert) {
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() {
@@ -1880,7 +1883,7 @@ QUnit.module('Checking intersection of labels', function() {
         };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() {
@@ -1901,7 +1904,7 @@ QUnit.module('Checking intersection of labels', function() {
 
     QUnit.test('Other bar shift on left and bottom of current bar', function(assert) {
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() {
@@ -1918,7 +1921,7 @@ QUnit.module('Checking intersection of labels', function() {
         };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() {
@@ -1939,7 +1942,7 @@ QUnit.module('Checking intersection of labels', function() {
 
     QUnit.test('Current bar doesn\'t crossed with other bar', function(assert) {
         const currentBar = new BarWrapper(0, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         currentBar.calculateLabelCoords = function() {
@@ -1956,7 +1959,7 @@ QUnit.module('Checking intersection of labels', function() {
         };
 
         const otherBar = new BarWrapper(1, {
-            renderer: new vizMocks.Renderer()
+            renderer: new Renderer()
         });
 
         otherBar.calculateLabelCoords = function() {
@@ -1974,5 +1977,4 @@ QUnit.module('Checking intersection of labels', function() {
 
         assert.ok(!currentBar.checkIntersect(otherBar), 'current bar doesn\'t intersect with other');
     });
-
 });

@@ -208,7 +208,11 @@ export class TooltipStrategyBase {
     const $markerBody = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY);
 
     $marker.append($markerBody);
-    color && color.done((value) => $markerBody.css('background', value));
+    color.then((value) => {
+      if (value) {
+        $markerBody.css('background', value);
+      }
+    });
 
     return $marker;
   }

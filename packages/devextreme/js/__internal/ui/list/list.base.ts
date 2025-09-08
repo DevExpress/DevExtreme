@@ -162,6 +162,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _selectionChangeEventInstance?: any;
 
+  protected _feedbackShowTimeout(): number {
+    return LIST_FEEDBACK_SHOW_TIMEOUT;
+  }
+
   _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
@@ -495,7 +499,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     return true;
   }
 
-  _updateActiveStateUnit(): void {
+  protected _activeStateUnit(): string {
     const { collapsibleGroups } = this.option();
 
     const selectors = [
@@ -507,20 +511,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       selectors.push(`.${LIST_GROUP_HEADER_CLASS}`);
     }
 
-    this._activeStateUnit = selectors.join(',');
+    return selectors.join(',');
   }
 
   _init(): void {
     super._init();
 
-    this._updateActiveStateUnit();
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
 
     this._$listContainer = $('<div>').addClass(LIST_ITEMS_CLASS);
     this._initScrollView();
-    // @ts-expect-error ts-error
-    this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
     this._createGroupRenderAction();
   }
 
@@ -1364,7 +1365,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         this._invalidate();
         break;
       case 'collapsibleGroups':
-        this._updateActiveStateUnit();
         this._invalidate();
         break;
       case 'wrapItemText':

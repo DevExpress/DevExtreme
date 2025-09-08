@@ -10,8 +10,10 @@ class TestComponent extends HierarchicalCollectionWidget {
     constructor(element, options) {
         super(element, options);
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
     }
+
+    _activeStateUnit() { return '.item'; }
+
     _itemContainer() { return this.$element(); }
 
     _createActionByOption(optionName, config) {

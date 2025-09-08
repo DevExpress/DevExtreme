@@ -1353,7 +1353,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
       .notOk();
 
     for (let i = 0; i < 3; i += 1) {
-    // act
+      // act
       await t
         .click(dataGrid.getPager().getNavPage('4').element)
         .wait(3500);
@@ -1432,7 +1432,7 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 // T1152498
 // TODO: fix unstable tests
 // ['infinite', 'virtual'].forEach((scrollingMode) => {
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 //   safeSizeTest(`${scrollingMode} scrolling - the markup should be correct for continuous scrolling when there is a fixed column with cellTemplate (React)`, async (t) => {
 //   // arrange
 //     const dataGrid = new DataGrid('#container');
@@ -1857,7 +1857,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   test(
     `Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`,
     async (t) => {
-    // NOTE: idx + 1 logic inside POM
+      // NOTE: idx + 1 logic inside POM
       const adaptiveCellIdx = 101;
       const scrollValuesThreshold = 100;
 

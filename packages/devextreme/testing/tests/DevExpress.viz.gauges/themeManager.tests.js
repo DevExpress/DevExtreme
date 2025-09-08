@@ -1,6 +1,6 @@
-const noop = require('core/utils/common').noop;
-const themeModule = require('viz/themes');
-const ThemeManager = require('viz/gauges/theme_manager').ThemeManager;
+import { noop } from 'core/utils/common';
+import themeModule from 'viz/themes';
+import { ThemeManager } from 'viz/gauges/theme_manager';
 
 QUnit.module('ThemeManager', {
     createThemeManager: function() {

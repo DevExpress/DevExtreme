@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Menu from 'devextreme-testcafe-models/menu';
 import { testScreenshot } from '../../../helpers/themeUtils';

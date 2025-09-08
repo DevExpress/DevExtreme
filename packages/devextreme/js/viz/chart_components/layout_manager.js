@@ -1,6 +1,7 @@
 import { isNumeric as _isNumber } from '../../core/utils/type';
 import consts from '../components/consts';
 import { WrapperLayoutElement } from '../core/layout_element';
+
 const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;

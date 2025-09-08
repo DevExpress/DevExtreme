@@ -147,14 +147,12 @@ class DiagramToolbar extends DiagramPanel {
         if(isSelectButton) {
             options = extend(true, options, {
                 options: {
-                    fieldTemplate: (data, container) => {
-                        $('<i>')
-                            .addClass((data && data.icon) || nullIconClass)
-                            .appendTo(container);
-                        $('<div>').dxTextBox({
-                            readOnly: true,
-                            stylingMode: 'outlined'
-                        }).appendTo(container);
+                    fieldAddons: {
+                        beforeTemplate: (data, container) => {
+                            $('<i>')
+                                .addClass((data && data.icon) || nullIconClass)
+                                .appendTo(container);
+                        }
                     },
                     itemTemplate: (data, index, container) => {
                         $(container).attr('title', data.hint);
@@ -197,16 +195,14 @@ class DiagramToolbar extends DiagramPanel {
             options = extend(true, options, {
                 options: {
                     openOnFieldClick: true,
-                    fieldTemplate: (data, container) => {
-                        $('<i>')
-                            .addClass(icon)
-                            .css('borderBottomColor', data)
-                            .appendTo(container);
-                        $('<div>').dxTextBox({
-                            readOnly: true,
-                            stylingMode: 'outlined'
-                        }).appendTo(container);
-                    }
+                    fieldAddons: {
+                        beforeTemplate: (data, container) => {
+                            $('<i>')
+                                .addClass(icon)
+                                .css('borderBottomColor', data)
+                                .appendTo(container);
+                        }
+                    },
                 }
             });
         }

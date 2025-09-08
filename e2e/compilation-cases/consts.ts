@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
-/* eslint-disable @typescript-eslint/no-type-alias */
 export const ANY = undefined as any;
 export interface SomeType {
   // eslint-disable-next-line spellcheck/spell-checker

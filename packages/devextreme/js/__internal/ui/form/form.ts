@@ -31,6 +31,7 @@ import type {
   Item,
   LabelLocation,
   Properties,
+  SimpleItem,
   SimpleItemTemplateData,
   SmartPastedEvent,
   SmartPastingEvent,
@@ -38,7 +39,9 @@ import type {
 } from '@js/ui/form';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
+import errors from '@js/ui/widget/ui.errors';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
+import { logger } from '@ts/core/utils/m_console';
 import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
@@ -65,7 +68,11 @@ import {
   GROUP_COL_COUNT_CLASS,
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
-import { getItemFormatInfo } from '@ts/ui/form/form.ai.utils';
+import {
+  getItemFormatInfo,
+  type ParsedAIValue,
+  parseResultForEditorType,
+} from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
@@ -1855,15 +1862,21 @@ class Form extends Widget<FormProperties> {
     this._abort?.();
     this._abort = undefined;
     this._currentAICommand = undefined;
-    this._hideLoadPanel();
   }
 
   private _processAIIntegrationUpdate(): void {
     if (this._currentAICommand) {
       const { command, params, callbacks } = this._currentAICommand;
+      const { aiIntegration } = this.option();
 
       this._processCommandCompletion();
-      this._executeAICommand(command, params, callbacks);
+
+      if (!aiIntegration) {
+        this._hideLoadPanel();
+        throw errors.Error('E1063');
+      } else {
+        this._executeAICommand(command, params, callbacks);
+      }
     }
   }
 
@@ -1874,12 +1887,38 @@ class Form extends Widget<FormProperties> {
   ): void {
     const { aiIntegration } = this.option();
 
+    if (!aiIntegration) {
+      this._hideLoadPanel();
+      throw errors.Error('E1063');
+    }
+
     this._currentAICommand = {
       command,
       params,
       callbacks,
     };
-    this._abort = aiIntegration?.[command](params, callbacks);
+    this._abort = aiIntegration[command](params, callbacks);
+  }
+
+  private _updateFieldWithSmartPasteValue(dataField: string, value: SmartPasteCommandResult[number]['value'], item?: SimpleItem): void {
+    const { formData } = this.option();
+
+    if (isDefined(formData)) {
+      let resultValue: ParsedAIValue = value;
+
+      resultValue = parseResultForEditorType(dataField, item?.editorType, value);
+      if (typeof resultValue !== undefined) {
+        this._updateFieldValue(dataField, resultValue);
+      }
+    }
+  }
+
+  private _getEditorItemsMap(): Record<string, SimpleItem> {
+    const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
+    return dataItems.reduce((itemsMap, item) => {
+      itemsMap[item.dataField] = item;
+      return itemsMap;
+    }, {});
   }
 
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
@@ -1896,9 +1935,17 @@ class Form extends Widget<FormProperties> {
         invokeConditionally(
           smartPastingArgs.cancel,
           (): void => {
+            this._hideLoadPanel();
             this.beginUpdate();
+
+            const editorTypesMap = this._getEditorItemsMap();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
-              this._updateFieldValue(name, value);
+              try {
+                const currentItem = editorTypesMap[name];
+                this._updateFieldWithSmartPasteValue(name, value, currentItem);
+              } catch (error) {
+                logger.error(error);
+              }
             });
             this.endUpdate();
 
@@ -1908,7 +1955,8 @@ class Form extends Widget<FormProperties> {
 
         this._processCommandCompletion();
       },
-      onError: (): void => {
+      onError: (error): void => {
+        logger.error(error);
         this._hideLoadPanel();
         this._processCommandCompletion();
       },
@@ -1920,7 +1968,12 @@ class Form extends Widget<FormProperties> {
       this._processCommandCompletion();
     }
 
-    const smartPasteText = text ?? await navigator.clipboard?.readText();
+    const { aiIntegration } = this.option();
+    if (!aiIntegration) {
+      throw errors.Error('E1063');
+    }
+
+    const smartPasteText = text ?? await navigator.clipboard.readText();
 
     if (isDefined(smartPasteText)) {
       this._showLoadPanel();
@@ -1932,6 +1985,7 @@ class Form extends Widget<FormProperties> {
       format: getItemFormatInfo(item),
       instruction: item.aiOptions?.instruction,
     }));
+
     const smartPasteParams = {
       text: smartPasteText,
       fields,

@@ -8,6 +8,12 @@
   min-height: 30px;
 }
 
+::ng-deep .custom-addon {
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+}
+
 ::ng-deep .dx-dropdowneditor-input-wrapper .custom-item > img {
   padding-left: 8px;
 }

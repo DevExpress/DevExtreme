@@ -31,6 +31,7 @@ const attributeNames = {
   buyNow: 'buy-now',
   licensingDoc: 'licensing-doc',
   version: 'version',
+  subscriptions: 'subscriptions',
 };
 const commonStyles = {
   opacity: '1',
@@ -110,6 +111,8 @@ class DxLicense extends SafeHTMLElement {
 
   private readonly _buttonStyles: string;
 
+  private _subscriptionsSpan?: HTMLSpanElement;
+
   constructor() {
     super();
 
@@ -130,6 +133,48 @@ class DxLicense extends SafeHTMLElement {
       buttonStyles,
       DxLicense.customStyles?.contentStyles,
     );
+  }
+
+  private _getSubscriptionsArray(subscriptions: string | null): string[] {
+    return subscriptions?.split(',').map((x) => x.trim()) ?? [];
+  }
+
+  public updateSubscriptions(newSubscriptions: string): void {
+    if (!this._subscriptionsSpan || !newSubscriptions) return;
+    const currentSubscriptionsStr = this.getAttribute(attributeNames.subscriptions);
+    const currentSubscriptions = this._getSubscriptionsArray(currentSubscriptionsStr);
+    if (!currentSubscriptions.length) {
+      this._updateSubscriptionsText(newSubscriptions);
+      return;
+    }
+
+    const newSubscriptionsArray = this._getSubscriptionsArray(newSubscriptions);
+    const mergedSubscriptions: string[] = [];
+
+    newSubscriptionsArray.forEach((subscription) => {
+      if (currentSubscriptions.some((x) => x === subscription)) {
+        mergedSubscriptions.push(subscription);
+      }
+    });
+
+    this._updateSubscriptionsText(
+      mergedSubscriptions.length !== 0
+        ? mergedSubscriptions.join(', ')
+        : [...currentSubscriptions, ...newSubscriptionsArray].join(', '),
+    );
+  }
+
+  private _updateSubscriptionsText(subscriptions: string | null): void {
+    if (subscriptions && this._subscriptionsSpan) {
+      this.setAttribute(attributeNames.subscriptions, subscriptions);
+      this._subscriptionsSpan.innerText = ` Included in Subscriptions: ${subscriptions}`;
+    }
+  }
+
+  private _createSubscriptionsSpan(): HTMLSpanElement {
+    this._subscriptionsSpan = this._createSpan('');
+    this._updateSubscriptionsText(this.getAttribute(attributeNames.subscriptions));
+    return this._subscriptionsSpan;
   }
 
   private _createSpan(text: string): HTMLSpanElement {
@@ -191,7 +236,9 @@ class DxLicense extends SafeHTMLElement {
       this._createSpan(' an existing license or '),
       this._createLink('purchase a new license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+      this._createSubscriptionsSpan(),
     );
+
     return contentContainer;
   }
 
@@ -252,27 +299,23 @@ class DxLicenseTrigger extends SafeHTMLElement {
     });
 
     const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (!licensePanel.length && !DxLicense.closed) {
+    if (DxLicense.closed) return;
+    if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
 
-      license.setAttribute(
-        attributeNames.version,
-        this.getAttribute(attributeNames.version) as string,
-      );
-
-      license.setAttribute(
-        attributeNames.buyNow,
-        this.getAttribute(attributeNames.buyNow) as string,
-      );
-
-      license.setAttribute(
-        attributeNames.licensingDoc,
-        this.getAttribute(attributeNames.licensingDoc) as string,
-      );
+      Object.values(attributeNames).forEach((attrName) => {
+        license.setAttribute(
+          attrName,
+          this.getAttribute(attrName) as string,
+        );
+      });
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
 
       document.body.prepend(license);
+    } else {
+      const subscriptions = this.getAttribute(attributeNames.subscriptions) as string;
+      (licensePanel[0] as DxLicense).updateSubscriptions(subscriptions);
     }
   }
 }
@@ -281,12 +324,12 @@ export function registerCustomComponents(customStyles?: CustomTrialPanelStyles):
   if (!customElements.get(componentNames.trigger)) {
     DxLicense.customStyles = customStyles;
     customElements.define(
-      componentNames.trigger,
-      DxLicenseTrigger,
-    );
-    customElements.define(
       componentNames.panel,
       DxLicense,
+    );
+    customElements.define(
+      componentNames.trigger,
+      DxLicenseTrigger,
     );
   }
 }
@@ -295,6 +338,7 @@ export function renderTrialPanel(
   buyNowUrl: string,
   licensingDocUrl: string,
   version: string,
+  subscriptions = '',
   customStyles?: CustomTrialPanelStyles,
 ): void {
   registerCustomComponents(customStyles);
@@ -304,6 +348,7 @@ export function renderTrialPanel(
   trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
   trialPanelTrigger.setAttribute(attributeNames.licensingDoc, licensingDocUrl);
   trialPanelTrigger.setAttribute(attributeNames.version, version);
+  trialPanelTrigger.setAttribute(attributeNames.subscriptions, subscriptions);
 
   document.body.appendChild(trialPanelTrigger);
 }

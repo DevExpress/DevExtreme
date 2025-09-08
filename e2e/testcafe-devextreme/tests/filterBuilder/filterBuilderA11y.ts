@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
@@ -97,7 +95,7 @@ elements.forEach(({
         t,
         {
           rules: {
-          // NOTE: color-contrast issues
+            // NOTE: color-contrast issues
             'color-contrast': { enabled: false },
           },
         },

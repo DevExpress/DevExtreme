@@ -1,10 +1,14 @@
-const $ = require('jquery');
-const trackerModule = require('viz/range_selector/tracker');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const seriesDataSourceModule = require('viz/range_selector/series_data_source');
-const commons = require('./rangeSelectorParts/commons.js');
+import $ from 'jquery';
+import trackerModule from 'viz/range_selector/tracker';
+import { DataSource } from 'common/data/data_source/data_source';
+import seriesDataSourceModule from 'viz/range_selector/series_data_source';
+import {
+    environment,
+    StubRange,
+    StubThemeManager,
+} from './rangeSelectorParts/commons.js';
 
-QUnit.module('Basic', commons.environment);
+QUnit.module('Basic', environment);
 
 QUnit.test('Renderer', function(assert) {
     this.createWidget();
@@ -158,11 +162,10 @@ QUnit.test('initialize with logarithmic axis', function(assert) {
     assert.equal(range.base, 10, 'base');
 });
 
-
 QUnit.test('Pass series dataType to range', function(assert) {
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.seriesDataSource.stub('getCalculatedValueType').returns('datetime');
 
@@ -213,12 +216,12 @@ QUnit.test('Tracker options', function(assert) {
     }]);
 });
 
-QUnit.module('DataSource', commons.environment);
+QUnit.module('DataSource', environment);
 
 QUnit.test('Creation', function(assert) {
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     const widget = this.createWidget({ dataSource: [1, 2, 3] });
     const ds = widget.getDataSource();
@@ -227,13 +230,13 @@ QUnit.test('Creation', function(assert) {
     assert.deepEqual(ds.items(), [1, 2, 3]);
 });
 
-QUnit.module('isReady', $.extend({}, commons.environment, {
+QUnit.module('isReady', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.seriesDataSource.stub('isShowChart').returns(true);
         this.seriesDataSource.stub('getBoundRange').returns({
-            arg: new commons.StubRange(),
-            val: new commons.StubRange()
+            arg: new StubRange(),
+            val: new StubRange()
         });
     }
 }));
@@ -260,8 +263,8 @@ QUnit.test('dataSource is loaded', function(assert) {
 QUnit.test('Update axis canvas before create series dataSorce', function(assert) {
     const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
 
     this.createWidget({
@@ -296,7 +299,7 @@ QUnit.test('Pass all scale options to axis on first update', function(assert) {
     const options = this.axis.updateOptions.secondCall.args[0];
     assert.strictEqual(options.someOptions, true);
 });
-QUnit.module('logarithmic type', commons.environment);
+QUnit.module('logarithmic type', environment);
 
 QUnit.test('scale. logarithmic type', function(assert) {
     this.createWidget({
@@ -378,8 +381,8 @@ QUnit.test('scale. not valid logarithmBase, string', function(assert) {
 QUnit.test('valueAxis. logarithmic type', function(assert) {
     const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.createWidget({
         dataSource: [{}],
@@ -400,11 +403,11 @@ QUnit.test('valueAxis. not valid logarithmBase', function(assert) {
     const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
-        arg: new commons.StubRange(),
-        val: new commons.StubRange()
+        arg: new StubRange(),
+        val: new StubRange()
     });
     this.seriesDataSource.getThemeManager = function() {
-        const themeManager = new commons.StubThemeManager();
+        const themeManager = new StubThemeManager();
         themeManager.getOptions = sinon.stub().withArgs('valueAxis').returns({ logarithmBase: 2 });
         return themeManager;
     };
@@ -427,7 +430,7 @@ QUnit.test('valueAxis. not valid logarithmBase', function(assert) {
     assert.strictEqual(incidentOccurred.getCall(0).args[0].target.id, 'E2104', 'incident');
 });
 
-QUnit.module('discrete type', commons.environment);
+QUnit.module('discrete type', environment);
 
 QUnit.test('scale. discrete type', function(assert) {
     this.createWidget({
