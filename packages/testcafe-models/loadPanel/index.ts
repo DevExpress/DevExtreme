@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import Overlay from '../overlay/index';
 
 export default class LoadPanel extends Overlay {
@@ -10,9 +11,11 @@ export default class LoadPanel extends Overlay {
     }
 
     getShadowOffset(): Promise<{ left: number; top: number }> {
-        return this.getWrapper().boundingClientRect.then(rect => ({
-            left: rect.left,
-            top: rect.top,
-        }));
+        const wrapperElement = this.getWrapper();
+    
+        return ClientFunction(
+          () => ($(wrapperElement()) as any).offset(),
+          { dependencies: { wrapperElement } },
+        )();
     }
 }

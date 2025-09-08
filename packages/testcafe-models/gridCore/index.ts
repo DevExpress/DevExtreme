@@ -94,10 +94,12 @@ export default abstract class GridCore extends Widget {
   }
 
   getElementOffset(): Promise<{ left: number; top: number }> {
-    return this.element.boundingClientRect.then((rect) => ({
-      left: rect.left,
-      top: rect.top,
-    }));
+    const { element } = this;
+
+    return ClientFunction(
+      () => ($(element()) as any).offset(),
+      { dependencies: { element } },
+    )();
   }
 
   getLoadPanel(): LoadPanel {
