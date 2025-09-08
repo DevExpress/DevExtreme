@@ -37,6 +37,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { AzureOpenAI, type OpenAI } from 'openai';
 import {
   DxForm, DxItem, DxButtonItem, DxGroupItem
 } from 'devextreme-vue/form';
@@ -45,8 +46,10 @@ import DxButton from 'devextreme-vue/button';
 import DxTextArea from 'devextreme-vue/text-area';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import notify from 'devextreme/ui/notify';
-import { AzureOpenAI, OpenAI } from 'openai';
 import { AzureOpenAIConfig, defaultText } from './data.ts';
+
+const text = ref(defaultText);
+const formRef = ref();
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
@@ -93,18 +96,20 @@ const aiIntegration = new AIIntegration({
 
 const stylingMode = 'filled';
 
-const text = ref(defaultText);
-const formRef = ref();
-
 const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
 const amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
+
 const statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
 const statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
+
 const textEditorOptions = { stylingMode };
+
 const phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
 const phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
+
 const emailValidationRules: ValidationRule[] = [{ type: 'email' }];
 const emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
+
 const zipEditorOptions = { stylingMode, mode: 'text', value: null };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
@@ -124,7 +129,7 @@ const colCountByScreen = {
   lg: 2,
 };
 
-const showNotification = (message, of, offset) => {
+const showNotification = (message: string, of: string, offset?: string) => {
   notify({
     message,
     position: {

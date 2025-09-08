@@ -79,6 +79,14 @@ $(() => {
       });
   }
 
+  const colCountByScreen = {
+    xs: 2,
+    sm: 2,
+    md: 2,
+    lg: 2,
+  };
+  const stylingMode = 'filled';
+
   const form = $('#form').dxForm({
     formData: {},
     aiIntegration,
@@ -89,18 +97,13 @@ $(() => {
     items: [{
       itemType: 'group',
       caption: 'Billing Summary',
-      colCountByScreen: {
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-      },
+      colCountByScreen,
       items: [{
         dataField: 'Amount Due',
         editorType: 'dxTextBox',
         editorOptions: {
           placeholder: '$0.00',
-          stylingMode: 'filled',
+          stylingMode,
         },
         aiOptions: {
           instruction: 'Format as the following: $0.00',
@@ -119,30 +122,25 @@ $(() => {
     }, {
       itemType: 'group',
       caption: 'Billing Information',
-      colCountByScreen: {
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-      },
+      colCountByScreen,
       items: [{
         dataField: 'First Name',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
       }, {
         dataField: 'Last Name',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
       }, {
         dataField: 'Phone Number',
         editorType: 'dxTextBox',
         editorOptions: {
           placeholder: '(000) 000-0000',
-          stylingMode: 'filled',
+          stylingMode,
         },
         aiOptions: {
           instruction: 'Format as the following: (000) 000-0000',
@@ -151,7 +149,7 @@ $(() => {
         dataField: 'Email',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
         validationRules: [{ type: 'email' }],
         aiOptions: {
@@ -161,35 +159,30 @@ $(() => {
     }, {
       itemType: 'group',
       caption: 'Billing Address',
-      colCountByScreen: {
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-      },
+      colCountByScreen,
       items: [{
         dataField: 'Street Address',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
       }, {
         dataField: 'City',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
       }, {
         dataField: 'State/Province/Region',
         editorType: 'dxTextBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
         },
       }, {
         dataField: 'ZIP',
         editorType: 'dxNumberBox',
         editorOptions: {
-          stylingMode: 'filled',
+          stylingMode,
           mode: 'text',
           value: null,
         },
@@ -200,12 +193,7 @@ $(() => {
     }, {
       itemType: 'group',
       cssClass: 'buttons-group',
-      colCountByScreen: {
-        xs: 2,
-        sm: 2,
-        md: 2,
-        lg: 2,
-      },
+      colCountByScreen,
       items: [{
         itemType: 'button',
         name: 'smartPaste',
@@ -226,7 +214,7 @@ $(() => {
 
   const textarea = $('#textarea').dxTextArea({
     value: defaultText,
-    stylingMode: 'filled',
+    stylingMode,
     height: '100%',
   }).dxTextArea('instance');
 

@@ -1,23 +1,21 @@
 import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxTextAreaModule,
-  DxFormModule, 
-  DxFormComponent,
-  DxDateBoxModule,
-  DxButtonModule
-} from 'devextreme-angular';
+
+import { AzureOpenAI, type OpenAI } from 'openai';
+
+import { DxButtonModule } from 'devextreme-angular';
+import type { ButtonStyle } from 'devextreme-angular/common';
 import {
   AIIntegration,
   RequestParams,
   Response,
 } from 'devextreme-angular/common/ai-integration';
+import { DxFormModule, DxFormComponent } from 'devextreme-angular/ui/form';
+import { DxTextAreaModule, type DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
 import notify from 'devextreme/ui/notify';
-import { AzureOpenAI, OpenAI } from 'openai';
+
 import { Service } from './app.service';
-import { ButtonStyle } from 'devextreme-angular/common';
-import type { ValueChangedEvent } from 'devextreme/ui/text_area';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -34,8 +32,9 @@ const stylingMode = 'filled';
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
 };
+console.log('AAA');
 
-const sendNotification = (message, of, offset) => {
+const sendNotification = (message: string, of: string, offset?: string) => {
   notify({
     message,
     position: {
@@ -169,25 +168,20 @@ export class AppComponent {
 
   onCopy() {
     navigator.clipboard.writeText(this.text);
-    sendNotification('Text copied to clipboard', '#textarea', '0 -20');
+    sendNotification('Text copied to clipboard', '#textarea');
   }
 
-  setText(event: ValueChangedEvent) {
+  onTextareaValueChangedEvent(event: DxTextAreaTypes.ValueChangedEvent) {
     this.text = event.value;
-  }
-
-  smartPaste() {
-    form.instance().smartPaste();
   }
 }
 
 @NgModule({
   imports: [
     BrowserModule,
-    DxTextAreaModule,
-    DxFormModule,
-    DxDateBoxModule,
     DxButtonModule,
+    DxFormModule,
+    DxTextAreaModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -3,9 +3,16 @@
   <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
   <div class="textarea-container">
     <dx-button id="copy" text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" (onClick)="onCopy()"></dx-button>
-    <dx-text-area id="textarea" [value]="text" stylingMode="filled" height="100%" (onValueChanged)="setText($event)"></dx-text-area>
+    <dx-text-area id="textarea" [value]="text" stylingMode="filled" height="100%" (onValueChanged)="onTextareaValueChangedEvent($event)"></dx-text-area>
   </div>
-  <dx-form id="form" labelMode="outside" labelLocation="top" [minColWidth]="220" [aiIntegration]="aiIntegration">
+  <dx-form
+    id="form"
+    labelMode="outside"
+    labelLocation="top"
+    [minColWidth]="220"
+    [aiIntegration]="aiIntegration"
+    stylingMode="filled"
+  >
     <dxi-form-item itemType="group" [colCountByScreen]="colCountByScreen" caption="Billing Summary">
       <dxi-form-item
         dataField="Amount Due"

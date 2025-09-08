@@ -1,9 +1,10 @@
 import {
-    AIIntegration,
-    RequestParams,
-    Response,
+  AIIntegration,
+  RequestParams,
+  Response,
 } from 'devextreme-react/common/ai-integration';
-import { AzureOpenAI, OpenAI } from 'openai';
+
+import { AzureOpenAI, type OpenAI } from 'openai';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;

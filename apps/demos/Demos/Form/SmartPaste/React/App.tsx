@@ -1,33 +1,35 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { ButtonStyle, ValidationRule } from 'devextreme-react/common';
-
+import { Button } from 'devextreme-react/button';
 import {
   Form,
-  Item, GroupItem, Label,
-  type FormTypes,
+  Item, GroupItem,
   ButtonItem,
   FormRef,
 } from 'devextreme-react/form';
-import 'devextreme-react/text-area';
-import Button from 'devextreme-react/button';
+import { TextArea, type TextAreaTypes } from 'devextreme-react/text-area';
 
 import notify from 'devextreme/ui/notify';
 
 import { aiIntegration, defaultText } from './data.ts';
-import TextArea from 'devextreme-react/text-area';
 
 const stylingMode = 'filled';
 
 const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
 const amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
+
 const statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
 const statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
+
 const textEditorOptions = { stylingMode };
+
 const phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
 const phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
+
 const emailValidationRules: ValidationRule[] = [{ type: 'email' }];
 const emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
+
 const zipEditorOptions = { stylingMode, mode: 'text', value: null };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
@@ -47,7 +49,7 @@ const colCountByScreen = {
   lg: 2,
 };
 
-const showNotification = (message, of, offset) => {
+const showNotification = (message: string, of: string, offset?: string) => {
   notify({
     message,
     position: {
@@ -91,13 +93,17 @@ const App = () => {
     formRef.current.instance().registerKeyHandler('V', shortcutHandler);
   }, []);
 
+  const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent) => {
+    setText(e.value);
+  }, []);
+
   return (
     <>
       <div className="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
       <div className="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
       <div className="textarea-container">
         <Button text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" onClick={onCopy} />
-        <TextArea id="textarea" value={text} stylingMode="filled" height="100%" onChange={setText} />
+        <TextArea id="textarea" value={text} stylingMode="filled" height="100%" onValueChanged={onTextAreaValueChanged} />
       </div>
       <Form
         id="form"
