@@ -16503,7 +16503,9 @@ declare module DevExpress.ui {
    * [descr:dxDropDownEditor]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
+  export class dxDropDownEditor<
+    TProperties extends DevExpress.ui.Editor.EditorValueContainer = DevExpress.ui.dxDropDownEditor.Properties
+  > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
      */
@@ -16529,7 +16531,15 @@ declare module DevExpress.ui {
       readonly text?: string;
       readonly icon?: string;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    interface DropDownEditorInstance extends dxDropDownEditor<Properties> {}
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -16611,7 +16621,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownList<
-    TProperties
+    TProperties extends DevExpress.ui.Editor.EditorValueContainer
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.common.data.DataSource;
   }
