@@ -20,6 +20,6 @@ describe('Appointments', () => {
     });
 
     const appointment = POM.getAppointment();
-    expect(appointment && !appointment.classList.contains('dx-resizable')).toBe(true);
+    expect(appointment.element && !appointment.element.classList.contains('dx-resizable')).toBe(true);
   });
 });
