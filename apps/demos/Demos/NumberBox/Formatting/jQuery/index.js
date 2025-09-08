@@ -35,4 +35,10 @@ $(() => {
     value: 3.14,
     inputAttr: { 'aria-label': 'Weight Format' },
   });
+
+  $('#precisionAndType').dxNumberBox({
+    format: { type: "percent", precision: 5 },
+    value: 1.2312345,
+    inputAttr: { 'aria-label': 'Precision and Type Format' },
+  });
 });

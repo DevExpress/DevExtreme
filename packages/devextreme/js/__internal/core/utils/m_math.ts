@@ -22,8 +22,16 @@ const inRange = function (value, minValue, maxValue) {
   return value >= minValue && value <= maxValue;
 };
 
-function getExponent(value) {
-  return Math.abs(parseInt(value.toExponential().split('e')[1], 10));
+/**
+ * Returns the absolute value of the exponent of the number in exponential notation.
+ * @param value - The number to get the exponent of.
+ * @returns The absolute value of the exponent of the number in exponential notation.
+ */
+
+function getExponent(value: number) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+  const [_, exponentString] = value.toExponential().split('e');
+  return Math.abs(parseInt(exponentString, 10));
 }
 
 function getExponentialNotation(value) {
@@ -45,56 +53,88 @@ function multiplyInExponentialForm(value, exponentShift) {
 }
 
 // T570217
-function isEdgeBug() {
-  const value = 0.0003;
-  const correctValue = '0.000300';
-  const precisionValue = 3;
-  return correctValue !== value.toPrecision(precisionValue);
-}
 
-function adjust(value, interval?) {
-  let precision = getPrecision(interval || 0) + 2;
-  const separatedValue = value.toString().split('.');
-  const sourceValue = value;
+const EXP_TO_CHANGE_NOTATION = 7;
+const MAX_PRECISION = 15;
+const MIN_PRECISION = 7;
+
+/**
+ * Adjusts the value to the nearest interval.
+ * @param value - The value to adjust.
+ * @param interval - The interval to adjust to.
+ * @returns The adjusted value.
+ *
+ * consider using roundFloatPart instead of adjust
+ */
+
+function adjust(value: number, interval?: number) {
+  // (0.0000001) => 1e-7
+  // (0.000001) => 0.000001
+
   const absValue = Math.abs(value);
-  let separatedAdjustedValue;
-  const isExponentValue = isExponential(value);
   const integerPart = absValue > 1 ? 10 : 0;
 
-  if (separatedValue.length === 1) {
+  const precision = getPrecision(interval ?? 0) + 2;
+
+  const finalPrecision = precision > EXP_TO_CHANGE_NOTATION ? MAX_PRECISION : MIN_PRECISION;
+
+  const [integerValuePart, fractionalValuePart] = value.toString().split('.');
+  const sourceValue = value;
+
+  const isExponentValue = isExponential(value);
+
+  if (isExponentValue) {
+    return adjustExponential(value, finalPrecision);
+  }
+
+  if (!fractionalValuePart) {
     return value;
   }
 
-  if (!isExponentValue) {
-    if (isExponential(interval)) {
-      precision = separatedValue[0].length + getExponent(interval);
-    }
-    value = absValue;
-    value = value - Math.floor(value) + integerPart;
+  if (isExponential(interval)) {
+    const expPrecision = integerValuePart.length + getExponent(interval);
+    return parseFloat(sourceValue.toPrecision(expPrecision));
   }
 
-  precision = (isEdgeBug() && (getExponent(value) > 6)) || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
+  const fractionalPart = absValue - Math.floor(absValue);
+  const adjustedValue = integerPart + fractionalPart;
 
-  if (!isExponentValue) {
-    separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
-    if (separatedAdjustedValue[0] === integerPart.toString()) {
-      return parseFloat(`${separatedValue[0]}.${separatedAdjustedValue[1]}`);
-    }
+  const separatedAdjustedValue = parseFloat(adjustedValue.toPrecision(finalPrecision + 0)).toString().split('.');
+
+  const isIntPartNotChanged = separatedAdjustedValue[0] === integerPart.toString();
+  if (isIntPartNotChanged) {
+    return parseFloat(`${integerValuePart}.${separatedAdjustedValue[1]}`);
   }
-  return parseFloat(sourceValue.toPrecision(precision));
+
+  return parseFloat(sourceValue.toPrecision(finalPrecision));
 }
 
-function getPrecision(value) {
+function adjustExponential(value: number, precision: number) {
+  const expValue = value.toExponential();
+
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [mantissa, _exponent] = expValue.split('e');
+
+  if (!mantissa.includes('.')) {
+    return parseFloat(expValue);
+  }
+
+  return parseFloat(value.toPrecision(precision));
+}
+
+function getPrecision(value: number) {
   const str = value.toString();
 
-  if (str.indexOf('.') < 0) {
+  if (!str.includes('.')) {
     return 0;
   }
 
-  const mantissa = str.split('.');
-  const positionOfDelimiter = mantissa[1].indexOf('e');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [_, fractionalPart] = str.split('.');
+  const positionOfDelimiter = fractionalPart.indexOf('e');
 
-  return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
+  return positionOfDelimiter >= 0 ? positionOfDelimiter : fractionalPart.length;
 }
 
 function getRoot(x, n) {
@@ -180,7 +220,7 @@ function getExponentLength(value) {
         || 0;
 }
 
-function roundFloatPart(value, digitsCount = 0) {
+function roundFloatPart(value: number, digitsCount = 0) {
   return parseFloat(value.toFixed(digitsCount));
 }
 
