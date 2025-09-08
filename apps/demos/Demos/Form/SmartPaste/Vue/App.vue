@@ -83,6 +83,10 @@ const aiIntegration = new AIIntegration({
 
     const promise = getAIResponse(aiPrompt, signal);
 
+    promise.catch(() => {
+      showNotification('Something went wrong. Please try again.', '#form', true);
+    });
+
     const result = {
       promise,
       abort: () => {
@@ -129,7 +133,7 @@ const colCountByScreen = {
   lg: 2,
 };
 
-const showNotification = (message: string, of: string, offset?: string) => {
+const showNotification = (message: string, of: string, isError?: boolean, offset?: string) => {
   notify({
     message,
     position: {
@@ -141,12 +145,12 @@ const showNotification = (message: string, of: string, offset?: string) => {
     width: 'fit-content',
     maxWidth: 'fit-content',
     minWidth: 'fit-content',
-  }, 'info', 1500);
+  }, isError ? 'error' : 'info', 1500);
 };
 
 const onCopy = () => {
   navigator.clipboard.writeText(text.value);
-  showNotification('Text copied to clipboard', "#textarea", '0 -20');
+  showNotification('Text copied to clipboard', "#textarea", false, '0 -20');
 }
 
 onMounted(() => {

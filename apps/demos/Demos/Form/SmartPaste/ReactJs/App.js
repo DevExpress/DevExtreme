@@ -1,13 +1,15 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
+import { AzureOpenAI } from 'openai';
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { Button } from 'devextreme-react/button';
 import {
   Form, Item, GroupItem, ButtonItem,
 } from 'devextreme-react/form';
 import { TextArea } from 'devextreme-react/text-area';
 import notify from 'devextreme/ui/notify';
-import { aiIntegration, defaultText } from './data.js';
+import { AzureOpenAIConfig, defaultText } from './data.js';
 
 const stylingMode = 'filled';
 const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
@@ -41,7 +43,7 @@ const colCountByScreen = {
   md: 2,
   lg: 2,
 };
-const showNotification = (message, of, offset) => {
+const showNotification = (message, of, isError, offset) => {
   notify(
     {
       message,
@@ -55,16 +57,49 @@ const showNotification = (message, of, offset) => {
       maxWidth: 'fit-content',
       minWidth: 'fit-content',
     },
-    'info',
+    isError ? 'error' : 'info',
     1500,
   );
 };
+const aiService = new AzureOpenAI(AzureOpenAIConfig);
+export async function getAIResponse(messages, signal) {
+  const params = {
+    messages,
+    model: AzureOpenAIConfig.deployment,
+    max_tokens: 1000,
+    temperature: 0.7,
+  };
+  const response = await aiService.chat.completions.create(params, { signal });
+  const result = response.choices[0].message?.content;
+  return result;
+}
+export const aiIntegration = new AIIntegration({
+  sendRequest({ prompt }) {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const aiPrompt = [
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
+    ];
+    const promise = getAIResponse(aiPrompt, signal);
+    promise.catch(() => {
+      showNotification('Something went wrong. Please try again.', '#form', true);
+    });
+    const result = {
+      promise,
+      abort: () => {
+        controller.abort();
+      },
+    };
+    return result;
+  },
+});
 const App = () => {
   const formRef = useRef(null);
   const [text, setText] = useState(defaultText);
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(text);
-    showNotification('Text copied to clipboard', '#textarea', '0 -20');
+    showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
   }, [text]);
   const shortcutHandler = useCallback((event) => {
     if (event.ctrlKey && event.shiftKey) {
@@ -90,7 +125,10 @@ const App = () => {
   }, []);
   return (
     <React.Fragment>
-      <div className="instruction">
+      <div
+        id="textarea-label"
+        className="instruction"
+      >
         Copy text from the editor below to the clipboard. Edit the text to see how your changes
         affect Smart Paste result.
       </div>
@@ -109,6 +147,7 @@ const App = () => {
         />
         <TextArea
           id="textarea"
+          elementAttr={{ 'aria-labelledby': 'textarea-label' }}
           value={text}
           stylingMode="filled"
           height="100%"

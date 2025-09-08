@@ -32,7 +32,7 @@ type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionS
   content: string;
 };
 
-const sendNotification = (message: string, of: string, offset?: string) => {
+const showNotification = (message: string, of: string, isError?: boolean, offset?: string) => {
   notify({
     message,
     position: {
@@ -44,7 +44,7 @@ const sendNotification = (message: string, of: string, offset?: string) => {
     width: 'fit-content',
     maxWidth: 'fit-content',
     minWidth: 'fit-content',
-  }, 'info', 1500);
+  }, isError ? 'error' : 'info', 1500);
 }
 
 @Component({
@@ -120,11 +120,11 @@ export class AppComponent {
             if (clipboardText) {
               form.smartPaste(clipboardText);;
             } else {
-              sendNotification('Copy the text to paste into the form', '#form');
+              showNotification('Copy the text to paste into the form', '#form');
             }
           })
           .catch(() => {
-            sendNotification('Could not access the clipboard', '#form');
+            showNotification('Could not access the clipboard', '#form');
           });
       }
     });
@@ -139,6 +139,10 @@ export class AppComponent {
       { role: 'user', content: prompt.user, },
     ];
     const promise = this.getAIResponse(aiPrompt, signal);
+
+    promise.catch(() => {
+      showNotification('Something went wrong. Please try again.', '#form', true);
+    })
 
     const result: Response = {
       promise,
@@ -166,7 +170,7 @@ export class AppComponent {
 
   onCopy() {
     navigator.clipboard.writeText(this.text);
-    sendNotification('Text copied to clipboard', '#textarea');
+    showNotification('Text copied to clipboard', '#textarea');
   }
 }
 

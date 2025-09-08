@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { AzureOpenAI, type OpenAI } from 'openai';
+
+import {
+  AIIntegration,
+  RequestParams,
+  Response,
+} from 'devextreme-react/common/ai-integration';
 import type { ButtonStyle, ValidationRule } from 'devextreme-react/common';
 import { Button } from 'devextreme-react/button';
 import {
@@ -12,7 +19,11 @@ import { TextArea, type TextAreaTypes } from 'devextreme-react/text-area';
 
 import notify from 'devextreme/ui/notify';
 
-import { aiIntegration, defaultText } from './data.ts';
+import { AzureOpenAIConfig, defaultText } from './data.ts';
+
+type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+  content: string;
+};
 
 const stylingMode = 'filled';
 
@@ -49,7 +60,7 @@ const colCountByScreen = {
   lg: 2,
 };
 
-const showNotification = (message: string, of: string, offset?: string) => {
+const showNotification = (message: string, of: string, isError?: boolean, offset?: string) => {
   notify({
     message,
     position: {
@@ -61,8 +72,51 @@ const showNotification = (message: string, of: string, offset?: string) => {
     width: 'fit-content',
     maxWidth: 'fit-content',
     minWidth: 'fit-content',
-  }, 'info', 1500);
+  }, isError ? 'error' : 'info', 1500);
+};
+
+const aiService = new AzureOpenAI(AzureOpenAIConfig);
+
+export async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
+  const params = {
+    messages,
+    model: AzureOpenAIConfig.deployment,
+    max_tokens: 1000,
+    temperature: 0.7,
+  };
+
+  const response = await aiService.chat.completions.create(params, { signal });
+  const result = response.choices[0].message?.content;
+
+  return result;
 }
+
+export const aiIntegration = new AIIntegration({
+  sendRequest({ prompt }: RequestParams): Response {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    const aiPrompt: AIMessage[] = [
+      { role: 'system', content: prompt.system, },
+      { role: 'user', content: prompt.user, },
+    ];
+
+    const promise = getAIResponse(aiPrompt, signal);
+
+    promise.catch(() => {
+      showNotification('Something went wrong. Please try again.', '#form', true);
+    });
+
+    const result: Response = {
+      promise,
+      abort: () => {
+        controller.abort();
+      },
+    };
+
+    return result;
+  },
+});
 
 const App = () => {
   const formRef = useRef<FormRef>(null);
@@ -70,7 +124,7 @@ const App = () => {
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(text);
-    showNotification('Text copied to clipboard', "#textarea", '0 -20');
+    showNotification('Text copied to clipboard', "#textarea", false, '0 -20');
   }, [text]);
 
   const shortcutHandler = useCallback((event: KeyboardEvent) => {
