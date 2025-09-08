@@ -164,6 +164,7 @@ const App = () => {
         ref={formRef}
         labelMode="outside"
         labelLocation="top"
+        showColonAfterLabel={false}
         minColWidth={220}
         aiIntegration={aiIntegration}
       >
