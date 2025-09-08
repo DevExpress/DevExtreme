@@ -3,7 +3,7 @@
   <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
   <div class="textarea-container">
     <DxButton text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" @click="onCopy()" />
-    <DxTextArea id="textarea" aria-labelledby="textarea-label" v-model:value="text" stylingMode="filled" height="100%" />
+    <DxTextArea id="textarea" :element-attr="{ 'aria-labelledby': 'textarea-label' }" v-model:value="text" stylingMode="filled" height="100%" />
   </div>
   <DxForm
     id="form"

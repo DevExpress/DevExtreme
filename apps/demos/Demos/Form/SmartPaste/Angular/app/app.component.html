@@ -19,7 +19,7 @@
     ></dx-button>
     <dx-text-area
       id="textarea"
-      aria-labelledby="textarea-label"
+      [elementAttr]="{ 'aria-labelledby': 'textarea-label' }"
       [value]="text"
       stylingMode="filled"
       height="100%"

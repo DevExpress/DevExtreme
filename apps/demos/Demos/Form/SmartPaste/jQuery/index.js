@@ -219,6 +219,7 @@ $(() => {
   const textarea = $('#textarea').dxTextArea({
     value: defaultText,
     stylingMode,
+    elementAttr: { 'aria-labelledby': 'textarea-label' },
     height: '100%',
   }).dxTextArea('instance');
 
