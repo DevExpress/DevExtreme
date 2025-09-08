@@ -77,6 +77,11 @@ class Slider<
 
   _startOffset?: number;
 
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return SLIDER_HANDLE_SELECTOR;
+  }
+
   _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
@@ -186,12 +191,6 @@ class Slider<
       focusStateEnabled: true,
       valueChangeMode: 'onHandleMove',
     };
-  }
-
-  _init(): void {
-    super._init();
-
-    this._activeStateUnit = SLIDER_HANDLE_SELECTOR;
   }
 
   _toggleValidationMessage(visible: boolean): void {

@@ -8,6 +8,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
+import { EMPTY_ACTIVE_STATE_UNIT } from '@ts/core/widget/widget';
 
 import {
   DATE_TABLE_CLASS,
@@ -47,6 +48,11 @@ class SchedulerAgenda extends WorkSpace {
 
   _$noDataContainer: any;
 
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return EMPTY_ACTIVE_STATE_UNIT;
+  }
+
   get type() { return VIEWS.AGENDA; }
 
   get renderingStrategy() { return (this.invoke as any)('getLayoutManager').getRenderingStrategyInstance(); }
@@ -57,7 +63,6 @@ class SchedulerAgenda extends WorkSpace {
 
   _init() {
     super._init();
-    this._activeStateUnit = undefined;
   }
 
   _getDefaultOptions() {

@@ -121,6 +121,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _selectAllValueChangedAction?: (event?: Record<string, unknown>) => void;
 
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
+
   _supportedKeys(): SupportedKeys {
     const click = (e: DxEvent<KeyboardEvent>): void => {
       const { focusedElement } = this.option();
@@ -506,8 +510,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _init(): void {
     this._filter = {};
     super._init();
-
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._initStoreChangeHandlers();
   }

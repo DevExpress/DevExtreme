@@ -99,9 +99,12 @@ const ITEM_SELECTED_CLASS = 'dx-item-selected';
 class TestComponent extends CollectionWidget {
     ctor(element, options) {
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
 
         super.ctor(element, options);
+    }
+
+    _activeStateUnit() {
+        return '.item';
     }
 
     _itemClass() {
