@@ -15,7 +15,9 @@ runManualTest('Form', 'SmartPaste', (test) => {
   test('SmartPaste loading', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const setClipboard = ClientFunction((text) => {
-        navigator.clipboard.readText = () => Promise.resolve(text);
+      navigator = navigator ?? {};
+      navigator.clipboard = navigator.clipboard ?? {};
+      navigator.clipboard.readText = () => Promise.resolve(text);
     });
 
     await setClipboard('some text');
