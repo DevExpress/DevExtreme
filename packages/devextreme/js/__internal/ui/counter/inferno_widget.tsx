@@ -6,6 +6,8 @@ import { type ComponentType, rerender } from 'inferno';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export abstract class InfernoWidget<TProperties extends {}> extends Widget<any> {
+  protected viewRef?: any;
+
   protected cleanupRenderSubscription?: () => void;
 
   private props?: TProperties;
@@ -27,7 +29,7 @@ export abstract class InfernoWidget<TProperties extends {}> extends Widget<any> 
     return effect(() => {
       this.props = props;
       const content = (
-        <ViewComponent {...props}/>
+        <ViewComponent {...props} ref={(ref): void => { this.viewRef = ref; }}/>
       );
 
       infernoRenderer.renderIntoContainer(content, root, !this.firstRender);

@@ -49,12 +49,27 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="textbox"></div>
+        <div id="button-reset"></div>
+        <div id="button-get-current-value"></div>
+        <div id="current-value"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const textbox = $("#textbox").dxInfernoTextBox({
+                    label: 'Test label',
+                    placeholder: 'Test placeholder',
+                    onChange: (e) => console.log('changed to: ', e.target.value),
+                    onInput: (value) => console.log('input', value),
+                }).dxInfernoTextBox('instance');
+
+                $("#button-reset").dxButton({
+                    text: 'Reset',
+                    onClick: () => textbox.reset(),
+                });
+
+                $("#button-get-current-value").dxButton({
+                    text: 'Get current value',
+                    onClick: () => $("#current-value").text(`Current value: ${textbox.option('value')}`)
                 });
             });
         </script>

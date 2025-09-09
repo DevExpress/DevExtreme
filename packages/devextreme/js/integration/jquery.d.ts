@@ -1,4 +1,5 @@
 import dxCounter, { Properties as CounterProperties } from '../ui/counter';
+import dxInfernoTextBox, { Properties as InfernoTextBoxProperties } from '../ui/counter_textbox';
 import dxAccordion, { Properties as AccordionProperties } from '../ui/accordion';
 import dxActionSheet, { Properties as ActionSheetProperties } from '../ui/action_sheet';
 import dxAutocomplete, { Properties as AutocompleteProperties } from '../ui/autocomplete';
@@ -147,10 +148,16 @@ declare global {
         dxBullet(options: string, ...params: any[]): any;
 
         dxCounter(): JQuery;
-        dxCounter(options: 'instance'): dxButton;
+        dxCounter(options: 'instance'): dxCounter;
         dxCounter(options: CounterProperties): JQuery;
         dxCounter(options: string): any;
         dxCounter(options: string, ...params: any[]): any;
+
+        dxInfernoTextBox(): JQuery;
+        dxInfernoTextBox(options: 'instance'): dxInfernoTextBox;
+        dxInfernoTextBox(options: InfernoTextBoxProperties): JQuery;
+        dxInfernoTextBox(options: string): any;
+        dxInfernoTextBox(options: string, ...params: any[]): any;
 
         dxButton(): JQuery;
         dxButton(options: 'instance'): dxButton;
