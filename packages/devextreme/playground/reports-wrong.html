@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dxAILoadingPanel binding demo</title>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <script type="text/javascript" src="../artifacts/js/knockout-latest.js"></script>
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .demo-container {
+            width: 600px;
+            height: 400px;
+            border: 2px solid #ccc;
+            position: relative;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+        .target-element {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+        }
+        #dxrd-report-preview-holder {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>dxAILoadingPanel Custom Binding Demo</h1>
+
+    <div class="controls">
+        <button data-bind="click: showLoading">Show Loading</button>
+        <button data-bind="click: hideLoading">Hide Loading</button>
+        <button data-bind="click: toggleLoading">Toggle Loading</button>
+        <span>Loading State: <strong data-bind="text: loading() ? 'Visible' : 'Hidden'"></strong></span>
+    </div>
+
+    <div class="demo-container">
+        <div data-bind="dxAILoadingPanel: {
+            visible: loading,
+            position: { of: '#dxrd-report-preview-holder' },
+            message: 'AI Processing...',
+            text: 'Please wait while we process your request'
+        }">
+            <div id="dxrd-report-preview-holder" class="target-element">
+                <p>This is the content area that will be overlaid by the loading panel.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addDisposeCallback(element, callback) {
+            if (!element._disposeCallbacks) {
+                element._disposeCallbacks = [];
+            }
+            element._disposeCallbacks.push(callback);
+        }
+
+        function $unwrap(element) {
+            if (element && 'length' in element) {
+                return element[0];
+            }
+            return element;
+        }
+
+        ko.bindingHandlers['dxAILoadingPanel'] = (() => {
+            return {
+                init: (element, valueAccessor) => {
+                    const values = valueAccessor();
+
+                    const loadingDiv = document.createElement('div');
+                    const loadingPanel = new DevExpress.ui.dxLoadPanel(loadingDiv, {
+                        ...values,
+                        width: '100%',
+                        height: '100%',
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                    });
+                    element.append(loadingDiv);
+                    loadingPanel.option('contentTemplate', (contentElement) => {
+                        const wrapper = document.createElement('div');
+                        wrapper.style.display = 'inline-flex';
+                        wrapper.style.alignItems = 'center';
+                        wrapper.style.flexDirection = 'column';
+
+                        const indicatorDiv = document.createElement('div');
+                        const indicator = new DevExpress.ui.dxLoadIndicator(indicatorDiv, {
+                            width: 90,
+                            height: 90,
+                        });
+                        indicator.option('_animationType', 'sparkle');
+                        wrapper.append(indicatorDiv);
+
+                        if(values.text) {
+                            const textDiv = document.createElement('div');
+                            textDiv.textContent = values.text;
+                            textDiv.style.fontSize = '24px';
+                            wrapper.append(textDiv);
+                        }
+
+                        const element = $unwrap(contentElement);
+                        element.style.display = 'block';
+                        element.style.height = '100%';
+                        element.append(wrapper);
+                    });
+                    loadingPanel.option('showIndicator', false);
+                    loadingPanel.option('showPane', false);
+                    loadingPanel.option('message', '');
+                    const subscriptions = [];
+                    if(ko.isSubscribable(values.visible)) {
+                        subscriptions.push(values.visible.subscribe(visible => {
+                            loadingPanel.option('visible', visible);
+                        }));
+                    }
+                    loadingPanel.option;
+                    addDisposeCallback(element, function() {
+                        loadingPanel.dispose();
+                        subscriptions.forEach(x => x.dispose());
+                    });
+                }
+            };
+        })();
+
+        $(function() {
+            var viewModel = {
+                loading: ko.observable(false),
+
+                showLoading: function() {
+                    this.loading(true);
+                },
+
+                hideLoading: function() {
+                    this.loading(false);
+                },
+
+                toggleLoading: function() {
+                    this.loading(!this.loading());
+                },
+            };
+
+            ko.applyBindings(viewModel);
+        });
+    </script>
+</body>
+</html>

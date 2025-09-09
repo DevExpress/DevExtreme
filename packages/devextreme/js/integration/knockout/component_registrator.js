@@ -28,6 +28,8 @@ if(ko) {
 
         ko.bindingHandlers[componentName] = {
             init: function(domNode, valueAccessor) {
+                console.log('INIT', componentName);
+
                 const $element = $(domNode);
                 const optionChangedCallbacks = Callbacks();
                 let optionsByReference = {};

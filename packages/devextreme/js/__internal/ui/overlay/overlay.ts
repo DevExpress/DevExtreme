@@ -1422,7 +1422,9 @@ class Overlay<
   }
 
   _isVisible(): boolean {
-    const visible = this.option('visible');
+    const { visible } = this.option();
+
+    console.log('🚀 ~ Overlay ~ _isVisible ~ visible:', visible);
 
     return Boolean(visible);
   }

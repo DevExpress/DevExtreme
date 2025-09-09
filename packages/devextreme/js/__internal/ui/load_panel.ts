@@ -229,6 +229,8 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   }
 
   _optionChanged(args: OptionChanged<LoadPanelProperties>): void {
+    console.log('🚀 ~ LoadPanel ~ _optionChanged ~ args:', args);
+
     switch (args.name) {
       case 'delay':
         break;
