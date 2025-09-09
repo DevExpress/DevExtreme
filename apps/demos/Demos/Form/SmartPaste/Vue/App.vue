@@ -1,9 +1,14 @@
 <template>
-  <div class="instruction" id="textarea-label">
-    Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
+  <div
+    class="instruction"
+    id="textarea-label"
+  >
+    Copy text from the editor below to the clipboard.
+    Edit the text to see how your changes affect Smart Paste result.
   </div>
   <div class="instruction">
-    Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
+    Paste text from the clipboard to populate the form.
+    Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
   </div>
   <div class="textarea-container">
     <DxButton
@@ -31,7 +36,10 @@
     :minColWidth="220"
     :aiIntegration="aiIntegration"
   >
-    <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Summary">
+    <DxGroupItem
+      :colCountByScreen="colCountByScreen"
+      caption="Billing Summary"
+    >
       <DxItem
         dataField="Amount Due"
         editorType="dxTextBox"
@@ -45,7 +53,10 @@
         :aiOptions="statementDueAIOptions"
       />
     </DxGroupItem>
-    <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Information">
+    <DxGroupItem
+      :colCountByScreen="colCountByScreen"
+      caption="Billing Information"
+    >
       <DxItem
         dataField="First Name"
         editorType="dxTextBox"
@@ -70,7 +81,10 @@
         :validationRules="emailValidationRules"
       />
     </DxGroupItem>
-    <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Address">
+    <DxGroupItem
+      :colCountByScreen="colCountByScreen"
+      caption="Billing Address"
+    >
       <DxItem
         dataField="Street Address"
         editorType="dxTextBox"
@@ -93,9 +107,18 @@
         :aiOptions="zipAIOptions"
       />
     </DxGroupItem>
-    <DxGroupItem cssClass="buttons-group" :colCountByScreen="colCountByScreen">
-      <DxButtonItem :buttonOptions="smartPasteButtonOptions" name="smartPaste" />
-      <DxButtonItem :buttonOptions="resetButtonOptions" name="reset" />
+    <DxGroupItem
+      cssClass="buttons-group"
+      :colCountByScreen="colCountByScreen"
+    >
+      <DxButtonItem
+        :buttonOptions="smartPasteButtonOptions"
+        name="smartPaste"
+      />
+      <DxButtonItem
+        :buttonOptions="resetButtonOptions"
+        name="reset"
+      />
     </DxGroupItem>
   </DxForm>
 </template>
@@ -103,7 +126,7 @@
 import { onMounted, ref } from 'vue';
 import { AzureOpenAI, type OpenAI } from 'openai';
 import {
-  DxForm, DxItem, DxButtonItem, DxGroupItem
+  DxForm, DxItem, DxButtonItem, DxGroupItem,
 } from 'devextreme-vue/form';
 import type { ValidationRule } from 'devextreme-vue/common';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
@@ -115,7 +138,9 @@ import { AzureOpenAIConfig, defaultText } from './data.ts';
 const text = ref(defaultText);
 const formRef = ref();
 
-type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+type AIMessage = (
+  OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam
+) & {
   content: string;
 };
 
@@ -183,7 +208,7 @@ const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determi
 
 const resetButtonOptions: DxButtonTypes.Properties = {
   stylingMode: 'outlined',
-  type: 'normal'
+  type: 'normal',
 };
 const smartPasteButtonOptions: DxButtonTypes.Properties = {
   stylingMode: 'contained',
@@ -201,8 +226,8 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
   notify({
     message,
     position: {
-      my: "bottom center",
-      at: "bottom center",
+      my: 'bottom center',
+      at: 'bottom center',
       of,
       offset: offset ?? '0 -50',
     },
@@ -214,8 +239,8 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
 
 const onCopy = () => {
   navigator.clipboard.writeText(text.value);
-  showNotification('Text copied to clipboard', "#textarea", false, '0 -20');
-}
+  showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
+};
 
 onMounted(() => {
   formRef.value.instance.registerKeyHandler('V', (event: KeyboardEvent) => {
@@ -231,7 +256,7 @@ onMounted(() => {
         .catch(() => {
           showNotification('Could not access the clipboard', '#form');
         });
-      }
+    }
   });
 });
 

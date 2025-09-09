@@ -27,13 +27,13 @@ $(() => {
       const signal = controller.signal;
 
       const aiPrompt = [
-        { role: 'system', content: prompt.system, },
-        { role: 'user', content: prompt.user, },
+        { role: 'system', content: prompt.system },
+        { role: 'user', content: prompt.user },
       ];
 
       const promise = getAIResponse(aiPrompt, signal);
 
-      promise.catch((e) => {
+      promise.catch(() => {
         showNotification('Something went wrong. Please try again.', '#form', true);
       });
 
@@ -52,8 +52,8 @@ $(() => {
     DevExpress.ui.notify({
       message,
       position: {
-        my: "bottom center",
-        at: "bottom center",
+        my: 'bottom center',
+        at: 'bottom center',
         of,
         offset: offset ?? '0 -50',
       },
@@ -61,7 +61,7 @@ $(() => {
       maxWidth: 'fit-content',
       minWidth: 'fit-content',
     }, isError ? 'error' : 'info', 1500);
-  }
+  };
 
   const customSmartPasteHandler = () => {
     navigator.clipboard.readText()
@@ -71,17 +71,17 @@ $(() => {
         } else {
           showNotification(
             'Copy the text to paste into the form',
-            '#form'
+            '#form',
           );
         }
       })
       .catch(() => {
         showNotification(
           'Could not access the clipboard',
-          '#form'
+          '#form',
         );
       });
-  }
+  };
 
   const colCountByScreen = {
     xs: 2,
@@ -159,7 +159,7 @@ $(() => {
         aiOptions: {
           instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com',
         },
-      }]
+      }],
     }, {
       itemType: 'group',
       caption: 'Billing Address',
@@ -193,7 +193,7 @@ $(() => {
         aiOptions: {
           instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.',
         },
-      }]
+      }],
     }, {
       itemType: 'group',
       cssClass: 'buttons-group',
@@ -216,7 +216,7 @@ $(() => {
     }],
   }).dxForm('instance');
 
-  const textarea = $('#textarea').dxTextArea({
+  const textArea = $('#textarea').dxTextArea({
     value: defaultText,
     stylingMode,
     inputAttr: { 'aria-labelledby': 'textarea-label' },
@@ -230,7 +230,7 @@ $(() => {
     type: 'default',
     width: 'fit-content',
     onClick: () => {
-      const { value } = textarea.option();
+      const { value } = textArea.option();
       navigator.clipboard.writeText(value);
 
       showNotification(
@@ -239,10 +239,10 @@ $(() => {
         false,
         '0 -20',
       );
-    }
+    },
   });
 
-  form.registerKeyHandler("V", (event) => {
+  form.registerKeyHandler('V', (event) => {
     if (event.ctrlKey && event.shiftKey) {
       customSmartPasteHandler();
     }

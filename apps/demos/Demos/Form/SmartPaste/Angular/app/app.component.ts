@@ -34,8 +34,8 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
   notify({
     message,
     position: {
-      my: "bottom center",
-      at: "bottom center",
+      my: 'bottom center',
+      at: 'bottom center',
       of,
       offset: offset ?? '0 -50',
     },
@@ -43,7 +43,7 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
     maxWidth: 'fit-content',
     minWidth: 'fit-content',
   }, isError ? 'error' : 'info', 1500);
-}
+};
 
 @Component({
   selector: 'demo-app',
@@ -62,30 +62,34 @@ export class AppComponent {
   };
 
   amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
+
   amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
 
   statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
+
   statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
 
   textEditorOptions = { stylingMode };
 
   phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
+
   phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
 
   emailAIOptions = { instruction: 'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com' };
 
   zipEditorOptions = { stylingMode, mode: 'text', value: null };
+
   zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
   resetButtonOptions: DxButtonTypes.Properties = {
     stylingMode: 'outlined',
-    type: 'normal'
+    type: 'normal',
   };
 
   smartPasteButtonOptions: DxButtonTypes.Properties = {
     stylingMode: 'contained',
     type: 'default',
-  }
+  };
 
   azureOpenAIConfig: any;
 
@@ -116,7 +120,7 @@ export class AppComponent {
         navigator.clipboard.readText()
           .then((clipboardText) => {
             if (clipboardText) {
-              form.smartPaste(clipboardText);;
+              form.smartPaste(clipboardText);
             } else {
               showNotification('Copy the text to paste into the form', '#form');
             }
@@ -133,14 +137,14 @@ export class AppComponent {
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system, },
-      { role: 'user', content: prompt.user, },
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
     ];
     const promise = this.getAIResponse(aiPrompt, signal);
 
     promise.catch(() => {
       showNotification('Something went wrong. Please try again.', '#form', true);
-    })
+    });
 
     const result: Response = {
       promise,

@@ -61,8 +61,8 @@ const showNotification = (message: string, of: string, isError?: boolean, offset
   notify({
     message,
     position: {
-      my: "bottom center",
-      at: "bottom center",
+      my: 'bottom center',
+      at: 'bottom center',
       of,
       offset: offset ?? '0 -50',
     },
