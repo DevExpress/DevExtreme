@@ -13,6 +13,7 @@ const getPatterns = () => {
   const CONSTEL = process.env.CONSTEL;
 
   if (CONSTEL == null) {
+    console.log('CONSTEL is null');
     return ['Demos/**/*.@(vue|[tj]s?(x))'];
   }
 
@@ -33,6 +34,8 @@ const getPatterns = () => {
       return filteredDemosPatterns;
     }
 
+    console.log('changedFiles', JSON.stringify(changedFiles, null, 2));
+
     const changedDemos = changedFiles
       .filter((item) => item.filename.startsWith('Demos'))
       .map((item) => {
@@ -46,9 +49,11 @@ const getPatterns = () => {
       .filter(({ widget, name, framework }) => fs.statSync(`Demos/${widget}/${name}/${framework}`).isDirectory())
       .filter(({ widget }) => filteredDemos.includes(widget));
 
+    console.log('changedDemos', JSON.stringify(changedDemos, null, 2));
     return changedDemos.map(({ widget, name, framework }) => `Demos/${widget}/${name}/${framework}/**/*.@(vue|[tj]s?(x))`);
   }
 
+  console.log('filteredDemosPatterns', JSON.stringify(filteredDemosPatterns, null, 2));
   return filteredDemosPatterns;
 };
 
@@ -58,6 +63,7 @@ const getPatterns = () => {
   });
 
   const patterns = getPatterns();
+  console.log('PATTERNS', JSON.stringify(patterns, null, 2));
   const results = await eslint.lintFiles(patterns);
 
   const errors = results.reduce((acc, { errorCount }) => acc + errorCount, 0);
