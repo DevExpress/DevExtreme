@@ -34,9 +34,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -55,13 +54,11 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       shell: bash
-      run: |
-        node ./tools/scripts/performance_log.js &
-        pnpx nx build devextreme
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -203,9 +200,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -224,7 +220,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
