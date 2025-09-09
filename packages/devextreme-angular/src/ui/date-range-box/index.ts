@@ -874,10 +874,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get value(): Array<Date | null | number | string> | undefined {
+    get value(): Array<Date | null | number | string> {
         return this._getOption('value');
     }
-    set value(value: Array<Date | null | number | string> | undefined) {
+    set value(value: Array<Date | null | number | string>) {
         this._setOption('value', value);
     }
 
@@ -1467,7 +1467,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<Date | null | number | string> | undefined>;
+    @Output() valueChange: EventEmitter<Array<Date | null | number | string>>;
 
     /**
     
