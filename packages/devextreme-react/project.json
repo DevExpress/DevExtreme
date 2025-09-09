@@ -33,7 +33,7 @@
     },
     "regenerate": {
       "executor": "nx:run-script",
-      "dependsOn": ["devextreme-metadata:build"],
+      "dependsOn": ["devextreme-metadata:generate"],
       "options": {
         "script": "regenerate"
       }
