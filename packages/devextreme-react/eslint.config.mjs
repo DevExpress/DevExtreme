@@ -17,25 +17,6 @@ const compat = new FlatCompat({
   allConfig: js.configs.all
 });
 
-const defaultJsOptions = {
-  files: ['**/*.js'],
-  languageOptions: {
-    globals: {
-      setInterval: true,
-      setTimeout: true,
-      clearInterval: true,
-      clearTimeout: true,
-      require: true,
-      module: true,
-      exports: true,
-    },
-    parser: babelParser,
-    parserOptions: {
-      requireConfigFile: false,
-    },
-  },
-}
-
 export default [
   {
     ignores: [
@@ -85,19 +66,27 @@ export default [
       },
     },
   },
+  ...compatibility.extends('eslint:recommended', 'plugin:import/recommended').map(config => ({
+    ...config,
+    files: ['**/*.js']
+  })),
   {
-    ...js.configs.recommended,
-    ...defaultJsOptions,
-  },
-  {
-    ...importPlugin.flatConfigs.recommended,
-    ...defaultJsOptions,
-    plugins: {
-      'import': importPlugin,
-    }
-  },
-  {
-    ...defaultJsOptions,
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        setInterval: true,
+        setTimeout: true,
+        clearInterval: true,
+        clearTimeout: true,
+        require: true,
+        module: true,
+        exports: true,
+      },
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+      },
+    },
      plugins: {
       '@stylistic': stylistic,
     },

@@ -85,7 +85,6 @@
     "eslint-config-airbnb-typescript": "catalog:",
     "eslint-plugin-import": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/experimental-utils": "5.62.0",
     "@typescript-eslint/parser": "catalog:",
     "eslint-config-devextreme": "1.1.6"
   },
