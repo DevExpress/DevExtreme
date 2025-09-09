@@ -42,5 +42,5 @@
 }
 
 ::ng-deep .buttons-group .dx-item {
-  flex: unset!important;
+  flex: unset !important;
 }
