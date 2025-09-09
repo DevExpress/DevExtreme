@@ -1,0 +1,11 @@
+{
+  "name": "devextreme-icons",
+  "version": "1.0.0",
+  "dependencies": {
+    "fantasticon": "3.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "regenerate": "node ./generate.js"
+  }
+}
