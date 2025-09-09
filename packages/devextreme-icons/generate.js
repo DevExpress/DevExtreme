@@ -38,6 +38,12 @@ await generateFonts({
   inputDir: NAMED_ICONS,
   outputDir: DIST,
   fontTypes: ['ttf', 'woff', 'woff2'],
+  formatOptions: {
+    svg: {
+      centerHorizontally: true,
+      centerVertically: true,
+    }
+  },
   codepoints: Object.fromEntries(
     icons
       .map(({devextreme_name, devextreme_symbol}) => [devextreme_name, parseInt(devextreme_symbol, 16)])
