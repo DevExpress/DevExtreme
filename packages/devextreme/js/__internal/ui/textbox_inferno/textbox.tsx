@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import { InfernoWidget } from '@ts/ui/counter/inferno_widget';
 import { createTwoWayProps } from '@ts/ui/counter/two_way';
-import type { TextBoxProps } from '@ts/ui/counter_textbox/textbox.types';
+import type { TextBoxProps } from '@ts/ui/textbox_inferno/textbox.types';
 
 import { InfernoTextBoxComponentWithHOC as TextBoxComponent } from './textbox.component';
 

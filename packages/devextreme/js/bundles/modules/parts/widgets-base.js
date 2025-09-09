@@ -76,7 +76,7 @@ ui.dxTrackBar = require('../../../ui/track_bar');
 ui.dxDraggable = require('../../../ui/draggable');
 ui.dxSortable = require('../../../ui/sortable');
 ui.dxCounter = require('../../../ui/counter');
-ui.dxInfernoTextBox = require('../../../ui/counter_textbox');
+ui.dxInfernoTextBox = require('../../../ui/textbox_inferno');
 
 /* Validation (dx.module-widgets-base.js) */
 

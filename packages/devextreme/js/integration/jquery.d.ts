@@ -1,5 +1,5 @@
 import dxCounter, { Properties as CounterProperties } from '../ui/counter';
-import dxInfernoTextBox, { Properties as InfernoTextBoxProperties } from '../ui/counter_textbox';
+import dxInfernoTextBox, { Properties as InfernoTextBoxProperties } from '../ui/textbox_inferno';
 import dxAccordion, { Properties as AccordionProperties } from '../ui/accordion';
 import dxActionSheet, { Properties as ActionSheetProperties } from '../ui/action_sheet';
 import dxAutocomplete, { Properties as AutocompleteProperties } from '../ui/autocomplete';

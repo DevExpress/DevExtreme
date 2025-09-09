@@ -1,7 +1,7 @@
 import Guid from '@js/core/guid';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
-import withMethods from '@ts/ui/counter_textbox/textbox.methods_hoc';
-import type { TextBoxProps } from '@ts/ui/counter_textbox/textbox.types';
+import withMethods from '@ts/ui/textbox_inferno/textbox.methods_hoc';
+import type { TextBoxProps } from '@ts/ui/textbox_inferno/textbox.types';
 
 class InfernoTextBoxComponent extends BaseInfernoComponent<TextBoxProps> {
   render(): JSX.Element {

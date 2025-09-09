@@ -1,5 +1,5 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
-import type { TextBoxProps, TextBoxState } from '@ts/ui/counter_textbox/textbox.types';
+import type { TextBoxProps, TextBoxState } from '@ts/ui/textbox_inferno/textbox.types';
 
 // eslint-disable-next-line @stylistic/max-len
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type,@typescript-eslint/explicit-module-boundary-types
