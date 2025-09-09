@@ -66,7 +66,7 @@ export default [
       },
     },
   },
-  ...compatibility.extends('eslint:recommended', 'plugin:import/recommended').map(config => ({
+  ...compat.extends('eslint:recommended', 'plugin:import/recommended').map(config => ({
     ...config,
     files: ['**/*.js']
   })),
