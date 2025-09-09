@@ -1,9 +1,9 @@
 export const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
-  deployment: "gpt-4o-mini",
-  apiVersion: "2024-02-01",
-  endpoint: "https://public-api.devexpress.com/demo-openai",
-  apiKey: "DEMO",
+  deployment: 'gpt-4o-mini',
+  apiVersion: '2024-02-01',
+  endpoint: 'https://public-api.devexpress.com/demo-openai',
+  apiKey: 'DEMO',
 };
 export const defaultText = `Payment: Amount - $123.00
 Statement Date: 10/15/2024
