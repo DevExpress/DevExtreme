@@ -85,4 +85,3 @@ function changeSelectionPriority(e) {
   selectionPriority.value = e.value;
 }
 </script>
-

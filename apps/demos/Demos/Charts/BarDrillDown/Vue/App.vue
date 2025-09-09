@@ -40,9 +40,9 @@ const colors = ['#6babac', '#e55253'];
 function customizePoint() {
   return {
     color: colors[Number(isFirstLevel.value)],
-    hoverStyle:  {
+    hoverStyle: {
       ...!isFirstLevel.value ? { hatching: 'none' } : {},
-    }
+    },
   } as SeriesPoint;
 }
 function onPointClick({ target }) {

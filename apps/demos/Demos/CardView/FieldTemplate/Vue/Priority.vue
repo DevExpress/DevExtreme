@@ -1,7 +1,7 @@
 <template>
   <div :className="priorityClassName">
-      <div className="task__indicator"></div>
-      <div>{{ priority.text }}</div>
+    <div className="task__indicator"/>
+    <div>{{ priority.text }}</div>
   </div>
 </template>
 
@@ -14,7 +14,7 @@ const props = defineProps<{
 }>();
 
 const priority = computed(() =>
-  priorities.find(p => p.id === props.priorityID)
+  priorities.find((p) => p.id === props.priorityID),
 );
 const priorityClassName = `task__priority task__priority--${priority.value.postfix}`;
 </script>

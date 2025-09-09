@@ -33,7 +33,8 @@ export default function App() {
           };
         }
         return step;
-      }));
+      }),
+    );
   }, []);
   const onPrevButtonClick = useCallback(() => {
     setSelectedIndex((prev) => prev - 1);
@@ -95,31 +96,46 @@ export default function App() {
   const onSelectionChanged = useCallback(({ component }) => {
     setSelectedIndex(component.option('selectedIndex') ?? 0);
   }, []);
-  const renderDatesForm = useCallback(() => (
-    <DatesForm
-      formData={formData}
-      validationGroup={validationGroups[0]}
-    />
-  ), [formData]);
-  const renderGuestsForm = useCallback(() => (
-    <GuestsForm
-      formData={formData}
-      validationGroup={validationGroups[1]}
-    />
-  ), [formData]);
-  const renderRoomMealPlanForm = useCallback(() => (
-    <RoomMealPlanForm
-      formData={formData}
-      validationGroup={validationGroups[2]}
-    />
-  ), [formData]);
-  const renderAdditionalForm = useCallback(() => <AdditionalForm formData={formData} />, [formData]);
-  const renderConfirmation = useCallback(() => (
-    <Confirmation
-      formData={formData}
-      isConfirmed={isConfirmed}
-    />
-  ), [formData, isConfirmed]);
+  const renderDatesForm = useCallback(
+    () => (
+      <DatesForm
+        formData={formData}
+        validationGroup={validationGroups[0]}
+      />
+    ),
+    [formData],
+  );
+  const renderGuestsForm = useCallback(
+    () => (
+      <GuestsForm
+        formData={formData}
+        validationGroup={validationGroups[1]}
+      />
+    ),
+    [formData],
+  );
+  const renderRoomMealPlanForm = useCallback(
+    () => (
+      <RoomMealPlanForm
+        formData={formData}
+        validationGroup={validationGroups[2]}
+      />
+    ),
+    [formData],
+  );
+  const renderAdditionalForm = useCallback(
+    () => <AdditionalForm formData={formData} />,
+    [formData],
+  );
+  const renderConfirmation = useCallback(
+    () => (
+      <Confirmation
+        formData={formData}
+        isConfirmed={isConfirmed}
+      />
+    ),
+    [formData, isConfirmed],
+  );
   return (
     <React.Fragment>
       <Stepper

@@ -1,6 +1,8 @@
 <template>
   <p>
-    Enter the number of adults, children, and pets staying in the room. This information help us suggest suitable room types, number of beds, and included amenities.
+    Enter the number of adults, children, and pets staying in the room.
+    This information help us suggest suitable room types, number of beds,
+    and included amenities.
   </p>
   <DxForm
     :form-data="formData"

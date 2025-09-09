@@ -6,7 +6,7 @@ import {
 import { createSankey, environment } from './commonParts/common.js';
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
-import dxSankey from 'viz/sankey/sankey';
+import dxSankey from '__internal/viz/sankey/sankey';
 
 const TitleOrig = titleModule.Title;
 const ExportMenuOrig = exportModule.ExportMenu;

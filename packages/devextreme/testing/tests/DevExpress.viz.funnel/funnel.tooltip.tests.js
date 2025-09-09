@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import dxFunnel from 'viz/funnel/funnel';
+import dxFunnel from '__internal/viz/funnel/funnel';
 import tooltipModule from 'viz/core/tooltip';
-import funnelTooltip from 'viz/funnel/tooltip';
+import * as funnelTooltip from '__internal/viz/funnel/tooltip';
 import { createFunnel, environment, stubAlgorithm } from './commonParts/common.js';
 import { Tooltip as TooltipMock } from '../../helpers/vizMocks.js';
 

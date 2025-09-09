@@ -31,8 +31,8 @@ export class AppComponent {
     showTitle: true,
     width: 700,
     height: 525,
-  }
-  
+  };
+
   constructor(private httpClient: HttpClient, service: Service) {
     this.employees = service.getEmployees();
   }
@@ -40,12 +40,12 @@ export class AppComponent {
   altExpr({ fullName }: Employee) {
     return `Photo of ${fullName}`;
   }
-  
+
   imageExpr({ picture }: Employee) {
     return picture;
   }
-  
-  calculateFullName({firstName, lastName}: Employee) {
+
+  calculateFullName({ firstName, lastName }: Employee) {
     return `${firstName} ${lastName}`;
   }
 
@@ -62,9 +62,7 @@ export class AppComponent {
     return result;
   };
 
-  hireDateValidationCallback = (params) => {
-    return new Date(params.value) > new Date(params.data.birthDate);
-  };
+  hireDateValidationCallback = (params) => new Date(params.value) > new Date(params.data.birthDate);
 }
 
 @NgModule({

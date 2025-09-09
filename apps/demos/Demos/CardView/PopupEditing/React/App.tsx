@@ -11,7 +11,7 @@ function imageExpr({ picture }: Employee) {
   return picture;
 }
 
-function calculateFullName({firstName, lastName}: Employee) {
+function calculateFullName({ firstName, lastName }: Employee) {
   return `${firstName} ${lastName}`;
 }
 
@@ -127,10 +127,10 @@ const App = () => (
       caption="Position"
       dataField="title"
     />
-    <Column dataField="department"/>
-    <Column dataField="address"/>
-    <Column dataField="mobilePhone"/>
-    <Column dataField="email"/>
+    <Column dataField="department" />
+    <Column dataField="address" />
+    <Column dataField="mobilePhone" />
+    <Column dataField="email" />
     <Column
       dataField="notes"
       visible={false}

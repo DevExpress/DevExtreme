@@ -105,7 +105,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { DragDirection, Orientation } from "devextreme/common";
+import type { DragDirection, Orientation } from 'devextreme/common';
 import DxScrollView from 'devextreme-vue/scroll-view';
 import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
 import DxSelectBox from 'devextreme-vue/select-box';

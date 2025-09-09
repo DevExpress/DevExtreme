@@ -5,7 +5,6 @@ import DataGrid, {
 import Button from 'devextreme-react/button';
 import { query } from 'devextreme-react/common/data';
 
-
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 const dataSource = {
   store: {
@@ -32,7 +31,6 @@ const App = () => {
   const [peopleCount, setPeopleCount] = useState(0);
   const [avgDuration, setAvgDuration] = useState(0);
 
-  // eslint-disable-next-line space-before-function-paren
   const calculateStatistics = useCallback(async () => {
     const selectedItems = await dataGrid.getSelectedRowsData();
 

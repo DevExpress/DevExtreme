@@ -1,10 +1,10 @@
 export interface Employee {
-  ID:number;
+  ID: number;
   FirstName: string;
   LastName: string;
   Prefix: string;
   Position: string;
-  StateID:number;
+  StateID: number;
   CityID: number;
 }
 

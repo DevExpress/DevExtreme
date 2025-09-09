@@ -6,7 +6,7 @@ export class IceHockeyStatistics {
   place: number;
 }
 
-const iceHockeyStatistics : IceHockeyStatistics[] = [{
+const iceHockeyStatistics: IceHockeyStatistics[] = [{
   year: 1977,
   place: 4,
 }, {

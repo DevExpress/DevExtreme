@@ -144,4 +144,3 @@ function onHidden() {
   align-items: center;
 }
 </style>
-

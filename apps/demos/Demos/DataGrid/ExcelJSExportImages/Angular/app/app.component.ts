@@ -29,7 +29,7 @@ export class AppComponent {
   employees: Employee[];
 
   constructor(service: Service) {
-    this.employees = service.getEmployess();
+    this.employees = service.getEmployees();
   }
 
   onExporting(e: DxDataGridTypes.ExportingEvent) {

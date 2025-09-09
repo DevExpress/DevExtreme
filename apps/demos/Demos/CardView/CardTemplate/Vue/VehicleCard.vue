@@ -1,13 +1,17 @@
 <template>
   <div class="vehicle__card">
     <div class="vehicle__img-wrapper">
-      <img class="vehicle__img"
+      <img
+        class="vehicle__img"
         :src="`../../../../images/vehicles/image_${id}.png`"
         :alt="`${model}`"
       >
     </div>
     <div class="vehicle__info">
-      <div class="vehicle__name" :title="`${model}`">
+      <div
+        class="vehicle__name"
+        :title="`${model}`"
+      >
         {{ model }}
       </div>
       <div class="vehicle__price">
@@ -26,7 +30,7 @@
           {{ bodyStyleName }}
         </div>
         <div class="vehicle__modification">
-           {{ horsepower }} h.p.
+          {{ horsepower }} h.p.
         </div>
       </div>
       <div class="vehicle__footer-container">

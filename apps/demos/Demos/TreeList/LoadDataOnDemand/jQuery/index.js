@@ -5,7 +5,7 @@ $(() => {
         return $.ajax({
           url: 'https://js.devexpress.com/Demos/NetCore/api/treeListData',
           dataType: 'json',
-          data: { parentIds: options.parentIds.join(",") },
+          data: { parentIds: options.parentIds.join(',') },
         }).then((result) => ({
           data: result,
         }));

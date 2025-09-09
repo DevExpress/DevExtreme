@@ -1,7 +1,7 @@
 import { setHeight, getHeight } from 'core/utils/size';
 import { isNumeric } from 'core/utils/type';
 import $ from 'jquery';
-import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
+import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from '__internal/viz/core/base_widget.utils';
 import {
     environment,
     returnValue,

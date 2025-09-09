@@ -7,7 +7,7 @@ import {
     Tooltip,
     Title,
 } from '../../../helpers/vizMocks.js';
-import dxVectorMapUtils from 'viz/vector_map/vector_map.utils';
+import { _TESTS_resetDataKey } from '__internal/viz/vector_map/vector_map.utils';
 
 import projectionModule from 'viz/vector_map/projection.main';
 import controlBarModule from 'viz/vector_map/control_bar/control_bar';
@@ -25,7 +25,7 @@ import exportModule from 'viz/core/export';
 import tooltipModule from 'viz/core/tooltip';
 import { implementationsMap } from 'core/utils/size';
 
-import 'viz/vector_map';
+import '__internal/viz/vector_map/vector_map';
 
 const StubProjection = stubClass(projectionModule.Projection);
 const StubControlBar = stubClass(controlBarModule.ControlBar);
@@ -68,7 +68,7 @@ export { stubComponentConstructors };
 
 export const environment = {
     beforeEach: function() {
-        dxVectorMapUtils._TESTS_resetDataKey();
+        _TESTS_resetDataKey();
         this.$container = $('<div id="test-container"></div>');
         this.renderer = new Renderer();
         this.themeManager = new StubThemeManager();

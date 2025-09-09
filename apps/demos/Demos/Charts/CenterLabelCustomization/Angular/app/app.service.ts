@@ -9,7 +9,7 @@ export class DataItem {
 
   total: number;
 }
-const data:DataItem[] = [
+const data: DataItem[] = [
   { country: 'France', commodity: 'Nuclear', total: 413278 },
   { country: 'Germany', commodity: 'Nuclear', total: 76536 },
   { country: 'France', commodity: 'Thermal', total: 47594 },
@@ -27,7 +27,11 @@ const cache = {};
 export class Service {
   getData(country?: string): DataItem[] {
     if (country) {
-      return cache[country] = cache[country] || data.filter((item) => item.country === country);
+      if (!cache[country]) {
+        cache[country] = data.filter((item) => item.country === country);
+      }
+
+      return cache[country];
     }
     return data;
   }

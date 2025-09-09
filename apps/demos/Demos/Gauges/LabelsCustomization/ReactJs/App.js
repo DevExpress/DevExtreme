@@ -25,7 +25,7 @@ function App() {
         customizeText={customizeText}
       />
       <Export enabled={true} />
-      <Title text={"Series' Ratings"}>
+      <Title text="Series' Ratings">
         <Font size={28} />
       </Title>
     </BarGauge>

@@ -3,10 +3,10 @@ import {
     createWidget,
 } from './commonParts/common.js';
 import $ from 'jquery';
-import 'viz/tree_map/tiling.squarified';
-import 'viz/tree_map/tiling.strip';
-import 'viz/tree_map/tiling.slice_and_dice';
-import 'viz/tree_map/tiling.rotated_slice_and_dice';
+import '__internal/viz/tree_map/tiling.squarified';
+import '__internal/viz/tree_map/tiling.strip';
+import '__internal/viz/tree_map/tiling.slice_and_dice';
+import '__internal/viz/tree_map/tiling.rotated_slice_and_dice';
 
 const moduleSetup = {
     beforeEach: environment.beforeEach,

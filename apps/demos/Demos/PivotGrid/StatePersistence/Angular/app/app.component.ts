@@ -76,7 +76,7 @@ export class AppComponent {
     if (e.field !== dataSource.field(4)) { return; }
 
     for (const summaryDisplayMode of this.summaryDisplayModes) {
-      var summaryDisplayModeValue = summaryDisplayMode.value;
+      const summaryDisplayModeValue = summaryDisplayMode.value;
 
       e.items.push({
         text: summaryDisplayMode.text,

@@ -131,7 +131,7 @@ function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEven
   },
   ]);
 }
-const getMovieById = function(resourceId) {
+const getMovieById = function (resourceId) {
   return Query(moviesData)
     .filter(['id', resourceId])
     .toArray()[0];

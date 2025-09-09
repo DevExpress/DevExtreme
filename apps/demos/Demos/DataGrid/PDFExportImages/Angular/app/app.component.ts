@@ -27,7 +27,7 @@ export class AppComponent {
   employees: Employee[];
 
   constructor(private service: Service) {
-    this.employees = service.getEmployess();
+    this.employees = service.getEmployees();
   }
 
   onExporting({ component }: DxDataGridTypes.ExportingEvent) {

@@ -73,7 +73,7 @@ export class AppComponent implements AfterViewInit {
     const updateContentText = `<br /><div>Content has been updated on the ${eventName} event.</div><br />`;
     if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
     this.updateContentTimer = setTimeout(() => {
-      this.content = (eventName == 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
+      this.content = (eventName === 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
       args.component.release(false);
     }, 500);
   };

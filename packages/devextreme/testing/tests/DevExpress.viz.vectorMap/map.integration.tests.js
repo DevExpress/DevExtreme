@@ -3,7 +3,7 @@ import { CustomStore } from 'common/data/custom_store';
 import DataSource from 'common/data/data_source';
 import { projection } from 'viz/vector_map/projection';
 
-import 'viz/vector_map/vector_map';
+import '__internal/viz/vector_map/vector_map';
 
 const simpleProjection = projection({
     aspectRatio: 4 / 3,

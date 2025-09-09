@@ -33,7 +33,7 @@ const tasks: string[] = ['Prepare 2016 Financial', 'Prepare 2016 Marketing Plan'
 
 @Injectable()
 export class Service {
-  getTasks() : string[] {
+  getTasks(): string[] {
     return tasks;
   }
 }

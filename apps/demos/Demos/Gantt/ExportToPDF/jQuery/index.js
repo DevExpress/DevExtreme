@@ -130,7 +130,6 @@ $(() => {
     DevExpress.pdfExporter.exportGantt(
       {
         component: ganttInstance,
-        // eslint-disable-next-line new-cap
         createDocumentMethod: (args) => new jsPDF(args),
         format,
         landscape: isLandscape,

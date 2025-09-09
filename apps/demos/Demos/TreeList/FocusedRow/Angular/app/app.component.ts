@@ -51,7 +51,7 @@ export class AppComponent {
   });
 
   onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
-    const rowData = e.row && e.row.data;
+    const rowData = e.row?.data;
     let cellValue: unknown;
     let assigned: string;
 

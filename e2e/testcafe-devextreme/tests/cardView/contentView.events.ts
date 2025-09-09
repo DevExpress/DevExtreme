@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import CardView from 'devextreme-testcafe-models/cardView';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';

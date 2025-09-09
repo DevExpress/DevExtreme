@@ -8,8 +8,8 @@ export class Data {
   argument: number;
 }
 
-function generateData(start:number, end:number, step:number) {
-  const data:Data[] = [];
+function generateData(start: number, end: number, step: number) {
+  const data: Data[] = [];
   for (let i = start; i < end; i += step) {
     const originalValue = Math.sin(i) / i;
     data.push({ value: originalValue + ((0.5 - Math.random()) / 10), originalValue, argument: i });

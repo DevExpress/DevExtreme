@@ -25,8 +25,10 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   dataSource: Data[];
 
+  // eslint-disable-next-line spellcheck/spell-checker
   wwdcDate = new Date(2017, 5, 5);
 
+  // eslint-disable-next-line spellcheck/spell-checker
   tvAnnounceDate = new Date(2019, 2, 25);
 
   watchReleaseDate = new Date(2015, 3, 24);

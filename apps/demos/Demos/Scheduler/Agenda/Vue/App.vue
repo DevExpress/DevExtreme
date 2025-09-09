@@ -31,6 +31,6 @@ const views = ['agenda'];
 const currentDate = new Date(2021, 4, 11);
 const dataSource = new ArrayStore({
   key: 'id',
-  data
+  data,
 });
 </script>

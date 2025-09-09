@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Stepper, Item, type StepperTypes } from 'devextreme-react/stepper'
+import { Stepper, Item, type StepperTypes } from 'devextreme-react/stepper';
 import { Button } from 'devextreme-react/button';
 import { MultiView } from 'devextreme-react/multi-view';
 import validationEngine from 'devextreme/ui/validation_engine';
@@ -15,7 +15,7 @@ import { BookingFormData } from './types.ts';
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
-export default function App () {
+export default function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [steps, setSteps] = useState<StepperTypes.Item[]>(initialSteps);
   const [formData, setFormData] = useState<BookingFormData>(getInitialFormData);
@@ -36,7 +36,7 @@ export default function App () {
         return {
           ...step,
           isValid,
-        }
+        };
       }
 
       return step;
@@ -52,7 +52,7 @@ export default function App () {
 
     setStepValidationResult(selectedIndex, isValid);
 
-    if (isValid){
+    if (isValid) {
       setSelectedIndex(selectedIndex + 1);
     }
   }, [getValidationResult, selectedIndex, setStepValidationResult]);
@@ -72,7 +72,7 @@ export default function App () {
   }, []);
 
   const onNextButtonClick = useCallback(() => {
-    if (selectedIndex < initialSteps.length -1) {
+    if (selectedIndex < initialSteps.length - 1) {
       moveNext();
     } else if (isConfirmed) {
       onReset();
@@ -116,28 +116,33 @@ export default function App () {
     setSelectedIndex(component.option('selectedIndex') ?? 0);
   }, []);
 
-  const renderDatesForm = useCallback(() => {
-    return <DatesForm formData={formData} validationGroup={validationGroups[0]} />;
-  }, [formData]);
+  const renderDatesForm = useCallback(
+    () => <DatesForm formData={formData} validationGroup={validationGroups[0]} />,
+    [formData]
+  );
 
-  const renderGuestsForm = useCallback(() => {
-    return <GuestsForm formData={formData} validationGroup={validationGroups[1]} />;
-  }, [formData]);
+  const renderGuestsForm = useCallback(
+    () => <GuestsForm formData={formData} validationGroup={validationGroups[1]} />,
+    [formData]
+  );
 
-  const renderRoomMealPlanForm = useCallback(() => {
-    return <RoomMealPlanForm formData={formData} validationGroup={validationGroups[2]} />;
-  }, [formData]);
+  const renderRoomMealPlanForm = useCallback(
+    () => <RoomMealPlanForm formData={formData} validationGroup={validationGroups[2]} />,
+    [formData]
+  );
 
-  const renderAdditionalForm = useCallback(() => {
-    return <AdditionalForm formData={formData} />;
-  }, [formData]);
+  const renderAdditionalForm = useCallback(
+    () => <AdditionalForm formData={formData} />,
+    [formData]
+  );
 
-  const renderConfirmation = useCallback(() => {
-    return <Confirmation formData={formData} isConfirmed={isConfirmed} />;
-  }, [formData, isConfirmed]);
+  const renderConfirmation = useCallback(
+    () => <Confirmation formData={formData} isConfirmed={isConfirmed} />,
+    [formData, isConfirmed]
+  );
 
   return (
-    <>
+    <React.Fragment>
       <Stepper
         className={ isStepperReadonly ? 'readonly' : ''}
         focusStateEnabled={!isStepperReadonly}
@@ -166,11 +171,11 @@ export default function App () {
         <div className="nav-panel">
           <div className="current-step">
             {!isConfirmed && (
-              <>
+              <React.Fragment>
                 Step <span className="selected-index">{selectedIndex + 1}</span>
                 {' of '}
                 {steps.length}
-               </>
+              </React.Fragment>
             )}
           </div>
 
@@ -194,6 +199,6 @@ export default function App () {
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }

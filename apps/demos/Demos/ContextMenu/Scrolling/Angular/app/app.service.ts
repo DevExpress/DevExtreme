@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export class ContextMenuItems {
   text: string;
+
   items?: ContextMenuItems[];
 }
 
@@ -40,12 +41,12 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Warranties',
           },
           {
-            text: 'Projectors & Screens'
+            text: 'Projectors & Screens',
           },
           {
             text: 'Computer Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Cell Phones',
@@ -57,7 +58,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Smart Phones & PDAs',
           },
           {
-            text: 'Senior Cell Phones'
+            text: 'Senior Cell Phones',
           },
           {
             text: 'Mobile Broadband Devices',
@@ -65,7 +66,7 @@ const contextMenuItems: ContextMenuItems[] = [
           {
             text: 'Cell Phone Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Camera & Photo',
@@ -115,7 +116,7 @@ const contextMenuItems: ContextMenuItems[] = [
           {
             text: 'Camera Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Audio',
@@ -150,7 +151,7 @@ const contextMenuItems: ContextMenuItems[] = [
           {
             text: 'Speakers',
           },
-        ]
+        ],
       },
       {
         text: 'Home Appliances',
@@ -174,22 +175,22 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Refrigerators',
           },
           {
-            text: 'Washers & Dryers'
+            text: 'Washers & Dryers',
           },
           {
             text: ' Water Heaters',
           },
           {
-            'text': 'Vacuum'
+            'text': 'Vacuum',
           },
           {
-            text: 'Steaming & Ironing'
-          }
-        ]
+            text: 'Steaming & Ironing',
+          },
+        ],
       },
-    ]
+    ],
   },
-  
+
   {
     text: 'Entertainment',
     items: [
@@ -215,15 +216,15 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Vinyl',
           },
           {
-            text: 'Cassette'
+            text: 'Cassette',
           },
           {
             text: 'Musical Instruments',
           },
           {
-            text: 'DJ Equipment'
-          }
-        ]
+            text: 'DJ Equipment',
+          },
+        ],
       },
       {
         text: 'Games & Toys',
@@ -241,7 +242,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Download Games',
           },
           {
-            text: 'Handheld Game Systems'
+            text: 'Handheld Game Systems',
           },
           {
             text: 'Legacy Systems',
@@ -249,11 +250,11 @@ const contextMenuItems: ContextMenuItems[] = [
           {
             text: 'Cards',
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
-  
+
   {
     text: 'Healthcare & Living',
     items: [
@@ -279,12 +280,12 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Sport Electronics',
           },
           {
-            text: 'Sport Apparel'
+            text: 'Sport Apparel',
           },
           {
             text: 'Trainers & Tennis Shoes',
           },
-        ]
+        ],
       },
       {
         text: 'Beauty',
@@ -302,7 +303,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Nail Care',
           },
           {
-            text: 'Make-up'
+            text: 'Make-up',
           },
           {
             text: 'Fragrance',
@@ -313,7 +314,7 @@ const contextMenuItems: ContextMenuItems[] = [
           {
             text: 'Tools & Accessories',
           },
-        ]
+        ],
       },
       {
         text: 'Fashion',
@@ -335,10 +336,10 @@ const contextMenuItems: ContextMenuItems[] = [
           },
           {
             text: 'Accessories',
-          }
-        ]
-      }
-    ]
+          },
+        ],
+      },
+    ],
   },
 ];
 

@@ -129,7 +129,7 @@ export class Service {
 
   getAnnotationSources(): AnnotationInfo[] {
     const annotations: AnnotationInfo[] = [];
-    for (let i = 0; i < annotationSources.length; i++) {
+    for (let i = 0; i < annotationSources.length; i += 1) {
       const annotation = annotationSources[i];
       const country = annotation.country;
       const image = `../../../../images/flags/3x2/${country.replace(/\s/, '')}.svg`;

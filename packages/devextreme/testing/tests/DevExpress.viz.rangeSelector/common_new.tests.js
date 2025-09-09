@@ -6,7 +6,7 @@ import {
 import rendererModule from 'viz/core/renderers/renderer';
 import axisModule from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
-import 'viz/range_selector/range_selector';
+import '__internal/viz/range_selector/range_selector';
 
 const StubAxis = stubClass(axisModule.Axis);
 

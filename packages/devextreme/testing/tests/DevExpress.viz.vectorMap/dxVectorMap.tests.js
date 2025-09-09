@@ -19,7 +19,7 @@ import {
 import typeUtils from 'core/utils/type';
 import plaqueModule from 'viz/core/plaque';
 
-import 'viz/vector_map/vector_map';
+import '__internal/viz/vector_map/vector_map';
 
 const stubLayersEnvironment = $.extend({}, environment, {
     beforeEach: function() {

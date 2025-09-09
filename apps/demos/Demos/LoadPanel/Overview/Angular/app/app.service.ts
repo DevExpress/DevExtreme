@@ -40,7 +40,7 @@ const employee: Employee = {
 
 @Injectable()
 export class Service {
-  getEmployee() : Employee {
+  getEmployee(): Employee {
     return employee;
   }
 }

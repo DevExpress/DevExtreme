@@ -1,6 +1,7 @@
 <template>
   <p>
-    Review room types that can accommodate your group size and make your selection. You can also choose a meal plan, whether it's breakfast only or full board.
+    Review room types that can accommodate your group size and make your selection.
+    You can also choose a meal plan, whether it's breakfast only or full board.
   </p>
   <DxForm
     :form-data="formData"

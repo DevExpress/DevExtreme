@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <DxChart
@@ -87,4 +86,3 @@ function exportChart() {
   font-weight: 500;
 }
 </style>
-

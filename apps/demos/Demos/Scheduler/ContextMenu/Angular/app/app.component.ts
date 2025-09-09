@@ -7,7 +7,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
-  type DxSchedulerTypes
+  type DxSchedulerTypes,
 } from 'devextreme-angular/ui/scheduler';
 import { DxContextMenuModule, type DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 

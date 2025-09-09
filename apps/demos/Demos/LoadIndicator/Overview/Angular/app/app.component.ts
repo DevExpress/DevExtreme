@@ -23,7 +23,7 @@ export class AppComponent {
 
   buttonText = 'Send';
 
-  onClick(data) {
+  onClick() {
     this.buttonText = 'Sending';
     this.loadIndicatorVisible = true;
 

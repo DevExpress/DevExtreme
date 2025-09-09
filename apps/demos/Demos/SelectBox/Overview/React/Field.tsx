@@ -5,16 +5,10 @@ const nameLabel = { 'aria-label': 'Name' };
 
 export default function Field(data: { ImageSrc: any; Name: any }) {
   return (
-    <div className="custom-item">
+    <div className="custom-addon">
       <img
         alt="Product name"
-        src={data && data.ImageSrc}
-      />
-      <TextBox
-        className="product-name"
-        inputAttr={nameLabel}
-        defaultValue={data && data.Name}
-        readOnly={true}
+        src={data?.ImageSrc}
       />
     </div>
   );

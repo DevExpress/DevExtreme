@@ -68,6 +68,7 @@ export class AppComponent {
       } else {
         if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
+        // eslint-disable-next-line consistent-return
         this.holidays.forEach((item) => {
           if (date.getDate() === item[0] && date.getMonth() === item[1]) {
             cssClass = 'holiday';

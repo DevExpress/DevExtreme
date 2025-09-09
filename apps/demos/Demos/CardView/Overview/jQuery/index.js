@@ -1,5 +1,5 @@
 $(() => {
-  const cardView = $('#card-view').dxCardView({
+  $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'ID',
     cardMinWidth: 300,
@@ -14,13 +14,13 @@ $(() => {
     columns: [
       {
         dataField: 'Status',
-        fieldValueTemplate({ field: { value } }) {          
+        fieldValueTemplate({ field: { value } }) {
           return $('<div>')
             .append(
-              $('<div>').addClass('indicator')
+              $('<div>').addClass('indicator'),
             )
             .append(
-              $('<div>').text(value)
+              $('<div>').text(value),
             )
             .addClass('status')
             .toggleClass('status--salaried', value === 'Salaried')
@@ -45,7 +45,7 @@ $(() => {
       'Mobile_Phone',
       {
         dataField: 'Email',
-        fieldValueTemplate({ field: { value, text }}) {
+        fieldValueTemplate({ field: { value, text } }) {
           return $('<a>')
             .attr('href', `mailto:${value}`)
             .text(text);
@@ -89,7 +89,7 @@ $(() => {
               });
             },
           }),
-        )
+        );
     },
     selection: {
       mode: 'multiple',

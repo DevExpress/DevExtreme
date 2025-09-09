@@ -40,6 +40,7 @@ export class AppComponent {
     this.buildingData = service.getBuildingData();
   }
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip({ layer, attribute }) {
     if (layer.name === 'rooms') {
       return {

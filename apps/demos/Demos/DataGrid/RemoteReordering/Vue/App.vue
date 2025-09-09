@@ -73,7 +73,7 @@ const onReorder = (e: any) => {
   e.promise = processReorder(e);
 };
 
-const processReorder = async(e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
+const processReorder = async (e: DxDataGridTypes.RowDraggingReorderEvent<Task>) => {
   const visibleRows = e.component.getVisibleRows();
   const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 

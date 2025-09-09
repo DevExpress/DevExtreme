@@ -55,6 +55,7 @@ const supportedWidgets = [
 
       const toolbarItems = [] as any[];
       (supportedWidgets as any[]).forEach((widgetName) => {
+        // eslint-disable-next-line @typescript-eslint/init-declarations
         let iconPosition;
         if (widgetName === 'dxTabs') {
           iconPosition = 'start';

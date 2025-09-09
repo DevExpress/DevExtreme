@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import React, { useCallback, useMemo, useState } from 'react';
 import Scheduler from 'devextreme-react/scheduler';
 import notify from 'devextreme/ui/notify';
@@ -11,6 +10,7 @@ import TimeCell from './TimeCell.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
+// eslint-disable-next-line consistent-return
 const ariaDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
@@ -20,7 +20,8 @@ const ariaDescription = () => {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      }));
+      }),
+    );
   if (disabledDates?.length === 1) {
     return `${disabledDates} is a disabled date`;
   }
@@ -86,7 +87,7 @@ const App = () => {
         currentView={currentView}
       />
     ),
-    [],
+    [currentView],
   );
   return (
     <Scheduler

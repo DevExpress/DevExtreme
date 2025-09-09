@@ -139,7 +139,8 @@ function changeFavoriteState() {
     message,
     width: 450,
   },
-  favoriteState ? 'success' : 'error', 2000);
+  favoriteState ? 'success' : 'error',
+  2000);
 }
 </script>
 <style src="./styles.css"></style>

@@ -49,6 +49,14 @@ fixture.disablePageReloads`LoadIndicator`
       }
     `);
 
+    if (animationType === 'sparkle') {
+      await insertStylesheetRulesToPage(`
+        .${LOADINDICATOR_SEGMENT_CLASS} {
+          transform: scale(1) !important;
+        }
+      `);
+    }
+
     return createWidget('dxLoadIndicator', {
       width: 128,
       height: 128,

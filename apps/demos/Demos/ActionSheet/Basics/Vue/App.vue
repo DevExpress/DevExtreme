@@ -49,4 +49,3 @@ function showClickNotification(buttonName: string) {
   notify(`The "${buttonName}" button is clicked.`);
 }
 </script>
-

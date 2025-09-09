@@ -27,8 +27,8 @@ $(() => {
       const signal = controller.signal;
 
       const aiPrompt = [
-        { role: 'system', content: prompt.system, },
-        { role: 'user', content: prompt.user, },
+        { role: 'system', content: prompt.system },
+        { role: 'user', content: prompt.user },
       ];
 
       const promise = getAIResponse(aiPrompt, signal);
@@ -43,7 +43,7 @@ $(() => {
       return result;
     },
   });
-  
+
   $('.html-editor').dxHtmlEditor({
     height: 530,
     value: markup,
@@ -62,18 +62,16 @@ $(() => {
             'translate',
             'askAI',
             {
-                name: 'custom',
-                text: 'Extract Keywords',
-                prompt: () => {
-                    return 'Extract a list of keywords from the text and return it as a comma-separated string';
-                },
+              name: 'custom',
+              text: 'Extract Keywords',
+              prompt: () => 'Extract a list of keywords from the text and return it as a comma-separated string',
             },
           ],
-        }, 
+        },
         'separator',
         'undo',
-        'redo'
+        'redo',
       ],
-    }
+    },
   });
 });

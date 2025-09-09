@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, PatternRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
+import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item, RequiredRule, EmailRule, AsyncRule, CustomRule } from 'devextreme-react/card-view';
 import 'devextreme-react/text-area';
 import { employees, Employee } from './data.ts';
 
@@ -11,7 +11,7 @@ function imageExpr({ picture }: Employee) {
   return picture;
 }
 
-function calculateFullName({firstName, lastName}: Employee) {
+function calculateFullName({ firstName, lastName }: Employee) {
   return `${firstName} ${lastName}`;
 }
 
@@ -32,11 +32,11 @@ async function emailValidationCallback(params) {
   const result = await response.json();
 
   return result;
-};
+}
 
 function hireDateValidationCallback(params) {
   return new Date(params.value) > new Date(params.data.birthDate);
-};
+}
 
 const App = () => (
   <CardView
@@ -128,7 +128,7 @@ const App = () => (
           <Item
             dataField="mobilePhone"
             editorOptions={{
-              mask: "+1 (000) 000-0000",
+              mask: '+1 (000) 000-0000',
               useMaskedValue: true,
             }}
           ></Item>
@@ -146,13 +146,13 @@ const App = () => (
       dataField="birthDate"
       dataType="date"
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="hireDate"
       dataType="date"
     >
-      <RequiredRule/>
+      <RequiredRule />
       <CustomRule
         message="Hire date cannot be earlier than birth date"
         validationCallback={hireDateValidationCallback}
@@ -162,15 +162,15 @@ const App = () => (
       caption="Position"
       dataField="title"
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
-    <Column dataField="department"/>
-    <Column dataField="address"/>
+    <Column dataField="department" />
+    <Column dataField="address" />
     <Column dataField="mobilePhone">
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column dataField="email">
-      <EmailRule/>
+      <EmailRule />
       <AsyncRule
         message="Email address is not unique"
         ignoreEmptyValue={true}
@@ -185,13 +185,13 @@ const App = () => (
       dataField="firstName"
       visible={false}
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="lastName"
       visible={false}
     >
-      <RequiredRule/>
+      <RequiredRule />
     </Column>
     <Column
       dataField="city"

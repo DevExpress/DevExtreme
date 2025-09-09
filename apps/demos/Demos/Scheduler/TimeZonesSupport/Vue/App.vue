@@ -40,7 +40,7 @@ const views = ['workWeek'];
 const dataSource = data;
 const currentDate = new Date(2021, 3, 27);
 
-const getTimeZones = (date: Date) => getTimeZonesUtility(date, locations)
+const getTimeZones = (date: Date) => getTimeZonesUtility(date, locations);
 
 const timeZones = ref(getTimeZones(currentDate));
 const currentTimeZone = ref(timeZones.value[0].id);

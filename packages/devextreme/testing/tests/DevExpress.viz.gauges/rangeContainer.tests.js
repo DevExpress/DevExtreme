@@ -4,11 +4,11 @@ import {
     Renderer,
     Element,
 } from '../../helpers/vizMocks.js';
-import BaseRangeContainer from 'viz/gauges/base_range_container';
-import CircularRangeContainer from 'viz/gauges/circular_range_container';
-import LinearRangeContainer from 'viz/gauges/linear_range_container';
-import { Translator1D } from 'viz/translators/translator1d';
-import themeManagerModule from 'viz/gauges/theme_manager';
+import BaseRangeContainer from '__internal/viz/gauges/base_range_container';
+import CircularRangeContainer from '__internal/viz/gauges/circular_range_container';
+import LinearRangeContainer from '__internal/viz/gauges/linear_range_container';
+import { Translator1D } from '__internal/viz/translators/translator1d';
+import themeManagerModule from '__internal/viz/gauges/theme_manager';
 
 class TestRangeContainer extends BaseRangeContainer {
     _processOptions() {

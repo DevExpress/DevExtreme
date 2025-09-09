@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Field } from 'devextreme/ui/filter_builder';
 
 export const filter = [

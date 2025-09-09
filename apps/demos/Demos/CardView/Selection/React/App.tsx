@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
-import SelectBox  from 'devextreme-react/select-box';
-import CheckBox  from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import { employees, Employee } from './data.ts';
 
 function altExpr({ FullName }: Employee): string {
@@ -29,7 +29,7 @@ const App = () => {
     cardViewRef.current!.instance().clearSelection();
   }, []);
 
-  return <>
+  return <React.Fragment>
     <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
@@ -64,7 +64,7 @@ const App = () => {
         </div>
         <div className="option">
           <CheckBox
-            text={"Allow Select All"}
+            text="Allow Select All"
             value={allowSelectAll}
             onValueChange={setAllowSelectAll}
             disabled={selectionMode !== 'multiple'}
@@ -103,7 +103,7 @@ const App = () => {
         dataField="Email"
       />
     </CardView>
-  </>;
+  </React.Fragment>;
 };
 
 export default App;

@@ -19,9 +19,9 @@ export class AdditionalFormComponent {
   textAreaOptions: DxTextAreaTypes.Properties = {
     height: 160,
     elementAttr: { id: 'additionalRequest' },
-  }
+  };
 
-  labelOptions: DxFormTypes.SimpleItem["label"] = {
+  labelOptions: DxFormTypes.SimpleItem['label'] = {
     visible: false,
   };
 }

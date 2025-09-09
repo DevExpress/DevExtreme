@@ -54,4 +54,3 @@ function setSelectedValue(e) {
   selectedValue.value = e.value;
 }
 </script>
-

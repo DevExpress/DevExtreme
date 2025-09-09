@@ -25,12 +25,17 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class AppComponent {
   steps: DxStepperTypes.Item[];
+
   orientations: any[];
+
   navigationModes: any[];
 
   orientation: string;
+
   navigationMode: boolean;
+
   selectOnFocus: boolean = true;
+
   rtlMode: boolean = false;
 
   constructor(private readonly appService: AppService) {

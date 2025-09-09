@@ -29,6 +29,7 @@ export class AppComponent {
     this.iceHockeyStatistics = service.getIceHockeyStatistics();
   }
 
+  // eslint-disable-next-line consistent-return
   customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     const color = {
       1: 'gold',

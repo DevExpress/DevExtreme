@@ -1,10 +1,8 @@
-
 import React, { useCallback } from 'react';
 import { DrillInfo } from './data';
 
 interface BreadcrumbProps {
   key: string;
-  // eslint-disable-next-line no-unused-vars
   onClick: (props: DrillInfo['node']) => void;
   info: DrillInfo;
   isLast: boolean;

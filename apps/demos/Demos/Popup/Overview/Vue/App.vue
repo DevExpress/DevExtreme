@@ -156,4 +156,3 @@ function showInfo(employee) {
   margin-top: 0;
 }
 </style>
-

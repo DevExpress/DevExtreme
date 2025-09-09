@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
@@ -29,7 +28,6 @@ const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
   if (result && typeof result.then === 'function') {
-    // eslint-disable-next-line no-promise-executor-return
     return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
   }
 
@@ -64,11 +62,9 @@ FRAMEWORKS.forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
-      // eslint-disable-next-line spellcheck/spell-checker
       t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
       await t.resizeWindow(1000, 800);
     })
-    // eslint-disable-next-line spellcheck/spell-checker
     .afterEach((t) => clearTimeout(t.ctx.watchDogHandle))
     .clientScripts([
       { module: 'mockdate' },
@@ -88,7 +84,7 @@ FRAMEWORKS.forEach((approach) => {
 
   getDemoPaths(approach).forEach((demoPath, index) => {
     if (!shouldRunTestAtIndex(index + 1) || !existsSync(demoPath)) { return; }
-    // eslint-disable-next-line max-len
+
     const readFrom = (relativePath, mapCallback) => globalReadFrom(demoPath, relativePath, mapCallback);
 
     const testParts = demoPath.split(/[/\\]/);

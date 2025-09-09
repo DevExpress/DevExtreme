@@ -23,7 +23,7 @@ const props = defineProps<{
   templateTooltipModel?: DxSchedulerTypes.AppointmentTooltipTemplateData
 }>();
 
-const getMovieById = function(resourceId) {
+const getMovieById = function (resourceId) {
   return Query(moviesData)
     .filter(['id', resourceId])
     .toArray()[0];

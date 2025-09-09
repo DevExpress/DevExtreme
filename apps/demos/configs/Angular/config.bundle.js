@@ -84,4 +84,5 @@ function useBundle() {
 
 // useBundle();
 System.config(window.config);
+// eslint-disable-next-line no-console
 System.import('@angular/compiler').catch(console.error.bind(console));

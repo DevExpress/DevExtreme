@@ -3,9 +3,36 @@ import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import type { Options } from 'rrule';
 import { RRule, RRuleSet } from 'rrule';
 
 import timeZoneUtils from './m_utils_time_zone';
+
+interface ProcessorOptions {
+  start: Date;
+  end?: Date;
+  min: Date;
+  max: Date;
+  appointmentTimezoneOffset: number;
+  rule?: string;
+  exception?: string;
+  firstDayOfWeek?: number;
+  getExceptionDateTimezoneOffsets?: (date: Date) => number[];
+}
+interface Rule {
+  count: number;
+  interval: number;
+  freq: string;
+  until: Date | null;
+}
+interface RRuleIntervalParams {
+  startIntervalDate: Date;
+  minViewTime: number;
+  minViewDate: Date;
+  maxViewDate: Date;
+  startIntervalDateDSTShift: number;
+  appointmentDuration: number;
+}
 
 const toMs = dateUtils.dateToMilliseconds;
 const { addOffsets } = dateUtilsTs;
@@ -29,13 +56,13 @@ const RRULE_BROKEN_TIMEZONES = [
   'Pacific/Kiritimati',
 ];
 
-let recurrence: RecurrenceProcessor | null = null;
+let recurrenceProcessor: RecurrenceProcessor | null = null;
 
 export function getRecurrenceProcessor(): RecurrenceProcessor {
-  if (!recurrence) {
-    recurrence = new RecurrenceProcessor();
+  if (!recurrenceProcessor) {
+    recurrenceProcessor = new RecurrenceProcessor();
   }
-  return recurrence;
+  return recurrenceProcessor;
 }
 
 class RecurrenceProcessor {
@@ -45,7 +72,11 @@ class RecurrenceProcessor {
 
   validator = new RecurrenceValidator();
 
-  generateDates(options) {
+  generateDates(options: ProcessorOptions): Date[] {
+    if (!options.rule) {
+      return [];
+    }
+
     const recurrenceRule = this.evalRecurrenceRule(options.rule);
     const { rule } = recurrenceRule;
 
@@ -70,7 +101,7 @@ class RecurrenceProcessor {
       .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
   }
 
-  _createRruleIntervalParams(options) {
+  _createRruleIntervalParams(options: ProcessorOptions): RRuleIntervalParams {
     const {
       start, min, max, appointmentTimezoneOffset,
     } = options;
@@ -103,7 +134,11 @@ class RecurrenceProcessor {
     };
   }
 
-  _convertRruleResult(rruleIntervalParams, options, rruleDate) {
+  _convertRruleResult(
+    rruleIntervalParams: RRuleIntervalParams,
+    options: ProcessorOptions,
+    rruleDate: Date,
+  ): Date {
     const convertedBackDate = addOffsets(
       rruleDate,
       ...this._getLocalMachineOffset(rruleDate),
@@ -122,7 +157,7 @@ class RecurrenceProcessor {
     return resultDate;
   }
 
-  _getLocalMachineOffset(rruleDate) {
+  _getLocalMachineOffset(rruleDate: Date): number[] {
     const machineTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
     const machineTimezoneName = timeZoneUtils.getMachineTimezoneName();
     const result = [machineTimezoneOffset];
@@ -144,11 +179,10 @@ class RecurrenceProcessor {
     return result;
   }
 
-  hasRecurrence(options) {
-    return Boolean(this.generateDates(options).length);
-  }
-
-  evalRecurrenceRule(rule) {
+  evalRecurrenceRule(rule?: string): {
+    rule: Rule;
+    isValid: boolean;
+  } {
     const result = {
       rule: {} as any,
       isValid: false,
@@ -217,11 +251,11 @@ class RecurrenceProcessor {
     return result.toUpperCase();
   }
 
-  _parseExceptionToRawArray(value) {
-    return value.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+  _parseExceptionToRawArray(value: string): RegExpExecArray | null {
+    return /(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/.exec(value);
   }
 
-  getDateByAsciiString(exceptionText) {
+  getDateByAsciiString(exceptionText: string | Date): Date | null {
     if (typeof exceptionText !== 'string') {
       return exceptionText;
     }
@@ -272,8 +306,8 @@ class RecurrenceProcessor {
     return new Date().getTimezoneOffset();
   }
 
-  _initializeRRule(options, startDateUtc, until) {
-    const ruleOptions = RRule.parseString(options.rule);
+  _initializeRRule(options: ProcessorOptions, startDateUtc: Date, until: Date | null): void {
+    const ruleOptions = RRule.parseString(options.rule!);
     const { firstDayOfWeek } = options;
 
     ruleOptions.dtstart = startDateUtc;
@@ -297,7 +331,8 @@ class RecurrenceProcessor {
       const exceptionStrings = options.exception;
       const exceptionDates = exceptionStrings
         .split(',')
-        .map((rule) => this.getDateByAsciiString(rule));
+        .map((rule) => this.getDateByAsciiString(rule))
+        .filter(Boolean) as Date[];
 
       exceptionDates.forEach((date) => {
         const rruleTimezoneOffsets = typeof options.getExceptionDateTimezoneOffsets === 'function'
@@ -313,7 +348,7 @@ class RecurrenceProcessor {
     }
   }
 
-  _createRRule(ruleOptions) {
+  _createRRule(ruleOptions: Partial<Options>): void {
     this._dispose();
 
     this.rRuleSet = new RRuleSet();
@@ -322,9 +357,9 @@ class RecurrenceProcessor {
     this.rRuleSet.rrule(this.rRule);
   }
 
-  _parseRecurrenceRule(recurrence) {
+  _parseRecurrenceRule(recurrenceRule: string): Rule {
     const ruleObject: any = {};
-    const ruleParts = recurrence.split(';');
+    const ruleParts = recurrenceRule.split(';');
 
     for (let i = 0, len = ruleParts.length; i < len; i++) {
       const rule = ruleParts[i].split('=');
@@ -334,16 +369,14 @@ class RecurrenceProcessor {
       ruleObject[ruleName] = ruleValue;
     }
 
-    // eslint-disable-next-line radix
-    const count = parseInt(ruleObject.count);
+    const count = parseInt(ruleObject.count, 10);
 
     if (!isNaN(count)) {
       ruleObject.count = count;
     }
 
     if (ruleObject.interval) {
-      // eslint-disable-next-line radix
-      const interval = parseInt(ruleObject.interval);
+      const interval = parseInt(ruleObject.interval, 10);
       if (!isNaN(interval)) {
         ruleObject.interval = interval;
       }
@@ -358,7 +391,7 @@ class RecurrenceProcessor {
     return ruleObject;
   }
 
-  _createDateTuple(parseResult): [
+  _createDateTuple(parseResult: RegExpExecArray): [
     number,
     number,
     number,
@@ -378,26 +411,22 @@ class RecurrenceProcessor {
       parseResult.splice(6);
     }
 
-    parseResult[1]--;
+    parseResult.unshift('');
 
-    parseResult.unshift(null);
-
-    /* eslint-disable radix */
     return [
-      parseInt(parseResult[1]),
-      parseInt(parseResult[2]),
-      parseInt(parseResult[3]),
-      parseInt(parseResult[4]) || 0,
-      parseInt(parseResult[5]) || 0,
-      parseInt(parseResult[6]) || 0,
+      parseInt(parseResult[1], 10),
+      parseInt(parseResult[2], 10) - 1,
+      parseInt(parseResult[3], 10),
+      parseInt(parseResult[4], 10) || 0,
+      parseInt(parseResult[5], 10) || 0,
+      parseInt(parseResult[6], 10) || 0,
       isUtc,
     ];
-    /* eslint-enable radix */
   }
 }
 
 class RecurrenceValidator {
-  validateRRule(rule, recurrence) {
+  validateRRule(rule, recurrence): boolean {
     if (this._brokenRuleNameExists(rule)
             || !freqNames.includes(rule.freq)
             || this._wrongCountRule(rule) || this._wrongIntervalRule(rule)

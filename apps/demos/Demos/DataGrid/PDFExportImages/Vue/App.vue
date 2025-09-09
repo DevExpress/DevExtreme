@@ -50,7 +50,6 @@ import { jsPDF } from 'jspdf';
 import { employees } from './data.ts';
 
 const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
 
   exportDataGrid({

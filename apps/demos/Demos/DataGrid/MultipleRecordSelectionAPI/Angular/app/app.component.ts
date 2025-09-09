@@ -32,31 +32,31 @@ export class AppComponent {
 
   selectedRows: number[] = [];
 
-  selectionChangedBySelectbox: boolean;
+  selectionChangedBySelectBox: boolean;
 
   constructor(service: Service) {
     this.employees = service.getEmployees();
   }
 
   filterSelected(event) {
-    this.selectionChangedBySelectbox = true;
+    this.selectionChangedBySelectBox = true;
 
     const prefix = event.value;
 
     if (!prefix) { return; }
     if (prefix === 'All') { this.selectedRows = this.employees.map((employee) => employee.ID); } else {
-      this.selectedRows = this.employees.filter((employe) => employe.Prefix === prefix).map((employee) => employee.ID);
+      this.selectedRows = this.employees.filter((employee) => employee.Prefix === prefix).map((employee) => employee.ID);
     }
 
     this.prefix = prefix;
   }
 
   selectionChangedHandler() {
-    if (!this.selectionChangedBySelectbox) {
+    if (!this.selectionChangedBySelectBox) {
       this.prefix = null;
     }
 
-    this.selectionChangedBySelectbox = false;
+    this.selectionChangedBySelectBox = false;
   }
 }
 

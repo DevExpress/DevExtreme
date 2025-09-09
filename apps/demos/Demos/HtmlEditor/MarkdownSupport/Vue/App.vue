@@ -38,13 +38,13 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkStringify from "remark-stringify";
-import rehypeParse from "rehype-parse";
-import rehypeRemark from "rehype-remark";
-import rehypeStringify from "rehype-stringify";
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import remarkStringify from 'remark-stringify';
+import rehypeParse from 'rehype-parse';
+import rehypeRemark from 'rehype-remark';
+import rehypeStringify from 'rehype-stringify';
 import {
   DxHtmlEditor,
   DxToolbar,

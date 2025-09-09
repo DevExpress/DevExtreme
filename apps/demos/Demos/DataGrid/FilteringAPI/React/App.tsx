@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DataGrid, { Column, DataGridRef, Pager, } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef, Pager } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme-react/common/data';
 
@@ -43,9 +43,9 @@ const App = () => {
     <div>
       <div className="left-side">
         <div className="logo">
-          <img src="../../../../images/logo-devav.png" alt="DEVAV"/>
+          <img src="../../../../images/logo-devav.png" alt="DEVAV" />
           &nbsp;
-          <img src="../../../../images/logo-tasks.png" alt="Tasks"/>
+          <img src="../../../../images/logo-tasks.png" alt="Tasks" />
         </div>
       </div>
       <div className="right-side">

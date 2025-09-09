@@ -1,6 +1,16 @@
 import $ from 'jquery';
 import Color from 'color';
-import { registerPalette, generateColors, getPalette, createPalette, getDiscretePalette, _DEBUG_palettes, currentPalette, getGradientPalette, getAccentColor } from 'viz/palette';
+import {
+    registerPalette,
+    generateColors,
+    getPalette,
+    createPalette,
+    getDiscretePalette,
+    currentPalette,
+    getGradientPalette,
+    getAccentColor
+} from 'viz/palette';
+import { _DEBUG_palettes } from '__internal/viz/palette';
 
 const environment = {
     beforeEach: function() {

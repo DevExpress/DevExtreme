@@ -178,7 +178,6 @@ import DxForm, {
   DxAsyncRule,
   DxCustomRule,
 } from 'devextreme-vue/form';
-// eslint-disable-next-line
 import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxAutocomplete
 import 'devextreme-vue/date-range-box';
 import notify from 'devextreme/ui/notify';
@@ -346,7 +345,7 @@ function handleSubmit(e) {
   }, 'success', 3000);
   e.preventDefault();
 }
-const sendRequest = function(value) {
+const sendRequest = function (value) {
   const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {
