@@ -12,7 +12,7 @@ function altExpr({ First_Name, Last_Name }: Employee): string {
 
 function imageExpr({ First_Name, Last_Name }: Employee): string {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
-} 
+}
 
 function calculateFullName({ First_Name, Last_Name }: Employee): string {
   return `${First_Name} ${Last_Name}`;
@@ -25,7 +25,7 @@ const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState<'select' | 'dragAndDrop'>('select');
   const [searchEnabled, setSearchEnabled] = useState(true);
   const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true)
+  const [selectByClick, setSelectByClick] = useState(true);
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
 
   return <React.Fragment>

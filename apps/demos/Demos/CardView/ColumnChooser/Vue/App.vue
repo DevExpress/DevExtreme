@@ -121,7 +121,7 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 }
 
 const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');
-const searchEnabled = ref(true)
+const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);
 const allowColumnReordering = ref(false);
