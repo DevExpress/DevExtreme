@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import * as React from 'react';
 import * as events from 'devextreme/events';
 
@@ -16,6 +17,7 @@ import {
   DXTemplateCollection,
   TemplateFunc,
   TemplateManagerUpdateContext,
+  ITemplate,
 } from './types';
 
 import { TemplateWrapper } from './template-wrapper';
@@ -23,7 +25,6 @@ import { TemplateInstantiationModels, generateID } from './helpers';
 import { DX_REMOVE_EVENT } from './component-base';
 import { ITemplateArgs } from './template';
 import { getOption as getConfigOption } from './config';
-import { ITemplate } from './configuration/config-node';
 
 function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['data'] {
   if (getConfigOption('useLegacyTemplateEngine')) {
@@ -131,20 +132,20 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     function createDXTemplates(templateOptions: Record<string, ITemplate>): DXTemplateCollection {
       const factories = Object.entries(templateOptions)
         .reduce<Record<string, TemplateFunc>>((res, [key, template]) => (
-        {
-          ...res,
-          [key]: getTemplateFunction(template),
-        }
-      ), {});
+          {
+            ...res,
+            [key]: getTemplateFunction(template),
+          }
+        ), {});
 
       templateFactories.current = factories;
 
       const dxTemplates = Object.keys(factories)
         .reduce<DXTemplateCollection>((templates, templateKey) => {
-        templates[templateKey] = { render: getRenderFunc(templateKey) };
+          templates[templateKey] = { render: getRenderFunc(templateKey) };
 
-        return templates;
-      }, {});
+          return templates;
+        }, {});
 
       return dxTemplates;
     }
