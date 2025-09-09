@@ -1,7 +1,4 @@
 import React from 'react';
-import TextBox from 'devextreme-react/text-box';
-
-const nameLabel = { 'aria-label': 'Name' };
 
 export default function Field(data: { ImageSrc: any; Name: any }) {
   return (

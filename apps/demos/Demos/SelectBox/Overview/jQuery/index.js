@@ -48,7 +48,7 @@ $(() => {
         const result = $(`<div class="custom-addon"><img alt="Product name" src="${src}"/></div>`);
 
         return result;
-      }
+      },
     },
     itemTemplate(data) {
       return `<div class='custom-item'><img alt='Product name' src='${
