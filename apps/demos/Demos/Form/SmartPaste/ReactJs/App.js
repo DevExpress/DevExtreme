@@ -1,41 +1,36 @@
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
-import { AzureOpenAI } from 'openai';
-import { AIIntegration } from 'devextreme-react/common/ai-integration';
-import { Button } from 'devextreme-react/button';
-import {
-  Form, Item, GroupItem, ButtonItem,
-} from 'devextreme-react/form';
-import { TextArea } from 'devextreme-react/text-area';
-import notify from 'devextreme/ui/notify';
-import { AzureOpenAIConfig, defaultText } from './data.js';
-
-const stylingMode = 'filled';
-const amountDueEditorOptions = { placeholder: '$0.00', stylingMode };
-const amountDueAIOptions = { instruction: 'Format as the following: $0.00' };
-const statementDueEditorOptions = { placeholder: 'MM/DD/YYYY', stylingMode };
-const statementDueAIOptions = { instruction: 'Format as the following: MM/DD/YYYY' };
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AzureOpenAI } from "openai";
+import { AIIntegration } from "devextreme-react/common/ai-integration";
+import { Button } from "devextreme-react/button";
+import { Form, Item, GroupItem, ButtonItem } from "devextreme-react/form";
+import { TextArea } from "devextreme-react/text-area";
+import notify from "devextreme/ui/notify";
+import { AzureOpenAIConfig, defaultText } from "./data.js";
+const stylingMode = "filled";
+const amountDueEditorOptions = { placeholder: "$0.00", stylingMode };
+const amountDueAIOptions = { instruction: "Format as the following: $0.00" };
+const statementDueEditorOptions = { placeholder: "MM/DD/YYYY", stylingMode };
+const statementDueAIOptions = { instruction: "Format as the following: MM/DD/YYYY" };
 const textEditorOptions = { stylingMode };
-const phoneEditorOptions = { placeholder: '(000) 000-0000', stylingMode };
-const phoneAIOptions = { instruction: 'Format as the following: (000) 000-0000' };
-const emailValidationRules = [{ type: 'email' }];
+const phoneEditorOptions = { placeholder: "(000) 000-0000", stylingMode };
+const phoneAIOptions = { instruction: "Format as the following: (000) 000-0000" };
+const emailValidationRules = [{ type: "email" }];
 const emailAIOptions = {
   instruction:
-    'Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com',
+    "Do not fill this field if the text contains an invalid email address. A valid email is in the following format: email@example.com",
 };
-const zipEditorOptions = { stylingMode, mode: 'text', value: null };
+const zipEditorOptions = { stylingMode, mode: "text", value: null };
 const zipAIOptions = {
   instruction:
-    'If the text does not contain a ZIP, determine the ZIP code from the provided address.',
+    "If the text does not contain a ZIP, determine the ZIP code from the provided address.",
 };
 const resetButtonOptions = {
-  stylingMode: 'outlined',
-  type: 'normal',
+  stylingMode: "outlined",
+  type: "normal",
 };
 const smartPasteButtonOptions = {
-  stylingMode: 'contained',
-  type: 'default',
+  stylingMode: "contained",
+  type: "default",
 };
 const colCountByScreen = {
   xs: 2,
@@ -48,17 +43,17 @@ const showNotification = (message, of, isError, offset) => {
     {
       message,
       position: {
-        my: 'bottom center',
-        at: 'bottom center',
+        my: "bottom center",
+        at: "bottom center",
         of,
-        offset: offset ?? '0 -50',
+        offset: offset ?? "0 -50",
       },
-      width: 'fit-content',
-      maxWidth: 'fit-content',
-      minWidth: 'fit-content',
+      width: "fit-content",
+      maxWidth: "fit-content",
+      minWidth: "fit-content",
     },
-    isError ? 'error' : 'info',
-    1500,
+    isError ? "error" : "info",
+    1500
   );
 };
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
@@ -78,12 +73,12 @@ export const aiIntegration = new AIIntegration({
     const controller = new AbortController();
     const signal = controller.signal;
     const aiPrompt = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: "system", content: prompt.system },
+      { role: "user", content: prompt.user },
     ];
     const promise = getAIResponse(aiPrompt, signal);
     promise.catch(() => {
-      showNotification('Something went wrong. Please try again.', '#form', true);
+      showNotification("Something went wrong. Please try again.", "#form", true);
     });
     const result = {
       promise,
@@ -99,7 +94,7 @@ const App = () => {
   const [text, setText] = useState(defaultText);
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(text);
-    showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
+    showNotification("Text copied to clipboard", "#textarea", false, "0 -20");
   }, [text]);
   const shortcutHandler = useCallback((event) => {
     if (event.ctrlKey && event.shiftKey) {
@@ -107,24 +102,24 @@ const App = () => {
         .readText()
         .then((clipboardText) => {
           if (clipboardText) {
-            formRef.current.instance().smartPaste(clipboardText);
+            formRef.current?.instance().smartPaste(clipboardText);
           } else {
-            showNotification('Copy the text to paste into the form', '#form');
+            showNotification("Copy the text to paste into the form", "#form");
           }
         })
         .catch(() => {
-          showNotification('Could not access the clipboard', '#form');
+          showNotification("Could not access the clipboard", "#form");
         });
     }
   }, []);
   useEffect(() => {
-    formRef.current.instance().registerKeyHandler('V', shortcutHandler);
-  }, []);
+    formRef.current.instance().registerKeyHandler("V", shortcutHandler);
+  }, [shortcutHandler]);
   const onTextAreaValueChanged = useCallback((e) => {
     setText(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div
         id="textarea-label"
         className="instruction"
@@ -147,7 +142,7 @@ const App = () => {
         />
         <TextArea
           id="textarea"
-          elementAttr={{ 'aria-labelledby': 'textarea-label' }}
+          inputAttr={{ "aria-labelledby": "textarea-label" }}
           value={text}
           stylingMode="filled"
           height="100%"
@@ -248,7 +243,7 @@ const App = () => {
           />
         </GroupItem>
       </Form>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

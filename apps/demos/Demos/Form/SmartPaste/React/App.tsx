@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-
 import { AzureOpenAI, type OpenAI } from 'openai';
-
 import {
   AIIntegration,
   RequestParams,
   Response,
 } from 'devextreme-react/common/ai-integration';
-import type { ButtonStyle, ValidationRule } from 'devextreme-react/common';
-import { Button } from 'devextreme-react/button';
+import type { ValidationRule } from 'devextreme-react/common';
+import { Button, type ButtonTypes } from 'devextreme-react/button';
 import {
   Form,
   Item, GroupItem,
@@ -16,7 +14,6 @@ import {
   FormRef,
 } from 'devextreme-react/form';
 import { TextArea, type TextAreaTypes } from 'devextreme-react/text-area';
-
 import notify from 'devextreme/ui/notify';
 
 import { AzureOpenAIConfig, defaultText } from './data.ts';
@@ -44,12 +41,12 @@ const emailAIOptions = { instruction: 'Do not fill this field if the text contai
 const zipEditorOptions = { stylingMode, mode: 'text', value: null };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
-const resetButtonOptions = {
-  stylingMode: 'outlined' as ButtonStyle,
+const resetButtonOptions: ButtonTypes.Properties = {
+  stylingMode: 'outlined',
   type: 'normal'
 };
-const smartPasteButtonOptions = {
-  stylingMode: 'contained' as ButtonStyle,
+const smartPasteButtonOptions: ButtonTypes.Properties = {
+  stylingMode: 'contained',
   type: 'default',
 };
 
@@ -132,7 +129,7 @@ const App = () => {
       navigator.clipboard.readText()
         .then((clipboardText) => {
           if (clipboardText) {
-            formRef.current.instance().smartPaste(clipboardText);
+            formRef.current?.instance().smartPaste(clipboardText);
           } else {
             showNotification('Copy the text to paste into the form', '#form');
           }
@@ -145,7 +142,7 @@ const App = () => {
 
   useEffect(() => {
     formRef.current.instance().registerKeyHandler('V', shortcutHandler);
-  }, []);
+  }, [shortcutHandler]);
 
   const onTextAreaValueChanged = useCallback((e: TextAreaTypes.ValueChangedEvent) => {
     setText(e.value);
@@ -153,11 +150,29 @@ const App = () => {
 
   return (
     <>
-      <div id="textarea-label" className="instruction">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
-      <div className="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
+      <div id="textarea-label" className="instruction">
+        Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
+      </div>
+      <div className="instruction">
+        Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
+      </div>
       <div className="textarea-container">
-        <Button text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" onClick={onCopy} />
-        <TextArea id="textarea" elementAttr={{ 'aria-labelledby': 'textarea-label' }} value={text} stylingMode="filled" height="100%" onValueChanged={onTextAreaValueChanged} />
+        <Button
+          text="Copy Text"
+          icon="copy"
+          stylingMode="contained"
+          type="default"
+          width="fit-content"
+          onClick={onCopy}
+        />
+        <TextArea
+          id="textarea"
+          inputAttr={{ 'aria-labelledby': 'textarea-label' }}
+          value={text}
+          stylingMode="filled"
+          height="100%"
+          onValueChanged={onTextAreaValueChanged}
+        />
       </div>
       <Form
         id="form"
@@ -169,20 +184,66 @@ const App = () => {
         aiIntegration={aiIntegration}
       >
         <GroupItem colCountByScreen={colCountByScreen} caption="Billing Summary">
-          <Item dataField="Amount Due" editorType="dxTextBox" editorOptions={amountDueEditorOptions} aiOptions={amountDueAIOptions} />
-          <Item dataField="Statement Date" editorType="dxDateBox" editorOptions={statementDueEditorOptions} aiOptions={statementDueAIOptions} />
+          <Item
+            dataField="Amount Due"
+            editorType="dxTextBox"
+            editorOptions={amountDueEditorOptions}
+            aiOptions={amountDueAIOptions}
+          />
+          <Item
+            dataField="Statement Date"
+            editorType="dxDateBox"
+            editorOptions={statementDueEditorOptions}
+            aiOptions={statementDueAIOptions}
+          />
         </GroupItem>
         <GroupItem colCountByScreen={colCountByScreen} caption="Billing Information">
-          <Item dataField="First Name" editorType="dxTextBox" editorOptions={textEditorOptions} />
-          <Item dataField="Last Name" editorType="dxTextBox" editorOptions={textEditorOptions} />
-          <Item dataField="Phone Number" editorType="dxTextBox" editorOptions={phoneEditorOptions} aiOptions={phoneAIOptions} />
-          <Item dataField="Email" editorType="dxTextBox" editorOptions={textEditorOptions} aiOptions={emailAIOptions} validationRules={emailValidationRules} />
+          <Item
+            dataField="First Name"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+          />
+          <Item
+            dataField="Last Name"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+          />
+          <Item
+            dataField="Phone Number"
+            editorType="dxTextBox"
+            editorOptions={phoneEditorOptions}
+            aiOptions={phoneAIOptions}
+          />
+          <Item
+            dataField="Email"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+            aiOptions={emailAIOptions}
+            validationRules={emailValidationRules}
+          />
         </GroupItem>
         <GroupItem colCountByScreen={colCountByScreen} caption="Billing Address">
-          <Item dataField="Street Address" editorType="dxTextBox" editorOptions={textEditorOptions} />
-          <Item dataField="City" editorType="dxTextBox" editorOptions={textEditorOptions} />
-          <Item dataField="State/Province/Region" editorType="dxTextBox" editorOptions={textEditorOptions} />
-          <Item dataField="ZIP" editorType="dxNumberBox" editorOptions={zipEditorOptions} aiOptions={zipAIOptions} />
+          <Item
+            dataField="Street Address"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+          />
+          <Item
+            dataField="City"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+          />
+          <Item
+            dataField="State/Province/Region"
+            editorType="dxTextBox"
+            editorOptions={textEditorOptions}
+          />
+          <Item
+            dataField="ZIP"
+            editorType="dxNumberBox"
+            editorOptions={zipEditorOptions}
+            aiOptions={zipAIOptions}
+          />
         </GroupItem>
         <GroupItem cssClass="buttons-group" colCountByScreen={colCountByScreen}>
           <ButtonItem buttonOptions={smartPasteButtonOptions} name="smartPaste" />

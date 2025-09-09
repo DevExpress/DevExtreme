@@ -1,16 +1,14 @@
 import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { AzureOpenAI, type OpenAI } from 'openai';
-
-import { DxButtonModule, DxTextAreaModule } from 'devextreme-angular';
-import type { ButtonStyle } from 'devextreme-angular/common';
+import { DxTextAreaModule } from 'devextreme-angular';
 import {
   AIIntegration,
   RequestParams,
   Response,
 } from 'devextreme-angular/common/ai-integration';
+import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxFormModule, DxFormComponent } from 'devextreme-angular/ui/form';
 import notify from 'devextreme/ui/notify';
 
@@ -79,13 +77,13 @@ export class AppComponent {
   zipEditorOptions = { stylingMode, mode: 'text', value: null };
   zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
-  resetButtonOptions = {
-    stylingMode: 'outlined' as ButtonStyle,
+  resetButtonOptions: DxButtonTypes.Properties = {
+    stylingMode: 'outlined',
     type: 'normal'
   };
 
-  smartPasteButtonOptions = {
-    stylingMode: 'contained' as ButtonStyle,
+  smartPasteButtonOptions: DxButtonTypes.Properties = {
+    stylingMode: 'contained',
     type: 'default',
   }
 
@@ -170,7 +168,7 @@ export class AppComponent {
 
   onCopy() {
     navigator.clipboard.writeText(this.text);
-    showNotification('Text copied to clipboard', '#textarea');
+    showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
   }
 }
 

@@ -1973,13 +1973,9 @@ class Form extends Widget<FormProperties> {
       throw errors.Error('E1063');
     }
 
-    let smartPasteText = text;
-    if (!isDefined(smartPasteText)) {
-      const clipboardText = await navigator.clipboard.readText();
-      if (!clipboardText) {
-        return;
-      }
-      smartPasteText = clipboardText;
+    const smartPasteText = text ?? await navigator.clipboard.readText();
+    if (!isDefined(text) && !smartPasteText) {
+      return;
     }
 
     this._showLoadPanel();

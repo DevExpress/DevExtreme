@@ -1,9 +1,26 @@
 <template>
-  <div class="instruction" id="textarea-label">Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.</div>
-  <div class="instruction">Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.</div>
+  <div class="instruction" id="textarea-label">
+    Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
+  </div>
+  <div class="instruction">
+    Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
+  </div>
   <div class="textarea-container">
-    <DxButton text="Copy Text" icon="copy" stylingMode="contained" type="default" width="fit-content" @click="onCopy()" />
-    <DxTextArea id="textarea" :element-attr="{ 'aria-labelledby': 'textarea-label' }" v-model:value="text" stylingMode="filled" height="100%" />
+    <DxButton
+      text="Copy Text"
+      icon="copy"
+      stylingMode="contained"
+      type="default"
+      width="fit-content"
+      @click="onCopy()"
+    />
+    <DxTextArea
+      id="textarea"
+      :input-attr="{ 'aria-labelledby': 'textarea-label' }"
+      v-model:value="text"
+      stylingMode="filled"
+      height="100%"
+    />
   </div>
   <DxForm
     id="form"
@@ -15,20 +32,66 @@
     :aiIntegration="aiIntegration"
   >
     <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Summary">
-      <DxItem dataField="Amount Due" editorType="dxTextBox" :editorOptions="amountDueEditorOptions" :aiOptions="amountDueAIOptions" />
-      <DxItem dataField="Statement Date" editorType="dxDateBox" :editorOptions="statementDueEditorOptions" :aiOptions="statementDueAIOptions" />
+      <DxItem
+        dataField="Amount Due"
+        editorType="dxTextBox"
+        :editorOptions="amountDueEditorOptions"
+        :aiOptions="amountDueAIOptions"
+      />
+      <DxItem
+        dataField="Statement Date"
+        editorType="dxDateBox"
+        :editorOptions="statementDueEditorOptions"
+        :aiOptions="statementDueAIOptions"
+      />
     </DxGroupItem>
     <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Information">
-      <DxItem dataField="First Name" editorType="dxTextBox" :editorOptions="textEditorOptions" />
-      <DxItem dataField="Last Name" editorType="dxTextBox" :editorOptions="textEditorOptions" />
-      <DxItem dataField="Phone Number" editorType="dxTextBox" :editorOptions="phoneEditorOptions" :aiOptions="phoneAIOptions" />
-      <DxItem dataField="Email" editorType="dxTextBox" :editorOptions="textEditorOptions" :aiOptions="emailAIOptions" :validationRules="emailValidationRules" />
+      <DxItem
+        dataField="First Name"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+      />
+      <DxItem
+        dataField="Last Name"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+      />
+      <DxItem
+        dataField="Phone Number"
+        editorType="dxTextBox"
+        :editorOptions="phoneEditorOptions"
+        :aiOptions="phoneAIOptions"
+      />
+      <DxItem
+        dataField="Email"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+        :aiOptions="emailAIOptions"
+        :validationRules="emailValidationRules"
+      />
     </DxGroupItem>
     <DxGroupItem :colCountByScreen="colCountByScreen" caption="Billing Address">
-      <DxItem dataField="Street Address" editorType="dxTextBox" :editorOptions="textEditorOptions" />
-      <DxItem dataField="City" editorType="dxTextBox" :editorOptions="textEditorOptions" />
-      <DxItem dataField="State/Province/Region" editorType="dxTextBox" :editorOptions="textEditorOptions" />
-      <DxItem dataField="ZIP" editorType="dxNumberBox" :editorOptions="zipEditorOptions" :aiOptions="zipAIOptions" />
+      <DxItem
+        dataField="Street Address"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+      />
+      <DxItem
+        dataField="City"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+      />
+      <DxItem
+        dataField="State/Province/Region"
+        editorType="dxTextBox"
+        :editorOptions="textEditorOptions"
+      />
+      <DxItem
+        dataField="ZIP"
+        editorType="dxNumberBox"
+        :editorOptions="zipEditorOptions"
+        :aiOptions="zipAIOptions"
+      />
     </DxGroupItem>
     <DxGroupItem cssClass="buttons-group" :colCountByScreen="colCountByScreen">
       <DxButtonItem :buttonOptions="smartPasteButtonOptions" name="smartPaste" />
@@ -42,8 +105,8 @@ import { AzureOpenAI, type OpenAI } from 'openai';
 import {
   DxForm, DxItem, DxButtonItem, DxGroupItem
 } from 'devextreme-vue/form';
-import type { ValidationRule, ButtonStyle } from 'devextreme-vue/common';
-import DxButton from 'devextreme-vue/button';
+import type { ValidationRule } from 'devextreme-vue/common';
+import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import DxTextArea from 'devextreme-vue/text-area';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import notify from 'devextreme/ui/notify';
@@ -118,12 +181,12 @@ const emailAIOptions = { instruction: 'Do not fill this field if the text contai
 const zipEditorOptions = { stylingMode, mode: 'text', value: null };
 const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determine the ZIP code from the provided address.' };
 
-const resetButtonOptions = {
-  stylingMode: 'outlined' as ButtonStyle,
+const resetButtonOptions: DxButtonTypes.Properties = {
+  stylingMode: 'outlined',
   type: 'normal'
 };
-const smartPasteButtonOptions = {
-  stylingMode: 'contained' as ButtonStyle,
+const smartPasteButtonOptions: DxButtonTypes.Properties = {
+  stylingMode: 'contained',
   type: 'default',
 };
 
@@ -218,6 +281,6 @@ onMounted(() => {
 }
 
 .buttons-group .dx-item {
-  flex: unset!important;
+  flex: unset !important;
 }
 </style>
