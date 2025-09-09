@@ -45,7 +45,7 @@ const adjustPercentValue = function (rawValue, interval) {
     return rawValue;
   }
 
-  return adjust(rawValue / 100, interval * 0.0001);
+  return adjust(rawValue / 100, interval * 0.01);
 };
 
 const roundFloatPartPercentValue = function (rawValue: number, precision: number) {
