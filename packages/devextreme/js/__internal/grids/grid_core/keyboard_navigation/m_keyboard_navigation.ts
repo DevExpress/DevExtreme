@@ -84,7 +84,6 @@ import { GridCoreKeyboardNavigationDom } from './dom';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 import {
   getInteractiveElement,
-  getInteractiveElements,
   isCellInHeaderRow,
   isDataRow,
   isDetailRow,
@@ -947,17 +946,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   private isOriginalTabHandlerRequired($cell: dxElementWrapper, event: KeyDownEvent): boolean {
     const eventTarget = event.originalEvent.target;
     const elementType = this._getElementType(eventTarget);
-    const $lastInteractiveElements = getInteractiveElements($cell);
+    const $lastInteractiveElement = getInteractiveElement($cell, !event.shift);
 
-    if (elementType !== 'cell' || $lastInteractiveElements.length === 0) {
+    if (elementType !== 'cell' || $lastInteractiveElement.length === 0) {
       return false;
     }
 
-    if (event.shift) {
-      return eventTarget !== $lastInteractiveElements.get(0);
-    }
-
-    return eventTarget !== $lastInteractiveElements.get($lastInteractiveElements.length - 1);
+    return eventTarget !== $lastInteractiveElement.get(0);
   }
 
   private _targetCellTabHandler(eventArgs, direction) {
