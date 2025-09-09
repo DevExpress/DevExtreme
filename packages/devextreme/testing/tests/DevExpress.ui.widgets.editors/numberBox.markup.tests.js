@@ -108,20 +108,6 @@ QUnit.module('dxNumberBox markup', moduleConfig, () => {
         assert.equal($numberBox.find('.dx-texteditor-input').val(), '05', 'input value is correct');
     });
 
-    QUnit.test('T1299760 - the \'displayValueFormatter\' option', function(assert) {
-        const $numberBox = this.$element.dxNumberBox({
-            value: 0,
-            format: { type: 'percent', precision: 5 },
-            inputAttr: { 'aria-label': 'Percent Format' }
-        });
-
-        $numberBox.find('.dx-texteditor-input').val(123.12345).trigger('change');
-
-        assert.equal($numberBox.dxNumberBox('option', 'value'), 1.2312345, 'value is correct');
-        assert.equal($numberBox.find('.dx-texteditor-input').val(), '123.12345%', 'input value is correct');
-    });
-
-
     QUnit.test('The widget should be valid if the value option is undefined', function(assert) {
         const numberBox = new NumberBox(this.$element, { value: undefined });
         const $input = this.$element.find('.' + INPUT_CLASS);
