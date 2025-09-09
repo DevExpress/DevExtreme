@@ -19,7 +19,7 @@ const { module, test, testStart } = QUnit;
 
 testStart(() => initTestMarkup());
 
-const APPOINTMENT_DEFAULT_LEFT_OFFSET = 28;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
 const createInstanceBase = options => createWrapper({ _draggingMode: 'default', ...options });
 

@@ -100,6 +100,7 @@ QUnit.module('Integration: Appointment templates', {
             // TODO: in current state, targetedAppointmentData arguments has non converted dates
             const { appointmentData, targetedAppointmentData } = model;
 
+            console.log(appointmentData, targetedAppointmentData, eventCallCount);
             const startDateExpr = scheduler.option('startDateExpr');
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
@@ -181,6 +182,11 @@ QUnit.module('Integration: Appointment templates', {
     }];
 
     const hourlyRecurrenceData = [{
+        textCustom: 'Website Re-Design Plan',
+        startDateCustom: new Date(2017, 4, 25, 9, 30),
+        endDateCustom: new Date(2017, 4, 25, 10),
+        recurrenceRule: 'FREQ=HOURLY;COUNT=5'
+    }, {
         textCustom: 'Website Re-Design Plan1',
         startDateCustom: new Date(2017, 4, 25, 9, 35),
         endDateCustom: new Date(2017, 4, 25, 11, 20),

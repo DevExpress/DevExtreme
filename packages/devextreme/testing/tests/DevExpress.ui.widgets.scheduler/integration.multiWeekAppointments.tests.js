@@ -562,13 +562,21 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
     });
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+    const lefts = [
+        translator.locate($appointments.eq(0)).left,
+        translator.locate($appointments.eq(1)).left,
+        translator.locate($appointments.eq(2)).left,
+        translator.locate($appointments.eq(3)).left,
+        translator.locate($appointments.eq(4)).left,
+        translator.locate($appointments.eq(5)).left,
+    ].sort((a, b) => a - b);
 
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, 50, 2.001);
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, 399, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, 0, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, 349, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(4)).left, 0, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(5)).left, 349, 1.001);
+    assert.roughEqual(lefts[0], 0, 2.001);
+    assert.roughEqual(lefts[1], 0, 1.001);
+    assert.roughEqual(lefts[2], 50, 1.001);
+    assert.roughEqual(lefts[3], 349, 1.001);
+    assert.roughEqual(lefts[4], 349, 1.001);
+    assert.roughEqual(lefts[5], 399, 1.001);
 
 });
 
@@ -661,15 +669,15 @@ QUnit.test('Multi-week grouped appointments should be painted correctly', async 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
     assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
-    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
+    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
     assert.equal(new Color($appointments.eq(4).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
-    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
+    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
+    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
     assert.equal(new Color($appointments.eq(8).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 });
 

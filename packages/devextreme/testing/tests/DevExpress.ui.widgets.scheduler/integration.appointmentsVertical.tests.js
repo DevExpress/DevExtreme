@@ -16,7 +16,7 @@ import 'ui/switch';
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_LEFT_OFFSET = 28;
+const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
 QUnit.testStart(() => initTestMarkup());
 

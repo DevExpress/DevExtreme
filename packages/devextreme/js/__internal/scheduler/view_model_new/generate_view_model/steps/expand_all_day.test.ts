@@ -49,12 +49,12 @@ describe('expandAllDay', () => {
         allDay: true,
         isAllDayPanelOccupied: false,
         startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime() + 1,
+        endDate: new Date(2020, 0, 10, 24).getTime(),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
         startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime() + 1,
+        endDate: new Date(2020, 0, 11, 24).getTime(),
       },
     ]);
   });
@@ -77,12 +77,12 @@ describe('expandAllDay', () => {
         allDay: true,
         isAllDayPanelOccupied: true,
         startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime() + 1,
+        endDate: new Date(2020, 0, 10, 24).getTime(),
       }, {
         allDay: true,
         isAllDayPanelOccupied: true,
         startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime() + 1,
+        endDate: new Date(2020, 0, 11, 24).getTime(),
       },
     ]);
   });

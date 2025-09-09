@@ -17,7 +17,7 @@ export const getSchedulerMock = ({
   resourceManager?: ResourceManager;
   dateRange?: Date[];
 }): Scheduler => ({
-  currentView: { type },
+  currentView: { type, skippedDays: [] },
   getWorkSpace: () => ({
     getDateRange: () => dateRange ?? [
       new Date(2000, 0, 10, startDayHour),

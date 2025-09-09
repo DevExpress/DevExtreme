@@ -326,6 +326,18 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
+.dx-scheduler-work-space.dx-scheduler-work-space-day,
+.dx-scheduler-work-space.dx-scheduler-work-space-week,
+.dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+  .dx-scheduler-fixed-appointments,
+  .dx-scheduler-date-table-container {
+    .dx-scheduler-appointment-collector {
+      margin-left: 0;
+      margin-right: 2px;
+    }
+  }
+}
+
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
   .dx-scheduler-appointment-collector {
     margin-right: 33px;

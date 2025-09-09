@@ -795,11 +795,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 2, 3]
+                        indices: [0, 1, 2]
                     },
                     {
                         color: '#0000ff',
-                        indices: [1, 4, 5]
+                        indices: [3, 4, 5]
                     }
                 ]
             }, {
@@ -807,11 +807,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 2, 3]
+                        indices: [0, 1, 2]
                     },
                     {
                         color: '#0000ff',
-                        indices: [1, 4, 5]
+                        indices: [3, 4, 5]
                     }
                 ]
             }

@@ -1089,10 +1089,16 @@ module('Integration: Appointment Day, Week views', {
 
                 assert.strictEqual(scheduler.appointments.compact.getButtonCount(), 2, 'Appointments are rendered');
 
-                const tailCoords = translator.locate(scheduler.appointments.compact.getButton(1));
+                const coords = [
+                    translator.locate(scheduler.appointments.compact.getButton(0)),
+                    translator.locate(scheduler.appointments.compact.getButton(1)),
+                ].sort((a, b) => a.left - b.left);
 
-                assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
-                assert.roughEqual(tailCoords.left, 196, 2, 'Appointment left is correct');
+                assert.strictEqual(coords[0].top, 600, 'Appointment top is correct');
+                assert.roughEqual(coords[0].left, 124, 2, 'Appointment left is correct');
+
+                assert.strictEqual(coords[1].top, 0, 'Appointment top is correct');
+                assert.roughEqual(coords[1].left, 199, 2, 'Appointment left is correct');
             });
 
             test('targetedAppointmentData should have valid targeted resource on onAppointmentClick event', async function(assert) {

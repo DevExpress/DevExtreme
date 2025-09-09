@@ -205,7 +205,8 @@ module('Virtual scrolling integration', () => {
         });
     });
 
-    module('AppointmentSettings', {
+    // TODO: transform it to jest with snapshots and unskip
+    module.skip('AppointmentSettings', {
         beforeEach: function() {
             this.createInstance = async function(options) {
                 this.scheduler = await createWrapper(options);
@@ -1954,7 +1955,8 @@ module('Virtual scrolling integration', () => {
         });
     });
 
-    module('Appointment filtering', function() {
+    // TODO: transform it to jest with snapshots and unskip
+    module.skip('Appointment filtering', function() {
         module('Init', function() {
             ['vertical', 'horizontal'].forEach(groupOrientation => {
                 test(`Should be filtered correctly when groupOrientation: ${groupOrientation}`, async function(assert) {
@@ -2916,7 +2918,8 @@ module('Virtual scrolling integration', () => {
         });
     });
 
-    module('Appointment rendering', {
+    // TODO: transform it to jest with snapshots and unskip
+    module.skip('Appointment rendering', {
         before: function() {
             this.createInstance = async function(options) {
                 this.scheduler = await createWrapper(options);

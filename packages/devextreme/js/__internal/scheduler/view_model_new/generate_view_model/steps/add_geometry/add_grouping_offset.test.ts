@@ -88,7 +88,7 @@ describe('addGroupingOffset', () => {
 
   it('should add grouping offset for horizontal grouping by date', () => {
     const entity = {
-      left: 207, top: 89, columnIndex: 1, groupIndex: 2,
+      left: 207, top: 89, columnIndex: 1, rowIndex: 1, groupIndex: 2,
     } as any;
     addGroupingOffset(entity, {
       groupCount: 10,
@@ -105,7 +105,7 @@ describe('addGroupingOffset', () => {
     } as any);
 
     expect(entity).toEqual({
-      left: 1307, top: 89, columnIndex: 1, groupIndex: 2,
+      left: 1307, top: 89, columnIndex: 1, rowIndex: 1, groupIndex: 2,
     });
   });
 
