@@ -300,6 +300,10 @@ const iconSet = {
   chatadd: '\f200',
   colordismiss: '\f201',
   clipboardpastesparkle: '\f202',
+  micoutline: '\f203',
+  micfilled: '\f204',
+  stopoutline: '\f205',
+  stopfilled: '\f206',
 };
 
 fixture.disablePageReloads`Icons`
