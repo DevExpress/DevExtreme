@@ -98,7 +98,6 @@ export default class dxSlider extends dxTrackBar<dxSliderOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:number | undefined
      */
     reset(value?: Properties['value']): void;
 }

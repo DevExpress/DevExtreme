@@ -548,7 +548,6 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Array<File> | undefined
      */
     reset(value?: Properties['value']): void;
 }

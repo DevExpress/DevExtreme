@@ -123,7 +123,6 @@ export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:boolean | null | undefined
      */
     reset(value?: Properties['value']): void;
 }

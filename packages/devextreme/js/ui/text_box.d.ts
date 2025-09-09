@@ -179,7 +179,6 @@ export default class dxTextBox<
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:string | undefined
      */
     reset(value?: TProperties['value']): void;
 }
