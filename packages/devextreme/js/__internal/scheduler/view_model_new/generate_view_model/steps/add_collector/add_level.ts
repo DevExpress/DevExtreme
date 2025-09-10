@@ -1,4 +1,4 @@
-import type { Level, ListEntity, MaxLevel } from '../../../types';
+import type { Level, ListEntity } from '../../../types';
 import type { CollectorOptions } from './types';
 
 const between = (
@@ -7,35 +7,36 @@ const between = (
   max: number,
 ): number => Math.min(Math.max(value, min), max);
 
-export const addLevel = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex'>>(
+export const addLevel = <T extends Pick<ListEntity, 'startDate' | 'endDate'>>(
   entities: T[],
   { minLevel, maxLevel }: Pick<CollectorOptions, 'minLevel' | 'maxLevel'>,
-): (T & Level & MaxLevel)[] => {
+): (T & Level)[] => {
   const minMaxLevel = maxLevel === -1 ? 0 : Math.min(minLevel, maxLevel);
   let levelsEndDate: number[] = [];
-  let stack: (T & Level & MaxLevel)[] = [];
-  return entities.map((entity, entityIndex) => {
+  let stack: (T & Level)[] = [];
+  return entities.map((entity) => {
+    const entityEndDate = entity.endDate === entity.startDate ? entity.endDate + 1 : entity.endDate;
     const index = levelsEndDate.findIndex((endDate) => entity.startDate >= endDate);
     const level = index === -1 ? levelsEndDate.length : index;
-    const extended = { ...entity, level, maxLevel: minMaxLevel };
+    const extended = {
+      ...entity, level, maxLevel: minMaxLevel, inStackWithCollector: false,
+    };
 
     const isIntersectWithPrevious = levelsEndDate.some((endDate) => entity.startDate < endDate);
     if (isIntersectWithPrevious) {
-      levelsEndDate[level] = extended.endDate;
+      levelsEndDate[level] = entityEndDate;
       stack.push(extended);
       stack.forEach((item) => {
         item.maxLevel = maxLevel === -1
           ? levelsEndDate.length
           : between(levelsEndDate.length, minMaxLevel, maxLevel);
+        item.inStackWithCollector = maxLevel !== -1 && levelsEndDate.length > maxLevel;
       });
     } else {
       extended.maxLevel = minMaxLevel;
-      levelsEndDate = [extended.endDate];
+      extended.inStackWithCollector = maxLevel !== -1 && levelsEndDate.length > maxLevel;
+      levelsEndDate = [entityEndDate];
       stack = [extended];
-    }
-
-    if (entities[entityIndex + 1]?.groupIndex !== entity.groupIndex) {
-      levelsEndDate = [];
     }
 
     return extended;

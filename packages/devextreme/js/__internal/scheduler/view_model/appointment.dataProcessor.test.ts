@@ -602,7 +602,7 @@ describe('data processor', () => {
       dataSource.load();
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([{
         text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1,
@@ -683,7 +683,7 @@ describe('data processor', () => {
       scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }]);
     });
@@ -707,7 +707,7 @@ describe('data processor', () => {
       scheduler.appointmentDataSource.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }]);
     });
@@ -733,7 +733,7 @@ describe('data processor', () => {
       scheduler.appointmentDataSource.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }]);
     });
@@ -764,7 +764,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([
         { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
@@ -797,7 +797,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([
         {
@@ -832,7 +832,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([
         {
@@ -884,9 +884,10 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
-      expect(appts).toEqual([
+      expect(appts).toHaveLength(4);
+      expect([appts[0], appts[2]]).toEqual([
         {
           text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4,
         },
@@ -922,7 +923,7 @@ describe('data processor', () => {
       scheduler.appointmentDataSource.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([{
         text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false,
@@ -944,16 +945,20 @@ describe('data processor', () => {
         recurrenceExceptionExpr: 'Exception',
       });
 
-      scheduler.appointmentDataSource.add({
-        text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY',
-      });
+      const appointment = {
+        text: 'a',
+        StartDate: new Date(2015, 0, 1).toString(),
+        EndDate: new Date(2015, 0, 2).toString(),
+        AllDay: true,
+        RecurrenceRule: 'FREQ=DAILY',
+      };
+      scheduler.appointmentDataSource.add(appointment);
 
       scheduler.repaint();
       const appts = scheduler._layoutManager.filteredItems;
 
-      expect(appts).toEqual([{
-        text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY',
-      }]);
+      expect(appts).toHaveLength(3);
+      expect(appts[0].itemData).toEqual(appointment);
     });
 
     [
@@ -977,19 +982,25 @@ describe('data processor', () => {
           recurrenceExceptionExpr: 'Exception',
         });
 
-        scheduler.appointmentDataSource.add({
+        const appointment = {
           text: 'a',
           StartDate: new Date(2015, 0, 1).toString(),
           EndDate: new Date(2015, 0, 2).toString(),
           AllDay: true,
           RecurrenceRule: 'FREQ=DAILY',
           visible,
-        });
-
+        };
+        scheduler.appointmentDataSource.add(appointment);
         scheduler.repaint();
+
         const appts = scheduler._layoutManager.filteredItems;
 
-        expect(Boolean(appts.length)).toBe(expectedVisibility);
+        if (expectedVisibility) {
+          expect(appts).toHaveLength(3);
+          expect(appts[0].itemData).toEqual(appointment);
+        } else {
+          expect(appts).toHaveLength(0);
+        }
       });
     });
 
@@ -1015,7 +1026,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts.length).toBe(0);
     });
@@ -1042,7 +1053,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([]);
     });
@@ -1069,7 +1080,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([]);
     });
@@ -1096,7 +1107,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts).toEqual([]);
     });
@@ -1124,7 +1135,7 @@ describe('data processor', () => {
       });
 
       scheduler.repaint();
-      const appts = scheduler._layoutManager.filteredItems;
+      const appts = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(appts[0].EndDate).toEqual(new Date(2015, 2, 1, 12, 0));
     });
@@ -1212,7 +1223,7 @@ describe('data processor', () => {
       dataSource.load();
       scheduler.repaint();
 
-      const result = scheduler._layoutManager.filteredItems;
+      const result = scheduler._layoutManager.filteredItems.map((item) => item.itemData);
 
       expect(result).toEqual(appointments);
     });

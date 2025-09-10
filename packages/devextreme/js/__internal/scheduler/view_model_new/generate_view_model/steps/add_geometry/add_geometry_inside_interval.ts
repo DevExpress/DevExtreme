@@ -1,9 +1,6 @@
 import type { AppointmentCollectorWithGeometry } from '../../../types';
-import { getAppointmentGeometry, getAppointmentX } from './get_appointment_geometry';
-import {
-  getAbstractSizeByViewOrientation,
-  getRealSizeByViewOrientation,
-} from './swap_by_view_orientation';
+import { getAppointmentCollectorGeometry } from './get_appointment_collector_geometry';
+import { getAppointmentGeometry } from './get_appointment_geometry';
 import type {
   Geometry,
   GeometryMinimalEntity,
@@ -14,24 +11,17 @@ export const addGeometryInsideInterval = <T extends GeometryMinimalEntity>(
   entity: T,
   options: GeometryOptions,
 ): T & Geometry & AppointmentCollectorWithGeometry => {
-  const { intervals, intervalSize, viewOrientation } = options;
-  const dateInterval = intervals[entity.rowIndex];
-  const intervalAbstractSize = getAbstractSizeByViewOrientation(intervalSize, viewOrientation);
-  const interval = { ...dateInterval, ...intervalAbstractSize };
-  const abstractGeometryInsideInterval = getAppointmentGeometry(entity, interval, options);
-  const entityGeometry = getRealSizeByViewOrientation(
-    abstractGeometryInsideInterval,
-    viewOrientation,
-  );
-  const items = entity.items.map((item) => {
-    const appointmentX = getAppointmentX({ ...entity, ...item }, interval);
-    const itemRealSize = getRealSizeByViewOrientation(
-      { sizeX: appointmentX.sizeX, sizeY: abstractGeometryInsideInterval.sizeY },
-      viewOrientation,
-    );
+  if (entity.items.length) {
+    const entityGeometry = getAppointmentCollectorGeometry(entity, options);
+    const items = entity.items.map((item) => {
+      const size = getAppointmentGeometry({ ...entity, ...item }, options);
+      return { ...item, width: size.width, height: size.height };
+    });
 
-    return { ...item, ...itemRealSize };
-  });
+    return { ...entity, ...entityGeometry, items };
+  }
 
-  return { ...entity, ...entityGeometry, items };
+  const entityGeometry = getAppointmentGeometry(entity, options);
+
+  return { ...entity, ...entityGeometry, items: [] };
 };

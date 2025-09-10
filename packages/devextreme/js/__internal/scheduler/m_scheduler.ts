@@ -79,7 +79,7 @@ import { createResourceEditorModel } from './utils/resource_manager/popup_utils'
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
-import AppointmentLayoutManagerBridge from './view_model_new/m_appointments_layout_manager_bridge';
+import AppointmentLayoutManager from './view_model_new/appointments_layout_manager';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -207,7 +207,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _recurrenceDialog: any;
 
-  _layoutManager!: AppointmentLayoutManagerBridge;
+  _layoutManager!: AppointmentLayoutManager;
 
   _appointmentForm: any;
 
@@ -412,7 +412,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this._refreshWorkSpace();
           if (this._readyToRenderAppointments) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
+            this._appointments.option('items', this._layoutManager.generateViewModel());
           }
         });
         break;
@@ -421,7 +421,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this._readyToRenderAppointments) {
           this._updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this._getAppointmentsToRepaint());
+          this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'tabIndex':
@@ -506,6 +506,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'recurrenceRuleExpr':
       case 'recurrenceExceptionExpr':
       case 'disabledExpr':
+      case 'visibleExpr':
         this._updateExpression(name, value);
         this._initAppointmentTemplate();
         this.repaint();
@@ -739,6 +740,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       recurrenceRuleExpr: this.option('recurrenceRuleExpr'),
       recurrenceExceptionExpr: this.option('recurrenceExceptionExpr'),
       disabledExpr: this.option('disabledExpr'),
+      visibleExpr: this.option('visibleExpr'),
     } as IFieldExpr);
 
     super._init();
@@ -878,7 +880,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this._getAppointmentsToRepaint()
+      ? this._layoutManager.generateViewModel()
       : [];
 
     this._appointments.option('items', viewModel);
@@ -886,11 +888,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (this._isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
-  }
-
-  _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
-    const appointmentsMap = this._layoutManager.generateViewModel();
-    return appointmentsMap;
   }
 
   _initExpressions(fields: IFieldExpr) {
@@ -1007,7 +1004,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderHeader();
     this._toggleAdaptiveClass();
 
-    this._layoutManager = new AppointmentLayoutManagerBridge(this);
+    this._layoutManager = new AppointmentLayoutManager(this);
 
     // @ts-expect-error
     this._appointments = this._createComponent('<div>', AppointmentCollection, this._appointmentsConfig());
@@ -1707,7 +1704,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointment,
       settings,
       this._dataAccessors,
-      this.timeZoneCalculator,
       this.resourceManager,
     );
   }

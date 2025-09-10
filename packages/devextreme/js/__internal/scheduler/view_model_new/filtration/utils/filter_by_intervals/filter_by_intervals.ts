@@ -1,5 +1,5 @@
+import { isAppointmentMatchedIntervals } from '../../../common/is_appointment_matched_intervals';
 import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../../types';
-import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
 
 export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
   entities: T[],
@@ -8,8 +8,14 @@ export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPan
     const intervals = appointment.allDay || appointment.isAllDayPanelOccupied
       ? allDayIntervals
       : regularIntervals;
+    // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
+    const fixedAppointment = { ...appointment };
+    if (appointment.allDay && appointment.isAllDayPanelOccupied) {
+      fixedAppointment.endDate += 1;
+    }
+
     return isAppointmentMatchedIntervals(
-      appointment,
+      fixedAppointment,
       intervals,
     );
   });
