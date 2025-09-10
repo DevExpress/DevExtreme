@@ -15,8 +15,9 @@ const endDayHour = 20;
 const compareOptions = {
   startDayHour,
   endDayHour,
-  min: new Date(2000, 0, minDay, startDayHour),
-  max: new Date(2000, 0, maxDay, endDayHour),
+  min: new Date(2000, 0, minDay, startDayHour).getTime(),
+  max: new Date(2000, 0, maxDay, endDayHour).getTime(),
+  skippedDays: [],
 };
 const viewportOptions = {
   ...compareOptions,
@@ -132,8 +133,8 @@ describe('getAppointmentFilter', () => {
   it('should pass correct all day appointment with zero duration in day view', () => {
     expect(getAppointmentFilter(
       getViewportOptions({
-        min: new Date(2000, 0, 15, startDayHour),
-        max: new Date(2000, 0, 15, endDayHour),
+        min: new Date(2000, 0, 15, startDayHour).getTime(),
+        max: new Date(2000, 0, 15, endDayHour).getTime(),
       }),
       mockTimeZoneCalculator,
     )({
@@ -146,8 +147,8 @@ describe('getAppointmentFilter', () => {
   it('should pass correct all day appointment with zero hours', () => {
     expect(getAppointmentFilter(
       getViewportOptions({
-        min: new Date(2000, 0, 16, startDayHour),
-        max: new Date(2000, 0, 16, endDayHour),
+        min: new Date(2000, 0, 16, startDayHour).getTime(),
+        max: new Date(2000, 0, 16, endDayHour).getTime(),
       }),
       mockTimeZoneCalculator,
     )({
@@ -251,8 +252,8 @@ describe('getAppointmentFilter', () => {
   }) => {
     it(`should filter out ${title} recurrence appointment`, () => {
       expect(getAppointmentFilter(getViewportOptions({
-        min: new Date(2000, 0, maxDay, startDayHour),
-        max: new Date(2000, 0, maxDay, endDayHour),
+        min: new Date(2000, 0, maxDay, startDayHour).getTime(),
+        max: new Date(2000, 0, maxDay, endDayHour).getTime(),
       }), mockTimeZoneCalculator)({
         ...correctRecurrenceAppointment,
         recurrenceRule: 'FREQ=DAILY',
@@ -264,8 +265,8 @@ describe('getAppointmentFilter', () => {
 
     it(`should filter out ${title} appointment`, () => {
       expect(getAppointmentFilter(getViewportOptions({
-        min: new Date(2000, 0, maxDay, startDayHour),
-        max: new Date(2000, 0, maxDay, endDayHour),
+        min: new Date(2000, 0, maxDay, startDayHour).getTime(),
+        max: new Date(2000, 0, maxDay, endDayHour).getTime(),
       }), mockTimeZoneCalculator)({
         ...correctAppointment,
         startDate: new Date(2000, 0, maxDay, endDayHour + 1),
@@ -287,8 +288,8 @@ describe('getAppointmentFilter', () => {
   ])('$title', ({ appointmentConfig, dayShift }) => {
     it('should compare tiny appointment on one day view', () => {
       expect(getAppointmentFilter(getViewportOptions({
-        min: new Date(2000, 0, maxDay),
-        max: new Date(2000, 0, maxDay),
+        min: new Date(2000, 0, maxDay, startDayHour).getTime(),
+        max: new Date(2000, 0, maxDay, endDayHour).getTime(),
       }), mockTimeZoneCalculator)({
         ...appointmentConfig,
         startDate: new Date(2000, 0, maxDay + dayShift, startDayHour + 1),

@@ -1,6 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { monthCells } from '../__mock__/month.mock';
 import { snapToCells } from './snap_to_cells';
 
 describe('snapToCells', () => {
@@ -14,6 +13,13 @@ describe('snapToCells', () => {
     },
     {
       duration: 0,
+      cellIndex: 3,
+      endCellIndex: 4,
+      rowIndex: 1,
+      columnIndex: 0,
+    },
+    {
+      duration: 0,
       cellIndex: 0,
       endCellIndex: 2,
       rowIndex: 0,
@@ -21,86 +27,69 @@ describe('snapToCells', () => {
     },
     {
       duration: 0,
-      cellIndex: 6,
-      endCellIndex: 6,
-      rowIndex: 0,
-      columnIndex: 6,
-    },
-    {
-      duration: 0,
-      cellIndex: 8,
-      endCellIndex: 8,
-      rowIndex: 1,
+      cellIndex: 4,
+      endCellIndex: 4,
+      rowIndex: 2,
       columnIndex: 1,
     },
     {
       duration: 0,
-      cellIndex: 9,
-      endCellIndex: 9,
-      rowIndex: 1,
-      columnIndex: 2,
-    },
-    {
-      duration: 0,
-      cellIndex: 27,
-      endCellIndex: 27,
+      cellIndex: 5,
+      endCellIndex: 5,
       rowIndex: 3,
-      columnIndex: 6,
+      columnIndex: 2,
     }];
 
-    expect(snapToCells(items as any, monthCells)).toEqual([{
-      startDate: new Date(2025, 0, 1).getTime(),
-      endDate: new Date(2025, 0, 2).getTime(),
-      duration: 24 * 3600_000,
-      cellIndex: 0,
-      endCellIndex: 0,
-      rowIndex: 0,
-      columnIndex: 0,
-    },
-    {
-      startDate: new Date(2025, 0, 1).getTime(),
-      endDate: new Date(2025, 0, 4).getTime(),
-      duration: 3 * 24 * 3600_000,
-      cellIndex: 0,
-      endCellIndex: 2,
-      rowIndex: 0,
-      columnIndex: 0,
-    },
-    {
-      startDate: new Date(2025, 0, 7).getTime(),
-      endDate: new Date(2025, 0, 8).getTime(),
-      duration: 24 * 3600_000,
-      cellIndex: 6,
-      endCellIndex: 6,
-      rowIndex: 0,
-      columnIndex: 6,
-    },
-    {
-      startDate: new Date(2025, 0, 9).getTime(),
-      endDate: new Date(2025, 0, 10).getTime(),
-      duration: 24 * 3600_000,
-      cellIndex: 8,
-      endCellIndex: 8,
-      rowIndex: 1,
-      columnIndex: 1,
-    },
-    {
-      startDate: new Date(2025, 0, 10).getTime(),
-      endDate: new Date(2025, 0, 11).getTime(),
-      duration: 24 * 3600_000,
-      cellIndex: 9,
-      endCellIndex: 9,
-      rowIndex: 1,
-      columnIndex: 2,
-    },
-    {
-      startDate: new Date(2025, 0, 28).getTime(),
-      endDate: new Date(2025, 0, 29).getTime(),
-      duration: 24 * 3600_000,
-      cellIndex: 27,
-      endCellIndex: 27,
-      rowIndex: 3,
-      columnIndex: 6,
-    }]);
+    expect(snapToCells(items as any, [
+      {
+        min: 0, max: 10, cellIndex: 0, rowIndex: 0, columnIndex: 0,
+      },
+      {
+        min: 10, max: 20, cellIndex: 1, rowIndex: 0, columnIndex: 1,
+      },
+      {
+        min: 20, max: 30, cellIndex: 2, rowIndex: 0, columnIndex: 2,
+      },
+      {
+        min: 30, max: 40, cellIndex: 3, rowIndex: 1, columnIndex: 0,
+      },
+      {
+        min: 40, max: 50, cellIndex: 4, rowIndex: 2, columnIndex: 1,
+      },
+      {
+        min: 50, max: 60, cellIndex: 5, rowIndex: 3, columnIndex: 2,
+      },
+    ])).toEqual([
+      {
+        ...items[0],
+        duration: 10,
+        startDate: 0,
+        endDate: 10,
+      },
+      {
+        ...items[1],
+        duration: 20,
+        startDate: 30,
+        endDate: 50,
+      },
+      {
+        ...items[2],
+        duration: 30,
+        startDate: 0,
+        endDate: 30,
+      },
+      {
+        ...items[3],
+        duration: 10,
+        startDate: 40,
+        endDate: 50,
+      },
+      {
+        ...items[4],
+        duration: 10,
+        startDate: 50,
+        endDate: 60,
+      },
+    ]);
   });
 });

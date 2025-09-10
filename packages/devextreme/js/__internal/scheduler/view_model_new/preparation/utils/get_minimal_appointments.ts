@@ -2,7 +2,6 @@ import { isDefined } from '@js/core/utils/type';
 
 import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
 import type { SafeAppointment } from '../../../types';
-import { AppointmentAdapter } from '../../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import type { MinimalAppointmentEntity } from '../../types';
 
@@ -15,24 +14,27 @@ export const getMinimalAppointments = (
   safeItems: SafeAppointment[],
   { dataAccessors, timeZoneCalculator }: Options,
 ): MinimalAppointmentEntity[] => safeItems.map((rawAppointment) => {
-  const adapter = new AppointmentAdapter(rawAppointment, dataAccessors);
-  const { startDate, endDate } = adapter.getCalculatedDates(timeZoneCalculator, 'toGrid');
-  const rawVisible = dataAccessors.get('visible', rawAppointment);
-  const visible = isDefined(rawVisible) ? Boolean(rawVisible) : true;
+  const rawStartDate = dataAccessors.get('startDate', rawAppointment);
+  const rawEndDate = dataAccessors.get('endDate', rawAppointment);
+  const startDate = timeZoneCalculator.createDate(rawStartDate, 'toGrid');
+  const endDate = timeZoneCalculator.createDate(rawEndDate, 'toGrid');
   const startDateMs = startDate.getTime();
   const endDateMs = endDate.getTime();
 
+  const rawVisible = dataAccessors.get('visible', rawAppointment);
+  const visible = isDefined(rawVisible) ? Boolean(rawVisible) : true;
+
   return {
-    allDay: adapter.allDay,
+    allDay: dataAccessors.get('allDay', rawAppointment),
     startDate: startDateMs,
-    startDateTimeZone: adapter.startDateTimeZone,
+    startDateTimeZone: dataAccessors.get('startDateTimeZone', rawAppointment),
     endDate: endDateMs,
-    endDateTimeZone: adapter.endDateTimeZone,
-    recurrenceRule: adapter.recurrenceRule,
-    recurrenceException: adapter.recurrenceException,
-    hasRecurrenceRule: adapter.isRecurrent,
+    endDateTimeZone: dataAccessors.get('endDateTimeZone', rawAppointment),
+    recurrenceRule: dataAccessors.get('recurrenceRule', rawAppointment),
+    recurrenceException: dataAccessors.get('recurrenceException', rawAppointment),
+    hasRecurrenceRule: dataAccessors.isRecurrent(rawAppointment),
     visible,
-    disabled: adapter.disabled,
+    disabled: dataAccessors.get('disabled', rawAppointment),
     itemData: rawAppointment,
   };
 });

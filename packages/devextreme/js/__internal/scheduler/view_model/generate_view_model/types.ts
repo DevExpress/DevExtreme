@@ -83,17 +83,19 @@ export interface AppointmentCollectorViewModel extends BaseAppointmentViewModel 
   items: AppointmentItemViewModel[];
 }
 
-export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel, AppointmentInfo {
+export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel {
   isAgendaModel: true;
-  direction: string;
   height: number;
   width: string;
   isLastInGroup: boolean;
+  info: AppointmentInfo['info'] & {
+    partialDates: SimpleAppointment;
+  };
 }
 
 export interface AppointmentItemViewModel extends BaseAppointmentViewModel, AppointmentInfo {
   direction: string;
-  skipResizing?: true;
+  skipResizing: boolean;
   level: number;
   maxLevel: number;
   empty: boolean;

@@ -24,11 +24,11 @@ describe('getFilterOptions', () => {
         firstDayOfWeek: 0,
         allDayIntervals: [{
           min: new Date(2000, 0, 10, 0, 30).getTime(),
-          max: new Date(2000, 0, 13, 0, 30).getTime(),
+          max: new Date(2000, 0, 12, 0, 30).getTime(),
         }],
         regularIntervals: [{
           min: new Date(2000, 0, 10, 0, 30).getTime(),
-          max: new Date(2000, 0, 13, 0, 30).getTime(),
+          max: new Date(2000, 0, 12, 0, 30).getTime(),
         }],
       });
     });

@@ -67,6 +67,7 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
+import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
@@ -1949,17 +1950,17 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }));
   }
 
-  getWorkspaceDOMSize(): {
-    allDayPenalSize: { width: number; height: number };
-    regularDayPenalSize: { width: number; height: number };
-  } {
-    return this.cache.memo('workspaceSize', () => ({
-      allDayPenalSize: this._$allDayPanel ? getBoundingRect(this._$allDayPanel.get(0)) : {
-        width: 0,
-        height: 0,
-      },
-      regularDayPenalSize: getBoundingRect(this._getDateTable().get(0)),
-    }));
+  getPanelDOMSize(panelName: 'allDayPanel' | 'regularPanel'): { width: number; height: number } {
+    return panelName === 'allDayPanel'
+      ? this.cache.memo('allDayPanelSize', () => getBoundingRect(this._$allDayPanel.get(0)))
+      : this.cache.memo('regularPanelSize', () => getBoundingRect(this._getDateTable().get(0)));
+  }
+
+  getCollectorDimension(isCollectorCompact: boolean, panelName: 'allDayPanel' | 'regularPanel') {
+    return this.cache.memo(`collectorSize-${panelName}`, () => CompactAppointmentsHelper.measureCollectorDimensions(
+      panelName === 'allDayPanel' ? this.getAllDayContainer() : this.getFixedContainer(),
+      isCollectorCompact,
+    ));
   }
 
   _getDateTableDOMElementsInfo() {

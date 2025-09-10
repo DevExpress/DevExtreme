@@ -2,7 +2,6 @@ import type { AppointmentCollectorWithGeometry } from '../../../types';
 import { addAdaptivityGeometryInsideInterval } from './add_adaptivity_geometry_inside_interval';
 import { addGeometryInsideInterval } from './add_geometry_inside_interval';
 import { addGroupingOffset } from './add_grouping_offset';
-import { resizeToWorkspace } from './resize_to_workspace';
 import type {
   Geometry,
   GeometryMinimalEntity,
@@ -21,15 +20,15 @@ const RTLSwap = (
 
 const addPanelOffset = <T extends GeometryMinimalEntity & Geometry>(
   entity: T,
-  { intervalSize, viewOrientation, isTimeline }: GeometryOptions,
+  { cellSize, viewOrientation, isTimelineView }: GeometryOptions,
 ): void => {
   switch (true) {
-    case viewOrientation === 'horizontal' && !isTimeline: // month
-      entity.top += entity.rowIndex * intervalSize.height;
+    case viewOrientation === 'horizontal' && !isTimelineView: // month
+      entity.top += entity.rowIndex * cellSize.height;
       break;
-    case viewOrientation === 'horizontal' && isTimeline: // timelineX
+    case viewOrientation === 'horizontal' && isTimelineView: // timelineX
     case viewOrientation === 'vertical': // day, week, workWeek
-      entity.left += entity.rowIndex * intervalSize.width;
+      entity.left += entity.rowIndex * cellSize.width;
       break;
     default:
   }
@@ -45,7 +44,6 @@ export const addGeometry = <T extends GeometryMinimalEntity>(
       : addGeometryInsideInterval(rawEntity, options);
     addPanelOffset(entity, options);
     addGroupingOffset(entity, options);
-    resizeToWorkspace(entity, options);
     RTLSwap(entity, options);
 
     return entity;

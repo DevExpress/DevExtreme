@@ -5,12 +5,13 @@ import { isAppointmentTakesAllDay, isDateAndTimeView } from '../../r1/utils/inde
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { isAppointmentMatchedResources } from '../../view_model_new/filtration/utils/filter_by_attributes/is_appointment_matched_resources';
+import type { CompareOptions } from '../../view_model_new/types';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 import {
   filterArray,
   getRawAppointments,
 } from './utils/index';
-import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
+import type { CombinedFilter, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -56,8 +57,9 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       const compareOptions: CompareOptions = {
         startDayHour,
         endDayHour,
-        min: groupStartDate,
-        max: groupEndDate,
+        min: groupStartDate.getTime(),
+        max: groupEndDate.getTime(),
+        skippedDays: [],
       };
 
       filterOptions.push({

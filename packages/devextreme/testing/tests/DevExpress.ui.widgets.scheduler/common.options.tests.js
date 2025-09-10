@@ -48,7 +48,8 @@ QUnit.module('Options', () => {
                 'allDayExpr': '_allDay',
                 'recurrenceRuleExpr': '_recurrenceRule',
                 'recurrenceExceptionExpr': '_recurrenceException',
-                'disabledExpr': '_disabled'
+                'disabledExpr': '_disabled',
+                'visibleExpr': '_visible',
             });
 
             const data = {
@@ -61,7 +62,8 @@ QUnit.module('Options', () => {
                 allDay: true,
                 recurrenceRule: 'abc',
                 recurrenceException: 'def',
-                disabled: false
+                disabled: false,
+                visible: false,
             };
             const appointment = {
                 _startDate: data.startDate,
@@ -73,17 +75,18 @@ QUnit.module('Options', () => {
                 _allDay: data.allDay,
                 _recurrenceRule: data.recurrenceRule,
                 _recurrenceException: data.recurrenceException,
-                _disabled: data.disabled
+                _disabled: data.disabled,
+                _visible: data.visible
             };
 
             const dataAccessors = scheduler.instance._dataAccessors;
 
-            $.each(dataAccessors.getter, function(name, getter) {
-                assert.deepEqual(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
+            $.each(dataAccessors.getter, function(name) {
+                assert.deepEqual(dataAccessors.get(name, appointment), data[name], 'getter for ' + name + ' is OK');
             });
 
-            $.each(dataAccessors.setter, function(name, getter) {
-                dataAccessors.setter[name](appointment, 'xyz');
+            $.each(dataAccessors.setter, function(name) {
+                dataAccessors.set(name, appointment, 'xyz');
                 assert.equal(appointment['_' + name], 'xyz', 'setter for ' + name + ' is OK');
             });
         } finally {

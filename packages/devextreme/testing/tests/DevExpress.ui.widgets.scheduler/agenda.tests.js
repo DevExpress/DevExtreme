@@ -35,17 +35,6 @@ module('Agenda', {}, () => {
                 e.component._renderView();
                 e.component._recalculateAgenda(rows);
             },
-            notifyScheduler: {
-                invoke: (functionName) => {
-                    if(functionName === 'getLayoutManager') {
-                        return {
-                            getRenderingStrategyInstance: () => {
-                                return { calculateRows: () => rows };
-                            }
-                        };
-                    }
-                }
-            },
             getResourceManager: getEmptyResourceManager,
         };
 
