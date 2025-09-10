@@ -1,0 +1,130 @@
+<div id="form-container">
+  <div class="instruction" id="textarea-label"
+    >Copy text from the editor below to the clipboard. Edit the text to see how
+    your changes affect Smart Paste result.</div
+  >
+  <div class="instruction"
+    >Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or
+    use the "Smart Paste" button under the form.</div
+  >
+  <div class="textarea-container">
+    <dx-button
+      id="copy"
+      text="Copy Text"
+      icon="copy"
+      stylingMode="contained"
+      type="default"
+      width="fit-content"
+      (onClick)="onCopy()"
+    ></dx-button>
+    <dx-text-area
+      id="textarea"
+      [elementAttr]="{ 'aria-labelledby': 'textarea-label' }"
+      [(value)]="text"
+      stylingMode="filled"
+      height="100%"
+    ></dx-text-area>
+  </div>
+  <dx-form
+    id="form"
+    labelMode="outside"
+    labelLocation="top"
+    [showColonAfterLabel]="false"
+    [minColWidth]="220"
+    [aiIntegration]="aiIntegration"
+    stylingMode="filled"
+  >
+    <dxi-form-item
+      itemType="group"
+      [colCountByScreen]="colCountByScreen"
+      caption="Billing Summary"
+    >
+      <dxi-form-item
+        dataField="Amount Due"
+        editorType="dxTextBox"
+        [editorOptions]="amountDueEditorOptions"
+        [aiOptions]="amountDueAIOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="Statement Date"
+        editorType="dxDateBox"
+        [editorOptions]="statementDueEditorOptions"
+        [aiOptions]="statementDueAIOptions"
+      ></dxi-form-item>
+    </dxi-form-item>
+    <dxi-form-item
+      itemType="group"
+      [colCountByScreen]="colCountByScreen"
+      caption="Billing Information"
+    >
+      <dxi-form-item
+        dataField="First Name"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="Last Name"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="Phone Number"
+        editorType="dxTextBox"
+        [editorOptions]="phoneEditorOptions"
+        [aiOptions]="phoneAIOptions"
+      >
+      </dxi-form-item>
+      <dxi-form-item
+        dataField="Email"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+        [aiOptions]="emailAIOptions"
+      >
+        <dxi-validation-rule type="email"></dxi-validation-rule>
+      </dxi-form-item>
+    </dxi-form-item>
+    <dxi-form-item
+      itemType="group"
+      [colCountByScreen]="colCountByScreen"
+      caption="Billing Address"
+    >
+      <dxi-form-item
+        dataField="Street Address"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="City"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="State/Province/Region"
+        editorType="dxTextBox"
+        [editorOptions]="textEditorOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        dataField="ZIP"
+        editorType="dxNumberBox"
+        [editorOptions]="zipEditorOptions"
+        [aiOptions]="zipAIOptions"
+      ></dxi-form-item>
+    </dxi-form-item>
+    <dxi-form-item
+      itemType="group"
+      cssClass="buttons-group"
+      [colCountByScreen]="colCountByScreen"
+    >
+      <dxi-form-item
+        itemType="button"
+        name="smartPaste"
+        [buttonOptions]="smartPasteButtonOptions"
+      ></dxi-form-item>
+      <dxi-form-item
+        itemType="button"
+        name="reset"
+        [buttonOptions]="resetButtonOptions"
+      ></dxi-form-item>
+    </dxi-form-item>
+  </dx-form>
+</div>

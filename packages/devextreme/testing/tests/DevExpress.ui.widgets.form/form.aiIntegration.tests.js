@@ -642,6 +642,26 @@ QUnit.module('SmartPaste', () => {
             }
 
             const done = assert.async();
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {});
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(smartPaste.called, false, 'AI operation should not be called with empty clipboard');
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel DOM element should not be created for empty clipboard');
+                    assert.strictEqual(form._loadPanel, undefined, 'LoadPanel should not be created for empty text');
+                    assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled during operation');
+                    done();
+                }, 10);
+            });
+        });
+
+        QUnit.test('smartPaste handles empty text', function(assert) {
+            const done = assert.async();
             let completionCallback;
 
             const smartPaste = sinon.stub().callsFake((params, callbacks) => {
@@ -651,9 +671,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            this.clipboardStub = this.createClipboardStub('');
-
-            form.smartPaste().then(() => {
+            form.smartPaste('').then(() => {
                 setTimeout(() => {
                     assert.strictEqual(smartPaste.called, true, 'AI operation should be called with empty text');
                     assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel DOM element should be created for empty text');
