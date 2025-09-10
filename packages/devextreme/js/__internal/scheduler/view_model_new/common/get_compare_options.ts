@@ -9,8 +9,9 @@ export const getCompareOptions = (
   const compareOptions = {
     startDayHour: schedulerStore.getViewOption('startDayHour'),
     endDayHour: schedulerStore.getViewOption('endDayHour'),
-    min: dateRange[0],
-    max: dateRange[1],
+    min: dateRange[0].getTime(),
+    max: dateRange[1].getTime(),
+    skippedDays: schedulerStore.currentView.skippedDays,
   };
 
   return compareOptions;

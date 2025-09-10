@@ -325,8 +325,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             const $appts = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
             const cellHeight = getOuterHeight($element.find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
-            assert.roughEqual(getOuterHeight($appts.eq(0)), cellHeight / 2, 2.001, 'Appts top is OK');
-            assert.roughEqual(getOuterHeight($appts.eq(1)), cellHeight * 4, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(1)), cellHeight / 2, 2.001, 'Appts top is OK');
+            assert.roughEqual(getOuterHeight($appts.eq(0)), cellHeight * 4, 2.001, 'Appts top is OK');
 
         } finally {
             tzOffsetStub.restore();

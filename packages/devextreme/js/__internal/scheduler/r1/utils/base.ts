@@ -37,9 +37,9 @@ const getDurationInHours = (
   endDate: Date,
 ): number => Math.floor((endDate.getTime() - startDate.getTime()) / toMs('hour'));
 
-export const getDatesWithoutTime = (min: Date, max: Date): [Date, Date] => {
-  const newMin = dateUtils.trimTime(min) as Date;
-  const newMax = dateUtils.trimTime(max) as Date;
+export const getDatesWithoutTime = (min: Date | number, max: Date | number): [Date, Date] => {
+  const newMin = dateUtils.trimTime(new Date(min)) as Date;
+  const newMax = dateUtils.trimTime(new Date(max)) as Date;
 
   newMax.setDate(newMax.getDate() + 1);
 

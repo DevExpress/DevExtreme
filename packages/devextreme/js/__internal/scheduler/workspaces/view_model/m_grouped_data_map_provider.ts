@@ -226,7 +226,12 @@ export class GroupedDataMapProvider {
     }
   }
 
-  getCompletedGroupsInfo() {
+  getCompletedGroupsInfo(): ({
+    allDay: boolean;
+    startDate: Date;
+    endDate: Date;
+    groupIndex: number;
+  })[] {
     const { dateTableGroupedMap } = this.groupedDataMap;
     return dateTableGroupedMap.map((groupData) => {
       const firstCell = groupData[0][0];

@@ -13,10 +13,16 @@ export const adaptAgendaSettings = (
 
   return settings.map((item) => {
     const { agendaSettings } = item;
-    const adapter = new AppointmentAdapter(
+    const adapterBySettings = new AppointmentAdapter(
       agendaSettings ?? item.itemData,
       dataAccessor,
     );
+    const adapter = dataAccessor.isRecurrent(item.itemData)
+      ? adapterBySettings
+      : new AppointmentAdapter(
+        item.itemData,
+        dataAccessor,
+      );
 
     return {
       isAgendaModel: true,
@@ -27,6 +33,7 @@ export const adaptAgendaSettings = (
       direction: item.direction,
       height: item.height,
       width: item.width,
+      isLastInGroup: false,
       info: {
         sourceAppointment: {
           allDay: item.allDay,
@@ -36,6 +43,10 @@ export const adaptAgendaSettings = (
         appointment: {
           allDay: item.allDay,
           ...adapter.getCalculatedDates(timeZoneCalculator, 'toGrid'),
+        },
+        partialDates: {
+          allDay: item.allDay,
+          ...adapterBySettings.getCalculatedDates(timeZoneCalculator, 'toGrid'),
         },
       },
     };

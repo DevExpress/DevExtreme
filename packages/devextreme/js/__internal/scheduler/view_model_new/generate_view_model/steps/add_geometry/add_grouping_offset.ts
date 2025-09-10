@@ -9,12 +9,14 @@ export const addGroupingOffset = (
   {
     groupCount,
     groupOrientation,
+    viewOrientation,
+    hasAllDayPanel,
     isGroupByDate,
-    isTimeline,
+    isTimelineView,
     cellSize,
-    intervalSize,
+    groupSize,
     intervals,
-  }: Pick<GeometryOptions, 'groupCount' | 'groupOrientation' | 'isGroupByDate' | 'isTimeline' | 'cellSize' | 'intervalSize' | 'intervals'>,
+  }: GeometryOptions,
 ): void => {
   if (groupCount) {
     const intervalsCount = intervals.length;
@@ -22,25 +24,29 @@ export const addGroupingOffset = (
     switch (true) {
       case groupOrientation === 'horizontal' && isGroupByDate:
         entity.left
-          += (groupCount - 1) * cellSize.width * entity.columnIndex // cells before date
+          += (groupCount - 1) * cellSize.width * (
+            viewOrientation === 'horizontal' ? entity.columnIndex : entity.rowIndex
+          ) // cells before date
           + cellSize.width * entity.groupIndex; // cells inside date
         break;
       case groupOrientation === 'horizontal':
-        entity.left += entity.groupIndex * intervalSize.width; // intervals before
+        entity.left += entity.groupIndex * groupSize.width; // intervals before
         break;
       default:
-        entity.top += entity.groupIndex * intervalSize.height * intervalsCount;
+        entity.top += entity.groupIndex * groupSize.height
+        + (entity.groupIndex + Number(!entity.isAllDayPanelOccupied))
+          * Number(hasAllDayPanel) * cellSize.height;
     }
 
-    if (isTimeline) {
+    if (isTimelineView) {
       switch (true) {
         case groupOrientation === 'horizontal' && isGroupByDate:
           // grouped intervals before
-          entity.left += (groupCount - 1) * entity.rowIndex * intervalSize.width;
+          entity.left += (groupCount - 1) * entity.rowIndex * groupSize.width;
           break;
         case groupOrientation === 'horizontal':
           // intervals of groups before
-          entity.left += entity.groupIndex * intervalsCount * intervalSize.width;
+          entity.left += entity.groupIndex * intervalsCount * groupSize.width;
           break;
         default:
       }
