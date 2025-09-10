@@ -1,6 +1,5 @@
 import React from 'react';
 
-const nameLabel = { 'aria-label': 'Name' };
 export default function Field(data) {
   return (
     <div className="custom-addon">

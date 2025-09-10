@@ -234,29 +234,13 @@ jobs:
       #   run: pnpm run ts-check-react
 
   lint:
-    name: ${{ matrix.name }}
+    name: Lint code base
     needs:
       - build-devextreme
       - get-changes
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Lint code base (excluding demos)
-            command: pnpx nx lint-non-demos
-          # NOTE: skipped due to enormous number of errors
-          # - name: Lint demos (1/4)
-          #   command: CONSTEL=1/4 npm run lint-demos
-          # - name: Lint demos (2/4)
-          #   command: CONSTEL=2/4 npm run lint-demos
-          # - name: Lint demos (3/4)
-          #   command: CONSTEL=3/4 npm run lint-demos
-          # - name: Lint demos (4/4)
-          #   command: CONSTEL=4/4 npm run lint-demos
 
     steps:
     - name: Get sources
@@ -319,7 +303,7 @@ jobs:
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: ${{ matrix.command }}
+      run: pnpx nx lint
 
   check_generated_demos:
     name: ${{ matrix.name }}

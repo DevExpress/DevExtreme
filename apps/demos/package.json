@@ -164,7 +164,7 @@
         "prepare-shared": "pnpm run prepare-ts && gulp shared",
         "lint-html": "prettier --check .",
         "lint-js": "eslint . --ignore-pattern 'Demos'",
-        "lint-demos": "ts-node utils/eslint-runner",
+        "lint-demos": "eslint ./Demos",
         "lint-css": "stylelint **/*.{css,vue}",
         "lint-non-demos": "pnpx nx run-many -t lint-js lint-css lint-html -p devextreme-demos",
         "lint": "pnpm run lint-non-demos && pnpm run lint-demos",
