@@ -1242,7 +1242,7 @@ QUnit.module('SmartPaste', () => {
                     completionCallback();
 
                     setTimeout(() => {
-                        assert.strictEqual(form.getEditor(dataField).option('value'), value, 'text value was set');
+                        assert.deepEqual(form.getEditor(dataField).option('value'), value, 'text value was set');
                         done();
                     }, 10);
                 } catch(error) {

@@ -167,7 +167,7 @@ QUnit.module('parseResultForEditorType', () => {
     }].forEach(({ editorType, correctValues, incorrectValues, expectedType }) => {
         correctValues.forEach(({ value, description }) => {
             QUnit.test(`should return correct value for ${description} for ${editorType}`, function(assert) {
-                assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
+                assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
             });
         });
 
@@ -206,7 +206,19 @@ QUnit.module('parseResultForEditorType', () => {
 
         QUnit.test(`should return same array value for ${editorType}`, function(assert) {
             const value = ['string'];
-            assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
+            assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
+        });
+    });
+
+    [' value', 'value', '    value   ', 'value    '].forEach((value) => {
+        QUnit.test(`should return trimmed value if spaces are around the value: ${value}`, function(assert) {
+            assert.strictEqual(parseResultForEditorType('', '', value), 'value', 'trimmed value returned');
+        });
+    });
+
+    [['  value', 'value  '], ['value', '    value  ']].forEach((value) => {
+        QUnit.test(`should return trimmed values in array if spaces are around them: ${value}`, function(assert) {
+            assert.deepEqual(parseResultForEditorType('', '', value), ['value', 'value'], 'trimmed value returned');
         });
     });
 });
