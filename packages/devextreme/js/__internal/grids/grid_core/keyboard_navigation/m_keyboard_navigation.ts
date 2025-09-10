@@ -44,7 +44,7 @@ import {
 } from '../editing/const';
 import modules from '../m_modules';
 import type {
-  Controllers, ModuleType, OptionChanged, RowKey, Views,
+  Controllers, KeyDownEvent, ModuleType, OptionChanged, RowKey, Views,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
@@ -77,6 +77,7 @@ import {
 } from './const';
 import { GridCoreKeyboardNavigationDom } from './dom';
 import {
+  getInteractiveElement,
   isCellInHeaderRow,
   isDataRow,
   isDetailRow,
@@ -963,6 +964,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     const $targetCell = this._getCellElementFromTarget(eventTarget);
     const isCommandCell = $targetCell.is(COMMAND_CELL_SELECTOR);
 
+    if (this.isOriginalTabHandlerRequired($targetCell, eventArgs)) {
+      return false;
+    }
+
     if (isCommandCell) {
       return !this._targetCellTabHandler(eventArgs, direction);
     }
@@ -1012,64 +1017,66 @@ export class KeyboardNavigationController extends modules.ViewController {
     return true;
   }
 
+  private isOriginalTabHandlerRequired($cell: dxElementWrapper, event: KeyDownEvent): boolean {
+    const eventTarget = event.originalEvent.target;
+    const elementType = this._getElementType(eventTarget);
+    const $lastInteractiveElement = getInteractiveElement($cell, !event.shift);
+
+    if (elementType !== 'cell' || $lastInteractiveElement.length === 0) {
+      return false;
+    }
+
+    return eventTarget !== $lastInteractiveElement.get(0);
+  }
+
   private _targetCellTabHandler(eventArgs, direction) {
     const $event = eventArgs.originalEvent;
     let eventTarget = $event.target;
     let elementType = this._getElementType(eventTarget);
     let $cell = this._getCellElementFromTarget(eventTarget);
-    const $lastInteractiveElement = elementType === 'cell' && this._getInteractiveElement(
-      $cell,
-      !eventArgs.shift,
-    );
-    let isOriginalHandlerRequired = false;
+
+    if (!isEditorCell(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
+      return true;
+    }
 
     if (
-      !isEditorCell(this, $cell)
-      && $lastInteractiveElement?.length
-      && eventTarget !== $lastInteractiveElement.get(0)
+      this._focusedCellPosition.rowIndex === undefined
+      && $(eventTarget).hasClass(ROW_CLASS)
     ) {
-      isOriginalHandlerRequired = true;
-    } else {
-      if (
-        this._focusedCellPosition.rowIndex === undefined
-        && $(eventTarget).hasClass(ROW_CLASS)
-      ) {
-        this._updateFocusedCellPosition($cell);
-      }
+      this._updateFocusedCellPosition($cell);
+    }
 
-      elementType = this._getElementType(eventTarget);
-      if (this.isRowFocusType()) {
-        this.setCellFocusType();
-        if (elementType === 'row' && isDataRow($(eventTarget))) {
-          eventTarget = this.getFirstValidCellInRow($(eventTarget));
-          elementType = this._getElementType(eventTarget);
-        }
-      }
-
-      const nextCellInfo = this._getNextCellByTabKey(
-        $event,
-        direction,
-        elementType,
-      );
-      $cell = nextCellInfo.$cell;
-
-      if (!$cell) {
-        return false;
-      }
-
-      $cell = this._checkNewLineTransition($event, $cell);
-      if (!$cell) {
-        return false;
-      }
-
-      this._focusCell($cell, !nextCellInfo.isHighlighted);
-
-      if (!isEditorCell(this, $cell)) {
-        this._focusInteractiveElement($cell, eventArgs.shift);
+    if (this.isRowFocusType()) {
+      this.setCellFocusType();
+      if (elementType === 'row' && isDataRow($(eventTarget))) {
+        eventTarget = this.getFirstValidCellInRow($(eventTarget));
+        elementType = this._getElementType(eventTarget);
       }
     }
 
-    return isOriginalHandlerRequired;
+    const nextCellInfo = this._getNextCellByTabKey(
+      $event,
+      direction,
+      elementType,
+    );
+    $cell = nextCellInfo.$cell;
+
+    if (!$cell) {
+      return false;
+    }
+
+    $cell = this._checkNewLineTransition($event, $cell);
+    if (!$cell) {
+      return false;
+    }
+
+    this._focusCell($cell, !nextCellInfo.isHighlighted);
+
+    if (!isEditorCell(this, $cell)) {
+      this._focusInteractiveElement($cell, eventArgs.shift);
+    }
+
+    return false;
   }
 
   private _getNextCellByTabKey($event, direction, elementType) {
@@ -1511,7 +1518,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   private _focusInteractiveElement($cell, isLast?) {
     if (!$cell) return;
 
-    const $focusedElement = this._getInteractiveElement($cell, isLast);
+    const $focusedElement = getInteractiveElement($cell, isLast);
 
     /// #DEBUG
     this._testInteractiveElement = $focusedElement;
@@ -2468,14 +2475,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     return (
       this._isCellEditMode() && this.option('keyboardNavigation.editOnKeyPress')
     );
-  }
-
-  private _getInteractiveElement($cell, isLast) {
-    const $focusedElement = $cell
-      .find(INTERACTIVE_ELEMENTS_SELECTOR)
-      .filter(':visible');
-
-    return isLast ? $focusedElement.last() : $focusedElement.first();
   }
 
   public _applyTabIndexToElement($element) {
