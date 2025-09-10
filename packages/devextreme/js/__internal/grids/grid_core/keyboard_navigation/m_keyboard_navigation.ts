@@ -44,7 +44,7 @@ import {
 } from '../editing/const';
 import modules from '../m_modules';
 import type {
-  Controllers, ModuleType, OptionChanged, RowKey, Views,
+  Controllers, KeyDownEvent, ModuleType, OptionChanged, RowKey, Views,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
