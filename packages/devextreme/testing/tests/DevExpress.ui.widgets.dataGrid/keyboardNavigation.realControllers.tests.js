@@ -1302,7 +1302,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $inputElement.change();
         that.clock.tick(10);
         $inputElement = $testElement.find('.dx-texteditor-input').first();
-        $testElement.find('.dx-datagrid-rowsview').trigger($.Event('keydown', { key: 'Tab', target: $inputElement }));
+        $testElement.find('.dx-datagrid-rowsview').trigger($.Event('keydown', { key: 'Tab', target: $inputElement.get(0) }));
         that.clock.tick(10);
 
         // assert
