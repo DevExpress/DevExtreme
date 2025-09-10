@@ -100,7 +100,6 @@ QUnit.module('Integration: Appointment templates', {
             // TODO: in current state, targetedAppointmentData arguments has non converted dates
             const { appointmentData, targetedAppointmentData } = model;
 
-            console.log(appointmentData, targetedAppointmentData, eventCallCount);
             const startDateExpr = scheduler.option('startDateExpr');
             const endDateExpr = scheduler.option('endDateExpr');
             const textExpr = scheduler.option('textExpr');
