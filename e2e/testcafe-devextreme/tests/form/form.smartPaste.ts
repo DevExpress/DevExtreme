@@ -14,7 +14,7 @@ test('Showing loader after calling smart paste', async (t) => {
   const baseScreenshotName = 'Form Smart Paste';
   const loadingScreenshotSuffix = 'loading';
   const screenshotName = `${baseScreenshotName}.png`;
-  const loadingScreenshotName = `${loadingScreenshotSuffix}.png`;
+  const loadingScreenshotName = `${baseScreenshotName} ${loadingScreenshotSuffix}.png`;
 
   await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
@@ -33,7 +33,7 @@ test('Showing loader after calling smart paste', async (t) => {
     width: 1000,
     aiIntegration: {
       smartPaste: async () => {
-        await t.wait(500);
+        await t.wait(1000);
         return {};
       },
     },
