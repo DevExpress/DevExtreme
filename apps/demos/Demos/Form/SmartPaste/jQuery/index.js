@@ -70,7 +70,7 @@ $(() => {
           form.smartPaste(text);
         } else {
           showNotification(
-            'Copy the text to paste into the form',
+            'Clipboard is empty. Copy text before pasting',
             '#form',
           );
         }

@@ -17,6 +17,15 @@ export default class Form extends Widget {
     )();
   }
 
+  smartPaste(text: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => { (getInstance() as any).smartPaste(text); },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   findTextBox(filedName: string): TextBox {
     return new TextBox(Selector(this.element.find(`input[name='${filedName}']`)).parent(2));
   }

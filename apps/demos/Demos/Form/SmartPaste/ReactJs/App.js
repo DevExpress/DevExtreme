@@ -109,7 +109,7 @@ const App = () => {
           if (clipboardText) {
             formRef.current?.instance().smartPaste(clipboardText);
           } else {
-            showNotification('Copy the text to paste into the form', '#form');
+            showNotification('Clipboard is empty. Copy text before pasting', '#form');
           }
         })
         .catch(() => {
