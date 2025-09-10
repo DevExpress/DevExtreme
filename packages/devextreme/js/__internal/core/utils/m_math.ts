@@ -68,9 +68,6 @@ const MIN_PRECISION = 7;
  */
 
 function adjust(value: number, interval?: number) {
-  // (0.0000001) => 1e-7
-  // (0.000001) => 0.000001
-
   const absValue = Math.abs(value);
   const integerPart = absValue > 1 ? 10 : 0;
 
