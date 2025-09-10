@@ -26,16 +26,13 @@ test('Showing loader after calling smart paste', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await appendElementTo('#container', 'div', 'form');
   await createWidget('dxForm', {
     height: 400,
     width: 1000,
     aiIntegration: {
-      smartPaste: async () => {
-        await t.wait(1000);
-        return {};
-      },
+      smartPaste: () => new Promise(() => {}),
     },
     formData: {},
     items: [
