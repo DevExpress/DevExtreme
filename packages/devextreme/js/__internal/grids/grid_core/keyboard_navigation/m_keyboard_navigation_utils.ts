@@ -1,11 +1,18 @@
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
 import { EDIT_ROW, EDITOR_CELL_CLASS } from '../editing/const';
 import {
   ADAPTIVE_ITEM_TEXT_CLASS,
-  COMMAND_SELECT_CLASS, DATA_ROW_CLASS, EDIT_FORM_CLASS, FREESPACE_ROW_CLASS, GROUP_ROW_CLASS, HEADER_ROW_CLASS,
-  MASTER_DETAIL_ROW_CLASS, VIRTUAL_ROW_CLASS,
+  COMMAND_SELECT_CLASS, DATA_ROW_CLASS,
+  EDIT_FORM_CLASS,
+  FREESPACE_ROW_CLASS,
+  GROUP_ROW_CLASS,
+  HEADER_ROW_CLASS,
+  INTERACTIVE_ELEMENTS_SELECTOR,
+  MASTER_DETAIL_ROW_CLASS,
+  VIRTUAL_ROW_CLASS,
 } from './const';
 
 const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
@@ -68,4 +75,16 @@ export function isFixedColumnIndexOffsetRequired(that, column) {
 export function shouldPreventScroll(that) {
   const keyboardController = that.getController('keyboardNavigation');
   return keyboardController._isVirtualScrolling() ? that.option('focusedRowIndex') === keyboardController.getRowIndex() : false;
+}
+
+export function getInteractiveElements($cell: dxElementWrapper): dxElementWrapper {
+  return $cell
+    .find(INTERACTIVE_ELEMENTS_SELECTOR)
+    .filter(':visible');
+}
+
+export function getInteractiveElement($cell: dxElementWrapper, isLast: boolean): dxElementWrapper {
+  const $focusedElement = getInteractiveElements($cell);
+
+  return isLast ? $focusedElement.last() : $focusedElement.first();
 }

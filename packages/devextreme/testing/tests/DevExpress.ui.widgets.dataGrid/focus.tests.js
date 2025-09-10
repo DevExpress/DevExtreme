@@ -559,7 +559,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick(10);
 
         // act
-        this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)));
+        this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)).find('.dx-texteditor-input').get(0));
 
         // assert
         const keyboardController = this.getController('keyboardNavigation');
