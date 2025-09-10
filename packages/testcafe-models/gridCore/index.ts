@@ -6,6 +6,7 @@ import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
 import TextBox from '../textBox';
 import ContextMenu from '../contextMenu';
+import LoadPanel from '../loadPanel/index';
 
 export const CLASS = {
     pager: 'pager',
@@ -15,6 +16,7 @@ export const CLASS = {
     columnChooserButton: 'column-chooser-button',
     searchBox: 'dx-searchbox',
     contextMenu: 'dx-context-menu',
+    loadPanel: 'dx-loadpanel',
 }
 
 export default abstract class GridCore extends Widget {
@@ -89,6 +91,19 @@ export default abstract class GridCore extends Widget {
 
   getContextMenu(): ContextMenu {
     return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
+  getElementOffset(): Promise<{ left: number; top: number }> {
+    const { element } = this;
+
+    return ClientFunction(
+      () => ($(element()) as any).offset(),
+      { dependencies: { element } },
+    )();
+  }
+
+  getLoadPanel(): LoadPanel {
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanel}`));
   }
 
   apiFilter(filter: any[]): Promise<void> {
