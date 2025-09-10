@@ -28,6 +28,15 @@ export const setupSchedulerTestEnvironment = ({
     onScroll: jest.fn(),
     onEnd: jest.fn(),
   });
+  // NOTE: collector size
+  window.getComputedStyle = jest.fn((): any => ({
+    width: '24px',
+    height: '20px',
+    marginLeft: '3px',
+    marginRight: '3px',
+    marginTop: '3px',
+    marginBottom: '3px',
+  }));
   Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
     switch (true) {
       case this.classList.contains('dx-scheduler-date-table-cell'):

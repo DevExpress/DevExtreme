@@ -2,7 +2,6 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { VIEWS } from './constants_view';
 import {
   getCurrentView, getViewOption, getViews, parseCurrentDate, parseDateOption,
 } from './utils';
@@ -25,7 +24,7 @@ describe('views utils', () => {
         name: 'MyDay',
         groups: ['a', 'b'],
       };
-      expect(getViews([input] as any)).toEqual([input]);
+      expect(getViews([input] as any)).toEqual([{ ...input, skippedDays: [] }]);
     });
 
     it.each([
@@ -56,71 +55,89 @@ describe('views utils', () => {
         },
       },
     ] as const)('should set default for undefined props ($input.type)', ({ input, output }) => {
-      expect(getViews([input])).toEqual([output]);
+      expect(getViews([input])).toEqual([{ ...output, skippedDays: [] }]);
     });
 
-    it.each(
-      Object.values(VIEWS).map((view, index) => ({
-        input: view,
-        output: [
-          {
-            groupOrientation: 'horizontal',
-            intervalCount: 1,
-            name: 'Day',
-            type: 'day',
-          },
-          {
-            groupOrientation: 'horizontal',
-            intervalCount: 1,
-            name: 'Week',
-            type: 'week',
-          },
-          {
-            groupOrientation: 'horizontal',
-            intervalCount: 1,
-            name: 'Work Week',
-            type: 'workWeek',
-          },
-          {
-            groupOrientation: 'horizontal',
-            intervalCount: 1,
-            name: 'Month',
-            type: 'month',
-          },
-          {
-            groupOrientation: 'vertical',
-            intervalCount: 1,
-            name: 'Timeline Day',
-            type: 'timelineDay',
-          },
-          {
-            groupOrientation: 'vertical',
-            intervalCount: 1,
-            name: 'Timeline Week',
-            type: 'timelineWeek',
-          },
-          {
-            groupOrientation: 'vertical',
-            intervalCount: 1,
-            name: 'Timeline Work Week',
-            type: 'timelineWorkWeek',
-          },
-          {
-            groupOrientation: 'vertical',
-            intervalCount: 1,
-            name: 'Timeline Month',
-            type: 'timelineMonth',
-          },
-          {
-            agendaDuration: 7,
-            intervalCount: 1,
-            name: 'Agenda',
-            type: 'agenda',
-          },
-        ][index],
-      })),
-    )('should return normalized $input.type view', ({ input, output }) => {
-      expect(getViews([input])).toEqual([output]);
+    it.each([{
+      input: 'day',
+      output: {
+        groupOrientation: 'horizontal',
+        intervalCount: 1,
+        name: 'Day',
+        type: 'day',
+      },
+    }, {
+      input: 'week',
+      output: {
+        groupOrientation: 'horizontal',
+        intervalCount: 1,
+        name: 'Week',
+        type: 'week',
+      },
+    }, {
+      input: 'month',
+      output: {
+        groupOrientation: 'horizontal',
+        intervalCount: 1,
+        name: 'Month',
+        type: 'month',
+      },
+    }, {
+      input: 'timelineDay',
+      output: {
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        name: 'Timeline Day',
+        type: 'timelineDay',
+      },
+    }, {
+      input: 'timelineWeek',
+      output: {
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        name: 'Timeline Week',
+        type: 'timelineWeek',
+      },
+    }, {
+      input: 'timelineMonth',
+      output: {
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        name: 'Timeline Month',
+        type: 'timelineMonth',
+      },
+    }, {
+      input: 'agenda',
+      output: {
+        agendaDuration: 7,
+        intervalCount: 1,
+        name: 'Agenda',
+        type: 'agenda',
+      },
+    }])('should return normalized $input.type view', ({ input, output }) => {
+      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [] }]);
+    });
+
+    it.each([
+      {
+        input: 'workWeek',
+        output: {
+          groupOrientation: 'horizontal',
+          intervalCount: 1,
+          name: 'Work Week',
+          type: 'workWeek',
+        },
+      }, {
+        input: 'timelineWorkWeek',
+        output: {
+          groupOrientation: 'vertical',
+          intervalCount: 1,
+          name: 'Timeline Work Week',
+          type: 'timelineWorkWeek',
+        },
+      },
+    ])('should return normalized $input.type view', ({ input, output }) => {
+      expect(getViews([input] as any)).toEqual([{ ...output, skippedDays: [0, 6] }]);
     });
   });
 
@@ -131,6 +148,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'Agenda',
         type: 'agenda',
+        skippedDays: [],
       });
     });
 
@@ -140,6 +158,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'Agenda',
         type: 'agenda',
+        skippedDays: [],
       });
     });
 
@@ -149,6 +168,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'SuperAgenda',
         type: 'agenda',
+        skippedDays: [],
       });
     });
 
@@ -158,6 +178,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'Agenda',
         type: 'agenda',
+        skippedDays: [],
       });
     });
 
@@ -167,6 +188,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'Month',
         type: 'month',
+        skippedDays: [],
       });
     });
 
@@ -180,6 +202,7 @@ describe('views utils', () => {
         intervalCount: 1,
         name: 'Day',
         type: 'day',
+        skippedDays: [],
       });
     });
   });

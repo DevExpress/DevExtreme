@@ -491,7 +491,7 @@ module('Integration: Appointments in Month view', {
                     height: 600
                 });
 
-                const appointments = scheduler.instance._getAppointmentsToRepaint();
+                const appointments = scheduler.instance._layoutManager.generateViewModel();
                 const parts = appointments.map((item) => ({
                     level: item.level,
                     maxLevel: item.maxLevel,
@@ -795,11 +795,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 2, 3]
+                        indices: [0, 1, 2]
                     },
                     {
                         color: '#0000ff',
-                        indices: [1, 4, 5]
+                        indices: [3, 4, 5]
                     }
                 ]
             }, {
@@ -807,11 +807,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 2, 3]
+                        indices: [0, 1, 2]
                     },
                     {
                         color: '#0000ff',
-                        indices: [1, 4, 5]
+                        indices: [3, 4, 5]
                     }
                 ]
             }

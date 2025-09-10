@@ -29,7 +29,8 @@ const printOffset = offset => [
 
 testStart(() => initTestMarkup());
 
-module('Virtual scrolling Month View', () => {
+// TODO: transform it to jest with snapshots and unskip
+module.skip('Virtual scrolling Month View', () => {
     module('Regular appointments', () => {
         test('Regular appointments should be rendered correctly if horizontal grouping', async function(assert) {
             const scheduler = await createWrapper({

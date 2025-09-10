@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
-import {
-  mockAppointmentDataAccessor,
-} from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
+import {
+  mockAppointmentDataAccessor, mockUppercaseFieldExpressions,
+} from '../../../__mock__/appointment_data_accessor.mock';
 import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
 import { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import type { MinimalAppointmentEntity } from '../../types';
@@ -133,19 +133,7 @@ describe('getMinimalAppointments', () => {
     const result = getMinimalAppointments(
       data as any,
       {
-        dataAccessors: new AppointmentDataAccessor({
-          startDateExpr: 'StartDate',
-          endDateExpr: 'EndDate',
-          startDateTimeZoneExpr: 'StartDateTimeZone',
-          endDateTimeZoneExpr: 'EndDateTimeZone',
-          allDayExpr: 'AllDay',
-          textExpr: 'Text',
-          descriptionExpr: 'Description',
-          recurrenceRuleExpr: 'RecurrenceRule',
-          recurrenceExceptionExpr: 'RecurrenceException',
-          disabledExpr: 'Disabled',
-          visibleExpr: 'Visible',
-        }, true),
+        dataAccessors: new AppointmentDataAccessor(mockUppercaseFieldExpressions, true),
         timeZoneCalculator: createTimeZoneCalculator(''),
       },
     );

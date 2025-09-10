@@ -906,11 +906,11 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     model.targetedAppointmentData,
                     {
                         allDay: true,
-                        endDate: new Date(2015, 4, 25, 11, 0, 0, 1),
+                        endDate: new Date(2015, 4, 25, 11),
                         recurrenceRule: 'FREQ=DAILY;COUNT=3',
                         startDate: new Date(2015, 4, 25, 9),
                         text: 'Task 2',
-                        displayEndDate: new Date(2015, 4, 25, 11, 0, 0, 1),
+                        displayEndDate: new Date(2015, 4, 25, 11),
                         displayStartDate: new Date(2015, 4, 25, 9),
                     }
                 );

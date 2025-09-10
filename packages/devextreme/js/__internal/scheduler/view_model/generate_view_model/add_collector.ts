@@ -21,7 +21,7 @@ const cropSettingsProps = (
   direction: setting.direction,
   groupIndex: setting.groupIndex,
   sortedIndex: setting.sortedIndex,
-  skipResizing: setting.skipResizing,
+  skipResizing: Boolean(setting.skipResizing),
   level: setting.index,
   maxLevel: setting.count,
   info: {

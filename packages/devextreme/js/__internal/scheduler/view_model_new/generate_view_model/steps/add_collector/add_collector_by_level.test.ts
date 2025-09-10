@@ -1,7 +1,14 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { monthCells } from '../../__mock__/month.mock';
 import { addCollectorByLevel } from './add_collector_by_level';
+
+const monthCells = Array.from({ length: 28 }).map((_, index) => ({
+  min: new Date(2025, 0, index + 1).getTime(),
+  max: new Date(2025, 0, index + 2).getTime(),
+  cellIndex: index,
+  rowIndex: Math.floor(index / 7),
+  columnIndex: index % 7,
+}));
 
 describe('addCollectorByLevel', () => {
   it('should add empty collector for non-overlapping appointments', () => {

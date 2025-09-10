@@ -1,10 +1,12 @@
+import type { Orientation } from '@js/common';
+
 import type {
   AllDayPanelOccupation,
   AppointmentCollector,
+  CellInterval,
   DateInterval,
   Level,
   ListEntity,
-  MaxLevel,
   Position,
 } from '../../../types';
 
@@ -33,7 +35,7 @@ export interface AbstractSize {
   sizeX: number; // abstract width
   sizeY: number; // abstract height
 }
-export interface RawCollectorSize {
+export interface CollectorCSS {
   height: string;
   width: string;
   marginRight: string;
@@ -42,20 +44,21 @@ export interface RawCollectorSize {
   marginBottom: string;
 }
 
-export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex'>
+export type GeometryMinimalEntity = Pick<ListEntity, 'startDate' | 'endDate' | 'groupIndex' | 'duration'>
   & Position
   & Level
-  & MaxLevel
   & AppointmentCollector
   & AllDayPanelOccupation;
 
 export interface GeometryOptions {
   intervals: DateInterval[];
+  cells: CellInterval[];
   maxAppointmentsPerCell: number;
-  viewOrientation: 'horizontal' | 'vertical';
-  groupOrientation?: 'horizontal' | 'vertical';
+  viewOrientation: Orientation;
+  groupOrientation?: Orientation;
   isGroupByDate: boolean;
-  isTimeline: boolean;
+  hasAllDayPanel: boolean;
+  isTimelineView: boolean;
   isRTLEnabled: boolean;
   isAdaptivityEnabled: boolean;
   collectorPosition: 'start' | 'end';
@@ -63,6 +66,6 @@ export interface GeometryOptions {
   cellSize: RealSize;
   collectorSize: RealSize;
   collectorWithMarginsSize: RealSize;
-  intervalSize: RealSize;
+  groupSize: RealSize;
   panelSize: RealSize;
 }

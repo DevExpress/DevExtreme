@@ -1,11 +1,11 @@
 import type {
   AppointmentCollector,
-  AppointmentPart,
+  AppointmentPart, DatesBeforeSplit,
   Level,
   ListEntity,
   Position,
 } from '../../../types';
-import { splitByCondition } from '../split_by_condition';
+import { splitByCondition } from './split_by_condition';
 import type { CollectorOptions } from './types';
 
 const addEmptyCollector = <T>(
@@ -47,12 +47,14 @@ const groupByOccupation = <T extends Level & Position>(
     return result;
   }, Array.from({ length: cells.length }, () => []));
 
-export const addCollectorByLevel = <T extends ListEntity & Level & Position & AppointmentPart>(
-  entities: T[],
-  {
-    cells, isCompact, maxLevel, collectBy,
-  }: CollectorOptions,
-): (T & AppointmentCollector)[] => {
+export const addCollectorByLevel = <
+  T extends ListEntity & Level & Position & AppointmentPart & DatesBeforeSplit,
+>(
+    entities: T[],
+    {
+      cells, isCompact, maxLevel, collectBy,
+    }: CollectorOptions,
+  ): (T & AppointmentCollector)[] => {
   if (maxLevel < 0) {
     return addEmptyCollector(entities);
   }

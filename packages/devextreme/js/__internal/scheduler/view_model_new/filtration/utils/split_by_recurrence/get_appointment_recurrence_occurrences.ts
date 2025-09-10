@@ -1,6 +1,6 @@
 import { getRecurrenceProcessor } from '../../../../m_recurrence';
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator';
-import type { DateInterval } from '../../../../view_model/filtering/utils/type';
+import type { DateInterval } from '../../../types';
 import { getRecurrenceException } from './get_recurrence_exception';
 
 interface Options {

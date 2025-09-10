@@ -1,47 +1,43 @@
-import { dateUtils } from '@ts/core/utils/m_date';
-
-import { getDatesWithoutTime } from '../../../../r1/utils/base';
+import { splitIntervalByDay } from '../../../common/split_interval_by_days';
 import type { CompareOptions, DateInterval } from '../../../types';
+
+const mergeIntervalsWithoutGap = (intervals: DateInterval[]): DateInterval[] => {
+  if (intervals.length === 0) return [];
+
+  return intervals.reduce<DateInterval[]>((result, interval) => {
+    const last = result[result.length - 1];
+    if (last.max === interval.min) {
+      last.max = interval.max;
+      return result;
+    }
+
+    result.push(interval);
+    return result;
+  }, [{ min: intervals[0].min, max: intervals[0].min }]);
+};
 
 export const getVisibleDateTimeIntervals = ({
   startDayHour,
   endDayHour,
   min,
   max,
-}: CompareOptions, isDateViewOnly: boolean, isSplitByDays = false): DateInterval[] => {
-  const isContinuousIntervals = startDayHour === 0 && endDayHour === 24;
-  if (isDateViewOnly || (!isSplitByDays && isContinuousIntervals)) {
-    const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-
-    return [{ min: trimMin.getTime(), max: trimMax.getTime() }];
+  skippedDays,
+}: CompareOptions, isDateViewOnly: boolean): DateInterval[] => {
+  if (isDateViewOnly || (startDayHour === 0 && endDayHour === 24)) {
+    return mergeIntervalsWithoutGap(splitIntervalByDay({
+      startDayHour: 0,
+      endDayHour: 24,
+      min,
+      max,
+      skippedDays,
+    }));
   }
 
-  if (startDayHour >= endDayHour) {
-    return [];
-  }
-
-  const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-  const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
-
-  const normalizedMin = new Date(min);
-  normalizedMin.setHours(startTime.hours, startTime.minutes, 0, 0);
-  const normalizedMax = new Date(max);
-  normalizedMax.setHours(endTime.hours, endTime.minutes, 0, 0);
-
-  const time = normalizedMin;
-  const maxTime = normalizedMax;
-  const result: DateInterval[] = [];
-
-  while (time < maxTime) {
-    const intervalMax = new Date(time);
-    intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
-
-    result.push({
-      min: time.getTime(),
-      max: intervalMax.getTime(),
-    });
-    time.setDate(time.getDate() + 1);
-  }
-
-  return result;
+  return splitIntervalByDay({
+    startDayHour,
+    endDayHour,
+    min,
+    max,
+    skippedDays,
+  });
 };
