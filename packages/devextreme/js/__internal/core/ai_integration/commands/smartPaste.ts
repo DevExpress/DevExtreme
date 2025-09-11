@@ -29,15 +29,10 @@ export class SmartPasteCommand extends BaseCommand<
       }
 
       const [name, ...rawValues] = data.split(':::');
-      let value = rawValues.length <= 1 ? rawValues[0] : rawValues;
+      const values = rawValues.map((value) => value.trim());
+      const value = values.length <= 1 ? values[0] : values;
 
       if (value) {
-        if (Array.isArray(value)) {
-          value = value.map((v) => v.trim());
-        } else {
-          value = value.trim();
-        }
-
         result.push({
           name,
           value,
