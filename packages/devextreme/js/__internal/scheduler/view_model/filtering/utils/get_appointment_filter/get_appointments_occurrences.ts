@@ -1,7 +1,8 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { getRecurrenceProcessor } from '../../../../m_recurrence';
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import { generateDates } from '../../../../recurrence/generate_dates';
+import { validateRRule } from '../../../../recurrence/validate_rule';
 import type { AppointmentDataItem } from '../../../../types';
 import type { DateInterval } from '../type';
 import { getRecurrenceException } from './get_recurrence_exception';
@@ -19,9 +20,7 @@ export const getAppointmentsOccurrences = (
   }: Options,
   timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentDataItem[] => {
-  const recurrenceProcessor = getRecurrenceProcessor();
-
-  if (!recurrenceProcessor.isValidRecurrenceRule(appointment.recurrenceRule)) {
+  if (!validateRRule(appointment.recurrenceRule)) {
     return [appointment];
   }
 
@@ -30,7 +29,7 @@ export const getAppointmentsOccurrences = (
     appointment.startDate,
     timeZoneCalculator,
   );
-  const startDates = recurrenceProcessor.generateDates({
+  const startDates = generateDates({
     rule: appointment.recurrenceRule,
     exception: recurrenceException,
     start: appointment.startDate,

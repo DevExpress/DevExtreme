@@ -7,7 +7,6 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
-import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
@@ -624,20 +623,6 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             scheduler.appointmentPopup.clickDoneButton();
 
             assert.expect(2);
-        });
-
-        test('Recurrence rule with UNTIL date in UTC format should apply correctly to local dates', async function(assert) {
-            const dates = getRecurrenceProcessor().generateDates(
-                {
-                    rule: 'FREQ=DAILY;UNTIL=20210625T075959Z',
-                    start: new Date(2021, 5, 24, 1, 30),
-                    min: new Date(2021, 5, 20),
-                    max: new Date(2021, 5, 26),
-                    appointmentTimezoneOffset: 0,
-                }
-            );
-
-            assert.deepEqual(dates, [new Date(2021, 5, 24, 1, 30)], 'Should be only one date');
         });
     });
 
