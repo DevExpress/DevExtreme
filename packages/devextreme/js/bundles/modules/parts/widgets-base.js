@@ -75,6 +75,8 @@ ui.dxTooltip = require('../../../ui/tooltip');
 ui.dxTrackBar = require('../../../ui/track_bar');
 ui.dxDraggable = require('../../../ui/draggable');
 ui.dxSortable = require('../../../ui/sortable');
+ui.dxCounter = require('../../../ui/counter');
+ui.dxCheckbox = require('../../../ui/checkbox');
 
 /* Validation (dx.module-widgets-base.js) */
 
