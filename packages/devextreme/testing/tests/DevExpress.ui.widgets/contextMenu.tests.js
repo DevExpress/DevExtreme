@@ -15,6 +15,11 @@ import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
+import {
+    SCROLLABLE_CONTENT_CLASS,
+    SCROLLABLE_CONTAINER_CLASS,
+    SCROLLABLE_CLASS,
+} from '__internal/ui/scroll_view/consts';
 
 import 'ui/button';
 import 'generic_light.css!';
@@ -321,9 +326,6 @@ QUnit.module('Repaint', moduleConfig, () => {
 });
 
 QUnit.module('Rendering Scrollable', moduleConfig, () => {
-    const DX_SCROLLABLE_CLASS = 'dx-scrollable';
-    const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-    const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
     const BORDER_WIDTH = 1;
     const SUBMENU_PADDING = 10;
 
@@ -333,7 +335,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
         assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
-        assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
+        assert.ok($submenu.hasClass(SCROLLABLE_CLASS), 'Scrollable initialized');
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
@@ -358,7 +360,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.strictEqual($submenus.length, 2, '2 submenu exists');
 
         const $nestedSubmenu = $submenus.eq(1);
-        assert.ok($nestedSubmenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized on nested menu');
+        assert.ok($nestedSubmenu.hasClass(SCROLLABLE_CLASS), 'Scrollable initialized on nested menu');
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
@@ -445,7 +447,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
+        assert.ok($submenu.find(`.${SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
         assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
         assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
     });
@@ -460,8 +462,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             focusStateEnabled: true,
             visible: true,
         });
-        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
 
@@ -499,8 +501,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+        const $scrollableContainer = $nestedSubmenu.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         assert.roughEqual(
             $scrollableContent.position().top,
@@ -525,8 +527,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             focusStateEnabled: true,
             visible: true,
         });
-        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         keyboardMock(instance.itemsContainer())
             .press('up')
@@ -562,8 +564,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+        const $scrollableContainer = $nestedSubmenu.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         assert.roughEqual(
             $scrollableContent.position().top,
@@ -603,8 +605,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
-        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+        const $scrollableContainer = $nestedSubmenu.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
         assert.roughEqual(
             $scrollableContent.position().top,
@@ -632,7 +634,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(0);
 
-        $(`.${DX_SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
+        $(`.${SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
             assert.strictEqual(window.getComputedStyle(scrollableContent).minHeight, '0px', 'min-height = auto');
         });
     });
