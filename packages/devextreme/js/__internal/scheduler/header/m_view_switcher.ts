@@ -55,12 +55,13 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
       },
     },
     ...item,
-  };
+  } as ToolbarItem;
 };
 
 export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
   const isOnlyOneView = isOneView(views, selectedView);
+  const isVisible = views?.length > 0;
 
   return {
     widget: 'dxDropDownButton',
@@ -68,6 +69,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
     location: 'after',
     name: 'viewSwitcher',
     cssClass: ClASS.container,
+    visible: isVisible,
     options: {
       items: views,
       useSelectMode: true,
@@ -102,5 +104,5 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
       },
     },
     ...item,
-  };
+  } as ToolbarItem;
 };
