@@ -19,7 +19,7 @@ test('Showing loader after calling smart paste', async (t) => {
   await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
   const form = new Form('#form');
-  await form.smartPaste('test');
+  await form.smartPaste();
 
   await testScreenshot(t, takeScreenshot, loadingScreenshotName, { element: '#container' });
 
