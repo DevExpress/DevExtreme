@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-base-to-string */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable default-case */
@@ -5,7 +6,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
@@ -516,7 +516,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-export const DEBUG_set_tooltip = function (value) {
+exports.DEBUG_set_tooltip = function (value) {
   Tooltip = value;
 };
 /// #ENDDEBUG

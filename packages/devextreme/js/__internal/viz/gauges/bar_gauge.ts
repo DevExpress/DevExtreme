@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @stylistic/no-mixed-operators */
 /* eslint-disable prefer-spread */
@@ -857,11 +858,11 @@ const __BarWrapper = BarWrapper;
 
 export { __BarWrapper as BarWrapper };
 
-export function stubBarWrapper(barWrapperType) {
+exports.stubBarWrapper = function (barWrapperType) {
   BarWrapper = barWrapperType;
-}
+};
 
-export function restoreBarWrapper() {
+exports.restoreBarWrapper = function () {
   BarWrapper = __BarWrapper;
-}
+};
 /// #ENDDEBUG

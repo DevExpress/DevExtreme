@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
@@ -357,7 +358,7 @@ export const plugin = {
 };
 
 /// #DEBUG
-export const DEBUG_set_title = function (value) {
+exports.DEBUG_set_title = function (value) {
   Title = value;
 };
 /// #ENDDEBUG

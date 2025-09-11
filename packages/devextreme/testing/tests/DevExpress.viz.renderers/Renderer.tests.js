@@ -4,6 +4,7 @@ import renderers from 'viz/core/renderers/renderer';
 import {
     stubClass
 } from '../../helpers/vizMocks.js';
+import domAdapter from '__internal/core/m_dom_adapter';
 import utils from 'viz/core/utils';
 
 $('<div>')
@@ -274,16 +275,19 @@ QUnit.module('Locking', {
         this.renderer = new Renderer({ container: this.container });
         this.renderer.root.append.resetHistory();
     },
-
     afterEach: function() {
-        renderers.DEBUG_removeBackupContainer();
+        this.removeBackupContainer();
     },
-
     after: resetMockElements,
-
     appendContainer: function() {
         $('#qunit-fixture').append(this.container);
-    }
+    },
+    removeBackupContainer: function() {
+        if(renderers.getBackup().backupCounter) {
+            renderers.getBackup().backupCounter = 0;
+            domAdapter.getBody().removeChild(renderers.getBackup().backupContainer);
+        }
+    },
 });
 
 QUnit.test('Lock / container is in DOM', function(assert) {
