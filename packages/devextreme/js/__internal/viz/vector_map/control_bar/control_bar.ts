@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable new-cap */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @stylistic/no-mixed-operators */
@@ -463,11 +464,11 @@ ZoomDragCommand.prototype.finish = function () {
 /// #DEBUG
 const COMMAND_TO_TYPE_MAP__ORIGINAL = COMMAND_TO_TYPE_MAP;
 
-export function _TESTS_stubCommandToTypeMap(map) {
+exports._TESTS_stubCommandToTypeMap = function (map) {
   COMMAND_TO_TYPE_MAP = map;
-}
+};
 
-export function _TESTS_restoreCommandToTypeMap() {
+exports._TESTS_restoreCommandToTypeMap = function () {
   COMMAND_TO_TYPE_MAP = COMMAND_TO_TYPE_MAP__ORIGINAL;
-}
+};
 /// #ENDDEBUG

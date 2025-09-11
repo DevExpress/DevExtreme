@@ -1,5 +1,4 @@
 /* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
@@ -10,7 +9,7 @@ export function generateDataKey() {
 }
 
 /// #DEBUG
-export function _TESTS_resetDataKey() {
+exports._TESTS_resetDataKey = function () {
   nextDataKey = 1;
-}
+};
 /// #ENDDEBUG

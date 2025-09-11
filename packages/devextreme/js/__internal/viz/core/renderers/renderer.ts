@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/default-param-last */
@@ -107,7 +108,7 @@ const DEFAULTS = {
   'pointer-events': null,
 };
 
-const getBackup = callOnce(() => {
+export const getBackup = callOnce(() => {
   const backupContainer = domAdapter.createElement('div');
   const backupCounter = 0;
   backupContainer.style.left = '-9999px';
@@ -1391,15 +1392,6 @@ function arcAnimate(params, options, complete) {
   return baseAnimate(that, params, options, complete);
 }
 
-/// #DEBUG
-export const DEBUG_removeBackupContainer = function () {
-  if (getBackup().backupCounter) {
-    getBackup().backupCounter = 0;
-    domAdapter.getBody().removeChild(getBackup().backupContainer);
-  }
-};
-/// #ENDDEBUG
-
 function buildLink(target, parameters) {
   const obj = { is: false, name: parameters.name || parameters, after: parameters.after };
   if (target) {
@@ -2351,23 +2343,31 @@ export const refreshPaths = function () {
 };
 
 /// #DEBUG
-export const DEBUG_set_SvgElement = function (value) {
+const DEBUG_set_SvgElement = function (value) {
   SvgElement = value;
 };
 
-export const DEBUG_set_RectSvgElement = function (value) {
+const DEBUG_set_RectSvgElement = function (value) {
   RectSvgElement = value;
 };
 
-export const DEBUG_set_PathSvgElement = function (value) {
+const DEBUG_set_PathSvgElement = function (value) {
   PathSvgElement = value;
 };
 
-export const DEBUG_set_ArcSvgElement = function (value) {
+const DEBUG_set_ArcSvgElement = function (value) {
   ArcSvgElement = value;
 };
 
-export const DEBUG_set_TextSvgElement = function (value) {
+const DEBUG_set_TextSvgElement = function (value) {
   TextSvgElement = value;
 };
+/// #ENDDEBUG
+
+/// #DEBUG
+exports.DEBUG_set_ArcSvgElement = DEBUG_set_ArcSvgElement;
+exports.DEBUG_set_PathSvgElement = DEBUG_set_PathSvgElement;
+exports.DEBUG_set_RectSvgElement = DEBUG_set_RectSvgElement;
+exports.DEBUG_set_SvgElement = DEBUG_set_SvgElement;
+exports.DEBUG_set_TextSvgElement = DEBUG_set_TextSvgElement;
 /// #ENDDEBUG

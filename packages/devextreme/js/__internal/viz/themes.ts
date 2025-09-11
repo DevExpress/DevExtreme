@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-dynamic-delete */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable no-plusplus */
@@ -255,7 +256,7 @@ export {
   widgetsCache,
 };
 
-export const resetCurrentTheme = function () {
+exports.resetCurrentTheme = function () {
   currentThemeName = null;
 };
 /// #ENDDEBUG
