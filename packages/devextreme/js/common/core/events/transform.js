@@ -6,7 +6,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
  * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
- * @hidden
 */
 /**
   * @name UI Events.dxtransform
@@ -20,7 +19,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field6 deltaTranslation:object
   * @type_function_param1_field7 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 /**
   * @name UI Events.dxtransformend
@@ -34,7 +32,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field6 deltaTranslation:object
   * @type_function_param1_field7 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 
 /**
@@ -43,7 +40,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
  * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
- * @hidden
 */
 /**
   * @name UI Events.dxtranslate
@@ -53,7 +49,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaTranslation:object
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 /**
   * @name UI Events.dxtranslateend
@@ -63,17 +58,15 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaTranslation:object
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 
 /**
-  * @name UI Events.dxpinchstart
-  * @type eventType
-  * @type_function_param1 event:event
-  * @type_function_param1_field1 cancel:boolean
-  * @module events/transform
-  * @hidden
-*/
+* @name UI Events.dxpinchstart
+* @type eventType
+* @type_function_param1 event:event
+* @type_function_param1_field1 cancel:boolean
+* @module events/transform
+   */
 /**
   * @name UI Events.dxpinch
   * @type eventType
@@ -82,7 +75,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaScale:number
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 /**
   * @name UI Events.dxpinchend
@@ -92,7 +84,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaScale:number
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 
 /**
@@ -101,7 +92,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
  * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
- * @hidden
 */
 /**
   * @name UI Events.dxrotate
@@ -111,7 +101,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaRotation:number
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 /**
   * @name UI Events.dxrotateend
@@ -121,7 +110,6 @@ import { exportNames } from '../../../__internal/events/m_transform';
   * @type_function_param1_field2 deltaRotation:number
   * @type_function_param1_field3 cancel:boolean
   * @module events/transform
-  * @hidden
 */
 
 /* eslint-disable spellcheck/spell-checker */

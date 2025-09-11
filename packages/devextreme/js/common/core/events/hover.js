@@ -3,7 +3,6 @@
  * @type eventType
  * @type_function_param1 event:event
  * @module events/hover
- * @hidden
 */
 
 /**
@@ -11,7 +10,6 @@
  * @type eventType
  * @type_function_param1 event:event
  * @module events/hover
- * @hidden
 */
 
 export * from '../../../__internal/events/m_hover';
