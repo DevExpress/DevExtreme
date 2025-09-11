@@ -4818,7 +4818,8 @@
               "/Models/SampleData/Electronics.cs",
               "/ViewModels/SelectBoxViewModel.cs"
             ],
-            "ShowOnMainPage": true
+            "ShowOnMainPage": true,
+            "Badge": "Updated"
           },
           {
             "Title": "Search and Editing",
