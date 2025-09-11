@@ -34,68 +34,61 @@ export const parseResultForEditorType = (
   editorType: FormItemComponent | undefined,
   value: SmartPasteCommandResult[number]['value'],
 ): ParsedAIValue => {
-  let normalizedValue = value;
-  if (Array.isArray(value)) {
-    normalizedValue = value.map((v) => v.trim());
-  } else {
-    normalizedValue = value.trim();
-  }
-
-  const errorValue = JSON.stringify(normalizedValue);
+  const errorValue = JSON.stringify(value);
   switch (editorType) {
     case 'dxDateBox':
     case 'dxCalendar':
-      if (!dateUtilsTs.isValidDate(normalizedValue)) {
+      if (!dateUtilsTs.isValidDate(value)) {
         throw errors.Error('E1064', dataField, errorValue, 'date');
       }
 
-      return normalizedValue;
+      return value;
     case 'dxDateRangeBox':
       if (
-        !Array.isArray(normalizedValue)
-        || normalizedValue.length > 2
-        || normalizedValue.some((item) => !dateUtilsTs.isValidDate(item))
+        !Array.isArray(value)
+        || value.length > 2
+        || value.some((item) => !dateUtilsTs.isValidDate(item))
       ) {
         throw errors.Error('E1064', dataField, errorValue, 'date range');
       }
 
-      return normalizedValue;
+      return value;
     case 'dxColorBox':
-      if (new Color(normalizedValue).colorIsInvalid) {
+      if (new Color(value).colorIsInvalid) {
         throw errors.Error('E1064', dataField, errorValue, 'color');
       }
-      return normalizedValue;
+      return value;
     case 'dxCheckBox':
     case 'dxSwitch':
-      if (normalizedValue === 'false') {
+      if (value === 'false') {
         return false;
       }
-      if (normalizedValue === 'true') {
+      if (value === 'true') {
         return true;
       }
       throw errors.Error('E1064', dataField, errorValue, 'boolean');
     case 'dxNumberBox':
     case 'dxSlider':
-      if (Array.isArray(normalizedValue) || isNaN(parseFloat(normalizedValue))) {
+      if (Array.isArray(value) || isNaN(parseFloat(value))) {
         throw errors.Error('E1064', dataField, errorValue, 'number');
       }
-      return normalizedValue;
+      return value;
     case 'dxRangeSlider':
       if (
-        !Array.isArray(normalizedValue)
-        || normalizedValue.length > 2
-        || normalizedValue.some((item) => isNaN(parseFloat(item)))
+        !Array.isArray(value)
+        || value.length > 2
+        || value.some((item) => isNaN(parseFloat(item)))
       ) {
         throw errors.Error('E1064', dataField, errorValue, 'number range');
       }
-      return normalizedValue;
+      return value;
     case 'dxHtmlEditor':
-      if (Array.isArray(normalizedValue)) {
+      if (Array.isArray(value)) {
         throw errors.Error('E1064', dataField, errorValue, 'string');
       }
-      return normalizedValue;
+      return value;
     default:
-      return normalizedValue;
+      return value;
   }
 };
 

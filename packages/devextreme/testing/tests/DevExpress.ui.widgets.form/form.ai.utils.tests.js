@@ -209,16 +209,4 @@ QUnit.module('parseResultForEditorType', () => {
             assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
         });
     });
-
-    [' value', 'value', '    value   ', 'value    '].forEach((value) => {
-        QUnit.test(`should return trimmed value if spaces are around the value: ${value}`, function(assert) {
-            assert.strictEqual(parseResultForEditorType('', '', value), 'value', 'trimmed value returned');
-        });
-    });
-
-    [['  value', 'value  '], ['value', '    value  ']].forEach((value) => {
-        QUnit.test(`should return trimmed values in array if spaces are around them: ${value}`, function(assert) {
-            assert.deepEqual(parseResultForEditorType('', '', value), ['value', 'value'], 'trimmed value returned');
-        });
-    });
 });
