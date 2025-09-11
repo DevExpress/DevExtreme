@@ -52,6 +52,7 @@ import type {
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import Overlay from '@ts/ui/overlay/overlay';
+import { SCROLLABLE_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -68,7 +69,6 @@ const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
@@ -791,14 +791,13 @@ class ContextMenu<
   _setSubMenuHeight(
     $submenu: dxElementWrapper,
     $anchor: ContextMenuTarget,
-    isNestedSubmenu: boolean,
   ): void {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     const contentHeight = getOuterHeight($itemsContainer);
-    const maxHeight = this._getMaxHeight($anchor, !isNestedSubmenu);
+    const maxHeight = this._getMaxHeight($anchor, false);
     const menuHeight = Math.min(contentHeight, maxHeight);
 
-    $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
+    $submenu.css('height', menuHeight);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -825,6 +824,24 @@ class ContextMenu<
     return availableHeight - SUBMENU_PADDING;
   }
 
+  _setOverlayMaxHeight($subMenu?: dxElementWrapper): void {
+    if (!$subMenu) {
+      return;
+    }
+
+    this._overlay?.option({
+      maxHeight: () => {
+        const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        const outerHeight: number = getOuterHeight($content);
+        const borderWidth = this._getSubmenuBorderWidth();
+
+        return outerHeight + borderWidth * 2;
+      },
+    });
+
+    $subMenu.css('height', '100%');
+  }
+
   _dimensionChanged(): void {
     if (!this._shownSubmenus) {
       return;
@@ -833,7 +850,7 @@ class ContextMenu<
     this._shownSubmenus.forEach(($submenu) => {
       const $item = $submenu.closest(`.${DX_MENU_ITEM_CLASS}`);
 
-      this._setSubMenuHeight($submenu, $item, true);
+      this._setSubMenuHeight($submenu, $item);
       this._scrollToElement($item);
 
       const submenuPosition = this._getSubmenuPosition($item);
@@ -873,7 +890,7 @@ class ContextMenu<
 
     const $item = $submenu?.closest(`.${DX_MENU_ITEM_CLASS}`);
 
-    this._setSubMenuHeight($submenu, $item, true);
+    this._setSubMenuHeight($submenu, $item);
 
     if (!this._isSubmenuVisible($submenu) && $item) {
       this._drawSubmenu($item);
@@ -1154,19 +1171,13 @@ class ContextMenu<
       this._setOptionWithoutOptionChange('visible', true);
       this._overlay?.option({
         height: () => this._getMaxHeight(position.of),
-        maxHeight: () => {
-          const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-          const outerHeight: number = getOuterHeight($content);
-          const borderWidth = this._getSubmenuBorderWidth();
-
-          return outerHeight + borderWidth * 2;
-        },
         position,
       });
 
-      if ($subMenu.length) {
-        this._setSubMenuHeight($subMenu, position.of, false);
-      }
+      this._setOverlayMaxHeight($subMenu);
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this._planPostRenderActions($subMenu, true);
 
       if (this._overlay) {
         promise = this._overlay.show();
@@ -1298,8 +1309,13 @@ class ContextMenu<
     return this.toggle(false);
   }
 
-  _postProcessRenderItems($submenu?: dxElementWrapper): void {
-    this._setSubmenuVisible($submenu);
+  _postProcessRenderItems($subMenu?: dxElementWrapper, isRootSubMenu?: boolean): void {
+    if (!isRootSubMenu) {
+      this._setSubmenuVisible($subMenu);
+      return;
+    }
+
+    this._setOverlayMaxHeight($subMenu);
   }
 }
 
