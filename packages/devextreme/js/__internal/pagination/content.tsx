@@ -159,10 +159,24 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getPagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
-      return 'hidden';
-    }
-    return undefined;
+    const {
+      pagesNavigatorVisible,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons,
+      showPageSizeSelector,
+    } = this.props;
+
+    const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
+
+    const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)
+    || showPageSizeSelector === true;
+
+    const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
+    const result = shouldHide ? 'hidden' : undefined;
+
+    return result;
   }
 
   getIsLargeDisplayMode(): boolean {
@@ -258,10 +272,10 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         { ...elementAttr as object }
       >
         {showPageSizeSelector && (
-          <PageSizeSelector
-            rootElementRef={allowedPageSizesRef}
-            isLargeDisplayMode={this.getIsLargeDisplayMode()}
-            pageSize={pageSize}
+            <PageSizeSelector
+              rootElementRef={allowedPageSizesRef}
+              isLargeDisplayMode={this.getIsLargeDisplayMode()}
+              pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
             allowedPageSizes={allowedPageSizes}
           />
