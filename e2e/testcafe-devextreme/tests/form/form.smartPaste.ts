@@ -9,6 +9,9 @@ fixture.disablePageReloads`Form`
   .page(url(__dirname, '../container.html'));
 
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 test('Showing loader after calling smart paste', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -30,6 +33,15 @@ test('Showing loader after calling smart paste', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'form');
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+  `);
   await insertStylesheetRulesToPage(`
     .${LOADINDICATOR_SEGMENT_CLASS} {
       transform: scale(1) !important;
