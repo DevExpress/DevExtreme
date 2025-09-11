@@ -7,7 +7,7 @@ import { type ComponentType, rerender } from 'inferno';
 /*
  * Widget inherited from Class, its properties values and constructor are run after ctor and _initMarkup
  */
-export abstract class InfernoWidget<TProperties extends {}> extends Widget<any> {
+export abstract class InfernoWidget<TProperties extends {}> extends Widget<TProperties> {
   protected cleanupRenderSubscription?: () => void;
 
   private props?: TProperties;
