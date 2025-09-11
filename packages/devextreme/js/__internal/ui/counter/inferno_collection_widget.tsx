@@ -3,7 +3,7 @@ import type {
   ItemLike,
 } from '@js/ui/collection/ui.collection_widget.base';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
-import { effect } from '@ts/core/state_manager/index';
+import { effect, type ReadonlySignal } from '@ts/core/state_manager/index';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 // eslint-disable-next-line spellcheck/spell-checker
 import { type ComponentType, rerender } from 'inferno';
@@ -24,7 +24,7 @@ export abstract class InfernoCollectionWidget<
   protected abstract getComponent(): ComponentType<TProperties>;
   protected abstract getItemComponent(): ComponentType<TItem>;
 
-  protected abstract getProps(): TProperties;
+  protected abstract getProps(): ReadonlySignal<TProperties>;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -40,10 +40,10 @@ export abstract class InfernoCollectionWidget<
     const props = this.getProps();
 
     return effect(() => {
-      this.props = props;
+      this.props = props.value;
 
       const content = (
-         <ContainerComponent {...props}>
+         <ContainerComponent {...props.value}>
            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-return */}
            {({ items, isSelected }) => items.map((item, index) => (
                  // @ts-expect-error

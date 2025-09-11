@@ -1,4 +1,6 @@
 import registerComponent from '@js/core/component_registrator';
+import type { ReadonlySignal } from '@ts/core/state_manager';
+import { computed } from '@ts/core/state_manager';
 import type CollectionItem from '@ts/ui/collection/item';
 import type { CollectionItemProps } from '@ts/ui/counter/collection.item.component';
 import { ItemComponent } from '@ts/ui/counter/collection.item.component';
@@ -53,13 +55,13 @@ class Collection extends InfernoCollectionWidget<CollectionProps, CollectionItem
     return ItemComponent;
   }
 
-  protected override getProps(): CollectionProps {
+  protected override getProps(): ReadonlySignal<CollectionProps> {
     const { items, selectedIndex } = this.option();
 
-    return {
+    return computed(() => ({
       items,
       selectedIndex: normalizeIndex(selectedIndex ?? -1, items.length),
-    };
+    }));
   }
 }
 
