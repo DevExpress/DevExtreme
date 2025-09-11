@@ -82,10 +82,10 @@ export class DxoCardViewPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get showPageSizeSelector(): boolean {
+    get showPageSizeSelector(): boolean | Mode {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean) {
+    set showPageSizeSelector(value: boolean | Mode) {
         this._setOption('showPageSizeSelector', value);
     }
 
