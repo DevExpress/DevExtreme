@@ -18,7 +18,7 @@ export const getRecurrenceString = (rule: Rule): string | undefined => {
   }
 
   const result = Object.entries(rule).reduce((acc, [field, value]) => {
-    if (field === 'interval' && value < 2) {
+    if (field === 'freq' || (field === 'interval' && value < 2)) {
       return acc;
     }
 
@@ -27,7 +27,7 @@ export const getRecurrenceString = (rule: Rule): string | undefined => {
     }
 
     return `${acc}${field}=${value};`;
-  }, '');
+  }, `freq=${rule.freq};`);
 
   return result.substring(0, result.length - 1).toUpperCase();
 };
@@ -102,6 +102,11 @@ export const getDateByAsciiString = (exceptionText: string | Date): Date | null 
 };
 
 export const parseRecurrenceRule = (recurrenceRule: string): Rule => {
+  const emptyRule = { interval: 1 } as unknown as Rule;
+  if (!recurrenceRule) {
+    return emptyRule;
+  }
+
   const ruleParts = recurrenceRule.split(';');
   const ruleObject = ruleParts.reduce((result, part) => {
     const rule = part.split('=');
@@ -122,7 +127,7 @@ export const parseRecurrenceRule = (recurrenceRule: string): Rule => {
     }
 
     return result;
-  }, { interval: 1 } as unknown as Rule);
+  }, emptyRule);
 
   if (ruleObject.freq && ruleObject.until) {
     ruleObject.until = getDateByAsciiString(ruleObject.until);

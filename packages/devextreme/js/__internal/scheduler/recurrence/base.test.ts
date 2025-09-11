@@ -77,6 +77,15 @@ describe('recurrence base utils', () => {
 
       expect(string).toEqual('FREQ=YEARLY;UNTIL=20150709T000000Z');
     });
+
+    it('should return string with freq ahead', () => {
+      const string = getRecurrenceString({
+        interval: 10,
+        freq: 'monthly',
+      });
+
+      expect(string).toEqual('FREQ=MONTHLY;INTERVAL=10');
+    });
   });
 
   describe('getDateByAsciiString', () => {
