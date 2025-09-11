@@ -28,8 +28,8 @@ export class SmartPasteCommand extends BaseCommand<
         return;
       }
 
-      const [name, ...values] = data.split(':::');
-      let value = values.length <= 1 ? values[0] : values;
+      const [name, ...rawValues] = data.split(':::');
+      let value = rawValues.length <= 1 ? rawValues[0] : rawValues;
 
       if (value) {
         if (Array.isArray(value)) {
