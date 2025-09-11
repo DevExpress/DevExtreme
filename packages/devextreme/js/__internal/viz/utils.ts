@@ -1,9 +1,9 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable no-bitwise */
 /* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -104,7 +104,7 @@ export const floorCanvasDimensions = function (canvas) {
 };
 
 /// #DEBUG
-export const _test_prepareSegmentRectPoints = function () {
+exports._test_prepareSegmentRectPoints = function () {
   // @ts-expect-error
   const original = prepareSegmentRectPoints.original || prepareSegmentRectPoints;
   if (arguments[0]) {

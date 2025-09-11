@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -480,21 +481,20 @@ makeEventEmitter(Tracker);
 /// #DEBUG
 const originFocus = Focus;
 
-export function _DEBUG_forceEventMode(mode) {
+exports._DEBUG_forceEventMode = function (mode) {
   // @ts-expect-error
   setupEvents(mode);
-}
+};
 
 export { Focus };
 
-export function _DEBUG_stubFocusType(focusType) {
+exports._DEBUG_stubFocusType = function (focusType) {
   Focus = focusType;
-}
+};
 
-export function _DEBUG_restoreFocusType() {
+exports._DEBUG_restoreFocusType = function () {
   Focus = originFocus;
-}
-
+};
 /// #ENDDEBUG
 
 function getDistance(x1, y1, x2, y2) {

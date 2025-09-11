@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -161,11 +162,11 @@ LegendsControl.prototype = {
 const originalLegend = Legend;
 export { Legend as _TESTS_Legend };
 
-export function _TESTS_stubLegendType(stub) {
+exports._TESTS_stubLegendType = function (stub) {
   Legend = stub;
-}
+};
 
-export function _TESTS_restoreLegendType() {
+exports._TESTS_restoreLegendType = function () {
   Legend = originalLegend;
-}
+};
 /// #ENDDEBUG

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -209,8 +210,9 @@ export const plugin = {
   },
   fontFields: ['loadingIndicator.font'],
 };
+
 /// #DEBUG
-export const DEBUG_set_LoadingIndicator = function (value) {
+exports.DEBUG_set_LoadingIndicator = function (value) {
   LoadingIndicator = value;
 };
 /// #ENDDEBUG
