@@ -1,8 +1,8 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable func-names */
 /* eslint-disable import/no-mutable-exports */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable consistent-return */
@@ -819,11 +819,11 @@ export const plugin = {
 };
 
 /// #DEBUG
-export const DEBUG_set_combineMarkups = function (value) {
+exports.DEBUG_set_combineMarkups = function (value) {
   combineMarkups = value;
 };
 
-export const DEBUG_set_ExportMenu = function (value) {
+exports.DEBUG_set_ExportMenu = function (value) {
   ExportMenu = value;
 };
 /// #ENDDEBUG

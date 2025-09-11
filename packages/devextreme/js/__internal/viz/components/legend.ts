@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/default-param-last */
 /* eslint-disable no-return-assign */
@@ -1281,17 +1282,17 @@ export const plugin = {
 };
 
 /// #DEBUG
-export const _setLegend = function (value) {
+exports._setLegend = function (value) {
   Legend = value;
 };
 
 const __getMarkerCreator = getMarkerCreator;
-export const _DEBUG_stubMarkerCreator = function (callback) {
+exports._DEBUG_stubMarkerCreator = function (callback) {
   getMarkerCreator = function () {
     return callback;
   };
 };
-export const _DEBUG_restoreMarkerCreator = function () {
+exports._DEBUG_restoreMarkerCreator = function () {
   getMarkerCreator = __getMarkerCreator;
 };
 /// #ENDDEBUG

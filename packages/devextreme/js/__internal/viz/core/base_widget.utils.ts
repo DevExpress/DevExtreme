@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 /* eslint-disable @typescript-eslint/no-implied-eval */
 /* eslint-disable prefer-spread */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -130,13 +131,13 @@ export { createEventTrigger as DEBUG_createEventTrigger };
 
 export const DEBUG_createIncidentOccurred = createIncidentOccurred;
 
-export function DEBUG_stub_createIncidentOccurred(stub) {
+exports.DEBUG_stub_createIncidentOccurred = function (stub) {
   createIncidentOccurred = stub;
-}
+};
 
-export function DEBUG_restore_createIncidentOccurred() {
+exports.DEBUG_restore_createIncidentOccurred = function () {
   createIncidentOccurred = DEBUG_createIncidentOccurred;
-}
+};
 
 export { createResizeHandler as DEBUG_createResizeHandler };
 /// #ENDDEBUG
