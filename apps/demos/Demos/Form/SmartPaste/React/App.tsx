@@ -43,7 +43,7 @@ const zipAIOptions = { instruction: 'If the text does not contain a ZIP, determi
 
 const resetButtonOptions: ButtonTypes.Properties = {
   stylingMode: 'outlined',
-  type: 'normal'
+  type: 'normal',
 };
 const smartPasteButtonOptions: ButtonTypes.Properties = {
   stylingMode: 'contained',
@@ -94,8 +94,8 @@ export const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system, },
-      { role: 'user', content: prompt.user, },
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
@@ -121,7 +121,7 @@ const App = () => {
 
   const onCopy = useCallback(() => {
     navigator.clipboard.writeText(text);
-    showNotification('Text copied to clipboard', "#textarea", false, '0 -20');
+    showNotification('Text copied to clipboard', '#textarea', false, '0 -20');
   }, [text]);
 
   const shortcutHandler = useCallback((event: KeyboardEvent) => {
@@ -149,7 +149,7 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <div id="textarea-label" className="instruction">
         Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
       </div>
@@ -250,7 +250,7 @@ const App = () => {
           <ButtonItem buttonOptions={resetButtonOptions} name="reset" />
         </GroupItem>
       </Form>
-    </>
+    </React.Fragment>
   );
 };
 
