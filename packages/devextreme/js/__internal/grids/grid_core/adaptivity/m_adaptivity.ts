@@ -604,6 +604,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
       }.bind(this);
       let visibleContentColumns = getVisibleContentColumns();
       const contentColumnsCount = visibleContentColumns.length;
+      const hasFixedAndNotCommandColumn = visibleColumns.filter((column) => column.fixed && !column.command).length > 0;
       let i;
       let hasHiddenColumns;
       let needHideColumn;
@@ -628,7 +629,8 @@ export class AdaptiveColumnsController extends modules.ViewController {
             hasHiddenColumns = true;
             continue;
           }
-          if (!columnWidth && !visibleColumn.command && !visibleColumn.fixed) {
+
+          if (!columnWidth && !visibleColumn.command && !visibleColumn.fixed && !hasFixedAndNotCommandColumn) {
             needHideColumn = true;
             break;
           }
