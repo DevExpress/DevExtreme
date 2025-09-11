@@ -105,7 +105,7 @@ export const aiIntegration = new AIIntegration({
     });
 
     const result: Response = {
-      promise,
+      promise: new Promise(() => {}),
       abort: () => {
         controller.abort();
       },

@@ -3,10 +3,12 @@ import Form from 'devextreme-testcafe-models/form/form';
 import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import { appendElementTo } from '../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../container.html'));
+
+const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 
 test('Showing loader after calling smart paste', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -28,6 +30,11 @@ test('Showing loader after calling smart paste', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'form');
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS} {
+      transform: scale(1) !important;
+    }
+  `);
   await createWidget('dxForm', {
     height: 400,
     width: 1000,
