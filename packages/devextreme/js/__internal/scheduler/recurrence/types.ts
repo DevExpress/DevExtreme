@@ -13,7 +13,7 @@ export interface ProcessorOptions {
 export interface Rule {
   count?: number;
   interval: number;
-  freq: string;
+  freq?: string;
   until?: Date | null;
   // eslint-disable-next-line spellcheck/spell-checker
   bymonthday?: string;

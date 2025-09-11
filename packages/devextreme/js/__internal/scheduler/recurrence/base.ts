@@ -102,7 +102,7 @@ export const getDateByAsciiString = (exceptionText: string | Date): Date | null 
 };
 
 export const parseRecurrenceRule = (recurrenceRule: string): Rule => {
-  const emptyRule = { interval: 1 } as unknown as Rule;
+  const emptyRule: Rule = { interval: 1 };
   if (!recurrenceRule) {
     return emptyRule;
   }

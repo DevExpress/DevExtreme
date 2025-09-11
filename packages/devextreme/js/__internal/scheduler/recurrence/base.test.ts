@@ -27,7 +27,7 @@ describe('recurrence base utils', () => {
       const string = getRecurrenceString({
         freq: 'yearly',
         interval: 2,
-      } as any);
+      });
 
       expect(string).toEqual('FREQ=YEARLY;INTERVAL=2');
     });
@@ -36,7 +36,7 @@ describe('recurrence base utils', () => {
       const string = getRecurrenceString({
         freq: 'yearly',
         interval: 1,
-      } as any);
+      });
 
       expect(string).toEqual('FREQ=YEARLY');
     });
@@ -45,7 +45,7 @@ describe('recurrence base utils', () => {
       const string = getRecurrenceString({
         freq: 'yearly',
         interval: 2,
-      } as any);
+      });
 
       expect(string).toEqual('FREQ=YEARLY;INTERVAL=2');
     });
@@ -53,7 +53,7 @@ describe('recurrence base utils', () => {
     it('should handle objects without freq', () => {
       const string = getRecurrenceString({
         interval: 2,
-      } as any);
+      });
 
       expect(string).toEqual(undefined);
     });

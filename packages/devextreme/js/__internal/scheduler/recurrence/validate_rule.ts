@@ -83,7 +83,7 @@ const logBrokenRule = (recurrence: string): void => {
 
 export const validateRRuleObject = (rule: Rule, recurrence: string): boolean => {
   if (brokenRuleNameExists(rule)
-    || !freqNames.includes(rule.freq)
+    || !rule.freq || !freqNames.includes(rule.freq)
     || wrongCountRule(rule) || wrongIntervalRule(rule)
     || wrongDayOfWeek(rule)
     || wrongByMonthDayRule(rule) || wrongByMonth(rule)
