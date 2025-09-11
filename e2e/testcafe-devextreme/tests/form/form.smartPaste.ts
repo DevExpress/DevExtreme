@@ -32,7 +32,7 @@ test('Showing loader after calling smart paste', async (t) => {
     height: 400,
     width: 1000,
     aiIntegration: {
-      smartPaste: () => new Promise(() => {}),
+      smartPaste: () => () => new Promise(() => {}),
     },
     formData: {},
     items: [
