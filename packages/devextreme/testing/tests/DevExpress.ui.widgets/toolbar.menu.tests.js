@@ -15,6 +15,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
+import errors from 'core/errors';
 
 import 'generic_light.css!';
 
@@ -194,9 +195,12 @@ QUnit.module('render with popup', moduleConfig, () => {
     });
 
     QUnit.test('should not throw a warning about the preventScroll event option is deprecated on popup opening (T1306077)', function(assert) {
-        const logDeprecationSpy = sinon.spy(Popup.prototype, '_logDeprecatedOptionWarning');
+        sinon.spy(errors, 'log');
+
         this.overflowMenu.click();
-        assert.strictEqual(logDeprecationSpy.callCount, 0, 'warning was not called');
+
+        assert.strictEqual(errors.log.callCount, 0, 'warning was not called');
+        errors.log.restore();
     });
 });
 
