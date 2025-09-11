@@ -8,7 +8,7 @@
   </div>
   <div class="instruction">
     Paste text from the clipboard to populate the form.
-    Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
+    Press Ctrl+Shift+V (when the form is focused) or use the "Smart Paste" button under the form.
   </div>
   <div class="textarea-container">
     <DxButton

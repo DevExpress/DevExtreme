@@ -17,11 +17,11 @@ export default class Form extends Widget {
     )();
   }
 
-  smartPaste(text: string): Promise<void> {
+  smartPaste(): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => { (getInstance() as any).smartPaste(text); },
+      () => { (getInstance() as any).smartPaste('test'); },
       { dependencies: { getInstance } },
     )();
   }

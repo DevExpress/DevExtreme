@@ -154,7 +154,7 @@ const App = () => {
         Copy text from the editor below to the clipboard. Edit the text to see how your changes affect Smart Paste result.
       </div>
       <div className="instruction">
-        Paste text from the clipboard to populate the form. Press Ctrl+Shift+V or use the "Smart Paste" button under the form.
+        Paste text from the clipboard to populate the form. Press Ctrl+Shift+V (when the form is focused) or use the "Smart Paste" button under the form.
       </div>
       <div className="textarea-container">
         <Button
