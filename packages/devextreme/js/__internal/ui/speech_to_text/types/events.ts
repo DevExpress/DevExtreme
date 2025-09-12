@@ -1,4 +1,4 @@
-import type { EventInfo, NativeEventInfo } from '@js/common/core/events';
+import type { NativeEventInfo } from '@js/common/core/events';
 
 import type SpeechToText from '../speech_to_text';
 
@@ -8,12 +8,12 @@ export type StartClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent>;
 
 export type StopClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent>;
 
-export type ResultEvent = EventInfo<SpeechToText> & {
+export type ResultEvent = NativeEventInfo<SpeechToText> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly result: any;
 };
 
-export type ErrorEvent = EventInfo<SpeechToText> & {
+export type ErrorEvent = NativeEventInfo<SpeechToText> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly error: any;
 };
