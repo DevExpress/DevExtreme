@@ -1,39 +1,39 @@
 <dx-splitter id="splitter">
-  <dxi-item
+  <dxi-splitter-item
     [resizable]="true"
     minSize="70px"
     size="140px"
     template="Left Pane"
-  ></dxi-item>
-  <dxi-item [resizable]="true">
+  ></dxi-splitter-item>
+  <dxi-splitter-item [resizable]="true">
     <dx-splitter orientation="vertical">
-      <dxi-item
+      <dxi-splitter-itemtter-item
         [resizable]="true"
         [collapsible]="true"
         collapsedSize="8%"
         maxSize="75%"
         template="Central Pane"
-      ></dxi-item>
-      <dxi-item [resizable]="true" [collapsible]="true">
+      ></dxi-splitter-itemtter-item>
+      <dxi-splitter-itemtter-item [resizable]="true" [collapsible]="true">
         <dx-splitter>
-          <dxi-item
+          <dxi-splitter-itemtter-itemtter-item
             [resizable]="true"
             [collapsible]="true"
             minSize="5%"
             size="30%"
             template="Nested Left Pane"
-          ></dxi-item>
-          <dxi-item
+          ></dxi-splitter-itemtter-itemtter-item>
+          <dxi-splitter-itemtter-itemtter-item
             [resizable]="true"
             template="Nested Central Pane"
-          ></dxi-item>
-          <dxi-item
+          ></dxi-splitter-itemtter-itemtter-item>
+          <dxi-splitter-itemtter-itemtter-item
             [resizable]="true"
             [collapsible]="true"
             minSize="5%"
             size="30%"
             template="Nested Right Pane"
-          ></dxi-item>
+          ></dxi-splitter-itemtter-itemtter-item>
 
           <ng-container *ngFor="let pane of paneContentTemplates">
             <div *dxTemplate="let data of pane.name" tabindex="0">
@@ -45,7 +45,7 @@
             </div>
           </ng-container>
         </dx-splitter>
-      </dxi-item>
+      </dxi-splitter-itemtter-item>
 
       <ng-container *ngFor="let pane of paneContentTemplates">
         <div *dxTemplate="let data of pane.name" tabindex="0">
@@ -57,13 +57,13 @@
         </div>
       </ng-container>
     </dx-splitter>
-  </dxi-item>
-  <dxi-item
+  </dxi-splitter-item>
+  <dxi-splitter-item
     [resizable]="false"
     [collapsible]="false"
     size="140px"
     template="Right Pane"
-  ></dxi-item>
+  ></dxi-splitter-item>
 
   <ng-container *ngFor="let pane of paneContentTemplates">
     <div *dxTemplate="let data of pane.name" tabindex="0">

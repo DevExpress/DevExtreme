@@ -8,24 +8,24 @@
   [columnAutoWidth]="true"
   [expandedRowKeys]="[1]"
 >
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
-  <dxo-selection mode="single"></dxo-selection>
-  <dxi-column dataField="Full_Name"></dxi-column>
-  <dxi-column dataField="Title" caption="Position">
-    <dxo-header-filter [allowSelectAll]="false">
-      <dxo-search [enabled]="true"></dxo-search>
-    </dxo-header-filter>
-  </dxi-column>
-  <dxi-column dataField="City">
-    <dxo-header-filter>
-      <dxo-search
+  <dxo-tree-list-header-filter [visible]="true"></dxo-tree-list-header-filter>
+  <dxo-tree-list-selection mode="single"></dxo-tree-list-selection>
+  <dxi-tree-list-column dataField="Full_Name"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="Title" caption="Position">
+    <dxo-tree-list-header-filter [allowSelectAll]="false">
+      <dxo-tree-list-search [enabled]="true"></dxo-tree-list-search>
+    </dxo-tree-list-header-filter>
+  </dxi-tree-list-column>
+  <dxi-tree-list-column dataField="City">
+    <dxo-tree-list-header-filter>
+      <dxo-tree-list-search
         [enabled]="true"
         [searchExpr]="searchExpr"
         [editorOptions]="editorOptions"
-      ></dxo-search>
-    </dxo-header-filter>
-  </dxi-column>
-  <dxi-column dataField="State"></dxi-column>
-  <dxi-column dataField="Mobile_Phone"></dxi-column>
-  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
+      ></dxo-tree-list-search>
+    </dxo-tree-list-header-filter>
+  </dxi-tree-list-column>
+  <dxi-tree-list-column dataField="State"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="Mobile_Phone"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="Hire_Date" dataType="date"></dxi-tree-list-column>
 </dx-tree-list>

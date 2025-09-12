@@ -10,18 +10,18 @@
   [(selectedRowKeys)]="selectedRowKeys"
   (onSelectionChanged)="onSelectionChanged($event)"
 >
-  <dxo-selection mode="multiple" [recursive]="recursiveSelectionEnabled">
-  </dxo-selection>
-  <dxi-column dataField="Full_Name" caption="Full Name"></dxi-column>
-  <dxi-column dataField="Title" caption="Position"></dxi-column>
-  <dxi-column dataField="City"></dxi-column>
-  <dxi-column dataField="State"></dxi-column>
-  <dxi-column
+  <dxo-tree-list-selection mode="multiple" [recursive]="recursiveSelectionEnabled">
+  </dxo-tree-list-selection>
+  <dxi-tree-list-column dataField="Full_Name" caption="Full Name"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="Title" caption="Position"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="City"></dxi-tree-list-column>
+  <dxi-tree-list-column dataField="State"></dxi-tree-list-column>
+  <dxi-tree-list-column
     dataField="Hire_Date"
     caption="Hire Date"
     dataType="date"
     [width]="120"
-  ></dxi-column>
+  ></dxi-tree-list-column>
 </dx-tree-list>
 <div class="options">
   <div class="caption">Options</div>

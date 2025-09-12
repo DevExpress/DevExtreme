@@ -4,39 +4,39 @@
   [repaintChangesOnly]="true"
   [showBorders]="true"
 >
-  <dxo-scrolling mode="virtual"></dxo-scrolling>
-  <dxo-editing
+  <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
+  <dxo-data-grid-editing
     mode="cell"
     [refreshMode]="refreshMode"
     [allowAdding]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
   >
-  </dxo-editing>
+  </dxo-data-grid-editing>
 
-  <dxi-column dataField="CustomerID" caption="Customer">
-    <dxo-lookup
+  <dxi-data-grid-column dataField="CustomerID" caption="Customer">
+    <dxo-data-grid-lookup
       [dataSource]="customersData"
       valueExpr="Value"
       displayExpr="Text"
-    ></dxo-lookup>
-  </dxi-column>
-  <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Freight"></dxi-column>
-  <dxi-column dataField="ShipCountry"></dxi-column>
-  <dxi-column dataField="ShipVia" caption="Shipping Company" dataType="number">
-    <dxo-lookup
+    ></dxo-data-grid-lookup>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Freight"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="ShipVia" caption="Shipping Company" dataType="number">
+    <dxo-data-grid-lookup
       [dataSource]="shippersData"
       valueExpr="Value"
       displayExpr="Text"
-    ></dxo-lookup>
-  </dxi-column>
+    ></dxo-data-grid-lookup>
+  </dxi-data-grid-column>
 
-  <dxo-summary>
-    <dxi-total-item column="CustomerID" summaryType="count"> </dxi-total-item>
-    <dxi-total-item column="Freight" summaryType="sum" valueFormat="#0.00">
-    </dxi-total-item>
-  </dxo-summary>
+  <dxo-data-grid-summary>
+    <dxi-data-grid-total-item column="CustomerID" summaryType="count"> </dxi-data-grid-total-item>
+    <dxi-data-grid-total-item column="Freight" summaryType="sum" valueFormat="#0.00">
+    </dxi-data-grid-total-item>
+  </dxo-data-grid-summary>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

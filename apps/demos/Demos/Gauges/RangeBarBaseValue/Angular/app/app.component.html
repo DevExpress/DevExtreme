@@ -3,18 +3,18 @@
 </div>
 <div id="gauge-demo">
   <dx-circular-gauge id="c1" [value]="20">
-    <dxo-value-indicator type="rangebar" [baseValue]="0"> </dxo-value-indicator>
-    <dxo-geometry [startAngle]="135" [endAngle]="45"> </dxo-geometry>
-    <dxo-scale [startValue]="45" [endValue]="-45" [tickInterval]="45">
-      <dxo-label [customizeText]="customizeText"></dxo-label>
-    </dxo-scale>
+    <dxo-circular-gauge-value-indicator type="rangebar" [baseValue]="0"> </dxo-circular-gauge-value-indicator>
+    <dxo-circular-gauge-geometry [startAngle]="135" [endAngle]="45"> </dxo-circular-gauge-geometry>
+    <dxo-circular-gauge-scale [startValue]="45" [endValue]="-45" [tickInterval]="45">
+      <dxo-circular-gauge-label [customizeText]="customizeText"></dxo-circular-gauge-label>
+    </dxo-circular-gauge-scale>
   </dx-circular-gauge>
 
   <dx-linear-gauge id="c2" [value]="-10">
-    <dxo-value-indicator [baseValue]="0"></dxo-value-indicator>
-    <dxo-geometry orientation="vertical"></dxo-geometry>
-    <dxo-scale [startValue]="-45" [endValue]="45" [tickInterval]="45">
-      <dxo-label [customizeText]="customizeText"></dxo-label>
-    </dxo-scale>
+    <dxo-linear-gauge-value-indicator [baseValue]="0"></dxo-linear-gauge-value-indicator>
+    <dxo-linear-gauge-geometry orientation="vertical"></dxo-linear-gauge-geometry>
+    <dxo-linear-gauge-scale [startValue]="-45" [endValue]="45" [tickInterval]="45">
+      <dxo-linear-gauge-label [customizeText]="customizeText"></dxo-linear-gauge-label>
+    </dxo-linear-gauge-scale>
   </dx-linear-gauge>
 </div>

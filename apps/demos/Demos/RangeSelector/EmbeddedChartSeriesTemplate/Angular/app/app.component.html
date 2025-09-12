@@ -3,21 +3,21 @@
   title="Select a Year Period"
   [dataSource]="dataSource"
 >
-  <dxo-margin [top]="50"></dxo-margin>
-  <dxo-chart>
-    <dxo-common-series-settings
+  <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
+  <dxo-range-selector-chart>
+    <dxo-range-selector-common-series-settings
       type="spline"
       argumentField="year"
       valueField="oil"
     >
-    </dxo-common-series-settings>
-    <dxo-series-template
+    </dxo-range-selector-common-series-settings>
+    <dxo-range-selector-series-template
       nameField="country"
       [customizeSeries]="customizeSeries"
     >
-    </dxo-series-template>
-  </dxo-chart>
-  <dxo-scale>
-    <dxo-label format="decimal"></dxo-label>
-  </dxo-scale>
+    </dxo-range-selector-series-template>
+  </dxo-range-selector-chart>
+  <dxo-range-selector-scale>
+    <dxo-range-selector-label format="decimal"></dxo-range-selector-label>
+  </dxo-range-selector-scale>
 </dx-range-selector>

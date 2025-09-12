@@ -4,23 +4,23 @@
   [showBorders]="true"
   (onRowInserted)="$event.component.navigateToRow($event.key)"
 >
-  <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
-  <dxo-pager [visible]="true"></dxo-pager>
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
-  <dxo-search-panel [visible]="true"></dxo-search-panel>
-  <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="true">
-  </dxo-editing>
-  <dxi-column
+  <dxo-data-grid-paging [enabled]="true" [pageSize]="15"></dxo-data-grid-paging>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  <dxo-data-grid-header-filter [visible]="true"></dxo-data-grid-header-filter>
+  <dxo-data-grid-search-panel [visible]="true"></dxo-data-grid-search-panel>
+  <dxo-data-grid-editing mode="cell" [allowUpdating]="true" [allowAdding]="true">
+  </dxo-data-grid-editing>
+  <dxi-data-grid-column
     dataField="Owner"
     [width]="150"
     [allowSorting]="false"
     editCellTemplate="singleDropDownBoxEditor"
   >
-    <dxo-lookup [dataSource]="employees" displayExpr="FullName" valueExpr="ID">
-    </dxo-lookup>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column
+    <dxo-data-grid-lookup [dataSource]="employees" displayExpr="FullName" valueExpr="ID">
+    </dxo-data-grid-lookup>
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column
     dataField="AssignedEmployee"
     caption="Assignees"
     [width]="200"
@@ -29,18 +29,18 @@
     [cellTemplate]="cellTemplate"
     [calculateFilterExpression]="calculateFilterExpression"
   >
-    <dxo-lookup [dataSource]="employees" valueExpr="ID" displayExpr="FullName">
-    </dxo-lookup>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="Subject">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="Status" width="200" [editorOptions]="editorOptions">
-    <dxo-lookup [dataSource]="statuses" displayExpr="name" valueExpr="id">
-    </dxo-lookup>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
+    <dxo-data-grid-lookup [dataSource]="employees" valueExpr="ID" displayExpr="FullName">
+    </dxo-data-grid-lookup>
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Subject">
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Status" width="200" [editorOptions]="editorOptions">
+    <dxo-data-grid-lookup [dataSource]="statuses" displayExpr="name" valueExpr="id">
+    </dxo-data-grid-lookup>
+    <dxi-data-grid-validation-rule type="required"></dxi-data-grid-validation-rule>
+  </dxi-data-grid-column>
 
   <div *dxTemplate="let cellInfo of 'tagBoxEditor'">
     <dx-tag-box
@@ -84,12 +84,12 @@
             onSelectionChanged($event.selectedRowKeys, cellInfo, e.component)
           "
         >
-          <dxi-column dataField="FullName"></dxi-column>
-          <dxi-column dataField="Title"></dxi-column>
-          <dxi-column dataField="Department"></dxi-column>
-          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
-          <dxo-scrolling mode="virtual"></dxo-scrolling>
-          <dxo-selection mode="single"></dxo-selection>
+          <dxi-data-grid-columnrid-column dataField="FullName"></dxi-data-grid-columnrid-column>
+          <dxi-data-grid-columnrid-column dataField="Title"></dxi-data-grid-columnrid-column>
+          <dxi-data-grid-columnrid-column dataField="Department"></dxi-data-grid-columnrid-column>
+          <dxo-data-grid-pagingrid-paging [enabled]="true" [pageSize]="10"></dxo-data-grid-pagingrid-paging>
+          <dxo-data-grid-scrolling-scrolling mode="virtual"></dxo-data-grid-scrolling-scrolling>
+          <dxo-data-grid-selection-selection mode="single"></dxo-data-grid-selection-selection>
         </dx-data-grid>
       </div>
     </dx-drop-down-box>

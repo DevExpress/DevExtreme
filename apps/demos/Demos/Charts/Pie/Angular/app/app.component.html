@@ -6,11 +6,11 @@
   (onPointClick)="pointClickHandler($event)"
   (onLegendClick)="legendClickHandler($event)"
 >
-  <dxi-series argumentField="country" valueField="area">
-    <dxo-label [visible]="true">
-      <dxo-connector [visible]="true" [width]="1"></dxo-connector>
-    </dxo-label>
-  </dxi-series>
-  <dxo-size [width]="500"></dxo-size>
-  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-pie-chart-series argumentField="country" valueField="area">
+    <dxo-pie-chart-label [visible]="true">
+      <dxo-pie-chart-connector [visible]="true" [width]="1"></dxo-pie-chart-connector>
+    </dxo-pie-chart-label>
+  </dxi-pie-chart-series>
+  <dxo-pie-chart-size [width]="500"></dxo-pie-chart-size>
+  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
 </dx-pie-chart>

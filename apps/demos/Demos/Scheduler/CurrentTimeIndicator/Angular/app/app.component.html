@@ -14,7 +14,7 @@
   (onAppointmentClick)="onAppointmentClick($event)"
   (onAppointmentDblClick)="onAppointmentDblClick($event)"
 >
-  <dxi-resource fieldExpr="movieId" [dataSource]="moviesData"> </dxi-resource>
+  <dxi-scheduler-resource fieldExpr="movieId" [dataSource]="moviesData"> </dxi-scheduler-resource>
 
   <div *dxTemplate="let model of 'appointment-template'">
     <ng-container

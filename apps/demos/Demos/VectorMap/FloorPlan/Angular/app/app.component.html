@@ -1,19 +1,19 @@
 <dx-vector-map id="vector-map" [projection]="projection">
-  <dxo-tooltip
+  <dxo-vector-map-tooltip
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
-  <dxi-layer
+  ></dxo-vector-map-tooltip>
+  <dxi-vector-map-layer
     [hoverEnabled]="false"
     [dataSource]="buildingData"
     name="building"
-  ></dxi-layer>
-  <dxi-layer
+  ></dxi-vector-map-layer>
+  <dxi-vector-map-layer
     color="transparent"
     [dataSource]="roomsData"
     name="rooms"
     [borderWidth]="1"
   >
-    <dxo-label [enabled]="true" dataField="name"></dxo-label>
-  </dxi-layer>
+    <dxo-vector-map-label [enabled]="true" dataField="name"></dxo-vector-map-label>
+  </dxi-vector-map-layer>
 </dx-vector-map>

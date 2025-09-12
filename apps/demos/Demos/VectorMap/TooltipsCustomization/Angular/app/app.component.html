@@ -1,10 +1,10 @@
 <dx-vector-map id="vector-map" [bounds]="[-180, 85, 180, -60]">
-  <dxo-tooltip [enabled]="true" contentTemplate="tooltipContent"></dxo-tooltip>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-title text="Nominal GDP">
-    <dxo-subtitle text="(in millions of US dollars)"></dxo-subtitle>
-  </dxo-title>
-  <dxi-layer
+  <dxo-vector-map-tooltip [enabled]="true" contentTemplate="tooltipContent"></dxo-vector-map-tooltip>
+  <dxo-vector-map-export [enabled]="true"></dxo-vector-map-export>
+  <dxo-vector-map-title text="Nominal GDP">
+    <dxo-vector-map-subtitle text="(in millions of US dollars)"></dxo-vector-map-subtitle>
+  </dxo-vector-map-title>
+  <dxi-vector-map-layer
     [customize]="customizeLayers"
     [dataSource]="worldMap"
     [colorGroups]="[
@@ -14,11 +14,11 @@
     name="areas"
     palette="Violet"
   >
-    <dxo-label [enabled]="true" dataField="name"></dxo-label>
-  </dxi-layer>
-  <dxi-legend [customizeText]="customizeText">
-    <dxo-source layer="areas" grouping="color"></dxo-source>
-  </dxi-legend>
+    <dxo-vector-map-label [enabled]="true" dataField="name"></dxo-vector-map-label>
+  </dxi-vector-map-layer>
+  <dxi-vector-map-legend [customizeText]="customizeText">
+    <dxo-vector-map-source layer="areas" grouping="color"></dxo-vector-map-source>
+  </dxi-vector-map-legend>
   <div *dxTemplate="let info of 'tooltipContent'" class="state-tooltip">
     <h4>{{ info.attribute("name") }}</h4>
     <div *ngIf="gdpData[info.attribute('name')] as countryGDPData" id="nominal">
@@ -27,12 +27,12 @@
     </div>
     <div *ngIf="getPieData(info.attribute('name')) as data; else noData">
       <dx-pie-chart id="gdp-sectors" [dataSource]="data" [animation]="false">
-        <dxi-series argumentField="name" valueField="value">
-          <dxo-label [visible]="true" [customizeText]="customizePieLabel">
-            <dxo-connector [visible]="true" [width]="1"></dxo-connector>
-          </dxo-label>
-        </dxi-series>
-        <dxo-legend [visible]="false"></dxo-legend>
+        <dxi-pie-chart-series argumentField="name" valueField="value">
+          <dxo-vector-map-labelhart-label [visible]="true" [customizeText]="customizePieLabel">
+            <dxo-pie-chart-connector [visible]="true" [width]="1"></dxo-pie-chart-connector>
+          </dxo-vector-map-labelhart-label>
+        </dxi-pie-chart-series>
+        <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
       </dx-pie-chart>
     </div>
     <ng-template #noData>No economic development data</ng-template>
