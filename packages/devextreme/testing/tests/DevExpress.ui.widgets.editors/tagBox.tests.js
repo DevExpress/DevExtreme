@@ -2451,6 +2451,10 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.test('pagedown/pageup keys should move focus to last/first item', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const $listItems = getListItems(this.instance);
         this.keyboard.press('down');
 
@@ -2462,6 +2466,10 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('down/up keys should move focus to next/previous item', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const $listItems = getListItems(this.instance);
         const $firstItem = $listItems.eq(0);
         const $secondItem = $listItems.eq(1);
@@ -8365,6 +8373,10 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
         ['enter', 'space'].forEach(key => {
             QUnit.test(`on selectAll item selecting using ${key}`, function(assert) {
+                if(shouldSkipOnMobile(assert)) {
+                    return;
+                }
+
                 this.keyboard
                     .focus()
                     .press('down')

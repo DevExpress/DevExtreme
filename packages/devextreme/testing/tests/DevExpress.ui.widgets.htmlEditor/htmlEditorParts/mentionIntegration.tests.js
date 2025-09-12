@@ -4,6 +4,7 @@ import 'ui/html_editor';
 
 import nativePointerMock from '../../../helpers/nativePointerMock.js';
 import { prepareEmbedValue } from './utils.js';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const { test, module } = QUnit;
 
@@ -384,6 +385,10 @@ export default function() {
         });
 
         test('first list item should be focused on filtering', function(assert) {
+            if(shouldSkipOnMobile(assert)) {
+                return;
+            }
+
             const done = assert.async();
             const valueChangeSpy = sinon.spy(() => {
                 if(valueChangeSpy.calledOnce) {
@@ -644,6 +649,10 @@ export default function() {
         });
 
         test('aria-activedescendant should only exist on textbox when mention pops up', function(assert) {
+            if(shouldSkipOnMobile(assert)) {
+                return;
+            }
+
             const done = assert.async();
             const valueChangeSpy = sinon.spy(() => {
                 if(valueChangeSpy.calledOnce) {
