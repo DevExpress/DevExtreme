@@ -95,30 +95,30 @@
       [startDateRange]="startDateRange"
       [endDateRange]="endDateRange"
     >
-      <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
-      <dxo-gantt-dependencies [dataSource]="dependencies"></dxo-gantt-dependencies>
-      <dxo-gantt-resources [dataSource]="resources"></dxo-gantt-resources>
-      <dxo-gantt-resource-assignments
+      <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+      <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+      <dxo-resources [dataSource]="resources"></dxo-resources>
+      <dxo-resource-assignments
         [dataSource]="resourceAssignments"
-      ></dxo-gantt-resource-assignments>
+      ></dxo-resource-assignments>
 
-      <dxi-gantt-column
+      <dxi-column
         dataField="title"
         caption="Subject"
         [width]="300"
-      ></dxi-gantt-column>
-      <dxi-gantt-column
+      ></dxi-column>
+      <dxi-column
         dataField="start"
         caption="Start Date"
         dataType="date"
-      ></dxi-gantt-column>
-      <dxi-gantt-column
+      ></dxi-column>
+      <dxi-column
         dataField="end"
         caption="End Date"
         dataType="date"
-      ></dxi-gantt-column>
+      ></dxi-column>
 
-      <dxo-gantt-editing [enabled]="true"></dxo-gantt-editing>
+      <dxo-editing [enabled]="true"></dxo-editing>
       <div
         *dxTemplate="let task of 'taskTooltipContentTemplate'"
         class="custom-task-edit-tooltip"

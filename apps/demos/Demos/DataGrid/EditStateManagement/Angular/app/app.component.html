@@ -8,23 +8,23 @@
   [repaintChangesOnly]="true"
   (onSaving)="onSaving($event)"
 >
-  <dxo-data-grid-editing
+  <dxo-editing
     mode="row"
     [allowAdding]="true"
     [allowDeleting]="true"
     [allowUpdating]="true"
     [(changes)]="changes"
     [(editRowKey)]="editRowKey"
-  ></dxo-data-grid-editing>
-  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  ></dxo-editing>
+  <dxo-pager [visible]="true"></dxo-pager>
 
-  <dxi-data-grid-column dataField="OrderID" [allowEditing]="false"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipCity"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipAddress"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Freight"></dxi-data-grid-column>
+  <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
+  <dxi-column dataField="ShipName"></dxi-column>
+  <dxi-column dataField="ShipCountry"></dxi-column>
+  <dxi-column dataField="ShipCity"></dxi-column>
+  <dxi-column dataField="ShipAddress"></dxi-column>
+  <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+  <dxi-column dataField="Freight"></dxi-column>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

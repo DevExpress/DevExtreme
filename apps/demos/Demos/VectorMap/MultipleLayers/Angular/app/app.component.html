@@ -4,9 +4,9 @@
   [maxZoomFactor]="3"
   title="Sea Currents"
 >
-  <dxo-vector-map-export [enabled]="true"></dxo-vector-map-export>
-  <dxi-vector-map-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-vector-map-layer>
-  <dxi-vector-map-layer
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-layer>
+  <dxi-layer
     name="water"
     [dataSource]="streamsData"
     colorGroupingField="tag"
@@ -14,13 +14,13 @@
     [palette]="['#3c20c8', '#d82020']"
     borderColor="none"
     [hoverEnabled]="false"
-  ></dxi-vector-map-layer>
-  <dxi-vector-map-legend
+  ></dxi-layer>
+  <dxi-legend
     horizontalAlignment="right"
     verticalAlignment="top"
     [customizeText]="customizeText"
   >
-    <dxo-vector-map-font [size]="14"></dxo-vector-map-font>
-    <dxo-vector-map-source layer="water" grouping="color"></dxo-vector-map-source>
-  </dxi-vector-map-legend>
+    <dxo-font [size]="14"></dxo-font>
+    <dxo-source layer="water" grouping="color"></dxo-source>
+  </dxi-legend>
 </dx-vector-map>

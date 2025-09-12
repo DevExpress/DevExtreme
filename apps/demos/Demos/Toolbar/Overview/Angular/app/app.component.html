@@ -1,49 +1,49 @@
 <dx-toolbar>
-  <dxi-toolbar-item location="before" widget="dxButton" [options]="backButtonOptions">
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  <dxi-item location="before" widget="dxButton" [options]="backButtonOptions">
+  </dxi-item>
+  <dxi-item
     location="before"
     widget="dxButton"
     locateInMenu="auto"
     [options]="refreshButtonOptions"
   >
-  </dxi-toolbar-item>
-  <dxi-toolbar-item location="center" widget="dxButton" locateInMenu="never">
+  </dxi-item>
+  <dxi-item location="center" widget="dxButton" locateInMenu="never">
     <div *dxTemplate>
       <div class="toolbar-label"><b>Tom's Club</b> Products</div>
     </div>
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  </dxi-item>
+  <dxi-item
     location="after"
     widget="dxSelectBox"
     locateInMenu="auto"
     [options]="selectBoxOptions"
   >
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  </dxi-item>
+  <dxi-item
     location="after"
     widget="dxButton"
     locateInMenu="auto"
     [options]="addButtonOptions"
   >
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  </dxi-item>
+  <dxi-item
     widget="dxButton"
     locateInMenu="always"
     [options]="saveButtonOptions"
   >
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  </dxi-item>
+  <dxi-item
     widget="dxButton"
     locateInMenu="always"
     [options]="printButtonOptions"
   >
-  </dxi-toolbar-item>
-  <dxi-toolbar-item
+  </dxi-item>
+  <dxi-item
     widget="dxButton"
     locateInMenu="always"
     [options]="settingsButtonOptions"
   >
-  </dxi-toolbar-item>
+  </dxi-item>
 </dx-toolbar>
 <dx-list id="products" [dataSource]="productsStore"> </dx-list>

@@ -5,24 +5,24 @@
   [palette]="['#00ced1', '#008000', '#ffd700', '#ff7f50']"
   (onSeriesClick)="onSeriesClick($event)"
 >
-  <dxo-chart-common-series-settings type="bubble"></dxo-chart-common-series-settings>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
-  <dxo-chart-legend position="inside" horizontalAlignment="left">
-    <dxo-chart-border [visible]="true"></dxo-chart-border>
-  </dxo-chart-legend>
-  <dxo-chart-argument-axis title="Total Population">
-    <dxo-chart-label [customizeText]="argumentCustomizeText"></dxo-chart-label>
-  </dxo-chart-argument-axis>
-  <dxi-chart-value-axis title="Population with Age over 60">
-    <dxo-chart-label [customizeText]="valueCustomizeText"></dxo-chart-label>
-  </dxi-chart-value-axis>
-  <dxo-chart-tooltip
+  <dxo-common-series-settings type="bubble"></dxo-common-series-settings>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-legend position="inside" horizontalAlignment="left">
+    <dxo-border [visible]="true"></dxo-border>
+  </dxo-legend>
+  <dxo-argument-axis title="Total Population">
+    <dxo-label [customizeText]="argumentCustomizeText"></dxo-label>
+  </dxo-argument-axis>
+  <dxi-value-axis title="Population with Age over 60">
+    <dxo-label [customizeText]="valueCustomizeText"></dxo-label>
+  </dxi-value-axis>
+  <dxo-tooltip
     [enabled]="true"
     location="edge"
     [customizeTooltip]="customizeTooltip"
   >
-  </dxo-chart-tooltip>
-  <dxi-chart-series
+  </dxo-tooltip>
+  <dxi-series
     *ngFor="let correlation of correlationSource"
     [name]="correlation.name"
     [argumentField]="correlation.argumentField"
@@ -30,5 +30,5 @@
     [sizeField]="correlation.sizeField"
     [tagField]="correlation.tagField"
   >
-  </dxi-chart-series>
+  </dxi-series>
 </dx-chart>

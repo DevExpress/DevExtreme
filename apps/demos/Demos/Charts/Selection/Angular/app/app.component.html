@@ -6,24 +6,24 @@
   (onPointClick)="pointClick($event)"
   (onLegendClick)="legendClick($event)"
 >
-  <dxi-chart-series valueField="year2007" name="2007 - 2008"></dxi-chart-series>
-  <dxi-chart-series valueField="year2008" name="2008 - 2009"></dxi-chart-series>
-  <dxo-chart-common-series-settings
+  <dxi-series valueField="year2007" name="2007 - 2008"></dxi-series>
+  <dxi-series valueField="year2008" name="2008 - 2009"></dxi-series>
+  <dxo-common-series-settings
     argumentField="country"
     type="bar"
     hoverMode="allArgumentPoints"
     selectionMode="allArgumentPoints"
   >
-    <dxo-chart-label [visible]="true">
-      <dxo-chart-format type="percent" [precision]="1"> </dxo-chart-format>
-    </dxo-chart-label>
-  </dxo-chart-common-series-settings>
-  <dxi-chart-value-axis>
-    <dxo-chart-label>
-      <dxo-chart-format type="percent" [precision]="1"> </dxo-chart-format>
-    </dxo-chart-label>
-  </dxi-chart-value-axis>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+    <dxo-label [visible]="true">
+      <dxo-format type="percent" [precision]="1"> </dxo-format>
+    </dxo-label>
+  </dxo-common-series-settings>
+  <dxi-value-axis>
+    <dxo-label>
+      <dxo-format type="percent" [precision]="1"> </dxo-format>
+    </dxo-label>
+  </dxi-value-axis>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

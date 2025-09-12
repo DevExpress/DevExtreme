@@ -4,17 +4,17 @@
   [showBorders]="true"
   [remoteOperations]="true"
 >
-  <dxi-data-grid-column dataField="OrderNumber" dataType="number"> </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date"> </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="StoreCity" dataType="string"> </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="StoreState" dataType="string"> </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Employee" dataType="string"> </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="SaleAmount" dataType="number" format="currency">
-  </dxi-data-grid-column>
-  <dxo-data-grid-paging [pageSize]="12"></dxo-data-grid-paging>
-  <dxo-data-grid-pager
+  <dxi-column dataField="OrderNumber" dataType="number"> </dxi-column>
+  <dxi-column dataField="OrderDate" dataType="date"> </dxi-column>
+  <dxi-column dataField="StoreCity" dataType="string"> </dxi-column>
+  <dxi-column dataField="StoreState" dataType="string"> </dxi-column>
+  <dxi-column dataField="Employee" dataType="string"> </dxi-column>
+  <dxi-column dataField="SaleAmount" dataType="number" format="currency">
+  </dxi-column>
+  <dxo-paging [pageSize]="12"></dxo-paging>
+  <dxo-pager
     [visible]="true"
     [showPageSizeSelector]="true"
     [allowedPageSizes]="[8, 12, 20]"
-  ></dxo-data-grid-pager>
+  ></dxo-pager>
 </dx-data-grid>

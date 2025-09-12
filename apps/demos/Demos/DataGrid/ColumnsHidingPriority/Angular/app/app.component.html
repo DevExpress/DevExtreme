@@ -4,26 +4,26 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxi-data-grid-column
+  <dxi-column
     dataField="OrderNumber"
     [width]="130"
     caption="Invoice Number"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column
     dataField="CustomerStoreCity"
     caption="City"
     [hidingPriority]="0"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column
     dataField="CustomerStoreState"
     caption="State"
     [hidingPriority]="1"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column dataField="Employee"></dxi-column>
+  <dxi-column
     dataField="OrderDate"
     dataType="date"
     [hidingPriority]="2"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="SaleAmount" format="currency"></dxi-data-grid-column>
+  ></dxi-column>
+  <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
 </dx-data-grid>

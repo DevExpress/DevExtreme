@@ -1,20 +1,20 @@
 <dx-chart id="chart" [dataSource]="oilProductionData" palette="soft">
-  <dxi-chart-series valueField="year1970" name="1970"></dxi-chart-series>
-  <dxi-chart-series valueField="year1980" name="1980"></dxi-chart-series>
-  <dxi-chart-series valueField="year1990" name="1990"></dxi-chart-series>
-  <dxi-chart-series valueField="year2000" name="2000"></dxi-chart-series>
-  <dxi-chart-series valueField="year2008" name="2008"></dxi-chart-series>
-  <dxi-chart-series valueField="year2009" name="2009"></dxi-chart-series>
-  <dxo-chart-common-series-settings
+  <dxi-series valueField="year1970" name="1970"></dxi-series>
+  <dxi-series valueField="year1980" name="1980"></dxi-series>
+  <dxi-series valueField="year1990" name="1990"></dxi-series>
+  <dxi-series valueField="year2000" name="2000"></dxi-series>
+  <dxi-series valueField="year2008" name="2008"></dxi-series>
+  <dxi-series valueField="year2009" name="2009"></dxi-series>
+  <dxo-common-series-settings
     argumentField="state"
     type="bar"
     [barPadding]="0.5"
   >
-  </dxo-chart-common-series-settings>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
-  <dxo-chart-title text="Oil Production">
-    <dxo-chart-subtitle text="(in millions tonnes)"></dxo-chart-subtitle>
-  </dxo-chart-title>
+  </dxo-common-series-settings>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-title text="Oil Production">
+    <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>
+  </dxo-title>
 </dx-chart>

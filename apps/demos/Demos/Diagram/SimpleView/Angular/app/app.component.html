@@ -1,12 +1,12 @@
 <dx-diagram #diagram id="diagram" [simpleView]="true">
-  <dxo-diagram-nodes
+  <dxo-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     textExpr="Title"
     parentKeyExpr="Head_ID"
   >
-    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
-  </dxo-diagram-nodes>
-  <dxo-diagram-toolbox visibility="disabled"></dxo-diagram-toolbox>
-  <dxo-diagram-properties-panel visibility="disabled"></dxo-diagram-properties-panel>
+    <dxo-auto-layout type="tree"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-toolbox visibility="disabled"></dxo-toolbox>
+  <dxo-properties-panel visibility="disabled"></dxo-properties-panel>
 </dx-diagram>

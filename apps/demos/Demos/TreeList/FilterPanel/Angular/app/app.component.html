@@ -7,17 +7,17 @@
   [filterValue]="filterValue"
   [showBorders]="true"
 >
-  <dxo-tree-list-filter-panel [visible]="true"></dxo-tree-list-filter-panel>
-  <dxo-tree-list-filter-row [visible]="true"></dxo-tree-list-filter-row>
-  <dxo-tree-list-header-filter [visible]="true"></dxo-tree-list-header-filter>
-  <dxi-tree-list-column dataField="Full_Name" dataType="string"></dxi-tree-list-column>
-  <dxi-tree-list-column
+  <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxi-column dataField="Full_Name" dataType="string"></dxi-column>
+  <dxi-column
     dataField="Title"
     caption="Position"
     dataType="string"
-  ></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="City" dataType="string"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="State" dataType="string"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Mobile_Phone" dataType="string"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Hire_Date" dataType="date"></dxi-tree-list-column>
+  ></dxi-column>
+  <dxi-column dataField="City" dataType="string"></dxi-column>
+  <dxi-column dataField="State" dataType="string"></dxi-column>
+  <dxi-column dataField="Mobile_Phone" dataType="string"></dxi-column>
+  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
 </dx-tree-list>

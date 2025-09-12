@@ -3,15 +3,15 @@
   [value]="[40000, 80000]"
   title="Select House Price Range"
 >
-  <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
-  <dxo-range-selector-scale
+  <dxo-margin [top]="50"></dxo-margin>
+  <dxo-scale
     [startValue]="15000"
     [endValue]="150000"
     [minorTickInterval]="500"
     [tickInterval]="15000"
   >
-    <dxo-range-selector-label format="currency"></dxo-range-selector-label>
-    <dxo-range-selector-minor-tick [visible]="false"></dxo-range-selector-minor-tick>
-  </dxo-range-selector-scale>
-  <dxo-range-selector-slider-marker format="currency"></dxo-range-selector-slider-marker>
+    <dxo-label format="currency"></dxo-label>
+    <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+  </dxo-scale>
+  <dxo-slider-marker format="currency"></dxo-slider-marker>
 </dx-range-selector>

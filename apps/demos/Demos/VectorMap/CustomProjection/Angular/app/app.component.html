@@ -3,12 +3,12 @@
   [projection]="customProjection"
   title="Wagner VI projection"
 >
-  <dxo-vector-map-export [enabled]="true"></dxo-vector-map-export>
-  <dxi-vector-map-layer [dataSource]="worldMap"></dxi-vector-map-layer>
-  <dxi-vector-map-layer
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-layer [dataSource]="worldMap"></dxi-layer>
+  <dxi-layer
     [dataSource]="coordLinesData"
     [hoverEnabled]="false"
     [borderWidth]="1"
     color="#aaa"
-  ></dxi-vector-map-layer>
+  ></dxi-layer>
 </dx-vector-map>

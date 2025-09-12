@@ -4,19 +4,19 @@
   [rotated]="true"
   [barGroupPadding]="0.2"
 >
-  <dxo-chart-argument-axis [categories]="['Royal Houses']">
-    <dxo-chart-tick [visible]="false"></dxo-chart-tick>
-  </dxo-chart-argument-axis>
-  <dxo-chart-title
+  <dxo-argument-axis [categories]="['Royal Houses']">
+    <dxo-tick [visible]="false"></dxo-tick>
+  </dxo-argument-axis>
+  <dxo-title
     text="The British Monarchy"
     subtitle="An Abbreviated Timeline"
-  ></dxo-chart-title>
-  <dxo-chart-animation [enabled]="false"></dxo-chart-animation>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-    <dxo-chart-title text="Royal Houses"></dxo-chart-title>
-  </dxo-chart-legend>
-  <dxo-chart-series-template nameField="house"></dxo-chart-series-template>
-  <dxo-chart-common-series-settings
+  ></dxo-title>
+  <dxo-animation [enabled]="false"></dxo-animation>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+    <dxo-title text="Royal Houses"></dxo-title>
+  </dxo-legend>
+  <dxo-series-template nameField="house"></dxo-series-template>
+  <dxo-common-series-settings
     argumentField="monarch"
     type="rangeBar"
     rangeValue1Field="start"
@@ -24,5 +24,5 @@
     barOverlapGroup="monarchs"
     [minBarSize]="4"
   >
-  </dxo-chart-common-series-settings>
+  </dxo-common-series-settings>
 </dx-chart>

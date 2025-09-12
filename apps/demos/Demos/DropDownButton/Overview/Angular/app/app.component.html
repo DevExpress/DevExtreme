@@ -50,7 +50,7 @@
   <div class="dx-fieldset-header">Embedded in a Toolbar</div>
   <div class="dx-field">
     <dx-toolbar>
-      <dxi-toolbar-item
+      <dxi-item
         location="before"
         widget="dxDropDownButton"
         [options]="{
@@ -64,9 +64,9 @@
           onSelectionChanged: onAlignmentChanged
         }"
       >
-      </dxi-toolbar-item>
+      </dxi-item>
 
-      <dxi-toolbar-item
+      <dxi-item
         location="before"
         widget="dxDropDownButton"
         [options]="{
@@ -78,9 +78,9 @@
           dropDownContentTemplate: 'colorpicker'
         }"
       >
-      </dxi-toolbar-item>
+      </dxi-item>
 
-      <dxi-toolbar-item
+      <dxi-item
         location="before"
         widget="dxDropDownButton"
         [options]="{
@@ -94,9 +94,9 @@
           itemTemplate: 'fontItem'
         }"
       >
-      </dxi-toolbar-item>
+      </dxi-item>
 
-      <dxi-toolbar-item
+      <dxi-item
         location="before"
         widget="dxDropDownButton"
         [options]="{
@@ -110,7 +110,7 @@
           onSelectionChanged: onLineHeightChanged
         }"
       >
-      </dxi-toolbar-item>
+      </dxi-item>
 
       <div
         *dxTemplate="let data of 'fontItem'"

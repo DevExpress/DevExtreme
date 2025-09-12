@@ -8,30 +8,30 @@
   [showBorders]="true"
   [showRowLines]="true"
 >
-  <dxo-tree-list-column-fixing [enabled]="true"></dxo-tree-list-column-fixing>
-  <dxi-tree-list-column
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxi-column
     caption="Employee"
     [fixed]="true"
     [calculateCellValue]="calculateCellValue"
-  ></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Position" alignment="right"></dxi-tree-list-column>
-  <dxi-tree-list-column
+  ></dxi-column>
+  <dxi-column dataField="Position" alignment="right"></dxi-column>
+  <dxi-column
     dataField="Address"
     [fixed]="true"
     fixedPosition="sticky"
-  ></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="City"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Zipcode"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="State"></dxi-tree-list-column>
-  <dxi-tree-list-column
+  ></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="Zipcode"></dxi-column>
+  <dxi-column dataField="State"></dxi-column>
+  <dxi-column
     dataField="Department"
     [fixed]="true"
     fixedPosition="right"
-  ></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="BirthDate" dataType="date"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="HireDate" dataType="date"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="HomePhone"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="MobilePhone"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Email"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Skype"></dxi-tree-list-column>
+  ></dxi-column>
+  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+  <dxi-column dataField="HomePhone"></dxi-column>
+  <dxi-column dataField="MobilePhone"></dxi-column>
+  <dxi-column dataField="Email"></dxi-column>
+  <dxi-column dataField="Skype"></dxi-column>
 </dx-tree-list>

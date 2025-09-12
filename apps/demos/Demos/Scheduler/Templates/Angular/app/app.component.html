@@ -20,17 +20,17 @@
   appointmentTooltipTemplate="tooltip-template"
   (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
 >
-  <dxo-scheduler-editing [allowAdding]="false"></dxo-scheduler-editing>
+  <dxo-editing [allowAdding]="false"></dxo-editing>
 
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="movieId"
     [useColorAsDefault]="true"
     [dataSource]="moviesData"
   >
-  </dxi-scheduler-resource>
+  </dxi-resource>
 
-  <dxi-scheduler-resource fieldExpr="theatreId" [dataSource]="theatreData">
-  </dxi-scheduler-resource>
+  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData">
+  </dxi-resource>
 
   <div *dxTemplate="let model of 'appointment-template'">
     <div class="showtime-preview">

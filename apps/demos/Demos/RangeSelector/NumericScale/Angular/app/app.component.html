@@ -4,12 +4,12 @@
   title="Select a Product Weight"
   [dataSource]="dataSource"
 >
-  <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
-  <dxo-range-selector-scale valueType="numeric"></dxo-range-selector-scale>
-  <dxo-range-selector-chart>
-    <dxi-range-selector-series valueField="appleCost" color="#00ff00"></dxi-range-selector-series>
-    <dxi-range-selector-series valueField="orangeCost" color="#ffa500"></dxi-range-selector-series>
-    <dxo-range-selector-common-series-settings type="spline" argumentField="weight">
-    </dxo-range-selector-common-series-settings>
-  </dxo-range-selector-chart>
+  <dxo-margin [top]="50"></dxo-margin>
+  <dxo-scale valueType="numeric"></dxo-scale>
+  <dxo-chart>
+    <dxi-series valueField="appleCost" color="#00ff00"></dxi-series>
+    <dxi-series valueField="orangeCost" color="#ffa500"></dxi-series>
+    <dxo-common-series-settings type="spline" argumentField="weight">
+    </dxo-common-series-settings>
+  </dxo-chart>
 </dx-range-selector>

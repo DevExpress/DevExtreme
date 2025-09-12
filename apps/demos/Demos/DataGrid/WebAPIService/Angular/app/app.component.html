@@ -5,72 +5,72 @@
   [height]="600"
   [showBorders]="true"
 >
-  <dxo-data-grid-filter-row [visible]="true"></dxo-data-grid-filter-row>
-  <dxo-data-grid-header-filter [visible]="true"></dxo-data-grid-header-filter>
-  <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
-  <dxo-data-grid-editing
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+  <dxo-editing
     mode="row"
     [allowAdding]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
   >
-  </dxo-data-grid-editing>
-  <dxo-data-grid-grouping [autoExpandAll]="false"></dxo-data-grid-grouping>
-  <dxo-data-grid-master-detail [enabled]="true" template="detail"></dxo-data-grid-master-detail>
-  <dxi-data-grid-column dataField="CustomerID" caption="Customer">
-    <dxi-data-grid-validation-rule
+  </dxo-editing>
+  <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+  <dxo-master-detail [enabled]="true" template="detail"></dxo-master-detail>
+  <dxi-column dataField="CustomerID" caption="Customer">
+    <dxi-validation-rule
       type="stringLength"
       [max]="5"
       message="The field Customer must be a string with a maximum length of 5."
-    ></dxi-data-grid-validation-rule>
-    <dxo-data-grid-lookup
+    ></dxi-validation-rule>
+    <dxo-lookup
       [dataSource]="customersData"
       valueExpr="Value"
       displayExpr="Text"
-    ></dxo-data-grid-lookup>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate" dataType="date">
-    <dxi-data-grid-validation-rule
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="OrderDate" dataType="date">
+    <dxi-validation-rule
       type="required"
       message="The OrderDate field is required."
-    ></dxi-data-grid-validation-rule>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Freight">
-    <dxo-data-grid-header-filter groupInterval="100"></dxo-data-grid-header-filter>
-    <dxi-data-grid-validation-rule
+    ></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="Freight">
+    <dxo-header-filter groupInterval="100"></dxo-header-filter>
+    <dxi-validation-rule
       type="range"
       [min]="0"
       [max]="2000"
       message="The field Freight must be between 0 and 2000."
     >
-    </dxi-data-grid-validation-rule>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipCountry">
-    <dxi-data-grid-validation-rule
+    </dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="ShipCountry">
+    <dxi-validation-rule
       type="stringLength"
       max="15"
       message="The field ShipCountry must be a string with a maximum length of 15."
-    ></dxi-data-grid-validation-rule>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="ShipVia" caption="Shipping Company" dataType="number">
-    <dxo-data-grid-lookup
+    ></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="ShipVia" caption="Shipping Company" dataType="number">
+    <dxo-lookup
       [dataSource]="shippersData"
       valueExpr="Value"
       displayExpr="Text"
-    ></dxo-data-grid-lookup>
-  </dxi-data-grid-column>
+    ></dxo-lookup>
+  </dxi-column>
 
   <div *dxTemplate="let order of 'detail'">
     <detail-grid [key]="order.key"></detail-grid>
   </div>
-  <dxo-data-grid-summary>
-    <dxi-data-grid-total-item column="Freight" summaryType="sum">
-      <dxo-data-grid-value-format type="decimal" [precision]="2"></dxo-data-grid-value-format>
-    </dxi-data-grid-total-item>
-    <dxi-data-grid-group-item column="Freight" summaryType="sum">
-      <dxo-data-grid-value-format type="decimal" [precision]="2"></dxo-data-grid-value-format>
-    </dxi-data-grid-group-item>
-    <dxi-data-grid-group-item summaryType="count"> </dxi-data-grid-group-item>
-  </dxo-data-grid-summary>
+  <dxo-summary>
+    <dxi-total-item column="Freight" summaryType="sum">
+      <dxo-value-format type="decimal" [precision]="2"></dxo-value-format>
+    </dxi-total-item>
+    <dxi-group-item column="Freight" summaryType="sum">
+      <dxo-value-format type="decimal" [precision]="2"></dxo-value-format>
+    </dxi-group-item>
+    <dxi-group-item summaryType="count"> </dxi-group-item>
+  </dxo-summary>
 </dx-data-grid>

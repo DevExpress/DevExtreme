@@ -10,19 +10,19 @@
     [expandedRowKeys]="expandedRowKeys"
     [columnAutoWidth]="true"
   >
-    <dxo-tree-list-row-dragging
+    <dxo-row-dragging
       [onDragChange]="onDragChange"
       [onReorder]="onReorder"
       [allowDropInsideItem]="allowDropInsideItem"
       [allowReordering]="allowReordering"
       [showDragIcons]="showDragIcons"
-    ></dxo-tree-list-row-dragging>
-    <dxi-tree-list-column dataField="Title" caption="Position"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="Full_Name"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="City"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="State"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="Mobile_Phone"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="Hire_Date" dataType="date"></dxi-tree-list-column>
+    ></dxo-row-dragging>
+    <dxi-column dataField="Title" caption="Position"></dxi-column>
+    <dxi-column dataField="Full_Name"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State"></dxi-column>
+    <dxi-column dataField="Mobile_Phone"></dxi-column>
+    <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
   </dx-tree-list>
 
   <div class="options">

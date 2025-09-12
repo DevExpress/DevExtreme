@@ -4,16 +4,16 @@
   dataSource="../../../../data/simpleJSON.json"
   [rotated]="true"
 >
-  <dxi-chart-series color="#79cac4" type="bar" argumentField="day" valueField="sales">
-    <dxo-chart-label [visible]="true" backgroundColor="#c18e92"></dxo-chart-label>
-  </dxi-chart-series>
-  <dxo-chart-argument-axis>
-    <dxo-chart-label [customizeText]="customizeText"></dxo-chart-label>
-  </dxo-chart-argument-axis>
-  <dxi-chart-value-axis>
-    <dxo-chart-tick [visible]="false"></dxo-chart-tick>
-    <dxo-chart-label [visible]="false"></dxo-chart-label>
-  </dxi-chart-value-axis>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
-  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
+  <dxi-series color="#79cac4" type="bar" argumentField="day" valueField="sales">
+    <dxo-label [visible]="true" backgroundColor="#c18e92"></dxo-label>
+  </dxi-series>
+  <dxo-argument-axis>
+    <dxo-label [customizeText]="customizeText"></dxo-label>
+  </dxo-argument-axis>
+  <dxi-value-axis>
+    <dxo-tick [visible]="false"></dxo-tick>
+    <dxo-label [visible]="false"></dxo-label>
+  </dxi-value-axis>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-legend [visible]="false"></dxo-legend>
 </dx-chart>

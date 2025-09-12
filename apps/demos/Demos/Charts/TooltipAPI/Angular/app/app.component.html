@@ -6,15 +6,15 @@
   title="The Population of Continents and Regions"
   (onPointClick)="pointClick($event)"
 >
-  <dxi-pie-chart-series argumentField="region"></dxi-pie-chart-series>
-  <dxo-pie-chart-tooltip
+  <dxi-series argumentField="region"></dxi-series>
+  <dxo-tooltip
     [enabled]="false"
     format="millions"
     [customizeTooltip]="customizeTooltip"
   >
-  </dxo-pie-chart-tooltip>
-  <dxo-pie-chart-size [height]="350"></dxo-pie-chart-size>
-  <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
+  </dxo-tooltip>
+  <dxo-size [height]="350"></dxo-size>
+  <dxo-legend [visible]="false"></dxo-legend>
 </dx-pie-chart>
 <div class="controls-pane">
   <dx-select-box

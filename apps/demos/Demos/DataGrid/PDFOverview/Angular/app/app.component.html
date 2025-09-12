@@ -5,19 +5,19 @@
   [showBorders]="true"
   (onExporting)="onExporting($event)"
 >
-  <dxi-data-grid-column dataField="CompanyName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Phone"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Fax"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="State" [groupIndex]="0"></dxi-data-grid-column>
+  <dxi-column dataField="CompanyName"></dxi-column>
+  <dxi-column dataField="Phone"></dxi-column>
+  <dxi-column dataField="Fax"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
 
-  <dxo-data-grid-selection mode="multiple"></dxo-data-grid-selection>
-  <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
-  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxo-data-grid-grouping [autoExpandAll]="true"></dxo-data-grid-grouping>
-  <dxo-data-grid-export
+  <dxo-selection mode="multiple"></dxo-selection>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager [visible]="true"></dxo-pager>
+  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+  <dxo-export
     [enabled]="true"
     [formats]="['pdf']"
     [allowExportSelectedData]="true"
-  ></dxo-data-grid-export>
+  ></dxo-export>
 </dx-data-grid>

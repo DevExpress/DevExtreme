@@ -5,30 +5,30 @@
   [customizePoint]="customizePoint"
   [customizeLabel]="customizeLabel"
 >
-  <dxi-chart-series
+  <dxi-series
     argumentField="day"
     valueField="temperature"
     type="spline"
     color="#a3aaaa"
-  ></dxi-chart-series>
-  <dxi-chart-value-axis>
-    <dxo-chart-label [customizeText]="customizeText"></dxo-chart-label>
-    <dxi-chart-strip [startValue]="highAverage" color="rgba(255,155,85,0.15)">
-      <dxo-chart-label text="Above average high">
-        <dxo-chart-font [color]="highAverageColor"></dxo-chart-font>
-      </dxo-chart-label>
-    </dxi-chart-strip>
-    <dxi-chart-strip [endValue]="lowAverage" color="rgba(97,153,230,0.10)">
-      <dxo-chart-label text="Below average low">
-        <dxo-chart-font [color]="lowAverageColor"></dxo-chart-font>
-      </dxo-chart-label>
-    </dxi-chart-strip>
-    <dxo-chart-strip-style>
-      <dxo-chart-label>
-        <dxo-chart-font weight="500" size="14"></dxo-chart-font>
-      </dxo-chart-label>
-    </dxo-chart-strip-style>
-  </dxi-chart-value-axis>
-  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  ></dxi-series>
+  <dxi-value-axis>
+    <dxo-label [customizeText]="customizeText"></dxo-label>
+    <dxi-strip [startValue]="highAverage" color="rgba(255,155,85,0.15)">
+      <dxo-label text="Above average high">
+        <dxo-font [color]="highAverageColor"></dxo-font>
+      </dxo-label>
+    </dxi-strip>
+    <dxi-strip [endValue]="lowAverage" color="rgba(97,153,230,0.10)">
+      <dxo-label text="Below average low">
+        <dxo-font [color]="lowAverageColor"></dxo-font>
+      </dxo-label>
+    </dxi-strip>
+    <dxo-strip-style>
+      <dxo-label>
+        <dxo-font weight="500" size="14"></dxo-font>
+      </dxo-label>
+    </dxo-strip-style>
+  </dxi-value-axis>
+  <dxo-legend [visible]="false"></dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

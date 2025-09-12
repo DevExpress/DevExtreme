@@ -4,18 +4,18 @@
     palette="Harmony Light"
     [dataSource]="corporationsInfo"
   >
-    <dxi-chart-series valueField="y2005" name="2005"></dxi-chart-series>
-    <dxi-chart-series valueField="y2004" name="2004"></dxi-chart-series>
-    <dxo-chart-common-series-settings
+    <dxi-series valueField="y2005" name="2005"></dxi-series>
+    <dxi-series valueField="y2004" name="2004"></dxi-series>
+    <dxo-common-series-settings
       #commonSeries
       argumentField="company"
       [type]="types[0]"
-    ></dxo-chart-common-series-settings>
-    <dxo-chart-margin [bottom]="20"></dxo-chart-margin>
-    <dxo-chart-argument-axis [valueMarginsEnabled]="false"></dxo-chart-argument-axis>
-    <dxo-chart-export [enabled]="true"></dxo-chart-export>
-    <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-    </dxo-chart-legend>
+    ></dxo-common-series-settings>
+    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+    </dxo-legend>
   </dx-chart>
   <div class="options">
     <div class="caption">Options</div>

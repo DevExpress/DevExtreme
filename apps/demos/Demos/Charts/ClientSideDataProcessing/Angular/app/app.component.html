@@ -1,14 +1,14 @@
 <div id="chart-demo">
   <dx-chart [dataSource]="monthWeather" [customizePoint]="customizePoint">
-    <dxo-chart-title text="Temperature in Seattle: October 2017"></dxo-chart-title>
-    <dxo-chart-size [height]="420"></dxo-chart-size>
-    <dxi-chart-series argumentField="day" valueField="t" type="bar"></dxi-chart-series>
-    <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-    <dxo-chart-export [enabled]="true"></dxo-chart-export>
-    <dxi-chart-value-axis>
-      <dxo-chart-label [customizeText]="customizeText"></dxo-chart-label>
-    </dxi-chart-value-axis>
-    <dxo-chart-loading-indicator [enabled]="true"></dxo-chart-loading-indicator>
+    <dxo-title text="Temperature in Seattle: October 2017"></dxo-title>
+    <dxo-size [height]="420"></dxo-size>
+    <dxi-series argumentField="day" valueField="t" type="bar"></dxi-series>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-value-axis>
+      <dxo-label [customizeText]="customizeText"></dxo-label>
+    </dxi-value-axis>
+    <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
   </dx-chart>
   <div class="action">
     <div class="label">Choose a temperature threshold, &deg;C: </div>

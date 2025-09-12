@@ -55,18 +55,18 @@
       position="top"
       [hideOnOutsideClick]="false"
     >
-      <dxo-tooltip-animation>
-        <dxo-tooltip-show
+      <dxo-animation>
+        <dxo-show
           type="slide"
           [from]="{ top: -100, opacity: 0 }"
           [to]="{ opacity: 1, top: 0 }"
-        ></dxo-tooltip-show>
-        <dxo-tooltip-hide
+        ></dxo-show>
+        <dxo-hide
           type="pop"
           [from]="{ scale: 1, opacity: 1 }"
           [to]="{ opacity: 0, scale: 0.1 }"
-        ></dxo-tooltip-hide>
-      </dxo-tooltip-animation>
+        ></dxo-hide>
+      </dxo-animation>
       <div *dxTemplate="let data of 'content'"> Projector PlusHD </div>
     </dx-tooltip>
   </div>

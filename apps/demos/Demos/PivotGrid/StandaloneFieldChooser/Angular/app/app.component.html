@@ -5,7 +5,7 @@
   [showBorders]="true"
   [dataSource]="pivotGridDataSource"
 >
-  <dxo-pivot-grid-field-chooser [enabled]="false"></dxo-pivot-grid-field-chooser>
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
 </dx-pivot-grid>
 
 <div class="container">
@@ -17,14 +17,14 @@
     [applyChangesMode]="applyChangesMode"
     [(state)]="state"
   >
-    <dxo-pivot-grid-field-chooser-texts
+    <dxo-texts
       allFields="All"
       columnFields="Columns"
       dataFields="Data"
       rowFields="Rows"
       filterFields="Filter"
     >
-    </dxo-pivot-grid-field-chooser-texts>
+    </dxo-texts>
   </dx-pivot-grid-field-chooser>
   <div class="bottom-bar" *ngIf="applyChangesMode === 'onDemand'">
     <dx-button

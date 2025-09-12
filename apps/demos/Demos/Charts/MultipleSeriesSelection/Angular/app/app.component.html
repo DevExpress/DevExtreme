@@ -5,21 +5,21 @@
   title="Internet Explorer Statistics"
   (onSeriesClick)="seriesClick($event)"
 >
-  <dxi-chart-series valueField="IE7" name="Internet Explorer 7"></dxi-chart-series>
-  <dxi-chart-series valueField="IE8" name="Internet Explorer 8"></dxi-chart-series>
-  <dxi-chart-series valueField="IE9" name="Internet Explorer 9"></dxi-chart-series>
-  <dxi-chart-series valueField="IE10" name="Internet Explorer 10"></dxi-chart-series>
-  <dxo-chart-common-series-settings argumentField="year" type="stackedarea">
-  </dxo-chart-common-series-settings>
-  <dxo-chart-common-axis-settings [valueMarginsEnabled]="false">
-  </dxo-chart-common-axis-settings>
-  <dxo-chart-argument-axis type="discrete"></dxo-chart-argument-axis>
-  <dxi-chart-value-axis>
-    <dxo-chart-label>
-      <dxo-chart-format type="percent"> </dxo-chart-format>
-    </dxo-chart-label>
-  </dxi-chart-value-axis>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  <dxi-series valueField="IE7" name="Internet Explorer 7"></dxi-series>
+  <dxi-series valueField="IE8" name="Internet Explorer 8"></dxi-series>
+  <dxi-series valueField="IE9" name="Internet Explorer 9"></dxi-series>
+  <dxi-series valueField="IE10" name="Internet Explorer 10"></dxi-series>
+  <dxo-common-series-settings argumentField="year" type="stackedarea">
+  </dxo-common-series-settings>
+  <dxo-common-axis-settings [valueMarginsEnabled]="false">
+  </dxo-common-axis-settings>
+  <dxo-argument-axis type="discrete"></dxo-argument-axis>
+  <dxi-value-axis>
+    <dxo-label>
+      <dxo-format type="percent"> </dxo-format>
+    </dxo-label>
+  </dxi-value-axis>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

@@ -3,11 +3,11 @@
   title="World Population by Decade"
   [dataSource]="populationData"
 >
-  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-  <dxi-chart-series type="bar"></dxi-chart-series>
-  <dxo-chart-argument-axis [tickInterval]="10">
-    <dxo-chart-label>
-      <dxo-chart-format type="decimal"></dxo-chart-format>
-    </dxo-chart-label>
-  </dxo-chart-argument-axis>
+  <dxo-legend [visible]="false"></dxo-legend>
+  <dxi-series type="bar"></dxi-series>
+  <dxo-argument-axis [tickInterval]="10">
+    <dxo-label>
+      <dxo-format type="decimal"></dxo-format>
+    </dxo-label>
+  </dxo-argument-axis>
 </dx-chart>

@@ -19,22 +19,22 @@
           [showBorders]="true"
           height="100%"
         >
-          <dxo-data-grid-paging [pageSize]="8"></dxo-data-grid-paging>
-          <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
-          <dxi-data-grid-column
+          <dxo-paging [pageSize]="8"></dxo-paging>
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
+          <dxi-column
             [allowGrouping]="false"
             dataField="OrderNumber"
             [width]="130"
             caption="Invoice Number"
-          ></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
-          <dxi-data-grid-column
+          ></dxi-column>
+          <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+          <dxi-column
             dataField="CustomerStoreState"
             caption="State"
-          ></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="SaleAmount" format="currency"></dxi-data-grid-column>
+          ></dxi-column>
+          <dxi-column dataField="Employee"></dxi-column>
+          <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+          <dxi-column dataField="SaleAmount" format="currency"></dxi-column>
         </dx-data-grid>
       </dx-resizable>
     </div>

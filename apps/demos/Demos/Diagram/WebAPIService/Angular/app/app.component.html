@@ -1,19 +1,19 @@
 <dx-diagram #diagram id="diagram">
-  <dxo-diagram-nodes
+  <dxo-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     textExpr="Title"
     parentKeyExpr="HeadID"
   >
-    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
-  </dxo-diagram-nodes>
-  <dxo-diagram-context-toolbox
+    <dxo-auto-layout type="tree"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-context-toolbox
     [width]="100"
     [shapeIconsPerRow]="2"
     [shapes]="['rectangle']"
   >
-  </dxo-diagram-context-toolbox>
-  <dxo-diagram-toolbox [shapeIconsPerRow]="2" [showSearch]="false">
-    <dxi-diagram-group title="Items" [shapes]="['rectangle']"></dxi-diagram-group>
-  </dxo-diagram-toolbox>
+  </dxo-context-toolbox>
+  <dxo-toolbox [shapeIconsPerRow]="2" [showSearch]="false">
+    <dxi-group title="Items" [shapes]="['rectangle']"></dxi-group>
+  </dxo-toolbox>
 </dx-diagram>

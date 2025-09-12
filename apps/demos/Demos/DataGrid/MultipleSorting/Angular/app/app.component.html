@@ -4,23 +4,23 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxo-data-grid-sorting mode="multiple"></dxo-data-grid-sorting>
-  <dxi-data-grid-column
+  <dxo-sorting mode="multiple"></dxo-sorting>
+  <dxi-column
     dataField="Prefix"
     caption="Title"
     [width]="100"
     sortOrder="asc"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="FirstName" sortOrder="asc"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="State"></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column dataField="FirstName" sortOrder="asc"></dxi-column>
+  <dxi-column dataField="LastName"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State"></dxi-column>
+  <dxi-column
     dataField="Position"
     [width]="130"
     [allowSorting]="!positionDisableSorting"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
+  ></dxi-column>
+  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

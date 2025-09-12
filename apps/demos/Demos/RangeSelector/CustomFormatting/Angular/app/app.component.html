@@ -2,19 +2,19 @@
   id="range-selector"
   title="Select a Lead Concentration in Water"
 >
-  <dxo-range-selector-margin [top]="50"></dxo-range-selector-margin>
-  <dxo-range-selector-scale
+  <dxo-margin [top]="50"></dxo-margin>
+  <dxo-scale
     [startValue]="0.004563"
     [endValue]="0.04976"
     [minorTickInterval]="0.001"
     [tickInterval]="0.005"
   >
-    <dxo-range-selector-label>
-      <dxo-range-selector-format type="fixedPoint" [precision]="3"> </dxo-range-selector-format>
-    </dxo-range-selector-label>
-  </dxo-range-selector-scale>
-  <dxo-range-selector-slider-marker [customizeText]="customizeText">
-    <dxo-range-selector-format type="fixedPoint" [precision]="4"> </dxo-range-selector-format>
-  </dxo-range-selector-slider-marker>
-  <dxo-range-selector-behavior [snapToTicks]="false"> </dxo-range-selector-behavior>
+    <dxo-label>
+      <dxo-format type="fixedPoint" [precision]="3"> </dxo-format>
+    </dxo-label>
+  </dxo-scale>
+  <dxo-slider-marker [customizeText]="customizeText">
+    <dxo-format type="fixedPoint" [precision]="4"> </dxo-format>
+  </dxo-slider-marker>
+  <dxo-behavior [snapToTicks]="false"> </dxo-behavior>
 </dx-range-selector>

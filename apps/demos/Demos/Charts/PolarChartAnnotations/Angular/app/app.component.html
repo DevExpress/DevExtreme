@@ -3,17 +3,17 @@
   [dataSource]="temperaturesData"
   title="Average temperature in London"
 >
-  <dxo-polar-chart-common-series-settings type="bar" [opacity]="0.75">
-  </dxo-polar-chart-common-series-settings>
-  <dxi-polar-chart-series valueField="day" name="Day" color="#fdff5e"> </dxi-polar-chart-series>
-  <dxi-polar-chart-series valueField="night" name="Night" color="#0f3b59"> </dxi-polar-chart-series>
-  <dxo-polar-chart-common-annotation-settings type="text" [opacity]="0.7" [arrowLength]="0">
-  </dxo-polar-chart-common-annotation-settings>
-  <dxi-polar-chart-annotation text="WINTER" [angle]="45" [radius]="180"> </dxi-polar-chart-annotation>
-  <dxi-polar-chart-annotation text="SPRING" [angle]="135" [radius]="180"> </dxi-polar-chart-annotation>
-  <dxi-polar-chart-annotation text="SUMMER" [angle]="225" [radius]="180"> </dxi-polar-chart-annotation>
-  <dxi-polar-chart-annotation text="FALL" [angle]="315" [radius]="180"> </dxi-polar-chart-annotation>
-  <dxi-polar-chart-annotation
+  <dxo-common-series-settings type="bar" [opacity]="0.75">
+  </dxo-common-series-settings>
+  <dxi-series valueField="day" name="Day" color="#fdff5e"> </dxi-series>
+  <dxi-series valueField="night" name="Night" color="#0f3b59"> </dxi-series>
+  <dxo-common-annotation-settings type="text" [opacity]="0.7" [arrowLength]="0">
+  </dxo-common-annotation-settings>
+  <dxi-annotation text="WINTER" [angle]="45" [radius]="180"> </dxi-annotation>
+  <dxi-annotation text="SPRING" [angle]="135" [radius]="180"> </dxi-annotation>
+  <dxi-annotation text="SUMMER" [angle]="225" [radius]="180"> </dxi-annotation>
+  <dxi-annotation text="FALL" [angle]="315" [radius]="180"> </dxi-annotation>
+  <dxi-annotation
     [argument]="maxDay.arg"
     series="Day"
     text="Highest temperature: {{ maxDay.day }} °C"
@@ -22,8 +22,8 @@
     [paddingTopBottom]="15"
     [paddingLeftRight]="15"
   >
-  </dxi-polar-chart-annotation>
-  <dxi-polar-chart-annotation
+  </dxi-annotation>
+  <dxi-annotation
     [argument]="minNight.arg"
     series="Night"
     text="Lowest temperature: {{ minNight.night }} °C"
@@ -32,15 +32,15 @@
     [paddingTopBottom]="15"
     [paddingLeftRight]="15"
   >
-  </dxi-polar-chart-annotation>
-  <dxo-polar-chart-argument-axis>
-    <dxi-polar-chart-strip startValue="December" endValue="February" color="#0076d1">
-    </dxi-polar-chart-strip>
-    <dxi-polar-chart-strip startValue="March" endValue="May" color="#3ca3b0"> </dxi-polar-chart-strip>
-    <dxi-polar-chart-strip startValue="June" endValue="August" color="#3fbc1e"> </dxi-polar-chart-strip>
-    <dxi-polar-chart-strip startValue="September" endValue="November" color="#f0bb00">
-    </dxi-polar-chart-strip>
-  </dxo-polar-chart-argument-axis>
-  <dxo-polar-chart-legend horizontalAlignment="center" verticalAlignment="bottom">
-  </dxo-polar-chart-legend>
+  </dxi-annotation>
+  <dxo-argument-axis>
+    <dxi-strip startValue="December" endValue="February" color="#0076d1">
+    </dxi-strip>
+    <dxi-strip startValue="March" endValue="May" color="#3ca3b0"> </dxi-strip>
+    <dxi-strip startValue="June" endValue="August" color="#3fbc1e"> </dxi-strip>
+    <dxi-strip startValue="September" endValue="November" color="#f0bb00">
+    </dxi-strip>
+  </dxo-argument-axis>
+  <dxo-legend horizontalAlignment="center" verticalAlignment="bottom">
+  </dxo-legend>
 </dx-polar-chart>

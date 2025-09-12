@@ -9,37 +9,37 @@
   [(focusedRowKey)]="focusedRowKey"
   (onFocusedRowChanged)="onFocusedRowChanged($event)"
 >
-  <dxo-tree-list-remote-operations
+  <dxo-remote-operations
     [filtering]="true"
     [sorting]="true"
     [grouping]="true"
-  ></dxo-tree-list-remote-operations>
+  ></dxo-remote-operations>
 
-  <dxi-tree-list-column dataField="Task_ID" width="100" alignment="left"></dxi-tree-list-column>
-  <dxi-tree-list-column
+  <dxi-column dataField="Task_ID" width="100" alignment="left"></dxi-column>
+  <dxi-column
     dataField="Task_Assigned_Employee_ID"
     caption="Assigned"
     minWidth="120"
   >
-    <dxo-tree-list-lookup
+    <dxo-lookup
       [dataSource]="taskEmployees"
       valueExpr="ID"
       displayExpr="Name"
-    ></dxo-tree-list-lookup>
-  </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Task_Status" caption="Status" width="160"></dxi-tree-list-column>
-  <dxi-tree-list-column
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="Task_Status" caption="Status" width="160"></dxi-column>
+  <dxi-column
     dataField="Task_Start_Date"
     caption="Start Date"
     dataType="date"
     width="160"
-  ></dxi-tree-list-column>
-  <dxi-tree-list-column
+  ></dxi-column>
+  <dxi-column
     dataField="Task_Due_Date"
     caption="Due Date"
     dataType="date"
     width="160"
-  ></dxi-tree-list-column>
+  ></dxi-column>
 </dx-tree-list>
 
 <div class="task-info">

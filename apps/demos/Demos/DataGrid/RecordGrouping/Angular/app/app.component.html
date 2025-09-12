@@ -6,17 +6,17 @@
   [width]="'100%'"
   [showBorders]="true"
 >
-  <dxi-data-grid-column dataField="CompanyName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Phone"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Fax"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="State" [groupIndex]="0"></dxi-data-grid-column>
+  <dxi-column dataField="CompanyName"></dxi-column>
+  <dxi-column dataField="Phone"></dxi-column>
+  <dxi-column dataField="Fax"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
 
-  <dxo-data-grid-search-panel [visible]="true"></dxo-data-grid-search-panel>
-  <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
-  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-grouping #expand [autoExpandAll]="true"></dxo-data-grid-grouping>
+  <dxo-search-panel [visible]="true"></dxo-search-panel>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager [visible]="true"></dxo-pager>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

@@ -9,36 +9,36 @@
   [startDayHour]="7"
   [endDayHour]="23"
 >
-  <dxi-scheduler-view type="day"></dxi-scheduler-view>
-  <dxi-scheduler-view
+  <dxi-view type="day"></dxi-view>
+  <dxi-view
     type="week"
     [groups]="['typeId']"
     dateCellTemplate="dateCellTemplate"
-  ></dxi-scheduler-view>
-  <dxi-scheduler-view
+  ></dxi-view>
+  <dxi-view
     type="workWeek"
     [startDayHour]="9"
     [endDayHour]="18"
     [groups]="['priorityId']"
     dateCellTemplate="dateCellTemplate"
-  ></dxi-scheduler-view>
-  <dxi-scheduler-view type="month"></dxi-scheduler-view>
+  ></dxi-view>
+  <dxi-view type="month"></dxi-view>
 
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="priorityId"
     [allowMultiple]="false"
     [dataSource]="priorityData"
     label="Priority"
   >
-  </dxi-scheduler-resource>
+  </dxi-resource>
 
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="typeId"
     [allowMultiple]="false"
     [dataSource]="typeData"
     label="Type"
   >
-  </dxi-scheduler-resource>
+  </dxi-resource>
 
   <div *dxTemplate="let data of 'dateCellTemplate'">
     <div class="name">{{

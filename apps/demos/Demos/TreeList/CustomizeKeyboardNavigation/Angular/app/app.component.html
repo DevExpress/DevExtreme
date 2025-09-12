@@ -7,19 +7,19 @@
   [expandedRowKeys]="[1, 2, 4, 5]"
   (onFocusedCellChanging)="onFocusedCellChanging($event)"
 >
-  <dxo-tree-list-keyboard-navigation
+  <dxo-keyboard-navigation
     [editOnKeyPress]="editOnkeyPress"
     [enterKeyAction]="enterKeyAction"
     [enterKeyDirection]="enterKeyDirection"
   >
-  </dxo-tree-list-keyboard-navigation>
-  <dxo-tree-list-editing mode="batch" [allowUpdating]="true" startEditAction="dblClick">
-  </dxo-tree-list-editing>
-  <dxi-tree-list-column dataField="Full_Name"> </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Prefix" caption="Title"> </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Title" caption="Position"> </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="City"> </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Hire_Date" dataType="date"> </dxi-tree-list-column>
+  </dxo-keyboard-navigation>
+  <dxo-editing mode="batch" [allowUpdating]="true" startEditAction="dblClick">
+  </dxo-editing>
+  <dxi-column dataField="Full_Name"> </dxi-column>
+  <dxi-column dataField="Prefix" caption="Title"> </dxi-column>
+  <dxi-column dataField="Title" caption="Position"> </dxi-column>
+  <dxi-column dataField="City"> </dxi-column>
+  <dxi-column dataField="Hire_Date" dataType="date"> </dxi-column>
 </dx-tree-list>
 
 <div class="options">

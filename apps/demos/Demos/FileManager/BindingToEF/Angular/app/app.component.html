@@ -5,29 +5,29 @@
   [allowedFileExtensions]="allowedFileExtensions"
   height="550"
 >
-  <dxo-file-manager-permissions
+  <dxo-permissions
     [create]="true"
     [copy]="true"
     [move]="true"
     [delete]="true"
     [rename]="true"
   >
-  </dxo-file-manager-permissions>
-  <dxo-file-manager-item-view>
-    <dxo-file-manager-details>
-      <dxi-file-manager-column dataField="thumbnail"></dxi-file-manager-column>
-      <dxi-file-manager-column dataField="name"></dxi-file-manager-column>
-      <dxi-file-manager-column dataField="dateModified" caption="Modified"></dxi-file-manager-column>
-      <dxi-file-manager-column
+  </dxo-permissions>
+  <dxo-item-view>
+    <dxo-details>
+      <dxi-column dataField="thumbnail"></dxi-column>
+      <dxi-column dataField="name"></dxi-column>
+      <dxi-column dataField="dateModified" caption="Modified"></dxi-column>
+      <dxi-column
         dataField="created"
         caption="Created"
         dataType="date"
-      ></dxi-file-manager-column>
-      <dxi-file-manager-column
+      ></dxi-column>
+      <dxi-column
         dataField="modifiedBy"
         caption="Modified By"
         visibleIndex="2"
-      ></dxi-file-manager-column>
-    </dxo-file-manager-details>
-  </dxo-file-manager-item-view>
+      ></dxi-column>
+    </dxo-details>
+  </dxo-item-view>
 </dx-file-manager>

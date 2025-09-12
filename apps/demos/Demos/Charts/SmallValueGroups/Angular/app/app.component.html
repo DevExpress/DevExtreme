@@ -4,22 +4,22 @@
   palette="bright"
   [dataSource]="internetLanguages"
 >
-  <dxo-pie-chart-legend
+  <dxo-legend
     horizontalAlignment="center"
     verticalAlignment="bottom"
-  ></dxo-pie-chart-legend>
-  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
-  <dxi-pie-chart-series argumentField="language" valueField="percent">
-    <dxo-pie-chart-label
+  ></dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-series argumentField="language" valueField="percent">
+    <dxo-label
       [visible]="true"
       format="fixedPoint"
       [customizeText]="customizeLabel"
     >
-      <dxo-pie-chart-connector [visible]="true" [width]="0.5"></dxo-pie-chart-connector>
-    </dxo-pie-chart-label>
-    <dxo-pie-chart-small-values-grouping
+      <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
+    </dxo-label>
+    <dxo-small-values-grouping
       mode="smallValueThreshold"
       [threshold]="4.5"
-    ></dxo-pie-chart-small-values-grouping>
-  </dxi-pie-chart-series>
+    ></dxo-small-values-grouping>
+  </dxi-series>
 </dx-pie-chart>

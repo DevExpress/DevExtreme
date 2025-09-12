@@ -6,13 +6,13 @@
   (onDone)="done($event)"
   (onPointClick)="pointClick($event)"
 >
-  <dxi-chart-series valueField="count" name="breeds" color="#a3d6d2">
-    <dxo-chart-selection-style color="#ec2e7a">
-      <dxo-chart-hatching direction="none"></dxo-chart-hatching>
-    </dxo-chart-selection-style>
-  </dxi-chart-series>
-  <dxo-chart-common-series-settings argumentField="breed" type="bar">
-  </dxo-chart-common-series-settings>
-  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  <dxi-series valueField="count" name="breeds" color="#a3d6d2">
+    <dxo-selection-style color="#ec2e7a">
+      <dxo-hatching direction="none"></dxo-hatching>
+    </dxo-selection-style>
+  </dxi-series>
+  <dxo-common-series-settings argumentField="breed" type="bar">
+  </dxo-common-series-settings>
+  <dxo-legend [visible]="false"></dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

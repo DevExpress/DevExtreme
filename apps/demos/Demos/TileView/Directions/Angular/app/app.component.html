@@ -7,7 +7,7 @@
   [itemMargin]="10"
   direction="horizontal"
 >
-  <dxi-tile-view-item
+  <dxi-item
     *ngFor="let home of homes"
     [widthRatio]="home.widthRatio"
     [heightRatio]="home.heightRatio"
@@ -16,7 +16,7 @@
       class="image"
       [style.background-image]="'url(' + home.ImageSrc + ')'"
     ></div>
-  </dxi-tile-view-item>
+  </dxi-item>
 </dx-tile-view>
 <div class="options">
   <div class="caption">Options</div>

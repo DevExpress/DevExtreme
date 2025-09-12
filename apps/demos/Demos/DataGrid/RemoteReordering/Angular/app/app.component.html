@@ -4,32 +4,32 @@
   [dataSource]="tasksStore"
   [showBorders]="true"
 >
-  <dxo-data-grid-row-dragging
+  <dxo-row-dragging
     [allowReordering]="true"
     [onReorder]="onReorder"
     dropFeedbackMode="push"
-  ></dxo-data-grid-row-dragging>
-  <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>
-  <dxo-data-grid-scrolling mode="virtual"></dxo-data-grid-scrolling>
-  <dxi-data-grid-column dataField="ID" [width]="55"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Owner" [width]="150">
-    <dxo-data-grid-lookup
+  ></dxo-row-dragging>
+  <dxo-sorting mode="none"></dxo-sorting>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+  <dxi-column dataField="ID" [width]="55"></dxi-column>
+  <dxi-column dataField="Owner" [width]="150">
+    <dxo-lookup
       [dataSource]="employeesStore"
       valueExpr="ID"
       displayExpr="FullName"
-    ></dxo-data-grid-lookup>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column
     dataField="AssignedEmployee"
     dataType="number"
     [width]="150"
     caption="Assignee"
   >
-    <dxo-data-grid-lookup
+    <dxo-lookup
       [dataSource]="employeesStore"
       valueExpr="ID"
       displayExpr="FullName"
-    ></dxo-data-grid-lookup>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Subject"></dxi-data-grid-column>
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="Subject"></dxi-column>
 </dx-data-grid>

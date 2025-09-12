@@ -8,39 +8,39 @@
   [columnAutoWidth]="true"
   [expandedRowKeys]="[1, 5]"
 >
-  <dxo-tree-list-column-chooser
+  <dxo-column-chooser
     #columnChooser
     [enabled]="true"
     [mode]="columnChooserModes[1].key"
   >
-    <dxo-tree-list-position
+    <dxo-position
       my="right top"
       at="right bottom"
       of=".dx-treelist-column-chooser-button"
-    ></dxo-tree-list-position>
+    ></dxo-position>
 
-    <dxo-tree-list-search
+    <dxo-search
       [enabled]="searchEnabled"
       [editorOptions]="editorOptions"
-    ></dxo-tree-list-search>
+    ></dxo-search>
 
-    <dxo-tree-list-selection
+    <dxo-selection
       [allowSelectAll]="allowSelectAll"
       [selectByClick]="selectByClick"
       [recursive]="recursive"
-    ></dxo-tree-list-selection>
-  </dxo-tree-list-column-chooser>
+    ></dxo-selection>
+  </dxo-column-chooser>
 
-  <dxi-tree-list-column dataField="Title" caption="Position"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Full_Name" [allowHiding]="false"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="City"></dxi-tree-list-column>
-  <dxi-tree-list-column dataField="State"></dxi-tree-list-column>
-  <dxi-tree-list-column caption="Contacts">
-    <dxi-tree-list-column dataField="Mobile_Phone" [allowHiding]="false"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="Email"></dxi-tree-list-column>
-    <dxi-tree-list-column dataField="Skype" [visible]="false"></dxi-tree-list-column>
-  </dxi-tree-list-column>
-  <dxi-tree-list-column dataField="Hire_Date" dataType="date"></dxi-tree-list-column>
+  <dxi-column dataField="Title" caption="Position"></dxi-column>
+  <dxi-column dataField="Full_Name" [allowHiding]="false"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State"></dxi-column>
+  <dxi-column caption="Contacts">
+    <dxi-column dataField="Mobile_Phone" [allowHiding]="false"></dxi-column>
+    <dxi-column dataField="Email"></dxi-column>
+    <dxi-column dataField="Skype" [visible]="false"></dxi-column>
+  </dxi-column>
+  <dxi-column dataField="Hire_Date" dataType="date"></dxi-column>
 </dx-tree-list>
 
 <div class="options">

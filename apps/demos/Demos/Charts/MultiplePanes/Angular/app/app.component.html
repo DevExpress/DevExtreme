@@ -4,7 +4,7 @@
   defaultPane="bottomPane"
   title="Weather in Glendale, CA"
 >
-  <dxi-chart-series
+  <dxi-series
     pane="topPane"
     color="#b0daff"
     type="rangeArea"
@@ -12,29 +12,29 @@
     rangeValue2Field="maxT"
     name="Monthly Temperature Ranges, °C"
   >
-  </dxi-chart-series>
-  <dxi-chart-series pane="topPane" valueField="avgT" name="Average Temperature, °C">
-    <dxo-chart-label [visible]="true" [customizeText]="temperatureCustomizeText">
-    </dxo-chart-label>
-  </dxi-chart-series>
-  <dxi-chart-series type="bar" valueField="prec" name="prec, mm">
-    <dxo-chart-label [visible]="true" [customizeText]="precipitationCustomizeText">
-    </dxo-chart-label>
-  </dxi-chart-series>
-  <dxo-chart-common-series-settings
+  </dxi-series>
+  <dxi-series pane="topPane" valueField="avgT" name="Average Temperature, °C">
+    <dxo-label [visible]="true" [customizeText]="temperatureCustomizeText">
+    </dxo-label>
+  </dxi-series>
+  <dxi-series type="bar" valueField="prec" name="prec, mm">
+    <dxo-label [visible]="true" [customizeText]="precipitationCustomizeText">
+    </dxo-label>
+  </dxi-series>
+  <dxo-common-series-settings
     argumentField="month"
-  ></dxo-chart-common-series-settings>
-  <dxi-chart-pane name="topPane"></dxi-chart-pane>
-  <dxi-chart-pane name="bottomPane"></dxi-chart-pane>
-  <dxi-chart-value-axis pane="bottomPane">
-    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
-    <dxo-chart-title text="Precipitation, mm"></dxo-chart-title>
-  </dxi-chart-value-axis>
-  <dxi-chart-value-axis pane="topPane">
-    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
-    <dxo-chart-title text="Temperature, °C"></dxo-chart-title>
-  </dxi-chart-value-axis>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  ></dxo-common-series-settings>
+  <dxi-pane name="topPane"></dxi-pane>
+  <dxi-pane name="bottomPane"></dxi-pane>
+  <dxi-value-axis pane="bottomPane">
+    <dxo-grid [visible]="true"></dxo-grid>
+    <dxo-title text="Precipitation, mm"></dxo-title>
+  </dxi-value-axis>
+  <dxi-value-axis pane="topPane">
+    <dxo-grid [visible]="true"></dxo-grid>
+    <dxo-title text="Temperature, °C"></dxo-title>
+  </dxi-value-axis>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

@@ -25,9 +25,9 @@
       [items]="selectedEmployees"
       showScrollbar="always"
     >
-      <dxi-list-item *ngFor="let item of selectedEmployees">
+      <dxi-item *ngFor="let item of selectedEmployees">
         {{ item.prefix + " " + item.fullName + " (" + item.position + ")" }}
-      </dxi-list-item>
+      </dxi-item>
     </dx-list>
   </div>
 </div>

@@ -3,60 +3,60 @@
 </div>
 <div id="form-container">
   <dx-form id="form" [formData]="employee" [colCount]="2">
-    <dxi-form-item
+    <dxi-item
       itemType="group"
       captionTemplate="info"
       caption="System Information"
     >
-      <dxi-form-item dataField="ID"></dxi-form-item>
-      <dxi-form-item
+      <dxi-item dataField="ID"></dxi-item>
+      <dxi-item
         itemType="group"
         captionTemplate="user"
         caption="Main Information"
       >
-        <dxi-form-item dataField="FirstName"></dxi-form-item>
-        <dxi-form-item dataField="LastName"></dxi-form-item>
-        <dxi-form-item dataField="HireDate"></dxi-form-item>
-        <dxi-form-item dataField="Position"></dxi-form-item>
-        <dxi-form-item dataField="OfficeNo"></dxi-form-item>
-      </dxi-form-item>
-    </dxi-form-item>
-    <dxi-form-item
+        <dxi-item dataField="FirstName"></dxi-item>
+        <dxi-item dataField="LastName"></dxi-item>
+        <dxi-item dataField="HireDate"></dxi-item>
+        <dxi-item dataField="Position"></dxi-item>
+        <dxi-item dataField="OfficeNo"></dxi-item>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item
       itemType="group"
       captionTemplate="personal"
       caption="Personal Data"
     >
-      <dxi-form-item dataField="BirthDate"></dxi-form-item>
-      <dxi-form-item
+      <dxi-item dataField="BirthDate"></dxi-item>
+      <dxi-item
         itemType="group"
         captionTemplate="address"
         caption="Home Address"
       >
-        <dxi-form-item dataField="Address"></dxi-form-item>
-        <dxi-form-item dataField="City"></dxi-form-item>
-        <dxi-form-item dataField="State"></dxi-form-item>
-        <dxi-form-item dataField="Zipcode"></dxi-form-item>
-      </dxi-form-item>
-    </dxi-form-item>
-    <dxi-form-item
+        <dxi-item dataField="Address"></dxi-item>
+        <dxi-item dataField="City"></dxi-item>
+        <dxi-item dataField="State"></dxi-item>
+        <dxi-item dataField="Zipcode"></dxi-item>
+      </dxi-item>
+    </dxi-item>
+    <dxi-item
       itemType="group"
       captionTemplate="contact"
       caption="Contact Information"
     >
-      <dxi-form-item itemType="tabbed">
-        <dxo-form-tab-panel-options [deferRendering]="false">
-        </dxo-form-tab-panel-options>
-        <dxi-form-tab title="Phone">
-          <dxi-form-item dataField="Phone"></dxi-form-item>
-        </dxi-form-tab>
-        <dxi-form-tab title="Skype">
-          <dxi-form-item dataField="Skype"></dxi-form-item>
-        </dxi-form-tab>
-        <dxi-form-tab title="Email">
-          <dxi-form-item dataField="Email"></dxi-form-item>
-        </dxi-form-tab>
-      </dxi-form-item>
-    </dxi-form-item>
+      <dxi-item itemType="tabbed">
+        <dxo-tab-panel-options [deferRendering]="false">
+        </dxo-tab-panel-options>
+        <dxi-tab title="Phone">
+          <dxi-item dataField="Phone"></dxi-item>
+        </dxi-tab>
+        <dxi-tab title="Skype">
+          <dxi-item dataField="Skype"></dxi-item>
+        </dxi-tab>
+        <dxi-tab title="Email">
+          <dxi-item dataField="Email"></dxi-item>
+        </dxi-tab>
+      </dxi-item>
+    </dxi-item>
 
     <ng-container *ngFor="let label of groupCaptionTemplates">
       <div *dxTemplate="let data of label.name">

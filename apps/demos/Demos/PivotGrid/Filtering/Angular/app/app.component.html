@@ -7,17 +7,17 @@
   [height]="570"
   [dataSource]="pivotGridDataSource"
 >
-  <dxo-pivot-grid-header-filter
+  <dxo-header-filter
     [showRelevantValues]="showRelevantValues"
     [width]="300"
     [height]="400"
   >
-    <dxo-pivot-grid-search [enabled]="searchEnabled"></dxo-pivot-grid-search>
-  </dxo-pivot-grid-header-filter>
+    <dxo-search [enabled]="searchEnabled"></dxo-search>
+  </dxo-header-filter>
 
-  <dxo-pivot-grid-field-chooser [allowSearch]="true"></dxo-pivot-grid-field-chooser>
+  <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
 
-  <dxo-pivot-grid-field-panel [visible]="true"> </dxo-pivot-grid-field-panel>
+  <dxo-field-panel [visible]="true"> </dxo-field-panel>
 </dx-pivot-grid>
 
 <div class="options">

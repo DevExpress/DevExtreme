@@ -3,9 +3,9 @@
   [bounds]="[-180, 85, 180, -60]"
   (onClick)="click($event)"
 >
-  <dxo-vector-map-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
-    <dxo-vector-map-font color="#fff"></dxo-vector-map-font>
-    <dxo-vector-map-border [visible]="false"></dxo-vector-map-border>
-  </dxo-vector-map-tooltip>
-  <dxi-vector-map-layer [dataSource]="worldMap" [customize]="customizeLayers"> </dxi-vector-map-layer>
+  <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip">
+    <dxo-font color="#fff"></dxo-font>
+    <dxo-border [visible]="false"></dxo-border>
+  </dxo-tooltip>
+  <dxi-layer [dataSource]="worldMap" [customize]="customizeLayers"> </dxi-layer>
 </dx-vector-map>

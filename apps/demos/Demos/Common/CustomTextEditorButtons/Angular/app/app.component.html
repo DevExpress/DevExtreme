@@ -9,11 +9,11 @@
         stylingMode="filled"
         [(mode)]="passwordMode"
       >
-        <dxi-text-box-button
+        <dxi-button
           name="today"
           location="after"
           [options]="passwordButton"
-        ></dxi-text-box-button>
+        ></dxi-button>
       </dx-text-box>
     </div>
   </div>
@@ -27,13 +27,13 @@
         [showSpinButtons]="true"
         [inputAttr]="{ 'aria-label': 'Currency Format' }"
       >
-        <dxi-number-box-button
+        <dxi-button
           name="currency"
           location="after"
           [options]="currencyButton"
-        ></dxi-number-box-button>
-        <dxi-number-box-button name="clear"></dxi-number-box-button>
-        <dxi-number-box-button name="spins"></dxi-number-box-button>
+        ></dxi-button>
+        <dxi-button name="clear"></dxi-button>
+        <dxi-button name="spins"></dxi-button>
       </dx-number-box>
     </div>
   </div>
@@ -45,22 +45,22 @@
         [(value)]="dateValue"
         [inputAttr]="{ 'aria-label': 'Date' }"
       >
-        <dxi-date-box-button
+        <dxi-button
           name="today"
           location="before"
           [options]="todayButton"
-        ></dxi-date-box-button>
-        <dxi-date-box-button
+        ></dxi-button>
+        <dxi-button
           name="prevDate"
           location="before"
           [options]="prevDateButton"
-        ></dxi-date-box-button>
-        <dxi-date-box-button
+        ></dxi-button>
+        <dxi-button
           name="nextDate"
           location="after"
           [options]="nextDateButton"
-        ></dxi-date-box-button>
-        <dxi-date-box-button name="dropDown"></dxi-date-box-button>
+        ></dxi-button>
+        <dxi-button name="dropDown"></dxi-button>
       </dx-date-box>
     </div>
   </div>

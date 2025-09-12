@@ -1,8 +1,8 @@
 <dx-pie-chart id="pie" [dataSource]="data" [customizePoint]="customizePoint">
-  <dxi-pie-chart-series argumentField="type" valueField="value">
-    <dxo-pie-chart-label [visible]="true" [customizeText]="customizeText">
-      <dxo-pie-chart-connector [visible]="true"></dxo-pie-chart-connector>
-    </dxo-pie-chart-label>
-  </dxi-pie-chart-series>
-  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
+  <dxi-series argumentField="type" valueField="value">
+    <dxo-label [visible]="true" [customizeText]="customizeText">
+      <dxo-connector [visible]="true"></dxo-connector>
+    </dxo-label>
+  </dxi-series>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-pie-chart>

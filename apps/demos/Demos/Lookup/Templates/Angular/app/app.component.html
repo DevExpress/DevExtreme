@@ -10,7 +10,7 @@
       fieldTemplate="field"
       [inputAttr]="{ 'aria-label': 'Custom Field Template' }"
     >
-      <dxo-lookup-drop-down-options title="Select employee"></dxo-lookup-drop-down-options>
+      <dxo-drop-down-options title="Select employee"></dxo-drop-down-options>
       <div *dxTemplate="let item of 'field'">
         <div class="custom-field">
           <img alt="{{ item.FirstName }}" src="{{ item.Picture }}" /><div
@@ -33,7 +33,7 @@
       itemTemplate="listItem"
       [inputAttr]="{ 'aria-label': 'Custom Item Template' }"
     >
-      <dxo-lookup-drop-down-options title="Select employee"></dxo-lookup-drop-down-options>
+      <dxo-drop-down-options title="Select employee"></dxo-drop-down-options>
       <div *dxTemplate="let item of 'listItem'">
         <div class="custom-item">
           <img src="{{ item.Picture }}" /><div

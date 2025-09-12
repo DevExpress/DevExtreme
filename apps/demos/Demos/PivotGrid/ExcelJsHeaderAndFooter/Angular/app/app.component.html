@@ -9,7 +9,7 @@
   [dataSource]="dataSource"
   (onExporting)="onExporting($event)"
 >
-  <dxo-pivot-grid-field-panel
+  <dxo-field-panel
     [showDataFields]="true"
     [showRowFields]="true"
     [showColumnFields]="true"
@@ -17,9 +17,9 @@
     [allowFieldDragging]="true"
     [visible]="true"
   >
-  </dxo-pivot-grid-field-panel>
-  <dxo-pivot-grid-field-chooser [enabled]="false"></dxo-pivot-grid-field-chooser>
-  <dxo-pivot-grid-export [enabled]="true"></dxo-pivot-grid-export>
+  </dxo-field-panel>
+  <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-pivot-grid>
 
 <div class="export-options">

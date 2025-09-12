@@ -5,13 +5,13 @@
       [value]="gaugeValue"
       [subvalues]="gaugeSubvalues"
     >
-      <dxo-circular-gauge-scale [startValue]="10" [endValue]="40" [tickInterval]="5">
-        <dxo-circular-gauge-label [customizeText]="customizeText"></dxo-circular-gauge-label>
-      </dxo-circular-gauge-scale>
-      <dxo-circular-gauge-title text="Generators Voltage (kV)">
-        <dxo-circular-gauge-font [size]="28"></dxo-circular-gauge-font>
-      </dxo-circular-gauge-title>
-      <dxo-circular-gauge-tooltip [enabled]="true"></dxo-circular-gauge-tooltip>
+      <dxo-scale [startValue]="10" [endValue]="40" [tickInterval]="5">
+        <dxo-label [customizeText]="customizeText"></dxo-label>
+      </dxo-scale>
+      <dxo-title text="Generators Voltage (kV)">
+        <dxo-font [size]="28"></dxo-font>
+      </dxo-title>
+      <dxo-tooltip [enabled]="true"></dxo-tooltip>
     </dx-circular-gauge>
   </div>
   <div class="options">

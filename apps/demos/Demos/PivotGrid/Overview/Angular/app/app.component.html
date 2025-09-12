@@ -1,13 +1,13 @@
 <div id="pivotgrid-demo">
   <dx-chart id="sales-chart">
-    <dxo-chart-common-series-settings type="bar"></dxo-chart-common-series-settings>
-    <dxo-chart-size [height]="200"></dxo-chart-size>
-    <dxo-chart-adaptive-layout [width]="450"></dxo-chart-adaptive-layout>
-    <dxo-chart-tooltip
+    <dxo-common-series-settings type="bar"></dxo-common-series-settings>
+    <dxo-size [height]="200"></dxo-size>
+    <dxo-adaptive-layout [width]="450"></dxo-adaptive-layout>
+    <dxo-tooltip
       [enabled]="true"
       format="currency"
       [customizeTooltip]="customizeTooltip"
-    ></dxo-chart-tooltip>
+    ></dxo-tooltip>
   </dx-chart>
 
   <dx-pivot-grid
@@ -22,7 +22,7 @@
     [showColumnTotals]="false"
     [dataSource]="pivotGridDataSource"
   >
-    <dxo-pivot-grid-field-chooser [enabled]="true" [height]="400"></dxo-pivot-grid-field-chooser>
-    <dxo-pivot-grid-scrolling mode="virtual"></dxo-pivot-grid-scrolling>
+    <dxo-field-chooser [enabled]="true" [height]="400"></dxo-field-chooser>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
   </dx-pivot-grid>
 </div>

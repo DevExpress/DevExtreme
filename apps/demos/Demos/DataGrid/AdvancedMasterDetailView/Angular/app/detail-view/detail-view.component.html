@@ -1,10 +1,10 @@
 <dx-tab-panel>
-  <dxi-tab-panel-item title="Orders" template="ordersTab"></dxi-tab-panel-item>
+  <dxi-item title="Orders" template="ordersTab"></dxi-item>
   <div *dxTemplate="let ordersTabItem of 'ordersTab'">
     <dx-form labelLocation="top" class="form-container">
-      <dxi-tab-panel-item-item template="productSelectBox">
-        <dxo-form-label text="Product"></dxo-form-label>
-      </dxi-tab-panel-item-item>
+      <dxi-item template="productSelectBox">
+        <dxo-label text="Product"></dxo-label>
+      </dxi-item>
       <div *dxTemplate="let selectBoxItem of 'productSelectBox'">
         <dx-select-box
           [value]="productIdBySupplier"
@@ -18,38 +18,38 @@
         </dx-select-box>
       </div>
 
-      <dxi-tab-panel-item-item template="orderHistory">
-        <dxo-form-label text="Order History"></dxo-form-label>
-      </dxi-tab-panel-item-item>
+      <dxi-item template="orderHistory">
+        <dxo-label text="Order History"></dxo-label>
+      </dxi-item>
       <div *dxTemplate="let order of 'orderHistory'">
         <dx-data-grid [dataSource]="orderHistoryData" [showBorders]="true">
-          <dxo-data-grid-paging [pageSize]="5"></dxo-data-grid-paging>
+          <dxo-paging [pageSize]="5"></dxo-paging>
 
-          <dxi-data-grid-column dataField="OrderID"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="OrderDate" dataType="date"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="ShipCountry"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="ShipCity"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="UnitPrice" format="currency"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="Quantity"></dxi-data-grid-column>
-          <dxi-data-grid-column dataField="Discount" format="percent"></dxi-data-grid-column>
+          <dxi-column dataField="OrderID"></dxi-column>
+          <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+          <dxi-column dataField="ShipCountry"></dxi-column>
+          <dxi-column dataField="ShipCity"></dxi-column>
+          <dxi-column dataField="UnitPrice" format="currency"></dxi-column>
+          <dxi-column dataField="Quantity"></dxi-column>
+          <dxi-column dataField="Discount" format="percent"></dxi-column>
 
-          <dxo-data-grid-summary>
-            <dxi-data-grid-total-item column="UnitPrice" summaryType="sum">
-              <dxo-data-grid-value-format
+          <dxo-summary>
+            <dxi-total-item column="UnitPrice" summaryType="sum">
+              <dxo-value-format
                 format="currency"
                 [precision]="2"
-              ></dxo-data-grid-value-format>
-            </dxi-data-grid-total-item>
-            <dxi-data-grid-total-item
+              ></dxo-value-format>
+            </dxi-total-item>
+            <dxi-total-item
               column="Quantity"
               summaryType="count"
-            ></dxi-data-grid-total-item>
-          </dxo-data-grid-summary>
+            ></dxi-total-item>
+          </dxo-summary>
         </dx-data-grid>
       </div>
     </dx-form>
   </div>
-  <dxi-tab-panel-item title="Address" template="addressTab"></dxi-tab-panel-item>
+  <dxi-item title="Address" template="addressTab"></dxi-item>
   <div *dxTemplate="let addressTabItem of 'addressTab'">
     <dx-form
       [formData]="rowData"
@@ -57,12 +57,12 @@
       [customizeItem]="customizeItemTemplate"
       class="address-form form-container"
     >
-      <dxi-tab-panel-item-item dataField="Address"></dxi-tab-panel-item-item>
-      <dxi-tab-panel-item-item dataField="City"></dxi-tab-panel-item-item>
-      <dxi-tab-panel-item-item dataField="Region"></dxi-tab-panel-item-item>
-      <dxi-tab-panel-item-item dataField="PostalCode"></dxi-tab-panel-item-item>
-      <dxi-tab-panel-item-item dataField="Country"></dxi-tab-panel-item-item>
-      <dxi-tab-panel-item-item dataField="Phone"></dxi-tab-panel-item-item>
+      <dxi-item dataField="Address"></dxi-item>
+      <dxi-item dataField="City"></dxi-item>
+      <dxi-item dataField="Region"></dxi-item>
+      <dxi-item dataField="PostalCode"></dxi-item>
+      <dxi-item dataField="Country"></dxi-item>
+      <dxi-item dataField="Phone"></dxi-item>
 
       <div *dxTemplate="let item of 'formItem'">
         <span>{{ item.editorOptions.value }}</span>

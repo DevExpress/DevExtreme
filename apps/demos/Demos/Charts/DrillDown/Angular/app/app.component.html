@@ -5,12 +5,12 @@
   (onClick)="nodeClick($event)"
   (onDrill)="drill($event)"
 >
-  <dxo-tree-map-size height="440"></dxo-tree-map-size>
-  <dxo-tree-map-title
+  <dxo-size height="440"></dxo-size>
+  <dxo-title
     text="The Most Populated Cities by Continents"
     [placeholderSize]="80"
-  ></dxo-tree-map-title>
-  <dxo-tree-map-colorizer palette="soft"></dxo-tree-map-colorizer>
+  ></dxo-title>
+  <dxo-colorizer palette="soft"></dxo-colorizer>
 </dx-tree-map>
 <div id="drill-down-title">
   <span *ngFor="let drillInfo of drillInfos; let isLast = last">

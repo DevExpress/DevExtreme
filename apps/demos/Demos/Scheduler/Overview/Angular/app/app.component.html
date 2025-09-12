@@ -13,13 +13,13 @@
   resourceCellTemplate="resourceCellTemplate"
   dataCellTemplate="dataCellTemplate"
 >
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="employeeID"
     [allowMultiple]="false"
     [dataSource]="resourcesDataSource"
     label="Employee"
   >
-  </dxi-scheduler-resource>
+  </dxi-resource>
 
   <div *dxTemplate="let employee of 'resourceCellTemplate'">
     <div class="name" [style.background]="employee.color">

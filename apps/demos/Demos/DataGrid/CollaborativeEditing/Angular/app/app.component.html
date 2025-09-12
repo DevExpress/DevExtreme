@@ -7,9 +7,9 @@
       [repaintChangesOnly]="true"
       [highlightChanges]="true"
     >
-      <dxo-data-grid-paging [enabled]="false"> </dxo-data-grid-paging>
+      <dxo-paging [enabled]="false"> </dxo-paging>
 
-      <dxo-data-grid-editing
+      <dxo-editing
         mode="cell"
         refreshMode="reshape"
         [allowUpdating]="true"
@@ -17,34 +17,34 @@
         [allowAdding]="true"
         [useIcons]="true"
       >
-      </dxo-data-grid-editing>
+      </dxo-editing>
 
-      <dxi-data-grid-column dataField="Prefix" caption="Title" [width]="50">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
-      </dxi-data-grid-column>
+      <dxi-column dataField="Prefix" caption="Title" [width]="50">
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dxi-column>
 
-      <dxi-data-grid-column dataField="FirstName">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
-      </dxi-data-grid-column>
+      <dxi-column dataField="FirstName">
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dxi-column>
 
-      <dxi-data-grid-column dataField="StateID" caption="State">
-        <dxi-data-grid-validation-rule type="required"> </dxi-data-grid-validation-rule>
-        <dxo-data-grid-lookup
+      <dxi-column dataField="StateID" caption="State">
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+        <dxo-lookup
           [dataSource]="stateDataSource"
           displayExpr="Name"
           valueExpr="ID"
         >
-        </dxo-data-grid-lookup>
-      </dxi-data-grid-column>
+        </dxo-lookup>
+      </dxi-column>
 
-      <dxi-data-grid-column dataField="BirthDate" dataType="date">
-        <dxi-data-grid-validation-rule
+      <dxi-column dataField="BirthDate" dataType="date">
+        <dxi-validation-rule
           type="range"
           [max]="maxDate"
           message="Date can not be greater than 01/01/3000"
         >
-        </dxi-data-grid-validation-rule>
-      </dxi-data-grid-column>
+        </dxi-validation-rule>
+      </dxi-column>
     </dx-data-grid>
   </div>
 </div>

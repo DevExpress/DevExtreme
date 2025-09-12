@@ -4,22 +4,22 @@
   [dataSource]="chartDataSource"
   [zoomAndPan]="{ argumentAxis: 'pan' }"
 >
-  <dxo-chart-scroll-bar [visible]="true"></dxo-chart-scroll-bar>
-  <dxo-chart-argument-axis
+  <dxo-scroll-bar [visible]="true"></dxo-scroll-bar>
+  <dxo-argument-axis
     argumentType="datetime"
     [(visualRange)]="currentVisualRange"
     [wholeRange]="bounds"
   >
-  </dxo-chart-argument-axis>
-  <dxi-chart-value-axis name="temperature" [allowDecimals]="false">
-    <dxo-chart-title text="Temperature, &deg;C">
-      <dxo-chart-font color="#ff950c"></dxo-chart-font>
-    </dxo-chart-title>
-    <dxo-chart-label>
-      <dxo-chart-font color="#ff950c"></dxo-chart-font>
-    </dxo-chart-label>
-  </dxi-chart-value-axis>
-  <dxi-chart-series
+  </dxo-argument-axis>
+  <dxi-value-axis name="temperature" [allowDecimals]="false">
+    <dxo-title text="Temperature, &deg;C">
+      <dxo-font color="#ff950c"></dxo-font>
+    </dxo-title>
+    <dxo-label>
+      <dxo-font color="#ff950c"></dxo-font>
+    </dxo-label>
+  </dxi-value-axis>
+  <dxi-series
     color="#ff950c"
     type="rangeArea"
     argumentField="date"
@@ -27,10 +27,10 @@
     rangeValue2Field="maxTemp"
     name="Temperature range"
   >
-  </dxi-chart-series>
-  <dxo-chart-animation [enabled]="false"></dxo-chart-animation>
-  <dxo-chart-loading-indicator backgroundColor="none">
-    <dxo-chart-font [size]="14"></dxo-chart-font>
-  </dxo-chart-loading-indicator>
-  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
+  </dxi-series>
+  <dxo-animation [enabled]="false"></dxo-animation>
+  <dxo-loading-indicator backgroundColor="none">
+    <dxo-font [size]="14"></dxo-font>
+  </dxo-loading-indicator>
+  <dxo-legend [visible]="false"></dxo-legend>
 </dx-chart>

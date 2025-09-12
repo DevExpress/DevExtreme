@@ -5,7 +5,7 @@
   customShapeToolboxTemplate="customShapeToolboxTemplate"
   (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)"
 >
-  <dxi-diagram-custom-shape
+  <dxi-custom-shape
     type="employee"
     baseType="rectangle"
     category="employee"
@@ -19,7 +19,7 @@
     [maxHeight]="2"
     [allowEditText]="false"
   >
-  </dxi-diagram-custom-shape>
+  </dxi-custom-shape>
   <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
     <text class="template-name" x="50%" y="20%">
       {{ item.dataItem ? item.dataItem.Full_Name : "Employee's Name" }}
@@ -48,32 +48,32 @@
     <text x="50%" y="40%">New</text>
     <text x="50%" y="70%">Employee</text>
   </svg>
-  <dxo-diagram-nodes
+  <dxo-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     [typeExpr]="itemTypeExpr"
     [customDataExpr]="itemCustomDataExpr"
     parentKeyExpr="Head_ID"
   >
-    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
-  </dxo-diagram-nodes>
-  <dxo-diagram-context-toolbox [width]="100" [shapeIconsPerRow]="1">
-  </dxo-diagram-context-toolbox>
-  <dxo-diagram-toolbox [showSearch]="false" [shapeIconsPerRow]="1">
-    <dxi-diagram-group
+    <dxo-auto-layout type="tree"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="1">
+  </dxo-context-toolbox>
+  <dxo-toolbox [showSearch]="false" [shapeIconsPerRow]="1">
+    <dxi-group
       category="employee"
       title="Employee"
       [expanded]="true"
-    ></dxi-diagram-group>
-  </dxo-diagram-toolbox>
-  <dxo-diagram-properties-panel>
-    <dxi-diagram-tab>
-      <dxi-diagram-group
+    ></dxi-group>
+  </dxo-toolbox>
+  <dxo-properties-panel>
+    <dxi-tab>
+      <dxi-group
         title="Page Properties"
         [commands]="['pageSize', 'pageOrientation', 'pageColor']"
-      ></dxi-diagram-group>
-    </dxi-diagram-tab>
-  </dxo-diagram-properties-panel>
+      ></dxi-group>
+    </dxi-tab>
+  </dxo-properties-panel>
 </dx-diagram>
 
 <dx-popup

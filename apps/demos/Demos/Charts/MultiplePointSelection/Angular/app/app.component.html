@@ -6,23 +6,23 @@
   title="Olympic Medals in 2008"
   (onPointClick)="pointClick($event)"
 >
-  <dxi-chart-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-chart-series>
-  <dxi-chart-series
+  <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+  <dxi-series
     valueField="silver"
     name="Silver Medals"
     color="#c0c0c0"
-  ></dxi-chart-series>
-  <dxi-chart-series
+  ></dxi-series>
+  <dxi-series
     valueField="bronze"
     name="Bronze Medals"
     color="#cd7f32"
-  ></dxi-chart-series>
-  <dxo-chart-common-series-settings argumentField="country" type="stackedbar">
-    <dxo-chart-selection-style>
-      <dxo-chart-hatching direction="left"></dxo-chart-hatching>
-    </dxo-chart-selection-style>
-  </dxo-chart-common-series-settings>
-  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-chart-legend>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  ></dxi-series>
+  <dxo-common-series-settings argumentField="country" type="stackedbar">
+    <dxo-selection-style>
+      <dxo-hatching direction="left"></dxo-hatching>
+    </dxo-selection-style>
+  </dxo-common-series-settings>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

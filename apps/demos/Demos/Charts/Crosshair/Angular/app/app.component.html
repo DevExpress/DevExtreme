@@ -1,33 +1,33 @@
 <dx-chart id="chart" [dataSource]="countriesInfo">
-  <dxi-chart-series
+  <dxi-series
     *ngFor="let energy of energySources"
     [valueField]="energy.value"
     [name]="energy.name"
   >
-  </dxi-chart-series>
-  <dxo-chart-common-series-settings argumentField="country" type="spline">
-    <dxo-chart-point hoverMode="allArgumentPoints"></dxo-chart-point>
-  </dxo-chart-common-series-settings>
-  <dxo-chart-argument-axis
+  </dxi-series>
+  <dxo-common-series-settings argumentField="country" type="spline">
+    <dxo-point hoverMode="allArgumentPoints"></dxo-point>
+  </dxo-common-series-settings>
+  <dxo-argument-axis
     [valueMarginsEnabled]="false"
     discreteAxisDivisionMode="crossLabels"
   >
-    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
-  </dxo-chart-argument-axis>
-  <dxo-chart-crosshair [enabled]="true" color="#949494" [width]="3" dashStyle="dot">
-    <dxo-chart-label [visible]="true" backgroundColor="#949494">
-      <dxo-chart-font color="#fff" [size]="12"> </dxo-chart-font>
-    </dxo-chart-label>
-  </dxo-chart-crosshair>
-  <dxo-chart-legend
+    <dxo-grid [visible]="true"></dxo-grid>
+  </dxo-argument-axis>
+  <dxo-crosshair [enabled]="true" color="#949494" [width]="3" dashStyle="dot">
+    <dxo-label [visible]="true" backgroundColor="#949494">
+      <dxo-font color="#fff" [size]="12"> </dxo-font>
+    </dxo-label>
+  </dxo-crosshair>
+  <dxo-legend
     verticalAlignment="bottom"
     horizontalAlignment="center"
     itemTextPosition="bottom"
   >
-  </dxo-chart-legend>
-  <dxo-chart-title text="Energy Consumption in 2004">
-    <dxo-chart-subtitle text="(Millions of Tons, Oil Equivalent)"></dxo-chart-subtitle>
-  </dxo-chart-title>
-  <dxo-chart-tooltip [enabled]="true"></dxo-chart-tooltip>
-  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  </dxo-legend>
+  <dxo-title text="Energy Consumption in 2004">
+    <dxo-subtitle text="(Millions of Tons, Oil Equivalent)"></dxo-subtitle>
+  </dxo-title>
+  <dxo-tooltip [enabled]="true"></dxo-tooltip>
+  <dxo-export [enabled]="true"></dxo-export>
 </dx-chart>

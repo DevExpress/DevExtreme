@@ -4,37 +4,37 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxo-data-grid-filter-row
+  <dxo-filter-row
     [visible]="showFilterRow"
     [applyFilter]="currentFilter"
-  ></dxo-data-grid-filter-row>
-  <dxo-data-grid-header-filter [visible]="showHeaderFilter"></dxo-data-grid-header-filter>
-  <dxo-data-grid-search-panel
+  ></dxo-filter-row>
+  <dxo-header-filter [visible]="showHeaderFilter"></dxo-header-filter>
+  <dxo-search-panel
     [visible]="true"
     [width]="240"
     placeholder="Search..."
-  ></dxo-data-grid-search-panel>
-  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
-  <dxi-data-grid-column dataField="OrderNumber" [width]="140" caption="Invoice Number">
-    <dxo-data-grid-header-filter [groupInterval]="10000"></dxo-data-grid-header-filter>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxo-search-panel>
+  <dxo-pager [visible]="true"></dxo-pager>
+  <dxi-column dataField="OrderNumber" [width]="140" caption="Invoice Number">
+    <dxo-header-filter [groupInterval]="10000"></dxo-header-filter>
+  </dxi-column>
+  <dxi-column
     dataField="OrderDate"
     alignment="right"
     dataType="date"
     [width]="120"
     [calculateFilterExpression]="calculateFilterExpression"
   >
-    <dxo-data-grid-header-filter [dataSource]="orderHeaderFilter"></dxo-data-grid-header-filter>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column
+    <dxo-header-filter [dataSource]="orderHeaderFilter"></dxo-header-filter>
+  </dxi-column>
+  <dxi-column
     dataField="DeliveryDate"
     alignment="right"
     dataType="datetime"
     format="M/d/yyyy, HH:mm"
     [width]="180"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column
     dataField="SaleAmount"
     alignment="right"
     format="currency"
@@ -46,16 +46,16 @@
       }
     }"
   >
-    <dxo-data-grid-header-filter
+    <dxo-header-filter
       [dataSource]="saleAmountHeaderFilter"
-    ></dxo-data-grid-header-filter>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City">
-    <dxo-data-grid-header-filter>
-      <dxo-data-grid-search [enabled]="true"></dxo-data-grid-search>
-    </dxo-data-grid-header-filter>
-  </dxi-data-grid-column>
+    ></dxo-header-filter>
+  </dxi-column>
+  <dxi-column dataField="Employee"></dxi-column>
+  <dxi-column dataField="CustomerStoreCity" caption="City">
+    <dxo-header-filter>
+      <dxo-search [enabled]="true"></dxo-search>
+    </dxo-header-filter>
+  </dxi-column>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

@@ -3,34 +3,34 @@
   title="Stochastic Process"
   [dataSource]="dataSource"
 >
-  <dxi-polar-chart-series type="scatter" name="Test results" valueField="value">
-    <dxo-polar-chart-point [size]="8"></dxo-polar-chart-point>
-  </dxi-polar-chart-series>
-  <dxi-polar-chart-series type="line" name="Expected average" valueField="originalValue">
-    <dxo-polar-chart-point [visible]="false"></dxo-polar-chart-point>
-  </dxi-polar-chart-series>
-  <dxo-polar-chart-common-series-settings argumentField="argument" [closed]="false">
-  </dxo-polar-chart-common-series-settings>
-  <dxo-polar-chart-argument-axis [startAngle]="90" [tickInterval]="30"> </dxo-polar-chart-argument-axis>
-  <dxo-polar-chart-value-axis [visualRange]="visualRange"></dxo-polar-chart-value-axis>
-  <dxo-polar-chart-export [enabled]="true"></dxo-polar-chart-export>
-  <dxo-polar-chart-legend
+  <dxi-series type="scatter" name="Test results" valueField="value">
+    <dxo-point [size]="8"></dxo-point>
+  </dxi-series>
+  <dxi-series type="line" name="Expected average" valueField="originalValue">
+    <dxo-point [visible]="false"></dxo-point>
+  </dxi-series>
+  <dxo-common-series-settings argumentField="argument" [closed]="false">
+  </dxo-common-series-settings>
+  <dxo-argument-axis [startAngle]="90" [tickInterval]="30"> </dxo-argument-axis>
+  <dxo-value-axis [visualRange]="visualRange"></dxo-value-axis>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-legend
     hoverMode="excludePoints"
     verticalAlignment="top"
     horizontalAlignment="center"
   >
-  </dxo-polar-chart-legend>
+  </dxo-legend>
 </dx-polar-chart>
 <dx-range-selector [(value)]="visualRange">
-  <dxo-range-selector-size [height]="100"></dxo-range-selector-size>
-  <dxo-range-selector-margin [top]="10" [left]="60" [bottom]="10" [right]="50"> </dxo-range-selector-margin>
-  <dxo-range-selector-scale
+  <dxo-size [height]="100"></dxo-size>
+  <dxo-margin [top]="10" [left]="60" [bottom]="10" [right]="50"> </dxo-margin>
+  <dxo-scale
     [startValue]="0"
     [endValue]="8"
     [minorTickInterval]="0.1"
     [tickInterval]="1"
   >
-    <dxo-range-selector-minor-tick [visible]="false"></dxo-range-selector-minor-tick>
-  </dxo-range-selector-scale>
-  <dxo-range-selector-behavior valueChangeMode="onHandleMove"></dxo-range-selector-behavior>
+    <dxo-minor-tick [visible]="false"></dxo-minor-tick>
+  </dxo-scale>
+  <dxo-behavior valueChangeMode="onHandleMove"></dxo-behavior>
 </dx-range-selector>

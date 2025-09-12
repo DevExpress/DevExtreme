@@ -6,33 +6,33 @@
   [showBorders]="true"
   (onExporting)="onExporting($event)"
 >
-  <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-grouping [autoExpandAll]="true"></dxo-data-grid-grouping>
-  <dxo-data-grid-export [enabled]="true"></dxo-data-grid-export>
-  <dxi-data-grid-sort-by-group-summary-info
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-sort-by-group-summary-info
     summaryItem="count"
-  ></dxi-data-grid-sort-by-group-summary-info>
+  ></dxi-sort-by-group-summary-info>
 
-  <dxi-data-grid-column dataField="Name" [width]="190"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Address" [width]="200"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="State" [groupIndex]="0"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Phone" [format]="phoneNumberFormat"></dxi-data-grid-column>
-  <dxi-data-grid-column
+  <dxi-column dataField="Name" [width]="190"></dxi-column>
+  <dxi-column dataField="Address" [width]="200"></dxi-column>
+  <dxi-column dataField="City"></dxi-column>
+  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
+  <dxi-column dataField="Phone" [format]="phoneNumberFormat"></dxi-column>
+  <dxi-column
     dataField="Website"
     alignment="center"
     [width]="100"
     cellTemplate="cellTemplate"
-  ></dxi-data-grid-column>
+  ></dxi-column>
   <div *dxTemplate="let cell of 'cellTemplate'">
     <a href="{{ cell.text }}" target="_blank">Website</a>
   </div>
 
-  <dxo-data-grid-summary>
-    <dxi-data-grid-total-item
+  <dxo-summary>
+    <dxi-total-item
       column="Name"
       summaryType="count"
       displayFormat="Total count: {0} companies"
-    ></dxi-data-grid-total-item>
-  </dxo-data-grid-summary>
+    ></dxi-total-item>
+  </dxo-summary>
 </dx-data-grid>

@@ -6,12 +6,12 @@
     [dataSource]="olympicMedals"
     [resolveLabelOverlapping]="resolveOverlappingTypes[0]"
   >
-    <dxo-pie-chart-margin [bottom]="20"></dxo-pie-chart-margin>
-    <dxo-pie-chart-legend [visible]="false"></dxo-pie-chart-legend>
-    <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
-    <dxi-pie-chart-series argumentField="country" valueField="medals">
-      <dxo-pie-chart-label [visible]="true" [customizeText]="customizeLabel"> </dxo-pie-chart-label>
-    </dxi-pie-chart-series>
+    <dxo-margin [bottom]="20"></dxo-margin>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+    <dxi-series argumentField="country" valueField="medals">
+      <dxo-label [visible]="true" [customizeText]="customizeLabel"> </dxo-label>
+    </dxi-series>
   </dx-pie-chart>
   <div class="options">
     <div class="caption">Options</div>

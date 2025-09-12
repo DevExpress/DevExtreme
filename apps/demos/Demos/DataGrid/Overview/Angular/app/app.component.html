@@ -8,28 +8,28 @@
   [width]="'100%'"
   (onContentReady)="contentReady($event)"
 >
-  <dxo-data-grid-paging [pageSize]="10"></dxo-data-grid-paging>
-  <dxo-data-grid-pager
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-pager
     [visible]="true"
     [showPageSizeSelector]="true"
     [allowedPageSizes]="[10, 25, 50, 100]"
-  ></dxo-data-grid-pager>
-  <dxo-data-grid-search-panel
+  ></dxo-pager>
+  <dxo-search-panel
     [visible]="true"
     [highlightCaseSensitive]="true"
-  ></dxo-data-grid-search-panel>
-  <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
-  <dxo-data-grid-grouping [autoExpandAll]="false"></dxo-data-grid-grouping>
+  ></dxo-search-panel>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
 
-  <dxi-data-grid-column dataField="Product" [groupIndex]="0"></dxi-data-grid-column>
-  <dxi-data-grid-column
+  <dxi-column dataField="Product" [groupIndex]="0"></dxi-column>
+  <dxi-column
     dataField="Amount"
     caption="Sale Amount"
     dataType="number"
     format="currency"
     alignment="right"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column
     caption="Discount %"
     dataField="Discount"
     cellTemplate="discountCellTemplate"
@@ -38,12 +38,12 @@
     alignment="right"
     [allowGrouping]="false"
     cssClass="bullet"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="SaleDate" dataType="date"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Region" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Sector" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Channel" dataType="string"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Customer" dataType="string" [width]="150"></dxi-data-grid-column>
+  ></dxi-column>
+  <dxi-column dataField="SaleDate" dataType="date"></dxi-column>
+  <dxi-column dataField="Region" dataType="string"></dxi-column>
+  <dxi-column dataField="Sector" dataType="string"></dxi-column>
+  <dxi-column dataField="Channel" dataType="string"></dxi-column>
+  <dxi-column dataField="Customer" dataType="string" [width]="150"></dxi-column>
 
   <div *dxTemplate="let d of 'discountCellTemplate'">
     <div class="chart-cell">
@@ -54,15 +54,15 @@
         [endScaleValue]="100"
         [value]="d.value * 100"
       >
-        <dxo-bullet-size [width]="150" [height]="35"></dxo-bullet-size>
-        <dxo-bullet-tooltip
+        <dxo-size [width]="150" [height]="35"></dxo-size>
+        <dxo-tooltip
           [enabled]="true"
           [paddingTopBottom]="2"
           [customizeTooltip]="customizeTooltip"
         >
-          <dxo-bullet-font [size]="18"></dxo-bullet-font>
-        </dxo-bullet-tooltip>
-        <dxo-bullet-margin [top]="5" [bottom]="0" [left]="5"></dxo-bullet-margin>
+          <dxo-font [size]="18"></dxo-font>
+        </dxo-tooltip>
+        <dxo-margin [top]="5" [bottom]="0" [left]="5"></dxo-margin>
       </dx-bullet>
     </div>
   </div>

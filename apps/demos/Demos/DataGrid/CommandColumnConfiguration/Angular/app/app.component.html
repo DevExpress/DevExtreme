@@ -6,35 +6,35 @@
   (onRowValidating)="onRowValidating($event)"
   (onEditorPreparing)="onEditorPreparing($event)"
 >
-  <dxo-data-grid-paging [enabled]="false"></dxo-data-grid-paging>
-  <dxo-data-grid-editing
+  <dxo-paging [enabled]="false"></dxo-paging>
+  <dxo-editing
     mode="row"
     [allowUpdating]="true"
     [allowDeleting]="isDeleteIconVisible"
     [useIcons]="true"
-  ></dxo-data-grid-editing>
+  ></dxo-editing>
 
-  <dxi-data-grid-column type="buttons" [width]="110">
-    <dxi-data-grid-button name="edit"></dxi-data-grid-button>
-    <dxi-data-grid-button name="delete"></dxi-data-grid-button>
-    <dxi-data-grid-button
+  <dxi-column type="buttons" [width]="110">
+    <dxi-button name="edit"></dxi-button>
+    <dxi-button name="delete"></dxi-button>
+    <dxi-button
       hint="Clone"
       icon="copy"
       [visible]="isCloneIconVisible"
       [disabled]="isCloneIconDisabled"
       [onClick]="onCloneIconClick"
-    ></dxi-data-grid-button>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Prefix" caption="Title"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Position" [width]="130"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="StateID" [width]="125" caption="State">
-    <dxo-data-grid-lookup
+    ></dxi-button>
+  </dxi-column>
+  <dxi-column dataField="Prefix" caption="Title"></dxi-column>
+  <dxi-column dataField="FirstName"></dxi-column>
+  <dxi-column dataField="LastName"></dxi-column>
+  <dxi-column dataField="Position" [width]="130"></dxi-column>
+  <dxi-column dataField="StateID" [width]="125" caption="State">
+    <dxo-lookup
       [dataSource]="states"
       displayExpr="Name"
       valueExpr="ID"
-    ></dxo-data-grid-lookup>
-  </dxi-data-grid-column>
-  <dxi-data-grid-column dataField="BirthDate" [width]="125" dataType="date"></dxi-data-grid-column>
+    ></dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="BirthDate" [width]="125" dataType="date"></dxi-column>
 </dx-data-grid>

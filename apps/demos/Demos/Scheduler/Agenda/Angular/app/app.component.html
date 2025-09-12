@@ -7,18 +7,18 @@
   [startDayHour]="9"
   [height]="600"
 >
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="assigneeId"
     label="Assignee"
     [allowMultiple]="true"
     [dataSource]="assignees"
     [useColorAsDefault]="true"
   >
-  </dxi-scheduler-resource>
-  <dxi-scheduler-resource
+  </dxi-resource>
+  <dxi-resource
     fieldExpr="priorityId"
     label="Priority"
     [dataSource]="priorities"
   >
-  </dxi-scheduler-resource>
+  </dxi-resource>
 </dx-scheduler>

@@ -28,12 +28,12 @@
   [height]="600"
   [editing]="true"
 >
-  <dxi-scheduler-view type="day" [intervalCount]="3"> </dxi-scheduler-view>
+  <dxi-view type="day" [intervalCount]="3"> </dxi-view>
 
-  <dxo-scheduler-appointment-dragging
+  <dxo-appointment-dragging
     [group]="draggingGroupName"
     [onRemove]="onAppointmentRemove"
     [onAdd]="onAppointmentAdd"
   >
-  </dxo-scheduler-appointment-dragging>
+  </dxo-appointment-dragging>
 </dx-scheduler>

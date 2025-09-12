@@ -4,33 +4,33 @@
   keyExpr="ID"
   [showBorders]="true"
 >
-  <dxo-data-grid-grouping [autoExpandAll]="expandAll"></dxo-data-grid-grouping>
-  <dxo-data-grid-column-chooser [enabled]="true"></dxo-data-grid-column-chooser>
-  <dxo-data-grid-load-panel [enabled]="true"></dxo-data-grid-load-panel>
+  <dxo-grouping [autoExpandAll]="expandAll"></dxo-grouping>
+  <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
 
-  <dxi-data-grid-column dataField="OrderNumber" caption="Invoice Number"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="OrderDate"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="Employee"></dxi-data-grid-column>
-  <dxi-data-grid-column dataField="CustomerStoreCity" caption="City"></dxi-data-grid-column>
-  <dxi-data-grid-column
+  <dxi-column dataField="OrderNumber" caption="Invoice Number"></dxi-column>
+  <dxi-column dataField="OrderDate"></dxi-column>
+  <dxi-column dataField="Employee"></dxi-column>
+  <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
+  <dxi-column
     dataField="CustomerStoreState"
     caption="State"
     [groupIndex]="0"
-  ></dxi-data-grid-column>
-  <dxi-data-grid-column
+  ></dxi-column>
+  <dxi-column
     dataField="SaleAmount"
     alignment="right"
     format="currency"
-  ></dxi-data-grid-column>
+  ></dxi-column>
 
-  <dxo-data-grid-toolbar>
-    <dxi-data-grid-item location="before">
+  <dxo-toolbar>
+    <dxi-item location="before">
       <div *dxTemplate class="informer">
         <div class="count">{{ totalCount }}</div>
         <span>Total Count</span>
       </div>
-    </dxi-data-grid-item>
-    <dxi-data-grid-item location="before" locateInMenu="auto">
+    </dxi-item>
+    <dxi-item location="before" locateInMenu="auto">
       <div *dxTemplate>
         <dx-select-box
           width="225"
@@ -43,22 +43,22 @@
         >
         </dx-select-box>
       </div>
-    </dxi-data-grid-item>
-    <dxi-data-grid-item
+    </dxi-item>
+    <dxi-item
       location="before"
       locateInMenu="auto"
       widget="dxButton"
       [options]="toggleButtonOptions"
     >
-    </dxi-data-grid-item>
-    <dxi-data-grid-item
+    </dxi-item>
+    <dxi-item
       location="after"
       locateInMenu="auto"
       showText="inMenu"
       widget="dxButton"
       [options]="refreshButtonOptions"
     >
-    </dxi-data-grid-item>
-    <dxi-data-grid-item name="columnChooserButton"></dxi-data-grid-item>
-  </dxo-data-grid-toolbar>
+    </dxi-item>
+    <dxi-item name="columnChooserButton"></dxi-item>
+  </dxo-toolbar>
 </dx-data-grid>

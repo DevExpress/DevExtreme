@@ -5,9 +5,9 @@
   (onZoomFactorChanged)="zoomChanged($event)"
   (onCenterChanged)="centerChanged($event)"
 >
-  <dxi-vector-map-layer [dataSource]="worldMap"></dxi-vector-map-layer>
-  <dxo-vector-map-control-bar [panVisible]="pan.value" [zoomVisible]="zoom.value">
-  </dxo-vector-map-control-bar>
+  <dxi-layer [dataSource]="worldMap"></dxi-layer>
+  <dxo-control-bar [panVisible]="pan.value" [zoomVisible]="zoom.value">
+  </dxo-control-bar>
 </dx-vector-map>
 <div class="options">
   <div class="caption">Options</div>

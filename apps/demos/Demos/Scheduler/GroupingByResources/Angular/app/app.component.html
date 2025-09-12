@@ -10,26 +10,26 @@
   [showAllDayPanel]="false"
   [crossScrollingEnabled]="true"
 >
-  <dxi-scheduler-view
+  <dxi-view
     type="workWeek"
     name="Vertical Grouping"
     groupOrientation="vertical"
     [cellDuration]="60"
     [intervalCount]="2"
   >
-  </dxi-scheduler-view>
-  <dxi-scheduler-view
+  </dxi-view>
+  <dxi-view
     type="workWeek"
     name="Horizontal Grouping"
     groupOrientation="horizontal"
     [cellDuration]="30"
     [intervalCount]="2"
   >
-  </dxi-scheduler-view>
-  <dxi-scheduler-resource
+  </dxi-view>
+  <dxi-resource
     [dataSource]="prioritiesData"
     fieldExpr="priorityId"
     label="Priority"
     [allowMultiple]="false"
-  ></dxi-scheduler-resource>
+  ></dxi-resource>
 </dx-scheduler>

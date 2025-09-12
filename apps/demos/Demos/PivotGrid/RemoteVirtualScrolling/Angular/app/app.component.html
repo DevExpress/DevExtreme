@@ -8,13 +8,13 @@
   [showBorders]="true"
   [dataSource]="dataSource"
 >
-  <dxo-pivot-grid-field-panel
+  <dxo-field-panel
     [visible]="true"
     [showFilterFields]="false"
-  ></dxo-pivot-grid-field-panel>
-  <dxo-pivot-grid-field-chooser [allowSearch]="true"></dxo-pivot-grid-field-chooser>
-  <dxo-pivot-grid-header-filter>
-    <dxo-pivot-grid-search [enabled]="true"></dxo-pivot-grid-search>
-  </dxo-pivot-grid-header-filter>
-  <dxo-pivot-grid-scrolling mode="virtual"></dxo-pivot-grid-scrolling>
+  ></dxo-field-panel>
+  <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
+  <dxo-header-filter>
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
 </dx-pivot-grid>

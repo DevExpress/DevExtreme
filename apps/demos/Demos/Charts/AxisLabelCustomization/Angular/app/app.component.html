@@ -3,15 +3,15 @@
   title="Ice Hockey World Championship Gold Medal Winners"
   [dataSource]="dataSource"
 >
-  <dxo-chart-common-series-settings type="bar" argumentField="country">
-    <dxo-chart-label visible="true"></dxo-chart-label>
-  </dxo-chart-common-series-settings>
-  <dxi-chart-series name="Gold" valueField="gold" color="#ffd700"> </dxi-chart-series>
-  <dxi-chart-series name="Silver" valueField="silver" color="#c0c0c0"> </dxi-chart-series>
-  <dxi-chart-series name="Bronze" valueField="bronze" color="#cd7f32"> </dxi-chart-series>
-  <dxo-chart-argument-axis>
-    <dxo-chart-label [visible]="true" template="labelTemplate"></dxo-chart-label>
-  </dxo-chart-argument-axis>
+  <dxo-common-series-settings type="bar" argumentField="country">
+    <dxo-label visible="true"></dxo-label>
+  </dxo-common-series-settings>
+  <dxi-series name="Gold" valueField="gold" color="#ffd700"> </dxi-series>
+  <dxi-series name="Silver" valueField="silver" color="#c0c0c0"> </dxi-series>
+  <dxi-series name="Bronze" valueField="bronze" color="#cd7f32"> </dxi-series>
+  <dxo-argument-axis>
+    <dxo-label [visible]="true" template="labelTemplate"></dxo-label>
+  </dxo-argument-axis>
   <svg overflow="visible" *dxTemplate="let data of 'labelTemplate'">
     <image
       filter="url(#DevExpress_shadow_filter)"

@@ -11,17 +11,17 @@
   [currentDate]="currentDate"
   [height]="580"
 >
-  <dxi-scheduler-resource
+  <dxi-resource
     fieldExpr="ownerId"
     [allowMultiple]="true"
     [dataSource]="resourcesData"
     label="Owner"
     [useColorAsDefault]="true"
-  ></dxi-scheduler-resource>
-  <dxi-scheduler-resource
+  ></dxi-resource>
+  <dxi-resource
     fieldExpr="priority"
     [allowMultiple]="false"
     [dataSource]="prioritiesData"
     label="Priority"
-  ></dxi-scheduler-resource>
+  ></dxi-resource>
 </dx-scheduler>

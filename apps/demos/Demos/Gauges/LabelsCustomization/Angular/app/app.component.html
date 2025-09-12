@@ -4,11 +4,11 @@
   [endValue]="100"
   [values]="[47.27, 65.32, 84.59, 71.86]"
 >
-  <dxo-bar-gauge-label [indent]="30" [customizeText]="customizeText"
-    ><dxo-bar-gauge-format type="fixedPoint" [precision]="1"></dxo-bar-gauge-format>
-  </dxo-bar-gauge-label>
-  <dxo-bar-gauge-export [enabled]="true"></dxo-bar-gauge-export>
-  <dxo-bar-gauge-title text="Series' Ratings">
-    <dxo-bar-gauge-font [size]="28"></dxo-bar-gauge-font>
-  </dxo-bar-gauge-title>
+  <dxo-label [indent]="30" [customizeText]="customizeText"
+    ><dxo-format type="fixedPoint" [precision]="1"></dxo-format>
+  </dxo-label>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-title text="Series' Ratings">
+    <dxo-font [size]="28"></dxo-font>
+  </dxo-title>
 </dx-bar-gauge>
