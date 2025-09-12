@@ -65,7 +65,7 @@ jobs:
         fi
 
   validate-declarations:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -75,6 +75,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.x
 
     - uses: pnpm/action-setup@v3
       with:
