@@ -117,15 +117,13 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   private _getCurrentIcon(): string | undefined {
     const { startIcon, stopIcon } = this.option();
 
-    return this._state === SpeechToTextState.LISTENING
-      ? stopIcon
-      : startIcon;
+    return this._isListening() ? stopIcon : startIcon;
   }
 
   private _getCurrentText(): string {
     const { startText, stopText } = this.option();
 
-    return this._state === SpeechToTextState.LISTENING
+    return this._isListening()
       ? stopText ?? ''
       : startText ?? '';
   }
@@ -135,7 +133,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       return;
     }
 
-    if (this._state === SpeechToTextState.LISTENING) {
+    if (this._isListening()) {
       this._handleStopClick(e);
     } else {
       this._handleStartClick(e);
