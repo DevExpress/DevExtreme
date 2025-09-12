@@ -11,39 +11,18 @@ import type {
 } from './events';
 
 export interface SpeechToTextProperties extends WidgetOptions<SpeechToText> {
-  /**
-   * @default 'contained'
-   */
   stylingMode?: ButtonStyle;
 
-  /**
-   * @default 'default'
-   */
   type?: ButtonType;
 
-  /**
-   * @default ''
-   */
   startText?: string;
 
-  /**
-   * @default ''
-   */
   stopText?: string;
 
-  /**
-   * @default 'mic'
-   */
   startIcon?: string;
 
-  /**
-   * @default 'square'
-   */
   stopIcon?: string;
 
-  /**
-   * @default { enabled: false, isListening: false }
-   */
   customSpeechRecognizer?: CustomEngineConfig;
 
   onStartClick?: (e: StartClickEvent) => void;
