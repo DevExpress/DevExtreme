@@ -37,7 +37,3 @@ Thumbs.db
 .nx/cache
 .nx/workspace-data
 nx-cloud.env
-
-# Copilot
-context_files
-prompts
