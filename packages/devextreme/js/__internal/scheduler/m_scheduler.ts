@@ -42,7 +42,6 @@ import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
 import { hide as hideLoading, show as showLoading } from './m_loading';
-import { getRecurrenceProcessor } from './m_recurrence';
 import type { SubscribeKey, SubscribeMethods } from './m_subscribes';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
@@ -56,6 +55,7 @@ import {
   isDateAndTimeView,
   isTimelineView,
 } from './r1/utils/index';
+import { validateRRule } from './recurrence/validate_rule';
 import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
@@ -1470,7 +1470,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   ) {
     const recurrenceRule = this._dataAccessors.get('recurrenceRule', rawAppointment);
 
-    if (!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
+    if (!validateRRule(recurrenceRule) || !this._editing.allowUpdating) {
       callback();
       return;
     }
