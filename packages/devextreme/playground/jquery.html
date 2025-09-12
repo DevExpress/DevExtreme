@@ -52,17 +52,9 @@
         <div id="button"></div>
         <script>
             $(() => {
-                $("#button").dxSpeechToText({
-                    customSpeechRecognizer: {
-                        enabled: true,
-                        isListening: true,
-                    },
-                    onStartClick: (e) => {
-                        e.component.option('customSpeechRecognizer.isListening', true);
-                    },
-                    onStopClick: (e) => {
-                        e.component.option('customSpeechRecognizer.isListening', false);
-                    },
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: () => { alert("clicked"); }
                 });
             });
         </script>
