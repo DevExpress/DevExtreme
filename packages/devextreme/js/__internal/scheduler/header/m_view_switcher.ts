@@ -1,12 +1,11 @@
+import messageLocalization from '@js/common/core/localization/message';
 import { isFluent } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
+import { camelize } from '@ts/core/utils/m_inflector';
 
 import type { NormalizedView } from '../utils/options/types';
 import type { SchedulerHeader } from './m_header';
-import {
-  getViewName,
-  isOneView,
-} from './m_utils';
+import { isOneView } from './m_utils';
 
 const ClASS = {
   container: 'dx-scheduler-view-switcher',
@@ -14,10 +13,12 @@ const ClASS = {
   dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content',
 };
 
+const viewDisplayExpr = (item: { type: string }) => messageLocalization.format(`dxScheduler-switcher${camelize(item.type, true)}`);
+
 const getViewsAndSelectedView = (header: SchedulerHeader) => {
   const views = header.option('views');
-  const selectedView = header.option('currentView').name;
-  const isSelectedViewInViews = views.some((view) => view.name === selectedView);
+  const selectedView = header.option('currentView').type;
+  const isSelectedViewInViews = views.some((view) => view.type === selectedView);
 
   return {
     selectedView: isSelectedViewInViews ? selectedView : undefined,
@@ -30,7 +31,6 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
 
   // @ts-expect-error
   const stylingMode = isFluent() ? 'outlined' : 'contained';
-  const items = views.map((view) => ({ ...view, text: view.name }));
 
   return {
     widget: 'dxButtonGroup',
@@ -39,8 +39,9 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
     name: 'viewSwitcher',
     cssClass: ClASS.container,
     options: {
-      items,
-      keyExpr: 'name',
+      items: views,
+      keyExpr: 'type',
+      displayExpr: viewDisplayExpr,
       selectedItemKeys: [selectedView],
       stylingMode,
       onItemClick: (e) => {
@@ -50,7 +51,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
+          viewSwitcher.option('selectedItemKeys', [view.type]);
         });
       },
     },
@@ -71,9 +72,9 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
     options: {
       items: views,
       useSelectMode: true,
-      keyExpr: 'name',
+      keyExpr: 'type',
       selectedItemKey: selectedView,
-      displayExpr: 'name',
+      displayExpr: viewDisplayExpr,
       showArrowIcon: !isOnlyOneView,
       elementAttr: {
         class: ClASS.dropDownButton,
@@ -86,9 +87,8 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
 
         header._addEvent('currentView', (view: NormalizedView) => {
           const currentViews = header.option('views');
-
-          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view.name));
-          viewSwitcher.option('selectedItemKey', getViewName(view));
+          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view.type));
+          viewSwitcher.option('selectedItemKey', view.type);
         });
       },
       dropDownOptions: {
