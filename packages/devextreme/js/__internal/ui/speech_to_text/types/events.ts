@@ -4,13 +4,9 @@ import type SpeechToText from '../speech_to_text';
 
 type PointerLikeEvent = MouseEvent | PointerEvent | TouchEvent | KeyboardEvent;
 
-export type StartClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent> & {
-  readonly component: SpeechToText;
-};
+export type StartClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent>;
 
-export type StopClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent> & {
-  readonly component: SpeechToText;
-};
+export type StopClickEvent = NativeEventInfo<SpeechToText, PointerLikeEvent>;
 
 export type ResultEvent = EventInfo<SpeechToText> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
