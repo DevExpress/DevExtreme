@@ -79,7 +79,7 @@ jobs:
         working-directory: ./e2e/devextreme-bundler-test
         run: |
           pnpm install --filter devextreme-bundler-test --frozen-lockfile
-          pnpm add i ./devextreme.tgz
+          pnpm add ./devextreme.tgz
 
       - name: Build bundle
         working-directory: ./e2e/devextreme-bundler-test
