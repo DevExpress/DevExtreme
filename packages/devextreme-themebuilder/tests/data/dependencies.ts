@@ -54,6 +54,7 @@ export const dependencies: FlatStylesDependencies = {
   textarea: ['validation', 'button', 'loadindicator', 'textbox'],
   tileview: ['loadindicator', 'loadpanel', 'scrollview'],
   accordion: [],
+  speechtotext: ['button'],
   treeview: ['validation', 'button', 'loadindicator', 'textbox', 'checkbox'],
   menu: ['validation', 'button', 'loadindicator', 'textbox', 'contextmenu', 'checkbox', 'treeview'],
   filterbuilder: ['validation', 'button', 'loadindicator', 'textbox', 'checkbox', 'treeview', 'popup', 'numberbox', 'loadpanel', 'scrollview', 'list', 'selectbox', 'calendar', 'box', 'datebox'],
