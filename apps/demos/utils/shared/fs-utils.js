@@ -42,11 +42,35 @@ class FileSystemUtils {
     });
   }
 
+  replaceRelativePaths(fromPath, toPath) {
+    if (!fs.existsSync(toPath)) {
+      fs.mkdirSync(toPath, { recursive: true });
+    }
+    fs.readdirSync(fromPath, { withFileTypes: true })
+      .forEach((entry) => {
+        const entryPath = path.join(fromPath, entry.name);
+        const updatedToPath = path.join(toPath, entry.name);
+
+        if (entry.isDirectory()) {
+          this.replaceRelativePaths(entryPath, updatedToPath);
+        } else {
+          const parentsLength = toPath.split('/').length;
+          const relativePath = '../'.repeat(parentsLength);
+
+          let content = fs.readFileSync(entryPath, 'utf-8');
+          content = content.replaceAll('__RELATIVE_PATH__', relativePath);
+
+          fs.writeFileSync(updatedToPath, content);
+        }
+      })
+  }
+
   copyFilesFromBlankDemos(approaches, demoPath) {
     approaches.forEach((approach) => {
       const fromPath = path.join(demosPathPrefix, approach);
       const toPath = path.join(demoPath, approach);
-      copySync(fromPath, toPath);
+
+      this.replaceRelativePaths(fromPath, toPath);
     });
 
     fs.writeFileSync(path.join(demoPath, descriptionFileName), '', (err) => {

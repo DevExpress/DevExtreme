@@ -8,6 +8,22 @@ const menuMetaUtils = require('./menu-meta-utils');
 const menuMetaData = require('../../menuMeta.json');
 
 const existingApproaches = ['jQuery', 'Angular', 'React', 'Vue'];
+const extraModules = [
+  'signalr',
+  'devextreme-aspnet-data-nojquery',
+  'globalize',
+  'devextreme-exceljs-fork&file-saver',
+  'jspdf',
+  'jspdf&jspdf-autotable',
+  'devextreme-intl',
+  'canvg',
+  'whatwg-fetch',
+  'vectormap',
+  'unified',
+  'openai',
+  'html-react-parser',
+  'vuex',
+];
 
 // const descriptionFileName = 'description.md';
 
@@ -23,6 +39,7 @@ const addDemo = async (category, group, meta) => {
   let missingApproaches = [];
 
   if (demo.name === 'new') {
+    const equivalents = await promptsQuestions.askEquivalents();
     const widget = await promptsQuestions.askWidget(baseDemosDir);
     if (widget.name === 'new') {
       const pathToNewWidget = path.join(baseDemosDir, widget.newName);
@@ -39,6 +56,7 @@ const addDemo = async (category, group, meta) => {
       group.name,
       demo.newName,
       widget.newName ? widget.newName : widget.name,
+      equivalents.value,
     );
     missingApproaches = existingApproaches;
   } else {
@@ -66,6 +84,16 @@ const addDemo = async (category, group, meta) => {
       newOrExisting,
     );
   }
+  if (newOrExisting.choice === 'new') {
+    const extraModulesAnswer = await promptsQuestions.askForExtraModules(extraModules);
+    menuMetaUtils.updateDemoModules(
+      meta,
+      category.name,
+      group.name,
+      demo.newName.replace(/ /g, ''),
+      extraModulesAnswer.modules,
+    );
+  }
   fileSystemUtils.copyDemos(
     demoPath,
     approaches.selectedApproaches,
@@ -74,7 +102,6 @@ const addDemo = async (category, group, meta) => {
     baseDemosDir,
   );
   fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
-  console.log(demoPath);
   openDemoInEditor(demoPath);
 };
 

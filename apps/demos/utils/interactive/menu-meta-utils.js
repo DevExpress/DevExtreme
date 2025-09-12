@@ -10,10 +10,11 @@ const addGroup = (menuMetaData, categoryName, groupName) => {
   menuMetaData[categoryIndex].Groups.push(groupMeta);
 };
 
-const addDemo = (menuMetaData, categoryName, groupName, demoName, widgetName) => {
+const addDemo = (menuMetaData, categoryName, groupName, demoName, widgetName, equivalents) => {
   const demoMeta = {
     Title: demoName,
     Name: demoName.replace(/ /g, ''),
+    Equivalents: equivalents,
     DocUrl: '',
     Widget: widgetName,
     MvcDescription: '',
@@ -52,6 +53,19 @@ const updateDemoProperties = (
   const demoMetaDest = getDemoMeta(menuMetaData, categoryName, groupName, demoNewName);
   if (demoMetaSource.Modules) {
     demoMetaDest.Modules = demoMetaSource.Modules;
+  }
+};
+
+const updateDemoModules = (
+  menuMetaData,
+  categoryName,
+  groupName,
+  demoNewName,
+  modules = [],
+) => {
+  if (modules.length) {
+    const demoMetaDest = getDemoMeta(menuMetaData, categoryName, groupName, demoNewName);
+    demoMetaDest.Modules = modules.join(',');
   }
 };
 
@@ -98,6 +112,7 @@ module.exports = {
   addCategory,
   addGroup,
   updateDemoProperties,
+  updateDemoModules,
   addDemo,
   getCategories,
   getGroups,

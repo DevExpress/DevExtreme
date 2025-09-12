@@ -66,6 +66,13 @@ const getWidgetQuestions = (baseDemosDir) => [{
   message: 'Enter the name of a new directory:',
 }];
 
+const getEquivalentsQuestions = () => [{
+  type: 'text',
+  name: 'value',
+  format: (val) => val.split(',').map(str => str.trim()).filter(str => str).join(', '),
+  message: 'Enter Equivalents:',
+}];
+
 const getApproachesQuestions = (approaches) => ({
   type: 'multiselect',
   name: 'selectedApproaches',
@@ -94,6 +101,13 @@ const getNewOrExistingQuestions = (menuMetaData) => [{
   name: 'demo',
   message: '[Copy from existing demo]: Select a demo',
   choices: (prev, answers) => menuMetaUtils.getDemos(menuMetaData, answers.category, answers.group),
+}];
+
+const getNeedExtraModules = (extraModules) => [{
+  type: 'multiselect',
+  name: 'modules',
+  message: 'Do you need to include some extra modules in your demo?',
+  choices: extraModules.map(module => ({ title: module, value: module })),
 }];
 
 const getApproachesFoldersQuestions = (approaches) => {
@@ -176,6 +190,10 @@ const askWidget = async (baseDemosDir) => prompts(
   getWidgetQuestions(baseDemosDir), { onCancel },
 );
 
+const askEquivalents = async () => prompts(
+  getEquivalentsQuestions(), { onCancel },
+);
+
 const askApproaches = async (missingApproaches) => prompts(
   getApproachesQuestions(missingApproaches), { onCancel },
 );
@@ -186,6 +204,10 @@ const askNewOrExisting = async (menuMetaData) => prompts(
 
 const askDemoToUpdate = async (menuMetaData) => prompts(
   getDemoToUpdateQuestions(menuMetaData), { onCancel },
+);
+
+const askForExtraModules = async (extraModules) => prompts(
+  getNeedExtraModules(extraModules), { onCancel },
 );
 
 const askLinkRepositories = async () => prompts(getLinkRepositoriesQuestions(), { onCancel });
@@ -207,7 +229,9 @@ module.exports = {
   askDemoToUpdate,
   askApproaches,
   askWidget,
+  askEquivalents,
   askRepositoryPath,
+  askForExtraModules,
   getDemoQuestions,
   getApproachesQuestions,
   getWidgetQuestions,
