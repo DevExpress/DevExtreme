@@ -93,9 +93,8 @@ runs:
         rm -rf artifacts/npm
         7z x artifacts.zip
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -115,7 +114,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build dotnet
       working-directory: ./packages/devextreme
@@ -141,7 +140,6 @@ runs:
         DISPLAY: ":99"
         CHROME_CMD: ${{ env.CHROME_SHELL }}
       run: |
-        node ../../tools/scripts/performance_log.js &
         chmod +x ./docker-ci.sh
         ./docker-ci.sh
 
