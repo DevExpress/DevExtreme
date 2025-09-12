@@ -30,9 +30,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -51,7 +50,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         env:
@@ -59,9 +58,7 @@ jobs:
           DOTNET_CLI_TELEMETRY_OPTOUT: "true"
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         working-directory: ./packages/devextreme
-        run: |
-          node ../../tools/scripts/performance_log.js &
-          pnpm nx build:systemjs
+        run: pnpm nx build:systemjs
 
       - name: Zip artifacts
         working-directory: ./packages/devextreme
