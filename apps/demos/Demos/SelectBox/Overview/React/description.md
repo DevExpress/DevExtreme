@@ -13,7 +13,7 @@ Prevents users from changing the editor's value via the UI.
 Specifies whether the SelectBox responds to user interaction.
 - [dataSource](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#dataSource)        
 Binds the SelectBox to data. Unlike the **items** property, **dataSource** accepts the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object that allows users to sort, filter, group, and shape data.
-- **fieldAddons**.[beforeTemplate](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/fieldAddons/#beforeTemplate) and [itemTemplate](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#itemTemplate)       
+- **fieldAddons**.[beforeRender](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/fieldAddons/#beforeRender) and [itemRender](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#itemRender)       
 Allow you to customize the text field and drop-down list items.
 - [onValueChanged](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#onValueChanged) event handler      
 Use this function to perform an action when a user chooses a new value. In this demo, this function is used to display the selected value.
