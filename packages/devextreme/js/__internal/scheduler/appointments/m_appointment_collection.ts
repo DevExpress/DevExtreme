@@ -26,8 +26,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
-import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import { generateDates } from '../recurrence/generate_dates';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -1070,7 +1070,7 @@ class SchedulerAppointments extends CollectionWidget {
 
       const timezoneCalculator = this.option('timeZoneCalculator');
 
-      const recurrentDates = getRecurrenceProcessor().generateDates({
+      const recurrentDates = generateDates({
         rule: recurrenceRule,
         exception: recurrenceException,
         start: startDate,

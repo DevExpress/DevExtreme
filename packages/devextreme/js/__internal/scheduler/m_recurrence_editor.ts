@@ -13,7 +13,8 @@ import Editor from '@js/ui/editor/editor';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 
-import { getRecurrenceProcessor } from './m_recurrence';
+import { getRecurrenceString, parseRecurrenceRule } from './recurrence/base';
+import { daysFromByDayRule } from './recurrence/days_from_by_day_rule';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -72,17 +73,14 @@ const days = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
 class RecurrenceRule {
-  _recurrenceProcessor = getRecurrenceProcessor();
-
   _recurrenceRule: any;
 
   constructor(rule) {
-    this._recurrenceProcessor = getRecurrenceProcessor();
-    this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(rule).rule;
+    this._recurrenceRule = parseRecurrenceRule(rule);
   }
 
   makeRules(string) {
-    this._recurrenceRule = this._recurrenceProcessor.evalRecurrenceRule(string).rule;
+    this._recurrenceRule = parseRecurrenceRule(string);
   }
 
   makeRule(field, value) {
@@ -120,7 +118,7 @@ class RecurrenceRule {
   }
 
   getRecurrenceString() {
-    return this._recurrenceProcessor.getRecurrenceString(this._recurrenceRule);
+    return getRecurrenceString(this._recurrenceRule);
   }
 
   getRules() {
@@ -128,7 +126,7 @@ class RecurrenceRule {
   }
 
   getDaysFromByDayRule() {
-    return this._recurrenceProcessor.daysFromByDayRule(this._recurrenceRule);
+    return daysFromByDayRule(this._recurrenceRule);
   }
 }
 
@@ -485,8 +483,7 @@ class RecurrenceEditor extends Editor {
   }
 
   _changeEditorValue() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this.option('value', this._recurrenceRule.getRecurrenceString() || '');
+    this.option('value', this._recurrenceRule.getRecurrenceString() ?? '');
   }
 
   _daysOfWeekByRules() {
