@@ -224,10 +224,10 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       case 'onStartClick':
       case 'onStopClick':
       case 'onResult':
-      case 'onError': {
+      case 'onError':
         this._setAction(name);
         break;
-      }
+
       default:
         super._optionChanged(args);
     }
@@ -239,8 +239,6 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
     const isListening = enabled && isListeningState !== undefined ? isListeningState : false;
     const targetState = isListening ? SpeechToTextState.LISTENING : SpeechToTextState.INITIAL;
-
-    debugger;
 
     this._setState(targetState);
   }

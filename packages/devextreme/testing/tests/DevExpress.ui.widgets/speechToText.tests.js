@@ -125,15 +125,6 @@ QUnit.module('State Management', moduleConfig, () => {
         assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'listening CSS class removed');
     });
 
-    QUnit.test('disabled state should prevent state changes', function(assert) {
-        this.reinit({ disabled: true });
-
-        const $button = this.getButton();
-        $button.trigger('dxclick');
-
-        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state did not change when disabled');
-    });
-
     QUnit.test('should update button options when state changes', function(assert) {
         this.reinit({
             startIcon: 'play',
@@ -170,6 +161,46 @@ QUnit.module('State Management', moduleConfig, () => {
 
         $button.trigger('dxclick');
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'component working after re-enable');
+    });
+
+    QUnit.test('should properly handle state when switching from custom to manual control', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+                isListening: true,
+            }
+        });
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'custom engine listening state');
+
+        this.instance.option('customSpeechRecognizer', {
+            enabled: false,
+            isListening: false,
+        });
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'reset to initial when custom engine disabled');
+
+        const $button = this.getButton();
+        $button.trigger('dxclick');
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'manual control works');
+    });
+
+    QUnit.test('should handle state transitions with disabled component', function(assert) {
+        this.reinit({ disabled: true });
+
+        const $button = this.getButton();
+        $button.trigger('dxclick');
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'disabled prevents state change');
+
+        this.instance.option('disabled', false);
+        this.instance.option('customSpeechRecognizer', {
+            enabled: true,
+            isListening: true,
+        });
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'custom engine works after enabling');
     });
 });
 
@@ -270,6 +301,17 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state synced to listening');
     });
 
+    QUnit.test('should handle custom engine state during initialization', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+                isListening: true,
+            }
+        });
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'listening state set during init');
+    });
+
     QUnit.test('should not auto-change state when custom engine is enabled', function(assert) {
         this.reinit({
             customSpeechRecognizer: {
@@ -316,6 +358,19 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'normal behavior when custom engine disabled');
     });
 
+    [undefined, null].forEach(customSpeechRecognizer => {
+        QUnit.test(`should handle ${customSpeechRecognizer} customSpeechRecognizer option`, function(assert) {
+            this.reinit({ customSpeechRecognizer });
+
+            assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), `${customSpeechRecognizer} custom engine defaults to initial state`);
+
+            const $button = this.getButton();
+            $button.trigger('dxclick');
+
+            assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), `normal behavior with ${customSpeechRecognizer} custom engine`);
+        });
+    });
+
     QUnit.test('should handle partial custom engine config updates', function(assert) {
         this.reinit({
             customSpeechRecognizer: {
@@ -335,24 +390,65 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
             enabled: false,
         });
 
-        const $button = this.getButton();
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state reset when custom engine disabled');
 
+        const $button = this.getButton();
         $button.trigger('dxclick');
 
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'manual control restored');
     });
 
-    QUnit.test('should handle invalid custom engine configurations', function(assert) {
-        this.instance.option('customSpeechRecognizer', null);
-        assert.ok(true, 'handled null custom engine config');
+    QUnit.test('should handle custom engine with enabled is true and isListening is undefined', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+            }
+        });
 
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'undefined isListening defaults to false');
+    });
+
+    QUnit.test('should handle custom engine state transitions correctly', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+                isListening: true,
+            }
+        });
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'initially listening');
+
+        this.instance.option('customSpeechRecognizer', {
+            enabled: true,
+            isListening: false,
+        });
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'changed to initial');
+
+        this.instance.option('customSpeechRecognizer', {
+            enabled: false,
+            isListening: true,
+        });
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'custom engine disabled');
+    });
+
+    QUnit.test('should handle invalid custom engine configurations gracefully', function(assert) {
         this.instance.option('customSpeechRecognizer', {});
-        assert.ok(true, 'handled empty custom engine config');
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'empty config handled');
 
         this.instance.option('customSpeechRecognizer', {
             enabled: true,
         });
-        assert.ok(true, 'handled incomplete custom engine config');
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'missing isListening handled');
+
+        this.instance.option('customSpeechRecognizer', {
+            isListening: true,
+        });
+
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'missing enabled handled');
     });
 });
 
@@ -440,23 +536,54 @@ QUnit.module('Options', moduleConfig, () => {
         assert.ok($button.hasClass(BUTTON_MODE_OUTLINED_CLASS), 'outlined styling mode applied');
     });
 
-    QUnit.test('should provide undefined to button when icons are undefined', function(assert) {
-        this.reinit({
-            startIcon: undefined,
-            stopIcon: undefined,
+    [undefined, null].forEach(value => {
+        QUnit.test(`should handle ${value} icon values`, function(assert) {
+            this.reinit({
+                startIcon: value,
+                stopIcon: value,
+            });
+
+            const buttonInstance = this.getButtonInstance();
+
+            assert.strictEqual(buttonInstance.option('icon'), value, `start icon is ${value}`);
+
+            this.getButton().trigger('dxclick');
+
+            assert.strictEqual(buttonInstance.option('icon'), value, `stop icon is ${value}`);
         });
-
-        const buttonInstance = this.getButtonInstance();
-
-        assert.strictEqual(buttonInstance.option('icon'), undefined, 'start icon is undefined');
-
-        this.getButton().trigger('dxclick');
-
-        assert.strictEqual(buttonInstance.option('icon'), undefined, 'stop icon is undefined');
     });
 });
 
 QUnit.module('Component Lifecycle', moduleConfig, () => {
+    QUnit.test('should properly initialize actions with noop fallback', function(assert) {
+        const expectedActions = ['onStartClick', 'onStopClick', 'onResult', 'onError'];
+
+        expectedActions.forEach(action => {
+            assert.notStrictEqual(this.instance._actions[action], undefined, `${action} action initialized`);
+            assert.strictEqual(typeof this.instance._actions[action], 'function', `${action} is a function`);
+        });
+    });
+
+    QUnit.test('should handle action creation when option is undefined', function(assert) {
+        assert.expect(2);
+
+        try {
+            this.reinit({
+                onStartClick: undefined,
+            });
+
+            assert.strictEqual(typeof this.instance._actions.onStartClick, 'function', 'undefined action creates noop function');
+
+            const $button = this.getButton();
+
+            $button.trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error ${e.message}`);
+        } finally {
+            assert.ok(true, 'no error');
+        }
+    });
+
     QUnit.test('should clean up state on _clean', function(assert) {
         this.getButton().trigger('dxclick');
 
