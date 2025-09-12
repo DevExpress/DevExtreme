@@ -4,7 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { createFormattedDateText } from '../../appointments/m_text_utils';
+import { createFormattedDateText, DateFormatType } from '../../appointments/m_text_utils';
 import timeZoneUtils from '../../m_utils_time_zone';
 import { isDateAndTimeView } from '../../r1/utils/index';
 import { generateDates } from '../../recurrence/generate_dates';
@@ -19,7 +19,6 @@ import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provi
 import { CellPositionCalculator } from './m_cell_position_calculator';
 
 const toMs = dateUtils.dateToMilliseconds;
-const APPOINTMENT_DATE_TEXT_FORMAT = 'TIME';
 
 // TODO: Vinogradov types refactoring.
 export class DateGeneratorBaseStrategy {
@@ -713,7 +712,7 @@ export class AppointmentSettingsGenerator {
       startDate,
       endDate,
       allDay,
-      format: APPOINTMENT_DATE_TEXT_FORMAT,
+      format: allDay ? DateFormatType.DATE : DateFormatType.TIME,
     });
   }
 }
