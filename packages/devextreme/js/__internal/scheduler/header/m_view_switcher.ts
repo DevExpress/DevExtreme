@@ -13,9 +13,13 @@ const ClASS = {
   dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content',
 };
 
-const viewDisplayExpr = (item: { type: string }) => messageLocalization.format(`dxScheduler-switcher${camelize(item.type, true)}`);
+const viewDisplayExpr = (item: { type: string; name?: string } | null): string => {
+  if (!item || !item.type) return '';
+  if (item.name) return item.name;
+  return messageLocalization.format(`dxScheduler-switcher${camelize(item.type, true)}`);
+};
 
-const getViewsAndSelectedView = (header: SchedulerHeader) => {
+const getViewsAndSelectedView = (header: SchedulerHeader): { selectedView: string | undefined; views: NormalizedView[] } => {
   const views = header.option('views');
   const selectedView = header.option('currentView').type;
   const isSelectedViewInViews = views.some((view) => view.type === selectedView);
@@ -41,7 +45,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
     options: {
       items: views,
       keyExpr: 'type',
-      displayExpr: viewDisplayExpr,
+      buttonTemplate: (buttonData) => viewDisplayExpr(buttonData),
       selectedItemKeys: [selectedView],
       stylingMode,
       onItemClick: (e) => {
