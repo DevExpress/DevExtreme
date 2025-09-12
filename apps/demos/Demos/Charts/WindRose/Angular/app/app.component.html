@@ -7,21 +7,21 @@
     [dataSource]="windRoseData[0].values"
     (onLegendClick)="onLegendClick($event)"
   >
-    <dxi-series
+    <dxi-polar-chart-series
       *ngFor="let item of windSources"
       [valueField]="item.valueField"
       [name]="item.name"
     >
-    </dxi-series>
-    <dxo-common-series-settings type="stackedbar"></dxo-common-series-settings>
-    <dxo-margin [bottom]="50" [left]="100"> </dxo-margin>
-    <dxo-argument-axis
+    </dxi-polar-chart-series>
+    <dxo-polar-chart-common-series-settings type="stackedbar"></dxo-polar-chart-common-series-settings>
+    <dxo-polar-chart-margin [bottom]="50" [left]="100"> </dxo-polar-chart-margin>
+    <dxo-polar-chart-argument-axis
       discreteAxisDivisionMode="crossLabels"
       [firstPointOnStartAngle]="true"
     >
-    </dxo-argument-axis>
-    <dxo-value-axis [valueMarginsEnabled]="false"></dxo-value-axis>
-    <dxo-export [enabled]="true"></dxo-export>
+    </dxo-polar-chart-argument-axis>
+    <dxo-polar-chart-value-axis [valueMarginsEnabled]="false"></dxo-polar-chart-value-axis>
+    <dxo-polar-chart-export [enabled]="true"></dxo-polar-chart-export>
   </dx-polar-chart>
   <div class="center">
     <dx-select-box

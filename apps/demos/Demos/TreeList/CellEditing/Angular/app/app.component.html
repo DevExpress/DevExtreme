@@ -9,41 +9,41 @@
     [showBorders]="true"
     (onInitNewRow)="initNewRow($event)"
   >
-    <dxo-editing
+    <dxo-tree-list-editing
       mode="cell"
       [allowAdding]="true"
       [allowUpdating]="true"
       [allowDeleting]="true"
     >
-    </dxo-editing>
+    </dxo-tree-list-editing>
 
-    <dxi-column dataField="Task_Subject" [minWidth]="250">
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column
+    <dxi-tree-list-column dataField="Task_Subject" [minWidth]="250">
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column
       dataField="Task_Assigned_Employee_ID"
       caption="Assigned"
       [minWidth]="120"
     >
-      <dxo-lookup
+      <dxo-tree-list-lookup
         [dataSource]="employeesData"
         valueExpr="ID"
         displayExpr="Name"
-      ></dxo-lookup>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="Task_Status" caption="Status" [minWidth]="120">
-      <dxo-lookup [dataSource]="statusesData"></dxo-lookup>
-    </dxi-column>
-    <dxi-column
+      ></dxo-tree-list-lookup>
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column dataField="Task_Status" caption="Status" [minWidth]="120">
+      <dxo-tree-list-lookup [dataSource]="statusesData"></dxo-tree-list-lookup>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column
       dataField="Task_Start_Date"
       caption="Start Date"
       dataType="date"
-    ></dxi-column>
-    <dxi-column
+    ></dxi-tree-list-column>
+    <dxi-tree-list-column
       dataField="Task_Due_Date"
       caption="Due Date"
       dataType="date"
-    ></dxi-column>
+    ></dxi-tree-list-column>
   </dx-tree-list>
 </div>

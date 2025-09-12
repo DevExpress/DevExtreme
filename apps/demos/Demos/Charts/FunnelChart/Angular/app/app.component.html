@@ -5,18 +5,18 @@
   valueField="value"
   palette="Soft Pastel"
 >
-  <dxo-title text="Website Conversions">
-    <dxo-margin [bottom]="30"></dxo-margin>
-  </dxo-title>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip [enabled]="true" format="fixedPoint"> </dxo-tooltip>
-  <dxo-item>
-    <dxo-border [visible]="true"> </dxo-border>
-  </dxo-item>
-  <dxo-label
+  <dxo-funnel-title text="Website Conversions">
+    <dxo-funnel-margin [bottom]="30"></dxo-funnel-margin>
+  </dxo-funnel-title>
+  <dxo-funnel-export [enabled]="true"></dxo-funnel-export>
+  <dxo-funnel-tooltip [enabled]="true" format="fixedPoint"> </dxo-funnel-tooltip>
+  <dxo-funnel-item>
+    <dxo-funnel-border [visible]="true"> </dxo-funnel-border>
+  </dxo-funnel-item>
+  <dxo-funnel-label
     [visible]="true"
     position="inside"
     backgroundColor="none"
     [customizeText]="customizeText"
-  ></dxo-label>
+  ></dxo-funnel-label>
 </dx-funnel>

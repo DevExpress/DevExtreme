@@ -5,27 +5,27 @@
   innerRadius="0.2"
   [dataSource]="exportImportData"
 >
-  <dxo-title text="Imports/Exports of Goods and Services">
-    <dxo-subtitle text="(billion US$, 2012)"></dxo-subtitle>
-  </dxo-title>
-  <dxo-legend [visible]="true"></dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-common-series-settings>
-    <dxo-label [visible]="false"></dxo-label>
-  </dxo-common-series-settings>
-  <dxo-tooltip
+  <dxo-pie-chart-title text="Imports/Exports of Goods and Services">
+    <dxo-pie-chart-subtitle text="(billion US$, 2012)"></dxo-pie-chart-subtitle>
+  </dxo-pie-chart-title>
+  <dxo-pie-chart-legend [visible]="true"></dxo-pie-chart-legend>
+  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
+  <dxo-pie-chart-common-series-settings>
+    <dxo-pie-chart-label [visible]="false"></dxo-pie-chart-label>
+  </dxo-pie-chart-common-series-settings>
+  <dxo-pie-chart-tooltip
     [enabled]="true"
     format="currency"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
-  <dxi-series
+  ></dxo-pie-chart-tooltip>
+  <dxi-pie-chart-series
     name="Export"
     argumentField="Country"
     valueField="Export"
-  ></dxi-series>
-  <dxi-series
+  ></dxi-pie-chart-series>
+  <dxi-pie-chart-series
     name="Import"
     argumentField="Country"
     valueField="Import"
-  ></dxi-series>
+  ></dxi-pie-chart-series>
 </dx-pie-chart>

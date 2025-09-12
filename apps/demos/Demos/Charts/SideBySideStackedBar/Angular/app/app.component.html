@@ -3,35 +3,35 @@
   [dataSource]="populationData"
   title="Population: Age Structure"
 >
-  <dxi-series valueField="maleyoung" name="Male: 0-14" stack="male">
-  </dxi-series>
-  <dxi-series valueField="malemiddle" name="Male: 15-64" stack="male">
-  </dxi-series>
-  <dxi-series valueField="maleolder" name="Male: 65 and older" stack="male">
-  </dxi-series>
-  <dxi-series valueField="femaleyoung" name="Female: 0-14" stack="female">
-  </dxi-series>
-  <dxi-series valueField="femalemiddle" name="Female: 15-64" stack="female">
-  </dxi-series>
-  <dxi-series
+  <dxi-chart-series valueField="maleyoung" name="Male: 0-14" stack="male">
+  </dxi-chart-series>
+  <dxi-chart-series valueField="malemiddle" name="Male: 15-64" stack="male">
+  </dxi-chart-series>
+  <dxi-chart-series valueField="maleolder" name="Male: 65 and older" stack="male">
+  </dxi-chart-series>
+  <dxi-chart-series valueField="femaleyoung" name="Female: 0-14" stack="female">
+  </dxi-chart-series>
+  <dxi-chart-series valueField="femalemiddle" name="Female: 15-64" stack="female">
+  </dxi-chart-series>
+  <dxi-chart-series
     valueField="femaleolder"
     name="Female: 65 and older"
     stack="female"
   >
-  </dxi-series>
-  <dxi-value-axis>
-    <dxo-title text="Populations, millions"></dxo-title>
-  </dxi-value-axis>
-  <dxo-common-series-settings argumentField="state" type="stackedBar">
-  </dxo-common-series-settings>
-  <dxo-legend
+  </dxi-chart-series>
+  <dxi-chart-value-axis>
+    <dxo-chart-title text="Populations, millions"></dxo-chart-title>
+  </dxi-chart-value-axis>
+  <dxo-chart-common-series-settings argumentField="state" type="stackedBar">
+  </dxo-chart-common-series-settings>
+  <dxo-chart-legend
     horizontalAlignment="right"
     columnCount="2"
     [customizeItems]="customizeItems"
     position="inside"
   >
-    <dxo-border [visible]="true"></dxo-border>
-  </dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip [enabled]="true"></dxo-tooltip>
+    <dxo-chart-border [visible]="true"></dxo-chart-border>
+  </dxo-chart-legend>
+  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  <dxo-chart-tooltip [enabled]="true"></dxo-chart-tooltip>
 </dx-chart>

@@ -1,14 +1,14 @@
 <dx-diagram #diagram id="diagram">
-  <dxo-nodes [dataSource]="flowNodesDataSource" textExpr="text" typeExpr="type">
-    <dxo-auto-layout type="layered"></dxo-auto-layout>
-  </dxo-nodes>
-  <dxo-edges
+  <dxo-diagram-nodes [dataSource]="flowNodesDataSource" textExpr="text" typeExpr="type">
+    <dxo-diagram-auto-layout type="layered"></dxo-diagram-auto-layout>
+  </dxo-diagram-nodes>
+  <dxo-diagram-edges
     [dataSource]="flowEdgesDataSource"
     fromExpr="fromId"
     toExpr="toId"
     textExpr="text"
-  ></dxo-edges>
-  <dxo-toolbox>
-    <dxi-group category="general" title="General"></dxi-group>
-  </dxo-toolbox>
+  ></dxo-diagram-edges>
+  <dxo-diagram-toolbox>
+    <dxi-diagram-group category="general" title="General"></dxi-diagram-group>
+  </dxo-diagram-toolbox>
 </dx-diagram>

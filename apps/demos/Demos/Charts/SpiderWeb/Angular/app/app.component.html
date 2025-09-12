@@ -4,11 +4,11 @@
   title="Fruit Production in 2010 (Millions of Tons)"
   [dataSource]="productionData"
 >
-  <dxi-series valueField="apples" name="Apples"></dxi-series>
-  <dxi-series valueField="grapes" name="Grapes"></dxi-series>
-  <dxi-series valueField="lemons" name="Lemons"></dxi-series>
-  <dxi-series valueField="oranges" name="Oranges"></dxi-series>
-  <dxo-common-series-settings type="line"></dxo-common-series-settings>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip [enabled]="true"></dxo-tooltip>
+  <dxi-polar-chart-series valueField="apples" name="Apples"></dxi-polar-chart-series>
+  <dxi-polar-chart-series valueField="grapes" name="Grapes"></dxi-polar-chart-series>
+  <dxi-polar-chart-series valueField="lemons" name="Lemons"></dxi-polar-chart-series>
+  <dxi-polar-chart-series valueField="oranges" name="Oranges"></dxi-polar-chart-series>
+  <dxo-polar-chart-common-series-settings type="line"></dxo-polar-chart-common-series-settings>
+  <dxo-polar-chart-export [enabled]="true"></dxo-polar-chart-export>
+  <dxo-polar-chart-tooltip [enabled]="true"></dxo-polar-chart-tooltip>
 </dx-polar-chart>

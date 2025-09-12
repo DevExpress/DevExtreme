@@ -4,22 +4,22 @@
   palette="bright"
   [dataSource]="olympicMedals"
 >
-  <dxo-legend
+  <dxo-pie-chart-legend
     orientation="horizontal"
     itemTextPosition="right"
     horizontalAlignment="center"
     verticalAlignment="bottom"
     [columnCount]="4"
-  ></dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxi-series argumentField="country" valueField="medals">
-    <dxo-label
+  ></dxo-pie-chart-legend>
+  <dxo-pie-chart-export [enabled]="true"></dxo-pie-chart-export>
+  <dxi-pie-chart-series argumentField="country" valueField="medals">
+    <dxo-pie-chart-label
       [visible]="true"
       position="columns"
       [customizeText]="customizeLabel"
     >
-      <dxo-font [size]="16"></dxo-font>
-      <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
-    </dxo-label>
-  </dxi-series>
+      <dxo-pie-chart-font [size]="16"></dxo-pie-chart-font>
+      <dxo-pie-chart-connector [visible]="true" [width]="0.5"></dxo-pie-chart-connector>
+    </dxo-pie-chart-label>
+  </dxi-pie-chart-series>
 </dx-pie-chart>

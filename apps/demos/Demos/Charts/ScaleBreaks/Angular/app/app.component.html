@@ -1,14 +1,14 @@
 <dx-chart id="chart" [title]="title" [dataSource]="data">
-  <dxi-series valueField="mass" argumentField="name" type="bar"> </dxi-series>
-  <dxi-value-axis
+  <dxi-chart-series valueField="mass" argumentField="name" type="bar"> </dxi-chart-series>
+  <dxi-chart-value-axis
     [visible]="true"
     [autoBreaksEnabled]="autoBreaksEnabledValue"
     [maxAutoBreakCount]="breaksCountValue"
   >
-    <dxo-break-style [line]="lineStyleValue"> </dxo-break-style>
-  </dxi-value-axis>
-  <dxo-legend [visible]="false"> </dxo-legend>
-  <dxo-tooltip [enabled]="true"> </dxo-tooltip>
+    <dxo-chart-break-style [line]="lineStyleValue"> </dxo-chart-break-style>
+  </dxi-chart-value-axis>
+  <dxo-chart-legend [visible]="false"> </dxo-chart-legend>
+  <dxo-chart-tooltip [enabled]="true"> </dxo-chart-tooltip>
 </dx-chart>
 
 <div class="options">
