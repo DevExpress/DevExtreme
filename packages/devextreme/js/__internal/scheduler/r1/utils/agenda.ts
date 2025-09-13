@@ -28,7 +28,7 @@ export const calculateRows = (
   }
 
   appointments.forEach((appointment) => {
-    const appointmentStart = getDayStart(appointment.startDate);
+    const appointmentStart = getDayStart(appointment.startDateUTC);
     const intervalIndex = intervalsStartMap.get(appointmentStart);
     if (intervalIndex !== undefined) {
       result[appointment.groupIndex][intervalIndex] += 1;

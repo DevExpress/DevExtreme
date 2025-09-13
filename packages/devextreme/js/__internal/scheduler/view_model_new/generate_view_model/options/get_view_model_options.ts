@@ -34,6 +34,7 @@ export interface ViewModelOptions {
   isRTLEnabled: boolean;
   isAdaptivityEnabled: boolean;
   cellDurationMinutes: number;
+  isVirtualScrolling: boolean;
 }
 
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
@@ -52,6 +53,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
   const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
   const allDayPanelMode = schedulerStore.getViewOption('allDayPanelMode');
   const showAllDayPanel = schedulerStore.getViewOption('showAllDayPanel');
+  const isVirtualScrolling = schedulerStore.isVirtualScrolling();
 
   return {
     type,
@@ -67,5 +69,6 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     isAdaptivityEnabled,
     cellDurationMinutes,
     hasAllDayPanel: showAllDayPanel && allDayPanelMode !== 'hidden' && viewOrientation === 'vertical',
+    isVirtualScrolling,
   };
 };

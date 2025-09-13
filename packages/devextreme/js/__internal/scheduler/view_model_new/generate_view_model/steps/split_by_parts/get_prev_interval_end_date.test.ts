@@ -5,21 +5,21 @@ import { getPrevIntervalEndDate } from './get_prev_interval_end_date';
 describe('getPrevIntervalEndDate', () => {
   it('should return correct prev end date for several intervals with gap', () => {
     expect(getPrevIntervalEndDate([{
-      min: new Date(2000, 0, 10, 3, 30).getTime(),
-      max: new Date(2000, 0, 10, 23, 30).getTime(),
+      min: Date.UTC(2000, 0, 10, 3, 30),
+      max: Date.UTC(2000, 0, 10, 23, 30),
     }, {
-      min: new Date(2000, 0, 11, 3, 30).getTime(),
-      max: new Date(2000, 0, 11, 23, 30).getTime(),
-    }])).toEqual(new Date(2000, 0, 9, 23, 30).getTime());
+      min: Date.UTC(2000, 0, 11, 3, 30),
+      max: Date.UTC(2000, 0, 11, 23, 30),
+    }])).toEqual(Date.UTC(2000, 0, 9, 23, 30));
   });
 
   it('should return correct prev end date for several intervals without gap', () => {
     expect(getPrevIntervalEndDate([{
-      min: new Date(2000, 0, 10, 23, 30).getTime(),
-      max: new Date(2000, 0, 11, 23, 30).getTime(),
+      min: Date.UTC(2000, 0, 10, 23, 30),
+      max: Date.UTC(2000, 0, 11, 23, 30),
     }, {
-      min: new Date(2000, 0, 11, 23, 30).getTime(),
-      max: new Date(2000, 0, 12, 23, 30).getTime(),
-    }])).toEqual(new Date(2000, 0, 10, 23, 30).getTime());
+      min: Date.UTC(2000, 0, 11, 23, 30),
+      max: Date.UTC(2000, 0, 12, 23, 30),
+    }])).toEqual(Date.UTC(2000, 0, 10, 23, 30));
   });
 });

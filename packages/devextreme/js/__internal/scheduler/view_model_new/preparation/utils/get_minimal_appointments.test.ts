@@ -17,8 +17,12 @@ describe('getMinimalAppointments', () => {
     }];
     const expectedResult: MinimalAppointmentEntity = {
       allDay: false,
-      startDate: data[0].startDate.getTime(),
-      endDate: data[0].endDate.getTime(),
+      startDateUTC: data[0].startDate.getTime(),
+      endDateUTC: data[0].endDate.getTime(),
+      sourceDatesBeforeSplit: {
+        startDate: data[0].startDate.getTime(),
+        endDate: data[0].endDate.getTime(),
+      },
       hasRecurrenceRule: true,
       itemData: data[0],
       recurrenceException: undefined,
@@ -47,8 +51,12 @@ describe('getMinimalAppointments', () => {
       }];
       const expectedResult: MinimalAppointmentEntity = {
         allDay: false,
-        startDate: data[0].startDate.getTime(),
-        endDate: data[0].endDate.getTime(),
+        startDateUTC: data[0].startDate.getTime(),
+        endDateUTC: data[0].endDate.getTime(),
+        sourceDatesBeforeSplit: {
+          startDate: data[0].startDate.getTime(),
+          endDate: data[0].endDate.getTime(),
+        },
         hasRecurrenceRule: false,
         itemData: data[0],
         recurrenceException: undefined,
@@ -140,8 +148,12 @@ describe('getMinimalAppointments', () => {
 
     expect(result).toEqual([{
       allDay: true,
-      startDate: data[0].StartDate.getTime(),
-      endDate: data[0].EndDate.getTime(),
+      startDateUTC: data[0].StartDate.getTime(),
+      endDateUTC: data[0].EndDate.getTime(),
+      sourceDatesBeforeSplit: {
+        startDate: data[0].StartDate.getTime(),
+        endDate: data[0].EndDate.getTime(),
+      },
       startDateTimeZone: 'Etc/GMT+10',
       endDateTimeZone: 'Etc/GMT-10',
       recurrenceRule: 'FREQ=WEEKLY',

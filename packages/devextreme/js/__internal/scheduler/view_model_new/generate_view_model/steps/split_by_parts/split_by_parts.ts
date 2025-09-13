@@ -43,13 +43,13 @@ const cropEntityByInterval = <T extends MinimalAppointmentEntity>(
   entity: T,
   interval: DateInterval,
 ): T => {
-  const startDate = entity.startDate < interval.min ? interval.min : entity.startDate;
-  const endDate = entity.endDate > interval.max ? interval.max : entity.endDate;
+  const startDate = entity.startDateUTC < interval.min ? interval.min : entity.startDateUTC;
+  const endDate = entity.endDateUTC > interval.max ? interval.max : entity.endDateUTC;
 
   return {
     ...entity,
-    startDate,
-    endDate,
+    startDateUTC: startDate,
+    endDateUTC: endDate,
     duration: endDate - startDate,
   };
 };
@@ -77,11 +77,11 @@ export const splitByParts = <T extends MinimalAppointmentEntity & AllDayPanelOcc
 
   return entities
     .reduce<(T & AppointmentPart)[]>((result, entity) => {
-      const startIndex = intervals.findIndex(({ max }) => entity.startDate < max);
-      const endIndex = getEndIndex(intervals, entity.endDate);
+      const startIndex = intervals.findIndex(({ max }) => entity.startDateUTC < max);
+      const endIndex = getEndIndex(intervals, entity.endDateUTC);
       const partCount = endIndex - startIndex + 1;
-      const isStartOnPrevView = entity.startDate < prevIntervalEndDate;
-      const isEndOnNextView = entity.endDate > nextIntervalStartDate;
+      const isStartOnPrevView = entity.startDateUTC < prevIntervalEndDate;
+      const isEndOnNextView = entity.endDateUTC > nextIntervalStartDate;
 
       if (partCount <= 1) {
         result.push({

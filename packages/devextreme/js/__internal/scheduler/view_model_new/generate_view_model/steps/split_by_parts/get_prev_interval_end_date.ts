@@ -5,22 +5,22 @@ export const getPrevIntervalEndDate = (
 ): number => {
   const maxDate = new Date(intervals[0].max);
   const prevDate = new Date(intervals[0].min);
-  const isTheSameHours = maxDate.getHours() === prevDate.getHours()
-    && maxDate.getMinutes() === prevDate.getMinutes()
-    && maxDate.getSeconds() === prevDate.getSeconds()
-    && maxDate.getMilliseconds() === prevDate.getMilliseconds();
+  const isTheSameHours = maxDate.getUTCHours() === prevDate.getUTCHours()
+    && maxDate.getUTCMinutes() === prevDate.getUTCMinutes()
+    && maxDate.getUTCSeconds() === prevDate.getUTCSeconds()
+    && maxDate.getUTCMilliseconds() === prevDate.getUTCMilliseconds();
 
   if (isTheSameHours) {
     return prevDate.getTime();
   }
 
-  prevDate.setHours(
-    maxDate.getHours(),
-    maxDate.getMinutes(),
-    maxDate.getSeconds(),
-    maxDate.getMilliseconds(),
+  prevDate.setUTCHours(
+    maxDate.getUTCHours(),
+    maxDate.getUTCMinutes(),
+    maxDate.getUTCSeconds(),
+    maxDate.getUTCMilliseconds(),
   );
-  prevDate.setDate(prevDate.getDate() - 1);
+  prevDate.setUTCDate(prevDate.getUTCDate() - 1);
 
   return prevDate.getTime();
 };

@@ -3,11 +3,11 @@ import { describe, expect, it } from '@jest/globals';
 import { maybeSplit } from './maybe_split';
 
 const entities = [
-  { isAllDayPanelOccupied: true, startDate: 10 },
-  { isAllDayPanelOccupied: false, startDate: 10 },
-  { isAllDayPanelOccupied: false, startDate: 12 },
-  { isAllDayPanelOccupied: true, startDate: 12 },
-  { isAllDayPanelOccupied: false, startDate: 15 },
+  { isAllDayPanelOccupied: true, startDateUTC: 10 },
+  { isAllDayPanelOccupied: false, startDateUTC: 10 },
+  { isAllDayPanelOccupied: false, startDateUTC: 12 },
+  { isAllDayPanelOccupied: true, startDateUTC: 12 },
+  { isAllDayPanelOccupied: false, startDateUTC: 15 },
 ];
 const callback = (items, panelName) => items
   .map((item) => ({ ...item, panelName }));

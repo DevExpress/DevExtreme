@@ -12,24 +12,27 @@ interface Options {
 
 export const getMinimalAppointments = (
   safeItems: SafeAppointment[],
-  { dataAccessors, timeZoneCalculator }: Options,
+  { dataAccessors }: Options,
 ): MinimalAppointmentEntity[] => safeItems.map((rawAppointment) => {
-  const rawStartDate = dataAccessors.get('startDate', rawAppointment);
-  const rawEndDate = dataAccessors.get('endDate', rawAppointment);
-  const startDate = timeZoneCalculator.createDate(rawStartDate, 'toGrid');
-  const endDate = timeZoneCalculator.createDate(rawEndDate, 'toGrid');
-  const startDateMs = startDate.getTime();
-  const endDateMs = endDate.getTime();
+  const startDateMs = dataAccessors.get('startDate', rawAppointment).getTime();
+  const startDateTimeZone = dataAccessors.get('startDateTimeZone', rawAppointment);
+
+  const endDateMs = dataAccessors.get('endDate', rawAppointment).getTime();
+  const endDateTimeZone = dataAccessors.get('endDateTimeZone', rawAppointment);
 
   const rawVisible = dataAccessors.get('visible', rawAppointment);
   const visible = isDefined(rawVisible) ? Boolean(rawVisible) : true;
 
   return {
     allDay: dataAccessors.get('allDay', rawAppointment),
-    startDate: startDateMs,
-    startDateTimeZone: dataAccessors.get('startDateTimeZone', rawAppointment),
-    endDate: endDateMs,
-    endDateTimeZone: dataAccessors.get('endDateTimeZone', rawAppointment),
+    startDateUTC: startDateMs,
+    startDateTimeZone,
+    endDateUTC: endDateMs,
+    endDateTimeZone,
+    sourceDatesBeforeSplit: {
+      startDate: startDateMs,
+      endDate: endDateMs,
+    },
     recurrenceRule: dataAccessors.get('recurrenceRule', rawAppointment),
     recurrenceException: dataAccessors.get('recurrenceException', rawAppointment),
     hasRecurrenceRule: dataAccessors.isRecurrent(rawAppointment),

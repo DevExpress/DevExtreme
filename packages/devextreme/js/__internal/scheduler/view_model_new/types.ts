@@ -1,7 +1,7 @@
 import type { Orientation } from '@js/common';
 
-import type { TimeZoneCalculator } from '../r1/timezone_calculator';
 import type { AllDayPanelModeType, SafeAppointment } from '../types';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
 import type {
@@ -43,7 +43,8 @@ export interface FilterOptions {
   showAllDayPanel: boolean;
   supportAllDayPanel: boolean;
   resourceManager: ResourceManager;
-  timeZoneCalculator: TimeZoneCalculator;
+  timeZone: string;
+  dataAccessor: AppointmentDataAccessor;
   viewOffset: number;
   firstDayOfWeek?: number;
   allDayIntervals: DateInterval[];
@@ -63,9 +64,9 @@ export interface AllDayPanelOccupation {
 }
 
 export interface MinimalAppointmentEntity {
-  startDate: number;
+  startDateUTC: number;
   startDateTimeZone?: string;
-  endDate: number;
+  endDateUTC: number;
   endDateTimeZone?: string;
   recurrenceRule?: string;
   recurrenceException?: string;
@@ -74,6 +75,10 @@ export interface MinimalAppointmentEntity {
   visible: boolean;
   disabled: boolean;
   itemData: SafeAppointment;
+  sourceDatesBeforeSplit: {
+    startDate: number;
+    endDate: number;
+  };
 }
 
 export interface Duration {
@@ -88,26 +93,24 @@ export interface AppointmentPart {
 
 export interface DatesBeforeSplit {
   sourceDatesBeforeSplit: {
-    allDay: boolean;
     startDate: number;
     endDate: number;
   };
   datesBeforeSplit: {
-    allDay: boolean;
-    startDate: number;
-    endDate: number;
+    startDateUTC: number;
+    endDateUTC: number;
   };
 }
 
 export interface DatesAfterSplit {
   datesAfterSplit: {
-    allDay: boolean;
-    startDate: number;
-    endDate: number;
+    startDateUTC: number;
+    endDateUTC: number;
   };
 }
 
 export type ListEntity = MinimalAppointmentEntity
+  & DatesBeforeSplit
   & AllDayPanelOccupation
   & GroupIndex
   & Duration;
@@ -122,7 +125,6 @@ export interface AgendaGeometry {
 }
 
 export type AgendaEntity = ListEntity
-  & DatesBeforeSplit
   & DatesAfterSplit
   & AppointmentPart
   & AgendaGeometry

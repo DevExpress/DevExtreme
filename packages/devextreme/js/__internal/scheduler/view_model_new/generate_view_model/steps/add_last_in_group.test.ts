@@ -3,12 +3,12 @@ import { describe, expect, it } from '@jest/globals';
 import { addLastInGroup } from './add_last_in_group';
 
 const items = [
-  { groupIndex: 0, startDate: new Date(2020, 0, 10, 0) },
-  { groupIndex: 0, startDate: new Date(2020, 0, 10, 1) },
-  { groupIndex: 0, startDate: new Date(2020, 0, 11, 5) },
-  { groupIndex: 1, startDate: new Date(2020, 0, 10, 0) },
-  { groupIndex: 1, startDate: new Date(2020, 0, 10, 1) },
-  { groupIndex: 1, startDate: new Date(2020, 0, 11, 5) },
+  { groupIndex: 0, startDateUTC: new Date(2020, 0, 10, 0) },
+  { groupIndex: 0, startDateUTC: new Date(2020, 0, 10, 1) },
+  { groupIndex: 0, startDateUTC: new Date(2020, 0, 11, 5) },
+  { groupIndex: 1, startDateUTC: new Date(2020, 0, 10, 0) },
+  { groupIndex: 1, startDateUTC: new Date(2020, 0, 10, 1) },
+  { groupIndex: 1, startDateUTC: new Date(2020, 0, 11, 5) },
 ] as any[];
 
 describe('addLastInGroup', () => {

@@ -1,7 +1,7 @@
 import type { ListEntity } from '../../types';
 
 // NOTE: if all day appointment ends at 00:00 make it longer to occupy next cell
-export const expandAllDay = <T extends Pick<ListEntity, 'startDate' | 'endDate' | 'allDay' | 'isAllDayPanelOccupied'>>(
+export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay' | 'isAllDayPanelOccupied'>>(
   entities: T[],
   isMonthView: boolean,
 ): T[] => entities.map((entity) => {
@@ -11,21 +11,21 @@ export const expandAllDay = <T extends Pick<ListEntity, 'startDate' | 'endDate' 
     if (isMonthView || entity.isAllDayPanelOccupied) {
       return {
         ...entity,
-        endDate: new Date(entity.endDate).setHours(24, 0, 0, 0),
+        endDateUTC: new Date(entity.endDateUTC).setUTCHours(24, 0, 0, 0),
       };
     }
 
-    const startDate = new Date(entity.startDate);
-    const endDate = new Date(entity.endDate + 1);
-    endDate.setDate(endDate.getDate() + 1);
+    const startDate = new Date(entity.startDateUTC);
+    const endDate = new Date(entity.endDateUTC + 1);
+    endDate.setUTCDate(endDate.getUTCDate() + 1);
 
     return {
       ...entity,
-      endDate: endDate.setHours(
-        startDate.getHours(),
-        startDate.getMinutes(),
-        startDate.getSeconds(),
-        startDate.getMilliseconds(),
+      endDateUTC: endDate.setUTCHours(
+        startDate.getUTCHours(),
+        startDate.getUTCMinutes(),
+        startDate.getUTCSeconds(),
+        startDate.getUTCMilliseconds(),
       ),
     };
   });

@@ -15,7 +15,8 @@ export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
     supportAllDayPanel,
     showAllDayPanel: schedulerStore.option('showAllDayPanel'),
     resourceManager: schedulerStore.resourceManager,
-    timeZoneCalculator: schedulerStore.timeZoneCalculator,
+    timeZone: schedulerStore.getTimeZone(),
+    dataAccessor: schedulerStore._dataAccessors,
     viewOffset,
     firstDayOfWeek: schedulerStore.option('firstDayOfWeek'),
     allDayIntervals: shiftIntervals(

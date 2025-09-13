@@ -3,8 +3,8 @@ import { describe, expect, it } from '@jest/globals';
 import { addCollectorByLevel } from './add_collector_by_level';
 
 const monthCells = Array.from({ length: 28 }).map((_, index) => ({
-  min: new Date(2025, 0, index + 1).getTime(),
-  max: new Date(2025, 0, index + 2).getTime(),
+  min: Date.UTC(2025, 0, index + 1),
+  max: Date.UTC(2025, 0, index + 2),
   cellIndex: index,
   rowIndex: Math.floor(index / 7),
   columnIndex: index % 7,
@@ -13,8 +13,8 @@ const monthCells = Array.from({ length: 28 }).map((_, index) => ({
 describe('addCollectorByLevel', () => {
   it('should add empty collector for non-overlapping appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 1, 1).getTime(),
-      endDate: new Date(2025, 0, 1, 2, 15).getTime(),
+      startDate: Date.UTC(2025, 0, 1, 1),
+      endDate: Date.UTC(2025, 0, 1, 2, 15),
       duration: 3600_000,
       cellIndex: 0,
       rowIndex: 0,
@@ -24,8 +24,8 @@ describe('addCollectorByLevel', () => {
       maxLevel: 0,
     },
     {
-      startDate: new Date(2025, 0, 1, 2, 15).getTime(),
-      endDate: new Date(2025, 0, 1, 3).getTime(),
+      startDate: Date.UTC(2025, 0, 1, 2, 15),
+      endDate: Date.UTC(2025, 0, 1, 3),
       duration: 3600_000,
       cellIndex: 0,
       rowIndex: 0,
@@ -34,8 +34,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 0,
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1),
+      endDate: Date.UTC(2025, 0, 8, 2),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -44,8 +44,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 0,
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1, 30),
+      endDate: Date.UTC(2025, 0, 8, 5),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -71,8 +71,8 @@ describe('addCollectorByLevel', () => {
 
   it('should collect non-overlapping appointments with zero maxAppointmentsPerCell', () => {
     const items = [{
-      startDate: new Date(2025, 0, 1, 1).getTime(),
-      endDate: new Date(2025, 0, 1, 2, 15).getTime(),
+      startDate: Date.UTC(2025, 0, 1, 1),
+      endDate: Date.UTC(2025, 0, 1, 2, 15),
       duration: 3600_000,
       cellIndex: 0,
       rowIndex: 0,
@@ -82,8 +82,8 @@ describe('addCollectorByLevel', () => {
       maxLevel: 0,
     },
     {
-      startDate: new Date(2025, 0, 1, 2, 15).getTime(),
-      endDate: new Date(2025, 0, 1, 3).getTime(),
+      startDate: Date.UTC(2025, 0, 1, 2, 15),
+      endDate: Date.UTC(2025, 0, 1, 3),
       duration: 3600_000,
       cellIndex: 0,
       rowIndex: 0,
@@ -92,8 +92,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 0,
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1),
+      endDate: Date.UTC(2025, 0, 8, 2),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -102,8 +102,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 0,
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1, 30),
+      endDate: Date.UTC(2025, 0, 8, 5),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -127,8 +127,8 @@ describe('addCollectorByLevel', () => {
 
   it('should collect overlapping appointments with maxAppointmentsPerCell=2', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
-      endDate: new Date(2025, 0, 8, 4, 15).getTime(),
+      startDate: Date.UTC(2025, 0, 7, 3, 15),
+      endDate: Date.UTC(2025, 0, 8, 4, 15),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -137,8 +137,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1),
+      endDate: Date.UTC(2025, 0, 8, 2),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -147,8 +147,8 @@ describe('addCollectorByLevel', () => {
       level: 1,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1, 30),
+      endDate: Date.UTC(2025, 0, 8, 5),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -157,8 +157,8 @@ describe('addCollectorByLevel', () => {
       level: 2,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 8, 3).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 2),
+      endDate: Date.UTC(2025, 0, 8, 3),
       duration: 3600_000,
       cellIndex: 6,
       rowIndex: 0,
@@ -184,8 +184,8 @@ describe('addCollectorByLevel', () => {
 
   it('should add empty collector for overlapping appointments with maxAppointmentsPerCell=-1', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
-      endDate: new Date(2025, 0, 8, 1).getTime(),
+      startDate: Date.UTC(2025, 0, 7, 3, 15),
+      endDate: Date.UTC(2025, 0, 8, 1),
       cellIndex: 0,
       rowIndex: 0,
       columnIndex: 0,
@@ -193,8 +193,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 0,
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1),
+      endDate: Date.UTC(2025, 0, 8, 2),
       cellIndex: 6,
       rowIndex: 0,
       columnIndex: 6,
@@ -202,8 +202,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 1, 30),
+      endDate: Date.UTC(2025, 0, 8, 5),
       cellIndex: 6,
       rowIndex: 0,
       columnIndex: 6,
@@ -211,8 +211,8 @@ describe('addCollectorByLevel', () => {
       level: 1,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 8, 3).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 2),
+      endDate: Date.UTC(2025, 0, 8, 3),
       cellIndex: 6,
       rowIndex: 0,
       columnIndex: 6,
@@ -220,8 +220,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 4).getTime(),
-      endDate: new Date(2025, 0, 8, 7).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 4),
+      endDate: Date.UTC(2025, 0, 8, 7),
       cellIndex: 6,
       rowIndex: 0,
       columnIndex: 6,
@@ -229,8 +229,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 2,
     }, {
-      startDate: new Date(2025, 0, 8, 8).getTime(),
-      endDate: new Date(2025, 0, 8, 9).getTime(),
+      startDate: Date.UTC(2025, 0, 8, 8),
+      endDate: Date.UTC(2025, 0, 8, 9),
       cellIndex: 6,
       rowIndex: 0,
       columnIndex: 6,
@@ -257,8 +257,8 @@ describe('addCollectorByLevel', () => {
 
   it('should collect overlapping appointments by occupation', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7).getTime(),
-      endDate: new Date(2025, 0, 12).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 7),
+      endDateUTC: Date.UTC(2025, 0, 12),
       duration: 3600_000,
       cellIndex: 6,
       endCellIndex: 11,
@@ -268,8 +268,8 @@ describe('addCollectorByLevel', () => {
       level: 0,
       maxLevel: 1,
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 10, 3).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 2),
+      endDateUTC: Date.UTC(2025, 0, 10, 3),
       duration: 3600_000,
       cellIndex: 7,
       endCellIndex: 9,
@@ -279,8 +279,8 @@ describe('addCollectorByLevel', () => {
       level: 3,
       maxLevel: 1,
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 9, 5).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1, 30),
+      endDateUTC: Date.UTC(2025, 0, 9, 5),
       duration: 3600_000,
       cellIndex: 7,
       endCellIndex: 8,
@@ -290,8 +290,8 @@ describe('addCollectorByLevel', () => {
       level: 2,
       maxLevel: 1,
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1),
+      endDateUTC: Date.UTC(2025, 0, 8, 2),
       duration: 3600_000,
       cellIndex: 7,
       endCellIndex: 7,
@@ -317,8 +317,8 @@ describe('addCollectorByLevel', () => {
       },
       {
         ...items[1],
-        startDate: monthCells[8].min,
-        endDate: monthCells[8].max,
+        startDateUTC: monthCells[8].min,
+        endDateUTC: monthCells[8].max,
         cellIndex: 8,
         endCellIndex: 8,
         rowIndex: monthCells[8].rowIndex,
@@ -326,8 +326,8 @@ describe('addCollectorByLevel', () => {
         items: [
           {
             ...items[1],
-            startDate: monthCells[8].min,
-            endDate: monthCells[8].max,
+            startDateUTC: monthCells[8].min,
+            endDateUTC: monthCells[8].max,
             cellIndex: 8,
             endCellIndex: 8,
             rowIndex: monthCells[8].rowIndex,
@@ -335,8 +335,8 @@ describe('addCollectorByLevel', () => {
           },
           {
             ...items[2],
-            startDate: monthCells[8].min,
-            endDate: monthCells[8].max,
+            startDateUTC: monthCells[8].min,
+            endDateUTC: monthCells[8].max,
             cellIndex: 8,
             endCellIndex: 8,
             rowIndex: monthCells[8].rowIndex,
@@ -347,8 +347,8 @@ describe('addCollectorByLevel', () => {
       },
       {
         ...items[1],
-        startDate: monthCells[9].min,
-        endDate: monthCells[9].max,
+        startDateUTC: monthCells[9].min,
+        endDateUTC: monthCells[9].max,
         cellIndex: 9,
         endCellIndex: 9,
         rowIndex: monthCells[9].rowIndex,
@@ -356,8 +356,8 @@ describe('addCollectorByLevel', () => {
         items: [
           {
             ...items[1],
-            startDate: monthCells[9].min,
-            endDate: monthCells[9].max,
+            startDateUTC: monthCells[9].min,
+            endDateUTC: monthCells[9].max,
             cellIndex: 9,
             endCellIndex: 9,
             rowIndex: monthCells[9].rowIndex,

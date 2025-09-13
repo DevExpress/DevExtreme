@@ -1,8 +1,8 @@
 import type {
-  CellInterval, Duration, Position,
+  CellInterval, ListEntity, Position,
 } from '../../types';
 
-export const snapToCells = <T extends Duration & Position>(
+export const snapToCells = <T extends ListEntity & Position>(
   entities: T[],
   cells: CellInterval[],
   isSnapToCell = true,
@@ -16,8 +16,8 @@ export const snapToCells = <T extends Duration & Position>(
 
     return {
       ...entity,
-      startDate: cells[cellIndex].min,
-      endDate: cells[endCellIndex].max,
+      startDateUTC: cells[cellIndex].min,
+      endDateUTC: cells[endCellIndex].max,
       duration: cells[endCellIndex].max - cells[cellIndex].min,
     };
   });

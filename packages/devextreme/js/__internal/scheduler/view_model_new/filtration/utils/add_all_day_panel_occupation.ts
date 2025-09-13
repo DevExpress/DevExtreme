@@ -8,8 +8,8 @@ export const addAllDayPanelOccupation = <T extends MinimalAppointmentEntity>(
     const isAllDayPanelOccupied = supportAllDayPanel && isAppointmentTakesAllDay(
       {
         allDay: entity.allDay,
-        startDate: new Date(entity.startDate),
-        endDate: new Date(entity.endDate),
+        startDate: new Date(entity.startDateUTC),
+        endDate: new Date(entity.endDateUTC),
       },
       allDayPanelMode,
     );

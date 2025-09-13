@@ -11,7 +11,6 @@ import { expandAllDay } from './steps/expand_all_day';
 import { filterByVirtualScreen } from './steps/filter_by_virtual_screen';
 import { groupByGroupIndex } from './steps/group_by_group_index';
 import { maybeSplit } from './steps/maybe_split';
-import { saveDatesBeforeSplit } from './steps/save_dates';
 import { snapToCells } from './steps/snap_to_cells';
 import { sortByDuration, sortByGroupIndex, sortByStartDate } from './steps/sorting';
 import { splitByParts } from './steps/split_by_parts/split_by_parts';
@@ -27,11 +26,11 @@ export const generateGridViewModel = (
     isAdaptivityEnabled,
     isTimelineView,
     hasAllDayPanel,
+    isVirtualScrolling,
   } = optionManager.options;
   const { viewDataProvider } = schedulerStore._workSpace;
 
-  const savedStep1 = saveDatesBeforeSplit(items, schedulerStore.timeZoneCalculator);
-  const expandedStep2 = expandAllDay(savedStep1, isMonthView);
+  const expandedStep2 = expandAllDay(items, isMonthView);
 
   const positionedStep3 = maybeSplit(expandedStep2, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
@@ -54,7 +53,11 @@ export const generateGridViewModel = (
   });
 
   const sortIndexedStep4 = addSortedIndex(positionedStep3);
-  const filteredStep5 = filterByVirtualScreen(sortIndexedStep4, viewDataProvider);
+  const filteredStep5 = filterByVirtualScreen(
+    sortIndexedStep4,
+    viewDataProvider,
+    isVirtualScrolling,
+  );
   const sizedStep6 = maybeSplit(filteredStep5, hasAllDayPanel, (entities, panelName) => {
     const output = addGeometry(entities, optionManager.getGeometryOptions(panelName));
     return output;

@@ -24,7 +24,7 @@ const groupByStart = <T extends Position>(
     return result;
   }, Array.from({ length: cellsCount }, () => []));
 
-const groupByOccupation = <T extends Level & Position>(
+const groupByOccupation = <T extends ListEntity & Level & Position>(
   entities: T[],
   cells: CollectorOptions['cells'],
   maxLevel: number,
@@ -36,8 +36,8 @@ const groupByOccupation = <T extends Level & Position>(
           ...entity,
           cellIndex: i,
           endCellIndex: i,
-          startDate: cells[i].min,
-          endDate: cells[i].max,
+          startDateUTC: cells[i].min,
+          endDateUTC: cells[i].max,
           columnIndex: cells[i].columnIndex,
           rowIndex: cells[i].rowIndex,
         });

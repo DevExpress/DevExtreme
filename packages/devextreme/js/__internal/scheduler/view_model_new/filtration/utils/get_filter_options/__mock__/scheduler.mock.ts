@@ -1,5 +1,5 @@
+import { mockAppointmentDataAccessor } from '../../../../../__mock__/appointment_data_accessor.mock';
 import type Scheduler from '../../../../../m_scheduler';
-import { createTimeZoneCalculator } from '../../../../../r1/timezone_calculator';
 import { ResourceManager } from '../../../../../utils/resource_manager/resource_manager';
 
 export const getSchedulerMock = ({
@@ -25,10 +25,8 @@ export const getSchedulerMock = ({
     ],
   }),
   getViewOption: (name: string) => ({ startDayHour, endDayHour, allDayPanelMode: 'allDay' }[name]),
-  option: (name: string) => ({ firstDayOfWeek: 0, showAllDayPanel: true }[name]),
+  option: (name: string) => ({ timeZone: 'UTC', firstDayOfWeek: 0, showAllDayPanel: true }[name]),
   getViewOffsetMs: () => offsetMinutes * 60_000,
   resourceManager: resourceManager ?? new ResourceManager([]),
-  timeZoneCalculator: createTimeZoneCalculator(
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-  ),
+  _dataAccessors: mockAppointmentDataAccessor,
 }) as unknown as Scheduler;

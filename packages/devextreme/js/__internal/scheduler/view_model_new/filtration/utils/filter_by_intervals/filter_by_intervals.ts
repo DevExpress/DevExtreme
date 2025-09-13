@@ -11,11 +11,11 @@ export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPan
     // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
     const fixedAppointment = { ...appointment };
     if (appointment.allDay && appointment.isAllDayPanelOccupied) {
-      fixedAppointment.endDate += 1;
+      fixedAppointment.endDateUTC += 1;
     }
 
     return isAppointmentMatchedIntervals(
-      fixedAppointment,
+      { startDate: fixedAppointment.startDateUTC, endDate: fixedAppointment.endDateUTC },
       intervals,
     );
   });

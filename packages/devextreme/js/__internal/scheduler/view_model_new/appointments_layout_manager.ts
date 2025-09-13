@@ -10,7 +10,7 @@ import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
-import { getAppointmentInfo } from './get_appointment_info';
+import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type {
   AppointmentEntity,
@@ -46,14 +46,7 @@ class AppointmentLayoutManager {
       return viewModel.map((item) => ({
         ...item,
         isAgendaModel: true,
-        info: {
-          ...getAppointmentInfo(item),
-          partialDates: {
-            allDay: item.allDay,
-            startDate: new Date(item.datesAfterSplit.startDate),
-            endDate: new Date(item.datesAfterSplit.endDate),
-          },
-        },
+        info: getAgendaAppointmentInfo(item),
       }));
     }
 

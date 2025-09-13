@@ -19,16 +19,17 @@ describe('getFilterOptions', () => {
         showAllDayPanel: true,
         supportAllDayPanel: false,
         resourceManager: schedulerStore.resourceManager,
-        timeZoneCalculator: schedulerStore.timeZoneCalculator,
+        dataAccessor: schedulerStore._dataAccessors,
+        timeZone: 'UTC',
         viewOffset: 30 * 60_000,
         firstDayOfWeek: 0,
         allDayIntervals: [{
-          min: new Date(2000, 0, 10, 0, 30).getTime(),
-          max: new Date(2000, 0, 12, 0, 30).getTime(),
+          min: Date.UTC(2000, 0, 10, 0, 30),
+          max: Date.UTC(2000, 0, 12, 0, 30),
         }],
         regularIntervals: [{
-          min: new Date(2000, 0, 10, 0, 30).getTime(),
-          max: new Date(2000, 0, 12, 0, 30).getTime(),
+          min: Date.UTC(2000, 0, 10, 0, 30),
+          max: Date.UTC(2000, 0, 12, 0, 30),
         }],
       });
     });

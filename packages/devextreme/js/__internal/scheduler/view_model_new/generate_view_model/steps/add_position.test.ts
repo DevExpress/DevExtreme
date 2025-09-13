@@ -26,11 +26,11 @@ describe('addPosition', () => {
     ];
 
     const items = [
-      { startDate: 0, endDate: 5 },
-      { startDate: 2, endDate: 5 },
-      { startDate: 8, endDate: 27 },
-      { startDate: 43, endDate: 48 },
-      { startDate: 59, endDate: 60 },
+      { startDateUTC: 0, endDateUTC: 5 },
+      { startDateUTC: 2, endDateUTC: 5 },
+      { startDateUTC: 8, endDateUTC: 27 },
+      { startDateUTC: 43, endDateUTC: 48 },
+      { startDateUTC: 59, endDateUTC: 60 },
     ];
 
     expect(addPosition(items, cells)).toEqual([
@@ -54,9 +54,9 @@ describe('addPosition', () => {
 
   it('should add cell indexes and crop appointments by cell for interrupted interval', () => {
     const items = [
-      { startDate: 10, endDate: 20 },
-      { startDate: 20, endDate: 50 },
-      { startDate: 40, endDate: 55 },
+      { startDateUTC: 10, endDateUTC: 20 },
+      { startDateUTC: 20, endDateUTC: 50 },
+      { startDateUTC: 40, endDateUTC: 55 },
     ];
 
     expect(addPosition(items, [
@@ -71,13 +71,28 @@ describe('addPosition', () => {
       },
     ])).toEqual([
       {
-        startDate: 10, endDate: 15, cellIndex: 0, endCellIndex: 0, rowIndex: 0, columnIndex: 0,
+        startDateUTC: 10,
+        endDateUTC: 15,
+        cellIndex: 0,
+        endCellIndex: 0,
+        rowIndex: 0,
+        columnIndex: 0,
       },
       {
-        startDate: 25, endDate: 50, cellIndex: 1, endCellIndex: 2, rowIndex: 0, columnIndex: 1,
+        startDateUTC: 25,
+        endDateUTC: 50,
+        cellIndex: 1,
+        endCellIndex: 2,
+        rowIndex: 0,
+        columnIndex: 1,
       },
       {
-        startDate: 45, endDate: 55, cellIndex: 2, endCellIndex: 2, rowIndex: 0, columnIndex: 2,
+        startDateUTC: 45,
+        endDateUTC: 55,
+        cellIndex: 2,
+        endCellIndex: 2,
+        rowIndex: 0,
+        columnIndex: 2,
       },
     ]);
   });

@@ -5,22 +5,22 @@ export const getNextIntervalStartDate = (
 ): number => {
   const minDate = new Date(intervals[intervals.length - 1].min);
   const nextDate = new Date(intervals[intervals.length - 1].max);
-  const isTheSameHours = minDate.getHours() === nextDate.getHours()
-    && minDate.getMinutes() === nextDate.getMinutes()
-    && minDate.getSeconds() === nextDate.getSeconds()
-    && minDate.getMilliseconds() === nextDate.getMilliseconds();
+  const isTheSameHours = minDate.getUTCHours() === nextDate.getUTCHours()
+    && minDate.getUTCMinutes() === nextDate.getUTCMinutes()
+    && minDate.getUTCSeconds() === nextDate.getUTCSeconds()
+    && minDate.getUTCMilliseconds() === nextDate.getUTCMilliseconds();
 
   if (isTheSameHours) {
     return nextDate.getTime();
   }
 
-  nextDate.setHours(
-    minDate.getHours(),
-    minDate.getMinutes(),
-    minDate.getSeconds(),
-    minDate.getMilliseconds(),
+  nextDate.setUTCHours(
+    minDate.getUTCHours(),
+    minDate.getUTCMinutes(),
+    minDate.getUTCSeconds(),
+    minDate.getUTCMilliseconds(),
   );
-  nextDate.setDate(nextDate.getDate() + 1);
+  nextDate.setUTCDate(nextDate.getUTCDate() + 1);
 
   return nextDate.getTime();
 };

@@ -8,25 +8,25 @@ describe('expandAllDay', () => {
       {
         allDay: false,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
       }, {
         allDay: false,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
     ], false)).toEqual([
       {
         allDay: false,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
       }, {
         allDay: false,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
     ]);
   });
@@ -36,25 +36,25 @@ describe('expandAllDay', () => {
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
     ], true)).toEqual([
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 24).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 24),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 24).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 24),
       },
     ]);
   });
@@ -64,25 +64,25 @@ describe('expandAllDay', () => {
       {
         allDay: true,
         isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
       }, {
         allDay: true,
         isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
     ], false)).toEqual([
       {
         allDay: true,
         isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 24).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 24),
       }, {
         allDay: true,
         isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 24).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 24),
       },
     ]);
   });
@@ -92,25 +92,25 @@ describe('expandAllDay', () => {
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 0).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 0),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 11, 0).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 11, 0),
       },
     ], false)).toEqual([
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 11, 0).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 11, 0),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 12, 0).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 12, 0),
       },
     ]);
   });
@@ -120,35 +120,35 @@ describe('expandAllDay', () => {
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 10, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 10, 5),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 12, 5).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 12, 5),
       },
     ], false)).toEqual([
       {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 4).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 4),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 12, 4).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 12, 4),
       }, {
         allDay: true,
         isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 13, 4).getTime(),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 13, 4),
       },
     ]);
   });
