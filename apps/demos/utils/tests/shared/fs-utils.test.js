@@ -118,9 +118,7 @@ describe('common functions', () => {
     const expectedPath = path.join(baseDemosDir, 'Widget2', demoName);
 
     expect(fileSystemUtils.getDemoPathByMeta(
-      categoryName,
-      groupName,
-      demoName,
+      [ categoryName, groupName, demoName ],
       baseDemosDir,
       menuMetaData,
     )).toBe(expectedPath);

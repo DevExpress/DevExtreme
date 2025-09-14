@@ -4,7 +4,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const promptsQuestions = require('./prompts-questions');
 const fileSystemUtils = require('../shared/fs-utils');
-const menuMetaUtils = require('./menu-meta-utils');
+const menuMetaUtils = require('../shared/menu-meta-utils');
 const menuMetaData = require('../../menuMeta.json');
 
 const existingApproaches = ['jQuery', 'Angular', 'React', 'Vue'];
@@ -33,8 +33,8 @@ const baseDemosDir = 'Demos';
 
 const openDemoInEditor = (demoPath) => spawn('code', [demoPath], { shell: true });
 
-const addDemo = async (category, group, meta) => {
-  const demo = await promptsQuestions.askDemo(meta, category, group);
+const addDemo = async (metaPath, meta) => {
+  const demo = await promptsQuestions.askDemo(meta, metaPath);
   let demoPath;
   let missingApproaches = [];
 
@@ -52,18 +52,17 @@ const addDemo = async (category, group, meta) => {
     }
     menuMetaUtils.addDemo(
       meta,
-      category.name,
-      group.name,
+      metaPath,
       demo.newName,
       widget.newName ? widget.newName : widget.name,
       equivalents.value,
     );
+    metaPath.push(demo.newName.replace(/ /g, ''));
     missingApproaches = existingApproaches;
   } else {
+    metaPath.push(demo.name);
     demoPath = fileSystemUtils.getDemoPathByMeta(
-      category.name,
-      group.name,
-      demo.name,
+      metaPath,
       baseDemosDir,
       meta,
     );
@@ -78,19 +77,15 @@ const addDemo = async (category, group, meta) => {
   if (newOrExisting.choice === 'existing') {
     menuMetaUtils.updateDemoProperties(
       meta,
-      category.name,
-      group.name,
-      demo.newName,
+      metaPath,
       newOrExisting,
     );
   }
   if (newOrExisting.choice === 'new') {
     const extraModulesAnswer = await promptsQuestions.askForExtraModules(extraModules);
-    menuMetaUtils.updateDemoModules(
+    menuMetaUtils.addDemoModules(
       meta,
-      category.name,
-      group.name,
-      demo.newName.replace(/ /g, ''),
+      metaPath,
       extraModulesAnswer.modules,
     );
   }
@@ -112,13 +107,25 @@ const mainRoutine = async (meta) => {
     fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
     console.log('-> New category has been added.');
   } else {
-    const group = await promptsQuestions.askGroup(meta, category);
-    if (group.name === 'new') {
-      menuMetaUtils.addGroup(meta, category.name, group.newName);
-      fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
-      console.log('-> New group has been added.');
-    } else {
-      await addDemo(category, group, meta);
+    const path = [category.name];
+    let shouldCountinue = true;
+    let group;
+    while (shouldCountinue) {
+      group = await promptsQuestions.askGroup(meta, path);
+      // console.log('group', group.name);
+      if (group.name === 'new') {
+        menuMetaUtils.addGroup(meta, path, group.newName);
+        fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
+        console.log('-> New group has been added.');
+        shouldCountinue = false;
+      } else {
+        path.push(group.name);
+        // console.log('isGroup', path, menuMetaUtils.isGroup(meta, path));
+        if (menuMetaUtils.isGroup(meta, path)) {
+          shouldCountinue = false;
+          await addDemo(path, meta);
+        }
+      }
     }
   }
 };
