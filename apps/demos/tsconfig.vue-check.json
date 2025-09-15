@@ -6,8 +6,5 @@
   },
   "include": [
     "Demos/**/Vue/**/*.vue"
-  ],
-  "exclude": [
-    "utils/templates/Vue/index.ts"
   ]
 }
