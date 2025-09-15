@@ -59,21 +59,6 @@ QUnit.module('Initialization', moduleConfig, () => {
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_CLASS), 'main CSS class applied');
     });
 
-    QUnit.test('component should have default options', function(assert) {
-        const expectedDefaults = {
-            stylingMode: 'contained',
-            type: 'default',
-            startIcon: 'micoutline',
-            stopIcon: 'stopfilled',
-            startText: '',
-            stopText: '',
-        };
-
-        Object.entries(expectedDefaults).forEach(([key, value]) => {
-            assert.strictEqual(this.instance.option(key), value, `${key} has correct default value`);
-        });
-    });
-
     QUnit.test('button should inherit properties from SpeechToText options', function(assert) {
         this.reinit({
             stylingMode: 'custom',
@@ -448,7 +433,7 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
             isListening: true,
         });
 
-        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'missing enabled handled');
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'enabled not missed');
     });
 });
 

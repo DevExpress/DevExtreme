@@ -1,6 +1,6 @@
 import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -25,17 +25,15 @@ const ACTIONS: (keyof SpeechToTextActions)[] = [
 ];
 
 class SpeechToText extends Widget<SpeechToTextProperties> {
-  private _button!: Button;
+  private _button?: Button;
 
   private _state!: SpeechToTextState;
 
   private _actions!: SpeechToTextActions;
 
   _getDefaultOptions(): SpeechToTextProperties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
-      stylingMode: 'contained',
-      type: 'default',
+    return {
+      ...super._getDefaultOptions(),
       startIcon: DEFAULT_INITIAL_ICON,
       stopIcon: DEFAULT_LISTENING_ICON,
       startText: '',
@@ -48,7 +46,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       onStopClick: undefined,
       onResult: undefined,
       onError: undefined,
-    });
+    };
   }
 
   _init(): void {
@@ -78,8 +76,9 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   }
 
   private _renderButton(): void {
+    const $buttonElement = $('<div>').appendTo(this.$element());
     this._button = this._createComponent<Button, ButtonProperties>(
-      this.$element(),
+      $buttonElement,
       Button,
       this._getButtonOptions(),
     );
@@ -109,7 +108,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       icon: this._getCurrentIcon(),
       text: this._getCurrentText(),
       onClick: (e: ClickEvent): void => {
-        this._buttonClickHandler(e);
+        this._handleButtonClick(e);
       },
     };
   }
@@ -128,7 +127,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       : startText ?? '';
   }
 
-  private _buttonClickHandler(e: ClickEvent): void {
+  private _handleButtonClick(e: ClickEvent): void {
     if (this._state === SpeechToTextState.DISABLED) {
       return;
     }
@@ -149,7 +148,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
     this._actions.onStartClick?.({
       component: this,
-      element: this.$element().get(0) as HTMLElement,
+      element: this.element(),
       event: e.event,
     });
   }
@@ -163,7 +162,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
     this._actions.onStopClick?.({
       component: this,
-      element: this.$element().get(0) as HTMLElement,
+      element: this.element(),
       event: e.event,
     });
   }
@@ -179,11 +178,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   }
 
   private _updateButtonState(): void {
-    if (!this._button) {
-      return;
-    }
-
-    this._button.option({
+    this._button?.option({
       icon: this._getCurrentIcon(),
       text: this._getCurrentText(),
     });
@@ -203,13 +198,14 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
       case 'stylingMode':
       case 'type':
-      case 'disabled':
       case 'width':
       case 'height':
         this._button?.option(name, value);
-        if (name === 'disabled') {
-          this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
-        }
+        break;
+
+      case 'disabled':
+        this._button?.option(name, value);
+        this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
         break;
 
       case 'startIcon':
@@ -245,8 +241,15 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     return this._state === SpeechToTextState.LISTENING;
   }
 
+  _cleanButton(): void {
+    this._button?.dispose();
+    this._button = undefined;
+  }
+
   _clean(): void {
+    this._cleanButton();
     this._setState(SpeechToTextState.INITIAL);
+    this.dispose();
     super._clean();
   }
 
