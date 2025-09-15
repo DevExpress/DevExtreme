@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeViewModule } from 'devextreme-angular';
-import { DataSource, ODataStore } from 'devextreme-angular/common/data';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -19,11 +19,9 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
 })
 export class AppComponent {
-  dataSource = new DataSource({
-    store: new ODataStore({
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
-    }),
+  dataSource = AspNetData.createStore({
+    loadUrl: 'http://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
+    key: 'ID',
   });
 }
 
