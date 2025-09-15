@@ -62,6 +62,8 @@ const tasksT1223168 = [{
     const treeList = new TreeList('#container');
 
     await t
+      .expect(treeList.isReady())
+      .ok()
       .expect(await takeScreenshot(`T1221037-cell-with-template-${theme}`, treeList.element))
       .ok()
       .expect(compareResults.isValid())
