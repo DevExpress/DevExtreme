@@ -4,6 +4,12 @@ import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+
+const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 fixture.disablePageReloads`CardView - LoadPanel`
   .page(url(__dirname, '../container.html'));
@@ -19,15 +25,27 @@ safeSizeTest('Default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxCardView', {
-  width: 500,
-  height: 300,
-  dataSource: {
-    key: 'id',
-    load: () => new Promise(() => {}),
-  },
-  columns: ['A', 'B', 'C', 'D'],
-}));
+}, [800, 800]).before(async () => {
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+  `);
+
+  return createWidget('dxCardView', {
+    width: 500,
+    height: 300,
+    dataSource: {
+      key: 'id',
+      load: () => new Promise(() => {}),
+    },
+    columns: ['A', 'B', 'C', 'D'],
+  });
+});
 
 safeSizeTest('Default render when CardView has a large height', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -37,15 +55,27 @@ safeSizeTest('Default render when CardView has a large height', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxCardView', {
-  width: 500,
-  height: 3000,
-  dataSource: {
-    key: 'id',
-    load: () => new Promise(() => {}),
-  },
-  columns: ['A', 'B', 'C', 'D'],
-}));
+}, [800, 800]).before(async () => {
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+  `);
+
+  return createWidget('dxCardView', {
+    width: 500,
+    height: 3000,
+    dataSource: {
+      key: 'id',
+      load: () => new Promise(() => {}),
+    },
+    columns: ['A', 'B', 'C', 'D'],
+  });
+});
 
 safeSizeTest('The load panel should match the size of the component’s root container', async (t) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
