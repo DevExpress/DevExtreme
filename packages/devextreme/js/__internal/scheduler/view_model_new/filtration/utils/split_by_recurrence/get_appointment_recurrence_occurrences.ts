@@ -11,33 +11,37 @@ interface Options {
 }
 
 // NOTE: When DST+1, then 2 AM equal 3 AM and interval [2 AM, 3 AM) is unreachable
-const getUnreachableShift = (
+// Recurrence is different because each occurrence has to have the same time in any timezone shift
+const getUnreachableShiftRecurrence = (
   startDateInfo: DateInformation,
   endDateInfo: DateInformation,
 ): number[] => {
   switch (true) {
-    case startDateInfo.isUnreachable:
+    case startDateInfo.isUnreachableTime:
       return [startDateInfo.deltaMs, startDateInfo.deltaMs];
-    case endDateInfo.isUnreachable:
+    case endDateInfo.isUnreachableTime:
       return [0, endDateInfo.deltaMs];
     default:
       return [0, 0];
   }
 };
 
-const getDatesShiftedByTimezone = (
-  startDateMs: number,
-  endDateMs: number,
-  timeZone: string,
-): UTCDates => {
-  const startDateInfo = getDateInformation(startDateMs, timeZone);
-  const endDateInfo = getDateInformation(endDateMs, timeZone);
-  const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
-
-  return {
-    startDateUTC: startDateMs + startDateFix + startDateInfo.offsetMs,
-    endDateUTC: endDateMs + endDateFix + startDateInfo.offsetMs,
-  };
+const getUnreachableShift = (
+  startDateInfo: DateInformation,
+  endDateInfo: DateInformation,
+): number[] => {
+  switch (true) {
+    case startDateInfo.isUnreachableTime && endDateInfo.isUnreachableTime:
+      return [startDateInfo.deltaMs, startDateInfo.deltaMs];
+    case startDateInfo.isUnreachableTime:
+      return [startDateInfo.deltaMs, 0];
+    case endDateInfo.isUnreachableTime:
+      return [0, endDateInfo.deltaMs];
+    case endDateInfo.isDoubleTimeStart:
+      return [0, -endDateInfo.deltaMs];
+    default:
+      return [0, 0];
+  }
 };
 
 export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointmentEntity >(
@@ -54,9 +58,14 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
   } = appointment;
 
   if (!appointment.hasRecurrenceRule) {
+    const startDateInfo = getDateInformation(startDateMsBase, timeZone);
+    const endDateInfo = getDateInformation(endDateMsBase, timeZone);
+    const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
+
     return [{
       ...appointment,
-      ...getDatesShiftedByTimezone(startDateMsBase, endDateMsBase, timeZone),
+      startDateUTC: startDateMsBase + startDateFix + startDateInfo.offsetMs,
+      endDateUTC: endDateMsBase + endDateFix + endDateInfo.offsetMs,
     }];
   }
 
@@ -93,7 +102,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
       const endDateDSTChange = (startDateOffsetBase - endDateInfo.offsetMs)
         + (endDateAppointmentOffsetBase - endDateAppointmentOffset);
 
-      const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
+      const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(startDateInfo, endDateInfo);
       const sourceStartDate = startDateMs + startDateDSTChange;
       const sourceEndDate = endDateMs + endDateDSTChange;
 
@@ -104,7 +113,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
           endDate: sourceEndDate,
         },
         startDateUTC: sourceStartDate + startDateFix + startDateInfo.offsetMs,
-        endDateUTC: sourceEndDate + endDateFix + startDateInfo.offsetMs,
+        endDateUTC: sourceEndDate + endDateFix + endDateInfo.offsetMs,
       };
     })
     .filter((item) => !exceptionDates.has(item.source.startDate));

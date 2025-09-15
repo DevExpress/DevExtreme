@@ -5,7 +5,8 @@ import timeZoneUtils from '../../../../m_utils_time_zone';
 
 export interface DateInformation {
   offsetMs: number;
-  isUnreachable: boolean;
+  isUnreachableTime: boolean;
+  isDoubleTimeStart: boolean;
   deltaMs: number;
 }
 
@@ -59,7 +60,8 @@ export const getDateInformation = (date: number, timeZone: string): DateInformat
 
   return {
     offsetMs: condition ? beforeDSTOffset : afterDSTOffset,
-    isUnreachable: deltaMs > 0 && date >= targetDST && date < targetDST + deltaMs,
+    isUnreachableTime: deltaMs > 0 && date >= targetDST && date < targetDST + deltaMs,
+    isDoubleTimeStart: date === targetDST,
     deltaMs,
   };
 };
