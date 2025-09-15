@@ -8,6 +8,6 @@
     "Demos/**/Vue/**/*.vue"
   ],
   "exclude": [
-    "templates/Vue/index.ts"
+    "utils/templates/Vue/index.ts"
   ]
 }
