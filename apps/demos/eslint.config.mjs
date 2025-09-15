@@ -41,6 +41,7 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
+      'templates/Vue/*.ts',
       'utils', // TODO unignore this
 
       '**/*.{png,json,mjs,css,html,md}',
@@ -364,17 +365,13 @@ export default [
     ...config,
     files: [
       'Demos/**/Vue/*.vue',
-      'Demos/**/Vue/*.ts',
       'utils/templates/Vue/*.vue',
-      'utils/templates/Vue/*.ts',
     ],
   })),
   {
     files: [
       'Demos/**/Vue/*.vue',
-      'Demos/**/Vue/*.ts',
       'utils/templates/Vue/*.vue',
-      'utils/templates/Vue/*.ts',
     ],
     languageOptions: {
       parser: vueParser,
