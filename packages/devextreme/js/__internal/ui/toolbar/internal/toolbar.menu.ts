@@ -244,6 +244,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       },
       deferRendering: false,
       preventScrollEvents: false,
+      _ignorePreventScrollEventsDeprecation: true,
       contentTemplate: (contentElement) => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error

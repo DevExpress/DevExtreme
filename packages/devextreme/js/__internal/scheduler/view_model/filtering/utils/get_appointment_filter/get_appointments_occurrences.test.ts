@@ -2,8 +2,8 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { getRecurrenceProcessor } from '../../../../m_recurrence';
 import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import { getAsciiStringByDate } from '../../../../recurrence/base';
 import { getAppointmentsOccurrences } from './get_appointments_occurrences';
 
 const options = {
@@ -204,9 +204,9 @@ describe('getAppointmentsOccurrences', () => {
   });
 
   it('should return appointment occurrences for appointment with exceptions', () => {
-    const exception1 = getRecurrenceProcessor().getAsciiStringByDate(new Date(2000, 0, 11, 10));
-    const exception2 = getRecurrenceProcessor().getAsciiStringByDate(new Date(2000, 0, 12, 10));
-    const exception3 = getRecurrenceProcessor().getAsciiStringByDate(new Date(2000, 0, 13, 10));
+    const exception1 = getAsciiStringByDate(new Date(2000, 0, 11, 10));
+    const exception2 = getAsciiStringByDate(new Date(2000, 0, 12, 10));
+    const exception3 = getAsciiStringByDate(new Date(2000, 0, 13, 10));
     const appointment: any = {
       startDate: new Date(2000, 0, 9, 10),
       endDate: new Date(2000, 0, 9, 11),

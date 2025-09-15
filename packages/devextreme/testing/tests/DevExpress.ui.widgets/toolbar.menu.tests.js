@@ -15,6 +15,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import themes from 'ui/themes';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
+import errors from 'core/errors';
 
 import 'generic_light.css!';
 
@@ -192,6 +193,15 @@ QUnit.module('render with popup', moduleConfig, () => {
 
         assert.ok(overlayTop >= buttonBottom);
     });
+
+    QUnit.test('should not throw a warning about the preventScroll event option is deprecated on popup opening (T1306077)', function(assert) {
+        sinon.spy(errors, 'log');
+
+        this.overflowMenu.click();
+
+        assert.strictEqual(errors.log.callCount, 0, 'warning was not called');
+        errors.log.restore();
+    });
 });
 
 
@@ -271,7 +281,7 @@ QUnit.module('render', moduleConfig, () => {
         assert.ok(this.overflowMenu.popup().option('visible'), 'popup is visible');
     });
 
-    QUnit.test('popup should be placed into container specified in the \'container\' option', function(assert) {
+    QUnit.test('popup should be placed into container specified in the container option', function(assert) {
         const $container = $('#dropDownMenu');
         this.instance.option({
             container: $container,
@@ -281,7 +291,7 @@ QUnit.module('render', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$popupContent().closest($container).length, 1, 'Popover content located into desired container');
     });
 
-    QUnit.test('popup should be placed into new container after changing the \'container\' option', function(assert) {
+    QUnit.test('popup should be placed into new container after changing the container option', function(assert) {
         const $container = $('#dropDownMenu');
 
         this.instance.option('opened', true);
@@ -413,7 +423,7 @@ QUnit.module('integration', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.list()._dataSource.paginate(), false, 'paginate is false');
     });
 
-    QUnit.test('the \'onItemRendered\' option should be proxied to the list', function(assert) {
+    QUnit.test('the onItemRendered option should be proxied to the list', function(assert) {
         const onItemRenderedHandler = sinon.stub();
 
         this.instance.option({
@@ -749,7 +759,7 @@ QUnit.module('widget sizing render', moduleConfig, () => {
             assert.equal(itemClicked, 2, 'item was clicked twice');
         });
 
-        QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
+        QUnit.test('No exceptions on tab key pressing when popup is not opened', function(assert) {
             assert.expect(0);
 
             this.instance.option({ focusStateEnabled: true });
@@ -761,12 +771,12 @@ QUnit.module('widget sizing render', moduleConfig, () => {
     });
 });
 
-QUnit.module('\'opened\' option', moduleConfig, () => {
+QUnit.module('opened option', moduleConfig, () => {
     QUnit.test('Default option value', function(assert) {
-        assert.strictEqual(this.instance.option('opened'), false, 'Option\'s default value is correct');
+        assert.strictEqual(this.instance.option('opened'), false, 'Option default value is correct');
     });
 
-    QUnit.test('Change menu visibility by option \'opened\' change', function(assert) {
+    QUnit.test('Change menu visibility by option opened change', function(assert) {
         this.instance.option('opened', true);
         assert.ok($(document.body).find('.dx-overlay-wrapper').length, 'Correctly opened by option change');
 
