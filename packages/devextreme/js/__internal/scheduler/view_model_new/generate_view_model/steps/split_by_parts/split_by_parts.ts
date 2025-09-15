@@ -1,8 +1,7 @@
 import type {
-  AllDayPanelOccupation,
   AppointmentPart,
   DateInterval,
-  MinimalAppointmentEntity,
+  ListEntity,
 } from '../../../types';
 import { getNextIntervalStartDate } from './get_next_interval_start_date';
 import { getPrevIntervalEndDate } from './get_prev_interval_end_date';
@@ -39,7 +38,7 @@ const getReduced = (
   }
 };
 
-const cropEntityByInterval = <T extends MinimalAppointmentEntity>(
+const cropEntityByInterval = <T extends ListEntity>(
   entity: T,
   interval: DateInterval,
 ): T => {
@@ -68,7 +67,7 @@ const getEndIndex = (intervals: DateInterval[], endDateMs: number): number => {
   return lastIdx;
 };
 
-export const splitByParts = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
+export const splitByParts = <T extends ListEntity>(
   entities: T[],
   intervals: DateInterval[],
 ): (T & AppointmentPart)[] => {

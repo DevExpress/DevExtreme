@@ -1,12 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
-import type {
-  AllDayPanelOccupation,
-  MinimalAppointmentEntity,
-} from '../../../types';
+import type { ListEntity } from '../../../types';
 import { splitByParts } from './split_by_parts';
-
-type Entity = MinimalAppointmentEntity & AllDayPanelOccupation;
 
 const intervals = [
   {
@@ -34,7 +29,7 @@ describe('splitByParts', () => {
         startDateUTC: Date.UTC(2000, 0, 10, 8),
         endDateUTC: Date.UTC(2000, 0, 10, 10),
       },
-    ] as Entity[];
+    ] as ListEntity[];
 
     expect(splitByParts(items, intervals)).toEqual([
       {
@@ -71,7 +66,7 @@ describe('splitByParts', () => {
         startDateUTC: Date.UTC(2000, 0, 12, 8),
         endDateUTC: Date.UTC(2000, 0, 13, 7),
       },
-    ] as Entity[];
+    ] as ListEntity[];
 
     expect(splitByParts(items, intervals)).toEqual([
       {
@@ -111,7 +106,7 @@ describe('splitByParts', () => {
         startDateUTC: Date.UTC(2000, 0, 11, 9),
         endDateUTC: Date.UTC(2000, 0, 13, 1),
       },
-    ] as (Entity & { id: number })[];
+    ] as (ListEntity & { id: number })[];
 
     expect(splitByParts(items, intervals)).toEqual([
       {
@@ -186,7 +181,7 @@ describe('splitByParts', () => {
     const items = [{
       startDateUTC: Date.UTC(2000, 0, 10, 0),
       endDateUTC: Date.UTC(2000, 0, 11, 0),
-    }] as Entity[];
+    }] as ListEntity[];
 
     expect(splitByParts(items, intervals)).toEqual([{
       startDateUTC: Date.UTC(2000, 0, 10, 3),
@@ -201,7 +196,7 @@ describe('splitByParts', () => {
     const items = [{
       startDateUTC: Date.UTC(2000, 0, 10, 0),
       endDateUTC: Date.UTC(2000, 0, 11, 0),
-    }] as Entity[];
+    }] as ListEntity[];
 
     expect(splitByParts(items, [{
       min: Date.UTC(2000, 0, 10),

@@ -44,7 +44,7 @@ describe('findDSTOfDay', () => {
 
   it('should return winter DST in Canada/Pacific', () => {
     expect(findDSTOfDay(Date.UTC(2025, 10, 2), 'Canada/Pacific')).toEqual([
-      Date.UTC(2025, 10, 2, 9),
+      Date.UTC(2025, 10, 2, 2) + 7 * HOUR_MS,
       -7 * HOUR_MS,
       -8 * HOUR_MS,
     ]);

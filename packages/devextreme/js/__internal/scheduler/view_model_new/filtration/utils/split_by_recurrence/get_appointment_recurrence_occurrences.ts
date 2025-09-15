@@ -36,7 +36,7 @@ const getDatesShiftedByTimezone = (
 
   return {
     startDateUTC: startDateMs + startDateFix + startDateInfo.offsetMs,
-    endDateUTC: endDateMs + endDateFix + endDateInfo.offsetMs,
+    endDateUTC: endDateMs + endDateFix + startDateInfo.offsetMs,
   };
 };
 
@@ -104,7 +104,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
           endDate: sourceEndDate,
         },
         startDateUTC: sourceStartDate + startDateFix + startDateInfo.offsetMs,
-        endDateUTC: sourceEndDate + endDateFix + endDateInfo.offsetMs,
+        endDateUTC: sourceEndDate + endDateFix + startDateInfo.offsetMs,
       };
     })
     .filter((item) => !exceptionDates.has(item.source.startDate));
