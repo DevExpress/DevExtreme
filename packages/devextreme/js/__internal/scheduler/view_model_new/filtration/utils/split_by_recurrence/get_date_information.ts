@@ -53,9 +53,10 @@ export const findDSTOfDay = (date: number, timeZone: string): number[] => {
 export const getDateInformation = (date: number, timeZone: string): DateInformation => {
   const [targetDST, beforeDSTOffset, afterDSTOffset] = findDSTOfDay(date, timeZone);
   const deltaMs = afterDSTOffset - beforeDSTOffset;
+  const condition = deltaMs > 0 ? date < targetDST + deltaMs : date <= targetDST + deltaMs;
 
   return {
-    offsetMs: date <= targetDST + deltaMs ? beforeDSTOffset : afterDSTOffset,
+    offsetMs: condition ? beforeDSTOffset : afterDSTOffset,
     isUnreachable: deltaMs > 0 && date >= targetDST && date < targetDST + deltaMs,
     deltaMs,
   };

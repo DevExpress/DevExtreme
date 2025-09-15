@@ -57,7 +57,7 @@ export class OptionManager {
     const workspace = this.schedulerStore.getWorkSpace();
     const panelDOMSize = workspace.getPanelDOMSize(panelName);
 
-    return this.cache.memo(panelName, () => {
+    return this.cache.memo(`${panelDOMSize.width}.${panelDOMSize.height}.${panelName}`, () => {
       const {
         type,
         viewOffset,

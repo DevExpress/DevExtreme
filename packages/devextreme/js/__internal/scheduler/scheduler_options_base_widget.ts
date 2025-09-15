@@ -104,7 +104,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   }
 
   getTimeZone(): string {
-    return (this.option('timeZone') || timeZoneUtils.getMachineTimezoneName()) ?? 'UTC';
+    return (this.option('timeZone') || timeZoneUtils.getMachineTimezoneName()) ?? 'Etc/UTC';
   }
 
   getViewOption<K extends keyof SafeSchedulerOptions>(optionName: K): SafeSchedulerOptions[K] {

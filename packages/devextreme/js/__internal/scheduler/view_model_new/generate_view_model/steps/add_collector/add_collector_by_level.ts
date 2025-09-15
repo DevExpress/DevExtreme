@@ -1,9 +1,9 @@
 import type {
   AppointmentCollector,
-  AppointmentPart, DatesBeforeSplit,
-  Level,
+  AppointmentPart, Level,
   ListEntity,
   Position,
+  UTCDatesBeforeSplit,
 } from '../../../types';
 import { splitByCondition } from './split_by_condition';
 import type { CollectorOptions } from './types';
@@ -48,7 +48,7 @@ const groupByOccupation = <T extends ListEntity & Level & Position>(
   }, Array.from({ length: cells.length }, () => []));
 
 export const addCollectorByLevel = <
-  T extends ListEntity & Level & Position & AppointmentPart & DatesBeforeSplit,
+  T extends ListEntity & Level & Position & AppointmentPart & UTCDatesBeforeSplit,
 >(
     entities: T[],
     {

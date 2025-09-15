@@ -25,11 +25,9 @@ export const getMinimalAppointments = (
 
   return {
     allDay: dataAccessors.get('allDay', rawAppointment),
-    startDateUTC: startDateMs,
     startDateTimeZone,
-    endDateUTC: endDateMs,
     endDateTimeZone,
-    sourceDatesBeforeSplit: {
+    source: {
       startDate: startDateMs,
       endDate: endDateMs,
     },

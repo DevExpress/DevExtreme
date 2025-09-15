@@ -14,9 +14,9 @@ import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type {
   AppointmentEntity,
-  DatesBeforeSplit,
   ListEntity,
   MinimalAppointmentEntity,
+  UTCDatesBeforeSplit,
 } from './types';
 
 class AppointmentLayoutManager {
@@ -76,7 +76,7 @@ class AppointmentLayoutManager {
       info: getAppointmentInfo(item),
     });
     const toCollectedItem = (
-      item: ListEntity & DatesBeforeSplit & RealSize,
+      item: ListEntity & UTCDatesBeforeSplit & RealSize,
     ): AppointmentItemViewModel => ({
       itemData: item.itemData,
       allDay: item.isAllDayPanelOccupied,

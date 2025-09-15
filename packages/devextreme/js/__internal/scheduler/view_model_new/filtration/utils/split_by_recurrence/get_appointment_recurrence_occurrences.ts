@@ -1,13 +1,13 @@
 import { getDateByAsciiString } from '../../../../recurrence/base';
-import type { DateInterval, MinimalAppointmentEntity } from '../../../types';
+import type { DateInterval, MinimalAppointmentEntity, UTCDates } from '../../../types';
 import { generateRecurrenceUTCDates } from './generate_recurrence_utc_dates';
 import type { DateInformation } from './get_date_information';
 import { getDateInformation, getDateOffsetMs } from './get_date_information';
 
 interface Options {
   firstDayOfWeek?: number;
-  timeZone: string;
   interval: DateInterval;
+  timeZone: string;
 }
 
 // NOTE: When DST+1, then 2 AM equal 3 AM and interval [2 AM, 3 AM) is unreachable
@@ -25,43 +25,50 @@ const getUnreachableShift = (
   }
 };
 
+const getDatesShiftedByTimezone = (
+  startDateMs: number,
+  endDateMs: number,
+  timeZone: string,
+): UTCDates => {
+  const startDateInfo = getDateInformation(startDateMs, timeZone);
+  const endDateInfo = getDateInformation(endDateMs, timeZone);
+  const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
+
+  return {
+    startDateUTC: startDateMs + startDateFix + startDateInfo.offsetMs,
+    endDateUTC: endDateMs + endDateFix + endDateInfo.offsetMs,
+  };
+};
+
 export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointmentEntity >(
   appointment: T,
   {
     firstDayOfWeek,
-    timeZone,
     interval,
+    timeZone,
   }: Options,
-): T[] => {
+): (T & UTCDates)[] => {
   const {
-    startDateUTC, endDateUTC, startDateTimeZone, endDateTimeZone,
+    source: { startDate: startDateMsBase, endDate: endDateMsBase },
+    startDateTimeZone, endDateTimeZone,
   } = appointment;
-  const duration = endDateUTC - startDateUTC;
-  const startDateOffsetBase = getDateOffsetMs(startDateUTC, timeZone);
+
+  if (!appointment.hasRecurrenceRule) {
+    return [{
+      ...appointment,
+      ...getDatesShiftedByTimezone(startDateMsBase, endDateMsBase, timeZone),
+    }];
+  }
+
+  const duration = endDateMsBase - startDateMsBase;
   const dates = generateRecurrenceUTCDates(appointment, {
     firstDayOfWeek,
     interval,
-    startDateOffsetBase,
+    timeZone,
   });
-
-  if (!appointment.hasRecurrenceRule) {
-    return dates
-      .map((startDateMs) => {
-        const endDateMs = startDateMs + duration;
-        const startDateInfo = getDateInformation(startDateMs, timeZone);
-        const endDateInfo = getDateInformation(endDateMs, timeZone);
-        const [startDateFix, endDateFix] = getUnreachableShift(startDateInfo, endDateInfo);
-
-        return {
-          ...appointment,
-          startDateUTC: startDateMs + startDateFix + startDateInfo.offsetMs,
-          endDateUTC: endDateMs + endDateFix + endDateInfo.offsetMs,
-        };
-      });
-  }
-
-  const startDateAppointmentOffsetBase = getDateOffsetMs(startDateUTC, startDateTimeZone);
-  const endDateAppointmentOffsetBase = getDateOffsetMs(endDateUTC, endDateTimeZone);
+  const startDateOffsetBase = getDateOffsetMs(startDateMsBase, timeZone);
+  const startDateAppointmentOffsetBase = getDateOffsetMs(startDateMsBase, startDateTimeZone);
+  const endDateAppointmentOffsetBase = getDateOffsetMs(endDateMsBase, endDateTimeZone);
   const exceptionDates = new Set(
     appointment.hasRecurrenceRule && appointment.recurrenceException
       ? appointment.recurrenceException
@@ -92,7 +99,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
 
       return {
         ...appointment,
-        sourceDatesBeforeSplit: {
+        source: {
           startDate: sourceStartDate,
           endDate: sourceEndDate,
         },
@@ -100,5 +107,5 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
         endDateUTC: sourceEndDate + endDateFix + endDateInfo.offsetMs,
       };
     })
-    .filter((item) => !exceptionDates.has(item.sourceDatesBeforeSplit.startDate));
+    .filter((item) => !exceptionDates.has(item.source.startDate));
 };

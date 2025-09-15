@@ -64,9 +64,7 @@ export interface AllDayPanelOccupation {
 }
 
 export interface MinimalAppointmentEntity {
-  startDateUTC: number;
   startDateTimeZone?: string;
-  endDateUTC: number;
   endDateTimeZone?: string;
   recurrenceRule?: string;
   recurrenceException?: string;
@@ -75,7 +73,7 @@ export interface MinimalAppointmentEntity {
   visible: boolean;
   disabled: boolean;
   itemData: SafeAppointment;
-  sourceDatesBeforeSplit: {
+  source: {
     startDate: number;
     endDate: number;
   };
@@ -91,26 +89,22 @@ export interface AppointmentPart {
   partCount: number;
 }
 
-export interface DatesBeforeSplit {
-  sourceDatesBeforeSplit: {
-    startDate: number;
-    endDate: number;
-  };
-  datesBeforeSplit: {
-    startDateUTC: number;
-    endDateUTC: number;
-  };
+export interface UTCDates {
+  startDateUTC: number;
+  endDateUTC: number;
 }
 
-export interface DatesAfterSplit {
-  datesAfterSplit: {
-    startDateUTC: number;
-    endDateUTC: number;
-  };
+export interface UTCDatesBeforeSplit {
+  datesBeforeSplit: UTCDates;
+}
+
+export interface UTCDatesAfterSplit {
+  datesAfterSplit: UTCDates;
 }
 
 export type ListEntity = MinimalAppointmentEntity
-  & DatesBeforeSplit
+  & UTCDates
+  & UTCDatesBeforeSplit
   & AllDayPanelOccupation
   & GroupIndex
   & Duration;
@@ -125,7 +119,7 @@ export interface AgendaGeometry {
 }
 
 export type AgendaEntity = ListEntity
-  & DatesAfterSplit
+  & UTCDatesAfterSplit
   & AppointmentPart
   & AgendaGeometry
   & LastInGroup
@@ -138,11 +132,11 @@ export interface Level {
 }
 
 export type CollectorItemEntity = ListEntity
-  & DatesBeforeSplit
+  & UTCDatesBeforeSplit
   & RealSize;
 
 export interface AppointmentCollector {
-  items: (ListEntity & DatesBeforeSplit)[];
+  items: (ListEntity & UTCDatesBeforeSplit)[];
   isCompact: boolean;
 }
 
@@ -156,7 +150,7 @@ export interface Direction {
 }
 
 export type AppointmentEntity = ListEntity
-  & DatesBeforeSplit
+  & UTCDatesBeforeSplit
   & AppointmentPart
   & Level
   & Position

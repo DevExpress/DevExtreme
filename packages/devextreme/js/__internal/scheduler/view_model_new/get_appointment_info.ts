@@ -3,7 +3,7 @@ import type {
   AppointmentAgendaViewModel,
   AppointmentItemViewModel,
 } from '../view_model/generate_view_model/types';
-import type { DatesAfterSplit, ListEntity } from './types';
+import type { ListEntity, UTCDatesAfterSplit } from './types';
 
 export const getAppointmentInfo = (
   item: ListEntity,
@@ -19,8 +19,8 @@ export const getAppointmentInfo = (
   };
   const source = {
     allDay: item.allDay,
-    startDate: new Date(item.sourceDatesBeforeSplit.startDate),
-    endDate: new Date(item.sourceDatesBeforeSplit.endDate),
+    startDate: new Date(item.source.startDate),
+    endDate: new Date(item.source.endDate),
   };
 
   return {
@@ -30,7 +30,7 @@ export const getAppointmentInfo = (
 };
 
 export const getAgendaAppointmentInfo = (
-  item: ListEntity & DatesAfterSplit,
+  item: ListEntity & UTCDatesAfterSplit,
 ): AppointmentAgendaViewModel['info'] => ({
   ...getAppointmentInfo(item),
   partialDates: {

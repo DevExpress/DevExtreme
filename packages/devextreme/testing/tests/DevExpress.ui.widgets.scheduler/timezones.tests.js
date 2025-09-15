@@ -1906,17 +1906,7 @@ module('Appointment popup', moduleConfig, () => {
     });
 });
 
-module('Fixed client time zone offset', {
-    beforeEach() {
-        this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
-        fx.off = true;
-    },
-
-    afterEach() {
-        this.tzOffsetStub.restore();
-        fx.off = false;
-    }
-}, () => {
+module('Fixed client time zone offset', () => {
     test('Appointment should have right width in workspace with timezone', async function(assert) {
         const scheduler = await createWrapper({
             dataSource: [],
@@ -1952,14 +1942,14 @@ module('Fixed client time zone offset', {
             firstDayOfWeek: 1,
             dataSource: [{
                 text: 'Approve New Online Marketing Strategy',
-                startDate: new Date(2015, 4, 25, 8),
-                endDate: new Date(2015, 4, 25, 12),
+                startDate: Date.UTC(2015, 4, 25, 6),
+                endDate: Date.UTC(2015, 4, 25, 10),
                 startDateTimeZone: 'Africa/Brazzaville',
                 endDateTimeZone: 'Africa/Brazzaville'
             }, {
                 text: 'Stand-up meeting',
-                startDate: new Date(2015, 4, 25, 18),
-                endDate: new Date(2015, 4, 25, 20),
+                startDate: Date.UTC(2015, 4, 25, 16),
+                endDate: Date.UTC(2015, 4, 25, 18),
                 startDateTimeZone: 'Africa/Brazzaville',
                 endDateTimeZone: 'Africa/Brazzaville'
             }],
@@ -1982,8 +1972,8 @@ module('Fixed client time zone offset', {
 
     test('Appointment should be rendered correctly if timeZones is changed', async function(assert) {
         const appointments = [{
-            startDate: new Date(2015, 1, 4, 5).toString(),
-            endDate: new Date(2015, 1, 4, 6).toString(),
+            startDate: Date.UTC(2015, 1, 4, 4),
+            endDate: Date.UTC(2015, 1, 4, 5),
             text: 'abc'
         }];
 
@@ -2042,8 +2032,8 @@ module('Fixed client time zone offset', {
             timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
-                startDate: new Date(2015, 5, 8, 10),
-                endDate: new Date(2015, 5, 10, 1),
+                startDate: Date.UTC(2015, 5, 8, 8),
+                endDate: Date.UTC(2015, 5, 9, 23),
                 allDay: true
             }]
         });
@@ -2089,8 +2079,8 @@ module('Fixed client time zone offset', {
         $appointment.trigger('dxclick');
     });
 
-    // TODO(10): manual test is correct, but automated one fails
-    test.skip('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', async function(assert) {
+    // TODO(10): manual test is correct, but automated one fails because start date shifts with end date
+    test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', async function(assert) {
         const scheduler = await createWrapper({
             currentDate: new Date(2015, 5, 12),
             views: ['week'],
@@ -2101,8 +2091,8 @@ module('Fixed client time zone offset', {
             timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
-                startDate: new Date(2015, 5, 12, 10).toString(),
-                endDate: new Date(2015, 5, 12, 12).toString(),
+                startDate: Date.UTC(2015, 5, 12, 8),
+                endDate: Date.UTC(2015, 5, 12, 10),
                 recurrenceRule: 'FREQ=DAILY',
                 startDateTimeZone: timeZones.Lima, // -5
                 endDateTimeZone: timeZones.Lima
@@ -2184,7 +2174,7 @@ module('Fixed client time zone offset', {
         text: 'Appointment with custom tz that is equal to scheduler tz should be resized correctly'
     }].forEach(testCase => {
         // TODO(10): manual test is correct, but automated one fails
-        test.skip(`${testCase.text}(T392414)`, async function(assert) {
+        test(`${testCase.text}(T392414)`, async function(assert) {
             const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 25),
                 views: ['week'],
@@ -2223,33 +2213,33 @@ module('Fixed client time zone offset', {
         const data = [
             {
                 schedule: 'Appointment 1',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 2',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 3',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 4',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 5',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 6',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             }
         ];
 
@@ -2273,8 +2263,8 @@ module('Fixed client time zone offset', {
         const scheduler = await createWrapper({
             dataSource: [{
                 text: 'Stand-up meeting',
-                startDate: new Date(2015, 4, 25, 17),
-                endDate: new Date(2015, 4, 25, 17, 30),
+                startDate: Date.UTC(2015, 4, 25, 15),
+                endDate: Date.UTC(2015, 4, 25, 15, 30),
                 startDateTimeZone: timeZones.Lima, // -5
                 endDateTimeZone: timeZones.Lima
             }],

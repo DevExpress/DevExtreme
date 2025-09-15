@@ -2,7 +2,8 @@ import type Scheduler from '../../m_scheduler';
 import { getCompareOptions } from '../common/get_compare_options';
 import { splitIntervalByDay } from '../common/split_interval_by_days';
 import type {
-  AgendaEntity, AgendaGeometry, DatesAfterSplit, ListEntity,
+  AgendaEntity, AgendaGeometry, ListEntity,
+  UTCDatesAfterSplit,
 } from '../types';
 import { addLastInGroup } from './steps/add_last_in_group';
 import { addSortedIndex } from './steps/add_sorted_index';
@@ -11,7 +12,7 @@ import { splitByParts } from './steps/split_by_parts/split_by_parts';
 
 const saveDatesAfterSplit = <T extends ListEntity>(
   entities: T[],
-): (T & DatesAfterSplit)[] => entities.map((entity) => ({
+): (T & UTCDatesAfterSplit)[] => entities.map((entity) => ({
     ...entity,
     datesAfterSplit: {
       startDateUTC: entity.startDateUTC,

@@ -13,84 +13,91 @@ const options = {
   },
   timeZone: 'America/Los_Angeles',
 };
+const HOUR_MS = 3600_000;
 
 describe('getAppointmentRecurrenceOccurrences', () => {
-  it('should return input appointment for not existed recurrence rule', () => {
-    const appointment: any = {};
-    expect(getAppointmentRecurrenceOccurrences(
-      appointment,
-      options,
-    )).toEqual([appointment]);
-  });
-
-  it('should return input appointment for invalid recurrence rule', () => {
-    const appointment: any = { recurrenceRule: 'invalidRecurrenceRule' };
-    expect(getAppointmentRecurrenceOccurrences(
-      appointment,
-      options,
-    )).toEqual([appointment]);
-  });
-
-  it('should crop appointment occurrences by hours', () => {
-    const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9, 20),
-      endDate: Date.UTC(2000, 0, 9, 21),
-      recurrenceRule: 'FREQ=DAILY',
-    };
-    expect(getAppointmentRecurrenceOccurrences(
-      appointment,
-      {
-        firstDayOfWeek: 3,
-        interval: {
-          min: Date.UTC(2000, 0, 14, 10),
-          max: Date.UTC(2000, 0, 15, 15),
+  describe('without recurrence rule', () => {
+    it('should return shift appointment according to timeZone', () => {
+      const appointment: any = {
+        source: {
+          startDate: Date.UTC(2000, 0, 10, 10),
+          endDate: Date.UTC(2000, 0, 10, 11),
         },
-        timeZone: 'America/Los_Angeles',
-      },
-    )).toEqual([
-      {
-        ...appointment,
-        startDate: Date.UTC(2000, 0, 14, 20),
-        endDate: Date.UTC(2000, 0, 14, 21),
-      },
-    ]);
-  });
+      };
 
-  it('should not crop appointment occurrences by hours for full day interval', () => {
-    const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9, 20),
-      endDate: Date.UTC(2000, 0, 9, 21),
-      recurrenceRule: 'FREQ=DAILY',
-    };
-    expect(getAppointmentRecurrenceOccurrences(
-      appointment,
-      {
-        firstDayOfWeek: 3,
-        interval: {
-          min: Date.UTC(2000, 0, 14, 0),
-          max: Date.UTC(2000, 0, 15, 24),
+      expect(getAppointmentRecurrenceOccurrences(
+        appointment,
+        options,
+      )).toEqual([{
+        ...appointment,
+        startDateUTC: appointment.source.startDate - HOUR_MS * 8,
+        endDateUTC: appointment.source.endDate - HOUR_MS * 8,
+      }]);
+    });
+
+    it('should return shift appointment according to timeZone cross summer DST', () => {
+      const appointment: any = {
+        source: {
+          startDate: Date.UTC(2025, 2, 9, 1),
+          endDate: Date.UTC(2025, 2, 9, 4),
         },
-        timeZone: 'America/Los_Angeles',
-      },
-    )).toEqual([
-      {
+      };
+
+      expect(getAppointmentRecurrenceOccurrences(
+        appointment,
+        options,
+      )).toEqual([{
         ...appointment,
-        startDate: Date.UTC(2000, 0, 14, 20),
-        endDate: Date.UTC(2000, 0, 14, 21),
-      },
-      {
+        startDateUTC: appointment.source.startDate - HOUR_MS * 8,
+        endDateUTC: appointment.source.endDate - HOUR_MS * 8,
+      }]);
+    });
+
+    it('should return shift appointment according to timeZone cross winter DST', () => {
+      const appointment: any = {
+        source: {
+          startDate: Date.UTC(2025, 10, 2, 1),
+          endDate: Date.UTC(2025, 10, 2, 4),
+        },
+      };
+
+      expect(getAppointmentRecurrenceOccurrences(
+        appointment,
+        options,
+      )).toEqual([{
         ...appointment,
-        startDate: Date.UTC(2000, 0, 15, 20),
-        endDate: Date.UTC(2000, 0, 15, 21),
-      },
-    ]);
+        startDateUTC: appointment.source.startDate - HOUR_MS * 7,
+        endDateUTC: appointment.source.endDate - HOUR_MS * 7,
+      }]);
+    });
+
+    it('should return shift appointment according to timeZone in unreachable time', () => {
+      const appointment: any = {
+        source: {
+          startDate: Date.UTC(2025, 2, 9, 2, 15),
+          endDate: Date.UTC(2025, 2, 9, 3, 45),
+        },
+      };
+
+      expect(getAppointmentRecurrenceOccurrences(
+        appointment,
+        options,
+      )).toEqual([{
+        ...appointment,
+        startDateUTC: appointment.source.startDate - HOUR_MS * 8,
+        endDateUTC: appointment.source.endDate - HOUR_MS * 8,
+      }]);
+    });
   });
 
   it('should return appointment occurrences for appointment starts before view interval', () => {
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9, 10),
-      endDate: Date.UTC(2000, 0, 9, 11),
+      source: {
+        startDate: Date.UTC(2000, 0, 9, 10),
+        endDate: Date.UTC(2000, 0, 9, 11),
+      },
       recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
@@ -98,56 +105,90 @@ describe('getAppointmentRecurrenceOccurrences', () => {
     )).toEqual([
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 10, 10),
-        endDate: Date.UTC(2000, 0, 10, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 10, 10),
+          endDate: Date.UTC(2000, 0, 10, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 10, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 10, 11) - HOUR_MS * 8,
       },
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 11, 10),
-        endDate: Date.UTC(2000, 0, 11, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 11, 10),
+          endDate: Date.UTC(2000, 0, 11, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 11, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 11, 11) - HOUR_MS * 8,
       },
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 12, 10),
-        endDate: Date.UTC(2000, 0, 12, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 12, 10),
+          endDate: Date.UTC(2000, 0, 12, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 12, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 12, 11) - HOUR_MS * 8,
       },
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 13, 10),
-        endDate: Date.UTC(2000, 0, 13, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 13, 10),
+          endDate: Date.UTC(2000, 0, 13, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 13, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 13, 11) - HOUR_MS * 8,
       },
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 14, 10),
-        endDate: Date.UTC(2000, 0, 14, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 14, 10),
+          endDate: Date.UTC(2000, 0, 14, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 14, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 14, 11) - HOUR_MS * 8,
       },
     ]);
   });
 
   it('should return appointment occurrences for appointment starts inside view interval', () => {
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 13, 10),
-      endDate: Date.UTC(2000, 0, 13, 11),
+      source: {
+        startDate: Date.UTC(2000, 0, 13, 10),
+        endDate: Date.UTC(2000, 0, 13, 11),
+      },
       recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
       options,
     )).toEqual([
-      appointment,
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 14, 10),
-        endDate: Date.UTC(2000, 0, 14, 11),
+        startDateUTC: Date.UTC(2000, 0, 13, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 13, 11) - HOUR_MS * 8,
+      },
+      {
+        ...appointment,
+        source: {
+          startDate: Date.UTC(2000, 0, 14, 10),
+          endDate: Date.UTC(2000, 0, 14, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 14, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 14, 11) - HOUR_MS * 8,
       },
     ]);
   });
 
   it('should return appointment occurrences for appointment starts after view interval', () => {
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 20, 10),
-      endDate: Date.UTC(2000, 0, 13, 11),
+      source: {
+        startDate: Date.UTC(2000, 0, 20, 10),
+        endDate: Date.UTC(2000, 0, 13, 11),
+      },
       recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
@@ -160,17 +201,24 @@ describe('getAppointmentRecurrenceOccurrences', () => {
     { title: 'appointment occurrence', delta: -20 },
   ])('should return $title is hagging view interval', ({ delta }) => {
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9 + delta),
-      endDate: Date.UTC(2000, 0, 16 + delta),
+      source: {
+        startDate: Date.UTC(2000, 0, 9 + delta),
+        endDate: Date.UTC(2000, 0, 16 + delta),
+      },
       recurrenceRule: 'FREQ=DAILY;INTERVAL=20',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
       options,
     )).toEqual([{
-      startDate: Date.UTC(2000, 0, 9),
-      endDate: Date.UTC(2000, 0, 16),
-      recurrenceRule: 'FREQ=DAILY;INTERVAL=20',
+      ...appointment,
+      source: {
+        startDate: Date.UTC(2000, 0, 9),
+        endDate: Date.UTC(2000, 0, 16),
+      },
+      startDateUTC: Date.UTC(2000, 0, 9) - HOUR_MS * 8,
+      endDateUTC: Date.UTC(2000, 0, 16) - HOUR_MS * 8,
     }]);
   });
 
@@ -179,17 +227,24 @@ describe('getAppointmentRecurrenceOccurrences', () => {
     { title: 'appointment occurrence', delta: -10 },
   ])('should return $title starts before view interval', ({ delta }) => {
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9 + delta, 20),
-      endDate: Date.UTC(2000, 0, 10 + delta, 10),
+      source: {
+        startDate: Date.UTC(2000, 0, 9 + delta, 20),
+        endDate: Date.UTC(2000, 0, 10 + delta, 10),
+      },
       recurrenceRule: 'FREQ=DAILY;INTERVAL=10',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
       options,
     )).toEqual([{
-      startDate: Date.UTC(2000, 0, 9, 20),
-      endDate: Date.UTC(2000, 0, 10, 10),
-      recurrenceRule: 'FREQ=DAILY;INTERVAL=10',
+      ...appointment,
+      source: {
+        startDate: Date.UTC(2000, 0, 9, 20),
+        endDate: Date.UTC(2000, 0, 10, 10),
+      },
+      startDateUTC: Date.UTC(2000, 0, 9, 20) - HOUR_MS * 8,
+      endDateUTC: Date.UTC(2000, 0, 10, 10) - HOUR_MS * 8,
     }]);
   });
 
@@ -204,10 +259,13 @@ describe('getAppointmentRecurrenceOccurrences', () => {
       new Date(Date.UTC(2000, 0, 13, 10)),
     );
     const appointment: any = {
-      startDate: Date.UTC(2000, 0, 9, 10),
-      endDate: Date.UTC(2000, 0, 9, 11),
+      source: {
+        startDate: Date.UTC(2000, 0, 9, 10),
+        endDate: Date.UTC(2000, 0, 9, 11),
+      },
       recurrenceException: `${exception1},${exception2},${exception3}`,
       recurrenceRule: 'FREQ=DAILY',
+      hasRecurrenceRule: true,
     };
     expect(getAppointmentRecurrenceOccurrences(
       appointment,
@@ -215,13 +273,21 @@ describe('getAppointmentRecurrenceOccurrences', () => {
     )).toEqual([
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 10, 10),
-        endDate: Date.UTC(2000, 0, 10, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 10, 10),
+          endDate: Date.UTC(2000, 0, 10, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 10, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 10, 11) - HOUR_MS * 8,
       },
       {
         ...appointment,
-        startDate: Date.UTC(2000, 0, 14, 10),
-        endDate: Date.UTC(2000, 0, 14, 11),
+        source: {
+          startDate: Date.UTC(2000, 0, 14, 10),
+          endDate: Date.UTC(2000, 0, 14, 11),
+        },
+        startDateUTC: Date.UTC(2000, 0, 14, 10) - HOUR_MS * 8,
+        endDateUTC: Date.UTC(2000, 0, 14, 11) - HOUR_MS * 8,
       },
     ]);
   });

@@ -17,9 +17,7 @@ describe('getMinimalAppointments', () => {
     }];
     const expectedResult: MinimalAppointmentEntity = {
       allDay: false,
-      startDateUTC: data[0].startDate.getTime(),
-      endDateUTC: data[0].endDate.getTime(),
-      sourceDatesBeforeSplit: {
+      source: {
         startDate: data[0].startDate.getTime(),
         endDate: data[0].endDate.getTime(),
       },
@@ -51,9 +49,7 @@ describe('getMinimalAppointments', () => {
       }];
       const expectedResult: MinimalAppointmentEntity = {
         allDay: false,
-        startDateUTC: data[0].startDate.getTime(),
-        endDateUTC: data[0].endDate.getTime(),
-        sourceDatesBeforeSplit: {
+        source: {
           startDate: data[0].startDate.getTime(),
           endDate: data[0].endDate.getTime(),
         },
@@ -148,9 +144,7 @@ describe('getMinimalAppointments', () => {
 
     expect(result).toEqual([{
       allDay: true,
-      startDateUTC: data[0].StartDate.getTime(),
-      endDateUTC: data[0].EndDate.getTime(),
-      sourceDatesBeforeSplit: {
+      source: {
         startDate: data[0].StartDate.getTime(),
         endDate: data[0].EndDate.getTime(),
       },

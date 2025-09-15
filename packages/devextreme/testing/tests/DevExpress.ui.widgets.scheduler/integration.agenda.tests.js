@@ -1606,7 +1606,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 await waitAsync(0);
 
                 const calculatedRows = agendaWorkspace._rows;
-                assert.deepEqual(calculatedRows, [[0, 2, 2, 2, 2]], 'Rows are OK');
+                assert.deepEqual(calculatedRows, [[1, 2, 2, 2, 2]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
                 startViewDateStub.restore();

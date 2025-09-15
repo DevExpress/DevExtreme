@@ -44,9 +44,7 @@ describe('prepareAppointments', () => {
 
     const expectedResult: MinimalAppointmentEntity = {
       allDay: false,
-      startDateUTC: data[0].startDate.getTime(),
-      endDateUTC: data[0].startDate.getTime() + 30 * 60000,
-      sourceDatesBeforeSplit: {
+      source: {
         startDate: data[0].startDate.getTime(),
         endDate: data[0].startDate.getTime() + 30 * 60000,
       },
