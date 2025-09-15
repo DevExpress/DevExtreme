@@ -9,6 +9,8 @@ import { Event as dxEvent } from 'common/core/events';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import Quill from 'devextreme-quill';
 
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
+
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -445,6 +447,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('list shouldn\'t be focused on text input', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -460,6 +466,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('trigger \'arrow down\' should focus next list item', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -523,6 +533,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('trigger \'arrow up\' should focus previous list item', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
@@ -541,6 +555,10 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('trigger "arrow down" or "arrow up" does not change focused item in case data source is loading', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);

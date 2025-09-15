@@ -24,6 +24,7 @@ import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const ACTIVE_STATE_CLASS = 'dx-state-active';
 export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
@@ -502,7 +503,7 @@ class Widget<
     event?: Record<string, unknown>,
   ): void {
     this.option('isActive', value);
-    $element.toggleClass('dx-state-active', value);
+    $element.toggleClass(ACTIVE_STATE_CLASS, value);
   }
 
   _updatedHover(): void {
