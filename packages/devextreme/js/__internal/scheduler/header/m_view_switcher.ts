@@ -31,7 +31,11 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
 
   // @ts-expect-error
   const stylingMode = isFluent() ? 'outlined' : 'contained';
-  const items = views.map((view) => ({ ...view }));
+  const items = views.map((v) => {
+    const def = messageLocalization.format(`dxScheduler-switcher${camelize(v.type, true)}`);
+    const text = v.name && v.name !== def ? v.name : def;
+    return { ...v, text, name: v.name };
+  });
 
   return {
     widget: 'dxButtonGroup',
@@ -44,16 +48,6 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
       keyExpr: 'type',
       selectedItemKeys: [selectedType],
       stylingMode,
-      buttonTemplate: (buttonData: NormalizedView, buttonContent) => {
-        const defaultText = messageLocalization.format(`dxScheduler-switcher${camelize(buttonData.type, true)}`);
-        const isCustomName = buttonData.name !== defaultText;
-        const text = isCustomName ? buttonData.name : defaultText;
-
-        buttonContent.text(text);
-        buttonContent.closest('.dx-button').addClass('dx-button-has-text');
-
-        return buttonContent;
-      },
       onItemClick: (e) => {
         header._updateCurrentView(e.itemData);
       },
@@ -73,7 +67,11 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
   const { selectedType, views } = getViewsAndSelectedView(header);
   const isOnlyOneView = isOneView(views, selectedType);
 
-  const items = views.map((view) => ({ ...view }));
+  const items = views.map((v) => {
+    const def = messageLocalization.format(`dxScheduler-switcher${camelize(v.type, true)}`);
+    const text = v.name && v.name !== def ? v.name : def;
+    return { ...v, text, name: v.name };
+  });
 
   return {
     widget: 'dxDropDownButton',
