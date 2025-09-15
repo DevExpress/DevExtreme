@@ -26,17 +26,21 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
-import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent,
 } from '@js/events';
-import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type {
+  CollectionWidgetItem as CollectionWidgetItemProperties,
+  CollectionWidgetOptions,
+  ItemLike,
+} from '@js/ui/collection/ui.collection_widget.base';
 import { getPublicElement } from '@ts/core/m_element';
 import { focusable } from '@ts/core/utils/m_selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import DataHelperMixin from '@ts/data/m_data_helper';
 import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
@@ -563,7 +567,12 @@ class CollectionWidget<
     if ($target.length) {
       this._refreshActiveDescendant();
       this._refreshItemId($target, needCleanItemId);
-      this._toggleFocusClass(isFocused, $target);
+
+      const { focusStateEnabled } = this.option();
+
+      if (focusStateEnabled) {
+        this._toggleFocusClass(isFocused, $target);
+      }
     }
 
     this._updateParentActiveDescendant();
