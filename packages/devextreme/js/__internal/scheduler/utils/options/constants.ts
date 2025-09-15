@@ -103,7 +103,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     multiline: false,
     items: [
       { location: 'before', name: 'dateNavigator' },
-      { location: 'after', name: 'viewSwitcher' },
+      { location: 'after', name: 'viewSwitcher', locateInMenu: 'auto' },
     ],
   },
 };

@@ -2,7 +2,7 @@ import { compileGetter, compileSetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { Appointment } from '@js/ui/scheduler';
 
-import { getRecurrenceProcessor } from '../../m_recurrence';
+import { validateRRule } from '../../recurrence/validate_rule';
 import { DataAccessor } from './data_accessor';
 import type { DataAccessorGetter, DataAccessorSetter, IFieldExpr } from './types';
 
@@ -115,7 +115,7 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
 
   public isRecurrent<T extends Appointment>(appointment: T): boolean {
     const recurrenceRule = this.get('recurrenceRule', appointment);
-    const isRecurrent = getRecurrenceProcessor().isValidRecurrenceRule(recurrenceRule);
+    const isRecurrent = validateRRule(recurrenceRule);
     return isRecurrent;
   }
 }
