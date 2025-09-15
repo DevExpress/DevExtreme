@@ -5,7 +5,6 @@ import type { NormalizedView } from '../utils/options/types';
 import type { SchedulerHeader } from './m_header';
 import {
   getViewName,
-  isOneView,
 } from './m_utils';
 
 const ClASS = {
@@ -25,8 +24,11 @@ const getViewsAndSelectedView = (header: SchedulerHeader) => {
   };
 };
 
+const isViewSwitcherVisible = (views: NormalizedView[]): boolean => views.length > 1;
+
 export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
+  const isVisible = isViewSwitcherVisible(views);
 
   // @ts-expect-error
   const stylingMode = isFluent() ? 'outlined' : 'contained';
@@ -38,6 +40,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
     location: 'after',
     name: 'viewSwitcher',
     cssClass: ClASS.container,
+    visible: isVisible,
     options: {
       items,
       keyExpr: 'name',
@@ -60,8 +63,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
 
 export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
-  const isOnlyOneView = isOneView(views, selectedView);
-  const isVisible = views?.length > 0;
+  const isVisible = isViewSwitcherVisible(views);
 
   return {
     widget: 'dxDropDownButton',
@@ -76,7 +78,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
       keyExpr: 'name',
       selectedItemKey: selectedView,
       displayExpr: 'name',
-      showArrowIcon: !isOnlyOneView,
+      showArrowIcon: true,
       elementAttr: {
         class: ClASS.dropDownButton,
       },
@@ -87,18 +89,10 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view: NormalizedView) => {
-          const currentViews = header.option('views');
-
-          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view.name));
           viewSwitcher.option('selectedItemKey', getViewName(view));
         });
       },
       dropDownOptions: {
-        onShowing: (e) => {
-          if (isOnlyOneView) {
-            e.cancel = true;
-          }
-        },
         width: 'max-content',
         _wrapperClassExternal: ClASS.dropDownButtonContent,
       },
