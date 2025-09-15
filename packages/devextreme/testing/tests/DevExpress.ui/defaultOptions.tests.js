@@ -1460,8 +1460,6 @@ testComponentDefaults(ChatEditingPreview,
 testComponentDefaults(SpeechToText,
     {},
     {
-        stylingMode: 'contained',
-        type: 'default',
         startIcon: 'micoutline',
         stopIcon: 'stopfilled',
         startText: '',
