@@ -34,7 +34,7 @@ export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
   agenda: {
     agendaDuration: 7,
     intervalCount: 1,
-    name: 'agenda',
+    name: 'Agenda',
     type: 'agenda',
   },
 };

@@ -44,10 +44,15 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
       keyExpr: 'type',
       selectedItemKeys: [selectedType],
       stylingMode,
-      buttonTemplate: (buttonData: NormalizedView) => {
+      buttonTemplate: (buttonData: NormalizedView, buttonContent) => {
         const defaultText = messageLocalization.format(`dxScheduler-switcher${camelize(buttonData.type, true)}`);
         const isCustomName = buttonData.name !== defaultText;
-        return isCustomName ? buttonData.name : defaultText;
+        const text = isCustomName ? buttonData.name : defaultText;
+
+        buttonContent.text(text);
+        buttonContent.closest('.dx-button').addClass('dx-button-has-text');
+
+        return buttonContent;
       },
       onItemClick: (e) => {
         header._updateCurrentView(e.itemData);
