@@ -1,5 +1,4 @@
 import registerComponent from '@js/core/component_registrator';
-import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -76,9 +75,8 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   }
 
   private _renderButton(): void {
-    const $buttonElement = $('<div>').appendTo(this.$element());
     this._button = this._createComponent<Button, ButtonProperties>(
-      $buttonElement,
+      this.$element(),
       Button,
       this._getButtonOptions(),
     );
@@ -249,7 +247,6 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   _clean(): void {
     this._cleanButton();
     this._setState(SpeechToTextState.INITIAL);
-    this.dispose();
     super._clean();
   }
 
