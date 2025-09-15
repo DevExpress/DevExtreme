@@ -364,13 +364,17 @@ export default [
     ...config,
     files: [
       'Demos/**/Vue/*.vue',
+      'Demos/**/Vue/*.ts',
       'utils/templates/Vue/*.vue',
+      'utils/templates/Vue/*.ts',
     ],
   })),
   {
     files: [
       'Demos/**/Vue/*.vue',
+      'Demos/**/Vue/*.ts',
       'utils/templates/Vue/*.vue',
+      'utils/templates/Vue/*.ts',
     ],
     languageOptions: {
       parser: vueParser,
