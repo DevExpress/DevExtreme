@@ -14,7 +14,7 @@ on:
 
 env:
   NX_CLOUD_DISTRIBUTED_EXECUTION: true # this enables DTE
-  NX_CLOUD_DISTRIBUTED_EXECUTION_AGENT_COUNT: 10 # expected number of agents
+  NX_CLOUD_DISTRIBUTED_EXECUTION_AGENT_COUNT: 20 # expected number of agents
   NX_BRANCH: ${{ github.event.number || github.ref_name }}
   # NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   # NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # this is needed if our pipeline publishes to npm  
@@ -123,7 +123,7 @@ jobs:
     strategy:
       matrix:
         # Add more agents here as your repository expands
-        agent: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        agent: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
       - name: Get sources
         uses: actions/checkout@v4
