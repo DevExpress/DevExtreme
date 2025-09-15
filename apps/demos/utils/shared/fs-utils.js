@@ -78,8 +78,8 @@ class FileSystemUtils {
     });
   }
 
-  getDemoPathByMeta(metaPath, baseDemosDir, menuMetaData) {
-    const demo = menuMetaUtils.getByPath(menuMetaData, metaPath);
+  getDemoPathByMeta(pathParts, baseDemosDir, menuMetaData) {
+    const demo = menuMetaUtils.getByPath(menuMetaData, pathParts);
     const result = path.join(baseDemosDir, demo.Widget, demo.Name);
     return result;
   }

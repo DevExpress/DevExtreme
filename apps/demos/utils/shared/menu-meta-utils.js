@@ -47,7 +47,6 @@ const addDemoModules = (
   pathParts,
   modules,
 ) => {
-  console.log('addDemoModules', modules);
   if (modules && modules.length) {
     const demoMetaDest = getByPath(menuMetaData, pathParts);
     demoMetaDest.Modules = modules.join(',');
@@ -112,12 +111,12 @@ const getItemByPath = (menuMetaData, pathParts) => {
     }, menuMetaData);
 }
 
-const isCategory = (menuMetaData, pathParts) => {
+const hasGroups = (menuMetaData, pathParts) => {
   const item = getItemByPath(menuMetaData, pathParts);
   return !!item.Groups;
 }
 
-const isGroup = (menuMetaData, pathParts) => {
+const hasDemos = (menuMetaData, pathParts) => {
   const item = getItemByPath(menuMetaData, pathParts);
   return !!item.Demos;
 }
@@ -150,7 +149,7 @@ module.exports = {
   getGroups,
   getDemos,
   getByPath,
-  isCategory,
-  isGroup,
+  hasGroups,
+  hasDemos,
   isDemo,
 };

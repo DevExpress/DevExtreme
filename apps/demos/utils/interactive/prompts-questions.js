@@ -199,9 +199,9 @@ const askPath = async (menuMetaData, prefix = '') => {
     }], { onCancel });
 
     path.push(question[name]);
-    if (menuMetaUtils.isCategory(menuMetaData, path)) {
+    if (menuMetaUtils.hasGroups(menuMetaData, path)) {
       stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'group');
-    } else if (menuMetaUtils.isGroup(menuMetaData, path)) {
+    } else if (menuMetaUtils.hasDemos(menuMetaData, path)) {
       stage = DEMO_PATH_STAGES.find(demoStage => demoStage.name === 'demo');
     } else {
       stage = undefined;

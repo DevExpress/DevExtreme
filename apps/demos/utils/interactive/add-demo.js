@@ -25,16 +25,14 @@ const extraModules = [
   'vuex',
 ];
 
-// const descriptionFileName = 'description.md';
-
 const menuMetaFilePath = './menuMeta.json';
 
 const baseDemosDir = 'Demos';
 
 const openDemoInEditor = (demoPath) => spawn('code', [demoPath], { shell: true });
 
-const addDemo = async (metaPath, meta) => {
-  const demo = await promptsQuestions.askDemo(meta, metaPath);
+const addDemo = async (meta, pathParts) => {
+  const demo = await promptsQuestions.askDemo(meta, pathParts);
   let demoPath;
   let missingApproaches = [];
 
@@ -52,17 +50,17 @@ const addDemo = async (metaPath, meta) => {
     }
     menuMetaUtils.addDemo(
       meta,
-      metaPath,
+      pathParts,
       demo.newName,
       widget.newName ? widget.newName : widget.name,
       equivalents.value,
     );
-    metaPath.push(demo.newName.replace(/ /g, ''));
+    pathParts.push(demo.newName.replace(/ /g, ''));
     missingApproaches = existingApproaches;
   } else {
-    metaPath.push(demo.name);
+    pathParts.push(demo.name);
     demoPath = fileSystemUtils.getDemoPathByMeta(
-      metaPath,
+      pathParts,
       baseDemosDir,
       meta,
     );
@@ -77,7 +75,7 @@ const addDemo = async (metaPath, meta) => {
   if (newOrExisting.choice === 'existing') {
     menuMetaUtils.updateDemoProperties(
       meta,
-      metaPath,
+      pathParts,
       newOrExisting,
     );
   }
@@ -85,7 +83,7 @@ const addDemo = async (metaPath, meta) => {
     const extraModulesAnswer = await promptsQuestions.askForExtraModules(extraModules);
     menuMetaUtils.addDemoModules(
       meta,
-      metaPath,
+      pathParts,
       extraModulesAnswer.modules,
     );
   }
@@ -107,23 +105,21 @@ const mainRoutine = async (meta) => {
     fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
     console.log('-> New category has been added.');
   } else {
-    const path = [category.name];
-    let shouldCountinue = true;
+    const pathParts = [category.name];
+    let shouldAskForGroup = true;
     let group;
-    while (shouldCountinue) {
-      group = await promptsQuestions.askGroup(meta, path);
-      // console.log('group', group.name);
+    while (shouldAskForGroup) {
+      group = await promptsQuestions.askGroup(meta, pathParts);
       if (group.name === 'new') {
-        menuMetaUtils.addGroup(meta, path, group.newName);
+        menuMetaUtils.addGroup(meta, pathParts, group.newName);
         fileSystemUtils.saveMetaDataFile(menuMetaFilePath, meta);
         console.log('-> New group has been added.');
-        shouldCountinue = false;
+        shouldAskForGroup = false;
       } else {
-        path.push(group.name);
-        // console.log('isGroup', path, menuMetaUtils.isGroup(meta, path));
-        if (menuMetaUtils.isGroup(meta, path)) {
-          shouldCountinue = false;
-          await addDemo(path, meta);
+        pathParts.push(group.name);
+        if (menuMetaUtils.hasDemos(meta, pathParts)) {
+          shouldAskForGroup = false;
+          await addDemo(meta, pathParts);
         }
       }
     }

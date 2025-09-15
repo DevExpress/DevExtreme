@@ -52,27 +52,27 @@ const menuMetaJson = [
 ]
 
 describe('check functions', () => {
-  test('isCategory (first level)', () => {
-    expect(menuMetaUtils.isCategory(menuMetaJson, ['Category1'])).toBe(true);
+  test('hasGroups (first level)', () => {
+    expect(menuMetaUtils.hasGroups(menuMetaJson, ['Category1'])).toBe(true);
   });
-  test('isCategory (nested)', () => {
-    expect(menuMetaUtils.isCategory(menuMetaJson, ['Category1', 'Category1.1', 'Category.1.1.2'])).toBe(true);
+  test('hasGroups (nested)', () => {
+    expect(menuMetaUtils.hasGroups(menuMetaJson, ['Category1', 'Category1.1', 'Category.1.1.2'])).toBe(true);
   });
-  test('isCategory (group)', () => {
-    expect(menuMetaUtils.isCategory(menuMetaJson, ['Category1', 'Group1.2'])).toBe(false);
+  test('hasGroups (group)', () => {
+    expect(menuMetaUtils.hasGroups(menuMetaJson, ['Category1', 'Group1.2'])).toBe(false);
   });
-  test('isCategory (demo)', () => {
-    expect(menuMetaUtils.isCategory(menuMetaJson, ['Category1', 'Group1.2', 'Demo1.2.1'])).toBe(false);
+  test('hasGroups (demo)', () => {
+    expect(menuMetaUtils.hasGroups(menuMetaJson, ['Category1', 'Group1.2', 'Demo1.2.1'])).toBe(false);
   });
 
-  test('isGroup (group)', () => {
-    expect(menuMetaUtils.isGroup(menuMetaJson, ['Category1', 'Group1.2'])).toBe(true);
+  test('hasDemos (group)', () => {
+    expect(menuMetaUtils.hasDemos(menuMetaJson, ['Category1', 'Group1.2'])).toBe(true);
   });
-  test('isGroup (category)', () => {
-    expect(menuMetaUtils.isGroup(menuMetaJson, ['Category1', 'Category1.1'])).toBe(false);
+  test('hasDemos (category)', () => {
+    expect(menuMetaUtils.hasDemos(menuMetaJson, ['Category1', 'Category1.1'])).toBe(false);
   });
-  test('isGroup (demo)', () => {
-    expect(menuMetaUtils.isGroup(menuMetaJson, ['Category1', 'Group1.2', 'Demo1.2.1'])).toBe(false);
+  test('hasDemos (demo)', () => {
+    expect(menuMetaUtils.hasDemos(menuMetaJson, ['Category1', 'Group1.2', 'Demo1.2.1'])).toBe(false);
   });
 
   test('isDemo (demo)', () => {
