@@ -27742,6 +27742,18 @@ declare module DevExpress.ui {
   export class dxSpeechToText extends Widget<DevExpress.ui.dxSpeechToText.Properties> {}
   module dxSpeechToText {
     /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type AllowedButtonOptionKeys = Exclude<
+      keyof DevExpress.ui.dxButton.Properties,
+      | 'template'
+      | 'useSubmitBehavior'
+      | 'validationGroup'
+      | 'icon'
+      | 'text'
+      | 'onClick'
+    >;
+    /**
      * [descr:_ui_speech_to_text_ContentReadyEvent]
      */
     export type ContentReadyEvent =
@@ -27783,14 +27795,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSpeechToTextOptions]
      */
-    export type Properties = Omit<
+    export type Properties = Pick<
       DevExpress.ui.dxButton.Properties,
-      | 'template'
-      | 'useSubmitBehavior'
-      | 'validationGroup'
-      | 'icon'
-      | 'text'
-      | 'onClick'
+      AllowedButtonOptionKeys
     > & {
       /**
        * [descr:dxSpeechToTextOptions.customSpeechRecognizer]

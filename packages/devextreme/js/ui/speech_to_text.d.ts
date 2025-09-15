@@ -130,12 +130,17 @@ export type InitializedEvent = InitializedEventInfo<dxSpeechToText>;
  */
 export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
 
+type AllowedButtonOptionKeys = Exclude<
+  keyof dxButtonOptions,
+  'template' | 'useSubmitBehavior' | 'validationGroup' | 'icon' | 'text' | 'onClick'
+>;
+
 /**
  * @public
  * @docid dxSpeechToTextOptions
  * @type object
  */
-export type Properties = Omit<dxButtonOptions, 'template' | 'useSubmitBehavior' | 'validationGroup' | 'icon' | 'text' | 'onClick'> & {
+export type Properties = Pick<dxButtonOptions, AllowedButtonOptionKeys> & {
   /**
    * @docid dxSpeechToTextOptions.customSpeechRecognizer
    * @public
