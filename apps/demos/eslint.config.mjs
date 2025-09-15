@@ -41,7 +41,6 @@ export default [
       'shared/empty-file.ts',
       'Demos/**/config.js',
       'Demos/**/Vue/**/*.html',
-      'templates/Vue/*.ts',
       'utils', // TODO unignore this
 
       '**/*.{png,json,mjs,css,html,md}',
