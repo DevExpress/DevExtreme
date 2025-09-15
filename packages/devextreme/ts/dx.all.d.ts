@@ -27793,6 +27793,11 @@ declare module DevExpress.ui {
       | 'onClick'
     > & {
       /**
+       * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
+       */
+      customSpeechRecognizer?: CustomSpeechRecognizer;
+
+      /**
        * [descr:dxSpeechToTextOptions.startText]
        */
       startText?: string;
@@ -27818,29 +27823,24 @@ declare module DevExpress.ui {
       webSpeechApiConfig?: WebSpeechApiConfig | { [key: string]: any };
 
       /**
-       * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
-       */
-      customSpeechRecognizer?: CustomSpeechRecognizer;
-
-      /**
        * [descr:dxSpeechToTextOptions.onStartClick]
        */
-      onStartClick?: (e: StartClickEvent) => void;
+      onStartClick?: ((e: StartClickEvent) => void) | undefined;
 
       /**
        * [descr:dxSpeechToTextOptions.onStopClick]
        */
-      onStopClick?: (e: StopClickEvent) => void;
+      onStopClick?: ((e: StopClickEvent) => void) | undefined;
 
       /**
        * [descr:dxSpeechToTextOptions.onResult]
        */
-      onResult?: (e: ResultEvent) => void;
+      onResult?: ((e: ResultEvent) => void) | undefined;
 
       /**
        * [descr:dxSpeechToTextOptions.onError]
        */
-      onError?: (e: ErrorEvent) => void;
+      onError?: ((e: ErrorEvent) => void) | undefined;
     };
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
@@ -27854,14 +27854,14 @@ declare module DevExpress.ui {
      */
     export type StartClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxSpeechToText,
-      KeyboardEvent | MouseEvent | PointerEvent
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
     >;
     /**
      * [descr:_ui_speech_to_text_StopClickEvent]
      */
     export type StopClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxSpeechToText,
-      KeyboardEvent | MouseEvent | PointerEvent
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
     >;
   }
   /**
@@ -34241,24 +34241,24 @@ declare module DevExpress.ui.dxSpeechToText {
    */
   export type WebSpeechApiConfig = {
     /**
-     * [descr:WebSpeechApiConfig.grammars]
-     */
-    grammars?: string[];
-
-    /**
-     * [descr:WebSpeechApiConfig.lang]
-     */
-    lang?: string;
-
-    /**
      * [descr:WebSpeechApiConfig.continuous]
      */
     continuous?: boolean;
 
     /**
+     * [descr:WebSpeechApiConfig.grammars]
+     */
+    grammars?: string[];
+
+    /**
      * [descr:WebSpeechApiConfig.interimResults]
      */
     interimResults?: boolean;
+
+    /**
+     * [descr:WebSpeechApiConfig.lang]
+     */
+    lang?: string;
 
     /**
      * [descr:WebSpeechApiConfig.maxAlternatives]

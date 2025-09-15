@@ -17,11 +17,11 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type ISpeechToTextOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
-  onError?: ((e: ErrorEvent) => void);
+  onError?: ((e: ErrorEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
-  onResult?: ((e: ResultEvent) => void);
-  onStartClick?: ((e: StartClickEvent) => void);
-  onStopClick?: ((e: StopClickEvent) => void);
+  onResult?: ((e: ResultEvent) => void) | undefined;
+  onStartClick?: ((e: StartClickEvent) => void) | undefined;
+  onStopClick?: ((e: StopClickEvent) => void) | undefined;
 }
 
 type ISpeechToTextOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISpeechToTextOptionsNarrowedEvents> & IHtmlOptions>

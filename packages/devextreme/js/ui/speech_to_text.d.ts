@@ -1,8 +1,8 @@
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
 } from '../common/core/events';
 
 import Widget from './widget/ui.widget';
@@ -18,25 +18,25 @@ export type WebSpeechApiConfig = {
    * @docid
    * @public
    */
-  grammars?: string[];
-
-  /**
-   * @docid
-   * @public
-   */
-  lang?: string;
-
-  /**
-   * @docid
-   * @public
-   */
   continuous?: boolean;
 
   /**
    * @docid
    * @public
    */
+  grammars?: string[];
+
+  /**
+   * @docid
+   * @public
+   */
   interimResults?: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
+  lang?: string;
 
   /**
    * @docid
@@ -72,7 +72,7 @@ export type CustomSpeechRecognizer = {
  * @type object
  * @inherits NativeEventInfo
  */
-export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent>;
+export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
 
 /**
  * @docid _ui_speech_to_text_StopClickEvent
@@ -80,7 +80,7 @@ export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | Mo
  * @type object
  * @inherits NativeEventInfo
  */
-export type StopClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent>;
+export type StopClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
 
 /**
  * @docid _ui_speech_to_text_ResultEvent
@@ -137,6 +137,12 @@ export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
  */
 export type Properties = Omit<dxButtonOptions, 'template' | 'useSubmitBehavior' | 'validationGroup' | 'icon' | 'text' | 'onClick'> & {
   /**
+   * @docid dxSpeechToTextOptions.customSpeechRecognizer
+   * @public
+   */
+  customSpeechRecognizer?: CustomSpeechRecognizer;
+
+  /**
    * @docid dxSpeechToTextOptions.startText
    * @default ""
    * @public
@@ -171,42 +177,40 @@ export type Properties = Omit<dxButtonOptions, 'template' | 'useSubmitBehavior' 
   webSpeechApiConfig?: WebSpeechApiConfig | { [key: string]: any };
 
   /**
-   * @docid dxSpeechToTextOptions.customSpeechRecognizer
-   * @public
-   */
-  customSpeechRecognizer?: CustomSpeechRecognizer;
-
-  /**
    * @docid dxSpeechToTextOptions.onStartClick
+   * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:StartClickEvent}
    * @action
    * @public
    */
-  onStartClick?: ((e: StartClickEvent) => void);
+  onStartClick?: ((e: StartClickEvent) => void) | undefined;
 
   /**
    * @docid dxSpeechToTextOptions.onStopClick
+   * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:StopClickEvent}
    * @action
    * @public
    */
-  onStopClick?: ((e: StopClickEvent) => void);
+  onStopClick?: ((e: StopClickEvent) => void) | undefined;
 
   /**
    * @docid dxSpeechToTextOptions.onResult
+   * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:ResultEvent}
    * @action
    * @public
    */
-  onResult?: ((e: ResultEvent) => void);
+  onResult?: ((e: ResultEvent) => void) | undefined;
 
   /**
    * @docid dxSpeechToTextOptions.onError
+   * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:ErrorEvent}
    * @action
    * @public
    */
-  onError?: ((e: ErrorEvent) => void);
+  onError?: ((e: ErrorEvent) => void) | undefined;
 };
 
 /**
