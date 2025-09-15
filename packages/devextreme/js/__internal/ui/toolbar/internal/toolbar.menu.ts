@@ -232,7 +232,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     }
 
     this._$popup = $('<div>').appendTo(this.$element());
-    const { rtlEnabled, container, animation } = this.option();
+    const {
+      rtlEnabled,
+      container,
+      animation,
+    } = this.option();
 
     this._popup = this._createComponent(this._$popup, Popup, {
       onInitialized(e) {
