@@ -1,9 +1,9 @@
 import messageLocalization from '@js/common/core/localization/message';
+import { camelize } from '@js/core/utils/inflector';
 import { isObject } from '@js/core/utils/type';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import { extend } from '@ts/core/utils/m_extend';
-import { camelize } from '@ts/core/utils/m_inflector';
 
 import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
 import type {
@@ -14,18 +14,25 @@ const isKnownView = (view: RawViewType): boolean => VIEW_TYPES
   .includes((isObject(view) ? view.type : view) as ViewType);
 const isExistedView = (view: NormalizedView | undefined): view is NormalizedView => Boolean(view);
 
+const getDefaultName = (type: ViewType): string => messageLocalization.format(`dxScheduler-switcher${camelize(type, true)}`);
+
 const normalizeView = (view: RawViewType): NormalizedView | undefined => {
-  const normalized = isObject(view)
-    ? extend({}, DEFAULT_VIEW_OPTIONS[view.type as string], view) as NormalizedView
-    : DEFAULT_VIEW_OPTIONS[view];
+  if (isObject(view)) {
+    const normalized = extend(
+      {},
+      DEFAULT_VIEW_OPTIONS[view.type as string],
+      view,
+    ) as NormalizedView;
 
-  if (normalized) {
-    if (!isObject(view) || !view.name) {
-      normalized.name = messageLocalization.format(`dxScheduler-switcher${camelize(normalized.type, true)}`);
+    if (!Object.prototype.hasOwnProperty.call(view, 'name')) {
+      normalized.name = getDefaultName(normalized.type as ViewType);
     }
+    return normalized;
   }
-
-  return normalized;
+  const type = view as ViewType;
+  const base = extend({}, DEFAULT_VIEW_OPTIONS[type]) as NormalizedView;
+  base.name = getDefaultName(type);
+  return base;
 };
 
 export const getViews = (views: RawViewType[]): NormalizedView[] => views
