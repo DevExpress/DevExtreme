@@ -116,6 +116,22 @@ jobs:
         name: compared-screenshots-e2e-testcafe-devextreme
         path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
+              
+    - name: Copy compared screenshot artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: compared-screenshots
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy failed test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: failed-tests
+        path: ${{ github.workspace }}/e2e/testcafe-devextreme/artifacts/failedtests/**/*
+        if-no-files-found: ignore
 
   agents:
     name: Agent ${{ matrix.agent }}
