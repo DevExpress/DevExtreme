@@ -47,6 +47,7 @@ import type {
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
+import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { countVisibleAppointments } from './utils/count_visible_appointments';
 import { isNeedToAdd } from './utils/get_arrays_diff';
@@ -487,7 +488,7 @@ class SchedulerAppointments extends CollectionWidget {
       'createFormattedDateText',
       appointment,
       targetedAppointmentData,
-      'TIME',
+      appointment.allDay ? DateFormatType.DATE : DateFormatType.TIME,
     );
 
     $container.append(this.isAgendaView
