@@ -28,8 +28,6 @@ class CollectionWidgetAsync<
     this._planPostRenderActions();
   }
 
-  _renderContent(): void {}
-
   _renderItemContent(args: ItemRenderInfo<TItem>): DeferredObj<dxElementWrapper> {
     const renderContentDeferred = Deferred();
     const itemDeferred = Deferred();
@@ -70,7 +68,6 @@ class CollectionWidgetAsync<
 
       d.resolve().done(() => {
         this._asyncTemplateItemsMap = {};
-        this._fireContentReadyAction();
       });
     });
 
