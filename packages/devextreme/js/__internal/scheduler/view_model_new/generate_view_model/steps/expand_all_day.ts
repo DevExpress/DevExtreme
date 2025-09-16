@@ -1,31 +1,21 @@
 import type { ListEntity } from '../../types';
 
+const HOURS_IN_DAY = 24;
+
 // NOTE: if all day appointment ends at 00:00 make it longer to occupy next cell
-export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay' | 'isAllDayPanelOccupied'>>(
+export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
   entities: T[],
-  isMonthView: boolean,
+  startDayHour: number,
 ): T[] => entities.map((entity) => {
     if (!entity.allDay) {
       return entity;
     }
-    if (isMonthView || entity.isAllDayPanelOccupied) {
-      return {
-        ...entity,
-        endDateUTC: new Date(entity.endDateUTC - 1).setUTCHours(24, 0, 0, 0),
-      };
-    }
 
-    const startDate = new Date(entity.startDateUTC);
-    const endDate = new Date(entity.endDateUTC + 1);
-    endDate.setUTCDate(endDate.getUTCDate() + 1);
+    const endDate = new Date(entity.endDateUTC);
+    endDate.setUTCHours(Math.max(endDate.getUTCHours(), startDayHour % HOURS_IN_DAY), 0, 0, 0);
 
     return {
       ...entity,
-      endDateUTC: endDate.setUTCHours(
-        startDate.getUTCHours(),
-        startDate.getUTCMinutes(),
-        startDate.getUTCSeconds(),
-        startDate.getUTCMilliseconds(),
-      ),
+      endDateUTC: endDate.getTime() + 1,
     };
   });
