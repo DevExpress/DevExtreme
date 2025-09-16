@@ -3,6 +3,13 @@ import type ViewDataProvider from '../../../workspaces/view_model/m_view_data_pr
 import { isAppointmentMatchedIntervals } from '../../common/is_appointment_matched_intervals';
 import type { ListEntity } from '../../types';
 
+interface GroupInfo {
+  allDay: boolean;
+  startDate: Date;
+  endDate: Date;
+  groupIndex: number;
+}
+
 export const filterByVirtualScreen = <T extends ListEntity>(
   entities: T[],
   viewDataProvider: ViewDataProvider,
@@ -13,19 +20,28 @@ export const filterByVirtualScreen = <T extends ListEntity>(
   }
 
   const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
-  // NOTE: all groups are the same because screen is rectangle
-  const groupIntervals = [{
-    min: timeZoneUtils.createUTCDateWithLocalOffset(groupsInfo[0].startDate).getTime(),
-    max: timeZoneUtils.createUTCDateWithLocalOffset(groupsInfo[0].endDate).getTime(),
-  }];
-  const groupIndexes = new Set(groupsInfo.map((group) => group.groupIndex));
+  const groupMap = new Map<number, GroupInfo>();
+  groupsInfo.forEach((group) => {
+    groupMap.set(group.groupIndex, group);
+  });
 
-  // NOTE: All day panel filter only by groupIndex, because it always fully visible
-  return entities.filter((appointment) => groupIndexes.has(appointment.groupIndex) && (
-    appointment.isAllDayPanelOccupied
-      || isAppointmentMatchedIntervals(
-        { startDate: appointment.startDateUTC, endDate: appointment.endDateUTC },
-        groupIntervals,
-      )
-  ));
+  return entities.filter((appointment) => {
+    const groupInfo = groupMap.get(appointment.groupIndex);
+    if (!groupInfo) {
+      return false;
+    }
+    if (appointment.isAllDayPanelOccupied) {
+      return true;
+    }
+
+    const groupInterval = {
+      min: timeZoneUtils.createUTCDateWithLocalOffset(groupInfo.startDate).getTime(),
+      max: timeZoneUtils.createUTCDateWithLocalOffset(groupInfo.endDate).getTime(),
+    };
+
+    return isAppointmentMatchedIntervals(
+      { startDate: appointment.startDateUTC, endDate: appointment.endDateUTC },
+      [groupInterval],
+    );
+  });
 };
