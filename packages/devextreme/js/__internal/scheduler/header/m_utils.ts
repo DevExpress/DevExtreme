@@ -337,4 +337,5 @@ export const getLocalizedSchedulerName = (type: ViewType): string => messageLoca
 export const isOneView = (
   views: NormalizedView[],
   selectedView: NormalizedView,
-) => views.length === 1 && views[0].type === selectedView.type && views[0].name === selectedView.name;
+): boolean => views.length === 1 && views[0].type === selectedView.type
+  && views[0].name === selectedView.name;

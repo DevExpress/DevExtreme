@@ -63,8 +63,7 @@ export const getTabViewSwitcher = (
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          const viewName = getViewName(view);
-          viewSwitcher.option('selectedItemKeys', [viewName]);
+          viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
         });
       },
     },
@@ -111,10 +110,9 @@ export const getDropDownViewSwitcher = (
 
         header._addEvent('currentView', (view: NormalizedView) => {
           const currentViews = header.option('views');
-          const viewName = getViewName(view);
 
           viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view));
-          viewSwitcher.option('selectedItemKey', viewName);
+          viewSwitcher.option('selectedItemKey', getViewName(view));
         });
       },
       dropDownOptions: {
