@@ -1,3 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
+import { camelize } from '@js/core/utils/inflector';
+
 import type { AgendaView, View, ViewType } from './types';
 
 export const VIEWS: Record<string, ViewType> = {
@@ -13,10 +16,12 @@ export const VIEWS: Record<string, ViewType> = {
 };
 export const VIEW_TYPES: ViewType[] = Object.values(VIEWS);
 
+const getName = (type: ViewType): string => messageLocalization.format(`dxScheduler-switcher${camelize(type, true)}`);
+
 const getView = (type: ViewType, groupOrientation: View['groupOrientation']): View => ({
   groupOrientation,
   intervalCount: 1,
-  name: type,
+  name: getName(type),
   type,
 });
 
