@@ -360,7 +360,7 @@ export class ResizingController extends modules.ViewController {
       return undefined;
     });
 
-    this._toggleContentMinHeight(this._hasHeight); // T1047239
+    this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
 
     this._setVisibleWidths(visibleColumns, []);
 
