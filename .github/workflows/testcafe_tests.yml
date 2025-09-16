@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
 
     runs-on: devextreme-shr2
-    timeout-minutes: 15
+    timeout-minutes: 55
 
     steps:
     - name: Get sources

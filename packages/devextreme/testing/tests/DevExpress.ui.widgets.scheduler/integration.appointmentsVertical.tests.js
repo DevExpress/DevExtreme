@@ -271,7 +271,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
     QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', async function(assert) {
         const scheduler = await createWrapper({
             dataSource: [],
-            currentDate: new Date(2016, 4, 7),
+            currentDate: new Date('2016-05-06T07:00:00.000Z'),
             timeZone: 'Asia/Ashkhabad',
             height: 500,
             currentView: 'week',
@@ -279,8 +279,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         scheduler.instance.addAppointment({
-            startDate: new Date(2016, 4, 2),
-            endDate: new Date(2016, 4, 2, 0, 30),
+            startDate: '2016-05-01T07:00:00.000Z',
+            endDate: '2016-05-01T07:30:00.000Z',
             recurrenceRule: 'FREQ=DAILY'
         });
 

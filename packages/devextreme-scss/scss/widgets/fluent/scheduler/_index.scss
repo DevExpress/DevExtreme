@@ -416,8 +416,9 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-work-space.dx-scheduler-work-space-month {
-    .dx-scheduler-appointment-collector {
-      margin: 0 $fluent-scheduler-dropdown-margin-left !important;
+    .dx-scheduler-appointment-collector,
+    &.dx-rtl .dx-scheduler-appointment-collector {
+      margin: 0 $fluent-scheduler-dropdown-margin-left;
     }
   }
 }

@@ -1293,30 +1293,25 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         test('Recurrence exception should be adjusted by scheduler timezone', async function(assert) {
-            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
-            try {
-                const scheduler = await this.createInstance({
-                    dataSource: [{
-                        text: 'a',
-                        startDate: new Date(2018, 2, 26, 10),
-                        endDate: new Date(2018, 2, 26, 11),
-                        recurrenceRule: 'FREQ=DAILY',
-                        recurrenceException: '20180327T100000, 20180330T100000'
-                    }],
-                    views: ['month'],
-                    currentView: 'month',
-                    currentDate: new Date(2018, 2, 30),
-                    timeZone: 'Australia/Sydney',
-                    height: 600,
-                    width: 600
-                });
+            const scheduler = await this.createInstance({
+                dataSource: [{
+                    text: 'a',
+                    startDate: Date.UTC(2018, 2, 26, 8),
+                    endDate: Date.UTC(2018, 2, 26, 9),
+                    recurrenceRule: 'FREQ=DAILY',
+                    recurrenceException: '20180327T080000Z, 20180330T080000Z'
+                }],
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2018, 2, 30),
+                timeZone: 'Australia/Sydney',
+                height: 600,
+                width: 600
+            });
 
-                const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
+            const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
-                assert.equal($appointments.length, 11, 'correct number of the appointments');
-            } finally {
-                tzOffsetStub.restore();
-            }
+            assert.equal($appointments.length, 11, 'correct number of the appointments');
         });
 
         test('Single changed appointment should be rendered correctly in specified timeZone', async function(assert) {

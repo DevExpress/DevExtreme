@@ -351,9 +351,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-work-space.dx-scheduler-work-space-month,
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
     .dx-scheduler-appointment-collector {
-      margin: 0 $generic-scheduler-dropdown-margin-right !important;
+      margin: 0 $generic-scheduler-dropdown-margin-right;
     }
   }
 }
