@@ -120,6 +120,7 @@ jobs:
   agents:
     name: Agent ${{ matrix.agent }}
     runs-on: devextreme-shr2
+    timeout-minutes: 90
     strategy:
       matrix:
         # Add more agents here as your repository expands
