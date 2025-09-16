@@ -12,15 +12,11 @@ export const addGroupingOffset = (
     viewOrientation,
     hasAllDayPanel,
     isGroupByDate,
-    isTimelineView,
     cellSize,
     groupSize,
-    intervals,
   }: GeometryOptions,
 ): void => {
   if (groupCount) {
-    const intervalsCount = intervals.length;
-
     switch (true) {
       case groupOrientation === 'horizontal' && isGroupByDate:
         entity.left
@@ -36,20 +32,6 @@ export const addGroupingOffset = (
         entity.top += entity.groupIndex * groupSize.height
         + (entity.groupIndex + Number(!entity.isAllDayPanelOccupied))
           * Number(hasAllDayPanel) * cellSize.height;
-    }
-
-    if (isTimelineView) {
-      switch (true) {
-        case groupOrientation === 'horizontal' && isGroupByDate:
-          // grouped intervals before
-          entity.left += (groupCount - 1) * entity.rowIndex * groupSize.width;
-          break;
-        case groupOrientation === 'horizontal':
-          // intervals of groups before
-          entity.left += entity.groupIndex * intervalsCount * groupSize.width;
-          break;
-        default:
-      }
     }
   }
 };
