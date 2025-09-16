@@ -172,7 +172,7 @@ export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit
 /** @public */
 export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 /** @public */
-export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+export type TreeListCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'drag';
 /** @public */
 export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
 
