@@ -1,5 +1,5 @@
 import messageLocalization from '@js/common/core/localization/message';
-import { camelize } from '@js/core/utils/inflector';
+import { camelize } from '@ts/core/utils/m_inflector';
 
 import type { AgendaView, View, ViewType } from './types';
 
@@ -39,7 +39,7 @@ export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
   agenda: {
     agendaDuration: 7,
     intervalCount: 1,
-    name: 'Agenda',
+    name: getName('agenda'),
     type: 'agenda',
   },
 };
