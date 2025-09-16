@@ -6,13 +6,15 @@ interface SchedulerInstance {
   createComponent: <T>(element: unknown, componentClass: unknown, options?: unknown) => T;
 }
 
-const defaultItems = ['name', {
-  name: 'startDate',
-  editorType: 'dxDateBox',
-  validationRules: [{
-    type: 'required',
-  }],
-}, 'endDate'];
+const defaultItems = ['name',
+  {
+    name: 'startDate', editorType: 'dxDateBox', validationRules: [{ type: 'required' }], dataField: 'startDate',
+  },
+  {
+    name: 'endDate', editorType: 'dxDateBox', validationRules: [{ type: 'required' }], dataField: 'endDate',
+  },
+];
+
 export class AppointmentForm {
   noop = noop;
 
@@ -40,15 +42,15 @@ export class AppointmentForm {
   }
 
   get formData(): unknown {
-    return this.form?.option('formData');
+    return this.form.option('formData');
   }
 
   set formData(value: unknown) {
-    this.noop();
+    this.form.option('formData', value);
   }
 
-  create(): void {
-    this.noop();
+  create(trigger, changeSize, formData): void {
+    this.formData = formData;
   }
 
   setEditorsType(): void {
