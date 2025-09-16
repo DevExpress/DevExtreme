@@ -37,7 +37,7 @@ $(() => {
   });
 
   $('#precisionAndType').dxNumberBox({
-    format: { type: "percent", precision: 5 },
+    format: { type: 'percent', precision: 5 },
     value: 1.2312345,
     inputAttr: { 'aria-label': 'Precision and Type Format' },
   });
