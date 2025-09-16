@@ -88,6 +88,7 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
     firstDayOfWeek,
     interval,
     timeZone,
+    startDateTimeZone,
   });
   const startDateOffsetBase = getDateOffsetMs(startDateMsBase, timeZone);
   const startDateAppointmentOffsetBase = getDateOffsetMs(startDateMsBase, startDateTimeZone);

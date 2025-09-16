@@ -14,7 +14,7 @@ describe('expandAllDay', () => {
         startDateUTC: Date.UTC(2020, 0, 10, 4),
         endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
-    ], 24)).toEqual([
+    ])).toEqual([
       {
         allDay: false,
         startDateUTC: Date.UTC(2020, 0, 10, 0),
@@ -42,51 +42,19 @@ describe('expandAllDay', () => {
         startDateUTC: Date.UTC(2020, 0, 11),
         endDateUTC: Date.UTC(2020, 0, 12),
       },
-    ], 24)).toEqual([
+    ])).toEqual([
       {
         allDay: true,
         startDateUTC: Date.UTC(2020, 0, 10),
-        endDateUTC: Date.UTC(2020, 0, 10) + 1,
+        endDateUTC: Date.UTC(2020, 0, 10, 23, 59, 59, 999),
       }, {
         allDay: true,
         startDateUTC: Date.UTC(2020, 0, 10, 4),
-        endDateUTC: Date.UTC(2020, 0, 11, 5) + 1,
+        endDateUTC: Date.UTC(2020, 0, 11, 23, 59, 59, 999),
       }, {
         allDay: true,
         startDateUTC: Date.UTC(2020, 0, 11),
-        endDateUTC: Date.UTC(2020, 0, 12) + 1,
-      },
-    ]);
-  });
-
-  it('should add 1ms and startDayHour', () => {
-    expect(expandAllDay([
-      {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10),
-        endDateUTC: Date.UTC(2020, 0, 10),
-      }, {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10, 4),
-        endDateUTC: Date.UTC(2020, 0, 11, 5),
-      }, {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 11),
-        endDateUTC: Date.UTC(2020, 0, 12),
-      },
-    ], 23)).toEqual([
-      {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10),
-        endDateUTC: Date.UTC(2020, 0, 10, 23) + 1,
-      }, {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10, 4),
-        endDateUTC: Date.UTC(2020, 0, 11, 23) + 1,
-      }, {
-        allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 11),
-        endDateUTC: Date.UTC(2020, 0, 12, 23) + 1,
+        endDateUTC: Date.UTC(2020, 0, 12, 23, 59, 59, 999),
       },
     ]);
   });

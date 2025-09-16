@@ -9,6 +9,7 @@ interface Options {
   firstDayOfWeek?: number;
   interval: DateInterval;
   timeZone: string;
+  startDateTimeZone?: string;
 }
 
 const WEEK_DAY_NUMBERS = [6, 0, 1, 2, 3, 4, 5];
@@ -21,13 +22,15 @@ export const generateRecurrenceUTCDates = <
       firstDayOfWeek,
       interval,
       timeZone,
+      startDateTimeZone,
     }: Options,
   ): number[] => {
   if (!appointment.hasRecurrenceRule || !appointment.recurrenceRule) {
     return [appointment.source.startDate];
   }
 
-  const startDateOffsetBase = getDateOffsetMs(appointment.source.startDate, timeZone);
+  const startDateOffsetBase = -getDateOffsetMs(appointment.source.startDate, timeZone)
+    + getDateOffsetMs(appointment.source.startDate, startDateTimeZone);
   // NOTE: Add offset only for correct recurrence calculation for rule with BYDAY=MO,WE,FR
   // Target time zone day and UTC day are different
   const duration = appointment.source.endDate - appointment.source.startDate;
