@@ -60,9 +60,9 @@ describe('m_view_switcher localization', () => {
 
       mockGetViewDisplayName.mockImplementation((view) => {
         const viewMap: Record<string, string> = {
-          day: 'Den', // Day in Russian (transliterated)
-          week: 'Nedelya', // Week in Russian (transliterated)
-          month: 'Mesyats', // Month in Russian (transliterated)
+          day: 'Den',
+          week: 'Nedelya',
+          month: 'Mesyats',
         };
         return viewMap[view.type] || view.type;
       });
