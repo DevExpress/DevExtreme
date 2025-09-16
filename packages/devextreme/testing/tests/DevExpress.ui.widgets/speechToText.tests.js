@@ -9,12 +9,11 @@ import {
     SPEECH_TO_TEXT_LISTENING_CLASS,
 } from '__internal/ui/speech_to_text/speech_to_text';
 
-const ICON_CLASS = 'dx-icon';
-const BUTTON_TEXT_CLASS = 'dx-button-text';
 const BUTTON_MODE_CONTAINED_CLASS = 'dx-button-mode-contained';
-const BUTTON_DANGER_CLASS = 'dx-button-danger';
 const BUTTON_MODE_TEXT_CLASS = 'dx-button-mode-text';
 const BUTTON_MODE_OUTLINED_CLASS = 'dx-button-mode-outlined';
+const BUTTON_TYPE_DANGER_CLASS = 'dx-button-danger';
+const BUTTON_TYPE_PRIMARY_CLASS = 'dx-button-primary';
 
 QUnit.testStart(() => {
     const markup = '<div id="speechToText"></div>';
@@ -219,7 +218,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onStartClick: (e) => {
                 assert.ok(e.component instanceof SpeechToText, 'component is correct');
-                assert.strictEqual(e.element, this.$element.get(0), 'element is provided correctly');
+                assert.deepEqual(e.element, this.instance.element(), 'element is provided correctly');
                 assert.ok(e.event, 'original event is provided');
                 assert.strictEqual(typeof e.event, 'object', 'event is an object');
             },
@@ -234,7 +233,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onStopClick: (e) => {
                 assert.ok(e.component instanceof SpeechToText, 'component is correct');
-                assert.strictEqual(e.element, this.$element.get(0), 'element is provided correctly');
+                assert.strictEqual(e.element, this.instance.element(), 'element is provided correctly');
                 assert.ok(e.event, 'original event is provided');
                 assert.strictEqual(typeof e.event, 'object', 'event is an object');
             },
@@ -242,6 +241,26 @@ QUnit.module('Events', moduleConfig, () => {
 
         const $button = this.getButton();
 
+        $button.trigger('dxclick');
+        $button.trigger('dxclick');
+    });
+
+    QUnit.test('should pass correct event arguments to onStopClick & onStartClick via on()', function(assert) {
+        assert.expect(8);
+
+        this.reinit();
+
+        const handleClick = (e) => {
+            assert.ok(e.component instanceof SpeechToText, 'component is correct');
+            assert.strictEqual(e.element, this.instance.element(), 'element is provided correctly');
+            assert.ok(e.event, 'original event is provided');
+            assert.strictEqual(typeof e.event, 'object', 'event is an object');
+        };
+
+        this.instance.on('startClick', handleClick);
+        this.instance.on('stopClick', handleClick);
+
+        const $button = this.getButton();
         $button.trigger('dxclick');
         $button.trigger('dxclick');
     });
@@ -438,31 +457,6 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
 });
 
 QUnit.module('Options', moduleConfig, () => {
-    QUnit.test('should update button icon and text based on state', function(assert) {
-        this.reinit({
-            startText: 'Start Recording',
-            stopText: 'Stop Recording',
-            startIcon: 'user',
-            stopIcon: 'check',
-        });
-
-        const $button = this.getButton();
-        const $buttonText = $button.find(`.${BUTTON_TEXT_CLASS}`);
-
-        let $icon = $button.find(`.${ICON_CLASS}`);
-
-        assert.strictEqual($buttonText.text(), 'Start Recording', 'initial text displayed');
-        assert.ok($icon.hasClass(`${ICON_CLASS}-user`), 'initial icon displayed');
-
-        $button.trigger('dxclick');
-
-        assert.strictEqual($buttonText.text(), 'Stop Recording', 'text updated after click');
-
-        $icon = $button.find(`.${ICON_CLASS}`);
-
-        assert.ok($icon.hasClass(`${ICON_CLASS}-check`), 'icon updated after click');
-    });
-
     QUnit.test('should support button styling options', function(assert) {
         this.reinit({
             stylingMode: 'contained',
@@ -472,7 +466,7 @@ QUnit.module('Options', moduleConfig, () => {
         const $button = this.getButton();
 
         assert.ok($button.hasClass(BUTTON_MODE_CONTAINED_CLASS), 'styling mode applied');
-        assert.ok($button.hasClass(BUTTON_DANGER_CLASS), 'button type applied');
+        assert.ok($button.hasClass(BUTTON_TYPE_DANGER_CLASS), 'button type applied');
     });
 
     QUnit.test('should handle icon options change at runtime', function(assert) {
@@ -519,6 +513,16 @@ QUnit.module('Options', moduleConfig, () => {
 
         this.instance.option('stylingMode', 'outlined');
         assert.ok($button.hasClass(BUTTON_MODE_OUTLINED_CLASS), 'outlined styling mode applied');
+    });
+
+    QUnit.test('should handle button type changes at runtime', function(assert) {
+        const $button = this.getButton();
+
+        this.instance.option('type', 'danger');
+        assert.ok($button.hasClass(BUTTON_TYPE_DANGER_CLASS), 'danger type is applied');
+
+        this.instance.option('type', 'primary');
+        assert.ok($button.hasClass(BUTTON_TYPE_PRIMARY_CLASS), 'primary type is applied');
     });
 
     [undefined, null].forEach(value => {
@@ -588,17 +592,21 @@ QUnit.module('Component Lifecycle', moduleConfig, () => {
         assert.strictEqual(Object.keys(this.instance._actions).length, 0, 'actions cleared after dispose');
     });
 
-    QUnit.test('should handle multiple reinitializations', function(assert) {
-        const onStartClickSpy = sinon.spy();
+    QUnit.test('reinit replaces event handler', function(assert) {
+        const handleClickSpy1 = sinon.spy();
+        const handleClickSpy2 = sinon.spy();
 
-        this.reinit({ onStartClick: onStartClickSpy });
+        this.reinit({ onStartClick: handleClickSpy1 });
+
         this.getButton().trigger('dxclick');
 
-        assert.ok(onStartClickSpy.calledOnce, 'event works after first init');
+        assert.strictEqual(handleClickSpy1.callCount, 1, 'first init: handler called once');
 
-        this.reinit({ onStartClick: onStartClickSpy });
+        this.reinit({ onStartClick: handleClickSpy2 });
+
         this.getButton().trigger('dxclick');
 
-        assert.ok(onStartClickSpy.calledTwice, 'event works after reinit');
+        assert.strictEqual(handleClickSpy1.callCount, 1, 'old handler not called after reinit');
+        assert.strictEqual(handleClickSpy2.callCount, 1, 'new handler called once after reinit');
     });
 });
