@@ -35,7 +35,7 @@ describe('m_view_switcher localization', () => {
           week: 'Week',
           month: 'Month',
         };
-        return viewMap[view.type] || view.type;
+        return viewMap[view.type];
       });
 
       const views = [
@@ -64,7 +64,7 @@ describe('m_view_switcher localization', () => {
           week: 'Nedelya',
           month: 'Mesyats',
         };
-        return viewMap[view.type] || view.type;
+        return viewMap[view.type];
       });
 
       const ruLocaleResult = getTabViewSwitcher(mockSchedulerHeader, {});
@@ -82,7 +82,7 @@ describe('m_view_switcher localization', () => {
           day: 'Day',
           week: 'Week',
         };
-        return viewMap[view.type] || view.type;
+        return viewMap[view.type];
       });
 
       const views = [
@@ -108,7 +108,7 @@ describe('m_view_switcher localization', () => {
           day: 'Den',
           week: 'Nedelya',
         };
-        return viewMap[view.type] || view.type;
+        return viewMap[view.type];
       });
 
       const ruLocaleResult = getDropDownViewSwitcher(mockSchedulerHeader, {});
