@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
 
     runs-on: devextreme-shr2
-    timeout-minutes: 55
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -169,7 +169,7 @@ jobs:
 #          { componentFolder: "fileUploader", name: "fileUploader - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
-    timeout-minutes: 45
+    timeout-minutes: 145
 
     steps:
     - name: Set machine timezone
