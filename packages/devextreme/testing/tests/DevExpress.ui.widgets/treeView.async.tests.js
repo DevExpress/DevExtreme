@@ -119,4 +119,40 @@ QUnit.module('Async render', () => {
             }, asyncTemplateRenderTimeout);
         });
     });
+
+    QUnit.test('checkbox selectItem should not throw an error if template is used and render is asynchronous (T1307114)', function(assert) {
+        const done = assert.async();
+
+        try {
+            new TreeView($('#treeView'), {
+                dataSource: [{ text: 'item 1', id: 1 }, { text: 'item 2', id: 2 }],
+                selectionMode: 'multiple',
+                showCheckBoxesMode: 'selectAll',
+                itemTemplate: 'custom',
+                onContentReady: (e) => {
+                    e.component.selectItem(1);
+                },
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        custom: {
+                            render: function({ container, onRendered, model }) {
+                                setTimeout(() => {
+                                    $('<div>').text(model.text).appendTo(container);
+                                    onRendered();
+                                });
+                            }
+                        }
+                    }
+                },
+            });
+            assert.ok(true, 'No error should be thrown');
+        } catch(e) {
+            assert.ok(false, `Error should not be thrown: ${e}`);
+        }
+
+        setTimeout(() => {
+            done();
+        }, asyncTemplateRenderTimeout);
+    });
 });
