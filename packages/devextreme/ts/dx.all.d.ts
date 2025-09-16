@@ -12349,6 +12349,7 @@ declare module DevExpress.ui {
       DevExpress.common.grids.DataErrorOccurredInfo;
     export type DataGridCommandColumnType =
       | 'adaptive'
+      | 'ai'
       | 'buttons'
       | 'detailExpand'
       | 'groupExpand'
@@ -31401,7 +31402,11 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.ToolbarPreparingInfo;
-    export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+    export type TreeListCommandColumnType =
+      | 'adaptive'
+      | 'ai'
+      | 'buttons'
+      | 'drag';
     export type TreeListFilterMode =
       | 'fullBranch'
       | 'withAncestors'
