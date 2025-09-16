@@ -44,6 +44,20 @@ const getUnreachableShift = (
   }
 };
 
+const getDSTChanges = (
+  targetTimeZoneChange: number,
+  appointmentTimeZoneChange: number,
+): number => {
+  if (targetTimeZoneChange < 0 && appointmentTimeZoneChange < 0) {
+    return Math.min(targetTimeZoneChange, appointmentTimeZoneChange);
+  }
+  if (targetTimeZoneChange > 0 && appointmentTimeZoneChange > 0) {
+    return Math.max(targetTimeZoneChange, appointmentTimeZoneChange);
+  }
+
+  return targetTimeZoneChange + appointmentTimeZoneChange;
+};
+
 export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointmentEntity >(
   appointment: T,
   {
@@ -94,13 +108,17 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
       const endDateMs = startDateMs + duration;
       const startDateInfo = getDateInformation(startDateMs, timeZone);
       const startDateAppointmentOffset = getDateOffsetMs(startDateMs, startDateTimeZone);
-      const startDateDSTChange = (startDateOffsetBase - startDateInfo.offsetMs)
-        + (startDateAppointmentOffsetBase - startDateAppointmentOffset);
+      const startDateDSTChange = getDSTChanges(
+        startDateOffsetBase - startDateInfo.offsetMs,
+        startDateAppointmentOffsetBase - startDateAppointmentOffset,
+      );
 
       const endDateInfo = getDateInformation(endDateMs, timeZone);
       const endDateAppointmentOffset = getDateOffsetMs(endDateMs, endDateTimeZone);
-      const endDateDSTChange = (startDateOffsetBase - endDateInfo.offsetMs)
-        + (endDateAppointmentOffsetBase - endDateAppointmentOffset);
+      const endDateDSTChange = getDSTChanges(
+        startDateOffsetBase - endDateInfo.offsetMs,
+        endDateAppointmentOffsetBase - endDateAppointmentOffset,
+      );
 
       const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(startDateInfo, endDateInfo);
       const sourceStartDate = startDateMs + startDateDSTChange;

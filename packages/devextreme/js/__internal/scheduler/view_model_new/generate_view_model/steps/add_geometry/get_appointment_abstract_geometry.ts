@@ -11,7 +11,8 @@ import type {
 const getInsideCellX = (date: number, { min, max }: CellInterval, cellSizeX: number): number => {
   const cellDuration = minusDST(max) - minusDST(min);
   const startTimeDelta = minusDST(date) - minusDST(min);
-  return (startTimeDelta * cellSizeX) / cellDuration;
+
+  return cellDuration === 0 ? 0 : (startTimeDelta * cellSizeX) / cellDuration;
 };
 
 export const getAppointmentX = (

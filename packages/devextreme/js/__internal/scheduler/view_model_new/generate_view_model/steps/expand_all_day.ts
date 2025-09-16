@@ -11,7 +11,7 @@ export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDat
     if (isMonthView || entity.isAllDayPanelOccupied) {
       return {
         ...entity,
-        endDateUTC: new Date(entity.endDateUTC).setUTCHours(24, 0, 0, 0),
+        endDateUTC: new Date(entity.endDateUTC - 1).setUTCHours(24, 0, 0, 0),
       };
     }
 

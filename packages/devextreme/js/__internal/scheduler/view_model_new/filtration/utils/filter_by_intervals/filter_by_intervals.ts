@@ -17,7 +17,7 @@ export const filterByIntervals = <T extends Entity>(
       : regularIntervals;
     // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
     const fixedAppointment = { ...appointment };
-    if (appointment.allDay && appointment.isAllDayPanelOccupied) {
+    if (appointment.allDay) {
       fixedAppointment.endDateUTC += 1;
     }
 
