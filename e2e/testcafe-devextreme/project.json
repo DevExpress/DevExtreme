@@ -1,7 +1,5 @@
 {
   "name": "devextreme-testcafe-tests",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "e2e/testcafe-devextreme",
   "projectType": "application",
   "targets": {
     "lint": {
@@ -14,22 +12,93 @@
     "test": {
       "executor": "nx:noop",
       "dependsOn": [
-        "test--accessibility-common-1",
-        "test--accessibility-common-2",
-        "test--accessibility-common-3",
-        "test--accessibility-common-4",
-        "test--accessibility-common-5",
-        "test--accessibility-common-6",
-        "test--accessibility-common-7",
-        "test--datagrid-common-1",
-        "test--datagrid-common-2",
-        "test--datagrid-common-3",
-        "test--datagrid-common-4",
-        "test--datagrid-common-5"
-      ],
-      "cache": true
+        "test--accessibility-1-7",
+        "test--accessibility-2-7",
+        "test--accessibility-3-7",
+        "test--accessibility-4-7",
+        "test--accessibility-5-7",
+        "test--accessibility-6-7",
+        "test--accessibility-7-7",
+        "test--accessibility-material-1-7",
+        "test--accessibility-material-2-7",
+        "test--accessibility-material-3-7",
+        "test--accessibility-material-4-7",
+        "test--accessibility-material-5-7",
+        "test--accessibility-material-6-7",
+        "test--accessibility-material-7-7",
+        "test--accessibility-fluent-1-7",
+        "test--accessibility-fluent-2-7",
+        "test--accessibility-fluent-3-7",
+        "test--accessibility-fluent-4-7",
+        "test--accessibility-fluent-5-7",
+        "test--accessibility-fluent-6-7",
+        "test--accessibility-fluent-7-7",
+        "test--common",
+        "test--common-material",
+        "test--common-fluent",
+        "test--chat",
+        "test--chat-material",
+        "test--chat-fluent",
+        "test--treeList",
+        "test--dataGrid-common-1-5",
+        "test--dataGrid-common-2-5",
+        "test--dataGrid-common-3-5",
+        "test--dataGrid-common-4-5",
+        "test--dataGrid-common-5-5",
+        "test--dataGrid-stickycommon",
+        "test--dataGrid-sticky-1-3",
+        "test--dataGrid-sticky-2-3",
+        "test--dataGrid-sticky-3-3",
+        "test--cardView",
+        "test--cardView-material",
+        "test--cardView-fluent",
+        "test--pivotGrid",
+        "test--pivotGrid-material",
+        "test--pivotGrid-fluent",
+        "test--scheduler-common-1-6",
+        "test--scheduler-common-2-6",
+        "test--scheduler-common-3-6",
+        "test--scheduler-common-4-6",
+        "test--scheduler-common-5-6",
+        "test--scheduler-common-6-6",
+        "test--scheduler-offset",
+        "test--scheduler-offsetmarkups",
+        "test--form-1-2",
+        "test--form-2-2",
+        "test--form-material-1-2",
+        "test--form-material-2-2",
+        "test--form-fluent-1-2",
+        "test--form-fluent-2-2",
+        "test--editors-1-3",
+        "test--editors-2-3",
+        "test--editors-3-3",
+        "test--editors-material-1-3",
+        "test--editors-material-2-3",
+        "test--editors-material-3-3",
+        "test--editors-fluent-1-3",
+        "test--editors-fluent-2-3",
+        "test--editors-fluent-3-3",
+        "test--htmlEditor",
+        "test--htmlEditor-material",
+        "test--htmlEditor-fluent",
+        "test--navigation",
+        "test--navigation-material",
+        "test--navigation-fluent",
+        "test--fileManager",
+        "test--fileManager-material",
+        "test--fileManager-fluent",
+        "test--filterBuilder",
+        "test--filterBuilder-material",
+        "test--filterBuilder-fluent",
+        "test--pagination",
+        "test--pagination-fluent",
+        "test--gantt",
+        "test--fileUploader",
+        "test--fileUploader-material",
+        "test--fileUploader-fluent"
+      ]
     },
-    "test--accessibility-common-1": {
+    "test--accessibility-1-7": {
       "dependsOn": [
         "^build"
       ],
@@ -44,7 +113,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 1/7"
       }
     },
-    "test--accessibility-common-2": {
+    "test--accessibility-2-7": {
       "dependsOn": [
         "^build"
       ],
@@ -59,7 +128,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 2/7"
       }
     },
-    "test--accessibility-common-3": {
+    "test--accessibility-3-7": {
       "dependsOn": [
         "^build"
       ],
@@ -74,7 +143,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 3/7"
       }
     },
-    "test--accessibility-common-4": {
+    "test--accessibility-4-7": {
       "dependsOn": [
         "^build"
       ],
@@ -89,7 +158,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 4/7"
       }
     },
-    "test--accessibility-common-5": {
+    "test--accessibility-5-7": {
       "dependsOn": [
         "^build"
       ],
@@ -104,7 +173,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 5/7"
       }
     },
-    "test--accessibility-common-6": {
+    "test--accessibility-6-7": {
       "dependsOn": [
         "^build"
       ],
@@ -119,7 +188,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 6/7"
       }
     },
-    "test--accessibility-common-7": {
+    "test--accessibility-7-7": {
       "dependsOn": [
         "^build"
       ],
@@ -134,7 +203,322 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --indices 7/7"
       }
     },
-    "test--datagrid-common-1": {
+    "test--accessibility-material-1-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 1/7"
+      }
+    },
+    "test--accessibility-material-2-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 2/7"
+      }
+    },
+    "test--accessibility-material-3-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 3/7"
+      }
+    },
+    "test--accessibility-material-4-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 4/7"
+      }
+    },
+    "test--accessibility-material-5-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 5/7"
+      }
+    },
+    "test--accessibility-material-6-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 6/7"
+      }
+    },
+    "test--accessibility-material-7-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme material.blue.light --indices 7/7"
+      }
+    },
+    "test--accessibility-fluent-1-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 1/7"
+      }
+    },
+    "test--accessibility-fluent-2-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 2/7"
+      }
+    },
+    "test--accessibility-fluent-3-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 3/7"
+      }
+    },
+    "test--accessibility-fluent-4-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 4/7"
+      }
+    },
+    "test--accessibility-fluent-5-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 5/7"
+      }
+    },
+    "test--accessibility-fluent-6-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 6/7"
+      }
+    },
+    "test--accessibility-fluent-7-7": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder accessibility/common --theme fluent.blue.light --indices 7/7"
+      }
+    },
+    "test--common": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder common"
+      }
+    },
+    "test--common-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder common --theme material.blue.light"
+      }
+    },
+    "test--common-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder common --theme fluent.blue.light"
+      }
+    },
+    "test--chat": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder chat"
+      }
+    },
+    "test--chat-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder chat --theme material.blue.light"
+      }
+    },
+    "test--chat-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder chat --theme fluent.blue.light"
+      }
+    },
+    "test--treeList": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder treeList --concurrency 1"
+      }
+    },
+    "test--dataGrid-common-1-5": {
       "dependsOn": [
         "^build"
       ],
@@ -149,7 +533,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 1/5"
       }
     },
-    "test--datagrid-common-2": {
+    "test--dataGrid-common-2-5": {
       "dependsOn": [
         "^build"
       ],
@@ -164,7 +548,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 2/5"
       }
     },
-    "test--datagrid-common-3": {
+    "test--dataGrid-common-3-5": {
       "dependsOn": [
         "^build"
       ],
@@ -179,7 +563,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 3/5"
       }
     },
-    "test--datagrid-common-4": {
+    "test--dataGrid-common-4-5": {
       "dependsOn": [
         "^build"
       ],
@@ -194,7 +578,7 @@
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 4/5"
       }
     },
-    "test--datagrid-common-5": {
+    "test--dataGrid-common-5-5": {
       "dependsOn": [
         "^build"
       ],
@@ -207,6 +591,771 @@
         "cwd": "{projectRoot}",
         "command": "pnpm run test",
         "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/common --indices 5/5"
+      }
+    },
+    "test--dataGrid-stickycommon": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/sticky/common"
+      }
+    },
+    "test--dataGrid-sticky-1-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/sticky/fixed --indices 1/3"
+      }
+    },
+    "test--dataGrid-sticky-2-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/sticky/fixed --indices 2/3"
+      }
+    },
+    "test--dataGrid-sticky-3-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder dataGrid/sticky/fixed --indices 3/3"
+      }
+    },
+    "test--cardView": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder cardView"
+      }
+    },
+    "test--cardView-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder cardView --theme material.blue.light"
+      }
+    },
+    "test--cardView-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder cardView --theme fluent.blue.light"
+      }
+    },
+    "test--pivotGrid": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder pivotGrid --concurrency 1"
+      }
+    },
+    "test--pivotGrid-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder pivotGrid --theme material.blue.light --concurrency 1"
+      }
+    },
+    "test--pivotGrid-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder pivotGrid --theme fluent.blue.light --concurrency 1"
+      }
+    },
+    "test--scheduler-common-1-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 1/6"
+      }
+    },
+    "test--scheduler-common-2-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 2/6"
+      }
+    },
+    "test--scheduler-common-3-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 3/6"
+      }
+    },
+    "test--scheduler-common-4-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 4/6"
+      }
+    },
+    "test--scheduler-common-5-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 5/6"
+      }
+    },
+    "test--scheduler-common-6-6": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/common --indices 6/6"
+      }
+    },
+    "test--scheduler-offset": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/viewOffset/common"
+      }
+    },
+    "test--scheduler-offsetmarkups": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder scheduler/viewOffset/markup"
+      }
+    },
+    "test--form-1-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --indices 1/2"
+      }
+    },
+    "test--form-2-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --indices 2/2"
+      }
+    },
+    "test--form-material-1-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --theme material.blue.light --indices 1/2"
+      }
+    },
+    "test--form-material-2-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --theme material.blue.light --indices 2/2"
+      }
+    },
+    "test--form-fluent-1-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --theme fluent.blue.light --indices 1/2"
+      }
+    },
+    "test--form-fluent-2-2": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder form --theme fluent.blue.light --indices 2/2"
+      }
+    },
+    "test--editors-1-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --indices 1/3"
+      }
+    },
+    "test--editors-2-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --indices 2/3"
+      }
+    },
+    "test--editors-3-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --indices 3/3"
+      }
+    },
+    "test--editors-material-1-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme material.blue.light --indices 1/3"
+      }
+    },
+    "test--editors-material-2-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme material.blue.light --indices 2/3"
+      }
+    },
+    "test--editors-material-3-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme material.blue.light --indices 3/3"
+      }
+    },
+    "test--editors-fluent-1-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme fluent.blue.light --indices 1/3"
+      }
+    },
+    "test--editors-fluent-2-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme fluent.blue.light --indices 2/3"
+      }
+    },
+    "test--editors-fluent-3-3": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder editors --theme fluent.blue.light --indices 3/3"
+      }
+    },
+    "test--htmlEditor": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder htmlEditor --concurrency 1"
+      }
+    },
+    "test--htmlEditor-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder htmlEditor --theme material.blue.light --concurrency 1"
+      }
+    },
+    "test--htmlEditor-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder htmlEditor --theme fluent.blue.light --concurrency 1"
+      }
+    },
+    "test--navigation": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder navigation"
+      }
+    },
+    "test--navigation-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder navigation --theme material.blue.light"
+      }
+    },
+    "test--navigation-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder navigation --theme fluent.blue.light"
+      }
+    },
+    "test--fileManager": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileManager"
+      }
+    },
+    "test--fileManager-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileManager --theme material.blue.light"
+      }
+    },
+    "test--fileManager-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileManager --theme fluent.blue.light"
+      }
+    },
+    "test--filterBuilder": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder filterBuilder"
+      }
+    },
+    "test--filterBuilder-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder filterBuilder --theme material.blue.light"
+      }
+    },
+    "test--filterBuilder-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder filterBuilder --theme fluent.blue.light"
+      }
+    },
+    "test--pagination": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder pagination"
+      }
+    },
+    "test--pagination-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder pagination --theme fluent.blue.light"
+      }
+    },
+    "test--gantt": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder gantt"
+      }
+    },
+    "test--fileUploader": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileUploader"
+      }
+    },
+    "test--fileUploader-material": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileUploader --theme material.blue.light"
+      }
+    },
+    "test--fileUploader-fluent": {
+      "dependsOn": [
+        "^build"
+      ],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "outputs": [
+        "{projectRoot}/artifacts/compared-screenshots/**/*"
+      ],
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm run test",
+        "args": "--browsers=chrome:devextreme-shr2 --componentFolder fileUploader --theme fluent.blue.light"
       }
     }
   },
