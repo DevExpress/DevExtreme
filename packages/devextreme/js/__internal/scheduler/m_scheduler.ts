@@ -34,6 +34,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
+import { AppointmentForm } from './appointment_popup/m_form';
 import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
@@ -1062,7 +1063,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
-    return new AppointmentLegacyForm(scheduler);
+    return this._editing.legacyForm
+      ? new AppointmentLegacyForm(scheduler)
+      : new AppointmentForm(scheduler);
   }
 
   createAppointmentPopup(form) {
