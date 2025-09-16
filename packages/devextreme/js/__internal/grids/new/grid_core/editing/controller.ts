@@ -167,7 +167,7 @@ export class EditingController {
     ];
 
     this.changes.value = [
-      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: {} },
+      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: eventArgs.data },
     ];
     this.editCardKey.value = newItemKey;
   }
