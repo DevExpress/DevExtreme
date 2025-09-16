@@ -1,5 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
+import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
+import { camelize } from '@js/core/utils/inflector';
 import { isFunction } from '@js/core/utils/type';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
@@ -326,7 +328,13 @@ const STEP_MAP: Record<ViewType, Step> = {
 
 export const getStep = (type: ViewType): Step => STEP_MAP[type];
 
+export const getViewName = (
+  view: NormalizedView | string,
+): string => (typeof view === 'string' ? view : view.name);
+
+export const getLocalizedSchedulerName = (type: ViewType): string => messageLocalization.format(`dxScheduler-switcher${camelize(type, true)}`);
+
 export const isOneView = (
   views: NormalizedView[],
-  selectedView?: string,
-) => views.length === 1 && views[0].type === selectedView;
+  selectedView: NormalizedView,
+) => views.length === 1 && views[0].type === selectedView.type && views[0].name === selectedView.name;
