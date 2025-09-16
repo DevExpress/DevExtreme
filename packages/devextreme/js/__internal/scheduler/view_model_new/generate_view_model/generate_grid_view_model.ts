@@ -30,41 +30,40 @@ export const generateGridViewModel = (
   } = optionManager.options;
   const { viewDataProvider } = schedulerStore._workSpace;
 
-  const expandedStep2 = expandAllDay(items);
-
-  const positionedStep3 = maybeSplit(expandedStep2, hasAllDayPanel, (entities, panelName) => {
+  const step1 = expandAllDay(items);
+  const step2 = maybeSplit(step1, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
     const positionInsideGroup = byGroup.map((group) => {
       sortByDuration(group);
       sortByStartDate(group);
-      const partsStep1 = splitByParts(group, optionManager.getSplitIntervals(panelName));
-      sortByDuration(partsStep1);
-      sortByStartDate(partsStep1);
-      sortByGroupIndex(partsStep1);
-      const indexedStep2 = addPosition(partsStep1, optionManager.getCells(panelName));
-      const snappedStep3 = isMonthView || panelName === 'allDayPanel'
-        ? snapToCells(indexedStep2, optionManager.getCells(panelName))
-        : indexedStep2;
-      const collected = addCollector(snappedStep3, optionManager.getCollectorOptions(panelName));
-      return collected;
+      const innerStep1 = splitByParts(group, optionManager.getSplitIntervals(panelName));
+      sortByDuration(innerStep1);
+      sortByStartDate(innerStep1);
+      sortByGroupIndex(innerStep1);
+      const innerStep2 = addPosition(innerStep1, optionManager.getCells(panelName));
+      const innerStep3 = isMonthView || panelName === 'allDayPanel'
+        ? snapToCells(innerStep2, optionManager.getCells(panelName))
+        : innerStep2;
+      const innerStep4 = addCollector(innerStep3, optionManager.getCollectorOptions(panelName));
+      return innerStep4;
     });
 
     return positionInsideGroup.flat();
   });
 
-  const sortIndexedStep4 = addSortedIndex(positionedStep3);
-  const filteredStep5 = filterByVirtualScreen(
-    sortIndexedStep4,
+  const step3 = addSortedIndex(step2);
+  const step4 = filterByVirtualScreen(
+    step3,
     viewDataProvider,
     isVirtualScrolling,
   );
-  const sizedStep6 = maybeSplit(filteredStep5, hasAllDayPanel, (entities, panelName) => {
-    const output = addGeometry(entities, optionManager.getGeometryOptions(panelName));
-    return output;
+  const step5 = maybeSplit(step4, hasAllDayPanel, (entities, panelName) => {
+    const innerStep = addGeometry(entities, optionManager.getGeometryOptions(panelName));
+    return innerStep;
   });
 
-  const directionStep7 = addDirection(sizedStep6, 'horizontal', viewOrientation);
-  const emptyStep8 = addEmptiness(directionStep7, { isTimelineView, isAdaptivityEnabled });
+  const step6 = addDirection(step5, 'horizontal', viewOrientation);
+  const step7 = addEmptiness(step6, { isTimelineView, isAdaptivityEnabled });
 
-  return emptyStep8;
+  return step7;
 };

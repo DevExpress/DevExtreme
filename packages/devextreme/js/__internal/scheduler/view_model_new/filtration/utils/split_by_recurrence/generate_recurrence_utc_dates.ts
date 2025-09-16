@@ -29,7 +29,7 @@ export const generateRecurrenceUTCDates = <
     return [appointment.source.startDate];
   }
 
-  const startDateOffsetBase = -getDateOffsetMs(appointment.source.startDate, timeZone)
+  const startDateOffsetBase = getDateOffsetMs(appointment.source.startDate, timeZone)
     + getDateOffsetMs(appointment.source.startDate, startDateTimeZone);
   // NOTE: Add offset only for correct recurrence calculation for rule with BYDAY=MO,WE,FR
   // Target time zone day and UTC day are different
