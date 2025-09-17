@@ -17,7 +17,7 @@ import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../util
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
+export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
 const DAY_IN_MS = toMs('day');
 
