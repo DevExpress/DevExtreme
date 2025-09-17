@@ -119,4 +119,50 @@ QUnit.module('Async render', () => {
             }, asyncTemplateRenderTimeout);
         });
     });
+
+    QUnit.test('selectItem triggered in onContentReady works properly for asynchronous templates (T1307114)', function(assert) {
+        const done = assert.async();
+
+        let instance = null;
+
+        try {
+            instance = new TreeView($('#treeView'), {
+                dataSource: [{ text: 'item 1', id: 1 }, { text: 'item 2', id: 2 }],
+                selectionMode: 'multiple',
+                showCheckBoxesMode: 'selectAll',
+                itemTemplate: 'custom',
+                onContentReady: (e) => {
+                    e.component.selectItem(1);
+                },
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        custom: {
+                            render: function({ container, onRendered, model }) {
+                                setTimeout(() => {
+                                    $('<div>').text(model.text).appendTo(container);
+                                    onRendered();
+                                });
+                            }
+                        }
+                    }
+                },
+            });
+            assert.ok(true, 'No error should be thrown');
+        } catch(e) {
+            assert.ok(false, `Error should not be thrown: ${e}`);
+        }
+
+        setTimeout(() => {
+            const element = instance.itemsContainer();
+            const $firstCheckbox = $(element).find(`.${CHECKBOX_CLASS}`);
+            const firstCheckboxInstance = $firstCheckbox.dxCheckBox('instance');
+
+            assert.strictEqual($firstCheckbox.eq(0).hasClass(CHECKBOX_CHECKED_CLASS), true, 'checkbox has selected class');
+            assert.strictEqual(firstCheckboxInstance.option('value'), true, 'checkbox value is correct');
+            assert.strictEqual(instance.getSelectedNodeKeys()[0], 1, 'item is selected');
+
+            done();
+        }, asyncTemplateRenderTimeout);
+    });
 });
