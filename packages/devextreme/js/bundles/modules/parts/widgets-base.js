@@ -59,6 +59,7 @@ ui.dxResponsiveBox = require('../../../ui/responsive_box');
 ui.dxScrollView = require('../../../ui/scroll_view');
 ui.dxSelectBox = require('../../../ui/select_box');
 ui.dxSlider = require('../../../ui/slider');
+ui.dxSpeechToText = require('../../../ui/speech_to_text');
 ui.dxSpeedDialAction = require('../../../ui/speed_dial_action');
 ui.dxStepper = require('../../../ui/stepper');
 ui.dxSplitter = require('../../../ui/splitter');
