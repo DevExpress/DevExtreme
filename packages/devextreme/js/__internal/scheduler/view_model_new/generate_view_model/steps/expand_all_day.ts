@@ -9,6 +9,7 @@ const MINUTES_IN_HOUR = 60;
 export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC' | 'allDay'>>(
   entities: T[],
   viewOffsetMs: number,
+  endDayHour: number,
 ): T[] => entities.map((entity) => {
     if (!entity.allDay) {
       return entity;
@@ -22,16 +23,13 @@ export const expandAllDay = <T extends Pick<ListEntity, 'startDateUTC' | 'endDat
     const endDate = new Date(entity.endDateUTC);
     endDate.setUTCHours(endOfDayHours, endOfDayRemainingMinutes);
 
-    const startOfDayMinutes = (TWO_DAYS_MINUTES + viewOffsetMs / MS_IN_MINUTE) % ONE_DAY_MINUTES;
-    const startOfDayHours = Math.floor(startOfDayMinutes / MINUTES_IN_HOUR);
-    const startOfDayRemainingMinutes = startOfDayMinutes % MINUTES_IN_HOUR;
-
-    const startDate = new Date(entity.startDateUTC);
-    startDate.setUTCHours(startOfDayHours, startOfDayRemainingMinutes);
+    const minStartDate = new Date(entity.startDateUTC)
+      .setUTCHours(endDayHour, 0, 0, 0)
+      - MS_IN_MINUTE;
 
     return {
       ...entity,
-      startDateUTC: Math.min(entity.startDateUTC, startDate.getTime()),
+      startDateUTC: Math.min(entity.startDateUTC, minStartDate),
       endDateUTC: endDate.getTime(),
     };
   });

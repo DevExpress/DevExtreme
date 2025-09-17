@@ -14,7 +14,7 @@ describe('expandAllDay', () => {
         startDateUTC: Date.UTC(2020, 0, 10, 4),
         endDateUTC: Date.UTC(2020, 0, 11, 5),
       },
-    ], 0)).toEqual([
+    ], 0, 24)).toEqual([
       {
         allDay: false,
         startDateUTC: Date.UTC(2020, 0, 10, 0),
@@ -27,7 +27,7 @@ describe('expandAllDay', () => {
     ]);
   });
 
-  it('should set dates to all day appointment without offset', () => {
+  it('should set end date to all day appointment without offset', () => {
     expect(expandAllDay([
       {
         allDay: true,
@@ -42,14 +42,14 @@ describe('expandAllDay', () => {
         startDateUTC: Date.UTC(2020, 0, 11),
         endDateUTC: Date.UTC(2020, 0, 12),
       },
-    ], 0)).toEqual([
+    ], 0, 24)).toEqual([
       {
         allDay: true,
         startDateUTC: Date.UTC(2020, 0, 10),
         endDateUTC: Date.UTC(2020, 0, 10, 23, 59),
       }, {
         allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
         endDateUTC: Date.UTC(2020, 0, 11, 23, 59),
       }, {
         allDay: true,
@@ -59,7 +59,7 @@ describe('expandAllDay', () => {
     ]);
   });
 
-  it('should set dates for all day appointment with offset', () => {
+  it('should set end date for all day appointment with offset', () => {
     expect(expandAllDay([
       {
         allDay: true,
@@ -74,14 +74,46 @@ describe('expandAllDay', () => {
         startDateUTC: Date.UTC(2020, 0, 11),
         endDateUTC: Date.UTC(2020, 0, 12),
       },
-    ], 180 * 60_000)).toEqual([
+    ], 180 * 60_000, 24)).toEqual([
       {
         allDay: true,
         startDateUTC: Date.UTC(2020, 0, 10),
         endDateUTC: Date.UTC(2020, 0, 10, 2, 59),
       }, {
         allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10, 3),
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 2, 59),
+      }, {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 11),
+        endDateUTC: Date.UTC(2020, 0, 12, 2, 59),
+      },
+    ]);
+  });
+
+  it('should set start date for all day appointment with offset', () => {
+    expect(expandAllDay([
+      {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 10),
+        endDateUTC: Date.UTC(2020, 0, 10),
+      }, {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        endDateUTC: Date.UTC(2020, 0, 11, 5),
+      }, {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 11),
+        endDateUTC: Date.UTC(2020, 0, 12),
+      },
+    ], 180 * 60_000, 24)).toEqual([
+      {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 10),
+        endDateUTC: Date.UTC(2020, 0, 10, 2, 59),
+      }, {
+        allDay: true,
+        startDateUTC: Date.UTC(2020, 0, 10, 4),
         endDateUTC: Date.UTC(2020, 0, 11, 2, 59),
       }, {
         allDay: true,

@@ -28,10 +28,11 @@ export const generateGridViewModel = (
     hasAllDayPanel,
     isVirtualScrolling,
     viewOffset,
+    compareOptions: { endDayHour },
   } = optionManager.options;
   const { viewDataProvider } = schedulerStore._workSpace;
 
-  const step1 = expandAllDay(items, viewOffset);
+  const step1 = expandAllDay(items, viewOffset, endDayHour);
   const step2 = maybeSplit(step1, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
     const positionInsideGroup = byGroup.map((group) => {
