@@ -7,13 +7,32 @@ import { addEmptiness } from './steps/add_emptiness';
 import { addGeometry } from './steps/add_geometry/add_geometry';
 import { addPosition } from './steps/add_position';
 import { addSortedIndex } from './steps/add_sorted_index';
-import { expandAllDay } from './steps/expand_all_day';
+import { expandAllDayAllDayPanel } from './steps/expand_all_day';
 import { filterByVirtualScreen } from './steps/filter_by_virtual_screen';
 import { groupByGroupIndex } from './steps/group_by_group_index';
 import { maybeSplit } from './steps/maybe_split';
 import { snapToCells } from './steps/snap_to_cells';
 import { sortByDuration, sortByGroupIndex, sortByStartDate } from './steps/sorting';
 import { splitByParts } from './steps/split_by_parts/split_by_parts';
+
+const expandAllDayRegularPanel = <T extends ListEntity>(
+  entities: T[],
+): T[] => entities.map((entity) => {
+    const startDate = new Date(entity.startDateUTC);
+    const endDate = new Date(entity.endDateUTC - 1);
+    endDate.setDate(endDate.getDate() + 1);
+
+    return {
+      ...entity,
+      endDateUTC: endDate
+        .setUTCHours(
+          startDate.getUTCHours(),
+          startDate.getUTCMinutes(),
+          startDate.getUTCSeconds(),
+          startDate.getUTCMilliseconds(),
+        ),
+    };
+  });
 
 export const generateGridViewModel = (
   schedulerStore: Scheduler,
@@ -27,18 +46,19 @@ export const generateGridViewModel = (
     isTimelineView,
     hasAllDayPanel,
     isVirtualScrolling,
-    viewOffset,
     compareOptions: { endDayHour },
   } = optionManager.options;
   const { viewDataProvider } = schedulerStore._workSpace;
 
-  const step1 = expandAllDay(items, viewOffset, endDayHour);
-  const step2 = maybeSplit(step1, hasAllDayPanel, (entities, panelName) => {
+  const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
     const positionInsideGroup = byGroup.map((group) => {
       sortByDuration(group);
       sortByStartDate(group);
-      const innerStep1 = splitByParts(group, optionManager.getSplitIntervals(panelName));
+      const innerStep0 = isMonthView || panelName === 'allDayPanel'
+        ? expandAllDayAllDayPanel(group, endDayHour)
+        : expandAllDayRegularPanel(group);
+      const innerStep1 = splitByParts(innerStep0, optionManager.getSplitIntervals(panelName));
       sortByDuration(innerStep1);
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);
