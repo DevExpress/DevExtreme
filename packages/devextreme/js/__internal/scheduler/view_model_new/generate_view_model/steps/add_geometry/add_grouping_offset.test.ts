@@ -11,6 +11,7 @@ describe('addGroupingOffset', () => {
       groupOrientation: 'vertical',
       isGroupByDate: false,
       isTimelineView: false,
+      allDayPanelCellSize: { width: 100, height: 80 },
       cellSize: { width: 100, height: 80 },
       groupSize: { width: 80, height: 800 },
       intervals: [
@@ -31,6 +32,7 @@ describe('addGroupingOffset', () => {
       groupOrientation: 'vertical',
       isGroupByDate: false,
       isTimelineView: false,
+      allDayPanelCellSize: { width: 100, height: 80 },
       cellSize: { width: 100, height: 80 },
       groupSize: { width: 80, height: 800 },
       intervals: [
@@ -53,6 +55,7 @@ describe('addGroupingOffset', () => {
       groupOrientation: 'vertical',
       isGroupByDate: false,
       isTimelineView: false,
+      allDayPanelCellSize: { width: 100, height: 50 },
       cellSize: { width: 100, height: 80 },
       groupSize: { width: 80, height: 800 },
       intervals: [
@@ -63,7 +66,7 @@ describe('addGroupingOffset', () => {
     } as any);
 
     expect(entity).toEqual({
-      isAllDayPanelOccupied: true, left: 7, top: 2 * 800 + 2 * 80 + 9, groupIndex: 2,
+      isAllDayPanelOccupied: true, left: 7, top: 2 * 800 + 2 * 50 + 9, groupIndex: 2,
     });
   });
 
@@ -74,6 +77,7 @@ describe('addGroupingOffset', () => {
       groupOrientation: 'horizontal',
       isGroupByDate: false,
       isTimelineView: false,
+      allDayPanelCellSize: { width: 100, height: 80 },
       cellSize: { width: 100, height: 80 },
       groupSize: { width: 800, height: 80 },
       intervals: [
@@ -95,6 +99,7 @@ describe('addGroupingOffset', () => {
       groupOrientation: 'horizontal',
       isGroupByDate: true,
       isTimelineView: false,
+      allDayPanelCellSize: { width: 100, height: 80 },
       cellSize: { width: 100, height: 80 },
       groupSize: { width: 800, height: 80 },
       intervals: [

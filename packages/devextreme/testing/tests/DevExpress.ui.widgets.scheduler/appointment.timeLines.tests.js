@@ -306,7 +306,7 @@ module('Integration: Appointments in Timeline views', {
 
                 const $appointment = $(scheduler.instance.$element()).find(`.${APPOINTMENT_CLASS}`).eq(0);
                 const $cell = $(scheduler.instance.$element()).find(`.${DATE_TABLE_CELL_CLASS}`).eq(0);
-                const cellsInAppointment = 48;
+                const cellsInAppointment = 3 * (22 - 10); // 3 days for 12 cells by 1 hour
 
                 assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, 'Task has a right width');
             });
