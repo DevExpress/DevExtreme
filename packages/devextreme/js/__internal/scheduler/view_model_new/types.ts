@@ -34,6 +34,7 @@ export interface CompareOptions {
 
 export interface LayoutIntervals {
   intervals: DateInterval[];
+  dayIntervals: DateInterval[];
   cells: CellInterval[];
 }
 

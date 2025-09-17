@@ -55,7 +55,11 @@ export class OptionManager {
     geometryOptions: GeometryOptions;
   } {
     const workspace = this.schedulerStore.getWorkSpace();
-    const panelDOMSize = workspace.getPanelDOMSize(panelName);
+    const panelDOMSize = workspace.getPanelDOMSize(
+      this.options.groupOrientation === 'vertical'
+        ? 'regularPanel'
+        : panelName,
+    );
 
     return this.cache.memo(`${panelDOMSize.width}.${panelDOMSize.height}.${panelName}`, () => {
       const {
@@ -93,6 +97,7 @@ export class OptionManager {
 
       const {
         cells,
+        dayIntervals,
         intervals,
       } = getLayoutIntervals(
         compareOptions,
@@ -103,7 +108,8 @@ export class OptionManager {
         panelName,
       );
 
-      const splitIntervals = isGroupByDate ? cells : intervals;
+      const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;
+      const splitIntervals = isGroupByDate ? groupByDateSplitIntervals : intervals;
       const geometryOptions: GeometryOptions = {
         intervals,
         cells,
