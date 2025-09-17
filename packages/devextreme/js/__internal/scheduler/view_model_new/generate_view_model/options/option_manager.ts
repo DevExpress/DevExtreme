@@ -81,6 +81,7 @@ export class OptionManager {
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
       const collectorCSS = workspace.getCollectorDimension(isCompactCollector, panelName);
       const {
+        allDayPanelCellSize,
         cellSize,
         collectorSizes,
         maxLevel,
@@ -121,6 +122,7 @@ export class OptionManager {
         isTimelineView,
         isRTLEnabled,
         isAdaptivityEnabled,
+        allDayPanelCellSize,
         cellSize,
         collectorPosition: viewOrientation === 'vertical' ? 'end' : 'start',
         ...collectorSizes,

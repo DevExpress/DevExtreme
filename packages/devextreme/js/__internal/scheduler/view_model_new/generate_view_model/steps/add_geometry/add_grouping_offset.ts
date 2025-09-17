@@ -12,6 +12,7 @@ export const addGroupingOffset = (
     viewOrientation,
     hasAllDayPanel,
     isGroupByDate,
+    allDayPanelCellSize,
     cellSize,
     groupSize,
   }: GeometryOptions,
@@ -31,7 +32,7 @@ export const addGroupingOffset = (
       default:
         entity.top += entity.groupIndex * groupSize.height
         + (entity.groupIndex + Number(!entity.isAllDayPanelOccupied))
-          * Number(hasAllDayPanel) * cellSize.height;
+          * Number(hasAllDayPanel) * allDayPanelCellSize.height;
     }
   }
 };

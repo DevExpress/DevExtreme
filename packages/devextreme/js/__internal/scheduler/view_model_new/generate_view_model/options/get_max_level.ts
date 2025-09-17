@@ -16,6 +16,7 @@ interface Options {
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
 const MIN_APPOINTMENT_COUNT = 1;
+const CELL_MIN_SIZE = 30;
 
 export const getMaxLevel = ({
   maxAppointmentsPerCell,
@@ -28,6 +29,11 @@ export const getMaxLevel = ({
   switch (maxAppointmentsPerCell) {
     case 'auto': {
       if (isAdaptivityEnabled && viewOrientation === 'horizontal') {
+        return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
+      }
+
+      const isSmallCell = cellSize.width <= CELL_MIN_SIZE || cellSize.height <= CELL_MIN_SIZE;
+      if (isSmallCell) {
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 

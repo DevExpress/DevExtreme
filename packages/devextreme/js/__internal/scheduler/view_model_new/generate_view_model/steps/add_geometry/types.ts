@@ -63,6 +63,7 @@ export interface GeometryOptions {
   isAdaptivityEnabled: boolean;
   collectorPosition: 'start' | 'end';
   groupCount: number;
+  allDayPanelCellSize: RealSize;
   cellSize: RealSize;
   collectorSize: RealSize;
   collectorWithMarginsSize: RealSize;
