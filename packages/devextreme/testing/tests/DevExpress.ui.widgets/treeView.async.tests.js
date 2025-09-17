@@ -120,11 +120,13 @@ QUnit.module('Async render', () => {
         });
     });
 
-    QUnit.test('checkbox selectItem should not throw an error if template is used and render is asynchronous (T1307114)', function(assert) {
+    QUnit.test('selectItem triggered in onContentReady works properly for asynchronous templates (T1307114)', function(assert) {
         const done = assert.async();
 
+        let instance = null;
+
         try {
-            new TreeView($('#treeView'), {
+            instance = new TreeView($('#treeView'), {
                 dataSource: [{ text: 'item 1', id: 1 }, { text: 'item 2', id: 2 }],
                 selectionMode: 'multiple',
                 showCheckBoxesMode: 'selectAll',
@@ -152,6 +154,13 @@ QUnit.module('Async render', () => {
         }
 
         setTimeout(() => {
+            const element = instance.itemsContainer();
+            const $firstCheckbox = $(element).find(`.${CHECKBOX_CLASS}`);
+            const firstCheckboxInstance = $firstCheckbox.dxCheckBox('instance');
+
+            assert.strictEqual($firstCheckbox.eq(0).hasClass(CHECKBOX_CHECKED_CLASS), true, 'checkbox has selected class');
+            assert.strictEqual(firstCheckboxInstance.option('value'), true, 'checkbox value is correct');
+
             done();
         }, asyncTemplateRenderTimeout);
     });
