@@ -1,4 +1,3 @@
-import { minusDST } from '../../../common/minus_dst';
 import type { CellInterval } from '../../../types';
 import type {
   AbstractSize,
@@ -9,8 +8,8 @@ import type {
 } from './types';
 
 const getInsideCellX = (date: number, { min, max }: CellInterval, cellSizeX: number): number => {
-  const cellDuration = minusDST(max) - minusDST(min);
-  const startTimeDelta = minusDST(date) - minusDST(min);
+  const cellDuration = max - min;
+  const startTimeDelta = date - min;
 
   return cellDuration === 0 ? 0 : (startTimeDelta * cellSizeX) / cellDuration;
 };

@@ -93,7 +93,6 @@ export class OptionManager {
 
       const {
         cells,
-        dayIntervals,
         intervals,
       } = getLayoutIntervals(
         compareOptions,
@@ -104,7 +103,7 @@ export class OptionManager {
         panelName,
       );
 
-      const splitIntervals = isGroupByDate ? dayIntervals : intervals;
+      const splitIntervals = isGroupByDate ? cells : intervals;
       const geometryOptions: GeometryOptions = {
         intervals,
         cells,

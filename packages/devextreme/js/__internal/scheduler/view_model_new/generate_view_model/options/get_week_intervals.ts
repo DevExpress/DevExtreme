@@ -15,7 +15,6 @@ export const getWeekIntervals = (
   const splitIntervals = splitIntervalByDay(compareOptions);
   const intervals = isTimeline ? [trimmedInterval] : splitIntervals;
   const shiftedIntervals = shiftIntervals(intervals, viewOffset);
-  const shiftedSplitIntervals = shiftIntervals(splitIntervals, viewOffset);
 
   const cells = getMinutesCellIntervals({
     ...compareOptions,
@@ -26,7 +25,6 @@ export const getWeekIntervals = (
 
   return {
     cells: shiftedCells,
-    dayIntervals: shiftedSplitIntervals,
     intervals: shiftedIntervals,
   };
 };
