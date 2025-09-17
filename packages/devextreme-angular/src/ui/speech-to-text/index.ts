@@ -31,8 +31,6 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoCustomSpeechRecognizerModule } from 'devextreme-angular/ui/nested';
-import { DxoWebSpeechApiConfigModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSpeechToTextCustomSpeechRecognizerModule } from 'devextreme-angular/ui/speech-to-text/nested';
 import { DxoSpeechToTextWebSpeechApiConfigModule } from 'devextreme-angular/ui/speech-to-text/nested';
@@ -40,10 +38,7 @@ import { DxoSpeechToTextWebSpeechApiConfigModule } from 'devextreme-angular/ui/s
 
 
 
-/**
- * [descr:dxSpeechToText]
 
- */
 @Component({
     selector: 'dx-speech-to-text',
     standalone: true,
@@ -59,10 +54,7 @@ import { DxoSpeechToTextWebSpeechApiConfigModule } from 'devextreme-angular/ui/s
 export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     instance: DxSpeechToText = null;
 
-    /**
-     * [descr:WidgetOptions.accessKey]
     
-     */
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -72,10 +64,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.activeStateEnabled]
     
-     */
     @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
@@ -85,10 +74,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
     
-     */
     @Input()
     get customSpeechRecognizer(): CustomSpeechRecognizer {
         return this._getOption('customSpeechRecognizer');
@@ -98,10 +84,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.disabled]
     
-     */
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -111,10 +94,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.elementAttr]
     
-     */
     @Input()
     get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
@@ -124,10 +104,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.focusStateEnabled]
     
-     */
     @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
@@ -137,10 +114,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.height]
     
-     */
     @Input()
     get height(): number | string | undefined {
         return this._getOption('height');
@@ -150,10 +124,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.hint]
     
-     */
     @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
@@ -163,10 +134,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.hoverStateEnabled]
     
-     */
     @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
@@ -176,10 +144,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.rtlEnabled]
     
-     */
     @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
@@ -189,10 +154,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.startIcon]
     
-     */
     @Input()
     get startIcon(): string {
         return this._getOption('startIcon');
@@ -202,10 +164,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.startText]
     
-     */
     @Input()
     get startText(): string {
         return this._getOption('startText');
@@ -215,10 +174,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.stopIcon]
     
-     */
     @Input()
     get stopIcon(): string {
         return this._getOption('stopIcon');
@@ -228,10 +184,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.stopText]
     
-     */
     @Input()
     get stopText(): string {
         return this._getOption('stopText');
@@ -241,10 +194,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.tabIndex]
     
-     */
     @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
@@ -254,10 +204,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:WidgetOptions.visible]
     
-     */
     @Input()
     get visible(): boolean {
         return this._getOption('visible');
@@ -267,10 +214,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxSpeechToTextOptions.webSpeechApiConfig]
     
-     */
     @Input()
     get webSpeechApiConfig(): Record<string, any> | WebSpeechApiConfig {
         return this._getOption('webSpeechApiConfig');
@@ -280,10 +224,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.width]
     
-     */
     @Input()
     get width(): number | string | undefined {
         return this._getOption('width');
@@ -294,7 +235,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onContentReady]
+     * [descr:undefined]
     
     
      */
@@ -302,7 +243,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onDisposing]
+     * [descr:undefined]
     
     
      */
@@ -310,7 +251,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onError]
+     * [descr:undefined]
     
     
      */
@@ -318,7 +259,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onInitialized]
+     * [descr:undefined]
     
     
      */
@@ -326,7 +267,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onOptionChanged]
+     * [descr:undefined]
     
     
      */
@@ -334,7 +275,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onResult]
+     * [descr:undefined]
     
     
      */
@@ -342,7 +283,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onStartClick]
+     * [descr:undefined]
     
     
      */
@@ -350,7 +291,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     /**
     
-     * [descr:dxSpeechToTextOptions.onStopClick]
+     * [descr:undefined]
     
     
      */
@@ -543,8 +484,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 @NgModule({
   imports: [
     DxSpeechToTextComponent,
-    DxoCustomSpeechRecognizerModule,
-    DxoWebSpeechApiConfigModule,
     DxoSpeechToTextCustomSpeechRecognizerModule,
     DxoSpeechToTextWebSpeechApiConfigModule,
     DxIntegrationModule,
@@ -552,8 +491,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxSpeechToTextComponent,
-    DxoCustomSpeechRecognizerModule,
-    DxoWebSpeechApiConfigModule,
     DxoSpeechToTextCustomSpeechRecognizerModule,
     DxoSpeechToTextWebSpeechApiConfigModule,
     DxTemplateModule

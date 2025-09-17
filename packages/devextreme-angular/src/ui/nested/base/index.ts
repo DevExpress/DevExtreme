@@ -15,7 +15,6 @@ export * from './column-chooser-selection-config';
 export * from './column-chooser';
 export * from './column-header-filter';
 export * from './converter';
-export * from './custom-speech-recognizer';
 export * from './data-change-dxi';
 export * from './data-grid-column-dxi';
 export * from './data-grid-toolbar';
@@ -59,5 +58,4 @@ export * from './user';
 export * from './vector-map-projection-config';
 export * from './viz-font';
 export * from './viz-scale-break-dxi';
-export * from './web-speech-api-config';
 
