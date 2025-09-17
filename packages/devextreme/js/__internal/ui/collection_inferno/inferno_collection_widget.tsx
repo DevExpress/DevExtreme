@@ -7,12 +7,10 @@ import type {
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { effect, type ReadonlySignal } from '@ts/core/state_manager/index';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
-import type { CollectionChildrenProps, CollectionProps } from '@ts/ui/collection_inferno/collection.component';
+import type { CollectionProps } from '@ts/ui/collection_inferno/collection.component';
 import type { CollectionItemProps } from '@ts/ui/collection_inferno/collection.item.component';
 // eslint-disable-next-line spellcheck/spell-checker
 import { type ComponentType, rerender } from 'inferno';
-
-type ContainerProviderProps<TItem> = CollectionChildrenProps & { items: TItem[] };
 
 export abstract class InfernoCollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,13 +19,13 @@ export abstract class InfernoCollectionWidget<
 > extends CollectionWidget<TProperties, TItem> {
   protected cleanupRenderSubscription?: () => void;
 
-  private props?: TProperties;
+  protected props?: TProperties;
 
   private firstRender?: boolean;
 
   protected abstract getComponent(): ComponentType<CollectionProps<TProperties>>;
 
-  protected abstract getItemComponent(): ComponentType<CollectionItemProps<TItem>>;
+  protected abstract getItemComponent(): ComponentType<CollectionItemProps>;
 
   protected abstract getProps(): ReadonlySignal<TProperties>;
 
@@ -38,15 +36,14 @@ export abstract class InfernoCollectionWidget<
     };
   }
 
-  _getItemProps(
+  protected getItemProps(
     item: TItem,
     index: number,
-    getProps: CollectionChildrenProps,
-  ): CollectionItemProps<TItem> {
+  ): CollectionItemProps {
     return {
       ...isObject(item) ? item : { text: String(item) },
-      isSelected: getProps.isSelected(index),
-    } as CollectionItemProps<TItem>;
+      isSelected: index === this.props?.selectedIndex,
+    };
   }
 
   _renderItems(): () => void {
@@ -60,8 +57,8 @@ export abstract class InfernoCollectionWidget<
 
       const content = (
         <ContainerComponent {...props.value}>
-           {({ items, ...getProps }: ContainerProviderProps<TItem>) => items.map((item, index) => {
-             const itemProps = this._getItemProps(item, index, getProps);
+           {({ items }: { items: TItem[] }) => items.map((item, index) => {
+             const itemProps = this.getItemProps(item, index);
 
              return <ItemComponent {...itemProps} />;
            })}
@@ -83,13 +80,13 @@ export abstract class InfernoCollectionWidget<
     rerender();
   }
 
-  public _initMarkup(): void {
+  _initMarkup(): void {
     super._initMarkup();
 
     this.firstRender = true;
   }
 
-  public _clean(): void {
+  _clean(): void {
     this.cleanupRenderSubscription?.();
     infernoRenderer.renderIntoContainer(null, this.$element().get(0), true);
     // infernoRenderer.render(null, null, this.$element().get(0), true);

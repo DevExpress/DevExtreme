@@ -1,3 +1,4 @@
+import { isDefined } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed } from '@ts/core/state_manager/index';
 import type {
@@ -12,6 +13,7 @@ import type {
 import {
   ButtonCollectionItem,
 } from '@ts/ui/button_group_inferno/button_collection.item.component';
+import type { CollectionItemProps } from '@ts/ui/collection_inferno/collection.item.component';
 import { InfernoCollectionWidget } from '@ts/ui/collection_inferno/inferno_collection_widget';
 import type { ComponentType } from 'inferno';
 
@@ -24,6 +26,24 @@ export class ButtonCollection extends InfernoCollectionWidget<
 
   protected override getItemComponent(): ComponentType<ButtonCollectionItemProps> {
     return ButtonCollectionItem;
+  }
+
+  protected getItemProps(
+    item: ButtonCollectionItemProps,
+    index: number,
+  ): CollectionItemProps<ButtonCollectionItemProps> {
+    return {
+      ...super.getItemProps(item, index),
+      isFirst: index === 0,
+      isLast: index === (this.props?.items?.length ?? 0) - 1,
+      hasWidth: isDefined(this.props?.width),
+      focusStateEnabled: false,
+      // @ts-expect-error ts-error
+      onClick: null,
+      hoverStateEnabled: this.props?.hoverStateEnabled,
+      activeStateEnabled: this.props?.activeStateEnabled,
+      stylingMode: this.props?.stylingMode,
+    };
   }
 
   protected override getProps(): ReadonlySignal<ButtonCollectionProps> {
