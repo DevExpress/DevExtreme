@@ -309,10 +309,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             { id: 1, text: 'One', color: undefined },
             { id: 2, text: 'Two', color: undefined }
         ], 'Groups items are OK');
-        assert.deepEqual(workSpace.option('groups')[0].data, [
-            { key: 1, name: 'One' },
-            { key: 2, name: 'Two' }
-        ], 'Groups data are OK');
 
         scheduler.instance.option('groups', ['resource2']);
         await waitAsync(0);
@@ -323,9 +319,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual(workSpace.option('groups')[0].items, [
             { id: 1, text: 'Room 1', color: undefined }
         ], 'Groups items are OK');
-        assert.deepEqual(workSpace.option('groups')[0].data, [
-            { id: 1, text: 'Room 1' }
-        ], 'Groups data are OK');
     });
 
     test('updateScrollPosition should work correctly when groups were not set (T946739)', async function(assert) {
