@@ -1721,7 +1721,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       this.setAria('selected', nodeSelection, $node);
 
       if (this._showCheckboxes()) {
-        this._getCheckBoxInstance($node).option('value', nodeSelection);
+        this._getCheckBoxInstance($node)?.option('value', nodeSelection);
       }
     });
 
