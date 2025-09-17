@@ -18,6 +18,10 @@ import { splitByParts } from './steps/split_by_parts/split_by_parts';
 const expandAllDayRegularPanel = <T extends ListEntity>(
   entities: T[],
 ): T[] => entities.map((entity) => {
+    if (!entity.allDay) {
+      return entity;
+    }
+
     const startDate = new Date(entity.startDateUTC);
     const endDate = new Date(entity.endDateUTC - 1);
     endDate.setDate(endDate.getDate() + 1);
