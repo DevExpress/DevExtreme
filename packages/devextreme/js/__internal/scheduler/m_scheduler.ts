@@ -94,6 +94,7 @@ const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+export const POPUP_DIALOG_CLASS = 'dx-dialog';
 const WIDGET_SMALL_WIDTH = 400;
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
@@ -1581,7 +1582,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         { text: occurrenceText, onClick() { return RECURRENCE_EDITING_MODE.OCCURRENCE; } },
       ],
       popupOptions: {
-        wrapperAttr: { class: 'dx-dialog' },
+        wrapperAttr: { class: POPUP_DIALOG_CLASS },
       },
     } as any);
 
@@ -1879,7 +1880,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.showAppointmentPopup(resultAppointment, true);
   }
 
-  showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment?: any) {
+  showAppointmentPopup(rawAppointment?: any, createNewAppointment?: boolean, rawTargetedAppointment?: any) {
     const newRawTargetedAppointment = { ...rawTargetedAppointment };
     if (newRawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;
