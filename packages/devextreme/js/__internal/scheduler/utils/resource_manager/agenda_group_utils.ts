@@ -59,13 +59,11 @@ export const convertToOldTree = (
   const convert = (item: GroupNode): DeprecatedGroupNode => {
     const value = item.grouped[item.resourceIndex];
     const resource = resourceById[item.resourceIndex];
-    const resourceData = resource?.data
-      .find((rItem) => resource.dataAccessor.get('id', rItem) === value);
     const resourceItem = resource?.items
       .find((rItem) => rItem.id === value);
 
     return {
-      data: resourceData,
+      data: resourceItem,
       name: item.resourceIndex,
       title: item.resourceText,
       value,
