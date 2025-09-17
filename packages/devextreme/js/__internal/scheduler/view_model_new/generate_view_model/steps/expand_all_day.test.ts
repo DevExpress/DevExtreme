@@ -68,15 +68,15 @@ describe('expandAllDay', () => {
       ], 24, 180 * 60_000)).toEqual([
         {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 10),
+          startDateUTC: Date.UTC(2020, 0, 9, 3),
           endDateUTC: Date.UTC(2020, 0, 10, 2, 59),
         }, {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 10, 4),
-          endDateUTC: Date.UTC(2020, 0, 11, 2, 59),
+          startDateUTC: Date.UTC(2020, 0, 10, 3),
+          endDateUTC: Date.UTC(2020, 0, 12, 2, 59),
         }, {
           allDay: true,
-          startDateUTC: Date.UTC(2020, 0, 11),
+          startDateUTC: Date.UTC(2020, 0, 10, 3),
           endDateUTC: Date.UTC(2020, 0, 12, 2, 59),
         },
       ]);

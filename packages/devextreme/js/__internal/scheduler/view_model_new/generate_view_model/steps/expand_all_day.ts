@@ -31,12 +31,12 @@ const getShiftedEndDate = (endDate: number, viewOffsetMs: number): number => {
   const { min, max } = getDayInterval(endDate, viewOffsetMs);
 
   switch (true) {
-    case endDate > max:
+    case endDate >= max:
       return max + DAY_MS - MINUTE_MS;
     case endDate < min:
       return min - MINUTE_MS;
     default:
-      return min;
+      return max - MINUTE_MS;
   }
 };
 
@@ -73,8 +73,6 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
       ...entity,
       startDateUTC: getShiftedStartDate(entity.startDateUTC, viewOffsetMs),
       endDateUTC: getShiftedEndDate(entity.endDateUTC, viewOffsetMs),
-      // startDateUTC: Math.min(entity.startDateUTC, minStartDate),
-      // endDateUTC: maxEndDate,
     };
   });
 
