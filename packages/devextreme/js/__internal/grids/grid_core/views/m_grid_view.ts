@@ -312,7 +312,6 @@ export class ResizingController extends modules.ViewController {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
-    const wordWrapEnabled = this.option('wordWrapEnabled');
     const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
     let needBestFit = this._needBestFit();
     let hasMinWidth = false;
@@ -354,6 +353,8 @@ export class ResizingController extends modules.ViewController {
       return undefined;
     });
 
+    this._toggleContentMinHeight(this._hasHeight); // T1047239, T1270354
+
     this._setVisibleWidths(visibleColumns, []);
 
     const $element = this.component.$element();
@@ -365,8 +366,6 @@ export class ResizingController extends modules.ViewController {
       this._toggleBestFitMode(true);
       resetBestFitMode = true;
     }
-
-    this._toggleContentMinHeight(wordWrapEnabled); // T1047239
 
     if ($element && $element.get(0) && this._maxWidth) {
       delete this._maxWidth;
@@ -423,9 +422,7 @@ export class ResizingController extends modules.ViewController {
           this._setVisibleWidths(visibleColumns, resultWidths);
         }
 
-        if (wordWrapEnabled) {
-          this._toggleContentMinHeight(false);
-        }
+        this._toggleContentMinHeight(false);
       });
     });
   }
