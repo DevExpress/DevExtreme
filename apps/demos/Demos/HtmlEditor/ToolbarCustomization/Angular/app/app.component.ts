@@ -32,7 +32,7 @@ export class AppComponent {
   toolbarButtonOptions: DxButtonTypes.Properties = {
     text: 'Show markup',
     stylingMode: 'text',
-    onClick: () => this.popupVisible = true,
+    onClick: () => { this.popupVisible = true; },
   };
 
   constructor(service: Service) {

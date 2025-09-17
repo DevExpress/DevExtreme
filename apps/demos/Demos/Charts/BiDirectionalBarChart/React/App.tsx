@@ -14,7 +14,7 @@ function customizeTooltip(e: { valueText: number; }) {
   return { text: Math.abs(e.valueText) };
 }
 
-function customizeLabel(e: {value: Date | number | string}) {
+function customizeLabel(e: { value: Date | number | string }) {
   return `${Math.abs(e.value as number)}%`;
 }
 

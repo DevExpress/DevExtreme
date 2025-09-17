@@ -48,7 +48,7 @@ import { ref } from 'vue';
 
 interface Props {
   annotation?: Record<string, any>;
-};
+}
 
 const { annotation = {} as Record<string, any> } = defineProps<Props>();
 const data = ref<Record<string, any>>(annotation.data);

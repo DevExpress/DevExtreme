@@ -1,5 +1,8 @@
-import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
+/* eslint-disable spellcheck/spell-checker, no-param-reassign */
+
+import { buildNodeFullName } from './config-node';
 import { mergeNameParts, parseOptionName } from './utils';
+import { IConfigNode, ITemplate } from '../types';
 
 interface IConfig {
   options: Record<string, unknown>;

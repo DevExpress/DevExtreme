@@ -91,7 +91,7 @@ test('After drag over component area, shouldn\'t called onAppointment* data even
     .expect(ClientFunction(() => (window as any).eventName)())
     .eql('')
     .expect(scheduler.getAppointment('All day test app 2').date.time)
-    .eql('12:00 AM - 12:01 AM');
+    .eql('April 27');
 
   await t
     .dragToElement(scheduler.getAppointment('Regular test app').element, Selector('#left-right'));

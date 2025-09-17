@@ -134,6 +134,19 @@ describe('SmartPasteCommand', () => {
 
       expect(result).toStrictEqual(expectedResult);
     });
+
+    it('should trim string and array values in parseResult', () => {
+      const response = 'Field1:::  value1  ;;;Field2:::  value2  ::: value3 ';
+      // @ts-expect-error Access to protected property for a test
+      const result = command.parseResult(response);
+
+      const expectedResult = [
+        { name: 'Field1', value: 'value1' },
+        { name: 'Field2', value: ['value2', 'value3'] },
+      ];
+
+      expect(result).toStrictEqual(expectedResult);
+    });
   });
 
   describe('execute', () => {

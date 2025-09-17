@@ -27,8 +27,8 @@ export class AppComponent {
     showTitle: true,
     width: 700,
     height: 525,
-  }
-  
+  };
+
   constructor(service: Service) {
     this.employees = service.getEmployees();
   }
@@ -36,12 +36,12 @@ export class AppComponent {
   altExpr({ fullName }: Employee) {
     return `Photo of ${fullName}`;
   }
-  
+
   imageExpr({ picture }: Employee) {
     return picture;
   }
-  
-  calculateFullName({firstName, lastName}: Employee) {
+
+  calculateFullName({ firstName, lastName }: Employee) {
     return `${firstName} ${lastName}`;
   }
 }
@@ -50,7 +50,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
-    DxTextAreaModule
+    DxTextAreaModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

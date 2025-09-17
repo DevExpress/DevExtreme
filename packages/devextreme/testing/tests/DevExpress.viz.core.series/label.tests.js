@@ -1,12 +1,14 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockTranslator } from '../../helpers/chartMocks.js';
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.data = {
             formatObject: {
                 value: 15,
@@ -192,7 +194,6 @@ QUnit.test('Hide', function(assert) {
     label.show();
     label._group.stub('attr').resetHistory();
 
-    // act
     label.hide();
 
     assert.equal(label._group.stub('attr').callCount, 1);
@@ -270,7 +271,6 @@ QUnit.test('Draw() - hide label', function(assert) {
 QUnit.test('Draw(true) after hide() - draw label', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.hide();
     label.draw(true);
 
@@ -280,7 +280,6 @@ QUnit.test('Draw(true) after hide() - draw label', function(assert) {
 QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.hide(true);
     label.draw(true);
 
@@ -290,7 +289,6 @@ QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
 QUnit.test('Draw() after show() - hide label', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.show();
     label.draw();
 
@@ -300,7 +298,6 @@ QUnit.test('Draw() after show() - hide label', function(assert) {
 QUnit.test('Draw() after show(true) - keep visible state', function(assert) {
     const label = this.createAndDrawLabel();
 
-    // act
     label.show(true);
     label.draw();
 
@@ -924,7 +921,7 @@ QUnit.test('zero angle - build correct connector', function(assert) {
 
 QUnit.module('Set options', $.extend({}, environment, {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translator = new MockTranslator({
             getCanvasVisibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 }
@@ -1041,7 +1038,7 @@ QUnit.test('Set tracker data', function(assert) {
 
 QUnit.module('Dispose', $.extend({}, environment, {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translator = new MockTranslator({
             getCanvasVisibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 }
@@ -1114,7 +1111,7 @@ QUnit.test('Pie label', function(assert) {
 
 QUnit.module('getBoundingRect', $.extend({}, environment, {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translator = new MockTranslator({
             getCanvasVisibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 }
@@ -1167,7 +1164,7 @@ QUnit.module('Layouted label', $.extend({}, environment, {
         };
         this.point = sinon.createStubInstance(pointModule.Point);
         this.point.hasValue.returns(true);
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.data = {
             formatObject: {
@@ -1436,7 +1433,7 @@ QUnit.test('resetEllipsis', function(assert) {
 
 QUnit.module('Format label', $.extend({}, environment, {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.data = {
             formatObject: {
@@ -1487,7 +1484,6 @@ QUnit.test('Fixed point', function(assert) {
             value: 10,
             valueText: '10.00'
         });
-
 });
 
 QUnit.module('Is visible', environment);

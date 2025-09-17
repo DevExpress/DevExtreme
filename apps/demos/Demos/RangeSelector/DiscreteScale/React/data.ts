@@ -8,4 +8,3 @@ export const dataSource = [
   { country: 'DR Congo', copper: 900000 },
   { country: 'Finland', copper: 119000 },
 ];
-

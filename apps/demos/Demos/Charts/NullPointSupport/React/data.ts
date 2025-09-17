@@ -1,4 +1,3 @@
-
 export const medalsInfo = [{
   year: 1904,
   gold: null,

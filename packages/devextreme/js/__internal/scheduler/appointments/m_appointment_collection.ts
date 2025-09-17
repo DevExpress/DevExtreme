@@ -26,8 +26,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
-import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import { generateDates } from '../recurrence/generate_dates';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -47,6 +47,7 @@ import type {
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
+import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { countVisibleAppointments } from './utils/count_visible_appointments';
 import { isNeedToAdd } from './utils/get_arrays_diff';
@@ -487,7 +488,7 @@ class SchedulerAppointments extends CollectionWidget {
       'createFormattedDateText',
       appointment,
       targetedAppointmentData,
-      'TIME',
+      appointment.allDay ? DateFormatType.DATE : DateFormatType.TIME,
     );
 
     $container.append(this.isAgendaView
@@ -1070,7 +1071,7 @@ class SchedulerAppointments extends CollectionWidget {
 
       const timezoneCalculator = this.option('timeZoneCalculator');
 
-      const recurrentDates = getRecurrenceProcessor().generateDates({
+      const recurrentDates = generateDates({
         rule: recurrenceRule,
         exception: recurrenceException,
         start: startDate,

@@ -81,7 +81,6 @@ $(() => {
     text: 'Export multiple grids',
     icon: 'exportpdf',
     onClick() {
-      // eslint-disable-next-line new-cap
       const doc = new jsPDF();
 
       const priceDataGrid = $('#priceDataGrid').dxDataGrid('instance');

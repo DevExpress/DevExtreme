@@ -158,7 +158,11 @@
 .dx-icon-ratingfilled,
 .dx-icon-chatadd,
 .dx-icon-colordismiss,
-.dx-icon-clipboardpastesparkle {
+.dx-icon-clipboardpastesparkle,
+.dx-icon-micfilled,
+.dx-icon-micoutline,
+.dx-icon-stopfilled,
+.dx-icon-stopoutline {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -532,6 +536,10 @@ $icons: (
     "chatadd":"\f200",
     "colordismiss":"\f201",
     "clipboardpastesparkle":"\f202",
+    "micoutline":"\f203",
+    "micfilled":"\f204",
+    "stopoutline":"\f205",
+    "stopfilled":"\f206",
 );
 
 // stylelint-enable

@@ -19,7 +19,8 @@ export interface Employee {
   MobilePhone: string;
 }
 
-export const employees: Employee[] = [{
+export const employees: Employee[] = [
+  {
     ID: 1,
     Head_ID: 0,
     FirstName: 'John',
@@ -209,5 +210,5 @@ export const employees: Employee[] = [{
     DepartmentID: 5,
     Department: 'Human Resources',
     MobilePhone: '(310) 555-7276',
-  }];
-  
+  },
+];

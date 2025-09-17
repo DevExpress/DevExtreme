@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 function getRoot() {
     return document.querySelector('#parentContainer').shadowRoot;
 }
@@ -14,11 +14,11 @@ $(function() {
         const result = new jQueryInit(selector, context, root);
         const resultElement = result.get(0);
 
-        if(!resultElement) {
+        if (!resultElement) {
             return new jQueryInit(get(selector), context, root);
         }
 
-        if(resultElement === getRoot()?.host) {
+        if (resultElement === getRoot()?.host) {
             return new jQueryInit(get(':scope div')[0], context, root);
         }
 

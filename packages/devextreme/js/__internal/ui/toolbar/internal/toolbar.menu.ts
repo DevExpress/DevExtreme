@@ -232,7 +232,11 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     }
 
     this._$popup = $('<div>').appendTo(this.$element());
-    const { rtlEnabled, container, animation } = this.option();
+    const {
+      rtlEnabled,
+      container,
+      animation,
+    } = this.option();
 
     this._popup = this._createComponent(this._$popup, Popup, {
       onInitialized(e) {
@@ -244,6 +248,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       },
       deferRendering: false,
       preventScrollEvents: false,
+      _ignorePreventScrollEventsDeprecation: true,
       contentTemplate: (contentElement) => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error

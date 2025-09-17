@@ -6,9 +6,12 @@
 // It is not used in map and requesting frame is just suppressed
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass
+} from '../../helpers/vizMocks.js';
 import trackerModule from 'viz/vector_map/tracker';
-import eventEmitterModule from 'viz/vector_map/event_emitter';
+import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
 import animationFrame from 'common/core/animation/frame';
 
 const FOCUS_OFF_DELAY = 100;
@@ -43,7 +46,7 @@ const EVENTS = {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.root = this.renderer.g();
         this.root.element = $('<div>').appendTo('#test-root')[0];
         trackerModule._DEBUG_forceEventMode(this.eventMode);
@@ -105,7 +108,6 @@ const environment = {
             touchEnabled: true,
             wheelEnabled: true
         });
-
     },
     triggerEvent: function($target, type, x, y, originalEventData) {
         const event = $.Event(type);
@@ -163,7 +165,7 @@ QUnit.test('Subscription to projection', function(assert) {
 
 QUnit.test('Event emitter methods are injected', function(assert) {
     const tracker = this.tracker;
-    $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
+    $.each(_TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(tracker[name], method, name);
     });
 });
@@ -474,7 +476,7 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
     });
 });
 
-const StubFocus = vizMocks.stubClass(new trackerModule.Focus(), null, {
+const StubFocus = stubClass(new trackerModule.Focus(), null, {
     $constructor: function() {
         currentTest().focus = this;
     }

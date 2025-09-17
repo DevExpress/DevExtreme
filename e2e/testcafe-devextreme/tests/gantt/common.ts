@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
 import { Selector } from 'testcafe';

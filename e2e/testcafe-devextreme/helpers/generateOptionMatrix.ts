@@ -20,9 +20,9 @@ const generateOptionMatrixImpl = <T>(
     const nextCombinations = current
       .slice(0, currentLength)
       .map<T>((item) => ({
-      ...item,
-      [key]: values[i],
-    }));
+        ...item,
+        [key]: values[i],
+      }));
 
     current.push(...nextCombinations);
   }

@@ -3,10 +3,10 @@
     Right click within this region to display the DevExtreme Context Menu
   </div>
   <DxContextMenu
-      :data-source="items"
-      :width="200"
-      target=".target-area"
-      @item-click="itemClick"
+    :data-source="items"
+    :width="200"
+    target=".target-area"
+    @item-click="itemClick"
   />
 </template>
 <script setup lang="ts">

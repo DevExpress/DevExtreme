@@ -1,14 +1,17 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import tickGeneratorModule from 'viz/axes/tick_generator';
 import { Axis as originalAxis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
-import xyMethods from 'viz/axes/xy_axes';
+import xyMethods from '__internal/viz/axes/xy_axes';
 import { isFunction, isDeferred } from 'core/utils/type';
 
-const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
+const StubTranslator = stubClass(translator2DModule.Translator2D, {
     updateBusinessRange: function(range) {
         this.getBusinessRange.returns(range);
     }
@@ -16,7 +19,7 @@ const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
 
         const that = this;
         this.tickGeneratorSpy = sinon.spy(function() {
@@ -492,7 +495,7 @@ QUnit.test('Update translator on setTypes pass old business range and canvas', f
 
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
     this.axis.updateCanvas(this.canvas);
-    // act
+
     this.axis.setTypes('someAxisType', 'someType', 'valueType');
 
     assert.strictEqual(translator.update.lastCall.args[0], translator.getBusinessRange());
@@ -756,7 +759,6 @@ QUnit.test('Get visual range center. Logarithmic with negative values', function
     assert.equal(this.axis.getVisualRangeCenter(range), 0);
 });
 
-
 QUnit.test('getCategoriesSorter returns categoriesSortingMethod option value', function(assert) {
     this.updateOptions({
         categoriesSortingMethod: 'sorting method'
@@ -858,10 +860,8 @@ QUnit.test('getTemplate called on labels drawing', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
-    // assert
     assert.strictEqual(this.getTemplate.callCount, 1);
     assert.strictEqual(this.getTemplate.lastCall.args[0], templateOption);
 });
@@ -882,11 +882,9 @@ QUnit.test('arguments passing to render', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.renderer.g.resetHistory();
     this.axis.draw();
 
-    // assert
     assert.strictEqual(this.templateRender.callCount, 3);
     const ticks = this.axis.getFullTicks();
 
@@ -922,7 +920,6 @@ QUnit.test('getTemplatesDef after drawing', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     const def = this.axis.getTemplatesDef();
@@ -943,7 +940,6 @@ QUnit.test('getTemplatesDef. State after template draw', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     const def = this.axis.getTemplatesDef();
@@ -969,7 +965,6 @@ QUnit.test('templatesDef after dispose axis', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     const def = this.axis.getTemplatesDef();
@@ -989,7 +984,6 @@ QUnit.test('templatesDef on redrawing', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     const def = this.axis.getTemplatesDef();
@@ -1009,7 +1003,6 @@ QUnit.test('getTemplatesGroups', function(assert) {
     });
     this.axis.createTicks(this.canvas);
 
-    // act
     this.axis.draw();
 
     const groups = this.axis.getTemplatesGroups();
@@ -1431,7 +1424,6 @@ QUnit.test('Set visual range using array', function(assert) {
     assert.equal(this.axis.visualRange().startValue, 10, 'visualRange[0] should be correct');
     assert.equal(this.axis.visualRange().endValue, 20, 'visualRange[1] should be correct');
 });
-
 
 QUnit.test('Set visual range using object', function(assert) {
     this.updateOptions();
@@ -3274,7 +3266,6 @@ QUnit.test('updateSize, synchronized axis - do not recalculate margins/interval'
         size: 100
     });
 
-    // act
     // emulate synchronizer
     axis.createTicks(this.canvas);
     axis.setTicks({});
@@ -3292,7 +3283,6 @@ QUnit.test('updateSize, synchronized axis - do not recalculate margins/interval'
         height: 400
     });
 
-    // assert
     assert.equal(translator.updateBusinessRange.callCount, 0);
     assert.deepEqual(translator.getCanvasVisibleArea(), { min: 200, max: 700 });
 });
@@ -3313,7 +3303,6 @@ QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins
         size: 100
     });
 
-    // act
     // emulate synchronizer
     axis.createTicks(this.canvas);
     axis.setTicks({});
@@ -3330,7 +3319,6 @@ QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins
         height: 400
     });
 
-    // assert
     const range = translator2DModule.Translator2D.lastCall.returnValue.getBusinessRange();
     assert.equal(range.min, 90);
     assert.equal(range.minVisible, 90);
@@ -3561,7 +3549,6 @@ QUnit.test('Argument axis, endOnTick = true - do not extend range to boundary ti
         isArgumentAxis: true
     });
 });
-
 
 QUnit.test('Do not correct zero level if min < 0', function(assert) {
     this.testMargins(assert, {
@@ -4361,7 +4348,6 @@ QUnit.test('Create ticks with empty range. Range is still empty', function(asser
     assert.equal(businessRange.isEmpty(), true);
 });
 
-
 QUnit.test('Pass linearThreshold to translator range', function(assert) {
     this.updateOptions({
         type: 'logarithmic'
@@ -5050,7 +5036,6 @@ QUnit.test('whole range is set - get from option', function(assert) {
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: 10, endValue: 50 });
 });
-
 
 QUnit.test('whole range values are set to null - get from option', function(assert) {
     this.updateOptions({

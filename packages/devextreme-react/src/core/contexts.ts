@@ -4,16 +4,17 @@ import {
 } from 'react';
 
 import { IExpectedChild, IOptionDescriptor } from './configuration/react/element';
-import { IConfigNode, ITemplate } from './configuration/config-node';
+import { IConfigNode, ITemplate } from './types';
 
 export interface UpdateLocker {
   lock: () => void;
   unlock: () => void;
 }
 
+// eslint-disable-next-line @stylistic/max-len
 export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
 
-// eslint-disable-next-line @typescript-eslint/no-extra-parens
+// eslint-disable-next-line @stylistic/max-len
 export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
 
 export interface NestedOptionContextContent {

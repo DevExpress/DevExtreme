@@ -1,17 +1,19 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const common = require('./commonParts/common.js');
-const commonEnvironment = common.environment;
-const createFunnel = common.createFunnel;
-const stubAlgorithm = common.stubAlgorithm;
-const legendModule = require('viz/components/legend');
-const titleModule = require('viz/core/title');
-const exportModule = require('viz/core/export');
-const labelEnvironment = require('./commonParts/label.js').labelEnvironment;
-const dxFunnel = require('viz/funnel/funnel');
-const Legend = legendModule.Legend;
-const TitleOrig = titleModule.Title;
-const ExportMenuOrig = exportModule.ExportMenu;
+import $ from 'jquery';
+import legendModule from 'viz/components/legend';
+import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
+import dxFunnel from '__internal/viz/funnel/funnel';
+import { createFunnel, environment as commonEnvironment, stubAlgorithm } from './commonParts/common.js';
+import { labelEnvironment } from './commonParts/label.js';
+import {
+    Legend,
+    Title,
+    ExportMenu,
+} from '../../helpers/vizMocks.js';
+
+// const { Legend } = legendModule;
+const { Title: TitleOrig } = titleModule;
+const { ExportMenu: ExportMenuOrig } = exportModule;
 
 dxFunnel.addPlugin(legendModule.plugin);
 dxFunnel.addPlugin(titleModule.plugin);
@@ -19,7 +21,7 @@ dxFunnel.addPlugin(exportModule.plugin);
 
 function stubLegend() {
     const that = this;
-    that.legend = new vizMocks.Legend();
+    that.legend = new Legend();
     that.legend.stub('coordsIn').returns(true);
     that.legend.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
     that.legend.stub('measure').returns([100, 100]);
@@ -34,14 +36,14 @@ function stubLegend() {
 
 function stubTitle() {
     const that = this;
-    that.title = new vizMocks.Title();
+    that.title = new Title();
     that.title.stub('measure').returns([200, 50]);
     titleModule.DEBUG_set_title(sinon.spy(function() { return that.title; }));
 }
 
 function stubExport() {
     const that = this;
-    that.export = new vizMocks.ExportMenu();
+    that.export = new ExportMenu();
     that.export.stub('measure').returns([50, 50]);
     exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;

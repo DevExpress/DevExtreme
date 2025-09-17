@@ -1,4 +1,3 @@
-
 export const data = [
   { source: 'Spain', target: 'United States of America', weight: 2 },
   { source: 'Germany', target: 'United States of America', weight: 8 },

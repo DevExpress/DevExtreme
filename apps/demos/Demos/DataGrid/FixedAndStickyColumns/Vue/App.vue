@@ -22,9 +22,9 @@
         :fixed="true"
         fixed-position="sticky"
       />
-      <DxColumn data-field="City" />
-      <DxColumn data-field="Zipcode" />
-      <DxColumn data-field="State" />
+      <DxColumn data-field="City"/>
+      <DxColumn data-field="Zipcode"/>
+      <DxColumn data-field="State"/>
       <DxColumn
         data-field="Department"
         :fixed="true"
@@ -38,10 +38,10 @@
         data-field="HireDate"
         data-type="date"
       />
-      <DxColumn data-field="HomePhone" />
-      <DxColumn data-field="MobilePhone" />
-      <DxColumn data-field="Email" />
-      <DxColumn data-field="Skype" />
+      <DxColumn data-field="HomePhone"/>
+      <DxColumn data-field="MobilePhone"/>
+      <DxColumn data-field="Email"/>
+      <DxColumn data-field="Skype"/>
     </DxDataGrid>
   </div>
 </template>

@@ -13,11 +13,11 @@ import {
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
-import { DatesFormComponent } from "./dates-form/dates-form.component";
-import { GuestsFormComponent } from "./guests-form/guests-form.component";
-import { RoomMealPlanFormComponent } from "./room-meal-plan-form/room-meal-plan-form.component";
-import { AdditionalFormComponent } from "./additional-form/additional-form.component";
-import { ConfirmationComponent } from "./confirmation/confirmation.component";
+import { DatesFormComponent } from './dates-form/dates-form.component';
+import { GuestsFormComponent } from './guests-form/guests-form.component';
+import { RoomMealPlanFormComponent } from './room-meal-plan-form/room-meal-plan-form.component';
+import { AdditionalFormComponent } from './additional-form/additional-form.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
 
 import validationEngine from 'devextreme/ui/validation_engine';
 
@@ -57,7 +57,7 @@ export class AppComponent {
     this.isStepperReadonly = false;
   }
 
-  getValidationResult(index: number){
+  getValidationResult(index: number) {
     if (index >= this.validationGroups.length) {
       return true;
     }
@@ -65,7 +65,7 @@ export class AppComponent {
     return validationEngine.validateGroup(this.validationGroups[index]).isValid;
   }
 
-  setStepValidationResult(index: number, isValid: boolean | undefined){
+  setStepValidationResult(index: number, isValid: boolean | undefined) {
     this.steps[index].isValid = isValid;
   }
 
@@ -110,7 +110,7 @@ export class AppComponent {
     }
   }
 
-  reset(){
+  reset() {
     this.isConfirmed = false;
     this.selectedIndex = 0;
     this.steps = this.appService.getInitialSteps();
@@ -118,7 +118,7 @@ export class AppComponent {
     this.isStepperReadonly = false;
   }
 
-  confirm(){
+  confirm() {
     this.isConfirmed = true;
     this.setStepValidationResult(this.selectedIndex, true);
     this.isStepperReadonly = true;

@@ -642,6 +642,26 @@ QUnit.module('SmartPaste', () => {
             }
 
             const done = assert.async();
+
+            const smartPaste = sinon.stub().callsFake((params, callbacks) => {});
+            const aiIntegration = { smartPaste: smartPaste };
+            const form = setupFormWithAi({ aiIntegration });
+
+            this.clipboardStub = this.createClipboardStub('');
+
+            form.smartPaste().then(() => {
+                setTimeout(() => {
+                    assert.strictEqual(smartPaste.called, false, 'AI operation should not be called with empty clipboard');
+                    assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel DOM element should not be created for empty clipboard');
+                    assert.strictEqual(form._loadPanel, undefined, 'LoadPanel should not be created for empty text');
+                    assert.strictEqual(form.option('disabled'), false, 'Form should not be disabled during operation');
+                    done();
+                }, 10);
+            });
+        });
+
+        QUnit.test('smartPaste handles empty text', function(assert) {
+            const done = assert.async();
             let completionCallback;
 
             const smartPaste = sinon.stub().callsFake((params, callbacks) => {
@@ -651,9 +671,7 @@ QUnit.module('SmartPaste', () => {
             const aiIntegration = { smartPaste: smartPaste };
             const form = setupFormWithAi({ aiIntegration });
 
-            this.clipboardStub = this.createClipboardStub('');
-
-            form.smartPaste().then(() => {
+            form.smartPaste('').then(() => {
                 setTimeout(() => {
                     assert.strictEqual(smartPaste.called, true, 'AI operation should be called with empty text');
                     assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel DOM element should be created for empty text');
@@ -982,14 +1000,19 @@ QUnit.module('SmartPaste', () => {
                             { dataField, editorType: 'dxCheckBox' },
                         ]
                     });
+                    const done = assert.async();
 
                     try {
                         await form.smartPaste('test');
                         completionCallback();
 
-                        assert.strictEqual(form.getEditor(dataField).option('value'), value, `${value} value was set`);
+                        setTimeout(() => {
+                            assert.strictEqual(form.getEditor(dataField).option('value'), value, `${value} value was set`);
+                            done();
+                        }, 10);
                     } catch(error) {
                         assert.ok(false, `failed with error: ${error}`);
+                        done();
                     }
                 });
             });
@@ -1018,15 +1041,20 @@ QUnit.module('SmartPaste', () => {
                         { dataField, editorType: 'dxCheckBox', allowIndeterminateState: undefined },
                     ]
                 });
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), undefined, 'new value was not set');
-                    assert.ok(true, 'gracefully continued');
+                    setTimeout(() => {
+                        assert.strictEqual(form.getEditor(dataField).option('value'), undefined, 'new value was not set');
+                        assert.ok(true, 'gracefully continued');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                    done();
                 };
             });
         });
@@ -1050,14 +1078,19 @@ QUnit.module('SmartPaste', () => {
                             { dataField, editorType: 'dxSwitch' },
                         ]
                     });
+                    const done = assert.async();
 
                     try {
                         await form.smartPaste('test');
                         completionCallback();
 
-                        assert.strictEqual(form.getEditor(dataField).option('value'), value, `${value} value was set`);
+                        setTimeout(() => {
+                            assert.strictEqual(form.getEditor(dataField).option('value'), value, `${value} value was set`);
+                            done();
+                        }, 10);
                     } catch(error) {
                         assert.ok(false, `failed with error: ${error}`);
+                        done();
                     }
                 });
             });
@@ -1087,15 +1120,20 @@ QUnit.module('SmartPaste', () => {
                     ]
                 });
                 const defaultValue = form.getEditor(dataField).option('value');
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                    assert.ok(true, 'gracefully continued');
+                    setTimeout(() => {
+                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
+                        assert.ok(true, 'gracefully continued');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                    done();
                 };
             });
         });
@@ -1119,16 +1157,19 @@ QUnit.module('SmartPaste', () => {
                         { dataField, editorType: 'dxHtmlEditor' },
                     ]
                 });
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), `<p>${value}</p>`, 'text value was set');
+                    setTimeout(() => {
+                        assert.strictEqual(form.getEditor(dataField).option('value'), `<p>${value}</p>`, 'text value was set');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
-                } finally {
-                    form.dispose();
+                    done();
                 }
             });
 
@@ -1157,15 +1198,20 @@ QUnit.module('SmartPaste', () => {
                     ]
                 });
                 const defaultValue = form.getEditor(dataField).option('value');
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                    assert.ok(true, 'gracefully continued');
+                    setTimeout(() => {
+                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
+                        assert.ok(true, 'gracefully continued');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                    done();
                 }
             });
         });
@@ -1189,14 +1235,19 @@ QUnit.module('SmartPaste', () => {
                         { dataField, editorType: 'dxDateRangeBox' },
                     ]
                 });
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), value, 'text value was set');
+                    setTimeout(() => {
+                        assert.deepEqual(form.getEditor(dataField).option('value'), value, 'text value was set');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                    done();
                 }
             });
 
@@ -1225,15 +1276,20 @@ QUnit.module('SmartPaste', () => {
                     ]
                 });
                 const defaultValue = form.getEditor(dataField).option('value');
+                const done = assert.async();
 
                 try {
                     await form.smartPaste('test');
                     completionCallback();
 
-                    assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                    assert.ok(true, 'gracefully continued');
+                    setTimeout(() => {
+                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
+                        assert.ok(true, 'gracefully continued');
+                        done();
+                    }, 10);
                 } catch(error) {
                     assert.ok(false, `failed with error: ${error}`);
+                    done();
                 }
             });
         });

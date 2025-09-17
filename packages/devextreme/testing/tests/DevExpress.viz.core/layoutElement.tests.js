@@ -1,9 +1,6 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const layoutElementModule = require('viz/core/layout_element');
-
-const LayoutElement = layoutElementModule.LayoutElement;
-const WrapperLayoutElement = layoutElementModule.WrapperLayoutElement;
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import { LayoutElement, WrapperLayoutElement } from '__internal/viz/core/layout_element';
 
 const environmentLE = {
     createLayoutElement: function(options) {
@@ -36,7 +33,7 @@ const environmentW = {
     beforeEach: function() {
         const that = this;
         this.bBoxes = [];
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.renderer.bBoxTemplate = function() {
             return that.bBoxes[$.inArray(this, that.renderer.g.returnValues)]
                 || { x: 1, y: 3, height: 10, width: 20 };

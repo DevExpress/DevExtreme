@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
@@ -237,3 +235,41 @@ test(
     component.columnOption(lastColumnDataField, 'allowHiding', false);
   },
 }));
+
+test('ColumnChooser should receive and render custom texts', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await dataGrid.isReady();
+  const columnChooserBtn = dataGrid.getColumnChooserButton();
+  await t.click(columnChooserBtn);
+  const columnChooser = dataGrid.getColumnChooser();
+  const title = columnChooser.getTitle();
+  const emptyMessage = columnChooser.getEmptyMessage();
+  const titleText = await title.innerText;
+  const emptyMessageText = await emptyMessage.innerText;
+  await t.expect(titleText).eql('customTitle');
+  await t.expect(emptyMessageText).eql('customEmptyText');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      en: {
+        'dxDataGrid-columnChooserTitle': 'customTitle',
+        'dxDataGrid-columnChooserEmptyText': 'customEmptyText',
+      },
+    });
+  });
+
+  return createWidget('dxDataGrid', {
+    columnChooser: {
+      height: '340px',
+      enabled: true,
+      mode: 'dragAndDrop',
+      position: {
+        my: 'right top',
+        at: 'right bottom',
+        of: '.dx-datagrid-column-chooser-button',
+      },
+    },
+    dataSource: [],
+    columns: [],
+  });
+});

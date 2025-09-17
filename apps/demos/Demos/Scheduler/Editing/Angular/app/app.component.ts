@@ -33,7 +33,7 @@ export class AppComponent {
   }
 
   showToast(event: string, value: string, type: string) {
-    notify(`${event} "${value}"` + ' task', type, 800);
+    notify(`${event} "${value}" task`, type, 800);
   }
 
   onAppointmentAdded(e: DxSchedulerTypes.AppointmentAddedEvent) {

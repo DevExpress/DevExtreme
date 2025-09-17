@@ -41,6 +41,7 @@ export class AppComponent {
       : undefined;
   };
 
+  // eslint-disable-next-line consistent-return
   customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
     if (value > this.highAverage) {
       return {

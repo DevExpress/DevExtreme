@@ -5,14 +5,14 @@ interface ProgressProps {
   value: number;
 }
 
-const Progress = ({ value }: ProgressProps) => {
-    return <div className="task__progress">
-        <ProgressBar
-            value={value}
-            elementAttr={{ 'aria-label': 'Progress Bar' }}
-            statusFormat={(_, value: number) => `${value}%`}
-        />
-    </div>;
-}
+const Progress = ({ value }: ProgressProps) => (
+  <div className="task__progress">
+    <ProgressBar
+      value={value}
+      elementAttr={{ 'aria-label': 'Progress Bar' }}
+      statusFormat={(_, value: number) => `${value}%`}
+    />
+  </div>
+);
 
 export default Progress;

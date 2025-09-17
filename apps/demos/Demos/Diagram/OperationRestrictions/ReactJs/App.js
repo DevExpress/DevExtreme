@@ -84,7 +84,7 @@ export default function App() {
         e.allowed = false;
       }
     } else if (e.operation === 'changeConnection') {
-      const shapeType = e.args.newShape && e.args.newShape.type;
+      const shapeType = e.args.newShape?.type;
       if (shapeType === 'root' && e.args.connectorPosition === 'end') {
         if (e.reason !== 'checkUIElementAvailability') {
           showToast("The 'Development' shape cannot have an incoming connection.");

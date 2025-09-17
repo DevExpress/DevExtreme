@@ -2,8 +2,8 @@ import registerComponent from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import { plugins } from '@js/viz/core/annotations';
-import { convertPolarToXY, normalizeAngle } from '@js/viz/core/utils';
+import { plugins } from '@ts/viz/core/annotations';
+import { convertPolarToXY, normalizeAngle } from '@ts/viz/core/utils';
 
 import { AdvancedChart } from './chart_components/m_advanced_chart';
 

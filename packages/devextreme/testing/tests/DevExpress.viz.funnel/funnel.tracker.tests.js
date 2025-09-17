@@ -1,20 +1,17 @@
-const $ = require('jquery');
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
-const trackerModule = require('viz/funnel/tracker');
-const clickEventName = require('common/core/events/click').name;
-const pointerEvents = require('common/core/events/pointer');
-const labelModule = require('viz/series/points/label');
-const vizMocks = require('../../helpers/vizMocks.js');
-const Label = labelModule.Label;
-const stubLabel = vizMocks.stubClass(Label);
-const labels = require('viz/funnel/label');
-const legendModule = require('viz/components/legend');
-const Legend = legendModule.Legend;
-const stubLegend = vizMocks.stubClass(Legend);
+import $ from 'jquery';
+import dxFunnel from '__internal/viz/funnel/funnel';
+import * as trackerModule from '__internal/viz/funnel/tracker';
+import { name as clickEventName } from 'common/core/events/click';
+import { move } from 'common/core/events/pointer';
+import * as labels from '__internal/viz/funnel/label';
+import legendModule from 'viz/components/legend';
+import { createFunnel, environment } from './commonParts/common.js';
+import labelModule from 'viz/series/points/label';
+import { stubClass } from '../../helpers/vizMocks.js';
 
-const dxFunnel = require('viz/funnel/funnel');
+const stubLabel = stubClass(labelModule.Label);
+const stubLegend = stubClass(legendModule.Legend);
+
 dxFunnel.addPlugin({
     name: 'tracker-test',
     init: function() {
@@ -29,7 +26,7 @@ dxFunnel.addPlugin(legendModule.plugin);
 const trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         const that = this;
-        common.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this);
         this.legend = new stubLegend();
         sinon.stub(labelModule, 'Label').callsFake(function() {
             const stub = new stubLabel();
@@ -53,7 +50,7 @@ const trackerEnvironment = $.extend({}, environment, {
     afterEach: function() {
         environment.afterEach.call(this);
         labelModule.Label.restore();
-        legendModule._setLegend(Legend);
+        legendModule._setLegend(legendModule.Legend);
     },
 
     trigger: function(name, data, options) {
@@ -84,7 +81,7 @@ QUnit.test('Hover on. Get item by tracker data', function(assert) {
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
 
-    this.trigger(pointerEvents.move, 2);
+    this.trigger(move, 2);
 
     assert.strictEqual(widget.getAllItems()[0].isHovered(), false, 'state');
     assert.strictEqual(widget.getAllItems()[1].isHovered(), false, 'state');
@@ -95,9 +92,9 @@ QUnit.test('Hover off', function(assert) {
     const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
-    this.trigger(pointerEvents.move, 2);
+    this.trigger(move, 2);
 
-    this.trigger(pointerEvents.move, 1);
+    this.trigger(move, 1);
 
     assert.strictEqual(widget.getAllItems()[1].isHovered(), true, 'state 1');
     assert.strictEqual(widget.getAllItems()[2].isHovered(), false, 'state 2');
@@ -111,7 +108,7 @@ QUnit.test('Hover on. Legend item', function(assert) {
     this.legend.stub('coordsIn').withArgs(97, 45).returns(true);
     this.legend.stub('getItemByCoord').withArgs(97, 45).returns({ id: 2 });
 
-    this.trigger(pointerEvents.move, null, {
+    this.trigger(move, null, {
         pageX: 100,
         pageY: 50
     });
@@ -136,7 +133,7 @@ QUnit.test('Hover on. Label item', function(assert) {
         height: 10
     });
 
-    this.trigger(pointerEvents.move, null, {
+    this.trigger(move, null, {
         pageX: 100,
         pageY: 50
     });
@@ -153,7 +150,7 @@ QUnit.test('No hover any items if no data', function(assert) {
 
     this.legend.stub('coordsIn').withArgs(97, 45).returns(false);
 
-    this.trigger(pointerEvents.move, null, {
+    this.trigger(move, null, {
         pageX: 100,
         pageY: 50
     });
@@ -176,7 +173,6 @@ QUnit.test('Click', function(assert) {
     assert.strictEqual(spy.callCount, 1, 'call count');
     assert.strictEqual(spy.lastCall.args[0].item, widget.getAllItems()[2], 'item');
 });
-
 
 QUnit.test('Legend click', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
@@ -210,7 +206,7 @@ QUnit.test('Show tooltip on hovered item', function(assert) {
 
     sinon.spy(widget.getAllItems()[2], 'showTooltip');
 
-    this.trigger(pointerEvents.move, 2);
+    this.trigger(move, 2);
 
     assert.ok(widget.getAllItems()[2].showTooltip.called);
 });
@@ -236,7 +232,7 @@ QUnit.test('Show tooltip on hovered inside label item', function(assert) {
         height: 10
     });
 
-    this.trigger(pointerEvents.move, null, {
+    this.trigger(move, null, {
         pageX: 100,
         pageY: 50
     });
@@ -265,7 +261,7 @@ QUnit.test('Do not show tooltip on hovered outside label item', function(assert)
         height: 10
     });
 
-    this.trigger(pointerEvents.move, null, {
+    this.trigger(move, null, {
         pageX: 100,
         pageY: 50
     });

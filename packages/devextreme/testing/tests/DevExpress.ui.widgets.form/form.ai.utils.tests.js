@@ -167,7 +167,7 @@ QUnit.module('parseResultForEditorType', () => {
     }].forEach(({ editorType, correctValues, incorrectValues, expectedType }) => {
         correctValues.forEach(({ value, description }) => {
             QUnit.test(`should return correct value for ${description} for ${editorType}`, function(assert) {
-                assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
+                assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
             });
         });
 
@@ -206,7 +206,7 @@ QUnit.module('parseResultForEditorType', () => {
 
         QUnit.test(`should return same array value for ${editorType}`, function(assert) {
             const value = ['string'];
-            assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
+            assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
         });
     });
 });

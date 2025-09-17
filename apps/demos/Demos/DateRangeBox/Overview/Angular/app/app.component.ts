@@ -63,7 +63,7 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxDateRangeBoxModule,
+    BrowserModule, DxDateRangeBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -4313,6 +4313,19 @@
             "Equivalents": "add item, remove item, show item, hide item",
             "DocUrl": "",
             "Widget": "Form"
+          },
+          {
+            "Title": "Smart Paste",
+            "Name": "SmartPaste",
+            "Equivalents": "AI paste, AI form filler, AI form paste",
+            "DocUrl": "",
+            "Widget": "Form",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New",
+            "Modules": "openai"
           }
         ]
       },
@@ -4805,7 +4818,8 @@
               "/Models/SampleData/Electronics.cs",
               "/ViewModels/SelectBoxViewModel.cs"
             ],
-            "ShowOnMainPage": true
+            "ShowOnMainPage": true,
+            "Badge": "Updated"
           },
           {
             "Title": "Search and Editing",
@@ -6238,7 +6252,6 @@
                 ],
                 "DemoType": "Viz"
               },
-
               {
                 "Title": "Dynamic Viewport",
                 "Name": "DynamicViewport",

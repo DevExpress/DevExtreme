@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
 
     steps:
       - name: Get sources
@@ -20,9 +20,13 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
         with:
-          version: 9
+          dotnet-version: 6.0.x
+
+      - uses: pnpm/action-setup@v4
+        with:
           run_install: false
 
       - name: Get pnpm store directory
@@ -41,7 +45,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run:  pnpm install
+        run:  pnpm install --frozen-lockfile
 
       - name: Build npm packages
         run: pnpm run all:build
@@ -59,6 +63,9 @@ jobs:
     needs: build
 
     steps:
+      - name: Get sources
+      - uses: actions/checkout@v4
+
       - name: Download npm packages
         uses: actions/download-artifact@v4
         with:
@@ -66,15 +73,16 @@ jobs:
           path: npm
 
       - name: Move devextreme package
-        run: mv ./npm/devextreme-2*.tgz ./devextreme.tgz
+        run: mv ./npm/devextreme-2*.tgz ./e2e/devextreme-bundler-test/devextreme.tgz
 
       - name: Setup deps
+        working-directory: ./e2e/devextreme-bundler-test
         run: |
-          npm init -y
-          npm i webpack terser-webpack-plugin
-          npm i ./devextreme.tgz
+          pnpm install --filter devextreme-bundler-test --frozen-lockfile
+          pnpm add ./devextreme.tgz
 
       - name: Build bundle
+        working-directory: ./e2e/devextreme-bundler-test
         run: |
           npx devextreme-bundler-init custom-bundle
           npx devextreme-bundler custom-bundle

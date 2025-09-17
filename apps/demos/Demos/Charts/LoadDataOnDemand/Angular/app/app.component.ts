@@ -86,29 +86,34 @@ export class AppComponent {
       endBound: this.getDateString(bounded ? storage[storage.length - 1].date : null),
     };
 
-    if (ajaxArgs.startVisible !== ajaxArgs.startBound
-            && ajaxArgs.endVisible !== ajaxArgs.endBound && !this.packetsLock) {
-      this.packetsLock++;
+    if (
+      ajaxArgs.startVisible !== ajaxArgs.startBound
+      && ajaxArgs.endVisible !== ajaxArgs.endBound
+      && !this.packetsLock
+    ) {
+      this.packetsLock += 1;
       this.component.instance.showLoadingIndicator();
 
       this.getDataFrame(ajaxArgs)
         .then((dataFrame: Record<string, number | Date>[]) => {
-          this.packetsLock--;
-          dataFrame = dataFrame.map((i) => ({
-            date: new Date(i.Date),
-            minTemp: i.MinTemp,
-            maxTemp: i.MaxTemp,
-          }));
+          this.packetsLock -= 1;
 
           const componentStorage = dataSource.store();
 
-          dataFrame.forEach((item) => componentStorage.insert(item));
+          dataFrame
+            .map((i) => ({
+              date: new Date(i.Date),
+              minTemp: i.MinTemp,
+              maxTemp: i.MaxTemp,
+            }))
+            .forEach((item) => componentStorage.insert(item));
+
           dataSource.reload();
 
           this.onVisualRangeChanged();
         })
-        .catch((error) => {
-          this.packetsLock--;
+        .catch(() => {
+          this.packetsLock -= 1;
           dataSource.reload();
         });
     }

@@ -33,9 +33,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -54,7 +53,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: DevExtreme - Build-all
         env:
@@ -102,9 +101,8 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -123,7 +121,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -195,9 +193,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -216,7 +213,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Install tgz
         run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
@@ -234,29 +231,13 @@ jobs:
       #   run: pnpm run ts-check-react
 
   lint:
-    name: ${{ matrix.name }}
+    name: Lint code base
     needs:
       - build-devextreme
       - get-changes
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Lint code base (excluding demos)
-            command: pnpx nx lint-non-demos
-          # NOTE: skipped due to enormous number of errors
-          # - name: Lint demos (1/4)
-          #   command: CONSTEL=1/4 npm run lint-demos
-          # - name: Lint demos (2/4)
-          #   command: CONSTEL=2/4 npm run lint-demos
-          # - name: Lint demos (3/4)
-          #   command: CONSTEL=3/4 npm run lint-demos
-          # - name: Lint demos (4/4)
-          #   command: CONSTEL=4/4 npm run lint-demos
 
     steps:
     - name: Get sources
@@ -279,9 +260,8 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -300,7 +280,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
@@ -319,7 +299,7 @@ jobs:
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: ${{ matrix.command }}
+      run: pnpx nx lint
 
   check_generated_demos:
     name: ${{ matrix.name }}
@@ -346,9 +326,8 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Use Node.js
@@ -442,9 +421,8 @@ jobs:
         name: changed-demos
         path: apps/demos
 
-    - uses: pnpm/action-setup@v3
+    - uses: pnpm/action-setup@v4
       with:
-        version: 9
         run_install: false
 
     - name: Get pnpm store directory
@@ -463,7 +441,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Install tgz
       working-directory: apps/demos
@@ -511,9 +489,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: |
-        node ../../tools/scripts/performance_log.js &
-        pnpx nx test-testcafe
+      run: pnpx nx test-testcafe
 
     - name: Sanitize job name
       if: ${{ failure() }}

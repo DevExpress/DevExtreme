@@ -17,9 +17,8 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-const isProductItem = (item: Product | ProductItem): item is ProductItem => {
-  return !('items' in item);
-}
+const isProductItem = (item: Product | ProductItem): item is ProductItem =>
+  !('items' in item);
 
 @Component({
   selector: 'demo-app',

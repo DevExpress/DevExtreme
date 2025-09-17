@@ -12,7 +12,6 @@ export class Employee {
   Picture: string;
 
   MobilePhone: string;
-
 }
 
 const employees: Employee[] = [

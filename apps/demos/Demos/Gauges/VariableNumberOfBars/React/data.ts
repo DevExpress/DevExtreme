@@ -27,4 +27,3 @@ export const products = [{
   count: 19,
   active: true,
 }];
-

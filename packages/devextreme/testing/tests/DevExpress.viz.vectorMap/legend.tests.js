@@ -1,14 +1,20 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const coreLegendModule = require('viz/components/legend');
-const legendModule = require('viz/vector_map/legend');
-const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+    Element,
+    stubClass,
+} from '../../helpers/vizMocks.js';
+import coreLegendModule from 'viz/components/legend';
+import legendModule from 'viz/vector_map/legend';
+import { ThemeManager as ChartThemeManager } from 'viz/components/chart_theme_manager';
+
+const ThemeManager = stubClass(ChartThemeManager);
 
 QUnit.module('Legend', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.container = new vizMocks.Element();
+        this.renderer = new Renderer();
+        this.container = new Element();
         this.addItem = sinon.stub();
         this.removeItem = sinon.stub();
         this.bind = sinon.spy();
@@ -203,7 +209,7 @@ QUnit.test('resize / when size is not set', function(assert) {
     assert.ok(true, 'no errors');
 });
 
-const StubLegend = vizMocks.stubClass(legendModule._TESTS_Legend, null, {
+const StubLegend = stubClass(legendModule._TESTS_Legend, null, {
     $constructor: function() {
         StubLegend.items.push(this);
     }
@@ -215,7 +221,7 @@ QUnit.module('LegendsControl', {
         StubLegend.items = [];
         this.theme = sinon.stub();
         this.parameters = {
-            container: new vizMocks.Element(),
+            container: new Element(),
             themeManager: { theme: this.theme },
             layoutControl: {
                 suspend: sinon.spy(),

@@ -1,18 +1,25 @@
 /* global currentTest */
 
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+    Title,
+    forceThemeOptions,
+    LoadingIndicator,
+    ExportMenu,
+} from '../../helpers/vizMocks.js';
 import registerComponent from 'core/component_registrator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { BaseGauge, formatValue, getSampleText } from 'viz/gauges/base_gauge';
+import { BaseGauge, formatValue, getSampleText } from '__internal/viz/gauges/base_gauge';
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import rendererModule from 'viz/core/renderers/renderer';
 import tooltipModule from 'viz/core/tooltip';
 import translator1DModule from 'viz/translators/translator1d';
-import themeManagerModule from 'viz/gauges/theme_manager';
-import Tracker from 'viz/gauges/tracker';
+import themeManagerModule from '__internal/viz/gauges/theme_manager';
+import Tracker from '__internal/viz/gauges/tracker';
 import graphicObjects from '__internal/common/m_charts';
 
 registerComponent('BaseGauge', BaseGauge);
@@ -26,15 +33,15 @@ const ABSTRACT_METHODS = ['_setupDomainCore', '_setupCodomain', '_getDefaultSize
 const CONTAINER_WIDTH = 200;
 const CONTAINER_HEIGHT = 100;
 
-const StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D);
-const StubThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager);
-const StubTracker = vizMocks.stubClass(Tracker);
+const StubTranslator = stubClass(translator1DModule.Translator1D);
+const StubThemeManager = stubClass(themeManagerModule.ThemeManager);
+const StubTracker = stubClass(Tracker);
 // StubLayoutManager = null,
-const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
-const StubTitle = vizMocks.Title;
+const StubTooltip = stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
+const StubTitle = Title;
 
 StubThemeManager.prototype.setTheme = function() {
-    vizMocks.forceThemeOptions(this);
+    forceThemeOptions(this);
 };
 
 $.each(BASE_METHODS, function(_, name) {
@@ -75,7 +82,7 @@ $.extend(factory, {
 const environment = {
     beforeEach: function() {
         this.$container = $('<div>').css({ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }).appendTo('#qunit-fixture');
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.translator = new StubTranslator();
         this.translator.stub('getDomain').returns([100, 200]);
         this.themeManager = new StubThemeManager();
@@ -98,7 +105,7 @@ const environment = {
         this.clock = sinon.useFakeTimers();
         // this.setAbstractField("_width", 200);
         // this.setAbstractField("_height", 100);
-        loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
+        loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicator);
     },
     afterEach: function() {
         this.$container.remove();
@@ -301,7 +308,7 @@ QUnit.test('T305684. Title is single text', function(assert) {
     this.createGauge({
         title: 'Test'
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.equal(this.title.update.getCall(0).args[1], 'Test');
     assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme('title'));
@@ -314,7 +321,7 @@ QUnit.test('T305684. Subtitle is single text', function(assert) {
             subtitle: 'Test2'
         }
     });
-    vizMocks.forceThemeOptions(this.themeManager);
+    forceThemeOptions(this.themeManager);
 
     assert.deepEqual(this.title.update.getCall(0).args[1], { text: 'Test', subtitle: 'Test2' });
     assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme('title'));
@@ -591,7 +598,7 @@ QUnit.module('Render content on LAYOUT change', {
         environment.beforeEach.apply(this, arguments);
         const that = this;
 
-        this.export = new vizMocks.ExportMenu();
+        this.export = new ExportMenu();
         exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
             return that.export;
         }));

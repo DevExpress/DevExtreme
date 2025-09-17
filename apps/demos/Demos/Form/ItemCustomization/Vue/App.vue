@@ -113,7 +113,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxForm, DxItem, DxLabel, DxGroupItem
+  DxForm, DxItem, DxLabel, DxGroupItem,
 } from 'devextreme-vue/form';
 import { type ValidationRule } from 'devextreme-vue/common';
 import service from './data.ts';

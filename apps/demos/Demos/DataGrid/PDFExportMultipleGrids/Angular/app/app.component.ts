@@ -8,7 +8,7 @@ import {
   DxButtonModule, DxTabPanelModule, DxDataGridModule, DxDataGridComponent,
 } from 'devextreme-angular';
 import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
-import {DataSourceOptions as DataSourceConfig} from 'devextreme-angular/common/data';
+import { DataSourceOptions as DataSourceConfig } from 'devextreme-angular/common/data';
 
 import 'devextreme/data/odata/store';
 

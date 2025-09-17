@@ -146,4 +146,3 @@ const tooltip = {
   position: 'bottom',
 };
 </script>
-

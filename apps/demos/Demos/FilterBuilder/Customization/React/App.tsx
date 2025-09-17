@@ -20,8 +20,7 @@ function App() {
   }, [updateTexts, setValue]);
 
   const calculateFilterExpression: ICustomOperationProps['calculateFilterExpression'] = useCallback((filterValue, field) => (
-    filterValue
-      && filterValue.length
+    filterValue?.length
       && Array.prototype.concat
         .apply(
           [],

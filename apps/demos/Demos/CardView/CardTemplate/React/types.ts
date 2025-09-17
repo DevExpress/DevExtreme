@@ -1,4 +1,4 @@
-import { Vehicle } from "./data";
+import { Vehicle } from './data';
 
 export interface VehicleImageLicenseProps {
   vehicle: Vehicle;

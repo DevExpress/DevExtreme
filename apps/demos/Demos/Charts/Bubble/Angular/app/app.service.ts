@@ -167,7 +167,7 @@ export class Service {
     return populationData;
   }
 
-  getCorrelationSource() : CorrelationDescription[] {
+  getCorrelationSource(): CorrelationDescription[] {
     return correlationSource;
   }
 }

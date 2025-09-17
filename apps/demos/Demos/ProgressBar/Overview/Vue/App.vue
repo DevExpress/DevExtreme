@@ -80,4 +80,3 @@ function timer() {
   background-color: green;
 }
 </style>
-

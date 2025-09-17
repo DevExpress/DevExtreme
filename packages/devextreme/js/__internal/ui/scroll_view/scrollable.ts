@@ -23,6 +23,13 @@ import supportUtils from '@ts/core/utils/m_support';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import {
+  SCROLLABLE_CLASS,
+  SCROLLABLE_CONTAINER_CLASS,
+  SCROLLABLE_CONTENT_CLASS,
+  SCROLLABLE_DISABLED_CLASS,
+  SCROLLABLE_WRAPPER_CLASS,
+} from '@ts/ui/scroll_view/consts';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import NativeStrategy from '@ts/ui/scroll_view/scrollable.native';
 import { SimulatedStrategy } from '@ts/ui/scroll_view/scrollable.simulated';
@@ -35,11 +42,6 @@ import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
-const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const SCROLLABLE_WRAPPER_CLASS = 'dx-scrollable-wrapper';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';

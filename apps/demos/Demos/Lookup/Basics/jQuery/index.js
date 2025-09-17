@@ -14,7 +14,7 @@ $(() => {
     dataSource: new DevExpress.data.DataSource({
       store: new DevExpress.data.ArrayStore({
         data: employeesTasks,
-        key: 'ID'
+        key: 'ID',
       }),
       group: 'Assigned',
     }),

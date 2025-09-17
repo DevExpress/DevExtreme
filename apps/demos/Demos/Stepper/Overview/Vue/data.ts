@@ -29,7 +29,7 @@ export const steps = [
   },
 ];
 
-export const orientations: Array<{ text: string; value: Orientation }> = [
+export const orientations: { text: string; value: Orientation }[] = [
   { text: 'Horizontal', value: 'horizontal' },
   { text: 'Vertical', value: 'vertical' },
 ];

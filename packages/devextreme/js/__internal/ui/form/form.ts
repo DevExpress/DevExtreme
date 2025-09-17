@@ -1974,10 +1974,11 @@ class Form extends Widget<FormProperties> {
     }
 
     const smartPasteText = text ?? await navigator.clipboard.readText();
-
-    if (isDefined(smartPasteText)) {
-      this._showLoadPanel();
+    if (!isDefined(text) && !smartPasteText) {
+      return;
     }
+
+    this._showLoadPanel();
 
     const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
     const fields = dataItems.map((item) => ({

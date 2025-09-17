@@ -415,7 +415,7 @@ $diagram-toolbox-title-size: 18px;
     width: $diagram-small-editor-width;
   }
 
-  .dx-diagram-color-edit-item .dx-dropdowneditor-field-template-wrapper {
+  .dx-diagram-color-edit-item .dx-dropdowneditor-field-before-template-wrapper {
     .dx-diagram-i,
     .dx-icon {
       border-bottom-width: $diagram-toolbar-colorbutton-border-width;
@@ -428,7 +428,7 @@ $diagram-toolbox-title-size: 18px;
 .dx-dropdownmenu-popup {
   .dx-diagram-image-dropdown-item,
   .dx-diagram-color-edit-item {
-    .dx-dropdowneditor-field-template-wrapper {
+    .dx-dropdowneditor-field-before-template-wrapper {
       .dx-diagram-i,
       .dx-icon {
         margin-left: 12px;

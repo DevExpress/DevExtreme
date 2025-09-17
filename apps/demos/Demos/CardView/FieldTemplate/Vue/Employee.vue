@@ -1,5 +1,5 @@
 <template>
-    <button className="task__link-button">{{ employee.Name }}</button>
+  <button className="task__link-button">{{ employee.Name }}</button>
 </template>
 
 <script setup lang="ts">
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const employee = computed(() =>
-  employees.find(e => e.ID === props.employeeID)
+  employees.find((e) => e.ID === props.employeeID),
 );
 </script>
 

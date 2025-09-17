@@ -13,11 +13,18 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class VehicleCard {
   @Input() id!: number;
+
   @Input() model!: string;
+
   @Input() price!: string;
+
   @Input() categoryName!: string;
+
   @Input() modification!: string;
+
   @Input() bodyStyleName!: string;
+
   @Input() horsepower!: string;
+
   @Output() showInfo = new EventEmitter<void>();
 }

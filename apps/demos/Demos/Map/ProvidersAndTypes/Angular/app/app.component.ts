@@ -25,6 +25,7 @@ if (window && window.config?.packageConfigPaths) {
 
 export class AppComponent {
   mapTypes: MapSetting[];
+
   mapProviders: MapSetting[];
 
   apiKey: APIKey = {};

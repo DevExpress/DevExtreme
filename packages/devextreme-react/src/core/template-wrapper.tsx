@@ -54,6 +54,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   const removalListenerElement = useRef<HTMLElement>();
 
   const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
+    // eslint-disable-next-line spellcheck/spell-checker
     if (args?.isUnmounting || isRemovalLocked.current) {
       return;
     }
@@ -64,6 +65,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     ].forEach((el) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
 
     // In case of multiple root elements, letting the widget remove them all sync
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
       onRemoved(componentKey);
     });
@@ -129,14 +131,14 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     : undefined;
 
   return createPortal(
-      <>
-        <RemovalLockerContext.Provider value={removalLocker}>
-          { templateFactory({ data, index, onRendered }) }
-          { hiddenNode }
-          { removalListener }
-        </RemovalLockerContext.Provider>
-      </>,
-      container,
+    <>
+      <RemovalLockerContext.Provider value={removalLocker}>
+        {templateFactory({ data, index, onRendered })}
+        {hiddenNode}
+        {removalListener}
+      </RemovalLockerContext.Provider>
+    </>,
+    container,
   );
 };
 

@@ -2,8 +2,14 @@
   <div>
     <div class="left-side">
       <div class="logo">
-        <img :src="'../../../../images/logo-devav.png'" alt="DEVAV">
-        <img :src="'../../../../images/logo-tasks.png'" alt="Tasks">
+        <img
+          :src="'../../../../images/logo-devav.png'"
+          alt="DEVAV"
+        >
+        <img
+          :src="'../../../../images/logo-tasks.png'"
+          alt="Tasks"
+        >
       </div>
     </div>
     <div class="right-side">

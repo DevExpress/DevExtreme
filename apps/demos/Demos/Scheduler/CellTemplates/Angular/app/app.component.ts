@@ -44,15 +44,16 @@ export class AppComponent {
 
   currentView = this.views[0];
 
+  // eslint-disable-next-line consistent-return
   ariaDescription = () => {
     const disabledDates = this.holidays
-      .filter(date => !this.isWeekend(date))
-      .map(date => new Date(date).toLocaleDateString('en-US', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
+      .filter((date) => !this.isWeekend(date))
+      .map((date) => new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
       );
     if (disabledDates?.length === 1) {
       return `${disabledDates} is a disabled date`;

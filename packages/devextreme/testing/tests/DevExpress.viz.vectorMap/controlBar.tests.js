@@ -1,7 +1,9 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const controlBarModule = require('viz/vector_map/control_bar/control_bar');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
+import * as controlBarModule from 'viz/vector_map/control_bar/control_bar';
 
 function returnValue(value) {
     return function() {
@@ -11,7 +13,7 @@ function returnValue(value) {
 
 const environment = {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.projection = {
             on: sinon.stub().returns(noop),
             isInvertible: returnValue(true)
@@ -414,12 +416,10 @@ QUnit.module('Commands - general', {
             'test-command': this.commandType
         });
     },
-
     afterEach: function() {
         controlBarModule._TESTS_restoreCommandToTypeMap();
         environment.afterEach.apply(this, arguments);
     },
-
     triggerTrackerEvent: function(name, arg) {
         this.tracker.on.lastCall.args[0][name](arg);
     }

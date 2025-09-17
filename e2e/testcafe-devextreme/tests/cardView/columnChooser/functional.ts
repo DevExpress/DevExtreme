@@ -145,3 +145,40 @@ testsFactory({
     ).eql('A');
   },
 });
+
+test('ColumnChooser should receive and render custom texts', async (t) => {
+  const cardView = new CardView('#container');
+
+  const columnChooserBtn = cardView.getColumnChooserButton();
+  await t.click(columnChooserBtn);
+  const columnChooser = cardView.getColumnChooser();
+  const title = columnChooser.getTitle();
+  const emptyMessage = columnChooser.getEmptyMessage();
+  const titleText = await title.innerText;
+  const emptyMessageText = await emptyMessage.innerText;
+
+  await t.expect(titleText).eql('customTitle');
+  await t.expect(emptyMessageText).eql('customEmptyText');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      en: {
+        'dxDataGrid-columnChooserTitle': 'customTitle',
+        'dxDataGrid-columnChooserEmptyText': 'customEmptyText',
+      },
+    });
+  });
+
+  return createWidget('dxCardView', {
+    dataSource: [],
+    keyExpr: 'ID',
+    cardsPerRow: 'auto',
+    cardMinWidth: 300,
+    columnChooser: {
+      enabled: true,
+      mode: 'dragAndDrop',
+      height: '340px',
+    },
+    columns: [],
+  });
+});

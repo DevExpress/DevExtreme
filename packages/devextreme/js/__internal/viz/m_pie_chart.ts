@@ -3,12 +3,12 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { each as _each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
-import consts from '@js/viz/components/consts';
-import { plugins as annotationsPlugins } from '@js/viz/core/annotations';
-import { plugins as centerTemplatePlugins } from '@js/viz/core/center_template';
-import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, normalizeAngle } from '@js/viz/core/utils';
-import { Range } from '@js/viz/translators/range';
-import { Translator1D } from '@js/viz/translators/translator1d';
+import consts from '@ts/viz/components/consts';
+import { plugins as annotationsPlugins } from '@ts/viz/core/annotations';
+import { plugins as centerTemplatePlugins } from '@ts/viz/core/center_template';
+import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, normalizeAngle } from '@ts/viz/core/utils';
+import { Range } from '@ts/viz/translators/range';
+import { Translator1D } from '@ts/viz/translators/translator1d';
 
 import { BaseChart, overlapping } from './chart_components/m_base_chart';
 

@@ -41,6 +41,7 @@ import {
   extractKeywordsPrompt,
 } from './data.ts';
 
+// eslint-disable-next-line vue/max-len
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
   content: string;
 };

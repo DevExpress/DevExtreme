@@ -49,7 +49,7 @@ export class AppComponent {
   };
 
   selectStatus({ value }) {
-    if (value == 'All') {
+    if (value === 'All') {
       this.dataGrid.instance.clearFilter();
     } else {
       this.dataGrid.instance.filter(['Task_Status', '=', value]);

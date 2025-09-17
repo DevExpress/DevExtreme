@@ -88,7 +88,7 @@ const showScrollbarModes = ref([
     value: 'never',
   },
 ]);
-const showScrollbar = ref<DxScrollViewTypes.Properties["showScrollbar"]>('onScroll');
+const showScrollbar = ref<DxScrollViewTypes.Properties['showScrollbar']>('onScroll');
 const scrollByContent = ref(true);
 const scrollByThumb = ref(true);
 const scrollViewWidget = ref();

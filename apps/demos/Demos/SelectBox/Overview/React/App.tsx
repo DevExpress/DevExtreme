@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
+import SelectBox, { FieldAddons, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { ArrayStore } from 'devextreme-react/common/data';
 import notify from 'devextreme/ui/notify';
 
@@ -97,9 +97,10 @@ function App() {
               inputAttr={templatedProductLabel}
               valueExpr="ID"
               defaultValue={products[3].ID}
-              fieldRender={Field}
               itemRender={Item}
-            />
+            >
+              <FieldAddons beforeRender={Field} />
+            </SelectBox>
           </div>
         </div>
       </div>

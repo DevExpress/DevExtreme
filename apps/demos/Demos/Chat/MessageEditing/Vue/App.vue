@@ -60,8 +60,8 @@ const store = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: async() => store,
-  insert: async(message) => {
+  load: async () => store,
+  insert: async (message) => {
     store.push(message);
     return message;
   },
@@ -115,7 +115,7 @@ const editingStrategy = {
     const userId = user.id;
 
     const lastNotDeletedMessage = items.findLast(
-      (item) => item.author?.id === userId && !item.isDeleted
+      (item) => item.author?.id === userId && !item.isDeleted,
     );
 
     return message.id === lastNotDeletedMessage?.id;

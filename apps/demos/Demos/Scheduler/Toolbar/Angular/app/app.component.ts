@@ -60,7 +60,7 @@ export class AppComponent {
     }
 
     const currentDate = this.scheduler.instance.option('currentDate');
-    const cellDuration = this.scheduler.instance.option('cellDuration') as number;
+    const cellDuration = this.scheduler.instance.option('cellDuration');
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate as Date).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;

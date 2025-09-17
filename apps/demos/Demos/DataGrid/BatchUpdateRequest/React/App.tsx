@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { DataGridRef, Column, DataGridTypes, Editing, Pager, } from 'devextreme-react/data-grid';
+import DataGrid, { DataGridRef, Column, DataGridTypes, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
@@ -14,7 +14,8 @@ const ordersStore = createStore({
 });
 
 function normalizeChanges(changes: DataGridTypes.DataChange[]): DataGridTypes.DataChange[] {
-  return changes.map(c => {
+  // eslint-disable-next-line consistent-return
+  return changes.map((c) => {
     switch (c.type) {
       case 'insert':
         return {

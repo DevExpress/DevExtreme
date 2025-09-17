@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import ConfigurationComponent from '../../../nested-option';

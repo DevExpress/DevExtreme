@@ -38,7 +38,7 @@ export class AppComponent {
     loadMode: 'raw',
     load: () => {
       this.isLoaded = false;
-      const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve) => {
         setTimeout(() => {
           resolve(this.simpleProducts);
           this.isLoaded = true;

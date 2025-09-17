@@ -1,6 +1,9 @@
 <template>
   <div class="movie">
-    <img :src="movieInfo.image" :alt="`${movieInfo.text} poster`">
+    <img
+      :src="movieInfo.image"
+      :alt="`${movieInfo.text} poster`"
+    >
     <div class="movie-text">{{ movieInfo.text }}</div>
   </div>
 </template>
@@ -14,7 +17,7 @@ const props = defineProps<{
   appointmentModel: DxSchedulerTypes.AppointmentTemplateData
 }>();
 
-const getMovieInfo = function(data: DxSchedulerTypes.Appointment) {
+const getMovieInfo = function (data: DxSchedulerTypes.Appointment) {
   return Query(moviesData)
     .filter(['id', data.movieId])
     .toArray()[0] || {};

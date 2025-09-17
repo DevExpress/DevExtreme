@@ -1,5 +1,5 @@
 import { getChanges } from '../comparer';
-import { IConfigNode } from '../config-node';
+import { IConfigNode } from '../../types';
 
 const emptyNode: IConfigNode = {
   name: '',

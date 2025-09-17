@@ -227,4 +227,3 @@ export const employees: Employee[] = [{
   Department: 'Human Resources',
   MobilePhone: '(310) 555-7276',
 }];
-

@@ -16,7 +16,7 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['danger', 'default', 'normal', 'success'];
-// eslint-disable-next-line max-len
+// eslint-disable-next-line @stylistic/max-len
 const states = [false] as any[]; // FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`
 
 fixture`Toolbar_OverflowMenu`

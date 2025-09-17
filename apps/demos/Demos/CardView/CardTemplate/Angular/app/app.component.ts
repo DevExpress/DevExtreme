@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { 
+import {
   DxButtonModule,
   DxCardViewModule,
   DxPopupModule,
@@ -30,6 +30,7 @@ export class AppComponent {
   vehicles: Vehicle[];
 
   popupVisible = false;
+
   currentVehicle: Vehicle | null = null;
 
   constructor(service: Service) {
@@ -46,7 +47,7 @@ export class AppComponent {
   }
 
   getFormattedPrice(card: CardInfo): string {
-    const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+    const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
     return priceText?.text ?? '';
   }
 }

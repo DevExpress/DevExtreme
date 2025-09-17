@@ -25,7 +25,7 @@ const props = defineProps<{
 function getFormatDate(value) {
   return formatDate(value, 'shortTime');
 }
-const getMovieById = function(resourceId) {
+const getMovieById = function (resourceId) {
   return Query(moviesData)
     .filter(['id', resourceId])
     .toArray()[0];

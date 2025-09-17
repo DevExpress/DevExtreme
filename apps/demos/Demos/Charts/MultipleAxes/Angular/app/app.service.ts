@@ -18,7 +18,7 @@ export class Population {
   total: number;
 }
 
-const populatinData: Population[] = [{
+const populationData: Population[] = [{
   year: '1750',
   africa: 106000000,
   asia: 502000000,
@@ -86,6 +86,6 @@ const populatinData: Population[] = [{
 @Injectable()
 export class Service {
   getPopulationData(): Population[] {
-    return populatinData;
+    return populationData;
   }
 }

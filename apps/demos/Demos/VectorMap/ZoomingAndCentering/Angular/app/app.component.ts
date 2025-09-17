@@ -36,6 +36,7 @@ export class AppComponent {
     this.markers = service.getMarkers();
   }
 
+  // eslint-disable-next-line consistent-return
   customizeTooltip(arg) {
     if (arg.layer.type === 'marker') {
       return {

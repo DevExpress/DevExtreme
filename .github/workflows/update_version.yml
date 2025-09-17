@@ -28,9 +28,8 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -49,7 +48,7 @@ jobs:
             ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Setup git config
         run: |
