@@ -2665,6 +2665,21 @@ QUnit.module('file uploading', moduleConfig, () => {
             assert.equal($(message).text(), instance.option('uploadAbortedMessage'), 'has uploadAbortedMessage');
         });
     });
+
+    QUnit.test('should trigger native input click to open a system dialog on upload button click (T1307271)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader();
+        const instance = $fileUploader.dxFileUploader('instance');
+        const inputElement = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`).get(0);
+        const nativeClickSpy = sinon.spy();
+
+        inputElement.addEventListener('click', nativeClickSpy);
+
+        instance._selectFileDialogClickHandler();
+
+        assert.strictEqual(nativeClickSpy.calledOnce, true, 'native click triggered');
+
+        inputElement.removeEventListener('click', nativeClickSpy);
+    });
 });
 
 QUnit.module('uploading progress', moduleConfig, () => {
