@@ -22,7 +22,6 @@ test('Default render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxTreeList', {
-  height: 600,
   dataSource: [
     {
       id: 1, parentId: 0, name: 'Name 1', value: 10,

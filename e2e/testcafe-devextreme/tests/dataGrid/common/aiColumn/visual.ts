@@ -22,7 +22,6 @@ test('Default render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
-  height: 600,
   dataSource: [
     { id: 1, name: 'Name 1', value: 10 },
     { id: 2, name: 'Name 2', value: 20 },
