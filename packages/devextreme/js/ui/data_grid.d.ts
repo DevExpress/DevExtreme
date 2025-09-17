@@ -183,7 +183,7 @@ export type ScrollingBase = ComponentScrollingBase;
 export type SelectionBase = ComponentSelectionBase;
 
 /** @public */
-export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
+export type DataGridCommandColumnType = 'adaptive' | 'ai' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 /** @public */
 export type DataGridExportFormat = 'pdf' | 'xlsx';
 /** @public */
