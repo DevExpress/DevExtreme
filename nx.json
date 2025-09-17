@@ -9,6 +9,7 @@
       { "externalDependencies": [ "devextreme-internal-tools", "ts-node", "typescript"] }
     ]
   },
+  "parallel": 1,
   "targetDefaults": {
     "build": {
       "dependsOn": [
