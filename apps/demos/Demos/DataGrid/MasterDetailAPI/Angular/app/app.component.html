@@ -6,14 +6,14 @@
   (onContentReady)="onContentReady($event)"
   [showBorders]="true"
 >
-  <dxo-selection mode="single"></dxo-selection>
-  <dxo-master-detail [enabled]="false" template="detail"></dxo-master-detail>
-  <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="Position" [width]="170"></dxi-column>
-  <dxi-column dataField="State" [width]="125"></dxi-column>
-  <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
+  <dxo-data-grid-selection mode="single"></dxo-data-grid-selection>
+  <dxo-data-grid-master-detail [enabled]="false" template="detail"></dxo-data-grid-master-detail>
+  <dxi-data-grid-column dataField="Prefix" [width]="70" caption="Title"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position" [width]="170"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="State" [width]="125"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="BirthDate" dataType="date"></dxi-data-grid-column>
 
   <div *dxTemplate="let employee of 'detail'">
     <div class="employeeInfo">

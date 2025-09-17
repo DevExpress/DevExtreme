@@ -8,36 +8,36 @@
   [focusedRowEnabled]="true"
   [expandedRowKeys]="[1, 2, 3, 5]"
 >
-  <dxo-editing
+  <dxo-tree-list-editing
     [allowUpdating]="true"
     [allowDeleting]="true"
     [selectTextOnEditStart]="true"
     [useIcons]="true"
   >
-  </dxo-editing>
+  </dxo-tree-list-editing>
 
-  <dxo-header-filter [visible]="true"> </dxo-header-filter>
+  <dxo-tree-list-header-filter [visible]="true"> </dxo-tree-list-header-filter>
 
-  <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
+  <dxo-tree-list-filter-panel [visible]="true"> </dxo-tree-list-filter-panel>
 
-  <dxo-filter-row [visible]="true"> </dxo-filter-row>
+  <dxo-tree-list-filter-row [visible]="true"> </dxo-tree-list-filter-row>
 
-  <dxo-scrolling mode="standard"> </dxo-scrolling>
+  <dxo-tree-list-scrolling mode="standard"> </dxo-tree-list-scrolling>
 
-  <dxo-paging [enabled]="true" [pageSize]="10"> </dxo-paging>
+  <dxo-tree-list-paging [enabled]="true" [pageSize]="10"> </dxo-tree-list-paging>
 
-  <dxo-pager
+  <dxo-tree-list-pager
     [allowedPageSizes]="[5, 10]"
     [showPageSizeSelector]="true"
     [showNavigationButtons]="true"
   >
-  </dxo-pager>
+  </dxo-tree-list-pager>
 
-  <dxi-column dataField="Full_Name"> </dxi-column>
+  <dxi-tree-list-column dataField="Full_Name"> </dxi-tree-list-column>
 
-  <dxi-column dataField="Title" caption="Position"> </dxi-column>
+  <dxi-tree-list-column dataField="Title" caption="Position"> </dxi-tree-list-column>
 
-  <dxi-column dataField="City"> </dxi-column>
+  <dxi-tree-list-column dataField="City"> </dxi-tree-list-column>
 
-  <dxi-column dataField="State"> </dxi-column>
+  <dxi-tree-list-column dataField="State"> </dxi-tree-list-column>
 </dx-tree-list>

@@ -6,38 +6,38 @@
   [showBorders]="true"
   [focusedRowEnabled]="true"
 >
-  <dxo-editing
+  <dxo-data-grid-editing
     [allowUpdating]="true"
     [allowDeleting]="true"
     [selectTextOnEditStart]="true"
     [useIcons]="true"
   >
-  </dxo-editing>
+  </dxo-data-grid-editing>
 
-  <dxo-header-filter [visible]="true"> </dxo-header-filter>
+  <dxo-data-grid-header-filter [visible]="true"> </dxo-data-grid-header-filter>
 
-  <dxo-filter-panel [visible]="true"> </dxo-filter-panel>
+  <dxo-data-grid-filter-panel [visible]="true"> </dxo-data-grid-filter-panel>
 
-  <dxo-filter-row [visible]="true"> </dxo-filter-row>
+  <dxo-data-grid-filter-row [visible]="true"> </dxo-data-grid-filter-row>
 
-  <dxo-paging [pageSize]="10"> </dxo-paging>
+  <dxo-data-grid-paging [pageSize]="10"> </dxo-data-grid-paging>
 
-  <dxo-pager
+  <dxo-data-grid-pager
     [allowedPageSizes]="[5, 10]"
     [showPageSizeSelector]="true"
     [showNavigationButtons]="true"
   >
-  </dxo-pager>
-  <dxo-pager [visible]="true"></dxo-pager>
+  </dxo-data-grid-pager>
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
 
-  <dxi-column dataField="FirstName"> </dxi-column>
+  <dxi-data-grid-column dataField="FirstName"> </dxi-data-grid-column>
 
-  <dxi-column dataField="LastName"> </dxi-column>
+  <dxi-data-grid-column dataField="LastName"> </dxi-data-grid-column>
 
-  <dxi-column dataField="Position"> </dxi-column>
+  <dxi-data-grid-column dataField="Position"> </dxi-data-grid-column>
 
-  <dxi-column dataField="StateID" caption="State">
-    <dxo-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
-    </dxo-lookup>
-  </dxi-column>
+  <dxi-data-grid-column dataField="StateID" caption="State">
+    <dxo-data-grid-lookup [dataSource]="states" valueExpr="ID" displayExpr="Name">
+    </dxo-data-grid-lookup>
+  </dxi-data-grid-column>
 </dx-data-grid>

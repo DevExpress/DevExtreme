@@ -11,35 +11,35 @@
     (onEditorPreparing)="editorPreparing($event)"
     (onInitNewRow)="initNewRow($event)"
   >
-    <dxo-editing
+    <dxo-tree-list-editing
       mode="row"
       [allowUpdating]="true"
       [allowDeleting]="allowDeleting"
       [allowAdding]="true"
     >
-    </dxo-editing>
+    </dxo-tree-list-editing>
 
-    <dxi-column dataField="Full_Name">
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="Head_ID" caption="Head">
-      <dxo-lookup
+    <dxi-tree-list-column dataField="Full_Name">
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column dataField="Head_ID" caption="Head">
+      <dxo-tree-list-lookup
         [dataSource]="lookupData"
         valueExpr="ID"
         displayExpr="Full_Name"
       >
-      </dxo-lookup>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="Title" caption="Position">
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column dataField="Hire_Date" dataType="date" [width]="120">
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dxi-column>
-    <dxi-column type="buttons">
-      <dxi-button name="edit"></dxi-button>
-      <dxi-button name="delete"></dxi-button>
-    </dxi-column>
+      </dxo-tree-list-lookup>
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column dataField="Title" caption="Position">
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column dataField="Hire_Date" dataType="date" [width]="120">
+      <dxi-tree-list-validation-rule type="required"></dxi-tree-list-validation-rule>
+    </dxi-tree-list-column>
+    <dxi-tree-list-column type="buttons">
+      <dxi-tree-list-button name="edit"></dxi-tree-list-button>
+      <dxi-tree-list-button name="delete"></dxi-tree-list-button>
+    </dxi-tree-list-column>
   </dx-tree-list>
 </div>

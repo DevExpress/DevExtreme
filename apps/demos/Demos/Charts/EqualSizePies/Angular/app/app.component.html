@@ -7,15 +7,15 @@
     [dataSource]="options.dataSource"
     sizeGroup="piesGroup"
   >
-    <dxi-series argumentField="name" valueField="area">
-      <dxo-label [visible]="true" format="percent"></dxo-label>
-    </dxi-series>
-    <dxo-legend
+    <dxi-pie-chart-series argumentField="name" valueField="area">
+      <dxo-pie-chart-label [visible]="true" format="percent"></dxo-pie-chart-label>
+    </dxi-pie-chart-series>
+    <dxo-pie-chart-legend
       verticalAlignment="bottom"
       horizontalAlignment="center"
       itemTextPosition="right"
       [rowCount]="2"
     >
-    </dxo-legend>
+    </dxo-pie-chart-legend>
   </dx-pie-chart>
 </div>

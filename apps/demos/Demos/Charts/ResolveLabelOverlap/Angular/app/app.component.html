@@ -1,9 +1,9 @@
 <dx-chart id="chart" [dataSource]="population" title="Population by Countries">
-  <dxi-series argumentField="country"></dxi-series>
-  <dxo-argument-axis>
-    <dxo-label wordWrap="none" [overlappingBehavior]="currentMode"></dxo-label>
-  </dxo-argument-axis>
-  <dxo-legend [visible]="false"></dxo-legend>
+  <dxi-chart-series argumentField="country"></dxi-chart-series>
+  <dxo-chart-argument-axis>
+    <dxo-chart-label wordWrap="none" [overlappingBehavior]="currentMode"></dxo-chart-label>
+  </dxo-chart-argument-axis>
+  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
 </dx-chart>
 <div class="options">
   <div class="caption">Options</div>

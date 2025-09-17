@@ -18,29 +18,29 @@
   [dataSource]="tasks"
   [showBorders]="true"
 >
-  <dxo-pager [visible]="true"></dxo-pager>
-  <dxi-column dataField="Task_ID" [width]="80" dataType="number"></dxi-column>
-  <dxi-column
+  <dxo-data-grid-pager [visible]="true"></dxo-data-grid-pager>
+  <dxi-data-grid-column dataField="Task_ID" [width]="80" dataType="number"></dxi-data-grid-column>
+  <dxi-data-grid-column
     dataField="Task_Start_Date"
     dataType="date"
     caption="Start Date"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     cssClass="employee"
     dataField="ResponsibleEmployee.Employee_Full_Name"
     dataType="string"
     caption="Assigned To"
     [allowSorting]="false"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     dataField="Task_Subject"
     [width]="350"
     dataType="string"
     caption="Subject"
-  ></dxi-column>
-  <dxi-column
+  ></dxi-data-grid-column>
+  <dxi-data-grid-column
     dataField="Task_Status"
     dataType="string"
     caption="Status"
-  ></dxi-column>
+  ></dxi-data-grid-column>
 </dx-data-grid>

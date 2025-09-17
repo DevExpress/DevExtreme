@@ -7,41 +7,41 @@
   [showBorders]="true"
   [columnAutoWidth]="true"
 >
-  <dxo-column-chooser
+  <dxo-data-grid-column-chooser
     height="340px"
     #columnChooser
     [enabled]="true"
     [mode]="columnChooserModes[1].key"
   >
-    <dxo-position
+    <dxo-data-grid-position
       my="right top"
       at="right bottom"
       of=".dx-datagrid-column-chooser-button"
-    ></dxo-position>
+    ></dxo-data-grid-position>
 
-    <dxo-search
+    <dxo-data-grid-search
       [enabled]="searchEnabled"
       [editorOptions]="editorOptions"
-    ></dxo-search>
+    ></dxo-data-grid-search>
 
-    <dxo-selection
+    <dxo-data-grid-selection
       [allowSelectAll]="allowSelectAll"
       [selectByClick]="selectByClick"
       [recursive]="recursive"
-    ></dxo-selection>
-  </dxo-column-chooser>
+    ></dxo-data-grid-selection>
+  </dxo-data-grid-column-chooser>
 
-  <dxi-column dataField="FirstName" [allowHiding]="false"></dxi-column>
-  <dxi-column dataField="LastName" [allowHiding]="false"></dxi-column>
-  <dxi-column dataField="Position"></dxi-column>
-  <dxi-column dataField="City"></dxi-column>
-  <dxi-column dataField="State"></dxi-column>
-  <dxi-column caption="Contacts">
-    <dxi-column dataField="MobilePhone" [allowHiding]="false"></dxi-column>
-    <dxi-column dataField="Email"></dxi-column>
-    <dxi-column dataField="Skype" [visible]="false"></dxi-column>
-  </dxi-column>
-  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+  <dxi-data-grid-column dataField="FirstName" [allowHiding]="false"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName" [allowHiding]="false"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="State"></dxi-data-grid-column>
+  <dxi-data-grid-column caption="Contacts">
+    <dxi-data-grid-column dataField="MobilePhone" [allowHiding]="false"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Email"></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="Skype" [visible]="false"></dxi-data-grid-column>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
 </dx-data-grid>
 
 <div class="options">

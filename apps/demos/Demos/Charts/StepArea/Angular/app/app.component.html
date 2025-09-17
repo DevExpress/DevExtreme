@@ -1,26 +1,26 @@
 <dx-chart id="chart" title="Australian Medal Count" [dataSource]="medalsInfo">
-  <dxi-series
+  <dxi-chart-series
     valueField="bronze"
     name="Bronze Medals"
     color="#cd7f32"
-  ></dxi-series>
-  <dxi-series
+  ></dxi-chart-series>
+  <dxi-chart-series
     valueField="silver"
     name="Silver Medals"
     color="#c0c0c0"
-  ></dxi-series>
-  <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
-  <dxo-common-series-settings argumentField="year" type="steparea">
+  ></dxi-chart-series>
+  <dxi-chart-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-chart-series>
+  <dxo-chart-common-series-settings argumentField="year" type="steparea">
     <dxo-steparea>
-      <dxo-border [visible]="false"></dxo-border>
+      <dxo-chart-border [visible]="false"></dxo-chart-border>
     </dxo-steparea>
-  </dxo-common-series-settings>
-  <dxo-argument-axis [valueMarginsEnabled]="false">
-    <dxo-label>
-      <dxo-format type="decimal"></dxo-format>
-    </dxo-label>
-  </dxo-argument-axis>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-legend>
+  </dxo-chart-common-series-settings>
+  <dxo-chart-argument-axis [valueMarginsEnabled]="false">
+    <dxo-chart-label>
+      <dxo-chart-format type="decimal"></dxo-chart-format>
+    </dxo-chart-label>
+  </dxo-chart-argument-axis>
+  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-chart-legend>
 </dx-chart>

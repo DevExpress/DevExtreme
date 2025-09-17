@@ -1,16 +1,16 @@
 <div id="data-grid-demo">
   <dx-data-grid [dataSource]="payments">
-    <dxi-column
+    <dxi-data-grid-column
       dataField="PaymentId"
       [caption]="formatMessage('Number')"
       [allowEditing]="false"
       width="100"
-    ></dxi-column>
-    <dxi-column dataField="ContactName" [caption]="formatMessage('Contact')">
-    </dxi-column>
-    <dxi-column dataField="CompanyName" [caption]="formatMessage('Company')">
-    </dxi-column>
-    <dxi-column
+    ></dxi-data-grid-column>
+    <dxi-data-grid-column dataField="ContactName" [caption]="formatMessage('Contact')">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column dataField="CompanyName" [caption]="formatMessage('Company')">
+    </dxi-data-grid-column>
+    <dxi-data-grid-column
       dataField="Amount"
       [caption]="formatMessage('Amount')"
       dataType="number"
@@ -23,17 +23,17 @@
         }
       }"
     >
-    </dxi-column>
-    <dxi-column
+    </dxi-data-grid-column>
+    <dxi-data-grid-column
       dataField="PaymentDate"
       [caption]="formatMessage('PaymentDate')"
       dataType="date"
     >
-    </dxi-column>
-    <dxo-filter-row [visible]="true" [applyFilter]="auto"> </dxo-filter-row>
-    <dxo-editing mode="popup" [allowUpdating]="true">
-      <dxo-popup [width]="700" [height]="345"> </dxo-popup>
-    </dxo-editing>
+    </dxi-data-grid-column>
+    <dxo-data-grid-filter-row [visible]="true" [applyFilter]="auto"> </dxo-data-grid-filter-row>
+    <dxo-data-grid-editing mode="popup" [allowUpdating]="true">
+      <dxo-data-grid-popup [width]="700" [height]="345"> </dxo-data-grid-popup>
+    </dxo-data-grid-editing>
   </dx-data-grid>
 
   <div class="options">
