@@ -160,6 +160,7 @@ QUnit.module('Async render', () => {
 
             assert.strictEqual($firstCheckbox.eq(0).hasClass(CHECKBOX_CHECKED_CLASS), true, 'checkbox has selected class');
             assert.strictEqual(firstCheckboxInstance.option('value'), true, 'checkbox value is correct');
+            assert.strictEqual(instance.getSelectedNodeKeys()[0], 1, 'item is selected');
 
             done();
         }, asyncTemplateRenderTimeout);
