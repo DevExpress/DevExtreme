@@ -12,7 +12,7 @@ import 'ui/pivot_grid/ui.pivot_grid';
 import 'generic_light.css!';
 
 import { DataController__internals } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
-import PivotGridExport from '__internal/grids/pivot_grid/export/m_export';
+import { PivotGridExport } from '__internal/grids/pivot_grid/export/m_export';
 
 let helper;
 
@@ -23,7 +23,6 @@ const alignRightTopNoWrap = { horizontal: 'right', vertical: 'top', wrapText: fa
 const alignCenterTopWrap = { horizontal: 'center', vertical: 'top', wrapText: true };
 const alignCenterTopNoWrap = { horizontal: 'center', vertical: 'top', wrapText: false };
 
-// eslint-disable-next-line spellcheck/spell-checker
 const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
 const defaultBorderStyle = {
     bottom: borderStyle,
@@ -672,9 +671,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'column' && pivotCell.text === '$20') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
@@ -835,9 +834,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'row' && pivotCell.text === '$15') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
@@ -3945,9 +3944,9 @@ QUnit.module('Scenarios', moduleConfig, () => {
             customizeCell: ({ excelCell, pivotCell }) => {
                 if(pivotCell.area === 'row' && pivotCell.text === '$15') {
                     Object.assign(excelCell, {
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFC7CE' } },
-                        // eslint-disable-next-line spellcheck/spell-checker
+
                         font: { color: { argb: '9C0006' }, bold: true }
                     });
                 }
