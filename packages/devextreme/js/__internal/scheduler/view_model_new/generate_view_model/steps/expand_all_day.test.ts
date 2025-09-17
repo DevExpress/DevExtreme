@@ -27,7 +27,7 @@ describe('expandAllDay', () => {
     ]);
   });
 
-  it('should set end date to 1ms after startDayHour=24 to all day appointment', () => {
+  it('should set dates to all day appointment without offset', () => {
     expect(expandAllDay([
       {
         allDay: true,
@@ -49,7 +49,7 @@ describe('expandAllDay', () => {
         endDateUTC: Date.UTC(2020, 0, 10, 23, 59),
       }, {
         allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        startDateUTC: Date.UTC(2020, 0, 10),
         endDateUTC: Date.UTC(2020, 0, 11, 23, 59),
       }, {
         allDay: true,
@@ -59,7 +59,7 @@ describe('expandAllDay', () => {
     ]);
   });
 
-  it('should set end date for all day appointment with offset', () => {
+  it('should set dates for all day appointment with offset', () => {
     expect(expandAllDay([
       {
         allDay: true,
@@ -81,7 +81,7 @@ describe('expandAllDay', () => {
         endDateUTC: Date.UTC(2020, 0, 10, 2, 59),
       }, {
         allDay: true,
-        startDateUTC: Date.UTC(2020, 0, 10, 4),
+        startDateUTC: Date.UTC(2020, 0, 10, 3),
         endDateUTC: Date.UTC(2020, 0, 11, 2, 59),
       }, {
         allDay: true,

@@ -29,14 +29,19 @@ export const generateRecurrenceUTCDates = <
     return [appointment.source.startDate];
   }
 
+  const startDateOffset = getDateOffsetMs(appointment.source.startDate, startDateTimeZone);
+  const targetOffset = getDateOffsetMs(appointment.source.startDate, timeZone);
   const startDateOffsetBase = startDateTimeZone
-    ? getDateOffsetMs(appointment.source.startDate, startDateTimeZone)
-      - getDateOffsetMs(appointment.source.startDate, timeZone)
-    : getDateOffsetMs(appointment.source.startDate, timeZone);
+    ? startDateOffset - targetOffset
+    : targetOffset;
   // NOTE: Add offset only for correct recurrence calculation for rule with BYDAY=MO,WE,FR
   // Target time zone day and UTC day are different
   const duration = appointment.source.endDate - appointment.source.startDate;
   const start = appointment.source.startDate + startDateOffsetBase;
+
+  // NOTE: interval dates already have target time zone offset
+  const min = interval.min - duration - targetOffset + startDateOffsetBase;
+  const max = interval.max - targetOffset + startDateOffsetBase;
 
   const rule = parseRecurrenceRule(appointment.recurrenceRule);
   const ruleOptions = RRule.parseString(appointment.recurrenceRule);
@@ -56,6 +61,6 @@ export const generateRecurrenceUTCDates = <
   rRuleSet.rrule(rRule);
 
   return rRuleSet
-    .between(new Date(interval.min - duration), new Date(interval.max), true)
+    .between(new Date(min), new Date(max), true)
     .map((date) => date.getTime() - startDateOffsetBase);
 };

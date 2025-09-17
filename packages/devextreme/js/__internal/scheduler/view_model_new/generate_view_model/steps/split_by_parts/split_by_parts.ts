@@ -77,6 +77,10 @@ export const splitByParts = <T extends ListEntity>(
   return entities
     .reduce<(T & AppointmentPart)[]>((result, entity) => {
       const startIndex = intervals.findIndex(({ max }) => entity.startDateUTC < max);
+      if (startIndex === -1) {
+        return result;
+      }
+
       const endIndex = getEndIndex(intervals, entity.endDateUTC);
       const partCount = endIndex - startIndex + 1;
       const isStartOnPrevView = entity.startDateUTC < prevIntervalEndDate;
