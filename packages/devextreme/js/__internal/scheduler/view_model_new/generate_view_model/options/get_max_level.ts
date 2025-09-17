@@ -16,7 +16,7 @@ interface Options {
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
 const MIN_APPOINTMENT_COUNT = 1;
-const CELL_MIN_SIZE = 30;
+const CELL_MIN_WIDTH = 30;
 
 export const getMaxLevel = ({
   maxAppointmentsPerCell,
@@ -32,7 +32,7 @@ export const getMaxLevel = ({
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 
-      const isSmallCell = cellSize.width <= CELL_MIN_SIZE || cellSize.height <= CELL_MIN_SIZE;
+      const isSmallCell = cellSize.width < CELL_MIN_WIDTH;
       if (isSmallCell) {
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
