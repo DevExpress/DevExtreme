@@ -25,11 +25,11 @@ import {
   chartSeriesObject,
   dxChartAnnotationConfig,
   PointInfo as ChartPointInfo,
-} from "../chart";
+} from '../chart';
 
-import { PointInfo as PieChartPointInfo } from "../pie_chart";
+import { PointInfo as PieChartPointInfo } from '../pie_chart';
 
-import { PointInfo as PolarPointInfo } from "../polar_chart";
+import { PointInfo as PolarPointInfo } from '../polar_chart';
 
 import {
   BaseLegend,
