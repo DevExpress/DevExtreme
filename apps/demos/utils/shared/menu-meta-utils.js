@@ -139,13 +139,23 @@ const getByPath = (menuMetaData, pathParts) => {
   return result;
 }
 
+const difference = (firstSet, secondSet) => {
+  const result = new Set(firstSet);
+  for (const item of firstSet) {
+    if (secondSet.has(item)) {
+      result.delete(item);
+    }
+  }
+  return result;
+}
+
 const prepareModules = (modules) => {
   const complexSet = new Set(modules);
   const simplifiedSet = new Set(modules.map(module => module.split('&')).flat());
 
-  const combinedModules = complexSet.difference(simplifiedSet);
+  const combinedModules = difference(complexSet, simplifiedSet);
   const simplifiedCombinedModulesSet = new Set(Array.from(combinedModules).map(module => module.split('&')).flat())
-  return Array.from(complexSet.difference(simplifiedCombinedModulesSet));
+  return Array.from(difference(complexSet, simplifiedCombinedModulesSet));
 }
 
 module.exports = {
