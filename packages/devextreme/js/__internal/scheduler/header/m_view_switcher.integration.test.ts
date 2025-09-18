@@ -1,0 +1,88 @@
+import {
+  afterEach,
+  describe, expect, it,
+} from '@jest/globals';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+
+import type { Properties as SchedulerProperties } from '../../../ui/scheduler';
+import Scheduler from '../../../ui/scheduler';
+
+const SCHEDULER_CONTAINER_ID = 'schedulerContainer';
+
+const SELECTORS = {
+  schedulerContainer: '#schedulerContainer',
+  invisibleState: '.dx-state-invisible',
+  viewSwitcher: '.dx-scheduler-view-switcher',
+};
+
+const createScheduler = (options: SchedulerProperties): Promise<{
+  $container: dxElementWrapper; instance: Scheduler;
+}> => new Promise((resolve) => {
+  const $container = $('<div>')
+    .attr('id', SCHEDULER_CONTAINER_ID)
+    .appendTo(document.body);
+
+  const instance = new Scheduler($container.get(0) as HTMLDivElement, {
+    ...options,
+    onContentReady: (): void => {
+      resolve({ $container, instance });
+    },
+  });
+});
+
+describe('ViewSwitcher', () => {
+  afterEach(() => {
+    const $container = $(SELECTORS.schedulerContainer);
+
+    const scheduler = ($container as any).dxScheduler('instance') as Scheduler;
+
+    scheduler.dispose();
+    $container.remove();
+  });
+
+  describe('Visibility', () => {
+    it.each(
+      [
+        {
+          useDropDownViewSwitcher: true, views: ['day'], currentView: 'day', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: true, views: ['day'], currentView: 'week', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: true, views: [], currentView: 'day', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: true, views: ['day', 'week'], currentView: 'day', expectedVisibility: true,
+        },
+        {
+          useDropDownViewSwitcher: false, views: ['day'], currentView: 'day', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: false, views: ['day'], currentView: 'week', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: false, views: [], currentView: 'day', expectedVisibility: false,
+        },
+        {
+          useDropDownViewSwitcher: false, views: ['day', 'week'], currentView: 'day', expectedVisibility: true,
+        },
+      ],
+    )(
+      'view switcher should be visible: $expectedVisibility, when useDropDownViewSwitcher: $useDropDownViewSwitcher views: $views, currentView: $currentView',
+      async ({
+        useDropDownViewSwitcher, views, currentView, expectedVisibility,
+      }) => {
+        const { $container } = await createScheduler({
+          useDropDownViewSwitcher,
+          currentView,
+          views: views as SchedulerProperties['views'],
+        });
+
+        const viewSwitcher = $container.find(SELECTORS.viewSwitcher);
+        expect(!viewSwitcher.is(SELECTORS.invisibleState)).toBe(expectedVisibility);
+      },
+    );
+  });
+});
