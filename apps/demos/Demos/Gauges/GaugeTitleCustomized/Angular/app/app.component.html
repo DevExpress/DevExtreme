@@ -1,14 +1,14 @@
 <dx-circular-gauge id="gauge" [value]="7.78" centerTemplate="centerTemplate">
-  <dxo-scale [startValue]="0" [endValue]="10" [tickInterval]="1">
-    <dxo-minor-tick [visible]="true"></dxo-minor-tick>
-  </dxo-scale>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-range-container backgroundColor="#03a9f4"></dxo-range-container>
-  <dxo-value-indicator color="#03a9f4"></dxo-value-indicator>
-  <dxo-title text="Gold Production (in Kilograms)" verticalAlignment="bottom">
-    <dxo-font [size]="25"></dxo-font>
-    <dxo-margin top="25"></dxo-margin>
-  </dxo-title>
+  <dxo-circular-gauge-scale [startValue]="0" [endValue]="10" [tickInterval]="1">
+    <dxo-circular-gauge-minor-tick [visible]="true"></dxo-circular-gauge-minor-tick>
+  </dxo-circular-gauge-scale>
+  <dxo-circular-gauge-export [enabled]="true"></dxo-circular-gauge-export>
+  <dxo-circular-gauge-range-container backgroundColor="#03a9f4"></dxo-circular-gauge-range-container>
+  <dxo-circular-gauge-value-indicator color="#03a9f4"></dxo-circular-gauge-value-indicator>
+  <dxo-circular-gauge-title text="Gold Production (in Kilograms)" verticalAlignment="bottom">
+    <dxo-circular-gauge-font [size]="25"></dxo-circular-gauge-font>
+    <dxo-circular-gauge-margin top="25"></dxo-circular-gauge-margin>
+  </dxo-circular-gauge-title>
   <svg *dxTemplate="let gauge of 'centerTemplate'">
     <rect x="0" y="0" width="200" height="200" fill="transparent"></rect>
     <g transform="translate(50 0)">

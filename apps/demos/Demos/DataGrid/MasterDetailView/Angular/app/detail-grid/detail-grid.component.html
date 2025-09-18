@@ -3,13 +3,13 @@
   [showBorders]="true"
   [columnAutoWidth]="true"
 >
-  <dxi-column dataField="Subject" dataType="string"></dxi-column>
-  <dxi-column dataField="StartDate" dataType="date"></dxi-column>
-  <dxi-column dataField="DueDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Priority" dataType="string"></dxi-column>
-  <dxi-column
+  <dxi-data-grid-column dataField="Subject" dataType="string"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="StartDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="DueDate" dataType="date"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Priority" dataType="string"></dxi-data-grid-column>
+  <dxi-data-grid-column
     caption="Completed"
     dataType="boolean"
     [calculateCellValue]="completedValue"
-  ></dxi-column>
+  ></dxi-data-grid-column>
 </dx-data-grid>

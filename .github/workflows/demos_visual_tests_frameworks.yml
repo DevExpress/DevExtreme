@@ -66,6 +66,13 @@ jobs:
           mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
           mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
           mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
+          # Override with custom devextreme-angular TGZ if it exists
+          if ls ./.github/custom-packages/devextreme-angular-*.tgz 1> /dev/null 2>&1; then
+            echo "Using custom devextreme-angular package"
+            cp ./.github/custom-packages/devextreme-angular-*.tgz ./devextreme-angular-installer.tgz
+          else
+            echo "Using built devextreme-angular package"
+          fi
           mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
           mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 

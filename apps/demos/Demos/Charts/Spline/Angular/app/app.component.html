@@ -4,29 +4,29 @@
     [dataSource]="architecturesInfo"
     title="Architecture Share Over Time (Count)"
   >
-    <dxi-series valueField="smp" name="SMP"></dxi-series>
-    <dxi-series valueField="mmp" name="MMP"></dxi-series>
-    <dxi-series valueField="cnstl" name="Cnstl"></dxi-series>
-    <dxi-series valueField="cluster" name="Cluster"></dxi-series>
-    <dxo-common-series-settings
+    <dxi-chart-series valueField="smp" name="SMP"></dxi-chart-series>
+    <dxi-chart-series valueField="mmp" name="MMP"></dxi-chart-series>
+    <dxi-chart-series valueField="cnstl" name="Cnstl"></dxi-chart-series>
+    <dxi-chart-series valueField="cluster" name="Cluster"></dxi-chart-series>
+    <dxo-chart-common-series-settings
       #seriesSettings
       argumentField="year"
       [type]="types[0]"
     >
-    </dxo-common-series-settings>
-    <dxo-margin [bottom]="20"></dxo-margin>
-    <dxo-common-axis-settings>
-      <dxo-grid [visible]="true"></dxo-grid>
-    </dxo-common-axis-settings>
-    <dxo-legend verticalAlignment="top" horizontalAlignment="right">
-    </dxo-legend>
-    <dxo-argument-axis [allowDecimals]="false" [axisDivisionFactor]="60">
-      <dxo-label>
-        <dxo-format type="decimal"></dxo-format>
-      </dxo-label>
-    </dxo-argument-axis>
-    <dxo-export [enabled]="true"></dxo-export>
-    <dxo-tooltip [enabled]="true"></dxo-tooltip>
+    </dxo-chart-common-series-settings>
+    <dxo-chart-margin [bottom]="20"></dxo-chart-margin>
+    <dxo-chart-common-axis-settings>
+      <dxo-chart-grid [visible]="true"></dxo-chart-grid>
+    </dxo-chart-common-axis-settings>
+    <dxo-chart-legend verticalAlignment="top" horizontalAlignment="right">
+    </dxo-chart-legend>
+    <dxo-chart-argument-axis [allowDecimals]="false" [axisDivisionFactor]="60">
+      <dxo-chart-label>
+        <dxo-chart-format type="decimal"></dxo-chart-format>
+      </dxo-chart-label>
+    </dxo-chart-argument-axis>
+    <dxo-chart-export [enabled]="true"></dxo-chart-export>
+    <dxo-chart-tooltip [enabled]="true"></dxo-chart-tooltip>
   </dx-chart>
   <div class="options">
     <div class="caption">Options</div>

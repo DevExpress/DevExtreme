@@ -4,16 +4,16 @@
   (onContentReady)="contentReadyHandler($event)"
   (onSelectionChanged)="selectionChangedHandler($event)"
 >
-  <dxo-nodes
+  <dxo-diagram-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
     [textExpr]="textExpression"
     parentKeyExpr="Head_ID"
   >
-    <dxo-auto-layout type="tree"></dxo-auto-layout>
-  </dxo-nodes>
-  <dxo-toolbox visibility="disabled"></dxo-toolbox>
-  <dxo-properties-panel visibility="disabled"></dxo-properties-panel>
+    <dxo-diagram-auto-layout type="tree"></dxo-diagram-auto-layout>
+  </dxo-diagram-nodes>
+  <dxo-diagram-toolbox visibility="disabled"></dxo-diagram-toolbox>
+  <dxo-diagram-properties-panel visibility="disabled"></dxo-diagram-properties-panel>
 </dx-diagram>
 <div class="selected-data">
   <span class="caption">Selected Items:</span>

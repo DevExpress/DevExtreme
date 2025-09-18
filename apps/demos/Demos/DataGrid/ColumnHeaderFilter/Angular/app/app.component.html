@@ -6,25 +6,25 @@
   [showBorders]="true"
   [columnAutoWidth]="true"
 >
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-data-grid-header-filter [visible]="true"></dxo-data-grid-header-filter>
 
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="Position">
-    <dxo-header-filter [allowSelectAll]="false">
-      <dxo-search [enabled]="true"></dxo-search>
-    </dxo-header-filter>
-  </dxi-column>
-  <dxi-column dataField="City">
-    <dxo-header-filter>
-      <dxo-search
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position">
+    <dxo-data-grid-header-filter [allowSelectAll]="false">
+      <dxo-data-grid-search [enabled]="true"></dxo-data-grid-search>
+    </dxo-data-grid-header-filter>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="City">
+    <dxo-data-grid-header-filter>
+      <dxo-data-grid-search
         [enabled]="true"
         [searchExpr]="searchExpr"
         [editorOptions]="editorOptions"
-      ></dxo-search>
-    </dxo-header-filter>
-  </dxi-column>
-  <dxi-column dataField="State"></dxi-column>
-  <dxi-column dataField="HomePhone"></dxi-column>
-  <dxi-column dataField="HireDate" dataType="date"></dxi-column>
+      ></dxo-data-grid-search>
+    </dxo-data-grid-header-filter>
+  </dxi-data-grid-column>
+  <dxi-data-grid-column dataField="State"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="HomePhone"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="HireDate" dataType="date"></dxi-data-grid-column>
 </dx-data-grid>

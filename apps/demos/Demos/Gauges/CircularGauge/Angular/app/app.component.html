@@ -4,19 +4,19 @@
     [value]="value.mean"
     [subvalues]="[value.min, value.max]"
   >
-    <dxo-range-container>
-      <dxi-range [startValue]="10" [endValue]="20" color="#0077BE"></dxi-range>
-      <dxi-range [startValue]="20" [endValue]="30" color="#E6E200"></dxi-range>
-      <dxi-range [startValue]="30" [endValue]="40" color="#77DD77"></dxi-range>
-    </dxo-range-container>
+    <dxo-circular-gauge-range-container>
+      <dxi-circular-gauge-range [startValue]="10" [endValue]="20" color="#0077BE"></dxi-circular-gauge-range>
+      <dxi-circular-gauge-range [startValue]="20" [endValue]="30" color="#E6E200"></dxi-circular-gauge-range>
+      <dxi-circular-gauge-range [startValue]="30" [endValue]="40" color="#77DD77"></dxi-circular-gauge-range>
+    </dxo-circular-gauge-range-container>
 
-    <dxo-scale [startValue]="10" [endValue]="40" [tickInterval]="5">
-      <dxo-label [customizeText]="customizeText"></dxo-label>
-    </dxo-scale>
-    <dxo-tooltip [enabled]="true"></dxo-tooltip>
-    <dxo-title text="Temperature in the Greenhouse">
-      <dxo-font [size]="28"></dxo-font>
-    </dxo-title>
+    <dxo-circular-gauge-scale [startValue]="10" [endValue]="40" [tickInterval]="5">
+      <dxo-circular-gauge-label [customizeText]="customizeText"></dxo-circular-gauge-label>
+    </dxo-circular-gauge-scale>
+    <dxo-circular-gauge-tooltip [enabled]="true"></dxo-circular-gauge-tooltip>
+    <dxo-circular-gauge-title text="Temperature in the Greenhouse">
+      <dxo-circular-gauge-font [size]="28"></dxo-circular-gauge-font>
+    </dxo-circular-gauge-title>
   </dx-circular-gauge>
 
   <dx-select-box

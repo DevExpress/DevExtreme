@@ -4,40 +4,40 @@
   [dataSource]="populationData"
   title="Evolution of Population by Continent"
 >
-  <dxi-series valueField="africa" name="Africa"></dxi-series>
-  <dxi-series valueField="asia" name="Asia"></dxi-series>
-  <dxi-series valueField="europe" name="Europe"></dxi-series>
-  <dxi-series
+  <dxi-chart-series valueField="africa" name="Africa"></dxi-chart-series>
+  <dxi-chart-series valueField="asia" name="Asia"></dxi-chart-series>
+  <dxi-chart-series valueField="europe" name="Europe"></dxi-chart-series>
+  <dxi-chart-series
     valueField="latinamerica"
     name="Latin America & Caribbean"
-  ></dxi-series>
-  <dxi-series valueField="northamerica" name="Northern America"></dxi-series>
-  <dxi-series valueField="oceania" name="Oceania"></dxi-series>
-  <dxi-series
+  ></dxi-chart-series>
+  <dxi-chart-series valueField="northamerica" name="Northern America"></dxi-chart-series>
+  <dxi-chart-series valueField="oceania" name="Oceania"></dxi-chart-series>
+  <dxi-chart-series
     axis="total"
     type="spline"
     valueField="total"
     name="Total"
     color="#008fd8"
   >
-  </dxi-series>
-  <dxo-common-series-settings argumentField="year" type="fullstackedbar">
-  </dxo-common-series-settings>
-  <dxi-value-axis>
-    <dxo-grid [visible]="true"></dxo-grid>
-  </dxi-value-axis>
-  <dxi-value-axis name="total" position="right">
-    <dxo-grid [visible]="true"></dxo-grid>
-    <dxo-title text="Total Population, billions"></dxo-title>
-  </dxi-value-axis>
-  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
-  </dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip
+  </dxi-chart-series>
+  <dxo-chart-common-series-settings argumentField="year" type="fullstackedbar">
+  </dxo-chart-common-series-settings>
+  <dxi-chart-value-axis>
+    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
+  </dxi-chart-value-axis>
+  <dxi-chart-value-axis name="total" position="right">
+    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
+    <dxo-chart-title text="Total Population, billions"></dxo-chart-title>
+  </dxi-chart-value-axis>
+  <dxo-chart-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-chart-legend>
+  <dxo-chart-export [enabled]="true"></dxo-chart-export>
+  <dxo-chart-tooltip
     [enabled]="true"
     [shared]="true"
     [customizeTooltip]="customizeTooltip"
   >
-    <dxo-format type="largeNumber" [precision]="1"></dxo-format>
-  </dxo-tooltip>
+    <dxo-chart-format type="largeNumber" [precision]="1"></dxo-chart-format>
+  </dxo-chart-tooltip>
 </dx-chart>
