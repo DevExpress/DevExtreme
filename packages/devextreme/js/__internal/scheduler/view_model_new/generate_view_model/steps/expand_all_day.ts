@@ -5,8 +5,6 @@ import type { DateInterval, ListEntity } from '../../types';
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTE_MS = toMs('minute');
 const DAY_MS = toMs('day');
-const ONE_DAY_MINUTES = 24 * 60;
-const HOUR_MINUTES = 60;
 
 const getDayInterval = (date: number, viewOffsetMs: number): DateInterval => {
   const trimmedDate = new Date(date).setUTCHours(0, 0, 0, 0);
@@ -19,7 +17,7 @@ const getShiftedStartDate = (startDate: number, viewOffsetMs: number): number =>
   const { min, max } = getDayInterval(startDate, viewOffsetMs);
 
   switch (true) {
-    case startDate > max:
+    case startDate > max - MINUTE_MS:
       return max;
     case startDate < min:
       return min - DAY_MS;
@@ -56,11 +54,9 @@ export const expandAllDayAllDayPanel = <T extends Pick<ListEntity, 'startDateUTC
       const minStartDate = new Date(entity.startDateUTC)
         .setUTCHours(endDayHour, 0, 0, 0)
         - MINUTE_MS;
-      const endOfDayMinutes = (endDayHour * HOUR_MINUTES - 1) % ONE_DAY_MINUTES;
-      const endOfDayHours = Math.floor(endOfDayMinutes / HOUR_MINUTES);
-      const endOfDayRemainingMinutes = endOfDayMinutes % HOUR_MINUTES;
       const maxEndDate = new Date(entity.endDateUTC)
-        .setUTCHours(endOfDayHours, endOfDayRemainingMinutes, 0, 0);
+        .setUTCHours(endDayHour, 0, 0, 0)
+        - MINUTE_MS;
 
       return {
         ...entity,
