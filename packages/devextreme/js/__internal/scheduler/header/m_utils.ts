@@ -1,10 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
-import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import { isFunction } from '@js/core/utils/type';
-import type { Item } from '@js/ui/button_group';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
-import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
 import type { NormalizedView, ViewType } from '@ts/scheduler/utils/options/types';
 
@@ -330,13 +327,3 @@ const STEP_MAP: Record<ViewType, Step> = {
 export const getStep = (type: ViewType): Step => STEP_MAP[type];
 
 export const getViewName = (view: NormalizedView): string | undefined => view.name ?? view.type;
-
-export const createLocalizedViewItems = (
-  views: NormalizedView[],
-): Item[] => views.map((view) => {
-  const localizedName = messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
-  return {
-    ...view,
-    text: localizedName,
-  };
-});

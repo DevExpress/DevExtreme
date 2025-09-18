@@ -4,7 +4,6 @@ import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import type { NormalizedView } from '../utils/options/types';
 import type { SchedulerHeader } from './m_header';
 import {
-  createLocalizedViewItems,
   getViewName,
 } from './m_utils';
 
@@ -33,6 +32,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
 
   // @ts-expect-error
   const stylingMode = isFluent() ? 'outlined' : 'contained';
+  const items = views.map((view) => ({ ...view, text: view.name }));
 
   return {
     widget: 'dxButtonGroup',
@@ -42,7 +42,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
     cssClass: ClASS.container,
     visible: isVisible,
     options: {
-      items: createLocalizedViewItems(views),
+      items,
       keyExpr: 'name',
       selectedItemKeys: [selectedView],
       stylingMode,
@@ -73,11 +73,11 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
     cssClass: ClASS.container,
     visible: isVisible,
     options: {
-      items: createLocalizedViewItems(views),
+      items: views,
       useSelectMode: true,
       keyExpr: 'name',
       selectedItemKey: selectedView,
-      displayExpr: 'text',
+      displayExpr: 'name',
       showArrowIcon: true,
       elementAttr: {
         class: ClASS.dropDownButton,
