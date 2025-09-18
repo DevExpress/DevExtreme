@@ -29,6 +29,7 @@ import {
     BaseChartOptions,
     BaseChartTooltip,
     BaseChartAnnotationConfig,
+    BasePointInfo,
     PointInteractionInfo,
     TooltipInfo,
 } from './chart_components/base_chart';
@@ -399,72 +400,8 @@ export interface baseLabelObject {
 
 /**
  * @docid
- * @type object
- * @namespace DevExpress.viz
- */
-export type CommonPointInfo<TPoint extends basePointObject> = {
-  /**
-   * @docid
-   * @public
-   */
-  argument?: string | number | Date;
-  /**
-   * @docid
-   * @public
-   */
-  argumentText?: string;
-  /**
-   * @docid
-   * @public
-   */
-  highErrorValue?: number;
-  /**
-   * @docid
-   * @public
-   */
-  lowErrorValue?: number;
-  /**
-   * @docid
-   * @public
-   */
-  originalArgument?: string | number | Date;
-  /**
-   * @docid
-   * @public
-   */
-  originalValue?: string | number | Date;
-  /**
-   * @docid
-   * @public
-   */
-  point?: TPoint;
-  /**
-   * @docid
-   * @public
-   */
-  points?: CommonPointInfo<TPoint>[];
-  /**
-   * @docid
-   * @public
-   */
-  seriesName?: any;
-  /**
-   * @docid
-   * @public
-   */
-  value?: string | number | Date;
-  /**
-   * @docid
-   * @public
-   */
-  valueText?: string;
-};
-
-/**
- * @docid
  * @public
  * @type object
- * @namespace DevExpress.viz
  */
 export type StackedPointInfo = ChartPointInfo & {
   /**
@@ -498,7 +435,6 @@ export type StackedPointInfo = ChartPointInfo & {
  * @docid
  * @public
  * @type object
- * @namespace DevExpress.viz
  */
 export type BubblePointInfo = ChartPointInfo & {
   /**
@@ -522,7 +458,6 @@ export type BubblePointInfo = ChartPointInfo & {
  * @docid
  * @public
  * @type object
- * @namespace DevExpress.viz
  */
 export type CandleStickPointInfo = {
   /**
@@ -631,7 +566,6 @@ export type CandleStickPointInfo = {
  * @docid
  * @public
  * @type object
- * @namespace DevExpress.viz
  */
 export type RangePointInfo = {
   /**
@@ -704,7 +638,7 @@ export type RangePointInfo = {
 /**
  * @public
  */
-export type ChartPointInfo = CommonPointInfo<chartPointObject>;
+export type ChartPointInfo = BasePointInfo<chartPointObject>;
 
 /**
  * @public

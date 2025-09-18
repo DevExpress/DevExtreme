@@ -16,7 +16,6 @@ import {
 } from '../localization';
 
 import {
-  CommonPointInfo,
   basePointObject,
   baseSeriesObject,
   chartAxisObject,
@@ -29,6 +28,7 @@ import {
     BaseChartOptions,
     BaseChartTooltip,
     BaseChartAnnotationConfig,
+    BasePointInfo,
     PointInteractionInfo,
     TooltipInfo,
 } from './chart_components/base_chart';
@@ -1216,7 +1216,7 @@ export type Legend = BaseChartLegend & {
 /**
  * @public
  */
-export type PointInfo = CommonPointInfo<polarPointObject>;
+export type PointInfo = BasePointInfo<polarPointObject>;
 
 /**
  * @public

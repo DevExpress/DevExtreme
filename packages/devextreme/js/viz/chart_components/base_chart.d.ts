@@ -47,6 +47,69 @@ import {
 
 /**
  * @docid
+ * @type object
+ * @namespace DevExpress.viz
+ */
+export type BasePointInfo<TPoint extends basePointObject> = {
+  /**
+   * @docid
+   * @public
+   */
+  argument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  argumentText?: string;
+  /**
+   * @docid
+   * @public
+   */
+  highErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  lowErrorValue?: number;
+  /**
+   * @docid
+   * @public
+   */
+  originalArgument?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  originalValue?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  point?: TPoint;
+  /**
+   * @docid
+   * @public
+   */
+  points?: BasePointInfo<TPoint>[];
+  /**
+   * @docid
+   * @public
+   */
+  seriesName?: any;
+  /**
+   * @docid
+   * @public
+   */
+  value?: string | number | Date;
+  /**
+   * @docid
+   * @public
+   */
+  valueText?: string;
+};
+
+/**
+ * @docid
  * @hidden
  */
 export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
