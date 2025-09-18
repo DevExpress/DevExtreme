@@ -23,7 +23,7 @@ describe('common functions', () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       './test.json',
-      JSON.stringify(testJson, null, 2),
+      `${JSON.stringify(testJson, null, 2)}\n`,
     );
   });
 

@@ -81,10 +81,11 @@ const addDemo = async (meta, pathParts) => {
   }
   if (newOrExisting.choice === 'new') {
     const extraModulesAnswer = await promptsQuestions.askForExtraModules(extraModules);
+    const modules = menuMetaUtils.prepareModules(extraModulesAnswer.modules);
     menuMetaUtils.addDemoModules(
       meta,
       pathParts,
-      extraModulesAnswer.modules,
+      modules,
     );
   }
   fileSystemUtils.copyDemos(

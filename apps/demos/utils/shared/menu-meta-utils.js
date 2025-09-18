@@ -139,6 +139,15 @@ const getByPath = (menuMetaData, pathParts) => {
   return result;
 }
 
+const prepareModules = (modules) => {
+  const complexSet = new Set(modules);
+  const simplifiedSet = new Set(modules.map(module => module.split('&')).flat());
+
+  const combinedModules = complexSet.difference(simplifiedSet);
+  const simplifiedCombinedModulesSet = new Set(Array.from(combinedModules).map(module => module.split('&')).flat())
+  return Array.from(complexSet.difference(simplifiedCombinedModulesSet));
+}
+
 module.exports = {
   addCategory,
   addGroup,
@@ -152,4 +161,5 @@ module.exports = {
   hasGroups,
   hasDemos,
   isDemo,
+  prepareModules,
 };

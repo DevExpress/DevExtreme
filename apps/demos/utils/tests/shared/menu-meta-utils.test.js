@@ -324,8 +324,6 @@ describe('modules functions', () => {
     expect(testMeta).toStrictEqual(meta);
   });
 
-
-
   test('addDemoModules', () => {
     const meta = [{
       Name: 'Category1',
@@ -397,5 +395,14 @@ describe('modules functions', () => {
     );
 
     expect(testMeta).toStrictEqual(meta);
+  });
+});
+
+describe('utils', () => {
+  test('prepareModules', () => {
+    expect(
+      menuMetaUtils
+        .prepareModules(['jspdf', 'jspdf&jspdf-autotable', 'jsp', 'openai', 'html', 'html&openai']))
+        .toStrictEqual(['jspdf&jspdf-autotable', 'jsp', 'html&openai']);
   });
 });
