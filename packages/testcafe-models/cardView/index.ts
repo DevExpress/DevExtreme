@@ -107,11 +107,16 @@ export default class CardView extends GridCore {
     return this.element.find(`.${CLASS.cardViewContent}`).hasClass(`${CLASS.selectCheckBoxesHidden}`);
   }
 
-  isReady(): Promise<boolean> {
+  isReady(): Promise<unknown> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).isReady(),
+      () => {
+        const instance = getInstance();
+        if (typeof instance === 'object' && instance !== null && 'isReady' in instance && typeof instance.isReady === 'function') {
+          return instance.isReady();
+        }
+      },
       { dependencies: { getInstance } },
     )();
   }
