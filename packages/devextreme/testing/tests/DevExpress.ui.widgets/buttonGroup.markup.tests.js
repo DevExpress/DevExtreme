@@ -110,7 +110,9 @@ QUnit.module('default', {
             tabIndex: 25
         }).dxButtonGroup('instance');
 
-        const buttonCollection = buttonGroup._buttonsCollection;
+        const $buttonCollection = buttonGroup.$element().find('.dx-collection');
+        const componentName = $buttonCollection.data('dxComponents')[0];
+        const buttonCollection = $buttonCollection.data(componentName);
 
         assert.equal(buttonCollection.option('items').length, 2, 'items of data source count');
         assert.equal(buttonCollection.option('accessKey'), 'test key', 'accessKey option');

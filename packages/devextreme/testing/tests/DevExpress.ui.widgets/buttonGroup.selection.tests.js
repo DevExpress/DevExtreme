@@ -452,6 +452,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
 
             QUnit.test('KeyExpr: custom, set items: [], selectedItems[], click(btn1) -> click(btn3)' + config, function() {
                 const helper = new ButtonGroupSelectionTestHelper(onInitialOption, selectionMode);
+
                 helper.createButtonGroup({
                     items: [
                         { icon: 'leftIcon', custom: 'left' },

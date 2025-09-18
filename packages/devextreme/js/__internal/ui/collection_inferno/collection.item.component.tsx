@@ -1,5 +1,5 @@
 import type { CollectionWidgetItem, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
 export type CollectionItemProps<
   TProperties extends ItemLike = CollectionWidgetItem,

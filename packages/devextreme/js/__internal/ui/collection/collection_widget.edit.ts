@@ -347,7 +347,6 @@ class CollectionWidget<
 
   _syncSelectionOptions(byOption?: string): DeferredObj<unknown> {
     const selectedByOption = byOption ?? this._chooseSelectOption();
-
     // eslint-disable-next-line default-case
     switch (selectedByOption) {
       case 'selectedIndex': {
