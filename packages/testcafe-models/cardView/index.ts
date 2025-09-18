@@ -111,12 +111,7 @@ export default class CardView extends GridCore {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => {
-        const instance = getInstance();
-        if (typeof instance === 'object' && instance !== null && 'isReady' in instance && typeof instance.isReady === 'function') {
-          return instance.isReady();
-        }
-      },
+      () => (getInstance() as any).isReady(),
       { dependencies: { getInstance } },
     )();
   }
