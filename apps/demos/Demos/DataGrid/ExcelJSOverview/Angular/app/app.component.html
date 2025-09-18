@@ -6,17 +6,17 @@
   [showBorders]="true"
   (onExporting)="onExporting($event)"
 >
-  <dxo-group-panel [visible]="true"></dxo-group-panel>
-  <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
-  <dxo-selection mode="multiple"></dxo-selection>
+  <dxo-data-grid-group-panel [visible]="true"></dxo-data-grid-group-panel>
+  <dxo-data-grid-grouping [autoExpandAll]="true"></dxo-data-grid-grouping>
+  <dxo-data-grid-selection mode="multiple"></dxo-data-grid-selection>
 
-  <dxi-column dataField="FirstName"></dxi-column>
-  <dxi-column dataField="LastName"></dxi-column>
-  <dxi-column dataField="City"></dxi-column>
-  <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
-  <dxi-column dataField="Position" [width]="130"></dxi-column>
-  <dxi-column dataField="BirthDate" dataType="date" [width]="100"></dxi-column>
-  <dxi-column dataField="HireDate" dataType="date" [width]="100"></dxi-column>
+  <dxi-data-grid-column dataField="FirstName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="LastName"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="City"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="State" [groupIndex]="0"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="Position" [width]="130"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="BirthDate" dataType="date" [width]="100"></dxi-data-grid-column>
+  <dxi-data-grid-column dataField="HireDate" dataType="date" [width]="100"></dxi-data-grid-column>
 
-  <dxo-export [enabled]="true" [allowExportSelectedData]="true"></dxo-export>
+  <dxo-data-grid-export [enabled]="true" [allowExportSelectedData]="true"></dxo-data-grid-export>
 </dx-data-grid>

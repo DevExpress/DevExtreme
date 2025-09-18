@@ -3,12 +3,12 @@
   [bounds]="[-180, 85, 180, -60]"
   (onClick)="markerClick($event)"
 >
-  <dxo-tooltip
+  <dxo-vector-map-tooltip
     [enabled]="true"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
-  <dxi-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-layer>
-  <dxi-layer [dataSource]="markers"></dxi-layer>
+  ></dxo-vector-map-tooltip>
+  <dxi-vector-map-layer [dataSource]="worldMap" [hoverEnabled]="false"></dxi-vector-map-layer>
+  <dxi-vector-map-layer [dataSource]="markers"></dxi-vector-map-layer>
 </dx-vector-map>
 
 <dx-button id="reset" text="Reset" (onClick)="resetClick()"></dx-button>

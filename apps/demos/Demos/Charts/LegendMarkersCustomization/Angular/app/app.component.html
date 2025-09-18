@@ -3,13 +3,13 @@
   [dataSource]="dataSource"
   (onLegendClick)="onLegendClick($event)"
 >
-  <dxo-title text="Noisy and Original Signals"> </dxo-title>
-  <dxo-common-series-settings argumentField="argument">
-    <dxo-point [visible]="false"></dxo-point>
-  </dxo-common-series-settings>
-  <dxi-series valueField="originalValue" name="Original Signal"> </dxi-series>
-  <dxi-series valueField="value" name="Noisy Signal"> </dxi-series>
-  <dxo-legend
+  <dxo-chart-title text="Noisy and Original Signals"> </dxo-chart-title>
+  <dxo-chart-common-series-settings argumentField="argument">
+    <dxo-chart-point [visible]="false"></dxo-chart-point>
+  </dxo-chart-common-series-settings>
+  <dxi-chart-series valueField="originalValue" name="Original Signal"> </dxi-chart-series>
+  <dxi-chart-series valueField="value" name="Noisy Signal"> </dxi-chart-series>
+  <dxo-chart-legend
     verticalAlignment="bottom"
     horizontalAlignment="center"
     markerTemplate="markerTemplate"
@@ -28,5 +28,5 @@
       ></rect>
       <path attr.d="{{ getMarkerPath(item.series.name) }}"></path>
     </svg>
-  </dxo-legend>
+  </dxo-chart-legend>
 </dx-chart>

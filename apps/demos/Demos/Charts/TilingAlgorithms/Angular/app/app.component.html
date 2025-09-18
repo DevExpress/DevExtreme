@@ -6,12 +6,12 @@
     selectbox.value === 'custom' ? customAlgorithm : selectbox.value
   "
 >
-  <dxo-colorizer type="discrete" [colorizeGroups]="true"></dxo-colorizer>
-  <dxo-tooltip
+  <dxo-tree-map-colorizer type="discrete" [colorizeGroups]="true"></dxo-tree-map-colorizer>
+  <dxo-tree-map-tooltip
     [enabled]="true"
     format="thousands"
     [customizeTooltip]="customizeTooltip"
-  ></dxo-tooltip>
+  ></dxo-tree-map-tooltip>
 </dx-tree-map>
 
 <div class="options">
