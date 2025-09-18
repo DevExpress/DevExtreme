@@ -42,6 +42,7 @@ export interface FilterOptions {
   allDayPanelMode: AllDayPanelModeType;
   showAllDayPanel: boolean;
   supportAllDayPanel: boolean;
+  isDateTimeView: boolean;
   resourceManager: ResourceManager;
   timeZone: string;
   dataAccessor: AppointmentDataAccessor;

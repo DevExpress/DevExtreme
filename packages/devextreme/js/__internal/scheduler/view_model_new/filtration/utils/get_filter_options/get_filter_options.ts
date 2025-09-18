@@ -1,18 +1,24 @@
 import type Scheduler from '../../../../m_scheduler';
+import type { ViewType } from '../../../../types';
 import { getCompareOptions } from '../../../common/get_compare_options';
 import { shiftIntervals } from '../../../common/shift_intervals';
-import { VIEWS_WITH_ALL_DAY_PANEL } from '../../../constants';
 import type { FilterOptions } from '../../../types';
 import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
+
+const VIEWS_WITH_ALL_DAY_PANEL: ViewType[] = ['day', 'week', 'workWeek'];
+const DATE_TIME_VIEWS: ViewType[] = ['day', 'week', 'workWeek', 'timelineDay', 'timelineWeek', 'timelineWorkWeek'];
 
 export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
   const compareOptions = getCompareOptions(schedulerStore);
   const viewOffset = schedulerStore.getViewOffsetMs();
-  const supportAllDayPanel = VIEWS_WITH_ALL_DAY_PANEL.includes(schedulerStore.currentView.type);
+  const viewType = schedulerStore.currentView.type;
+  const supportAllDayPanel = VIEWS_WITH_ALL_DAY_PANEL.includes(viewType);
+  const isDateTimeView = DATE_TIME_VIEWS.includes(viewType);
 
   return {
     allDayPanelMode: schedulerStore.getViewOption('allDayPanelMode'),
     supportAllDayPanel,
+    isDateTimeView,
     showAllDayPanel: schedulerStore.option('showAllDayPanel'),
     resourceManager: schedulerStore.resourceManager,
     timeZone: schedulerStore.getTimeZone(),

@@ -10,9 +10,9 @@ type Entity = MinimalAppointmentEntity & AllDayPanelOccupation & UTCDates;
 
 export const filterByIntervals = <T extends Entity>(
   entities: T[],
-  { allDayIntervals, regularIntervals }: FilterOptions,
+  { allDayIntervals, regularIntervals, isDateTimeView }: FilterOptions,
 ): T[] => entities.filter((appointment) => {
-    const intervals = appointment.allDay || appointment.isAllDayPanelOccupied
+    const intervals = (!isDateTimeView && appointment.allDay) || appointment.isAllDayPanelOccupied
       ? allDayIntervals
       : regularIntervals;
     // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
