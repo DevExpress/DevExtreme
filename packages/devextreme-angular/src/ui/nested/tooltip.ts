@@ -19,6 +19,7 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
+import { ChartsPointInfo } from 'devextreme/viz/chart_components/base_chart';
 
 import {
     DxIntegrationModule,

@@ -24,7 +24,12 @@ import {
   baseSeriesObject,
   chartSeriesObject,
   dxChartAnnotationConfig,
-} from '../chart';
+  PointInfo as ChartPointInfo,
+} from "../chart";
+
+import { PointInfo as PieChartPointInfo } from "../pie_chart";
+
+import { PointInfo as PolarPointInfo } from "../polar_chart";
 
 import {
   BaseLegend,
@@ -44,6 +49,12 @@ import {
   Palette,
   PaletteExtensionMode,
 } from '../../common/charts';
+
+/**
+ * @docid
+ * @skip
+ */
+type ChartsPointInfo = ChartPointInfo | PieChartPointInfo | PolarPointInfo;
 
 /**
  * @docid
@@ -365,7 +376,7 @@ export interface BaseChartTooltip<TPointInfo = any> extends BaseWidgetTooltip {
     contentTemplate?: template | ((pointInfo: TPointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
-     * @type_function_param1 pointInfo:object
+     * @type_function_param1 pointInfo:{viz/chart_components/base_chart:ChartsPointInfo}
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme

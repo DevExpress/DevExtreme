@@ -13,6 +13,7 @@ import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, An
 import type { template, HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { ChartSeries } from "devextreme/viz/common";
+import type { ChartsPointInfo } from "devextreme/viz/chart_components/base_chart";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
 
@@ -3421,7 +3422,7 @@ type ITooltipProps = React.PropsWithChildren<{
   container?: any | string | undefined;
   contentTemplate?: ((pointInfo: any, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined;
+  customizeTooltip?: ((pointInfo: ChartsPointInfo) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
   format?: LocalizationFormat | undefined;

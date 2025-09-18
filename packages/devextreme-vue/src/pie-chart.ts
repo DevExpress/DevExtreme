@@ -66,6 +66,9 @@ import {
 import {
  Format as LocalizationFormat,
 } from "devextreme/common/core/localization";
+import {
+ ChartsPointInfo,
+} from "devextreme/viz/chart_components/base_chart";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -1396,7 +1399,7 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<((pointInfo: any) => Record<string, any>)>,
+    customizeTooltip: Function as PropType<((pointInfo: ChartsPointInfo) => Record<string, any>)>,
     enabled: Boolean,
     font: Object as PropType<Font | Record<string, any>>,
     format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,

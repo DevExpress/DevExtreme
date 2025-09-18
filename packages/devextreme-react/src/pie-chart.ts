@@ -12,6 +12,7 @@ import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEve
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { template, Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { ChartsPointInfo } from "devextreme/viz/chart_components/base_chart";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -1360,7 +1361,7 @@ type ITooltipProps = React.PropsWithChildren<{
   container?: any | string | undefined;
   contentTemplate?: ((pointInfo: any, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
-  customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined;
+  customizeTooltip?: ((pointInfo: ChartsPointInfo) => Record<string, any>) | undefined;
   enabled?: boolean;
   font?: ChartsFont;
   format?: LocalizationFormat | undefined;
