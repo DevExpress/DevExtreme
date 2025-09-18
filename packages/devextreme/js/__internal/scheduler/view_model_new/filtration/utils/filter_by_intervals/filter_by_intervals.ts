@@ -16,7 +16,8 @@ const getIntervals = <T extends Entity>(
     regularIntervals,
     isDateTimeView,
   }: FilterOptions): DateInterval[] => {
-  if (isDateTimeView && appointment.allDay) {
+  // NOTE: broken case for all day appointments in regular panel
+  if (isDateTimeView && appointment.allDay && !appointment.isAllDayPanelOccupied) {
     return regularIntervals.map((interval) => ({
       min: new Date(interval.min).setUTCHours(0, 0, 0, 0),
       max: interval.max,
