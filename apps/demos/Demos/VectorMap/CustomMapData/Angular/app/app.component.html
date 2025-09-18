@@ -1,20 +1,20 @@
 <dx-vector-map id="map-container" [maxZoomFactor]="2" [projection]="projection">
-  <dxo-title
+  <dxo-vector-map-title
     text="Map of Pangaea"
     subtitle="with modern continental outlines"
-  ></dxo-title>
-  <dxo-export [enabled]="true"></dxo-export>
-  <dxi-layer
+  ></dxo-vector-map-title>
+  <dxo-vector-map-export [enabled]="true"></dxo-vector-map-export>
+  <dxi-vector-map-layer
     [dataSource]="pangaeaBorders"
     name="pangaea"
     [hoverEnabled]="false"
     color="#bb7862"
-  ></dxi-layer>
-  <dxi-layer
+  ></dxi-vector-map-layer>
+  <dxi-vector-map-layer
     [dataSource]="pangaeaContinents"
     name="continents"
     [customize]="customizeLayer"
   >
-    <dxo-label [enabled]="true" dataField="name"></dxo-label>
-  </dxi-layer>
+    <dxo-vector-map-label [enabled]="true" dataField="name"></dxo-vector-map-label>
+  </dxi-vector-map-layer>
 </dx-vector-map>

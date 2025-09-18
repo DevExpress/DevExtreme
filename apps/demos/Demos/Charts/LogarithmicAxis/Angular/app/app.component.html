@@ -4,19 +4,19 @@
   title="Relative Masses of the Heaviest Solar System Objects"
   [customizePoint]="customizePoint"
 >
-  <dxi-series type="scatter" valueField="mass" argumentField="name">
-    <dxo-point [size]="20"></dxo-point>
-  </dxi-series>
-  <dxo-common-pane-settings>
-    <dxo-border [visible]="true"></dxo-border>
-  </dxo-common-pane-settings>
-  <dxo-argument-axis>
-    <dxo-grid [visible]="true"></dxo-grid>
-    <dxo-label rotationAngle="20" overlappingBehavior="rotate"> </dxo-label>
-  </dxo-argument-axis>
-  <dxi-value-axis type="logarithmic" title="Mass Relative to the Earth">
-  </dxi-value-axis>
-  <dxo-tooltip [enabled]="true"></dxo-tooltip>
-  <dxo-legend [visible]="false"></dxo-legend>
-  <dxo-export [enabled]="true"></dxo-export>
+  <dxi-chart-series type="scatter" valueField="mass" argumentField="name">
+    <dxo-chart-point [size]="20"></dxo-chart-point>
+  </dxi-chart-series>
+  <dxo-chart-common-pane-settings>
+    <dxo-chart-border [visible]="true"></dxo-chart-border>
+  </dxo-chart-common-pane-settings>
+  <dxo-chart-argument-axis>
+    <dxo-chart-grid [visible]="true"></dxo-chart-grid>
+    <dxo-chart-label rotationAngle="20" overlappingBehavior="rotate"> </dxo-chart-label>
+  </dxo-chart-argument-axis>
+  <dxi-chart-value-axis type="logarithmic" title="Mass Relative to the Earth">
+  </dxi-chart-value-axis>
+  <dxo-chart-tooltip [enabled]="true"></dxo-chart-tooltip>
+  <dxo-chart-legend [visible]="false"></dxo-chart-legend>
+  <dxo-chart-export [enabled]="true"></dxo-chart-export>
 </dx-chart>

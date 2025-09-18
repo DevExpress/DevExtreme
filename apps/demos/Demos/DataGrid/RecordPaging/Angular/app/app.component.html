@@ -5,9 +5,9 @@
   keyExpr="id"
   [showBorders]="true"
 >
-  <dxo-scrolling rowRenderingMode="virtual"> </dxo-scrolling>
-  <dxo-paging [pageSize]="10"> </dxo-paging>
-  <dxo-pager
+  <dxo-data-grid-scrolling rowRenderingMode="virtual"> </dxo-data-grid-scrolling>
+  <dxo-data-grid-paging [pageSize]="10"> </dxo-data-grid-paging>
+  <dxo-data-grid-pager
     [visible]="true"
     [allowedPageSizes]="allowedPageSizes"
     [displayMode]="displayMode"
@@ -15,7 +15,7 @@
     [showInfo]="showInfo"
     [showNavigationButtons]="showNavButtons"
   >
-  </dxo-pager>
+  </dxo-data-grid-pager>
 </dx-data-grid>
 <div class="options">
   <div class="caption">Options</div>

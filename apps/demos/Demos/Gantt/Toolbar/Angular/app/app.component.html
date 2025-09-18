@@ -1,39 +1,39 @@
 <dx-gantt taskListWidth="500" scaleType="weeks" height="700">
-  <dxo-toolbar>
-    <dxi-item name="undo"></dxi-item>
-    <dxi-item name="redo"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="collapseAll"></dxi-item>
-    <dxi-item name="expandAll"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="addTask"></dxi-item>
-    <dxi-item name="deleteTask"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="zoomIn"></dxi-item>
-    <dxi-item name="zoomOut"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item name="showResources"></dxi-item>
-    <dxi-item name="showDependencies"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
-    <dxi-item widget="dxButton" [options]="customButtonOptions"> </dxi-item>
-  </dxo-toolbar>
+  <dxo-gantt-toolbar>
+    <dxi-gantt-item name="undo"></dxi-gantt-item>
+    <dxi-gantt-item name="redo"></dxi-gantt-item>
+    <dxi-gantt-item name="separator"></dxi-gantt-item>
+    <dxi-gantt-item name="collapseAll"></dxi-gantt-item>
+    <dxi-gantt-item name="expandAll"></dxi-gantt-item>
+    <dxi-gantt-item name="separator"></dxi-gantt-item>
+    <dxi-gantt-item name="addTask"></dxi-gantt-item>
+    <dxi-gantt-item name="deleteTask"></dxi-gantt-item>
+    <dxi-gantt-item name="separator"></dxi-gantt-item>
+    <dxi-gantt-item name="zoomIn"></dxi-gantt-item>
+    <dxi-gantt-item name="zoomOut"></dxi-gantt-item>
+    <dxi-gantt-item name="separator"></dxi-gantt-item>
+    <dxi-gantt-item name="showResources"></dxi-gantt-item>
+    <dxi-gantt-item name="showDependencies"></dxi-gantt-item>
+    <dxi-gantt-item name="separator"></dxi-gantt-item>
+    <dxi-gantt-item widget="dxButton" [options]="customButtonOptions"> </dxi-gantt-item>
+  </dxo-gantt-toolbar>
 
-  <dxo-tasks [dataSource]="tasks"></dxo-tasks>
-  <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
-  <dxo-resources [dataSource]="resources"></dxo-resources>
-  <dxo-resource-assignments
+  <dxo-gantt-tasks [dataSource]="tasks"></dxo-gantt-tasks>
+  <dxo-gantt-dependencies [dataSource]="dependencies"></dxo-gantt-dependencies>
+  <dxo-gantt-resources [dataSource]="resources"></dxo-gantt-resources>
+  <dxo-gantt-resource-assignments
     [dataSource]="resourceAssignments"
-  ></dxo-resource-assignments>
+  ></dxo-gantt-resource-assignments>
 
-  <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
-  <dxi-column
+  <dxi-gantt-column dataField="title" caption="Subject" [width]="300"></dxi-gantt-column>
+  <dxi-gantt-column
     dataField="start"
     caption="Start Date"
     dataType="date"
-  ></dxi-column>
-  <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+  ></dxi-gantt-column>
+  <dxi-gantt-column dataField="end" caption="End Date" dataType="date"></dxi-gantt-column>
 
-  <dxo-editing [enabled]="true"></dxo-editing>
+  <dxo-gantt-editing [enabled]="true"></dxo-gantt-editing>
 </dx-gantt>
 
 <dx-popup

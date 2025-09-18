@@ -5,44 +5,44 @@
     [dataSource]="chemicalComposition"
     title="The Chemical Composition of the Earth Layers"
   >
-    <dxi-series
+    <dxi-chart-series
       *ngFor="let item of seriesSource"
       [valueField]="item.valueField"
       [name]="item.name"
     >
-    </dxi-series>
-    <dxo-common-series-settings type="bar" [ignoreEmptyPoints]="true">
-    </dxo-common-series-settings>
-    <dxi-value-axis>
-      <dxo-label [customizeText]="customizeText"></dxo-label>
-    </dxi-value-axis>
-    <dxo-argument-axis #argumentAxis> </dxo-argument-axis>
-    <dxo-legend
+    </dxi-chart-series>
+    <dxo-chart-common-series-settings type="bar" [ignoreEmptyPoints]="true">
+    </dxo-chart-common-series-settings>
+    <dxi-chart-value-axis>
+      <dxo-chart-label [customizeText]="customizeText"></dxo-chart-label>
+    </dxi-chart-value-axis>
+    <dxo-chart-argument-axis #argumentAxis> </dxo-chart-argument-axis>
+    <dxo-chart-legend
       [visible]="true"
       verticalAlignment="top"
       horizontalAlignment="right"
       orientation="horizontal"
     >
-      <dxo-border [visible]="true"></dxo-border>
-    </dxo-legend>
+      <dxo-chart-border [visible]="true"></dxo-chart-border>
+    </dxo-chart-legend>
   </dx-chart>
   <dx-range-selector
     [dataSource]="chemicalComposition"
     [(value)]="argumentAxis.visualRange"
   >
-    <dxo-size [height]="120"></dxo-size>
-    <dxo-margin [left]="10"></dxo-margin>
-    <dxo-scale [minorTickCount]="1"></dxo-scale>
-    <dxo-behavior valueChangeMode="onHandleMove"></dxo-behavior>
-    <dxo-chart palette="soft">
-      <dxo-common-series-settings type="bar" [ignoreEmptyPoints]="true">
-      </dxo-common-series-settings>
-      <dxi-series
+    <dxo-range-selector-size [height]="120"></dxo-range-selector-size>
+    <dxo-range-selector-margin [left]="10"></dxo-range-selector-margin>
+    <dxo-range-selector-scale [minorTickCount]="1"></dxo-range-selector-scale>
+    <dxo-range-selector-behavior valueChangeMode="onHandleMove"></dxo-range-selector-behavior>
+    <dxo-range-selector-chart palette="soft">
+      <dxo-range-selector-common-series-settings type="bar" [ignoreEmptyPoints]="true">
+      </dxo-range-selector-common-series-settings>
+      <dxi-range-selector-series
         *ngFor="let item of seriesSource"
         [valueField]="item.valueField"
         [name]="item.name"
       >
-      </dxi-series>
-    </dxo-chart>
+      </dxi-range-selector-series>
+    </dxo-range-selector-chart>
   </dx-range-selector>
 </div>
