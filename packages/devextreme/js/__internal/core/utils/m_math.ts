@@ -22,12 +22,6 @@ const inRange = function (value, minValue, maxValue) {
   return value >= minValue && value <= maxValue;
 };
 
-/**
- * Returns the absolute value of the exponent of the number in exponential notation.
- * @param value - The number to get the exponent of.
- * @returns The absolute value of the exponent of the number in exponential notation.
- */
-
 function getExponent(value: number) {
   // eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
   const [_, exponentString] = value.toExponential().split('e');
@@ -52,8 +46,6 @@ function multiplyInExponentialForm(value, exponentShift) {
   return parseFloat(`${exponentialNotation.mantissa}e${exponentialNotation.exponent + exponentShift}`);
 }
 
-// T570217
-
 const EXP_TO_CHANGE_NOTATION = 7;
 const MAX_PRECISION = 15;
 const MIN_PRECISION = 7;
@@ -66,8 +58,7 @@ const MIN_PRECISION = 7;
  *
  * consider using roundFloatPart instead of adjust
  */
-
-function adjust(value: number, interval?: number) {
+function adjust(value: number, interval?: number): number {
   const absValue = Math.abs(value);
   const integerPart = absValue > 1 ? 10 : 0;
 
@@ -96,7 +87,7 @@ function adjust(value: number, interval?: number) {
   const fractionalPart = absValue - Math.floor(absValue);
   const adjustedValue = integerPart + fractionalPart;
 
-  const separatedAdjustedValue = parseFloat(adjustedValue.toPrecision(finalPrecision + 0)).toString().split('.');
+  const separatedAdjustedValue = parseFloat(adjustedValue.toPrecision(finalPrecision)).toString().split('.');
 
   const isIntPartNotChanged = separatedAdjustedValue[0] === integerPart.toString();
   if (isIntPartNotChanged) {
@@ -217,7 +208,7 @@ function getExponentLength(value) {
         || 0;
 }
 
-function roundFloatPart(value: number, digitsCount = 0) {
+function roundFloatPart(value: number, digitsCount = 0): number {
   return parseFloat(value.toFixed(digitsCount));
 }
 
