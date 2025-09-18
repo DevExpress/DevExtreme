@@ -4,7 +4,7 @@ import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import type { NormalizedView } from '../utils/options/types';
 import type { SchedulerHeader } from './m_header';
 import {
-  createLocalizedViewItems,
+  formatViews,
   getViewName,
   isOneView,
 } from './m_utils';
@@ -16,7 +16,7 @@ const ClASS = {
 };
 
 const getViewsAndSelectedView = (header: SchedulerHeader) => {
-  const views = header.option('views');
+  const views = formatViews(header.option('views'));
   const selectedView = header.option('currentView').name;
   const isSelectedViewInViews = views.some((view) => view.name === selectedView);
 
@@ -39,7 +39,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
     name: 'viewSwitcher',
     cssClass: ClASS.container,
     options: {
-      items: createLocalizedViewItems(views),
+      items: views,
       keyExpr: 'name',
       selectedItemKeys: [selectedView],
       stylingMode,
@@ -69,7 +69,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
     name: 'viewSwitcher',
     cssClass: ClASS.container,
     options: {
-      items: createLocalizedViewItems(views),
+      items: views,
       useSelectMode: true,
       keyExpr: 'name',
       selectedItemKey: selectedView,
