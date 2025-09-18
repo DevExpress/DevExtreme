@@ -35,8 +35,8 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 1,
       cellIndex: 3,
       endCellIndex: 3,
-      startDate: 30,
-      endDate: 40,
+      startDateUTC: 30,
+      endDateUTC: 40,
       level: 0,
       maxLevel: 0,
       items: [],
@@ -61,8 +61,8 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 0,
       cellIndex: 4,
       endCellIndex: 5,
-      startDate: 40,
-      endDate: 60,
+      startDateUTC: 40,
+      endDateUTC: 60,
       duration: 20,
       level: 2,
       maxLevel: 4,
@@ -88,12 +88,12 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 0,
       cellIndex: 2,
       endCellIndex: 2,
-      startDate: 20,
-      endDate: 30,
+      startDateUTC: 20,
+      endDateUTC: 30,
       duration: 10,
       level: 0,
       maxLevel: 0,
-      items: [{ startDate: 23, endDate: 33, duration: 10 }],
+      items: [{ startDateUTC: 23, endDateUTC: 33, duration: 10 }],
     };
 
     expect(addGeometryInsideInterval(entity as any, {
@@ -111,7 +111,7 @@ describe('addGeometryInsideInterval', () => {
       height: 20,
       left: 0,
       items: [{
-        startDate: 23, endDate: 33, width: 100, height: 56, duration: 10,
+        startDateUTC: 23, endDateUTC: 33, width: 100, height: 56, duration: 10,
       }],
     });
   });
@@ -122,12 +122,12 @@ describe('addGeometryInsideInterval', () => {
       columnIndex: 0,
       cellIndex: 4,
       endCellIndex: 5,
-      startDate: 40,
-      endDate: 60,
+      startDateUTC: 40,
+      endDateUTC: 60,
       duration: 20,
       level: 2,
       maxLevel: 4,
-      items: [{ startDate: 23, endDate: 38, duration: 15 }],
+      items: [{ startDateUTC: 23, endDateUTC: 38, duration: 15 }],
     };
 
     expect(addGeometryInsideInterval(entity as any, {
@@ -145,7 +145,7 @@ describe('addGeometryInsideInterval', () => {
       height: 20,
       left: 80,
       items: [{
-        startDate: 23, endDate: 38, width: 20, height: 120, duration: 15,
+        startDateUTC: 23, endDateUTC: 38, width: 20, height: 120, duration: 15,
       }],
     });
   });

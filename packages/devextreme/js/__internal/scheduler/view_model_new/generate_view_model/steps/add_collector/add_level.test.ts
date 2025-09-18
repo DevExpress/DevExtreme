@@ -14,13 +14,13 @@ const collectorOptions: CollectorOptions = {
 describe('addLevel', () => {
   it('should add 0 level for non-overlapping appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 1).getTime(),
-      endDate: new Date(2025, 0, 2).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 1),
+      endDateUTC: Date.UTC(2025, 0, 2),
       duration: 24 * 3600_000,
     },
     {
-      startDate: new Date(2025, 0, 3).getTime(),
-      endDate: new Date(2025, 0, 4).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 3),
+      endDateUTC: Date.UTC(2025, 0, 4),
       duration: 24 * 3600_000,
     }];
 
@@ -36,12 +36,12 @@ describe('addLevel', () => {
 
   it('should add 0 level for non-overlapping closed appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 1, 1).getTime(),
-      endDate: new Date(2025, 0, 1, 2, 15).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 1, 1),
+      endDateUTC: Date.UTC(2025, 0, 1, 2, 15),
     },
     {
-      startDate: new Date(2025, 0, 1, 2, 15).getTime(),
-      endDate: new Date(2025, 0, 1, 3).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 1, 2, 15),
+      endDateUTC: Date.UTC(2025, 0, 1, 3),
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
@@ -56,17 +56,17 @@ describe('addLevel', () => {
 
   it('should add levels for overlapping appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
-      endDate: new Date(2025, 0, 8, 4, 15).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 7, 3, 15),
+      endDateUTC: Date.UTC(2025, 0, 8, 4, 15),
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1),
+      endDateUTC: Date.UTC(2025, 0, 8, 2),
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1, 30),
+      endDateUTC: Date.UTC(2025, 0, 8, 5),
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 8, 3).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 2),
+      endDateUTC: Date.UTC(2025, 0, 8, 3),
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([
@@ -87,29 +87,29 @@ describe('addLevel', () => {
 
   it('should add levels from min to max for overlapping appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
-      endDate: new Date(2025, 0, 8, 4, 15).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 7, 3, 15),
+      endDateUTC: Date.UTC(2025, 0, 8, 4, 15),
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1),
+      endDateUTC: Date.UTC(2025, 0, 8, 2),
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1, 30),
+      endDateUTC: Date.UTC(2025, 0, 8, 5),
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 8, 3).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 2),
+      endDateUTC: Date.UTC(2025, 0, 8, 3),
     }, {
-      startDate: new Date(2025, 0, 17).getTime(),
-      endDate: new Date(2025, 0, 18).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 17),
+      endDateUTC: Date.UTC(2025, 0, 18),
     }, {
-      startDate: new Date(2025, 0, 17).getTime(),
-      endDate: new Date(2025, 0, 18).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 17),
+      endDateUTC: Date.UTC(2025, 0, 18),
     }, {
-      startDate: new Date(2025, 0, 17).getTime(),
-      endDate: new Date(2025, 0, 18).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 17),
+      endDateUTC: Date.UTC(2025, 0, 18),
     }, {
-      startDate: new Date(2025, 0, 17).getTime(),
-      endDate: new Date(2025, 0, 18).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 17),
+      endDateUTC: Date.UTC(2025, 0, 18),
     }];
 
     expect(addLevel(items, { ...collectorOptions, maxLevel: 10 })).toEqual([
@@ -142,23 +142,23 @@ describe('addLevel', () => {
 
   it('should add auto levels for overlapping appointments', () => {
     const items = [{
-      startDate: new Date(2025, 0, 7, 3, 15).getTime(),
-      endDate: new Date(2025, 0, 8, 1).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 7, 3, 15),
+      endDateUTC: Date.UTC(2025, 0, 8, 1),
     }, {
-      startDate: new Date(2025, 0, 8, 1).getTime(),
-      endDate: new Date(2025, 0, 8, 2).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1),
+      endDateUTC: Date.UTC(2025, 0, 8, 2),
     }, {
-      startDate: new Date(2025, 0, 8, 1, 30).getTime(),
-      endDate: new Date(2025, 0, 8, 5).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 1, 30),
+      endDateUTC: Date.UTC(2025, 0, 8, 5),
     }, {
-      startDate: new Date(2025, 0, 8, 2).getTime(),
-      endDate: new Date(2025, 0, 8, 3).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 2),
+      endDateUTC: Date.UTC(2025, 0, 8, 3),
     }, {
-      startDate: new Date(2025, 0, 8, 4).getTime(),
-      endDate: new Date(2025, 0, 8, 7).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 4),
+      endDateUTC: Date.UTC(2025, 0, 8, 7),
     }, {
-      startDate: new Date(2025, 0, 8, 8).getTime(),
-      endDate: new Date(2025, 0, 8, 9).getTime(),
+      startDateUTC: Date.UTC(2025, 0, 8, 8),
+      endDateUTC: Date.UTC(2025, 0, 8, 9),
     }];
 
     expect(addLevel(items, { ...collectorOptions, maxLevel: -1 })).toEqual([
@@ -186,28 +186,28 @@ describe('addLevel', () => {
   it('should add levels for overlapping appointments with zero duration', () => {
     const items = [{
       id: 1,
-      startDate: 0,
-      endDate: 10,
+      startDateUTC: 0,
+      endDateUTC: 10,
     }, {
       id: 2,
-      startDate: 0,
-      endDate: 15,
+      startDateUTC: 0,
+      endDateUTC: 15,
     }, {
       id: 3,
-      startDate: 10,
-      endDate: 15,
+      startDateUTC: 10,
+      endDateUTC: 15,
     }, {
       id: 4,
-      startDate: 10,
-      endDate: 10,
+      startDateUTC: 10,
+      endDateUTC: 10,
     }, {
       id: 5,
-      startDate: 10,
-      endDate: 10,
+      startDateUTC: 10,
+      endDateUTC: 10,
     }, {
       id: 6,
-      startDate: 10,
-      endDate: 10,
+      startDateUTC: 10,
+      endDateUTC: 10,
     }];
 
     expect(addLevel(items, collectorOptions)).toEqual([

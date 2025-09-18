@@ -1,7 +1,6 @@
 import type { ViewType } from '../../../types';
 import type { CellInterval, DateInterval } from '../../types';
 import type { RealSize } from '../steps/add_geometry/types';
-import { getIntervalDaysCount } from './get_interval_days_count';
 
 interface Options {
   cellSize: RealSize;
@@ -27,7 +26,7 @@ export const getGroupSize = ({
   switch (viewType) {
     case 'month':
     case 'timelineMonth': {
-      const intervalDaysCount = getIntervalDaysCount(intervals[0]);
+      const intervalDaysCount = cells.filter((cell) => cell.rowIndex === 0).length;
       return {
         width: cellSize.width * intervalDaysCount,
         height: cellSize.height * intervals.length,

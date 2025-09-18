@@ -16,6 +16,7 @@ interface Options {
 
 const ADAPTIVITY_MIN_APPOINTMENT_COUNT = 0;
 const MIN_APPOINTMENT_COUNT = 1;
+const CELL_MIN_Y = 30;
 
 export const getMaxLevel = ({
   maxAppointmentsPerCell,
@@ -31,6 +32,12 @@ export const getMaxLevel = ({
         return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
       }
 
+      const cellSizeY = getAbstractSizeByViewOrientation(cellSize, viewOrientation).sizeY;
+      const isSmallCell = cellSizeY < CELL_MIN_Y;
+      if (isSmallCell) {
+        return ADAPTIVITY_MIN_APPOINTMENT_COUNT;
+      }
+
       const defaultAppointmentSize = getDefaultAppointmentSize({
         isTimelineView,
         isAdaptivityEnabled,
@@ -40,7 +47,6 @@ export const getMaxLevel = ({
         defaultAppointmentSize,
         viewOrientation,
       );
-      const cellSizeY = getAbstractSizeByViewOrientation(cellSize, viewOrientation).sizeY;
       const collectorSizeY = getAbstractSizeByViewOrientation(collectorSize, viewOrientation).sizeY;
       const calculated = Math.floor(
         Math.max(0, cellSizeY - collectorSizeY) / minAbstractSize.sizeY,

@@ -3,15 +3,15 @@ import { describe, expect, it } from '@jest/globals';
 import { calculateRows } from './agenda';
 
 const items = [
-  { groupIndex: 0, startDate: new Date(2020, 0, 10, 5).getTime() },
-  { groupIndex: 0, startDate: new Date(2020, 0, 11, 5).getTime() },
-  { groupIndex: 0, startDate: new Date(2020, 0, 15, 5).getTime() },
-  { groupIndex: 0, startDate: new Date(2020, 0, 10, 15).getTime() },
-  { groupIndex: 1, startDate: new Date(2020, 0, 14, 5).getTime() },
-  { groupIndex: 1, startDate: new Date(2020, 0, 11, 5).getTime() },
-  { groupIndex: 1, startDate: new Date(2020, 0, 11, 15).getTime() },
-  { groupIndex: 1, startDate: new Date(2020, 0, 14, 15).getTime() },
-  { groupIndex: 1, startDate: new Date(2020, 0, 12, 5).getTime() },
+  { groupIndex: 0, startDateUTC: Date.UTC(2020, 0, 10, 5) },
+  { groupIndex: 0, startDateUTC: Date.UTC(2020, 0, 11, 5) },
+  { groupIndex: 0, startDateUTC: Date.UTC(2020, 0, 15, 5) },
+  { groupIndex: 0, startDateUTC: Date.UTC(2020, 0, 10, 15) },
+  { groupIndex: 1, startDateUTC: Date.UTC(2020, 0, 14, 5) },
+  { groupIndex: 1, startDateUTC: Date.UTC(2020, 0, 11, 5) },
+  { groupIndex: 1, startDateUTC: Date.UTC(2020, 0, 11, 15) },
+  { groupIndex: 1, startDateUTC: Date.UTC(2020, 0, 14, 15) },
+  { groupIndex: 1, startDateUTC: Date.UTC(2020, 0, 12, 5) },
 ] as any[];
 
 describe('calculateRows', () => {

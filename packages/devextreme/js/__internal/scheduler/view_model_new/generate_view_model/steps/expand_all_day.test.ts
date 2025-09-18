@@ -1,155 +1,133 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { expandAllDay } from './expand_all_day';
+import { expandAllDayAllDayPanel, expandAllDayRegularPanel } from './expand_all_day';
 
 describe('expandAllDay', () => {
-  it('should not expand regular appointment', () => {
-    expect(expandAllDay([
-      {
+  describe('expandAllDayAllDayPanel', () => {
+    it('should not expand regular appointment', () => {
+      expect(expandAllDayAllDayPanel([{
         allDay: false,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
-      }, {
-        allDay: false,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
-      },
-    ], false)).toEqual([
-      {
-        allDay: false,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
-      }, {
-        allDay: false,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
-      },
-    ]);
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
+      }], 24, 0)).toEqual([
+        {
+          allDay: false,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 10, 1),
+        },
+      ]);
+    });
+
+    it('should set end date to all day appointment without offset', () => {
+      expect(expandAllDayAllDayPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 10),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11),
+          endDateUTC: Date.UTC(2020, 0, 12),
+        },
+      ], 24, 0)).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 10, 23, 59),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 23, 59),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11),
+          endDateUTC: Date.UTC(2020, 0, 12, 23, 59),
+        },
+      ]);
+    });
+
+    it('should set end date for all day appointment with offset', () => {
+      expect(expandAllDayAllDayPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 10),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11),
+          endDateUTC: Date.UTC(2020, 0, 12),
+        },
+      ], 24, 180 * 60_000)).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 9, 3),
+          endDateUTC: Date.UTC(2020, 0, 10, 2, 59),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 3),
+          endDateUTC: Date.UTC(2020, 0, 12, 2, 59),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 3),
+          endDateUTC: Date.UTC(2020, 0, 12, 2, 59),
+        },
+      ]);
+    });
   });
 
-  it('should just add 1ms to all day appointment for month view', () => {
-    expect(expandAllDay([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
-      },
-    ], true)).toEqual([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 24).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 24).getTime(),
-      },
-    ]);
-  });
+  describe('expandAllDayRegularPanel', () => {
+    it('should not expand regular appointment', () => {
+      expect(expandAllDayRegularPanel([{
+        allDay: false,
+        startDateUTC: Date.UTC(2020, 0, 10, 0),
+        endDateUTC: Date.UTC(2020, 0, 10, 1),
+      }])).toEqual([
+        {
+          allDay: false,
+          startDateUTC: Date.UTC(2020, 0, 10, 0),
+          endDateUTC: Date.UTC(2020, 0, 10, 1),
+        },
+      ]);
+    });
 
-  it('should just add 1ms to all day appointment in all day panel', () => {
-    expect(expandAllDay([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 1).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
-      },
-    ], false)).toEqual([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 24).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: true,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 24).getTime(),
-      },
-    ]);
-  });
-
-  it('should expand all day appointment with from 0 hours', () => {
-    expect(expandAllDay([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 10, 0).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 11, 0).getTime(),
-      },
-    ], false)).toEqual([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 11, 0).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 0).getTime(),
-        endDate: new Date(2020, 0, 12, 0).getTime(),
-      },
-    ]);
-  });
-
-  it('should expand all day appointment with from 4 AM', () => {
-    expect(expandAllDay([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 10, 5).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 5).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 12, 5).getTime(),
-      },
-    ], false)).toEqual([
-      {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 11, 4).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 12, 4).getTime(),
-      }, {
-        allDay: true,
-        isAllDayPanelOccupied: false,
-        startDate: new Date(2020, 0, 10, 4).getTime(),
-        endDate: new Date(2020, 0, 13, 4).getTime(),
-      },
-    ]);
+    it('should set +1 day from end date to all day appointment', () => {
+      expect(expandAllDayRegularPanel([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 10),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 11, 5),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11, 23),
+          endDateUTC: Date.UTC(2020, 0, 12),
+        },
+      ])).toEqual([
+        {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10),
+          endDateUTC: Date.UTC(2020, 0, 11),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 10, 4),
+          endDateUTC: Date.UTC(2020, 0, 12, 4),
+        }, {
+          allDay: true,
+          startDateUTC: Date.UTC(2020, 0, 11, 23),
+          endDateUTC: Date.UTC(2020, 0, 13, 23),
+        },
+      ]);
+    });
   });
 });

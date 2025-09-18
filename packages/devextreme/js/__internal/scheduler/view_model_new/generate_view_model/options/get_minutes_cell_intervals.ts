@@ -12,7 +12,7 @@ interface Options {
 const filterBySkippedDays = <T extends DateInterval>(
   intervals: T[],
   skippedDays: number[],
-): T[] => intervals.filter((item) => !skippedDays.includes(new Date(item.min).getDay()));
+): T[] => intervals.filter((item) => !skippedDays.includes(new Date(item.min).getUTCDay()));
 
 export const getMinutesCellIntervals = ({
   intervals,
@@ -30,11 +30,11 @@ export const getMinutesCellIntervals = ({
     const date = new Date(dayInterval.min);
     while (date.getTime() < dayInterval.max) {
       const min = date.getTime();
-      let max = date.setMinutes(date.getMinutes() + durationMinutes);
+      let max = date.setUTCMinutes(date.getUTCMinutes() + durationMinutes);
 
-      if (date.getHours() > endDayHour) {
-        date.setDate(date.getDate() + 1);
-        date.setHours(startDayHour, 0, 0, 0);
+      if (date.getUTCHours() > endDayHour) {
+        date.setUTCDate(date.getUTCDate() + 1);
+        date.setUTCHours(startDayHour, 0, 0, 0);
         max = date.getTime();
       }
 
