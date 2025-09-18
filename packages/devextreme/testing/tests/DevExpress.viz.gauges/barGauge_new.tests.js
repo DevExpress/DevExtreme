@@ -12,7 +12,6 @@ import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import dxBarGauge from 'viz/bar_gauge';
-import errors from 'core/errors';
 
 import '__internal/viz/gauges/bar_gauge';
 
