@@ -55,9 +55,13 @@ export class OptionManager {
     geometryOptions: GeometryOptions;
   } {
     const workspace = this.schedulerStore.getWorkSpace();
-    const panelDOMSize = workspace.getPanelDOMSize(panelName);
+    const panelDOMSize = workspace.getPanelDOMSize(
+      this.options.groupOrientation === 'vertical'
+        ? 'regularPanel'
+        : panelName,
+    );
 
-    return this.cache.memo(panelName, () => {
+    return this.cache.memo(`${panelDOMSize.width}.${panelDOMSize.height}.${panelName}`, () => {
       const {
         type,
         viewOffset,
@@ -77,6 +81,7 @@ export class OptionManager {
       const isCompactCollector = isAdaptivityEnabled || viewOrientation === 'vertical';
       const collectorCSS = workspace.getCollectorDimension(isCompactCollector, panelName);
       const {
+        allDayPanelCellSize,
         cellSize,
         collectorSizes,
         maxLevel,
@@ -104,7 +109,8 @@ export class OptionManager {
         panelName,
       );
 
-      const splitIntervals = isGroupByDate ? dayIntervals : intervals;
+      const groupByDateSplitIntervals = viewOrientation === 'vertical' ? dayIntervals : cells;
+      const splitIntervals = isGroupByDate ? groupByDateSplitIntervals : intervals;
       const geometryOptions: GeometryOptions = {
         intervals,
         cells,
@@ -116,6 +122,7 @@ export class OptionManager {
         isTimelineView,
         isRTLEnabled,
         isAdaptivityEnabled,
+        allDayPanelCellSize,
         cellSize,
         collectorPosition: viewOrientation === 'vertical' ? 'end' : 'start',
         ...collectorSizes,

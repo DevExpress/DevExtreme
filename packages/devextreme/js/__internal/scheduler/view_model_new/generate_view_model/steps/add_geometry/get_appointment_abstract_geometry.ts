@@ -1,4 +1,3 @@
-import { minusDST } from '../../../common/minus_dst';
 import type { CellInterval } from '../../../types';
 import type {
   AbstractSize,
@@ -9,18 +8,19 @@ import type {
 } from './types';
 
 const getInsideCellX = (date: number, { min, max }: CellInterval, cellSizeX: number): number => {
-  const cellDuration = minusDST(max) - minusDST(min);
-  const startTimeDelta = minusDST(date) - minusDST(min);
-  return (startTimeDelta * cellSizeX) / cellDuration;
+  const cellDuration = max - min;
+  const startTimeDelta = date - min;
+
+  return cellDuration === 0 ? 0 : (startTimeDelta * cellSizeX) / cellDuration;
 };
 
 export const getAppointmentX = (
-  entity: Pick<GeometryMinimalEntity, 'startDate' | 'endDate' | 'cellIndex' | 'endCellIndex' | 'columnIndex'>,
+  entity: Pick<GeometryMinimalEntity, 'startDateUTC' | 'endDateUTC' | 'cellIndex' | 'endCellIndex' | 'columnIndex'>,
   cellSize: AbstractSize,
   cells: CellInterval[],
 ): X => {
-  const startX = getInsideCellX(entity.startDate, cells[entity.cellIndex], cellSize.sizeX);
-  const endX = getInsideCellX(entity.endDate, cells[entity.endCellIndex], cellSize.sizeX);
+  const startX = getInsideCellX(entity.startDateUTC, cells[entity.cellIndex], cellSize.sizeX);
+  const endX = getInsideCellX(entity.endDateUTC, cells[entity.endCellIndex], cellSize.sizeX);
   const offsetX = entity.columnIndex * cellSize.sizeX + startX;
   const sizeX = (entity.endCellIndex - entity.cellIndex) * cellSize.sizeX + endX - startX;
 

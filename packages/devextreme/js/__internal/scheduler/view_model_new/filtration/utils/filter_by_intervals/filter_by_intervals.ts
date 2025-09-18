@@ -1,21 +1,47 @@
 import { isAppointmentMatchedIntervals } from '../../../common/is_appointment_matched_intervals';
-import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../../types';
+import type {
+  AllDayPanelOccupation,
+  DateInterval,
+  FilterOptions,
+  MinimalAppointmentEntity,
+  UTCDates,
+} from '../../../types';
 
-export const filterByIntervals = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
+type Entity = MinimalAppointmentEntity & AllDayPanelOccupation & UTCDates;
+
+const getIntervals = <T extends Entity>(
+  appointment: T,
+  {
+    allDayIntervals,
+    regularIntervals,
+    isDateTimeView,
+  }: FilterOptions): DateInterval[] => {
+  // NOTE: broken case for all day appointments in regular panel
+  if (isDateTimeView && appointment.allDay && !appointment.isAllDayPanelOccupied) {
+    return regularIntervals.map((interval) => ({
+      min: new Date(interval.min).setUTCHours(0, 0, 0, 0),
+      max: interval.max,
+    }));
+  }
+
+  return appointment.allDay || appointment.isAllDayPanelOccupied
+    ? allDayIntervals
+    : regularIntervals;
+};
+
+export const filterByIntervals = <T extends Entity>(
   entities: T[],
-  { allDayIntervals, regularIntervals }: FilterOptions,
+  options: FilterOptions,
 ): T[] => entities.filter((appointment) => {
-    const intervals = appointment.allDay || appointment.isAllDayPanelOccupied
-      ? allDayIntervals
-      : regularIntervals;
+    const intervals = getIntervals(appointment, options);
     // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
     const fixedAppointment = { ...appointment };
-    if (appointment.allDay && appointment.isAllDayPanelOccupied) {
-      fixedAppointment.endDate += 1;
+    if (appointment.allDay) {
+      fixedAppointment.endDateUTC += 1;
     }
 
     return isAppointmentMatchedIntervals(
-      fixedAppointment,
+      { startDate: fixedAppointment.startDateUTC, endDate: fixedAppointment.endDateUTC },
       intervals,
     );
   });

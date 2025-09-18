@@ -346,10 +346,16 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-
 .dx-scheduler-adaptive {
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
     white-space: nowrap;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month {
+    .dx-scheduler-appointment-collector,
+    &.dx-rtl .dx-scheduler-appointment-collector {
+      margin: 0 $material-scheduler-dropdown-margin-right;
+    }
   }
 }
 

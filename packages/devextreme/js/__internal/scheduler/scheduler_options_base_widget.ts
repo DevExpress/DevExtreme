@@ -1,6 +1,7 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
 
+import timeZoneUtils from './m_utils_time_zone';
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
@@ -100,6 +101,10 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     };
     const validationResult = this.optionsValidator.validate(currentViewOptions);
     this.optionsValidatorErrorHandler.handleValidationResult(validationResult);
+  }
+
+  getTimeZone(): string {
+    return (this.option('timeZone') || timeZoneUtils.getMachineTimezoneName()) ?? 'Etc/UTC';
   }
 
   getViewOption<K extends keyof SafeSchedulerOptions>(optionName: K): SafeSchedulerOptions[K] {

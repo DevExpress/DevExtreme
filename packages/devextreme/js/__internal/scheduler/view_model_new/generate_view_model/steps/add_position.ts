@@ -5,22 +5,22 @@ import type {
 } from '../../types';
 import { binarySearchCellIndex } from './binary_search_cell_index';
 
-export const addPosition = <T extends Pick<ListEntity, 'startDate' | 'endDate'>>(
+export const addPosition = <T extends Pick<ListEntity, 'startDateUTC' | 'endDateUTC'>>(
   entities: T[],
   cells: CellInterval[],
 ): (T & Position)[] => entities.map((entity) => {
-    const cellIndex = binarySearchCellIndex(cells, entity.startDate);
+    const cellIndex = binarySearchCellIndex(cells, entity.startDateUTC);
     let endCellIndex = cellIndex;
     while (
       endCellIndex < cells.length - 1
-      && entity.endDate > cells[endCellIndex].max
-      && entity.endDate >= cells[endCellIndex + 1].min
+      && entity.endDateUTC > cells[endCellIndex].max
+      && entity.endDateUTC >= cells[endCellIndex + 1].min
     ) { endCellIndex += 1; }
 
     return {
       ...entity,
-      startDate: Math.max(entity.startDate, cells[cellIndex].min),
-      endDate: Math.min(entity.endDate, cells[endCellIndex].max),
+      startDateUTC: Math.max(entity.startDateUTC, cells[cellIndex].min),
+      endDateUTC: Math.min(entity.endDateUTC, cells[endCellIndex].max),
       cellIndex,
       endCellIndex,
       rowIndex: cells[cellIndex].rowIndex,

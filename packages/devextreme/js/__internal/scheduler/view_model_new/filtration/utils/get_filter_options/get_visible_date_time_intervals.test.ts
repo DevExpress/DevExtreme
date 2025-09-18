@@ -9,12 +9,12 @@ describe('getVisibleDateTimeIntervals', () => {
     expect(getVisibleDateTimeIntervals({
       startDayHour: 3,
       endDayHour: 10,
-      min: new Date(2000, 0, 10, 3).getTime(),
-      max: new Date(2000, 0, 15, 10).getTime(),
+      min: Date.UTC(2000, 0, 10, 3),
+      max: Date.UTC(2000, 0, 15, 10),
       skippedDays: [],
     }, true)).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 16).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 16),
     }]);
   });
 
@@ -22,12 +22,12 @@ describe('getVisibleDateTimeIntervals', () => {
     expect(getVisibleDateTimeIntervals({
       startDayHour: 10,
       endDayHour: 3,
-      min: new Date(2000, 0, 10, 10).getTime(),
-      max: new Date(2000, 0, 15, 3).getTime(),
+      min: Date.UTC(2000, 0, 10, 10),
+      max: Date.UTC(2000, 0, 15, 3),
       skippedDays: [],
     }, true)).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 16).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 16),
     }]);
   });
 
@@ -35,12 +35,12 @@ describe('getVisibleDateTimeIntervals', () => {
     expect(getVisibleDateTimeIntervals({
       startDayHour: 0,
       endDayHour: 24,
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 15).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 15),
       skippedDays: [],
     }, false)).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 15).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 15),
     }]);
   });
 
@@ -48,15 +48,15 @@ describe('getVisibleDateTimeIntervals', () => {
     expect(getVisibleDateTimeIntervals({
       startDayHour: 0,
       endDayHour: 24,
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 20).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 20),
       skippedDays: [0, 6],
     }, false)).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 15).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 15),
     }, {
-      min: new Date(2000, 0, 17).getTime(),
-      max: new Date(2000, 0, 20).getTime(),
+      min: Date.UTC(2000, 0, 17),
+      max: Date.UTC(2000, 0, 20),
     }]);
   });
 
@@ -64,28 +64,28 @@ describe('getVisibleDateTimeIntervals', () => {
     expect(getVisibleDateTimeIntervals({
       startDayHour: 3,
       endDayHour: 10,
-      min: new Date(2000, 0, 10, 10).getTime(),
-      max: new Date(2000, 0, 15, 5).getTime(),
+      min: Date.UTC(2000, 0, 10, 10),
+      max: Date.UTC(2000, 0, 15, 5),
       skippedDays: [],
     }, false)).toEqual([
       {
-        min: new Date(2000, 0, 10, 3).getTime(),
-        max: new Date(2000, 0, 10, 10).getTime(),
+        min: Date.UTC(2000, 0, 10, 3),
+        max: Date.UTC(2000, 0, 10, 10),
       }, {
-        min: new Date(2000, 0, 11, 3).getTime(),
-        max: new Date(2000, 0, 11, 10).getTime(),
+        min: Date.UTC(2000, 0, 11, 3),
+        max: Date.UTC(2000, 0, 11, 10),
       }, {
-        min: new Date(2000, 0, 12, 3).getTime(),
-        max: new Date(2000, 0, 12, 10).getTime(),
+        min: Date.UTC(2000, 0, 12, 3),
+        max: Date.UTC(2000, 0, 12, 10),
       }, {
-        min: new Date(2000, 0, 13, 3).getTime(),
-        max: new Date(2000, 0, 13, 10).getTime(),
+        min: Date.UTC(2000, 0, 13, 3),
+        max: Date.UTC(2000, 0, 13, 10),
       }, {
-        min: new Date(2000, 0, 14, 3).getTime(),
-        max: new Date(2000, 0, 14, 10).getTime(),
+        min: Date.UTC(2000, 0, 14, 3),
+        max: Date.UTC(2000, 0, 14, 10),
       }, {
-        min: new Date(2000, 0, 15, 3).getTime(),
-        max: new Date(2000, 0, 15, 10).getTime(),
+        min: Date.UTC(2000, 0, 15, 3),
+        max: Date.UTC(2000, 0, 15, 10),
       },
     ]);
   });

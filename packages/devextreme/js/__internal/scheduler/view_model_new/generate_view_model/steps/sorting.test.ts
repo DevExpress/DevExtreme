@@ -6,23 +6,23 @@ describe('sorting', () => {
   describe('sortByStartDate', () => {
     it('should sort items by start date', () => {
       const items = [
-        { id: 1, startDate: 10 },
-        { id: 2, startDate: 100 },
-        { id: 3, startDate: 20 },
-        { id: 4, startDate: 100 },
-        { id: 5, startDate: 5 },
-        { id: 6, startDate: 500 },
-        { id: 7, startDate: 10 },
+        { id: 1, startDateUTC: 10 },
+        { id: 2, startDateUTC: 100 },
+        { id: 3, startDateUTC: 20 },
+        { id: 4, startDateUTC: 100 },
+        { id: 5, startDateUTC: 5 },
+        { id: 6, startDateUTC: 500 },
+        { id: 7, startDateUTC: 10 },
       ];
 
       expect(sortByStartDate(items)).toEqual([
-        { id: 5, startDate: 5 },
-        { id: 1, startDate: 10 },
-        { id: 7, startDate: 10 },
-        { id: 3, startDate: 20 },
-        { id: 2, startDate: 100 },
-        { id: 4, startDate: 100 },
-        { id: 6, startDate: 500 },
+        { id: 5, startDateUTC: 5 },
+        { id: 1, startDateUTC: 10 },
+        { id: 7, startDateUTC: 10 },
+        { id: 3, startDateUTC: 20 },
+        { id: 2, startDateUTC: 100 },
+        { id: 4, startDateUTC: 100 },
+        { id: 6, startDateUTC: 500 },
       ]);
     });
   });

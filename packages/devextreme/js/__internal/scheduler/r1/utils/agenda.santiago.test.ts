@@ -4,19 +4,27 @@
 
 import { describe, expect, it } from '@jest/globals';
 
+import timeZoneUtils from '../../m_utils_time_zone';
 import { calculateRows } from './agenda';
+
+const createDate = (year: number, month: number, day: number, hours: number) => {
+  const dateUTC = timeZoneUtils.createUTCDateWithLocalOffset(
+    new Date(year, month, day, hours),
+  ).getTime();
+  return dateUTC;
+};
 
 describe('calculateRows', () => {
   it('should count rows through winter 00:00 DST', () => {
     expect(calculateRows([
-      { groupIndex: 0, startDate: new Date(2016, 8, 6, 10).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 6, 23).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 7, 0).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 7, 2).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 7, 15).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 8, 0).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 8, 16).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 8, 9, 0).getTime() },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 6, 10) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 6, 23) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 7, 0) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 7, 2) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 7, 15) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 8, 0) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 8, 16) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 8, 9, 0) },
     ] as any, 7, new Date(2016, 8, 6), 0)).toEqual([
       [2, 3, 2, 1, 0, 0, 0],
     ]);
@@ -24,14 +32,14 @@ describe('calculateRows', () => {
 
   it('should count rows through summer 00:00 DST', () => {
     expect(calculateRows([
-      { groupIndex: 0, startDate: new Date(2016, 3, 3, 10).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 3, 23).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 4, 0).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 4, 2).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 4, 15).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 5, 0).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 5, 16).getTime() },
-      { groupIndex: 0, startDate: new Date(2016, 3, 6, 0).getTime() },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 3, 10) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 3, 23) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 4, 0) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 4, 2) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 4, 15) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 5, 0) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 5, 16) },
+      { groupIndex: 0, startDateUTC: createDate(2016, 3, 6, 0) },
     ] as any, 7, new Date(2016, 3, 2), 0)).toEqual([
       [0, 2, 3, 2, 1, 0, 0],
     ]);

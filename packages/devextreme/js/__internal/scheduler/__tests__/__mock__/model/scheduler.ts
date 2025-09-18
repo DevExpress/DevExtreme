@@ -8,6 +8,7 @@ const getTexts = (
 export interface SchedulerModel {
   getAppointment: () => AppointmentModel<HTMLDivElement | null>;
   getAppointments: () => AppointmentModel[];
+  getCollectorTexts: () => string[];
   getDateTableContent: () => string[];
   getHeaderPanelContent: () => string[];
   getTimePanelContent: () => string[];
@@ -22,6 +23,10 @@ export const createSchedulerModel = (container: HTMLDivElement): SchedulerModel 
     return [...container.querySelectorAll('.dx-scheduler-appointment')].map(
       (element) => createAppointmentModel(element as HTMLDivElement),
     );
+  },
+  getCollectorTexts(): string[] {
+    const collectors = container.querySelectorAll('.dx-scheduler-appointment-collector');
+    return getTexts(collectors);
   },
   getDateTableContent(): string[] {
     const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');

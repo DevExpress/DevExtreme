@@ -38,8 +38,10 @@ export const setupSchedulerTestEnvironment = ({
     marginBottom: '3px',
   }));
   Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
+    const classList: string[] = Array.from(this.classList);
     switch (true) {
-      case this.classList.contains('dx-scheduler-date-table-cell'):
+      case classList.includes('dx-scheduler-date-table-cell')
+        || classList.includes('dx-scheduler-all-day-table-cell'):
         return {
           width,
           height,

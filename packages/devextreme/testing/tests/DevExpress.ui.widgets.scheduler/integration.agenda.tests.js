@@ -1060,33 +1060,6 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.equal($dateTableRows.length, 2, 'DateTable row count is OK');
     });
 
-    test('All-day appointment should not be duplicated with custom timezone', async function(assert) {
-        const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
-        try {
-            const timezoneDifference = getDeltaTz(5);
-            const getDate = function(date) {
-                return new Date(date.getTime() - timezoneDifference);
-            };
-
-            const instance = await createInstance({
-                views: ['agenda'],
-                currentView: 'agenda',
-                currentDate: new Date(2016, 4, 3),
-                timeZone: 'Asia/Ashkhabad',
-                dataSource: [{
-                    startDate: getDate(new Date(2016, 4, 4)),
-                    endDate: getDate(new Date(2016, 4, 5))
-                }]
-            });
-
-            const $appts = instance.$element().find('.dx-scheduler-appointment');
-
-            assert.equal($appts.length, 1, 'Appt count is OK');
-        } finally {
-            tzOffsetStub.restore();
-        }
-    });
-
     test('All-day appointment should not be duplicated with custom timezone (T437288)', async function(assert) {
         const instance = await createInstance({
             views: ['agenda'],
