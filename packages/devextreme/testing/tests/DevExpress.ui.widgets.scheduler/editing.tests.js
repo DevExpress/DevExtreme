@@ -80,27 +80,6 @@ QUnit.test('Appointment should not be draggable & resizable', async function(ass
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
 });
 
-QUnit.test('Edit button should not be contain the \'pencil\' icon', async function(assert) {
-    await this.createInstance({
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: 'a',
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').first());
-
-    const itemData = dataUtils.data($appointment[0], 'dxItemData');
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    assert.notOk($('.dx-scheduler-appointment-tooltip-buttons .dx-button').hasClass('dx-button-has-icon'), 'Edit button is OK');
-    tooltip.hide();
-});
-
 QUnit.test('ReadOnly option should be passed to the details appointment view', async function(assert) {
     await this.createInstance();
 

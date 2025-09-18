@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals';
+import { logger } from '@ts/core/utils/m_console';
 import DOMComponent from '@ts/core/widget/dom_component';
 
 import SchedulerWorkSpace from '../../workspaces/m_work_space';
@@ -16,6 +17,7 @@ export const setupSchedulerTestEnvironment = ({
   width = DEFAULT_CELL_WIDTH,
   height = DEFAULT_CELL_HEIGHT,
 }: SetupSchedulerTestEnvironmentOptions = {}): void => {
+  jest.spyOn(logger, 'warn').mockImplementation(() => {});
   DOMComponent.prototype._isVisible = jest.fn((): boolean => true);
   SchedulerWorkSpace.prototype._createCrossScrollingConfig = (): {
     direction: string;

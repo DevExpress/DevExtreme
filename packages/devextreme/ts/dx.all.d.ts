@@ -1447,7 +1447,7 @@ declare module DevExpress.common {
     /**
      * [descr:PagerBase.showPageSizeSelector]
      */
-    showPageSizeSelector?: boolean;
+    showPageSizeSelector?: boolean | Mode;
     /**
      * [descr:PagerBase.label]
      */

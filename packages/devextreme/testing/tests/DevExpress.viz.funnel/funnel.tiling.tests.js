@@ -1,6 +1,4 @@
-const common = require('./commonParts/common.js');
-const createFunnel = common.createFunnel;
-const environment = common.environment;
+import { createFunnel, environment } from './commonParts/common.js';
 
 QUnit.module('Algorithms', environment);
 

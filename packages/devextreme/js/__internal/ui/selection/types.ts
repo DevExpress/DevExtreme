@@ -2,8 +2,8 @@ import type { LoadResult } from '@js/common/data';
 import type { FilterDescriptor, LoadOptions, SelectDescriptor } from '@js/common/data.types';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import type { Cancelable } from '@js/events';
-import type DeferredStrategy from '@ts/ui/selection/m_selection.strategy.deferred';
-import type StandardStrategy from '@ts/ui/selection/m_selection.strategy.standard';
+import type DeferredStrategy from '@ts/ui/selection/selection.strategy.deferred';
+import type StandardStrategy from '@ts/ui/selection/selection.strategy.standard';
 
 export type SelectionFilter = FilterDescriptor[];
 

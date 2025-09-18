@@ -32,8 +32,19 @@ class RadioGroup extends Editor<RadioGroupProperties> {
 
   private _$submitElement!: dxElementWrapper;
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return `.${RADIO_BUTTON_CLASS}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _feedbackHideTimeout(): number {
+    return RADIO_FEEDBACK_HIDE_TIMEOUT;
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<RadioGroupProperties>[] {
@@ -88,8 +99,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   _init(): void {
     super._init();
 
-    this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
-    this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
     // @ts-expect-error
     this._initDataExpressions();
   }

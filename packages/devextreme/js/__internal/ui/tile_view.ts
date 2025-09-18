@@ -84,6 +84,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
   _cells!: number[][];
 
+  protected _activeStateUnit(): string {
+    return TILEVIEW_ITEM_SELECTOR;
+  }
+
   _getDefaultOptions(): TileViewProperties {
     return {
       ...super._getDefaultOptions(),
@@ -135,8 +139,6 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
   _init(): void {
     super._init();
-
-    this._activeStateUnit = TILEVIEW_ITEM_SELECTOR;
 
     this.$element().addClass(TILEVIEW_CLASS);
     this._initScrollView();

@@ -46,19 +46,22 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
-type ItemClickEvent =
-  NativeEventInfo<dxMenuBase<MenuBaseProperties>, MouseEvent | PointerEvent | TouchEvent>
-  & ItemInfo<dxMenuBaseItem>;
+type ItemClickEvent<TComponent, TItem> =
+  NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent>
+  & ItemInfo<TItem>;
 export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
 export type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
-export type ItemClickActionArguments = ActionArguments<
-  dxMenuBase<MenuBaseProperties>,
-  ItemClickEvent
+export type ItemClickActionArguments<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionArguments<
+  TComponent,
+  ItemClickEvent<TComponent, TItem>
 >;
 type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
 export interface MenuBaseProperties<
-  TItem extends dxMenuBaseItem = Item,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
   focusedElement?: Element | null;
@@ -77,6 +80,10 @@ class MenuBase<
 
   // eslint-disable-next-line no-restricted-globals
   _showSubmenusTimeout?: ReturnType<typeof setTimeout>;
+
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
 
   _getDefaultOptions(): TProperties {
     return {
@@ -173,7 +180,6 @@ class MenuBase<
 
   _init(): void {
     super._init();
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._renderSelectedItem();
     this._initActions();
@@ -272,7 +278,7 @@ class MenuBase<
       return;
     }
 
-    const node: Item | null = this._dataAdapter.getNodeByKey(selectedKey);
+    const node: MenuBaseNode | null = this._dataAdapter.getNodeByKey(selectedKey);
 
     if (!node || node.selectable === false) {
       return;
@@ -412,9 +418,8 @@ class MenuBase<
     return delay;
   }
 
-  // TODO: try to simplify
   _getItemElementByEventArgs(
-    eventArgs: HoverEvent | ClickEvent,
+    eventArgs: DxEvent,
   ): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
@@ -631,6 +636,10 @@ class MenuBase<
     e._skipHandling = true;
   }
 
+  _isUrlItem(item: Item | dxMenuBaseItem | undefined): item is Item {
+    return !!item && 'url' in item && !!item.url;
+  }
+
   _itemClick(actionArgs: ItemClickActionArguments): void {
     const { event, itemData } = actionArgs.args?.[0] ?? {};
 
@@ -641,7 +650,7 @@ class MenuBase<
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement?.find(`.${ITEM_URL_CLASS}`)[0];
 
-    if (!itemData?.url || !link) {
+    if (!this._isUrlItem(itemData) || !link) {
       return;
     }
 
@@ -667,7 +676,7 @@ class MenuBase<
   }
 
   _updateSelectedItemOnClick(actionArgs: ItemClickActionArguments): void {
-    const args: ItemClickEvent = actionArgs.args ? actionArgs.args[0] : actionArgs;
+    const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
     const { itemData } = args;
 
@@ -793,7 +802,9 @@ class MenuBase<
   }
 
   selectItem(itemElement: Element | dxMenuBaseItem): void {
-    const itemData = itemElement.nodeType ? this._getItemData(itemElement as Element) : itemElement;
+    const isElement = (item: Element | dxMenuBaseItem): item is Element => typeof item === 'object' && 'nodeType' in item && !!item.nodeType;
+
+    const itemData = isElement(itemElement) ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
     const node = this._dataAdapter.getNodeByItem(itemData);

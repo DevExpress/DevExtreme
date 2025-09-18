@@ -1,0 +1,20 @@
+import { isDefined } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+
+export function getSummaryCellIndex(
+  column: Column,
+  prevColumn?: Column,
+  isGroupRow = false,
+): number {
+  const cellIndex = column.index ?? -1;
+
+  if (!isGroupRow) {
+    return cellIndex;
+  }
+
+  if (prevColumn?.type === 'groupExpand' || column.type === 'groupExpand') {
+    return prevColumn?.index ?? -1;
+  }
+
+  return !isDefined(column.groupIndex) ? cellIndex : -1;
+}

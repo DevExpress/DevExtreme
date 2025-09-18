@@ -26,17 +26,22 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { findTemplates } from '@js/core/utils/template_manager';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
-import DataHelperMixin from '@js/data_helper';
 import type {
   Cancelable, DxEvent,
 } from '@js/events';
-import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type {
+  CollectionWidgetItem as CollectionWidgetItemProperties,
+  CollectionWidgetOptions,
+  ItemLike,
+} from '@js/ui/collection/ui.collection_widget.base';
 import { getPublicElement } from '@ts/core/m_element';
 import { focusable } from '@ts/core/utils/m_selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import DataHelperMixin from '@ts/data/m_data_helper';
+import type { ClickableCollectionWidgetItem, ItemClickEvent } from '@ts/ui/collection/item';
 import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
@@ -117,8 +122,7 @@ export type Constructor<T> = new (...args: unknown[]) => T;
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TItem extends ItemLike = any,
+    TItem extends ItemLike = CollectionWidgetItemProperties,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey extends CollectionItemKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey>, Omit<
@@ -145,8 +149,7 @@ export interface CollectionWidgetBaseProperties<
 class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TProperties extends CollectionWidgetBaseProperties<any, TItem, TKey>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TItem extends ItemLike = any,
+  TItem extends ItemLike = CollectionWidgetItemProperties,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey extends CollectionItemKey = any,
 > extends Widget<TProperties> {
@@ -179,6 +182,10 @@ class CollectionWidget<
       event: InkRippleEvent;
     }) => void;
   };
+
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
 
   _supportedKeys(): SupportedKeys {
     const space = (e: DxEvent<KeyboardEvent>): void => {
@@ -231,12 +238,10 @@ class CollectionWidget<
     }
 
     const itemData = this._getItemData($itemElement);
-    // @ts-expect-error ts-error
-    if (itemData?.onClick) {
+    if (CollectionWidgetItem.isClickableItem(itemData)) {
       const actionArgs: ActionArgs<TItem> = {
         event: e,
       };
-      // @ts-expect-error
       this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
     }
     // @ts-expect-error ts-error
@@ -284,8 +289,6 @@ class CollectionWidget<
     // @ts-expect-error ts-error
     this._initDataController();
     super._init();
-
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._cleanRenderedItems();
     // @ts-expect-error ts-error
@@ -435,7 +438,7 @@ class CollectionWidget<
   }
 
   _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
-    return $element.find(this._activeStateUnit);
+    return $element.find(this._activeStateUnit());
   }
 
   _getActiveItem(last?: boolean): dxElementWrapper {
@@ -564,7 +567,12 @@ class CollectionWidget<
     if ($target.length) {
       this._refreshActiveDescendant();
       this._refreshItemId($target, needCleanItemId);
-      this._toggleFocusClass(isFocused, $target);
+
+      const { focusStateEnabled } = this.option();
+
+      if (focusStateEnabled) {
+        this._toggleFocusClass(isFocused, $target);
+      }
     }
 
     this._updateParentActiveDescendant();
@@ -1240,8 +1248,7 @@ class CollectionWidget<
   }
 
   _attachItemClickEvent(itemData: TItem, $itemElement: dxElementWrapper): void {
-    // @ts-expect-error ts-error
-    if (!itemData || !itemData.onClick) {
+    if (!itemData || !CollectionWidgetItem.isClickableItem(itemData)) {
       return;
     }
 
@@ -1252,7 +1259,6 @@ class CollectionWidget<
         const actionArgs = {
           event: e,
         };
-        // @ts-expect-error ts-error
         this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
       },
     );
@@ -1487,7 +1493,7 @@ class CollectionWidget<
 
   _itemEventHandlerByHandler(
     initiator: dxElementWrapper | Element,
-    handler: () => void,
+    handler: (e: ItemClickEvent<ClickableCollectionWidgetItem>) => void,
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {

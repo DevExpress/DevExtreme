@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/drawer.markup.tests.js');
+import '../DevExpress.ui.widgets/drawer.markup.tests.js';

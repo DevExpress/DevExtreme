@@ -136,6 +136,7 @@ const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
 const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const TOOLBAR_ITEM_CONTENT_CLASS = 'dx-toolbar-item-content';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -2722,7 +2723,6 @@ QUnit.module('rendering', {
         });
     });
 
-
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
         this.instance.option('width', function() { return getWidth($(window)); });
         this.instance.show();
@@ -2746,6 +2746,39 @@ QUnit.module('rendering', {
         popup.show();
 
         assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
+    });
+
+    ['top', 'bottom'].forEach((position) => {
+        QUnit.test(`${position} toolbar should be rendered correctly after clearing the toolbarItems (T1305512)`, function(assert) {
+            const popup = $('#popup').dxPopup({
+                showCloseButton: false,
+                showTitle: false,
+            }).dxPopup('instance');
+
+            popup.option({
+                toolbarItems: [
+                    {
+                        text: 'first',
+                        toolbar: position,
+                    },
+                ],
+            });
+            popup.option({ toolbarItems: [] });
+            popup.option({
+                toolbarItems: [
+                    {
+                        text: 'second',
+                        toolbar: position,
+                    },
+                ],
+            });
+
+            popup.show();
+
+            const $toolbarItemContent = popup.$wrapper().find(`.${TOOLBAR_ITEM_CONTENT_CLASS}`);
+
+            assert.strictEqual($toolbarItemContent.text(), 'second', 'toolbar with the correct element rendered after toolbarItems cleaning');
+        });
     });
 
     QUnit.test('dx-popup-content-scrollable class should be attached when preventScrollEvents is used', function(assert) {

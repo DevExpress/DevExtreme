@@ -23,8 +23,8 @@ import {
   REDUCED_APPOINTMENT_ICON,
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../m_classes';
-import { getRecurrenceProcessor } from '../../m_recurrence';
 import type { SubscribeKey, SubscribeMethods } from '../../m_subscribes';
+import { validateRRule } from '../../recurrence/validate_rule';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentProperties } from './m_types';
 import {
@@ -260,17 +260,17 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   }
 
   _renderAllDayClass() {
-    (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, !!this.option('allDay'));
+    (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, Boolean(this.option('allDay')));
   }
 
   _renderDragSourceClass() {
-    (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, !!this.option('isDragSource'));
+    (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, Boolean(this.option('isDragSource')));
   }
 
   _renderRecurrenceClass() {
     const rule = this.dataAccessors.get('recurrenceRule', this.rawAppointment);
 
-    if (getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
+    if (validateRRule(rule)) {
       (this.$element() as any).addClass(RECURRENCE_APPOINTMENT_CLASS);
     }
   }

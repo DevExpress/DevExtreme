@@ -1,9 +1,9 @@
 import { fileSaver } from './__internal/exporter/file_saver';
 import {
     imageCreator, testFormats, getData as getImageData,
-    ///#DEBUG
+    /// #DEBUG
     asyncEach
-    ///#ENDDEBUG
+    /// #ENDDEBUG
 } from './__internal/exporter/image_creator';
 import { svgCreator, getData as getSvgData } from './__internal/exporter/svg_creator';
 import { isFunction as _isFunction, isBoolean } from './core/utils/type';
@@ -57,9 +57,9 @@ export {
 };
 
 export const image = {
-    ///#DEBUG
+    /// #DEBUG
     asyncEach,
-    ///#ENDDEBUG
+    /// #ENDDEBUG
     creator: imageCreator,
     getData: getImageData,
     testFormats: testFormats

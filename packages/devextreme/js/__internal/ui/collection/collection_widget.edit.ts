@@ -29,7 +29,7 @@ import type {
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type DataController from '@ts/ui/collection/m_data_controller';
-import Selection from '@ts/ui/selection/m_selection';
+import Selection from '@ts/ui/selection/selection';
 
 import type { CollectionItemIndex } from './collection_widget.edit.strategy';
 
@@ -383,7 +383,8 @@ class CollectionWidget<
         break;
       }
       case 'selectedItem': {
-        const { selectedItem = {} as TItem, selectionRequired } = this.option();
+        const { selectedItem, selectionRequired } = this.option();
+        // @ts-expect-error
         const selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
         if (selectionRequired && !indexExists(selectedIndex)) {

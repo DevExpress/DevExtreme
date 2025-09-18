@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import { Renderer, Element } from '../../helpers/vizMocks.js';
 import translator2DModule from 'viz/translators/translator2d';
 import rangeViewModule from 'viz/range_selector/range_view';
 import { MockAxis } from '../../helpers/chartMocks.js';
 
 QUnit.module('RangeView', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.root = new vizMocks.Element();
+        this.renderer = new Renderer();
+        this.root = new Element();
         this.translator = { tag: 'translator' };
         this.rangeView = new rangeViewModule.RangeView({
             renderer: this.renderer,

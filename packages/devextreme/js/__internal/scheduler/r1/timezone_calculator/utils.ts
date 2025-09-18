@@ -4,6 +4,7 @@ import { TimeZoneCalculator } from './calculator';
 export const createTimeZoneCalculator = (
   currentTimeZone: string,
 ): TimeZoneCalculator => new TimeZoneCalculator({
+  timeZone: currentTimeZone,
   getClientOffset: (date: Date): number => timeZoneUtils
     .getClientTimezoneOffset(date),
   tryGetCommonOffset: (date: Date): number | undefined => timeZoneUtils

@@ -1,12 +1,25 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { isFunction } from 'core/utils/type';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    Point,
+    ObjectPool,
+    stubClass,
+    stubIncidentOccurredCreation,
+    ExportMenu,
+} from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import commons from './chartParts/commons.js';
+import {
+    rendererModule,
+    resetModules,
+    getLegendStub,
+    getTrackerStub
+} from './chartParts/commons.js';
+import exportModule from 'viz/core/export';
 import seriesModule from 'viz/series/base_series';
 import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
-import labelModule from 'viz/series/points/label';
+import * as labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
 import { CustomStore } from 'common/data/custom_store';
@@ -23,7 +36,7 @@ import graphicObjects from '__internal/common/m_charts';
 import eventsEngine from 'common/core/events/core/events_engine';
 import devices from '__internal/core/m_devices';
 
-const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);
+const LabelCtor = new ObjectPool(labelModule.Label);
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
@@ -32,10 +45,9 @@ const dataSourceTemplate = [
     { cat: 'Second', val: 200 },
     { cat: 'Third', val: 300 }
 ];
-const Point = vizMocks.Point;
 
-commons.rendererModule.Renderer = sinon.spy(function(parameters) {
-    return new vizMocks.Renderer(parameters);
+rendererModule.Renderer = sinon.spy(function(parameters) {
+    return new Renderer(parameters);
 });
 
 function createPieChart(options) {
@@ -49,7 +61,7 @@ function createPieChart(options) {
 
 function setupMocks() {
     insertMockFactory();
-    vizMocks.stubIncidentOccurredCreation();
+    stubIncidentOccurredCreation();
 
     this.dataSource = $.extend(true, [], dataSourceTemplate);
     this.stubPoints = [
@@ -75,11 +87,21 @@ function createPoint(options) {
     return point;
 }
 
+function stubExport() {
+    const exportMenuInstance = new ExportMenu();
+    exportMenuInstance.stub('measure').returns([0, 0]);
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
+        return exportMenuInstance;
+    }));
+}
+
+stubExport();
 
 const environment = {
     beforeEach: function() {
         setupMocks.call(this);
         const that = this;
+
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
         that.templateManager = new TemplateManagerModule.TemplateManager();
@@ -170,7 +192,7 @@ const environment = {
         this.themeManager.getOptions.reset();
         this.themeManager = null;
 
-        commons.resetModules();
+        resetModules();
         resetMockFactory();
         restoreMockFactory();
     }
@@ -225,16 +247,14 @@ const overlappingEnvironment = $.extend({}, environment, {
     }
 });
 
-
 (function mainTest() {
-
     QUnit.module('Pie dxChart', environment);
 
     QUnit.test('dxChart creation', function(assert) {
         const chart = createPieChart.call(this, {});
 
         assert.ok(chart);
-        assert.strictEqual(commons.rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
+        assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
     });
 
     QUnit.test('Theme manager with no settings', function(assert) {
@@ -347,11 +367,11 @@ const overlappingEnvironment = $.extend({}, environment, {
             seriesGroup: chart._seriesGroup,
             renderer: chart._renderer,
             tooltip: chart._tooltip,
-            legend: commons.getLegendStub(),
+            legend: getLegendStub(),
             eventTrigger: chart._eventTrigger
         }, 'create tracker arguments');
 
-        const tracker = commons.getTrackerStub(true);
+        const tracker = getTrackerStub(true);
         assert.ok(tracker.stub('update').calledOnce, 'tracker updating was called once');
 
         const updateArg0 = tracker.stub('update').lastCall.args[0];
@@ -575,72 +595,63 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('T400246. After dataSource update tracker gets same series', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
 
-        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
-        commons.getTrackerStub(true).stub('updateSeries').reset();
+        const oldSeries = getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        getTrackerStub(true).stub('updateSeries').reset();
 
-        // act
         chart.option({
             dataSource: $.extend(true, [], this.dataSource)
         });
 
-        // assert
-        assert.strictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.strictEqual(oldSeries, getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('T400246. After series update tracker gets new series', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
 
-        const oldSeries = commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0];
-        commons.getTrackerStub(true).stub('updateSeries').reset();
+        const oldSeries = getTrackerStub(true).stub('updateSeries').lastCall.args[0];
+        getTrackerStub(true).stub('updateSeries').reset();
 
         seriesMockData.series.push(new MockSeries({ points: this.points1 }));
         seriesMockData.series.push(new MockSeries({ points: this.points2 }));
 
-        // act
         chart.option({
             series: [{}, {}]
         });
 
-        // assert
-        assert.notStrictEqual(oldSeries, commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
+        assert.notStrictEqual(oldSeries, getTrackerStub(true).stub('updateSeries').lastCall.args[0]);
     });
 
     QUnit.test('create tracker, with series', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: [{}, {}]
         });
 
-        // assert
         assert.equal(chart.series.length, 2, 'Series length');
-        assert.equal(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0].length, 2, 'updateSeries args');
+        assert.equal(getTrackerStub(true).stub('updateSeries').lastCall.args[0].length, 2, 'updateSeries args');
     });
 
     QUnit.module('dxChart simple series creation', environment);
 
     QUnit.test('Pie dxChart with single series request default type, dataSource', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
         sinon.spy(stubSeries, 'arrangePoints');
-        // act
+
         const chart = createPieChart.call(this, {
             dataSource: this.dataSource,
             type: 'pie',
             series: {}
         });
-        // assert
+
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -655,17 +666,15 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Pie dxChart with single series request default type, data in series', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
-        // act
+
         const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
             type: 'pie',
             series: {}
         });
 
-        // assert
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -679,11 +688,11 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('visibility changed', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({});
         const visiblePoints = [];
+
         seriesMockData.series.push(stubSeries);
-        // act
+
         const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
             type: 'pie',
@@ -694,7 +703,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         series.visiblePoints = visiblePoints;
         const populateBusinessRange = sinon.spy(chart, '_populateBusinessRange');
         const renderMethod = sinon.spy(chart, '_doRender');
-        // assert
 
         assert.ok(series);
         series.options.visibilityChanged();
@@ -707,18 +715,16 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('dxChart with single series, series type is unknown', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({});
         seriesMockData.series.push(stubSeries);
         seriesModule.Series = function() { return { isUpdated: false }; };
 
-        // act
         const chart = this.createPieChart({
             dataSource: dataSourceTemplate,
             type: 'unknown',
             series: {}
         });
-        // assert
+
         assert.ok(chart.series);
         assert.equal(chart.series.length, 0);
         assert.ok(chart._incidentOccurred.calledOnce);
@@ -730,7 +736,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Theme was applied to single series', function(assert) {
-        // arrange
         seriesMockData.series.push(this.stubSeries);
 
         this.themeManager.getOptions.withArgs('series').resetBehavior();
@@ -742,14 +747,12 @@ const overlappingEnvironment = $.extend({}, environment, {
             point: { pointThemeApplied: true }
         });
 
-
-        // act
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: {},
             type: 'pie'
         });
-        // assert
+
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], this.stubSeries);
@@ -759,10 +762,9 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Pie dxChart with single series request default type, customizeLabel and customizePoint is specify', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ points: this.stubPoints });
         seriesMockData.series.push(stubSeries);
-        // act
+
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             customizePoint: 'custompoint',
@@ -775,7 +777,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         points[2].value = points[0].value + points[1].value + points[2].value;
         points[2].tag = 'tag';
         chart._processSingleSeries(chart.series[0], {});
-        // assert
+
         assert.ok(chart.series);
         assert.equal(chart.series.length, 1);
         assert.equal(chart.series[0], stubSeries);
@@ -790,11 +792,10 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Series animation. Renderer unsupported animation', function(assert) {
-        // arrange
         seriesMockData.series.push(this.stubSeries);
 
         seriesMockData.series.push(this.stubSeries);
-        // act
+
         const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {}
@@ -805,7 +806,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             return false;
         };
         chart.render({ force: true });
-        // assert
+
         assert.ok(!chart.series[0].wasAnimated, 'Series should be not animated');
     });
 
@@ -829,7 +830,7 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.module('Axes and Series', {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -888,7 +889,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
             this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -1070,7 +1071,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             environment.beforeEach.apply(this, arguments);
             this.mockSeries1 = new MockSeries({ argumentField: 'arg' });
             this.mockSeries2 = new MockSeries({ argumentField: 'arg' });
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -1082,7 +1083,6 @@ const overlappingEnvironment = $.extend({}, environment, {
             this.mockSeries2.getPointsCount = sinon.stub().returns(3);
             seriesMockData.series.push(this.mockSeries1);
             seriesMockData.series.push(this.mockSeries2);
-
         },
         afterEach: function() {
             environment.afterEach.apply(this, arguments);
@@ -1116,14 +1116,14 @@ const overlappingEnvironment = $.extend({}, environment, {
 
     QUnit.test('handle render complete without series', function(assert) {
         let renderCompleteHandledCount = 0;
-        // act
+
         this.createPieChart({
             onDone: function() {
                 renderCompleteHandledCount++;
             }
         });
         this.clock.tick(0);
-        // assert
+
         assert.equal(renderCompleteHandledCount, 1);
     });
 
@@ -1133,7 +1133,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         seriesMockData.series.push(stubSeries1);
         seriesMockData.series.push(stubSeries2);
         let renderCompleteHandledCount = 0;
-        // act
+
         this.createPieChart({
             onDone: function() {
                 renderCompleteHandledCount++;
@@ -1141,7 +1141,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [stubSeries1, stubSeries2]
         });
         this.clock.tick(0);
-        // assert
+
         assert.equal(renderCompleteHandledCount, 1);
     });
 
@@ -1160,14 +1160,13 @@ const overlappingEnvironment = $.extend({}, environment, {
         this.stubPoints[0]._visible = false;
         seriesMockData.series.push(this.stubSeries);
 
-        // act
         this.createPieChart({
             dataSource: this.dataSource,
             series: {},
             type: 'pie'
         });
 
-        const legend = commons.getLegendStub();
+        const legend = getLegendStub();
 
         const getLegendData = function(passedData) {
             return {
@@ -1210,16 +1209,15 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Create Horizontal Legend with single named series', function(assert) {
-        // arrange
         seriesMockData.series.push(this.stubSeries);
         this.themeManager.getOptions.withArgs('legend').returns({ legendThemeApplied: true });
-        // act
+
         const chart = this.createPieChart({
             dataSource: this.dataSource,
             series: {}
         });
-        // assert
-        const legend = commons.getLegendStub();
+
+        const legend = getLegendStub();
         const updateArgs = legend.update.lastCall.args;
 
         assert.equal(updateArgs[1]._incidentOccurred, chart._incidentOccurred, 'incidentOccurred');
@@ -1250,7 +1248,7 @@ const overlappingEnvironment = $.extend({}, environment, {
 
         const points = this.stubPoints;
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 3, 'update args');
         updateArgs[0].forEach(function(args, i) {
@@ -1282,7 +1280,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 5, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1325,7 +1323,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
 
         assert.equal(updateArgs[0].length, 7, 'update args');
         for(i = 0; i < updateArgs[0].length; i++) {
@@ -1361,7 +1359,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const updateArgs = commons.getLegendStub().stub('update').lastCall.args;
+        const updateArgs = getLegendStub().stub('update').lastCall.args;
         assert.deepEqual(updateArgs[0][0].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][1].states, { hover: {}, selection: {}, normal: {} }, 'Legend states');
         assert.deepEqual(updateArgs[0][2].states, { hover: { opacity: 0.3 }, selection: { opacity: 0.3 }, normal: { opacity: 0.3 } }, 'Legend states');
@@ -1468,7 +1466,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const legendData = commons.getLegendStub().stub('update').lastCall.args[0];
+        const legendData = getLegendStub().stub('update').lastCall.args[0];
 
         assert.strictEqual(legendData.length, 7);
         assert.equal(legendData[0].argumentIndex, 0);
@@ -1494,16 +1492,13 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('pass legendCallback to series', function(assert) {
-        // arrange
         seriesMockData.series.push(this.stubSeries);
 
-        // act
         this.createPieChart({
             dataSource: this.dataSource,
             series: {}
         });
 
-        // assert
         assert.ok(isFunction(this.stubSeries.legendCallback), 'legend callback passed');
     });
 
@@ -1559,9 +1554,9 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
-        // act
+
         legendCallback();
 
         assert.strictEqual(legendActionCallback.callCount, 4, 'legend.getActionCallback call count');
@@ -1630,9 +1625,9 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        commons.getLegendStub().stub('getActionCallback').returns(action);
+        getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
-        // act
+
         legendCallback();
 
         assert.strictEqual(action.getCall(0).args[0], 'resetItem', 'first item');
@@ -1696,9 +1691,9 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}, {}]
         });
 
-        commons.getLegendStub().stub('getActionCallback').returns(action);
+        getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
-        // act
+
         legendCallback();
 
         assert.strictEqual(action.getCall(0).args[0], 'resetItem', 'first item');
@@ -1728,9 +1723,9 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
-        // act
+
         legendCallback({
             argument: 'Second',
             argumentIndex: 0,
@@ -1766,9 +1761,9 @@ const overlappingEnvironment = $.extend({}, environment, {
             series: [{}]
         });
 
-        const legendActionCallback = commons.getLegendStub().stub('getActionCallback').returns(action);
+        const legendActionCallback = getLegendStub().stub('getActionCallback').returns(action);
         const legendCallback = seriesMockData.series[0].legendCallback;
-        // act
+
         legendCallback({
             argument: 'Second',
             argumentIndex: 0,
@@ -1792,7 +1787,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Force full redraw', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {},
@@ -1801,11 +1795,11 @@ const overlappingEnvironment = $.extend({}, environment, {
             }
         });
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-        // act
+
         chart.render({
             force: true
         });
-        // assert
+
         assert.ok(chart._renderer.resize.called, 'Canvas should be resized');
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, 'layout count');
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, 'check free space - call count');
@@ -1821,7 +1815,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Refresh', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: {},
@@ -1832,9 +1825,9 @@ const overlappingEnvironment = $.extend({}, environment, {
         seriesMockData.series.push(new MockSeries({}));
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         this.validateData.resetHistory();
-        // act
+
         chart.refresh();
-        // assert
+
         assert.ok(chart._renderer.resize.called, 'Canvas should be resized');
         assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, 'layout count');
         assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, 'check free space - call count');
@@ -1921,7 +1914,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('update diameter', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -1932,16 +1924,13 @@ const overlappingEnvironment = $.extend({}, environment, {
             ]
         });
 
-        // act
         this.themeManager.getOptions.withArgs('diameter').returns(0.8);
         chart.option({ diameter: 0.8 });
 
-        // assert
         assert.deepEqual(layoutManagerModule.LayoutManager.lastCall.returnValue.setOptions.lastCall.args, [{ piePercentage: 0.8 }]);
     });
 
     QUnit.test('update minDiameter', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -1952,16 +1941,13 @@ const overlappingEnvironment = $.extend({}, environment, {
             ]
         });
 
-        // act
         this.themeManager.getOptions.withArgs('minDiameter').returns(0.8);
         chart.option({ minDiameter: 0.8 });
 
-        // assert
         assert.deepEqual(layoutManagerModule.LayoutManager.lastCall.returnValue.setOptions.lastCall.args, [{ minPiePercentage: 0.8 }]);
     });
 
     QUnit.test('update type', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -1974,19 +1960,16 @@ const overlappingEnvironment = $.extend({}, environment, {
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         seriesMockData.currentSeries = 0;
 
-        // act
         chart.option({ type: 'donut' });
 
-        // assert
         assert.ok(chart.seriesDisposed, 'Series should be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].type, 'donut', 'series type');
     });
 
     QUnit.test('update innerRadius', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -2000,19 +1983,16 @@ const overlappingEnvironment = $.extend({}, environment, {
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         seriesMockData.currentSeries = 0;
 
-        // act
         chart.option({ innerRadius: 0.8 });
 
-        // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.innerRadius, 0.8, 'inner radius');
     });
 
     QUnit.test('update startAngle', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -2026,19 +2006,16 @@ const overlappingEnvironment = $.extend({}, environment, {
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         seriesMockData.currentSeries = 0;
 
-        // act
         chart.option({ startAngle: 20 });
 
-        // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.startAngle, 20, 'start angle');
     });
 
     QUnit.test('update segmentsDirection', function(assert) {
-        // arrange
         const stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: 0, max: 10 } } });
         seriesMockData.series.push(stubSeries);
         const chart = this.createPieChart({
@@ -2052,12 +2029,10 @@ const overlappingEnvironment = $.extend({}, environment, {
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
         seriesMockData.currentSeries = 0;
 
-        // act
         chart.option({ segmentsDirection: 'anticlockwise' });
 
-        // assert
         assert.ok(!chart.seriesDisposed, 'Series should not be disposed');
-        assert.deepEqual(commons.getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
+        assert.deepEqual(getTrackerStub(true).stub('updateSeries').lastCall.args[0], chart.series, 'series updating for tracker');
         assert.equal(chart.series.length, 1, 'series length');
         assert.equal(chart.series[0].options.name, 'First series', 'series name');
         assert.equal(chart.series[0].options.segmentsDirection, 'anticlockwise', 'segment direction');
@@ -2069,7 +2044,7 @@ const overlappingEnvironment = $.extend({}, environment, {
             seriesMockData.series.push(new MockSeries({ name: 'Pie series' }));
             executeAsyncMock.setup();
 
-            const translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+            const translatorClass = new stubClass(translator1DModule.Translator1D);
 
             sinon.stub(translator1DModule, 'Translator1D').callsFake(function() {
                 const translator = new translatorClass();
@@ -2086,7 +2061,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('dxChart with single series request default type', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             series: {}
         });
@@ -2094,10 +2068,8 @@ const overlappingEnvironment = $.extend({}, environment, {
         chart.series[0].setOptions({ argumentField: 'arg', range: { val: { min: 1, max: 5 } } });
         $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
 
-        // act
         chart.option('dataSource', updatedData.slice(0));
 
-        // assert
         assert.ok(chart.series, 'series');
         assert.equal(chart.series.length, 1, 'series count');
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
@@ -2115,7 +2087,6 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('Datasource with delayed loading from Store', function(assert) {
-        // arrange
         const loadingDeferred = $.Deferred();
         const store = new CustomStore({
             load: function() {
@@ -2131,10 +2102,8 @@ const overlappingEnvironment = $.extend({}, environment, {
         const updatedData = [1, 2, 3, 4, 5];
         chart.series[0].setOptions({ argumentField: 'arg', range: { val: { min: 1, max: 5 } } });
 
-        // act
         loadingDeferred.resolve(updatedData);
 
-        // assert
         assert.ok(chart.series, 'series');
         assert.equal(chart.series.length, 1, 'series count');
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
@@ -2164,7 +2133,6 @@ const overlappingEnvironment = $.extend({}, environment, {
 }());
 
 (function API() {
-
     QUnit.module('Selection API', {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -2178,30 +2146,26 @@ const overlappingEnvironment = $.extend({}, environment, {
     });
 
     QUnit.test('dxChart - clear selection', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             series: {
             }
         });
-        // act
+
         chart.clearSelection();
-        // assert
-        assert.ok(commons.getTrackerStub(true).stub('clearSelection').called, 'Selection should be cleared through tracker');
+
+        assert.ok(getTrackerStub(true).stub('clearSelection').called, 'Selection should be cleared through tracker');
     });
 
     QUnit.test('dxChart - get all series', function(assert) {
-        // arrange
         const chart = this.createPieChart({
             // fake data comes from creation
             series: { name: 'Pie series' }
         });
-        // act
         const series = chart.getAllSeries()[0];
-        // assert
+
         assert.ok(series, 'Result is defined');
         assert.equal(series.name, 'Pie series');
     });
-
 })();
 
 (function minorFunctionality() {
@@ -2333,7 +2297,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         const series = pie.getAllSeries()[0];
         const points = series.getVisiblePoints();
 
-        // assert
         assert.equal(series.adjustLabels.callCount, 5);
         assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(0).args, [true], 'Move from center (T586419)');
@@ -2346,7 +2309,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         const series = pie.getAllSeries()[0];
         const points = series.getVisiblePoints();
 
-        // assert
         assert.equal(series.adjustLabels.callCount, 5);
         assert.ok(series.adjustLabels.lastCall.calledBefore(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(1).args, [true]);

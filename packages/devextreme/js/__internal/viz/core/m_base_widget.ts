@@ -12,20 +12,19 @@ import {
   isDefined, isFunction, isNumeric, isObject as _isObject, type,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import { BaseThemeManager } from '@js/viz/core/base_theme_manager';
+import warnings from '@js/viz/core/errors_warnings';
+// @ts-expect-error
+import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
+import graphicObject from '@ts/common/m_charts';
+import { BaseThemeManager } from '@ts/viz/core/base_theme_manager';
 import {
   createEventTrigger,
   createIncidentOccurred, createResizeHandler,
-} from '@js/viz/core/base_widget.utils';
-import warnings from '@js/viz/core/errors_warnings';
-import { changes, replaceInherit } from '@js/viz/core/helpers';
-import _Layout from '@js/viz/core/layout';
-import { Renderer } from '@js/viz/core/renderers/renderer';
-import { parseScalar as _parseScalar } from '@js/viz/core/utils';
-// @ts-expect-error
-import { areCanvasesDifferent, floorCanvasDimensions } from '@js/viz/utils';
-
-import graphicObject from '../../common/m_charts';
+} from '@ts/viz/core/base_widget.utils';
+import { changes, replaceInherit } from '@ts/viz/core/helpers';
+import _Layout from '@ts/viz/core/layout';
+import { Renderer } from '@ts/viz/core/renderers/renderer';
+import { parseScalar as _parseScalar } from '@ts/viz/core/utils';
 
 const { log } = warnings;
 

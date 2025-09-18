@@ -62,11 +62,11 @@ export class TimeZoneCalculator {
   protected getOffsetInHours(date: Date, timezone: string | undefined, isUTCDate: boolean): number {
     const { client, appointment, common } = this.getOffsets(date, timezone);
 
-    if (!!timezone && isUTCDate) {
+    if (Boolean(timezone) && isUTCDate) {
       return appointment - client;
     }
 
-    if (!!timezone && !isUTCDate) {
+    if (Boolean(timezone) && !isUTCDate) {
       return appointment - common;
     }
 

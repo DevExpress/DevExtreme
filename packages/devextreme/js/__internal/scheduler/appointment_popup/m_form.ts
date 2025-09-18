@@ -49,8 +49,8 @@ const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'fil
 const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
-  const isCurrentDateCorrect = value === null || !!value;
-  const isPreviousDateCorrect = previousValue === null || !!previousValue;
+  const isCurrentDateCorrect = value === null || Boolean(value);
+  const isPreviousDateCorrect = previousValue === null || Boolean(previousValue);
   if (!isCurrentDateCorrect && isPreviousDateCorrect) {
     editor.option('value', previousValue);
   }

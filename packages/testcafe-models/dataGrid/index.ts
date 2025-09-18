@@ -12,6 +12,7 @@ import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
+import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
@@ -235,8 +236,8 @@ export default class DataGrid extends GridCore {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
-  getLoadPanel(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
+  getLoadPanel(): LoadPanel {
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -657,6 +658,20 @@ export default class DataGrid extends GridCore {
     return ClientFunction(
       () => (getInstance() as DataGridInstance).addColumn(config),
       { dependencies: { getInstance, config } },
+    )();
+  }
+
+
+  apiFocus(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).focus(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
     )();
   }
 

@@ -5,9 +5,9 @@ import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createFormattedDateText } from '../../appointments/m_text_utils';
-import { getRecurrenceProcessor } from '../../m_recurrence';
 import timeZoneUtils from '../../m_utils_time_zone';
 import { isDateAndTimeView } from '../../r1/utils/index';
+import { generateDates } from '../../recurrence/generate_dates';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import {
@@ -413,7 +413,7 @@ export class DateGeneratorBaseStrategy {
     const { duration } = appointment;
     const { viewOffset } = this.options;
     const option = this._createRecurrenceOptions(appointment);
-    const generatedStartDates = getRecurrenceProcessor().generateDates(option);
+    const generatedStartDates = generateDates(option);
 
     return generatedStartDates
       .map((date) => {
@@ -550,7 +550,7 @@ export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
 
     validGroupIndices.forEach((groupIndex) => {
       const option = this._createRecurrenceOptions(appointment, groupIndex);
-      const generatedStartDates = getRecurrenceProcessor().generateDates(option);
+      const generatedStartDates = generateDates(option);
       const recurrentInfo = generatedStartDates
         .map((date) => {
           const startDate = new Date(date);

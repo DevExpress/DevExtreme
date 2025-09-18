@@ -69,7 +69,7 @@
         "{projectRoot}/dist/integration-data.json"
       ]
     },
-    "build": {
+    "generate": {
       "dependsOn": [
         "make-angular-metadata",
         "make-aspnet-metadata",
@@ -82,7 +82,7 @@
       ]
     },
     "pack": {
-      "dependsOn": ["build"],
+      "dependsOn": ["generate"],
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",

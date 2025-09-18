@@ -1578,7 +1578,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
 
     this._isCustomClickEvent = true;
-    eventsEngine.triggerHandler(this._$fileInput, { type: 'click' });
+    // @ts-expect-error update events_engine interface to support trigger method
+    eventsEngine.trigger(this._$fileInput, 'click');
     this._isCustomClickEvent = false;
   }
 

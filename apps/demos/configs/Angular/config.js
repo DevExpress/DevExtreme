@@ -332,3 +332,5 @@ window.config = {
 
 System.config(window.config);
 System.import('@angular/compiler').catch(console.error.bind(console));
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

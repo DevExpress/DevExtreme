@@ -48,7 +48,7 @@ export interface AppointmentViewModelSettingsInternal extends BaseViewModelSetti
 }
 
 export interface AgendaViewModelSettingsInternal extends BaseViewModelSettingsInternal {
-  agendaSettings: SimpleAppointment;
+  agendaSettings?: SafeAppointment;
   height: number;
   width: string;
 }
@@ -58,6 +58,13 @@ export interface AppointmentViewModelInternal {
   needRepaint: boolean;
   needRemove: boolean;
   settings: (AppointmentViewModelSettingsInternal & AgendaViewModelSettingsInternal)[];
+}
+
+interface AppointmentInfo {
+  info: {
+    sourceAppointment: SimpleAppointment;
+    appointment: SimpleAppointment;
+  };
 }
 
 export interface BaseAppointmentViewModel {
@@ -70,25 +77,24 @@ export interface BaseAppointmentViewModel {
 export interface AppointmentCollectorViewModel extends BaseAppointmentViewModel {
   top: number;
   left: number;
+  height: number;
+  width: number;
+  isCompact: boolean;
   items: AppointmentItemViewModel[];
 }
 
-export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel {
+export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel, AppointmentInfo {
+  isAgendaModel: true;
   direction: string;
-  agendaSettings: SimpleAppointment;
   height: number;
   width: string;
 }
 
-export interface AppointmentItemViewModel extends BaseAppointmentViewModel {
+export interface AppointmentItemViewModel extends BaseAppointmentViewModel, AppointmentInfo {
   direction: string;
   skipResizing?: true;
   level: number;
   maxLevel: number;
-  info: {
-    sourceAppointment: SimpleAppointment;
-    appointment: SimpleAppointment;
-  };
   empty: boolean;
   left: number;
   top: number;

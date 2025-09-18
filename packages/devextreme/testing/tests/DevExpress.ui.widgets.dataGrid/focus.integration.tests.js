@@ -656,7 +656,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
         this.clock.tick(10);
 
-        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').get(0) }) });
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
         this.clock.tick(10);
@@ -4140,7 +4140,7 @@ QUnit.module('View\'s focus', {
             assert.strictEqual($firstCellInput.val(), 'a', 'correct editor value');
 
             // act
-            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input'));
             keyboard.keyDown('tab');
             this.clock.tick(25);
             const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');

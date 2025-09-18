@@ -121,6 +121,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _selectAllValueChangedAction?: (event?: Record<string, unknown>) => void;
 
+  protected _activeStateUnit(): string {
+    return `.${ITEM_CLASS}`;
+  }
+
   _supportedKeys(): SupportedKeys {
     const click = (e: DxEvent<KeyboardEvent>): void => {
       const { focusedElement } = this.option();
@@ -506,8 +510,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _init(): void {
     this._filter = {};
     super._init();
-
-    this._activeStateUnit = `.${ITEM_CLASS}`;
 
     this._initStoreChangeHandlers();
   }
@@ -1497,7 +1499,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const isAllSelected = this._dataAdapter.isAllSelected();
     this._createComponent(this._$selectAllItem, CheckBox, {
       value: isAllSelected,
-      elementAttr: { 'aria-label': 'Select All' },
+      elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
       text: selectAllText,
       focusStateEnabled,
       onValueChanged: (event: ValueChangedEvent) => {
@@ -1719,7 +1721,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       this.setAria('selected', nodeSelection, $node);
 
       if (this._showCheckboxes()) {
-        this._getCheckBoxInstance($node).option('value', nodeSelection);
+        this._getCheckBoxInstance($node)?.option('value', nodeSelection);
       }
     });
 
@@ -1912,7 +1914,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   focus(): void {
-    if (this._selectAllEnabled()) {
+    const { items = [] } = this.option();
+    if (this._selectAllEnabled() && items.length) {
       // @ts-expect-error ts-error
       eventsEngine.trigger(this._$selectAllItem, 'focus');
       return;

@@ -1,10 +1,10 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const circularIndicatorsModule = require('viz/gauges/circular_indicators');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { Renderer } from '../../helpers/vizMocks.js';
+import * as circularIndicatorsModule from '__internal/viz/gauges/circular_indicators';
+import { Translator1D } from '__internal/viz/translators/translator1d';
 
 QUnit.module('RectangleNeedle', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },
@@ -141,7 +141,7 @@ QUnit.test('valid (offsets is dicreased if beginAdaptingAtRadius is set)', funct
 
 QUnit.module('TriangleNeedle', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },
@@ -234,7 +234,7 @@ QUnit.test('Dicrease offsets and spindle size if radius is less than beginAdapti
 
 QUnit.module('TwoColorRectangleNeedle', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.owner = this.renderer.g();
         const tracker = {
             attach: function(arg) { this.attached = arg; },

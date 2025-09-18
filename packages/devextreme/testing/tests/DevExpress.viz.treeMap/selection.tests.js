@@ -1,15 +1,18 @@
-const common = require('./commonParts/common.js');
+import {
+    environment,
+    createWidget,
+} from './commonParts/common.js';
 
-require('viz/tree_map/selection');
+import '__internal/viz/tree_map/selection';
 
-QUnit.module('Basics', common.environment);
+QUnit.module('Basics', environment);
 
 QUnit.test('Select tile', function(assert) {
     function onSelectionChanged(e) {
         assert.strictEqual(e.node.isSelected(), true, 'state inside callback');
     }
     const spy = sinon.spy(onSelectionChanged);
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         tile: {
@@ -38,7 +41,7 @@ QUnit.test('Unselect tile', function(assert) {
         assert.strictEqual(e.node.isSelected(), false, 'state inside callback');
     }
     const spy = sinon.spy(onSelectionChanged);
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         tile: {
             color: 'red',
@@ -64,7 +67,7 @@ QUnit.test('Unselect tile', function(assert) {
 
 QUnit.test('Select group', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 3 }]
         }, {
@@ -97,7 +100,7 @@ QUnit.test('Select group', function(assert) {
 
 QUnit.test('Unselect group', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{
             items: [{ value: 3 }]
         }, {
@@ -127,7 +130,7 @@ QUnit.test('Unselect group', function(assert) {
 
 QUnit.test('Select tile when another one is selected', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy
     }).getRootNode();
@@ -145,7 +148,7 @@ QUnit.test('Select tile when another one is selected', function(assert) {
 
 QUnit.test('Select tile when another one is selected - multiple selection', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         selectionMode: 'MULTIPLE'
@@ -162,7 +165,7 @@ QUnit.test('Select tile when another one is selected - multiple selection', func
 
 QUnit.test('Disabled selection', function(assert) {
     const spy = sinon.spy();
-    const root = common.createWidget({
+    const root = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         selectionMode: 'NONE'
@@ -175,7 +178,7 @@ QUnit.test('Disabled selection', function(assert) {
 
 QUnit.test('Clear selection', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         selectionMode: 'multiple'
@@ -196,7 +199,7 @@ QUnit.test('Clear selection', function(assert) {
 
 QUnit.test('Change from multiple to single', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         selectionMode: 'multiple'
@@ -215,7 +218,7 @@ QUnit.test('Change from multiple to single', function(assert) {
 
 QUnit.test('Change from multiple to none', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         onSelectionChanged: spy,
         selectionMode: 'multiple'
@@ -236,7 +239,7 @@ QUnit.test('Change from multiple to none', function(assert) {
 
 QUnit.test('Selection state is not applied until endUpdate', function(assert) {
     const spy = sinon.spy();
-    const widget = common.createWidget({
+    const widget = createWidget({
         dataSource: [{ value: 1 }, { value: 2 }],
         tile: {
             hoverStyle: {

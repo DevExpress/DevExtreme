@@ -5959,3 +5959,262 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
     delete (window as any).focusedEventsTestData;
   })();
 });
+
+// T1299278
+test('The row edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(0, 0);
+
+  await dataGrid.apiEditRow(0);
+
+  // act - focus the first cell
+  await t.click(dataCell.element);
+
+  // assert
+  await t
+    .expect(dataCell.isEditCell).ok()
+    .expect(dataCell.isFocused).ok();
+
+  // act - navigate to the button of the second cell
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+
+  // act - navigate to the editor of the second cell
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+
+  // act - navigate to the third cell
+  await t.pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 2).isEditCell).ok()
+    .expect(dataGrid.getDataCell(0, 2).isFocused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        editCellTemplate: (cellElement) => {
+          $('<input type="button" value="My button" />')
+            .addClass('my-button')
+            .appendTo(cellElement);
+
+          $('<input type="text"/>')
+            .addClass('my-editor')
+            .appendTo(cellElement);
+        },
+      },
+      'field3',
+    ],
+  });
+});
+
+// T1299278
+test('The row edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(0, 2);
+
+  await dataGrid.apiEditRow(0);
+
+  // act - focus the third cell
+  await t.click(dataCell.element);
+
+  // assert
+  await t
+    .expect(dataCell.isEditCell).ok()
+    .expect(dataCell.isFocused).ok();
+
+  // act - navigate to the editor of the second cell
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+
+  // act - navigate to the button of the second cell
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+
+  // act - navigate to the first cell
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isEditCell).ok()
+    .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        editCellTemplate: (cellElement) => {
+          $('<input type="button" value="My button" />')
+            .addClass('my-button')
+            .appendTo(cellElement);
+
+          $('<input type="text"/>')
+            .addClass('my-editor')
+            .appendTo(cellElement);
+        },
+      },
+      'field3',
+    ],
+  });
+});
+
+// T1299278
+test('The batch edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(0, 0);
+
+  // act - focus the first cell
+  await t.click(dataCell.element);
+
+  // assert
+  await t
+    .expect(dataCell.isEditCell).ok()
+    .expect(dataCell.isFocused).ok();
+
+  // act - navigate to the button of the second cell
+  await t.pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+
+  // act - navigate to the editor of the second cell
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-editor').focused).ok();
+
+  // act - navigate to the third cell
+  await t.pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 2).isEditCell).ok()
+    .expect(dataGrid.getDataCell(0, 2).isFocused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        editCellTemplate: (cellElement) => {
+          $('<input type="button" value="My button" />')
+            .addClass('my-button')
+            .appendTo(cellElement);
+
+          $('<input type="text"/>')
+            .addClass('my-editor')
+            .appendTo(cellElement);
+        },
+      },
+      'field3',
+    ],
+  });
+});
+
+// T1299278
+test('The batch edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(0, 2);
+
+  // act - focus the third cell
+  await t.click(dataCell.element);
+
+  // assert
+  await t
+    .expect(dataCell.isEditCell).ok()
+    .expect(dataCell.isFocused).ok();
+
+  // act - navigate to the button of the second cell
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t.expect(dataGrid.getDataCell(0, 1).element.find('.my-button').focused).ok();
+
+  // act - navigate to the first cell
+  await t.pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isEditCell).ok()
+    .expect(dataGrid.getDataCell(0, 0).isFocused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 800,
+    dataSource: [
+      {
+        id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+      },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    columns: [
+      'field1',
+      {
+        dataField: 'field2',
+        editCellTemplate: (cellElement) => {
+          $('<input type="button" value="My button" />')
+            .addClass('my-button')
+            .appendTo(cellElement);
+
+          $('<input type="text"/>')
+            .addClass('my-editor')
+            .appendTo(cellElement);
+        },
+      },
+      'field3',
+    ],
+  });
+});

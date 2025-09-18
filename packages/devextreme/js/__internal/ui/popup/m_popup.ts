@@ -520,7 +520,8 @@ class Popup<
 
       this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else {
-      this._$topToolbar?.detach();
+      this._$topToolbar?.remove();
+      this._$topToolbar = undefined;
     }
 
     this._toggleAriaLabel();
@@ -556,7 +557,8 @@ class Popup<
     const items = this._getToolbarItems('bottom');
 
     if (!items.length) {
-      this._$bottomToolbar?.detach();
+      this._$bottomToolbar?.remove();
+      this._$bottomToolbar = undefined;
       return;
     }
 

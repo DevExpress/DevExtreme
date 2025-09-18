@@ -1,12 +1,14 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import rendererModule from 'viz/core/renderers/renderer';
 import axisModule from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
-import errors from 'core/errors.js';
-import 'viz/range_selector/range_selector';
+import '__internal/viz/range_selector/range_selector';
 
-const StubAxis = vizMocks.stubClass(axisModule.Axis);
+const StubAxis = stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
@@ -24,7 +26,7 @@ QUnit.module('RangeSelector', {
     beforeEach: function() {
         const that = this;
         this.$container = $('#test-container');
-        const renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new Renderer();
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
