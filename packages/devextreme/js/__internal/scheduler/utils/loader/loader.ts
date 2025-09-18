@@ -14,8 +14,6 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
 
   public items: Data[] = [];
 
-  public data: T[] = []; // TODO(9): probably we dont need it. Used in getGroupPanelData
-
   protected readonly isSharedDataSource: boolean;
 
   protected loadingStatePromise?: Promise<T[]>;
@@ -87,9 +85,8 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
   }
 
   protected applyChanges(items: T[]): void {
-    if (items && items !== this.data) {
-      this.data = items;
-      this.items = this.onLoadTransform(this.data);
+    if (items) {
+      this.items = this.onLoadTransform(items);
     }
   }
 
@@ -101,7 +98,6 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
       } else {
         this.dataSource.dispose();
       }
-      this.data = [];
       this.items = [];
     }
   }
