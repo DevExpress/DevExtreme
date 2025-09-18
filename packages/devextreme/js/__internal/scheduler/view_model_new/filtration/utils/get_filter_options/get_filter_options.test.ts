@@ -49,6 +49,7 @@ describe('getFilterOptions', () => {
         allDayPanelMode: 'allDay',
         showAllDayPanel: true,
         supportAllDayPanel: false,
+        isDateTimeView: false,
         resourceManager: schedulerStore.resourceManager,
         dataAccessor: schedulerStore._dataAccessors,
         timeZone: 'Etc/UTC',
