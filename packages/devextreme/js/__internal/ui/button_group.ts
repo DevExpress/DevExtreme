@@ -126,11 +126,11 @@ class ButtonGroup extends Widget<Properties> {
       width,
       noDataText: '',
       selectionRequired: false,
-      onItemRendered: (e: ItemRenderedEvent): void => {
-        if (isDefined(width)) {
-          $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
-        }
-      },
+      // onItemRendered: (e: ItemRenderedEvent): void => {
+      //   if (isDefined(width)) {
+      //     $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+      //   }
+      // },
       onSelectionChanged: (e: SelectionChangedEvent): void => {
         this._syncSelectionOptions();
         this._fireSelectionChangeEvent(e.addedItems, e.removedItems);

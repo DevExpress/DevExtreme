@@ -1,4 +1,5 @@
-import { isObject } from '@js/core/utils/type';
+import type { dxElementWrapper } from '@js/core/renderer';
+import { isObject, isString } from '@js/core/utils/type';
 import type {
   CollectionWidgetItem,
   CollectionWidgetOptions,
@@ -6,6 +7,7 @@ import type {
 } from '@js/ui/collection/ui.collection_widget.base';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { effect, type ReadonlySignal } from '@ts/core/state_manager/index';
+import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { CollectionProps } from '@ts/ui/collection_inferno/collection.component';
 import type { CollectionItemProps } from '@ts/ui/collection_inferno/collection.item.component';
@@ -40,9 +42,13 @@ export abstract class InfernoCollectionWidget<
     item: TItem,
     index: number,
   ): CollectionItemProps {
+    const isSelected = index === this.props?.selectedIndex
+    // eslint-disable-next-line @stylistic/max-len
+     || (isString(this.props?.keyExpr) && this.props?.selectedItemKeys?.includes(item[this.props?.keyExpr]));
+
     return {
       ...isObject(item) ? item : { text: String(item) },
-      isSelected: index === this.props?.selectedIndex,
+      isSelected,
     };
   }
 
@@ -71,6 +77,9 @@ export abstract class InfernoCollectionWidget<
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _refreshItem($item: dxElementWrapper, item: TItem): void {}
+
   _renderContentImpl(): void {
     super._renderContentImpl();
     this.cleanupRenderSubscription = this._renderItems();
@@ -92,5 +101,22 @@ export abstract class InfernoCollectionWidget<
     // infernoRenderer.render(null, null, this.$element().get(0), true);
 
     super._clean();
+  }
+
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    switch (args.name) {
+      case 'items':
+      case '_itemAttributes':
+      case 'itemTemplateProperty':
+      case 'useItemTextAsTitle':
+      case 'visibleExpr':
+      case 'disabledExpr':
+      case 'noDataText':
+      case 'encodeNoDataText':
+      case 'itemTemplate':
+        break;
+      default:
+        super._optionChanged(args);
+    }
   }
 }
