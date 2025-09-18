@@ -421,10 +421,6 @@ export const getColumnIndexByVisibleIndex = function (that: ColumnsController, v
   // @ts-expect-error
   visibleIndex = isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
 
-  if (location === 'headers') {
-    visibleIndex += that.getColumnIndexOffset();
-  }
-
   column = columns[visibleIndex];
 
   if (column && column.type === GROUP_COMMAND_COLUMN_NAME) {
