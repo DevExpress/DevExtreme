@@ -5,8 +5,8 @@ import {
   ChangedOptionInfo,
 } from '../common/core/events';
 
-import Widget from './widget/ui.widget';
-import type { Properties as dxButtonOptions } from './button';
+import Widget, { WidgetOptions } from './widget/ui.widget';
+import type { ButtonStyle, ButtonType } from './button';
 
 /**
  * @docid
@@ -130,17 +130,12 @@ export type InitializedEvent = InitializedEventInfo<dxSpeechToText>;
  */
 export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
 
-type AllowedButtonOptionKeys = Exclude<
-  keyof dxButtonOptions,
-  'template' | 'useSubmitBehavior' | 'validationGroup' | 'icon' | 'text' | 'onClick'
->;
-
 /**
  * @public
  * @docid dxSpeechToTextOptions
  * @type object
  */
-export type Properties = Pick<dxButtonOptions, AllowedButtonOptionKeys> & {
+export interface Properties extends WidgetOptions<dxSpeechToText> {
   /**
    * @docid dxSpeechToTextOptions.customSpeechRecognizer
    * @public
@@ -162,6 +157,13 @@ export type Properties = Pick<dxButtonOptions, AllowedButtonOptionKeys> & {
   stopText?: string;
 
   /**
+   * @docid dxSpeechToTextOptions.stylingMode
+   * @default 'contained'
+   * @public
+   */
+  stylingMode?: ButtonStyle;
+
+  /**
    * @docid dxSpeechToTextOptions.startIcon
    * @default 'micoutline'
    * @public
@@ -174,6 +176,13 @@ export type Properties = Pick<dxButtonOptions, AllowedButtonOptionKeys> & {
    * @public
    */
   stopIcon?: string;
+
+  /**
+   * @docid dxSpeechToTextOptions.type
+   * @default 'normal'
+   * @public
+   */
+  type?: ButtonType | string;
 
   /**
    * @docid dxSpeechToTextOptions.webSpeechApiConfig
@@ -216,7 +225,7 @@ export type Properties = Pick<dxButtonOptions, AllowedButtonOptionKeys> & {
    * @public
    */
   onError?: ((e: ErrorEvent) => void) | undefined;
-};
+}
 
 /**
  * @docid

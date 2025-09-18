@@ -14,6 +14,10 @@ import {
  StopClickEvent,
  WebSpeechApiConfig,
 } from "devextreme/ui/speech_to_text";
+import {
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -39,7 +43,9 @@ type AccessibleOptions = Pick<Properties,
   "startText" |
   "stopIcon" |
   "stopText" |
+  "stylingMode" |
   "tabIndex" |
+  "type" |
   "visible" |
   "webSpeechApiConfig" |
   "width"
@@ -73,7 +79,9 @@ const componentConfig = {
     startText: String,
     stopIcon: String,
     stopText: String,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
+    type: String as PropType<ButtonType | string>,
     visible: Boolean,
     webSpeechApiConfig: Object as PropType<Record<string, any> | WebSpeechApiConfig>,
     width: [Number, String]
@@ -103,7 +111,9 @@ const componentConfig = {
     "update:startText": null,
     "update:stopIcon": null,
     "update:stopText": null,
+    "update:stylingMode": null,
     "update:tabIndex": null,
+    "update:type": null,
     "update:visible": null,
     "update:webSpeechApiConfig": null,
     "update:width": null,

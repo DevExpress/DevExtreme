@@ -18,6 +18,7 @@ import {
 
 
 import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, WebSpeechApiConfig } from 'devextreme/ui/speech_to_text';
+import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
 
@@ -196,11 +197,31 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     
     @Input()
+    get stylingMode(): ButtonStyle {
+        return this._getOption('stylingMode');
+    }
+    set stylingMode(value: ButtonStyle) {
+        this._setOption('stylingMode', value);
+    }
+
+
+    
+    @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }
     set tabIndex(value: number) {
         this._setOption('tabIndex', value);
+    }
+
+
+    
+    @Input()
+    get type(): ButtonType | string {
+        return this._getOption('type');
+    }
+    set type(value: ButtonType | string) {
+        this._setOption('type', value);
     }
 
 
@@ -400,7 +421,21 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() stylingModeChange: EventEmitter<ButtonStyle>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() typeChange: EventEmitter<ButtonType | string>;
 
     /**
     
@@ -461,7 +496,9 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
             { emit: 'startTextChange' },
             { emit: 'stopIconChange' },
             { emit: 'stopTextChange' },
+            { emit: 'stylingModeChange' },
             { emit: 'tabIndexChange' },
+            { emit: 'typeChange' },
             { emit: 'visibleChange' },
             { emit: 'webSpeechApiConfigChange' },
             { emit: 'widthChange' }
