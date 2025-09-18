@@ -16,7 +16,7 @@ import {
 } from '../localization';
 
 import {
-  BasePointInfo,
+  CommonPointInfo,
   basePointObject,
   baseSeriesObject,
   chartAxisObject,
@@ -1216,7 +1216,7 @@ export type Legend = BaseChartLegend & {
 /**
  * @public
  */
-export type PointInfo = BasePointInfo<polarPointObject>;
+export type PointInfo = CommonPointInfo<polarPointObject>;
 
 /**
  * @public

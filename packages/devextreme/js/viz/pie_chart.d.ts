@@ -19,7 +19,7 @@ import {
 } from '../localization';
 
 import {
-  BasePointInfo,
+  CommonPointInfo,
   basePointObject,
   baseSeriesObject,
 } from './chart';
@@ -997,7 +997,7 @@ export interface pieChartSeriesObject extends baseSeriesObject {
  * @type object
  * @namespace DevExpress.viz
  */
-export type PointInfo = BasePointInfo<piePointObject> & {
+export type PointInfo = CommonPointInfo<piePointObject> & {
   /**
    * @docid
    * @public

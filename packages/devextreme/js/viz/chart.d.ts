@@ -402,7 +402,7 @@ export interface baseLabelObject {
  * @type object
  * @namespace DevExpress.viz
  */
-export type BasePointInfo<TPoint extends basePointObject> = {
+export type CommonPointInfo<TPoint extends basePointObject> = {
   /**
    * @docid
    * @public
@@ -442,7 +442,7 @@ export type BasePointInfo<TPoint extends basePointObject> = {
    * @docid
    * @public
    */
-  points?: BasePointInfo<TPoint>[];
+  points?: CommonPointInfo<TPoint>[];
   /**
    * @docid
    * @public
@@ -466,7 +466,7 @@ export type BasePointInfo<TPoint extends basePointObject> = {
  * @type object
  * @namespace DevExpress.viz
  */
-export type StackedPointInfo = BasePointInfo<chartPointObject> & {
+export type StackedPointInfo = ChartPointInfo & {
   /**
    * @docid
    * @public
@@ -500,7 +500,7 @@ export type StackedPointInfo = BasePointInfo<chartPointObject> & {
  * @type object
  * @namespace DevExpress.viz
  */
-export type BubblePointInfo = BasePointInfo<chartPointObject> & {
+export type BubblePointInfo = ChartPointInfo & {
   /**
    * @docid
    * @public
@@ -663,7 +663,7 @@ export type RangePointInfo = {
    * @docid
    * @public
    */
-  rangeValue12?: string | number | Date;
+  rangeValue2?: string | number | Date;
   /**
    * @docid
    * @public
@@ -704,13 +704,13 @@ export type RangePointInfo = {
 /**
  * @public
  */
-export type BaseChartPointInfo = BasePointInfo<chartPointObject>;
+export type ChartPointInfo = CommonPointInfo<chartPointObject>;
 
 /**
- * public
+ * @public
  */
 export type PointInfo =
-  | BaseChartPointInfo
+  | ChartPointInfo
   | StackedPointInfo
   | BubblePointInfo
   | CandleStickPointInfo
