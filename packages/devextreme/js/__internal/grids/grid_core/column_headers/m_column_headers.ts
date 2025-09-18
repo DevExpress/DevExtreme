@@ -592,6 +592,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     let items;
     const { column } = options;
 
+    if (column?.command) {
+      return items;
+    }
+
     if (options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
       const sortingOptions = this.option('sorting');
 
