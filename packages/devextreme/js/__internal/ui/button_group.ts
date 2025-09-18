@@ -15,9 +15,9 @@ import type { SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget
 import CollectionWidgetEdit from '@js/ui/collection/ui.collection_widget.edit';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-// import {
-//   ButtonGroup as ButtonGroupInferno,
-// } from '@ts/ui/button_group_inferno/button_group.widget';
+import {
+  ButtonGroup as ButtonGroupInferno,
+} from '@ts/ui/button_group_inferno/button_group.widget';
 import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
@@ -320,8 +320,10 @@ class ButtonGroup extends Widget<Properties> {
   }
 }
 
-registerComponent('dxButtonGroup', ButtonGroup);
-// registerComponent('dxButtonGroup', ButtonGroupInferno);
+export class TestButtonGroup1 extends ButtonGroup {}
 
-export default ButtonGroup;
-// export default ButtonGroupInferno;
+// registerComponent('dxButtonGroup', ButtonGroup);
+registerComponent('dxButtonGroup', ButtonGroupInferno);
+
+// export default ButtonGroup;
+export default ButtonGroupInferno;

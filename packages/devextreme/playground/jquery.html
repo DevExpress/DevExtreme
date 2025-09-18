@@ -49,12 +49,35 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
+        <div id="inferno"></div>
         <div id="button"></div>
         <script>
             $(() => {
+                const inferno = $("#inferno").dxButtonGroup({
+                    items: [
+                        {
+                            text: "Button 1",
+                            icon: "refresh",
+                            onClick: () => {
+                                alert("Button 1 clicked");
+                            }
+                        },
+                        {
+                            text: "Button 2",
+                        }
+                    ]
+                }).dxButtonGroup("instance");
                 $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                    text: "Button 1",
+                    icon: "refresh",
+                    onClick: () => {
+                        inferno.testMethod();
+                        inferno.addItem({ text: "Button 3" });
+                        inferno.selectItem(2);
+                        console.log(inferno.getSelectedItemKeys());
+                        inferno.clearSelection();
+                        console.log(inferno.getSelectedItemKeys());
+                    }
                 });
             });
         </script>

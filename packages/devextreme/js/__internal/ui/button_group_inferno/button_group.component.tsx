@@ -5,9 +5,21 @@ export interface ButtonGroupProps extends Properties {}
 
 export class ButtonGroupComponent extends BaseInfernoComponent<ButtonGroupProps> {
   render(): JSX.Element {
+    const { items } = this.props;
     return (
       <div>
-        Button group placeholder
+        {items?.map((item, index) => (
+            <div key={index}>
+              <div
+                style={{
+                  background: 'grey',
+                  border: '1px solid black',
+                }}
+              >
+                {item.text}
+              </div>
+            </div>
+        ))}
       </div>
     );
   }
