@@ -2,7 +2,7 @@ import type { AllDayPanelOccupation, PanelName } from '../../types';
 import { splitByCondition } from './add_collector/split_by_condition';
 
 interface StartDate {
-  startDate: number;
+  startDateUTC: number;
 }
 
 const mergeByStartDate = <T extends StartDate>(a: T[], b: T[]): T[] => {
@@ -11,7 +11,7 @@ const mergeByStartDate = <T extends StartDate>(a: T[], b: T[]): T[] => {
   let j = 0;
 
   while (i < a.length && j < b.length) {
-    if (a[i].startDate <= b[j].startDate) {
+    if (a[i].startDateUTC <= b[j].startDateUTC) {
       result.push(a[i]);
       i += 1;
     } else {

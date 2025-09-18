@@ -11,7 +11,7 @@ const splitBy7Days = (intervals: DateInterval): DateInterval[] => {
 
   while (date.getTime() < intervals.max) {
     const min = date.getTime();
-    date.setDate(date.getDate() + MONTH_INTERVAL_DAYS_COUNT);
+    date.setUTCDate(date.getUTCDate() + MONTH_INTERVAL_DAYS_COUNT);
     result.push({ min, max: date.getTime() });
   }
 
@@ -24,8 +24,8 @@ const cropIntervalsByDayHours = (
   endDayHour: number,
 ): DateInterval[] => intervals.map((item) => ({
   ...item,
-  min: new Date(item.min).setHours(startDayHour, 0, 0, 0),
-  max: new Date(item.max - 1).setHours(endDayHour, 0, 0, 0),
+  min: new Date(item.min).setUTCHours(startDayHour, 0, 0, 0),
+  max: new Date(item.max - 1).setUTCHours(endDayHour, 0, 0, 0),
 }));
 
 export const getMonthIntervals = (

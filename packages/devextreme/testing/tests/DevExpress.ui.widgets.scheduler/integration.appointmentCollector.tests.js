@@ -775,7 +775,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getCell(8).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
     });
 
@@ -813,7 +813,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getAllDayCell(1).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, (scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
     });
 

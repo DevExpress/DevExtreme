@@ -1,18 +1,26 @@
-import type { AppointmentItemViewModel } from '../view_model/generate_view_model/types';
-import type { DatesBeforeSplit, ListEntity } from './types';
+import timeZoneUtils from '../m_utils_time_zone';
+import type {
+  AppointmentAgendaViewModel,
+  AppointmentItemViewModel,
+} from '../view_model/generate_view_model/types';
+import type { ListEntity, UTCDatesAfterSplit } from './types';
 
 export const getAppointmentInfo = (
-  item: ListEntity & DatesBeforeSplit,
+  item: ListEntity,
 ): AppointmentItemViewModel['info'] => {
   const appointment = {
     allDay: item.allDay,
-    startDate: new Date(item.datesBeforeSplit.startDate),
-    endDate: new Date(item.datesBeforeSplit.endDate),
+    startDate: timeZoneUtils.createDateFromUTCWithLocalOffset(
+      new Date(item.datesBeforeSplit.startDateUTC),
+    ),
+    endDate: timeZoneUtils.createDateFromUTCWithLocalOffset(
+      new Date(item.datesBeforeSplit.endDateUTC),
+    ),
   };
   const source = {
     allDay: item.allDay,
-    startDate: new Date(item.sourceDatesBeforeSplit.startDate),
-    endDate: new Date(item.sourceDatesBeforeSplit.endDate),
+    startDate: new Date(item.source.startDate),
+    endDate: new Date(item.source.endDate),
   };
 
   return {
@@ -20,3 +28,18 @@ export const getAppointmentInfo = (
     sourceAppointment: source,
   };
 };
+
+export const getAgendaAppointmentInfo = (
+  item: ListEntity & UTCDatesAfterSplit,
+): AppointmentAgendaViewModel['info'] => ({
+  ...getAppointmentInfo(item),
+  partialDates: {
+    allDay: item.allDay,
+    startDate: timeZoneUtils.createDateFromUTCWithLocalOffset(
+      new Date(item.datesAfterSplit.startDateUTC),
+    ),
+    endDate: timeZoneUtils.createDateFromUTCWithLocalOffset(
+      new Date(item.datesAfterSplit.endDateUTC),
+    ),
+  },
+});

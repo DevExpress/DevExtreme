@@ -63,32 +63,32 @@ describe('snapToCells', () => {
       {
         ...items[0],
         duration: 10,
-        startDate: 0,
-        endDate: 10,
+        startDateUTC: 0,
+        endDateUTC: 10,
       },
       {
         ...items[1],
         duration: 20,
-        startDate: 30,
-        endDate: 50,
+        startDateUTC: 30,
+        endDateUTC: 50,
       },
       {
         ...items[2],
         duration: 30,
-        startDate: 0,
-        endDate: 30,
+        startDateUTC: 0,
+        endDateUTC: 30,
       },
       {
         ...items[3],
         duration: 10,
-        startDate: 40,
-        endDate: 50,
+        startDateUTC: 40,
+        endDateUTC: 50,
       },
       {
         ...items[4],
         duration: 10,
-        startDate: 50,
-        endDate: 60,
+        startDateUTC: 50,
+        endDateUTC: 60,
       },
     ]);
   });

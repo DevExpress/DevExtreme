@@ -1,4 +1,8 @@
 import type { AppointmentCollectorWithGeometry } from '../../../types';
+import {
+  getAbstractSizeByViewOrientation,
+  getRealSizeByViewOrientation,
+} from './swap_by_view_orientation';
 import type {
   Geometry,
   GeometryMinimalEntity,
@@ -7,22 +11,30 @@ import type {
 
 const COLLECTOR_ADAPTIVE_BOTTOM_OFFSET = 40;
 
-// NOTE: It's intended only for horizontal views and all day panel,
-// for other views uses another strategy
 export const addAdaptivityGeometryInsideInterval = <T extends GeometryMinimalEntity>(
   entity: T,
-  { cellSize, collectorSize }: Pick<GeometryOptions, 'cellSize' | 'collectorSize'>,
+  {
+    cellSize,
+    collectorSize,
+    collectorWithMarginsSize,
+    viewOrientation,
+  }: Pick<GeometryOptions, 'cellSize' | 'collectorSize' | 'collectorWithMarginsSize' | 'viewOrientation'>,
 ): T & Geometry & AppointmentCollectorWithGeometry => {
-  const topInsideCell = entity.isAllDayPanelOccupied
-    ? (cellSize.height - collectorSize.height) / 2
+  const cellAbstractSize = getAbstractSizeByViewOrientation(cellSize, viewOrientation);
+  const topInsideCell = entity.isAllDayPanelOccupied || viewOrientation === 'vertical'
+    ? (cellSize.height - collectorWithMarginsSize.height) / 2
     : cellSize.height - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
-  const leftInsideCell = (cellSize.width - collectorSize.width) / 2;
-  const geometry = {
-    left: leftInsideCell + entity.columnIndex * cellSize.width,
+  const leftInsideCell = (cellSize.width - collectorWithMarginsSize.width) / 2;
+
+  const abstractGeometry = getAbstractSizeByViewOrientation({
     top: topInsideCell,
+    left: leftInsideCell,
     width: collectorSize.width,
     height: collectorSize.height,
-  };
+  }, viewOrientation);
+  abstractGeometry.offsetX += entity.columnIndex * cellAbstractSize.sizeX;
+
+  const geometry = getRealSizeByViewOrientation(abstractGeometry, viewOrientation);
   const items = entity.items.map((item) => ({
     ...item,
     width: cellSize.width,

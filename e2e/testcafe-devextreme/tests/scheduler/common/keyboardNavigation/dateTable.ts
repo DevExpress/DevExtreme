@@ -26,7 +26,7 @@ const setMacOsScrollableOptions = ClientFunction(() => {
   test(`Should pass focus to the next elements after date table on Mac devices (view: ${currentView})`, async (t) => {
     const bottomBtn = Selector(BOTTOM_BTN_SELECTOR);
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-    const usualAppointment = scheduler.getAppointment('Usual');
+    const usualAppointment = scheduler.getAppointment('All-day');
 
     await t
       .click(usualAppointment.element)

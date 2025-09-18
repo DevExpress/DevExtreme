@@ -973,7 +973,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this.currentView,
       dateRange[0],
       dateRange[1],
-      this._appointments.appointmentsCount,
+      this._layoutManager.filteredItems.length,
       indicatorTime,
     );
 

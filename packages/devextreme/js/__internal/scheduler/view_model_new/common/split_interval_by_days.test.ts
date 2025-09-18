@@ -9,12 +9,12 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 0,
       endDayHour: 24,
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 11).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 11),
       skippedDays: [],
     })).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 11).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 11),
     }]);
   });
 
@@ -22,18 +22,18 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 0,
       endDayHour: 24,
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 13).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 13),
       skippedDays: [],
     })).toEqual([{
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 11).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 11),
     }, {
-      min: new Date(2000, 0, 11).getTime(),
-      max: new Date(2000, 0, 12).getTime(),
+      min: Date.UTC(2000, 0, 11),
+      max: Date.UTC(2000, 0, 12),
     }, {
-      min: new Date(2000, 0, 12).getTime(),
-      max: new Date(2000, 0, 13).getTime(),
+      min: Date.UTC(2000, 0, 12),
+      max: Date.UTC(2000, 0, 13),
     }]);
   });
 
@@ -41,18 +41,18 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 3,
       endDayHour: 13,
-      min: new Date(2000, 0, 10).getTime(),
-      max: new Date(2000, 0, 13).getTime(),
+      min: Date.UTC(2000, 0, 10),
+      max: Date.UTC(2000, 0, 13),
       skippedDays: [],
     })).toEqual([{
-      min: new Date(2000, 0, 10, 3).getTime(),
-      max: new Date(2000, 0, 10, 13).getTime(),
+      min: Date.UTC(2000, 0, 10, 3),
+      max: Date.UTC(2000, 0, 10, 13),
     }, {
-      min: new Date(2000, 0, 11, 3).getTime(),
-      max: new Date(2000, 0, 11, 13).getTime(),
+      min: Date.UTC(2000, 0, 11, 3),
+      max: Date.UTC(2000, 0, 11, 13),
     }, {
-      min: new Date(2000, 0, 12, 3).getTime(),
-      max: new Date(2000, 0, 12, 13).getTime(),
+      min: Date.UTC(2000, 0, 12, 3),
+      max: Date.UTC(2000, 0, 12, 13),
     }]);
   });
 
@@ -60,22 +60,22 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 0.1,
       endDayHour: 23.9,
-      min: new Date(2000, 0, 10, 0, 6).getTime(),
-      max: new Date(2000, 0, 13, 23, 56).getTime(),
+      min: Date.UTC(2000, 0, 10, 0, 6),
+      max: Date.UTC(2000, 0, 13, 23, 56),
       skippedDays: [],
     })).toEqual([
       {
-        min: new Date(2000, 0, 10, 0, 6).getTime(),
-        max: new Date(2000, 0, 10, 23, 54).getTime(),
+        min: Date.UTC(2000, 0, 10, 0, 6),
+        max: Date.UTC(2000, 0, 10, 23, 54),
       }, {
-        min: new Date(2000, 0, 11, 0, 6).getTime(),
-        max: new Date(2000, 0, 11, 23, 54).getTime(),
+        min: Date.UTC(2000, 0, 11, 0, 6),
+        max: Date.UTC(2000, 0, 11, 23, 54),
       }, {
-        min: new Date(2000, 0, 12, 0, 6).getTime(),
-        max: new Date(2000, 0, 12, 23, 54).getTime(),
+        min: Date.UTC(2000, 0, 12, 0, 6),
+        max: Date.UTC(2000, 0, 12, 23, 54),
       }, {
-        min: new Date(2000, 0, 13, 0, 6).getTime(),
-        max: new Date(2000, 0, 13, 23, 54).getTime(),
+        min: Date.UTC(2000, 0, 13, 0, 6),
+        max: Date.UTC(2000, 0, 13, 23, 54),
       },
     ]);
   });
@@ -84,8 +84,8 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 20,
       endDayHour: 10,
-      min: new Date(2000, 0, 10, 10).getTime(),
-      max: new Date(2000, 0, 15, 5).getTime(),
+      min: Date.UTC(2000, 0, 10, 10),
+      max: Date.UTC(2000, 0, 15, 5),
       skippedDays: [],
     })).toEqual([]);
   });
@@ -94,21 +94,21 @@ describe('splitIntervalByDay', () => {
     expect(splitIntervalByDay({
       startDayHour: 0,
       endDayHour: 24,
-      min: new Date(2000, 2, 1).getTime(),
-      max: new Date(2000, 2, 7).getTime(),
+      min: Date.UTC(2000, 2, 1),
+      max: Date.UTC(2000, 2, 7),
       skippedDays: [0, 6],
     })).toEqual([{
-      min: new Date(2000, 2, 1).getTime(), // Wed
-      max: new Date(2000, 2, 2).getTime(),
+      min: Date.UTC(2000, 2, 1), // Wed
+      max: Date.UTC(2000, 2, 2),
     }, {
-      min: new Date(2000, 2, 2).getTime(), // Thu
-      max: new Date(2000, 2, 3).getTime(),
+      min: Date.UTC(2000, 2, 2), // Thu
+      max: Date.UTC(2000, 2, 3),
     }, {
-      min: new Date(2000, 2, 3).getTime(), // Fri
-      max: new Date(2000, 2, 4).getTime(),
+      min: Date.UTC(2000, 2, 3), // Fri
+      max: Date.UTC(2000, 2, 4),
     }, {
-      min: new Date(2000, 2, 6).getTime(), // Mon
-      max: new Date(2000, 2, 7).getTime(),
+      min: Date.UTC(2000, 2, 6), // Mon
+      max: Date.UTC(2000, 2, 7),
     }]);
   });
 });

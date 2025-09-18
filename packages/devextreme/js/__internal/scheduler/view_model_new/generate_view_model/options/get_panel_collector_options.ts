@@ -11,6 +11,7 @@ const UNLIMITED_COLLECTOR_SIZES = {
   collectorWithMarginsSize: { width: 0, height: 0 },
 };
 const ALL_DAY_COLLECTOR_WIDTH_FACTOR = 0.75;
+const MIN_LEVEL_VERTICAL_VIEW = 1;
 
 export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   alwaysReserveSpaceForCollector,
@@ -32,14 +33,23 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   collectorCSS: CollectorCSS;
   panelName: PanelName;
 }): {
+  allDayPanelCellSize: RealSize;
   cellSize: RealSize;
   collectorSizes: { collectorSize: RealSize; collectorWithMarginsSize: RealSize };
   maxLevel: number;
   minLevel: number;
 } => {
-  const cellDOM = panelName === 'allDayPanel'
-    ? DOMMetaData.allDayPanelCellsMeta[0] || DOMMetaData.dateTableCellsMeta[0][0]
-    : DOMMetaData.dateTableCellsMeta[0][0];
+  // vertical grouping has only regular panel with all day appointments and regular appointments
+  const allDayPanelCellDOM = DOMMetaData.allDayPanelCellsMeta[0]
+    || DOMMetaData.dateTableCellsMeta[0][0];
+  const regularPanelCellDOM = DOMMetaData.dateTableCellsMeta[1]?.[0]
+    || DOMMetaData.dateTableCellsMeta[0][0];
+
+  const cellDOM = panelName === 'allDayPanel' ? allDayPanelCellDOM : regularPanelCellDOM;
+  const allDayPanelCellSize = {
+    width: allDayPanelCellDOM.width ?? 0,
+    height: allDayPanelCellDOM.height ?? 0,
+  };
   const cellSize = {
     width: cellDOM.width ?? 0,
     height: cellDOM.height ?? 0,
@@ -62,7 +72,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
     isTimelineView,
     isAdaptivityEnabled,
   });
-  const minLevel = viewOrientation === 'vertical' ? 1 : getMaxLevel({
+  const minLevel = viewOrientation === 'vertical' ? MIN_LEVEL_VERTICAL_VIEW : getMaxLevel({
     maxAppointmentsPerCell: 'auto',
     cellSize,
     collectorSize: collectorSizes.collectorWithMarginsSize,
@@ -72,6 +82,7 @@ export const getPanelCollectorOptions = (schedulerStore: Scheduler, {
   });
 
   return {
+    allDayPanelCellSize,
     cellSize,
     collectorSizes,
     maxLevel,

@@ -6,6 +6,6 @@ export const sortByDuration = <T extends { duration: number }>(
   entities: T[],
 ): T[] => entities.sort((a, b) => b.duration - a.duration);
 
-export const sortByStartDate = <T extends { startDate: number }>(
+export const sortByStartDate = <T extends { startDateUTC: number }>(
   entities: T[],
-): T[] => entities.sort((a, b) => a.startDate - b.startDate);
+): T[] => entities.sort((a, b) => a.startDateUTC - b.startDateUTC);

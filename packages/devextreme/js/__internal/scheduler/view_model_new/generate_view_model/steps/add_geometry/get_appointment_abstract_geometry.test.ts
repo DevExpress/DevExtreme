@@ -21,7 +21,7 @@ describe('appointment position utils', () => {
 
     it('should return X position inside one cell', () => {
       const entity = {
-        startDate: 10, endDate: 15, cellIndex: 0, endCellIndex: 0, columnIndex: 0,
+        startDateUTC: 10, endDateUTC: 15, cellIndex: 0, endCellIndex: 0, columnIndex: 0,
       };
 
       expect(getAppointmentX(entity, cellSize, cells)).toEqual({ offsetX: 100, sizeX: 50 });
@@ -29,7 +29,7 @@ describe('appointment position utils', () => {
 
     it('should return X position inside cells with gap', () => {
       const entity = {
-        startDate: 22, endDate: 72, cellIndex: 1, endCellIndex: 3, columnIndex: 1,
+        startDateUTC: 22, endDateUTC: 72, cellIndex: 1, endCellIndex: 3, columnIndex: 1,
       };
 
       expect(getAppointmentX(entity, cellSize, cells)).toEqual({ offsetX: 220, sizeX: 400 });
@@ -37,22 +37,22 @@ describe('appointment position utils', () => {
 
     it('should return correct X position through DST', () => {
       const entity = {
-        startDate: new Date(2019, 9, 26).getTime(),
-        endDate: new Date(2019, 9, 29).getTime(),
+        startDateUTC: Date.UTC(2019, 9, 26),
+        endDateUTC: Date.UTC(2019, 9, 29),
         cellIndex: 0,
         endCellIndex: 1,
         columnIndex: 0,
       };
 
       expect(getAppointmentX(entity, cellSize, [{
-        min: new Date(2019, 9, 25).getTime(),
-        max: new Date(2019, 9, 27).getTime(),
+        min: Date.UTC(2019, 9, 25),
+        max: Date.UTC(2019, 9, 27),
         cellIndex: 0,
         columnIndex: 0,
         rowIndex: 0,
       }, {
-        min: new Date(2019, 9, 27).getTime(),
-        max: new Date(2019, 9, 29).getTime(),
+        min: Date.UTC(2019, 9, 27),
+        max: Date.UTC(2019, 9, 29),
         cellIndex: 1,
         columnIndex: 1,
         rowIndex: 0,
