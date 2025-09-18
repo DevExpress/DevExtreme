@@ -17,18 +17,18 @@ export const splitIntervalByDay = ({
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
 
   const normalizedMin = new Date(min);
-  normalizedMin.setHours(startTime.hours, startTime.minutes, 0, 0);
+  normalizedMin.setUTCHours(startTime.hours, startTime.minutes, 0, 0);
   const normalizedMax = new Date(max - 1);
-  normalizedMax.setHours(endTime.hours, endTime.minutes, 0, 0);
+  normalizedMax.setUTCHours(endTime.hours, endTime.minutes, 0, 0);
 
   const time = normalizedMin;
   const maxTime = normalizedMax;
   const result: DateInterval[] = [];
 
   while (time < maxTime) {
-    if (!skippedDays.includes(time.getDay())) {
+    if (!skippedDays.includes(time.getUTCDay())) {
       const intervalMax = new Date(time);
-      intervalMax.setHours(endTime.hours, endTime.minutes, 0, 0);
+      intervalMax.setUTCHours(endTime.hours, endTime.minutes, 0, 0);
 
       result.push({
         min: time.getTime(),
@@ -36,7 +36,7 @@ export const splitIntervalByDay = ({
       });
     }
 
-    time.setDate(time.getDate() + 1);
+    time.setUTCDate(time.getUTCDate() + 1);
   }
 
   return result;

@@ -1,7 +1,7 @@
 import type { Orientation } from '@js/common';
 
-import type { TimeZoneCalculator } from '../r1/timezone_calculator';
 import type { AllDayPanelModeType, SafeAppointment } from '../types';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupLeaf } from '../utils/resource_manager/types';
 import type {
@@ -42,8 +42,10 @@ export interface FilterOptions {
   allDayPanelMode: AllDayPanelModeType;
   showAllDayPanel: boolean;
   supportAllDayPanel: boolean;
+  isDateTimeView: boolean;
   resourceManager: ResourceManager;
-  timeZoneCalculator: TimeZoneCalculator;
+  timeZone: string;
+  dataAccessor: AppointmentDataAccessor;
   viewOffset: number;
   firstDayOfWeek?: number;
   allDayIntervals: DateInterval[];
@@ -63,9 +65,7 @@ export interface AllDayPanelOccupation {
 }
 
 export interface MinimalAppointmentEntity {
-  startDate: number;
   startDateTimeZone?: string;
-  endDate: number;
   endDateTimeZone?: string;
   recurrenceRule?: string;
   recurrenceException?: string;
@@ -74,6 +74,10 @@ export interface MinimalAppointmentEntity {
   visible: boolean;
   disabled: boolean;
   itemData: SafeAppointment;
+  source: {
+    startDate: number;
+    endDate: number;
+  };
 }
 
 export interface Duration {
@@ -86,28 +90,22 @@ export interface AppointmentPart {
   partCount: number;
 }
 
-export interface DatesBeforeSplit {
-  sourceDatesBeforeSplit: {
-    allDay: boolean;
-    startDate: number;
-    endDate: number;
-  };
-  datesBeforeSplit: {
-    allDay: boolean;
-    startDate: number;
-    endDate: number;
-  };
+export interface UTCDates {
+  startDateUTC: number;
+  endDateUTC: number;
 }
 
-export interface DatesAfterSplit {
-  datesAfterSplit: {
-    allDay: boolean;
-    startDate: number;
-    endDate: number;
-  };
+export interface UTCDatesBeforeSplit {
+  datesBeforeSplit: UTCDates;
+}
+
+export interface UTCDatesAfterSplit {
+  datesAfterSplit: UTCDates;
 }
 
 export type ListEntity = MinimalAppointmentEntity
+  & UTCDates
+  & UTCDatesBeforeSplit
   & AllDayPanelOccupation
   & GroupIndex
   & Duration;
@@ -122,8 +120,7 @@ export interface AgendaGeometry {
 }
 
 export type AgendaEntity = ListEntity
-  & DatesBeforeSplit
-  & DatesAfterSplit
+  & UTCDatesAfterSplit
   & AppointmentPart
   & AgendaGeometry
   & LastInGroup
@@ -136,11 +133,11 @@ export interface Level {
 }
 
 export type CollectorItemEntity = ListEntity
-  & DatesBeforeSplit
+  & UTCDatesBeforeSplit
   & RealSize;
 
 export interface AppointmentCollector {
-  items: (ListEntity & DatesBeforeSplit)[];
+  items: (ListEntity & UTCDatesBeforeSplit)[];
   isCompact: boolean;
 }
 
@@ -154,7 +151,7 @@ export interface Direction {
 }
 
 export type AppointmentEntity = ListEntity
-  & DatesBeforeSplit
+  & UTCDatesBeforeSplit
   & AppointmentPart
   & Level
   & Position

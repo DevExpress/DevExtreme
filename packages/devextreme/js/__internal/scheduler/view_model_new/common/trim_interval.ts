@@ -1,11 +1,14 @@
-import { getDatesWithoutTime } from '../../r1/utils/base';
 import type { DateInterval } from '../types';
 
 export const trimInterval = ({
   min,
   max,
 }: DateInterval): DateInterval => {
-  const [trimMin, trimMax] = getDatesWithoutTime(min, max);
+  const maxMinusDay = new Date(max - 1).setUTCHours(0, 0, 0, 0);
+  const maxMinusDayDate = new Date(maxMinusDay);
 
-  return { min: trimMin.getTime(), max: trimMax.getTime() };
+  return {
+    min: new Date(min).setUTCHours(0, 0, 0, 0),
+    max: maxMinusDayDate.setDate(maxMinusDayDate.getDate() + 1),
+  };
 };
