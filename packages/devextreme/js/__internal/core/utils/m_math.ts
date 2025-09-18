@@ -50,14 +50,6 @@ const EXP_TO_CHANGE_NOTATION = 7;
 const MAX_PRECISION = 15;
 const MIN_PRECISION = 7;
 
-/**
- * Adjusts the value to the nearest interval.
- * @param value - The value to adjust.
- * @param interval - The interval to adjust to.
- * @returns The adjusted value.
- *
- * consider using roundFloatPart instead of adjust
- */
 function adjust(value: number, interval?: number): number {
   const absValue = Math.abs(value);
   const integerPart = absValue > 1 ? 10 : 0;
