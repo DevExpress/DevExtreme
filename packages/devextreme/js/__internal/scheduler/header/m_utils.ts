@@ -334,9 +334,9 @@ export const getViewName = (view: NormalizedView): string | undefined => view.na
 export const createLocalizedViewItems = (
   views: NormalizedView[],
 ): Item[] => views.map((view) => {
-  const text = view.name ?? messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
+  const localizedName = messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
   return {
     ...view,
-    text,
+    text: localizedName,
   };
 });
