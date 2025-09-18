@@ -70,9 +70,9 @@ describe('m_view_switcher localization', () => {
       const ruLocaleResult = getTabViewSwitcher(mockSchedulerHeader, {});
 
       expect(ruLocaleResult.options.items).toEqual([
-        { type: 'day', name: 'Day', text: 'Day' },
-        { type: 'week', name: 'Week', text: 'Week' },
-        { type: 'month', name: 'Month', text: 'Month' },
+        { type: 'day', name: 'Day', text: 'Day (RU)' },
+        { type: 'week', name: 'Week', text: 'Week (RU)' },
+        { type: 'month', name: 'Month', text: 'Month (RU)' },
       ]);
     });
 
@@ -114,8 +114,8 @@ describe('m_view_switcher localization', () => {
       const ruLocaleResult = getDropDownViewSwitcher(mockSchedulerHeader, {});
 
       expect(ruLocaleResult.options.items).toEqual([
-        { type: 'day', name: 'Day', text: 'Day' },
-        { type: 'week', name: 'Week', text: 'Week' },
+        { type: 'day', name: 'Day', text: 'Day (RU)' },
+        { type: 'week', name: 'Week', text: 'Week (RU)' },
       ]);
     });
   });
