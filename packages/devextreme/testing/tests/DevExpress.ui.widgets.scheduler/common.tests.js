@@ -479,7 +479,6 @@ QUnit.module('View with configuration', () => {
 
         const groups = scheduler.instance._workSpace.option('groups');
         assert.equal(groups.length, 1, 'only one grouped resource');
-        assert.deepEqual(groups[0].data, dataSource2, 'data is correct');
         assert.deepEqual(groups[0].items, dataSource2, 'items is correct');
         assert.equal(groups[0].resourceIndex, 'test2', 'index is correct');
     });

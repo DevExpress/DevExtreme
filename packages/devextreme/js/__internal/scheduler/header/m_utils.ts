@@ -327,8 +327,3 @@ const STEP_MAP: Record<ViewType, Step> = {
 export const getStep = (type: ViewType): Step => STEP_MAP[type];
 
 export const getViewName = (view: NormalizedView): string | undefined => view.name ?? view.type;
-
-export const isOneView = (
-  views: NormalizedView[],
-  selectedView?: string,
-): boolean => views.length === 1 && getViewName(views[0]) === selectedView;

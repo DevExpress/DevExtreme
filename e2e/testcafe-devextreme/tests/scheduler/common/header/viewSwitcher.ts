@@ -1,4 +1,5 @@
 import SelectBox from 'devextreme-testcafe-models/selectBox';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
@@ -66,3 +67,24 @@ test('Changing view does not reset toolbar items state', async (t) => {
     ],
   },
 }));
+
+[true, false].forEach((useDropDownViewSwitcher) => {
+  test(`view switcher should not be displayed if views has only one element when useDropDownViewSwitcher: ${useDropDownViewSwitcher}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const { toolbar } = new Scheduler('#container');
+
+    await t
+      .expect(await takeScreenshot(`toolbar-without-view-switcher-(useDropDownViewSwitcher=${useDropDownViewSwitcher}).png`, toolbar.element))
+      .ok()
+
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxScheduler', {
+    currentDate: new Date(2020, 2, 2),
+    currentView: 'day',
+    views: ['day'],
+    useDropDownViewSwitcher,
+    height: 580,
+  }));
+});
