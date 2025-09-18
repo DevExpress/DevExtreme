@@ -92,7 +92,7 @@ class FileSystemUtils {
 
   saveMetaDataFile(menuMetaDataFilePath, metaData) {
     console.log('Saving: menuMeta.json');
-    fs.writeFileSync(menuMetaDataFilePath, JSON.stringify(metaData, null, 2));
+    fs.writeFileSync(menuMetaDataFilePath, `${JSON.stringify(metaData, null, 2)}\n`);
     console.log('Saved: menuMeta.json');
   }
 
