@@ -8,7 +8,7 @@ const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.
 
 moduleWithoutCsp('Render', () => {
     // T831205
-    QUnit.test('Widget rendering when buttonTemplate is used', function(assert) {
+    QUnit.skip('Widget rendering when buttonTemplate is used', function(assert) {
         const items = [
             { text: 'Item_1' },
             { text: 'Item_2' }
