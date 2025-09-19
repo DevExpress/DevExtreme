@@ -36,7 +36,8 @@ import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
-import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
+import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
+import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
@@ -1091,8 +1092,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
       },
     };
-
-    return new AppointmentPopup(scheduler, form);
+    return this._editing.legacyForm
+      ? new AppointmentLegacyPopup(scheduler, form)
+      : new AppointmentPopup(scheduler, form);
   }
 
   _getAppointmentTooltipOptions() {
