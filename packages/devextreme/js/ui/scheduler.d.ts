@@ -30,7 +30,7 @@ import {
 
 import dxDraggable from './draggable';
 
-import dxForm from './form';
+import dxForm, { Item as FormItem } from './form';
 import dxPopup from './popup';
 
 import dxSortable from './sortable';
@@ -638,6 +638,36 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default true
        */
       allowUpdating?: boolean;
+      /**
+       * @docid dxSchedulerOptions.editing.form
+       * @public
+       */
+      form?: {
+        /**
+         * @docid dxSchedulerOptions.editing.form.items
+         * Defines form items that the user can configure. These are standard dxForm items.
+         * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
+         * @default undefined
+         * @public
+         */
+        items?: Array<FormItem> | undefined;
+        /**
+         * @docid dxSchedulerOptions.editing.form.onSubmit
+         * @type_function_param1 formData:object
+         * @default null
+         * @action
+         * @public
+         */
+        onSubmit?: ((formData: any) => void) | null;
+        /**
+         * @docid dxSchedulerOptions.editing.form.onCancel
+         * @type_function_param1 formData:object
+         * @default null
+         * @action
+         * @public
+         */
+        onCancel?: ((formData: any) => void) | null;
+      };
     };
     /**
      * @docid
