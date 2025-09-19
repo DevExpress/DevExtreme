@@ -26,9 +26,12 @@ const createDataGrid = async (
     ...options,
   });
 
-  setTimeout(() => {
+  const contentReadyHandler = (): void => {
     resolve({ $container, instance });
-  }, 30);
+    instance.off('contentReady', contentReadyHandler);
+  };
+
+  instance.on('contentReady', contentReadyHandler);
 });
 
 const getGrid = (): DataGrid => {
