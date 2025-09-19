@@ -32,6 +32,7 @@ import { StickyPosition } from '../sticky_columns/const';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_OPTION_REGEXP,
+  COMMAND_COLUMNS_WITH_REQUIRED_NAMES,
   COMMAND_EXPAND_CLASS,
   DATATYPE_OPERATIONS,
   DETAIL_COMMAND_COLUMN_NAME,
@@ -1553,7 +1554,9 @@ export class ColumnsController extends modules.Controller {
   }
 
   public setName(column) {
-    column.name = column.name || column.dataField || column.type;
+    if (!COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(column.type)) {
+      column.name = column.name || column.dataField || column.type;
+    }
   }
 
   public setUserState(state) {
@@ -1594,18 +1597,23 @@ export class ColumnsController extends modules.Controller {
 
   public _checkColumns() {
     const usedNames = {};
-    let hasEditableColumnWithoutName = false;
     const duplicatedNames: any = [];
+    let hasEditableColumnWithoutName = false;
+    let hasColumnsWithoutRequiredNames = false;
+
     this._columns.forEach((column) => {
       const { name } = column;
       const isBand = column.columns?.length;
       const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
+
       if (name) {
         if (usedNames[name]) {
           duplicatedNames.push(`"${name}"`);
         }
 
         usedNames[name] = true;
+      } else if (COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(column.type)) {
+        hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
       }
@@ -1613,6 +1621,10 @@ export class ColumnsController extends modules.Controller {
 
     if (duplicatedNames.length) {
       errors.log('E1059', duplicatedNames.join(', '));
+    }
+
+    if (hasColumnsWithoutRequiredNames) {
+      errors.log('E1066');
     }
 
     if (hasEditableColumnWithoutName) {

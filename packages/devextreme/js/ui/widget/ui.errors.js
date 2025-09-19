@@ -267,6 +267,11 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1065: 'The browser does not support Web Speech API (SpeechRecognition)',
 
     /**
+    * @name ErrorsUIWidgets.E1066
+    */
+    E1066: 'All AI columns must have names',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',
