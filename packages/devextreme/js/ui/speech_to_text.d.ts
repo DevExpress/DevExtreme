@@ -86,17 +86,17 @@ export type StopClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | Mou
  * @docid _ui_speech_to_text_ResultEvent
  * @public
  * @type object
- * @inherits NativeEventInfo
+ * @inherits EventInfo
  */
-export type ResultEvent = NativeEventInfo<dxSpeechToText, Event>;
+export type ResultEvent = EventInfo<dxSpeechToText> & { event: Event };
 
 /**
  * @docid _ui_speech_to_text_ErrorEvent
  * @public
  * @type object
- * @inherits NativeEventInfo
+ * @inherits EventInfo
  */
-export type ErrorEvent = NativeEventInfo<dxSpeechToText, Event>;
+export type ErrorEvent = EventInfo<dxSpeechToText> & { event: Event };
 
 /**
  * @docid _ui_speech_to_text_ContentReadyEvent

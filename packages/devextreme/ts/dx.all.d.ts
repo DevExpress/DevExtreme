@@ -27754,10 +27754,10 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_speech_to_text_ErrorEvent]
      */
-    export type ErrorEvent = DevExpress.common.core.events.NativeEventInfo<
-      dxSpeechToText,
-      Event
-    >;
+    export type ErrorEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
     export type ExplicitTypes = {
       Properties: Properties;
       ContentReadyEvent: ContentReadyEvent;
@@ -27847,10 +27847,10 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
      */
-    export type ResultEvent = DevExpress.common.core.events.NativeEventInfo<
-      dxSpeechToText,
-      Event
-    >;
+    export type ResultEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
     /**
      * [descr:_ui_speech_to_text_StartClickEvent]
      */
