@@ -645,12 +645,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       form?: {
         /**
          * @docid dxSchedulerOptions.editing.form.items
-         * Defines form items that the user can configure. These are standard dxForm items.
          * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-         * @default undefined
+         * @default []
          * @public
          */
-        items?: Array<FormItem> | undefined;
+        items: Array<FormItem>;
         /**
          * @docid dxSchedulerOptions.editing.form.onSubmit
          * @type_function_param1 formData:object
@@ -658,7 +657,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          * @action
          * @public
          */
-        onSubmit?: ((formData: any) => void) | null;
+        onSaved?: ((formData: any) => void) | null;
         /**
          * @docid dxSchedulerOptions.editing.form.onCancel
          * @type_function_param1 formData:object
@@ -666,7 +665,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          * @action
          * @public
          */
-        onCancel?: ((formData: any) => void) | null;
+        onCanceled?: ((formData: any) => void) | null;
       };
     };
     /**
