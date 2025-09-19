@@ -320,8 +320,6 @@ class ButtonGroup extends Widget<Properties> {
   }
 }
 
-export class TestButtonGroup1 extends ButtonGroup {}
-
 registerComponent('dxButtonGroup', ButtonGroup);
 // registerComponent('dxButtonGroup', ButtonGroupInferno);
 
