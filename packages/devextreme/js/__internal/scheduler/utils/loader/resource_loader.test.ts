@@ -27,6 +27,7 @@ describe('resource loader', () => {
 
       expect(loader.isLoaded()).toBe(false);
       await loader.load();
+      expect(loader.data).toEqual(assigneeData);
       expect(loader.items).toEqual([
         { id: 1, text: 'Samantha Bright', color: '#727bd2' },
         { id: 2, text: 'John Heart', color: '#32c9ed' },
@@ -45,6 +46,7 @@ describe('resource loader', () => {
 
       expect(loader.isLoaded()).toBe(false);
       await loader.load();
+      expect(loader.data).toEqual(assigneeData);
       expect(loader.items).toEqual([
         { id: 1, text: 'Samantha Bright', color: '#727bd2' },
         { id: 2, text: 'John Heart', color: '#32c9ed' },
