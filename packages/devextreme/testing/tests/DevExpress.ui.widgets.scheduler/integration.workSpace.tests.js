@@ -1698,6 +1698,7 @@ module('Resource Cell Template', () => {
 
                 assert.equal(templateOptions.id, 1, 'id option is OK');
                 assert.equal(templateOptions.text, 'John', 'text option is OK');
+                assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
             });
 
             test('resourceCellTemplate should work correct in timeline view', async function(assert) {
