@@ -1582,7 +1582,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       ],
       popupOptions: {
         wrapperAttr: { class: 'dx-dialog' },
-        onHidden: () => { this._appointments?.focus(); },
+        onHidden: (e) => {
+          this._appointments?.focus();
+          $(e.element).remove();
+        },
       },
     } as any);
 
