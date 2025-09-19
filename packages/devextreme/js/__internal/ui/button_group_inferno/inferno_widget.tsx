@@ -24,7 +24,10 @@ export abstract class InfernoWidget<TProperties extends {}> extends Widget<TProp
     return effect(() => {
       this.props = props.value;
 
-      infernoRenderer.render(InfernoComponent, props.value, root, !this.firstRender);
+      const content = <InfernoComponent {...props.value} />;
+
+      infernoRenderer.renderIntoContainer(content, root, !this.firstRender);
+
       this.firstRender = false;
     });
   }
@@ -43,7 +46,8 @@ export abstract class InfernoWidget<TProperties extends {}> extends Widget<TProp
 
   public _clean(): void {
     this.cleanupRenderSubscription?.();
-    infernoRenderer.render(null, null, this.$element().get(0), true);
+
+    infernoRenderer.renderIntoContainer(null, this.$element().get(0), true);
 
     super._clean();
   }
