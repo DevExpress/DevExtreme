@@ -14,6 +14,7 @@ import {
 
 
 
+import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -77,6 +78,14 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
     set allowUpdating(value: boolean) {
         this._setOption('allowUpdating', value);
+    }
+
+    @Input()
+    get form(): { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCancel?: ((formData: any) => void) | null, onSubmit?: ((formData: any) => void) | null } {
+        return this._getOption('form');
+    }
+    set form(value: { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCancel?: ((formData: any) => void) | null, onSubmit?: ((formData: any) => void) | null }) {
+        this._setOption('form', value);
     }
 
 

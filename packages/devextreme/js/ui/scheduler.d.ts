@@ -649,7 +649,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          * @default []
          * @public
          */
-        items: Array<FormItem>;
+        items?: Array<FormItem>;
         /**
          * @docid dxSchedulerOptions.editing.form.onSubmit
          * @type_function_param1 formData:object

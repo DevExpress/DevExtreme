@@ -291,4 +291,18 @@ export abstract class DxoFormOptions extends NestedOption {
     set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
+
+    get onCancel(): Function | null {
+        return this._getOption('onCancel');
+    }
+    set onCancel(value: Function | null) {
+        this._setOption('onCancel', value);
+    }
+
+    get onSubmit(): Function | null {
+        return this._getOption('onSubmit');
+    }
+    set onSubmit(value: Function | null) {
+        this._setOption('onSubmit', value);
+    }
 }

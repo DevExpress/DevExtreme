@@ -26287,6 +26287,23 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.editing.allowUpdating]
            */
           allowUpdating?: boolean;
+          /**
+           * [descr:dxSchedulerOptions.editing.form]
+           */
+          form?: {
+            /**
+             * [descr:dxSchedulerOptions.editing.form.items]
+             */
+            items?: Array<DevExpress.ui.dxForm.Item>;
+            /**
+             * [descr:dxSchedulerOptions.editing.form.onSubmit]
+             */
+            onSaved?: ((formData: any) => void) | null;
+            /**
+             * [descr:dxSchedulerOptions.editing.form.onCancel]
+             */
+            onCanceled?: ((formData: any) => void) | null;
+          };
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
