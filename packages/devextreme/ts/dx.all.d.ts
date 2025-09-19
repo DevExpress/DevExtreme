@@ -36760,6 +36760,9 @@ declare module DevExpress.viz {
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+    /**
+     * [descr:ChartPointInfo]
+     */
     export type ChartPointInfo = BasePointInfo<chartPointObject>;
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
     export type ChartSeriesAggregationMethod =
@@ -37414,6 +37417,9 @@ declare module DevExpress.viz {
     export type PointHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
+    /**
+     * [descr:dxChartPointInfo]
+     */
     export type PointInfo =
       | ChartPointInfo
       | StackedPointInfo
@@ -42106,6 +42112,9 @@ declare module DevExpress.viz {
     export type PointHoverChangedEvent =
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
+    /**
+     * [descr:dxPolarChartPointInfo]
+     */
     export type PointInfo = BasePointInfo<polarPointObject>;
     /**
      * [descr:_viz_polar_chart_PointSelectionChangedEvent]
@@ -46046,7 +46055,7 @@ declare module DevExpress.viz {
     show(): void;
   }
   /**
-   * [descr:PointInfo]
+   * [descr:dxPieChartPointInfo]
    */
   export type PointInfo = BasePointInfo<piePointObject> & {
     /**

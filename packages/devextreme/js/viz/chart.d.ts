@@ -636,11 +636,13 @@ export type RangePointInfo = {
 };
 
 /**
+ * @docid
  * @public
  */
 export type ChartPointInfo = BasePointInfo<chartPointObject>;
 
 /**
+ * @docid dxChartPointInfo
  * @public
  */
 export type PointInfo =

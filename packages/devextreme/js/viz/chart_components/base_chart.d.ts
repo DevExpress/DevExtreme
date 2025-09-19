@@ -53,6 +53,7 @@ import {
 /**
  * @docid
  * @skip
+ * @type dxChartPointInfo|dxPieChartPointInfo|dxPolarChartPointInfo
  */
 type ChartsPointInfo = ChartPointInfo | PieChartPointInfo | PolarPointInfo;
 

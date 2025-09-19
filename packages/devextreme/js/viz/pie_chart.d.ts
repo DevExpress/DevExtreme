@@ -992,7 +992,7 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 }
 
 /**
- * @docid
+ * @docid dxPieChartPointInfo
  * @public
  * @type object
  * @namespace DevExpress.viz
