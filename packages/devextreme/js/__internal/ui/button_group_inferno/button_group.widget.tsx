@@ -1,5 +1,5 @@
-// eslint-disable-next-line max-classes-per-file
 /* eslint-disable spellcheck/spell-checker */
+// eslint-disable-next-line max-classes-per-file
 import { Component } from '@js/core/component';
 import type { Item, SelectionChangedEvent } from '@js/ui/button_group';
 import type dxButtonGroup from '@js/ui/button_group';
@@ -18,6 +18,8 @@ import { OptionsController } from './controllers/options_controller';
 
 export class ButtonGroupBase extends InfernoWidget<ButtonGroupProps> {
   private diContext!: DIContext;
+
+  protected functionalityController!: FunctionalityControllerModule.Controller;
 
   protected options!: OptionsController;
 
@@ -61,7 +63,7 @@ export class ButtonGroupBase extends InfernoWidget<ButtonGroupProps> {
 
   public _init(): void {
     super._init();
-    
+
     this.functionalityController = new FunctionalityControllerModule.Controller(this);
 
     this.diContext = new DIContext();
