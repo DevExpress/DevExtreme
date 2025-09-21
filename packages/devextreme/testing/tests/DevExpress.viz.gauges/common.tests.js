@@ -22,7 +22,7 @@ import loadingIndicatorModule from 'viz/core/loading_indicator';
 import tooltipModule from 'viz/core/tooltip';
 import rangeModule from 'viz/translators/range';
 import translator1DModule from 'viz/translators/translator1d';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import themeManagerModule from '__internal/viz/gauges/theme_manager';
 
 const stubRange = stubClass(rangeModule.Range);
