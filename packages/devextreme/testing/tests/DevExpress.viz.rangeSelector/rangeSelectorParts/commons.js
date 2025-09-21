@@ -9,7 +9,7 @@ import axisModule from 'viz/axes/base_axis';
 import seriesDataSourceModule from 'viz/range_selector/series_data_source';
 import rangeModule from 'viz/translators/range';
 import translator2DModule from 'viz/translators/translator2d';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import {
     stubClass,
     forceThemeOptions,

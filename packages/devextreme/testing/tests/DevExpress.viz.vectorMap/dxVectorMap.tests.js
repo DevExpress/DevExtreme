@@ -3,7 +3,7 @@ import { noop } from 'core/utils/common';
 import {
     environment
 } from './vectorMapParts/commons.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import projectionModule from 'viz/vector_map/projection.main';
 import controlBarModule from 'viz/vector_map/control_bar/control_bar';
 import gestureHandlerModule from 'viz/vector_map/gesture_handler';

@@ -3,7 +3,9 @@ import {
     Renderer,
     stubClass
 } from '../../helpers/vizMocks.js';
-import vizUtilsModule from 'viz/core/utils';
+import {
+    getLog
+} from 'viz/core/utils';
 import { Axis } from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import { Range } from 'viz/translators/range';
@@ -113,7 +115,7 @@ function compareFloatNumbers(ticks, expectedNumbers, assert) {
     ticks.forEach(function(tick, index) {
         const number = tick.value.valueOf();
 
-        assert.strictEqual(parseFloat(number.toFixed(Math.floor(Math.abs(vizUtilsModule.getLog(number, 10))) + 1)), expectedNumbers[index], (index + 1) + 'tick');
+        assert.strictEqual(parseFloat(number.toFixed(Math.floor(Math.abs(getLog(number, 10))) + 1)), expectedNumbers[index], (index + 1) + 'tick');
     });
 }
 
