@@ -1,8 +1,21 @@
-import utils from 'viz/core/utils';
+import {
+    decreaseGaps,
+    parseScalar,
+    convertPolarToXY,
+    convertXYToPolar,
+    enumParser,
+    getCategoriesInfo,
+    map,
+    normalizePanesHeight,
+    patchFontOptions,
+    unique,
+    setCanvasValues,
+    updatePanesCanvases,
+} from 'viz/core/utils';
 
 QUnit.module('decreaseGaps', {
     beforeEach: function() {
-        this.decreaseGaps = utils.decreaseGaps;
+        this.decreaseGaps = decreaseGaps;
     }
 });
 
@@ -72,36 +85,36 @@ QUnit.test('value round', function(assert) {
 QUnit.module('Other');
 
 QUnit.test('parseScalar', function(assert) {
-    assert.strictEqual(utils.parseScalar(undefined, 0), 0);
-    assert.strictEqual(utils.parseScalar(undefined, true), true);
-    assert.strictEqual(utils.parseScalar(null, true), null);
-    assert.strictEqual(utils.parseScalar(1, 'a'), 1);
+    assert.strictEqual(parseScalar(undefined, 0), 0);
+    assert.strictEqual(parseScalar(undefined, true), true);
+    assert.strictEqual(parseScalar(null, true), null);
+    assert.strictEqual(parseScalar(1, 'a'), 1);
 });
 
 QUnit.test('enumParser', function(assert) {
-    const parser = utils.enumParser(['one', 'Two', 'THREE']);
+    const parser = enumParser(['one', 'Two', 'THREE']);
     assert.strictEqual(parser('ONE', 'four'), 'one', 'ONE');
     assert.strictEqual(parser('ONE1', 'four'), 'four', 'ONE1');
     assert.strictEqual(parser('thREE', 'four'), 'three', 'thREE');
 });
 
 QUnit.test('convertPolarToXY', function(assert) {
-    assert.deepEqual(utils.convertPolarToXY({ x: 0, y: 0 }, 0, 10, 20), { x: 3, y: -20 });
-    assert.deepEqual(utils.convertPolarToXY({ x: 10, y: 20 }, 20, 10, 20), { x: 20, y: 3 });
-    assert.deepEqual(utils.convertPolarToXY({ x: 0, y: 0 }, 40, 100, 250), { x: 161, y: 192 });
-    assert.deepEqual(utils.convertPolarToXY({ x: 10, y: 20 }, 90, 100, 250), { x: -33, y: 266 });
+    assert.deepEqual(convertPolarToXY({ x: 0, y: 0 }, 0, 10, 20), { x: 3, y: -20 });
+    assert.deepEqual(convertPolarToXY({ x: 10, y: 20 }, 20, 10, 20), { x: 20, y: 3 });
+    assert.deepEqual(convertPolarToXY({ x: 0, y: 0 }, 40, 100, 250), { x: 161, y: 192 });
+    assert.deepEqual(convertPolarToXY({ x: 10, y: 20 }, 90, 100, 250), { x: -33, y: 266 });
 });
 
 QUnit.test('convertXYToPolar', function(assert) {
-    assert.deepEqual(utils.convertXYToPolar({ x: 0, y: 0 }, 10, 20), { phi: 63, r: 22 });
-    assert.deepEqual(utils.convertXYToPolar({ x: 10, y: 20 }, 10, 20), { phi: 0, r: 0 });
-    assert.deepEqual(utils.convertXYToPolar({ x: 0, y: 0 }, 100, 200), { phi: 63, r: 224 });
-    assert.deepEqual(utils.convertXYToPolar({ x: 10, y: 20 }, 100, 200), { phi: 63, r: 201 });
+    assert.deepEqual(convertXYToPolar({ x: 0, y: 0 }, 10, 20), { phi: 63, r: 22 });
+    assert.deepEqual(convertXYToPolar({ x: 10, y: 20 }, 10, 20), { phi: 0, r: 0 });
+    assert.deepEqual(convertXYToPolar({ x: 0, y: 0 }, 100, 200), { phi: 63, r: 224 });
+    assert.deepEqual(convertXYToPolar({ x: 10, y: 20 }, 100, 200), { phi: 63, r: 201 });
 });
 
 QUnit.test('map', function(assert) {
     function check(array, callback, expected, messages) {
-        assert.deepEqual(utils.map(array, callback), expected, messages);
+        assert.deepEqual(map(array, callback), expected, messages);
     }
 
     check([], function(el, i) { return el * i + 2; }, [], 'empty array');
@@ -111,20 +124,20 @@ QUnit.test('map', function(assert) {
 });
 
 QUnit.test('unique', function(assert) {
-    assert.deepEqual(utils.unique([1, 2, 3, 4, 5, 5, 6, 7, 6, 2, 8, 9, 1, 3, 1]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    assert.deepEqual(unique([1, 2, 3, 4, 5, 5, 6, 7, 6, 2, 8, 9, 1, 3, 1]), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 });
 
 QUnit.module('Patch font options');
 
 QUnit.test('Param is empty/undefined', function(assert) {
-    assert.deepEqual(utils.patchFontOptions(), {});
-    assert.deepEqual(utils.patchFontOptions({}), {});
+    assert.deepEqual(patchFontOptions(), {});
+    assert.deepEqual(patchFontOptions({}), {});
 });
 
 QUnit.test('Check options are processed', function(assert) {
     const options = { font: { size: 14, family: 'FontFamily', weight: 300, color: 'red' } };
 
-    const fontOptions = utils.patchFontOptions(options.font);
+    const fontOptions = patchFontOptions(options.font);
 
     assert.deepEqual(options.font, { size: 14, family: 'FontFamily', weight: 300, color: 'red' });
 
@@ -139,7 +152,7 @@ QUnit.test('Check options are processed', function(assert) {
 QUnit.test('Check exceptions', function(assert) {
     const options = { font: { color: '#767676', cursor: 'default', opacity: 0.3, size: 14 } };
 
-    const fontOptions = utils.patchFontOptions(options.font);
+    const fontOptions = patchFontOptions(options.font);
 
     assert.deepEqual(options.font, { color: '#767676', cursor: 'default', opacity: 0.3, size: 14 });
 
@@ -170,7 +183,7 @@ QUnit.module('utils graphic', {
 });
 
 QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
-    const info = utils.getCategoriesInfo([]);
+    const info = getCategoriesInfo([]);
 
     assert.deepEqual(info, {
         categories: []
@@ -178,7 +191,7 @@ QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');
+    const info = getCategoriesInfo(this.categories, 'a3', 'a5');
 
     assert.deepEqual(info, {
         start: 'a3',
@@ -189,7 +202,7 @@ QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo (inverted)', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, 'a5', 'a3');
+    const info = getCategoriesInfo(this.categories, 'a5', 'a3');
 
     assert.deepEqual(info, {
         start: 'a5',
@@ -200,7 +213,7 @@ QUnit.test('getCategoriesInfo (inverted)', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, undefined, 'a3');
+    const info = getCategoriesInfo(this.categories, undefined, 'a3');
 
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
@@ -211,7 +224,7 @@ QUnit.test('getCategoriesInfo. start categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, 'a3', undefined);
+    const info = getCategoriesInfo(this.categories, 'a3', undefined);
 
     assert.deepEqual(info, {
         categories: ['a3', 'a4', 'a5', 'a6', 'a7'],
@@ -222,7 +235,7 @@ QUnit.test('getCategoriesInfo. end categories is not set', function(assert) {
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains start categories', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, 'someCategories', 'a3');
+    const info = getCategoriesInfo(this.categories, 'someCategories', 'a3');
 
     assert.deepEqual(info, {
         categories: ['a1', 'a2', 'a3'],
@@ -233,7 +246,7 @@ QUnit.test('getCategoriesInfo. categories is not contains start categories', fun
 });
 
 QUnit.test('getCategoriesInfo. categories is not contains end categories', function(assert) {
-    const info = utils.getCategoriesInfo(this.categories, 'a5', 'someCategories');
+    const info = getCategoriesInfo(this.categories, 'a5', 'someCategories');
 
     assert.deepEqual(info, {
         categories: ['a5', 'a6', 'a7'],
@@ -258,7 +271,7 @@ QUnit.module('Layout canvas utils', {
 
 QUnit.test('Normalize pane weight', function(assert) {
     const defSingle = [{ name: 'default' }];
-    utils.normalizePanesHeight(defSingle);
+    normalizePanesHeight(defSingle);
 
     assert.deepEqual(defSingle, [{
         name: 'default',
@@ -267,7 +280,7 @@ QUnit.test('Normalize pane weight', function(assert) {
     }], 'Default for single pane');
 
     const defFew = [{ name: 'default1' }, { name: 'default2' }];
-    utils.normalizePanesHeight(defFew);
+    normalizePanesHeight(defFew);
 
     assert.deepEqual(defFew, [{
         name: 'default1',
@@ -280,7 +293,7 @@ QUnit.test('Normalize pane weight', function(assert) {
     }], 'Default for a few panes');
 
     const simpleMultiPane = [{ name: 'pane1', height: 0.6 }, { name: 'pane2' }, { name: 'pane3' }];
-    utils.normalizePanesHeight(simpleMultiPane);
+    normalizePanesHeight(simpleMultiPane);
 
     assert.deepEqual(simpleMultiPane, [{
         name: 'pane1',
@@ -297,7 +310,7 @@ QUnit.test('Normalize pane weight', function(assert) {
     }], 'Simple multipane (with unknown weight)');
 
     const incorrectMultiPane = [{ name: 'pane1', height: 'abc' }, { name: 'pane2', height: -150 }];
-    utils.normalizePanesHeight(incorrectMultiPane);
+    normalizePanesHeight(incorrectMultiPane);
 
     assert.deepEqual(incorrectMultiPane, [{
         name: 'pane1',
@@ -310,7 +323,7 @@ QUnit.test('Normalize pane weight', function(assert) {
     }], 'Simple multipane (with incorrect weight/height)');
 
     const underWeightMultiPane = [{ name: 'pane1', height: 0.2 }, { name: 'pane2', height: 0.3 }];
-    utils.normalizePanesHeight(underWeightMultiPane);
+    normalizePanesHeight(underWeightMultiPane);
 
     assert.deepEqual(underWeightMultiPane, [{
         name: 'pane1',
@@ -323,7 +336,7 @@ QUnit.test('Normalize pane weight', function(assert) {
     }], 'Underweight of pane height');
 
     const overWeightMultiPane = [{ name: 'pane1', height: 0.4 }, { name: 'pane2', height: 0.4 }, { name: 'pane3' }, { name: 'pane4', height: 0.4 }];
-    utils.normalizePanesHeight(overWeightMultiPane);
+    normalizePanesHeight(overWeightMultiPane);
 
     assert.deepEqual(overWeightMultiPane, [{
         name: 'pane1',
@@ -346,7 +359,7 @@ QUnit.test('Normalize pane weight', function(assert) {
 
 QUnit.test('Normalize pane weight (percentages)', function(assert) {
     const simple = [{ name: 'perc', height: '60%' }, { name: 'pane' }];
-    utils.normalizePanesHeight(simple);
+    normalizePanesHeight(simple);
 
     assert.deepEqual(simple, [{
         name: 'perc',
@@ -359,7 +372,7 @@ QUnit.test('Normalize pane weight (percentages)', function(assert) {
     }], 'Simple example');
 
     const overWeight = [{ name: 'perc', height: '60%' }, { name: 'over', height: '140%' }];
-    utils.normalizePanesHeight(overWeight);
+    normalizePanesHeight(overWeight);
 
     assert.deepEqual(overWeight, [{
         name: 'perc',
@@ -374,7 +387,7 @@ QUnit.test('Normalize pane weight (percentages)', function(assert) {
 
 QUnit.test('Normalize pane height (pixels)', function(assert) {
     const panes = [{ name: 'pane1', height: 300 }, { name: 'pane2', height: '400px' }];
-    utils.normalizePanesHeight(panes);
+    normalizePanesHeight(panes);
 
     assert.deepEqual(panes, [{
         name: 'pane1',
@@ -390,7 +403,7 @@ QUnit.test('Normalize pane height (pixels)', function(assert) {
 QUnit.test('setCanvasValues', function(assert) {
     const canvas = { top: 11, bottom: 22, left: 33, right: 44 };
 
-    utils.setCanvasValues(canvas);
+    setCanvasValues(canvas);
 
     assert.equal(canvas.top, 11);
     assert.equal(canvas.bottom, 22);
@@ -405,9 +418,9 @@ QUnit.test('setCanvasValues', function(assert) {
 QUnit.test('Single pane - main case (no specific options provided)', function(assert) {
     const pane = { name: 'default' };
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([pane]);
-    utils.updatePanesCanvases([pane], this.canvas);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([pane]);
+    updatePanesCanvases([pane], this.canvas);
 
     assert.ok(pane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, pane.canvas, 'Pane canvas should not reference the main object in memory');
@@ -439,9 +452,9 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
     const panePadding = 10;
     const expectedPaneHeight = (chartCanvasHeight - panePadding) / 2;
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([topPane, bottomPane]);
-    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([topPane, bottomPane]);
+    updatePanesCanvases([topPane, bottomPane], this.canvas);
 
     assert.ok(topPane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, topPane.canvas, 'Pane canvas should not reference the main object in memory');
@@ -485,9 +498,9 @@ QUnit.test('Two not equal panes - vertical alignment (weight)', function(assert)
     const expectedBottomPaneHeight = (chartCanvasHeight - panePadding) * 0.3;
     const expectedTopPaneHeight = (chartCanvasHeight - panePadding) * 0.7;
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([topPane, bottomPane]);
-    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([topPane, bottomPane]);
+    updatePanesCanvases([topPane, bottomPane], this.canvas);
 
     assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
@@ -515,9 +528,9 @@ QUnit.test('Two not equal panes - vertical alignment (pixels)', function(assert)
     const panePadding = 10;
     const expectedTopPaneHeight = chartCanvasHeight - panePadding - expectedBottomPaneHeight;
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([topPane, bottomPane]);
-    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([topPane, bottomPane]);
+    updatePanesCanvases([topPane, bottomPane], this.canvas);
 
     assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
@@ -545,9 +558,9 @@ QUnit.test('Two not equal panes - vertical alignment (both panes sized by pixels
     };
     const panePadding = 10;
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([topPane, bottomPane]);
-    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([topPane, bottomPane]);
+    updatePanesCanvases([topPane, bottomPane], this.canvas);
 
     assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
     assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
@@ -575,9 +588,9 @@ QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
     const panePadding = 10;
     const expectedPaneWidth = (chartCanvasWidth - panePadding) / 2;
 
-    utils.setCanvasValues(this.canvas);
-    utils.normalizePanesHeight([leftPane, rightPane]);
-    utils.updatePanesCanvases([leftPane, rightPane], this.canvas, true);
+    setCanvasValues(this.canvas);
+    normalizePanesHeight([leftPane, rightPane]);
+    updatePanesCanvases([leftPane, rightPane], this.canvas, true);
 
     assert.ok(rightPane.canvas, 'Canvas added to pane');
     assert.notEqual(this.canvas, rightPane.canvas, 'Pane canvas should not reference the main object in memory');
