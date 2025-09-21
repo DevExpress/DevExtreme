@@ -349,28 +349,19 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   _renderView() {
-    let groupCellTemplates;
-    if (!this.isRenovatedRender()) {
-      groupCellTemplates = this._renderGroupHeader();
-    }
-
     this.renderWorkSpace();
 
-    if (this.isRenovatedRender()) {
-      this.virtualScrollingDispatcher.updateDimensions();
-    }
+    this.virtualScrollingDispatcher.updateDimensions();
 
     this._shader = new HorizontalShader(this);
 
     this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
-    if (this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+    if (this._isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
     }
 
     this.updateHeaderEmptyCellWidth();
-
-    this._applyCellTemplates(groupCellTemplates);
   }
 
   _setHorizontalGroupHeaderCellsHeight() { return noop(); }
@@ -504,18 +495,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       this._getTotalRowCount(this._getGroupCount()),
       groupByDate,
     );
-  }
-
-  // Old render methods.
-  // TODO Old render: delete these methods with the old render.
-
-  _setCurrentTimeCells(): void {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
-    });
   }
 
   _cleanCurrentTimeCells(): void {

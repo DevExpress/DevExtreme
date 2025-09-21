@@ -160,15 +160,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   renderCurrentDateTimeIndication(): void {
     this.renderCurrentDateTimeLineAndShader();
 
-    if (this.isRenovatedRender()) {
-      this.renderWorkSpace({
-        generateNewData: true,
-        renderComponents: {
-          header: true,
-          timePanel: true,
-        },
-      });
-    }
+    this.renderWorkSpace({
+      generateNewData: true,
+      renderComponents: {
+        header: true,
+        timePanel: true,
+      },
+    });
   }
 
   renderCurrentDateTimeLineAndShader(): void {
@@ -302,22 +300,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const rtlOffset = this._getRtlOffset(this.getCellWidth());
 
     this._renderIndicator(height, rtlOffset, $container, groupCount);
-
-    // TODO Old render: delete this code with the old render.
-    if (!this.isRenovatedRender()) {
-      this._setCurrentTimeCells();
-    }
-  }
-
-  // Temporary new render methods.
-  // TODO Old render: replace base call methods by these after the deleting of the old render.
-  protected _setCurrentTimeCells(): void {
-    const timePanelCells = this._getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
-    currentTimeCellIndices.forEach((timePanelCellIndex) => {
-      timePanelCells.eq(timePanelCellIndex)
-        .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
-    });
   }
 
   protected _cleanCurrentTimeCells(): void {

@@ -819,16 +819,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  isRenovatedRender() {
-    return this.renovatedRenderSupported() && this.option('renovateRender');
-  }
-
   _isVirtualModeOn() {
     return this.option('scrolling.mode') === 'virtual';
   }
 
   isVirtualScrolling() {
-    return this.isRenovatedRender() && this._isVirtualModeOn();
+    return this._isVirtualModeOn();
   }
 
   _initVirtualScrolling() {
@@ -2285,7 +2281,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         mode: 'standard',
       },
       allDayPanelMode: 'all',
-      renovateRender: true,
       height: undefined,
       draggingMode: 'outlook',
       onScrollEnd: () => {},
@@ -2333,9 +2328,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           this._removeAllDayElements();
           this._initGrouping();
           this.repaint();
-        } else if (!this.isRenovatedRender()) {
-          this._updateAllDayVisibility();
-          this._updateScrollable();
         } else {
           this.renderWorkSpace();
         }
@@ -2380,7 +2372,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'selectedCellData':
         break;
-      case 'renovateRender':
       case 'scrolling':
         this.repaint();
         break;
@@ -2547,11 +2538,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     this._initAllDayPanelElements();
 
-    if (this.isRenovatedRender()) {
-      this.createRAllDayPanelElements();
-    } else {
-      this._createAllDayPanelElements();
-    }
+    this.createRAllDayPanelElements();
 
     this._$timePanel = $('<table>').addClass(TIME_PANEL_CLASS).attr('aria-hidden', true);
     this._$dateTable = $('<table>').attr('aria-hidden', true);
@@ -2693,8 +2680,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       for (let i = 0; i < groupCount; i++) {
         this._addTableClass(this._allDayTables[i], ALL_DAY_TABLE_CLASS);
       }
-    } else if (!this.isRenovatedRender()) {
-      this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
     }
   }
 
@@ -2743,20 +2728,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _renderView() {
-    if (this.isRenovatedRender()) {
-      if (this._isVerticalGroupedWorkSpace()) {
-        this.renderRGroupPanel();
-      }
-    } else {
-      this._applyCellTemplates(
-        this._renderGroupHeader(),
-      );
+    if (this._isVerticalGroupedWorkSpace()) {
+      this.renderRGroupPanel();
     }
 
     this.renderWorkSpace();
-    if (this.isRenovatedRender()) {
-      this.virtualScrollingDispatcher.updateDimensions();
-    }
+    this.virtualScrollingDispatcher.updateDimensions();
 
     this._updateGroupTableHeight();
     this.updateHeaderEmptyCellWidth();
@@ -2827,15 +2804,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.cache.clear();
     this._cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
-    if (!this.isRenovatedRender()) {
-      this._$thead.empty();
-      this._$dateTable.empty();
-      this._$timePanel.empty();
-      this._$groupTable.empty();
-
-      this._$allDayTable?.empty();
-      this._$sidebarTable?.empty();
-    }
 
     this._shader?.clean();
 
@@ -2944,16 +2912,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
     this.viewDataProvider.update(this.generateRenderOptions(), generateNewData);
 
-    if (this.isRenovatedRender()) {
-      this.renderRWorkSpace(renderComponents);
-    } else {
-      // TODO Old render: Delete this old render block after the SSR tests check.
-      this._renderDateHeader();
-      this._renderTimePanel();
-      this._renderGroupAllDayPanel();
-      this._renderDateTable();
-      this._renderAllDayPanel();
-    }
+    this.renderRWorkSpace(renderComponents);
 
     this._initPositionHelper();
   }

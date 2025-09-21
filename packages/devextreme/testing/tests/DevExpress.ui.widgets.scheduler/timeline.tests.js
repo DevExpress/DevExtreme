@@ -91,63 +91,59 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.test(`Sidebar scrollable should update position if date scrollable position is changed when renovateRender is ${renovateRender}`, async function(assert) {
-        const done = assert.async();
+QUnit.test('Sidebar scrollable should update position if date scrollable position is changed', async function(assert) {
+    const done = assert.async();
 
-        const resourceConfig = await getWorkspaceResourceConfig([{
-            label: 'one',
-            fieldExpr: 'one',
-            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
-        }]);
-        this.instance.option({
-            crossScrollingEnabled: true,
-            width: 400,
-            height: 150,
-            ...resourceConfig,
-            renovateRender,
-        });
-
-        const $element = this.instance.$element();
-        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
-
-        triggerHidingEvent($element);
-        triggerShownEvent($element);
-
-        dateTableScrollable.scrollTo({ top: 102 });
-
-        setTimeout(() => {
-            assert.equal(groupPanelScrollable.scrollTop(), 102, 'Scroll position is OK');
-            done();
-        }, 100);
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+    }]);
+    this.instance.option({
+        crossScrollingEnabled: true,
+        width: 400,
+        height: 150,
+        ...resourceConfig,
     });
 
-    QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, async function(assert) {
-        const resourceConfig = await getWorkspaceResourceConfig([{
-            label: 'one',
-            fieldExpr: 'one',
-            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
-        }]);
-        this.instance.option({
-            crossScrollingEnabled: true,
-            width: 400,
-            height: 150,
-            ...resourceConfig,
-            renovateRender,
-        });
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
-        const $element = this.instance.$element();
-        const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
-        const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
 
-        triggerHidingEvent($element);
-        triggerShownEvent($element);
+    dateTableScrollable.scrollTo({ top: 102 });
 
-        groupPanelScrollable.scrollTo({ top: 102 });
+    setTimeout(() => {
+        assert.equal(groupPanelScrollable.scrollTop(), 102, 'Scroll position is OK');
+        done();
+    }, 100);
+});
 
-        assert.equal(dateTableScrollable.scrollTop(), 102, 'Scroll position is OK');
+QUnit.test('Date table scrollable should update position if sidebar position is changed', async function(assert) {
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+    }]);
+    this.instance.option({
+        crossScrollingEnabled: true,
+        width: 400,
+        height: 150,
+        ...resourceConfig,
     });
+
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+
+    triggerHidingEvent($element);
+    triggerShownEvent($element);
+
+    groupPanelScrollable.scrollTo({ top: 102 });
+
+    assert.equal(dateTableScrollable.scrollTop(), 102, 'Scroll position is OK');
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', async function(assert) {
@@ -328,41 +324,37 @@ QUnit.module('Timeline Day', {
     }
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.skip(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, async function(assert) {
-        this.instance.option({
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
-
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
-        const expectedPositionLeft = $expectedCell.position().left + 0.5 * getOuterWidth($expectedCell);
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates', async function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 10, 15),
+        startDayHour: 9,
+        hoursInterval: 1,
     });
 
-    QUnit.skip(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, async function(assert) {
-        this.instance.option({
-            rtlEnabled: true,
-            width: 100,
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
+    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+    const $expectedCell = this.instance.$element()
+        .find('.dx-scheduler-date-table-cell').eq(1);
+    const expectedPositionLeft = $expectedCell.position().left + 0.5 * getOuterWidth($expectedCell);
 
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
+    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+});
 
-        const expectedPositionLeft = $expectedCell.position().left + getOuterWidth($expectedCell) - 0.5 * getOuterWidth($expectedCell);
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for rtl mode with renovated render', async function(assert) {
+    this.instance.option({
+        rtlEnabled: true,
+        width: 100,
+        currentDate: new Date(2015, 10, 15),
+        startDayHour: 9,
+        hoursInterval: 1,
     });
+
+    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
+    const $expectedCell = this.instance.$element()
+        .find('.dx-scheduler-date-table-cell').eq(1);
+
+    const expectedPositionLeft = $expectedCell.position().left + getOuterWidth($expectedCell) - 0.5 * getOuterWidth($expectedCell);
+
+    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 });
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
@@ -587,7 +579,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         e.component.initDragBehavior();
                         e.component._attachTablesEvents();
                     },
-                    renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
                     getResourceManager: getEmptyResourceManager,
                 }).dxSchedulerTimelineMonth('instance');
@@ -742,7 +733,6 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                             ...resourceConfig,
                             allowMultipleCellSelection: true,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
-                            renovateRender: true,
                         });
 
                         const $element = this.instance.$element();
@@ -891,7 +881,6 @@ QUnit.test('Group header should be rendered correct, groupByDate = true and cros
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', async function(assert) {
-    this.instance.option('renovateRender', false);
 
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
@@ -966,26 +955,23 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', a
     assert.equal($groupHeaderCells.eq(83).text(), 'b', 'Group header content height is OK');
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.skip(`Timeline should find cell coordinates by date, groupByDate = true when renovateRender is ${renovateRender}`, async function(assert) {
-        this.instance.option({
-            currentDate: new Date(2015, 2, 4),
-            renovateRender,
-        });
-
-        let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
-        const $element = this.instance.$element();
-
-        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
-        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
-        assert.equal(coords.hMax, 16800, 'hMax is right');
-
-        coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
-
-        assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().top, 'Top cell coordinates are right');
-        assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().left, 'Left cell coordinates are right');
-        assert.equal(coords.hMax, 16800, 'hMax is right');
+QUnit.skip('Timeline should find cell coordinates by date, groupByDate = true', async function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 2, 4),
     });
+
+    let coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 4, 9, 0), 0, false);
+    const $element = this.instance.$element();
+
+    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().top, 'Top cell coordinates are right');
+    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(36).position().left, 'Left cell coordinates are right');
+    assert.equal(coords.hMax, 16800, 'hMax is right');
+
+    coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 5, 9, 0), 1, false);
+
+    assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().top, 'Top cell coordinates are right');
+    assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(49).position().left, 'Left cell coordinates are right');
+    assert.equal(coords.hMax, 16800, 'hMax is right');
 });
 
 QUnit.module('TimelineDay with grouping by date', {
@@ -1054,7 +1040,6 @@ QUnit.module('Renovated Render', {
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
-                renovateRender: true,
                 currentDate: new Date(2020, 11, 21),
                 startDayHour: 0,
                 endDayHour: 1,

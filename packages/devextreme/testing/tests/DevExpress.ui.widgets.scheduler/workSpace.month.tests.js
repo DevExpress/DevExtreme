@@ -29,26 +29,22 @@ module('Work Space Month', () => {
             }).dxSchedulerWorkSpaceMonth('instance');
         }
     }, () => {
-        [true, false].forEach((renovateRender) => {
-            test(`Scheduler all day panel is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, async function(assert) {
-                this.instance.option('renovateRender', renovateRender);
-                this.instance.option('showAllDayPanel', false);
-                this.instance.option('showAllDayPanel', true);
+        test('Scheduler all day panel is invisible on month view after switching showAllDayPanel option', async function(assert) {
+            this.instance.option('showAllDayPanel', false);
+            this.instance.option('showAllDayPanel', true);
 
-                const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-table-cell');
+            const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-table-cell');
 
-                assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
-            });
+            assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
+        });
 
-            test(`Scheduler all day title is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, async function(assert) {
-                this.instance.option('renovateRender', renovateRender);
-                this.instance.option('showAllDayPanel', false);
-                this.instance.option('showAllDayPanel', true);
+        test('Scheduler all day title is invisible on month view after switching showAllDayPanel option', async function(assert) {
+            this.instance.option('showAllDayPanel', false);
+            this.instance.option('showAllDayPanel', true);
 
-                const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
+            const $allDayTitle = this.instance.$element().find('.dx-scheduler-all-day-title');
 
-                assert.equal($allDayTitle.length, 0, 'All-day title is invisible');
-            });
+            assert.equal($allDayTitle.length, 0, 'All-day title is invisible');
         });
 
         skip('Work space should find cell coordinates by date', async function(assert) {
@@ -112,7 +108,6 @@ module('Work Space Month', () => {
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
                 startDayHour: 5,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
@@ -129,7 +124,6 @@ module('Work Space Month', () => {
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
                 endDayHour: 10,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
@@ -147,7 +141,6 @@ module('Work Space Month', () => {
                 firstDayOfWeek: 1,
                 hoursInterval: 2.1666666666666665,
                 endDayHour: 5,
-                renovateRender: false,
             });
 
             const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(0);
@@ -159,56 +152,52 @@ module('Work Space Month', () => {
             });
         });
 
-        [true, false].forEach((renovateRender) => {
-            test(`WorkSpace should calculate max left position when renovateRender is ${renovateRender}`, async function(assert) {
-                this.instance.option({
-                    currentDate: new Date(2015, 2, 16),
-                    firstDayOfWeek: 1,
-                    renovateRender,
-                });
-
-                const $lastCell = this.instance.$element().find('.dx-scheduler-date-table').find('td').eq(6);
-
-                assert.equal(Math.round(this.instance.getMaxAllowedPosition()),
-                    Math.round($lastCell.position().left + getOuterWidth($lastCell)), 'Max left position is correct');
+        test('WorkSpace should calculate max left position', async function(assert) {
+            this.instance.option({
+                currentDate: new Date(2015, 2, 16),
+                firstDayOfWeek: 1,
             });
 
-            test(`Grouped work space should calculate max left position when renovateRender is ${renovateRender}`, async function(assert) {
-                const resourceConfig = await getWorkspaceResourceConfig([{
-                    label: 'one',
-                    fieldExpr: 'one',
-                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }, {
-                    label: 'two',
-                    fieldExpr: 'two',
-                    dataSource: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
-                }]);
-                this.instance.option({
-                    currentDate: new Date(2015, 2, 16),
-                    firstDayOfWeek: 1,
-                    ...resourceConfig,
-                    renovateRender,
-                });
+            const $lastCell = this.instance.$element().find('.dx-scheduler-date-table').find('td').eq(6);
 
-                const $cells = this.instance.$element().find('.dx-scheduler-date-table tr').first().find('td');
-                const $firstGroupLastCell = $cells.eq(6);
-                const $secondGroupLastCell = $cells.eq(13);
-                const $thirdGroupLastCell = $cells.eq(20);
-                const $fourthGroupLastCell = $cells.eq(27);
+            assert.equal(Math.round(this.instance.getMaxAllowedPosition()),
+                Math.round($lastCell.position().left + getOuterWidth($lastCell)), 'Max left position is correct');
+        });
 
-                const expectedResult = [
-                    $firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width,
-                    $secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width,
-                    $thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width,
-                    $fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width
-                ];
-
-                const actualResult = [0, 1, 2, 3].map((groupIndex) => {
-                    return this.instance.getMaxAllowedPosition(groupIndex);
-                });
-
-                assert.deepEqual(actualResult, expectedResult, 'Max left positions are correct');
+        test('Grouped work space should calculate max left position', async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+            }, {
+                label: 'two',
+                fieldExpr: 'two',
+                dataSource: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
+            }]);
+            this.instance.option({
+                currentDate: new Date(2015, 2, 16),
+                firstDayOfWeek: 1,
+                ...resourceConfig,
             });
+
+            const $cells = this.instance.$element().find('.dx-scheduler-date-table tr').first().find('td');
+            const $firstGroupLastCell = $cells.eq(6);
+            const $secondGroupLastCell = $cells.eq(13);
+            const $thirdGroupLastCell = $cells.eq(20);
+            const $fourthGroupLastCell = $cells.eq(27);
+
+            const expectedResult = [
+                $firstGroupLastCell.position().left + $firstGroupLastCell.get(0).getBoundingClientRect().width,
+                $secondGroupLastCell.position().left + $secondGroupLastCell.get(0).getBoundingClientRect().width,
+                $thirdGroupLastCell.position().left + $thirdGroupLastCell.get(0).getBoundingClientRect().width,
+                $fourthGroupLastCell.position().left + $fourthGroupLastCell.get(0).getBoundingClientRect().width
+            ];
+
+            const actualResult = [0, 1, 2, 3].map((groupIndex) => {
+                return this.instance.getMaxAllowedPosition(groupIndex);
+            });
+
+            assert.deepEqual(actualResult, expectedResult, 'Max left positions are correct');
         });
 
         test('Group width calculation', async function(assert) {
@@ -241,7 +230,6 @@ module('Work Space Month', () => {
         });
 
         test('Get cell count to last view dates', async function(assert) {
-            this.instance.option('renovateRender', false);
 
             this.instance.option({
                 currentDate: new Date(2016, 2, 14, 0, 0),
@@ -268,7 +256,6 @@ module('Work Space Month', () => {
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
                 ...resourceConfig,
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -396,7 +383,6 @@ module('Work Space Month', () => {
                 intervalCount: 3,
                 currentDate: new Date(2017, 4, 25),
                 startDate: new Date(2017, 0, 15),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -418,7 +404,6 @@ module('Work Space Month', () => {
                 intervalCount: 3,
                 currentDate: new Date(2017, 1, 15),
                 startDate: new Date(2017, 5, 15),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
@@ -440,7 +425,6 @@ module('Work Space Month', () => {
                 intervalCount: 3,
                 currentDate: new Date(2017, 6, 15),
                 startDate: new Date(2017, 5, 15),
-                renovateRender: false,
             });
 
             const firstCellData = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).data('dxCellData');
