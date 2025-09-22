@@ -558,6 +558,20 @@ QUnit.module('Options', moduleConfig, () => {
             assert.strictEqual(buttonInstance.option('icon'), value, `stop icon is ${value}`);
         });
     });
+
+    QUnit.test('should apply hint option on init', function(assert) {
+        this.reinit({
+            hint: 'hint',
+        });
+
+        assert.strictEqual(this.$element.attr('title'), 'hint', 'title is added');
+    });
+
+    QUnit.test('should apply hint option at runtime', function(assert) {
+        this.instance.option('hint', 'hint');
+
+        assert.strictEqual(this.$element.attr('title'), 'hint', 'title is added');
+    });
 });
 
 QUnit.module('Component Lifecycle', moduleConfig, () => {
