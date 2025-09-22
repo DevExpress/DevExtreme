@@ -3419,7 +3419,7 @@ type ITooltipProps = React.PropsWithChildren<{
   };
   color?: string;
   container?: any | string | undefined;
-  contentTemplate?: ((pointInfo: any, element: any) => string | any) | template | undefined;
+  contentTemplate?: ((pointInfo: dxChartPointInfo, element: any) => string | any) | template | undefined;
   cornerRadius?: number;
   customizeTooltip?: ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined;
   enabled?: boolean;

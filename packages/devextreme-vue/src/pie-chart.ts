@@ -29,6 +29,7 @@ import {
  PieChartLegendItem,
  PieChartLegendHoverMode,
  SmallValuesGroupingMode,
+ dxPieChartPointInfo,
 } from "devextreme/viz/pie_chart";
 import {
  SeriesLabel,
@@ -1396,7 +1397,7 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function as PropType<((pointInfo: any) => Record<string, any>)>,
+    customizeTooltip: Function as PropType<((pointInfo: dxPieChartPointInfo) => Record<string, any>)>,
     enabled: Boolean,
     font: Object as PropType<Font | Record<string, any>>,
     format: [Object, String, Function] as PropType<LocalizationFormat | Format | (((value: number | Date) => string)) | Record<string, any> | string>,

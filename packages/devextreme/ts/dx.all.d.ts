@@ -37545,12 +37545,22 @@ declare module DevExpress.viz {
      */
     export type Tooltip = Omit<
       BaseChartTooltip<PointInfo>,
-      'customizeTooltip'
+      'contentTemplate' | 'customizeTooltip'
     > & {
       /**
        * [descr:dxChartOptions.tooltip.location]
        */
       location?: ChartTooltipLocation;
+      /**
+       * [descr:dxChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
       /**
        * [descr:dxChartOptions.tooltip.customizeTooltip]
        */
@@ -41043,6 +41053,23 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
+     * [descr:dxPieChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<piePointObject> & {
+      /**
+       * [descr:PointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:PointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:PointInfo.points]
+       */
+      points?: PointInfo;
+    };
+    /**
      * [descr:_viz_pie_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -41053,6 +41080,28 @@ declare module DevExpress.viz {
       | 'none'
       | 'smallValueThreshold'
       | 'topN';
+    /**
+     * [descr:dxPieChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
+      /**
+       * [descr:dxPieChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPieChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+    };
     /**
      * [descr:_viz_pie_chart_TooltipHiddenEvent]
      */
@@ -41229,7 +41278,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.tooltip]
      */
-    tooltip?: BaseChartTooltip<PointInfo>;
+    tooltip?: DevExpress.viz.dxPieChart.Tooltip;
   }
   /**
    * [descr:dxPieChartSeriesTypes]
@@ -42165,11 +42214,28 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartTooltip]
      */
-    export type Tooltip = BaseChartTooltip<PointInfo> & {
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxPolarChartOptions.tooltip.shared]
        */
       shared?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_polar_chart_TooltipHiddenEvent]
@@ -46052,23 +46118,6 @@ declare module DevExpress.viz {
      */
     show(): void;
   }
-  /**
-   * [descr:dxPieChartPointInfo]
-   */
-  export type PointInfo = BasePointInfo<piePointObject> & {
-    /**
-     * [descr:PointInfo.percent]
-     */
-    percent?: number;
-    /**
-     * [descr:PointInfo.percentText]
-     */
-    percentText?: string;
-    /**
-     * [descr:PointInfo.points]
-     */
-    points?: PointInfo;
-  };
   /**
    * [descr:PolarChartSeries]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

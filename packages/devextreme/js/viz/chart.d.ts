@@ -2689,8 +2689,9 @@ export type Panes = CommonPaneSettings & {
  * @public
  * @docid dxChartTooltip
  * @type object
+ * @inherits BaseChartOptions.tooltip
  */
-export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'customizeTooltip'> & {
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**
      * @docid dxChartOptions.tooltip.location
      * @default 'center'
@@ -2698,6 +2699,14 @@ export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'customizeTooltip'> & {
      * @public
      */
     location?: ChartTooltipLocation;
+    /**
+     * @docid dxChartOptions.tooltip.contentTemplate
+     * @type_function_param1 pointInfo:dxChartPointInfo
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @public
+     */
+    contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
     /**
      * @docid dxChartOptions.tooltip.customizeTooltip
      * @public

@@ -272,6 +272,31 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
     tag?: any | undefined;
 }
 /**
+ * @public
+ * @docid dxPieChartTooltip
+ * @type object
+ * @inherits BaseChartOptions.tooltip
+ */
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
+  /**
+   * @docid dxPieChartOptions.tooltip.contentTemplate
+   * @type_function_param1 pointInfo:dxPieChartPointInfo
+   * @type_function_return string|Element|jQuery
+   * @default undefined
+   * @public
+   */
+  contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
+  /**
+   * @docid dxPieChartOptions.tooltip.customizeTooltip
+   * @public
+   * @type_function_param1 pointInfo:dxPieChartPointInfo
+   * @type_function_return object
+   * @default undefined
+   * @notUsedInTheme
+   */
+  customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+};
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.viz
  * @docid
@@ -417,7 +442,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart, piePoint
      * @type object
      * @public
      */
-    tooltip?: BaseChartTooltip<PointInfo>;
+    tooltip?: Tooltip;
 }
 
 /**
@@ -994,8 +1019,6 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 /**
  * @docid dxPieChartPointInfo
  * @public
- * @type object
- * @namespace DevExpress.viz
  */
 export type PointInfo = BasePointInfo<piePointObject> & {
   /**
@@ -1014,6 +1037,12 @@ export type PointInfo = BasePointInfo<piePointObject> & {
    */
   points?: PointInfo;
 };
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxPieChartPointInfo = PointInfo;
 
 /** @public */
 export type Properties = dxPieChartOptions;
