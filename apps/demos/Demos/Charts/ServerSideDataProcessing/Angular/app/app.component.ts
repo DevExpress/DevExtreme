@@ -52,7 +52,7 @@ export class AppComponent {
       load: () => {
         const startVisible = this.startOfMonthStr(this.selectedMonth);
         const endVisible = this.endOfMonthStr(this.selectedMonth);
-        const url = 'http://localhost:5555/api/TemperatureData'
+        const url = 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData'
           + `?startVisible=${encodeURIComponent(startVisible)}`
           + `&endVisible=${encodeURIComponent(endVisible)}`
           + `&startBound=${encodeURIComponent(startVisible)}`
