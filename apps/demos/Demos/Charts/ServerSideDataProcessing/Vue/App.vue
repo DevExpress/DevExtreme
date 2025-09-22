@@ -112,7 +112,7 @@ const chartDataSource = new DataSource({
   paginate: false,
 });
 const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
-const customizeArgumentAxisLabelText = ({ value }) => new Date(value).getDate();
+const customizeArgumentAxisLabelText = ({ value }) => new Date(value).getDate().toString();
 const customizeTooltip = ({ valueText }) => ({
   text: `${valueText}${'&#176C'}`,
 });
