@@ -11,6 +11,7 @@ import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { value as getViewport } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import type {
   alert as alertFunc,
@@ -152,11 +153,6 @@ export const custom = (params: DialogParams): BaseDialog => {
     eventsEngine.trigger($firstButton, 'focus');
   };
 
-  const onHidden: PopupProperties['onHidden'] = (e) => {
-    $(e.element).remove();
-    popupOptions?.onHidden?.(e);
-  };
-
   const animation = {
     show: {
       type: 'pop',
@@ -241,7 +237,6 @@ export const custom = (params: DialogParams): BaseDialog => {
     height: 'auto',
     ignoreChildEvents: false,
     onContentReady,
-    onHidden,
     onHiding: (): void => { deferred.reject(); },
     onShowing,
     onShown,
@@ -257,8 +252,12 @@ export const custom = (params: DialogParams): BaseDialog => {
   };
 
   const options = {
-    ...popupOptions,
     ...configuration,
+    ...popupOptions,
+    onHidden: (e: EventInfo<Popup>): void => {
+      $(e.element).remove();
+      popupOptions?.onHidden?.(e);
+    },
   };
 
   // @ts-expect-error Incorrect constructor usage
