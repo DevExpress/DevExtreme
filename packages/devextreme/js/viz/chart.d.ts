@@ -653,6 +653,12 @@ export type PointInfo =
   | RangePointInfo;
 
 /**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxChartPointInfo = PointInfo;
+
+/**
  * @docid
  * @publicName Point
  * @type object
@@ -2678,11 +2684,13 @@ export type Panes = CommonPaneSettings & {
      */
     name?: string | undefined;
 };
+
 /**
- * @bublic
+ * @public
  * @docid dxChartTooltip
+ * @type object
  */
-export type Tooltip = BaseChartTooltip<PointInfo> & {
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'customizeTooltip'> & {
     /**
      * @docid dxChartOptions.tooltip.location
      * @default 'center'
@@ -2690,7 +2698,17 @@ export type Tooltip = BaseChartTooltip<PointInfo> & {
      * @public
      */
     location?: ChartTooltipLocation;
+    /**
+     * @docid dxChartOptions.tooltip.customizeTooltip
+     * @public
+     * @type_function_param1 pointInfo:dxChartPointInfo
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     */
+    customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
 };
+
 /**
  * @public
  * @docid dxChartValueAxis
