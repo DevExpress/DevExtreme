@@ -80,11 +80,7 @@ export let prepareSegmentRectPoints = function (left, top, width, height, border
   return { points, pathType: visiblyOpt === 15 ? 'area' : 'line' };
 };
 
-export {
-  refreshPaths,
-};
-
-export const areCanvasesDifferent = function (canvas1, canvas2) {
+const areCanvasesDifferent = function (canvas1, canvas2) {
   const sizeChangingThreshold = 1;
 
   const sizeLessThreshold = ['width', 'height']
@@ -95,12 +91,18 @@ export const areCanvasesDifferent = function (canvas1, canvas2) {
   return !(sizeLessThreshold && canvasCoordsIsEqual);
 };
 
-export const floorCanvasDimensions = function (canvas) {
+const floorCanvasDimensions = function (canvas) {
   return {
     ...canvas,
     height: floor(canvas.height),
     width: floor(canvas.width),
   };
+};
+
+export {
+  areCanvasesDifferent,
+  floorCanvasDimensions,
+  refreshPaths,
 };
 
 /// #DEBUG

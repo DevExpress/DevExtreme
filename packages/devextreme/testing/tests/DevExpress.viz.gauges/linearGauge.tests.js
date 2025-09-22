@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { Axis as VizMocksAxis, Renderer as VizMocksRenderer } from '../../helpers/vizMocks.js';
 import dxLinearGauge from 'viz/linear_gauge';
 import axisModule from 'viz/axes/base_axis';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 
 const factory = dxLinearGauge.prototype._factory;
 

@@ -7,7 +7,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import dxCircularGauge from 'viz/circular_gauge';
 import axisModule from 'viz/axes/base_axis';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 
 const factory = dxCircularGauge.prototype._factory;
 

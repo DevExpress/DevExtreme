@@ -9,7 +9,7 @@ import seriesModule, { Series } from 'viz/series/base_series';
 import seriesFamilyModule from 'viz/core/series_family';
 import axisModule from 'viz/axes/base_axis';
 import dxPolarChart from 'viz/polar_chart';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import dataValidatorModule from 'viz/components/data_validator';
 import rangeModule from 'viz/translators/range';
 import tooltipModule from 'viz/core/tooltip';

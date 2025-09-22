@@ -2,19 +2,23 @@ import registerComponent from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import type {
-  SpeechToTextActions,
-  SpeechToTextProperties,
-} from '@ts/ui/speech_to_text/types/index';
-import { SpeechToTextState } from '@ts/ui/speech_to_text/types/index';
 
 export const SPEECH_TO_TEXT_CLASS = 'dx-speech-to-text';
 export const SPEECH_TO_TEXT_LISTENING_CLASS = 'dx-speech-to-text-listening';
 
 const DEFAULT_INITIAL_ICON = 'micoutline';
 const DEFAULT_LISTENING_ICON = 'stopfilled';
+
+enum SpeechToTextState {
+  INITIAL = 'initial',
+  LISTENING = 'listening',
+  DISABLED = 'disabled',
+}
+
+type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError'>;
 
 const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onStartClick',
