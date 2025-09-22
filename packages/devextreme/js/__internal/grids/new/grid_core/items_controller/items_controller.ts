@@ -67,8 +67,7 @@ export class ItemsController {
       const displayValue = column.calculateDisplayValue(data);
 
       const formattedText = formatHelper.format(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        displayValue as any,
+        displayValue as never,
         column.format,
       );
       const text = column.customizeText
