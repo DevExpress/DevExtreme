@@ -12,7 +12,7 @@ interface SpeechRecognitionEvents {
   onEnd: () => void;
 }
 
-const SR_CONFIG_IGNORED_PROPERTIES = ['onresult', 'onerror', 'onend'];
+const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
 export class SpeechRecognitionAdapter {
   private _speechRecognition?: SpeechRecognition | null;
 
@@ -45,7 +45,7 @@ export class SpeechRecognitionAdapter {
 
   applyConfig(config: SpeechRecognitionConfig = {}): void {
     Object.entries(config).forEach(([key, value]) => {
-      if (this._speechRecognition && !SR_CONFIG_IGNORED_PROPERTIES.includes(key)) {
+      if (this._speechRecognition && !EVENT_NAMES.includes(key)) {
         this._speechRecognition[key] = value;
       }
     });
