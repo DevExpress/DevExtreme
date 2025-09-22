@@ -83,6 +83,7 @@ export {
   CommonSeriesSettings,
   Legend,
   Panes,
+  Tooltip,
   ValueAxis,
   ValueAxisConstantLineStyle,
   ValueAxisConstantLineStyleLabel,

@@ -34214,14 +34214,6 @@ declare module DevExpress.viz {
   }
   module BaseChart {
     /**
-     * [descr:ChartsPointInfo]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type ChartsPointInfo =
-      | DevExpress.viz.dxChart.PointInfo
-      | PointInfo
-      | DevExpress.viz.dxPolarChart.PointInfo;
-    /**
      * [descr:PointInteractionInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -37550,13 +37542,19 @@ declare module DevExpress.viz {
     };
     /**
      * [descr:dxChartTooltip]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export type Tooltip = BaseChartTooltip<PointInfo> & {
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'customizeTooltip'
+    > & {
       /**
        * [descr:dxChartOptions.tooltip.location]
        */
       location?: ChartTooltipLocation;
+      /**
+       * [descr:dxChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_chart_TooltipHiddenEvent]

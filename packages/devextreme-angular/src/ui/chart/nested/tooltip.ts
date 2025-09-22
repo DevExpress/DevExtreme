@@ -16,8 +16,7 @@ import {
 
 import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font } from 'devextreme/common/charts';
-import { ChartsPointInfo } from 'devextreme/viz/chart_components/base_chart';
-import { ChartTooltipLocation } from 'devextreme/viz/chart';
+import { dxChartPointInfo, ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,
@@ -92,10 +91,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get customizeTooltip(): ((pointInfo: ChartsPointInfo) => Record<string, any>) | undefined {
+    get customizeTooltip(): ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: ((pointInfo: ChartsPointInfo) => Record<string, any>) | undefined) {
+    set customizeTooltip(value: ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined) {
         this._setOption('customizeTooltip', value);
     }
 
