@@ -186,6 +186,23 @@ QUnit.module('State Management', moduleConfig, () => {
 
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'custom engine works after enabling');
     });
+
+    QUnit.test('INITIAL state should not have animation by default', function(assert) {
+        const animation = this.$element.css('animation');
+
+        assert.strictEqual(animation, 'none 0s ease 0s 1 normal none running');
+    });
+
+    QUnit.test('LISTENING state should have animation by default', function(assert) {
+        const $button = this.getButton();
+
+        $button.trigger('dxclick');
+
+        const animation = this.$element.css('animation');
+        const easeInOutAnimationEnabled = animation.includes('1.5s ease-in-out 0.5s infinite normal none running');
+
+        assert.strictEqual(easeInOutAnimationEnabled, true);
+    });
 });
 
 QUnit.module('Events', moduleConfig, () => {
