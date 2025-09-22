@@ -243,7 +243,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [TS, JS, CSS, texts, component_exports]
+    needs: [TS, JS, texts, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
