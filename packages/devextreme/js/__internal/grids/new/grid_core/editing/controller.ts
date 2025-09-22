@@ -78,14 +78,16 @@ export class EditingController {
 
     const oldData = insertChange?.data ?? oldItem.data;
 
-    const newData = applyChanges(
-      [oldData],
-      changes,
-      {
-        keyExpr: this.dataController.dataSource.peek().key(),
-        immutable: true,
-      },
-    )[0];
+    const newData = insertChange
+      ? { ...oldData, ...changes }
+      : applyChanges(
+        [oldData],
+        changes,
+        {
+          keyExpr: this.dataController.dataSource.peek().key(),
+          immutable: true,
+        },
+      )[0];
 
     const newItem = this.itemsController.createCardInfo(
       newData,
@@ -167,7 +169,7 @@ export class EditingController {
     ];
 
     this.changes.value = [
-      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: {} },
+      ...this.changes.peek(), { type: 'insert', key: newItemKey, data: eventArgs.data },
     ];
     this.editCardKey.value = newItemKey;
   }

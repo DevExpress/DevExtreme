@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import CardView from 'devextreme-testcafe-models/cardView';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { columns, data } from './helpers/simpleArrayData';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
-import { a11yCheck } from '../../helpers/accessibility/utils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { columns, data } from '../helpers/simpleArrayData';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - Editing`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
 
