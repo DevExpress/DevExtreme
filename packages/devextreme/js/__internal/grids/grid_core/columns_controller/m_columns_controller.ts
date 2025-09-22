@@ -88,6 +88,7 @@ export interface Column extends ColumnBase {
   groupIndex?: number;
   type?: string;
   visibleWidth?: string | number;
+  hidingPriority?: number;
 }
 
 export class ColumnsController extends modules.Controller {
