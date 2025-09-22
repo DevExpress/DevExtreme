@@ -11,7 +11,7 @@ import { isFunction } from 'core/utils/type';
 import BaseWidget from '__internal/viz/core/m_base_widget';
 import { DEBUG_createEventTrigger, DEBUG_createResizeHandler } from '__internal/viz/core/base_widget.utils';
 import { BaseThemeManager } from 'viz/core/base_theme_manager';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import { stubClass, environmentMethodInvoker, LoadingIndicator, Renderer, Title } from '../../helpers/vizMocks.js';
 import { implementationsMap } from 'core/utils/size';
 

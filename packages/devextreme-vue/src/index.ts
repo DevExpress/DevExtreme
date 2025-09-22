@@ -61,6 +61,7 @@ export { DxSelectBox } from "./select-box";
 export { DxSlider } from "./slider";
 export { DxSortable } from "./sortable";
 export { DxSparkline } from "./sparkline";
+export { DxSpeechToText } from "./speech-to-text";
 export { DxSpeedDialAction } from "./speed-dial-action";
 export { DxSplitter } from "./splitter";
 export { DxStepper } from "./stepper";

@@ -1,4 +1,13 @@
-import vizUtils from 'viz/core/utils';
+import {
+    getLog,
+    normalizeAngle,
+    convertAngleToRendererSpace,
+    degreesToRadians,
+    getCosAndSin,
+    getDistance,
+    getDecimalOrder,
+    getAppropriateFormat
+} from 'viz/core/utils';
 
 const EPSILON = 1E-8;
 const PI = Math.PI;
@@ -17,7 +26,7 @@ QUnit.module('Angular utils');
 
 QUnit.test('normalizeAngle', function(assert) {
     const testNormalizeAngle = function(arg, expected) {
-        const actual = vizUtils.normalizeAngle(arg);
+        const actual = normalizeAngle(arg);
         assert.roughEqual(actual, expected, EPSILON, format('{0} -> {1} ({2})', arg, actual, expected));
     };
 
@@ -37,7 +46,7 @@ QUnit.test('normalizeAngle', function(assert) {
 
 QUnit.test('convertAngleToRendererSpace', function(assert) {
     const testConvertAngleToRendererSpace = function(angle, expected) {
-        const actual = vizUtils.convertAngleToRendererSpace(angle);
+        const actual = convertAngleToRendererSpace(angle);
         assert.strictEqual(actual, expected, format('{0} -> {1} ({2})', angle, actual, expected));
     };
 
@@ -62,7 +71,7 @@ QUnit.test('convertAngleToRendererSpace', function(assert) {
 
 QUnit.test('degreesToRadians', function(assert) {
     const testDegreesToRadians = function(value, expected) {
-        const actual = vizUtils.degreesToRadians(value);
+        const actual = degreesToRadians(value);
         assert.roughEqual(actual, expected, EPSILON, format('{0} -> {1} ({2})', value, actual, expected));
     };
 
@@ -78,7 +87,7 @@ QUnit.test('degreesToRadians', function(assert) {
 
 QUnit.test('getCosAndSin', function(assert) {
     const testGetCosAndSin = function(value, expectedCos, expectedSin) {
-        const actual = vizUtils.getCosAndSin(value);
+        const actual = getCosAndSin(value);
         assert.roughEqual(actual.cos, expectedCos, EPSILON, format('{0} -> {1} ({2}) (cos)', value, actual.cos, expectedCos));
         assert.roughEqual(actual.sin, expectedSin, EPSILON, format('{0} -> {1} ({2}) (sin)', value, actual.sin, expectedSin));
     };
@@ -93,47 +102,47 @@ QUnit.test('getCosAndSin', function(assert) {
 });
 
 QUnit.test('getDistance', function(assert) {
-    assert.equal(vizUtils.getDistance(0, 0, 3, 4), 5, 'egypt triangle');
-    assert.equal(vizUtils.getDistance(3, 4, 0, 0), 5, 'egypt triangle');
-    assert.equal(vizUtils.getDistance(20, 20, 10, 10), Math.sqrt(200));
+    assert.equal(getDistance(0, 0, 3, 4), 5, 'egypt triangle');
+    assert.equal(getDistance(3, 4, 0, 0), 5, 'egypt triangle');
+    assert.equal(getDistance(20, 20, 10, 10), Math.sqrt(200));
 });
 
 QUnit.module('Number utils');
 
 QUnit.test('getDecimalOrder', function(assert) {
-    assert.strictEqual(vizUtils.getDecimalOrder(0), 0, '0');
-    assert.strictEqual(vizUtils.getDecimalOrder(3.1), 0, '3.1');
-    assert.strictEqual(vizUtils.getDecimalOrder(0.5), -1, '-0.5');
-    assert.strictEqual(vizUtils.getDecimalOrder(10), 1, '10');
-    assert.strictEqual(vizUtils.getDecimalOrder(100.4), 2, '100.4');
-    assert.strictEqual(vizUtils.getDecimalOrder(0.0001), -4, '0.0001');
-    assert.strictEqual(vizUtils.getDecimalOrder(1.3E50), 50, '1.3E50');
+    assert.strictEqual(getDecimalOrder(0), 0, '0');
+    assert.strictEqual(getDecimalOrder(3.1), 0, '3.1');
+    assert.strictEqual(getDecimalOrder(0.5), -1, '-0.5');
+    assert.strictEqual(getDecimalOrder(10), 1, '10');
+    assert.strictEqual(getDecimalOrder(100.4), 2, '100.4');
+    assert.strictEqual(getDecimalOrder(0.0001), -4, '0.0001');
+    assert.strictEqual(getDecimalOrder(1.3E50), 50, '1.3E50');
 
-    assert.strictEqual(vizUtils.getDecimalOrder(-23), 1, '-23');
-    assert.strictEqual(vizUtils.getDecimalOrder(-0.003), -3, '-0.003');
-    assert.strictEqual(vizUtils.getDecimalOrder(-1E50), 50, '-1E50');
-    assert.strictEqual(vizUtils.getDecimalOrder(-1E-300), -300, '-1E-300');
+    assert.strictEqual(getDecimalOrder(-23), 1, '-23');
+    assert.strictEqual(getDecimalOrder(-0.003), -3, '-0.003');
+    assert.strictEqual(getDecimalOrder(-1E50), 50, '-1E50');
+    assert.strictEqual(getDecimalOrder(-1E-300), -300, '-1E-300');
 
-    assert.strictEqual(vizUtils.getDecimalOrder('56'), 1, '"56"');
-    assert.strictEqual(vizUtils.getDecimalOrder('123.3'), 2, '"123.3"');
-    assert.strictEqual(vizUtils.getDecimalOrder('-0.000045'), -5, '"-0.000045"');
+    assert.strictEqual(getDecimalOrder('56'), 1, '"56"');
+    assert.strictEqual(getDecimalOrder('123.3'), 2, '"123.3"');
+    assert.strictEqual(getDecimalOrder('-0.000045'), -5, '"-0.000045"');
 
-    assert.strictEqual(vizUtils.getDecimalOrder(null), 0, 'null');
+    assert.strictEqual(getDecimalOrder(null), 0, 'null');
 
-    assert.ok(isNaN(vizUtils.getDecimalOrder(undefined)), 'undefined');
-    assert.ok(isNaN(vizUtils.getDecimalOrder('test')), '"test"');
-    assert.ok(isNaN(vizUtils.getDecimalOrder({})), '{}');
+    assert.ok(isNaN(getDecimalOrder(undefined)), 'undefined');
+    assert.ok(isNaN(getDecimalOrder('test')), '"test"');
+    assert.ok(isNaN(getDecimalOrder({})), '{}');
 });
 
 QUnit.test('getDecimalOrder - extremal cases', function(assert) {
     let x = -30;
     for(;x <= 30; ++x) {
-        assert.strictEqual(vizUtils.getDecimalOrder(Math.pow(10, x)), x, '1E' + x.toString());
+        assert.strictEqual(getDecimalOrder(Math.pow(10, x)), x, '1E' + x.toString());
     }
 });
 
 function testGetAppropriateFormat(assert, start, end, count, expectedFormat, expectedPrecision, message) {
-    const actual = vizUtils.getAppropriateFormat(start, end, count);
+    const actual = getAppropriateFormat(start, end, count);
     const expected = { type: expectedFormat, precision: expectedPrecision };
     const extraMessage = start.toString() + ' to ' + end.toString() + ' as ' + count.toString();
     assert.deepEqual(actual, expected, message ? message + ' (' + extraMessage + ')' : extraMessage);
@@ -267,17 +276,17 @@ QUnit.test('getAppropriateFormat - [0.1E-6, 1.1E-6]', function(assert) {
 });
 
 QUnit.test('getLog', function(assert) {
-    assert.roughEqual(vizUtils.getLog(10, 10), 1, 1E-8);
-    assert.roughEqual(vizUtils.getLog(1, 10), 0, 1E-8);
+    assert.roughEqual(getLog(10, 10), 1, 1E-8);
+    assert.roughEqual(getLog(1, 10), 0, 1E-8);
 
-    assert.roughEqual(vizUtils.getLog(16, 2), 4, 1E-8);
-    assert.roughEqual(vizUtils.getLog(1, 2), 0, 1E-8);
+    assert.roughEqual(getLog(16, 2), 4, 1E-8);
+    assert.roughEqual(getLog(1, 2), 0, 1E-8);
 
-    assert.deepEqual(vizUtils.getLog(-10, 10), NaN);
-    assert.deepEqual(vizUtils.getLog(0, 10), NaN);
-    assert.deepEqual(vizUtils.getLog(undefined, 10), NaN);
+    assert.deepEqual(getLog(-10, 10), NaN);
+    assert.deepEqual(getLog(0, 10), NaN);
+    assert.deepEqual(getLog(undefined, 10), NaN);
 
-    assert.deepEqual(vizUtils.getLog(-10, 0), NaN);
-    assert.deepEqual(vizUtils.getLog(10, -10), NaN);
-    assert.deepEqual(vizUtils.getLog(10, undefined), NaN);
+    assert.deepEqual(getLog(-10, 0), NaN);
+    assert.deepEqual(getLog(10, -10), NaN);
+    assert.deepEqual(getLog(10, undefined), NaN);
 });

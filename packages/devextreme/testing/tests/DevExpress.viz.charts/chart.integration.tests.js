@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';

@@ -7,7 +7,7 @@ import {
     LoadingIndicator,
     stubClass
 } from '../../helpers/vizMocks.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';

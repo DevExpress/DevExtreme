@@ -7,7 +7,7 @@ import {
     forceThemeOptions,
 } from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
 import { isFunction } from 'core/utils/type';
 import 'viz/bullet';
