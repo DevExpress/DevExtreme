@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+// eslint-disable-next-line max-classes-per-file
 import { Component } from '@js/core/component';
 import type { Item, SelectionChangedEvent } from '@js/ui/button_group';
 import type dxButtonGroup from '@js/ui/button_group';
@@ -7,6 +8,7 @@ import type { ReadonlySignal } from '@ts/core/state_manager/index';
 import { computed } from '@ts/core/state_manager/index';
 import type { ButtonGroupProps } from '@ts/ui/button_group_inferno/button_group.component';
 import { ButtonGroupComponent } from '@ts/ui/button_group_inferno/button_group.component';
+import * as FunctionalityControllerModule from '@ts/ui/button_group_inferno/functionality/index';
 import { InfernoWidget } from '@ts/ui/button_group_inferno/inferno_widget';
 import type { ComponentType } from 'inferno';
 
@@ -14,8 +16,10 @@ import type { BaseButtonCollection } from './base_button_collection';
 import { defaultOptions as buttonGroupDefaultOptions } from './controllers/options';
 import { OptionsController } from './controllers/options_controller';
 
-export class ButtonGroup extends InfernoWidget<ButtonGroupProps> {
+export class ButtonGroupBase extends InfernoWidget<ButtonGroupProps> {
   private diContext!: DIContext;
+
+  protected functionalityController!: FunctionalityControllerModule.Controller;
 
   protected options!: OptionsController;
 
@@ -60,6 +64,8 @@ export class ButtonGroup extends InfernoWidget<ButtonGroupProps> {
   public _init(): void {
     super._init();
 
+    this.functionalityController = new FunctionalityControllerModule.Controller(this);
+
     this.diContext = new DIContext();
     this.diContext.registerInstance(Component, this);
     // @ts-expect-error
@@ -81,3 +87,7 @@ export class ButtonGroup extends InfernoWidget<ButtonGroupProps> {
     })({ addedItems, removedItems });
   }
 }
+
+export class ButtonGroup extends FunctionalityControllerModule.PublicMethods(
+  ButtonGroupBase,
+) {}
