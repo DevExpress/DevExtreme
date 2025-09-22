@@ -18,27 +18,55 @@ import Chart, {
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { months, monthLabel } from './data.ts';
 
+const year = 2017;
+let selectedMonth = 1;
+
+const startOfMonthStr = (month: number): string => `${month}/01/${year}`;
+const endOfMonthStr = (month: number): string => {
+  const nextMonth = (month === 12) ? 1 : month + 1;
+  const nextYear = (month === 12) ? year + 1 : year;
+
+  const lastDay = new Date(nextYear, nextMonth - 1, 0).getDate();
+
+  return `${month}/${lastDay}/${year}`;
+};
+
 const chartDataSource = new DataSource({
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
+  key: 'Date',
+  load: () => {
+    const startVisible = startOfMonthStr(selectedMonth);
+    const endVisible = endOfMonthStr(selectedMonth);
+    const url = 'http://localhost:5555/api/TemperatureData'
+      + `?startVisible=${encodeURIComponent(startVisible)}`
+      + `&endVisible=${encodeURIComponent(endVisible)}`
+      + `&startBound=${encodeURIComponent(startVisible)}`
+      + `&endBound=${encodeURIComponent(endVisible)}`;
+
+    return fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
+        return r.json();
+      })
+      .then((arr) => arr.map((item) => ({
+        ...item,
+        Temperature: (item.MinTemp + item.MaxTemp) / 2,
+        Date: new Date(item.Date),
+      })));
   },
-  postProcess(results) {
-    return results[0].DayItems;
-  },
-  expand: 'DayItems',
-  filter: ['Id', '=', 1],
   paginate: false,
 });
 
 function onValueChanged(data: SelectBoxTypes.ValueChangedEvent) {
-  chartDataSource.filter(['Id', '=', data.value]);
+  selectedMonth = data.value;
   chartDataSource.load();
 }
 
 function customizeLabel(e: { valueText: string; }) {
   return `${e.valueText}${'&#176C'}`;
+}
+
+function customizeArgumentAxisLabel(e: { value: string | number | Date, valueText: string; }) {
+  return new Date(e.value).getDate().toString();
 }
 
 function customizeTooltip(arg: { valueText: string; }) {
@@ -50,7 +78,7 @@ function customizeTooltip(arg: { valueText: string; }) {
 function App() {
   return (
     <div id="chart-demo">
-      <Chart title="Temperature in Seattle , 2017" dataSource={chartDataSource}>
+      <Chart title={`Temperature in Seattle , ${year}`} dataSource={chartDataSource}>
         <Size height={420} />
         <ValueAxis valueType="numeric">
           <Grid opacity={0.2} />
@@ -58,11 +86,12 @@ function App() {
         </ValueAxis>
         <ArgumentAxis type="discrete">
           <Grid visible={true} opacity={0.5} />
+          <Label customizeText={customizeArgumentAxisLabel} />
         </ArgumentAxis>
         <CommonPaneSettings>
           <Border visible={true} width={2} top={false} right={false} />
         </CommonPaneSettings>
-        <Series argumentField="Number" valueField="Temperature" type="spline" />
+        <Series argumentField="Date" valueField="Temperature" type="spline" />
         <Legend visible={false} />
         <Export enabled={true} />
         <Tooltip enabled={true} customizeTooltip={customizeTooltip} />
@@ -78,7 +107,7 @@ function App() {
           inputAttr={monthLabel}
           displayExpr="name"
           items={months}
-          defaultValue={1}
+          defaultValue={selectedMonth}
           onValueChanged={onValueChanged}
         />
       </div>

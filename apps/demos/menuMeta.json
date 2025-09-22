@@ -1961,8 +1961,10 @@
                 "Name": "ServerSideDataProcessing",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/MonthNames.cs"
+                  "/Models/SampleData/MonthNames.cs",
+                  "/Controllers/ApiControllers/TemperatureDataController.cs"
                 ],
                 "DemoType": "Viz"
               },
