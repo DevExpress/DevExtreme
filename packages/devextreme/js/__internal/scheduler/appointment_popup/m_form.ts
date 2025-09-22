@@ -90,9 +90,6 @@ export class AppointmentForm {
     const element = $('<div>');
 
     this.form = this.scheduler.createComponent(element, Form, {
-      onInitialized: (e) => {
-        this.form = e.component;
-      },
       ...defaultFormOptions,
     });
   }
