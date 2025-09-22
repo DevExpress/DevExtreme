@@ -1,9 +1,10 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import { isFunction } from '@js/core/utils/type';
+import { isFunction, isObject } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
-import type { NormalizedView, ViewType } from '@ts/scheduler/utils/options/types';
+import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
 import type { Direction } from './constants';
 
@@ -324,9 +325,30 @@ const STEP_MAP: Record<ViewType, Step> = {
   agenda: 'agenda',
 } as const;
 
-export const getStep = (type: ViewType): Step => STEP_MAP[type];
+export const getViewName = (view: RawViewType): string | undefined => {
+  if (isObject(view)) {
+    return view.name ?? view.type;
+  }
 
-export const getViewName = (view: NormalizedView): string | undefined => view.name ?? view.type;
+  return view;
+};
+
+export const getViewText = (view: RawViewType): string => {
+  const viewName = getViewName(view);
+  const viewText = messageLocalization.format(`dxScheduler-switcher${viewName}`);
+
+  if (!viewText) {
+    return viewName ?? '';
+  }
+
+  return viewText;
+};
+
+export const formatViews = (
+  views: NormalizedView[],
+): NormalizedView[] => views.map((view) => ({ ...view, text: getViewText(view) }));
+
+export const getStep = (type: ViewType): Step => STEP_MAP[type];
 
 export const isOneView = (
   views: NormalizedView[],
