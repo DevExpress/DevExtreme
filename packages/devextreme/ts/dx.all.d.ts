@@ -7072,9 +7072,8 @@ declare module DevExpress.core.utils {
     * [descr:DxPromise]
     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
     */
-   export type DxPromise<T = void> = {} extends PromiseType<T>
-    ? Promise<T>
-    : PromiseType<T>;
+   export type DxPromise<T = void> =
+    {} extends PromiseType<T> ? Promise<T> : PromiseType<T>;
 }
 declare module DevExpress.data {
   /**
@@ -26298,11 +26297,11 @@ declare module DevExpress.ui {
             /**
              * [descr:dxSchedulerOptions.editing.form.onSubmit]
              */
-            onSaved?: ((formData: any) => void) | null;
+            onSaved?: (formData: any) => void;
             /**
              * [descr:dxSchedulerOptions.editing.form.onCancel]
              */
-            onCanceled?: ((formData: any) => void) | null;
+            onCanceled?: (formData: any) => void;
           };
         };
     /**

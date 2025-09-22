@@ -406,8 +406,8 @@ type IEditingProps = React.PropsWithChildren<{
   allowUpdating?: boolean;
   form?: Record<string, any> | {
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-    onCancel?: ((formData: any) => void) | null;
-    onSubmit?: ((formData: any) => void) | null;
+    onCancel?: ((formData: any) => void);
+    onSubmit?: ((formData: any) => void);
   };
 }>
 const _componentEditing = (props: IEditingProps) => {
@@ -481,8 +481,8 @@ const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>
 // Editing
 type IFormProps = React.PropsWithChildren<{
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  onCancel?: ((formData: any) => void) | null;
-  onSubmit?: ((formData: any) => void) | null;
+  onCancel?: ((formData: any) => void);
+  onSubmit?: ((formData: any) => void);
 }>
 const _componentForm = (props: IFormProps) => {
   return React.createElement(NestedOption<IFormProps>, {

@@ -51,18 +51,18 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get onCancel(): ((formData: any) => void) | null {
+    get onCancel(): ((formData: any) => void) {
         return this._getOption('onCancel');
     }
-    set onCancel(value: ((formData: any) => void) | null) {
+    set onCancel(value: ((formData: any) => void)) {
         this._setOption('onCancel', value);
     }
 
     @Input()
-    get onSubmit(): ((formData: any) => void) | null {
+    get onSubmit(): ((formData: any) => void) {
         return this._getOption('onSubmit');
     }
-    set onSubmit(value: ((formData: any) => void) | null) {
+    set onSubmit(value: ((formData: any) => void)) {
         this._setOption('onSubmit', value);
     }
 

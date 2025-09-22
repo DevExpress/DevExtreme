@@ -756,8 +756,8 @@ const DxFormConfig = {
   },
   props: {
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    onCancel: Function as PropType<(((formData: any) => void)) | null>,
-    onSubmit: Function as PropType<(((formData: any) => void)) | null>
+    onCancel: Function as PropType<((formData: any) => void)>,
+    onSubmit: Function as PropType<((formData: any) => void)>
   }
 };
 

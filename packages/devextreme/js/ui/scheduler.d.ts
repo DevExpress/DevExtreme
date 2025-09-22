@@ -653,19 +653,19 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
         /**
          * @docid dxSchedulerOptions.editing.form.onSubmit
          * @type_function_param1 formData:object
-         * @default null
+         * @default undefined
          * @action
          * @public
          */
-        onSaved?: ((formData: any) => void) | null;
+        onSaved?: ((formData: any) => void);
         /**
          * @docid dxSchedulerOptions.editing.form.onCancel
          * @type_function_param1 formData:object
-         * @default null
+         * @default undefined
          * @action
          * @public
          */
-        onCanceled?: ((formData: any) => void) | null;
+        onCanceled?: ((formData: any) => void);
       };
     };
     /**

@@ -97,10 +97,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get form(): dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function | null, onSubmit?: Function | null } {
+    get form(): dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function, onSubmit?: Function } {
         return this._getOption('form');
     }
-    set form(value: dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function | null, onSubmit?: Function | null }) {
+    set form(value: dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function, onSubmit?: Function }) {
         this._setOption('form', value);
     }
 
