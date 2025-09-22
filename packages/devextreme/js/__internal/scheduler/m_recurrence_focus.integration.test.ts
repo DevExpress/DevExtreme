@@ -34,8 +34,6 @@ describe('Recurrence focus restore', () => {
     POM.popup.getCloseButton().click();
     jest.runAllTimers();
 
-    jest.runAllTimers();
-
     expect(appointmentEl.classList.contains('dx-state-focused')).toBe(true);
   });
 });
