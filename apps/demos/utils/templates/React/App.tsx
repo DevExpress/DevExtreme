@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid from 'devextreme-react/data-grid';
-import { customers } from './data.js';
+import { customers } from './data.ts';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 
