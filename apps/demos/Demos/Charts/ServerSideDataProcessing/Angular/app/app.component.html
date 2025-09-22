@@ -14,7 +14,7 @@
   >
     <dxo-size [height]="420"></dxo-size>
     <dxi-series
-      argumentField="Number"
+      argumentField="Date"
       valueField="Temperature"
       type="spline"
     ></dxi-series>
@@ -34,6 +34,7 @@
     ></dxo-tooltip>
     <dxo-argument-axis type="discrete">
       <dxo-grid [visible]="true" [opacity]="0.5"></dxo-grid>
+      <dxo-label [customizeText]="customizeArgumentAxisText"></dxo-label>
     </dxo-argument-axis>
     <dxo-loading-indicator [enabled]="true"></dxo-loading-indicator>
   </dx-chart>
@@ -44,7 +45,7 @@
       [items]="months"
       [width]="150"
       [inputAttr]="{ 'aria-label': 'Month' }"
-      [value]="1"
+      [value]="selectedMonth"
       valueExpr="id"
       displayExpr="name"
       (onValueChanged)="onValueChanged($event)"
