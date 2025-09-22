@@ -126,8 +126,8 @@ function getDataFrame(args) {
   let params = '?';
   params += `startVisible=${args.startVisible}
     &endVisible=${args.endVisible}`;
-  return fetch(`http://localhost:5555/api/TemperatureData${params}`).then((response) =>
-    response.json(),
+  return fetch(`https://js.devexpress.com/Demos/NetCore/api/TemperatureData${params}`).then(
+    (response) => response.json(),
   );
 }
 function getDateString(dateTime) {
