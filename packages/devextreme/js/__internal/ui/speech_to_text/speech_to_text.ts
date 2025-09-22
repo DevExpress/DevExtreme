@@ -4,8 +4,9 @@ import type { DxEvent } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
-  Properties as SpeechToTextProperties, WebSpeechApiConfig,
+  Properties as SpeechToTextProperties,
 } from '@js/ui/speech_to_text';
+import { SpeechRecognitionAdapter } from '@ts/core/speech_recognition_adapter';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
@@ -24,13 +25,6 @@ enum SpeechToTextState {
 type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError'>;
 type PointerLikeEvent = KeyboardEvent | MouseEvent | PointerEvent | TouchEvent;
 
-type SpeechRecognitionLike = WebSpeechApiConfig & {
-  start: () => void;
-  stop: () => void;
-} & Record<string, unknown>;
-
-const SR_CONFIG_IGNORED_PROPERTIES = ['onresult', 'onerror', 'onend'];
-
 const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onStartClick',
   'onStopClick',
@@ -41,7 +35,7 @@ const ACTIONS: (keyof SpeechToTextActions)[] = [
 class SpeechToText extends Widget<SpeechToTextProperties> {
   private _button?: Button;
 
-  private _speechRecognition?: SpeechRecognitionLike | null;
+  private _speechRecognitionAdapter?: SpeechRecognitionAdapter | null;
 
   private _state!: SpeechToTextState;
 
@@ -65,40 +59,18 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     };
   }
 
-  _applySpeechRecognitionConfig(): void {
-    const { webSpeechApiConfig = {} } = this.option();
+  _initSpeechRecognitionAdapter(): void {
+    const { speechRecognitionConfig = {} } = this.option();
 
-    Object.entries(webSpeechApiConfig).forEach(([key, value]) => {
-      if (this._speechRecognition && !SR_CONFIG_IGNORED_PROPERTIES.includes(key)) {
-        this._speechRecognition[key] = value;
-      }
+    if (this._isCustomSpeechRecognitionEnabled()) {
+      return;
+    }
+
+    this._speechRecognitionAdapter = new SpeechRecognitionAdapter(speechRecognitionConfig, {
+      onEnd: this._handleSpeechRecognitionEnd.bind(this),
+      onResult: this._handleSpeechRecognitionResult.bind(this),
+      onError: this._handleSpeechRecognitionError.bind(this),
     });
-  }
-
-  _attachSpeechRecognitionEventHandlers(): void {
-    if (!this._speechRecognition) {
-      return;
-    }
-
-    // eslint-disable-next-line spellcheck/spell-checker
-    this._speechRecognition.onend = this._handleSpeechRecognitionEnd.bind(this);
-    // eslint-disable-next-line spellcheck/spell-checker
-    this._speechRecognition.onresult = this._handleSpeechRecognitionResult.bind(this);
-    this._speechRecognition.onerror = this._handleSpeechRecognitionError.bind(this);
-  }
-
-  _initSpeechRecognition(): void {
-    // @ts-expect-error SpeechRecognition API is not supported in TS
-    const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (this._isCustomSpeechRecognitionEnabled() || !SpeechRecognitionConstructor) {
-      return;
-    }
-
-    this._speechRecognition = new SpeechRecognitionConstructor();
-
-    this._applySpeechRecognitionConfig();
-    this._attachSpeechRecognitionEventHandlers();
   }
 
   _isCustomSpeechRecognitionEnabled(): boolean {
@@ -112,7 +84,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     super._init();
     this._handleCustomEngineState();
     this._createActions();
-    this._initSpeechRecognition();
+    this._initSpeechRecognitionAdapter();
   }
 
   _initMarkup(): void {
@@ -209,7 +181,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     if (!this._isCustomSpeechRecognitionEnabled()) {
       this._setState(SpeechToTextState.LISTENING);
 
-      this._speechRecognition?.start();
+      this._speechRecognitionAdapter?.start();
     }
 
     this._emitDxEvent('onStartClick', e.event);
@@ -219,7 +191,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     if (!this._isCustomSpeechRecognitionEnabled()) {
       this._setState(SpeechToTextState.INITIAL);
 
-      this._speechRecognition?.stop();
+      this._speechRecognitionAdapter?.stop();
     }
 
     this._emitDxEvent('onStopClick', e.event);
@@ -268,8 +240,8 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
         this._handleCustomEngineState();
         break;
 
-      case 'webSpeechApiConfig':
-        this._applySpeechRecognitionConfig();
+      case 'speechRecognitionConfig':
+        this._speechRecognitionAdapter?.applyConfig(value);
         break;
 
       case 'stylingMode':
@@ -330,7 +302,8 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
   _dispose(): void {
     this._actions = {};
-    this._speechRecognition = null;
+    this._speechRecognitionAdapter?.dispose();
+    this._speechRecognitionAdapter = null;
     super._dispose();
   }
 }
