@@ -50,6 +50,8 @@ function readThemeMarker() {
             return null;
         }
         return result.substr(THEME_MARKER_PREFIX.length);
+    } catch(e) {
+        return null;
     } finally {
         element.remove();
     }
