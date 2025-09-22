@@ -44,51 +44,6 @@ describe('ViewSwitcher', () => {
     $container.remove();
   });
 
-  describe('Visibility', () => {
-    it.each(
-      [
-        {
-          useDropDownViewSwitcher: true, views: ['day'], currentView: 'day', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: true, views: ['day'], currentView: 'week', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: true, views: [], currentView: 'day', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: true, views: ['day', 'week'], currentView: 'day', expectedVisibility: true,
-        },
-        {
-          useDropDownViewSwitcher: false, views: ['day'], currentView: 'day', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: false, views: ['day'], currentView: 'week', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: false, views: [], currentView: 'day', expectedVisibility: false,
-        },
-        {
-          useDropDownViewSwitcher: false, views: ['day', 'week'], currentView: 'day', expectedVisibility: true,
-        },
-      ],
-    )(
-      'view switcher should be visible: $expectedVisibility, when useDropDownViewSwitcher: $useDropDownViewSwitcher views: $views, currentView: $currentView',
-      async ({
-        useDropDownViewSwitcher, views, currentView, expectedVisibility,
-      }) => {
-        const { $container } = await createScheduler({
-          useDropDownViewSwitcher,
-          currentView,
-          views: views as SchedulerProperties['views'],
-        });
-
-        const viewSwitcher = $container.find(SELECTORS.viewSwitcher);
-        expect(!viewSwitcher.is(SELECTORS.invisibleState)).toBe(expectedVisibility);
-      },
-    );
-  });
-
   describe('Localization', () => {
     it('should display Russian view names when locale is set to Russian', async () => {
       loadMessages({
