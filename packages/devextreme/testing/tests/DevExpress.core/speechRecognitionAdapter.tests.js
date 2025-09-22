@@ -1,10 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 import SpeechRecognitionAdapter from 'core/speech_recognition_adapter';
-import {
-    UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-    UNSUPPORTED_BROWSER_ERROR,
-    SPEECH_RECOGNITION_ERROR_TYPE
-} from '__internal/core/speech_recognition_adapter';
 
 QUnit.module('SpeechRecognitionAdapter', {
     beforeEach: function() {
@@ -40,29 +35,6 @@ QUnit.module('SpeechRecognitionAdapter', {
         const adapter = this.createAdapter();
 
         assert.ok(adapter._speechRecognition, 'SpeechRecognition available');
-    });
-
-    QUnit.test('should call onError when SpeechRecognition is not supported', function(assert) {
-        const onErrorSpy = sinon.spy();
-
-        window.SpeechRecognition = undefined;
-        window.webkitSpeechRecognition = undefined;
-
-        const adapter = new SpeechRecognitionAdapter({}, {
-            onResult: sinon.spy(),
-            onError: onErrorSpy,
-            onEnd: sinon.spy(),
-        });
-
-        const errorEvent = onErrorSpy.firstCall.args[0];
-
-        assert.notOk(adapter._speechRecognition, 'SpeechRecognition not available');
-        assert.ok(onErrorSpy.calledOnce, 'onError called once');
-
-        assert.ok(errorEvent instanceof ErrorEvent, 'error is ErrorEvent');
-        assert.strictEqual(errorEvent.type, SPEECH_RECOGNITION_ERROR_TYPE, 'error type is correct');
-        assert.strictEqual(errorEvent.error, UNSUPPORTED_BROWSER_ERROR, 'error is correct');
-        assert.strictEqual(errorEvent.message, UNSUPPORTED_BROWSER_ERROR_MESSAGE, 'error message is correct');
     });
 
     QUnit.test('should apply config on init and runtime', function(assert) {

@@ -13,10 +13,6 @@ interface SpeechRecognitionEvents {
 }
 
 const SR_CONFIG_IGNORED_PROPERTIES = ['onresult', 'onerror', 'onend'];
-export const SPEECH_RECOGNITION_ERROR_TYPE = 'speechrecognitionerror';
-export const UNSUPPORTED_BROWSER_ERROR = 'unsupported-browser';
-export const UNSUPPORTED_BROWSER_ERROR_MESSAGE = 'The browser does not support the SpeechRecognition API.';
-
 export class SpeechRecognitionAdapter {
   private _speechRecognition?: SpeechRecognition | null;
 
@@ -26,13 +22,6 @@ export class SpeechRecognitionAdapter {
     const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionConstructor) {
-      const errorEvent = new ErrorEvent(SPEECH_RECOGNITION_ERROR_TYPE, {
-        error: UNSUPPORTED_BROWSER_ERROR,
-        message: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-      });
-
-      events.onError(errorEvent);
-
       return;
     }
 
