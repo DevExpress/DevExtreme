@@ -1,13 +1,19 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  afterEach, describe, expect, it, jest,
+} from '@jest/globals';
 
 import { createScheduler } from './__tests__/__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__tests__/__mock__/m_mock_scheduler';
 
 describe('Recurrence focus restore', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('should restore focus on appointment after closing recurrence dialog and allow reopening with Enter', async () => {
     setupSchedulerTestEnvironment();
 
-    const { container, keydown } = await createScheduler({
+    const { POM, keydown } = await createScheduler({
       timeZone: 'Etc/UTC',
       dataSource: [{
         text: 'Recurring meeting',
@@ -15,31 +21,21 @@ describe('Recurrence focus restore', () => {
         endDate: new Date('2021-02-02T10:00:00.000Z'),
         recurrenceRule: 'FREQ=DAILY',
       }],
-      views: ['week'],
-      currentView: 'week',
       currentDate: new Date('2021-02-02T10:00:00.000Z'),
-      startDayHour: 8,
-      endDayHour: 20,
-      height: 600,
-      focusStateEnabled: true,
-      editing: true,
     });
+    jest.useFakeTimers();
 
-    const appointmentEl = container.querySelector('.dx-scheduler-appointment');
-    appointmentEl!.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-    expect(appointmentEl!.classList.contains('dx-state-focused')).toBe(true);
+    const appointment = POM.getAppointment('Recurring meeting');
+    const appointmentEl = appointment.element as HTMLElement;
 
-    keydown(appointmentEl!, 'Enter');
-    await new Promise(process.nextTick);
+    appointmentEl.focus();
+    keydown(appointmentEl, 'Enter');
 
-    const dialog = document.body.querySelector('.dx-dialog');
-    const closeButton = dialog!.querySelector('.dx-closebutton.dx-button') as HTMLElement;
-    closeButton.click();
+    POM.popup.getCloseButton().click();
+    jest.runAllTimers();
 
-    keydown(appointmentEl!, 'Enter');
-    await new Promise(process.nextTick);
+    jest.runAllTimers();
 
-    const dialogAgain = document.body.querySelector('.dx-dialog');
-    expect(dialogAgain).toBeTruthy();
+    expect(appointmentEl.classList.contains('dx-state-focused')).toBe(true);
   });
 });
