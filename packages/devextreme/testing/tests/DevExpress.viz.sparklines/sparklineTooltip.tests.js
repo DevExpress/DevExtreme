@@ -8,7 +8,7 @@ import {
 } from '../../helpers/vizMocks.js';
 import tooltipModule from 'viz/core/tooltip';
 import baseThemeManagerModule from 'viz/core/base_theme_manager';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import { isFunction } from 'core/utils/type';
 
 import 'viz/sparkline';

@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import animationModule from 'viz/core/renderers/animation';
-import renderers from 'viz/core/renderers/renderer';
+import renderers from 'viz/core/renderers/renderer_default';
 import {
     stubClass
 } from '../../helpers/vizMocks.js';
 import domAdapter from '__internal/core/m_dom_adapter';
-import utils from 'viz/core/utils';
+import utils from 'viz/core/utils_default';
 
 $('<div>')
     .attr('id', 'qunit-fixture')
