@@ -77,20 +77,12 @@ export class AppComponent {
 
   uploadDataByVisualRange() {
     const dataSource = this.component.instance.getDataSource();
-    const storage = dataSource.items();
-    const bounded = !!storage.length;
     const ajaxArgs = {
       startVisible: this.getDateString(this._visualRange.startValue as Date),
       endVisible: this.getDateString(this._visualRange.endValue as Date),
-      startBound: this.getDateString(bounded ? storage[0].date : null),
-      endBound: this.getDateString(bounded ? storage[storage.length - 1].date : null),
     };
 
-    if (
-      ajaxArgs.startVisible !== ajaxArgs.startBound
-      && ajaxArgs.endVisible !== ajaxArgs.endBound
-      && !this.packetsLock
-    ) {
+    if (!this.packetsLock) {
       this.packetsLock += 1;
       this.component.instance.showLoadingIndicator();
 
@@ -121,12 +113,10 @@ export class AppComponent {
 
   getDataFrame(args: Record<string, string>) {
     const params = `startVisible=${args.startVisible}`
-        + `&endVisible=${args.endVisible}`
-        + `&startBound=${args.startBound}`
-        + `&endBound=${args.endBound}`;
+        + `&endVisible=${args.endVisible}`;
 
     return lastValueFrom(
-      this.httpClient.get(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData?${params}`),
+      this.httpClient.get(`https://js.devexpress.com/Demos/NetCore/api/TemperatureData?${params}`),
     );
   }
 
