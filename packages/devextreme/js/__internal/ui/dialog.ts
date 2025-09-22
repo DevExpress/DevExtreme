@@ -154,6 +154,7 @@ export const custom = (params: DialogParams): BaseDialog => {
 
   const onHidden: PopupProperties['onHidden'] = (e) => {
     $(e.element).remove();
+    popupOptions?.onHidden?.(e);
   };
 
   const animation = {
@@ -256,8 +257,8 @@ export const custom = (params: DialogParams): BaseDialog => {
   };
 
   const options = {
-    ...configuration,
     ...popupOptions,
+    ...configuration,
   };
 
   // @ts-expect-error Incorrect constructor usage
