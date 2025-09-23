@@ -21,6 +21,9 @@ export type NormalizedView = View | AgendaView;
 export interface SchedulerInternalOptions {
   indicatorTime?: Date;
   renovateRender: boolean;
+  editing: Properties['editing'] | {
+    legacyForm: boolean;
+  };
   _draggingMode: 'outlook' | 'default';
   _appointmentTooltipOffset: { x: number; y: number };
   _appointmentCountPerCell: number;

@@ -11,7 +11,7 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import Form, { type Item } from '@js/ui/form';
+import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 
 import timeZoneUtils from '../m_utils_time_zone';
@@ -61,37 +61,17 @@ const updateRecurrenceItemVisibility = (recurrenceRuleExpr, value, form) => {
   form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
 };
 
-const defaultFormOptions = {
-  showValidationSummary: true,
-  scrollingEnabled: true,
-  colCount: 'auto',
-  colCountByScreen: {
-    lg: 2,
-    xs: 1,
-  },
-  showColonAfterLabel: false,
-  labelLocation: 'top',
-  screenByWidth: (width) => (width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg'),
-  elementAttr: {
-    class: E2E_TEST_CLASSES.form,
-  },
-};
-
 export class AppointmentForm {
   scheduler: any;
 
-  form: Form;
+  form: any;
 
   // NOTE: flag to prevent double value set during form updating
   private isFormUpdating = false;
 
   constructor(scheduler) {
     this.scheduler = scheduler;
-    const element = $('<div>');
-
-    this.form = this.scheduler.createComponent(element, Form, {
-      ...defaultFormOptions,
-    });
+    this.form = null;
   }
 
   get dxForm() {
@@ -129,7 +109,7 @@ export class AppointmentForm {
 
     changeSize(isRecurrence);
 
-    const items: Item[] = [
+    const items = [
       {
         itemType: 'group',
         name: APPOINTMENT_FORM_GROUP_NAMES.Main,
@@ -148,9 +128,27 @@ export class AppointmentForm {
       },
     ];
 
-    this.form.option({
+    const element = $('<div>');
+
+    this.scheduler.createComponent(element, Form, {
       items,
+      showValidationSummary: true,
+      scrollingEnabled: true,
+      colCount: 'auto',
+      colCountByScreen: {
+        lg: 2,
+        xs: 1,
+      },
       formData,
+      showColonAfterLabel: false,
+      labelLocation: 'top',
+      onInitialized: (e) => {
+        this.form = e.component;
+      },
+      screenByWidth: (width) => (width < SCREEN_SIZE_OF_SINGLE_COLUMN || devices.current().deviceType !== 'desktop' ? 'xs' : 'lg'),
+      elementAttr: {
+        class: E2E_TEST_CLASSES.form,
+      },
     });
   }
 
@@ -160,12 +158,10 @@ export class AppointmentForm {
     const value = dateSerialization.deserializeDate(args.value);
     const previousValue = dateSerialization.deserializeDate(args.previousValue);
     const dateEditor = this.form.getEditor(dateExpr);
-    // @ts-expect-error should be fixed in the future
     const dateValue = dateSerialization.deserializeDate(dateEditor.option('value'));
 
     if (!this.isFormUpdating && dateValue && value && isNeedCorrect(dateValue, value)) {
       const duration = previousValue ? dateValue.getTime() - previousValue.getTime() : 0;
-      // @ts-expect-error should be fixed in the future
       dateEditor.option('value', new Date(value.getTime() + duration));
     }
   }
@@ -193,7 +189,6 @@ export class AppointmentForm {
           const { form } = this;
           const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
           if (isMainTimeZone) {
-            // @ts-expect-error should be fixed in the future
             secondTimezoneEditor.option('value', args.value);
           }
         },
@@ -307,22 +302,17 @@ export class AppointmentForm {
               const { value } = args;
               const startDateEditor = this.form.getEditor(dataExprs.startDateExpr);
               const endDateEditor = this.form.getEditor(dataExprs.endDateExpr);
-              // @ts-expect-error should be fixed in the future
               const startDate = dateSerialization.deserializeDate(startDateEditor.option('value'));
 
               if (!this.isFormUpdating && startDate) {
                 if (value) {
                   const allDayStartDate = dateUtils.trimTime(startDate);
-                  // @ts-expect-error should be fixed in the future
                   startDateEditor.option('value', new Date(allDayStartDate));
-                  // @ts-expect-error should be fixed in the future
                   endDateEditor.option('value', new Date(allDayStartDate));
                 } else {
                   const startDateWithStartHour = getStartDateWithStartHour(startDate, this.scheduler.getStartDayHour());
                   const endDate = this.scheduler.getCalculatedEndDate(startDateWithStartHour);
-                  // @ts-expect-error should be fixed in the future
                   startDateEditor.option('value', startDateWithStartHour);
-                  // @ts-expect-error should be fixed in the future
                   endDateEditor.option('value', endDate);
                 }
               }
