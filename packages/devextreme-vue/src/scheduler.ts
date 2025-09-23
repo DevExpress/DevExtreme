@@ -32,6 +32,7 @@ import {
  RecurrenceEditMode,
  dxSchedulerScrolling,
  dxSchedulerToolbar,
+ dxSchedulerForm,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
@@ -677,7 +678,7 @@ const DxEditingConfig = {
     allowResizing: Boolean,
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean,
-    form: Object as PropType<Record<string, any>>
+    form: Object as PropType<dxSchedulerForm | Record<string, any>>
   }
 };
 
@@ -751,13 +752,13 @@ const DxFormConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:items": null,
-    "update:onCancel": null,
-    "update:onSubmit": null,
+    "update:onCanceled": null,
+    "update:onSaved": null,
   },
   props: {
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    onCancel: Function as PropType<((formData: any) => void)>,
-    onSubmit: Function as PropType<((formData: any) => void)>
+    onCanceled: Function as PropType<((formData: any) => void)>,
+    onSaved: Function as PropType<((formData: any) => void)>
   }
 };
 

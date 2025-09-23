@@ -76,8 +76,8 @@ import { DxiItemComponent } from './item-dxi';
         'validationGroup',
         'visible',
         'width',
-        'onCancel',
-        'onSubmit'
+        'onCanceled',
+        'onSaved'
     ]
 })
 export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnInit  {

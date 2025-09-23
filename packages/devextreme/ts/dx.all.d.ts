@@ -26296,20 +26296,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?: {
-            /**
-             * [descr:dxSchedulerOptions.editing.form.items]
-             */
-            items?: Array<DevExpress.ui.dxForm.Item>;
-            /**
-             * [descr:dxSchedulerOptions.editing.form.onSubmit]
-             */
-            onSaved?: (formData: any) => void;
-            /**
-             * [descr:dxSchedulerOptions.editing.form.onCancel]
-             */
-            onCanceled?: (formData: any) => void;
-          };
+          form?: DevExpress.ui.dxScheduler.Form | undefined;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -34205,6 +34192,23 @@ declare module DevExpress.ui.dxScheduler {
      * [descr:DateNavigatorItemProperties.items]
      */
     items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
+  };
+  /**
+   * [descr:dxSchedulerForm]
+   */
+  export type Form = {
+    /**
+     * [descr:dxSchedulerForm.items]
+     */
+    items?: Array<DevExpress.ui.dxForm.Item>;
+    /**
+     * [descr:dxSchedulerForm.onSaved]
+     */
+    onSaved?: (formData: any) => void;
+    /**
+     * [descr:dxSchedulerForm.onCanceled]
+     */
+    onCanceled?: (formData: any) => void;
   };
   /**
    * [descr:dxSchedulerToolbar]

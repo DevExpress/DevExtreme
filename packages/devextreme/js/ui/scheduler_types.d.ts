@@ -39,6 +39,7 @@ export {
   DateNavigatorItemProperties,
   ToolbarItem,
   Toolbar,
+  Form,
   Appointment,
   Properties,
   dxSchedulerScrolling,

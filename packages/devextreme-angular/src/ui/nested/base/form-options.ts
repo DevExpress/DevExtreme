@@ -292,17 +292,17 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('width', value);
     }
 
-    get onCancel(): Function {
-        return this._getOption('onCancel');
+    get onCanceled(): Function {
+        return this._getOption('onCanceled');
     }
-    set onCancel(value: Function) {
-        this._setOption('onCancel', value);
+    set onCanceled(value: Function) {
+        this._setOption('onCanceled', value);
     }
 
-    get onSubmit(): Function {
-        return this._getOption('onSubmit');
+    get onSaved(): Function {
+        return this._getOption('onSaved');
     }
-    set onSubmit(value: Function) {
-        this._setOption('onSubmit', value);
+    set onSaved(value: Function) {
+        this._setOption('onSaved', value);
     }
 }

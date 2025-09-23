@@ -20,8 +20,9 @@ import {
 
 
 import { DataChange, GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
-import { ButtonItem, EmptyItem, GroupItem, Properties as dxFormOptions, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import { dxSchedulerForm } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -97,10 +98,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get form(): dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function, onSubmit?: Function } {
+    get form(): dxFormOptions | dxSchedulerForm | undefined {
         return this._getOption('form');
     }
-    set form(value: dxFormOptions | { items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, onCancel?: Function, onSubmit?: Function }) {
+    set form(value: dxFormOptions | dxSchedulerForm | undefined) {
         this._setOption('form', value);
     }
 
