@@ -88,7 +88,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
+        "$base-font-family": "-apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
         '$base-accent': '#337ab7',
       });
     });
