@@ -269,7 +269,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1066
     */
-    E1066: 'All AI columns must have names',
+    E1066: 'All AI columns must have names.',
 
     /**
     * @name ErrorsUIWidgets.W1001
