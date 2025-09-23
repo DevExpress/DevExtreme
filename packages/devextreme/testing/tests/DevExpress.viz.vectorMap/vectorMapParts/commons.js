@@ -19,7 +19,7 @@ import legendModule from 'viz/vector_map/legend';
 import layoutModule from 'viz/vector_map/layout';
 import mapLayerModule from 'viz/vector_map/map_layer';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
 import tooltipModule from 'viz/core/tooltip';

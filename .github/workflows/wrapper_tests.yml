@@ -112,13 +112,17 @@ jobs:
           fi
 
   test:
-    runs-on: devextreme-shr2
     timeout-minutes: 20
     needs: build
     strategy:
       fail-fast: false
       matrix:
-        framework: [angular, react, vue]
+        framework: [react, vue]
+        runner: [devextreme-shr2]
+        include:
+          - runner: ubuntu-22.04
+            framework: angular
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Get sources

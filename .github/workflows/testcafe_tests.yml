@@ -58,10 +58,7 @@ jobs:
       run: pnpm install
 
     - name: Build
-      shell: bash
-      run: |
-        node ./tools/scripts/performance_log.js &
-        pnpx nx build devextreme
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -235,7 +232,6 @@ jobs:
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
-        node ../../tools/scripts/performance_log.js &
         pnpm run test $all_args
 
     - name: Sanitize job name
