@@ -76,6 +76,7 @@ import { ref } from 'vue';
 import { DxTextBox, DxButton as DxTextBoxButton, type DxTextBoxTypes } from 'devextreme-vue/text-box';
 import { DxNumberBox, DxButton as DxNumberBoxButton } from 'devextreme-vue/number-box';
 import { DxDateBox, DxButton as DxDateBoxButton } from 'devextreme-vue/date-box';
+import { type DxButtonTypes } from 'devextreme-vue/button';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 const passwordMode = ref<DxTextBoxTypes.TextBoxType>('password');
@@ -95,7 +96,7 @@ const currencyButton = {
   elementAttr: {
     class: 'currency',
   },
-  onClick: (e) => {
+  onClick: (e: DxButtonTypes.ClickEvent) => {
     if (e.component.option('text') === '$') {
       e.component.option('text', '€');
       currencyFormat.value = '$ #.##';

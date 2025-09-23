@@ -82,7 +82,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxChat from 'devextreme-vue/chat';
+import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import {
@@ -103,7 +103,7 @@ const dayHeaderFormat = ref(headerFormats[0]);
 const messageTimestampFormat = ref(messageFormats[0]);
 const isDisabled = ref(false);
 
-function onMessageEntered(event) {
+function onMessageEntered(event: DxChatTypes.MessageEnteredEvent): void {
   messages.value = [...messages.value, event.message];
 }
 
