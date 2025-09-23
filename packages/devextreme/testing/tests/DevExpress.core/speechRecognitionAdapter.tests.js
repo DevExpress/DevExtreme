@@ -1,9 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 import SpeechRecognitionAdapter from 'core/speech_recognition_adapter';
+import errors from 'ui/widget/ui.errors';
+import { NOT_SUPPORTED_ERROR } from '__internal/core/speech_recognition_adapter';
+
 
 QUnit.module('SpeechRecognitionAdapter', {
     beforeEach: function() {
         this.originalSpeechRecognition = window.SpeechRecognition;
+        this.originalWebkitSpeechRecognition = window.webkitSpeechRecognition;
 
         class SpeechRecognitionMock {
             constructor() {
@@ -29,12 +33,29 @@ QUnit.module('SpeechRecognitionAdapter', {
     },
     afterEach: function() {
         window.SpeechRecognition = this.originalSpeechRecognition;
+        window.webkitSpeechRecognition = this.originalWebkitSpeechRecognition;
     },
 }, () => {
     QUnit.test('should initialize SpeechRecognition', function(assert) {
         const adapter = this.createAdapter();
 
         assert.ok(adapter._speechRecognition, 'SpeechRecognition available');
+    });
+
+    QUnit.test('should log an error if SpeechRecognition is not supported', function(assert) {
+        sinon.spy(errors, 'log');
+
+        window.SpeechRecognition = undefined;
+        window.webkitSpeechRecognition = undefined;
+
+        try {
+            this.createAdapter();
+
+            assert.deepEqual(errors.log.lastCall.args, [NOT_SUPPORTED_ERROR], 'logged with correct args');
+        } finally {
+            errors.log.restore();
+
+        }
     });
 
     QUnit.test('should apply config on init and runtime', function(assert) {
