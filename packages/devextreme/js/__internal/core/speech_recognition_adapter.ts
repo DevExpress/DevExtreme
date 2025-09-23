@@ -1,5 +1,6 @@
 import { getWindow } from '@js/core/utils/window';
 import type { SpeechRecognitionConfig } from '@js/ui/speech_to_text';
+import errors from '@js/ui/widget/ui.errors';
 
 type SpeechRecognition = SpeechRecognitionConfig & {
   start: () => void;
@@ -12,6 +13,8 @@ interface SpeechRecognitionEvents {
   onEnd: () => void;
 }
 
+export const NOT_SUPPORTED_ERROR = 'E1065';
+
 const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
 export class SpeechRecognitionAdapter {
   private _speechRecognition?: SpeechRecognition | null;
@@ -22,6 +25,8 @@ export class SpeechRecognitionAdapter {
     const SpeechRecognitionConstructor = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionConstructor) {
+      errors.log(NOT_SUPPORTED_ERROR);
+
       return;
     }
 
