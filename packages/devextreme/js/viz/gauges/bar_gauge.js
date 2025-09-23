@@ -435,6 +435,9 @@ export const dxBarGauge = BaseGauge.inherit({
         const that = this;
         const options = that._options.silent();
 
+        const legendOptions = that._themeManager.theme('legend');
+        legendOptions._incidentOccurred = that._incidentOccurred;
+
         that._palette = that._themeManager.createPalette(options.palette, {
             useHighlight: true,
             extensionMode: options.paletteExtensionMode
