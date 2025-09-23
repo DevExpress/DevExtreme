@@ -1953,9 +1953,23 @@ class EditingControllerImpl extends modules.ViewController {
    */
   protected _afterCancelEditData(rowIndex) {
     const dataController = this._dataController;
+    const repaintChangesOnly = this.option('repaintChangesOnly');
+
+    if (repaintChangesOnly) {
+      // Clear modifiedValues from all rows to ensure proper restoration of original values
+      // when repaintChangesOnly is enabled
+      const items = dataController.items();
+      items.forEach((item: any) => {
+        if (item.modified && item.modifiedValues) {
+          delete item.modified;
+          delete item.modifiedValues;
+          delete item.oldData;
+        }
+      });
+    }
 
     dataController.updateItems({
-      repaintChangesOnly: this.option('repaintChangesOnly'),
+      repaintChangesOnly,
     });
   }
 
