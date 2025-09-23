@@ -32,7 +32,6 @@ import { StickyPosition } from '../sticky_columns/const';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_OPTION_REGEXP,
-  COMMAND_COLUMNS_WITH_REQUIRED_NAMES,
   COMMAND_EXPAND_CLASS,
   DATATYPE_OPERATIONS,
   DETAIL_COMMAND_COLUMN_NAME,
@@ -66,6 +65,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   isColumnFixed,
+  isColumnNameRequired,
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
@@ -1554,7 +1554,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public setName(column) {
-    if (!COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(column.type)) {
+    if (!isColumnNameRequired(column)) {
       column.name = column.name || column.dataField || column.type;
     }
   }
@@ -1612,7 +1612,7 @@ export class ColumnsController extends modules.Controller {
         }
 
         usedNames[name] = true;
-      } else if (COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(column.type)) {
+      } else if (isColumnNameRequired(column)) {
         hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
