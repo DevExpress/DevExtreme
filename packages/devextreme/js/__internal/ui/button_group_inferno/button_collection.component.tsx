@@ -61,9 +61,6 @@ export class ButtonCollectionComponent extends
     this.component = this.createComponent(this.getElementRef(), this.getComponentOptions());
     this.props.onComponentMounted?.(this.component);
   }
-export const BUTTON_GROUP_CLASS = 'dx-buttongroup';
-
-export type ButtonCollectionProps = CollectionProps<Properties>;
 
   public componentDidUpdate(prevProps: ButtonCollectionProps): void {
     this.updateComponentOptions(prevProps);
