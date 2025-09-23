@@ -2689,7 +2689,6 @@ export type Panes = CommonPaneSettings & {
  * @public
  * @docid dxChartTooltip
  * @type object
- * @inherits BaseChartOptions.tooltip
  */
 export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**

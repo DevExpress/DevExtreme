@@ -1229,7 +1229,6 @@ export type dxPolarChartPointInfo = PointInfo;
  * @public
  * @docid dxPolarChartTooltip
  * @type object
- * @inherits BaseChartOptions.tooltip
  */
 export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**

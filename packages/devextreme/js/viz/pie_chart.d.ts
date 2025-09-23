@@ -275,7 +275,6 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
  * @public
  * @docid dxPieChartTooltip
  * @type object
- * @inherits BaseChartOptions.tooltip
  */
 export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
   /**
