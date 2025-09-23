@@ -118,7 +118,7 @@ describe('compile', () => {
       // compiled css
       expect(data.result.css.toString()).toBe(
         '.dx-accordion{font-family:'
-        + '"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;'
+        + '-apple-system,blinkmacsystemfont,avenir next,avenir,segoe ui,helvetica neue,adwaita sans,cantarell,ubuntu,roboto,noto,helvetica,arial,sans-serif;'
         + 'color:#337ab7;background-image:url(icons/icons.woff2)}.dx-accordion '
         + '.from-base{background-color:transparent;color:#337ab7}.extra-class{color:red}',
       );
