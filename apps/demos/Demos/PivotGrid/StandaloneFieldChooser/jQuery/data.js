@@ -4017,3 +4017,14 @@ const sales = [{
   amount: 780,
   date: '2015/05/07',
 }];
+
+const layouts = [{
+  key: 0,
+  name: 'Layout0',
+}, {
+  key: 1,
+  name: 'Layout1',
+}, {
+  key: 2,
+  name: 'Layout2',
+}];
