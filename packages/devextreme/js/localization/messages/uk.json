@@ -851,6 +851,9 @@
         "dxSplitter-resizeHandleAriaLabel": "Розділювач",
         "dxSplitter-resizeHandleAriaRoleDescription": "Розділювач",
 
-        "dxStepper-optionalMark": "(Необов'язково)"
+        "dxStepper-optionalMark": "(Необов'язково)",
+
+        "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+        "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
     }
 }
