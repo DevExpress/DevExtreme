@@ -124,6 +124,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       disabled,
       width,
       height,
+      hint,
     } = this.option();
 
     return {
@@ -135,6 +136,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      hint,
       icon: this._getCurrentIcon(),
       text: this._getCurrentText(),
       onClick: (e: ClickEvent): void => {
@@ -248,6 +250,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
       case 'type':
       case 'width':
       case 'height':
+      case 'hint':
         this._button?.option(name, value);
         break;
 
