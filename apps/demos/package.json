@@ -144,7 +144,7 @@
         "systemjs-builder": "0.16.15",
         "testcafe": "2.6.2",
         "ts-node": "10.9.2",
-        "vue-tsc": "^2.2.8"
+        "vue-tsc": "^3.0.6"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",

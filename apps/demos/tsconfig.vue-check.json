@@ -1,10 +1,13 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "strict": false
+    "lib": ["es2023", "DOM", "DOM.Iterable"],
+    "strict": true
   },
   "include": [
-    "Demos/**/Vue/**/*.vue"
+    "Demos/Diagram/**/Vue/**/*.vue",
+    "Demos/Gantt/**/Vue/**/*.vue",
+    "Demos/FileManager/**/Vue/**/*.vue",
+    "Demos/Localization/**/Vue/**/*.vue"
   ]
 }

@@ -151,6 +151,7 @@ import {
   dependencies,
   resources,
   resourceAssignments,
+  type Task,
 } from './data.ts';
 
 const scaleType = ref<GanttScaleType>('months');
@@ -161,10 +162,10 @@ const showCustomTaskTooltip = ref(true);
 const startDateRange = ref(new Date(2018, 11, 1));
 const endDateRange = ref(new Date(2019, 11, 1));
 
-const getTime = (date) => date.toLocaleString();
-const getTimeEstimate = (task) => Math.abs(task.start - task.end) / 36e5;
-function getTimeLeft(task) {
-  const timeEstimate = Math.abs(task.start - task.end) / 36e5;
+const getTime = (date: Date) => date.toLocaleString();
+const getTimeEstimate = (task: Task) => Math.abs(task.start.getTime() - task.end.getTime()) / 36e5;
+function getTimeLeft(task: Task) {
+  const timeEstimate = Math.abs(task.start.getTime() - task.end.getTime()) / 36e5;
   return Math.floor(((100 - task.progress) / 100) * timeEstimate);
 }
 </script>
