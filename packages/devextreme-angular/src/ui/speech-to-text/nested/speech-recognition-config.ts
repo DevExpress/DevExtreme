@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-speech-to-text-web-speech-api-config',
+    selector: 'dxo-speech-to-text-speech-recognition-config',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSpeechToTextWebSpeechApiConfigComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSpeechToTextSpeechRecognitionConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get continuous(): boolean {
         return this._getOption('continuous');
@@ -73,7 +73,7 @@ export class DxoSpeechToTextWebSpeechApiConfigComponent extends NestedOption imp
 
 
     protected get _optionPath() {
-        return 'webSpeechApiConfig';
+        return 'speechRecognitionConfig';
     }
 
 
@@ -98,10 +98,10 @@ export class DxoSpeechToTextWebSpeechApiConfigComponent extends NestedOption imp
 
 @NgModule({
   imports: [
-    DxoSpeechToTextWebSpeechApiConfigComponent
+    DxoSpeechToTextSpeechRecognitionConfigComponent
   ],
   exports: [
-    DxoSpeechToTextWebSpeechApiConfigComponent
+    DxoSpeechToTextSpeechRecognitionConfigComponent
   ],
 })
-export class DxoSpeechToTextWebSpeechApiConfigModule { }
+export class DxoSpeechToTextSpeechRecognitionConfigModule { }
