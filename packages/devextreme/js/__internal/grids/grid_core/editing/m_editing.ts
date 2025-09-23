@@ -1956,8 +1956,6 @@ class EditingControllerImpl extends modules.ViewController {
     const repaintChangesOnly = this.option('repaintChangesOnly');
 
     if (repaintChangesOnly) {
-      // Clear modifiedValues from all rows to ensure proper restoration of original values
-      // when repaintChangesOnly is enabled
       const items = dataController.items();
       items.forEach((item: any) => {
         if (item.modified && item.modifiedValues) {
