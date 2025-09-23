@@ -4,7 +4,7 @@ import Chart, {
   AdaptiveLayout, CommonSeriesSettings, Size, Tooltip,
 } from 'devextreme-react/chart';
 import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
-import sales from './data.js';
+import { sales } from './data.js';
 
 const customizeTooltip = (args) => {
   const valueText = args.seriesName.indexOf('Total') !== -1
