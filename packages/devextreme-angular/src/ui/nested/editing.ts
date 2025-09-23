@@ -22,7 +22,6 @@ import {
 import { DataChange, GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
 import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { dxSchedulerForm } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -98,10 +97,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get form(): dxFormOptions | dxSchedulerForm | undefined {
+    get form(): dxFormOptions {
         return this._getOption('form');
     }
-    set form(value: dxFormOptions | dxSchedulerForm | undefined) {
+    set form(value: dxFormOptions) {
         this._setOption('form', value);
     }
 
