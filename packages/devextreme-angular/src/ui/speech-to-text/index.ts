@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, WebSpeechApiConfig } from 'devextreme/ui/speech_to_text';
+import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
@@ -34,7 +34,7 @@ import {
 
 
 import { DxoSpeechToTextCustomSpeechRecognizerModule } from 'devextreme-angular/ui/speech-to-text/nested';
-import { DxoSpeechToTextWebSpeechApiConfigModule } from 'devextreme-angular/ui/speech-to-text/nested';
+import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular/ui/speech-to-text/nested';
 
 
 
@@ -157,6 +157,16 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
     
     @Input()
+    get speechRecognitionConfig(): Record<string, any> | SpeechRecognitionConfig {
+        return this._getOption('speechRecognitionConfig');
+    }
+    set speechRecognitionConfig(value: Record<string, any> | SpeechRecognitionConfig) {
+        this._setOption('speechRecognitionConfig', value);
+    }
+
+
+    
+    @Input()
     get startIcon(): string {
         return this._getOption('startIcon');
     }
@@ -232,16 +242,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     }
     set visible(value: boolean) {
         this._setOption('visible', value);
-    }
-
-
-    
-    @Input()
-    get webSpeechApiConfig(): Record<string, any> | WebSpeechApiConfig {
-        return this._getOption('webSpeechApiConfig');
-    }
-    set webSpeechApiConfig(value: Record<string, any> | WebSpeechApiConfig) {
-        this._setOption('webSpeechApiConfig', value);
     }
 
 
@@ -393,6 +393,13 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() speechRecognitionConfigChange: EventEmitter<Record<string, any> | SpeechRecognitionConfig>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() startIconChange: EventEmitter<string>;
 
     /**
@@ -449,13 +456,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() webSpeechApiConfigChange: EventEmitter<Record<string, any> | WebSpeechApiConfig>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
@@ -492,6 +492,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'speechRecognitionConfigChange' },
             { emit: 'startIconChange' },
             { emit: 'startTextChange' },
             { emit: 'stopIconChange' },
@@ -500,7 +501,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
             { emit: 'tabIndexChange' },
             { emit: 'typeChange' },
             { emit: 'visibleChange' },
-            { emit: 'webSpeechApiConfigChange' },
             { emit: 'widthChange' }
         ]);
         optionHost.setHost(this);
@@ -522,14 +522,14 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
   imports: [
     DxSpeechToTextComponent,
     DxoSpeechToTextCustomSpeechRecognizerModule,
-    DxoSpeechToTextWebSpeechApiConfigModule,
+    DxoSpeechToTextSpeechRecognitionConfigModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
   exports: [
     DxSpeechToTextComponent,
     DxoSpeechToTextCustomSpeechRecognizerModule,
-    DxoSpeechToTextWebSpeechApiConfigModule,
+    DxoSpeechToTextSpeechRecognitionConfigModule,
     DxTemplateModule
   ]
 })

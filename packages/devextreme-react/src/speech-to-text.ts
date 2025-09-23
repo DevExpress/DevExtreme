@@ -47,7 +47,7 @@ const SpeechToText = memo(
 
       const expectedChildren = useMemo(() => ({
         customSpeechRecognizer: { optionName: "customSpeechRecognizer", isCollectionItem: false },
-        webSpeechApiConfig: { optionName: "webSpeechApiConfig", isCollectionItem: false }
+        speechRecognitionConfig: { optionName: "speechRecognitionConfig", isCollectionItem: false }
       }), []);
 
       return (
@@ -85,23 +85,23 @@ const CustomSpeechRecognizer = Object.assign<typeof _componentCustomSpeechRecogn
 
 // owners:
 // SpeechToText
-type IWebSpeechApiConfigProps = React.PropsWithChildren<{
+type ISpeechRecognitionConfigProps = React.PropsWithChildren<{
   continuous?: boolean;
   grammars?: Array<string>;
   interimResults?: boolean;
   lang?: string;
   maxAlternatives?: number;
 }>
-const _componentWebSpeechApiConfig = (props: IWebSpeechApiConfigProps) => {
-  return React.createElement(NestedOption<IWebSpeechApiConfigProps>, {
+const _componentSpeechRecognitionConfig = (props: ISpeechRecognitionConfigProps) => {
+  return React.createElement(NestedOption<ISpeechRecognitionConfigProps>, {
     ...props,
     elementDescriptor: {
-      OptionName: "webSpeechApiConfig",
+      OptionName: "speechRecognitionConfig",
     },
   });
 };
 
-const WebSpeechApiConfig = Object.assign<typeof _componentWebSpeechApiConfig, NestedComponentMeta>(_componentWebSpeechApiConfig, {
+const SpeechRecognitionConfig = Object.assign<typeof _componentSpeechRecognitionConfig, NestedComponentMeta>(_componentSpeechRecognitionConfig, {
   componentType: "option",
 });
 
@@ -112,8 +112,8 @@ export {
   SpeechToTextRef,
   CustomSpeechRecognizer,
   ICustomSpeechRecognizerProps,
-  WebSpeechApiConfig,
-  IWebSpeechApiConfigProps
+  SpeechRecognitionConfig,
+  ISpeechRecognitionConfigProps
 };
 import type * as SpeechToTextTypes from 'devextreme/ui/speech_to_text_types';
 export { SpeechToTextTypes };

@@ -13,7 +13,7 @@ import type { ButtonStyle, ButtonType } from './button';
  * @namespace DevExpress.ui.dxSpeechToText
  * @public
  */
-export type WebSpeechApiConfig = {
+export type SpeechRecognitionConfig = {
   /**
    * @docid
    * @public
@@ -185,10 +185,10 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
   type?: ButtonType | string;
 
   /**
-   * @docid dxSpeechToTextOptions.webSpeechApiConfig
+   * @docid dxSpeechToTextOptions.speechRecognitionConfig
    * @public
    */
-  webSpeechApiConfig?: WebSpeechApiConfig | { [key: string]: any };
+  speechRecognitionConfig?: SpeechRecognitionConfig | { [key: string]: any };
 
   /**
    * @docid dxSpeechToTextOptions.onStartClick

@@ -27821,9 +27821,11 @@ declare module DevExpress.ui {
       type?: DevExpress.common.ButtonType | string;
 
       /**
-       * [descr:dxSpeechToTextOptions.webSpeechApiConfig]
+       * [descr:dxSpeechToTextOptions.speechRecognitionConfig]
        */
-      webSpeechApiConfig?: WebSpeechApiConfig | { [key: string]: any };
+      speechRecognitionConfig?:
+        | SpeechRecognitionConfig
+        | { [key: string]: any };
 
       /**
        * [descr:dxSpeechToTextOptions.onStartClick]
@@ -34244,31 +34246,31 @@ declare module DevExpress.ui.dxSpeechToText {
     isListening?: boolean;
   };
   /**
-   * [descr:WebSpeechApiConfig]
+   * [descr:SpeechRecognitionConfig]
    */
-  export type WebSpeechApiConfig = {
+  export type SpeechRecognitionConfig = {
     /**
-     * [descr:WebSpeechApiConfig.continuous]
+     * [descr:SpeechRecognitionConfig.continuous]
      */
     continuous?: boolean;
 
     /**
-     * [descr:WebSpeechApiConfig.grammars]
+     * [descr:SpeechRecognitionConfig.grammars]
      */
     grammars?: string[];
 
     /**
-     * [descr:WebSpeechApiConfig.interimResults]
+     * [descr:SpeechRecognitionConfig.interimResults]
      */
     interimResults?: boolean;
 
     /**
-     * [descr:WebSpeechApiConfig.lang]
+     * [descr:SpeechRecognitionConfig.lang]
      */
     lang?: string;
 
     /**
-     * [descr:WebSpeechApiConfig.maxAlternatives]
+     * [descr:SpeechRecognitionConfig.maxAlternatives]
      */
     maxAlternatives?: number;
   };
