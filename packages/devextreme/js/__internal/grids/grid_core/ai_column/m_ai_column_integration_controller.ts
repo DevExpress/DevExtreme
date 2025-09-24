@@ -6,6 +6,10 @@ export class AiColumnIntegrationController extends modules.Controller {
 
   }
 
+  public abortRequest(): void {
+
+  }
+
   public showError(message: string): void {
 
   }

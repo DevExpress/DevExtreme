@@ -6,18 +6,18 @@ import modules from '../m_modules';
 import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
 
 export class AiColumnController extends modules.Controller {
-  private _columnsController!: ColumnsController;
+  private columnsController!: ColumnsController;
 
-  private _dataController!: DataController;
+  private dataController!: DataController;
 
-  private _dataChangedHandler!: (e) => any;
+  private dataChangedHandler!: (e) => any;
 
   public init(): void {
-    this._columnsController = this.getController('columns');
-    this._dataController = this.getController('data');
+    this.columnsController = this.getController('columns');
+    this.dataController = this.getController('data');
 
-    this._dataChangedHandler = this._handleDataChanged.bind(this);
-    this._dataController.changed.add(this._dataChangedHandler);
+    this.dataChangedHandler = this.handleDataChanged.bind(this);
+    this.dataController.changed.add(this.dataChangedHandler);
 
     this.createAction('onAIColumnRequestCreating');
     this.createAction('onAIColumnResponseReceived');
@@ -36,12 +36,15 @@ export class AiColumnController extends modules.Controller {
   }
 
   private addAiCommandColumn(): void {
-    const aiColumnOptions = getAiCommandColumnOptions();
-    this._columnsController.addCommandColumn(aiColumnOptions);
+    this.columnsController.addCommandColumn(getAiCommandColumnOptions());
   }
 
-  protected _handleDataChanged(e) {
+  private handleDataChanged(e) {
 
+  }
+
+  private showResult(columnName: string, data: Record<PropertyKey, string>): void {
+    // TODO
   }
 
   // API methods
@@ -77,7 +80,7 @@ export class AiColumnController extends modules.Controller {
   }
 
   public dispose(): void {
-    this._dataController.changed.remove(this._dataChangedHandler);
+    this.dataController.changed.remove(this.dataChangedHandler);
   }
 }
 
