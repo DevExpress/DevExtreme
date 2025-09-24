@@ -395,6 +395,12 @@ declare global {
     dxSparkline(options: string): any;
     dxSparkline(options: string, ...params: any[]): any;
 
+    dxSpeechToText(): JQuery;
+    dxSpeechToText(options: 'instance'): DevExpress.ui.dxSpeechToText;
+    dxSpeechToText(options: DevExpress.ui.dxSpeechToText.Properties): JQuery;
+    dxSpeechToText(options: string): any;
+    dxSpeechToText(options: string, ...params: any[]): any;
+
     dxSpeedDialAction(): JQuery;
     dxSpeedDialAction(options: 'instance'): DevExpress.ui.dxSpeedDialAction;
     dxSpeedDialAction(
@@ -27732,6 +27738,138 @@ declare module DevExpress.ui {
     onReorder?: (e: DevExpress.ui.dxSortable.ReorderEvent) => void;
   }
   /**
+   * [descr:dxSpeechToText]
+   */
+  export class dxSpeechToText extends Widget<DevExpress.ui.dxSpeechToText.Properties> {}
+  module dxSpeechToText {
+    /**
+     * [descr:_ui_speech_to_text_ContentReadyEvent]
+     */
+    export type ContentReadyEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_DisposingEvent]
+     */
+    export type DisposingEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_ErrorEvent]
+     */
+    export type ErrorEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    export type ExplicitTypes = {
+      Properties: Properties;
+      ContentReadyEvent: ContentReadyEvent;
+      DisposingEvent: DisposingEvent;
+      InitializedEvent: InitializedEvent;
+      OptionChangedEvent: OptionChangedEvent;
+      StartClickEvent: StartClickEvent;
+      StopClickEvent: StopClickEvent;
+      ResultEvent: ResultEvent;
+      ErrorEvent: ErrorEvent;
+    };
+    /**
+     * [descr:_ui_speech_to_text_InitializedEvent]
+     */
+    export type InitializedEvent =
+      DevExpress.common.core.events.InitializedEventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_OptionChangedEvent]
+     */
+    export type OptionChangedEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> &
+        DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:dxSpeechToTextOptions]
+     */
+    export interface Properties extends WidgetOptions<dxSpeechToText> {
+      /**
+       * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
+       */
+      customSpeechRecognizer?: CustomSpeechRecognizer;
+
+      /**
+       * [descr:dxSpeechToTextOptions.startText]
+       */
+      startText?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stopText]
+       */
+      stopText?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stylingMode]
+       */
+      stylingMode?: DevExpress.common.ButtonStyle;
+
+      /**
+       * [descr:dxSpeechToTextOptions.startIcon]
+       */
+      startIcon?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stopIcon]
+       */
+      stopIcon?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.type]
+       */
+      type?: DevExpress.common.ButtonType | string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.speechRecognitionConfig]
+       */
+      speechRecognitionConfig?:
+        | SpeechRecognitionConfig
+        | { [key: string]: any };
+
+      /**
+       * [descr:dxSpeechToTextOptions.onStartClick]
+       */
+      onStartClick?: ((e: StartClickEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onStopClick]
+       */
+      onStopClick?: ((e: StopClickEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onResult]
+       */
+      onResult?: ((e: ResultEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onError]
+       */
+      onError?: ((e: ErrorEvent) => void) | undefined;
+    }
+    /**
+     * [descr:_ui_speech_to_text_ResultEvent]
+     */
+    export type ResultEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
+     * [descr:_ui_speech_to_text_StartClickEvent]
+     */
+    export type StartClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxSpeechToText,
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+    >;
+    /**
+     * [descr:_ui_speech_to_text_StopClickEvent]
+     */
+    export type StopClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxSpeechToText,
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+    >;
+  }
+  /**
    * [descr:dxSpeedDialAction]
    */
   export class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> {}
@@ -34090,6 +34228,51 @@ declare module DevExpress.ui.dxScheduler {
      * [descr:dxSchedulerToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
+  };
+}
+declare module DevExpress.ui.dxSpeechToText {
+  /**
+   * [descr:CustomSpeechRecognizer]
+   */
+  export type CustomSpeechRecognizer = {
+    /**
+     * [descr:CustomSpeechRecognizer.enabled]
+     */
+    enabled?: boolean;
+
+    /**
+     * [descr:CustomSpeechRecognizer.isListening]
+     */
+    isListening?: boolean;
+  };
+  /**
+   * [descr:SpeechRecognitionConfig]
+   */
+  export type SpeechRecognitionConfig = {
+    /**
+     * [descr:SpeechRecognitionConfig.continuous]
+     */
+    continuous?: boolean;
+
+    /**
+     * [descr:SpeechRecognitionConfig.grammars]
+     */
+    grammars?: string[];
+
+    /**
+     * [descr:SpeechRecognitionConfig.interimResults]
+     */
+    interimResults?: boolean;
+
+    /**
+     * [descr:SpeechRecognitionConfig.lang]
+     */
+    lang?: string;
+
+    /**
+     * [descr:SpeechRecognitionConfig.maxAlternatives]
+     */
+    maxAlternatives?: number;
   };
 }
 declare module DevExpress.ui.dxSplitter {

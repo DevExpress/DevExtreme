@@ -83,6 +83,59 @@ QUnit.module('Dialogs', moduleConfig, () => {
         // Enabled boolean attributes return '' in jQuery 4+ and their name ('readonly') in jQuery 3
         assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
     });
+
+    test('task editing then show resource dialog and restore task state', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick(10);
+        showTaskEditDialog(this.instance);
+        this.clock.tick(10);
+        let $dialog = $('body').find(Consts.POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+
+        const $inputs = $dialog.find(Consts.INPUT_TEXT_EDITOR_SELECTOR);
+        assert.equal($inputs.eq(0).val(), data.tasks[0].title, 'title text is shown');
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), data.tasks[0].start.getTime(), 'start task text is shown');
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), data.tasks[0].end.getTime(), 'end task text is shown');
+        assert.equal($inputs.eq(3).val(), data.tasks[0].progress + '%', 'progress text is shown');
+        const testTitle = 'text';
+        const testProgress = 0.99;
+        const testDate = new Date();
+
+        let titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        let progressTextBox = $dialog.find('.dx-numberbox').eq(0).dxNumberBox('instance');
+        let startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        let endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+
+        titleTextBox.option('value', testTitle);
+        progressTextBox.option('value', testProgress);
+        startTextBox.option('value', testDate);
+        endTextBox.option('value', testDate);
+
+        const $showResourceDialogButton = $dialog.find('.dx-popup-content').find('.dx-button').eq(0);
+        $showResourceDialogButton.trigger('dxclick');
+        this.clock.tick(10);
+
+        const $closeResourceDialogButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $closeResourceDialogButton.trigger('dxclick');
+        this.clock.tick(10);
+
+        $dialog = $('body').find(Consts.POPUP_SELECTOR);
+
+        // Restore editors after closing resource dialog
+        titleTextBox = $dialog.find('.dx-textbox').eq(0).dxTextBox('instance');
+        progressTextBox = $dialog.find('.dx-numberbox').eq(0).dxNumberBox('instance');
+        startTextBox = $dialog.find('.dx-datebox').eq(0).dxDateBox('instance');
+        endTextBox = $dialog.find('.dx-datebox').eq(1).dxDateBox('instance');
+
+        assert.equal(titleTextBox.option('value'), testTitle, 'title is restored');
+        assert.equal(progressTextBox.option('value'), testProgress, 'progress is restored');
+        assert.equal(new Date(startTextBox.option('value')).getTime(), testDate.getTime(), 'start date is restored');
+        assert.equal(new Date(endTextBox.option('value')).getTime(), testDate.getTime(), 'end date is restored');
+    });
+
+
     test('showTaskDetailsDialog', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);

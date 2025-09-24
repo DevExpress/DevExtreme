@@ -474,7 +474,7 @@ export const getGroupPanelData = (
     .map((group) => {
       const result = [] as GroupRenderItem[];
       const {
-        resourceName, resourceIndex, items,
+        resourceName, resourceIndex, items, data,
       } = group;
 
       for (let i = 0; i < repeatCount; i += 1) {
@@ -484,7 +484,7 @@ export const getGroupPanelData = (
           color,
           key: `${i}_${resourceIndex}_${stringifyId(id)}`,
           resourceName,
-          data: items[index],
+          data: data?.[index],
         }) as GroupRenderItem));
       }
 

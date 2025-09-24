@@ -12,19 +12,6 @@ const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
 const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 
-export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
-  indicatorTime: undefined,
-  renovateRender: true,
-  _draggingMode: 'outlook',
-  _appointmentTooltipOffset: { x: 0, y: 0 },
-  _appointmentCountPerCell: 2,
-  _collectorOffset: 0,
-  _appointmentOffset: 26,
-  appointmentPopupTemplate: 'appointmentPopup',
-  disabledExpr: 'disabled',
-  allowMultipleCellSelection: true,
-};
-
 export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   views: ['day', 'week'],
   currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
@@ -106,6 +93,24 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
       { location: 'after', name: 'viewSwitcher', locateInMenu: 'auto' },
     ],
   },
+};
+
+export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
+  indicatorTime: undefined,
+  renovateRender: true,
+  editing: {
+    legacyForm: false,
+    // @ts-expect-error copy from default so that you can rewrite it
+    ...DEFAULT_SCHEDULER_OPTIONS.editing,
+  },
+  _draggingMode: 'outlook',
+  _appointmentTooltipOffset: { x: 0, y: 0 },
+  _appointmentCountPerCell: 2,
+  _collectorOffset: 0,
+  _appointmentOffset: 26,
+  appointmentPopupTemplate: 'appointmentPopup',
+  disabledExpr: 'disabled',
+  allowMultipleCellSelection: true,
 };
 
 export const DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = {

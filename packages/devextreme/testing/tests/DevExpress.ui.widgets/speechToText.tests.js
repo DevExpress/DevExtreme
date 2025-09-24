@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
 import SpeechToText from 'ui/speech_to_text';
 import Button from 'ui/button';
@@ -20,14 +21,31 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+class SpeechRecognitionMock {
+    constructor() {
+        this.start = sinon.spy();
+        this.stop = sinon.spy();
+        this.onresult = null;
+        this.onerror = null;
+        this.onend = null;
+    }
+}
+
 const moduleConfig = {
     beforeEach: function() {
+        this.originalSpeechRecognition = window.SpeechRecognition;
+
+        window.SpeechRecognition = SpeechRecognitionMock;
+
         const init = (options = {}, selector = '#speechToText') => {
             this.$element = $(selector).dxSpeechToText(options);
             this.instance = this.$element.dxSpeechToText('instance');
         };
 
         init();
+
+        this.getAdapter = () => this.instance._speechRecognitionAdapter;
+        this.getSpeechRecognition = () => this.getAdapter()._speechRecognition;
 
         this.reinit = (options, selector) => {
             this.instance.dispose();
@@ -39,7 +57,10 @@ const moduleConfig = {
         this.getButtonInstance = () => {
             return Button.getInstance(this.getButton());
         };
-    }
+    },
+    afterEach: function() {
+        window.SpeechRecognition = this.originalSpeechRecognition;
+    },
 };
 
 QUnit.module('Initialization', moduleConfig, () => {
@@ -185,6 +206,23 @@ QUnit.module('State Management', moduleConfig, () => {
         });
 
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'custom engine works after enabling');
+    });
+
+    QUnit.test('INITIAL state should not have animation by default', function(assert) {
+        const animation = this.$element.css('animation');
+
+        assert.strictEqual(animation, 'none 0s ease 0s 1 normal none running');
+    });
+
+    QUnit.test('LISTENING state should have animation by default', function(assert) {
+        const $button = this.getButton();
+
+        $button.trigger('dxclick');
+
+        const animation = this.$element.css('animation');
+        const easeInOutAnimationEnabled = animation.includes('1.5s ease-in-out 0.5s infinite normal none running');
+
+        assert.strictEqual(easeInOutAnimationEnabled, true);
     });
 });
 
@@ -541,6 +579,20 @@ QUnit.module('Options', moduleConfig, () => {
             assert.strictEqual(buttonInstance.option('icon'), value, `stop icon is ${value}`);
         });
     });
+
+    QUnit.test('should apply hint option on init', function(assert) {
+        this.reinit({
+            hint: 'hint',
+        });
+
+        assert.strictEqual(this.$element.attr('title'), 'hint', 'title is added');
+    });
+
+    QUnit.test('should apply hint option at runtime', function(assert) {
+        this.instance.option('hint', 'hint');
+
+        assert.strictEqual(this.$element.attr('title'), 'hint', 'title is added');
+    });
 });
 
 QUnit.module('Component Lifecycle', moduleConfig, () => {
@@ -608,5 +660,166 @@ QUnit.module('Component Lifecycle', moduleConfig, () => {
 
         assert.strictEqual(handleClickSpy1.callCount, 1, 'old handler not called after reinit');
         assert.strictEqual(handleClickSpy2.callCount, 1, 'new handler called once after reinit');
+    });
+});
+
+QUnit.module('SpeechRecognitionAdapter integration', moduleConfig, () => {
+    QUnit.test('should initialize SpeechRecognitionAdapter when available', function(assert) {
+        this.reinit();
+
+        const speechRecognitionAdapter = this.getAdapter();
+
+        assert.ok(speechRecognitionAdapter, 'speech recognition adapter initialized');
+    });
+
+    QUnit.test('should pass initial speechRecognitionConfig to adapter', function(assert) {
+        this.reinit({
+            speechRecognitionConfig: { lang: 'en-US' }
+        });
+
+        const speechRecognition = this.getSpeechRecognition();
+
+        assert.strictEqual(speechRecognition.lang, 'en-US', 'initial config passed to adapter');
+    });
+
+    QUnit.test('should pass actions as event handlers to adapter', function(assert) {
+        const actionsSpies = {
+            onResult: sinon.spy(),
+            onError: sinon.spy(),
+        };
+
+        this.reinit(actionsSpies);
+
+        const speechRecognition = this.getSpeechRecognition();
+
+        const actions = [
+            { option: 'onResult', method: 'onresult', spy: actionsSpies.onResult, event: { type: 'result' } },
+            { option: 'onError', method: 'onerror', spy: actionsSpies.onError, event: { type: 'error' } },
+        ];
+
+        actions.forEach(({ option, method, spy, event }) => {
+            speechRecognition[method](event);
+            const args = spy.firstCall.args[0];
+
+            assert.ok(spy.calledOnce, `${option} action passed to adapter`);
+
+            assert.ok(args.component instanceof SpeechToText, `${option}: component is passed`);
+            assert.strictEqual(args.element, this.instance.element(), `${option}: element is passed`);
+            assert.strictEqual(args.event, event, `${option}: native event passed correctly`);
+        });
+    });
+
+    QUnit.test('should call start on speechRecognitionAdapter when start button clicked', function(assert) {
+        this.reinit();
+        const speechRecognitionAdapter = this.getAdapter();
+        const startSpy = sinon.spy(speechRecognitionAdapter, 'start');
+
+        this.getButton().trigger('dxclick');
+
+        assert.ok(startSpy.calledOnce, 'start called once on button click');
+    });
+
+    QUnit.test('should call stop on speechRecognitionAdapter when stop button clicked', function(assert) {
+        this.reinit();
+        const speechRecognitionAdapter = this.getAdapter();
+        const stopSpy = sinon.spy(speechRecognitionAdapter, 'stop');
+
+
+        this.getButton().trigger('dxclick');
+        this.getButton().trigger('dxclick');
+
+        assert.ok(stopSpy.calledOnce, 'stop called once on button click');
+    });
+
+    QUnit.test('should handle end event via adapter', function(assert) {
+        this.reinit();
+
+        const speechRecognition = this.getSpeechRecognition();
+        const $button = this.getButton();
+
+        $button.trigger('dxclick');
+
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'listening state active');
+
+        speechRecognition.onend();
+
+        assert.notOk(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state reset after end event');
+    });
+
+    QUnit.test('should re-apply config when speechRecognitionConfig option changes', function(assert) {
+        this.reinit();
+
+        const adapter = this.getAdapter();
+        const applyConfigSpy = sinon.spy(adapter, 'applyConfig');
+
+        this.instance.option('speechRecognitionConfig', { lang: 'fr-FR' });
+
+        assert.ok(applyConfigSpy.calledOnce, 'applyConfig called on option change');
+        assert.strictEqual(this.getSpeechRecognition().lang, 'fr-FR', 'config updated in recognition instance');
+    });
+
+    QUnit.test('should update onResult/onError handlers at runtime', function(assert) {
+        const initialActionsSpies = {
+            onResult: sinon.spy(),
+            onError: sinon.spy(),
+        };
+        const updatedActionsSpies = {
+            onResult: sinon.spy(),
+            onError: sinon.spy(),
+        };
+
+        this.reinit(initialActionsSpies);
+
+        const speechRecognition = this.getSpeechRecognition();
+
+        const actions = [
+            { prop: 'onresult', option: 'onResult', initial: initialActionsSpies.onResult, updated: updatedActionsSpies.onResult, event: { type: 'result' } },
+            { prop: 'onerror', option: 'onError', initial: initialActionsSpies.onError, updated: updatedActionsSpies.onError, event: { type: 'error' } },
+        ];
+
+        actions.forEach(({ prop, option, initial, updated, event }) => {
+            this.instance.option(option, updated);
+
+            speechRecognition[prop](event);
+
+            assert.ok(updated.calledOnce, `${option} updated handler called`);
+            assert.notOk(initial.called, `${option} initial handler not called`);
+            assert.strictEqual(updated.firstCall.args[0].event, event, `${option} event passed correctly`);
+        });
+    });
+
+    QUnit.test('should allow subscribing to result/error via .on()', function(assert) {
+        assert.expect(6);
+
+        this.reinit();
+
+        const events = [
+            { eventName: 'result', trigger: 'onresult' },
+            { eventName: 'error', trigger: 'onerror' },
+        ];
+
+        const speechRecognition = this.getSpeechRecognition();
+
+        events.forEach(({ eventName, trigger }) => {
+            this.instance.on(eventName, (e) => {
+                assert.ok(e.component instanceof SpeechToText, `${eventName}: component is passed`);
+                assert.strictEqual(e.element, this.instance.element(), `${eventName}: element is passed`);
+                assert.strictEqual(e.event.type, eventName, `${eventName}: event type correct`);
+            });
+
+            speechRecognition[trigger]({ type: eventName });
+        });
+    });
+
+    QUnit.test('should dispose adapter and set it to null', function(assert) {
+        this.reinit();
+
+        const adapter = this.getAdapter();
+        const disposeSpy = sinon.spy(adapter, 'dispose');
+
+        this.instance._dispose();
+
+        assert.ok(disposeSpy.calledOnce, 'adapter.dispose called');
+        assert.strictEqual(this.getAdapter(), null, 'adapter set to null after dispose');
     });
 });

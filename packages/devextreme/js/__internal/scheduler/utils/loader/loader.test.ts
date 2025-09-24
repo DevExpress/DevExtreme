@@ -31,8 +31,10 @@ describe('resource loader', () => {
 
       await loader.load();
       expect(loader.items).toEqual(transformedData);
+      expect(loader.data).toEqual(data);
       loader.dispose();
       expect(loader.items).toEqual([]);
+      expect(loader.data).toEqual([]);
       expect(loader.dataSource?.items()).toBe(undefined);
     });
   });
@@ -48,8 +50,10 @@ describe('resource loader', () => {
 
       await loader.load();
       expect(loader.items).toEqual(transformedData);
+      expect(loader.data).toEqual(data);
       loader.dispose();
       expect(loader.items).toEqual([]);
+      expect(loader.data).toEqual([]);
       expect(loader.dataSource?.items()).toBe(data);
     });
 
@@ -68,6 +72,7 @@ describe('resource loader', () => {
       expect(loader.isLoaded()).toBe(false);
       await Promise.all([loader.load(), loader.load()]);
       await loader.load();
+      expect(loader.data).toEqual(data);
       expect(loader.items).toEqual(transformedData);
       expect(loader.isLoaded()).toBe(true);
       expect(loadCount).toBe(1);
@@ -83,6 +88,7 @@ describe('resource loader', () => {
       const loader = new BaseLoader({ dataSource });
 
       expect(loader.isLoaded()).toBe(true);
+      expect(loader.data).toEqual(data);
       expect(loader.items).toEqual(transformedData);
     });
 
@@ -94,6 +100,7 @@ describe('resource loader', () => {
 
       await dataSource.load();
       expect(loader.isLoaded()).toBe(true);
+      expect(loader.data).toEqual(data);
       expect(loader.items).toEqual(transformedData);
     });
   });

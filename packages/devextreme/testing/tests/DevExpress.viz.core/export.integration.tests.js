@@ -1,7 +1,7 @@
 import '__internal/viz/tree_map/tree_map';
 import $ from 'jquery';
 import { Renderer, ExportMenu } from '../../helpers/vizMocks.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import clientExporter from 'exporter';
 import exportModule from 'viz/core/export';
 import { Deferred } from 'core/utils/deferred';

@@ -65,6 +65,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   isColumnFixed,
+  isColumnNameRequired,
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
@@ -88,6 +89,7 @@ export interface Column extends ColumnBase {
   groupIndex?: number;
   type?: string;
   visibleWidth?: string | number;
+  hidingPriority?: number;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -1552,7 +1554,9 @@ export class ColumnsController extends modules.Controller {
   }
 
   public setName(column) {
-    column.name = column.name || column.dataField || column.type;
+    if (!isColumnNameRequired(column)) {
+      column.name = column.name || column.dataField || column.type;
+    }
   }
 
   public setUserState(state) {
@@ -1593,18 +1597,23 @@ export class ColumnsController extends modules.Controller {
 
   public _checkColumns() {
     const usedNames = {};
-    let hasEditableColumnWithoutName = false;
     const duplicatedNames: any = [];
+    let hasEditableColumnWithoutName = false;
+    let hasColumnsWithoutRequiredNames = false;
+
     this._columns.forEach((column) => {
       const { name } = column;
       const isBand = column.columns?.length;
       const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
+
       if (name) {
         if (usedNames[name]) {
           duplicatedNames.push(`"${name}"`);
         }
 
         usedNames[name] = true;
+      } else if (isColumnNameRequired(column)) {
+        hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
       }
@@ -1612,6 +1621,10 @@ export class ColumnsController extends modules.Controller {
 
     if (duplicatedNames.length) {
       errors.log('E1059', duplicatedNames.join(', '));
+    }
+
+    if (hasColumnsWithoutRequiredNames) {
+      errors.log('E1066');
     }
 
     if (hasEditableColumnWithoutName) {
