@@ -18,7 +18,7 @@ const includePaths = [path.join(dataPath, 'scss', 'widgets', 'generic'), path.jo
 const file = path.join(dataPath, 'scss', 'bundles', 'dx.light.scss');
 
 const expectedCss = ({
-                       fontFamily = '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
+                       fontFamily = '-apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
                        color = '#337ab7',
                        bgColor = 'transparent'
 } = {}) => `.dx-accordion {
