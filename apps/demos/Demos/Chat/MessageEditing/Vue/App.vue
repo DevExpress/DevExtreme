@@ -56,7 +56,7 @@ import {
   allowDeletingLabel,
 } from './data.ts';
 
-type CustomStrategyOptions = { component: DxChat['instance'], message: DxChatTypes.Message };
+type CustomStrategyOptions = { component: typeof DxChat['instance'], message: DxChatTypes.Message };
 const store = [...initialMessages];
 
 const customStore = new CustomStore({
