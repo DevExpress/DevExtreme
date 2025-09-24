@@ -580,6 +580,7 @@ QUnit.module('Options', () => {
             allowResizing: true,
             allowDragging: true,
             allowTimeZoneEditing: false,
+            legacyForm: false
         };
 
         if(devices.real().platform !== 'generic') {
