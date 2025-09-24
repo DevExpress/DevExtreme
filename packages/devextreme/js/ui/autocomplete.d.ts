@@ -229,7 +229,7 @@ export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:string | null | undefined
+     * @param1 value:string | null
      */
     reset(value?: Properties['value']): void;
 }
