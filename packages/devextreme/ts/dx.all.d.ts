@@ -34194,19 +34194,19 @@ declare module DevExpress.ui.dxScheduler {
     items: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
   };
   /**
-   * [descr:dxSchedulerForm]
+   * [descr:Form]
    */
   export type Form = {
     /**
-     * [descr:dxSchedulerForm.items]
+     * [descr:Form.items]
      */
     items?: Array<DevExpress.ui.dxForm.Item>;
     /**
-     * [descr:dxSchedulerForm.onSaved]
+     * [descr:Form.onSaved]
      */
     onSaved?: (formData: any) => void;
     /**
-     * [descr:dxSchedulerForm.onCanceled]
+     * [descr:Form.onCanceled]
      */
     onCanceled?: (formData: any) => void;
   };

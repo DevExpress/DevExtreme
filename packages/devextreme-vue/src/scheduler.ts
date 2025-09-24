@@ -32,7 +32,7 @@ import {
  RecurrenceEditMode,
  dxSchedulerScrolling,
  dxSchedulerToolbar,
- dxSchedulerForm,
+ Form,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
@@ -678,7 +678,7 @@ const DxEditingConfig = {
     allowResizing: Boolean,
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean,
-    form: Object as PropType<dxSchedulerForm | Record<string, any>>
+    form: Object as PropType<Form | Record<string, any>>
   }
 };
 
