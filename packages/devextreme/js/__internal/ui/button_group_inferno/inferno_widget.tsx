@@ -32,7 +32,7 @@ export abstract class InfernoWidget<TProperties extends {}> extends Widget<TProp
     });
   }
 
-  public _initMarkup(): void {
+  _initMarkup(): void {
     super._initMarkup();
 
     this.firstRender = true;
@@ -44,7 +44,7 @@ export abstract class InfernoWidget<TProperties extends {}> extends Widget<TProp
     rerender();
   }
 
-  public _clean(): void {
+  _clean(): void {
     this.cleanupRenderSubscription?.();
 
     infernoRenderer.renderIntoContainer(null, this.$element().get(0), true);

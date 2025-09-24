@@ -3,26 +3,27 @@ import type {
 } from '@js/ui/collection/ui.collection_widget.base';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 
+const EMPTY_COLLECTION = 'dx-empty-collection';
+
 export type CollectionProps<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TProperties extends CollectionWidgetOptions<any> = CollectionWidgetOptions<any>,
 > = TProperties & {};
 
-export interface CollectionChildrenProps {
-  isSelected: (index: number) => boolean;
-}
-
 export class CollectionComponent<
   TProps extends CollectionProps,
 > extends BaseInfernoComponent<TProps> {
-  isSelected = (index: number): boolean => index === this.props.selectedIndex;
-
   render(): JSX.Element {
+    const { items = [], noDataText } = this.props;
+
+    if (!items.length) {
+      return <div className={EMPTY_COLLECTION}>{noDataText}</div>;
+    }
+
     // @ts-expect-error ts
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.props.children?.({
       ...this.props,
-      isSelected: this.isSelected,
     });
   }
 }
