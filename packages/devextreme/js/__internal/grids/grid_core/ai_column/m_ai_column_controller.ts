@@ -2,10 +2,10 @@
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
-import modules from '../m_modules';
+import { Controller } from '../m_modules';
 import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
 
-export class AiColumnController extends modules.Controller {
+export class AiColumnController extends Controller {
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;

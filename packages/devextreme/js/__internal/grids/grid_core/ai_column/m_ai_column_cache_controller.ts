@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import modules from '../m_modules';
+import { Controller } from '../m_modules';
 
-export class AiColumnCacheController extends modules.Controller {
+export class AiColumnCacheController extends Controller {
   public clearCache(columnName: string): void {
 
   }
