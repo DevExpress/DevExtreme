@@ -111,6 +111,7 @@ export default class dxSwitch extends Editor<dxSwitchOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:boolean
      */
     reset(value?: Properties['value']): void;
 }

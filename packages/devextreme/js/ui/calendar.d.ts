@@ -230,7 +230,7 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Date|number|string|Array<Date|number|string|null>|null
+     * @param1 value:Date | number | string | Array<Date | number | string | null> | null
      */
     reset(value?: Properties['value']): void;
 }

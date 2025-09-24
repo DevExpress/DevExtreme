@@ -119,6 +119,7 @@ export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Array<number>
      */
     reset(value?: Properties['value']): void;
  }

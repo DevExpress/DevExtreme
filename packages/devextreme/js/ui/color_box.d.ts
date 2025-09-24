@@ -228,6 +228,7 @@ export default class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:string | null
      */
     reset(value?: Properties['value']): void;
 }
