@@ -283,6 +283,12 @@ class SpeechToText extends Widget<Properties> {
     this.$element().toggleClass(SPEECH_TO_TEXT_LISTENING_CLASS, this._isListening());
   }
 
+  private _updateSpeechRecognitionConfig(args: OptionChanged<SpeechToTextProperties>): void {
+    const options = Widget.getOptionsFromContainer(args);
+
+    this._speechRecognitionAdapter?.applyConfig(options);
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
@@ -292,7 +298,7 @@ class SpeechToText extends Widget<Properties> {
         break;
 
       case 'speechRecognitionConfig':
-        this._speechRecognitionAdapter?.applyConfig(value);
+        this._updateSpeechRecognitionConfig(args);
         break;
 
       case 'activeStateEnabled':

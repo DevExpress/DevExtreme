@@ -941,6 +941,18 @@ QUnit.module('SpeechRecognitionAdapter integration', moduleConfig, () => {
         assert.strictEqual(this.getSpeechRecognition().lang, 'fr-FR', 'config updated in recognition instance');
     });
 
+    QUnit.test('should apply nested option change for speechRecognitionConfig', function(assert) {
+        this.reinit();
+
+        const adapter = this.getAdapter();
+        const applyConfigSpy = sinon.spy(adapter, 'applyConfig');
+
+        this.instance.option('speechRecognitionConfig.lang', 'fr-FR');
+
+        assert.ok(applyConfigSpy.calledOnce, 'applyConfig called on nested option change');
+        assert.strictEqual(this.getSpeechRecognition().lang, 'fr-FR', 'config updated in recognition instance');
+    });
+
     QUnit.test('should update onResult/onError handlers at runtime', function(assert) {
         const initialActionsSpies = {
             onResult: sinon.spy(),
