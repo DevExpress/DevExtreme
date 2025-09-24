@@ -159,8 +159,8 @@
     "customManagers": [
         {
             "customType": "regex",
-            "fileMatch": [
-                "^\\.github\\/.+\\.ya?ml$"
+            "managerFilePatterns": [
+                "/^\\.github\\/.+\\.ya?ml$/"
             ],
             "matchStrings": [
                 "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)*)['\"]?(\\s|$)"
@@ -171,8 +171,8 @@
         },
         {
             "customType": "regex",
-            "fileMatch": [
-                "^\\.github\\/.+\\.ya?ml$"
+            "managerFilePatterns": [
+                "/^\\.github\\/.+\\.ya?ml$/"
             ],
             "matchStrings": [
                 "chrome-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)(-1)?['\"]?(\\s|$)"
@@ -183,8 +183,8 @@
         },
         {
             "customType": "regex",
-            "fileMatch": [
-                "^\\.github\\/.+\\.ya?ml$"
+            "managerFilePatterns": [
+                "/^\\.github\\/.+\\.ya?ml$/"
             ],
             "matchStrings": [
                 "firefox-version:\\s*['\"]?(?<currentValue>\\d+(\\.\\d+)+)['\"]?(\\s|$)"

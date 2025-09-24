@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import { Renderer } from '../../helpers/vizMocks.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import pointerEvents from 'common/core/events/pointer';
 
 import 'viz/sparkline';

@@ -18,6 +18,7 @@ Ng.makeMetadata({
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
+    removeMembers(/\/speech_to_text:/),
   ],
   variables: {
     collectionItems: [...commonSmdCollectionItems],

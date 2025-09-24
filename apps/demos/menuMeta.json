@@ -4759,11 +4759,12 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Autocomplete",
-            "Modules": "whatwg-fetch",
+            "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Models/SampleData/Names.cs",
               "/Models/SampleData/Surnames.cs",
-              "/Models/SampleData/Cities.cs"
+              "/Models/SampleData/Cities.cs",
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs"
             ],
             "ShowOnMainPage": true
           }

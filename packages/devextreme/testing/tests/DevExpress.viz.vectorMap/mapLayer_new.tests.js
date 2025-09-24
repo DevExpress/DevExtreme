@@ -5,14 +5,14 @@ import {
 } from '../../helpers/vizMocks.js';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import titleModule from 'viz/core/title';
-import projectionEnginesModule from 'viz/vector_map/projection';
+import { projection } from 'viz/vector_map/projection';
 import controlBarModule from 'viz/vector_map/control_bar/control_bar';
 import legendModule from 'viz/vector_map/legend';
 import tooltipModule from 'viz/core/tooltip';
 import tooltipViewerModule from 'viz/vector_map/tooltip_viewer';
 import { DataSource } from 'common/data/data_source/data_source';
 import exportMenuModule from 'viz/core/export';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 
 import '__internal/viz/vector_map/vector_map';
 
@@ -31,7 +31,7 @@ controlBarModule.ControlBar = stubClass(controlBarModule.ControlBar);
 legendModule.LegendsControl = stubClass(legendModule.LegendsControl);
 tooltipViewerModule.TooltipViewer = stubClass(tooltipViewerModule.TooltipViewer);
 
-const simpleProjection = projectionEnginesModule.projection({
+const simpleProjection = projection({
     aspectRatio: 4 / 3,
 
     to: function(coordinates) {

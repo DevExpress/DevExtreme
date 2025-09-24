@@ -4,8 +4,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { DxAutocompleteModule } from 'devextreme-angular';
-import { CustomStore, ODataStore } from 'devextreme-angular/common/data';
+import { CustomStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -35,7 +36,7 @@ export class AppComponent {
 
   positions: string[];
 
-  states: ODataStore;
+  states: CustomStore;
 
   clientsStore: CustomStore;
 
@@ -73,11 +74,9 @@ export class AppComponent {
           .catch(() => { throw 'Data Loading Error'; });
       },
     });
-    this.states = new ODataStore({
-      version: 2,
-      url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
-      key: 'Sate_ID',
-      keyType: 'Int32',
+    this.states = AspNetData.createStore({
+      loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+      key: 'ID',
     });
     this.names = service.getNames();
     this.surnames = service.getSurnames();
