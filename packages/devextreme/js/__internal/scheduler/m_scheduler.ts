@@ -1972,6 +1972,7 @@ class Scheduler extends Widget<any> {
       ],
       popupOptions: {
         wrapperAttr: { class: 'dx-dialog' },
+        onHidden: () => { this._appointments?.focus(); },
       },
     } as any);
 
