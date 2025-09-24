@@ -526,6 +526,44 @@ QUnit.module('SmartPaste', () => {
             });
         });
 
+        [false, true].forEach((isPromise) => {
+            QUnit.test(`LoadPanel is hidden on smartPaste cancelled: isPromise=${isPromise}`, function(assert) {
+                const done = assert.async();
+                const onSmartPasted = sinon.spy();
+                let completionCallback;
+
+                const smartPaste = sinon.stub().callsFake((params, callbacks) => {
+                    completionCallback = () => callbacks.onComplete([]);
+                    return () => {};
+                });
+                const aiIntegration = { smartPaste: smartPaste };
+                const form = setupFormWithAi({
+                    aiIntegration,
+                    onSmartPasting: (e) => { e.cancel = isPromise ? Promise.resolve(true) : true; },
+                    onSmartPasted,
+                });
+
+                assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 0, 'LoadPanel is not present initially');
+
+                form.smartPaste('text').then(() => {
+                    setTimeout(() => {
+                        assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is shown during operation');
+                        assert.strictEqual(form.option('disabled'), true, 'Form is disabled during operation');
+
+                        completionCallback();
+
+                        setTimeout(() => {
+                            assert.strictEqual(form.$element().find(`.${FORM_LOAD_PANEL_CLASS}`).length, 1, 'LoadPanel is still present but hidden');
+                            assert.strictEqual(form._loadPanel.option('visible'), false, 'LoadPanel is hidden after smart paste was canceled');
+                            assert.strictEqual(form.option('disabled'), false, 'Form is not disabled after smart paste was canceled');
+
+                            done();
+                        }, 10);
+                    }, 10);
+                });
+            });
+        });
+
         QUnit.test('LoadPanel not hidden on aiIntegration update during command execution', function(assert) {
             if(!navigator.clipboard) {
                 assert.ok(true, 'clipboard not supported in this environment');
