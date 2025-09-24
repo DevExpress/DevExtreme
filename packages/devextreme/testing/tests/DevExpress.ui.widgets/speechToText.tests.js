@@ -1,7 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 import SpeechToText from 'ui/speech_to_text';
 import Button from 'ui/button';
+import devices from '__internal/core/m_devices';
+import themes from 'ui/themes';
 
 import 'generic_light.css!';
 
@@ -15,6 +18,9 @@ const BUTTON_MODE_TEXT_CLASS = 'dx-button-mode-text';
 const BUTTON_MODE_OUTLINED_CLASS = 'dx-button-mode-outlined';
 const BUTTON_TYPE_DANGER_CLASS = 'dx-button-danger';
 const BUTTON_TYPE_PRIMARY_CLASS = 'dx-button-primary';
+
+const INKRIPPLE_CLASS = 'dx-inkripple';
+const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
 
 QUnit.testStart(() => {
     const markup = '<div id="speechToText"></div>';
@@ -89,6 +95,7 @@ QUnit.module('Initialization', moduleConfig, () => {
             hoverStateEnabled: false,
             width: 100,
             height: 100,
+            useInkRipple: true,
         });
 
         const buttonInstance = this.getButtonInstance();
@@ -101,6 +108,70 @@ QUnit.module('Initialization', moduleConfig, () => {
         assert.strictEqual(buttonInstance.option('hoverStateEnabled'), false, 'hoverStateEnabled inherited');
         assert.strictEqual(buttonInstance.option('width'), 100, 'width inherited');
         assert.strictEqual(buttonInstance.option('height'), 100, 'height inherited');
+        assert.strictEqual(buttonInstance.option('useInkRipple'), true, 'useInkRipple inherited');
+    });
+
+    QUnit.test('should have focusStateEnabled=true on desktop device', function(assert) {
+        const originalDevice = devices.real();
+        const originalIsSimulator = devices.isSimulator;
+
+        devices.real({ deviceType: 'desktop' });
+        devices.isSimulator = () => false;
+
+        try {
+            this.reinit();
+            const { focusStateEnabled } = this.instance.option();
+
+            assert.strictEqual(focusStateEnabled, true, 'focusStateEnabled is true on desktop');
+        } finally {
+            devices.real(originalDevice);
+            devices.isSimulator = originalIsSimulator;
+        }
+    });
+
+    QUnit.test('should have focusStateEnabled=undefined on mobile device', function(assert) {
+        const originalDevice = devices.real();
+
+        devices.real({ deviceType: 'phone' });
+
+        try {
+            this.reinit();
+            const { focusStateEnabled } = this.instance.option();
+
+            assert.strictEqual(focusStateEnabled, false, 'focusStateEnabled is false on mobile');
+        } finally {
+            devices.real(originalDevice);
+        }
+    });
+
+    QUnit.test('should have useInkRipple=true for Material theme', function(assert) {
+        const originalIsMaterial = themes.isMaterial;
+
+        themes.isMaterial = () => true;
+
+        try {
+            this.reinit();
+            const { useInkRipple } = this.instance.option();
+
+            assert.strictEqual(useInkRipple, true, 'useInkRipple is true for Material theme');
+        } finally {
+            themes.isMaterial = originalIsMaterial;
+        }
+    });
+
+    QUnit.test('should have useInkRipple=false for non-Material theme', function(assert) {
+        const originalIsMaterial = themes.isMaterial;
+
+        themes.isMaterial = () => false;
+
+        try {
+            this.reinit();
+            const { useInkRipple } = this.instance.option();
+
+            assert.strictEqual(useInkRipple, false, 'useInkRipple is false for non-Material theme');
+        } finally {
+            themes.isMaterial = originalIsMaterial;
+        }
     });
 
     QUnit.test('component should have proper customSpeechRecognizer default', function(assert) {
@@ -321,6 +392,91 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.ok(onStartClickSpy1.calledOnce, 'first handler not called again');
         assert.ok(onStartClickSpy2.calledOnce, 'second handler called');
+    });
+});
+
+QUnit.module('Accessibility', moduleConfig, () => {
+    QUnit.test('should have tabindex=0 on button element', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('tabindex'), '0', 'tabindex is set to 0');
+    });
+
+    QUnit.test('should have correct role attribute', function(assert) {
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('role'), 'button', 'role is set to button');
+    });
+
+    QUnit.test('should have correct aria-label in initial state', function(assert) {
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to start voice transcription', 'aria-label for start state is correct');
+    });
+
+    QUnit.test('should have correct aria-label in listening state', function(assert) {
+        const $button = this.getButton();
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to stop voice transcription', 'aria-label for stop state is correct');
+    });
+
+    QUnit.test('should have correct aria-pressed in initial state', function(assert) {
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('aria-pressed'), 'false', 'aria-pressed is false in initial state');
+    });
+
+    QUnit.test('should have correct aria-pressed in listening state', function(assert) {
+        const $button = this.getButton();
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual($button.attr('aria-pressed'), 'true', 'aria-pressed is true in listening state');
+    });
+
+    QUnit.test('should update aria attributes when state changes', function(assert) {
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to start voice transcription', 'initial aria-label is correct');
+        assert.strictEqual($button.attr('aria-pressed'), 'false', 'initial aria-pressed is correct');
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to stop voice transcription', 'listening aria-label is correct');
+        assert.strictEqual($button.attr('aria-pressed'), 'true', 'listening aria-pressed is correct');
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to start voice transcription', 'switch to initial aria-label is correct');
+        assert.strictEqual($button.attr('aria-pressed'), 'false', 'switch to initial aria-pressed is correct');
+    });
+
+    QUnit.test('should handle aria attributes with custom speech recognizer', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+                isListening: false,
+            }
+        });
+
+        const $button = this.getButton();
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to start voice transcription', 'initial aria-label is correct with custom engine');
+        assert.strictEqual($button.attr('aria-pressed'), 'false', 'initial aria-pressed is correct with custom engine');
+
+        this.instance.option('customSpeechRecognizer', {
+            enabled: true,
+            isListening: true,
+        });
+
+        assert.strictEqual($button.attr('aria-label'), 'Press to stop voice transcription', 'aria-label updated with custom engine');
+        assert.strictEqual($button.attr('aria-pressed'), 'true', 'aria-pressed updated with custom engine');
     });
 });
 
@@ -660,6 +816,33 @@ QUnit.module('Component Lifecycle', moduleConfig, () => {
 
         assert.strictEqual(handleClickSpy1.callCount, 1, 'old handler not called after reinit');
         assert.strictEqual(handleClickSpy2.callCount, 1, 'new handler called once after reinit');
+    });
+});
+
+QUnit.module('Ink Ripple', moduleConfig, () => {
+    QUnit.test('should create ink ripple effect on click when useInkRipple is enabled', function(assert) {
+        const originalIsMaterial = themes.isMaterial;
+        const clock = sinon.useFakeTimers();
+
+        themes.isMaterial = () => true;
+
+        try {
+            this.reinit();
+            const $button = this.getButton();
+
+            $button.trigger('dxactive');
+
+            const $inkRipple = $button.find(`.${INKRIPPLE_CLASS}`);
+            assert.strictEqual($inkRipple.length, 1, 'ink ripple container is created');
+
+            const $inkRippleWave = $inkRipple.find(`.${INKRIPPLE_WAVE_CLASS}`);
+            assert.strictEqual($inkRippleWave.length, 1, 'ink ripple wave element is created because _attachFeedbackEvents is overridden');
+
+            clock.tick();
+        } finally {
+            themes.isMaterial = originalIsMaterial;
+            clock.restore();
+        }
     });
 });
 

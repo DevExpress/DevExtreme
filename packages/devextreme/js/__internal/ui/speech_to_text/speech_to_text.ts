@@ -1,14 +1,19 @@
+import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { noop } from '@js/core/utils/common';
 import type { DxEvent } from '@js/events';
-import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
+import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   Properties as SpeechToTextProperties,
 } from '@js/ui/speech_to_text';
+import { current, isMaterial } from '@js/ui/themes';
 import { SpeechRecognitionAdapter } from '@ts/core/speech_recognition_adapter';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
 
 export const SPEECH_TO_TEXT_CLASS = 'dx-speech-to-text';
 export const SPEECH_TO_TEXT_LISTENING_CLASS = 'dx-speech-to-text-listening';
@@ -32,7 +37,11 @@ const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onError',
 ];
 
-class SpeechToText extends Widget<SpeechToTextProperties> {
+type Properties = SpeechToTextProperties & {
+  useInkRipple: boolean;
+};
+
+class SpeechToText extends Widget<Properties> {
   private _button?: Button;
 
   private _speechRecognitionAdapter?: SpeechRecognitionAdapter | null;
@@ -41,17 +50,20 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
 
   private _actions!: SpeechToTextActions;
 
-  _getDefaultOptions(): SpeechToTextProperties {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      startIcon: DEFAULT_INITIAL_ICON,
-      stopIcon: DEFAULT_LISTENING_ICON,
-      startText: '',
-      stopText: '',
+      activeStateEnabled: true,
       customSpeechRecognizer: {
         enabled: false,
         isListening: false,
       },
+      hoverStateEnabled: true,
+      startIcon: DEFAULT_INITIAL_ICON,
+      stopIcon: DEFAULT_LISTENING_ICON,
+      startText: '',
+      stopText: '',
+      useInkRipple: false,
       onStartClick: undefined,
       onStopClick: undefined,
       onResult: undefined,
@@ -106,6 +118,8 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     }) || noop;
   }
 
+  _attachFeedbackEvents(): void {}
+
   private _renderButton(): void {
     this._button = this._createComponent<Button, ButtonProperties>(
       this.$element(),
@@ -117,26 +131,28 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
   private _getButtonOptions(): ButtonProperties {
     const {
       activeStateEnabled,
+      disabled,
       focusStateEnabled,
+      height,
+      hint,
       hoverStateEnabled,
       stylingMode,
       type,
-      disabled,
+      useInkRipple,
       width,
-      height,
-      hint,
     } = this.option();
 
     return {
+      activeStateEnabled,
+      disabled,
+      focusStateEnabled,
+      height,
+      hint,
+      hoverStateEnabled,
       stylingMode,
       type,
-      disabled,
+      useInkRipple,
       width,
-      height,
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      hint,
       icon: this._getCurrentIcon(),
       text: this._getCurrentText(),
       onClick: (e: ClickEvent): void => {
@@ -145,10 +161,39 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     };
   }
 
+  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
+    const rules = [
+      ...super._defaultOptionsRules(),
+      {
+        device: (): boolean => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
+        options: {
+          focusStateEnabled: true,
+        },
+      }, {
+        device: (): boolean => isMaterial(current()),
+        options: {
+          useInkRipple: true,
+        },
+      },
+    ];
+
+    return rules;
+  }
+
   private _getCurrentIcon(): string | undefined {
     const { startIcon, stopIcon } = this.option();
 
     return this._isListening() ? stopIcon : startIcon;
+  }
+
+  private _getCurrentAriaLabel(): string {
+    return this._isListening()
+      ? messageLocalization.format('dxSpeechToText-ariaLabelStop')
+      : messageLocalization.format('dxSpeechToText-ariaLabelStart');
+  }
+
+  private _getCurrentAriaPressed(): boolean {
+    return this._isListening();
   }
 
   private _getCurrentText(): string {
@@ -227,6 +272,10 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     this._button?.option({
       icon: this._getCurrentIcon(),
       text: this._getCurrentText(),
+      elementAttr: {
+        'aria-label': this._getCurrentAriaLabel(),
+        'aria-pressed': this._getCurrentAriaPressed(),
+      },
     });
   }
 
@@ -234,7 +283,7 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
     this.$element().toggleClass(SPEECH_TO_TEXT_LISTENING_CLASS, this._isListening());
   }
 
-  _optionChanged(args: OptionChanged<SpeechToTextProperties>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -246,11 +295,14 @@ class SpeechToText extends Widget<SpeechToTextProperties> {
         this._speechRecognitionAdapter?.applyConfig(value);
         break;
 
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'height':
+      case 'hint':
+      case 'hoverStateEnabled':
       case 'stylingMode':
       case 'type':
       case 'width':
-      case 'height':
-      case 'hint':
         this._button?.option(name, value);
         break;
 
