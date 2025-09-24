@@ -149,7 +149,12 @@ export const custom = function (options) {
     position: {
       boundaryOffset: { h: 10, v: 0 },
     },
-  }, options.popupOptions));
+  }, options.popupOptions, {
+    onHidden: ({ element }): void => {
+      $(element).remove();
+      options.popupOptions?.onHidden?.({ element });
+    },
+  }));
 
   const buttonOptions = options.buttons || [DEFAULT_BUTTON];
 
