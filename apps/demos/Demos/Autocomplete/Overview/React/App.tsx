@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { ODataStore, CustomStore } from 'devextreme-react/common/data';
+import { CustomStore } from 'devextreme-react/common/data';
 import { Autocomplete, type AutocompleteTypes } from 'devextreme-react/autocomplete';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
+import AspNetData from 'devextreme-aspnet-data-nojquery';
 
 function isNotEmpty(value: string) {
   return value !== undefined && value !== null && value !== '';
@@ -11,11 +12,9 @@ function isNotEmpty(value: string) {
 const positionLabel = { 'aria-label': 'Position' };
 const position = positions[0];
 
-const states = new ODataStore({
-  version: 2,
-  url: 'https://js.devexpress.com/Demos/DevAV/odata/States?$select=Sate_ID,State_Long,State_Short',
-  key: 'Sate_ID',
-  keyType: 'Int32',
+const states = AspNetData.createStore({
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+  key: 'ID',
 });
 
 const clientsStore = new CustomStore({
@@ -42,7 +41,7 @@ const clientsStore = new CustomStore({
 
 const renderState = (data) => (
   <span>
-    {data.State_Long} ({data.State_Short})
+    {data.Name} ({data.Short})
   </span>
 );
 
@@ -131,7 +130,7 @@ function App() {
             <Autocomplete
               dataSource={states}
               value={state}
-              valueExpr="State_Long"
+              valueExpr="Name"
               onValueChanged={handleStateChange}
               placeholder="Type state name..."
               itemRender={renderState}

@@ -35,7 +35,9 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
-import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
+import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
+import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
+import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
@@ -94,6 +96,7 @@ const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+export const POPUP_DIALOG_CLASS = 'dx-dialog';
 const WIDGET_SMALL_WIDTH = 400;
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
@@ -909,6 +912,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowDeleting: Boolean(editing),
       allowResizing: Boolean(editing),
       allowDragging: Boolean(editing),
+      legacyForm: false,
     };
 
     if (isObject(editing)) {
@@ -1060,7 +1064,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
-    return new AppointmentForm(scheduler);
+    return this._editing.legacyForm
+      ? new AppointmentLegacyForm(scheduler)
+      : new AppointmentForm(scheduler);
   }
 
   createAppointmentPopup(form) {
@@ -1086,8 +1092,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
       },
     };
-
-    return new AppointmentPopup(scheduler, form);
+    return this._editing.legacyForm
+      ? new AppointmentLegacyPopup(scheduler, form)
+      : new AppointmentPopup(scheduler, form);
   }
 
   _getAppointmentTooltipOptions() {
@@ -1581,7 +1588,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         { text: occurrenceText, onClick() { return RECURRENCE_EDITING_MODE.OCCURRENCE; } },
       ],
       popupOptions: {
-        wrapperAttr: { class: 'dx-dialog' },
+        wrapperAttr: { class: POPUP_DIALOG_CLASS },
+        onHidden: () => {
+          this._appointments?.focus();
+        },
       },
     } as any);
 
@@ -1879,7 +1889,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.showAppointmentPopup(resultAppointment, true);
   }
 
-  showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment?: any) {
+  showAppointmentPopup(rawAppointment?: any, createNewAppointment?: boolean, rawTargetedAppointment?: any) {
     const newRawTargetedAppointment = { ...rawTargetedAppointment };
     if (newRawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;

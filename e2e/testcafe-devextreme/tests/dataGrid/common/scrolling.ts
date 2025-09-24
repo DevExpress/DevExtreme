@@ -7,6 +7,8 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
+import { changeTheme } from '../../../helpers/changeTheme';
+import { Themes } from '../../../helpers/themes';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1908,4 +1910,71 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   }).after(async (t) => t.eval(() => {
     delete (window as TestCaseWindow).dataGridScrollableEventValues;
   }));
+});
+
+// T1270354
+[
+  { theme: Themes.genericLight, useNative: true },
+  { theme: Themes.genericLight, useNative: false },
+  { theme: Themes.materialBlue, useNative: true },
+  { theme: Themes.materialBlue, useNative: false },
+  { theme: Themes.fluentBlue, useNative: true },
+  { theme: Themes.fluentBlue, useNative: false },
+].forEach(({ theme, useNative }) => {
+  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (${theme} theme)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await dataGrid.scrollBy({ y: 10000 });
+
+    await t
+      .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-${theme}.png`, '#container'))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  })
+    .before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxDataGrid', {
+        dataSource: [...new Array(50)]
+          .fill(null)
+          .map((_, index) => ({
+            id: index,
+            machine: index,
+            totalTime: 1,
+          })),
+        keyExpr: 'id',
+        showBorders: true,
+        height: 400,
+        width: '100%',
+        columns: [
+          {
+            dataField: 'machine',
+            groupIndex: 0,
+          }, {
+            dataField: 'totalTime',
+          },
+        ],
+        scrolling: {
+          mode: 'virtual',
+          useNative,
+        },
+        grouping: {
+          autoExpandAll: false,
+        },
+        summary: {
+          totalItems: [
+            {
+              column: 'totalTime',
+              summaryType: 'sum',
+            },
+          ],
+        },
+      });
+    })
+    .after(async () => changeTheme(Themes.genericLight));
 });

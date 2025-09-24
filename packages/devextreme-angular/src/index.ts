@@ -66,6 +66,7 @@ export { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/s
 export { DxSliderComponent, DxSliderModule } from 'devextreme-angular/ui/slider';
 export { DxSortableComponent, DxSortableModule } from 'devextreme-angular/ui/sortable';
 export { DxSparklineComponent, DxSparklineModule } from 'devextreme-angular/ui/sparkline';
+export { DxSpeechToTextComponent, DxSpeechToTextModule } from 'devextreme-angular/ui/speech-to-text';
 export { DxSpeedDialActionComponent, DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 export { DxSplitterComponent, DxSplitterModule } from 'devextreme-angular/ui/splitter';
 export { DxStepperComponent, DxStepperModule } from 'devextreme-angular/ui/stepper';

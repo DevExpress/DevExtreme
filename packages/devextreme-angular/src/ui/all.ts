@@ -62,6 +62,7 @@ import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { DxSliderModule } from 'devextreme-angular/ui/slider';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxSparklineModule } from 'devextreme-angular/ui/sparkline';
+import { DxSpeechToTextModule } from 'devextreme-angular/ui/speech-to-text';
 import { DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
 import { DxSplitterModule } from 'devextreme-angular/ui/splitter';
 import { DxStepperModule } from 'devextreme-angular/ui/stepper';
@@ -149,6 +150,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
+    DxSpeechToTextModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
     DxStepperModule,
@@ -235,6 +237,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
+    DxSpeechToTextModule,
     DxSpeedDialActionModule,
     DxSplitterModule,
     DxStepperModule,

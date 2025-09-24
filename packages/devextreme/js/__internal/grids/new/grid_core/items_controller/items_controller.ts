@@ -7,7 +7,6 @@ import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import type { CardInfo, Column, FieldInfo } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
-import { parseValue } from '../utils/parse_value/index';
 
 export class ItemsController {
   private readonly selectedCardKeys = signal<Key[]>([]);
@@ -68,7 +67,7 @@ export class ItemsController {
       const displayValue = column.calculateDisplayValue(data);
 
       const formattedText = formatHelper.format(
-        parseValue(column, displayValue as string) as never,
+        displayValue as never,
         column.format,
       );
       const text = column.customizeText

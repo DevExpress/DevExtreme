@@ -15,7 +15,7 @@ import { BaseGauge, formatValue, getSampleText } from '__internal/viz/gauges/bas
 import titleModule from 'viz/core/title';
 import exportModule from 'viz/core/export';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import tooltipModule from 'viz/core/tooltip';
 import translator1DModule from 'viz/translators/translator1d';
 import themeManagerModule from '__internal/viz/gauges/theme_manager';

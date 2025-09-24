@@ -11,7 +11,7 @@ import {
     stubClass,
 } from '../../helpers/vizMocks.js';
 import dxBarGauge from 'viz/bar_gauge';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';

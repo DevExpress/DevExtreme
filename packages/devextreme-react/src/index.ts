@@ -62,6 +62,7 @@ export { SelectBox } from "./select-box";
 export { Slider } from "./slider";
 export { Sortable } from "./sortable";
 export { Sparkline } from "./sparkline";
+export { SpeechToText } from "./speech-to-text";
 export { SpeedDialAction } from "./speed-dial-action";
 export { Splitter } from "./splitter";
 export { Stepper } from "./stepper";

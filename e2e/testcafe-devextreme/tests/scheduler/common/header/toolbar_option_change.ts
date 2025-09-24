@@ -7,7 +7,7 @@ fixture.disablePageReloads`Scheduler: Toolbar options change`
   .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async () => createWidget('dxScheduler', {
-  views: ['day'],
+  views: ['day', 'week'],
   currentView: 'day',
   currentDate: new Date(2021, 3, 27),
   height: 200,
