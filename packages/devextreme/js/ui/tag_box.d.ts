@@ -323,6 +323,7 @@ export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Array<string | number | any>
      */
     reset(value?: Properties['value']): void;
 }

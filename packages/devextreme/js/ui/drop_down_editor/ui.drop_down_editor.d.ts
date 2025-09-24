@@ -198,6 +198,7 @@ export default class dxDropDownEditor<
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:any
      */
     reset(value?: TProperties['value']): void;
 }

@@ -105,6 +105,7 @@ export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:number | false
      */
     reset(value?: Properties['value']): void;
 }
