@@ -159,14 +159,21 @@ function alertLimitReached(): void {
 
 async function regenerate(): Promise<void> {
   toggleDisabledState(true);
-
+  const lastMessage = messages.at(-1);
+  
   try {
     const aiResponse = await getAIResponse(messages.slice(0, -1));
 
     updateLastMessage(aiResponse);
-    messages.at(-1).content = aiResponse;
+    
+    if (lastMessage?.content) {
+      lastMessage.content = aiResponse;
+    }
   } catch {
-    updateLastMessage(messages.at(-1).content);
+    if (lastMessage?.content) {
+      updateLastMessage(lastMessage.content);
+    }
+    
     alertLimitReached();
   } finally {
     toggleDisabledState(false);

@@ -108,7 +108,7 @@ const onMessageUpdated = ({ message, text }: DxChatTypes.MessageUpdatedEvent) =>
   ]);
 };
 
-const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions) => boolean)> = {
+const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions) => boolean | undefined)> = {
   enabled: true,
   disabled: false,
   custom: ({ component, message }: CustomStrategyOptions) => {
