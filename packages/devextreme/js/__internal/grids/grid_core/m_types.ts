@@ -198,6 +198,7 @@ export interface Controllers {
   stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
+  aiColumn: import('./ai_column/m_ai_column_controller').AiColumnController;
 }
 
 type ControllerTypes = {
