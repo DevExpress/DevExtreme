@@ -53,6 +53,7 @@ export type WidgetName =
   | 'dxSelectBox'
   | 'dxSlider'
   | 'dxSortable'
+  | 'dxSpeechToText'
   | 'dxSpeedDialAction'
   | 'dxSplitter'
   | 'dxStepper'
