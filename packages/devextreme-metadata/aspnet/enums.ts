@@ -12,15 +12,7 @@ export const enums = {
     ],
   },
   EdmType: {
-    items: [
-      'Guid',
-      'Int32',
-      'Int64',
-      'String',
-      'Boolean',
-      'Single',
-      'Decimal',
-    ],
+    items: ['Guid', 'Int32', 'Int64', 'String', 'Boolean', 'Single', 'Decimal'],
   },
   FilterOperations: {
     items: [
@@ -49,17 +41,10 @@ export const enums = {
       'triangleNeedle',
       'twoColorNeedle',
     ],
-    options: [
-      'GaugeIndicator.type',
-    ],
+    options: ['GaugeIndicator.type'],
   },
   GeoMapProvider: {
-    items: [
-      'bing',
-      'google',
-      'googleStatic',
-      'azure',
-    ],
+    items: ['bing', 'google', 'googleStatic', 'azure'],
   },
   SchedulerViewType: {
     items: [
@@ -73,109 +58,53 @@ export const enums = {
       'week',
       'workWeek',
     ],
-    options: [
-      'dxScheduler.views',
-    ],
+    options: ['dxScheduler.views'],
   },
   ShowScrollbarMode: {
-    items: [
-      'always',
-      'never',
-      'onHover',
-      'onScroll',
-    ],
-    options: [
-      'dxScrollView.showScrollbar',
-    ],
+    items: ['always', 'never', 'onHover', 'onScroll'],
+    options: ['dxScrollView.showScrollbar'],
   },
   TextEditorButtonWidget: {
-    items: [
-      'dxButton',
-    ],
+    items: ['dxButton'],
   },
   DiagramDataLayoutOrientation: {
-    items: [
-      'vertical',
-      'horizontal',
-    ],
+    items: ['vertical', 'horizontal'],
   },
   GanttSortingMode: {
-    items: [
-      'multiple',
-      'none',
-      'single',
-    ],
+    items: ['multiple', 'none', 'single'],
   },
   GridSortingMode: {
-    items: [
-      'multiple',
-      'none',
-      'single',
-    ],
+    items: ['multiple', 'none', 'single'],
   },
   PieChartLegendHoverMode: {
-    items: [
-      'none',
-      'allArgumentPoints',
-    ],
+    items: ['none', 'allArgumentPoints'],
   },
   PolarChartOverlappingBehavior: {
-    items: [
-      'none',
-      'hide',
-    ],
+    items: ['none', 'hide'],
   },
   SelectionMode: {
-    items: [
-      'multiple',
-      'none',
-      'single',
-    ],
+    items: ['multiple', 'none', 'single'],
   },
   PolarChartResolveLabelOverlapping: {
-    items: [
-      'hide',
-      'none',
-    ],
+    items: ['hide', 'none'],
   },
   ButtonGroupSelectionMode: {
-    items: [
-      'multiple',
-      'single',
-      'none',
-    ],
+    items: ['multiple', 'single', 'none'],
   },
   ChartElementSelectionMode: {
-    items: [
-      'multiple',
-      'single',
-    ],
+    items: ['multiple', 'single'],
   },
   FileManagerSelectionMode: {
-    items: [
-      'multiple',
-      'single',
-    ],
+    items: ['multiple', 'single'],
   },
   ListSelectionMode: {
-    items: [
-      'all',
-      'multiple',
-      'none',
-      'single',
-    ],
+    items: ['all', 'multiple', 'none', 'single'],
   },
   MenuSelectionMode: {
-    items: [
-      'none',
-      'single',
-    ],
+    items: ['none', 'single'],
   },
   NavSelectionMode: {
-    items: [
-      'multiple',
-      'single',
-    ],
+    items: ['multiple', 'single'],
   },
 };
 
@@ -321,7 +250,9 @@ export const enumAliases = {
     'SingleMultipleOrNone': 'GridSortingMode',
   },
 
-  '(dxDataGrid|dxTreeList)(.*)\\.columnRenderingMode': { 'DataRenderMode': 'GridColumnRenderingMode' },
+  '(dxDataGrid|dxTreeList)(.*)\\.columnRenderingMode': {
+    'DataRenderMode': 'GridColumnRenderingMode',
+  },
 
   '(dxDataGrid|dxTreeList)(.*)\\.rowRenderingMode': { 'DataRenderMode': 'GridRowRenderingMode' },
 
