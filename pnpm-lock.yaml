@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     devexpress-diagram:
-      specifier: 2.2.19
-      version: 2.2.19
+      specifier: 2.2.24
+      version: 2.2.24
     devexpress-gantt:
       specifier: 4.1.62
       version: 4.1.62
@@ -251,7 +251,7 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
@@ -870,7 +870,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
@@ -1018,7 +1018,7 @@ importers:
         version: 3.0.13
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
@@ -3307,6 +3307,9 @@ packages:
 
   '@devexpress/utils@1.4.3':
     resolution: {integrity: sha512-UmmIwVRGQ6u6itE/zJ1xNmMuugXo/t1fWBtjROb7mhq2nY4ecDBdnRIqogKWAasGbMbhCxW9+ijkgRaNBVCIzQ==}
+
+  '@devexpress/utils@1.4.8':
+    resolution: {integrity: sha512-XVqyeYjqWjbcAUOxaUc6f93MATuVyFE2eec10Qm7X3/QLkKPBh2cJt5OOw4bkW4fC8SG8NZwjVITt08Tr+CXpQ==}
 
   '@devextreme-generator/angular@3.0.12':
     resolution: {integrity: sha512-u5h6ego2TqZuVcV43eEisD4/xmlGSOifXXcL9nU+3G8BCxLPhJ3eCq3EHlnN2y0j1Zmiy+oMGNGID3+DOl5MIQ==}
@@ -9660,8 +9663,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.19:
-    resolution: {integrity: sha512-obmeIqphCGJ9WQuWYCDc0cNB5gIZHc+NS5UNXFhuHZwnOUaKtruCTfE/YIxXEHSD7Arc2pkfodeIa2cDtUo9lw==}
+  devexpress-diagram@2.2.24:
+    resolution: {integrity: sha512-PD3mW50OFS44PnqUq2ywJHYDeNFWCIPhXCeLHkzg2BEdDufGGpW73Ux5z3F9NtW91sP0qNE1f1PrsR+3CIN0jA==}
 
   devexpress-gantt@4.1.62:
     resolution: {integrity: sha512-8ULKoAyStlFnATNkkYFZWB7eQHrxJPallq04+HHiu9fn1TIRz0SgYlQdZuXoOmEhcRhaNwk5d+38sJ6OMC0HnQ==}
@@ -21938,6 +21941,10 @@ snapshots:
     dependencies:
       tslib: 2.3.1
 
+  '@devexpress/utils@1.4.8':
+    dependencies:
+      tslib: 2.3.1
+
   '@devextreme-generator/angular@3.0.12(lwsxw2kgboo7ei5ffbskpgie2a)':
     dependencies:
       '@devextreme-generator/core': 3.0.12(lwsxw2kgboo7ei5ffbskpgie2a)
@@ -29945,9 +29952,9 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.19:
+  devexpress-diagram@2.2.24:
     dependencies:
-      '@devexpress/utils': 1.4.3
+      '@devexpress/utils': 1.4.8
       es6-object-assign: 1.1.0
 
   devexpress-gantt@4.1.62:
