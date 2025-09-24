@@ -1,4 +1,5 @@
 import { CustomStore, DataSource } from 'devextreme-vue/common/data';
+import { type DxChatTypes } from 'devextreme-vue/chat';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -34,8 +35,8 @@ export const assistant = {
   name: 'Virtual Assistant',
 };
 
-export const store = [];
-export const messages = [];
+export const messages: DxChatTypes.Message[] = [];
+const store: DxChatTypes.Message[] = [];
 
 const customStore = new CustomStore({
   key: 'id',
@@ -44,7 +45,7 @@ const customStore = new CustomStore({
       resolve([...store]);
     }, 0);
   }),
-  insert: (message) => new Promise((resolve) => {
+  insert: (message: DxChatTypes.Message) => new Promise((resolve) => {
     setTimeout(() => {
       store.push(message);
       resolve(message);

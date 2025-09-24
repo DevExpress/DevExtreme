@@ -1,4 +1,4 @@
-export const employee = {
+export const employee: Record<string, string | number> = {
   Full_Name: 'John Heart',
   Title: 'CEO',
   Birth_Date: '03/16/1964',
