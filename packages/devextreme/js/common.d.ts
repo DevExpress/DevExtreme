@@ -306,6 +306,13 @@ export type GlobalConfig = {
   defaultUseCurrencyAccountingStyle?: boolean;
   /**
    * @docid
+   * @type boolean
+   * @default true
+   * @public
+   */
+  copyStylesToShadowDom?: boolean;
+  /**
+   * @docid
    * @default undefined
    * @public
    */
