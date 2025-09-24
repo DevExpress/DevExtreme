@@ -67,7 +67,7 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import service from './data.ts';
 
 const eventValue = ref(service.valueChangeEvents[0].name);
-const maxLength = ref<number | null>();
+const maxLength = ref<number>();
 const value = ref(service.getContent());
 const valueForEditableTextArea = ref(service.getContent());
 const valueChangeEvents = service.valueChangeEvents;
@@ -77,7 +77,7 @@ const height = ref<number | undefined>(90);
 function onCheckboxValueChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
   const str = service.getContent();
   value.value = e.value ? str.substring(0, 100) : str;
-  maxLength.value = e.value ? 100 : null;
+  maxLength.value = e.value ? 100 : undefined;
 }
 
 function onAutoResizeChanged(e: DxCheckBoxTypes.ValueChangedEvent) {

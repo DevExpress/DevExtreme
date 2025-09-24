@@ -56,7 +56,7 @@ import {
   allowDeletingLabel,
 } from './data.ts';
 
-type CustomStrategyOptions = { component: typeof DxChat['instance'], message: DxChatTypes.Message };
+type CustomStrategyOptions = { component: DxChat['instance'], message: DxChatTypes.Message };
 const store = [...initialMessages];
 
 const customStore = new CustomStore({
@@ -108,11 +108,11 @@ const onMessageUpdated = ({ message, text }: DxChatTypes.MessageUpdatedEvent) =>
   ]);
 };
 
-const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions) => boolean | undefined)> = {
+const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions) => boolean)> = {
   enabled: true,
   disabled: false,
   custom: ({ component, message }: CustomStrategyOptions) => {
-    if (!component) return;
+    if (!component) return false;
     
     const { items, user } = component.option();
     const userId = user?.id;
