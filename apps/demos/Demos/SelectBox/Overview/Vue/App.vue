@@ -100,7 +100,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { ArrayStore } from 'devextreme-vue/common/data';
 import notify from 'devextreme/ui/notify';
 import Field from './Field.vue';
@@ -114,7 +114,7 @@ const data = new ArrayStore({
   data: products,
   key: 'ID',
 });
-function onValueChanged(e) {
+function onValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   notify(`The value is changed to: "${e.value}"`);
 }
 

@@ -157,45 +157,6 @@ jobs:
       working-directory: ./packages/devextreme
       run: pnpx nx lint-texts
 
-  CSS:
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store
-
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Lint CSS
-      working-directory: ./packages/devextreme-scss
-      run: pnpx nx lint
-
   pnpm_lock:
     runs-on: devextreme-shr2
     timeout-minutes: 10
@@ -335,7 +296,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [TS, JS, CSS, texts, pnpm_lock, component_exports]
+    needs: [TS, JS, texts, pnpm_lock, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
