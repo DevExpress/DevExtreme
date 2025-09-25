@@ -224,7 +224,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     const color = new Color(newValue);
 
     if (color.colorIsInvalid) {
-      this._input().val(oldValue);
+      this._input().val(oldValue === null ? undefined : oldValue);
       return;
     }
     // @ts-expect-error ts-error

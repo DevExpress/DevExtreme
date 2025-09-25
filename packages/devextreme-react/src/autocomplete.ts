@@ -55,9 +55,9 @@ type IAutocompleteOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
-  defaultValue?: string;
+  defaultValue?: null | string;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: null | string) => void;
 }>
 
 interface AutocompleteRef {
