@@ -2133,7 +2133,11 @@ export default class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDat
      * @public
      */
     totalCount(): number;
-
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DxPromise<TRowData>;
     cancelEditData(): void;
@@ -2521,7 +2525,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden
