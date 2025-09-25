@@ -27,7 +27,7 @@ import dxDropDownList, {
 
 import {
     ValueChangedInfo,
-    EditorValuableObject,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -294,7 +294,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  * @public
  */
 export default class dxSelectBox<
-    TProperties extends EditorValuableObject = Properties,
+    TProperties extends EditorOptionsWithValue = Properties,
 > extends dxDropDownList<TProperties> { }
 
 interface SelectBoxInstance extends dxSelectBox<Properties> { }

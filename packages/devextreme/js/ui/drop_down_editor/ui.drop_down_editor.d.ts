@@ -27,7 +27,7 @@ import {
     EventInfo,
 } from '../../common/core/events';
 
-import { EditorValuableObject } from '../editor/editor';
+import { EditorOptionsWithValue } from '../editor/editor';
 
 /** @public */
 export type DropDownPredefinedButton = 'clear' | 'dropDown';
@@ -168,7 +168,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
  * @options dxDropDownEditorOptions
  */
 export default class dxDropDownEditor<
-    TProperties extends EditorValuableObject = Properties,
+    TProperties extends EditorOptionsWithValue = Properties,
 > extends dxTextBox<TProperties> {
     /**
      * @docid

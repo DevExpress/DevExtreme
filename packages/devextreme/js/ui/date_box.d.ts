@@ -22,7 +22,7 @@ import dxDropDownEditor, {
 
 import {
     ValueChangedInfo,
-    EditorValuableObject,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -371,7 +371,7 @@ export interface DateBoxBaseOptions<TComponent> extends Omit<
  * @options DateBoxBaseOptions
  */
 export class DateBoxBase<
-    TProperties extends EditorValuableObject = Properties,
+    TProperties extends EditorOptionsWithValue = Properties,
 > extends dxDropDownEditor<TProperties> {
     /**
      * @docid
