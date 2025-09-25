@@ -243,7 +243,7 @@ const componentConfig = {
     validationMessageMode: String as PropType<ValidationMessageMode>,
     validationMessagePosition: String as PropType<Mode | Position>,
     validationStatus: String as PropType<ValidationStatus>,
-    value: String,
+    value: String as PropType<null | string>,
     valueChangeEvent: String,
     valueExpr: [Function, String] as PropType<(((item: any) => string | number | boolean)) | string>,
     visible: Boolean,
