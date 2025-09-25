@@ -230,8 +230,9 @@ export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:number
      */
-    reset(value?: number): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */
