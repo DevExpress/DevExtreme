@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import FileSystemItem from "devextreme/file_management/file_system_item";
 import { DxFileManager, DxPermissions, DxItemView } from 'devextreme-vue/file-manager';
+import FileSystemItem from "devextreme/file_management/file_system_item";
 import { fileItems } from './data.ts';
 
 function customizeIcon(fileSystemItem: FileSystemItem) {
