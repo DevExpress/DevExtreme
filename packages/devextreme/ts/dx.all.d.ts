@@ -34600,7 +34600,8 @@ declare module DevExpress.viz {
    * [descr:BaseChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartTooltip extends BaseWidgetTooltip {
+  export interface BaseChartTooltip<TPointInfo = any>
+    extends BaseWidgetTooltip {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
@@ -34611,14 +34612,14 @@ declare module DevExpress.viz {
     contentTemplate?:
       | template
       | ((
-          pointInfo: any,
+          pointInfo: TPointInfo,
           element: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement)
       | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: ((pointInfo: any) => any) | undefined;
+    customizeTooltip?: ((pointInfo: TPointInfo) => any) | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.shared]
      */
@@ -34978,6 +34979,56 @@ declare module DevExpress.viz {
      */
     show(holdVisible: boolean): void;
   }
+  /**
+   * [descr:BasePointInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type BasePointInfo<TPoint extends basePointObject> = {
+    /**
+     * [descr:BasePointInfo.argument]
+     */
+    argument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.argumentText]
+     */
+    argumentText?: string;
+    /**
+     * [descr:BasePointInfo.highErrorValue]
+     */
+    highErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.lowErrorValue]
+     */
+    lowErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.originalArgument]
+     */
+    originalArgument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.originalValue]
+     */
+    originalValue?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.point]
+     */
+    point?: TPoint;
+    /**
+     * [descr:BasePointInfo.points]
+     */
+    points?: BasePointInfo<TPoint>[];
+    /**
+     * [descr:BasePointInfo.seriesName]
+     */
+    seriesName?: any;
+    /**
+     * [descr:BasePointInfo.value]
+     */
+    value?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.valueText]
+     */
+    valueText?: string;
+  };
   /**
    * [descr:basePointObject]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36779,9 +36830,115 @@ declare module DevExpress.viz {
        */
       text?: string | undefined;
     };
+    /**
+     * [descr:BubblePointInfo]
+     */
+    export type BubblePointInfo = ChartPointInfo & {
+      /**
+       * [descr:BubblePointInfo.points]
+       */
+      points?: BubblePointInfo[];
+      /**
+       * [descr:BubblePointInfo.size]
+       */
+      size?: number;
+      /**
+       * [descr:BubblePointInfo.sizeText]
+       */
+      sizeText?: string;
+    };
+    /**
+     * [descr:CandleStickPointInfo]
+     */
+    export type CandleStickPointInfo = {
+      /**
+       * [descr:CandleStickPointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.closeValue]
+       */
+      closeValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.closeValueText]
+       */
+      closeValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.highValue]
+       */
+      highValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.highValueText]
+       */
+      highValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.lowValue]
+       */
+      lowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.lowValueText]
+       */
+      lowValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.openValue]
+       */
+      openValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.openValueText]
+       */
+      openValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.originalCloseValue]
+       */
+      originalCloseValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalHighValue]
+       */
+      originalHighValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalLowValue]
+       */
+      originalLowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalOpenValue]
+       */
+      originalOpenValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:CandleStickPointInfo.points]
+       */
+      points?: CandleStickPointInfo[];
+      /**
+       * [descr:CandleStickPointInfo.reductionValue]
+       */
+      reductionValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:CandleStickPointInfo.value]
+       */
+      value?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.valueText]
+       */
+      valueText?: string;
+    };
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+    /**
+     * [descr:ChartPointInfo]
+     */
+    export type ChartPointInfo = BasePointInfo<chartPointObject>;
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
     export type ChartSeriesAggregationMethod =
       | 'avg'
@@ -37436,12 +37593,78 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
+     * [descr:dxChartPointInfo]
+     */
+    export type PointInfo =
+      | ChartPointInfo
+      | StackedPointInfo
+      | BubblePointInfo
+      | CandleStickPointInfo
+      | RangePointInfo;
+    /**
      * [descr:_viz_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     export type Properties = dxChartOptions;
+    /**
+     * [descr:RangePointInfo]
+     */
+    export type RangePointInfo = {
+      /**
+       * [descr:RangePointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.argumentText]
+       */
+      argumentText?: string;
+      /**
+       * [descr:RangePointInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue1]
+       */
+      rangeValue1?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue1Text]
+       */
+      rangeValue1Text?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue2]
+       */
+      rangeValue2?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue2Text]
+       */
+      rangeValue2Text?: string;
+      /**
+       * [descr:RangePointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:RangePointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:RangePointInfo.points]
+       */
+      points?: RangePointInfo[];
+      /**
+       * [descr:RangePointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalMinValue]
+       */
+      originalMinValue?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalValue]
+       */
+      originalValue?: string | number | Date;
+    };
     /**
      * [descr:_viz_chart_SeriesClickEvent]
      */
@@ -37476,14 +37699,55 @@ declare module DevExpress.viz {
     export type SeriesSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> & SeriesInteractionInfo;
     /**
-     * [descr:dxChartTooltip]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:StackedPointInfo]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type StackedPointInfo = ChartPointInfo & {
+      /**
+       * [descr:StackedPointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:StackedPointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:StackedPointInfo.points]
+       */
+      points?: StackedPointInfo[];
+      /**
+       * [descr:StackedPointInfo.total]
+       */
+      total?: number;
+      /**
+       * [descr:StackedPointInfo.totalText]
+       */
+      totalText?: string;
+    };
+    /**
+     * [descr:dxChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxChartOptions.tooltip.location]
        */
       location?: ChartTooltipLocation;
+      /**
+       * [descr:dxChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_chart_TooltipHiddenEvent]
@@ -40972,6 +41236,23 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
+     * [descr:dxPieChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<piePointObject> & {
+      /**
+       * [descr:PointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:PointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:PointInfo.points]
+       */
+      points?: PointInfo;
+    };
+    /**
      * [descr:_viz_pie_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -40982,6 +41263,28 @@ declare module DevExpress.viz {
       | 'none'
       | 'smallValueThreshold'
       | 'topN';
+    /**
+     * [descr:dxPieChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
+      /**
+       * [descr:dxPieChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPieChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+    };
     /**
      * [descr:_viz_pie_chart_TooltipHiddenEvent]
      */
@@ -41155,6 +41458,10 @@ declare module DevExpress.viz {
           annotation: dxPieChartAnnotationConfig | any
         ) => dxPieChartAnnotationConfig)
       | undefined;
+    /**
+     * [descr:dxPieChartOptions.tooltip]
+     */
+    tooltip?: DevExpress.viz.dxPieChart.Tooltip;
   }
   /**
    * [descr:dxPieChartSeriesTypes]
@@ -42036,6 +42343,10 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
+     * [descr:dxPolarChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<polarPointObject>;
+    /**
      * [descr:_viz_polar_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -42086,11 +42397,28 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartTooltip]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxPolarChartOptions.tooltip.shared]
        */
       shared?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_polar_chart_TooltipHiddenEvent]
