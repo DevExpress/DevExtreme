@@ -27,6 +27,7 @@ import dxDropDownList, {
 
 import {
     ValueChangedInfo,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -279,7 +280,6 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @public
      */
     customItemCreateEvent?: string;
-
     /**
      * @docid
      * @type dxPopupOptions
@@ -293,7 +293,9 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }
+export default class dxSelectBox<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends dxDropDownList<TProperties> { }
 
 interface SelectBoxInstance extends dxSelectBox<Properties> { }
 

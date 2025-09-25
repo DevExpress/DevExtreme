@@ -8703,7 +8703,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties = DevExpress.ui.dxDateBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -9279,7 +9279,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocomplete.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxAutocomplete.Properties['value']): void;
   }
   module dxAutocomplete {
     /**
@@ -9436,8 +9436,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocompleteOptions.value]
      */
-    value?: string;
-
+    value?: string | null;
     /**
      * [descr:dxAutocompleteOptions.dropDownOptions]
      */
@@ -9830,9 +9829,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendar.reset(value)]
      */
-    reset(
-      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
-    ): void;
+    reset(value?: DevExpress.ui.dxCalendar.Properties['value']): void;
   }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
@@ -11288,7 +11285,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBox.reset(value)]
      */
-    reset(value?: boolean | null | undefined): void;
+    reset(value?: DevExpress.ui.dxCheckBox.Properties['value']): void;
   }
   module dxCheckBox {
     /**
@@ -11369,7 +11366,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBox.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxColorBox.Properties['value']): void;
   }
   module dxColorBox {
     /**
@@ -11525,7 +11522,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBoxOptions.value]
      */
-    value?: string;
+    value?: string | null;
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -14079,7 +14076,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBox.reset(value)]
      */
-    reset(value?: DevExpress.common.DateLike): void;
+    reset(value?: DevExpress.ui.dxDateBox.Properties['value']): void;
   }
   module dxDateBox {
     /**
@@ -14288,7 +14285,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: Array<Date | number | string | null>): void;
+    reset(value?: DevExpress.ui.dxDateRangeBox.Properties['value']): void;
   }
   module dxDateRangeBox {
     /**
@@ -16592,7 +16589,9 @@ declare module DevExpress.ui {
    * [descr:dxDropDownEditor]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
+  export class dxDropDownEditor<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+  > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
      */
@@ -16609,6 +16608,10 @@ declare module DevExpress.ui {
      * [descr:dxDropDownEditor.open()]
      */
     open(): void;
+    /**
+     * [descr:dxDropDownEditor.reset(value)]
+     */
+    reset(value?: TProperties['value']): void;
   }
   module dxDropDownEditor {
     /**
@@ -16618,7 +16621,15 @@ declare module DevExpress.ui {
       readonly text?: string;
       readonly icon?: string;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    interface DropDownEditorInstance extends dxDropDownEditor<Properties> {}
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -16704,7 +16715,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownList<
-    TProperties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.common.data.DataSource;
   }
@@ -17687,7 +17698,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileUploader.reset(value)]
      */
-    reset(value?: Array<File>): void;
+    reset(value?: DevExpress.ui.dxFileUploader.Properties['value']): void;
   }
   module dxFileUploader {
     /**
@@ -23423,7 +23434,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBox.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxNumberBox.Properties['value']): void;
   }
   module dxNumberBox {
     /**
@@ -25019,7 +25030,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBar.reset(value)]
      */
-    reset(value?: Number | false): void;
+    reset(value?: DevExpress.ui.dxProgressBar.Properties['value']): void;
   }
   module dxProgressBar {
     /**
@@ -25159,7 +25170,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxRangeSlider.reset(value)]
      */
-    reset(value?: Array<number>): void;
+    reset(value?: DevExpress.ui.dxRangeSlider.Properties['value']): void;
   }
   module dxRangeSlider {
     /**
@@ -26973,7 +26984,7 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -27184,7 +27195,6 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */
     customItemCreateEvent?: string;
-
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
@@ -27197,7 +27207,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlider.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxSlider.Properties['value']): void;
   }
   module dxSlider {
     /**
@@ -28365,7 +28375,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSwitch.reset(value)]
      */
-    reset(value?: boolean): void;
+    reset(value?: DevExpress.ui.dxSwitch.Properties['value']): void;
   }
   module dxSwitch {
     /**
@@ -28927,7 +28937,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTagBox]
    */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
+  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
+    /**
+     * [descr:dxTagBox.reset(value)]
+     */
+    reset(value?: DevExpress.ui.dxTagBox.Properties['value']): void;
+  }
   module dxTagBox {
     /**
      * [descr:_ui_tag_box_ChangeEvent]
@@ -29293,12 +29308,12 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
      */
-    reset(value?: string): void;
+    reset(value?: TProperties['value']): void;
   }
   module dxTextBox {
     /**
@@ -29443,7 +29458,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -30161,7 +30176,9 @@ declare module DevExpress.ui {
    * [descr:dxTrackBar]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxTrackBar<TProperties> extends Editor<TProperties> {}
+  export class dxTrackBar<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
+  > extends Editor<TProperties> {}
   /**
    * [descr:dxTrackBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -32788,7 +32805,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -32798,13 +32815,20 @@ declare module DevExpress.ui {
     /**
      * [descr:Editor.reset(value)]
      */
-    reset(value?: any): void;
+    reset(value?: TProperties['value']): void;
   }
   module Editor {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     interface EditorInstance extends Editor<Properties> {}
+    /**
+     * [descr:EditorOptionsWithValue]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface EditorOptionsWithValue {
+      value?: unknown;
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */

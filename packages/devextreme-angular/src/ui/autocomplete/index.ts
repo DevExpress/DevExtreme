@@ -746,10 +746,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get value(): string {
+    get value(): null | string {
         return this._getOption('value');
     }
-    set value(value: string) {
+    set value(value: null | string) {
         this._setOption('value', value);
     }
 
@@ -1311,7 +1311,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<string>;
+    @Output() valueChange: EventEmitter<null | string>;
 
     /**
     
