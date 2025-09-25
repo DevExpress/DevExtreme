@@ -22,8 +22,6 @@ import FileSystemItem from "devextreme/file_management/file_system_item";
 import { DxFileManager, DxPermissions, DxItemView } from 'devextreme-vue/file-manager';
 import { fileItems } from './data.ts';
 
-
-
 function customizeIcon(fileSystemItem: FileSystemItem) {
   if (fileSystemItem.isDirectory) {
     return '../../../../images/thumbnails/folder.svg';
