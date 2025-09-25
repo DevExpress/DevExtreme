@@ -258,7 +258,7 @@ test('The AI column can be shown when columnChooser.mode is "dragAndDrop"', asyn
 
   // act
   await t.dragToElement(
-    dataGrid.getColumnChooser().content,
+    dataGrid.getColumnChooser().getColumn(0),
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element,
   );
 
