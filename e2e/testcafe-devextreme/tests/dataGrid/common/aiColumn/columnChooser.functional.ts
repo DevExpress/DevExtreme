@@ -66,7 +66,6 @@ test('The AI column can be hidden when columnChooser.mode is "dragAndDrop"', asy
       type: 'ai',
       caption: 'AI Column',
       name: 'myAiColumn',
-      allowHiding: true, // TODO: Remove after merging https://github.com/DevExpress/DevExtreme/pull/31104 and enabling this option by default.
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -266,7 +265,6 @@ test('The AI column can be shown when columnChooser.mode is "dragAndDrop"', asyn
       caption: 'AI Column',
       name: 'myAiColumn',
       visible: false,
-      allowHiding: true, // TODO: Remove after merging https://github.com/DevExpress/DevExtreme/pull/31104 and enabling this option by default.
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
