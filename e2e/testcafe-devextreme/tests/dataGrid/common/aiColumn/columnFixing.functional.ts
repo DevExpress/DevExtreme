@@ -36,6 +36,7 @@ test('The AI column should not be fixed when the columnFixing.enabled option is 
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
   ],
 }));
@@ -67,6 +68,7 @@ test('The AI column should be fixed when its fixed option is true', async (t) =>
       type: 'ai',
       caption: 'AI Column',
       fixed: true,
+      name: 'myAiColumn',
     },
   ],
 }));
@@ -99,6 +101,7 @@ test('The AI column should be fixed when its fixed option is true and its fixed 
       caption: 'AI Column',
       fixed: true,
       fixedPosition: 'right',
+      name: 'myAiColumn',
     },
   ],
 }));
@@ -129,6 +132,7 @@ test('The AI column should be fixed when its fixed option is true and its fixed 
       caption: 'AI Column',
       fixed: true,
       fixedPosition: 'sticky',
+      name: 'myAiColumn',
     },
     { dataField: 'name', caption: 'Name' },
     { dataField: 'value', caption: 'Value' },
@@ -173,6 +177,7 @@ test('Fix an AI column using the context menu', async (t) => {
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },

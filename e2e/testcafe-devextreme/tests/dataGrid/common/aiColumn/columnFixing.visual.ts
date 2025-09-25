@@ -41,6 +41,7 @@ test('Check context menu items', async (t) => {
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -80,6 +81,7 @@ test('Check context menu items when allowFixing is false', async (t) => {
       type: 'ai',
       caption: 'AI Column',
       allowFixing: false,
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
