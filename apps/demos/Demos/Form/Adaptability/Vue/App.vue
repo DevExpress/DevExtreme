@@ -29,7 +29,7 @@ import employee from './data.ts';
 const calculateColCountAutomatically = ref(false);
 
 const colCountByScreen = computed(() => (calculateColCountAutomatically.value
-  ? null
+  ? undefined
   : {
     sm: 2,
     md: 4,

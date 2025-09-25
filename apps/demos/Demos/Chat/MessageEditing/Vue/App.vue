@@ -112,7 +112,7 @@ const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions
   enabled: true,
   disabled: false,
   custom: ({ component, message }: CustomStrategyOptions) => {
-    if (!component) return;
+    if (!component) return false;
     
     const { items, user } = component.option();
     const userId = user?.id;

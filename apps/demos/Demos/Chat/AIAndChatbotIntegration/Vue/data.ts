@@ -38,7 +38,7 @@ export const assistant = {
 export const messages: DxChatTypes.Message[] = [];
 const store: DxChatTypes.Message[] = [];
 
-const customStore = new CustomStore({
+const customStore = new CustomStore<DxChatTypes.Message>({
   key: 'id',
   load: () => new Promise((resolve) => {
     setTimeout(() => {
