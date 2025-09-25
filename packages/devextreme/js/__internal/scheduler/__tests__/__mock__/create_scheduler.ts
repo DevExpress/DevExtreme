@@ -14,6 +14,7 @@ export const createScheduler = async (config: Config): Promise<{
   const container = document.createElement('div');
   const scheduler = new Scheduler(container, config);
   await new Promise(process.nextTick);
+  document.body.appendChild(container);
 
   return {
     container,

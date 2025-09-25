@@ -104,8 +104,8 @@ import { housesSource } from './data.ts';
 
 const ADD_TO_FAVORITES = 'Add to Favorites';
 const REMOVE_FROM_FAVORITES = 'Remove from Favorites';
-const houses = ref(housesSource);
-const currentHouse = ref(housesSource[0]);
+const houses = ref<Record<string, any>[]>(housesSource);
+const currentHouse = ref<Record<string, any>>(housesSource[0]);
 const popupVisible = ref(false);
 const position = {
   offset: '0, 2',
@@ -124,11 +124,13 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
 });
-const currency = (val) => currencyFormatter.format(val);
-function showHouse(house) {
+const currency = (val: number) => currencyFormatter.format(val);
+
+function showHouse(house: Record<string, unknown>) {
   currentHouse.value = house;
   popupVisible.value = true;
 }
+
 function changeFavoriteState() {
   const favoriteState = !currentHouse.value.Favorite;
   const message = `This item has been ${
