@@ -95,6 +95,7 @@ import {
   DxFileManager, DxPermissions, DxToolbar, DxContextMenu, DxItem,
   DxFileSelectionItem, DxItemView, DxDetails, DxColumn, type DxFileManagerTypes,
 } from 'devextreme-vue/file-manager';
+import FileSystemItem from 'devextreme/file_management/file_system_item';
 import { fileItems, getItemInfo } from './data.ts';
 
 const newFileMenuOptions = getNewFileMenuOptions();
@@ -107,7 +108,7 @@ function onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.
 
   if (extension) {
     updated = createFile(extension, fileSystemItem);
-  } else if (category !== undefined) {
+  } else if (category !== undefined && fileSystemItem) {
     updated = updateCategory(category, fileSystemItem, viewArea);
   }
 
@@ -116,7 +117,7 @@ function onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.
   }
 }
 
-function createFile(fileExtension, directory = fileManager.value.instance.getCurrentDirectory()) {
+function createFile(fileExtension: string, directory: any = fileManager.value.instance.getCurrentDirectory()) {
   const newItem = {
     __KEY__: Date.now(),
     name: `New file${fileExtension}`,
@@ -128,7 +129,7 @@ function createFile(fileExtension, directory = fileManager.value.instance.getCur
     return false;
   }
 
-  let array = null;
+  let array: Record<string, unknown>[];
   if (!directory.dataItem) {
     array = fileItems;
   } else {
@@ -142,8 +143,8 @@ function createFile(fileExtension, directory = fileManager.value.instance.getCur
   array.push(newItem);
   return true;
 }
-function updateCategory(newCategory, directory, viewArea) {
-  let items = null;
+function updateCategory(newCategory: string, directory: FileSystemItem, viewArea: string) {
+  let items: FileSystemItem[] = [];
 
   if (viewArea === 'navPane') {
     items = [directory];
@@ -151,7 +152,7 @@ function updateCategory(newCategory, directory, viewArea) {
     items = fileManager.value.instance.getSelectedItems();
   }
 
-  items.forEach((item) => {
+  items.forEach((item: FileSystemItem) => {
     if (item.dataItem) {
       item.dataItem.category = newCategory;
     }
