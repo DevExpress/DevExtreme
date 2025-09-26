@@ -76,10 +76,12 @@ describe('SmartPasteCommand', () => {
   });
 
   describe('parseResult', () => {
+    const fields = { fields: [{ name: 'Field1', format: 'text' }, { name: 'Field2', format: 'text' }] };
+
     it('should return the parsed result', () => {
       const response = 'Field1:::value1;;;Field2:::value2';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -95,7 +97,7 @@ describe('SmartPasteCommand', () => {
     it('should parse array values correctly', () => {
       const response = 'Field1:::value1:::value2;;;Field2:::value3:::value4:::value5';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [
         {
@@ -114,7 +116,7 @@ describe('SmartPasteCommand', () => {
     it('should not include an empty fields into parsed result', () => {
       const response = 'Field1:::value1;;;Field2:::';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -127,7 +129,7 @@ describe('SmartPasteCommand', () => {
     it('should process multiple delimiters and malformed field data correctly', () => {
       const response = 'Field1:::value1;;;;;;Field2';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -140,7 +142,7 @@ describe('SmartPasteCommand', () => {
     it('should trim string and array values in parseResult', () => {
       const response = 'Field1:::  value1  ;;;Field2:::  value2  ::: value3 ';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [
         { name: 'Field1', value: 'value1' },
@@ -367,7 +369,7 @@ describe('SmartPasteCommand', () => {
 
       it('should handle single empty string in array', () => {
         const result = callToTyped(['']);
-        expect(result).toBe('');
+        expect(result).toBeUndefined();
       });
     });
   });
