@@ -910,7 +910,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   updateHeaderPanelScrollbarPadding() {
-    if (hasWindow()) {
+    if (hasWindow() && this._$headerPanelContainer) {
       const scrollbarWidth = this._getScrollbarWidth();
       this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
     }
