@@ -69,6 +69,8 @@ class SpeechToText extends Widget<Properties> {
       onStopClick: undefined,
       onResult: undefined,
       onError: undefined,
+      onEnd: undefined,
+      speechRecognitionConfig: undefined,
     };
   }
 
@@ -261,8 +263,8 @@ class SpeechToText extends Widget<Properties> {
     this._emitNativeEvent('onError', event);
   }
 
-  private _stopRecognitionOnDisable(): void {
-    if (this._state === SpeechToTextState.DISABLED && !this._isCustomSpeechRecognitionEnabled()) {
+  private _stopRecognitionOnDisable(disabled?: boolean): void {
+    if (disabled) {
       this._speechRecognitionAdapter?.stop();
     }
   }
@@ -275,7 +277,6 @@ class SpeechToText extends Widget<Properties> {
     this._state = newState;
     this._updateButtonState();
     this._updateCssClasses();
-    this._stopRecognitionOnDisable();
   }
 
   private _updateButtonState(): void {
@@ -325,6 +326,7 @@ class SpeechToText extends Widget<Properties> {
       case 'disabled':
         this._button?.option(name, value);
         this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
+        this._stopRecognitionOnDisable(value);
         break;
 
       case 'startIcon':

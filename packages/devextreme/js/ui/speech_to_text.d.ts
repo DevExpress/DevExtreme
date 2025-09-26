@@ -234,7 +234,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
    */
   onError?: ((e: ErrorEvent) => void) | undefined;
 
-    /**
+  /**
    * @docid dxSpeechToTextOptions.onEnd
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:EndEvent}
