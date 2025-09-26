@@ -42,9 +42,15 @@ export class SmartPasteCommand extends BaseCommand<
         throw errors.Error('E1064', fieldName, errorValue, 'boolean');
       }
       case 'string': {
+        if (!single) {
+          throw errors.Error('E1064', fieldName, errorValue, 'string');
+        }
         return single;
       }
       case 'stringArray': {
+        if (!arr) {
+          throw errors.Error('E1064', fieldName, errorValue, 'string array');
+        }
         return arr;
       }
       case 'number': {

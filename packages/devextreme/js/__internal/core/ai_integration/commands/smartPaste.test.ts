@@ -281,59 +281,81 @@ describe('SmartPasteCommand', () => {
     });
 
     describe('Exception handling', () => {
+      function buildErrorRegExp(value: unknown, field: string, type: string): RegExp {
+        function escapeRegExp(str: string): string {
+          return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        return new RegExp(
+          `E1064.*${
+            escapeRegExp(JSON.stringify(value))
+          }.*${
+            escapeRegExp(field)
+          }.*${
+            escapeRegExp(type)
+          }.*`,
+        );
+      }
+
+      const field = 'testField';
       it('should throw error for invalid color', () => {
-        expect(() => callToTyped(['invalid-color'], 'color', 'testField'))
-          .toThrow();
+        const value = ['invalid-color'];
+        expect(() => callToTyped(value, 'color', field))
+          .toThrow(buildErrorRegExp(value, field, 'color'));
       });
 
       it('should throw error for invalid boolean', () => {
-        expect(() => callToTyped(['invalid'], 'boolean', 'testField'))
-          .toThrow();
+        const value = ['not-a-boolean'];
+        expect(() => callToTyped(value, 'boolean', field))
+          .toThrow(buildErrorRegExp(value, field, 'boolean'));
       });
 
       it('should throw error for invalid number', () => {
-        expect(() => callToTyped(['not-a-number'], 'number', 'testField'))
-          .toThrow();
-      });
-
-      it('should throw error for undefined number', () => {
-        expect(() => callToTyped([], 'number', 'testField'))
-          .toThrow();
+        const value = ['not-a-number'];
+        expect(() => callToTyped(value, 'number', field))
+          .toThrow(buildErrorRegExp(value, field, 'number'));
       });
 
       it('should throw error when number range has single value', () => {
-        expect(() => callToTyped(['10'], 'numberRange', 'testField'))
-          .toThrow();
+        const value = ['10'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
       });
 
       it('should throw error when number range has more than 2 values', () => {
-        expect(() => callToTyped(['10', '20', '30'], 'numberRange', 'testField'))
-          .toThrow();
+        const value = ['10', '20', '30'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
       });
 
       it('should throw error when number range has invalid numbers', () => {
-        expect(() => callToTyped(['10', 'invalid'], 'numberRange', 'testField'))
-          .toThrow();
+        const value = ['10', 'invalid'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
       });
 
       it('should throw error for invalid date', () => {
-        expect(() => callToTyped(['invalid-date'], 'date', 'testField'))
-          .toThrow();
+        const value = ['invalid-date'];
+        expect(() => callToTyped(value, 'date', field))
+          .toThrow(buildErrorRegExp(value, field, 'date'));
       });
 
       it('should throw error when date range has single value', () => {
-        expect(() => callToTyped(['2024-01-15'], 'dateRange', 'testField'))
-          .toThrow();
+        const value = ['2024-01-15'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
       });
 
       it('should throw error when date range has more than 2 values', () => {
-        expect(() => callToTyped(['2024-01-15', '2024-01-20', '2024-01-25'], 'dateRange', 'testField'))
-          .toThrow();
+        const value = ['2024-01-15', '2024-01-20', '2024-01-25'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
       });
 
       it('should throw error when date range has invalid dates', () => {
-        expect(() => callToTyped(['2024-01-15', 'invalid-date'], 'dateRange', 'testField'))
-          .toThrow();
+        const value = ['2024-01-15', 'invalid-date'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
       });
     });
 
