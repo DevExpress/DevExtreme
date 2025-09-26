@@ -258,6 +258,9 @@ describe('SmartPasteCommand', () => {
         'dateRange',
       ])('should not throw for empty array when type=%s', (type) => {
         expect(() => callToTyped([], type, 'testField')).not.toThrow();
+        expect(() => callToTyped([''], type, 'testField')).not.toThrow();
+        expect(callToTyped([], type, 'testField')).toBeUndefined();
+        expect(callToTyped([''], type, 'testField')).toBeUndefined();
       });
 
       it('should not throw for empty array when type is undefined', () => {
@@ -265,7 +268,7 @@ describe('SmartPasteCommand', () => {
       });
     });
 
-    describe('Branching', () => {
+    describe('Default values', () => {
       it('should return default for undefined type with single value', () => {
         const result = callToTyped(['single value']);
         expect(result).toBe('single value');
@@ -358,18 +361,6 @@ describe('SmartPasteCommand', () => {
         const value = ['2024-01-15', 'invalid-date'];
         expect(() => callToTyped(value, 'dateRange', field))
           .toThrow(buildErrorRegExp(value, field, 'date range'));
-      });
-    });
-
-    describe('Input verification', () => {
-      it('should handle empty values array', () => {
-        const result = callToTyped([]);
-        expect(result).toBeUndefined();
-      });
-
-      it('should handle single empty string in array', () => {
-        const result = callToTyped(['']);
-        expect(result).toBeUndefined();
       });
     });
   });
