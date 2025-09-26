@@ -29,10 +29,10 @@ $numberbox-spin-icon-color: $base-icon-color !default;
 
 
 @if $color == "carmine" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -43,43 +43,43 @@ $numberbox-spin-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "light" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
-  $numberbox-spin-active-bg: darken($button-normal-bg, 30%) !default;
+  $numberbox-spin-active-bg: color.adjust($button-normal-bg, $lightness: -30%, $space: hsl) !default;
   $numberbox-spin-active-color: $base-text-color !default;
   $numberbox-spin-hover-border-color: transparent !default;
-  $numberbox-spin-hover-bg: darken($button-normal-bg, 10%) !default;
+  $numberbox-spin-hover-bg: color.adjust($button-normal-bg, $lightness: -10%, $space: hsl) !default;
 }

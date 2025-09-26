@@ -9,11 +9,11 @@ $informer-info-color: $base-text-color !default;
 $informer-info-background-color: null !default;
 
 @if $mode == "light" {
-  $informer-error-background-color: lighten(saturate(adjust-hue($base-danger, -358), 0.58), 46.67);
-  $informer-info-background-color: lighten($base-text-color, 74.90);
+  $informer-error-background-color: color.adjust($base-danger, $hue: -358deg, $saturation: 0.58%, $space: hsl, $lightness: 46.67%);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: 74.90%, $space: hsl);
 }
 
 @if $mode == "dark" {
-  $informer-error-background-color: darken(desaturate($base-danger, 5.06), 53.53);
-  $informer-info-background-color: darken($base-text-color, 76.08);
+  $informer-error-background-color: color.adjust($base-danger, $saturation: -5.06%, $space: hsl, $lightness: -53.53%);
+  $informer-info-background-color: color.adjust($base-text-color, $lightness: -76.08%, $space: hsl);
 }

@@ -47,7 +47,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "carmine" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: -15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -69,7 +69,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "dark" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: 15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -80,7 +80,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "darkmoon" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: 15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -91,7 +91,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "darkviolet" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: 15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -102,7 +102,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "greenmist" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: -15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -113,7 +113,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "light" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: -15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
@@ -124,7 +124,7 @@ $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "softblue" {
   $gallery-indicator-item-selected-bg: $base-accent !default;
-  $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
+  $gallery-indicator-focused-bg: color.adjust($base-accent, $lightness: -15%, $space: hsl) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;

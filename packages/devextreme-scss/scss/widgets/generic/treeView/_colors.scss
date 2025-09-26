@@ -105,7 +105,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-color: $base-text-color !default;
   $treeview-focused-bg: $base-focus-bg !default;
   $treeview-focus-color: $base-focus-color !default;
-  $treeview-hover-bg: color.change(darken($base-bg, 9%), $alpha: 0.2) !default;
+  $treeview-hover-bg: color.change(color.adjust($base-bg, $lightness: -9%, $space: hsl), $alpha: 0.2) !default;
   $treeview-item-hover-color: $base-hover-color !default;
   $treeview-item-selected-color: $treeview-color !default;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;

@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:map";
+@use "sass:selector";
 
 .dx-icon-plus,
 .dx-icon-overflow,
@@ -194,7 +195,7 @@
 @mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
   $icon-paddings-dirty: $container-size - $icon-size;
   $icon-paddings: $icon-paddings-dirty - $borders-size;
-  $icon-padding: floor(math.div($icon-paddings, 2));
+  $icon-padding: math.floor(math.div($icon-paddings, 2));
 
   // Geometry
   width: $container-size;
@@ -229,7 +230,7 @@
   }
 
   @if $position == relative {
-    @at-root #{selector-append(".dx-rtl", &)},
+    @at-root #{selector.append(".dx-rtl", &)},
     .dx-rtl & {
       &::before {
         left: 0;

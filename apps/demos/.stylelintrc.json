@@ -16,6 +16,7 @@
         "shorthand-property-no-redundant-values": [ true, { "severity": "warning" }],
         "declaration-block-no-redundant-longhand-properties": [ true, { "severity": "warning" }],
         "media-feature-range-notation": null,
-        "selector-not-notation": null
+        "selector-not-notation": null,
+        "color-function-alias-notation": null
     }
 }

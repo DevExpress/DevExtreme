@@ -13,7 +13,7 @@
 @use "../menuBase" as *; // need as private
 
 
-$generic-menu-popup-border: 1px solid $menu-popup-border-color;
+$generic-menu-popup-border: 1px solid;
 
 .dx-context-menu {
   color: $menu-color;
@@ -21,6 +21,7 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
   .dx-submenu {
     background-color: $menu-popup-bg;
     border: $generic-menu-popup-border;
+    border-color: $menu-popup-border-color;
     box-shadow: 0 2px 2px $menu-container-shadow-color;
   }
 

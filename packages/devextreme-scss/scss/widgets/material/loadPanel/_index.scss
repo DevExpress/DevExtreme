@@ -10,7 +10,8 @@
 
 
 .dx-loadpanel-content {
-  border: 1px solid $loadpanel-border-color;
+  border: 1px solid;
+  border-color: $loadpanel-border-color;
   background: $loadpanel-content-bg;
   padding: 13px;
   border-radius: 50%;

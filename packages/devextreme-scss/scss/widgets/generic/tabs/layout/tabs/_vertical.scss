@@ -15,7 +15,9 @@
 .dx-tabs-vertical {
   .dx-tabs-wrapper {
     border-inline-start: $generic-tabs-border;
+    border-inline-start-color: $tabs-border-color;
     border-inline-end: $generic-tabs-border;
+    border-inline-end-color: $tabs-border-color;
     border-block-start: none;
     border-block-end: none;
 

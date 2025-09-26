@@ -58,7 +58,8 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-indicator-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-indicator-border-color;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -116,7 +117,8 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-invalid-focused-border-color;
+      border-bottom: 2px solid;
+      border-bottom-color: $texteditor-invalid-focused-border-color;
     }
   }
 }

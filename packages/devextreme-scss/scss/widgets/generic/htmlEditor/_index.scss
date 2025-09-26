@@ -23,7 +23,8 @@
     position: relative;
 
     &:first-child {
-      border-bottom: 1px solid $htmleditor-toolbar-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $htmleditor-toolbar-border-color;
     }
   }
 
@@ -251,7 +252,8 @@
 
   .dx-fileuploader-input-wrapper {
     padding: $generic-html-editor-add-image-dialog-fileuploader-padding;
-    border: $generic-fileuploader-file-wrapper-border-size dashed $base-border-color;
+    border: $generic-fileuploader-file-wrapper-border-size dashed;
+    border-color: $base-border-color;
 
     .dx-fileuploader-input-label {
       border-width: 0;

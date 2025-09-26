@@ -16,7 +16,9 @@
   > .dx-tabpanel-tabs {
     .dx-tabs-wrapper {
       border-inline-start: $generic-tabs-border;
+      border-inline-start-color: $tabs-border-color;
       border-inline-end: $generic-tabs-border;
+      border-inline-end-color: $tabs-border-color;
     }
 
     .dx-tabs-scrollable {
@@ -25,6 +27,7 @@
         none,
         $generic-tabs-border-width solid,
         none,
+        null,
       );
 
       &::after {

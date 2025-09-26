@@ -3,6 +3,7 @@
 $scheduler-workspace-date-table-cell-height: null !default;
 $scheduler-accent-border: null !default;
 $scheduler-base-border: null !default;
+$scheduler-base-border-color: null !default;
 $scheduler-accent-border-color: null !default;
 
 $scheduler-timeline-min-height: 100px;
@@ -175,10 +176,12 @@ $scheduler-timeline-min-height: 100px;
 
     .dx-scheduler-header-panel {
       border-bottom: $scheduler-accent-border;
+      border-bottom-color: $scheduler-accent-border-color;
     }
 
     .dx-scheduler-header-panel-empty-cell {
-      border-bottom: 1px solid $scheduler-accent-border-color;
+      border-bottom: 1px solid;
+      border-bottom-color: $scheduler-accent-border-color;
     }
   }
 
@@ -194,15 +197,18 @@ $scheduler-timeline-min-height: 100px;
     .dx-scheduler-group-row .dx-scheduler-group-header {
       border: none;
       border-top: $scheduler-base-border;
+      border-top-color: $scheduler-base-border-color;
     }
 
     &.dx-scheduler-work-space-group-by-date {
       .dx-scheduler-group-row .dx-scheduler-group-header {
         border-right: $scheduler-base-border;
+        border-right-color: $scheduler-base-border-color;
       }
 
       .dx-scheduler-group-row .dx-scheduler-last-group-cell {
         border-right: $scheduler-accent-border;
+        border-right-color: $scheduler-accent-border-color;
       }
     }
 
@@ -219,6 +225,7 @@ $scheduler-timeline-min-height: 100px;
     .dx-scheduler-date-table-cell {
       &:first-child {
         border-left: $scheduler-base-border;
+        border-left-color: $scheduler-base-border-color;
         border-right: none;
       }
     }

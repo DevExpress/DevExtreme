@@ -30,7 +30,7 @@ $tooltip-border-radius: $base-border-radius !default;
   $tooltip-color: $base-text-color !default;
   $tooltip-bg: $base-bg !default;
   $tooltip-border-color: $overlay-border-color !default;
-  $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
+  $tooltip-shadow-color: color.change(color.adjust($tooltip-bg, $lightness: -100%, $space: hsl), $alpha: 0.1) !default;
 }
 
 @if $color == "contrast" {
@@ -49,7 +49,7 @@ $tooltip-border-radius: $base-border-radius !default;
 
 @if $color == "darkmoon" {
   $tooltip-color: $base-text-color !default;
-  $tooltip-bg: lighten($base-bg, 14%) !default; // #465672 => #62789e
+  $tooltip-bg: color.adjust($base-bg, $lightness: 14%, $space: hsl) !default; // #465672 => #62789e
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
 }
@@ -63,21 +63,21 @@ $tooltip-border-radius: $base-border-radius !default;
 
 @if $color == "greenmist" {
   $tooltip-color: $base-text-color !default;
-  $tooltip-bg: lighten($base-bg, 100%) !default;
+  $tooltip-bg: color.adjust($base-bg, $lightness: 100%, $space: hsl) !default;
   $tooltip-border-color: $overlay-border-color !default;
-  $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
+  $tooltip-shadow-color: color.change(color.adjust($tooltip-bg, $lightness: -100%, $space: hsl), $alpha: 0.1) !default;
 }
 
 @if $color == "light" {
   $tooltip-color: $base-text-color !default;
   $tooltip-bg: $base-bg !default;
   $tooltip-border-color: $overlay-border-color !default;
-  $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
+  $tooltip-shadow-color: color.change(color.adjust($tooltip-bg, $lightness: -100%, $space: hsl), $alpha: 0.1) !default;
 }
 
 @if $color == "softblue" {
   $tooltip-color: $base-text-color !default;
   $tooltip-bg: $base-bg !default;
   $tooltip-border-color: $overlay-border-color !default;
-  $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
+  $tooltip-shadow-color: color.change(color.adjust($tooltip-bg, $lightness: -100%, $space: hsl), $alpha: 0.1) !default;
 }

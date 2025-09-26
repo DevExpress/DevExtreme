@@ -5,7 +5,7 @@
 // adduse
 
 $filemanager-border-color: $base-border-color !default;
-$filemanager-file-toolbar-bg: darken($base-bg, 3%) !default;
+$filemanager-file-toolbar-bg: color.adjust($base-bg, $lightness: -3%, $space: hsl) !default;
 $filemanager-editor-active-bg: color.change($base-text-color, $alpha: 0.1) !default;
 $filemanager-dirs-tree-item-focus-color: $base-text-color !default;
 $filemanager-breadcrumbs-item-focus-bg: $base-border-color !default;
@@ -23,12 +23,12 @@ $filemanager-progressbox-shadow-color: null !default;
 
 
 @if $mode == "light" {
-  $filemanager-dirs-tree-item-focus-bg: darken($base-bg, 8%) !default;
+  $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: -8%, $space: hsl) !default;
   $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
 }
 
 @if $mode == "dark" {
-  $filemanager-dirs-tree-item-focus-bg: lighten($base-bg, 8%) !default;
+  $filemanager-dirs-tree-item-focus-bg: color.adjust($base-bg, $lightness: 8%, $space: hsl) !default;
   $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 }
 

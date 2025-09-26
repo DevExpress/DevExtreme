@@ -13,5 +13,5 @@ $tileview-bg: $base-element-bg !default;
 $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
 $tileview-hover-bg: $base-element-bg !default;
 $tileview-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
-$tileview-active-bg: color.change(darken($tileview-bg, 62.5%), $alpha: 0.2) !default;
+$tileview-active-bg: color.change(color.adjust($tileview-bg, $lightness: -62.5%, $space: hsl), $alpha: 0.2) !default;
 $tileview-active-color: $tileview-color !default;

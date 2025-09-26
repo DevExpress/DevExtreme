@@ -15,9 +15,9 @@
 // adduse
 @use "../badge";
 
-$generic-list-border: $generic-list-border-width solid $list-border-color;
-$generic-list-item-border: $generic-list-item-border-width solid $list-border-color;
-$generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
+$generic-list-border: $generic-list-border-width solid;
+$generic-list-item-border: $generic-list-item-border-width solid;
+$generic-list-search-editor-height: math.round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
 
 .dx-list-item-chevron {
   @include dx-icon(chevronnext);
@@ -136,7 +136,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     border: none;
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{round($generic-list-search-editor-height + $generic-list-searchbox-margin-bottom)});
+      height: calc(100% - #{math.round($generic-list-search-editor-height + $generic-list-searchbox-margin-bottom)});
     }
 
     &.dx-list-select-decorator-enabled {
@@ -152,7 +152,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
         &.dx-state-focused {
           .dx-radiobutton-icon,
           .dx-checkbox-icon {
-            border: 1px solid $checkbox-border-color-focused;
+            border: 1px solid;
+            border-color: $checkbox-border-color-focused;
           }
         }
       }
@@ -173,7 +174,9 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     font-weight: bold;
     padding: $generic-list-group-header-vertical-padding $item-horizontal-padding $generic-list-item-vertical-padding $item-horizontal-padding;
     border-top: $generic-list-item-border;
+    border-top-color: $list-border-color;
     border-bottom: $list-group-header-border-bottom;
+    border-bottom-color: $list-border-color;
     background: $list-group-header-bg;
     color: $list-group-color;
     display: flex;
@@ -229,8 +232,10 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
         &.dx-state-hover {
           color: $list-item-ghost-color;
           background: $list-item-ghost-bg;
-          border-top: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
-          border-bottom: 1px solid color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-top: 1px solid;
+          border-top-color: color.change($list-item-ghost-border-color, $alpha: 0.5);
+          border-bottom: 1px solid;
+          border-bottom-color: color.change($list-item-ghost-border-color, $alpha: 0.5);
           box-shadow: 0 0 1px color.change($list-item-ghost-shadow-color, $alpha: 0.1), 0 1px 3px color.change($list-item-ghost-shadow-color, $alpha: 0.2);
         }
       }
@@ -240,6 +245,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
   .dx-list-item,
   .dx-list .dx-empty-message {
     border-top: $generic-list-item-border;
+    border-top-color: $list-border-color;
     color: $list-normal-color;
 
     .dx-list-item-separator-hidden & {
@@ -265,9 +271,11 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-border-visible {
     border: $generic-list-border;
+    border-color: $list-border-color;
 
     .dx-list-select-all {
       border-bottom: $generic-list-border;
+      border-bottom-color: $list-border-color;
     }
   }
 
@@ -317,6 +325,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
   .dx-list-select-all {
     padding: $generic-list-item-vertical-padding - 1px 0 $generic-list-item-vertical-padding - 2px;
     border-bottom: $generic-list-item-border;
+    border-bottom-color: $list-border-color;
   }
 
   .dx-list-select-all-checkbox {
@@ -375,7 +384,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-context-menucontent {
     background-color: $list-holdmenu-bg;
-    border: 1px solid $list-holdmenu-border-color;
+    border: 1px solid;
+    border-color: $list-holdmenu-border-color;
     border-radius: 0;
     box-shadow: 0 3px 10px $list-holdmenu-shadow-color;
   }

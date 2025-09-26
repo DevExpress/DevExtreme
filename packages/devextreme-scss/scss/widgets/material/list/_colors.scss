@@ -65,7 +65,7 @@ $list-menu-button-default-bg: $button-default-bg !default;
 $list-menu-button-delete-bg: $base-danger !default;
 $list-button-delete-shadow-color: color.change($base-shadow-color, $alpha: 0.24) !default;
 $list-item-ghost-bg: $base-bg !default;
-$list-item-ghost-color: lighten($base-text-color, 38.5%) !default;
+$list-item-ghost-color: color.adjust($base-text-color, $lightness: 38.5%, $space: hsl) !default;
 $list-item-ghost-border-color: $base-accent !default;
 $list-item-ghost-shadow-color: $base-shadow-color !default;
 $list-icon-color: $base-icon-color !default;
@@ -75,13 +75,13 @@ $list-item-chevron-icon-color: $base-spin-icon-color !default;
   $list-item-selected-bg: color.change(#000, $alpha: 0.12) !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
   $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
-  $list-item-active-bg: darken($base-bg, 20%) !default;
+  $list-item-active-bg: color.adjust($base-bg, $lightness: -20%, $space: hsl) !default;
 }
 
 @if $mode == "dark" {
   $list-item-selected-bg: color.change(#6e6e80, $alpha: 0.5) !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
-  $list-item-active-bg: lighten($base-bg, 20%) !default;
+  $list-item-active-bg: color.adjust($base-bg, $lightness: 20%, $space: hsl) !default;
 }
 

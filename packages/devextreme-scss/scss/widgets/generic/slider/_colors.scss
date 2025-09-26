@@ -28,10 +28,10 @@ $slider-handle-border-radius: $base-border-radius - 1px !default;
 @if $color == "carmine" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: -17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: -10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -40,60 +40,60 @@ $slider-handle-border-radius: $base-border-radius - 1px !default;
   $slider-handle-active-bg: $base-inverted-bg !default;
   $slider-handle-hover-bg: $slider-range-bg !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
 }
 
 @if $color == "dark" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: 17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: 10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: 17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: 10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: lighten($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: lighten($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: 17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: 10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: lighten($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: 10%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: -17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: -10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "light" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: -17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: -10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
   $slider-handle-bg: $base-accent !default;
   $slider-handle-border-color: $base-bg !default;
-  $slider-handle-active-bg: darken($slider-handle-bg, 17%) !default;
-  $slider-handle-hover-bg: darken($slider-handle-bg, 10%) !default;
+  $slider-handle-active-bg: color.adjust($slider-handle-bg, $lightness: -17%, $space: hsl) !default;
+  $slider-handle-hover-bg: color.adjust($slider-handle-bg, $lightness: -10%, $space: hsl) !default;
   $slider-handle-focused-bg: $slider-handle-hover-bg !default;
-  $slider-invalid-handle-accent-bg: darken($base-danger, 10%) !default;
+  $slider-invalid-handle-accent-bg: color.adjust($base-danger, $lightness: -10%, $space: hsl) !default;
 }
 

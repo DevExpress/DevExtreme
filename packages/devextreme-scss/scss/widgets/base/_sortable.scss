@@ -38,7 +38,8 @@ $base-accent: null !default;
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid $base-accent;
+  border: 1px solid;
+  border-color: $base-accent;
   box-sizing: border-box;
   z-index: $max-integer;
 }

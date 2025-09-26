@@ -78,11 +78,11 @@ $texteditor-label-transition:
 }
 
 @if $color == "dark" {
-  $texteditor-placeholder-color: darken($texteditor-color, 40%) !default;
+  $texteditor-placeholder-color: color.adjust($texteditor-color, $lightness: -40%, $space: hsl) !default;
   $texteditor-bg: $base-element-bg !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
-  $texteditor-button-clear-icon-color: darken($texteditor-color, 40%) !default;
+  $texteditor-button-clear-icon-color: color.adjust($texteditor-color, $lightness: -40%, $space: hsl) !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
 }
 
@@ -90,14 +90,14 @@ $texteditor-label-transition:
   $texteditor-bg: $base-element-bg !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
-  $texteditor-placeholder-color: darken($base-label-color, 17%) !default; // #c1c7c9 => #919ea3
+  $texteditor-placeholder-color: color.adjust($base-label-color, $lightness: -17%, $space: hsl) !default; // #c1c7c9 => #919ea3
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.2) !default;
 }
 
 @if $color == "darkviolet" {
   $texteditor-bg: $base-element-bg !default;
-  $texteditor-placeholder-color: darken($texteditor-color, 40%) !default;
+  $texteditor-placeholder-color: color.adjust($texteditor-color, $lightness: -40%, $space: hsl) !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
@@ -105,7 +105,7 @@ $texteditor-label-transition:
 }
 
 @if $color == "greenmist" {
-  $texteditor-placeholder-color: lighten($base-label-color, 16%) !default; // #728e94 => #a1b1b5
+  $texteditor-placeholder-color: color.adjust($base-label-color, $lightness: 16%, $space: hsl) !default; // #728e94 => #a1b1b5
   $texteditor-bg: $base-element-bg !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
@@ -114,16 +114,16 @@ $texteditor-label-transition:
 }
 
 @if $color == "light" {
-  $texteditor-placeholder-color: lighten($texteditor-color, 40%) !default;
+  $texteditor-placeholder-color: color.adjust($texteditor-color, $lightness: 40%, $space: hsl) !default;
   $texteditor-bg: $base-element-bg !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-focused-border-color: $base-focus-bg !default;
-  $texteditor-button-clear-icon-color: lighten($texteditor-color, 40%) !default;
+  $texteditor-button-clear-icon-color: color.adjust($texteditor-color, $lightness: 40%, $space: hsl) !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
 }
 
 @if $color == "softblue" {
-  $texteditor-placeholder-color: lighten($texteditor-color, 40%) !default;
+  $texteditor-placeholder-color: color.adjust($texteditor-color, $lightness: 40%, $space: hsl) !default;
   $texteditor-bg: $base-element-bg !default;
   $texteditor-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $texteditor-focused-border-color: $base-focus-bg !default;

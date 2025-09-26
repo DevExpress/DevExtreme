@@ -35,7 +35,7 @@ $accordion-title-active-color: $accordion-color !default;
 $accordion-title-active-bg: $base-hover-bg !default;
 $accordion-item-hover-bg: $base-hover-bg !default;
 $accordion-item-bg: $accordion-background-color !default;
-$accordion-title-hover-border-color: darken($base-border-color, 6%) !default;
+$accordion-title-hover-border-color: color.adjust($base-border-color, $lightness: -6%, $space: hsl) !default;
 
 @if $mode == "light" {
   $accordion-item-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.20) !default;

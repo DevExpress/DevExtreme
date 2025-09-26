@@ -21,7 +21,8 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
-    border: 1px solid $overlay-border-color;
+    border: 1px solid;
+    border-color: $overlay-border-color;
     background: $overlay-content-bg;
     box-shadow: 0 6px 12px $overlay-content-shadow-color;
     border-radius: $popup-border-radius;
@@ -33,7 +34,8 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
   .dx-state-focused {
     &.dx-overlay-content {
-      border: 1px solid $base-accent;
+      border: 1px solid;
+      border-color: $base-accent;
     }
   }
 }
@@ -41,7 +43,8 @@ $generic-popup-toolbar-label-font-size: $generic-m-font-size;
 .dx-popup-title {
   position: relative;
   min-height: 28px;
-  border-bottom: 1px solid $popup-title-border-color;
+  border-bottom: 1px solid;
+  border-bottom-color: $popup-title-border-color;
   background: $popup-title-bg;
   color: $popup-title-color;
 

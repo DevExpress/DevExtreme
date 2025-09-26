@@ -1,3 +1,4 @@
+@use "sass:selector";
 @use "./mixins" as *;
 
 // adduse
@@ -56,7 +57,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  @at-root #{selector-append(".dx-overlay-wrapper .dx-overlay-content", &)} {
+  @at-root #{selector.append(".dx-overlay-wrapper .dx-overlay-content", &)} {
     > .dx-popup-title,
     > .dx-popup-bottom {
       width: 100%;

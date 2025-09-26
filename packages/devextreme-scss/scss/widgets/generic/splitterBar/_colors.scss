@@ -14,7 +14,7 @@ $splitter-bg: null !default;
 }
 
 @if $color == "contrast" {
-  $splitter-bg: darken($base-bg, 13.5%) !default;
+  $splitter-bg: color.adjust($base-bg, $lightness: -13.5%, $space: hsl) !default;
 }
 
 @if $color == "dark" {
