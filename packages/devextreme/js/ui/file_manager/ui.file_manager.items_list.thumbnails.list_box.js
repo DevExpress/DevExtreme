@@ -49,7 +49,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     _initActions() {
         this._actions = {
             onItemEnterKeyPressed: this._createActionByOption('onItemEnterKeyPressed'),
-            onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged')
+            onBeforeFocusedItemChanged: this._createActionByOption('onBeforeFocusedItemChanged'),
+            onFocusedElement: this._createActionByOption('onFocusedElement')
         };
     }
 
@@ -421,6 +422,16 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._actions.onFocusedItemChanged(args);
     }
 
+    _raiseFocusedElement() {
+        const args = {
+            shouldFocusElement: true
+        };
+
+        this._actions.onFocusedElement(args);
+
+        return args;
+    }
+
     _changeItemSelection(item, select) {
         if(this.isItemSelected(item) === select) {
             return;
@@ -492,6 +503,12 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             case 'onItemEnterKeyPressed':
             case 'onFocusedItemChanged':
                 this._actions[args.name] = this._createActionByOption(args.name);
+                break;
+            case 'focusedElement':
+                const res = this._raiseFocusedElement();
+                if(res.shouldFocusElement) {
+                    super._optionChanged(args);
+                }
                 break;
             default:
                 super._optionChanged(args);

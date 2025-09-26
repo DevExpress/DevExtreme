@@ -27,7 +27,20 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
 
+        this._lastMouseButton = null;
+        this._storeLastMouseButtonHandler = this._storeLastMouseButton.bind(this);
+        eventsEngine.on(this.$element(), 'pointerdown', this._storeLastMouseButtonHandler);
+
         this._createItemList();
+    }
+
+    _storeLastMouseButton(e) {
+        this._lastMouseButton = e.which;
+    }
+
+    _dispose() {
+        eventsEngine.off(this.$element(), 'pointerdown', this._storeLastMouseButtonHandler);
+        super.dispose();
     }
 
     _createItemList() {
@@ -47,6 +60,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
+            onFocusedElement: this._onItemListFocusedElement.bind(this),
             onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
             onContentReady: this._onContentReady.bind(this)
         });
@@ -138,6 +152,12 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             currentSelectedItemKeys: addedItemKeys,
             currentDeselectedItemKeys: removedItemKeys
         });
+    }
+
+    _onItemListFocusedElement(args) {
+        // Do not focus the element when the right mouse button is pressed.
+        args.shouldFocusElement = this._lastMouseButton !== 3;
+        this._lastMouseButton = null;
     }
 
     _onItemListFocusedItemChanged({ item, itemElement }) {
