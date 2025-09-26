@@ -8,7 +8,7 @@
 <script>
 
 import DxDataGrid from 'devextreme-vue/data-grid';
-import { customers } from './data.js';
+import { customers } from './data.ts';
 
 export default {
   components: {

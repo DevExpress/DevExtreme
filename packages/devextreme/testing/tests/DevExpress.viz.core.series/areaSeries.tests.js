@@ -3,7 +3,7 @@ import {
     Renderer,
 } from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
-import vizUtils from 'viz/core/utils';
+import vizUtils from 'viz/core/utils_default';
 import pointModule from 'viz/series/points/base_point';
 import SeriesModule from 'viz/series/base_series';
 import { insertMockFactory, MockAxis, restoreMockFactory } from '../../helpers/chartMocks.js';

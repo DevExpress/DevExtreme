@@ -31,6 +31,7 @@ import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
+import { getHideableColumns } from './utils';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -740,7 +741,7 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public updateHidingQueue(columns) {
     const that = this;
-    const hideableColumns = columns.filter((column) => column.visible && !column.type && !column.fixed && !(isDefined(column.groupIndex) && column.groupIndex >= 0));
+    const hideableColumns = getHideableColumns(columns);
     let columnsHasHidingPriority;
     let i;
 
@@ -751,9 +752,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
     }
 
     for (i = 0; i < hideableColumns.length; i++) {
-      if (isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+      const column = hideableColumns[i];
+
+      if (isDefined(column.hidingPriority) && column.hidingPriority >= 0) {
         columnsHasHidingPriority = true;
-        that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
+        that._hidingColumnsQueue[column.hidingPriority] = column;
       }
     }
 
