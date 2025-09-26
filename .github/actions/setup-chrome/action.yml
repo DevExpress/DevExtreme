@@ -9,6 +9,9 @@ inputs:
   chrome-version:
     description: Chrome version to install
     default: "latest"
+  runner-type:
+    description: Runner type, 'github-hosted' of 'self-hosted'
+    default: "self-hosted"
 
 runs:
   using: composite
@@ -27,10 +30,14 @@ runs:
       shell: bash
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
+        RUNNER_TYPE: ${{ inputs.runner-type }}
       run: |
-        if [ -n "$CHROME_VERSION" ]; then
-          sudo apt-get update
-          sudo apt-get -y install libu2f-udev
+        CURRENT_CHROME_VERSION=$(google-chrome-stable --product-version)
+        if [[ -n "$CHROME_VERSION" && "$CURRENT_CHROME_VERSION" != "$CHROME_VERSION" ]]; then
+          if [ "$RUNNER_TYPE" = "github_hosted" ]; then
+            sudo apt-get update
+            sudo apt-get -y install libu2f-udev
+          fi
           curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" > /tmp/chrome.deb
           sudo dpkg -i /tmp/chrome.deb
           unlink /tmp/chrome.deb
