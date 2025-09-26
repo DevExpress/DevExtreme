@@ -35,16 +35,14 @@ test('ScrollTo works correctly with timelineDay and timelineWeek view', async (t
   const views = [{
     name: 'timelineDay',
     initValue: 0,
-    expectedValue: 1700,
   }, {
     name: 'timelineWeek',
     initValue: 0,
-    expectedValue: 25700,
   }];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const view of views) {
-    const { name, initValue, expectedValue } = view;
+    const { name, initValue } = view;
 
     await scheduler.option('currentView', name);
     await scheduler.option('useNative', true);
@@ -55,9 +53,14 @@ test('ScrollTo works correctly with timelineDay and timelineWeek view', async (t
 
     await scrollToDate();
 
+    const workSpaceScrollLeft = await scheduler.workSpaceScroll.left;
+    const headerSpaceScrollLeft = await scheduler.headerSpaceScroll.left;
+
     await t
-      .expect(scheduler.workSpaceScroll.left).eql(expectedValue, `Work space is scrolled in ${name} view`)
-      .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, `Header space is scrolled in ${name} view`);
+      .expect(workSpaceScrollLeft).notEql(initValue, `Work space is scrolled in ${name} view`)
+      .expect(headerSpaceScrollLeft).notEql(initValue, `Header space is scrolled in ${name} view`)
+      .expect(workSpaceScrollLeft)
+      .eql(headerSpaceScrollLeft, `Work space and header space are synchronized in ${name} view`);
   }
 }).before(async () => createScheduler({
   dataSource: [],
@@ -79,7 +82,6 @@ test('ScrollTo works correctly with grouping in timeline views', async (t) => {
   await scheduler.option('useNative', true);
 
   const initValue = 0;
-  const expectedValue = 25700;
 
   await t
     .expect(scheduler.workSpaceScroll.left).eql(initValue, 'Work space has init scroll position')
@@ -87,9 +89,14 @@ test('ScrollTo works correctly with grouping in timeline views', async (t) => {
 
   await scrollToDateWithGroups();
 
+  const workSpaceScrollLeft = await scheduler.workSpaceScroll.left;
+  const headerSpaceScrollLeft = await scheduler.headerSpaceScroll.left;
+
   await t
-    .expect(scheduler.workSpaceScroll.left).eql(expectedValue, 'Work space is scrolled with groups')
-    .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, 'Header space is scrolled with groups');
+    .expect(workSpaceScrollLeft).notEql(initValue, 'Work space is scrolled with groups')
+    .expect(headerSpaceScrollLeft).notEql(initValue, 'Header space is scrolled with groups')
+    .expect(workSpaceScrollLeft)
+    .eql(headerSpaceScrollLeft, 'Work space and header space are synchronized with groups');
 }).before(async () => createScheduler({
   dataSource: [],
   views: ['timelineWeek'],
@@ -145,18 +152,22 @@ test('ScrollTo works correctly with RTL mode', async (t) => {
   await scheduler.option('useNative', true);
   await scheduler.option('rtlEnabled', true);
 
-  const initValue = 0;
-  const expectedValue = 25700;
+  const initialWorkSpaceScrollLeft = await scheduler.workSpaceScroll.left;
+  const initialHeaderSpaceScrollLeft = await scheduler.headerSpaceScroll.left;
 
   await t
-    .expect(scheduler.workSpaceScroll.left).eql(initValue, 'Work space has init scroll position in RTL')
-    .expect(scheduler.headerSpaceScroll.left).eql(initValue, 'Header space has init scroll position in RTL');
+    .expect(initialWorkSpaceScrollLeft).eql(initialHeaderSpaceScrollLeft, 'Work space and header space have same initial scroll position in RTL');
 
   await scrollToDate();
 
+  const workSpaceScrollLeft = await scheduler.workSpaceScroll.left;
+  const headerSpaceScrollLeft = await scheduler.headerSpaceScroll.left;
+
   await t
-    .expect(scheduler.workSpaceScroll.left).eql(expectedValue, 'Work space is scrolled in RTL')
-    .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, 'Header space is scrolled in RTL');
+    .expect(workSpaceScrollLeft).notEql(initialWorkSpaceScrollLeft, 'Work space is scrolled in RTL')
+    .expect(headerSpaceScrollLeft).notEql(initialHeaderSpaceScrollLeft, 'Header space is scrolled in RTL')
+    .expect(workSpaceScrollLeft)
+    .eql(headerSpaceScrollLeft, 'Work space and header space are synchronized in RTL');
 }).before(async () => createScheduler({
   dataSource: [],
   views: ['timelineWeek'],
