@@ -17,6 +17,15 @@ export type Prompt = {
 };
 
 /**
+ * @namespace DevExpress.aiIntegration
+ */
+export type RequestParamsInfo = Record<PropertyKey, any>;
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type AIResponse = string | Record<PropertyKey, any>;
+
+/**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @public
@@ -27,6 +36,11 @@ export type RequestParams = {
    * @public
    */
   prompt: Prompt;
+  /**
+   * @docid
+   * @public
+   */
+  requestParams?: RequestParamsInfo;
 };
 
 /**
@@ -39,7 +53,7 @@ export type Response = {
    * @docid
    * @public
    */
-  promise: Promise<string>;
+  promise: Promise<AIResponse>;
   /**
    * @docid
    * @public
