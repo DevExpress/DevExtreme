@@ -198,6 +198,7 @@ export interface Controllers {
   stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
+  toastViewController: import('./toast/m_toast_controller').ToastViewController;
 }
 
 type ControllerTypes = {
@@ -220,6 +221,7 @@ export interface Views {
   gridView: import('./views/m_grid_view').GridView;
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
+  toastView: import('./toast/m_toast_view').ToastView;
 }
 
 export interface EditingControllerRequired {

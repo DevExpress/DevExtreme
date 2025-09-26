@@ -56,7 +56,9 @@ gridCore.registerModulesOrder([
   'summary',
   'columnFixing',
   'export',
-  'gridView']);
+  'toast',
+  'gridView',
+]);
 
 class DataGrid extends GridCoreWidget<Properties> {
   private _defaultOptionsRules() {
