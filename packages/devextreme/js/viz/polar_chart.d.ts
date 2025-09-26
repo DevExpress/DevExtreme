@@ -16,9 +16,9 @@ import {
 } from '../localization';
 
 import {
-    basePointObject,
-    baseSeriesObject,
-    chartAxisObject,
+  basePointObject,
+  baseSeriesObject,
+  chartAxisObject,
 } from './chart';
 
 import {
@@ -28,6 +28,7 @@ import {
     BaseChartOptions,
     BaseChartTooltip,
     BaseChartAnnotationConfig,
+    BasePointInfo,
     PointInteractionInfo,
     TooltipInfo,
 } from './chart_components/base_chart';
@@ -1211,17 +1212,48 @@ export type Legend = BaseChartLegend & {
      */
     hoverMode?: LegendHoverMode;
 };
+
+/**
+ * @docid dxPolarChartPointInfo
+ * @public
+ */
+export type PointInfo = BasePointInfo<polarPointObject>;
+
+/**
+ * @namespace DevExpress.viz
+ * @deprecated Use PointInfo instead
+ */
+export type dxPolarChartPointInfo = PointInfo;
+
 /**
  * @public
  * @docid dxPolarChartTooltip
+ * @type object
  */
-export type Tooltip = BaseChartTooltip & {
+export type Tooltip = Omit<BaseChartTooltip<PointInfo>, 'contentTemplate' | 'customizeTooltip'> & {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
      * @default false
      * @public
      */
     shared?: boolean;
+    /**
+     * @docid dxPolarChartOptions.tooltip.contentTemplate
+     * @type_function_param1 pointInfo:dxPolarChartPointInfo
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @public
+     */
+    contentTemplate?: template | ((pointInfo: PointInfo, element: DxElement) => string | UserDefinedElement) | undefined;
+    /**
+     * @docid dxPolarChartOptions.tooltip.customizeTooltip
+     * @public
+     * @type_function_param1 pointInfo:dxPolarChartPointInfo
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     */
+    customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
 };
 /**
  * @public
