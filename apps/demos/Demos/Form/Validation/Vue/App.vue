@@ -177,6 +177,7 @@ import DxForm, {
   DxEmailRule,
   DxAsyncRule,
   DxCustomRule,
+  type DxFormTypes,
 } from 'devextreme-vue/form';
 import DxAutocomplete from 'devextreme-vue/autocomplete'; // for editor-type=dxAutocomplete
 import 'devextreme-vue/date-range-box';
@@ -184,7 +185,7 @@ import notify from 'devextreme/ui/notify';
 import Validator from 'devextreme/ui/validator';
 import service from './data.ts';
 
-const formInstance = ref(null);
+const formInstance = ref<DxForm['instance']>();
 const customer = ref(service.getCustomer());
 const registerButtonOptions = ref({
   text: 'Register',
@@ -198,7 +199,7 @@ const resetButtonOptions = ref({
   disabled: true,
   width: '120px',
   onClick: () => {
-    formInstance.value.reset();
+    formInstance.value?.reset();
   },
 });
 const colCountByScreen = ref({
@@ -211,8 +212,8 @@ const passwordEditorOptions = ref({
   mode: 'password',
   valueChangeEvent: 'keyup',
   onValueChanged: () => {
-    const editor = formInstance.value.getEditor('ConfirmPassword');
-    if (editor.option('value')) {
+    const editor = formInstance.value?.getEditor('ConfirmPassword');
+    if (editor?.option('value')) {
       const instance = Validator.getInstance(editor.element()) as Validator;
       instance.validate();
     }
@@ -289,18 +290,18 @@ const namePattern = ref(/^[^0-9]+$/);
 const cityPattern = ref(/^[^0-9]+$/);
 const phonePattern = ref(/^[02-9]\d{9}$/);
 
-function onOptionChanged(e) {
+function onOptionChanged(e: DxFormTypes.OptionChangedEvent) {
   if (e.name === 'isDirty') {
-    const resetButton = formInstance.value.getButton('Reset');
-    resetButton.option('disabled', !e.value);
+    const resetButton = formInstance.value?.getButton('Reset');
+    resetButton?.option('disabled', !e.value);
   }
 }
-function saveFormInstance(e) {
+function saveFormInstance(e: DxFormTypes.InitializedEvent) {
   formInstance.value = e.component;
 }
-function changePasswordMode(name) {
-  const editor = formInstance.value.getEditor(name);
-  editor.option(
+function changePasswordMode(name: string) {
+  const editor = formInstance.value?.getEditor?.(name);
+  editor?.option(
     'mode',
     editor.option('mode') === 'text' ? 'password' : 'text',
   );
@@ -311,10 +312,10 @@ function passwordComparison() {
 function checkComparison() {
   return true;
 }
-function asyncValidation(params) {
+function asyncValidation(params: Record<string, any>) {
   return sendRequest(params.value);
 }
-function validateVacationDatesRange({ value }) {
+function validateVacationDatesRange({ value }: Record<string, any>) {
   const [startDate, endDate] = value;
 
   if (startDate === null || endDate === null) {
@@ -326,7 +327,7 @@ function validateVacationDatesRange({ value }) {
 
   return daysDifference < 25;
 }
-function validateVacationDatesPresence({ value }) {
+function validateVacationDatesPresence({ value }: Record<string, any>) {
   const [startDate, endDate] = value;
 
   if (startDate === null && endDate === null) {
@@ -335,7 +336,7 @@ function validateVacationDatesPresence({ value }) {
 
   return startDate !== null && endDate !== null;
 }
-function handleSubmit(e) {
+function handleSubmit(e: Event) {
   notify({
     message: 'You have submitted the form',
     position: {
@@ -345,7 +346,7 @@ function handleSubmit(e) {
   }, 'success', 3000);
   e.preventDefault();
 }
-const sendRequest = function (value) {
+const sendRequest = function(value: string) {
   const invalidEmail = 'test@dx-email.com';
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -84,7 +84,7 @@ const amountEditorOptions = {
   },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
-const formatMessage = ref((msg) => msg);
+const formatMessage = ref((msg: string) => msg);
 
 onBeforeMount(() => {
   dxLocale(locale);
