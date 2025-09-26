@@ -99,6 +99,14 @@ export type ResultEvent = EventInfo<dxSpeechToText> & { event: Event };
 export type ErrorEvent = EventInfo<dxSpeechToText> & { event: Event };
 
 /**
+ * @docid _ui_speech_to_text_EndEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type EndEvent = EventInfo<dxSpeechToText> & { event: Event };
+
+/**
  * @docid _ui_speech_to_text_ContentReadyEvent
  * @public
  * @type object
@@ -225,6 +233,15 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
    * @public
    */
   onError?: ((e: ErrorEvent) => void) | undefined;
+
+    /**
+   * @docid dxSpeechToTextOptions.onEnd
+   * @default undefined
+   * @type_function_param1 e:{ui/speech_to_text:EndEvent}
+   * @action
+   * @public
+   */
+  onEnd?: ((e: EndEvent) => void) | undefined;
 }
 
 /**
@@ -258,7 +275,7 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 type EventsIntegrityCheckingHelper = CheckedEvents<
   FilterOutHidden<Properties>,
   Required<Events>,
-  'onStartClick' | 'onStopClick' | 'onResult' | 'onError'
+  'onStartClick' | 'onStopClick' | 'onResult' | 'onError' | 'onEnd'
 >;
 
 /**

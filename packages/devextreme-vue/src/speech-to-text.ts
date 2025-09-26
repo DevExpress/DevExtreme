@@ -6,6 +6,7 @@ import {
  CustomSpeechRecognizer,
  ContentReadyEvent,
  DisposingEvent,
+ EndEvent,
  ErrorEvent,
  InitializedEvent,
  OptionChangedEvent,
@@ -32,6 +33,7 @@ type AccessibleOptions = Pick<Properties,
   "hoverStateEnabled" |
   "onContentReady" |
   "onDisposing" |
+  "onEnd" |
   "onError" |
   "onInitialized" |
   "onOptionChanged" |
@@ -68,6 +70,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onEnd: Function as PropType<((e: EndEvent) => void)>,
     onError: Function as PropType<((e: ErrorEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
@@ -100,6 +103,7 @@ const componentConfig = {
     "update:hoverStateEnabled": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
+    "update:onEnd": null,
     "update:onError": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
