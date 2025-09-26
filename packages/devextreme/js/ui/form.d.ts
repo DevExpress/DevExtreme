@@ -1,4 +1,4 @@
-import { AIIntegration } from '../common/ai-integration';
+import { AIIntegration, SmartPasteResultFieldType } from '../common/ai-integration';
 import {
     UserDefinedElement,
     DxElement,
@@ -67,7 +67,7 @@ export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 export type FormPredefinedButtonItem = 'reset' | 'submit' | 'smartPaste';
 
 /** @public */
-export type AIResult = Record<string, string | string[]>;
+export type AIResult = Record<string, SmartPasteResultFieldType>;
 
 /**
  * @docid

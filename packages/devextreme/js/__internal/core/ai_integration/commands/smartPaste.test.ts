@@ -10,6 +10,8 @@ import type {
   RequestCallbacks,
   SmartPasteCommandParams,
   SmartPasteCommandResult,
+  SmartPasteFieldType,
+  SmartPasteResultFieldType,
 } from '@js/common/ai-integration';
 import { SmartPasteCommand } from '@ts/core/ai_integration/commands/smartPaste';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
@@ -184,6 +186,167 @@ describe('SmartPasteCommand', () => {
 
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('toTyped', () => {
+    const callToTyped = (
+      values: string[],
+      type?: SmartPasteFieldType,
+      fieldName?: string,
+    // @ts-expect-error Access to private static method for test
+    ): SmartPasteResultFieldType => SmartPasteCommand.toTyped(values, type, fieldName);
+
+    describe('Happy Path', () => {
+      it('should convert valid color', () => {
+        const result = callToTyped(['#ff0000'], 'color');
+        expect(result).toBe('#ff0000');
+      });
+
+      it('should convert valid boolean true', () => {
+        const result = callToTyped(['true'], 'boolean');
+        expect(result).toBe(true);
+      });
+
+      it('should convert valid boolean false', () => {
+        const result = callToTyped(['false'], 'boolean');
+        expect(result).toBe(false);
+      });
+
+      it('should convert valid string', () => {
+        const result = callToTyped(['test string'], 'string');
+        expect(result).toBe('test string');
+      });
+
+      it('should convert valid string array', () => {
+        const result = callToTyped(['item1', 'item2', 'item3'], 'stringArray');
+        expect(result).toEqual(['item1', 'item2', 'item3']);
+      });
+
+      it('should convert valid number', () => {
+        const result = callToTyped(['42.5'], 'number');
+        expect(result).toBe(42.5);
+      });
+
+      it('should convert valid number range', () => {
+        const result = callToTyped(['10', '20'], 'numberRange');
+        expect(result).toEqual([10, 20]);
+      });
+
+      it('should convert valid date', () => {
+        const result = callToTyped(['2024-01-15'], 'date');
+        expect(result).toEqual(new Date('2024-01-15'));
+      });
+
+      it('should convert valid date range', () => {
+        const result = callToTyped(['2024-01-15', '2024-01-20'], 'dateRange');
+        expect(result).toEqual([new Date('2024-01-15'), new Date('2024-01-20')]);
+      });
+    });
+
+    describe('Empty results', () => {
+      it.each<SmartPasteFieldType>([
+        'string',
+        'stringArray',
+        'color',
+        'boolean',
+        'number',
+        'numberRange',
+        'date',
+        'dateRange',
+      ])('should not throw for empty array when type=%s', (type) => {
+        expect(() => callToTyped([], type, 'testField')).not.toThrow();
+      });
+
+      it('should not throw for empty array when type is undefined', () => {
+        expect(() => callToTyped([], undefined, 'testField')).not.toThrow();
+      });
+    });
+
+    describe('Branching', () => {
+      it('should return default for undefined type with single value', () => {
+        const result = callToTyped(['single value']);
+        expect(result).toBe('single value');
+      });
+
+      it('should return default for undefined type with multiple values', () => {
+        const result = callToTyped(['value1', 'value2', 'value3']);
+        expect(result).toEqual(['value1', 'value2', 'value3']);
+      });
+
+      it('should return single value when single item in array for default type', () => {
+        const result = callToTyped(['single']);
+        expect(result).toBe('single');
+      });
+    });
+
+    describe('Exception handling', () => {
+      it('should throw error for invalid color', () => {
+        expect(() => callToTyped(['invalid-color'], 'color', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error for invalid boolean', () => {
+        expect(() => callToTyped(['invalid'], 'boolean', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error for invalid number', () => {
+        expect(() => callToTyped(['not-a-number'], 'number', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error for undefined number', () => {
+        expect(() => callToTyped([], 'number', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when number range has single value', () => {
+        expect(() => callToTyped(['10'], 'numberRange', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when number range has more than 2 values', () => {
+        expect(() => callToTyped(['10', '20', '30'], 'numberRange', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when number range has invalid numbers', () => {
+        expect(() => callToTyped(['10', 'invalid'], 'numberRange', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error for invalid date', () => {
+        expect(() => callToTyped(['invalid-date'], 'date', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when date range has single value', () => {
+        expect(() => callToTyped(['2024-01-15'], 'dateRange', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when date range has more than 2 values', () => {
+        expect(() => callToTyped(['2024-01-15', '2024-01-20', '2024-01-25'], 'dateRange', 'testField'))
+          .toThrow();
+      });
+
+      it('should throw error when date range has invalid dates', () => {
+        expect(() => callToTyped(['2024-01-15', 'invalid-date'], 'dateRange', 'testField'))
+          .toThrow();
+      });
+    });
+
+    describe('Input verification', () => {
+      it('should handle empty values array', () => {
+        const result = callToTyped([]);
+        expect(result).toBeUndefined();
+      });
+
+      it('should handle single empty string in array', () => {
+        const result = callToTyped(['']);
+        expect(result).toBe('');
+      });
     });
   });
 });

@@ -1,11 +1,8 @@
-import Color from '@js/color';
-import type { SmartPasteCommandResult } from '@js/common/ai-integration';
+import type {
+  SmartPasteFieldType,
+} from '@js/common/ai-integration';
 import { isObject } from '@js/core/utils/type';
 import type { FormItemComponent, SimpleItem } from '@js/ui/form';
-import errors from '@js/ui/widget/ui.errors';
-import { dateUtilsTs } from '@ts/core/utils/date';
-
-export type ParsedAIValue = string | string[] | boolean;
 
 const getEditorTypeInfo = (editorType: FormItemComponent | undefined): string => {
   switch (editorType) {
@@ -29,66 +26,29 @@ const getEditorTypeInfo = (editorType: FormItemComponent | undefined): string =>
   }
 };
 
-export const parseResultForEditorType = (
-  dataField: string,
+export const getFieldType = (
   editorType: FormItemComponent | undefined,
-  value: SmartPasteCommandResult[number]['value'],
-): ParsedAIValue => {
-  const errorValue = JSON.stringify(value);
+): SmartPasteFieldType => {
   switch (editorType) {
     case 'dxDateBox':
     case 'dxCalendar':
-      if (!dateUtilsTs.isValidDate(value)) {
-        throw errors.Error('E1064', dataField, errorValue, 'date');
-      }
-
-      return value;
+      return 'date';
     case 'dxDateRangeBox':
-      if (
-        !Array.isArray(value)
-        || value.length > 2
-        || value.some((item) => !dateUtilsTs.isValidDate(item))
-      ) {
-        throw errors.Error('E1064', dataField, errorValue, 'date range');
-      }
-
-      return value;
-    case 'dxColorBox':
-      if (new Color(value).colorIsInvalid) {
-        throw errors.Error('E1064', dataField, errorValue, 'color');
-      }
-      return value;
+      return 'dateRange';
     case 'dxCheckBox':
     case 'dxSwitch':
-      if (value === 'false') {
-        return false;
-      }
-      if (value === 'true') {
-        return true;
-      }
-      throw errors.Error('E1064', dataField, errorValue, 'boolean');
+      return 'boolean';
     case 'dxNumberBox':
     case 'dxSlider':
-      if (Array.isArray(value) || isNaN(parseFloat(value))) {
-        throw errors.Error('E1064', dataField, errorValue, 'number');
-      }
-      return value;
+      return 'number';
     case 'dxRangeSlider':
-      if (
-        !Array.isArray(value)
-        || value.length > 2
-        || value.some((item) => isNaN(parseFloat(item)))
-      ) {
-        throw errors.Error('E1064', dataField, errorValue, 'number range');
-      }
-      return value;
+      return 'numberRange';
+    case 'dxColorBox':
+      return 'color';
     case 'dxHtmlEditor':
-      if (Array.isArray(value)) {
-        throw errors.Error('E1064', dataField, errorValue, 'string');
-      }
-      return value;
+      return 'string';
     default:
-      return value;
+      return 'string';
   }
 };
 

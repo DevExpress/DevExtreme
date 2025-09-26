@@ -109,9 +109,23 @@ export type TranslateCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type SmartPasteFieldType =
+  | 'color'
+  | 'boolean'
+  | 'string'
+  | 'stringArray'
+  | 'number'
+  | 'numberRange'
+  | 'date'
+  | 'dateRange';
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type FieldInfo = {
   name: string;
   format: string;
+  type?: SmartPasteFieldType;
   instruction?: string;
 };
 
@@ -166,9 +180,14 @@ export type TranslateCommandResult = string;
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type SmartPasteResultFieldType = string | string[] | number | number[] | Date | Date[] | boolean;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type SmartPasteCommandResult = Array<{
   name: string;
-  value: string | string[];
+  value: SmartPasteResultFieldType;
 }>;
 
 /**

@@ -17,7 +17,7 @@ export abstract class BaseCommand<TParams, TResult> {
     const requestManagerCallbacks: RequestManagerCallbacks = {
       onChunk: (chunk) => { callbacks?.onChunk?.(chunk); },
       onComplete: (result) => {
-        const finalResponse = this.parseResult(result);
+        const finalResponse = this.parseResult(result, params);
 
         callbacks?.onComplete?.(finalResponse);
       },
@@ -31,5 +31,5 @@ export abstract class BaseCommand<TParams, TResult> {
 
   protected abstract getTemplateName(): PromptTemplateName;
   protected abstract buildPromptData(params: TParams): PromptData;
-  protected abstract parseResult(response: string): TResult;
+  protected abstract parseResult(response: string, params?: TParams): TResult;
 }
