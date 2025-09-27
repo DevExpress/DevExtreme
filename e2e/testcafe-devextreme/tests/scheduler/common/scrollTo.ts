@@ -9,22 +9,28 @@ fixture.disablePageReloads`Scheduler: ScrollTo`
 const createScheduler = async (options): Promise<void> => createWidget('dxScheduler', options);
 
 const scrollToDate = ClientFunction(() => {
-  const date = new Date(2019, 5, 1, 9, 40);
   const instance = ($('#container') as any).dxScheduler('instance');
+  const currentDate = instance.option('currentDate');
+  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
+  date.setHours(9, 40, 0, 0);
 
   instance.scrollTo(date);
 });
 
 const scrollToDateWithGroups = ClientFunction(() => {
-  const date = new Date(2019, 5, 1, 9, 40);
   const instance = ($('#container') as any).dxScheduler('instance');
+  const currentDate = instance.option('currentDate');
+  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
+  date.setHours(9, 40, 0, 0);
 
   instance.scrollTo(date, { priority: 1 });
 });
 
 const scrollToAllDay = ClientFunction(() => {
-  const date = new Date(2019, 5, 1, 9, 40);
   const instance = ($('#container') as any).dxScheduler('instance');
+  const currentDate = instance.option('currentDate');
+  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
+  date.setHours(9, 40, 0, 0);
 
   instance.scrollTo(date, undefined, true);
 });
