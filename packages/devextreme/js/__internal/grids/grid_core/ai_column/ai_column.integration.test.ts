@@ -54,6 +54,75 @@ describe('Options', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
+  describe('when alignment is left', () => {
+    it('should set text-align to the left', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            alignment: 'left',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).css('text-align')).toBe('left');
+    });
+  });
+
+  describe('when alignment is right', () => {
+    it('should set text-align to the right', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            alignment: 'right',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).css('text-align')).toBe('right');
+    });
+  });
+
+  describe('when alignment is center', () => {
+    it('should set text-align to the center', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            alignment: 'center',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).css('text-align')).toBe('center');
+    });
+  });
+
   describe('when the cssClass is set', () => {
     it('should have class', async () => {
       const { component } = await createDataGrid({
@@ -368,6 +437,30 @@ describe('columnOption', () => {
       component.apiColumnOption('myColumn2', 'name', 'myColumn1');
 
       expect(errors.log).toHaveBeenCalledWith('E1059', '"myColumn1"');
+    });
+
+    it('should apply alignment', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).css('text-align')).toBe('left');
+
+      instance.columnOption('myColumn', 'alignment', 'right');
+
+      expect($(instance.getCellElement(0, 3)).css('text-align')).toBe('right');
     });
   });
 });
