@@ -45,8 +45,6 @@ export const getFieldType = (
       return 'numberRange';
     case 'dxColorBox':
       return 'color';
-    case 'dxHtmlEditor':
-      return 'string';
     default:
       return 'string';
   }
