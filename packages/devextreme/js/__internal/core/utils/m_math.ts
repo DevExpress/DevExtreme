@@ -92,7 +92,6 @@ function adjust(value: number, interval?: number): number {
 function adjustExponential(value: number, precision: number) {
   const expValue = value.toExponential();
 
-  // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
   const [mantissa, _exponent] = expValue.split('e');
 
