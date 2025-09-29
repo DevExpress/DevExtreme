@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
+import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
@@ -276,6 +276,14 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     
     
      */
+    @Output() onEnd: EventEmitter<EndEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
     @Output() onError: EventEmitter<ErrorEvent>;
 
     /**
@@ -476,6 +484,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._createEventEmitters([
             { subscribe: 'contentReady', emit: 'onContentReady' },
             { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'end', emit: 'onEnd' },
             { subscribe: 'error', emit: 'onError' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },

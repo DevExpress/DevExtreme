@@ -18,6 +18,7 @@ import {
 
 import {
     ValueChangedInfo,
+    EditorOptionsWithValue,
 } from '../editor/editor';
 
 import {
@@ -189,6 +190,8 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
  * @namespace DevExpress.ui
  * @options dxDropDownListOptions
  */
-export default class dxDropDownList<TProperties> extends dxDropDownEditor<TProperties> {
+export default class dxDropDownList<
+    TProperties extends EditorOptionsWithValue,
+> extends dxDropDownEditor<TProperties> {
     getDataSource(): DataSource;
 }

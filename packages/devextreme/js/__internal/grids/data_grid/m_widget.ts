@@ -3,6 +3,7 @@
 import DataGrid from './m_widget_base';
 
 import './module_not_extended/state_storing';
+import './module_not_extended/ai_column_controller';
 import './module_not_extended/selection';
 import './module_not_extended/column_chooser';
 import './grouping/m_grouping';
