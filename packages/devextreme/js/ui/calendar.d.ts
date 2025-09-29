@@ -236,9 +236,9 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
-     * @param1 value:Date|number|string|Array<Date|number|string|null>|null
+     * @param1 value:Date | number | string | Array<Date | number | string | null> | null
      */
-    reset(value?: DateLike | Array<Date | number | string | null>): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

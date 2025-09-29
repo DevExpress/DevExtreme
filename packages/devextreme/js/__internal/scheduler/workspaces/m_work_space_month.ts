@@ -128,8 +128,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return this._getViewStartByOptions();
   }
 
-  scrollToTime() { return noop(); }
-
   renderRAllDayPanel() {}
 
   renderRTimeTable() {}

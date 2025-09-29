@@ -27,7 +27,7 @@ enum SpeechToTextState {
   DISABLED = 'disabled',
 }
 
-type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError'>;
+type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError' | 'onEnd'>;
 type PointerLikeEvent = KeyboardEvent | MouseEvent | PointerEvent | TouchEvent;
 
 const ACTIONS: (keyof SpeechToTextActions)[] = [
@@ -35,6 +35,7 @@ const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onStopClick',
   'onResult',
   'onError',
+  'onEnd',
 ];
 
 type Properties = SpeechToTextProperties & {
@@ -68,6 +69,8 @@ class SpeechToText extends Widget<Properties> {
       onStopClick: undefined,
       onResult: undefined,
       onError: undefined,
+      onEnd: undefined,
+      speechRecognitionConfig: undefined,
     };
   }
 
@@ -204,7 +207,7 @@ class SpeechToText extends Widget<Properties> {
       : startText ?? '';
   }
 
-  private _emitNativeEvent<K extends keyof Pick<SpeechToTextActions, 'onResult' | 'onError'>>(name: K, event: Event): void {
+  private _emitNativeEvent<K extends keyof Pick<SpeechToTextActions, 'onResult' | 'onError' | 'onEnd'>>(name: K, event: Event): void {
     this._actions[name]?.({ component: this, element: this.element(), event });
   }
 
@@ -244,10 +247,12 @@ class SpeechToText extends Widget<Properties> {
     this._emitDxEvent('onStopClick', e.event);
   }
 
-  private _handleSpeechRecognitionEnd(): void {
+  private _handleSpeechRecognitionEnd(event: Event): void {
     if (this._state !== SpeechToTextState.DISABLED && !this._isCustomSpeechRecognitionEnabled()) {
       this._setState(SpeechToTextState.INITIAL);
     }
+
+    this._emitNativeEvent('onEnd', event);
   }
 
   private _handleSpeechRecognitionResult(event: Event): void {
@@ -256,6 +261,12 @@ class SpeechToText extends Widget<Properties> {
 
   private _handleSpeechRecognitionError(event: Event): void {
     this._emitNativeEvent('onError', event);
+  }
+
+  private _stopRecognitionOnDisable(disabled?: boolean): void {
+    if (disabled) {
+      this._speechRecognitionAdapter?.stop();
+    }
   }
 
   private _setState(newState: SpeechToTextState): void {
@@ -315,6 +326,7 @@ class SpeechToText extends Widget<Properties> {
       case 'disabled':
         this._button?.option(name, value);
         this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
+        this._stopRecognitionOnDisable(value);
         break;
 
       case 'startIcon':
