@@ -10,7 +10,7 @@ type SpeechRecognition = SpeechRecognitionConfig & {
 interface SpeechRecognitionEvents {
   onResult: (event: Event) => void;
   onError: (event: Event) => void;
-  onEnd: () => void;
+  onEnd: (event: Event) => void;
 }
 
 export const NOT_SUPPORTED_ERROR = 'E1065';

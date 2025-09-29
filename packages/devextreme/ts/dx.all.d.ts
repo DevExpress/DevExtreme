@@ -27763,6 +27763,13 @@ declare module DevExpress.ui {
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxSpeechToText>;
     /**
+     * [descr:_ui_speech_to_text_EndEvent]
+     */
+    export type EndEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
      * [descr:_ui_speech_to_text_ErrorEvent]
      */
     export type ErrorEvent =
@@ -27856,6 +27863,11 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onError]
        */
       onError?: ((e: ErrorEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onEnd]
+       */
+      onEnd?: ((e: EndEvent) => void) | undefined;
     }
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
