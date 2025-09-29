@@ -9,6 +9,8 @@ import type {
   ExecuteCommandResult,
   ExpandCommandParams,
   ExpandCommandResult,
+  GenerateColumnCommandParams,
+  GenerateColumnCommandResult,
   ProofreadCommandParams,
   ProofreadCommandResult,
   RequestCallbacks,
@@ -36,6 +38,8 @@ import {
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
+import { GenerateColumnCommand } from '../commands/generateColumn';
+
 export const enum CommandNames {
   ChangeStyle = 'changeStyle',
   ChangeTone = 'changeTone',
@@ -46,6 +50,7 @@ export const enum CommandNames {
   Summarize = 'summarize',
   Translate = 'translate',
   SmartPaste = 'smartPaste',
+  GenerateColumn = 'generateColumn',
 }
 
 export const COMMANDS = {
@@ -58,6 +63,7 @@ export const COMMANDS = {
   [CommandNames.Summarize]: SummarizeCommand,
   [CommandNames.Translate]: TranslateCommand,
   [CommandNames.SmartPaste]: SmartPasteCommand,
+  [CommandNames.GenerateColumn]: GenerateColumnCommand,
 } as const;
 
 export interface CommandDefinition<TParams, TResult> {
@@ -76,6 +82,8 @@ export interface Commands {
   [CommandNames.Summarize]: CommandDefinition<SummarizeCommandParams, SummarizeCommandResult>;
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
   [CommandNames.SmartPaste]: CommandDefinition<SmartPasteCommandParams, SmartPasteCommandResult>;
+  // eslint-disable-next-line @stylistic/max-len
+  [CommandNames.GenerateColumn]: CommandDefinition<GenerateColumnCommandParams, GenerateColumnCommandResult>;
 }
 
 export class AIIntegration implements IAIIntegration {
@@ -206,6 +214,17 @@ export class AIIntegration implements IAIIntegration {
   ): () => void {
     return this.executeCommand(
       CommandNames.SmartPaste,
+      params,
+      callbacks,
+    );
+  }
+
+  public generateColumn(
+    params: GenerateColumnCommandParams,
+    callbacks: RequestCallbacks<GenerateColumnCommandResult>,
+  ): () => void {
+    return this.executeCommand(
+      CommandNames.GenerateColumn,
       params,
       callbacks,
     );

@@ -6,6 +6,7 @@ import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
+import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
@@ -165,6 +166,92 @@ describe('GridCore AI Column', () => {
 
         expect(errors.log).toHaveBeenCalledWith('E1059', '"myColumn1"');
       });
+    });
+  });
+
+  describe('AiIntegration', () => {
+    const rootSendRequestSpy = jest.fn();
+    const columnSendRequestSpy = jest.fn();
+
+    beforeEach(() => {
+      rootSendRequestSpy.mockClear();
+      columnSendRequestSpy.mockClear();
+    });
+
+    const aiIntegrationResult = () => {
+      const promise = new Promise<string>((resolve) => {
+        resolve('1');
+      });
+
+      const result = {
+        promise,
+        abort: (): void => { },
+      };
+
+      return result;
+    };
+
+    const rootAiIntegration = new AIIntegration({
+      sendRequest(): { promise: Promise<string>; abort: () => void } {
+        rootSendRequestSpy();
+        return aiIntegrationResult();
+      },
+    });
+    const columnAiIntegration = new AIIntegration({
+      sendRequest(): { promise: Promise<string>; abort: () => void } {
+        columnSendRequestSpy();
+        return aiIntegrationResult();
+      },
+    });
+
+    it('should be taken from grid level if it set up', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        keyExpr: 'id',
+        aiIntegration: rootAiIntegration,
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(rootSendRequestSpy).toHaveBeenCalled();
+      expect(columnSendRequestSpy).not.toHaveBeenCalled();
+    });
+    it('should be taken from column level if it set up', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        keyExpr: 'id',
+        aiIntegration: rootAiIntegration,
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestSpy).toHaveBeenCalled();
+      expect(rootSendRequestSpy).not.toHaveBeenCalled();
     });
   });
 });

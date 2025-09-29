@@ -126,6 +126,14 @@ export type SmartPasteCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
+export type GenerateColumnCommandParams = {
+  text: string;
+  data: Record<PropertyKey, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
 export type ChangeStyleCommandResult = string;
 
 /**
@@ -170,6 +178,11 @@ export type SmartPasteCommandResult = Array<{
   name: string;
   value: string | string[];
 }>;
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type GenerateColumnCommandResult = Record<PropertyKey, unknown>;
 
 /**
  * @namespace DevExpress.aiIntegration
@@ -240,4 +253,8 @@ export class AIIntegration {
    * @publicName smartPaste(params, callbacks)
    */
   smartPaste(params: SmartPasteCommandParams, callbacks: RequestCallbacks<SmartPasteCommandResult>): () => void;
+  /**
+   * @publicName generateColumn(params, callbacks)
+   */
+  generateColumn(params: GenerateColumnCommandParams, callbacks: RequestCallbacks<GenerateColumnCommandResult>): () => void;
 }

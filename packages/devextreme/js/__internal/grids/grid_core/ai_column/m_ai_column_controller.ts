@@ -3,18 +3,29 @@
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
+import { AiColumnCacheController } from './m_ai_column_cache_controller';
 import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
+import { AiColumnIntegrationController } from './m_ai_column_integration_controller';
 
 export class AiColumnController extends Controller {
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;
 
+  private aiColumnCacheController!: AiColumnCacheController;
+
+  private aiColumnIntegrationController!: AiColumnIntegrationController;
+
   private dataChangedHandler!: (e) => any;
 
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+
+    this.aiColumnCacheController = new AiColumnCacheController(this.component);
+    this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
+    this.aiColumnIntegrationController.init();
+    this.aiColumnCacheController.init();
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
@@ -64,7 +75,10 @@ export class AiColumnController extends Controller {
   }
 
   public sendAIColumnRequest(columnName: string): void {
-
+    const data = this.dataController.items()
+      .filter((row) => row.rowType === 'data')
+      .map((row) => ({ [row.key as PropertyKey]: row.data }));
+    this.aiColumnIntegrationController.sendRequest(columnName, data, {});
   }
 
   public refreshAIColumn(columnName: string): void {
