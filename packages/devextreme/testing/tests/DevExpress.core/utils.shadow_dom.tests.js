@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/m_shadow_dom';
 
 QUnit.module('computeStyleSheetsHash', () => {
@@ -36,6 +37,7 @@ QUnit.module('addShadowDomStyles', () => {
 
         const div = document.createElement('div');
         shadow.appendChild(div);
+
         const $div = $(div);
 
         addShadowDomStyles($div);
