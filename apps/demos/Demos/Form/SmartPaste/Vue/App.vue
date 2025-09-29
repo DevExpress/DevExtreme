@@ -129,7 +129,7 @@ import {
   DxForm, DxItem, DxButtonItem, DxGroupItem,
 } from 'devextreme-vue/form';
 import type { ValidationRule } from 'devextreme-vue/common';
-import type { RequestParams } from 'devextreme-vue/common/ai-integration';
+import type { RequestParams, Response } from 'devextreme-vue/common/ai-integration';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import DxTextArea from 'devextreme-vue/text-area';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
@@ -177,7 +177,7 @@ const aiIntegration = new AIIntegration({
       showNotification('Something went wrong. Please try again.', '#form', true);
     });
 
-    const result = {
+    const result: Response = {
       promise,
       abort: () => {
         controller.abort();
