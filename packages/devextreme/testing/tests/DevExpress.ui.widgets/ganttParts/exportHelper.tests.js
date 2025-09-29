@@ -1,15 +1,22 @@
 import { GanttExportHelper } from 'ui/gantt/ui.gantt.export_helper';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
-QUnit.module('GanttExportHelper');
+const moduleConfig = {
+    beforeEach: function() {
+        this.calledColumns = [];
+        this.getDisplayValueStub = sinon.stub(gridCoreUtils, 'getDisplayValue').callsFake((column, rawValue) => {
+            this.calledColumns.push(column && column.dataField);
+            return rawValue;
+        });
+    },
+    afterEach: function() {
+        this.getDisplayValueStub.restore();
+    }
+};
+
+QUnit.module('GanttExportHelper', moduleConfig);
 
 QUnit.test('getGridDisplayText uses only visible columns (T1307282)', function(assert) {
-    const calledColumns = [];
-    gridCoreUtils.getDisplayValue = function(column, rawValue) {
-        calledColumns.push(column && column.dataField);
-        return rawValue;
-    };
-
     const visibleColumns = [
         { dataField: 'id', dataType: 'number' },
         { dataField: 'title', dataType: 'string' }
@@ -41,6 +48,6 @@ QUnit.test('getGridDisplayText uses only visible columns (T1307282)', function(a
 
     assert.strictEqual(helper._getGridDisplayText(2, data), undefined, 'Out-of-range visible column index returns undefined');
 
-    assert.deepEqual(calledColumns, ['id', 'title', undefined], 'Only visible columns (and undefined for out-of-range) were queried');
-    assert.notOk(calledColumns.includes('secret'), 'Hidden column was not accessed');
+    assert.deepEqual(this.calledColumns, ['id', 'title', undefined], 'Only visible columns (and undefined for out-of-range) were queried');
+    assert.notOk(this.calledColumns.includes('secret'), 'Hidden column was not accessed');
 });
