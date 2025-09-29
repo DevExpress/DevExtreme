@@ -15,6 +15,8 @@ const TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = `${TOOLTIP_APPOINTMENT_ITEM}-marker
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button-container`;
 const TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = `${TOOLTIP_APPOINTMENT_ITEM}-delete-button`;
 
+const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
+
 export class TooltipStrategyBase {
   protected asyncTemplatePromises = new Set<Promise<void>>();
 
@@ -135,32 +137,31 @@ export class TooltipStrategyBase {
     const itemListContent = this._createItemListContent(appointment, targetedAppointment, color);
     this._options.addDefaultTemplates({
       // @ts-expect-error
-      [this._getItemListTemplateName()]: new FunctionTemplate((options) => {
+      appointmentTooltip: new FunctionTemplate((options) => {
         const $container = $(options.container);
         $container.append(itemListContent);
         return $container;
       }),
     });
 
-    const template = this._options.getAppointmentTemplate(`${this._getItemListTemplateName()}Template`);
+    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this._createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 
   _createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
     const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
 
-    const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
     // @ts-expect-error
     return new FunctionTemplate((options) => {
       // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
       const { promise, resolve } = createPromise<void>();
       this.asyncTemplatePromises.add(promise);
       return template.render({
-        model: isEmptyDropDownAppointmentTemplate ? {
+        model: {
           appointmentData,
           targetedAppointmentData,
           isButtonClicked,
-        } : appointmentData,
+        },
         container: options.container,
         index,
         onRendered: () => {
@@ -169,14 +170,6 @@ export class TooltipStrategyBase {
         },
       });
     });
-  }
-
-  _getItemListTemplateName() {
-    return this._isEmptyDropDownAppointmentTemplate() ? 'appointmentTooltip' : 'dropDownAppointment';
-  }
-
-  _isEmptyDropDownAppointmentTemplate() {
-    return !this._extraOptions.dropDownAppointmentTemplate || this._extraOptions.dropDownAppointmentTemplate === 'dropDownAppointment';
   }
 
   _onListItemClick(e) {
