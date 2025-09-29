@@ -6,7 +6,7 @@
     </div>
     <div>
       <span class="caption">Population</span>:
-      <span class="population">{{ formatNumber(info.value) }}</span>
+      <span class="population">{{ formatNumber(Number(info.value)) }}</span>
       people
     </div>
     <div>
@@ -19,13 +19,16 @@
   </div>
 </template>
 <script setup lang="ts">
+
+import type { DxPieChartTypes } from 'devextreme-vue/pie-chart';
+
 withDefaults(defineProps<{
-  info?: Record<string, any>
+  info?: DxPieChartTypes.PointInfo
 }>(), {
-  info: () => ({} as Record<string, any>),
+  info: () => ({} as DxPieChartTypes.PointInfo),
 });
 
-const getImagePath = ({ data }) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
+const getImagePath = ({ data }: DxPieChartTypes.PointInfo['point']) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 }).format;

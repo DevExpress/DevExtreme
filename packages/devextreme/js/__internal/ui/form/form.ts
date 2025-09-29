@@ -1951,6 +1951,9 @@ class Form extends Widget<FormProperties> {
 
             this._smartPastedAction?.({ aiResult });
           },
+          (): void => {
+            this._hideLoadPanel();
+          },
         );
 
         this._processCommandCompletion();

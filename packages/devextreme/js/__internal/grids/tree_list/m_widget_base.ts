@@ -21,6 +21,7 @@ const TREELIST_CLASS = 'dx-treelist';
 treeListCore.registerModulesOrder([
   'stateStoring',
   'columns',
+  'aiColumn',
   'selection',
   'editorFactory',
   'columnChooser',

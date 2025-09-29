@@ -851,6 +851,9 @@
         "dxSplitter-resizeHandleAriaLabel": "Barre de séparation",
         "dxSplitter-resizeHandleAriaRoleDescription": "Séparateur",
 
-        "dxStepper-optionalMark": "(Optionel)"
+        "dxStepper-optionalMark": "(Optionel)",
+
+        "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+        "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
     }
 }

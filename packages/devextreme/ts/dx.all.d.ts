@@ -8703,7 +8703,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties = DevExpress.ui.dxDateBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -9279,7 +9279,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocomplete.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxAutocomplete.Properties['value']): void;
   }
   module dxAutocomplete {
     /**
@@ -9436,8 +9436,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocompleteOptions.value]
      */
-    value?: string;
-
+    value?: string | null;
     /**
      * [descr:dxAutocompleteOptions.dropDownOptions]
      */
@@ -9830,9 +9829,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendar.reset(value)]
      */
-    reset(
-      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
-    ): void;
+    reset(value?: DevExpress.ui.dxCalendar.Properties['value']): void;
   }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
@@ -11288,7 +11285,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBox.reset(value)]
      */
-    reset(value?: boolean | null | undefined): void;
+    reset(value?: DevExpress.ui.dxCheckBox.Properties['value']): void;
   }
   module dxCheckBox {
     /**
@@ -11369,7 +11366,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBox.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxColorBox.Properties['value']): void;
   }
   module dxColorBox {
     /**
@@ -11525,7 +11522,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBoxOptions.value]
      */
-    value?: string;
+    value?: string | null;
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -14079,7 +14076,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBox.reset(value)]
      */
-    reset(value?: DevExpress.common.DateLike): void;
+    reset(value?: DevExpress.ui.dxDateBox.Properties['value']): void;
   }
   module dxDateBox {
     /**
@@ -14288,7 +14285,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: Array<Date | number | string | null>): void;
+    reset(value?: DevExpress.ui.dxDateRangeBox.Properties['value']): void;
   }
   module dxDateRangeBox {
     /**
@@ -16592,7 +16589,9 @@ declare module DevExpress.ui {
    * [descr:dxDropDownEditor]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
+  export class dxDropDownEditor<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+  > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
      */
@@ -16609,6 +16608,10 @@ declare module DevExpress.ui {
      * [descr:dxDropDownEditor.open()]
      */
     open(): void;
+    /**
+     * [descr:dxDropDownEditor.reset(value)]
+     */
+    reset(value?: TProperties['value']): void;
   }
   module dxDropDownEditor {
     /**
@@ -16618,7 +16621,15 @@ declare module DevExpress.ui {
       readonly text?: string;
       readonly icon?: string;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    interface DropDownEditorInstance extends dxDropDownEditor<Properties> {}
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -16704,7 +16715,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownList<
-    TProperties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.common.data.DataSource;
   }
@@ -17687,7 +17698,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileUploader.reset(value)]
      */
-    reset(value?: Array<File>): void;
+    reset(value?: DevExpress.ui.dxFileUploader.Properties['value']): void;
   }
   module dxFileUploader {
     /**
@@ -23423,7 +23434,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBox.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxNumberBox.Properties['value']): void;
   }
   module dxNumberBox {
     /**
@@ -25019,7 +25030,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBar.reset(value)]
      */
-    reset(value?: Number | false): void;
+    reset(value?: DevExpress.ui.dxProgressBar.Properties['value']): void;
   }
   module dxProgressBar {
     /**
@@ -25159,7 +25170,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxRangeSlider.reset(value)]
      */
-    reset(value?: Array<number>): void;
+    reset(value?: DevExpress.ui.dxRangeSlider.Properties['value']): void;
   }
   module dxRangeSlider {
     /**
@@ -26973,7 +26984,7 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -27184,7 +27195,6 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */
     customItemCreateEvent?: string;
-
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
@@ -27197,7 +27207,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlider.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxSlider.Properties['value']): void;
   }
   module dxSlider {
     /**
@@ -27753,6 +27763,13 @@ declare module DevExpress.ui {
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxSpeechToText>;
     /**
+     * [descr:_ui_speech_to_text_EndEvent]
+     */
+    export type EndEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
      * [descr:_ui_speech_to_text_ErrorEvent]
      */
     export type ErrorEvent =
@@ -27846,6 +27863,11 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onError]
        */
       onError?: ((e: ErrorEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onEnd]
+       */
+      onEnd?: ((e: EndEvent) => void) | undefined;
     }
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
@@ -28365,7 +28387,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSwitch.reset(value)]
      */
-    reset(value?: boolean): void;
+    reset(value?: DevExpress.ui.dxSwitch.Properties['value']): void;
   }
   module dxSwitch {
     /**
@@ -28927,7 +28949,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTagBox]
    */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
+  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
+    /**
+     * [descr:dxTagBox.reset(value)]
+     */
+    reset(value?: DevExpress.ui.dxTagBox.Properties['value']): void;
+  }
   module dxTagBox {
     /**
      * [descr:_ui_tag_box_ChangeEvent]
@@ -29293,12 +29320,12 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
      */
-    reset(value?: string): void;
+    reset(value?: TProperties['value']): void;
   }
   module dxTextBox {
     /**
@@ -29443,7 +29470,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -30161,7 +30188,9 @@ declare module DevExpress.ui {
    * [descr:dxTrackBar]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxTrackBar<TProperties> extends Editor<TProperties> {}
+  export class dxTrackBar<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
+  > extends Editor<TProperties> {}
   /**
    * [descr:dxTrackBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -32788,7 +32817,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -32798,13 +32827,20 @@ declare module DevExpress.ui {
     /**
      * [descr:Editor.reset(value)]
      */
-    reset(value?: any): void;
+    reset(value?: TProperties['value']): void;
   }
   module Editor {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     interface EditorInstance extends Editor<Properties> {}
+    /**
+     * [descr:EditorOptionsWithValue]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface EditorOptionsWithValue {
+      value?: unknown;
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -34600,7 +34636,8 @@ declare module DevExpress.viz {
    * [descr:BaseChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartTooltip extends BaseWidgetTooltip {
+  export interface BaseChartTooltip<TPointInfo = any>
+    extends BaseWidgetTooltip {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
@@ -34611,14 +34648,14 @@ declare module DevExpress.viz {
     contentTemplate?:
       | template
       | ((
-          pointInfo: any,
+          pointInfo: TPointInfo,
           element: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement)
       | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: ((pointInfo: any) => any) | undefined;
+    customizeTooltip?: ((pointInfo: TPointInfo) => any) | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.shared]
      */
@@ -34978,6 +35015,56 @@ declare module DevExpress.viz {
      */
     show(holdVisible: boolean): void;
   }
+  /**
+   * [descr:BasePointInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type BasePointInfo<TPoint extends basePointObject> = {
+    /**
+     * [descr:BasePointInfo.argument]
+     */
+    argument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.argumentText]
+     */
+    argumentText?: string;
+    /**
+     * [descr:BasePointInfo.highErrorValue]
+     */
+    highErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.lowErrorValue]
+     */
+    lowErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.originalArgument]
+     */
+    originalArgument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.originalValue]
+     */
+    originalValue?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.point]
+     */
+    point?: TPoint;
+    /**
+     * [descr:BasePointInfo.points]
+     */
+    points?: BasePointInfo<TPoint>[];
+    /**
+     * [descr:BasePointInfo.seriesName]
+     */
+    seriesName?: any;
+    /**
+     * [descr:BasePointInfo.value]
+     */
+    value?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.valueText]
+     */
+    valueText?: string;
+  };
   /**
    * [descr:basePointObject]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36779,9 +36866,115 @@ declare module DevExpress.viz {
        */
       text?: string | undefined;
     };
+    /**
+     * [descr:BubblePointInfo]
+     */
+    export type BubblePointInfo = ChartPointInfo & {
+      /**
+       * [descr:BubblePointInfo.points]
+       */
+      points?: BubblePointInfo[];
+      /**
+       * [descr:BubblePointInfo.size]
+       */
+      size?: number;
+      /**
+       * [descr:BubblePointInfo.sizeText]
+       */
+      sizeText?: string;
+    };
+    /**
+     * [descr:CandleStickPointInfo]
+     */
+    export type CandleStickPointInfo = {
+      /**
+       * [descr:CandleStickPointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.closeValue]
+       */
+      closeValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.closeValueText]
+       */
+      closeValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.highValue]
+       */
+      highValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.highValueText]
+       */
+      highValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.lowValue]
+       */
+      lowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.lowValueText]
+       */
+      lowValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.openValue]
+       */
+      openValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.openValueText]
+       */
+      openValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.originalCloseValue]
+       */
+      originalCloseValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalHighValue]
+       */
+      originalHighValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalLowValue]
+       */
+      originalLowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalOpenValue]
+       */
+      originalOpenValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:CandleStickPointInfo.points]
+       */
+      points?: CandleStickPointInfo[];
+      /**
+       * [descr:CandleStickPointInfo.reductionValue]
+       */
+      reductionValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:CandleStickPointInfo.value]
+       */
+      value?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.valueText]
+       */
+      valueText?: string;
+    };
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+    /**
+     * [descr:ChartPointInfo]
+     */
+    export type ChartPointInfo = BasePointInfo<chartPointObject>;
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
     export type ChartSeriesAggregationMethod =
       | 'avg'
@@ -37436,12 +37629,78 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
+     * [descr:dxChartPointInfo]
+     */
+    export type PointInfo =
+      | ChartPointInfo
+      | StackedPointInfo
+      | BubblePointInfo
+      | CandleStickPointInfo
+      | RangePointInfo;
+    /**
      * [descr:_viz_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     export type Properties = dxChartOptions;
+    /**
+     * [descr:RangePointInfo]
+     */
+    export type RangePointInfo = {
+      /**
+       * [descr:RangePointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.argumentText]
+       */
+      argumentText?: string;
+      /**
+       * [descr:RangePointInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue1]
+       */
+      rangeValue1?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue1Text]
+       */
+      rangeValue1Text?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue2]
+       */
+      rangeValue2?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue2Text]
+       */
+      rangeValue2Text?: string;
+      /**
+       * [descr:RangePointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:RangePointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:RangePointInfo.points]
+       */
+      points?: RangePointInfo[];
+      /**
+       * [descr:RangePointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalMinValue]
+       */
+      originalMinValue?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalValue]
+       */
+      originalValue?: string | number | Date;
+    };
     /**
      * [descr:_viz_chart_SeriesClickEvent]
      */
@@ -37476,14 +37735,55 @@ declare module DevExpress.viz {
     export type SeriesSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> & SeriesInteractionInfo;
     /**
-     * [descr:dxChartTooltip]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:StackedPointInfo]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type StackedPointInfo = ChartPointInfo & {
+      /**
+       * [descr:StackedPointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:StackedPointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:StackedPointInfo.points]
+       */
+      points?: StackedPointInfo[];
+      /**
+       * [descr:StackedPointInfo.total]
+       */
+      total?: number;
+      /**
+       * [descr:StackedPointInfo.totalText]
+       */
+      totalText?: string;
+    };
+    /**
+     * [descr:dxChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxChartOptions.tooltip.location]
        */
       location?: ChartTooltipLocation;
+      /**
+       * [descr:dxChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_chart_TooltipHiddenEvent]
@@ -40972,6 +41272,23 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
+     * [descr:dxPieChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<piePointObject> & {
+      /**
+       * [descr:PointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:PointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:PointInfo.points]
+       */
+      points?: PointInfo;
+    };
+    /**
      * [descr:_viz_pie_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -40982,6 +41299,28 @@ declare module DevExpress.viz {
       | 'none'
       | 'smallValueThreshold'
       | 'topN';
+    /**
+     * [descr:dxPieChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
+      /**
+       * [descr:dxPieChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPieChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+    };
     /**
      * [descr:_viz_pie_chart_TooltipHiddenEvent]
      */
@@ -41155,6 +41494,10 @@ declare module DevExpress.viz {
           annotation: dxPieChartAnnotationConfig | any
         ) => dxPieChartAnnotationConfig)
       | undefined;
+    /**
+     * [descr:dxPieChartOptions.tooltip]
+     */
+    tooltip?: DevExpress.viz.dxPieChart.Tooltip;
   }
   /**
    * [descr:dxPieChartSeriesTypes]
@@ -42036,6 +42379,10 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
+     * [descr:dxPolarChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<polarPointObject>;
+    /**
      * [descr:_viz_polar_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -42086,11 +42433,28 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartTooltip]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxPolarChartOptions.tooltip.shared]
        */
       shared?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_polar_chart_TooltipHiddenEvent]

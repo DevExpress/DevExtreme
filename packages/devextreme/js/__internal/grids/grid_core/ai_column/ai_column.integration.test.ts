@@ -43,6 +43,29 @@ describe('GridCore AI Column', () => {
     jest.clearAllMocks();
   });
 
+  describe('when the cssClass is set', () => {
+    it('should have class', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).hasClass('custom-class')).toBe(true);
+    });
+  });
+
   describe('when the name is not set', () => {
     it('should throw E1066', async () => {
       await createDataGrid({
@@ -165,6 +188,30 @@ describe('GridCore AI Column', () => {
 
         expect(errors.log).toHaveBeenCalledWith('E1059', '"myColumn1"');
       });
+    });
+
+    it('should apply cssClass to AI column', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      expect($(instance.getCellElement(0, 3)).hasClass('custom-class')).toBe(false);
+
+      instance.columnOption('myColumn', 'cssClass', 'custom-class');
+
+      expect($(instance.getCellElement(0, 3)).hasClass('custom-class')).toBe(true);
     });
   });
 });
