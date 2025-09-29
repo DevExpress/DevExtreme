@@ -136,7 +136,7 @@ test('Toast should be visible after calling and should be not visible after defa
   });
 
   await t.wait(100);
-  //TODO: fix this after toast will be implemented in AI Column
+  // TODO: fix this after toast will be implemented in AI Column
   await ClientFunction(() => {
     const dataGrid = ($('#container') as any).dxDataGrid('instance');
     // eslint-disable-next-line no-underscore-dangle
