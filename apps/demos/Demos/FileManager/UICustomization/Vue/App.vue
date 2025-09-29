@@ -119,7 +119,10 @@ function onItemClick(
   }
 }
 
-function createFile(fileExtension: string, directory: any = fileManager.value.instance.getCurrentDirectory()) {
+function createFile(
+    fileExtension: string,
+    directory: any = fileManager.value.instance.getCurrentDirectory()
+) {
   const newItem = {
     __KEY__: Date.now(),
     name: `New file${fileExtension}`,

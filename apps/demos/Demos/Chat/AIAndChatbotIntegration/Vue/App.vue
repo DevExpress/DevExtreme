@@ -124,7 +124,10 @@ function renderAssistantMessage(text: string): void {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
-async function processMessageSending(message: DxChatTypes.TextMessage, event: Events.EventObject | undefined): Promise<void> {
+async function processMessageSending(
+    message: DxChatTypes.TextMessage,
+    event: Events.EventObject | undefined
+): Promise<void> {
   toggleDisabledState(true, event);
 
   messages.push({ role: 'user', content: message.text });

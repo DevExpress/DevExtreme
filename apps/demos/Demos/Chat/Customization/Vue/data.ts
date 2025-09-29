@@ -18,7 +18,7 @@ export const supportAgent = {
   avatarUrl: '../../../../images/petersmith.png',
 };
 
-export const messages: Array<DxChatTypes.Message> = [
+export const messages: DxChatTypes.Message[] = [
   {
     timestamp: getTimestamp(date, -9),
     author: supportAgent,
