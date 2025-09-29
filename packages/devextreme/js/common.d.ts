@@ -306,7 +306,6 @@ export type GlobalConfig = {
   defaultUseCurrencyAccountingStyle?: boolean;
   /**
    * @docid
-   * @type boolean
    * @default true
    * @public
    */
