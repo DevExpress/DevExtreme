@@ -12,8 +12,30 @@ export class ToastView extends modules.View {
 
   private _$toastContainer: any | null = null;
 
-  public showToast(message: string, options: ToastProperties = {}): void {
+  private _ensureToastContainer(): void {
+    if (!this._$toastContainer) {
+      this._$toastContainer = $('<div>').appendTo(this.component.$element());
+    }
+  }
+
+  private _createToastInstance(options: ToastProperties = {}): dxToast | null {
     this._ensureToastContainer();
+
+    if (this._toastInstance) {
+      return this._toastInstance;
+    }
+
+    this._$toastContainer.dxToast({
+      displayTime: DEFAULT_DISPLAY_TIME,
+      position: { ...DEFAULT_POSITION, of: this.component.$element() },
+      ...options,
+      visible: false,
+    });
+    this._toastInstance = this._$toastContainer.dxToast('instance');
+    return this._toastInstance;
+  }
+
+  public showToast(message: string, options: ToastProperties = {}): void {
     const toast = this._createToastInstance(options);
     toast?.option({
       message,
@@ -22,30 +44,9 @@ export class ToastView extends modules.View {
     });
   }
 
-  private _ensureToastContainer(): void {
-    if (!this._$toastContainer) {
-      this._$toastContainer = $('<div>').appendTo(this.component.$element());
-    }
-  }
-
-  private _createToastInstance(options: ToastProperties): dxToast | null {
+  public async hideToast(): Promise<void> {
     if (this._toastInstance) {
-      return this._toastInstance;
-    }
-
-    this._$toastContainer?.dxToast({
-      displayTime: DEFAULT_DISPLAY_TIME,
-      position: { ...DEFAULT_POSITION, of: this.component.$element() },
-      ...options,
-      visible: false,
-    });
-    this._toastInstance = this._$toastContainer?.dxToast('instance');
-    return this._toastInstance;
-  }
-
-  public hideToast(): void {
-    if (this._toastInstance) {
-      this._toastInstance.hide();
+      await this._toastInstance.hide();
     }
   }
 
