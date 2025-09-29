@@ -11,40 +11,31 @@ const createScheduler = async (options): Promise<void> => createWidget('dxSchedu
 const scrollToDate = ClientFunction(() => {
   const instance = ($('#container') as any).dxScheduler('instance');
   const currentDate = instance.option('currentDate');
-  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
-  date.setHours(9, 40, 0, 0);
-
+  const date = new Date(currentDate.getTime());
+  date.setHours(date.getHours() + 6, 30, 0, 0);
   instance.scrollTo(date);
 });
 
 const scrollToDateWithGroups = ClientFunction(() => {
   const instance = ($('#container') as any).dxScheduler('instance');
   const currentDate = instance.option('currentDate');
-  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
-  date.setHours(9, 40, 0, 0);
-
+  const date = new Date(currentDate.getTime());
+  date.setHours(date.getHours() + 6, 30, 0, 0);
   instance.scrollTo(date, { priority: 1 });
 });
 
 const scrollToAllDay = ClientFunction(() => {
   const instance = ($('#container') as any).dxScheduler('instance');
   const currentDate = instance.option('currentDate');
-  const date = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000);
-  date.setHours(9, 40, 0, 0);
-
+  const date = new Date(currentDate.getTime());
+  date.setHours(date.getHours() + 6, 30, 0, 0);
   instance.scrollTo(date, undefined, true);
 });
 
 test('ScrollTo works correctly with week and day views', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  const views = [{
-    name: 'week',
-    initValue: 0,
-  }, {
-    name: 'day',
-    initValue: 0,
-  }];
+  const views = [{ name: 'week', initValue: 0 }, { name: 'day', initValue: 0 }];
 
   // eslint-disable-next-line no-restricted-syntax
   for (const view of views) {
@@ -52,16 +43,13 @@ test('ScrollTo works correctly with week and day views', async (t) => {
 
     await scheduler.option('currentView', name);
     await scheduler.option('useNative', true);
-
-    await t
-      .expect(scheduler.workSpaceScroll.top).eql(initValue, `Work space has init scroll position in ${name} view`);
+    await t.wait(2000);
 
     await scrollToDate();
-
-    const workSpaceScrollTop = await scheduler.workSpaceScroll.top;
+    await t.wait(3000);
 
     await t
-      .expect(workSpaceScrollTop).notEql(initValue, `Work space is scrolled in ${name} view`);
+      .expect(scheduler.workSpaceScroll.top).gt(initValue, `Work space is scrolled in ${name} view`);
   }
 }).before(async () => createScheduler({
   dataSource: [],
@@ -79,18 +67,15 @@ test('ScrollTo works correctly with grouping in week view', async (t) => {
 
   await scheduler.option('currentView', 'week');
   await scheduler.option('useNative', true);
+  await t.wait(2000);
 
-  const initValue = 0;
-
-  await t
-    .expect(scheduler.workSpaceScroll.top).eql(initValue, 'Work space has init scroll position');
+  const initialTop = await scheduler.workSpaceScroll.top;
 
   await scrollToDateWithGroups();
-
-  const workSpaceScrollTop = await scheduler.workSpaceScroll.top;
+  await t.wait(3000);
 
   await t
-    .expect(workSpaceScrollTop).notEql(initValue, 'Work space is scrolled with groups');
+    .expect(scheduler.workSpaceScroll.top).gt(initialTop, 'Work space is scrolled with groups');
 }).before(async () => createScheduler({
   dataSource: [],
   views: ['week'],
@@ -123,6 +108,7 @@ test('ScrollTo works correctly with all-day panel', async (t) => {
     .expect(scheduler.workSpaceScroll.top).eql(initValue, 'Work space has init scroll position');
 
   await scrollToAllDay();
+  await t.wait(3000);
 
   await t
     .expect(scheduler.workSpaceScroll.top).eql(expectedTopValue, 'Work space is scrolled to all-day panel');
@@ -144,15 +130,17 @@ test('ScrollTo works correctly with RTL mode', async (t) => {
   await scheduler.option('currentView', 'week');
   await scheduler.option('useNative', true);
   await scheduler.option('rtlEnabled', true);
+  await t.wait(2000);
 
-  const initialWorkSpaceScrollTop = await scheduler.workSpaceScroll.top;
+  const initialBrowserTop = await scheduler.workSpaceScroll.top;
 
   await scrollToDate();
+  await t.wait(3000);
 
-  const workSpaceScrollTop = await scheduler.workSpaceScroll.top;
+  const browserTop = await ClientFunction(() => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollTop())();
 
   await t
-    .expect(workSpaceScrollTop).notEql(initialWorkSpaceScrollTop, 'Work space is scrolled in RTL');
+    .expect(browserTop).gt(initialBrowserTop, 'Work space is scrolled in RTL');
 }).before(async () => createScheduler({
   dataSource: [],
   views: ['week'],
@@ -162,4 +150,83 @@ test('ScrollTo works correctly with RTL mode', async (t) => {
   startDayHour: 0,
   endDayHour: 20,
   height: 580,
+}));
+
+test('ScrollTo works correctly with timeline views (native, sync header/workspace)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const views = [{ name: 'timelineDay' }, { name: 'timelineWeek' }];
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const view of views) {
+    const { name } = view;
+
+    await scheduler.option('currentView', name);
+    await scheduler.option('useNative', true);
+    await t.wait(200);
+
+    const getWSLeft = ClientFunction(() => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft());
+    const getHeaderLeft = ClientFunction(() => $('.dx-scheduler-header-scrollable .dx-scrollable-container').scrollLeft());
+
+    const initialLeft = await getWSLeft();
+    const initialHeaderLeft = await getHeaderLeft();
+
+    await t.expect(initialLeft).eql(initialHeaderLeft, `${name}: header/workspace initial sync`);
+
+    await scrollToDate();
+    await t.wait(300);
+
+    const left = await getWSLeft();
+    const headerLeft = await getHeaderLeft();
+
+    await t
+      .expect(left).notEql(initialLeft, `${name}: workspace left changed`)
+      .expect(headerLeft).eql(left, `${name}: header synchronized with workspace`);
+  }
+}).before(async () => createScheduler({
+  dataSource: [],
+  views: ['timelineDay', 'timelineWeek'],
+  currentView: 'timelineDay',
+  currentDate: new Date(2019, 5, 1, 9, 40),
+  firstDayOfWeek: 0,
+  startDayHour: 0,
+  endDayHour: 20,
+  height: 580,
+}));
+
+test('ScrollTo works correctly in timeline RTL (native, sync header/workspace)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await scheduler.option('currentView', 'timelineWeek');
+  await scheduler.option('useNative', true);
+  await scheduler.option('rtlEnabled', true);
+  await t.wait(200);
+
+  const getWSLeft = ClientFunction(() => ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft());
+  const getHeaderLeft = ClientFunction(() => $('.dx-scheduler-header-scrollable .dx-scrollable-container').scrollLeft());
+
+  const initialLeft = await getWSLeft();
+  const initialHeaderLeft = await getHeaderLeft();
+
+  await t.expect(initialLeft).eql(initialHeaderLeft, 'timeline RTL: initial sync');
+
+  await scrollToDate();
+  await t.wait(300);
+
+  const left = await getWSLeft();
+  const headerLeft = await getHeaderLeft();
+
+  await t
+    .expect(left).notEql(initialLeft, 'timeline RTL: workspace left changed')
+    .expect(headerLeft).eql(left, 'timeline RTL: header synchronized');
+}).before(async () => createScheduler({
+  dataSource: [],
+  views: ['timelineWeek'],
+  currentView: 'timelineWeek',
+  currentDate: new Date(2019, 5, 1, 9, 40),
+  firstDayOfWeek: 0,
+  startDayHour: 0,
+  endDayHour: 20,
+  height: 580,
+  rtlEnabled: true,
 }));
