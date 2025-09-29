@@ -7,7 +7,7 @@ fixture.disablePageReloads`Shadow DOM - Adopted DX css styles`
 const dxWidgetHostStyles = '.dx-widget-shadow { font-size: 20px; }';
 const dxWidgetShadowStyles = '.dx-widget-shadow { font-size: 40px; }';
 
-const setupShadowDOMTest = (copyStylesToShadowDom) => ClientFunction((copyStyles) => {
+const setupShadowDomTest = (copyStylesToShadowDom) => ClientFunction((copyStyles) => {
   if (!copyStyles) {
     (window as any).DevExpress.config({ copyStylesToShadowDom: copyStyles });
   }
@@ -64,7 +64,7 @@ const getAdoptedStyleSheets = ClientFunction(() => {
 });
 
 test('Copies DX css styles from the host to the shadow root when rendering a DX widget', async (t) => {
-  await setupShadowDOMTest(true);
+  await setupShadowDomTest(true);
 
   const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets();
 
@@ -76,7 +76,7 @@ test('Copies DX css styles from the host to the shadow root when rendering a DX 
 });
 
 test('Does not copy DX css styles when copyStylesToShadowDom is disabled', async (t) => {
-  await setupShadowDOMTest(false);
+  await setupShadowDomTest(false);
 
   const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets();
   await t.expect(firstSheetRules === null && secondSheetRules === null)
