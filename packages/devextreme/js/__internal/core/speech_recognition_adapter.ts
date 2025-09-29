@@ -19,6 +19,8 @@ const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
 export class SpeechRecognitionAdapter {
   private _speechRecognition?: SpeechRecognition | null;
 
+  private _isListening = false;
+
   constructor(config: SpeechRecognitionConfig, events: SpeechRecognitionEvents) {
     const window = getWindow();
     // @ts-expect-error SpeechRecognition API is not supported in TS
@@ -42,7 +44,15 @@ export class SpeechRecognitionAdapter {
     }
 
     // eslint-disable-next-line spellcheck/spell-checker
-    this._speechRecognition.onend = events.onEnd;
+    this._speechRecognition.onstart = (): void => {
+      this._isListening = true;
+    };
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._speechRecognition.onend = (event: Event): void => {
+      this._isListening = false;
+
+      events.onEnd(event);
+    };
     // eslint-disable-next-line spellcheck/spell-checker
     this._speechRecognition.onresult = events.onResult;
     this._speechRecognition.onerror = events.onError;
@@ -57,10 +67,18 @@ export class SpeechRecognitionAdapter {
   }
 
   start(): void {
+    if (this._isListening) {
+      return;
+    }
+
     this._speechRecognition?.start();
   }
 
   stop(): void {
+    if (!this._isListening) {
+      return;
+    }
+
     this._speechRecognition?.stop();
   }
 
