@@ -142,7 +142,7 @@ const formRef = ref();
 type AIMessage = (
   OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam
 ) & {
-  content: string | undefined;
+  content: string;
 };
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
@@ -167,8 +167,8 @@ const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system || '' },
+      { role: 'user', content: prompt.user || '' },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
