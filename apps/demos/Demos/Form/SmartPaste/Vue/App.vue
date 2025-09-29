@@ -158,7 +158,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
-  return result;
+  return result || '';
 }
 
 const aiIntegration = new AIIntegration({
