@@ -5,7 +5,7 @@ import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Horizontal Scroll Screenshot`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, './container.html'));
 
 const testData = [
   {
@@ -77,25 +77,6 @@ const testData = [
   },
 ];
 
-const addScrollbarStyles = ClientFunction(() => {
-  const style = document.createElement('style');
-  style.textContent = `
-    ::-webkit-scrollbar {
-      -webkit-appearance: none;
-      width: 7px;
-    }
-    ::-webkit-scrollbar-thumb {
-      border-radius: 4px;
-      background-color: rgba(0, 0, 0, .5);
-      -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-    }
-    .dx-scheduler-date-table-scrollable .dx-scrollable-container {
-      overflow: scroll !important;
-    }
-  `;
-  document.head.appendChild(style);
-});
-
 const scrollHorizontallyToEnd = ClientFunction(() => {
   const scheduler = document.querySelector('.dx-scheduler');
   if (!scheduler) return { success: false, message: 'Scheduler not found' };
@@ -126,8 +107,6 @@ test('Scheduler horizontal scroll screenshot test', async (t) => {
     compareResults,
   } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
-
-  await addScrollbarStyles();
 
   await t.expect(
     await takeScreenshot('scheduler-horizontal-scroll-before.png', scheduler.element),
