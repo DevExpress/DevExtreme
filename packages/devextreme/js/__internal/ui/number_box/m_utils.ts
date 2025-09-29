@@ -1,4 +1,4 @@
-import { adjust } from '@js/core/utils/math';
+import { adjust, roundFloatPart } from '@js/core/utils/math';
 
 const getRealSeparatorIndex = function (str) {
   let quoteBalance = 0;
@@ -40,17 +40,25 @@ const splitByIndex = function (str, index) {
   return [str.slice(0, index), str.slice(index + 1)];
 };
 
-const adjustPercentValue = function (rawValue, precision) {
+const adjustPercentValue = function (rawValue, interval) {
   if (!rawValue) {
     return rawValue;
   }
 
-  return adjust(rawValue, precision) / 100;
+  return adjust(rawValue / 100, interval * 0.0001);
+};
+
+const roundFloatPartPercentValue = function (rawValue: number, precision: number) {
+  if (!rawValue) {
+    return rawValue;
+  }
+  return roundFloatPart(rawValue / 100, precision);
 };
 
 export {
   adjustPercentValue,
   getNthOccurrence,
   getRealSeparatorIndex,
+  roundFloatPartPercentValue,
   splitByIndex,
 };
