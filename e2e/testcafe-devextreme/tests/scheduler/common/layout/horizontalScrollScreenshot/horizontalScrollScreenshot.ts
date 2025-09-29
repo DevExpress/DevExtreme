@@ -89,6 +89,9 @@ const addScrollbarStyles = ClientFunction(() => {
       background-color: rgba(0, 0, 0, .5);
       -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
     }
+    .dx-scheduler-date-table-scrollable .dx-scrollable-container {
+      overflow: scroll !important;
+    }
   `;
   document.head.appendChild(style);
 });
