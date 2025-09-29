@@ -142,7 +142,7 @@ const formRef = ref();
 type AIMessage = (
   OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam
 ) & {
-  content: string;
+  content: string | undefined;
 };
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
