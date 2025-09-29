@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
 import FileManager from 'devextreme-testcafe-models/fileManager';
 import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
