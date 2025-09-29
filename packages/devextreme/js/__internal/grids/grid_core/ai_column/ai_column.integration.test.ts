@@ -156,7 +156,7 @@ describe('Options', () => {
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(headerCell.textContent.includes('Template')).toBe(true);
+      expect(headerCell.textContent).toBe('Template');
     });
   });
 
@@ -192,7 +192,7 @@ describe('Options', () => {
 
       expect(cellTemplate).toHaveBeenCalledTimes(1);
       expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(dataCell.textContent.includes('Template')).toBe(true);
+      expect(dataCell.textContent).toBe('Template');
     });
   });
 });
@@ -281,7 +281,7 @@ describe('columnOption', () => {
 
     expect(headerCellTemplate).toHaveBeenCalledTimes(1);
     expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(headerCell.textContent.includes('Template')).toBe(true);
+    expect(headerCell.textContent).toBe('Template');
   });
 
   it('should apply cellTemplate to AI column', async () => {
@@ -316,7 +316,7 @@ describe('columnOption', () => {
 
     expect(cellTemplate).toHaveBeenCalledTimes(1);
     expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(dataCell.textContent.includes('Template')).toBe(true);
+    expect(dataCell.textContent).toBe('Template');
   });
 
   describe('when the name is reset', () => {
