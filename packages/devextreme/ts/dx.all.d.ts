@@ -923,6 +923,10 @@ declare module DevExpress.aiIntegration {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
+  export type AIResponse = string | Record<PropertyKey, any>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
   export type ChangeStyleCommandParams = {
     text: string;
     writingStyle: string;
@@ -968,6 +972,7 @@ declare module DevExpress.aiIntegration {
   export type FieldInfo = {
     name: string;
     format: string;
+    type?: SmartPasteFieldType;
     instruction?: string;
   };
   /**
@@ -1009,7 +1014,15 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.prompt]
      */
     prompt: Prompt;
+    /**
+     * [descr:RequestParams.requestParams]
+     */
+    requestParams?: RequestParamsInfo;
   };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type RequestParamsInfo = Record<PropertyKey, any>;
   /**
    * [descr:Response]
    */
@@ -1017,7 +1030,7 @@ declare module DevExpress.aiIntegration {
     /**
      * [descr:Response.promise]
      */
-    promise: Promise<string>;
+    promise: Promise<AIResponse>;
     /**
      * [descr:Response.abort]
      */
@@ -1045,8 +1058,31 @@ declare module DevExpress.aiIntegration {
    */
   export type SmartPasteCommandResult = Array<{
     name: string;
-    value: string | string[];
+    value: SmartPasteResultFieldType;
   }>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteFieldType =
+    | 'color'
+    | 'boolean'
+    | 'string'
+    | 'stringArray'
+    | 'number'
+    | 'numberRange'
+    | 'date'
+    | 'dateRange';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteResultFieldType =
+    | string
+    | string[]
+    | number
+    | number[]
+    | Date
+    | Date[]
+    | boolean;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -18691,7 +18727,10 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
-    export type AIResult = Record<string, string | string[]>;
+    export type AIResult = Record<
+      string,
+      DevExpress.aiIntegration.SmartPasteResultFieldType
+    >;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
