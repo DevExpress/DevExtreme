@@ -129,6 +129,7 @@ import {
   DxForm, DxItem, DxButtonItem, DxGroupItem,
 } from 'devextreme-vue/form';
 import type { ValidationRule } from 'devextreme-vue/common';
+import type { RequestParams } from 'devextreme-vue/common/ai-integration';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import DxTextArea from 'devextreme-vue/text-area';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
@@ -161,7 +162,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
 }
 
 const aiIntegration = new AIIntegration({
-  sendRequest({ prompt }) {
+  sendRequest({ prompt }: RequestParams) {
     const controller = new AbortController();
     const signal = controller.signal;
 
