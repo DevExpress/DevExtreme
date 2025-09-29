@@ -20,7 +20,7 @@ if (window && window.config?.packageConfigPaths) {
 })
 export class AppComponent {
   dataSource = AspNetData.createStore({
-    loadUrl: 'http://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
+    loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
     key: 'ID',
   });
 }
