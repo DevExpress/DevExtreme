@@ -75,10 +75,7 @@ export class AiColumnController extends Controller {
   }
 
   public sendAIColumnRequest(columnName: string): void {
-    const data = this.dataController.items()
-      .filter((row) => row.rowType === 'data')
-      .map((row) => ({ [row.key as PropertyKey]: row.data }));
-    this.aiColumnIntegrationController.sendRequest(columnName, data, {});
+    this.aiColumnIntegrationController.sendRequest(columnName);
   }
 
   public refreshAIColumn(columnName: string): void {

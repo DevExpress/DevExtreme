@@ -4,6 +4,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import type { GenerateColumnCommandExecutor } from './types';
 
@@ -14,16 +15,26 @@ export class AiColumnIntegrationController extends Controller {
 
   private columnsController!: ColumnsController;
 
+  private dataController!: DataController;
+
   public init(): void {
     this.columnsController = this.getController('columns');
+    this.dataController = this.getController('data');
   }
 
-  public sendRequest(columnName: string, data: any[], additionalInfo: Record<string, any>): void {
+  public sendRequest(columnName: string): void {
     const aiIntegration = this.getAiIntegration(columnName);
+    const data = this.dataController.items()
+      .filter((row) => row.rowType === 'data')
+      .reduce<Record<PropertyKey, unknown>>((acc, row) => {
+        acc[JSON.stringify(row.key) as PropertyKey] = row.data;
+        return acc;
+      }, {});
+    const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
     aiIntegration.generateColumn(
       {
-        text: additionalInfo.text,
-        data: data[0] || {},
+        text: prompt,
+        data,
       },
       this.getAICommandCallbacks<GenerateColumnCommandResult>(),
     );
