@@ -61,8 +61,8 @@ const store = [...initialMessages];
 
 const customStore = new CustomStore({
   key: 'id',
-  load: async() => store,
-  insert: async(message: DxChatTypes.Message) => {
+  load: async () => store,
+  insert: async (message: DxChatTypes.Message) => {
     store.push(message);
     return message;
   },
@@ -113,12 +113,12 @@ const editingStrategy: Record<string, boolean | ((options: CustomStrategyOptions
   disabled: false,
   custom: ({ component, message }: CustomStrategyOptions) => {
     if (!component) return false;
-    
+
     const { items, user } = component.option();
     const userId = user?.id;
 
     const lastNotDeletedMessage = items?.findLast(
-      (item: DxChatTypes.Message) => item.author?.id === userId && !item.isDeleted
+      (item: DxChatTypes.Message) => item.author?.id === userId && !item.isDeleted,
     );
 
     return message.id === lastNotDeletedMessage?.id;

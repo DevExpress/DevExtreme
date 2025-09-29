@@ -57,7 +57,7 @@ function onSelectionChanged({ items }: DxDiagramTypes.SelectionChangedEvent) {
   selectedItemNames.value = 'Nobody has been selected';
   const filteredItems = items
     .filter((item) => item.itemType === 'shape')
-    .map(({text}: Record<string, any>) => text);
+    .map(({ text }: Record<string, any>) => text);
   if (filteredItems.length > 0) {
     selectedItemNames.value = filteredItems.join(', ');
   }

@@ -184,7 +184,7 @@ function onColorClick(clickedColor: string) {
   color.value = clickedColor;
   if (colorPicker) {
     (colorPicker.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement).style.color = clickedColor;
-    colorPicker.close();   
+    colorPicker.close();
   }
 }
 </script>

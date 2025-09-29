@@ -63,7 +63,7 @@ import {
   DxButtonItem,
   DxLabel,
 } from 'devextreme-vue/form';
-import { type DxCheckBoxTypes } from "devextreme-vue/check-box";
+import { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import service from './data.ts';
 
 const employee = service.getEmployee();

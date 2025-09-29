@@ -158,7 +158,7 @@ import {
   DxItem,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
-import DxNumberBox, {type DxNumberBoxTypes } from 'devextreme-vue/number-box';
+import DxNumberBox, { type DxNumberBoxTypes } from 'devextreme-vue/number-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { jsPDF } from 'jspdf';

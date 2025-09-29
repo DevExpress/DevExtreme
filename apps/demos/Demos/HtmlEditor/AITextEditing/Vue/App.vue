@@ -34,7 +34,7 @@ import {
   DxCommand,
 } from 'devextreme-vue/html-editor';
 import { AIIntegration, type Response } from 'devextreme-vue/common/ai-integration';
-import { AzureOpenAI, OpenAI  } from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
 import {
   markup,
   AzureOpenAIConfig,
@@ -66,7 +66,7 @@ const aiIntegration = new AIIntegration({
   sendRequest({ prompt }) {
     const controller = new AbortController();
     const signal = controller.signal;
-    
+
     const aiPrompt: AIMessage[] = [
       { role: 'system', content: prompt.system || '' },
       { role: 'user', content: prompt.user || '' },
@@ -74,7 +74,7 @@ const aiIntegration = new AIIntegration({
 
     const promise = getAIResponse(aiPrompt, signal);
 
-    const result: Response  = {
+    const result: Response = {
       promise,
       abort: () => {
         controller.abort();

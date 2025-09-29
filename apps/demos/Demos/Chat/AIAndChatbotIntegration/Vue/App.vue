@@ -80,7 +80,7 @@ onBeforeMount(() => {
 
 async function getAIResponse(messages: DxChatTypes.Message[]): Promise<string> {
   const params: Record<string, any> = {
-    messages: messages,
+    messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
@@ -160,12 +160,12 @@ function alertLimitReached(): void {
 async function regenerate(): Promise<void> {
   toggleDisabledState(true);
   const lastMessage = messages.at(-1);
-  
+
   try {
     const aiResponse = await getAIResponse(messages.slice(0, -1));
 
     updateLastMessage(aiResponse);
-    
+
     if (lastMessage?.content) {
       lastMessage.content = aiResponse;
     }
@@ -173,7 +173,7 @@ async function regenerate(): Promise<void> {
     if (lastMessage?.content) {
       updateLastMessage(lastMessage.content);
     }
-    
+
     alertLimitReached();
   } finally {
     toggleDisabledState(false);
