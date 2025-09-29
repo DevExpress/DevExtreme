@@ -1,0 +1,103 @@
+<div class="speech-to-text-demo">
+  <div class="speech-to-text-container">
+    <span>Use voice recognition (speech to text)</span>
+    <dx-speech-to-text
+      id="speech-to-text"
+      [ngClass]="{
+        'animation-disabled': !animation,
+        'custom-button': displayMode === 'Custom'
+      }"
+      [startText]="startText"
+      [stopText]="stopText"
+      [stylingMode]="stylingMode"
+      [type]="type"
+      [hint]="hint"
+      [disabled]="disabled"
+      [speechRecognitionConfig]="speechRecognitionConfig"
+      (onStartClick)="onStartClick($event)"
+      (onStopClick)="onStopClick($event)"
+      (onResult)="onResult($event)"
+    ></dx-speech-to-text>
+    <dx-text-area
+      id="text-area"
+      [(value)]="textAreaValue"
+      [widgth]="360"
+      [height]="120"
+      placeholder="Recognized text will appear here..."
+      [inputAttr]="{ 'aria-label': 'Recognized Text' }"
+      (onValueChanged)="onTextAreaValueChanged($event)"
+    ></dx-text-area>
+    <dx-button
+      text="Clear"
+      [disabled]="clearButtonDisabled"
+      (onClick)="onClearButtonClick($event)"
+    ></dx-button>
+  </div>
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+      <div>Display Mode</div>
+      <dx-select-box
+        [(value)]="displayMode"
+        [dataSource]="displayModes"
+        [inputAttr]="{ 'aria-label': 'Display Mode' }"
+        (onValueChanged)="onDisplayModeChanged($event)"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <div>Styling Mode</div>
+      <dx-select-box
+        [(value)]="stylingMode"
+        [dataSource]="stylingModes"
+        displayExpr="displayValue"
+        valueExpr="value"
+        [disabled]="stylingModeDisabled"
+        [inputAttr]="{ 'aria-label': 'Styling Mode' }"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <div>Type</div>
+      <dx-select-box
+        [(value)]="type"
+        [dataSource]="types"
+        displayExpr="displayValue"
+        valueExpr="value"
+        [disabled]="typeDisabled"
+        [inputAttr]="{ 'aria-label': 'Type' }"
+      ></dx-select-box>
+    </div>
+    <div class="switch">
+      <dx-switch [(value)]="disabled"></dx-switch>
+      <span>Disabled</span>
+    </div>
+    <div class="option-separator"></div>
+    <div class="option">
+      <div>Language</div>
+      <dx-select-box
+        [(value)]="language"
+        [dataSource]="languages"
+        [inputAttr]="{ 'aria-label': 'Language' }"
+        (onValueChanged)="updateSpeechRecognitionConfig()"
+      ></dx-select-box>
+    </div>
+    <div class="switch">
+      <dx-switch
+        [(value)]="interimResults"
+        (onValueChanged)="updateSpeechRecognitionConfig()"
+      ></dx-switch>
+      <span>Interim Results</span>
+    </div>
+    <div class="switch">
+      <dx-switch
+        [(value)]="continuous"
+        (onValueChanged)="updateSpeechRecognitionConfig()"
+      ></dx-switch>
+      <span>Continuous Recognition</span>
+    </div>
+    <div class="option-separator"></div>
+    <div class="switch">
+      <dx-switch [(value)]="animation"></dx-switch>
+      <span>Animation</span>
+    </div>
+  </div>
+</div>

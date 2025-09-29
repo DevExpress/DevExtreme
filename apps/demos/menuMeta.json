@@ -5016,6 +5016,24 @@
             "ShowOnMainPage": true
           }
         ]
+      },
+      {
+        "Name": "SpeechToText",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Equivalents": "dxSpeechToText, dx-speechtotext, VoiceInput, VoiceToText, AIDictation, MicrophoneInput, SpeechRecognition, SpeechTranscription, MicInput",
+            "DocUrl": "",
+            "Widget": "SpeechToText",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },
