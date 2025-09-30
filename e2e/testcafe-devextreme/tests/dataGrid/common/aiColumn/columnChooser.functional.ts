@@ -420,21 +420,21 @@ test('The AI column cannot be shown when columnChooser.mode is "select" and allo
 test('The AI column should not be visible in column chooser when showInColumnChooser is false and columnChooser.mode is "dragAndDrop"', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const columnChooser = dataGrid.getColumnChooser();
 
   await t.expect(dataGrid.isReady()).ok();
 
-  const headerCells = dataGrid.getHeaders().getHeaderRow(0).getHeaderCells();
-
   // assert
   await t.expect(dataGrid.apiColumnOption('myAiColumn', 'visible')).notOk();
-  await checkVisibleHeaders(t, headerCells, ['ID', 'Name', 'Value']);
+  await t.expect(await headerRow.getHeaderTexts()).eql(['ID', 'Name', 'Value']);
 
   // act
   await dataGrid.apiShowColumnChooser();
 
   // assert
-  await t.expect(dataGrid.getColumnChooser().isOpened).ok();
-  await checkChooserColumns(t, dataGrid.getColumnChooser().getColumns(), []);
+  await t.expect(columnChooser.isOpened).ok();
+  await t.expect(await columnChooser.getColumnTexts()).eql([]);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 1, name: 'Name 1', value: 10 },
@@ -464,21 +464,21 @@ test('The AI column should not be visible in column chooser when showInColumnCho
 test('The AI column should not be visible in column chooser when showInColumnChooser is false and columnChooser.mode is "select"', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+  const columnChooser = dataGrid.getColumnChooser();
 
   await t.expect(dataGrid.isReady()).ok();
 
-  const headerCells = dataGrid.getHeaders().getHeaderRow(0).getHeaderCells();
-
   // assert
   await t.expect(dataGrid.apiColumnOption('myAiColumn', 'visible')).notOk();
-  await checkVisibleHeaders(t, headerCells, ['ID', 'Name', 'Value']);
+  await t.expect(await headerRow.getHeaderTexts()).eql(['ID', 'Name', 'Value']);
 
   // act
   await dataGrid.apiShowColumnChooser();
 
   // assert
-  await t.expect(dataGrid.getColumnChooser().isOpened).ok();
-  await checkChooserColumns(t, dataGrid.getColumnChooser().getColumns(), ['ID', 'Name', 'Value']);
+  await t.expect(columnChooser.isOpened).ok();
+  await t.expect(await columnChooser.getColumnTexts()).eql(['ID', 'Name', 'Value']);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 1, name: 'Name 1', value: 10 },
