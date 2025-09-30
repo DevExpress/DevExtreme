@@ -665,7 +665,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          * @public
          */
         onCanceled?: ((formData: any) => void);
-      };
+      } | undefined;
     };
     /**
      * @docid

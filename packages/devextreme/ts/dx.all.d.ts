@@ -26296,20 +26296,22 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.editing.form]
            */
-          form?: {
-            /**
-             * [descr:dxSchedulerOptions.editing.form.items]
-             */
-            items?: Array<DevExpress.ui.dxForm.Item>;
-            /**
-             * [descr:dxSchedulerOptions.editing.form.onSaved]
-             */
-            onSaved?: (formData: any) => void;
-            /**
-             * [descr:dxSchedulerOptions.editing.form.onCanceled]
-             */
-            onCanceled?: (formData: any) => void;
-          };
+          form?:
+            | {
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.items]
+                 */
+                items?: Array<DevExpress.ui.dxForm.Item>;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onSaved]
+                 */
+                onSaved?: (formData: any) => void;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
+                 */
+                onCanceled?: (formData: any) => void;
+              }
+            | undefined;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]

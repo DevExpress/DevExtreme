@@ -404,7 +404,7 @@ type IEditingProps = React.PropsWithChildren<{
   allowResizing?: boolean;
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
-  form?: Record<string, any> | {
+  form?: Record<string, any> | undefined | {
     items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
     onCanceled?: ((formData: any) => void);
     onSaved?: ((formData: any) => void);

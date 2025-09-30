@@ -81,10 +81,10 @@ export class DxoSchedulerEditingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get form(): { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } {
+    get form(): undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } {
         return this._getOption('form');
     }
-    set form(value: { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }) {
+    set form(value: undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) }) {
         this._setOption('form', value);
     }
 
