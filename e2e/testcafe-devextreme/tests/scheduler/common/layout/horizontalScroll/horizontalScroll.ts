@@ -3,9 +3,10 @@ import { ClientFunction } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
 
-fixture.disablePageReloads`Scheduler: Horizontal Scroll Screenshot`
-  .page(url(__dirname, './container.html'));
+fixture.disablePageReloads`Scheduler: Horizontal Scroll`
+  .page(url(__dirname, '../../../../container.html'));
 
 const testData = [
   {
@@ -77,6 +78,21 @@ const testData = [
   },
 ];
 
+const SCROLLBAR_STYLES = `
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 7px;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, .5);
+      -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+    }
+    .dx-scheduler-date-table-scrollable .dx-scrollable-container {
+      overflow: scroll !important;
+    }
+`;
+
 const scrollHorizontallyToEnd = ClientFunction(() => {
   const scheduler = document.querySelector('.dx-scheduler');
   if (!scheduler) return { success: false, message: 'Scheduler not found' };
@@ -108,6 +124,8 @@ test('Scheduler horizontal scroll screenshot test', async (t) => {
   } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
+  await insertStylesheetRulesToPage(SCROLLBAR_STYLES);
+
   await t.expect(
     await takeScreenshot('scheduler-horizontal-scroll-before.png', scheduler.element),
   ).ok();
@@ -138,6 +156,8 @@ test('Scheduler horizontal scroll screenshot test', async (t) => {
     startDayHour: 9,
     height: 730,
     crossScrollingEnabled: true,
-    width: 800,
+    width: 500,
   });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
