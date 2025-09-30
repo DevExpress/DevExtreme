@@ -41,7 +41,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 
 type ITreeListOptionsNarrowedEvents<TRowData = any, TKey = any> = {
   onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent<TRowData, TKey>) => void);
-  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingInfo) => void);
+  onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingInfo<TRowData>) => void);
   onAIColumnResponseReceived?: ((e: AIColumnResponseReceivedInfo) => void);
   onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
   onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);

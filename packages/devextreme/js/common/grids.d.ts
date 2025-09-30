@@ -105,7 +105,7 @@ export type AIColumnResponseReceivedInfo = {
  * @docid
  * @namespace DevExpress.common.grids
  */
-export type AIColumnRequestCreatingInfo<TRowData> = {
+export type AIColumnRequestCreatingInfo<TRowData=any> = {
   /**
    * @docid
    * @type object
