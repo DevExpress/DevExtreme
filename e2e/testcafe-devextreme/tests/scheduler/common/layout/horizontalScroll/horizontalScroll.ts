@@ -126,6 +126,12 @@ test('Scheduler horizontal scroll screenshot test', async (t) => {
 
   await insertStylesheetRulesToPage(SCROLLBAR_STYLES);
 
+  await t.wait(100);
+
+  await scheduler.repaint();
+
+  await t.wait(100);
+
   await t.expect(
     await takeScreenshot('scheduler-horizontal-scroll-before.png', scheduler.element),
   ).ok();
