@@ -22,10 +22,7 @@ export default function App() {
   const [hint, setHint] = useState<string>('Start voice recognition');
   const [disabled, setDisabled] = useState<boolean>(false);
   const [textAreaValue, setTextAreaValue] = useState<string>('');
-  const [clearButtonDisabled, setClearButtonDisabled] = useState<boolean>(true);
   const [language, setLanguage] = useState<string>(languages[0]);
-  const [stylingModeDisabled, setStylingModeDisabled] = useState<boolean>(false);
-  const [typeDisabled, setTypeDisabled] = useState<boolean>(false);
   const [interimResults, setInterimResults] = useState<boolean>(true);
   const [continuous, setContinuous] = useState<boolean>(false);
   const [animation, setAnimation] = useState<boolean>(true);
@@ -43,7 +40,7 @@ export default function App() {
     }
 
     setType('danger');
-  }, [displayMode, setHint, setType]);
+  }, [displayMode]);
 
   const onEnd = useCallback(() => {
     state = 'initial';
@@ -54,7 +51,7 @@ export default function App() {
     }
 
     setType('default');
-  }, [displayMode, setHint, setType]);
+  }, [displayMode]);
 
   const onResult = useCallback(({ event }) => {
     const { results } = event;
@@ -62,21 +59,17 @@ export default function App() {
       .map((resultItem: any) => resultItem[0].transcript)
       .join(' ');
     setTextAreaValue(resultText);
-  }, [setTextAreaValue]);
+  }, []);
 
   const onTextAreaValueChanged = useCallback(({ value }) => {
     setTextAreaValue(value);
-    setClearButtonDisabled(!value);
-  }, [setTextAreaValue, setClearButtonDisabled]);
+  }, []);
 
   const onClearButtonClick = useCallback(() => {
     setTextAreaValue('');
-  }, [setTextAreaValue]);
+  }, []);
 
   const onDisplayModeValueChanged = useCallback(({ value }) => {
-    const isCustomMode = value === 'Custom';
-    setStylingModeDisabled(isCustomMode);
-    setTypeDisabled(isCustomMode);
     setDisplayMode(value);
 
     if (value === 'Text and Icon') {
@@ -89,39 +82,39 @@ export default function App() {
     setStartText('');
     setStopText('');
 
-    if (isCustomMode) {
+    if (value === 'Custom') {
       setStylingMode('contained');
       setType(state === 'initial' ? 'default' : 'danger');
     }
-  }, [setStylingModeDisabled, setTypeDisabled, setDisplayMode, setStartText, setStopText, setStylingMode, setType]);
+  }, []);
 
   const onStylingModeValueChanged = useCallback(({ value }) => {
     setStylingMode(value);
-  }, [setStylingMode]);
+  }, []);
 
   const onTypeValueChanged = useCallback(({ value }) => {
     setType(value);
-  }, [setType]);
+  }, []);
 
   const onDisabledValueChanged = useCallback(({ value }) => {
     setDisabled(value);
-  }, [setDisabled]);
+  }, []);
 
   const onLanguageValueChanged = useCallback(({ value }) => {
     setLanguage(value);
-  }, [setLanguage]);
+  }, []);
 
   const onInterimResultsValueChanged = useCallback(({ value }) => {
     setInterimResults(value);
-  }, [setInterimResults]);
+  }, []);
 
   const onContinuousValueChanged = useCallback(({ value }) => {
     setContinuous(value);
-  }, [setContinuous]);
+  }, []);
 
   const onAnimationValueChanged = useCallback(({ value }) => {
     setAnimation(value);
-  }, [setAnimation]);
+  }, []);
 
   return (
     <div className='speech-to-text-demo'>
@@ -152,7 +145,7 @@ export default function App() {
         />
         <Button
           text='Clear'
-          disabled={clearButtonDisabled}
+          disabled={textAreaValue === ''}
           onClick={onClearButtonClick}
         />
       </div>
@@ -174,7 +167,7 @@ export default function App() {
             dataSource={stylingModes}
             valueExpr='value'
             displayExpr='displayValue'
-            disabled={stylingModeDisabled}
+            disabled={displayMode === 'Custom'}
             inputAttr={stylingModeLabel}
             onValueChanged={onStylingModeValueChanged}
           />
@@ -186,7 +179,7 @@ export default function App() {
             dataSource={types}
             valueExpr='value'
             displayExpr='displayValue'
-            disabled={typeDisabled}
+            disabled={displayMode === 'Custom'}
             inputAttr={typeLabel}
             onValueChanged={onTypeValueChanged}
           />

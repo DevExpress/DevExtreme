@@ -25,11 +25,10 @@
       [height]="120"
       placeholder="Recognized text will appear here..."
       [inputAttr]="{ 'aria-label': 'Recognized Text' }"
-      (onValueChanged)="onTextAreaValueChanged($event)"
     ></dx-text-area>
     <dx-button
       text="Clear"
-      [disabled]="clearButtonDisabled"
+      [disabled]="textAreaValue === ''"
       (onClick)="onClearButtonClick($event)"
     ></dx-button>
   </div>
@@ -51,7 +50,7 @@
         [dataSource]="stylingModes"
         displayExpr="displayValue"
         valueExpr="value"
-        [disabled]="stylingModeDisabled"
+        [disabled]="displayMode === 'Custom'"
         [inputAttr]="{ 'aria-label': 'Styling Mode' }"
       ></dx-select-box>
     </div>
@@ -62,7 +61,7 @@
         [dataSource]="types"
         displayExpr="displayValue"
         valueExpr="value"
-        [disabled]="typeDisabled"
+        [disabled]="displayMode === 'Custom'"
         [inputAttr]="{ 'aria-label': 'Type' }"
       ></dx-select-box>
     </div>

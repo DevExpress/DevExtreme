@@ -39,21 +39,15 @@ export class AppComponent {
 
   stylingModes: { displayValue: string; value: string }[];
 
-  stylingModeDisabled: boolean;
-
   type: string;
 
   types: { displayValue: string; value: string }[];
-
-  typeDisabled: boolean;
 
   hint: string;
 
   disabled: boolean;
 
   textAreaValue: string;
-
-  clearButtonDisabled: boolean;
 
   language: string;
 
@@ -77,14 +71,11 @@ export class AppComponent {
     this.displayMode = this.displayModes[0];
     this.stylingModes = this.appService.getStylingModes();
     this.stylingMode = this.stylingModes[0].value;
-    this.stylingModeDisabled = false;
     this.types = this.appService.getTypes();
     this.type = this.types[2].value;
-    this.typeDisabled = false;
     this.hint = 'Start voice recognition';
     this.disabled = false;
     this.textAreaValue = '';
-    this.clearButtonDisabled = true;
     this.languages = this.appService.getLanguages();
     this.language = this.languages[0];
     this.langMap = this.appService.getLangMap();
@@ -123,19 +114,11 @@ export class AppComponent {
     this.type = 'default';
   }
 
-  onTextAreaValueChanged({ value }) {
-    this.clearButtonDisabled = !value;
-  }
-
   onClearButtonClick() {
     this.textAreaValue = '';
   }
 
   onDisplayModeChanged({ value }) {
-    const isCustomMode = value === 'Custom';
-    this.stylingModeDisabled = isCustomMode;
-    this.typeDisabled = isCustomMode;
-
     if (value === 'Text and Icon') {
       this.startText = 'Dictate';
       this.stopText = 'Stop';
@@ -146,7 +129,7 @@ export class AppComponent {
     this.startText = '';
     this.stopText = '';
 
-    if (isCustomMode) {
+    if (value === 'Custom') {
       this.stylingMode = 'contained';
       this.type = this.state === 'initial' ? 'default' : 'danger';
     }

@@ -23,11 +23,10 @@
         :height="120"
         placeholder="Recognized text will appear here..."
         :input-attr="{ 'aria-label': 'Recognized Text' }"
-        @value-changed="onTextAreaValueChanged"
       />
       <DxButton
         text="Clear"
-        :disabled="clearButtonDisabled"
+        :disabled="textAreaValue === ''"
         @click="onClearButtonClick"
       />
     </div>
@@ -49,7 +48,7 @@
           :data-source="stylingModes"
           display-expr="displayValue"
           value-expr="value"
-          :disabled="stylingModeDisabled"
+          :disabled="displayMode === 'Custom'"
           :input-attr="{ 'aria-label': 'Styling Mode' }"
         />
       </div>
@@ -60,7 +59,7 @@
           :data-source="types"
           display-expr="displayValue"
           value-expr="value"
-          :disabled="typeDisabled"
+          :disabled="displayMode === 'Custom'"
           :input-attr="{ 'aria-label': 'Type' }"
         />
       </div>
@@ -119,10 +118,7 @@ const type = ref<DxButtonTypes.ButtonType>('default');
 const hint = ref('Start voice recognition');
 const disabled = ref(false);
 const textAreaValue = ref('');
-const clearButtonDisabled = ref(true);
 const language = ref(languages[0]);
-const stylingModeDisabled = ref(false);
-const typeDisabled = ref(false);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
@@ -165,17 +161,10 @@ function stopHandler() {
 
   type.value = 'default';
 }
-function onTextAreaValueChanged({ value }: { value?: string }) {
-  clearButtonDisabled.value = !value;
-}
 function onClearButtonClick() {
   textAreaValue.value = '';
 }
 function onDisplayModeChanged({ value }: { value?: string }) {
-  const isCustomMode = value === 'Custom';
-  stylingModeDisabled.value = isCustomMode;
-  typeDisabled.value = isCustomMode;
-
   if (value === 'Text and Icon') {
     startText.value = 'Dictate';
     stopText.value = 'Stop';
@@ -186,7 +175,7 @@ function onDisplayModeChanged({ value }: { value?: string }) {
   startText.value = '';
   stopText.value = '';
 
-  if (isCustomMode) {
+  if (value === 'Custom') {
     stylingMode.value = 'contained';
     type.value = state === 'initial' ? 'default' : 'danger';
   }

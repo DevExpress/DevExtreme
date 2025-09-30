@@ -23,10 +23,7 @@ export default function App() {
   const [hint, setHint] = useState('Start voice recognition');
   const [disabled, setDisabled] = useState(false);
   const [textAreaValue, setTextAreaValue] = useState('');
-  const [clearButtonDisabled, setClearButtonDisabled] = useState(true);
   const [language, setLanguage] = useState(languages[0]);
-  const [stylingModeDisabled, setStylingModeDisabled] = useState(false);
-  const [typeDisabled, setTypeDisabled] = useState(false);
   const [interimResults, setInterimResults] = useState(true);
   const [continuous, setContinuous] = useState(false);
   const [animation, setAnimation] = useState(true);
@@ -42,7 +39,7 @@ export default function App() {
       return;
     }
     setType('danger');
-  }, [displayMode, setHint, setType]);
+  }, [displayMode]);
   const onEnd = useCallback(() => {
     state = 'initial';
     setHint('Start voice recognition');
@@ -50,97 +47,55 @@ export default function App() {
       return;
     }
     setType('default');
-  }, [displayMode, setHint, setType]);
-  const onResult = useCallback(
-    ({ event }) => {
-      const { results } = event;
-      const resultText = Object.values(results)
-        .map((resultItem) => resultItem[0].transcript)
-        .join(' ');
-      setTextAreaValue(resultText);
-    },
-    [setTextAreaValue],
-  );
-  const onTextAreaValueChanged = useCallback(
-    ({ value }) => {
-      setTextAreaValue(value);
-      setClearButtonDisabled(!value);
-    },
-    [setTextAreaValue, setClearButtonDisabled],
-  );
+  }, [displayMode]);
+  const onResult = useCallback(({ event }) => {
+    const { results } = event;
+    const resultText = Object.values(results)
+      .map((resultItem) => resultItem[0].transcript)
+      .join(' ');
+    setTextAreaValue(resultText);
+  }, []);
+  const onTextAreaValueChanged = useCallback(({ value }) => {
+    setTextAreaValue(value);
+  }, []);
   const onClearButtonClick = useCallback(() => {
     setTextAreaValue('');
-  }, [setTextAreaValue]);
-  const onDisplayModeValueChanged = useCallback(
-    ({ value }) => {
-      const isCustomMode = value === 'Custom';
-      setStylingModeDisabled(isCustomMode);
-      setTypeDisabled(isCustomMode);
-      setDisplayMode(value);
-      if (value === 'Text and Icon') {
-        setStartText('Dictate');
-        setStopText('Stop');
-        return;
-      }
-      setStartText('');
-      setStopText('');
-      if (isCustomMode) {
-        setStylingMode('contained');
-        setType(state === 'initial' ? 'default' : 'danger');
-      }
-    },
-    [
-      setStylingModeDisabled,
-      setTypeDisabled,
-      setDisplayMode,
-      setStartText,
-      setStopText,
-      setStylingMode,
-      setType,
-    ],
-  );
-  const onStylingModeValueChanged = useCallback(
-    ({ value }) => {
-      setStylingMode(value);
-    },
-    [setStylingMode],
-  );
-  const onTypeValueChanged = useCallback(
-    ({ value }) => {
-      setType(value);
-    },
-    [setType],
-  );
-  const onDisabledValueChanged = useCallback(
-    ({ value }) => {
-      setDisabled(value);
-    },
-    [setDisabled],
-  );
-  const onLanguageValueChanged = useCallback(
-    ({ value }) => {
-      setLanguage(value);
-    },
-    [setLanguage],
-  );
-  const onInterimResultsValueChanged = useCallback(
-    ({ value }) => {
-      setInterimResults(value);
-    },
-    [setInterimResults],
-  );
-  const onContinuousValueChanged = useCallback(
-    ({ value }) => {
-      setContinuous(value);
-    },
-    [setContinuous],
-  );
-  const onAnimationValueChanged = useCallback(
-    ({ value }) => {
-      setAnimation(value);
-    },
-    [setAnimation],
-  );
+  }, []);
+  const onDisplayModeValueChanged = useCallback(({ value }) => {
+    setDisplayMode(value);
+    if (value === 'Text and Icon') {
+      setStartText('Dictate');
+      setStopText('Stop');
+      return;
+    }
+    setStartText('');
+    setStopText('');
+    if (value === 'Custom') {
+      setStylingMode('contained');
+      setType(state === 'initial' ? 'default' : 'danger');
+    }
+  }, []);
+  const onStylingModeValueChanged = useCallback(({ value }) => {
+    setStylingMode(value);
+  }, []);
+  const onTypeValueChanged = useCallback(({ value }) => {
+    setType(value);
+  }, []);
+  const onDisabledValueChanged = useCallback(({ value }) => {
+    setDisabled(value);
+  }, []);
+  const onLanguageValueChanged = useCallback(({ value }) => {
+    setLanguage(value);
+  }, []);
+  const onInterimResultsValueChanged = useCallback(({ value }) => {
+    setInterimResults(value);
+  }, []);
+  const onContinuousValueChanged = useCallback(({ value }) => {
+    setContinuous(value);
+  }, []);
+  const onAnimationValueChanged = useCallback(({ value }) => {
+    setAnimation(value);
+  }, []);
   return (
     <div className="speech-to-text-demo">
       <div className="speech-to-text-container">
@@ -172,7 +127,7 @@ export default function App() {
         />
         <Button
           text="Clear"
-          disabled={clearButtonDisabled}
+          disabled={textAreaValue === ''}
           onClick={onClearButtonClick}
         />
       </div>
@@ -194,7 +149,7 @@ export default function App() {
             dataSource={stylingModes}
             valueExpr="value"
             displayExpr="displayValue"
-            disabled={stylingModeDisabled}
+            disabled={displayMode === 'Custom'}
             inputAttr={stylingModeLabel}
             onValueChanged={onStylingModeValueChanged}
           />
@@ -206,7 +161,7 @@ export default function App() {
             dataSource={types}
             valueExpr="value"
             displayExpr="displayValue"
-            disabled={typeDisabled}
+            disabled={displayMode === 'Custom'}
             inputAttr={typeLabel}
             onValueChanged={onTypeValueChanged}
           />
