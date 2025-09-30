@@ -640,11 +640,32 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       allowUpdating?: boolean;
       /**
        * @docid
-       * @type Form|undefined
        * @default undefined
        * @public
        */
-      form?: Form | undefined;
+      form?: {
+        /**
+         * @docid
+         * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
+         * @default []
+         * @public
+         */
+        items?: Array<FormItem>;
+        /**
+         * @docid
+         * @type_function_param1 formData:object
+         * @default undefined
+         * @public
+         */
+        onSaved?: ((formData: any) => void);
+        /**
+         * @docid
+         * @type_function_param1 formData:object
+         * @default undefined
+         * @public
+         */
+        onCanceled?: ((formData: any) => void);
+      };
     };
     /**
      * @docid
@@ -1194,35 +1215,6 @@ export type ToolbarItem = dxToolbarItem & {
    * @public
    */
   location?: ToolbarItemLocation;
-};
-
-/**
- * @namespace DevExpress.ui.dxScheduler
- * @docid
- * @public
- */
-export type Form = {
-  /**
-   * @docid
-   * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
-   * @default []
-   * @public
-   */
-  items?: Array<FormItem>;
-  /**
-   * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onSaved?: ((formData: any) => void);
-  /**
-   * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onCanceled?: ((formData: any) => void);
 };
 
 /**

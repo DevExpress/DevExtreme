@@ -38,7 +38,6 @@ export {
   DateNavigatorTextInfo,
   DateNavigatorItemProperties,
   ToolbarItem,
-  Form,
   Toolbar,
   Appointment,
   Properties,
