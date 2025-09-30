@@ -18,6 +18,7 @@ const config = {
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
   versionAssertions: [],
+  copyStylesToShadowDom: true,
 
   floatingActionButtonConfig: {
     icon: 'add',
