@@ -118,8 +118,7 @@ export class InfernoWrapperComponent<
       const indexInRemoved = el.dxClasses.removed.indexOf(value);
       if (indexInRemoved > -1) {
         el.dxClasses.removed.splice(indexInRemoved, 1);
-      }
-      if (!el.dxClasses.added.includes(value)) {
+      } else if (!el.dxClasses.added.includes(value)) {
         el.dxClasses.added.push(value);
       }
     });
@@ -128,8 +127,7 @@ export class InfernoWrapperComponent<
       const indexInAdded = el.dxClasses.added.indexOf(value);
       if (indexInAdded > -1) {
         el.dxClasses.added.splice(indexInAdded, 1);
-      }
-      if (!el.dxClasses.removed.includes(value)) {
+      } else if (!el.dxClasses.removed.includes(value)) {
         el.dxClasses.removed.push(value);
       }
     });
