@@ -27,7 +27,8 @@ import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
+import { AIIntegration } from 'devextreme/common/ai-integration';
+import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, AIColumnRequestCreatingInfo, AIColumnResponseReceivedInfo, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
 import { Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, SortOrder, HorizontalAlignment } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -255,6 +256,19 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:GridBaseOptions.aiIntegration]
+    
+     */
+    @Input()
+    get aiIntegration(): AIIntegration | undefined {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration | undefined) {
+        this._setOption('aiIntegration', value);
     }
 
 
@@ -1218,6 +1232,22 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
+     * [descr:GridBaseOptions.onAIColumnRequestCreating]
+    
+    
+     */
+    @Output() onAIColumnRequestCreating: EventEmitter<AIColumnRequestCreatingInfo>;
+
+    /**
+    
+     * [descr:GridBaseOptions.onAIColumnResponseReceived]
+    
+    
+     */
+    @Output() onAIColumnResponseReceived: EventEmitter<AIColumnResponseReceivedInfo>;
+
+    /**
+    
      * [descr:dxDataGridOptions.onCellClick]
     
     
@@ -1549,6 +1579,13 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
     
@@ -2111,6 +2148,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
         this._createEventEmitters([
             { subscribe: 'adaptiveDetailRowPreparing', emit: 'onAdaptiveDetailRowPreparing' },
+            { subscribe: 'aIColumnRequestCreating', emit: 'onAIColumnRequestCreating' },
+            { subscribe: 'aIColumnResponseReceived', emit: 'onAIColumnResponseReceived' },
             { subscribe: 'cellClick', emit: 'onCellClick' },
             { subscribe: 'cellDblClick', emit: 'onCellDblClick' },
             { subscribe: 'cellHoverChanged', emit: 'onCellHoverChanged' },
@@ -2153,6 +2192,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
             { subscribe: 'toolbarPreparing', emit: 'onToolbarPreparing' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiIntegrationChange' },
             { emit: 'allowColumnReorderingChange' },
             { emit: 'allowColumnResizingChange' },
             { emit: 'autoNavigateToFocusedRowChange' },

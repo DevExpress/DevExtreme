@@ -11,10 +11,15 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  ColumnChooser,
  ColumnResizeMode,
  FilterPanel,
  HeaderFilter,
+ AIColumnRequestCreatingInfo,
+ AIColumnResponseReceivedInfo,
  Pager,
  SearchPanel,
  Sorting,
@@ -194,9 +199,6 @@ import {
  Component,
 } from "devextreme/core/component";
 import {
- AIIntegration,
-} from "devextreme/common/ai-integration";
-import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
@@ -206,6 +208,7 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "aiIntegration" |
   "allowColumnReordering" |
   "allowColumnResizing" |
   "autoNavigateToFocusedRow" |
@@ -251,6 +254,8 @@ type AccessibleOptions = Pick<Properties,
   "masterDetail" |
   "noDataText" |
   "onAdaptiveDetailRowPreparing" |
+  "onAIColumnRequestCreating" |
+  "onAIColumnResponseReceived" |
   "onCellClick" |
   "onCellDblClick" |
   "onCellHoverChanged" |
@@ -330,6 +335,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    aiIntegration: Object as PropType<AIIntegration>,
     allowColumnReordering: Boolean,
     allowColumnResizing: Boolean,
     autoNavigateToFocusedRow: Boolean,
@@ -375,6 +381,8 @@ const componentConfig = {
     masterDetail: Object as PropType<Record<string, any>>,
     noDataText: String,
     onAdaptiveDetailRowPreparing: Function as PropType<((e: AdaptiveDetailRowPreparingEvent) => void)>,
+    onAIColumnRequestCreating: Function as PropType<((e: AIColumnRequestCreatingInfo) => void)>,
+    onAIColumnResponseReceived: Function as PropType<((e: AIColumnResponseReceivedInfo) => void)>,
     onCellClick: Function as PropType<((e: CellClickEvent) => void)>,
     onCellDblClick: Function as PropType<((e: CellDblClickEvent) => void)>,
     onCellHoverChanged: Function as PropType<((e: CellHoverChangedEvent) => void)>,
@@ -450,6 +458,7 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:aiIntegration": null,
     "update:allowColumnReordering": null,
     "update:allowColumnResizing": null,
     "update:autoNavigateToFocusedRow": null,
@@ -495,6 +504,8 @@ const componentConfig = {
     "update:masterDetail": null,
     "update:noDataText": null,
     "update:onAdaptiveDetailRowPreparing": null,
+    "update:onAIColumnRequestCreating": null,
+    "update:onAIColumnResponseReceived": null,
     "update:onCellClick": null,
     "update:onCellDblClick": null,
     "update:onCellHoverChanged": null,
