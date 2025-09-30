@@ -68,6 +68,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  toast: 'dx-toast-wrapper'
 };
 
 const E2E_ATTRIBUTES = {
@@ -282,6 +283,10 @@ export default class DataGrid extends GridCore {
 
   getContextMenu(): ContextMenu {
     return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+  }
+
+  getToast(): Selector {
+    return this.body.find(`.${CLASS.toast}`);
   }
 
   async scrollTo(
@@ -880,6 +885,16 @@ export default class DataGrid extends GridCore {
         (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
       },
       { dependencies: { getInstance, sensitivity } },
+    )();
+  }
+
+  apiShowToast(): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(() => {
+        const gridInstance = getInstance() as any;
+        gridInstance.getController('errorHandling').showError('Error');
+      },
+      { dependencies: { getInstance } },
     )();
   }
 }

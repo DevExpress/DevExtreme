@@ -11,6 +11,7 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
+import type { ToastViewController } from '../toast/m_toast_controller';
 import type { RowsView } from '../views/m_rows_view';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
@@ -27,10 +28,13 @@ export class ErrorHandlingController extends modules.ViewController {
 
   private _rowsView!: RowsView;
 
+  private _toastViewController!: ToastViewController;
+
   public init() {
     this._resizingController = this.getController('resizing');
     this._columnsController = this.getController('columns');
     this._columnHeadersView = this.getView('columnHeadersView');
+    this._toastViewController = this.getController('toastViewController');
     this._rowsView = this.getView('rowsView');
   }
 
@@ -151,6 +155,10 @@ export class ErrorHandlingController extends modules.ViewController {
       default:
         super.optionChanged(args);
     }
+  }
+
+  public showError(message: string) {
+    this._toastViewController.showToast(message, { type: 'error' });
   }
 }
 

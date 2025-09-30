@@ -4,7 +4,6 @@ import type dxToast from '@js/ui/toast';
 
 import modules from '../m_modules';
 
-const DEFAULT_DISPLAY_TIME = 3000;
 const DEFAULT_POSITION = { my: 'center bottom', at: 'center bottom' };
 
 export class ToastView extends modules.View {
@@ -25,13 +24,15 @@ export class ToastView extends modules.View {
       return this._toastInstance;
     }
 
-    this._$toastContainer.dxToast({
-      displayTime: DEFAULT_DISPLAY_TIME,
-      position: { ...DEFAULT_POSITION, of: this.component.$element() },
+    this._toastInstance = this._$toastContainer.dxToast({
+      position: {
+        ...DEFAULT_POSITION,
+        of: this.component.$element(),
+      },
       ...options,
       visible: false,
-    });
-    this._toastInstance = this._$toastContainer.dxToast('instance');
+    }).dxToast('instance');
+
     return this._toastInstance;
   }
 
