@@ -34,6 +34,7 @@ test('Column reordering should work when allowColumnReordering is true', async (
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -68,6 +69,7 @@ test('Column reordering should not work when allowColumnReordering is false', as
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
@@ -102,6 +104,7 @@ test('Column reordering should not work when it has allowReordering set to false
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
       allowReordering: false,
     },
     { dataField: 'id', caption: 'ID' },
@@ -141,6 +144,7 @@ test('The draggable AI column should have a caption', async (t) => {
     {
       type: 'ai',
       caption: 'AI Column',
+      name: 'myAiColumn',
     },
     { dataField: 'id', caption: 'ID' },
     { dataField: 'name', caption: 'Name' },
