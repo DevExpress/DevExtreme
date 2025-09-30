@@ -121,7 +121,7 @@ function onItemClick(
 
 function createFile(
   fileExtension: string,
-  directory: any = fileManager.value.instance.getCurrentDirectory()
+  directory: any = fileManager.value.instance.getCurrentDirectory(),
 ) {
   const newItem = {
     __KEY__: Date.now(),

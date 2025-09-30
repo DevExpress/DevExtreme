@@ -126,7 +126,7 @@ function renderAssistantMessage(text: string): void {
 
 async function processMessageSending(
   message: DxChatTypes.TextMessage,
-  event: Events.EventObject | undefined
+  event: Events.EventObject | undefined,
 ): Promise<void> {
   toggleDisabledState(true, event);
 
