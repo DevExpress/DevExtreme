@@ -94,7 +94,7 @@ export class AppointmentPopup {
       maxHeight: '90%',
       showCloseButton: false,
       showTitle: true,
-      title: 'Edit appointment', // TODO: move to localization messages
+      title: messageLocalization.format('dxScheduler-editPopupTitle'),
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
@@ -120,7 +120,7 @@ export class AppointmentPopup {
             onClick: (e) => this._doneButtonClickHandler(e),
             stylingMode: 'contained',
             type: 'default',
-            text: 'Save', // TODO: move to localization messages
+            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
           },
           shortcut: 'done',
         } as ToolbarItem,

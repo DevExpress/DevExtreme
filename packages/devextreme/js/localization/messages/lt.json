@@ -266,7 +266,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
         "dxScheduler-editorLabelEndDate": "Pabaigos data",
