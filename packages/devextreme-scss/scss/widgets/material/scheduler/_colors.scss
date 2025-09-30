@@ -63,6 +63,8 @@ $scheduler-workspace-accent-color: $base-accent !default;
 $scheduler-current-time-cell-color: $base-accent !default;
 $scheduler-time-indicator-color: #eb5757 !default;
 $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
+$scheduler-form-icon-color: $base-label-color !default;
+$scheduler-form-subject-icon-color: color.change($base-accent, $alpha: 0.24) !default;
 $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
 $scheduler-workspace-month-text-color: color.change($base-text-color, $alpha: 0.54) !default;
 $scheduler-dropdown-appointment-date-color: color.change($base-text-color, $alpha: 0.54) !default;
