@@ -1,10 +1,11 @@
 export {
-  WebSpeechApiConfig,
+  SpeechRecognitionConfig,
   CustomSpeechRecognizer,
   StartClickEvent,
   StopClickEvent,
   ResultEvent,
   ErrorEvent,
+  EndEvent,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

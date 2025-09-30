@@ -6,13 +6,14 @@ import {
  CustomSpeechRecognizer,
  ContentReadyEvent,
  DisposingEvent,
+ EndEvent,
  ErrorEvent,
  InitializedEvent,
  OptionChangedEvent,
  ResultEvent,
  StartClickEvent,
  StopClickEvent,
- WebSpeechApiConfig,
+ SpeechRecognitionConfig,
 } from "devextreme/ui/speech_to_text";
 import {
  ButtonStyle,
@@ -32,6 +33,7 @@ type AccessibleOptions = Pick<Properties,
   "hoverStateEnabled" |
   "onContentReady" |
   "onDisposing" |
+  "onEnd" |
   "onError" |
   "onInitialized" |
   "onOptionChanged" |
@@ -39,6 +41,7 @@ type AccessibleOptions = Pick<Properties,
   "onStartClick" |
   "onStopClick" |
   "rtlEnabled" |
+  "speechRecognitionConfig" |
   "startIcon" |
   "startText" |
   "stopIcon" |
@@ -47,7 +50,6 @@ type AccessibleOptions = Pick<Properties,
   "tabIndex" |
   "type" |
   "visible" |
-  "webSpeechApiConfig" |
   "width"
 >;
 
@@ -68,6 +70,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
+    onEnd: Function as PropType<((e: EndEvent) => void)>,
     onError: Function as PropType<((e: ErrorEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
@@ -75,6 +78,7 @@ const componentConfig = {
     onStartClick: Function as PropType<((e: StartClickEvent) => void)>,
     onStopClick: Function as PropType<((e: StopClickEvent) => void)>,
     rtlEnabled: Boolean,
+    speechRecognitionConfig: Object as PropType<Record<string, any> | SpeechRecognitionConfig>,
     startIcon: String,
     startText: String,
     stopIcon: String,
@@ -83,7 +87,6 @@ const componentConfig = {
     tabIndex: Number,
     type: String as PropType<ButtonType | string>,
     visible: Boolean,
-    webSpeechApiConfig: Object as PropType<Record<string, any> | WebSpeechApiConfig>,
     width: [Number, String]
   },
   emits: {
@@ -100,6 +103,7 @@ const componentConfig = {
     "update:hoverStateEnabled": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
+    "update:onEnd": null,
     "update:onError": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
@@ -107,6 +111,7 @@ const componentConfig = {
     "update:onStartClick": null,
     "update:onStopClick": null,
     "update:rtlEnabled": null,
+    "update:speechRecognitionConfig": null,
     "update:startIcon": null,
     "update:startText": null,
     "update:stopIcon": null,
@@ -115,7 +120,6 @@ const componentConfig = {
     "update:tabIndex": null,
     "update:type": null,
     "update:visible": null,
-    "update:webSpeechApiConfig": null,
     "update:width": null,
   },
   computed: {
@@ -128,7 +132,7 @@ const componentConfig = {
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
       customSpeechRecognizer: { isCollectionItem: false, optionName: "customSpeechRecognizer" },
-      webSpeechApiConfig: { isCollectionItem: false, optionName: "webSpeechApiConfig" }
+      speechRecognitionConfig: { isCollectionItem: false, optionName: "speechRecognitionConfig" }
     };
   }
 };
@@ -157,7 +161,7 @@ const DxCustomSpeechRecognizer = defineComponent(DxCustomSpeechRecognizerConfig)
 
 (DxCustomSpeechRecognizer as any).$_optionName = "customSpeechRecognizer";
 
-const DxWebSpeechApiConfigConfig = {
+const DxSpeechRecognitionConfigConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -176,17 +180,17 @@ const DxWebSpeechApiConfigConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxWebSpeechApiConfigConfig);
+prepareConfigurationComponentConfig(DxSpeechRecognitionConfigConfig);
 
-const DxWebSpeechApiConfig = defineComponent(DxWebSpeechApiConfigConfig);
+const DxSpeechRecognitionConfig = defineComponent(DxSpeechRecognitionConfigConfig);
 
-(DxWebSpeechApiConfig as any).$_optionName = "webSpeechApiConfig";
+(DxSpeechRecognitionConfig as any).$_optionName = "speechRecognitionConfig";
 
 export default DxSpeechToText;
 export {
   DxSpeechToText,
   DxCustomSpeechRecognizer,
-  DxWebSpeechApiConfig
+  DxSpeechRecognitionConfig
 };
 import type * as DxSpeechToTextTypes from "devextreme/ui/speech_to_text_types";
 export { DxSpeechToTextTypes };

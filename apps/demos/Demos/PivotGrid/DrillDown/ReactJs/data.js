@@ -89,22 +89,6 @@ export const sales = [
   },
   {
     id: 12,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2260,
-    date: '2013/01/01',
-  },
-  {
-    id: 13,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2910,
-    date: '2013/01/26',
-  },
-  {
-    id: 14,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -112,7 +96,7 @@ export const sales = [
     date: '2013/01/05',
   },
   {
-    id: 15,
+    id: 13,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -120,7 +104,7 @@ export const sales = [
     date: '2013/01/14',
   },
   {
-    id: 16,
+    id: 14,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -128,7 +112,7 @@ export const sales = [
     date: '2013/01/05',
   },
   {
-    id: 17,
+    id: 15,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -136,7 +120,7 @@ export const sales = [
     date: '2013/01/15',
   },
   {
-    id: 18,
+    id: 16,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -144,7 +128,7 @@ export const sales = [
     date: '2013/01/01',
   },
   {
-    id: 19,
+    id: 17,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -152,7 +136,7 @@ export const sales = [
     date: '2013/01/10',
   },
   {
-    id: 20,
+    id: 18,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -160,7 +144,7 @@ export const sales = [
     date: '2013/01/23',
   },
   {
-    id: 21,
+    id: 19,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -168,7 +152,7 @@ export const sales = [
     date: '2013/01/14',
   },
   {
-    id: 22,
+    id: 20,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -176,7 +160,7 @@ export const sales = [
     date: '2013/01/26',
   },
   {
-    id: 23,
+    id: 21,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -184,7 +168,7 @@ export const sales = [
     date: '2013/01/24',
   },
   {
-    id: 24,
+    id: 22,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -192,7 +176,7 @@ export const sales = [
     date: '2013/01/22',
   },
   {
-    id: 25,
+    id: 23,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -200,7 +184,7 @@ export const sales = [
     date: '2013/01/25',
   },
   {
-    id: 26,
+    id: 24,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -208,7 +192,7 @@ export const sales = [
     date: '2013/02/20',
   },
   {
-    id: 27,
+    id: 25,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -216,7 +200,7 @@ export const sales = [
     date: '2013/02/12',
   },
   {
-    id: 28,
+    id: 26,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -224,7 +208,7 @@ export const sales = [
     date: '2013/02/13',
   },
   {
-    id: 29,
+    id: 27,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -232,7 +216,7 @@ export const sales = [
     date: '2013/02/09',
   },
   {
-    id: 30,
+    id: 28,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -240,7 +224,7 @@ export const sales = [
     date: '2013/02/04',
   },
   {
-    id: 31,
+    id: 29,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -248,7 +232,7 @@ export const sales = [
     date: '2013/02/03',
   },
   {
-    id: 32,
+    id: 30,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -256,7 +240,7 @@ export const sales = [
     date: '2013/02/04',
   },
   {
-    id: 33,
+    id: 31,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -264,7 +248,7 @@ export const sales = [
     date: '2013/02/18',
   },
   {
-    id: 34,
+    id: 32,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -272,7 +256,7 @@ export const sales = [
     date: '2013/02/18',
   },
   {
-    id: 35,
+    id: 33,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -280,7 +264,7 @@ export const sales = [
     date: '2013/02/20',
   },
   {
-    id: 36,
+    id: 34,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -288,23 +272,7 @@ export const sales = [
     date: '2013/02/04',
   },
   {
-    id: 37,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5840,
-    date: '2013/02/13',
-  },
-  {
-    id: 38,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 6750,
-    date: '2013/02/11',
-  },
-  {
-    id: 39,
+    id: 35,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -312,7 +280,7 @@ export const sales = [
     date: '2013/02/03',
   },
   {
-    id: 40,
+    id: 36,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -320,7 +288,7 @@ export const sales = [
     date: '2013/02/08',
   },
   {
-    id: 41,
+    id: 37,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -328,7 +296,7 @@ export const sales = [
     date: '2013/02/17',
   },
   {
-    id: 42,
+    id: 38,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -336,7 +304,7 @@ export const sales = [
     date: '2013/02/08',
   },
   {
-    id: 43,
+    id: 39,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -344,7 +312,7 @@ export const sales = [
     date: '2013/02/20',
   },
   {
-    id: 44,
+    id: 40,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -352,7 +320,7 @@ export const sales = [
     date: '2013/02/11',
   },
   {
-    id: 45,
+    id: 41,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -360,7 +328,7 @@ export const sales = [
     date: '2013/02/15',
   },
   {
-    id: 46,
+    id: 42,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -368,7 +336,7 @@ export const sales = [
     date: '2013/02/21',
   },
   {
-    id: 47,
+    id: 43,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -376,7 +344,7 @@ export const sales = [
     date: '2013/02/04',
   },
   {
-    id: 48,
+    id: 44,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -384,7 +352,7 @@ export const sales = [
     date: '2013/03/04',
   },
   {
-    id: 49,
+    id: 45,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -392,7 +360,7 @@ export const sales = [
     date: '2013/03/20',
   },
   {
-    id: 50,
+    id: 46,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -400,7 +368,7 @@ export const sales = [
     date: '2013/03/04',
   },
   {
-    id: 51,
+    id: 47,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -408,7 +376,7 @@ export const sales = [
     date: '2013/03/17',
   },
   {
-    id: 52,
+    id: 48,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -416,7 +384,7 @@ export const sales = [
     date: '2013/03/21',
   },
   {
-    id: 53,
+    id: 49,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -424,7 +392,7 @@ export const sales = [
     date: '2013/03/08',
   },
   {
-    id: 54,
+    id: 50,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -432,7 +400,7 @@ export const sales = [
     date: '2013/03/19',
   },
   {
-    id: 55,
+    id: 51,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -440,7 +408,7 @@ export const sales = [
     date: '2013/03/20',
   },
   {
-    id: 56,
+    id: 52,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -448,7 +416,7 @@ export const sales = [
     date: '2013/03/18',
   },
   {
-    id: 57,
+    id: 53,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -456,7 +424,7 @@ export const sales = [
     date: '2013/03/25',
   },
   {
-    id: 58,
+    id: 54,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -464,23 +432,7 @@ export const sales = [
     date: '2013/03/07',
   },
   {
-    id: 59,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2000,
-    date: '2013/03/07',
-  },
-  {
-    id: 60,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 1410,
-    date: '2013/03/10',
-  },
-  {
-    id: 61,
+    id: 55,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -488,7 +440,7 @@ export const sales = [
     date: '2013/03/19',
   },
   {
-    id: 62,
+    id: 56,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -496,7 +448,7 @@ export const sales = [
     date: '2013/03/24',
   },
   {
-    id: 63,
+    id: 57,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -504,7 +456,7 @@ export const sales = [
     date: '2013/03/08',
   },
   {
-    id: 64,
+    id: 58,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -512,7 +464,7 @@ export const sales = [
     date: '2013/03/17',
   },
   {
-    id: 65,
+    id: 59,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -520,7 +472,7 @@ export const sales = [
     date: '2013/03/08',
   },
   {
-    id: 66,
+    id: 60,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -528,7 +480,7 @@ export const sales = [
     date: '2013/03/21',
   },
   {
-    id: 67,
+    id: 61,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -536,7 +488,7 @@ export const sales = [
     date: '2013/03/19',
   },
   {
-    id: 68,
+    id: 62,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -544,7 +496,7 @@ export const sales = [
     date: '2013/03/12',
   },
   {
-    id: 69,
+    id: 63,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -552,15 +504,7 @@ export const sales = [
     date: '2013/03/04',
   },
   {
-    id: 70,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 3080,
-    date: '2013/03/22',
-  },
-  {
-    id: 71,
+    id: 64,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -568,15 +512,7 @@ export const sales = [
     date: '2013/03/23',
   },
   {
-    id: 72,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 1200,
-    date: '2013/03/04',
-  },
-  {
-    id: 73,
+    id: 65,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -584,7 +520,7 @@ export const sales = [
     date: '2013/04/15',
   },
   {
-    id: 74,
+    id: 66,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -592,7 +528,7 @@ export const sales = [
     date: '2013/04/07',
   },
   {
-    id: 75,
+    id: 67,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -600,7 +536,7 @@ export const sales = [
     date: '2013/04/10',
   },
   {
-    id: 76,
+    id: 68,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -608,7 +544,7 @@ export const sales = [
     date: '2013/04/10',
   },
   {
-    id: 77,
+    id: 69,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -616,7 +552,7 @@ export const sales = [
     date: '2013/04/12',
   },
   {
-    id: 78,
+    id: 70,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -624,7 +560,7 @@ export const sales = [
     date: '2013/04/08',
   },
   {
-    id: 79,
+    id: 71,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -632,7 +568,7 @@ export const sales = [
     date: '2013/04/13',
   },
   {
-    id: 80,
+    id: 72,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -640,7 +576,7 @@ export const sales = [
     date: '2013/04/15',
   },
   {
-    id: 81,
+    id: 73,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -648,7 +584,7 @@ export const sales = [
     date: '2013/04/01',
   },
   {
-    id: 82,
+    id: 74,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -656,7 +592,7 @@ export const sales = [
     date: '2013/04/10',
   },
   {
-    id: 83,
+    id: 75,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -664,23 +600,7 @@ export const sales = [
     date: '2013/04/06',
   },
   {
-    id: 84,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1520,
-    date: '2013/04/08',
-  },
-  {
-    id: 85,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8760,
-    date: '2013/04/26',
-  },
-  {
-    id: 86,
+    id: 76,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -688,7 +608,7 @@ export const sales = [
     date: '2013/04/16',
   },
   {
-    id: 87,
+    id: 77,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -696,7 +616,7 @@ export const sales = [
     date: '2013/04/19',
   },
   {
-    id: 88,
+    id: 78,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -704,7 +624,7 @@ export const sales = [
     date: '2013/04/23',
   },
   {
-    id: 89,
+    id: 79,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -712,7 +632,7 @@ export const sales = [
     date: '2013/04/21',
   },
   {
-    id: 90,
+    id: 80,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -720,7 +640,7 @@ export const sales = [
     date: '2013/04/03',
   },
   {
-    id: 91,
+    id: 81,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -728,7 +648,7 @@ export const sales = [
     date: '2013/04/24',
   },
   {
-    id: 92,
+    id: 82,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -736,7 +656,7 @@ export const sales = [
     date: '2013/04/01',
   },
   {
-    id: 93,
+    id: 83,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -744,7 +664,7 @@ export const sales = [
     date: '2013/04/01',
   },
   {
-    id: 94,
+    id: 84,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -752,7 +672,7 @@ export const sales = [
     date: '2013/04/04',
   },
   {
-    id: 95,
+    id: 85,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -760,7 +680,7 @@ export const sales = [
     date: '2013/04/02',
   },
   {
-    id: 96,
+    id: 86,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -768,7 +688,7 @@ export const sales = [
     date: '2013/04/20',
   },
   {
-    id: 97,
+    id: 87,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -776,7 +696,7 @@ export const sales = [
     date: '2013/05/14',
   },
   {
-    id: 98,
+    id: 88,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -784,7 +704,7 @@ export const sales = [
     date: '2013/05/24',
   },
   {
-    id: 99,
+    id: 89,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -792,7 +712,7 @@ export const sales = [
     date: '2013/05/07',
   },
   {
-    id: 100,
+    id: 90,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -800,7 +720,7 @@ export const sales = [
     date: '2013/05/20',
   },
   {
-    id: 101,
+    id: 91,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -808,7 +728,7 @@ export const sales = [
     date: '2013/05/18',
   },
   {
-    id: 102,
+    id: 92,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -816,7 +736,7 @@ export const sales = [
     date: '2013/05/19',
   },
   {
-    id: 103,
+    id: 93,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -824,7 +744,7 @@ export const sales = [
     date: '2013/05/23',
   },
   {
-    id: 104,
+    id: 94,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -832,7 +752,7 @@ export const sales = [
     date: '2013/05/08',
   },
   {
-    id: 105,
+    id: 95,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -840,7 +760,7 @@ export const sales = [
     date: '2013/05/25',
   },
   {
-    id: 106,
+    id: 96,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -848,7 +768,7 @@ export const sales = [
     date: '2013/05/03',
   },
   {
-    id: 107,
+    id: 97,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -856,23 +776,7 @@ export const sales = [
     date: '2013/05/25',
   },
   {
-    id: 108,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 4700,
-    date: '2013/05/03',
-  },
-  {
-    id: 109,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 5520,
-    date: '2013/05/12',
-  },
-  {
-    id: 110,
+    id: 98,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -880,7 +784,7 @@ export const sales = [
     date: '2013/05/22',
   },
   {
-    id: 111,
+    id: 99,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -888,7 +792,7 @@ export const sales = [
     date: '2013/05/12',
   },
   {
-    id: 112,
+    id: 100,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -896,7 +800,7 @@ export const sales = [
     date: '2013/05/24',
   },
   {
-    id: 113,
+    id: 101,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -904,7 +808,7 @@ export const sales = [
     date: '2013/05/02',
   },
   {
-    id: 114,
+    id: 102,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -912,7 +816,7 @@ export const sales = [
     date: '2013/05/03',
   },
   {
-    id: 115,
+    id: 103,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -920,7 +824,7 @@ export const sales = [
     date: '2013/05/11',
   },
   {
-    id: 116,
+    id: 104,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -928,7 +832,7 @@ export const sales = [
     date: '2013/06/15',
   },
   {
-    id: 117,
+    id: 105,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -936,7 +840,7 @@ export const sales = [
     date: '2013/06/08',
   },
   {
-    id: 118,
+    id: 106,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -944,7 +848,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 119,
+    id: 107,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -952,7 +856,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 120,
+    id: 108,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -960,7 +864,7 @@ export const sales = [
     date: '2013/06/22',
   },
   {
-    id: 121,
+    id: 109,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -968,7 +872,7 @@ export const sales = [
     date: '2013/06/24',
   },
   {
-    id: 122,
+    id: 110,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -976,7 +880,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 123,
+    id: 111,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -984,7 +888,7 @@ export const sales = [
     date: '2013/06/23',
   },
   {
-    id: 124,
+    id: 112,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -992,7 +896,7 @@ export const sales = [
     date: '2013/06/06',
   },
   {
-    id: 125,
+    id: 113,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1000,7 +904,7 @@ export const sales = [
     date: '2013/06/12',
   },
   {
-    id: 126,
+    id: 114,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1008,23 +912,7 @@ export const sales = [
     date: '2013/06/22',
   },
   {
-    id: 127,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5100,
-    date: '2013/06/01',
-  },
-  {
-    id: 128,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 1500,
-    date: '2013/06/25',
-  },
-  {
-    id: 129,
+    id: 115,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1032,7 +920,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 130,
+    id: 116,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1040,7 +928,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 131,
+    id: 117,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1048,7 +936,7 @@ export const sales = [
     date: '2013/06/06',
   },
   {
-    id: 132,
+    id: 118,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1056,7 +944,7 @@ export const sales = [
     date: '2013/06/10',
   },
   {
-    id: 133,
+    id: 119,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1064,7 +952,7 @@ export const sales = [
     date: '2013/06/02',
   },
   {
-    id: 134,
+    id: 120,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1072,15 +960,7 @@ export const sales = [
     date: '2013/06/26',
   },
   {
-    id: 135,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 4280,
-    date: '2013/06/19',
-  },
-  {
-    id: 136,
+    id: 121,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1088,7 +968,7 @@ export const sales = [
     date: '2013/06/17',
   },
   {
-    id: 137,
+    id: 122,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1096,7 +976,7 @@ export const sales = [
     date: '2013/06/17',
   },
   {
-    id: 138,
+    id: 123,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1104,7 +984,7 @@ export const sales = [
     date: '2013/06/03',
   },
   {
-    id: 139,
+    id: 124,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1112,7 +992,7 @@ export const sales = [
     date: '2013/06/21',
   },
   {
-    id: 140,
+    id: 125,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1120,7 +1000,7 @@ export const sales = [
     date: '2013/07/14',
   },
   {
-    id: 141,
+    id: 126,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1128,7 +1008,7 @@ export const sales = [
     date: '2013/07/11',
   },
   {
-    id: 142,
+    id: 127,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1136,7 +1016,7 @@ export const sales = [
     date: '2013/07/02',
   },
   {
-    id: 143,
+    id: 128,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1144,7 +1024,7 @@ export const sales = [
     date: '2013/07/03',
   },
   {
-    id: 144,
+    id: 129,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1152,7 +1032,7 @@ export const sales = [
     date: '2013/07/07',
   },
   {
-    id: 145,
+    id: 130,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1160,7 +1040,7 @@ export const sales = [
     date: '2013/07/03',
   },
   {
-    id: 146,
+    id: 131,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -1168,7 +1048,7 @@ export const sales = [
     date: '2013/07/21',
   },
   {
-    id: 147,
+    id: 132,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -1176,7 +1056,7 @@ export const sales = [
     date: '2013/07/18',
   },
   {
-    id: 148,
+    id: 133,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1184,7 +1064,7 @@ export const sales = [
     date: '2013/07/04',
   },
   {
-    id: 149,
+    id: 134,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1192,7 +1072,7 @@ export const sales = [
     date: '2013/07/23',
   },
   {
-    id: 150,
+    id: 135,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1200,23 +1080,7 @@ export const sales = [
     date: '2013/07/01',
   },
   {
-    id: 151,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2400,
-    date: '2013/07/11',
-  },
-  {
-    id: 152,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 3330,
-    date: '2013/07/04',
-  },
-  {
-    id: 153,
+    id: 136,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1224,7 +1088,7 @@ export const sales = [
     date: '2013/07/23',
   },
   {
-    id: 154,
+    id: 137,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1232,7 +1096,7 @@ export const sales = [
     date: '2013/07/11',
   },
   {
-    id: 155,
+    id: 138,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1240,7 +1104,7 @@ export const sales = [
     date: '2013/07/19',
   },
   {
-    id: 156,
+    id: 139,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1248,7 +1112,7 @@ export const sales = [
     date: '2013/07/04',
   },
   {
-    id: 157,
+    id: 140,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1256,7 +1120,7 @@ export const sales = [
     date: '2013/07/16',
   },
   {
-    id: 158,
+    id: 141,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1264,7 +1128,7 @@ export const sales = [
     date: '2013/07/02',
   },
   {
-    id: 159,
+    id: 142,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1272,7 +1136,7 @@ export const sales = [
     date: '2013/07/26',
   },
   {
-    id: 160,
+    id: 143,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1280,7 +1144,7 @@ export const sales = [
     date: '2013/08/08',
   },
   {
-    id: 161,
+    id: 144,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1288,7 +1152,7 @@ export const sales = [
     date: '2013/08/01',
   },
   {
-    id: 162,
+    id: 145,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1296,7 +1160,7 @@ export const sales = [
     date: '2013/08/02',
   },
   {
-    id: 163,
+    id: 146,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1304,7 +1168,7 @@ export const sales = [
     date: '2013/08/14',
   },
   {
-    id: 164,
+    id: 147,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1312,7 +1176,7 @@ export const sales = [
     date: '2013/08/05',
   },
   {
-    id: 165,
+    id: 148,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1320,7 +1184,7 @@ export const sales = [
     date: '2013/08/09',
   },
   {
-    id: 166,
+    id: 149,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -1328,7 +1192,7 @@ export const sales = [
     date: '2013/08/15',
   },
   {
-    id: 167,
+    id: 150,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -1336,7 +1200,7 @@ export const sales = [
     date: '2013/08/20',
   },
   {
-    id: 168,
+    id: 151,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1344,7 +1208,7 @@ export const sales = [
     date: '2013/08/22',
   },
   {
-    id: 169,
+    id: 152,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1352,7 +1216,7 @@ export const sales = [
     date: '2013/08/14',
   },
   {
-    id: 170,
+    id: 153,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1360,23 +1224,7 @@ export const sales = [
     date: '2013/08/24',
   },
   {
-    id: 171,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5200,
-    date: '2013/08/21',
-  },
-  {
-    id: 172,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 7920,
-    date: '2013/08/17',
-  },
-  {
-    id: 173,
+    id: 154,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1384,7 +1232,7 @@ export const sales = [
     date: '2013/08/22',
   },
   {
-    id: 174,
+    id: 155,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1392,7 +1240,7 @@ export const sales = [
     date: '2013/08/05',
   },
   {
-    id: 175,
+    id: 156,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1400,7 +1248,7 @@ export const sales = [
     date: '2013/08/16',
   },
   {
-    id: 176,
+    id: 157,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1408,7 +1256,7 @@ export const sales = [
     date: '2013/08/23',
   },
   {
-    id: 177,
+    id: 158,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1416,7 +1264,7 @@ export const sales = [
     date: '2013/08/12',
   },
   {
-    id: 178,
+    id: 159,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1424,7 +1272,7 @@ export const sales = [
     date: '2013/08/25',
   },
   {
-    id: 179,
+    id: 160,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1432,7 +1280,7 @@ export const sales = [
     date: '2013/08/20',
   },
   {
-    id: 180,
+    id: 161,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1440,7 +1288,7 @@ export const sales = [
     date: '2013/08/04',
   },
   {
-    id: 181,
+    id: 162,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1448,7 +1296,7 @@ export const sales = [
     date: '2013/08/19',
   },
   {
-    id: 182,
+    id: 163,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1456,7 +1304,7 @@ export const sales = [
     date: '2013/08/02',
   },
   {
-    id: 183,
+    id: 164,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1464,7 +1312,7 @@ export const sales = [
     date: '2013/08/19',
   },
   {
-    id: 184,
+    id: 165,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1472,7 +1320,7 @@ export const sales = [
     date: '2013/08/24',
   },
   {
-    id: 185,
+    id: 166,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1480,7 +1328,7 @@ export const sales = [
     date: '2013/09/12',
   },
   {
-    id: 186,
+    id: 167,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1488,7 +1336,7 @@ export const sales = [
     date: '2013/09/07',
   },
   {
-    id: 187,
+    id: 168,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1496,7 +1344,7 @@ export const sales = [
     date: '2013/09/14',
   },
   {
-    id: 188,
+    id: 169,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1504,7 +1352,7 @@ export const sales = [
     date: '2013/09/08',
   },
   {
-    id: 189,
+    id: 170,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1512,7 +1360,7 @@ export const sales = [
     date: '2013/09/12',
   },
   {
-    id: 190,
+    id: 171,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1520,7 +1368,7 @@ export const sales = [
     date: '2013/09/08',
   },
   {
-    id: 191,
+    id: 172,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -1528,7 +1376,7 @@ export const sales = [
     date: '2013/09/19',
   },
   {
-    id: 192,
+    id: 173,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -1536,7 +1384,7 @@ export const sales = [
     date: '2013/09/09',
   },
   {
-    id: 193,
+    id: 174,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1544,7 +1392,7 @@ export const sales = [
     date: '2013/09/23',
   },
   {
-    id: 194,
+    id: 175,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1552,7 +1400,7 @@ export const sales = [
     date: '2013/09/06',
   },
   {
-    id: 195,
+    id: 176,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1560,23 +1408,7 @@ export const sales = [
     date: '2013/09/04',
   },
   {
-    id: 196,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 4320,
-    date: '2013/09/25',
-  },
-  {
-    id: 197,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 7530,
-    date: '2013/09/13',
-  },
-  {
-    id: 198,
+    id: 177,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1584,7 +1416,7 @@ export const sales = [
     date: '2013/09/08',
   },
   {
-    id: 199,
+    id: 178,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1592,7 +1424,7 @@ export const sales = [
     date: '2013/09/04',
   },
   {
-    id: 200,
+    id: 179,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1600,7 +1432,7 @@ export const sales = [
     date: '2013/09/25',
   },
   {
-    id: 201,
+    id: 180,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1608,7 +1440,7 @@ export const sales = [
     date: '2013/09/13',
   },
   {
-    id: 202,
+    id: 181,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1616,7 +1448,7 @@ export const sales = [
     date: '2013/09/24',
   },
   {
-    id: 203,
+    id: 182,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1624,7 +1456,7 @@ export const sales = [
     date: '2013/09/19',
   },
   {
-    id: 204,
+    id: 183,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1632,7 +1464,7 @@ export const sales = [
     date: '2013/09/02',
   },
   {
-    id: 205,
+    id: 184,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1640,7 +1472,7 @@ export const sales = [
     date: '2013/10/11',
   },
   {
-    id: 206,
+    id: 185,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1648,7 +1480,7 @@ export const sales = [
     date: '2013/10/02',
   },
   {
-    id: 207,
+    id: 186,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1656,7 +1488,7 @@ export const sales = [
     date: '2013/10/24',
   },
   {
-    id: 208,
+    id: 187,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1664,7 +1496,7 @@ export const sales = [
     date: '2013/10/15',
   },
   {
-    id: 209,
+    id: 188,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1672,7 +1504,7 @@ export const sales = [
     date: '2013/10/15',
   },
   {
-    id: 210,
+    id: 189,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1680,7 +1512,7 @@ export const sales = [
     date: '2013/10/18',
   },
   {
-    id: 211,
+    id: 190,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -1688,7 +1520,7 @@ export const sales = [
     date: '2013/10/24',
   },
   {
-    id: 212,
+    id: 191,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -1696,7 +1528,7 @@ export const sales = [
     date: '2013/10/18',
   },
   {
-    id: 213,
+    id: 192,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1704,7 +1536,7 @@ export const sales = [
     date: '2013/10/24',
   },
   {
-    id: 214,
+    id: 193,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1712,7 +1544,7 @@ export const sales = [
     date: '2013/10/11',
   },
   {
-    id: 215,
+    id: 194,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1720,23 +1552,7 @@ export const sales = [
     date: '2013/10/25',
   },
   {
-    id: 216,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 3480,
-    date: '2013/10/08',
-  },
-  {
-    id: 217,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 4830,
-    date: '2013/10/26',
-  },
-  {
-    id: 218,
+    id: 195,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1744,7 +1560,7 @@ export const sales = [
     date: '2013/10/05',
   },
   {
-    id: 219,
+    id: 196,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1752,7 +1568,7 @@ export const sales = [
     date: '2013/10/23',
   },
   {
-    id: 220,
+    id: 197,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1760,7 +1576,7 @@ export const sales = [
     date: '2013/10/01',
   },
   {
-    id: 221,
+    id: 198,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1768,7 +1584,7 @@ export const sales = [
     date: '2013/10/26',
   },
   {
-    id: 222,
+    id: 199,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1776,7 +1592,7 @@ export const sales = [
     date: '2013/10/01',
   },
   {
-    id: 223,
+    id: 200,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1784,7 +1600,7 @@ export const sales = [
     date: '2013/10/02',
   },
   {
-    id: 224,
+    id: 201,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1792,7 +1608,7 @@ export const sales = [
     date: '2013/10/23',
   },
   {
-    id: 225,
+    id: 202,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1800,7 +1616,7 @@ export const sales = [
     date: '2013/11/03',
   },
   {
-    id: 226,
+    id: 203,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1808,7 +1624,7 @@ export const sales = [
     date: '2013/11/02',
   },
   {
-    id: 227,
+    id: 204,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1816,7 +1632,7 @@ export const sales = [
     date: '2013/11/09',
   },
   {
-    id: 228,
+    id: 205,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1824,7 +1640,7 @@ export const sales = [
     date: '2013/11/15',
   },
   {
-    id: 229,
+    id: 206,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1832,7 +1648,7 @@ export const sales = [
     date: '2013/11/15',
   },
   {
-    id: 230,
+    id: 207,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -1840,7 +1656,7 @@ export const sales = [
     date: '2013/11/15',
   },
   {
-    id: 231,
+    id: 208,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -1848,7 +1664,7 @@ export const sales = [
     date: '2013/11/25',
   },
   {
-    id: 232,
+    id: 209,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -1856,7 +1672,7 @@ export const sales = [
     date: '2013/11/08',
   },
   {
-    id: 233,
+    id: 210,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1864,7 +1680,7 @@ export const sales = [
     date: '2013/11/17',
   },
   {
-    id: 234,
+    id: 211,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -1872,7 +1688,7 @@ export const sales = [
     date: '2013/11/15',
   },
   {
-    id: 235,
+    id: 212,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -1880,23 +1696,7 @@ export const sales = [
     date: '2013/11/08',
   },
   {
-    id: 236,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5340,
-    date: '2013/11/13',
-  },
-  {
-    id: 237,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8850,
-    date: '2013/11/01',
-  },
-  {
-    id: 238,
+    id: 213,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -1904,7 +1704,7 @@ export const sales = [
     date: '2013/11/14',
   },
   {
-    id: 239,
+    id: 214,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -1912,7 +1712,7 @@ export const sales = [
     date: '2013/11/18',
   },
   {
-    id: 240,
+    id: 215,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -1920,7 +1720,7 @@ export const sales = [
     date: '2013/11/04',
   },
   {
-    id: 241,
+    id: 216,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -1928,7 +1728,7 @@ export const sales = [
     date: '2013/11/13',
   },
   {
-    id: 242,
+    id: 217,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -1936,7 +1736,7 @@ export const sales = [
     date: '2013/11/11',
   },
   {
-    id: 243,
+    id: 218,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -1944,7 +1744,7 @@ export const sales = [
     date: '2013/11/12',
   },
   {
-    id: 244,
+    id: 219,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -1952,7 +1752,7 @@ export const sales = [
     date: '2013/11/07',
   },
   {
-    id: 245,
+    id: 220,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -1960,7 +1760,7 @@ export const sales = [
     date: '2013/12/01',
   },
   {
-    id: 246,
+    id: 221,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -1968,7 +1768,7 @@ export const sales = [
     date: '2013/12/19',
   },
   {
-    id: 247,
+    id: 222,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -1976,7 +1776,7 @@ export const sales = [
     date: '2013/12/14',
   },
   {
-    id: 248,
+    id: 223,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -1984,7 +1784,7 @@ export const sales = [
     date: '2013/12/03',
   },
   {
-    id: 249,
+    id: 224,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -1992,7 +1792,7 @@ export const sales = [
     date: '2013/12/20',
   },
   {
-    id: 250,
+    id: 225,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2000,7 +1800,7 @@ export const sales = [
     date: '2013/12/21',
   },
   {
-    id: 251,
+    id: 226,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2008,7 +1808,7 @@ export const sales = [
     date: '2013/12/22',
   },
   {
-    id: 252,
+    id: 227,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2016,7 +1816,7 @@ export const sales = [
     date: '2013/12/04',
   },
   {
-    id: 253,
+    id: 228,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2024,7 +1824,7 @@ export const sales = [
     date: '2013/12/19',
   },
   {
-    id: 254,
+    id: 229,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2032,7 +1832,7 @@ export const sales = [
     date: '2013/12/22',
   },
   {
-    id: 255,
+    id: 230,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2040,23 +1840,7 @@ export const sales = [
     date: '2013/12/20',
   },
   {
-    id: 256,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5520,
-    date: '2013/12/25',
-  },
-  {
-    id: 257,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 9210,
-    date: '2013/12/24',
-  },
-  {
-    id: 258,
+    id: 231,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2064,7 +1848,7 @@ export const sales = [
     date: '2013/12/05',
   },
   {
-    id: 259,
+    id: 232,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2072,7 +1856,7 @@ export const sales = [
     date: '2013/12/22',
   },
   {
-    id: 260,
+    id: 233,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2080,7 +1864,7 @@ export const sales = [
     date: '2013/12/12',
   },
   {
-    id: 261,
+    id: 234,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2088,7 +1872,7 @@ export const sales = [
     date: '2013/12/13',
   },
   {
-    id: 262,
+    id: 235,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2096,7 +1880,7 @@ export const sales = [
     date: '2013/12/17',
   },
   {
-    id: 263,
+    id: 236,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2104,7 +1888,7 @@ export const sales = [
     date: '2013/12/07',
   },
   {
-    id: 264,
+    id: 237,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2112,7 +1896,7 @@ export const sales = [
     date: '2013/12/18',
   },
   {
-    id: 265,
+    id: 238,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2120,7 +1904,7 @@ export const sales = [
     date: '2013/12/23',
   },
   {
-    id: 266,
+    id: 239,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2128,7 +1912,7 @@ export const sales = [
     date: '2013/12/06',
   },
   {
-    id: 267,
+    id: 240,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2136,7 +1920,7 @@ export const sales = [
     date: '2013/12/04',
   },
   {
-    id: 268,
+    id: 241,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2144,15 +1928,7 @@ export const sales = [
     date: '2013/12/01',
   },
   {
-    id: 269,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2250,
-    date: '2013/12/02',
-  },
-  {
-    id: 270,
+    id: 242,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2160,7 +1936,7 @@ export const sales = [
     date: '2014/01/18',
   },
   {
-    id: 271,
+    id: 243,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -2168,7 +1944,7 @@ export const sales = [
     date: '2014/01/10',
   },
   {
-    id: 272,
+    id: 244,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2176,7 +1952,7 @@ export const sales = [
     date: '2014/01/13',
   },
   {
-    id: 273,
+    id: 245,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2184,7 +1960,7 @@ export const sales = [
     date: '2014/01/22',
   },
   {
-    id: 274,
+    id: 246,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2192,7 +1968,7 @@ export const sales = [
     date: '2014/01/26',
   },
   {
-    id: 275,
+    id: 247,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2200,7 +1976,7 @@ export const sales = [
     date: '2014/01/25',
   },
   {
-    id: 276,
+    id: 248,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2208,7 +1984,7 @@ export const sales = [
     date: '2014/01/21',
   },
   {
-    id: 277,
+    id: 249,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2216,7 +1992,7 @@ export const sales = [
     date: '2014/01/22',
   },
   {
-    id: 278,
+    id: 250,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2224,7 +2000,7 @@ export const sales = [
     date: '2014/01/14',
   },
   {
-    id: 279,
+    id: 251,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2232,7 +2008,7 @@ export const sales = [
     date: '2014/01/21',
   },
   {
-    id: 280,
+    id: 252,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2240,23 +2016,7 @@ export const sales = [
     date: '2014/01/25',
   },
   {
-    id: 281,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5320,
-    date: '2014/01/08',
-  },
-  {
-    id: 282,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 4050,
-    date: '2014/01/14',
-  },
-  {
-    id: 283,
+    id: 253,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2264,7 +2024,7 @@ export const sales = [
     date: '2014/01/24',
   },
   {
-    id: 284,
+    id: 254,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2272,7 +2032,7 @@ export const sales = [
     date: '2014/01/11',
   },
   {
-    id: 285,
+    id: 255,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2280,7 +2040,7 @@ export const sales = [
     date: '2014/01/12',
   },
   {
-    id: 286,
+    id: 256,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2288,7 +2048,7 @@ export const sales = [
     date: '2014/01/16',
   },
   {
-    id: 287,
+    id: 257,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2296,7 +2056,7 @@ export const sales = [
     date: '2014/01/05',
   },
   {
-    id: 288,
+    id: 258,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2304,7 +2064,7 @@ export const sales = [
     date: '2014/01/15',
   },
   {
-    id: 289,
+    id: 259,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2312,7 +2072,7 @@ export const sales = [
     date: '2014/02/18',
   },
   {
-    id: 290,
+    id: 260,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -2320,7 +2080,7 @@ export const sales = [
     date: '2014/02/21',
   },
   {
-    id: 291,
+    id: 261,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2328,7 +2088,7 @@ export const sales = [
     date: '2014/02/18',
   },
   {
-    id: 292,
+    id: 262,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2336,7 +2096,7 @@ export const sales = [
     date: '2014/02/04',
   },
   {
-    id: 293,
+    id: 263,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2344,7 +2104,7 @@ export const sales = [
     date: '2014/02/25',
   },
   {
-    id: 294,
+    id: 264,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2352,7 +2112,7 @@ export const sales = [
     date: '2014/02/01',
   },
   {
-    id: 295,
+    id: 265,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2360,7 +2120,7 @@ export const sales = [
     date: '2014/02/20',
   },
   {
-    id: 296,
+    id: 266,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2368,7 +2128,7 @@ export const sales = [
     date: '2014/02/12',
   },
   {
-    id: 297,
+    id: 267,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2376,7 +2136,7 @@ export const sales = [
     date: '2014/02/10',
   },
   {
-    id: 298,
+    id: 268,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2384,7 +2144,7 @@ export const sales = [
     date: '2014/02/06',
   },
   {
-    id: 299,
+    id: 269,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2392,23 +2152,7 @@ export const sales = [
     date: '2014/02/18',
   },
   {
-    id: 300,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1780,
-    date: '2014/02/26',
-  },
-  {
-    id: 301,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8700,
-    date: '2014/02/03',
-  },
-  {
-    id: 302,
+    id: 270,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2416,7 +2160,7 @@ export const sales = [
     date: '2014/02/03',
   },
   {
-    id: 303,
+    id: 271,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2424,7 +2168,7 @@ export const sales = [
     date: '2014/02/15',
   },
   {
-    id: 304,
+    id: 272,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2432,7 +2176,7 @@ export const sales = [
     date: '2014/02/23',
   },
   {
-    id: 305,
+    id: 273,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2440,7 +2184,7 @@ export const sales = [
     date: '2014/02/08',
   },
   {
-    id: 306,
+    id: 274,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2448,7 +2192,7 @@ export const sales = [
     date: '2014/02/13',
   },
   {
-    id: 307,
+    id: 275,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2456,7 +2200,7 @@ export const sales = [
     date: '2014/02/20',
   },
   {
-    id: 308,
+    id: 276,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2464,7 +2208,7 @@ export const sales = [
     date: '2014/02/26',
   },
   {
-    id: 309,
+    id: 277,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2472,7 +2216,7 @@ export const sales = [
     date: '2014/02/12',
   },
   {
-    id: 310,
+    id: 278,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2480,7 +2224,7 @@ export const sales = [
     date: '2014/03/09',
   },
   {
-    id: 311,
+    id: 279,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -2488,7 +2232,7 @@ export const sales = [
     date: '2014/03/25',
   },
   {
-    id: 312,
+    id: 280,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2496,7 +2240,7 @@ export const sales = [
     date: '2014/03/23',
   },
   {
-    id: 313,
+    id: 281,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2504,7 +2248,7 @@ export const sales = [
     date: '2014/03/01',
   },
   {
-    id: 314,
+    id: 282,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2512,7 +2256,7 @@ export const sales = [
     date: '2014/03/19',
   },
   {
-    id: 315,
+    id: 283,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2520,7 +2264,7 @@ export const sales = [
     date: '2014/03/19',
   },
   {
-    id: 316,
+    id: 284,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2528,7 +2272,7 @@ export const sales = [
     date: '2014/03/02',
   },
   {
-    id: 317,
+    id: 285,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2536,7 +2280,7 @@ export const sales = [
     date: '2014/03/15',
   },
   {
-    id: 318,
+    id: 286,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2544,7 +2288,7 @@ export const sales = [
     date: '2014/03/09',
   },
   {
-    id: 319,
+    id: 287,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2552,7 +2296,7 @@ export const sales = [
     date: '2014/03/23',
   },
   {
-    id: 320,
+    id: 288,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2560,23 +2304,7 @@ export const sales = [
     date: '2014/03/11',
   },
   {
-    id: 321,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5140,
-    date: '2014/03/05',
-  },
-  {
-    id: 322,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 6210,
-    date: '2014/03/19',
-  },
-  {
-    id: 323,
+    id: 289,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2584,7 +2312,7 @@ export const sales = [
     date: '2014/03/19',
   },
   {
-    id: 324,
+    id: 290,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2592,7 +2320,7 @@ export const sales = [
     date: '2014/03/21',
   },
   {
-    id: 325,
+    id: 291,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2600,7 +2328,7 @@ export const sales = [
     date: '2014/03/15',
   },
   {
-    id: 326,
+    id: 292,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2608,7 +2336,7 @@ export const sales = [
     date: '2014/03/05',
   },
   {
-    id: 327,
+    id: 293,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2616,7 +2344,7 @@ export const sales = [
     date: '2014/03/07',
   },
   {
-    id: 328,
+    id: 294,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2624,7 +2352,7 @@ export const sales = [
     date: '2014/03/21',
   },
   {
-    id: 329,
+    id: 295,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2632,7 +2360,7 @@ export const sales = [
     date: '2014/03/08',
   },
   {
-    id: 330,
+    id: 296,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2640,7 +2368,7 @@ export const sales = [
     date: '2014/03/03',
   },
   {
-    id: 331,
+    id: 297,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2648,7 +2376,7 @@ export const sales = [
     date: '2014/04/11',
   },
   {
-    id: 332,
+    id: 298,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -2656,7 +2384,7 @@ export const sales = [
     date: '2014/04/13',
   },
   {
-    id: 333,
+    id: 299,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2664,7 +2392,7 @@ export const sales = [
     date: '2014/04/22',
   },
   {
-    id: 334,
+    id: 300,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2672,7 +2400,7 @@ export const sales = [
     date: '2014/04/08',
   },
   {
-    id: 335,
+    id: 301,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2680,7 +2408,7 @@ export const sales = [
     date: '2014/04/07',
   },
   {
-    id: 336,
+    id: 302,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2688,7 +2416,7 @@ export const sales = [
     date: '2014/04/01',
   },
   {
-    id: 337,
+    id: 303,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2696,7 +2424,7 @@ export const sales = [
     date: '2014/04/10',
   },
   {
-    id: 338,
+    id: 304,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2704,7 +2432,7 @@ export const sales = [
     date: '2014/04/21',
   },
   {
-    id: 339,
+    id: 305,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2712,7 +2440,7 @@ export const sales = [
     date: '2014/04/02',
   },
   {
-    id: 340,
+    id: 306,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2720,7 +2448,7 @@ export const sales = [
     date: '2014/04/07',
   },
   {
-    id: 341,
+    id: 307,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2728,23 +2456,7 @@ export const sales = [
     date: '2014/04/22',
   },
   {
-    id: 342,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1960,
-    date: '2014/04/16',
-  },
-  {
-    id: 343,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2250,
-    date: '2014/04/23',
-  },
-  {
-    id: 344,
+    id: 308,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2752,7 +2464,7 @@ export const sales = [
     date: '2014/04/05',
   },
   {
-    id: 345,
+    id: 309,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2760,7 +2472,7 @@ export const sales = [
     date: '2014/04/11',
   },
   {
-    id: 346,
+    id: 310,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2768,7 +2480,7 @@ export const sales = [
     date: '2014/04/02',
   },
   {
-    id: 347,
+    id: 311,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2776,7 +2488,7 @@ export const sales = [
     date: '2014/04/14',
   },
   {
-    id: 348,
+    id: 312,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2784,7 +2496,7 @@ export const sales = [
     date: '2014/04/19',
   },
   {
-    id: 349,
+    id: 313,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2792,7 +2504,7 @@ export const sales = [
     date: '2014/04/02',
   },
   {
-    id: 350,
+    id: 314,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2800,7 +2512,7 @@ export const sales = [
     date: '2014/04/01',
   },
   {
-    id: 351,
+    id: 315,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2808,15 +2520,7 @@ export const sales = [
     date: '2014/04/04',
   },
   {
-    id: 352,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 3200,
-    date: '2014/04/08',
-  },
-  {
-    id: 353,
+    id: 316,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2824,7 +2528,7 @@ export const sales = [
     date: '2014/04/21',
   },
   {
-    id: 354,
+    id: 317,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2832,7 +2536,7 @@ export const sales = [
     date: '2014/04/06',
   },
   {
-    id: 355,
+    id: 318,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -2840,7 +2544,7 @@ export const sales = [
     date: '2014/05/19',
   },
   {
-    id: 356,
+    id: 319,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -2848,7 +2552,7 @@ export const sales = [
     date: '2014/05/15',
   },
   {
-    id: 357,
+    id: 320,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -2856,7 +2560,7 @@ export const sales = [
     date: '2014/05/10',
   },
   {
-    id: 358,
+    id: 321,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -2864,7 +2568,7 @@ export const sales = [
     date: '2014/05/18',
   },
   {
-    id: 359,
+    id: 322,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -2872,7 +2576,7 @@ export const sales = [
     date: '2014/05/08',
   },
   {
-    id: 360,
+    id: 323,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -2880,7 +2584,7 @@ export const sales = [
     date: '2014/05/20',
   },
   {
-    id: 361,
+    id: 324,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -2888,7 +2592,7 @@ export const sales = [
     date: '2014/05/16',
   },
   {
-    id: 362,
+    id: 325,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -2896,7 +2600,7 @@ export const sales = [
     date: '2014/05/10',
   },
   {
-    id: 363,
+    id: 326,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -2904,7 +2608,7 @@ export const sales = [
     date: '2014/05/14',
   },
   {
-    id: 364,
+    id: 327,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -2912,7 +2616,7 @@ export const sales = [
     date: '2014/05/22',
   },
   {
-    id: 365,
+    id: 328,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -2920,23 +2624,7 @@ export const sales = [
     date: '2014/05/08',
   },
   {
-    id: 366,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 3760,
-    date: '2014/05/18',
-  },
-  {
-    id: 367,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 7920,
-    date: '2014/05/22',
-  },
-  {
-    id: 368,
+    id: 329,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -2944,7 +2632,7 @@ export const sales = [
     date: '2014/05/21',
   },
   {
-    id: 369,
+    id: 330,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -2952,7 +2640,7 @@ export const sales = [
     date: '2014/05/25',
   },
   {
-    id: 370,
+    id: 331,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -2960,7 +2648,7 @@ export const sales = [
     date: '2014/05/05',
   },
   {
-    id: 371,
+    id: 332,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -2968,7 +2656,7 @@ export const sales = [
     date: '2014/05/24',
   },
   {
-    id: 372,
+    id: 333,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -2976,7 +2664,7 @@ export const sales = [
     date: '2014/05/06',
   },
   {
-    id: 373,
+    id: 334,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -2984,15 +2672,7 @@ export const sales = [
     date: '2014/05/14',
   },
   {
-    id: 374,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8370,
-    date: '2014/05/06',
-  },
-  {
-    id: 375,
+    id: 335,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3000,7 +2680,7 @@ export const sales = [
     date: '2014/06/26',
   },
   {
-    id: 376,
+    id: 336,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3008,7 +2688,7 @@ export const sales = [
     date: '2014/06/04',
   },
   {
-    id: 377,
+    id: 337,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3016,7 +2696,7 @@ export const sales = [
     date: '2014/06/20',
   },
   {
-    id: 378,
+    id: 338,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3024,7 +2704,7 @@ export const sales = [
     date: '2014/06/23',
   },
   {
-    id: 379,
+    id: 339,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3032,7 +2712,7 @@ export const sales = [
     date: '2014/06/13',
   },
   {
-    id: 380,
+    id: 340,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3040,7 +2720,7 @@ export const sales = [
     date: '2014/06/08',
   },
   {
-    id: 381,
+    id: 341,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3048,7 +2728,7 @@ export const sales = [
     date: '2014/06/25',
   },
   {
-    id: 382,
+    id: 342,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3056,7 +2736,7 @@ export const sales = [
     date: '2014/06/20',
   },
   {
-    id: 383,
+    id: 343,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3064,7 +2744,7 @@ export const sales = [
     date: '2014/06/25',
   },
   {
-    id: 384,
+    id: 344,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3072,7 +2752,7 @@ export const sales = [
     date: '2014/06/26',
   },
   {
-    id: 385,
+    id: 345,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3080,23 +2760,7 @@ export const sales = [
     date: '2014/06/08',
   },
   {
-    id: 386,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1720,
-    date: '2014/06/09',
-  },
-  {
-    id: 387,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2880,
-    date: '2014/06/21',
-  },
-  {
-    id: 388,
+    id: 346,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3104,7 +2768,7 @@ export const sales = [
     date: '2014/06/03',
   },
   {
-    id: 389,
+    id: 347,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3112,7 +2776,7 @@ export const sales = [
     date: '2014/06/19',
   },
   {
-    id: 390,
+    id: 348,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -3120,7 +2784,7 @@ export const sales = [
     date: '2014/06/20',
   },
   {
-    id: 391,
+    id: 349,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3128,7 +2792,7 @@ export const sales = [
     date: '2014/06/25',
   },
   {
-    id: 392,
+    id: 350,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3136,7 +2800,7 @@ export const sales = [
     date: '2014/06/02',
   },
   {
-    id: 393,
+    id: 351,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3144,7 +2808,7 @@ export const sales = [
     date: '2014/06/25',
   },
   {
-    id: 394,
+    id: 352,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3152,7 +2816,7 @@ export const sales = [
     date: '2014/06/12',
   },
   {
-    id: 395,
+    id: 353,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3160,7 +2824,7 @@ export const sales = [
     date: '2014/06/02',
   },
   {
-    id: 396,
+    id: 354,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3168,7 +2832,7 @@ export const sales = [
     date: '2014/06/23',
   },
   {
-    id: 397,
+    id: 355,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3176,7 +2840,7 @@ export const sales = [
     date: '2014/07/21',
   },
   {
-    id: 398,
+    id: 356,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3184,7 +2848,7 @@ export const sales = [
     date: '2014/07/01',
   },
   {
-    id: 399,
+    id: 357,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3192,7 +2856,7 @@ export const sales = [
     date: '2014/07/26',
   },
   {
-    id: 400,
+    id: 358,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3200,7 +2864,7 @@ export const sales = [
     date: '2014/07/22',
   },
   {
-    id: 401,
+    id: 359,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3208,7 +2872,7 @@ export const sales = [
     date: '2014/07/09',
   },
   {
-    id: 402,
+    id: 360,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3216,7 +2880,7 @@ export const sales = [
     date: '2014/07/08',
   },
   {
-    id: 403,
+    id: 361,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3224,7 +2888,7 @@ export const sales = [
     date: '2014/07/18',
   },
   {
-    id: 404,
+    id: 362,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3232,7 +2896,7 @@ export const sales = [
     date: '2014/07/25',
   },
   {
-    id: 405,
+    id: 363,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3240,7 +2904,7 @@ export const sales = [
     date: '2014/07/04',
   },
   {
-    id: 406,
+    id: 364,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3248,7 +2912,7 @@ export const sales = [
     date: '2014/07/03',
   },
   {
-    id: 407,
+    id: 365,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3256,23 +2920,7 @@ export const sales = [
     date: '2014/07/21',
   },
   {
-    id: 408,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 5240,
-    date: '2014/07/11',
-  },
-  {
-    id: 409,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 1200,
-    date: '2014/07/21',
-  },
-  {
-    id: 410,
+    id: 366,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3280,7 +2928,7 @@ export const sales = [
     date: '2014/07/18',
   },
   {
-    id: 411,
+    id: 367,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3288,7 +2936,7 @@ export const sales = [
     date: '2014/07/01',
   },
   {
-    id: 412,
+    id: 368,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -3296,7 +2944,7 @@ export const sales = [
     date: '2014/07/02',
   },
   {
-    id: 413,
+    id: 369,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3304,7 +2952,7 @@ export const sales = [
     date: '2014/07/09',
   },
   {
-    id: 414,
+    id: 370,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3312,7 +2960,7 @@ export const sales = [
     date: '2014/07/04',
   },
   {
-    id: 415,
+    id: 371,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3320,15 +2968,7 @@ export const sales = [
     date: '2014/07/02',
   },
   {
-    id: 416,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 5520,
-    date: '2014/07/21',
-  },
-  {
-    id: 417,
+    id: 372,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3336,7 +2976,7 @@ export const sales = [
     date: '2014/07/25',
   },
   {
-    id: 418,
+    id: 373,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3344,7 +2984,7 @@ export const sales = [
     date: '2014/07/07',
   },
   {
-    id: 419,
+    id: 374,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3352,15 +2992,7 @@ export const sales = [
     date: '2014/07/21',
   },
   {
-    id: 420,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 3270,
-    date: '2014/07/12',
-  },
-  {
-    id: 421,
+    id: 375,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3368,7 +3000,7 @@ export const sales = [
     date: '2014/08/23',
   },
   {
-    id: 422,
+    id: 376,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3376,7 +3008,7 @@ export const sales = [
     date: '2014/08/09',
   },
   {
-    id: 423,
+    id: 377,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3384,7 +3016,7 @@ export const sales = [
     date: '2014/08/03',
   },
   {
-    id: 424,
+    id: 378,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3392,7 +3024,7 @@ export const sales = [
     date: '2014/08/11',
   },
   {
-    id: 425,
+    id: 379,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3400,7 +3032,7 @@ export const sales = [
     date: '2014/08/01',
   },
   {
-    id: 426,
+    id: 380,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3408,7 +3040,7 @@ export const sales = [
     date: '2014/08/21',
   },
   {
-    id: 427,
+    id: 381,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3416,7 +3048,7 @@ export const sales = [
     date: '2014/08/16',
   },
   {
-    id: 428,
+    id: 382,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3424,7 +3056,7 @@ export const sales = [
     date: '2014/08/20',
   },
   {
-    id: 429,
+    id: 383,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3432,7 +3064,7 @@ export const sales = [
     date: '2014/08/01',
   },
   {
-    id: 430,
+    id: 384,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3440,7 +3072,7 @@ export const sales = [
     date: '2014/08/22',
   },
   {
-    id: 431,
+    id: 385,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3448,23 +3080,7 @@ export const sales = [
     date: '2014/08/13',
   },
   {
-    id: 432,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2320,
-    date: '2014/08/18',
-  },
-  {
-    id: 433,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 7590,
-    date: '2014/08/24',
-  },
-  {
-    id: 434,
+    id: 386,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3472,7 +3088,7 @@ export const sales = [
     date: '2014/08/20',
   },
   {
-    id: 435,
+    id: 387,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3480,7 +3096,7 @@ export const sales = [
     date: '2014/08/20',
   },
   {
-    id: 436,
+    id: 388,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -3488,7 +3104,7 @@ export const sales = [
     date: '2014/08/25',
   },
   {
-    id: 437,
+    id: 389,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3496,7 +3112,7 @@ export const sales = [
     date: '2014/08/16',
   },
   {
-    id: 438,
+    id: 390,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3504,7 +3120,7 @@ export const sales = [
     date: '2014/08/15',
   },
   {
-    id: 439,
+    id: 391,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3512,7 +3128,7 @@ export const sales = [
     date: '2014/08/09',
   },
   {
-    id: 440,
+    id: 392,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3520,7 +3136,7 @@ export const sales = [
     date: '2014/08/09',
   },
   {
-    id: 441,
+    id: 393,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3528,7 +3144,7 @@ export const sales = [
     date: '2014/08/11',
   },
   {
-    id: 442,
+    id: 394,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3536,7 +3152,7 @@ export const sales = [
     date: '2014/09/21',
   },
   {
-    id: 443,
+    id: 395,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3544,7 +3160,7 @@ export const sales = [
     date: '2014/09/02',
   },
   {
-    id: 444,
+    id: 396,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3552,7 +3168,7 @@ export const sales = [
     date: '2014/09/05',
   },
   {
-    id: 445,
+    id: 397,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3560,7 +3176,7 @@ export const sales = [
     date: '2014/09/10',
   },
   {
-    id: 446,
+    id: 398,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3568,7 +3184,7 @@ export const sales = [
     date: '2014/09/01',
   },
   {
-    id: 447,
+    id: 399,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3576,7 +3192,7 @@ export const sales = [
     date: '2014/09/02',
   },
   {
-    id: 448,
+    id: 400,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3584,7 +3200,7 @@ export const sales = [
     date: '2014/09/03',
   },
   {
-    id: 449,
+    id: 401,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3592,7 +3208,7 @@ export const sales = [
     date: '2014/09/04',
   },
   {
-    id: 450,
+    id: 402,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3600,7 +3216,7 @@ export const sales = [
     date: '2014/09/09',
   },
   {
-    id: 451,
+    id: 403,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3608,7 +3224,7 @@ export const sales = [
     date: '2014/09/04',
   },
   {
-    id: 452,
+    id: 404,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3616,23 +3232,7 @@ export const sales = [
     date: '2014/09/16',
   },
   {
-    id: 453,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1320,
-    date: '2014/09/18',
-  },
-  {
-    id: 454,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8610,
-    date: '2014/09/19',
-  },
-  {
-    id: 455,
+    id: 405,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3640,7 +3240,7 @@ export const sales = [
     date: '2014/09/09',
   },
   {
-    id: 456,
+    id: 406,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3648,7 +3248,7 @@ export const sales = [
     date: '2014/09/01',
   },
   {
-    id: 457,
+    id: 407,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -3656,7 +3256,7 @@ export const sales = [
     date: '2014/09/19',
   },
   {
-    id: 458,
+    id: 408,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3664,7 +3264,7 @@ export const sales = [
     date: '2014/09/01',
   },
   {
-    id: 459,
+    id: 409,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3672,7 +3272,7 @@ export const sales = [
     date: '2014/09/03',
   },
   {
-    id: 460,
+    id: 410,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3680,7 +3280,7 @@ export const sales = [
     date: '2014/09/10',
   },
   {
-    id: 461,
+    id: 411,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3688,7 +3288,7 @@ export const sales = [
     date: '2014/09/25',
   },
   {
-    id: 462,
+    id: 412,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3696,7 +3296,7 @@ export const sales = [
     date: '2014/09/19',
   },
   {
-    id: 463,
+    id: 413,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3704,7 +3304,7 @@ export const sales = [
     date: '2014/10/15',
   },
   {
-    id: 464,
+    id: 414,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3712,7 +3312,7 @@ export const sales = [
     date: '2014/10/22',
   },
   {
-    id: 465,
+    id: 415,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3720,7 +3320,7 @@ export const sales = [
     date: '2014/10/01',
   },
   {
-    id: 466,
+    id: 416,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3728,7 +3328,7 @@ export const sales = [
     date: '2014/10/01',
   },
   {
-    id: 467,
+    id: 417,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3736,7 +3336,7 @@ export const sales = [
     date: '2014/10/23',
   },
   {
-    id: 468,
+    id: 418,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3744,7 +3344,7 @@ export const sales = [
     date: '2014/10/11',
   },
   {
-    id: 469,
+    id: 419,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3752,7 +3352,7 @@ export const sales = [
     date: '2014/10/20',
   },
   {
-    id: 470,
+    id: 420,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3760,7 +3360,7 @@ export const sales = [
     date: '2014/10/05',
   },
   {
-    id: 471,
+    id: 421,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3768,7 +3368,7 @@ export const sales = [
     date: '2014/10/06',
   },
   {
-    id: 472,
+    id: 422,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3776,7 +3376,7 @@ export const sales = [
     date: '2014/10/06',
   },
   {
-    id: 473,
+    id: 423,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3784,23 +3384,7 @@ export const sales = [
     date: '2014/10/18',
   },
   {
-    id: 474,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2940,
-    date: '2014/10/24',
-  },
-  {
-    id: 475,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2670,
-    date: '2014/10/04',
-  },
-  {
-    id: 476,
+    id: 424,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3808,7 +3392,7 @@ export const sales = [
     date: '2014/10/11',
   },
   {
-    id: 477,
+    id: 425,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3816,7 +3400,7 @@ export const sales = [
     date: '2014/10/08',
   },
   {
-    id: 478,
+    id: 426,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -3824,7 +3408,7 @@ export const sales = [
     date: '2014/10/08',
   },
   {
-    id: 479,
+    id: 427,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -3832,7 +3416,7 @@ export const sales = [
     date: '2014/10/11',
   },
   {
-    id: 480,
+    id: 428,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -3840,7 +3424,7 @@ export const sales = [
     date: '2014/10/17',
   },
   {
-    id: 481,
+    id: 429,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -3848,7 +3432,7 @@ export const sales = [
     date: '2014/10/05',
   },
   {
-    id: 482,
+    id: 430,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3856,7 +3440,7 @@ export const sales = [
     date: '2014/10/16',
   },
   {
-    id: 483,
+    id: 431,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3864,7 +3448,7 @@ export const sales = [
     date: '2014/10/08',
   },
   {
-    id: 484,
+    id: 432,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3872,7 +3456,7 @@ export const sales = [
     date: '2014/10/21',
   },
   {
-    id: 485,
+    id: 433,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -3880,7 +3464,7 @@ export const sales = [
     date: '2014/11/09',
   },
   {
-    id: 486,
+    id: 434,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -3888,7 +3472,7 @@ export const sales = [
     date: '2014/11/21',
   },
   {
-    id: 487,
+    id: 435,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -3896,7 +3480,7 @@ export const sales = [
     date: '2014/11/24',
   },
   {
-    id: 488,
+    id: 436,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -3904,7 +3488,7 @@ export const sales = [
     date: '2014/11/24',
   },
   {
-    id: 489,
+    id: 437,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -3912,7 +3496,7 @@ export const sales = [
     date: '2014/11/18',
   },
   {
-    id: 490,
+    id: 438,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -3920,7 +3504,7 @@ export const sales = [
     date: '2014/11/25',
   },
   {
-    id: 491,
+    id: 439,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -3928,7 +3512,7 @@ export const sales = [
     date: '2014/11/09',
   },
   {
-    id: 492,
+    id: 440,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -3936,7 +3520,7 @@ export const sales = [
     date: '2014/11/23',
   },
   {
-    id: 493,
+    id: 441,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -3944,7 +3528,7 @@ export const sales = [
     date: '2014/11/20',
   },
   {
-    id: 494,
+    id: 442,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -3952,7 +3536,7 @@ export const sales = [
     date: '2014/11/25',
   },
   {
-    id: 495,
+    id: 443,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -3960,23 +3544,7 @@ export const sales = [
     date: '2014/11/15',
   },
   {
-    id: 496,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2820,
-    date: '2014/11/13',
-  },
-  {
-    id: 497,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 2280,
-    date: '2014/11/12',
-  },
-  {
-    id: 498,
+    id: 444,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -3984,7 +3552,7 @@ export const sales = [
     date: '2014/11/03',
   },
   {
-    id: 499,
+    id: 445,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -3992,7 +3560,7 @@ export const sales = [
     date: '2014/11/23',
   },
   {
-    id: 500,
+    id: 446,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4000,7 +3568,7 @@ export const sales = [
     date: '2014/11/20',
   },
   {
-    id: 501,
+    id: 447,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4008,7 +3576,7 @@ export const sales = [
     date: '2014/11/24',
   },
   {
-    id: 502,
+    id: 448,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4016,7 +3584,7 @@ export const sales = [
     date: '2014/11/24',
   },
   {
-    id: 503,
+    id: 449,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4024,7 +3592,7 @@ export const sales = [
     date: '2014/11/16',
   },
   {
-    id: 504,
+    id: 450,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4032,7 +3600,7 @@ export const sales = [
     date: '2014/11/05',
   },
   {
-    id: 505,
+    id: 451,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4040,7 +3608,7 @@ export const sales = [
     date: '2014/11/07',
   },
   {
-    id: 506,
+    id: 452,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4048,7 +3616,7 @@ export const sales = [
     date: '2014/11/20',
   },
   {
-    id: 507,
+    id: 453,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4056,7 +3624,7 @@ export const sales = [
     date: '2014/11/02',
   },
   {
-    id: 508,
+    id: 454,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4064,7 +3632,7 @@ export const sales = [
     date: '2014/12/04',
   },
   {
-    id: 509,
+    id: 455,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4072,7 +3640,7 @@ export const sales = [
     date: '2014/12/02',
   },
   {
-    id: 510,
+    id: 456,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4080,7 +3648,7 @@ export const sales = [
     date: '2014/12/07',
   },
   {
-    id: 511,
+    id: 457,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4088,7 +3656,7 @@ export const sales = [
     date: '2014/12/15',
   },
   {
-    id: 512,
+    id: 458,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4096,7 +3664,7 @@ export const sales = [
     date: '2014/12/01',
   },
   {
-    id: 513,
+    id: 459,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -4104,7 +3672,7 @@ export const sales = [
     date: '2014/12/18',
   },
   {
-    id: 514,
+    id: 460,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4112,7 +3680,7 @@ export const sales = [
     date: '2014/12/22',
   },
   {
-    id: 515,
+    id: 461,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4120,7 +3688,7 @@ export const sales = [
     date: '2014/12/12',
   },
   {
-    id: 516,
+    id: 462,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4128,7 +3696,7 @@ export const sales = [
     date: '2014/12/06',
   },
   {
-    id: 517,
+    id: 463,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -4136,7 +3704,7 @@ export const sales = [
     date: '2014/12/20',
   },
   {
-    id: 518,
+    id: 464,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -4144,23 +3712,7 @@ export const sales = [
     date: '2014/12/10',
   },
   {
-    id: 519,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 4880,
-    date: '2014/12/13',
-  },
-  {
-    id: 520,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8850,
-    date: '2014/12/03',
-  },
-  {
-    id: 521,
+    id: 465,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4168,7 +3720,7 @@ export const sales = [
     date: '2014/12/10',
   },
   {
-    id: 522,
+    id: 466,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4176,7 +3728,7 @@ export const sales = [
     date: '2014/12/12',
   },
   {
-    id: 523,
+    id: 467,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4184,7 +3736,7 @@ export const sales = [
     date: '2014/12/02',
   },
   {
-    id: 524,
+    id: 468,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4192,7 +3744,7 @@ export const sales = [
     date: '2014/12/12',
   },
   {
-    id: 525,
+    id: 469,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4200,7 +3752,7 @@ export const sales = [
     date: '2014/12/01',
   },
   {
-    id: 526,
+    id: 470,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4208,7 +3760,7 @@ export const sales = [
     date: '2014/12/26',
   },
   {
-    id: 527,
+    id: 471,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4216,7 +3768,7 @@ export const sales = [
     date: '2014/12/17',
   },
   {
-    id: 528,
+    id: 472,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4224,7 +3776,7 @@ export const sales = [
     date: '2014/12/15',
   },
   {
-    id: 529,
+    id: 473,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4232,7 +3784,7 @@ export const sales = [
     date: '2014/12/18',
   },
   {
-    id: 530,
+    id: 474,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4240,7 +3792,7 @@ export const sales = [
     date: '2014/12/02',
   },
   {
-    id: 531,
+    id: 475,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4248,7 +3800,7 @@ export const sales = [
     date: '2014/12/13',
   },
   {
-    id: 532,
+    id: 476,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4256,7 +3808,7 @@ export const sales = [
     date: '2014/12/05',
   },
   {
-    id: 533,
+    id: 477,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4264,7 +3816,7 @@ export const sales = [
     date: '2015/01/10',
   },
   {
-    id: 534,
+    id: 478,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4272,7 +3824,7 @@ export const sales = [
     date: '2015/01/21',
   },
   {
-    id: 535,
+    id: 479,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4280,7 +3832,7 @@ export const sales = [
     date: '2015/01/17',
   },
   {
-    id: 536,
+    id: 480,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4288,7 +3840,7 @@ export const sales = [
     date: '2015/01/05',
   },
   {
-    id: 537,
+    id: 481,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4296,7 +3848,7 @@ export const sales = [
     date: '2015/01/05',
   },
   {
-    id: 538,
+    id: 482,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -4304,7 +3856,7 @@ export const sales = [
     date: '2015/01/04',
   },
   {
-    id: 539,
+    id: 483,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4312,7 +3864,7 @@ export const sales = [
     date: '2015/01/12',
   },
   {
-    id: 540,
+    id: 484,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4320,7 +3872,7 @@ export const sales = [
     date: '2015/01/20',
   },
   {
-    id: 541,
+    id: 485,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4328,7 +3880,7 @@ export const sales = [
     date: '2015/01/02',
   },
   {
-    id: 542,
+    id: 486,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -4336,7 +3888,7 @@ export const sales = [
     date: '2015/01/07',
   },
   {
-    id: 543,
+    id: 487,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -4344,23 +3896,7 @@ export const sales = [
     date: '2015/01/18',
   },
   {
-    id: 544,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1460,
-    date: '2015/01/22',
-  },
-  {
-    id: 545,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 5040,
-    date: '2015/01/10',
-  },
-  {
-    id: 546,
+    id: 488,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4368,7 +3904,7 @@ export const sales = [
     date: '2015/01/13',
   },
   {
-    id: 547,
+    id: 489,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4376,7 +3912,7 @@ export const sales = [
     date: '2015/01/22',
   },
   {
-    id: 548,
+    id: 490,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4384,7 +3920,7 @@ export const sales = [
     date: '2015/01/14',
   },
   {
-    id: 549,
+    id: 491,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4392,7 +3928,7 @@ export const sales = [
     date: '2015/01/23',
   },
   {
-    id: 550,
+    id: 492,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4400,7 +3936,7 @@ export const sales = [
     date: '2015/01/09',
   },
   {
-    id: 551,
+    id: 493,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4408,7 +3944,7 @@ export const sales = [
     date: '2015/01/02',
   },
   {
-    id: 552,
+    id: 494,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4416,7 +3952,7 @@ export const sales = [
     date: '2015/01/17',
   },
   {
-    id: 553,
+    id: 495,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4424,7 +3960,7 @@ export const sales = [
     date: '2015/01/20',
   },
   {
-    id: 554,
+    id: 496,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4432,7 +3968,7 @@ export const sales = [
     date: '2015/01/14',
   },
   {
-    id: 555,
+    id: 497,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4440,7 +3976,7 @@ export const sales = [
     date: '2015/01/06',
   },
   {
-    id: 556,
+    id: 498,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4448,7 +3984,7 @@ export const sales = [
     date: '2015/01/07',
   },
   {
-    id: 557,
+    id: 499,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4456,7 +3992,7 @@ export const sales = [
     date: '2015/02/13',
   },
   {
-    id: 558,
+    id: 500,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4464,7 +4000,7 @@ export const sales = [
     date: '2015/02/04',
   },
   {
-    id: 559,
+    id: 501,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4472,7 +4008,7 @@ export const sales = [
     date: '2015/02/22',
   },
   {
-    id: 560,
+    id: 502,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4480,7 +4016,7 @@ export const sales = [
     date: '2015/02/07',
   },
   {
-    id: 561,
+    id: 503,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4488,7 +4024,7 @@ export const sales = [
     date: '2015/02/21',
   },
   {
-    id: 562,
+    id: 504,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -4496,7 +4032,7 @@ export const sales = [
     date: '2015/02/24',
   },
   {
-    id: 563,
+    id: 505,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4504,7 +4040,7 @@ export const sales = [
     date: '2015/02/10',
   },
   {
-    id: 564,
+    id: 506,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4512,7 +4048,7 @@ export const sales = [
     date: '2015/02/26',
   },
   {
-    id: 565,
+    id: 507,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4520,7 +4056,7 @@ export const sales = [
     date: '2015/02/18',
   },
   {
-    id: 566,
+    id: 508,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -4528,7 +4064,7 @@ export const sales = [
     date: '2015/02/16',
   },
   {
-    id: 567,
+    id: 509,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -4536,23 +4072,7 @@ export const sales = [
     date: '2015/02/07',
   },
   {
-    id: 568,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1880,
-    date: '2015/02/24',
-  },
-  {
-    id: 569,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 6180,
-    date: '2015/02/26',
-  },
-  {
-    id: 570,
+    id: 510,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4560,7 +4080,7 @@ export const sales = [
     date: '2015/02/03',
   },
   {
-    id: 571,
+    id: 511,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4568,7 +4088,7 @@ export const sales = [
     date: '2015/02/26',
   },
   {
-    id: 572,
+    id: 512,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4576,7 +4096,7 @@ export const sales = [
     date: '2015/02/01',
   },
   {
-    id: 573,
+    id: 513,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4584,7 +4104,7 @@ export const sales = [
     date: '2015/02/23',
   },
   {
-    id: 574,
+    id: 514,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4592,7 +4112,7 @@ export const sales = [
     date: '2015/02/20',
   },
   {
-    id: 575,
+    id: 515,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4600,7 +4120,7 @@ export const sales = [
     date: '2015/02/19',
   },
   {
-    id: 576,
+    id: 516,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4608,7 +4128,7 @@ export const sales = [
     date: '2015/03/21',
   },
   {
-    id: 577,
+    id: 517,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4616,7 +4136,7 @@ export const sales = [
     date: '2015/03/21',
   },
   {
-    id: 578,
+    id: 518,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4624,7 +4144,7 @@ export const sales = [
     date: '2015/03/10',
   },
   {
-    id: 579,
+    id: 519,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4632,7 +4152,7 @@ export const sales = [
     date: '2015/03/15',
   },
   {
-    id: 580,
+    id: 520,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4640,7 +4160,7 @@ export const sales = [
     date: '2015/03/01',
   },
   {
-    id: 581,
+    id: 521,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -4648,7 +4168,7 @@ export const sales = [
     date: '2015/03/17',
   },
   {
-    id: 582,
+    id: 522,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4656,7 +4176,7 @@ export const sales = [
     date: '2015/03/20',
   },
   {
-    id: 583,
+    id: 523,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4664,7 +4184,7 @@ export const sales = [
     date: '2015/03/18',
   },
   {
-    id: 584,
+    id: 524,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4672,7 +4192,7 @@ export const sales = [
     date: '2015/03/22',
   },
   {
-    id: 585,
+    id: 525,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -4680,7 +4200,7 @@ export const sales = [
     date: '2015/03/17',
   },
   {
-    id: 586,
+    id: 526,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -4688,23 +4208,7 @@ export const sales = [
     date: '2015/03/25',
   },
   {
-    id: 587,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 6300,
-    date: '2015/03/20',
-  },
-  {
-    id: 588,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 8670,
-    date: '2015/03/07',
-  },
-  {
-    id: 589,
+    id: 527,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4712,7 +4216,7 @@ export const sales = [
     date: '2015/03/23',
   },
   {
-    id: 590,
+    id: 528,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4720,7 +4224,7 @@ export const sales = [
     date: '2015/03/02',
   },
   {
-    id: 591,
+    id: 529,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4728,7 +4232,7 @@ export const sales = [
     date: '2015/03/17',
   },
   {
-    id: 592,
+    id: 530,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4736,7 +4240,7 @@ export const sales = [
     date: '2015/03/25',
   },
   {
-    id: 593,
+    id: 531,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4744,7 +4248,7 @@ export const sales = [
     date: '2015/03/01',
   },
   {
-    id: 594,
+    id: 532,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4752,7 +4256,7 @@ export const sales = [
     date: '2015/03/07',
   },
   {
-    id: 595,
+    id: 533,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4760,7 +4264,7 @@ export const sales = [
     date: '2015/03/19',
   },
   {
-    id: 596,
+    id: 534,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4768,7 +4272,7 @@ export const sales = [
     date: '2015/03/26',
   },
   {
-    id: 597,
+    id: 535,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4776,7 +4280,7 @@ export const sales = [
     date: '2015/04/02',
   },
   {
-    id: 598,
+    id: 536,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4784,7 +4288,7 @@ export const sales = [
     date: '2015/04/13',
   },
   {
-    id: 599,
+    id: 537,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4792,7 +4296,7 @@ export const sales = [
     date: '2015/04/07',
   },
   {
-    id: 600,
+    id: 538,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -4800,7 +4304,7 @@ export const sales = [
     date: '2015/04/03',
   },
   {
-    id: 601,
+    id: 539,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4808,7 +4312,7 @@ export const sales = [
     date: '2015/04/03',
   },
   {
-    id: 602,
+    id: 540,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -4816,7 +4320,7 @@ export const sales = [
     date: '2015/04/12',
   },
   {
-    id: 603,
+    id: 541,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -4824,7 +4328,7 @@ export const sales = [
     date: '2015/04/07',
   },
   {
-    id: 604,
+    id: 542,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -4832,7 +4336,7 @@ export const sales = [
     date: '2015/04/05',
   },
   {
-    id: 605,
+    id: 543,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4840,7 +4344,7 @@ export const sales = [
     date: '2015/04/24',
   },
   {
-    id: 606,
+    id: 544,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -4848,7 +4352,7 @@ export const sales = [
     date: '2015/04/15',
   },
   {
-    id: 607,
+    id: 545,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -4856,23 +4360,7 @@ export const sales = [
     date: '2015/04/13',
   },
   {
-    id: 608,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 2940,
-    date: '2015/04/04',
-  },
-  {
-    id: 609,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 5580,
-    date: '2015/04/16',
-  },
-  {
-    id: 610,
+    id: 546,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4880,7 +4368,7 @@ export const sales = [
     date: '2015/04/19',
   },
   {
-    id: 611,
+    id: 547,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -4888,7 +4376,7 @@ export const sales = [
     date: '2015/04/26',
   },
   {
-    id: 612,
+    id: 548,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4896,7 +4384,7 @@ export const sales = [
     date: '2015/04/05',
   },
   {
-    id: 613,
+    id: 549,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -4904,7 +4392,7 @@ export const sales = [
     date: '2015/04/06',
   },
   {
-    id: 614,
+    id: 550,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4912,7 +4400,7 @@ export const sales = [
     date: '2015/04/25',
   },
   {
-    id: 615,
+    id: 551,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -4920,7 +4408,7 @@ export const sales = [
     date: '2015/04/05',
   },
   {
-    id: 616,
+    id: 552,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -4928,7 +4416,7 @@ export const sales = [
     date: '2015/04/16',
   },
   {
-    id: 617,
+    id: 553,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -4936,15 +4424,7 @@ export const sales = [
     date: '2015/04/02',
   },
   {
-    id: 618,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 5190,
-    date: '2015/04/10',
-  },
-  {
-    id: 619,
+    id: 554,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -4952,7 +4432,7 @@ export const sales = [
     date: '2015/04/26',
   },
   {
-    id: 620,
+    id: 555,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -4960,7 +4440,7 @@ export const sales = [
     date: '2015/04/24',
   },
   {
-    id: 621,
+    id: 556,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -4968,7 +4448,7 @@ export const sales = [
     date: '2015/04/17',
   },
   {
-    id: 622,
+    id: 557,
     region: 'North America',
     country: 'USA',
     city: 'New York',
@@ -4976,7 +4456,7 @@ export const sales = [
     date: '2015/05/12',
   },
   {
-    id: 623,
+    id: 558,
     region: 'North America',
     country: 'USA',
     city: 'Los Angeles',
@@ -4984,7 +4464,7 @@ export const sales = [
     date: '2015/05/23',
   },
   {
-    id: 624,
+    id: 559,
     region: 'North America',
     country: 'USA',
     city: 'Denver',
@@ -4992,7 +4472,7 @@ export const sales = [
     date: '2015/05/21',
   },
   {
-    id: 625,
+    id: 560,
     region: 'North America',
     country: 'CAN',
     city: 'Vancouver',
@@ -5000,7 +4480,7 @@ export const sales = [
     date: '2015/05/10',
   },
   {
-    id: 626,
+    id: 561,
     region: 'North America',
     country: 'CAN',
     city: 'Edmonton',
@@ -5008,7 +4488,7 @@ export const sales = [
     date: '2015/05/15',
   },
   {
-    id: 627,
+    id: 562,
     region: 'South America',
     country: 'BRA',
     city: 'Rio de Janeiro',
@@ -5016,7 +4496,7 @@ export const sales = [
     date: '2015/05/16',
   },
   {
-    id: 628,
+    id: 563,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',
@@ -5024,7 +4504,7 @@ export const sales = [
     date: '2015/05/10',
   },
   {
-    id: 629,
+    id: 564,
     region: 'South America',
     country: 'PRY',
     city: 'Asuncion',
@@ -5032,7 +4512,7 @@ export const sales = [
     date: '2015/05/06',
   },
   {
-    id: 630,
+    id: 565,
     region: 'Europe',
     country: 'GBR',
     city: 'London',
@@ -5040,7 +4520,7 @@ export const sales = [
     date: '2015/05/25',
   },
   {
-    id: 631,
+    id: 566,
     region: 'Europe',
     country: 'DEU',
     city: 'Berlin',
@@ -5048,7 +4528,7 @@ export const sales = [
     date: '2015/05/14',
   },
   {
-    id: 632,
+    id: 567,
     region: 'Europe',
     country: 'ESP',
     city: 'Madrid',
@@ -5056,23 +4536,7 @@ export const sales = [
     date: '2015/05/01',
   },
   {
-    id: 633,
-    region: 'Europe',
-    country: 'RUS',
-    city: 'Moscow',
-    amount: 1400,
-    date: '2015/05/22',
-  },
-  {
-    id: 634,
-    region: 'Asia',
-    country: 'CHN',
-    city: 'Beijing',
-    amount: 6060,
-    date: '2015/05/22',
-  },
-  {
-    id: 635,
+    id: 568,
     region: 'Asia',
     country: 'JPN',
     city: 'Tokyo',
@@ -5080,7 +4544,7 @@ export const sales = [
     date: '2015/05/13',
   },
   {
-    id: 636,
+    id: 569,
     region: 'Asia',
     country: 'KOR',
     city: 'Seoul',
@@ -5088,7 +4552,7 @@ export const sales = [
     date: '2015/05/26',
   },
   {
-    id: 637,
+    id: 570,
     region: 'Australia',
     country: 'AUS',
     city: 'Sydney',
@@ -5096,7 +4560,7 @@ export const sales = [
     date: '2015/05/17',
   },
   {
-    id: 638,
+    id: 571,
     region: 'Australia',
     country: 'AUS',
     city: 'Melbourne',
@@ -5104,7 +4568,7 @@ export const sales = [
     date: '2015/05/21',
   },
   {
-    id: 639,
+    id: 572,
     region: 'Africa',
     country: 'ZAF',
     city: 'Pretoria',
@@ -5112,7 +4576,7 @@ export const sales = [
     date: '2015/05/21',
   },
   {
-    id: 640,
+    id: 573,
     region: 'Africa',
     country: 'EGY',
     city: 'Cairo',
@@ -5120,7 +4584,7 @@ export const sales = [
     date: '2015/05/26',
   },
   {
-    id: 641,
+    id: 574,
     region: 'South America',
     country: 'ARG',
     city: 'Buenos Aires',

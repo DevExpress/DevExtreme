@@ -262,6 +262,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1064: 'AI returned {1} for the {0} field, but this field only accepts {2} values. Update the \'instruction\' for this field.',
 
     /**
+     * @name ErrorsUIWidgets.E1065
+     */
+    E1065: 'The browser does not support Web Speech API (SpeechRecognition)',
+
+    /**
+    * @name ErrorsUIWidgets.E1066
+    */
+    E1066: 'All AI columns must have names.',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: 'The "key" option cannot be modified after initialization',

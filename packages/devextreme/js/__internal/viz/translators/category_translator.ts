@@ -65,6 +65,7 @@ export default {
     const translateCategories = translate / interval;
     const visibleCount = (that.visibleCategories || []).length;
     let startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5);
+    // @ts-expect-error
     const categoriesLength = parseInt(adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1;
     let endCategoryIndex;
 
