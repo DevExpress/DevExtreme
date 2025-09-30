@@ -39,8 +39,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._createScrollViewControl();
 
         super._initMarkup();
-
-        this.onFocusedItemChanged = this._onFocusedItemChanged.bind(this);
         this._layoutUtils = new ListBoxLayoutUtils(this._scrollView, this.$element(), this._$itemContainer, this.itemElements().first());
 
         this._syncFocusedItemKey();
@@ -49,8 +47,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
     _initActions() {
         this._actions = {
             onItemEnterKeyPressed: this._createActionByOption('onItemEnterKeyPressed'),
-            onBeforeFocusedItemChanged: this._createActionByOption('onBeforeFocusedItemChanged'),
-            onFocusedElement: this._createActionByOption('onFocusedElement')
+            onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged')
         };
     }
 
@@ -338,6 +335,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
     _focusOutHandler() {}
 
+    _focusInHandler() {}
+
     _getItems() {
         return this.option('items') || [];
     }
@@ -422,16 +421,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._actions.onFocusedItemChanged(args);
     }
 
-    _raiseFocusedElement() {
-        const args = {
-            shouldFocusElement: true
-        };
-
-        this._actions.onFocusedElement(args);
-
-        return args;
-    }
-
     _changeItemSelection(item, select) {
         if(this.isItemSelected(item) === select) {
             return;
@@ -503,12 +492,6 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             case 'onItemEnterKeyPressed':
             case 'onFocusedItemChanged':
                 this._actions[args.name] = this._createActionByOption(args.name);
-                break;
-            case 'focusedElement':
-                const res = this._raiseFocusedElement();
-                if(res.shouldFocusElement) {
-                    super._optionChanged(args);
-                }
                 break;
             default:
                 super._optionChanged(args);
