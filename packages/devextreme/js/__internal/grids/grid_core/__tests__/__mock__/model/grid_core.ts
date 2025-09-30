@@ -7,7 +7,7 @@ const CLASSES = {
   dataRow: 'dx-data-row',
 };
 
-export abstract class GridComponentObject<TInstance extends GridBase = GridBase> {
+export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   constructor(protected readonly root: HTMLElement) {}
 
   public getHeaderCell(columnIndex: number): HTMLElement {

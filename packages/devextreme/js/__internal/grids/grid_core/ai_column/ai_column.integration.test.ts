@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
-import { DataGridComponentObject } from '@ts/grids/data_grid/test_component_object';
+import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
@@ -18,7 +18,7 @@ const createDataGrid = async (
   options: DataGridProperties = {},
 ): Promise<{
   $container: dxElementWrapper;
-  component: DataGridComponentObject;
+  component: DataGridModel;
 }> => new Promise((resolve) => {
   const $container = $('<div>')
     .attr('id', GRID_CONTAINER_ID)
@@ -29,7 +29,7 @@ const createDataGrid = async (
   const contentReadyHandler = (): void => {
     resolve({
       $container,
-      component: new DataGridComponentObject($container.get(0) as HTMLElement),
+      component: new DataGridModel($container.get(0) as HTMLElement),
     });
     instance.off('contentReady', contentReadyHandler);
   };
