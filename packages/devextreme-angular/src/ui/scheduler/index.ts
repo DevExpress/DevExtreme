@@ -1172,7 +1172,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } }>;
 
