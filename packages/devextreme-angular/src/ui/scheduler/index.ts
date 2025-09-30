@@ -337,21 +337,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-    
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-    
-     */
-    @Input()
-    get dropDownAppointmentTemplate(): any {
-        return this._getOption('dropDownAppointmentTemplate');
-    }
-    set dropDownAppointmentTemplate(value: any) {
-        this._setOption('dropDownAppointmentTemplate', value);
-    }
-
-
-    /**
      * [descr:dxSchedulerOptions.editing]
     
      */
@@ -850,10 +835,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
+    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
         return this._getOption('views');
     }
-    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
+    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
         this._setOption('views', value);
     }
 
@@ -1165,13 +1150,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownAppointmentTemplateChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }>;
 
     /**
@@ -1438,7 +1416,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
+    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
 
     /**
     
@@ -1540,7 +1518,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'dateSerializationFormatChange' },
             { emit: 'descriptionExprChange' },
             { emit: 'disabledChange' },
-            { emit: 'dropDownAppointmentTemplateChange' },
             { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
             { emit: 'endDateExprChange' },

@@ -56,8 +56,6 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   dataCellComponent?: React.ComponentType<any>;
   dateCellRender?: (...params: any) => React.ReactNode;
   dateCellComponent?: React.ComponentType<any>;
-  dropDownAppointmentRender?: (...params: any) => React.ReactNode;
-  dropDownAppointmentComponent?: React.ComponentType<any>;
   resourceCellRender?: (...params: any) => React.ReactNode;
   resourceCellComponent?: React.ComponentType<any>;
   timeCellRender?: (...params: any) => React.ReactNode;
@@ -127,11 +125,6 @@ const Scheduler = memo(
           tmplOption: "dateCellTemplate",
           render: "dateCellRender",
           component: "dateCellComponent"
-        },
-        {
-          tmplOption: "dropDownAppointmentTemplate",
-          render: "dropDownAppointmentRender",
-          component: "dropDownAppointmentComponent"
         },
         {
           tmplOption: "resourceCellTemplate",
@@ -486,7 +479,6 @@ type IViewProps = React.PropsWithChildren<{
   cellDuration?: number;
   dataCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
   firstDayOfWeek?: FirstDayOfWeek | undefined;
   groupByDate?: boolean;
@@ -512,8 +504,6 @@ type IViewProps = React.PropsWithChildren<{
   dataCellComponent?: React.ComponentType<any>;
   dateCellRender?: (...params: any) => React.ReactNode;
   dateCellComponent?: React.ComponentType<any>;
-  dropDownAppointmentRender?: (...params: any) => React.ReactNode;
-  dropDownAppointmentComponent?: React.ComponentType<any>;
   resourceCellRender?: (...params: any) => React.ReactNode;
   resourceCellComponent?: React.ComponentType<any>;
   timeCellRender?: (...params: any) => React.ReactNode;
@@ -548,10 +538,6 @@ const _componentView = (props: IViewProps) => {
         tmplOption: "dateCellTemplate",
         render: "dateCellRender",
         component: "dateCellComponent"
-      }, {
-        tmplOption: "dropDownAppointmentTemplate",
-        render: "dropDownAppointmentRender",
-        component: "dropDownAppointmentComponent"
       }, {
         tmplOption: "resourceCellTemplate",
         render: "resourceCellRender",
