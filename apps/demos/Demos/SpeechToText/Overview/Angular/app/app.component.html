@@ -14,14 +14,14 @@
       [hint]="hint"
       [disabled]="disabled"
       [speechRecognitionConfig]="speechRecognitionConfig"
-      (onStartClick)="onStartClick($event)"
-      (onStopClick)="onStopClick($event)"
+      (onStartClick)="onStartClick()"
       (onResult)="onResult($event)"
+      (onEnd)="onEnd()"
     ></dx-speech-to-text>
     <dx-text-area
       id="text-area"
       [(value)]="textAreaValue"
-      [widgth]="360"
+      [width]="360"
       [height]="120"
       placeholder="Recognized text will appear here..."
       [inputAttr]="{ 'aria-label': 'Recognized Text' }"

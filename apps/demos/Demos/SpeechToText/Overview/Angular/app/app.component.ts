@@ -104,7 +104,15 @@ export class AppComponent {
     this.type = 'danger';
   }
 
-  stopHandler() {
+  onResult({ event }) {
+    const { results } = event;
+    const resultText = Object.values(results)
+      .map((resultItem) => resultItem[0].transcript)
+      .join(' ');
+    this.textAreaValue = resultText;
+  }
+
+  onEnd() {
     this.state = 'initial';
     this.hint = 'Start voice recognition';
 
@@ -113,22 +121,6 @@ export class AppComponent {
     }
 
     this.type = 'default';
-  }
-
-  onStopClick() {
-    this.stopHandler();
-  }
-
-  onResult({ event }) {
-    const { results } = event;
-    const resultText = Object.values(results)
-      .map((resultItem) => resultItem[0].transcript)
-      .join(' ');
-    this.textAreaValue = resultText;
-
-    if (!this.continuous && results[0].isFinal === true) {
-      this.stopHandler();
-    }
   }
 
   onTextAreaValueChanged({ value }) {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +51,296 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div class="demo-container dx-theme-fluent-typography">
+            <div class="speech-to-text-container">
+                <span>Use voice recognition (speech to text)</span>
+                <div id="speech-to-text"></div>
+                <div id="text-area"></div>
+                <div id="clear-button"></div>
+            </div>
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                    <div>Display Mode</div>
+                    <div id="displayMode"></div>
+                </div>
+                <div class="option">
+                    <div>Styling Mode</div>
+                    <div id="stylingMode"></div>
+                </div>
+                <div class="option">
+                    <div>Type</div>
+                    <div id="type"></div>
+                </div>
+                <div class="switch">
+                    <div id="disabled"></div>
+                    <span>Disabled</span>
+                </div>
+                <div class="option-separator"></div>
+                <div class="option">
+                    <div>Language</div>
+                    <div id="language"></div>
+                </div>
+                <div class="switch">
+                    <div id="interimResults"></div>
+                    <span>Interim Results</span>
+                </div>
+                <div class="switch">
+                    <div id="continuousRecognition"></div>
+                    <span>Continuous Recognition</span>
+                </div>
+                <div class="option-separator"></div>
+                <div class="switch">
+                    <div id="animation"></div>
+                    <span>Animation</span>
+                </div>
+            </div>
+        </div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const shouldUpdateType = () => displayMode.option("value") === "Custom";
+                const isContinuous = () => continuousRecognition.option("value");
+                const stopHandler = (component) => {
+                    state = "initial";
+                    component.option("hint", "Start voice recognition");
+
+                    if (!shouldUpdateType()) {
+                        return;
+                    }
+
+                    type.option("value", "Default");
+                };
+                let state = "initial";
+
+                const speechToText = $("#speech-to-text")
+                    .dxSpeechToText({
+                        type: "default",
+                        hint: "Start voice recognition",
+                        speechRecognitionConfig: {
+                            interimResults: true,
+                            continuous: false
+                        },
+                        onStartClick: ({ component }) => {
+                            state = "listening";
+                            component.option("hint", "Stop voice recognition");
+                            if (!shouldUpdateType()) {
+                                return;
+                            }
+
+                            type.option("value", "Danger");
+                        },
+                        onStopClick: ({ component }) => {
+                            stopHandler(component);
+                        },
+                        onResult: ({ event, component }) => {
+                            const { results } = event;
+                            const resultText = Object.values(results)
+                                .map((resultItem) => resultItem[0].transcript)
+                                .join(" ");
+                            textArea.option("value", resultText);
+
+                            if (!isContinuous() && results[0].isFinal === true) {
+                                stopHandler(component);
+                            }
+                        },
+                        onEnd: () => {
+                            console.log('onEnd');
+                        },
+                    })
+                    .dxSpeechToText("instance");
+
+                const textArea = $("#text-area")
+                    .dxTextArea({
+                        width: 360,
+                        height: 120,
+                        placeholder: "Recognized text will appear here...",
+                        onValueChanged: ({ value }) => {
+                            clearButton.option("disabled", !value);
+                        }
+                    })
+                    .dxTextArea("instance");
+
+                const clearButton = $("#clear-button")
+                    .dxButton({
+                        text: "Clear",
+                        disabled: true,
+                        onClick: () => {
+                            textArea.option("value", "");
+                        }
+                    })
+                    .dxButton("instance");
+
+                const displayMode = $("#displayMode")
+                    .dxSelectBox({
+                        items: ["Icon Only", "Text and Icon", "Custom"],
+                        value: "Icon Only",
+                        onValueChanged: ({ value, component }) => {
+                            const $speechToText = speechToText.$element();
+                            const isCustomMode = value === "Custom";
+                            stylingMode.option("disabled", isCustomMode);
+                            type.option("disabled", isCustomMode);
+                            $speechToText.removeClass("custom-button");
+
+                            if (value === "Text and Icon") {
+                                speechToText.option({
+                                    startText: "Dictate",
+                                    stopText: "Stop"
+                                });
+                                return;
+                            }
+
+                            speechToText.option({ startText: "", stopText: "" });
+
+                            if (isCustomMode) {
+                                stylingMode.option("value", "Contained");
+                                type.option("value", state === "initial" ? "Default" : "Danger");
+                                $speechToText.addClass("custom-button");
+                            }
+                        }
+                    })
+                    .dxSelectBox("instance");
+
+                const stylingMode = $("#stylingMode")
+                    .dxSelectBox({
+                        items: ["Contained", "Outlined", "Text"],
+                        value: "Contained",
+                        onValueChanged: ({ value }) => {
+                            speechToText.option("stylingMode", value.toLowerCase());
+                        }
+                    })
+                    .dxSelectBox("instance");
+
+                const type = $("#type")
+                    .dxSelectBox({
+                        items: ["Normal", "Success", "Default", "Danger"],
+                        value: "Default",
+                        onValueChanged: ({ value }) => {
+                            speechToText.option("type", value.toLowerCase());
+                        }
+                    })
+                    .dxSelectBox("instance");
+
+                $("#disabled").dxSwitch({
+                    onValueChanged: ({ value }) => {
+                        speechToText.option("disabled", value);
+                    }
+                });
+
+                $("#language").dxSelectBox({
+                    items: ["Auto-detect", "English", "Spanish", "French", "German"],
+                    value: "Auto-detect",
+                    onValueChanged: ({ value }) => {
+                        const currentConfig = speechToText.option("speechRecognitionConfig");
+                        speechToText.option("speechRecognitionConfig", {
+                            ...currentConfig,
+                            lang: langMap[value]
+                        });
+                        console.log(speechToText.option("speechRecognitionConfig"));
+                    }
+                });
+
+                $("#interimResults").dxSwitch({
+                    value: true,
+                    onValueChanged: ({ value }) => {
+                        const currentConfig = speechToText.option("speechRecognitionConfig");
+                        speechToText.option("speechRecognitionConfig", {
+                            ...currentConfig,
+                            interimResults: value
+                        });
+                        console.log(speechToText.option("speechRecognitionConfig"));
+                    }
+                });
+
+                const continuousRecognition = $("#continuousRecognition")
+                    .dxSwitch({
+                        onValueChanged: ({ value }) => {
+                            const currentConfig = speechToText.option("speechRecognitionConfig");
+                            speechToText.option("speechRecognitionConfig", {
+                                ...currentConfig,
+                                continuous: value
+                            });
+                            console.log(speechToText.option("speechRecognitionConfig"));
+                        }
+                    })
+                    .dxSwitch("instance");
+
+                $("#animation").dxSwitch({
+                    value: true,
+                    onValueChanged: ({ value }) => {
+                        speechToText.$element().toggleClass("animation-disabled", !value);
+                    }
                 });
             });
+
+            const langMap = {
+                "Auto-detect": "",
+                English: "en-US",
+                Spanish: "es-ES",
+                French: "fr-FR",
+                German: "de-DE"
+            };
         </script>
+        <style>
+            .demo-container {
+                display: flex;
+                gap: 20px;
+                height: 640px;
+            }
+
+            .speech-to-text-container {
+                display: flex;
+                flex-direction: column;
+                row-gap: 16px;
+                flex-grow: 1;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #text-area {
+                margin-top: 16px;
+            }
+
+            .options {
+                display: flex;
+                flex-direction: column;
+                flex-shrink: 0;
+                width: 300px;
+                box-sizing: border-box;
+                padding: 20px;
+                background-color: rgba(191, 191, 191, 0.15);
+                gap: 16px;
+            }
+
+            .caption {
+                font-weight: 500;
+                font-size: 18px;
+            }
+
+            .option {
+                display: flex;
+                flex-direction: column;
+                row-gap: 4px;
+            }
+
+            .switch {
+                display: flex;
+                align-items: center;
+                column-gap: 8px;
+            }
+
+            .option-separator {
+                border-bottom: 1px solid var(--dx-color-border);
+            }
+
+            #speech-to-text.animation-disabled {
+                animation: none;
+            }
+
+            #speech-to-text.custom-button {
+                border-radius: 2rem;
+            }
+        </style>
     </div>
 </body>
+
 </html>

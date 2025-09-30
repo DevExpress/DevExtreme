@@ -103,11 +103,11 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import DxSpeechToText from 'devextreme-vue/speech-to-text';
-import DxTextArea from 'devextreme-vue/text-area';
-import DxButton, { DxButtonTypes } from 'devextreme-vue/button';
-import DxSelectBox from 'devextreme-vue/select-box';
-import DxSwitch from 'devextreme-vue/switch';
+import { DxSpeechToText } from 'devextreme-vue/speech-to-text';
+import { DxTextArea } from 'devextreme-vue/text-area';
+import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
+import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DxSwitch } from 'devextreme-vue/switch';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
 
 let state = 'initial';

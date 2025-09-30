@@ -68,7 +68,7 @@ pnpm run convert-to-js split
 If you want to run this script on specific folder you can pass it to the arguments
 
 ```
-pnpm run convert-to-js "JSDemos/Demos/Diagram/**/React"
+pnpm run convert-to-js "Demos/SpeechToText/OverView/React"
 ```
 
 1. To ensure that React JavaScript and TypeScript sources are always in sync, the following GitHub action is used: "Check generated JS demos".

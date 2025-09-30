@@ -1,16 +1,5 @@
 $(() => {
   const shouldUpdateType = () => displayMode.option('value') === 'Custom';
-  const isContinuous = () => continuousRecognition.option('value');
-  const stopHandler = (component) => {
-    state = 'initial';
-    component.option('hint', 'Start voice recognition');
-
-    if (!shouldUpdateType()) {
-      return;
-    }
-
-    type.option('value', 'Default');
-  };
   let state = 'initial';
 
   const speechToText = $('#speech-to-text')
@@ -30,20 +19,23 @@ $(() => {
 
         type.option('value', 'Danger');
       },
-      onStopClick: ({ component }) => {
-        stopHandler(component);
+      onEnd: ({ component }) => {
+        state = 'initial';
+        component.option('hint', 'Start voice recognition');
+
+        if (!shouldUpdateType()) {
+          return;
+        }
+
+        type.option('value', 'Default');
       },
-      onResult: ({ event, component }) => {
+      onResult: ({ event }) => {
         const { results } = event;
         const resultText = Object.values(results)
           .map((resultItem) => resultItem[0].transcript)
           .join(' ');
 
         textArea.option('value', resultText);
-
-        if (!isContinuous() && results[0].isFinal === true) {
-          stopHandler(component);
-        }
       },
     })
     .dxSpeechToText('instance');

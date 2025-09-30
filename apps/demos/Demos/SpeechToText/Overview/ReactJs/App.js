@@ -43,7 +43,7 @@ export default function App() {
     }
     setType('danger');
   }, [displayMode, setHint, setType]);
-  const onStop = useCallback(() => {
+  const onEnd = useCallback(() => {
     state = 'initial';
     setHint('Start voice recognition');
     if (displayMode !== 'Custom') {
@@ -51,9 +51,6 @@ export default function App() {
     }
     setType('default');
   }, [displayMode, setHint, setType]);
-  const onStopClick = useCallback(() => {
-    onStop();
-  }, [onStop]);
   const onResult = useCallback(
     ({ event }) => {
       const { results } = event;
@@ -61,11 +58,8 @@ export default function App() {
         .map((resultItem) => resultItem[0].transcript)
         .join(' ');
       setTextAreaValue(resultText);
-      if (!continuous && results[0].isFinal === true) {
-        onStop();
-      }
     },
-    [continuous, onStop, setTextAreaValue],
+    [setTextAreaValue],
   );
   const onTextAreaValueChanged = useCallback(
     ({ value }) => {
@@ -164,7 +158,7 @@ export default function App() {
           speechRecognitionConfig={speechRecognitionConfig}
           disabled={disabled}
           onStartClick={onStartClick}
-          onStopClick={onStopClick}
+          onEnd={onEnd}
           onResult={onResult}
         />
         <TextArea
@@ -181,7 +175,6 @@ export default function App() {
           disabled={clearButtonDisabled}
           onClick={onClearButtonClick}
         />
-        <div id="clear-button"></div>
       </div>
       <div className="options">
         <div className="caption">Options</div>
