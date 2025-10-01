@@ -264,6 +264,31 @@ describe('Options', () => {
       expect(dataCell.textContent).toBe('Template');
     });
   });
+
+  describe('when the visibleIndex is set', () => {
+    it('should have the correct order', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            visibleIndex: 1,
+          },
+        ],
+      });
+      const visibleColumns = component.apiGetVisibleColumns();
+
+      expect(visibleColumns.map(({ caption }) => caption))
+        .toEqual(['ID', 'AI Column', 'Name', 'Value']);
+    });
+  });
 });
 
 describe('columnOption', () => {
@@ -410,6 +435,31 @@ describe('columnOption', () => {
     component.apiColumnOption('myColumn', 'alignment', 'right');
 
     expect($(component.getCellElement(0, 3)).css('text-align')).toBe('right');
+  });
+
+  it('should apply visibleIndex to AI column', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'visibleIndex', 1);
+
+    const visibleColumns = component.apiGetVisibleColumns();
+
+    expect(visibleColumns.map(({ caption }) => caption))
+      .toEqual(['ID', 'AI Column', 'Name', 'Value']);
   });
 
   describe('when the name is reset', () => {

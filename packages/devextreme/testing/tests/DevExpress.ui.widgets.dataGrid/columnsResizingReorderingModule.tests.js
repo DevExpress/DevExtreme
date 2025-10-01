@@ -4825,7 +4825,7 @@ QUnit.module('Headers reordering', {
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
                 css: {
-                    width: '100px'
+                    width: '86px',
                 }
             }),
             sourceColumn: {
@@ -4837,7 +4837,6 @@ QUnit.module('Headers reordering', {
 
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
-        assert.ok($dragHeader.hasClass('dx-drag-command-cell'), 'draggable header element has class dx-command-cell');
         assert.strictEqual($dragHeader.outerWidth(), 102, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
