@@ -8,7 +8,7 @@ fixture.disablePageReloads`Layout:AppointmentForm:IntegerFormatNumberBox`
 
 test('dxNumberBox should not allow to enter not integer chars(T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -19,7 +19,7 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     .typeText(appointmentPopup.repeatEveryElement, '.,2', { speed: 0.5 });
 
   await t
-    .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', scheduler.appointmentPopup.content))
+    .expect(await takeScreenshot('dx-number-boxes-not-integer-chars.png', appointmentPopup.content))
     .ok();
 
   await t
@@ -32,6 +32,7 @@ test('dxNumberBox should not allow to enter not integer chars(T1002864)', async 
     endDate: new Date(2021, 3, 26, 11),
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;UNTIL=20220114T205959Z',
   }],
+  editing: { legacyForm: true },
   views: ['day', 'week', 'workWeek', 'month'],
   currentView: 'week',
   currentDate: new Date(2021, 3, 29),

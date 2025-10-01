@@ -16,10 +16,10 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
 
   await showAppointmentPopup();
 
-  await t.expect(scheduler.appointmentPopup.startDateElement.value)
+  await t.expect(scheduler.legacyAppointmentPopup.startDateElement.value)
     .eql('3/25/2021, 12:00 AM');
 
-  await t.expect(scheduler.appointmentPopup.endDateElement.value)
+  await t.expect(scheduler.legacyAppointmentPopup.endDateElement.value)
     .eql('3/25/2021, 12:30 AM');
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [],
@@ -27,6 +27,9 @@ test('Invoke showAppointmentPopup method shouldn\'t raise error if value of curr
   currentView: 'week',
   currentDate: new Date(2021, 2, 25).toISOString(),
   height: 600,
+  editing: {
+    legacyForm: true,
+  },
 }));
 
 test('Show appointment popup if deffereRendering is false (T1069753)', async (t) => {
@@ -35,7 +38,7 @@ test('Show appointment popup if deffereRendering is false (T1069753)', async (t)
 
   await t
     .doubleClick(appointment.element)
-    .expect(scheduler.appointmentPopup.isVisible)
+    .expect(scheduler.legacyAppointmentPopup.isVisible)
     .ok();
 }).before(async () => {
   await ClientFunction(() => {
@@ -58,5 +61,8 @@ test('Show appointment popup if deffereRendering is false (T1069753)', async (t)
     startDayHour: 9,
     endDayHour: 12,
     width: 400,
+    editing: {
+      legacyForm: true,
+    },
   });
 });

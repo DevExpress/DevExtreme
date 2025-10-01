@@ -20,7 +20,7 @@ const endDateTimeZoneValue = '(GMT -08:00) US - Alaska';
 
 test('TimeZone editors should be have data after hide forms data(T1080932)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
 
@@ -37,6 +37,7 @@ test('TimeZone editors should be have data after hide forms data(T1080932)', asy
     },
     editing: {
       allowTimeZoneEditing: true,
+      legacyForm: true,
     },
     recurrenceEditMode: 'series',
     views: ['month'],
@@ -52,7 +53,7 @@ test('TimeZone editors should be have data in default case(T1080932)', async (t)
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
 
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element);
 
@@ -66,6 +67,7 @@ test('TimeZone editors should be have data in default case(T1080932)', async (t)
     dataSource,
     editing: {
       allowTimeZoneEditing: true,
+      legacyForm: true,
     },
     recurrenceEditMode: 'series',
     views: ['month'],

@@ -89,7 +89,10 @@ const createScheduler = (options = {}) => {
         firstDayOfWeek: 1,
         startDayHour: 9,
         height: 600,
-        width: 600
+        width: 600,
+        editing: {
+            legacyForm: true,
+        }
     };
 
     return createWrapper($.extend(defaultOption, options));

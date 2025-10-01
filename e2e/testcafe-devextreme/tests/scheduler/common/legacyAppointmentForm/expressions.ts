@@ -20,9 +20,9 @@ const getDataSourceValues = ClientFunction(() => ($(SCHEDULER_SELECTOR) as any)
 const TEXT_TEST_CASES = {
   editor: 'text',
   errorMessage: 'appointment\'s text incorrect',
-  getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.subjectElement().value,
+  getValue: async (scheduler: Scheduler) => scheduler.legacyAppointmentPopup.subjectElement().value,
   setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
-    .typeText(scheduler.appointmentPopup.subjectElement, value, { replace: true }),
+    .typeText(scheduler.legacyAppointmentPopup.subjectElement, value, { replace: true }),
   setTestValue: '???',
   expectedValue: TEST_TITLE,
   cases: [
@@ -72,9 +72,10 @@ const TEXT_TEST_CASES = {
 const DESCRIPTION_TEST_CASES = {
   editor: 'description',
   errorMessage: 'appointment\'s description incorrect',
-  getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.descriptionElement().value,
+  getValue: async (scheduler: Scheduler) => scheduler
+    .legacyAppointmentPopup.descriptionElement().value,
   setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
-    .typeText(scheduler.appointmentPopup.descriptionElement, value, { replace: true }),
+    .typeText(scheduler.legacyAppointmentPopup.descriptionElement, value, { replace: true }),
   setTestValue: '???',
   expectedValue: TEST_DESCRIPTION,
   cases: [
@@ -127,9 +128,10 @@ const DESCRIPTION_TEST_CASES = {
 const START_DATE_TEST_CASES = {
   editor: 'startDate',
   errorMessage: 'appointment\'s startDate incorrect',
-  getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.startDateElement().value,
+  getValue: async (scheduler: Scheduler) => scheduler
+    .legacyAppointmentPopup.startDateElement().value,
   setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
-    .typeText(scheduler.appointmentPopup.startDateElement, value, { replace: true }),
+    .typeText(scheduler.legacyAppointmentPopup.startDateElement, value, { replace: true }),
   setTestValue: '10/10/2020, 01:00 AM',
   expectedValue: '12/10/2023, 10:00 AM',
   cases: [
@@ -179,9 +181,9 @@ const START_DATE_TEST_CASES = {
 const END_DATE_TEST_CASES = {
   editor: 'endDate',
   errorMessage: 'appointment\'s endDate incorrect',
-  getValue: async (scheduler: Scheduler) => scheduler.appointmentPopup.endDateElement().value,
+  getValue: async (scheduler: Scheduler) => scheduler.legacyAppointmentPopup.endDateElement().value,
   setValue: async (t: TestController, scheduler: Scheduler, value: string) => t
-    .typeText(scheduler.appointmentPopup.endDateElement, value, { replace: true }),
+    .typeText(scheduler.legacyAppointmentPopup.endDateElement, value, { replace: true }),
   setTestValue: '10/10/2020, 01:00 AM',
   expectedValue: '12/10/2023, 2:00 PM',
   cases: [
@@ -232,12 +234,12 @@ const ALL_DAY_TEST_CASES = {
   editor: 'allDay',
   errorMessage: 'appointment\'s allDay incorrect',
   getValue: async (scheduler: Scheduler) => scheduler
-    .appointmentPopup.getAllDaySwitchValue(),
+    .legacyAppointmentPopup.getAllDaySwitchValue(),
   setValue: async (t: TestController, scheduler: Scheduler, value: string) => {
-    const currentValue = await scheduler.appointmentPopup.getAllDaySwitchValue();
+    const currentValue = await scheduler.legacyAppointmentPopup.getAllDaySwitchValue();
 
     if (currentValue !== value) {
-      await t.click(scheduler.appointmentPopup.allDayElement);
+      await t.click(scheduler.legacyAppointmentPopup.allDayElement);
     }
   },
   setTestValue: 'false',
@@ -294,8 +296,8 @@ const ALL_DAY_TEST_CASES = {
 const START_DATE_TIME_ZONE_TEST_CASES = {
   editor: 'startDateTimeZone',
   errorMessage: 'appointment\'s startDateTimeZone incorrect',
-  getValue: async (scheduler: Scheduler) => scheduler
-    .appointmentPopup.startDateTimeZoneElement().value,
+  // eslint-disable-next-line @stylistic/max-len
+  getValue: async (scheduler: Scheduler) => scheduler.legacyAppointmentPopup.startDateTimeZoneElement().value,
   expectedValue: '(GMT -01:00) Etc - GMT+1',
   cases: [
     {
@@ -357,7 +359,7 @@ const END_DATE_TIME_ZONE_TEST_CASES = {
   editor: 'endDateTimeZone',
   errorMessage: 'appointment\'s endDateTimeZone incorrect',
   getValue: async (scheduler: Scheduler) => scheduler
-    .appointmentPopup.endDateTimeZoneElement().value,
+    .legacyAppointmentPopup.endDateTimeZoneElement().value,
   expectedValue: '(GMT -02:00) Etc - GMT+2',
   cases: [
     {
@@ -419,7 +421,7 @@ const RECURRENCE_RULE_TEST_CASES = {
   editor: 'recurrenceRule',
   errorMessage: 'appointment\'s recurrenceRule incorrect',
   getValue: async (scheduler: Scheduler) => scheduler
-    .appointmentPopup.getRecurrenceRuleSwitchValue(),
+    .legacyAppointmentPopup.getRecurrenceRuleSwitchValue(),
   expectedValue: 'true',
   cases: [
     {
@@ -508,6 +510,10 @@ const RECURRENCE_RULE_TEST_CASES = {
         currentDate: '2023-12-10',
         cellDuration: 240,
         ...options,
+        editing: {
+          legacyForm: true,
+          ...options.editing,
+        },
       });
     });
   });
@@ -539,7 +545,7 @@ const RECURRENCE_RULE_TEST_CASES = {
 
       await t.doubleClick(appointment.element);
       await setValue(t, scheduler, setTestValue);
-      await t.click(scheduler.appointmentPopup.cancelButton);
+      await t.click(scheduler.legacyAppointmentPopup.cancelButton);
 
       const dataSource = await getDataSourceValues();
 
@@ -549,6 +555,10 @@ const RECURRENCE_RULE_TEST_CASES = {
         currentDate: '2023-12-10',
         cellDuration: 240,
         ...options,
+        editing: {
+          legacyForm: true,
+          ...options.editing,
+        },
       });
     });
   });
@@ -562,11 +572,11 @@ test(
     const appointment = scheduler.getAppointment(TEST_TITLE);
 
     await t.doubleClick(appointment.element);
-    await t.expect(scheduler.appointmentPopup.form.exists).ok();
+    await t.expect(scheduler.legacyAppointmentPopup.form.exists).ok();
 
     await takeScreenshot(
       'form_recurrence-editor-first-opening_nested-expr.png',
-      scheduler.appointmentPopup.content,
+      scheduler.legacyAppointmentPopup.content,
     );
 
     await t.expect(compareResults.isValid())
@@ -592,5 +602,8 @@ test(
     cellDuration: 240,
     recurrenceEditMode: 'series',
     recurrenceRuleExpr: 'nestedA.nestedB.nestedC.recurrenceRuleCustom',
+    editing: {
+      legacyForm: true,
+    },
   });
 });

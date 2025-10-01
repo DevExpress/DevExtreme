@@ -7,7 +7,7 @@ fixture.disablePageReloads`Appointment popup form:date editors`
 
 test('Form date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
@@ -51,11 +51,14 @@ test('Form date editors should be pass numeric chars according by date mask', as
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
+  editing: {
+    legacyForm: true,
+  },
 }));
 
 test('Form date editors should not be pass chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
@@ -99,11 +102,14 @@ test('Form date editors should not be pass chars according by date mask', async 
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
+  editing: {
+    legacyForm: true,
+  },
 }));
 
 test('Form date editors should not be pass chars after remove all characters according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getAppointment('Website Re-Design Plan').element);
@@ -123,7 +129,7 @@ test('Form date editors should not be pass chars after remove all characters acc
 
   await t
     .click(appointmentPopup.endDateElement)
-    .selectText(scheduler.appointmentPopup.endDateElement)
+    .selectText(appointmentPopup.endDateElement)
     .pressKey('backspace')
 
     .typeText(appointmentPopup.endDateElement, 'TEXT')
@@ -159,4 +165,7 @@ test('Form date editors should not be pass chars after remove all characters acc
   currentDate: new Date(2021, 2, 28),
   startDayHour: 9,
   height: 600,
+  editing: {
+    legacyForm: true,
+  },
 }));

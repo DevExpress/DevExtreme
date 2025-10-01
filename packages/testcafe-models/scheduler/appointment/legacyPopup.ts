@@ -1,7 +1,7 @@
 import { Selector, ClientFunction } from 'testcafe';
 
 export const CLASS = {
-  appointmentPopup: 'dx-scheduler-appointment-popup',
+  appointmentPopup: 'dx-scheduler-legacy-appointment-popup',
   popup: 'dx-popup',
   popupWrapper: 'dx-popup-wrapper',
   popupContent: 'dx-overlay-content',
@@ -38,7 +38,7 @@ export const SELECTORS = {
   repeatCountInput: '.dx-recurrence-numberbox-repeat-count input[type="text"]',
 };
 
-export default class AppointmentPopup {
+export default class LegacyAppointmentPopup {
   element = this.scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
 
   form = Selector(`.${CLASS.form}`);

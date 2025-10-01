@@ -10,7 +10,7 @@ test('Subject and description fields should be empty after showing popup on empt
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';
 
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
     .expect(appointmentPopup.subjectElement.value)
@@ -57,7 +57,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
     .expect(Selector(TEXT_EDITOR_CLASS).value)
     .eql(APPOINTMENT_TEXT)
 
-    .click(scheduler.appointmentPopup.cancelButton)
+    .click(scheduler.legacyAppointmentPopup.cancelButton)
 
     .click(scheduler.getAppointment(APPOINTMENT_TEXT).element)
     .click(scheduler.appointmentTooltip.getListItem(APPOINTMENT_TEXT).element)
@@ -102,7 +102,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
   const APPOINTMENT_TEXT = 'Google AdWords Strategy';
 
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
@@ -142,7 +142,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
 test('From elements for disabled appointments should be read only (T835731)', async (t) => {
   const APPOINTMENT_TEXT = 'Install New Router in Dev Room';
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
     .expect(appointmentPopup.freqElement.hasClass('dx-state-readonly')).ok()
@@ -178,7 +178,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
 
 test('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getDateTableCell(2, 4))

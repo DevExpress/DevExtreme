@@ -10,19 +10,19 @@ fixture`AppointmentForm screenshot tests`
 ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
   test('Appointemt form tests', async (t) => {
     const scheduler = new Scheduler('#container');
-    const { appointmentPopup } = scheduler;
+    const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
       .doubleClick(scheduler.getDateTableCell(0, 0))
-      .expect(await takeScreenshot(`initial-form_${theme}.png`, scheduler.appointmentPopup.content))
+      .expect(await takeScreenshot(`initial-form_${theme}.png`, appointmentPopup.content))
       .ok()
 
       .click(appointmentPopup.allDayElement)
       .click(appointmentPopup.recurrenceElement)
 
-      .expect(await takeScreenshot(`allday-and-reccurence-form_${theme}.png`, scheduler.appointmentPopup.content))
+      .expect(await takeScreenshot(`allday-and-reccurence-form_${theme}.png`, appointmentPopup.content))
       .ok()
 
       .expect(compareResults.isValid())
@@ -31,6 +31,7 @@ fixture`AppointmentForm screenshot tests`
     await changeTheme(theme);
     await createWidget('dxScheduler', {
       currentDate: new Date(2021, 1, 1),
+      editing: { legacyForm: true },
     });
   }).after(async () => {
     await changeTheme('generic.light');

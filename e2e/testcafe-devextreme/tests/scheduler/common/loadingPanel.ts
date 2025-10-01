@@ -18,9 +18,9 @@ test('Save appointment loading panel screenshot', async (t) => {
 
   await t
     .doubleClick(appointment.element)
-    .click(appointmentPopup.subjectElement)
-    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
-    .click(appointmentPopup.doneButton)
+    .click(appointmentPopup.textEditor.element)
+    .typeText(appointmentPopup.textEditor.element, ADDITIONAL_TITLE_TEXT)
+    .click(appointmentPopup.saveButton.element)
     // act
     .expect(await takeScreenshot('save-appointment-loading-panel-screenshot.png', scheduler.element))
     .ok()

@@ -21,11 +21,11 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement)
-    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
-    .expect(appointmentPopup.subjectElement.value)
+    .click(appointmentPopup.textEditor.element)
+    .typeText(appointmentPopup.textEditor.element, ADDITIONAL_TITLE_TEXT)
+    .expect(appointmentPopup.textEditor.element.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton)
+    .click(appointmentPopup.saveButton.element)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -51,11 +51,11 @@ test('Should correctly update appointment if dataSource is a Store with key arra
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.subjectElement)
-    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
-    .expect(appointmentPopup.subjectElement.value)
+    .click(appointmentPopup.textEditor.element)
+    .typeText(appointmentPopup.textEditor.element, ADDITIONAL_TITLE_TEXT)
+    .expect(appointmentPopup.textEditor.element.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.doneButton)
+    .click(appointmentPopup.saveButton.element)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => {
@@ -100,7 +100,7 @@ test('Appointment EditForm screenshot', async (t) => {
     .expect(await takeScreenshot('appointment-popup-screenshot.png', appointment.element))
     .ok()
     // assert
-    .expect(scheduler.appointmentPopup.element.exists)
+    .expect(scheduler.appointmentPopup.popup.element.exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

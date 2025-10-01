@@ -28,5 +28,8 @@ test('Appointment popup shouldn\'t raise error if appointment is recursive', asy
     currentView: 'month',
     currentDate: new Date(2020, 10, 25),
     height: 600,
+    editing: {
+      legacyForm: true,
+    },
   });
 });

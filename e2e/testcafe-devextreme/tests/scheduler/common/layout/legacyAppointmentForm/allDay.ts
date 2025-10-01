@@ -9,6 +9,7 @@ fixture.disablePageReloads`Layout:AppointmentForm:AllDay`
 test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .click(scheduler.getAppointment('Text').element)
@@ -18,12 +19,12 @@ test('Start and end dates should be reflect the current day(appointment is alrea
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDayElement)
     .expect(await takeScreenshot('appointment-form-after-click-all-day.png'))
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.doneButton)
+    .click(appointmentPopup.doneButton)
     .expect(await takeScreenshot('all-day-appointment-on-tables.png'))
     .ok();
 
@@ -35,7 +36,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDayElement)
     .expect(await takeScreenshot('appointment-form-after-switch-off-all-day.png'))
     .ok();
 
@@ -48,6 +49,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
       startDate: new Date(2021, 3, 28, 10),
       endDate: new Date(2021, 3, 28, 12),
     }],
+    editing: { legacyForm: true },
     views: ['week'],
     currentView: 'week',
     currentDate: new Date(2021, 3, 29),
@@ -59,6 +61,7 @@ test('Start and end dates should be reflect the current day(appointment is alrea
 test('Start and end dates should be reflect the current day(create new appointment case)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(scheduler.getDateTableCell(2, 3))
@@ -66,12 +69,12 @@ test('Start and end dates should be reflect the current day(create new appointme
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDayElement)
     .expect(await takeScreenshot('new-appointment-form-after-click-all-day.png'))
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.doneButton)
+    .click(appointmentPopup.doneButton)
     .expect(await takeScreenshot('new-all-day-appointment-on-tables.png'))
     .ok();
 
@@ -83,7 +86,7 @@ test('Start and end dates should be reflect the current day(create new appointme
     .ok();
 
   await t
-    .click(scheduler.appointmentPopup.allDayElement)
+    .click(appointmentPopup.allDayElement)
     .expect(await takeScreenshot('new-appointment-form-after-switch-off-all-day.png'))
     .ok();
 
@@ -93,6 +96,7 @@ test('Start and end dates should be reflect the current day(create new appointme
   await createWidget('dxScheduler', {
     dataSource: [],
     views: ['week'],
+    editing: { legacyForm: true },
     currentView: 'week',
     currentDate: new Date(2021, 3, 29),
     startDayHour: 9,
@@ -102,7 +106,7 @@ test('Start and end dates should be reflect the current day(create new appointme
 
 test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async (t) => {
   const scheduler = new Scheduler('#container');
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -121,4 +125,5 @@ test('StartDate and endDate should have correct type after "allDay" and "repeat"
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2021, 1, 1),
+  editing: { legacyForm: true },
 }));

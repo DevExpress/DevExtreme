@@ -122,8 +122,8 @@ test('Wrong behavior: editing recurrence appointment does not affect to appointm
 
   await t.doubleClick(scheduler.getAppointment('Test').element);
   await t
-    .typeText(scheduler.appointmentPopup.subjectElement, 'Updated', { replace: true })
-    .click(scheduler.appointmentPopup.doneButton);
+    .typeText(scheduler.appointmentPopup.textEditor.element, 'Updated', { replace: true })
+    .click(scheduler.appointmentPopup.saveButton.element);
 
   await t.expect(scheduler.getAppointment('Updated').element.exists).notOk();
   // TODO: In correct behavior, expected assert is ok()

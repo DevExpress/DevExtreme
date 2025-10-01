@@ -57,7 +57,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
       .click(appointment.element)
       .expect(appointment.isFocused).ok()
       .pressKey('enter')
-      .expect(appointmentPopup.isVisible())
+      .expect(appointmentPopup.popup.isVisible())
       .ok();
   }).before(async () => createScheduler({
     views: [view],
@@ -83,7 +83,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
       .pressKey('enter')
       .expect(appointmentTooltip.isVisible())
       .notOk()
-      .expect(appointmentPopup.isVisible())
+      .expect(appointmentPopup.popup.isVisible())
       .ok();
   }).before(async () => createScheduler({
     views: [view],

@@ -183,7 +183,8 @@ module('Common', moduleConfig, () => {
                     currentView: 'day',
                     firstDayOfWeek: 1,
                     dataSource: [config.appointment],
-                    timeZone: config.schedulerTimeZone
+                    timeZone: config.schedulerTimeZone,
+                    editing: config.editing,
                 });
 
                 assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
@@ -200,15 +201,17 @@ module('Common', moduleConfig, () => {
 
             cases.forEach(config => {
                 test(`Appointment should have correct size, position and popup content if ${config.caseName}`, async function(assert) {
+                    const schedulerOptions = { ...config, editing: { legacyForm: true } };
+
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
-                            await runTest(config, assert);
+                            await runTest(schedulerOptions, assert);
                         } finally {
                             tzOffsetStub.restore();
                         }
                     } else {
-                        await runTest(config, assert);
+                        await runTest(schedulerOptions, assert);
                     }
                 });
             });
@@ -306,6 +309,7 @@ module('Common', moduleConfig, () => {
                             allowTimeZoneEditing: true,
                             allowAdding: true,
                             allowUpdating: true,
+                            legacyForm: true,
                         },
                         height: 600,
                         appointmentDragging: {
@@ -1776,7 +1780,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ timeZone: timeZones.NewYork }); // -4 offset
+                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, editing: { legacyForm: true } }); // -4 offset
 
                 scheduler.appointments.dblclick(index);
 
@@ -1804,7 +1808,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler();
+                const scheduler = await createScheduler({ editing: { legacyForm: true } });
 
                 scheduler.appointments.dblclick(index);
 
@@ -1835,6 +1839,9 @@ module('Appointment popup', moduleConfig, () => {
                     dataSource: new DataSource({
                         store: [appointment]
                     }),
+                    editing: {
+                        legacyForm: true,
+                    },
                     currentDate: new Date(2015, 3, 23),
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
@@ -1852,7 +1859,7 @@ module('Appointment popup', moduleConfig, () => {
             });
     });
 
-    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set',
+    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set, legacyForm',
         async function(assert) {
             const scheduler = await createWrapper({
                 dataSource: new DataSource({
@@ -1861,7 +1868,8 @@ module('Appointment popup', moduleConfig, () => {
                 currentDate: new Date(2015, 3, 23),
                 startDateExpr: 'Start',
                 endDateExpr: 'End',
-                timeZone: 'Asia/Calcutta'
+                timeZone: 'Asia/Calcutta',
+                editing: { legacyForm: true }
             });
 
             pointerMock(scheduler.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
