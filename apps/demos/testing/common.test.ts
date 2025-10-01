@@ -65,10 +65,11 @@ FRAMEWORKS.forEach((approach) => {
       t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
       await t.resizeWindow(1000, 800);
     })
-    .afterEach((t) => clearTimeout(t.ctx.watchDogHandle))
+    .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
     .clientScripts([
       { module: 'mockdate' },
       { module: 'axe-core/axe.min.js' },
+      // @ts-expect-error Type 'string' is not assignable to type 'ClientScript'
       join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
       { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css')) },
       {
@@ -93,8 +94,8 @@ FRAMEWORKS.forEach((approach) => {
     const testName = `${widgetName}-${demoName}`;
 
     const clientScriptSource = readFrom('../client-script.js', (x) => [{ content: x }]) || [];
-    const testCodeSource = readFrom('../test-code.js');
-    const testCafeCodeSource = readFrom('../testcafe-test-code.js');
+    const testCodeSource = readFrom('../test-code.js', (x) => x);
+    const testCafeCodeSource = readFrom('../testcafe-test-code.js', (x) => x);
     const visualTestSettings = readFrom('../visualtestrc.json', (x) => JSON.parse(x));
     const visualTestStyles = readFrom('../test-styles.css', (x) => injectStyle(x));
 

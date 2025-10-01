@@ -9,7 +9,8 @@
     "moduleResolution": "node",
   },
   "include": [
-    "utils/**/*.ts"
+    "utils/**/*.ts",
+    "testing/**/*.ts"
   ],
   "exclude": [
     "utils/templates/Vue/index.ts"
