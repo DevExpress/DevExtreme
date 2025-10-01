@@ -98,6 +98,14 @@
         <span>Animation</span>
       </div>
     </div>
+    <DxToast
+      :visible="toastVisible"
+      message="The browser does not support Web Speech API (SpeechRecognition)."
+      type="error"
+      :display-time="100000"
+      position="bottom center"
+      width="auto"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -107,7 +115,15 @@ import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxSwitch } from 'devextreme-vue/switch';
+import { DxToast } from 'devextreme-vue/toast';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
+
+declare global {
+  interface Window {
+    SpeechRecognition?: any;
+    webkitSpeechRecognition?: any;
+  }
+}
 
 let state = 'initial';
 const startText = ref('');
@@ -122,6 +138,7 @@ const language = ref(languages[0]);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
+const toastVisible = ref(!window.SpeechRecognition && !window.webkitSpeechRecognition);
 const speechRecognitionConfig = computed(() => ({
   interimResults: interimResults.value,
   continuous: continuous.value,

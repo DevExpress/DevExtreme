@@ -149,4 +149,13 @@ $(() => {
       speechToText.$element().toggleClass('animation-disabled', !value);
     },
   });
+
+  $('#toast').dxToast({
+    visible: !window.SpeechRecognition && !window.webkitSpeechRecognition,
+    message: 'The browser does not support Web Speech API (SpeechRecognition).',
+    type: 'error',
+    displayTime: 100000,
+    position: 'bottom center',
+    width: 'auto',
+  });
 });

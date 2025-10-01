@@ -6,8 +6,16 @@ import { DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { DxSwitchModule } from 'devextreme-angular/ui/switch';
+import { DxToastModule } from 'devextreme-angular/ui/toast';
 
 import { AppService } from './app.service';
+
+declare global {
+  interface Window {
+    SpeechRecognition?: any;
+    webkitSpeechRecognition?: any;
+  }
+}
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -63,6 +71,8 @@ export class AppComponent {
 
   speechRecognitionConfig: Record<string, unknown>;
 
+  toastVisible: boolean;
+
   constructor(private readonly appService: AppService) {
     this.state = 'initial';
     this.startText = '';
@@ -82,6 +92,7 @@ export class AppComponent {
     this.interimResults = true;
     this.continuous = false;
     this.animation = true;
+    this.toastVisible = !window.SpeechRecognition && !window.webkitSpeechRecognition;
     this.updateSpeechRecognitionConfig();
   }
 
@@ -152,6 +163,7 @@ export class AppComponent {
     DxButtonModule,
     DxSelectBoxModule,
     DxSwitchModule,
+    DxToastModule,
   ],
   declarations: [AppComponent],
   providers: [AppService],

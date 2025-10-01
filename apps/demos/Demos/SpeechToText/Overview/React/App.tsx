@@ -4,7 +4,15 @@ import { TextArea } from 'devextreme-react/text-area';
 import { Button, ButtonTypes } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
+import { Toast } from 'devextreme-react/toast';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
+
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 let state = 'initial';
 const textAreaLabel = { 'aria-label': 'Recognized Text' };
@@ -131,6 +139,7 @@ export default function App() {
           speechRecognitionConfig={speechRecognitionConfig}
           disabled={disabled}
           onStartClick={onStartClick}
+          onStopClick={onEnd}
           onEnd={onEnd}
           onResult={onResult}
         />
@@ -218,6 +227,14 @@ export default function App() {
           <span>Animation</span>
         </div>
       </div>
+      <Toast
+        visible={!window.SpeechRecognition && !window.webkitSpeechRecognition}
+        message='The browser does not support Web Speech API (SpeechRecognition).'
+        type='error'
+        displayTime={100000}
+        position='bottom center'
+        width='auto'
+      />
     </div>
   );
 }
