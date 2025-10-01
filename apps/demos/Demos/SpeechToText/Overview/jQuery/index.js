@@ -11,6 +11,17 @@ $(() => {
         continuous: false,
       },
       onStartClick: ({ component }) => {
+        if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+          DevExpress.ui.notify({
+            message: 'The browser does not support Web Speech API (SpeechRecognition).',
+            type: 'error',
+            displayTime: 7000,
+            position: 'bottom center',
+            width: 'auto',
+          });
+          return;
+        }
+
         state = 'listening';
         component.option('hint', 'Stop voice recognition');
         if (!shouldUpdateType()) {
@@ -148,14 +159,5 @@ $(() => {
     onValueChanged: ({ value }) => {
       speechToText.$element().toggleClass('animation-disabled', !value);
     },
-  });
-
-  $('#toast').dxToast({
-    visible: !window.SpeechRecognition && !window.webkitSpeechRecognition,
-    message: 'The browser does not support Web Speech API (SpeechRecognition).',
-    type: 'error',
-    displayTime: 100000,
-    position: 'bottom center',
-    width: 'auto',
   });
 });

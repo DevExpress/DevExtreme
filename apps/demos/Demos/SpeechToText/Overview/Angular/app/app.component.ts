@@ -6,7 +6,7 @@ import { DxTextAreaModule } from 'devextreme-angular/ui/text-area';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { DxSwitchModule } from 'devextreme-angular/ui/switch';
-import { DxToastModule } from 'devextreme-angular/ui/toast';
+import notify from 'devextreme/ui/notify';
 
 import { AppService } from './app.service';
 
@@ -97,6 +97,17 @@ export class AppComponent {
   }
 
   onStartClick() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      notify({
+        message: 'The browser does not support Web Speech API (SpeechRecognition).',
+        type: 'error',
+        displayTime: 7000,
+        position: 'bottom center',
+        width: 'auto',
+      });
+      return;
+    }
+
     this.state = 'listening';
     this.hint = 'Stop voice recognition';
     if (this.displayMode !== 'Custom') {
@@ -163,7 +174,6 @@ export class AppComponent {
     DxButtonModule,
     DxSelectBoxModule,
     DxSwitchModule,
-    DxToastModule,
   ],
   declarations: [AppComponent],
   providers: [AppService],

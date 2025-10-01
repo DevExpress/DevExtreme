@@ -4,7 +4,7 @@ import { TextArea } from 'devextreme-react/text-area';
 import { Button, ButtonTypes } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
-import { Toast } from 'devextreme-react/toast';
+import Notify from 'devextreme/ui/notify';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
 
 declare global {
@@ -41,6 +41,17 @@ export default function App() {
   };
 
   const onStartClick = useCallback(() => {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      Notify({
+        message: 'The browser does not support Web Speech API (SpeechRecognition).',
+        type: 'error',
+        displayTime: 7000,
+        position: 'bottom center',
+        width: 'auto',
+      });
+      return;
+    }
+
     state = 'listening';
     setHint('Stop voice recognition');
     if (displayMode !== 'Custom') {
@@ -227,14 +238,6 @@ export default function App() {
           <span>Animation</span>
         </div>
       </div>
-      <Toast
-        visible={!window.SpeechRecognition && !window.webkitSpeechRecognition}
-        message='The browser does not support Web Speech API (SpeechRecognition).'
-        type='error'
-        displayTime={100000}
-        position='bottom center'
-        width='auto'
-      />
     </div>
   );
 }
