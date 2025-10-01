@@ -130,7 +130,6 @@ const language = ref(languages[0]);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
-const toastVisible = ref(!window.SpeechRecognition && !window.webkitSpeechRecognition);
 const speechRecognitionConfig = computed(() => ({
   interimResults: interimResults.value,
   continuous: continuous.value,

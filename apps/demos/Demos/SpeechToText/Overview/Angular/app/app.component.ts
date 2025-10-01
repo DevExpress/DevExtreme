@@ -71,8 +71,6 @@ export class AppComponent {
 
   speechRecognitionConfig: Record<string, unknown>;
 
-  toastVisible: boolean;
-
   constructor(private readonly appService: AppService) {
     this.state = 'initial';
     this.startText = '';
@@ -92,7 +90,6 @@ export class AppComponent {
     this.interimResults = true;
     this.continuous = false;
     this.animation = true;
-    this.toastVisible = !window.SpeechRecognition && !window.webkitSpeechRecognition;
     this.updateSpeechRecognitionConfig();
   }
 
