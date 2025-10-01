@@ -844,7 +844,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     );
 
     this._itemRestrictions.forEach((pane) => {
-      pane.maxSize = undefined;
+      if (item.collapsed) pane.maxSize = undefined;
       pane.resizable = undefined;
     });
 

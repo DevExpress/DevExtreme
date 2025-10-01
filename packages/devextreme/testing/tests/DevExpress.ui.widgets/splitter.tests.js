@@ -882,6 +882,15 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['10.1626', '44.9187', '44.9187'] },
                 { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['27.5407', '27.5407', '44.9187'] },
             ]
+        },
+        {
+            items: [ { collapsible: true, collapsedSize: 50, size: 100, minSize: 100, maxSize: 100 }, { collapsible: true, size: 100 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['5', '95'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['10.0806', '89.9194'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['100', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['10.0806', '89.9194'] },
+            ],
         }
     ].forEach(({ items, scenarios }) => {
         QUnit.test(`The pane should restore its size after collapsing and expanding by click, items: ${JSON.stringify(items)}`, function(assert) {
