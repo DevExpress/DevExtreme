@@ -9,6 +9,7 @@
     "moduleResolution": "node",
   },
   "include": [
-    "utils/**/*.ts"
+    "utils/**/*.ts",
+    "testing/**/*.ts"
   ]
 }

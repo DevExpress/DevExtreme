@@ -17,7 +17,7 @@ runManualTest('List', 'Selection', (test) => {
   test('Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const optionsContainer = await Selector('.options');
+    const optionsContainer = Selector('.options');
     const selectAllCheckbox = optionsContainer.find(`.${CHECKBOX_ICON_CLASS}`);
 
     await t.click(selectAllCheckbox.nth(0));
