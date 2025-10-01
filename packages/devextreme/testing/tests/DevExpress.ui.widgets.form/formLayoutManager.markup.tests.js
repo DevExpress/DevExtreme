@@ -208,125 +208,134 @@ QUnit.module('Layout manager', () => {
         assert.equal($button.length, 1, 'field item label with button is rendered');
     });
 
-    test('Default render with marks', function(assert) {
-        const $testContainer = $('#container').dxLayoutManager({
-            items: [{
-                dataField: 'name',
-                editorType: 'dxTextBox',
-                isRequired: true
-            }, {
-                dataField: 'address',
-                editorType: 'dxTextBox'
-            }]
+    QUnit.module('Label marks', () => {
+        const getRequiredMark = ($item) => $item.find(`.${FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+        const getOptionalMark = ($item) => $item.find(`.${FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+        test('Default render with marks', function(assert) {
+            const $testContainer = $('#container').dxLayoutManager({
+                items: [{
+                    dataField: 'name',
+                    editorType: 'dxTextBox',
+                    isRequired: true
+                }, {
+                    dataField: 'address',
+                    editorType: 'dxTextBox'
+                }]
+            });
+            const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
+
+            assert.equal($items.length, 2, 'field items is rendered');
+
+            const $requiredItem = $items.eq(0);
+            const $optionalItem = $items.eq(1);
+
+            assert.ok($requiredItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item has required class');
+            assert.ok(!$requiredItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item has not optional class');
+            assert.strictEqual(getRequiredMark($requiredItem).length, 1, 'field item has required mark');
+            assert.strictEqual(getOptionalMark($requiredItem).length, 0, 'field item hasn\'t optional mark');
+            assert.strictEqual(getRequiredMark($requiredItem).attr('aria-hidden'), 'true', 'required mark has aria-hidden=true attribute');
+
+            assert.ok(!$optionalItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item has not required class');
+            assert.ok($optionalItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item has optional class');
+            assert.strictEqual(getRequiredMark($optionalItem).length, 0, 'field item has not required mark');
+            assert.strictEqual(getOptionalMark($optionalItem).length, 0, 'field item has not optional mark');
         });
-        const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($items.length, 2, 'field items is rendered');
+        test('Show optional marks', function(assert) {
+            const $testContainer = $('#container').dxLayoutManager({
+                items: [{
+                    dataField: 'address',
+                    editorType: 'dxTextBox'
+                }],
+                showOptionalMark: true
+            });
+            const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
 
-        const $requiredItem = $items.eq(0);
-        const $optionalItem = $items.eq(1);
+            assert.equal($items.length, 1, 'field items is rendered');
 
-        assert.ok($requiredItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item has required class');
-        assert.ok(!$requiredItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item hasn\'t optional class');
-        assert.ok($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).length, 'field item has required mark');
-        assert.ok(!$requiredItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).length, 'field item hasn\'t optional mark');
+            const $optionalItem = $items.eq(0);
 
-
-        assert.ok(!$optionalItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item hasn\'t required class');
-        assert.ok($optionalItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item has optional class');
-        assert.ok(!$optionalItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).length, 'field item hasn\'t required mark');
-        assert.ok(!$optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).length, 'field item hasn\'t optional mark');
-    });
-
-    test('Show optional marks', function(assert) {
-        const $testContainer = $('#container').dxLayoutManager({
-            items: [{
-                dataField: 'address',
-                editorType: 'dxTextBox'
-            }],
-            showOptionalMark: true
+            assert.ok(!$optionalItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item has not required class');
+            assert.ok($optionalItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item has optional class');
+            assert.strictEqual(getRequiredMark($optionalItem).length, 0, 'field item has not required mark');
+            assert.strictEqual(getOptionalMark($optionalItem).length, 1, 'field item has optional mark');
+            assert.strictEqual(getOptionalMark($optionalItem).attr('aria-hidden'), 'true', 'optional mark has aria-hidden=true attribute');
         });
-        const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($items.length, 1, 'field items is rendered');
+        test('Render custom marks', function(assert) {
+            const $testContainer = $('#container').dxLayoutManager({
+                showOptionalMark: true,
+                optionalMark: '-',
+                requiredMark: '+',
+                items: [{
+                    dataField: 'name',
+                    editorType: 'dxTextBox',
+                    isRequired: true
+                }, {
+                    dataField: 'address',
+                    editorType: 'dxTextBox'
+                }]
+            });
 
-        const $optionalItem = $items.eq(0);
-        assert.ok(!$optionalItem.hasClass(FIELD_ITEM_REQUIRED_CLASS), 'field item hasn\'t required class');
-        assert.ok($optionalItem.hasClass(FIELD_ITEM_OPTIONAL_CLASS), 'field item has optional class');
-        assert.ok(!$optionalItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).length, 'field item hasn\'t required mark');
-        assert.ok($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).length, 'field item hasn optional mark');
-    });
+            const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
+            const $requiredItem = $items.eq(0);
+            const $optionalItem = $items.eq(1);
 
-    test('Render custom marks', function(assert) {
-        const $testContainer = $('#container').dxLayoutManager({
-            showOptionalMark: true,
-            optionalMark: '-',
-            requiredMark: '+',
-            items: [{
-                dataField: 'name',
-                editorType: 'dxTextBox',
-                isRequired: true
-            }, {
-                dataField: 'address',
-                editorType: 'dxTextBox'
-            }]
+            assert.equal(getRequiredMark($requiredItem).text().trim(), '+', 'custom required mark');
+            assert.strictEqual(getRequiredMark($requiredItem).attr('aria-hidden'), 'true', 'required mark has aria-hidden=true attribute');
+            assert.equal(getOptionalMark($optionalItem).text().trim(), '-', 'custom optional mark');
+            assert.strictEqual(getOptionalMark($optionalItem).attr('aria-hidden'), 'true', 'optional mark has aria-hidden=true attribute');
         });
-        const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        const $requiredItem = $items.eq(0);
-        const $optionalItem = $items.eq(1);
+        test('Change marks', function(assert) {
+            const $testContainer = $('#container').dxLayoutManager({
+                showOptionalMark: true,
+                items: [{
+                    dataField: 'name',
+                    editorType: 'dxTextBox',
+                    isRequired: true
+                }, {
+                    dataField: 'address',
+                    editorType: 'dxTextBox'
+                }]
+            });
+            const instance = $testContainer.dxLayoutManager('instance');
 
-        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
-        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
-    });
+            instance.option('optionalMark', '-');
+            instance.option('requiredMark', '+');
 
-    test('Change marks', function(assert) {
-        const $testContainer = $('#container').dxLayoutManager({
-            showOptionalMark: true,
-            items: [{
-                dataField: 'name',
-                editorType: 'dxTextBox',
-                isRequired: true
-            }, {
-                dataField: 'address',
-                editorType: 'dxTextBox'
-            }]
+            const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
+            const $requiredItem = $items.eq(0);
+            const $optionalItem = $items.eq(1);
+
+            assert.equal(getRequiredMark($requiredItem).text().trim(), '+', 'custom required mark');
+            assert.equal(getOptionalMark($optionalItem).text().trim(), '-', 'custom optional mark');
         });
-        const instance = $testContainer.dxLayoutManager('instance');
 
-        instance.option('optionalMark', '-');
-        instance.option('requiredMark', '+');
+        test('Change marks visibility', function(assert) {
+            const $testContainer = $('#container').dxLayoutManager({
+                items: [{
+                    dataField: 'name',
+                    editorType: 'dxTextBox',
+                    isRequired: true
+                }, {
+                    dataField: 'address',
+                    editorType: 'dxTextBox'
+                }]
+            });
+            const instance = $testContainer.dxLayoutManager('instance');
 
-        const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
-        const $requiredItem = $items.eq(0);
-        const $optionalItem = $items.eq(1);
+            instance.option('showOptionalMark', true);
+            instance.option('showRequiredMark', false);
 
-        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
-        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
-    });
+            const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
+            const $requiredItem = $items.eq(0);
+            const $optionalItem = $items.eq(1);
 
-    test('Change marks visibility', function(assert) {
-        const $testContainer = $('#container').dxLayoutManager({
-            items: [{
-                dataField: 'name',
-                editorType: 'dxTextBox',
-                isRequired: true
-            }, {
-                dataField: 'address',
-                editorType: 'dxTextBox'
-            }]
+            assert.strictEqual(getRequiredMark($requiredItem).length, 0, 'Item has no required mark');
+            assert.strictEqual(getOptionalMark($optionalItem).length, 1, 'Item has optional mark');
         });
-        const instance = $testContainer.dxLayoutManager('instance');
-        const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
-
-        instance.option('showOptionalMark', true);
-        instance.option('showRequiredMark', false);
-
-        const $requiredItem = $items.eq(0);
-        const $optionalItem = $items.eq(1);
-
-        assert.ok($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).length, 'Item has no required mark');
-        assert.ok(!$optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).length, 'Item has optional mark');
     });
 
     test('Render read only layoutManager', function(assert) {
