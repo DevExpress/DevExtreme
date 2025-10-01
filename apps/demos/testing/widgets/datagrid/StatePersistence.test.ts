@@ -21,7 +21,7 @@ runManualTest('DataGrid', 'StatePersistence', (test) => {
 
     await testScreenshot(t, takeScreenshot, 'datagrid_state_persistence_2_desktop.png');
 
-    await t.eval(() => location.reload(true));
+    await t.eval(() => location.reload());
 
     await testScreenshot(t, takeScreenshot, 'datagrid_state_persistence_3_desktop.png');
 
