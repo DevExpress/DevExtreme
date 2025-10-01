@@ -167,7 +167,7 @@ function accessibilityTestCafeReporter() {
     appendAxeViolationsCount(reportData, browsers) {
       if (!reportData) { return; }
 
-      if (!Object.values(reportData).some((data) => data.length)) { return; }
+      if (!Object.values(reportData).some((data) => (data as any[]).length)) { return; }
 
       browsers.forEach(({ testRunId }) => {
         const browserReportData = reportData[testRunId];
@@ -211,6 +211,7 @@ async function main() {
   const reporters = [reporter];
 
   if (process.env.STRATEGY === 'accessibility') {
+    // @ts-expect-error types error
     reporters.push(accessibilityTestCafeReporter);
   }
 

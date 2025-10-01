@@ -22,6 +22,7 @@ const settings = {
 };
 
 // eslint-disable-next-line no-use-before-define
+// @ts-expect-error types error
 updateConfig();
 
 function shouldRunTestExplicitlyInternal(framework, product, demo) {
@@ -42,7 +43,7 @@ function patternGroupFromValues(product, demo, framework) {
 export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
   let demoAppCounter = 0;
   const demoAppIntervalHandle = setInterval(() => {
-    const demoApp = document.querySelector('demo-app');
+    const demoApp = document.querySelector('demo-app') as HTMLElement;
     if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
       setTimeout(resolve, 500);
       clearInterval(demoAppIntervalHandle);
@@ -60,6 +61,7 @@ export function getExplicitTestsFromArgs() {
   const result = { masks: [] };
   getInterestProcessArgs().forEach((argument) => {
     const parts = argument.split('-');
+    // @ts-expect-error types error
     result.masks.push(patternGroupFromValues(...parts));
   });
   return result.masks.length ? result : undefined;
@@ -69,6 +71,7 @@ export function getChangedFiles() {
   const changedFilesPath = process.env.CHANGEDFILEINFOSPATH;
   return changedFilesPath
     && existsSync(changedFilesPath)
+    // @ts-expect-error types error
     && JSON.parse(readFileSync(changedFilesPath));
 }
 
@@ -144,15 +147,18 @@ function getExplicitTestsInternal() {
 function getExplicitTests() {
   const result = getExplicitTestsInternal();
   if (result) {
+    // @ts-expect-error types error
     const oldToJSON = RegExp.prototype.toJSON;
     try {
       // Necessary for JSON.stringify call: by default RegExps will produce an empty string.
       // eslint-disable-next-line no-extend-native
+      // @ts-expect-error types error
       RegExp.prototype.toJSON = RegExp.prototype.toString;
       // eslint-disable-next-line no-console
       if (settings.verbose) { console.log('Test filters: \r\n', JSON.stringify(result, null, 2)); }
     } finally {
       // eslint-disable-next-line no-extend-native
+      // @ts-expect-error types error
       RegExp.prototype.toJSON = oldToJSON;
     }
   }

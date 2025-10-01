@@ -75,7 +75,7 @@ FRAMEWORKS.forEach((approach) => {
       { module: 'axe-core/axe.min.js' },
       // @ts-expect-error Type 'string' is not assignable to type 'ClientScript'
       join(__dirname, '../utils/visual-tests/inject/test-utils.js'),
-      { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css')) },
+      { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
       {
         content: `
           window.addEventListener('error', function (e) {
