@@ -32,7 +32,7 @@
     "@devextreme/runtime": "3.0.13",
     "devexpress-diagram": "2.2.18",
     "devexpress-gantt": "4.1.58",
-    "devextreme-quill": "1.7.2",
+    "devextreme-quill": "1.7.5",
     "showdown": "^2.1.0",
     "inferno": "^7.4.9",
     "inferno-create-element": "7.4.11",
