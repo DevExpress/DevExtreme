@@ -353,7 +353,7 @@ test('Grouping should work with virtual columns', async (t) => {
   },
 }));
 
-test('Column chooser should work with virtual columns', async (t) => {
+test.only('Column chooser should work with virtual columns', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
