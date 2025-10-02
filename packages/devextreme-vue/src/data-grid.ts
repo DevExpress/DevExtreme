@@ -239,6 +239,9 @@ import {
  Component,
 } from "devextreme/core/component";
 import {
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
+import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
@@ -2720,6 +2723,29 @@ const DxIcons = defineComponent(DxIconsConfig);
 
 (DxIcons as any).$_optionName = "icons";
 
+const DxIndicatorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:animationType": null,
+    "update:height": null,
+    "update:indicatorSrc": null,
+    "update:width": null,
+  },
+  props: {
+    animationType: String as PropType<LoadingAnimationType>,
+    height: [Number, String],
+    indicatorSrc: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxIndicatorOptionsConfig);
+
+const DxIndicatorOptions = defineComponent(DxIndicatorOptionsConfig);
+
+(DxIndicatorOptions as any).$_optionName = "indicatorOptions";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
@@ -2818,6 +2844,7 @@ const DxLoadPanelConfig = {
     "update:hoveredElement": null,
     "update:enabled": null,
     "update:height": null,
+    "update:indicatorOptions": null,
     "update:indicatorSrc": null,
     "update:shading": null,
     "update:shadingColor": null,
@@ -2829,6 +2856,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
+    indicatorOptions: Object,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,
@@ -2844,6 +2872,9 @@ prepareConfigurationComponentConfig(DxLoadPanelConfig);
 const DxLoadPanel = defineComponent(DxLoadPanelConfig);
 
 (DxLoadPanel as any).$_optionName = "loadPanel";
+(DxLoadPanel as any).$_expectedChildren = {
+  indicatorOptions: { isCollectionItem: false, optionName: "indicatorOptions" }
+};
 
 const DxLookupConfig = {
   emits: {
@@ -4112,6 +4143,7 @@ export {
   DxHeaderFilter,
   DxHide,
   DxIcons,
+  DxIndicatorOptions,
   DxItem,
   DxKeyboardNavigation,
   DxLabel,

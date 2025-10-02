@@ -19,6 +19,7 @@ import {
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { event } from 'devextreme/events/events.types';
+import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
 
@@ -45,6 +46,7 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoIndicatorOptionsModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLoadPanelAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelAtModule } from 'devextreme-angular/ui/load-panel/nested';
@@ -52,6 +54,7 @@ import { DxoLoadPanelBoundaryOffsetModule } from 'devextreme-angular/ui/load-pan
 import { DxoLoadPanelCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelIndicatorOptionsModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelMyModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
@@ -211,7 +214,22 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 
     /**
+     * [descr:dxLoadPanelOptions.indicatorOptions]
+    
+     */
+    @Input()
+    get indicatorOptions(): LoadIndicatorOptions {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadIndicatorOptions) {
+        this._setOption('indicatorOptions', value);
+    }
+
+
+    /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
+    
+     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
     
      */
     @Input()
@@ -543,6 +561,13 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() indicatorOptionsChange: EventEmitter<LoadIndicatorOptions>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() indicatorSrcChange: EventEmitter<string>;
 
     /**
@@ -677,6 +702,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
             { emit: 'hideOnParentScrollChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'indicatorOptionsChange' },
             { emit: 'indicatorSrcChange' },
             { emit: 'maxHeightChange' },
             { emit: 'maxWidthChange' },
@@ -722,12 +748,14 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoIndicatorOptionsModule,
     DxoLoadPanelAnimationModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,
     DxoLoadPanelCollisionModule,
     DxoLoadPanelFromModule,
     DxoLoadPanelHideModule,
+    DxoLoadPanelIndicatorOptionsModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
     DxoLoadPanelPositionModule,
@@ -749,12 +777,14 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoIndicatorOptionsModule,
     DxoLoadPanelAnimationModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,
     DxoLoadPanelCollisionModule,
     DxoLoadPanelFromModule,
     DxoLoadPanelHideModule,
+    DxoLoadPanelIndicatorOptionsModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
     DxoLoadPanelPositionModule,

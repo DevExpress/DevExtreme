@@ -15,6 +15,7 @@ import {
 
 
 import { Mode } from 'devextreme/common';
+import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
 
 import {
     DxIntegrationModule,
@@ -46,6 +47,14 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
     }
     set height(value: number | string) {
         this._setOption('height', value);
+    }
+
+    @Input()
+    get indicatorOptions(): LoadIndicatorOptions {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadIndicatorOptions) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()

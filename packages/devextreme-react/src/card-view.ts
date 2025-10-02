@@ -24,7 +24,9 @@ import type { Format as LocalizationFormat } from "devextreme/common/core/locali
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { AIIntegration } from "devextreme/common/ai-integration";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
 import type { event } from "devextreme/events/events.types";
+import type { LoadIndicatorOptions } from "UNKNOWN_MODULE";
 
 import type dxForm from "devextreme/ui/form";
 import type DataSource from "devextreme/data/data_source";
@@ -1662,6 +1664,27 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 });
 
 // owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  indicatorSrc?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
+  componentType: "option",
+});
+
+// owners:
 // CardHeader
 // TabPanelOptions
 // Form
@@ -1842,6 +1865,7 @@ type ILoadPanelProps = React.PropsWithChildren<{
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
+  indicatorOptions?: LoadIndicatorOptions;
   indicatorSrc?: string;
   maxHeight?: number | string;
   maxWidth?: number | string;
@@ -1881,6 +1905,7 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
       },
       ExpectedChildren: {
         animation: { optionName: "animation", isCollectionItem: false },
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false },
         position: { optionName: "position", isCollectionItem: false }
       },
     },
@@ -2911,6 +2936,8 @@ export {
   IHeaderPanelProps,
   Hide,
   IHideProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   Item,
   IItemProps,
   Label,

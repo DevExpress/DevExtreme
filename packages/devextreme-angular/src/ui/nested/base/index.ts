@@ -41,6 +41,7 @@ export * from './html-editor-mention-dxi';
 export * from './html-editor-table-context-menu';
 export * from './html-editor-table-resizing';
 export * from './html-editor-variables';
+export * from './load-indicator-options';
 export * from './pager';
 export * from './popup-options';
 export * from './popup-toolbar-item-dxi';

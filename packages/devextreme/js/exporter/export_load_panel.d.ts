@@ -34,7 +34,7 @@ export interface ExportLoadPanel {
   /**
    * @docid
    * @default ""
-   * @deprecated Use indicatorSrc in indicatorOptions instead
+   * @deprecated
    */
   indicatorSrc?: string;
   /**

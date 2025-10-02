@@ -18,6 +18,7 @@ import {
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { event } from 'devextreme/events/events.types';
+import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
 
@@ -115,6 +116,14 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
     set hoverStateEnabled(value: boolean) {
         this._setOption('hoverStateEnabled', value);
+    }
+
+    @Input()
+    get indicatorOptions(): LoadIndicatorOptions {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadIndicatorOptions) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()

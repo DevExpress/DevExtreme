@@ -2594,7 +2594,7 @@ export type LoadPanel = {
   /**
    * @docid GridBaseOptions.loadPanel.indicatorSrc
    * @default ""
-   * @deprecated Use indicatorSrc in GridBaseOptions.loadPanel.indicatorOptions instead
+   * @deprecated
    */
   indicatorSrc?: string;
   /**

@@ -14,6 +14,7 @@ import {
 
 
 
+import { LoadIndicatorOptions } from 'devextreme/!generated-members';
 import { Mode } from 'devextreme/common';
 
 import {
@@ -46,6 +47,14 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
     set height(value: number | string) {
         this._setOption('height', value);
+    }
+
+    @Input()
+    get indicatorOptions(): LoadIndicatorOptions {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadIndicatorOptions) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()

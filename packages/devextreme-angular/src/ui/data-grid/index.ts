@@ -36,6 +36,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
 import { event } from 'devextreme/events/events.types';
 import { Format } from 'devextreme/common/core/localization';
 
@@ -100,6 +101,7 @@ import { DxoGroupingModule } from 'devextreme-angular/ui/nested';
 import { DxoGroupPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoKeyboardNavigationModule } from 'devextreme-angular/ui/nested';
 import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoIndicatorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoMasterDetailModule } from 'devextreme-angular/ui/nested';
 import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
@@ -172,6 +174,7 @@ import { DxoDataGridGroupPanelModule } from 'devextreme-angular/ui/data-grid/nes
 import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridIndicatorOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridKeyboardNavigationModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridLabelModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -815,10 +818,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -1884,7 +1887,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -2378,6 +2381,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoGroupPanelModule,
     DxoKeyboardNavigationModule,
     DxoLoadPanelModule,
+    DxoIndicatorOptionsModule,
     DxoMasterDetailModule,
     DxoPagerModule,
     DxoPagingModule,
@@ -2449,6 +2453,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridHeaderFilterModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
+    DxoDataGridIndicatorOptionsModule,
     DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
     DxoDataGridLabelModule,
@@ -2540,6 +2545,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoGroupPanelModule,
     DxoKeyboardNavigationModule,
     DxoLoadPanelModule,
+    DxoIndicatorOptionsModule,
     DxoMasterDetailModule,
     DxoPagerModule,
     DxoPagingModule,
@@ -2611,6 +2617,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridHeaderFilterModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
+    DxoDataGridIndicatorOptionsModule,
     DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
     DxoDataGridLabelModule,

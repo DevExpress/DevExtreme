@@ -131,7 +131,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default ""
-     * @deprecated Use indicatorSrc in indicatorOptions instead
+     * @deprecated
      */
     indicatorSrc?: string;
     /**
