@@ -767,8 +767,13 @@ declare module DevExpress {
     showIndicator?: boolean;
     /**
      * [descr:ExportLoadPanel.indicatorSrc]
+     * @deprecated [depNote:ExportLoadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:ExportLoadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
     /**
      * [descr:ExportLoadPanel.showPane]
      */
@@ -6212,8 +6217,13 @@ declare module DevExpress.common.grids {
     height?: number | string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
+     * @deprecated [depNote:GridBaseOptions.loadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
     /**
      * [descr:GridBaseOptions.loadPanel.shading]
      */
@@ -22245,6 +22255,24 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadIndicator>;
+    export interface LoadIndicatorOptions {
+      /**
+       * [descr:LoadIndicatorOptions.animationType]
+       */
+      animationType?: LoadingAnimationType;
+      /**
+       * [descr:LoadIndicatorOptions.indicatorSrc]
+       */
+      indicatorSrc?: string;
+      /**
+       * [descr:LoadIndicatorOptions.height]
+       */
+      height?: number | string | undefined;
+      /**
+       * [descr:LoadIndicatorOptions.width]
+       */
+      width?: number | string | undefined;
+    }
     export type LoadingAnimationType = 'circle' | 'sparkle';
     /**
      * [descr:_ui_load_indicator_OptionChangedEvent]
@@ -22260,16 +22288,8 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLoadIndicatorOptions
-    extends WidgetOptions<dxLoadIndicator> {
-    /**
-     * [descr:dxLoadIndicatorOptions.animationType]
-     */
-    animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
-    /**
-     * [descr:dxLoadIndicatorOptions.indicatorSrc]
-     */
-    indicatorSrc?: string;
-  }
+    extends WidgetOptions<dxLoadIndicator>,
+      DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions {}
   /**
    * [descr:dxLoadPanel]
    */
@@ -22360,8 +22380,13 @@ declare module DevExpress.ui {
     height?: number | string;
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
+     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:dxLoadPanelOptions.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
