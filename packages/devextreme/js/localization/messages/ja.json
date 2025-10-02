@@ -104,6 +104,7 @@
         "dxNumberBox-noDataText": "データがありません",
 
 
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "{0} を使用して列を表示してください",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "グループパネルからここに列をドラッグしてください",

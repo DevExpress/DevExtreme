@@ -104,6 +104,7 @@
         "dxNumberBox-noDataText": "Ingen data",
 
 
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Brug {0} til at vise kolonner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Træk en kolonne fra gruppepanelet hertil",

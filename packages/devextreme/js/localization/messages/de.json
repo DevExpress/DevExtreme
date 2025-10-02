@@ -104,6 +104,7 @@
         "dxNumberBox-noDataText": "Keine Daten",
 
 
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Verwenden Sie die {0}, um Spalten anzuzeigen",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Ziehen Sie eine Spalte aus dem Gruppenpanel hierher",

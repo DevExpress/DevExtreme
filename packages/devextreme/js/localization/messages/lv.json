@@ -104,6 +104,7 @@
         "dxNumberBox-noDataText": "Nav datu",
 
 
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Izmanto {0} lai attēlotu kolonnas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Nomest kolonu no grupēšanas paneļa šeit",
