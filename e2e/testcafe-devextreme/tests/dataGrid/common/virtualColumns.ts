@@ -308,8 +308,6 @@ test('Columns reordering should work with virtual columns', async (t) => {
     0,
   );
 
-  await t.debug();
-
   await t
     .expect(await takeScreenshot('data-grid__virtual-columns__reoder.png', dataGrid.element))
     .ok()
@@ -336,7 +334,6 @@ test('Grouping should work with virtual columns', async (t) => {
     dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
     dataGrid.getGroupPanel().element,
   );
-  await t.debug();
 
   await t
     .expect(await takeScreenshot('data-grid__virtual-columns__grouping.png', dataGrid.element))
