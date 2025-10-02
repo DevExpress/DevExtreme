@@ -269,6 +269,7 @@ export class ColumnsController extends modules.Controller {
         }
         break;
       case 'commonColumnSettings':
+      case 'commonAiColumnSettings':
       case 'columnAutoWidth':
       case 'allowColumnResizing':
       case 'allowColumnReordering':
@@ -395,7 +396,7 @@ export class ColumnsController extends modules.Controller {
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 
-    return extend({
+    const settings = extend({
       allowFixing: this.option('columnFixing.enabled'),
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       allowResizing: this.option('allowColumnResizing') || undefined,
@@ -406,6 +407,13 @@ export class ColumnsController extends modules.Controller {
       allowCollapsing: groupingOptions.allowCollapsing,
       allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled,
     }, commonColumnSettings);
+
+    if (column && column.type === 'ai') {
+      const commonAiColumnSettings = this.option('commonAiColumnSettings') || {};
+      settings.ai = extend({}, commonAiColumnSettings, column.ai);
+    }
+
+    return settings;
   }
 
   public isColumnOptionUsed(optionName): any {
@@ -1942,6 +1950,11 @@ export const columnsControllerModule: Module = {
         encodeHtml: true,
         trueText: messageLocalization.format('dxDataGrid-trueText'),
         falseText: messageLocalization.format('dxDataGrid-falseText'),
+      },
+      commonAiColumnSettings: {
+        aiIntegration: null,
+        mode: 'auto',
+        showHeaderMenu: true,
       },
       allowColumnReordering: false,
       allowColumnResizing: false,

@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { GenerateColumnCommandParams, GenerateColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
+import type {
+  AIIntegration,
+  GenerateColumnCommandParams,
+  GenerateColumnCommandResult,
+  RequestCallbacks,
+} from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
-import type { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -96,6 +100,9 @@ export class AiColumnIntegrationController extends Controller {
   }
 
   private getAiIntegration(columnName: string): AIIntegration {
+    if (!columnName) {
+      errors.log('E1066');
+    }
     const aiIntegration = this.columnsController.columnOption(columnName, 'ai.aiIntegration');
     if (aiIntegration) {
       return aiIntegration as AIIntegration;
@@ -106,7 +113,7 @@ export class AiColumnIntegrationController extends Controller {
       return gridAiIntegration as AIIntegration;
     }
 
-    // TODO
-    throw errors.Error('E9999', columnName);
+    errors.log('E1067', columnName);
+    throw new Error('AI Integration not found');
   }
 }

@@ -50,8 +50,17 @@ export class AiColumnController extends Controller {
     this.columnsController.addCommandColumn(getAiCommandColumnOptions());
   }
 
-  private handleDataChanged(e) {
+  private refreshAIColumnInternal(columnName: string): void {
+    this.aiColumnIntegrationController.sendRequest(columnName);
+  }
 
+  private handleDataChanged(e) {
+    const aiColumns = this.columnsController.getColumns()
+      .filter((col) => col.type === 'ai'
+        && col.ai.mode === 'auto');
+    for (const col of aiColumns) {
+      this.refreshAIColumnInternal(col.name);
+    }
   }
 
   private showResult(columnName: string, data: Record<PropertyKey, string>): void {
@@ -79,7 +88,7 @@ export class AiColumnController extends Controller {
   }
 
   public refreshAIColumn(columnName: string): void {
-
+    this.refreshAIColumnInternal(columnName);
   }
 
   public clearAIColumn(columnName: string): void {
