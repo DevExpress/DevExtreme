@@ -279,20 +279,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return 0;
   }
 
-  scrollToTime(hours, minutes, date) {
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
-    const scrollable = this.getScrollable();
-    const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
-
-    if (this.option('templatesRenderAsynchronously')) {
-      setTimeout(() => {
-        scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
-      });
-    } else {
-      scrollable.scrollBy({ left: coordinates.left - scrollable.scrollLeft() - offset, top: 0 });
-    }
-  }
-
   renderRAllDayPanel() {}
 
   renderRTimeTable() {}
