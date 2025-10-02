@@ -25,6 +25,12 @@
   "nx": {},
   "private": true,
   "devDependencies": {
+    "babel-core": "^7.0.0-bridge",
+    "babel-jest": "29.7.0",
+    "babel-plugin-add-module-exports": "1.0.4",
+    "babel-plugin-inferno": "6.8.3",
+    "@babel/preset-env": "7.23.9",
+
     "@nx/devkit": "18.3.4",
     "@nx/jest": "19.4.2",
     "@nx/js": "19.4.2",

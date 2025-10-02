@@ -34,7 +34,7 @@ const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
-const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView'];
+const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView', 'aiColumnView'];
 
 const E2E_ATTRIBUTES = {
   a11yStatusContainer: 'e2e-a11y-general-status-container',

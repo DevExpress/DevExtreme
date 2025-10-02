@@ -58,6 +58,7 @@ function renderLabelMark(
 
   return $('<span>')
     .addClass(markClass)
+    .attr('aria-hidden', 'true')
     .text(markText);
 }
 

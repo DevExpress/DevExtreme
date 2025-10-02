@@ -174,7 +174,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             currentDate: currentDate,
             currentView: 'month',
             views: ['month'],
-            dropDownAppointmentTemplate(itemData) {
+            appointmentTooltipTemplate({ appointmentData: itemData }) {
                 assert.ok(dataSource.indexOf(itemData) > -1, 'appointment data contains in the data source');
             }
         });
@@ -489,7 +489,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 490,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate(data) {
+            appointmentTooltipTemplate({ appointmentData: data }) {
                 return `<div class='custom-title'>${data.Text}</div>`;
             }
         });
@@ -565,10 +565,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             textExpr: 'Text',
             height: 500,
             maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate: 'dropDownAppointmentTemplate',
+            appointmentTooltipTemplate: 'appointmentTooltipTemplate',
             integrationOptions: {
                 templates: {
-                    'dropDownAppointmentTemplate': {
+                    'appointmentTooltipTemplate': {
                         render(args) {
                             const $element = $('<span>')
                                 .addClass('dx-template-wrapper')

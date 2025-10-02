@@ -49,10 +49,12 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue';
+import { AzureOpenAI } from 'openai';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
 import { loadMessages } from 'devextreme-vue/common/core/localization';
-import { AzureOpenAI } from 'openai';
+import { type Events } from 'devextreme-vue/common/core';
+
 import {
   dictionary,
   messages,
@@ -67,8 +69,8 @@ import {
 
 const chatService = new AzureOpenAI(AzureOpenAIConfig);
 
-const typingUsers = ref([]);
-const alerts = ref([]);
+const typingUsers = ref<{ id: string, name: string }[]>([]);
+const alerts = ref<{ message: string }[]>([]);
 const isDisabled = ref(false);
 const copyButtonIcon = ref('copy');
 
@@ -76,31 +78,31 @@ onBeforeMount(() => {
   loadMessages(dictionary);
 });
 
-async function getAIResponse(messages) {
-  const params = {
+async function getAIResponse(messages: DxChatTypes.Message[]): Promise<string> {
+  const params: Record<string, any> = {
     messages,
     model: AzureOpenAIConfig.deployment,
     max_tokens: 1000,
     temperature: 0.7,
   };
 
-  const response = await chatService.chat.completions.create(params);
+  const response = await chatService.chat.completions.create(params as any);
   const data = { choices: response.choices };
 
-  return data.choices[0].message?.content;
+  return data.choices[0].message?.content || '';
 }
 
-function toggleDisabledState(disabled, event = undefined) {
+function toggleDisabledState(disabled: boolean, event?: Events.EventObject): void {
   isDisabled.value = disabled;
 
   if (disabled) {
-    event?.target.blur();
+    (event?.target as HTMLElement)?.blur();
   } else {
-    event?.target.focus();
+    (event?.target as HTMLElement)?.focus();
   }
 }
 
-function updateLastMessage(text = REGENERATION_TEXT) {
+function updateLastMessage(text: string = REGENERATION_TEXT): void {
   const items = dataSource.items();
   const lastMessage = items.at(-1);
 
@@ -111,7 +113,7 @@ function updateLastMessage(text = REGENERATION_TEXT) {
   }]);
 }
 
-function renderAssistantMessage(text) {
+function renderAssistantMessage(text: string): void {
   const message = {
     id: Date.now(),
     timestamp: new Date(),
@@ -122,7 +124,10 @@ function renderAssistantMessage(text) {
   dataSource.store().push([{ type: 'insert', data: message }]);
 }
 
-async function processMessageSending(message, event) {
+async function processMessageSending(
+  message: DxChatTypes.TextMessage,
+  event: Events.EventObject | undefined,
+): Promise<void> {
   toggleDisabledState(true, event);
 
   messages.push({ role: 'user', content: message.text });
@@ -145,7 +150,7 @@ async function processMessageSending(message, event) {
   }
 }
 
-function alertLimitReached() {
+function alertLimitReached(): void {
   alerts.value = [{
     message: 'Request limit reached, try again in a minute.',
   }];
@@ -155,23 +160,30 @@ function alertLimitReached() {
   }, ALERT_TIMEOUT);
 }
 
-async function regenerate() {
+async function regenerate(): Promise<void> {
   toggleDisabledState(true);
+  const lastMessage = messages.at(-1);
 
   try {
     const aiResponse = await getAIResponse(messages.slice(0, -1));
 
     updateLastMessage(aiResponse);
-    messages.at(-1).content = aiResponse;
+
+    if (lastMessage?.content) {
+      lastMessage.content = aiResponse;
+    }
   } catch {
-    updateLastMessage(messages.at(-1).content);
+    if (lastMessage?.content) {
+      updateLastMessage(lastMessage.content);
+    }
+
     alertLimitReached();
   } finally {
     toggleDisabledState(false);
   }
 }
 
-function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
+function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent): void {
   dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
   if (!alerts.value.length) {
@@ -179,7 +191,7 @@ function onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
   }
 }
 
-function onCopyButtonClick(message) {
+function onCopyButtonClick(message: { text: string }): void {
   navigator.clipboard?.writeText(message.text);
   copyButtonIcon.value = 'check';
 
@@ -188,7 +200,7 @@ function onCopyButtonClick(message) {
   }, 2500);
 }
 
-function onRegenerateButtonClick() {
+function onRegenerateButtonClick(): void {
   updateLastMessage();
   regenerate();
 }

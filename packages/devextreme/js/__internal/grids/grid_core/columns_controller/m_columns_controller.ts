@@ -25,6 +25,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
 import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -140,6 +141,14 @@ export class ColumnsController extends modules.Controller {
   protected _stateStoringController!: StateStoringController;
 
   public _isWarnedAboutUnsupportedProperties?: boolean;
+
+  private getCommonColumnSettings(column): Partial<Column> {
+    if (!column?.type) {
+      return this.option('commonColumnSettings');
+    }
+
+    return column.type === AI_COLUMN_NAME ? { allowHiding: true } : {};
+  }
 
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
@@ -392,7 +401,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public getCommonSettings(column?) {
-    const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 

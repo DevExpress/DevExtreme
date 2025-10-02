@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DevExtreme jQuery Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
+
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/dx-exceljs-fork.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./themeSelector.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.js"></script>
+
+    <style>
+      .custom-class {
+        background-color: lightblue;
+      }
+    </style>
+</head>
+<body class="dx-surface">
+  <div role="main">
+    <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+    <select id="theme-selector" style="display: block;"></select>
+    <br />
+    <div id="grid"></div>
+    <script>
+      $(() => {
+        let counter = 0;
+        
+    const rootAiIntegration = new DevExpress.aiIntegration({
+      sendRequest() {
+        const promise = new Promise((resolve) => {
+          counter = 1;
+          resolve('1');
+        });
+
+        const result = {
+          promise,
+          abort: () => {},
+        };
+
+        return result;
+      },
+    });
+    const columnAiIntegration = new DevExpress.aiIntegration({
+      sendRequest() {
+        const promise = new Promise((resolve) => {
+          counter = 2;
+          resolve('2');
+        });
+
+        const result = {
+          promise,
+          abort: () => {},
+        };
+
+        return result;
+      },
+    });
+        const dataSource = Array.from({ length: 100 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` }));
+        
+        // Initialize DevExtreme DataGrid
+        $("#grid").dxDataGrid({
+          dataSource,
+          showBorders: true,
+          width: 500,
+          filterRow: { visible: true },
+          keyExpr: 'id',
+          paging: {
+            pageSize: 5,
+          },
+          pager: {
+            visible: true,
+          },
+          headerFilter: {
+            visible: true,
+          },
+          columns: [
+            {
+              dataField: 'id',
+              // width: 80,
+            },
+            {
+              dataField: 'name',
+              caption: 'Name',
+              sortOrder: 'asc',
+              sortIndex: 3,
+            },
+            // {
+            //   caption: 'AI2',
+            //   type: 'ai',
+            //   width: 100,
+            //   name: 'AItest',
+
+            //   allowFiltering: true,
+            //   allowSorting: true,
+            //   sortOrder: 'asc',
+            //   sortIndex: 2,
+            //   calculateSortValue: 'name',
+            // },
+            {
+              caption: 'Custom',
+              type: 'ai',
+              // width: 100,
+              name: 'CustomTest',
+
+              allowFiltering: true,
+              ai: {
+                aiIntegration: columnAiIntegration,
+              },
+              // cssClass: 'custom-class',
+              // allowSorting: true,
+              // sortOrder: 'asc',
+              // sortIndex: 1,
+
+              // dataField: 'name',
+            },
+          ],
+        });
+      });
+    </script>
+  </div>
+</body>
+</html>

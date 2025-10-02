@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable max-classes-per-file */
+
 import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
@@ -221,6 +221,7 @@ export interface Views {
   gridView: import('./views/m_grid_view').GridView;
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
+  aiColumnView: import('./ai_column/m_ai_column_view').AiColumnView;
 }
 
 export interface EditingControllerRequired {

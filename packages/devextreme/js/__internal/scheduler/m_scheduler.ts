@@ -484,7 +484,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateAppointmentDataSource();
         this.repaint();
         break;
-      case 'dropDownAppointmentTemplate':
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
       case '_appointmentCountPerCell':
@@ -1994,11 +1993,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   hideAppointmentTooltip() {
     this._appointmentTooltip?.hide();
-  }
-
-  scrollToTime(hours, minutes, date) {
-    errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
-    this._workSpace.scrollToTime(hours, minutes, date);
   }
 
   scrollTo(date, groupValues, allDay) {

@@ -67,7 +67,7 @@ const BLACK_COLOR = '#000000';
 export interface ColorViewProperties extends EditorProperties {
   keyStep?: number;
 
-  matchValue?: string;
+  matchValue?: string | null;
 
   editAlphaChannel?: boolean;
 
@@ -299,7 +299,6 @@ class ColorView extends Editor<ColorViewProperties> {
     return {
       ...super._getDefaultOptions(),
       value: null,
-      // @ts-expect-error ts-error
       matchValue: null,
       onEnterKeyPressed: undefined,
       editAlphaChannel: false,

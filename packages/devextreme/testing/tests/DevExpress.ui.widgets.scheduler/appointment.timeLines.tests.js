@@ -406,7 +406,6 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, 'Task has a right width');
             });
 
-            // Timezone-sensitive test, use US/Pacific for proper testing
             [{
                 handle: CLASSES.resizableHandle.left,
                 direction: -1,
@@ -474,7 +473,7 @@ module('Integration: Appointments in Timeline views', {
                         width: 1500
                     });
 
-                    scheduler.instance.scrollToTime(0, 0, new Date(testCase.scrollDate));
+                    scheduler.instance.scrollTo(new Date(testCase.scrollDate));
 
                     const { getAppointment, getDateText } = scheduler.appointments;
 

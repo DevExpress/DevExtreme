@@ -10,12 +10,9 @@ import errors from '@js/ui/widget/ui.errors';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
-import type { GenerateColumnCommandExecutor } from './types';
 
 export class AiColumnIntegrationController extends Controller {
   private abort?: () => void;
-
-  private isAICommandExecuting = false;
 
   private columnsController!: ColumnsController;
 
@@ -38,37 +35,23 @@ export class AiColumnIntegrationController extends Controller {
         return acc;
       }, {});
     const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
-    aiIntegration.generateColumn(
+    const abort = aiIntegration.generateColumn(
       {
         text: prompt,
         data,
       },
       this.getAICommandCallbacks<GenerateColumnCommandResult>(),
     );
+    this.abort = abort;
   }
 
   private processCommandCompletion(): void {
     this.abort?.();
     this.abort = undefined;
-    this.isAICommandExecuting = false;
   }
 
   private updateResults(result: string): void {
     // Update the results in the UI or internal state
-  }
-
-  private executeAICommand(columnName: string): void {
-    const aiCommandName = 'generateColumn';
-    const uiCommand = this.getAiIntegration(columnName)[aiCommandName];
-
-    const callbacks = this.getAICommandCallbacks();
-    const params = this.getAICommandParams();
-
-    this.isAICommandExecuting = true;
-
-    const abort = (uiCommand as GenerateColumnCommandExecutor)(params, callbacks);
-
-    this.abort = abort;
   }
 
   private getAICommandCallbacks<T>(): RequestCallbacks<T> {
@@ -83,15 +66,6 @@ export class AiColumnIntegrationController extends Controller {
     };
 
     return callbacks;
-  }
-
-  private getAICommandParams(): GenerateColumnCommandParams {
-    const params = {
-      text: '',
-      data: {},
-    };
-
-    return params;
   }
 
   public abortRequest(): void {

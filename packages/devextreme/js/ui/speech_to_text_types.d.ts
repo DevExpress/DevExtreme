@@ -5,6 +5,7 @@ export {
   StopClickEvent,
   ResultEvent,
   ErrorEvent,
+  EndEvent,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

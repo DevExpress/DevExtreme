@@ -44,5 +44,5 @@ import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider
 const remoteProvider = new RemoteFileSystemProvider({
   endpointUrl: 'https://js.devexpress.com/Demos/NetCore/api/file-manager-db',
 });
-const allowedFileExtensions = [];
+const allowedFileExtensions: string[] = [];
 </script>

@@ -39,6 +39,7 @@ import DxPieChart, {
   DxTooltip,
   DxSize,
   DxLegend,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { populationData } from './data.ts';
@@ -46,7 +47,7 @@ import { populationData } from './data.ts';
 const selectedRegion = ref(null);
 const pieChart = ref();
 
-const customizeTooltip = ({ argumentText, valueText }) => ({
+const customizeTooltip = ({ argumentText, valueText }: DxPieChartTypes.PointInfo) => ({
   text: `${argumentText}<br/>${valueText}`,
 });
 function onPointClick({ target: point }) {
