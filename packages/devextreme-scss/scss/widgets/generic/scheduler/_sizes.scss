@@ -24,6 +24,7 @@ $generic-scheduler-dropdown-button-height: null !default;
 $generic-scheduler-dropdown-button-margin: null !default;
 $generic-scheduler-dropdown-button-vertical-margin: null !default;
 $generic-scheduler-dropdown-button-adaptive-margin: null !default;
+$generic-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
 
 $agenda-appointment-title-font-size: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -58,6 +59,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-dropdown-button-margin: 3px 2px 3px 3px !default;
   $generic-scheduler-dropdown-button-vertical-margin: 3px 2px 3px 0 !default;
   $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
 
   $agenda-appointment-title-font-size: 16px;
 
@@ -91,6 +93,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-dropdown-button-margin: 3px 1px 3px 3px !default;
   $generic-scheduler-dropdown-button-vertical-margin: 3px 1px 3px 0 !default;
   $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
 
   $agenda-appointment-title-font-size: 16px;
 

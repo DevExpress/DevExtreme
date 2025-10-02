@@ -19,6 +19,7 @@ $fluent-scheduler-dropdown-button-padding: null !default;
 $fluent-scheduler-dropdown-button-margin: null !default;
 $fluent-scheduler-dropdown-button-vertical-margin: null !default;
 $fluent-scheduler-dropdown-button-adaptive-margin: null !default;
+$fluent-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
 $fluent-scheduler-appointment-tooltip-content-margin-left: null !default;
 $fluent-tooltip-marker-dimension: null !default;
 $fluent-scheduler-appointment-tooltip-title-margin-top: null !default;
@@ -86,6 +87,7 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-dropdown-button-margin: 5px 1px 3px 3px !default;
   $fluent-scheduler-dropdown-button-vertical-margin: 5px 3px 3px 3px !default;
   $fluent-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $fluent-scheduler-appointment-tooltip-content-margin-left: 6px !default;
   $fluent-tooltip-marker-dimension: 12px !default;
@@ -121,6 +123,7 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-dropdown-button-margin: 2px 1px 2px 3px !default;
   $fluent-scheduler-dropdown-button-vertical-margin: 2px 1px 2px 1px !default;
   $fluent-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $fluent-scheduler-appointment-tooltip-content-margin-left: 8px !default;
   $fluent-tooltip-marker-dimension: 18px !default;

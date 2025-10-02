@@ -19,6 +19,7 @@ $material-scheduler-dropdown-button-padding: null !default;
 $material-scheduler-dropdown-button-margin: null !default;
 $material-scheduler-dropdown-button-vertical-margin: null !default;
 $material-scheduler-dropdown-button-adaptive-margin: null !default;
+$material-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
 $material-scheduler-appointment-tooltip-content-margin-left: null !default;
 $material-tooltip-marker-dimension: null !default;
 $material-scheduler-appointment-tooltip-title-margin-top: null !default;
@@ -69,6 +70,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-dropdown-button-margin: 5px 1px 3px 3px !default;
   $material-scheduler-dropdown-button-vertical-margin: 5px 2px 3px 1px !default;
   $material-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $material-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $material-scheduler-appointment-tooltip-content-margin-left: 10px !default;
   $material-tooltip-marker-dimension: 24px !default;
@@ -100,6 +102,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-dropdown-button-margin: 2px 1px 2px 2px !default;
   $material-scheduler-dropdown-button-vertical-margin: 2px 1px 2px 1px !default;
   $material-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $material-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $material-scheduler-appointment-tooltip-content-margin-left: 8px !default;
   $material-tooltip-marker-dimension: 18px !default;
