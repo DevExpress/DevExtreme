@@ -22258,7 +22258,7 @@ declare module DevExpress.ui {
     /**
      * [descr:LoadIndicatorOptions]
      */
-    export interface LoadIndicatorOptions {
+    export type LoadIndicatorOptions = {
       /**
        * [descr:LoadIndicatorOptions.animationType]
        */
@@ -22275,7 +22275,7 @@ declare module DevExpress.ui {
        * [descr:LoadIndicatorOptions.width]
        */
       width?: number | string | undefined;
-    }
+    };
     export type LoadingAnimationType = 'circle' | 'sparkle';
     /**
      * [descr:_ui_load_indicator_OptionChangedEvent]

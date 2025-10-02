@@ -2857,7 +2857,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
-    indicatorOptions: Object as PropType<LoadIndicatorOptions>,
+    indicatorOptions: Object as PropType<LoadIndicatorOptions | Record<string, any>>,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,

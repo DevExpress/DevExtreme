@@ -88,7 +88,7 @@ const componentConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object as PropType<LoadIndicatorOptions>,
+    indicatorOptions: Object as PropType<LoadIndicatorOptions | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],

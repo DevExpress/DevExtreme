@@ -47,7 +47,7 @@ export type LoadingAnimationType = 'circle' | 'sparkle';
  * @docid
  * @public
  */
-export interface LoadIndicatorOptions {
+export type LoadIndicatorOptions = {
     /**
      * @docid
      * @default 'circle'
@@ -72,7 +72,7 @@ export interface LoadIndicatorOptions {
      * @public
      */
     width?: number | string | undefined;
-}
+};
 
 /**
  * @deprecated use Properties instead
