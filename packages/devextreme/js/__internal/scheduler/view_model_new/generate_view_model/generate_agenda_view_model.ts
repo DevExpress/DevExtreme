@@ -35,7 +35,11 @@ export const generateAgendaViewModel = (
 ): AgendaEntity[] => {
   const height = schedulerStore.fire('getAgendaVerticalStepHeight');
   const compareOptions = getCompareOptions(schedulerStore);
-  const intervals = splitIntervalByDay(compareOptions);
+  const intervals = splitIntervalByDay({
+    ...compareOptions,
+    startDayHour: 0,
+    endDayHour: 24,
+  });
 
   let entities = splitByParts(items, intervals);
   entities = saveDatesAfterSplit(entities);

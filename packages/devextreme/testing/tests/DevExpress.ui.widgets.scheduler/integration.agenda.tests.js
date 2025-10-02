@@ -1176,10 +1176,10 @@ module('Integration: Agenda', moduleConfig, () => {
         assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData').endDate, new Date(2016, 1, 27, 11, 30)); // first part of long appointment has original endDate
 
         const expectedTimes = [
-            '8:00 AM - 8:00 PM',
-            '8:00 AM - 8:00 PM',
-            '8:00 AM - 8:00 PM',
-            '8:00 AM - 11:30 AM',
+            '1:00 AM - 12:00 AM',
+            '12:00 AM - 12:00 AM',
+            '12:00 AM - 12:00 AM',
+            '12:00 AM - 11:30 AM',
         ];
 
         const $appts = instance.$element().find('.dx-scheduler-appointment');
@@ -1315,9 +1315,9 @@ module('Integration: Agenda', moduleConfig, () => {
         const $secondContentDates = $appts.eq(1).find('.dx-scheduler-appointment-content-date');
         const $lastContentDates = $appts.last().find('.dx-scheduler-appointment-content-date');
 
-        assert.equal($firstContentDates.first().text(), '9:30 AM - 8:00 PM', 'First date is correct');
-        assert.equal($secondContentDates.first().text(), '8:00 AM - 8:00 PM', 'Second date is correct');
-        assert.equal($lastContentDates.first().text(), '8:00 AM - 10:00 AM', 'Last date is correct');
+        assert.equal($firstContentDates.first().text(), '9:30 AM - 12:00 AM', 'First date is correct');
+        assert.equal($secondContentDates.first().text(), '12:00 AM - 12:00 AM', 'Second date is correct');
+        assert.equal($lastContentDates.first().text(), '12:00 AM - 10:00 AM', 'Last date is correct');
 
     });
 
@@ -1394,7 +1394,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const expectedTimes = [
             '9:15 PM - 12:00 AM',
-            '9:00 AM - 9:15 AM',
+            '12:00 AM - 9:15 AM',
             '9:16 PM - 10:00 PM',
         ];
 
@@ -1465,15 +1465,15 @@ module('Integration: Agenda', moduleConfig, () => {
         });
 
         const expectedTimes = [
-            '9:00 AM - 8:00 PM',
-            '8:00 AM - 8:00 PM',
-            '9:00 AM - 8:00 PM',
-            '8:00 AM - 10:30 AM',
-            '8:00 AM - 8:00 PM',
-            '9:00 AM - 8:00 PM',
-            '8:00 AM - 10:30 AM',
-            '8:00 AM - 8:00 PM',
-            '8:00 AM - 10:30 AM'
+            '9:00 AM - 12:00 AM',
+            '12:00 AM - 12:00 AM',
+            '9:00 AM - 12:00 AM',
+            '12:00 AM - 10:30 AM',
+            '12:00 AM - 12:00 AM',
+            '9:00 AM - 12:00 AM',
+            '12:00 AM - 10:30 AM',
+            '12:00 AM - 12:00 AM',
+            '12:00 AM - 10:30 AM'
         ];
 
         const appointments = scheduler.appointmentList;
@@ -1515,10 +1515,10 @@ module('Integration: Agenda', moduleConfig, () => {
         });
 
         const expectedTimes = [
-            '8:00 AM - 8:00 PM',
-            '8:00 AM - 8:00 PM',
+            '1:00 AM - 12:00 AM',
+            '12:00 AM - 12:00 AM',
             '9:00 AM - 11:30 AM',
-            '8:00 AM - 10:30 AM',
+            '12:00 AM - 10:30 AM',
         ];
 
         const appointments = scheduler.appointmentList;
