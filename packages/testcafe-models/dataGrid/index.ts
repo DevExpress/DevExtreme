@@ -68,7 +68,8 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
-  toast: 'dx-toast-wrapper'
+  toast: 'dx-toast-wrapper',
+  dragHeader: 'drag-header',
 };
 
 const E2E_ATTRIBUTES = {
@@ -754,6 +755,24 @@ export default class DataGrid extends GridCore {
     )();
   }
 
+  async dropHeader(columnIndex: number): Promise<void> {
+    const header = this.getHeaders().getHeaderRow(0).getHeaderCell(columnIndex).element;
+
+    return ClientFunction(
+      () => {
+        const headerOffset = $(header()).offset();
+
+        triggerPointerUp($(document), headerOffset.left, headerOffset.top);
+      },
+      {
+        dependencies: {
+          header, 
+          triggerPointerUp,
+        },
+      },
+    )();
+  }
+
   moveColumnChooserColumn(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const columnChooser = this.getColumnChooser();
     const column = columnChooser.getColumn(columnIndex);
@@ -896,5 +915,9 @@ export default class DataGrid extends GridCore {
       },
       { dependencies: { getInstance } },
     )();
+  }
+  
+  getDraggableHeader() {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.dragHeader)}`);
   }
 }

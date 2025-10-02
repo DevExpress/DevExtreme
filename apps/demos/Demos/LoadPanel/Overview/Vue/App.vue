@@ -82,7 +82,7 @@ const showPane = ref(true);
 const hideOnOutsideClick = ref(false);
 
 function showLoadPanel() {
-  employeeInfo.value = null;
+  employeeInfo.value = undefined;
   loadingVisible.value = true;
 }
 function onShown() {

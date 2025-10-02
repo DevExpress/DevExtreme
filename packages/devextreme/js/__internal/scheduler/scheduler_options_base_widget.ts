@@ -6,7 +6,6 @@ import {
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS_RULES,
-  DEPRECATED_SCHEDULER_OPTIONS,
 } from './utils/options/constants';
 import type {
   NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
@@ -39,14 +38,6 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
       ...DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
       ...DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
     }) as SafeSchedulerOptions;
-  }
-
-  _setDeprecatedOptions(): void {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-
-    // @ts-expect-error
-    extend(this._deprecatedOptions, DEPRECATED_SCHEDULER_OPTIONS);
   }
 
   protected _defaultOptionsRules(): SchedulerOptionsRule[] {

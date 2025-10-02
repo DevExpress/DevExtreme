@@ -592,15 +592,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      */
     descriptionExpr?: string;
     /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-      * @public
-      */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-    /**
      * @docid
      * @default true
      * @public
@@ -1029,14 +1020,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
-      * @docid
-      * @default "dropDownAppointment"
-      * @type_function_param1 itemData:object
-      * @type_function_return string|Element|jQuery
-      * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
-      */
-      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
-      /**
        * @docid
        * @default 30
        */
@@ -1293,14 +1276,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
-     * @docid
-     * @publicName scrollToTime(hours, minutes, date)
-     * @param3 date:Date|undefined
-     * @deprecated dxScheduler.scrollTo
-     * @public
-     */
-    scrollToTime(hours: number, minutes: number, date?: Date): void;
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)

@@ -18,6 +18,18 @@ export default class HeaderRow extends FocusableElement {
     return this.element.child('td');
   }
 
+  async getHeaderTexts(): Promise<string[]> {
+    const result: string[] = [];
+    const headersCells = this.getHeaderCells();
+    const headerCount = await headersCells.count;
+
+    for (let i = 0; i < headerCount; i += 1) {
+      result.push(await headersCells.nth(i).textContent);
+    }
+
+    return result;
+  }
+
   getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index, this.widgetName);
   }

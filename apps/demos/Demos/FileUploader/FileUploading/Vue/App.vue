@@ -6,7 +6,7 @@
         :multiple="multiple"
         :upload-mode="uploadMode"
         upload-url="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
-        @value-changed="e => files = e.value"
+        @value-changed="onValueChanged"
       />
       <div
         :style="{display: files.length > 0 ? 'block' : 'none'}"
@@ -22,7 +22,7 @@
             <span>Name: {{ file.name }}<br></span>
             <span>Size {{ file.size }}<br></span>
             <span>Type {{ file.type }}<br></span>
-            <span>Last Modified Date: {{ file.lastModifiedDate }}</span>
+            <span>Last Modified Date: {{ file.lastModified }}</span>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@
           :input-attr="{ 'aria-label': 'File Type' }"
           display-expr="name"
           value="*"
-          @value-changed="e => accept = e.value"
+          @value-changed="onFileTypeChanged"
         />
       </div>
       <div class="option">
@@ -46,13 +46,13 @@
           :items="['instantly', 'useButtons']"
           value="instantly"
           :input-attr="{ 'aria-label': 'Mode' }"
-          @value-changed="e => uploadMode = e.value"
+          @value-changed="onUploadModeChanged"
         />
       </div>
       <div class="option">
         <DxCheckBox
           text="Allow multiple files selection"
-          @value-changed="e => multiple = e.value"
+          @value-changed="onMultipleChanged"
         />
       </div>
     </div>
@@ -61,8 +61,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxFileUploader, type DxFileUploaderTypes } from 'devextreme-vue/file-uploader';
-import { DxCheckBox } from 'devextreme-vue/check-box';
-import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 
 const multiple = ref(false);
 const accept = ref('*');
@@ -72,7 +72,23 @@ const fileTypesSource = [
   { name: 'Images', value: 'image/*' },
   { name: 'Videos', value: 'video/*' },
 ];
-const files = ref([]);
+const files = ref<File[]>([]);
+
+function onValueChanged(e: DxFileUploaderTypes.ValueChangedEvent) {
+  files.value = e.value || [];
+}
+
+function onFileTypeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  accept.value = e.value;
+}
+
+function onUploadModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  uploadMode.value = e.value;
+}
+
+function onMultipleChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  multiple.value = e.value;
+}
 </script>
 <style>
 .widget-container {
