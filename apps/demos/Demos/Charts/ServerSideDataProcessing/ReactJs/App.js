@@ -32,7 +32,7 @@ const chartDataSource = new DataSource({
     const startVisible = startOfMonthStr(selectedMonth);
     const endVisible = endOfMonthStr(selectedMonth);
     const url =
-      'http://localhost:5555/api/TemperatureData' +
+      'https://js.devexpress.com/Demos/NetCore/api/TemperatureData' +
       `?startVisible=${encodeURIComponent(startVisible)}` +
       `&endVisible=${encodeURIComponent(endVisible)}` +
       `&startBound=${encodeURIComponent(startVisible)}` +
