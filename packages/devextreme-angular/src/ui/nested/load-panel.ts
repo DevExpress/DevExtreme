@@ -14,8 +14,8 @@ import {
 
 
 
-import { LoadIndicatorOptions } from 'devextreme/!generated-members';
 import { Mode } from 'devextreme/common';
+import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
 
 import {
     DxIntegrationModule,

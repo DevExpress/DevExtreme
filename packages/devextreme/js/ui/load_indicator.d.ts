@@ -43,8 +43,11 @@ export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 /** @public */
 export type LoadingAnimationType = 'circle' | 'sparkle';
 
-/** @public */
-export type LoadIndicatorOptions = {
+/**
+ * @docid
+ * @public
+ */
+export interface LoadIndicatorOptions {
     /**
      * @docid
      * @default 'circle'
@@ -69,7 +72,7 @@ export type LoadIndicatorOptions = {
      * @public
      */
     width?: number | string | undefined;
-};
+}
 
 /**
  * @deprecated use Properties instead

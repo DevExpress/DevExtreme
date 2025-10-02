@@ -18,7 +18,7 @@ import {
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { event } from 'devextreme/events/events.types';
-import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
+import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
 

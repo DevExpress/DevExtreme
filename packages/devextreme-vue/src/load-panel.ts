@@ -6,6 +6,10 @@ import {
  event,
 } from "devextreme/events/events.types";
 import {
+ LoadIndicatorOptions,
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
+import {
  ContentReadyEvent,
  DisposingEvent,
  HiddenEvent,
@@ -29,9 +33,6 @@ import {
  AnimationType,
  CollisionResolutionCombination,
 } from "devextreme/common/core/animation";
-import {
- LoadingAnimationType,
-} from "devextreme/ui/load_indicator";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -87,7 +88,7 @@ const componentConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object,
+    indicatorOptions: Object as PropType<LoadIndicatorOptions>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],

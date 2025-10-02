@@ -25,10 +25,9 @@ import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devext
 import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
-import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
+import type { LoadingAnimationType, LoadIndicatorOptions } from "devextreme/ui/load_indicator";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { LoadIndicatorOptions } from "UNKNOWN_MODULE";
 
 import type dxOverlay from "devextreme/ui/overlay";
 import type DOMComponent from "devextreme/core/dom_component";

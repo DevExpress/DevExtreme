@@ -234,6 +234,7 @@ import {
 } from "devextreme/core/component";
 import {
  LoadingAnimationType,
+ LoadIndicatorOptions,
 } from "devextreme/ui/load_indicator";
 import {
  LocateInMenuMode,
@@ -2560,7 +2561,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
-    indicatorOptions: Object,
+    indicatorOptions: Object as PropType<LoadIndicatorOptions>,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,

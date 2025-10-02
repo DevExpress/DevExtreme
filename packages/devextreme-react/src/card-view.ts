@@ -24,9 +24,8 @@ import type { Format as LocalizationFormat } from "devextreme/common/core/locali
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { AIIntegration } from "devextreme/common/ai-integration";
-import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
+import type { LoadingAnimationType, LoadIndicatorOptions } from "devextreme/ui/load_indicator";
 import type { event } from "devextreme/events/events.types";
-import type { LoadIndicatorOptions } from "UNKNOWN_MODULE";
 
 import type dxForm from "devextreme/ui/form";
 import type DataSource from "devextreme/data/data_source";

@@ -36,7 +36,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { LoadIndicatorOptions } from 'UNKNOWN_MODULE';
+import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
 import { event } from 'devextreme/events/events.types';
 import { Format } from 'devextreme/common/core/localization';
 

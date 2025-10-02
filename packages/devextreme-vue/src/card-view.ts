@@ -183,6 +183,7 @@ import {
 } from "devextreme/common/ai-integration";
 import {
  LoadingAnimationType,
+ LoadIndicatorOptions,
 } from "devextreme/ui/load_indicator";
 import {
  dxTabPanelOptions,
@@ -2294,7 +2295,7 @@ const DxLoadPanelConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object,
+    indicatorOptions: Object as PropType<LoadIndicatorOptions>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],
