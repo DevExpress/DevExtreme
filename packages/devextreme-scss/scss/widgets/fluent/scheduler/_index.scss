@@ -394,19 +394,29 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
-  .dx-scheduler-appointment-collector {
-    margin-top: $fluent-scheduler-dropdown-appointment-margin-top;
-    margin-left: 52px;
-    margin-right: $fluent-scheduler-dropdown-margin-right;
-  }
-
-  &.dx-rtl .dx-scheduler-appointment-collector {
-    margin-left: $fluent-scheduler-dropdown-margin-left;
-    margin-right: 52px;
-  }
-
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
+  }
+}
+
+.dx-scheduler:not(.dx-scheduler-adaptive) {
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $fluent-scheduler-dropdown-button-vertical-margin;
+      }
+    }
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month:not(.dx-rtl) .dx-scheduler-appointment-collector {
+    margin-left: 52px;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-rtl .dx-scheduler-appointment-collector {
+    margin-right: 52px;
   }
 }
 
@@ -415,17 +425,25 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     white-space: nowrap;
   }
 
-  .dx-scheduler-work-space.dx-scheduler-work-space-month {
-    .dx-scheduler-appointment-collector,
-    &.dx-rtl .dx-scheduler-appointment-collector {
-      margin: 0 $fluent-scheduler-dropdown-margin-left;
+  .dx-scheduler-appointment-collector {
+    margin: $fluent-scheduler-dropdown-button-adaptive-margin;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $fluent-scheduler-dropdown-button-adaptive-vertical-margin;
+      }
     }
   }
 }
 
 .dx-scheduler-appointment-collector {
   height: $fluent-scheduler-dropdown-button-height;
-  margin: $fluent-scheduler-dropdown-margin-top $fluent-scheduler-dropdown-margin-right $fluent-scheduler-dropdown-margin-bottom $fluent-scheduler-dropdown-margin-left;
+  margin: $fluent-scheduler-dropdown-button-margin;
   position: absolute;
 
   &.dx-button {
