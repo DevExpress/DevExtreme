@@ -84,8 +84,6 @@ DevExpress.events.GestureEmitter = require('../../common/core/events/gesture/emi
 
 DevExpress.localization = require('../../common/core/localization');
 
-DevExpress.aiIntegration = require('../dx.ai-integration').AIIntegration;
-
 DevExpress.templateRendered = require('../../core/templates/template_base').renderedCallbacks;
 DevExpress.setTemplateEngine = require('../../core/templates/template_engine_registry').setTemplateEngine;
 

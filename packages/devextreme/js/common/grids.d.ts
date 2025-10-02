@@ -70,7 +70,6 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
-import { AIIntegration } from './ai-integration';
 
 /**
  * @docid
@@ -110,13 +109,6 @@ export type FixedPosition = 'left' | 'right' | 'sticky';
  * @type object
  */
 export interface ColumnBase<TRowData = any> {
-  // TEMP
-  ai?: {
-    aiIntegration?: AIIntegration;
-    prompt?: string;
-    mode?: 'auto' | 'manual';
-  };
-
   /**
    * @docid GridBaseColumn.alignment
    * @default undefined

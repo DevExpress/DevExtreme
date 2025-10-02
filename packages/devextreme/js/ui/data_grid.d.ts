@@ -1,4 +1,3 @@
-import type { AIIntegration } from '../common/ai-integration';
 import { DataSource } from '../common/data';
 
 import {
@@ -1161,10 +1160,7 @@ type OverriddenKeys = 'columns' | 'customizeColumns' | 'dataRowTemplate' | 'edit
  * @type object
  */
 export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
-  // TEMP
-  aiIntegration?: AIIntegration | undefined;
-
-  /**
+    /**
      * @docid
      * @type Array<dxDataGridColumn|string>
      * @default undefined
@@ -2203,9 +2199,6 @@ export default class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDat
     state(state: any): void;
     undeleteRow(rowIndex: number): void;
     updateDimensions(): void;
-
-    // TEMP
-    sendAIColumnRequest(columnName: string): void;
 }
 
 /**
