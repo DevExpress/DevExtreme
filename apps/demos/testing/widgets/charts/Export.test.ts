@@ -21,7 +21,7 @@ runManualTest('Charts', 'ExportCustomMarkup', (test) => {
       window.originalCreateObjectURL = URL.createObjectURL;
       window.testedValue = '';
 
-      // @ts-expect-error Window.originalCreateObjectURL is not typed
+      // @ts-expect-error wrong type
       URL.createObjectURL = (blob) => {
         // @ts-expect-error Blob.type is not typed
         window.testedValue = blob.type;
