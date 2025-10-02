@@ -109,14 +109,6 @@ declare global {
     dxDateRangeBox(options: string): any;
     dxDateRangeBox(options: string, ...params: any[]): any;
 
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
-    dxDeferRendering(
-      options: DevExpress.ui.dxDeferRendering.Properties
-    ): JQuery;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-
     dxDiagram(): JQuery;
     dxDiagram(options: 'instance'): DevExpress.ui.dxDiagram;
     dxDiagram(options: DevExpress.ui.dxDiagram.Properties): JQuery;
@@ -14494,76 +14486,6 @@ declare module DevExpress.ui {
         KeyboardEvent | MouseEvent | PointerEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * [descr:dxDeferRendering]
-   */
-  export class dxDeferRendering extends Widget<dxDeferRenderingOptions> {}
-  module dxDeferRendering {
-    /**
-     * [descr:_ui_defer_rendering_ContentReadyEvent]
-     */
-    export type ContentReadyEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_DisposingEvent]
-     */
-    export type DisposingEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_InitializedEvent]
-     */
-    export type InitializedEvent =
-      DevExpress.common.core.events.InitializedEventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_OptionChangedEvent]
-     */
-    export type OptionChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering> &
-        DevExpress.common.core.events.ChangedOptionInfo;
-    export type Properties = dxDeferRenderingOptions;
-    /**
-     * [descr:_ui_defer_rendering_RenderedEvent]
-     */
-    export type RenderedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_ShownEvent]
-     */
-    export type ShownEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-  }
-  /**
-   * [descr:dxDeferRenderingOptions]
-   * @deprecated [depNote:dxDeferRenderingOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxDeferRenderingOptions
-    extends WidgetOptions<dxDeferRendering> {
-    /**
-     * [descr:dxDeferRenderingOptions.animation]
-     */
-    animation?: DevExpress.common.core.animation.AnimationConfig | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.onRendered]
-     */
-    onRendered?: (e: DevExpress.ui.dxDeferRendering.RenderedEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.onShown]
-     */
-    onShown?: (e: DevExpress.ui.dxDeferRendering.ShownEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.renderWhen]
-     */
-    renderWhen?: PromiseLike<void> | boolean | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.showLoadIndicator]
-     */
-    showLoadIndicator?: boolean;
-    /**
-     * [descr:dxDeferRenderingOptions.staggerItemSelector]
-     */
-    staggerItemSelector?: string | undefined;
   }
   /**
    * [descr:dxDiagram]
