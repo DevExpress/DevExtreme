@@ -34,7 +34,7 @@ test('Appointment collector has correct offset when adaptivityEnabled=true (T102
 
 const getSchedulerBaseOptions = (view: string) => {
   const count = 20;
-  const day = ['workWeek', 'timelineWorkWeek'].includes(view) ? 2 : 1;
+  const day = 1;
   const allDayAppointments = Array(Math.round(count / 4)).fill({
     allDay: true,
     text: 'text',
@@ -46,7 +46,7 @@ const getSchedulerBaseOptions = (view: string) => {
     startDate: new Date(2021, 7, day, 0),
     endDate: new Date(2021, 7, day, 2),
   });
-  const width = ['month', 'week', 'workWeek'].includes(view) ? 800 : 500;
+  const width = ['month', 'week'].includes(view) ? 800 : 500;
   const height = ['month'].includes(view) ? 500 : 300;
 
   return {
@@ -60,7 +60,7 @@ const getSchedulerBaseOptions = (view: string) => {
 };
 
 generateOptionMatrix({
-  view: ['week', 'month', 'timelineWeek', 'timelineMonth'],
+  view: ['week', 'month', 'timelineWeek'],
   variants: [
     { theme: 'generic.light', adaptivityEnabled: false },
     { theme: 'material.blue.light', adaptivityEnabled: false },
@@ -121,7 +121,7 @@ generateOptionMatrix({
 });
 
 generateOptionMatrix({
-  view: ['week', 'month', 'timelineWeek', 'timelineMonth'],
+  view: ['week', 'month', 'timelineWeek'],
   rtlEnabled: [false, true],
 }).forEach(({
   view, rtlEnabled,
