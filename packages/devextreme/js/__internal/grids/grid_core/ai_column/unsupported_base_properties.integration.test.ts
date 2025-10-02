@@ -11,6 +11,7 @@ import DataGrid from '@js/ui/data_grid';
 const SELECTORS = {
   gridContainer: '#gridContainer',
   headerCell: '[aria-colindex]',
+  groupRow: '.dx-group-row',
 };
 
 const GRID_CONTAINER_ID = 'gridContainer';
@@ -197,6 +198,27 @@ describe('Unsupported properties', () => {
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
+    });
+  });
+
+  describe('Grouping properties', () => {
+    it('should have no group rows after put autoExpandGroup in props', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            autoExpandGroup: true,
+          },
+        ],
+      });
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow).toBeUndefined();
     });
   });
 });
