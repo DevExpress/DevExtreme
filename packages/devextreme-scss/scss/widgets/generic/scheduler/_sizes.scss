@@ -21,10 +21,10 @@ $generic-scheduler-group-header-table-cell-width: null !default;
 $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
 $generic-scheduler-dropdown-button-height: null !default;
-$generic-scheduler-dropdown-margin-top: null !default;
-$generic-scheduler-dropdown-margin-bottom: null !default;
-$generic-scheduler-dropdown-margin-left: null !default;
-$generic-scheduler-dropdown-margin-right: null !default;
+$generic-scheduler-dropdown-button-margin: null !default;
+$generic-scheduler-dropdown-button-vertical-margin: null !default;
+$generic-scheduler-dropdown-button-adaptive-margin: null !default;
+$generic-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
 
 $agenda-appointment-title-font-size: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -56,10 +56,10 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-right-border: 2px solid transparent !default;
 
   $generic-scheduler-dropdown-button-height: 20px !default;
-  $generic-scheduler-dropdown-margin-top: 3px !default;
-  $generic-scheduler-dropdown-margin-bottom: 3px !default;
-  $generic-scheduler-dropdown-margin-left: 3px !default;
-  $generic-scheduler-dropdown-margin-right: 2px !default;
+  $generic-scheduler-dropdown-button-margin: 3px 2px 3px 3px !default;
+  $generic-scheduler-dropdown-button-vertical-margin: 3px 2px 3px 0 !default;
+  $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
 
   $agenda-appointment-title-font-size: 16px;
 
@@ -90,10 +90,10 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
 
   $generic-scheduler-dropdown-button-height: 17px !default;
-  $generic-scheduler-dropdown-margin-top: 3px !default;
-  $generic-scheduler-dropdown-margin-bottom: 2px !default;
-  $generic-scheduler-dropdown-margin-left: 3px !default;
-  $generic-scheduler-dropdown-margin-right: 1px !default;
+  $generic-scheduler-dropdown-button-margin: 3px 1px 3px 3px !default;
+  $generic-scheduler-dropdown-button-vertical-margin: 3px 1px 3px 0 !default;
+  $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
 
   $agenda-appointment-title-font-size: 16px;
 
