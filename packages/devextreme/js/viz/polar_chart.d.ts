@@ -1214,7 +1214,7 @@ export type Legend = BaseChartLegend & {
 };
 
 /**
- * @docid dxPolarChartPointInfo
+ * @docid
  * @public
  */
 export type PointInfo = BasePointInfo<polarPointObject>;

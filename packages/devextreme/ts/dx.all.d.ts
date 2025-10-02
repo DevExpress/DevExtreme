@@ -37785,7 +37785,7 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
-     * [descr:dxChartPointInfo]
+     * [descr:PointInfo]
      */
     export type PointInfo =
       | ChartPointInfo
@@ -41428,7 +41428,7 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
-     * [descr:dxPieChartPointInfo]
+     * [descr:PointInfo]
      */
     export type PointInfo = BasePointInfo<piePointObject> & {
       /**
@@ -42535,7 +42535,7 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
-     * [descr:dxPolarChartPointInfo]
+     * [descr:PointInfo]
      */
     export type PointInfo = BasePointInfo<polarPointObject>;
     /**
