@@ -4,6 +4,7 @@ import { TextArea } from 'devextreme-react/text-area';
 import { Button } from 'devextreme-react/button';
 import { SelectBox } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
+import notify from 'devextreme/ui/notify';
 import {
   displayModes, stylingModes, types, languages, langMap,
 } from './data.js';
@@ -33,6 +34,16 @@ export default function App() {
     continuous,
   };
   const onStartClick = useCallback(() => {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      notify({
+        message: 'The browser does not support Web Speech API (SpeechRecognition).',
+        type: 'error',
+        displayTime: 7000,
+        position: 'bottom center',
+        width: 'auto',
+      });
+      return;
+    }
     state = 'listening';
     setHint('Stop voice recognition');
     if (displayMode !== 'Custom') {
@@ -113,6 +124,7 @@ export default function App() {
           speechRecognitionConfig={speechRecognitionConfig}
           disabled={disabled}
           onStartClick={onStartClick}
+          onStopClick={onEnd}
           onEnd={onEnd}
           onResult={onResult}
         />

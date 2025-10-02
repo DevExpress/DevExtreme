@@ -107,7 +107,15 @@ import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxSwitch } from 'devextreme-vue/switch';
+import notify from 'devextreme/ui/notify';
 import { displayModes, stylingModes, types, languages, langMap } from './data.ts';
+
+declare global {
+  interface Window {
+    SpeechRecognition?: any;
+    webkitSpeechRecognition?: any;
+  }
+}
 
 let state = 'initial';
 const startText = ref('');
@@ -129,6 +137,17 @@ const speechRecognitionConfig = computed(() => ({
 }));
 
 function onStartClick() {
+  if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    notify({
+      message: 'The browser does not support Web Speech API (SpeechRecognition).',
+      type: 'error',
+      displayTime: 7000,
+      position: 'bottom center',
+      width: 'auto',
+    });
+    return;
+  }
+
   state = 'listening';
   hint.value = 'Stop voice recognition';
   if (displayMode.value !== 'Custom') {

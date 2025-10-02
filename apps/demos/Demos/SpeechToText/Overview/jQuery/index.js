@@ -11,6 +11,17 @@ $(() => {
         continuous: false,
       },
       onStartClick: ({ component }) => {
+        if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+          DevExpress.ui.notify({
+            message: 'The browser does not support Web Speech API (SpeechRecognition).',
+            type: 'error',
+            displayTime: 7000,
+            position: 'bottom center',
+            width: 'auto',
+          });
+          return;
+        }
+
         state = 'listening';
         component.option('hint', 'Stop voice recognition');
         if (!shouldUpdateType()) {
