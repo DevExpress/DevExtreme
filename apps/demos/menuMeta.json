@@ -4995,7 +4995,7 @@
         ]
       },
       {
-        "Name": "SpeechToText",
+        "Name": "Speech To Text",
         "Equivalents": "dxSpeechToText, dx-speechtotext, VoiceInput, VoiceToText, AIDictation, MicrophoneInput, SpeechRecognition, SpeechTranscription, MicInput",
         "Demos": [
           {
