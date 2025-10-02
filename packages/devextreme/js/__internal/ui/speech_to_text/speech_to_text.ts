@@ -228,7 +228,10 @@ class SpeechToText extends Widget<Properties> {
   }
 
   private _handleStartClick(e: ClickEvent): void {
-    if (!this._isCustomSpeechRecognitionEnabled()) {
+    const isCustomEnabled = this._isCustomSpeechRecognitionEnabled();
+    const isSRAvailable = this._speechRecognitionAdapter?.isAvailable();
+
+    if (!isCustomEnabled && isSRAvailable) {
       this._setState(SpeechToTextState.LISTENING);
 
       this._speechRecognitionAdapter?.start();
@@ -306,6 +309,7 @@ class SpeechToText extends Widget<Properties> {
     switch (name) {
       case 'customSpeechRecognizer':
         this._handleCustomEngineState();
+        this._initSpeechRecognitionAdapter();
         break;
 
       case 'speechRecognitionConfig':
