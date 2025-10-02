@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "pnpm run format:check"
   },
   "devDependencies": {
     "@types/node": "catalog:tools",

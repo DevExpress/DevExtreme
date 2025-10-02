@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { environment, createChartInstance } from './chartParts/commons.js';
-import vizUtils from 'viz/core/utils';
+import vizUtils from 'viz/core/utils_default';
 import { MockSeries, commonMethodsForTests, categories, seriesMockData } from '../../helpers/chartMocks.js';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');

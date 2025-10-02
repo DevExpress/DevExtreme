@@ -391,6 +391,12 @@
     }
   },
   {
+    "name": "ui/speech_to_text",
+    "exports": {
+      "default": { "path": "ui.dxSpeechToText", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/speed_dial_action/repaint_floating_action_button",
     "exports": {
       "default": { "path": "ui.repaintFloatingActionButton" }

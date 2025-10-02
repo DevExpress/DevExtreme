@@ -67,6 +67,7 @@ const componentNames = [
   'slider',
   'sortable',
   'sparkline',
+  'speech-to-text',
   'speed-dial-action',
   'splitter',
   'stepper',

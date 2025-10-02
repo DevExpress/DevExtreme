@@ -92,7 +92,6 @@ type AccessibleOptions = Pick<Properties,
   "dateSerializationFormat" |
   "descriptionExpr" |
   "disabled" |
-  "dropDownAppointmentTemplate" |
   "editing" |
   "elementAttr" |
   "endDateExpr" |
@@ -179,7 +178,6 @@ const componentConfig = {
     dateSerializationFormat: String,
     descriptionExpr: String,
     disabled: Boolean,
-    dropDownAppointmentTemplate: {},
     editing: [Boolean, Object] as PropType<boolean | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     endDateExpr: String,
@@ -262,7 +260,6 @@ const componentConfig = {
     "update:dateSerializationFormat": null,
     "update:descriptionExpr": null,
     "update:disabled": null,
-    "update:dropDownAppointmentTemplate": null,
     "update:editing": null,
     "update:elementAttr": null,
     "update:endDateExpr": null,
@@ -696,7 +693,6 @@ const DxViewConfig = {
     "update:cellDuration": null,
     "update:dataCellTemplate": null,
     "update:dateCellTemplate": null,
-    "update:dropDownAppointmentTemplate": null,
     "update:endDayHour": null,
     "update:firstDayOfWeek": null,
     "update:groupByDate": null,
@@ -722,7 +718,6 @@ const DxViewConfig = {
     cellDuration: Number,
     dataCellTemplate: {},
     dateCellTemplate: {},
-    dropDownAppointmentTemplate: {},
     endDayHour: Number,
     firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
     groupByDate: Boolean,

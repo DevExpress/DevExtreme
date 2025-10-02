@@ -15,7 +15,7 @@ import PivotGrid, {
   PivotGridRef,
 } from 'devextreme-react/pivot-grid';
 
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const customizeTooltip = (args) => {
   const valueText = (args.seriesName.indexOf('Total') !== -1)

@@ -21,6 +21,7 @@ import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
+  COMMAND_COLUMNS_WITH_REQUIRED_NAMES,
   DEFAULT_COLUMN_OPTIONS,
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
@@ -29,7 +30,7 @@ import {
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
-import type { ColumnsController } from './m_columns_controller';
+import type { Column, ColumnsController } from './m_columns_controller';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
   if (controller?._isWarnedAboutUnsupportedProperties) return;
@@ -1026,4 +1027,8 @@ export const isFirstOrLastColumn = function (
   }
 
   return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
+};
+
+export const isColumnNameRequired = function ({ type = '' }: Column): boolean {
+  return COMMAND_COLUMNS_WITH_REQUIRED_NAMES.includes(type);
 };

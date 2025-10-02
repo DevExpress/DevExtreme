@@ -9,7 +9,7 @@ catalog:
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.21
+  devexpress-diagram: 2.2.24
   devexpress-gantt: 4.1.64
   devextreme-quill: 1.7.4
   eslint: 9.18.0
@@ -42,7 +42,7 @@ catalogs:
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
-    "devextreme-internal-tools": 18.0.0
+    "devextreme-internal-tools": 18.1.2
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8

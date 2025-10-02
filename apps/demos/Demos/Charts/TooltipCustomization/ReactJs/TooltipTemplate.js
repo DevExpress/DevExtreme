@@ -15,7 +15,7 @@ export default function TooltipTemplate(info) {
         <span className="caption">Capital</span>: {info.point.data.capital}
       </div>
       <div className="population">
-        <span className="caption">Population</span>: {formatNumber(info.value)} people
+        <span className="caption">Population</span>: {formatNumber(Number(info.value))} people
       </div>
       <div>
         <span className="caption">Area</span>:{' '}
