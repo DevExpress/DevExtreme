@@ -50,6 +50,16 @@ describe('GridCore AI Column', () => {
 
   describe('when the name is not set', () => {
     it('should throw E1066', async () => {
+      const aiIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return {
+            promise: new Promise<string>((resolve) => {
+              resolve('1');
+            }),
+            abort: (): void => { },
+          };
+        },
+      });
       await createDataGrid({
         dataSource: [
           { id: 1, name: 'Name 1', value: 10 },
@@ -61,6 +71,9 @@ describe('GridCore AI Column', () => {
           {
             type: 'ai',
             caption: 'AI Column',
+            ai: {
+              aiIntegration,
+            },
           },
         ],
       });
@@ -492,6 +505,68 @@ describe('GridCore AI Column', () => {
       instance.columnOption('name', 'groupIndex', 0);
       jest.runOnlyPendingTimers();
       expect(columnSendRequestSpy).toBeCalledTimes(6);
+
+      instance.clearGrouping();
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(7);
+    });
+
+    it('should NOT call aiIntegration.sendRequest with manual mode', async () => {
+      const dataSource = Array.from({ length: 100 }, (_, i) => ({
+        id: i + 1,
+        name: `Name ${i + 1}`,
+        value: (i + 1) * 10,
+      }));
+      const { instance } = await createDataGrid({
+        dataSource,
+        keyExpr: 'id',
+        paging: {
+          pageSize: 5,
+        },
+        pager: {
+          visible: true,
+        },
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+              mode: 'manual',
+            },
+          },
+        ],
+      });
+
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.option('paging.pageIndex', 2);
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.option('paging.pageIndex', 3);
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.option('filterValue', ['id', '>', 50]);
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.option('filterValue', undefined);
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.columnOption('name', 'groupIndex', 0);
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
+
+      instance.clearGrouping();
+      jest.runOnlyPendingTimers();
+      expect(columnSendRequestSpy).toBeCalledTimes(0);
     });
   });
 });
