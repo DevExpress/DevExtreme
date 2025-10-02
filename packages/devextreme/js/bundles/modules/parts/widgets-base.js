@@ -67,6 +67,7 @@ ui.dxTabPanel = require('../../../ui/tab_panel');
 ui.dxTabs = require('../../../ui/tabs');
 ui.dxTagBox = require('../../../ui/tag_box');
 ui.dxTextArea = require('../../../ui/text_area');
+ui.dxTextAreaOnSteroids = require('../../../ui/text_area_with_toolbar');
 ui.dxTextBox = require('../../../ui/text_box');
 ui.dxTileView = require('../../../ui/tile_view');
 ui.dxToast = require('../../../ui/toast');

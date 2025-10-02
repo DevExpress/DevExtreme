@@ -4,12 +4,14 @@ import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
-import Button from '@js/ui/button';
+import type Button from '@js/ui/button';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import EditingPreview from '@ts/ui/chat/editing_preview';
-import TextArea from '@ts/ui/m_text_area';
+import type { Properties as TextAreaOnSteroidsProperties } from '@ts/ui/text_area/text_area_with_toolbar';
+import TextAreaOnSteroids from '@ts/ui/text_area/text_area_with_toolbar';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 
@@ -36,6 +38,10 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   hoverStateEnabled?: boolean;
 
+  text?: string;
+
+  toolbarItems?: ToolbarProperties['items'];
+
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
   onTypingStart?: (e: TypingStartEvent) => void;
@@ -45,14 +51,12 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageEditCanceled?: () => void;
 
   onMessageUpdating?: (e: { text: string }) => void;
-
-  text?: string;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
-  _textArea!: TextArea;
+  _textArea!: TextAreaOnSteroids;
 
-  _button!: Button;
+  _sendButton?: Button;
 
   _editingPreview!: EditingPreview | null;
 
@@ -106,7 +110,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .appendTo(this.element());
 
     this._renderTextArea($messageBox);
-    this._renderButton($messageBox);
   }
 
   _cancelMessageEdit(): void {
@@ -136,20 +139,46 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _renderTextArea($parent: dxElementWrapper): void {
+    const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+    const textAreaOptions = this._getTextAreaOptions();
+
+    $parent.append($textArea);
+
+    this._textArea = this._createComponent(
+      $textArea,
+      TextAreaOnSteroids,
+      textAreaOptions,
+    );
+
+    this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
+      if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
+        event.preventDefault();
+      }
+    });
+
+    this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
+      if (this.option('text')) {
+        this._cancelMessageEdit();
+      }
+    });
+  }
+
+  _getTextAreaOptions(): TextAreaOnSteroidsProperties {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
-    const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+    const toolbarItems = this._getToolbarItems();
 
-    $parent.append($textArea);
-
-    this._textArea = this._createComponent($textArea, TextArea, {
+    const options = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      toolbarOptions: {
+        items: toolbarItems,
+      },
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
@@ -172,45 +201,98 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
           this._sendHandler(e);
         }
       },
-    });
+    };
 
-    this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
-      if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
-        event.preventDefault();
-      }
-    });
-
-    this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
-      if (this.option('text')) {
-        this._cancelMessageEdit();
-      }
-    });
+    return options as TextAreaOnSteroidsProperties;
   }
 
-  _renderButton($parent: dxElementWrapper): void {
+  _getToolbarItems(): ToolbarProperties['items'] {
+    const { toolbarItems } = this.option();
+
+    const items = [
+      ...this._getDefaultBeforeToolbarItems() ?? [],
+      ...toolbarItems ?? [],
+      ...this._getDefaultAfterToolbarItems() ?? [],
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return items;
+  }
+
+  _getDefaultBeforeToolbarItems(): ToolbarProperties['items'] {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
-    const $button = $('<div>').addClass(CHAT_MESSAGEBOX_BUTTON_CLASS);
+    const items = [
+      {
+        widget: 'dxButton',
+        location: 'before',
+        options: {
+          activeStateEnabled,
+          focusStateEnabled,
+          hoverStateEnabled,
+          icon: 'attach',
+          onClick: (): void => {
+            // eslint-disable-next-line no-alert
+            alert('attach');
+          },
+        },
+      },
+    ];
 
-    $parent.append($button);
+    return items;
+  }
 
-    this._button = this._createComponent<Button, ButtonProperties>($button, Button, {
+  _getDefaultAfterToolbarItems(): ToolbarProperties['items'] {
+    const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      icon: 'sendfilled',
-      type: 'default',
-      stylingMode: 'text',
-      disabled: true,
-      elementAttr: { 'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel') },
-      onClick: (e): void => {
-        this._sendHandler(e);
+      /** Filter items if unavailable */
+      // speechToTextEnabled,
+      // attachmentsEnabled,
+    } = this.option();
+
+    const items = [
+      {
+        widget: 'dxSpeechToText',
+        location: 'after',
+        options: {
+          activeStateEnabled,
+          focusStateEnabled,
+          hoverStateEnabled,
+          stylingMode: 'text',
+        },
       },
-    });
+      {
+        widget: 'dxButton',
+        location: 'after',
+        options: {
+          activeStateEnabled,
+          focusStateEnabled,
+          hoverStateEnabled,
+          icon: 'arrowright',
+          type: 'default',
+          stylingMode: 'contained',
+          disabled: true,
+          elementAttr: {
+            class: CHAT_MESSAGEBOX_BUTTON_CLASS,
+            'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
+          },
+          onClick: (e): void => {
+            this._sendHandler(e);
+          },
+          onInitialized: (e): void => {
+            this._sendButton = e.component;
+          },
+        } as ButtonProperties,
+      },
+    ];
+
+    return items;
   }
 
   _createMessageEnteredAction(): void {
@@ -284,7 +366,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _toggleButtonDisableState(state: boolean): void {
-    this._button.option('disabled', state);
+    this._sendButton?.option('disabled', state);
   }
 
   _isValuableTextEntered(): boolean {
@@ -300,7 +382,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled': {
-        this._button.option(name, value);
+        this._sendButton?.option(name, value);
         this._textArea.option(name, value);
         this._editingPreview?.option(name, value);
         break;
