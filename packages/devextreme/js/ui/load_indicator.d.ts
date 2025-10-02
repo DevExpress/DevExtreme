@@ -75,6 +75,7 @@ export type LoadIndicatorOptions = {
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @docid
+ * @inherits LoadIndicatorOptions
  */
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator>, LoadIndicatorOptions {}
 
