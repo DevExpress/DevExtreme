@@ -5,6 +5,7 @@ import type { Properties as ButtonProperties } from '@js/ui/button';
 import Popup from '@js/ui/popup';
 import TextArea from '@js/ui/text_area';
 
+import { DEFAULT_POPUP_OPTIONS } from './const';
 import type { AiPromptEditorOptions } from './types';
 
 export class AiPromptEditor {
@@ -18,7 +19,8 @@ export class AiPromptEditor {
     const { createComponent } = options;
 
     this.popupInstance = createComponent(options.container, Popup, {
-      visible: false,
+      ...DEFAULT_POPUP_OPTIONS,
+      title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       contentTemplate: (): dxElementWrapper => {
         const $editorContainer = $('<div>');
 

@@ -53,6 +53,9 @@ describe('AiPromptEditor', () => {
         Popup,
         {
           visible: false,
+          width: 360,
+          height: 216,
+          title: 'AI Prompt Editor',
           contentTemplate: expect.any(Function),
           toolbarItems: [
             {
