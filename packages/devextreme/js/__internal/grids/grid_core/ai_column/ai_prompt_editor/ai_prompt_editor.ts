@@ -1,5 +1,7 @@
+import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Popup from '@js/ui/popup';
 import TextArea from '@js/ui/text_area';
 
@@ -30,8 +32,38 @@ export class AiPromptEditor {
 
         return $editorContainer;
       },
+      toolbarItems: [
+        {
+          toolbar: 'bottom', location: 'before', widget: 'dxButton', options: this.getRegenerateDataButtonConfig(),
+        },
+        {
+          toolbar: 'bottom', location: 'after', widget: 'dxButton', options: this.getApplyButtonConfig(),
+        },
+      ],
       ...options.popupOptions,
     });
+  }
+
+  private getApplyButtonConfig(): ButtonProperties {
+    const { onRefresh } = this.options;
+
+    return {
+      text: messageLocalization.format('dxDataGrid-applyButton'),
+      onClick: (): void => {
+        onRefresh?.();
+      },
+    };
+  }
+
+  private getRegenerateDataButtonConfig(): ButtonProperties {
+    const { onSubmit } = this.options;
+
+    return {
+      text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
+      onClick: (): void => {
+        onSubmit?.();
+      },
+    };
   }
 
   public show(): Promise<boolean> {

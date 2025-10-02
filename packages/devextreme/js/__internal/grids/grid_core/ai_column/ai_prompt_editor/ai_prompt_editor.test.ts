@@ -54,6 +54,26 @@ describe('AiPromptEditor', () => {
         {
           visible: false,
           contentTemplate: expect.any(Function),
+          toolbarItems: [
+            {
+              toolbar: 'bottom',
+              location: 'before',
+              widget: 'dxButton',
+              options: {
+                text: 'Regenerate Data',
+                onClick: expect.any(Function),
+              },
+            },
+            {
+              toolbar: 'bottom',
+              location: 'after',
+              widget: 'dxButton',
+              options: {
+                text: 'Apply',
+                onClick: expect.any(Function),
+              },
+            },
+          ],
         },
       ]);
     });
@@ -100,6 +120,44 @@ describe('AiPromptEditor', () => {
       await aiPromptEditor.hide();
 
       expect(popupInstanceMock.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe('when onSubmit is provided', () => {
+    it('should call onSubmit when "Regenerate Data" button is clicked', () => {
+      const container = $(document.createElement('div'));
+      const onSubmitMock = jest.fn();
+
+      createAiPromptEditor({
+        container,
+        createComponent: createComponentMock,
+        onSubmit: onSubmitMock,
+      });
+
+      const regenerateButtonConfig = createComponentMock.mock.calls[0][2].toolbarItems[0];
+
+      regenerateButtonConfig.options.onClick();
+
+      expect(onSubmitMock).toHaveBeenCalled();
+    });
+  });
+
+  describe('when onRefresh is provided', () => {
+    it('should call onRefresh when "Apply" button is clicked', () => {
+      const container = $(document.createElement('div'));
+      const onRefreshMock = jest.fn();
+
+      createAiPromptEditor({
+        container,
+        createComponent: createComponentMock,
+        onRefresh: onRefreshMock,
+      });
+
+      const applyButtonConfig = createComponentMock.mock.calls[0][2].toolbarItems[1];
+
+      applyButtonConfig.options.onClick();
+
+      expect(onRefreshMock).toHaveBeenCalled();
     });
   });
 });
