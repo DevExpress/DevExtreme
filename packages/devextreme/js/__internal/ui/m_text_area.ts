@@ -27,10 +27,12 @@ export interface TextAreaProperties extends Omit<Properties,
   _shouldAttachKeyboardEvents?: boolean;
 }
 
-class TextArea extends TextBox<TextAreaProperties> {
+class TextArea<
+  TProperties extends TextAreaProperties = TextAreaProperties,
+> extends TextBox<TProperties> {
   _eventY!: number;
 
-  _getDefaultOptions(): TextAreaProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       spellcheck: true,
@@ -228,7 +230,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<TextAreaProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value } = args;
 
     switch (name) {
