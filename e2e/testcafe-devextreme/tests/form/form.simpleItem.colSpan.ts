@@ -29,7 +29,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
     await addCaptionTo(`#${formId}`, `colCount = ${colCount}`);
 
     const formOptions = {
-      height: 60,
+      elementAttr: { style: 'margin-bottom: 20px' },
       labelMode: 'static',
       colCount,
       items: [{ dataField: 'item_1', colSpan: 2 }],
@@ -60,7 +60,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
       await addCaptionTo(`#${formId}`, `colCount = ${colCount}`);
 
       const formOptions = {
-        height: colCount > colSpan1 ? 60 : 100,
+        elementAttr: { style: 'margin-bottom: 20px' },
         labelMode: 'static',
         colCount,
         items: [
