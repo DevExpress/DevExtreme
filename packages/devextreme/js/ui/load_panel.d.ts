@@ -23,6 +23,8 @@ import {
     PositionAlignment,
 } from '../common';
 
+import { LoadIndicatorOptions } from './load_indicator';
+
 /**
  * @docid _ui_load_panel_ContentReadyEvent
  * @public
@@ -129,9 +131,15 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default ""
-     * @public
+     * @deprecated Use indicatorSrc in indicatorOptions instead
      */
     indicatorSrc?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    indicatorOptions?: LoadIndicatorOptions;
     /**
      * @docid
      * @default 60 &for(Material)

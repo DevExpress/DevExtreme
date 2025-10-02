@@ -5362,6 +5362,11 @@ QUnit.module('LoadIndicator', () => {
             deferRendering: false,
             disabled: false,
             message: '',
+            indicatorOptions: {
+                animationType: 'sparkle',
+                width: FORM_LOAD_INDICATOR_SIZE,
+                height: FORM_LOAD_INDICATOR_SIZE,
+            },
             'wrapperAttr.class': FORM_LOAD_PANEL_WRAPPER_CLASS,
             width: FORM_LOAD_INDICATOR_SIZE,
             height: FORM_LOAD_INDICATOR_SIZE,
@@ -5370,7 +5375,7 @@ QUnit.module('LoadIndicator', () => {
         };
 
         Object.entries(expectedOptions).forEach(([optionName, value]) => {
-            assert.strictEqual(loadPanelInstance.option(optionName), value, `${optionName} option has correct default value`);
+            assert.deepEqual(loadPanelInstance.option(optionName), value, `${optionName} option has correct default value`);
         });
     });
 

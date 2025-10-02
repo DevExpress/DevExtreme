@@ -211,9 +211,12 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
         .appendTo(this._$loadPanelContentWrapper);
     }
 
+    const { indicatorOptions = {}, indicatorSrc } = this.option();
+
     this._createComponent(this._$indicator, LoadIndicator, {
       elementAttr: this._getAriaAttributes(),
-      indicatorSrc: this.option('indicatorSrc'),
+      indicatorSrc,
+      ...indicatorOptions,
     });
   }
 
@@ -243,6 +246,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
         this._togglePaneVisible();
         break;
       case 'indicatorSrc':
+      case 'indicatorOptions':
         this._renderLoadIndicator();
         break;
       default:
