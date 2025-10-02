@@ -28,6 +28,9 @@ export class AiColumnIntegrationController extends Controller {
 
   public sendRequest(columnName: string): void {
     const aiIntegration = this.getAiIntegration(columnName);
+    if (!aiIntegration) {
+      return;
+    }
     const data = this.dataController.items()
       .filter((row) => row.rowType === 'data')
       .reduce<Record<PropertyKey, unknown>>((acc, row) => {
@@ -99,7 +102,7 @@ export class AiColumnIntegrationController extends Controller {
 
   }
 
-  private getAiIntegration(columnName: string): AIIntegration {
+  private getAiIntegration(columnName: string): AIIntegration | null {
     if (!columnName) {
       errors.log('E1066');
     }
@@ -114,6 +117,6 @@ export class AiColumnIntegrationController extends Controller {
     }
 
     errors.log('E1067', columnName);
-    throw new Error('AI Integration not found');
+    return null;
   }
 }

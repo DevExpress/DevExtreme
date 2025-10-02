@@ -29,15 +29,13 @@ const createDataGrid = async (
 
   const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
 
-  jest.useFakeTimers();
   jest.runOnlyPendingTimers();
-  jest.useRealTimers();
-
   resolve({ $container, instance });
 });
 
 describe('GridCore AI Column', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.spyOn(errors, 'log').mockImplementation(jest.fn());
   });
   afterEach(() => {
@@ -47,6 +45,7 @@ describe('GridCore AI Column', () => {
     dataGrid.dispose();
     $container.remove();
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
 
   describe('when the name is not set', () => {
@@ -298,30 +297,6 @@ describe('GridCore AI Column', () => {
       expect(columnSendRequestSpy).toHaveBeenCalled();
       expect(rootSendRequestSpy).not.toHaveBeenCalled();
     });
-
-    describe('when aiIntegration is not set', () => {
-      it('should throw E1067', async () => {
-        const { instance } = await createDataGrid({
-          dataSource: [
-            { id: 1, name: 'Name 1', value: 10 },
-          ],
-          columns: [
-            { dataField: 'id', caption: 'ID' },
-            { dataField: 'name', caption: 'Name' },
-            { dataField: 'value', caption: 'Value' },
-            {
-              type: 'ai',
-              caption: 'AI Column',
-              name: 'myColumn',
-            },
-          ],
-        });
-        expect(() => {
-          instance.sendAIColumnRequest('myColumn');
-        }).toThrow();
-        expect(errors.log).toHaveBeenCalledWith('E1067', 'myColumn');
-      });
-    });
   });
 
   describe('Prompt', () => {
@@ -398,6 +373,27 @@ describe('GridCore AI Column', () => {
       instance.sendAIColumnRequest('myColumn');
       expect(columnSendRequestSpy).toHaveBeenCalledWith(true);
     });
+
+    describe('when aiIntegration is not set', () => {
+      it('should throw E1067', async () => {
+        await createDataGrid({
+          dataSource: [
+            { id: 1, name: 'Name 1', value: 10 },
+          ],
+          columns: [
+            { dataField: 'id', caption: 'ID' },
+            { dataField: 'name', caption: 'Name' },
+            { dataField: 'value', caption: 'Value' },
+            {
+              type: 'ai',
+              caption: 'AI Column',
+              name: 'myColumn',
+            },
+          ],
+        });
+        expect(errors.log).toHaveBeenCalledWith('E1067', 'myColumn');
+      });
+    });
   });
 
   describe('AI Mode', () => {
@@ -405,10 +401,6 @@ describe('GridCore AI Column', () => {
 
     beforeEach(() => {
       columnSendRequestSpy.mockClear();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
     });
 
     const aiIntegrationResult = (): RequestResult => ({
@@ -478,8 +470,7 @@ describe('GridCore AI Column', () => {
           },
         ],
       });
-      await instance.refresh();
-      jest.useFakeTimers();
+
       expect(columnSendRequestSpy).toBeCalledTimes(1);
 
       instance.option('paging.pageIndex', 2);
