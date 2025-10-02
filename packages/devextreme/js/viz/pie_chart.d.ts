@@ -1016,7 +1016,7 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 }
 
 /**
- * @docid
+ * @docid dxPieChartPointInfo
  * @public
  */
 export type PointInfo = BasePointInfo<piePointObject> & {

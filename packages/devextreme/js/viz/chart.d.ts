@@ -403,7 +403,7 @@ export interface baseLabelObject {
  * @public
  * @type object
  */
-export type StackedPointInfo = ChartPointInfo & {
+export type StackedPointInfo = CommonPointInfo & {
   /**
    * @docid
    * @public
@@ -436,7 +436,7 @@ export type StackedPointInfo = ChartPointInfo & {
  * @public
  * @type object
  */
-export type BubblePointInfo = ChartPointInfo & {
+export type BubblePointInfo = CommonPointInfo & {
   /**
    * @docid
    * @public
@@ -639,14 +639,14 @@ export type RangePointInfo = {
  * @docid
  * @public
  */
-export type ChartPointInfo = BasePointInfo<chartPointObject>;
+export type CommonPointInfo = BasePointInfo<chartPointObject>;
 
 /**
- * @docid
+ * @docid dxChartPointInfo
  * @public
  */
 export type PointInfo =
-  | ChartPointInfo
+  | CommonPointInfo
   | StackedPointInfo
   | BubblePointInfo
   | CandleStickPointInfo
