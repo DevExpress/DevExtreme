@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Az érték szám kell legyen",
         "dxNumberBox-noDataText": "Nincs adat",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} to display columns",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Drag a column from the group panel here",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} or drag a column from the group panel",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Módosítások mentése",
         "dxDataGrid-editingCancelAllChanges": "Módosítások elvetése",
         "dxDataGrid-editingAddRow": "Sor hozzáadása",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Minimum: {0}",
         "dxDataGrid-summaryMinOtherColumn": "{1} minimuma: {0}",
         "dxDataGrid-summaryMax": "Maximum: {0}",

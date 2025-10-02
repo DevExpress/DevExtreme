@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Значення має бути числом",
         "dxNumberBox-noDataText": "Немає даних",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Використовуйте {0}, щоб відобразити стовпці",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетягніть сюди стовпець з панелі групування",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Використовуйте {0} або перетягніть стовпець з панелі групування",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Зберегти зміни",
         "dxDataGrid-editingCancelAllChanges": "Скасувати зміни",
         "dxDataGrid-editingAddRow": "Додати рядок",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Мінімум: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Мінімум у {1}: {0}",
         "dxDataGrid-summaryMax": "Максимум: {0}",

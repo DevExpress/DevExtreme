@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
         "dxNumberBox-noDataText": "Keine Daten",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Verwenden Sie die {0}, um Spalten anzuzeigen",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Ziehen Sie eine Spalte aus dem Gruppenpanel hierher",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Verwenden Sie die {0} oder ziehen Sie eine Spalte aus dem Gruppenpanel",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Änderungen speichern",
         "dxDataGrid-editingCancelAllChanges": "Änderungen verwerfen",
         "dxDataGrid-editingAddRow": "Neue Zeile",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Min: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Minimum von {1} ist {0}",
         "dxDataGrid-summaryMax": "Max: {0}",

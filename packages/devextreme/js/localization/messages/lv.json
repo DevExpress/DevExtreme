@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Vērtībai jābūt skaitlim",
         "dxNumberBox-noDataText": "Nav datu",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Izmanto {0} lai attēlotu kolonnas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Nomest kolonu no grupēšanas paneļa šeit",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Izmanto {0} vai nomet kolonnu no grupēšanas paneļa",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Saglabāt izmaiņas",
         "dxDataGrid-editingCancelAllChanges": "Atcelt izmaiņas",
         "dxDataGrid-editingAddRow": "Pievienot rindu",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Min: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Min no {1} ir {0}",
         "dxDataGrid-summaryMax": "Max: {0}",

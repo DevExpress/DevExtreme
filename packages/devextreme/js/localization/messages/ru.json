@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
         "dxNumberBox-noDataText": "Нет данных",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Используйте {0} чтобы отобразить столбцы",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетащите столбец из панели группировки",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Используйте {0} или перетащите столбец из панели группировки",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Сохранить изменения",
         "dxDataGrid-editingCancelAllChanges": "Отменить изменения",
         "dxDataGrid-editingAddRow": "Добавить строку",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Мин: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Мин по {1} : {0}",
         "dxDataGrid-summaryMax": "Макс: {0}",

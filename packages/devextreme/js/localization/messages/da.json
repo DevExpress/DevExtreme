@@ -103,6 +103,8 @@
         "dxNumberBox-invalidValueMessage": "Værdien skal være et tal",
         "dxNumberBox-noDataText": "Ingen data",
 
+
+        "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Brug {0} til at vise kolonner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Træk en kolonne fra gruppepanelet hertil",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Brug {0}, eller træk en kolonne fra gruppepanelet",
@@ -153,6 +155,8 @@
         "dxDataGrid-editingSaveAllChanges": "Gem ændringer",
         "dxDataGrid-editingCancelAllChanges": "Kassér ændringer",
         "dxDataGrid-editingAddRow": "Tilføj en række",
+        "dxDataGrid-regenerateDataButton": "Regenerate Data",
+        "dxDataGrid-stopButton": "Stop",
         "dxDataGrid-summaryMin": "Min.: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Min. af {1} er {0}",
         "dxDataGrid-summaryMax": "Maks.: {0}",
