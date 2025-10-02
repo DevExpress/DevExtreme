@@ -39,6 +39,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         this._createScrollViewControl();
 
         super._initMarkup();
+
+        this.onFocusedItemChanged = this._onFocusedItemChanged.bind(this);
         this._layoutUtils = new ListBoxLayoutUtils(this._scrollView, this.$element(), this._$itemContainer, this.itemElements().first());
 
         this._syncFocusedItemKey();
