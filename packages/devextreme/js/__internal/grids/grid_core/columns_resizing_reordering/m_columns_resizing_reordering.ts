@@ -1521,7 +1521,12 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   private allowDrop(parameters) {
-    return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
+    return this._columnsController.allowMoveColumn(
+      this.addColumnIndexOffset(parameters.sourceColumnIndex),
+      this.addColumnIndexOffset(parameters.targetColumnIndex),
+      parameters.sourceLocation,
+      parameters.targetLocation,
+    );
   }
 
   public drag(parameters) {
