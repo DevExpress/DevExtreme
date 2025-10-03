@@ -107,6 +107,7 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
+import { DxoTreeListAiModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAiOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -117,6 +118,7 @@ import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested'
 import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListColumnButtonModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnChooserSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnChooserSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -131,6 +133,8 @@ import { DxiTreeListCustomOperationModule } from 'devextreme-angular/ui/tree-lis
 import { DxiTreeListCustomRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListEditingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListEditingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListEditorOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListEditorOptionsButtonModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListEmailRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFieldLookupModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -157,6 +161,7 @@ import { DxoTreeListMyModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListNumericRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagerModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListPatternRuleModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -2334,6 +2339,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiModule,
     DxoTreeListAiOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
@@ -2344,6 +2350,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
     DxiTreeListColumnModule,
+    DxiTreeListColumnButtonModule,
     DxoTreeListColumnChooserModule,
     DxoTreeListColumnChooserSearchModule,
     DxoTreeListColumnChooserSelectionModule,
@@ -2358,6 +2365,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListCustomRuleModule,
     DxoTreeListEditingModule,
     DxoTreeListEditingTextsModule,
+    DxoTreeListEditorOptionsModule,
+    DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
@@ -2384,6 +2393,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListNumericRuleModule,
     DxoTreeListOffsetModule,
     DxoTreeListOperationDescriptionsModule,
+    DxoTreeListOptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
     DxiTreeListPatternRuleModule,
@@ -2470,6 +2480,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoTreeListAiModule,
     DxoTreeListAiOptionsModule,
     DxoTreeListAnimationModule,
     DxiTreeListAsyncRuleModule,
@@ -2480,6 +2491,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
     DxiTreeListColumnModule,
+    DxiTreeListColumnButtonModule,
     DxoTreeListColumnChooserModule,
     DxoTreeListColumnChooserSearchModule,
     DxoTreeListColumnChooserSelectionModule,
@@ -2494,6 +2506,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListCustomRuleModule,
     DxoTreeListEditingModule,
     DxoTreeListEditingTextsModule,
+    DxoTreeListEditorOptionsModule,
+    DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
@@ -2520,6 +2534,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxiTreeListNumericRuleModule,
     DxoTreeListOffsetModule,
     DxoTreeListOperationDescriptionsModule,
+    DxoTreeListOptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
     DxiTreeListPatternRuleModule,

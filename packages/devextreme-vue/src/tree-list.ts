@@ -21,7 +21,9 @@ import {
  Pager,
  SearchPanel,
  Sorting,
+ AIColumnMode,
  DataChangeType,
+ ColumnAIOptions,
  FilterOperation,
  FilterType,
  FixedPosition,
@@ -107,15 +109,26 @@ import {
  ValidationRuleType,
  HorizontalAlignment,
  VerticalAlignment,
+ TextEditorButtonLocation,
  DataType,
  Format as CommonFormat,
  SortOrder,
  SearchMode,
  ComparisonOperator,
+ TextBoxPredefinedButton,
+ TextEditorButton,
+ LabelMode,
+ MaskMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
  PositionAlignment,
  Direction,
  ToolbarItemLocation,
  ToolbarItemComponent,
+ ButtonStyle,
+ ButtonType,
  DisplayMode,
  DragDirection,
  DragHighlight,
@@ -142,7 +155,7 @@ import {
  EditorPreparingEvent as FilterBuilderEditorPreparingEvent,
  InitializedEvent as FilterBuilderInitializedEvent,
  OptionChangedEvent as FilterBuilderOptionChangedEvent,
- ValueChangedEvent,
+ ValueChangedEvent as FilterBuilderValueChangedEvent,
 } from "devextreme/ui/filter_builder";
 import {
  dxPopupOptions,
@@ -152,6 +165,25 @@ import {
 import {
  PagerBase,
 } from "devextreme/ui/pagination";
+import {
+ dxTextBoxOptions,
+ TextBoxType,
+ ChangeEvent,
+ ContentReadyEvent as TextBoxContentReadyEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent as TextBoxDisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent as TextBoxInitializedEvent,
+ InputEvent,
+ KeyDownEvent as TextBoxKeyDownEvent,
+ KeyUpEvent,
+ OptionChangedEvent as TextBoxOptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/text_box";
 import {
  AnimationConfig,
  CollisionResolution,
@@ -163,6 +195,14 @@ import {
 import {
  event,
 } from "devextreme/events/events.types";
+import {
+ dxButtonOptions,
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import {
  Format,
 } from "devextreme/common/core/localization";
@@ -611,6 +651,40 @@ prepareComponentConfig(componentConfig);
 const DxTreeList = defineComponent(componentConfig);
 
 
+const DxAiConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:aiIntegration": null,
+    "update:editorOptions": null,
+    "update:emptyText": null,
+    "update:mode": null,
+    "update:noDataText": null,
+    "update:popup": null,
+    "update:prompt": null,
+    "update:showHeaderMenu": null,
+  },
+  props: {
+    aiIntegration: Object as PropType<AIIntegration>,
+    editorOptions: Object as PropType<dxTextBoxOptions<any> | Record<string, any>>,
+    emptyText: String,
+    mode: String as PropType<AIColumnMode>,
+    noDataText: String,
+    popup: Object as PropType<Record<string, any>>,
+    prompt: String,
+    showHeaderMenu: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxAiConfig);
+
+const DxAi = defineComponent(DxAiConfig);
+
+(DxAi as any).$_optionName = "ai";
+(DxAi as any).$_expectedChildren = {
+  editorOptions: { isCollectionItem: false, optionName: "editorOptions" }
+};
+
 const DxAiOptionsConfig = {
   emits: {
     "update:isActive": null,
@@ -728,8 +802,10 @@ const DxButtonConfig = {
     "update:disabled": null,
     "update:hint": null,
     "update:icon": null,
+    "update:location": null,
     "update:name": null,
     "update:onClick": null,
+    "update:options": null,
     "update:template": null,
     "update:text": null,
     "update:visible": null,
@@ -739,8 +815,10 @@ const DxButtonConfig = {
     disabled: [Boolean, Function] as PropType<boolean | (((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
     hint: String,
     icon: String,
+    location: String as PropType<TextEditorButtonLocation>,
     name: String as PropType<string | TreeListPredefinedColumnButton>,
     onClick: Function as PropType<((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)>,
+    options: Object as PropType<dxButtonOptions | Record<string, any>>,
     template: {},
     text: String,
     visible: [Boolean, Function] as PropType<boolean | (((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean))>
@@ -753,6 +831,9 @@ const DxButton = defineComponent(DxButtonConfig);
 
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
+(DxButton as any).$_expectedChildren = {
+  options: { isCollectionItem: false, optionName: "options" }
+};
 
 const DxChangeConfig = {
   emits: {
@@ -883,7 +964,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    ai: Object as PropType<Record<string, any>>,
+    ai: Object as PropType<ColumnAIOptions | Record<string, any>>,
     alignment: String as PropType<HorizontalAlignment>,
     allowEditing: Boolean,
     allowFiltering: Boolean,
@@ -950,8 +1031,10 @@ const DxColumn = defineComponent(DxColumnConfig);
 (DxColumn as any).$_optionName = "columns";
 (DxColumn as any).$_isCollectionItem = true;
 (DxColumn as any).$_expectedChildren = {
+  ai: { isCollectionItem: false, optionName: "ai" },
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   button: { isCollectionItem: true, optionName: "buttons" },
+  columnButton: { isCollectionItem: true, optionName: "buttons" },
   columnHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
   columnLookup: { isCollectionItem: false, optionName: "lookup" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -968,6 +1051,40 @@ const DxColumn = defineComponent(DxColumnConfig);
   StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
   validationRule: { isCollectionItem: true, optionName: "validationRules" }
 };
+
+const DxColumnButtonConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cssClass": null,
+    "update:disabled": null,
+    "update:hint": null,
+    "update:icon": null,
+    "update:name": null,
+    "update:onClick": null,
+    "update:template": null,
+    "update:text": null,
+    "update:visible": null,
+  },
+  props: {
+    cssClass: String,
+    disabled: [Boolean, Function] as PropType<boolean | (((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean))>,
+    hint: String,
+    icon: String,
+    name: String as PropType<string | TreeListPredefinedColumnButton>,
+    onClick: Function as PropType<((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)>,
+    template: {},
+    text: String,
+    visible: [Boolean, Function] as PropType<boolean | (((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean))>
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnButtonConfig);
+
+const DxColumnButton = defineComponent(DxColumnButtonConfig);
+
+(DxColumnButton as any).$_optionName = "buttons";
+(DxColumnButton as any).$_isCollectionItem = true;
 
 const DxColumnChooserConfig = {
   emits: {
@@ -1395,6 +1512,160 @@ const DxEditingTexts = defineComponent(DxEditingTextsConfig);
 
 (DxEditingTexts as any).$_optionName = "texts";
 
+const DxEditorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:buttons": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:inputAttr": null,
+    "update:isDirty": null,
+    "update:isValid": null,
+    "update:label": null,
+    "update:labelMode": null,
+    "update:mask": null,
+    "update:maskChar": null,
+    "update:maskInvalidMessage": null,
+    "update:maskRules": null,
+    "update:maxLength": null,
+    "update:mode": null,
+    "update:name": null,
+    "update:onChange": null,
+    "update:onContentReady": null,
+    "update:onCopy": null,
+    "update:onCut": null,
+    "update:onDisposing": null,
+    "update:onEnterKey": null,
+    "update:onFocusIn": null,
+    "update:onFocusOut": null,
+    "update:onInitialized": null,
+    "update:onInput": null,
+    "update:onKeyDown": null,
+    "update:onKeyUp": null,
+    "update:onOptionChanged": null,
+    "update:onPaste": null,
+    "update:onValueChanged": null,
+    "update:placeholder": null,
+    "update:readOnly": null,
+    "update:rtlEnabled": null,
+    "update:showClearButton": null,
+    "update:showMaskMode": null,
+    "update:spellcheck": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:text": null,
+    "update:useMaskedValue": null,
+    "update:validationError": null,
+    "update:validationErrors": null,
+    "update:validationMessageMode": null,
+    "update:validationMessagePosition": null,
+    "update:validationStatus": null,
+    "update:value": null,
+    "update:valueChangeEvent": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    buttons: Array as PropType<Array<string | TextBoxPredefinedButton | TextEditorButton>>,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    inputAttr: {},
+    isDirty: Boolean,
+    isValid: Boolean,
+    label: String,
+    labelMode: String as PropType<LabelMode>,
+    mask: String,
+    maskChar: String,
+    maskInvalidMessage: String,
+    maskRules: {},
+    maxLength: [Number, String],
+    mode: String as PropType<TextBoxType>,
+    name: String,
+    onChange: Function as PropType<((e: ChangeEvent) => void)>,
+    onContentReady: Function as PropType<((e: TextBoxContentReadyEvent) => void)>,
+    onCopy: Function as PropType<((e: CopyEvent) => void)>,
+    onCut: Function as PropType<((e: CutEvent) => void)>,
+    onDisposing: Function as PropType<((e: TextBoxDisposingEvent) => void)>,
+    onEnterKey: Function as PropType<((e: EnterKeyEvent) => void)>,
+    onFocusIn: Function as PropType<((e: FocusInEvent) => void)>,
+    onFocusOut: Function as PropType<((e: FocusOutEvent) => void)>,
+    onInitialized: Function as PropType<((e: TextBoxInitializedEvent) => void)>,
+    onInput: Function as PropType<((e: InputEvent) => void)>,
+    onKeyDown: Function as PropType<((e: TextBoxKeyDownEvent) => void)>,
+    onKeyUp: Function as PropType<((e: KeyUpEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: TextBoxOptionChangedEvent) => void)>,
+    onPaste: Function as PropType<((e: PasteEvent) => void)>,
+    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
+    placeholder: String,
+    readOnly: Boolean,
+    rtlEnabled: Boolean,
+    showClearButton: Boolean,
+    showMaskMode: String as PropType<MaskMode>,
+    spellcheck: Boolean,
+    stylingMode: String as PropType<EditorStyle>,
+    tabIndex: Number,
+    text: String,
+    useMaskedValue: Boolean,
+    validationError: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
+    value: String,
+    valueChangeEvent: String,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditorOptionsConfig);
+
+const DxEditorOptions = defineComponent(DxEditorOptionsConfig);
+
+(DxEditorOptions as any).$_optionName = "editorOptions";
+(DxEditorOptions as any).$_expectedChildren = {
+  button: { isCollectionItem: true, optionName: "buttons" },
+  editorOptionsButton: { isCollectionItem: true, optionName: "buttons" }
+};
+
+const DxEditorOptionsButtonConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:location": null,
+    "update:name": null,
+    "update:options": null,
+  },
+  props: {
+    location: String as PropType<TextEditorButtonLocation>,
+    name: String,
+    options: Object as PropType<dxButtonOptions | Record<string, any>>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditorOptionsButtonConfig);
+
+const DxEditorOptionsButton = defineComponent(DxEditorOptionsButtonConfig);
+
+(DxEditorOptionsButton as any).$_optionName = "buttons";
+(DxEditorOptionsButton as any).$_isCollectionItem = true;
+(DxEditorOptionsButton as any).$_expectedChildren = {
+  options: { isCollectionItem: false, optionName: "options" }
+};
+
 const DxEmailRuleConfig = {
   emits: {
     "update:isActive": null,
@@ -1544,7 +1815,7 @@ const DxFilterBuilderConfig = {
     onEditorPreparing: Function as PropType<((e: FilterBuilderEditorPreparingEvent) => void)>,
     onInitialized: Function as PropType<((e: FilterBuilderInitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: FilterBuilderOptionChangedEvent) => void)>,
-    onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
+    onValueChanged: Function as PropType<((e: FilterBuilderValueChangedEvent) => void)>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
@@ -2402,6 +2673,69 @@ prepareConfigurationComponentConfig(DxOperationDescriptionsConfig);
 const DxOperationDescriptions = defineComponent(DxOperationDescriptionsConfig);
 
 (DxOperationDescriptions as any).$_optionName = "operationDescriptions";
+
+const DxOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:icon": null,
+    "update:onClick": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:rtlEnabled": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:template": null,
+    "update:text": null,
+    "update:type": null,
+    "update:useSubmitBehavior": null,
+    "update:validationGroup": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    icon: String,
+    onClick: Function as PropType<((e: ClickEvent) => void)>,
+    onContentReady: Function as PropType<((e: ButtonContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: ButtonDisposingEvent) => void)>,
+    onInitialized: Function as PropType<((e: ButtonInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: ButtonOptionChangedEvent) => void)>,
+    rtlEnabled: Boolean,
+    stylingMode: String as PropType<ButtonStyle>,
+    tabIndex: Number,
+    template: {},
+    text: String,
+    type: String as PropType<ButtonType | string>,
+    useSubmitBehavior: Boolean,
+    validationGroup: String,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
+(DxOptions as any).$_optionName = "options";
 
 const DxPagerConfig = {
   emits: {
@@ -3308,6 +3642,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxTreeList;
 export {
   DxTreeList,
+  DxAi,
   DxAiOptions,
   DxAnimation,
   DxAsyncRule,
@@ -3318,6 +3653,7 @@ export {
   DxColCountByScreen,
   DxCollision,
   DxColumn,
+  DxColumnButton,
   DxColumnChooser,
   DxColumnChooserSearch,
   DxColumnChooserSelection,
@@ -3332,6 +3668,8 @@ export {
   DxCustomRule,
   DxEditing,
   DxEditingTexts,
+  DxEditorOptions,
+  DxEditorOptionsButton,
   DxEmailRule,
   DxField,
   DxFieldLookup,
@@ -3358,6 +3696,7 @@ export {
   DxNumericRule,
   DxOffset,
   DxOperationDescriptions,
+  DxOptions,
   DxPager,
   DxPaging,
   DxPatternRule,

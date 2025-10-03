@@ -19,9 +19,9 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
+import { ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { dxTreeListColumnButton, TreeListPredefinedColumnButton, dxTreeListColumn, TreeListCommandColumnType } from 'devextreme/ui/tree_list';
-import { FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -34,6 +34,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
 import { DxiTreeListButtonComponent } from './button-dxi';
+import { DxiTreeListColumnButtonComponent } from './column-button-dxi';
 import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
 import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
 import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
@@ -55,10 +56,10 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption implements AfterContentInit  {
     @Input()
-    get ai(): Record<string, any> {
+    get ai(): ColumnAIOptions {
         return this._getOption('ai');
     }
-    set ai(value: Record<string, any>) {
+    set ai(value: ColumnAIOptions) {
         this._setOption('ai', value);
     }
 
@@ -600,15 +601,21 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
         ]);
         this.setChildren('validationRules', q);
     }
+    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent)) buttonsChildren!: QueryList<DxiTreeListButtonComponent>
+    
+    @ContentChildren(forwardRef(() => DxiTreeListColumnButtonComponent)) columnButtonsChildren!: QueryList<DxiTreeListColumnButtonComponent>
+    
+    setButtons() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.buttonsChildren.toArray(),
+            ...this.columnButtonsChildren.toArray(),
+        ]);
+        this.setChildren('buttons', q);
+    }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
-    get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
+
 
 
 
@@ -664,6 +671,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
         this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
         this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
         this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
+        this.setButtons();
+        
+        this.buttonsChildren.changes.subscribe(() => { this.setButtons() });
+        this.columnButtonsChildren.changes.subscribe(() => { this.setButtons() });
     }
 }
 
