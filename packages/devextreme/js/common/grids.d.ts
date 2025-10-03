@@ -105,7 +105,7 @@ export type AIColumnResponseReceivedInfo = {
  * @namespace DevExpress.common.grids
  * @public
  */
-export type AIColumnRequestCreatingInfo<TRowData=any> = {
+export type AIColumnRequestCreatingInfo<TRowData = any> = {
   /**
    * @docid
    * @type GridBaseColumn
@@ -2166,22 +2166,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @public
    */
   noDataText?: string;
-  /**
-   * @docid
-   * @default null
-   * @type_function_param1 e:{common/grids:AIColumnRequestCreatingInfo}
-   * @action
-   * @public
-   */
-  onAIColumnRequestCreating?: ((e: EventInfo<TComponent> & AIColumnRequestCreatingInfo<TRowData>) => void);
-  /**
-   * @docid
-   * @default null
-   * @type_function_param1 e:{common/grids:AIColumnResponseReceivedInfo}
-   * @action
-   * @public
-   */
-  onAIColumnResponseReceived?: ((e: EventInfo<TComponent> & AIColumnResponseReceivedInfo) => void);
   /**
    * @docid
    * @default null

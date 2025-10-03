@@ -79,6 +79,8 @@ import {
     SelectionColumnDisplayMode,
     SummaryType,
     ToolbarPreparingInfo,
+    AIColumnRequestCreatingInfo,
+    AIColumnResponseReceivedInfo,
 } from '../common/grids';
 
 export {
@@ -1050,6 +1052,22 @@ export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo
   column?: Column<TRowData, TKey>;
 };
 
+/**
+ * @docid _ui_data_grid_AIColumnRequestCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AIColumnRequestCreatingInfo
+ */
+export type AIColumnRequestCreatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AIColumnRequestCreatingInfo<TRowData>;
+
+/**
+ * @docid _ui_data_grid_AIColumnResponseReceivedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AIColumnResponseReceivedInfo
+ */
+export type AIColumnResponseReceivedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AIColumnResponseReceivedInfo;
+
 /** @public */
 export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
   readonly component: dxDataGrid<TRowData, TKey>;
@@ -1435,6 +1453,22 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @public
      */
     toolbar?: Toolbar | undefined;
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/data_grid:AIColumnRequestCreatingEvent}
+     * @action
+     * @public
+     */
+    onAIColumnRequestCreating?: ((e: AIColumnRequestCreatingEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/data_grid:AIColumnResponseReceivedEvent}
+     * @action
+     * @public
+     */
+    onAIColumnResponseReceived?: ((e: AIColumnResponseReceivedEvent) => void);
 };
 
 /**
