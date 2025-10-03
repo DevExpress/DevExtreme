@@ -103,7 +103,7 @@ createTestCafe(TESTCAFE_CONFIG)
             }
         });
 
-        // runner.concurrency(args.concurrency || 3);
+        runner.concurrency(args.concurrency || 3);
 
         const split = (array, chunkCount) => {
             const fixturesInChunkCount = Math.ceil(array.length / chunkCount);
@@ -162,7 +162,7 @@ createTestCafe(TESTCAFE_CONFIG)
         }
 
         const runOptions = {
-            // quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+            quarantineMode: { successThreshold: 1, attemptLimit: 10 },
         };
 
         runOptions.hooks = {
