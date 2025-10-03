@@ -63,7 +63,6 @@ export class AppComponent {
   }
 
   normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
-    // eslint-disable-next-line consistent-return
     return changes.map((c) => {
       switch (c.type) {
         case 'insert':
@@ -82,6 +81,8 @@ export class AppComponent {
             type: c.type,
             key: c.key,
           };
+        default:
+          return c;
       }
     }) as DxDataGridTypes.DataChange[];
   }
