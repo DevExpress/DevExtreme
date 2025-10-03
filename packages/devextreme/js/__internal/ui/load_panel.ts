@@ -104,6 +104,15 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this._updateWrapperAria();
   }
 
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
+    this._deprecatedOptions = {
+      ...this._deprecatedOptions,
+      // @ts-expect-error ts-error
+      indicatorSrc: { since: '25.2', message: 'Use indicatorSrc in indicatorOptions' },
+    };
+  }
+
   _updateWrapperAria(): void {
     this.$wrapper()
       .removeAttr('aria-label')
