@@ -1,38 +1,39 @@
-import React, { useCallback, useState } from "react";
-import { CustomStore } from "devextreme-react/common/data";
-import { Autocomplete } from "devextreme-react/autocomplete";
-import "whatwg-fetch";
-import { names, surnames, positions } from "./data.js";
-import AspNetData from "devextreme-aspnet-data-nojquery";
+import React, { useCallback, useState } from 'react';
+import { CustomStore } from 'devextreme-react/common/data';
+import { Autocomplete } from 'devextreme-react/autocomplete';
+import 'whatwg-fetch';
+import AspNetData from 'devextreme-aspnet-data-nojquery';
+import { names, surnames, positions } from './data.js';
+
 function isNotEmpty(value) {
-  return value !== undefined && value !== null && value !== "";
+  return value !== undefined && value !== null && value !== '';
 }
-const positionLabel = { "aria-label": "Position" };
+const positionLabel = { 'aria-label': 'Position' };
 const position = positions[0];
 const states = AspNetData.createStore({
-  loadUrl: "https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup",
-  key: "ID",
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+  key: 'ID',
 });
 const clientsStore = new CustomStore({
-  key: "Value",
+  key: 'Value',
   useDefaultSearch: true,
   load: (loadOptions) => {
-    let params = "?";
-    ["skip", "take", "filter"].forEach((option) => {
+    let params = '?';
+    ['skip', 'take', 'filter'].forEach((option) => {
       if (option in loadOptions && isNotEmpty(loadOptions[option])) {
         params += `${option}=${JSON.stringify(loadOptions[option])}&`;
       }
     });
     params = params.slice(0, -1);
     return fetch(
-      `https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`
+      `https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`,
     )
       .then((response) => response.json())
       .then((data) => ({
         data: data.data,
       }))
       .catch(() => {
-        throw new Error("Data Loading Error");
+        throw new Error('Data Loading Error');
       });
   },
 });
@@ -42,10 +43,10 @@ const renderState = (data) => (
   </span>
 );
 function App() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [state, setState] = useState("");
-  const [currentClient, setCurrentClient] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [state, setState] = useState('');
+  const [currentClient, setCurrentClient] = useState('');
   const handleFirstNameChange = useCallback((e) => {
     setFirstName(e.value);
   }, []);
@@ -58,11 +59,11 @@ function App() {
   const handleCurrentClientChange = useCallback((e) => {
     setCurrentClient(e.value);
   }, []);
-  let fullInfo = "";
-  fullInfo += `${firstName || ""} ${lastName || ""}`.trim();
-  fullInfo += fullInfo && position ? `, ${position}` : position || "";
-  fullInfo += fullInfo && state ? `, ${state}` : state || "";
-  fullInfo += fullInfo && currentClient ? `, ${currentClient}` : currentClient || "";
+  let fullInfo = '';
+  fullInfo += `${firstName || ''} ${lastName || ''}`.trim();
+  fullInfo += fullInfo && position ? `, ${position}` : position || '';
+  fullInfo += fullInfo && state ? `, ${state}` : state || '';
+  fullInfo += fullInfo && currentClient ? `, ${currentClient}` : currentClient || '';
   return (
     <div className="form">
       <div className="dx-fieldset">
