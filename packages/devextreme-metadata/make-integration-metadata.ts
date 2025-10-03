@@ -10,6 +10,10 @@ Imd.makeMetadata({
   },
   mutations: [
     ...replaceTypes({
+      uid: 'common/grids:ColumnAIOptions.popup',
+      types: [types.object],
+    }),
+    ...replaceTypes({
       uid: 'ui/card_view:dxCardViewOptions.filterBuilderPopup',
       types: [types.object],
     }),

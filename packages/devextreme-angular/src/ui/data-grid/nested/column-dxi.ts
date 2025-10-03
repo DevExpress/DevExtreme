@@ -19,9 +19,9 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
+import { ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
-import { FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -34,6 +34,7 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiDataGridAsyncRuleComponent } from './async-rule-dxi';
 import { DxiDataGridButtonComponent } from './button-dxi';
+import { DxiDataGridColumnButtonComponent } from './column-button-dxi';
 import { DxiDataGridCompareRuleComponent } from './compare-rule-dxi';
 import { DxiDataGridCustomRuleComponent } from './custom-rule-dxi';
 import { DxiDataGridEmailRuleComponent } from './email-rule-dxi';
@@ -54,6 +55,14 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
     providers: [NestedOptionHost]
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption implements AfterContentInit  {
+    @Input()
+    get ai(): ColumnAIOptions {
+        return this._getOption('ai');
+    }
+    set ai(value: ColumnAIOptions) {
+        this._setOption('ai', value);
+    }
+
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -655,15 +664,21 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
         ]);
         this.setChildren('validationRules', q);
     }
+    @ContentChildren(forwardRef(() => DxiDataGridButtonComponent)) buttonsChildren!: QueryList<DxiDataGridButtonComponent>
+    
+    @ContentChildren(forwardRef(() => DxiDataGridColumnButtonComponent)) columnButtonsChildren!: QueryList<DxiDataGridColumnButtonComponent>
+    
+    setButtons() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.buttonsChildren.toArray(),
+            ...this.columnButtonsChildren.toArray(),
+        ]);
+        this.setChildren('buttons', q);
+    }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridButtonComponent))
-    get buttonsChildren(): QueryList<DxiDataGridButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
+
 
 
 
@@ -720,6 +735,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
         this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
         this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
         this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
+        this.setButtons();
+        
+        this.buttonsChildren.changes.subscribe(() => { this.setButtons() });
+        this.columnButtonsChildren.changes.subscribe(() => { this.setButtons() });
     }
 }
 

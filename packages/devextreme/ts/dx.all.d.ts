@@ -4474,13 +4474,101 @@ declare module DevExpress.common.grids {
      */
     readonly formOptions: any;
   };
+  export type AIColumnMode = 'auto' | 'manual';
+  /**
+   * [descr:AIColumnRequestCreatingInfo]
+   */
+  export type AIColumnRequestCreatingInfo<TRowData = any> = {
+    /**
+     * [descr:AIColumnRequestCreatingInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.data]
+     */
+    readonly data: TRowData[];
+    /**
+     * [descr:AIColumnRequestCreatingInfo.cancel]
+     */
+    cancel?: boolean;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.useCache]
+     */
+    useCache?: boolean;
+  };
+  /**
+   * [descr:AIColumnResponseReceivedInfo]
+   */
+  export type AIColumnResponseReceivedInfo = {
+    /**
+     * [descr:AIColumnResponseReceivedInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.error]
+     */
+    error?: string;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.data]
+     */
+    data: any[];
+    /**
+     * [descr:AIColumnResponseReceivedInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+  };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:ColumnAIOptions]
+   */
+  export type ColumnAIOptions = {
+    /**
+     * [descr:ColumnAIOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
+    /**
+     * [descr:ColumnAIOptions.prompt]
+     */
+    prompt?: string;
+    /**
+     * [descr:ColumnAIOptions.mode]
+     */
+    mode?: AIColumnMode;
+    /**
+     * [descr:ColumnAIOptions.showHeaderMenu]
+     */
+    showHeaderMenu?: boolean;
+    /**
+     * [descr:ColumnAIOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:ColumnAIOptions.emptyText]
+     */
+    emptyText?: string;
+    /**
+     * [descr:ColumnAIOptions.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:ColumnAIOptions.editorOptions]
+     */
+    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+  };
   /**
    * [descr:GridBaseColumn]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ColumnBase<TRowData = any> {
+    /**
+     * [descr:GridBaseColumn.ai]
+     */
+    ai?: ColumnAIOptions;
     /**
      * [descr:GridBaseColumn.alignment]
      */
@@ -5313,6 +5401,27 @@ declare module DevExpress.common.grids {
    */
   export interface GridBase<TRowData = any, TKey = any> {
     /**
+     * [descr:GridBase.abortAIColumnRequest(columnName)]
+     */
+    abortAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.sendAIColumnRequest(columnName)]
+     */
+    sendAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.refreshAIColumn(columnName)]
+     */
+    refreshAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.clearAIColumn(columnName)]
+     */
+    clearAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.getAIColumnText(columnName, key)]
+     */
+    getAIColumnText(columnName: string, key: TKey): string;
+
+    /**
      * [descr:GridBase.beginCustomLoading(messageText)]
      */
     beginCustomLoading(messageText: string): void;
@@ -5600,6 +5709,10 @@ declare module DevExpress.common.grids {
     GridBaseOptionsBlank<TComponent, TRowData, TKey>,
     'focusStateEnabled'
   > & {
+    /**
+     * [descr:GridBaseOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -11867,7 +11980,11 @@ declare module DevExpress.ui {
      * [descr:dxDataGrid.totalCount()]
      */
     totalCount(): number;
-
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -11962,6 +12079,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
@@ -14064,6 +14197,18 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar | undefined;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -30281,6 +30426,12 @@ declare module DevExpress.ui {
       childrenOnly: boolean
     ): DevExpress.core.utils.DxPromise<void>;
 
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
+
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -30376,6 +30527,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
@@ -31886,6 +32053,18 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar | undefined;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
