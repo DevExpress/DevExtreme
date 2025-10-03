@@ -18,7 +18,6 @@ Ng.makeMetadata({
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
-    removeMembers(/\/load_indicator:LoadIndicatorOptions/),
     removeMembers(/\/load_panel:dxLoadPanelOptions.indicatorOptions/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
