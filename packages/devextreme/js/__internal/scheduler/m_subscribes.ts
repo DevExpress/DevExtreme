@@ -17,7 +17,7 @@ import type {
   TargetedAppointment,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
-import type { AppointmentItemViewModel } from './view_model/generate_view_model/types';
+import type { AppointmentItemViewModel } from './view_model/types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const isAllDay = (

@@ -3,7 +3,7 @@ import type {
   AppointmentAgendaViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
-} from '../view_model/generate_view_model/types';
+} from '../view_model/types';
 import type { AppointmentDataAccessor } from './data_accessor/appointment_data_accessor';
 import { setAppointmentGroupValues } from './resource_manager/appointment_groups_utils';
 import { getLeafGroupValues } from './resource_manager/group_utils';

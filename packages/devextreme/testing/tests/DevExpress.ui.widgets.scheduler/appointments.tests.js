@@ -8,13 +8,10 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
-import VerticalAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_vertical';
-import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import eventsEngine from 'common/core/events/core/events_engine';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
-import commonUtils from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
@@ -468,75 +465,6 @@ QUnit.module('Appointments', moduleOptions, () => {
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
         assert.equal($appointment.attr('role'), 'button', 'role is right');
-    });
-
-    QUnit.test('Split appointment by day', async function(assert) {
-        const instance = createInstance({}, testConfig);
-
-        const appt1 = { startDate: new Date(2016, 1, 25, 9).toString(), endDate: new Date(2016, 1, 25, 10).toString() };
-        const appt2 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 2, 3, 16).toString() };
-        const appt3 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 1, 29, 10).toString() };
-
-        const parts1 = instance.splitAppointmentByDay(appt1);
-        const parts2 = instance.splitAppointmentByDay(appt2);
-        const parts3 = instance.splitAppointmentByDay(appt3);
-
-        assert.deepEqual(parts1, [{
-            appointmentData: appt1,
-            startDate: new Date(2016, 1, 25, 9)
-        }], 'Parts are OK');
-
-        assert.deepEqual(parts2, [
-            { settings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 16) }, startDate: appt2.startDate, endDate: appt2.endDate }
-        ], 'Parts are OK');
-
-        assert.deepEqual(parts3, [
-            { settings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
-            { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 10) }, startDate: appt3.startDate, endDate: appt3.endDate },
-        ], 'Parts are OK');
-    });
-
-    QUnit.test('Split appointment by day should consider startDayHour & endDayHour', async function(assert) {
-        const instance = createInstance({}, testConfig);
-
-        const appt1 = { startDate: new Date(2016, 1, 25, 1).toString(), endDate: new Date(2016, 1, 25, 2).toString() };
-        const appt2 = { startDate: new Date(2016, 1, 28, 1).toString(), endDate: new Date(2016, 2, 3, 2).toString() };
-        const appt3 = { startDate: new Date(2016, 1, 28, 16).toString(), endDate: new Date(2016, 1, 29, 20).toString() };
-
-        const parts1 = instance.splitAppointmentByDay(appt1);
-        const parts2 = instance.splitAppointmentByDay(appt2);
-        const parts3 = instance.splitAppointmentByDay(appt3);
-
-        assert.deepEqual(parts1, [], 'Parts are OK');
-
-        assert.deepEqual(parts2, [
-            { settings: { startDate: new Date(2016, 1, 28, 8), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-            { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate }
-        ], 'Parts are OK');
-
-        assert.deepEqual(parts3, [
-            { settings: { startDate: new Date(2016, 1, 28, 16), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
-            { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt3.startDate, endDate: appt3.endDate }
-        ], 'Parts are OK');
-    });
-
-    QUnit.test('Split appointment by day should trim minutes, seconds and milliseconds if needed', async function(assert) {
-        const instance = createInstance({}, testConfig);
-
-        const appt1 = { startDate: new Date(2017, 7, 21, 9, 0, 10).toString(), endDate: new Date(2017, 7, 22, 18, 0).toString() };
-
-        const parts1 = instance.splitAppointmentByDay(appt1);
-
-        assert.deepEqual(parts1, [
-            { settings: { startDate: new Date(2017, 7, 21, 9, 0, 10), endDate: new Date(2017, 7, 21, 20) }, startDate: appt1.startDate, endDate: appt1.endDate },
-            { settings: { startDate: new Date(2017, 7, 22, 8, 0, 0), endDate: new Date(2017, 7, 22, 18) }, startDate: appt1.startDate, endDate: appt1.endDate }
-        ], 'Parts are OK');
     });
 });
 

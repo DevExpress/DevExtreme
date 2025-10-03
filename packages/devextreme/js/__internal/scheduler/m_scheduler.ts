@@ -77,9 +77,9 @@ import type { NormalizedView } from './utils/options/types';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
-import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
-import AppointmentLayoutManager from './view_model_new/appointments_layout_manager';
+import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import { AppointmentDataSource } from './view_model/m_appointment_data_source';
+import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -486,9 +486,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
-      case '_appointmentCountPerCell':
-      case '_collectorOffset':
-      case '_appointmentOffset':
         this.repaint();
         break;
       case 'dateSerializationFormat':
@@ -1264,13 +1261,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
 
     return config;
-  }
-
-  getCollectorOffset() {
-    if (this._workSpace.needApplyCollectorOffset() && !this.option('adaptivityEnabled')) {
-      return this.option('_collectorOffset');
-    }
-    return 0;
   }
 
   _renderWorkSpace() {

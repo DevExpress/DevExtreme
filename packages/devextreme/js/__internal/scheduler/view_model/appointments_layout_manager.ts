@@ -1,11 +1,6 @@
 import type { Appointment } from '@js/ui/scheduler';
 
 import type Scheduler from '../m_scheduler';
-import type {
-  AppointmentCollectorViewModel,
-  AppointmentItemViewModel,
-  AppointmentViewModelPlain,
-} from '../view_model/generate_view_model/types';
 import { filterAppointments } from './filtration/filter_appointments';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
@@ -13,7 +8,10 @@ import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
 import type {
+  AppointmentCollectorViewModel,
   AppointmentEntity,
+  AppointmentItemViewModel,
+  AppointmentViewModelPlain,
   ListEntity,
   MinimalAppointmentEntity,
   UTCDatesBeforeSplit,
