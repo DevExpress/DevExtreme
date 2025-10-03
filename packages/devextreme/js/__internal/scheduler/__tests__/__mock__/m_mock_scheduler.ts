@@ -28,15 +28,20 @@ export const setupSchedulerTestEnvironment = ({
     onScroll: jest.fn(),
     onEnd: jest.fn(),
   });
-  // NOTE: collector size
-  window.getComputedStyle = jest.fn((): any => ({
-    width: '24px',
-    height: '20px',
-    marginLeft: '3px',
-    marginRight: '3px',
-    marginTop: '3px',
-    marginBottom: '3px',
-  }));
+
+  const { getComputedStyle } = window;
+  window.getComputedStyle = jest.fn(function (element: Element, pseudoElement?: string | null): any {
+    const styles = getComputedStyle.call(this, element, pseudoElement);
+
+    if (element.classList.contains('dx-scheduler-appointment-collector')) {
+      styles.setProperty('width', '24px');
+      styles.setProperty('height', '20px');
+      styles.setProperty('margin', '3px');
+    }
+
+    return styles;
+  });
+
   Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
     const classList: string[] = Array.from(this.classList);
     switch (true) {

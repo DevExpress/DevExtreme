@@ -2,8 +2,9 @@ import timeZoneUtils from '../m_utils_time_zone';
 import type {
   AppointmentAgendaViewModel,
   AppointmentItemViewModel,
-} from '../view_model/generate_view_model/types';
-import type { ListEntity, UTCDatesAfterSplit } from './types';
+  ListEntity,
+  UTCDatesAfterSplit,
+} from './types';
 
 export const getAppointmentInfo = (
   item: ListEntity,

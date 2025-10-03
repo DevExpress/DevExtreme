@@ -160,3 +160,64 @@ export type AppointmentEntity = ListEntity
   & SortedIndex
   & Geometry
   & AppointmentCollectorWithGeometry;
+
+interface SimpleAppointment {
+  allDay?: boolean;
+  startDate: Date;
+  endDate: Date;
+}
+
+interface AppointmentInfo {
+  info: {
+    sourceAppointment: SimpleAppointment;
+    appointment: SimpleAppointment;
+  };
+}
+
+export interface BaseAppointmentViewModel {
+  itemData: SafeAppointment;
+  allDay: boolean;
+  groupIndex: number;
+  sortedIndex: number;
+}
+
+export interface AppointmentCollectorViewModel extends BaseAppointmentViewModel {
+  top: number;
+  left: number;
+  height: number;
+  width: number;
+  isCompact: boolean;
+  items: AppointmentItemViewModel[];
+}
+
+export interface AppointmentAgendaViewModel extends BaseAppointmentViewModel {
+  isAgendaModel: true;
+  height: number;
+  width: string;
+  isLastInGroup: boolean;
+  info: AppointmentInfo['info'] & {
+    partialDates: SimpleAppointment;
+  };
+}
+
+export interface AppointmentItemViewModel extends BaseAppointmentViewModel, AppointmentInfo {
+  direction: string;
+  skipResizing: boolean;
+  level: number;
+  maxLevel: number;
+  empty: boolean;
+  left: number;
+  top: number;
+  height: number;
+  width: number;
+  reduced: 'head' | 'body' | 'tail' | undefined;
+  partIndex: number;
+  partTotalCount: number;
+  rowIndex: number;
+  columnIndex: number;
+}
+
+export type AppointmentViewModelPlain =
+  | AppointmentAgendaViewModel
+  | AppointmentItemViewModel
+  | AppointmentCollectorViewModel;
