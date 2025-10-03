@@ -15,7 +15,6 @@ import dateUtils from '@js/core/utils/date';
 import { isElementInDom } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { deepExtendArraySafe } from '@js/core/utils/object';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setOuterHeight, setOuterWidth } from '@js/core/utils/size';
 import { isDeferred, isPlainObject } from '@js/core/utils/type';
@@ -30,7 +29,6 @@ import {
   APPOINTMENT_ITEM_CLASS,
 } from '../m_classes';
 import timeZoneUtils from '../m_utils_time_zone';
-import { generateDates } from '../recurrence/generate_dates';
 import type { CompactAppointmentOptions } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
@@ -46,7 +44,7 @@ import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
-} from '../view_model/generate_view_model/types';
+} from '../view_model/types';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
@@ -54,7 +52,6 @@ import { DateFormatType } from './m_text_utils';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { isNeedToAdd } from './utils/get_arrays_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
-import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './utils/m_utils';
 import { getNextElement, getPrevElement } from './utils/sorted_index_utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
@@ -1049,121 +1046,6 @@ class SchedulerAppointments extends CollectionWidget {
     return $item;
   }
 
-  _sortAppointmentsByStartDate(appointments) {
-    return sortAppointmentsByStartDate(appointments, this.dataAccessors);
-  }
-
-  _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
-    // NOTE: this method is actual only for agenda
-    const recurrenceRule = this.dataAccessors.get('recurrenceRule', appointment);
-    const result: any = {
-      parts: [],
-      indexes: [],
-    };
-
-    if (recurrenceRule) {
-      const dates = appointment.settings || appointment;
-
-      const startDate = this.dataAccessors.get('startDate', dates);
-      const startDateTimeZone = this.dataAccessors.get('startDateTimeZone', appointment);
-      const endDate = this.dataAccessors.get('endDate', dates);
-      const appointmentDuration = endDate.getTime() - startDate.getTime();
-      const recurrenceException = this.dataAccessors.get('recurrenceException', appointment);
-      const startViewDate = this.invoke('getStartViewDate');
-      const endViewDate = this.invoke('getEndViewDate');
-
-      const timezoneCalculator = this.option('timeZoneCalculator');
-
-      const recurrentDates = generateDates({
-        rule: recurrenceRule,
-        exception: recurrenceException,
-        start: startDate,
-        end: endDate,
-        min: startViewDate,
-        max: endViewDate,
-        appointmentTimezoneOffset: timezoneCalculator.getOriginStartDateOffsetInMs(
-          startDate,
-          startDateTimeZone,
-          false,
-        ),
-      });
-      const recurrentDateCount = appointment.settings ? 1 : recurrentDates.length;
-
-      for (let i = 0; i < recurrentDateCount; i++) {
-        const appointmentPart = extend({}, appointment, true);
-
-        if (recurrentDates[i]) {
-          const appointmentSettings = this._applyStartDateToObj(recurrentDates[i], {});
-          this._applyEndDateToObj(new Date(recurrentDates[i].getTime() + appointmentDuration), appointmentSettings);
-          appointmentPart.settings = appointmentSettings;
-        } else {
-          appointmentPart.settings = dates;
-        }
-
-        result.parts.push(appointmentPart);
-
-        if (!skipLongAppointments) {
-          this._processLongAppointment(appointmentPart, result);
-        }
-      }
-
-      result.indexes.push(index);
-    }
-
-    return result;
-  }
-
-  _processLongAppointment(appointment, result) {
-    const parts = this.splitAppointmentByDay(appointment);
-    const partCount = parts.length;
-    const endViewDate = this.invoke('getEndViewDate').getTime();
-    const startViewDate = this.invoke('getStartViewDate').getTime();
-
-    const timeZoneCalculator = this.option('timeZoneCalculator');
-
-    result = result || {
-      parts: [],
-    };
-
-    if (partCount > 1) {
-      extend(appointment, parts[0]);
-
-      for (let i = 1; i < partCount; i++) {
-        let startDate = this.dataAccessors.get('startDate', parts[i].settings);
-        startDate = timeZoneCalculator.createDate(startDate.getTime(), 'toGrid');
-
-        if (startDate < endViewDate && startDate > startViewDate) {
-          result.parts.push(parts[i]);
-        }
-      }
-    }
-
-    return result;
-  }
-
-  _reduceRecurrenceAppointments(recurrenceIndexes, appointments) {
-    each(recurrenceIndexes, (i: number, index: number) => {
-      appointments.splice(index - i, 1);
-    });
-  }
-
-  _combineAppointments(appointments, additionalAppointments) {
-    if (additionalAppointments.length) {
-      appointments.push(...additionalAppointments);
-    }
-    this._sortAppointmentsByStartDate(appointments);
-  }
-
-  _applyStartDateToObj(startDate, obj) {
-    this.dataAccessors.set('startDate', obj, startDate);
-    return obj;
-  }
-
-  _applyEndDateToObj(endDate, obj) {
-    this.dataAccessors.set('endDate', obj, endDate);
-    return obj;
-  }
-
   moveAppointmentBack(dragEvent) {
     const $appointment = this._$currentAppointment;
     const size = this._initialSize;
@@ -1198,69 +1080,6 @@ class SchedulerAppointments extends CollectionWidget {
 
       this.option('focusedElement', focusedElement);
       (eventsEngine as any).trigger(focusedElement, 'focus');
-    }
-  }
-
-  splitAppointmentByDay(appointment) {
-    const dates = appointment.settings || appointment;
-    const originalStartDate = this.dataAccessors.get('startDate', dates);
-    let startDate = dateUtils.makeDate(originalStartDate);
-    let endDate = dateUtils.makeDate(this.dataAccessors.get('endDate', dates));
-    const maxAllowedDate = this.invoke('getEndViewDate');
-    const startDayHour = this.invoke('getStartDayHour');
-    const endDayHour = this.invoke('getEndDayHour');
-    const timeZoneCalculator = this.option('timeZoneCalculator');
-
-    const adapter = new AppointmentAdapter(appointment, this.dataAccessors);
-    const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
-    const result: any = [];
-
-    startDate = timeZoneCalculator.createDate(startDate, 'toGrid');
-    endDate = timeZoneCalculator.createDate(endDate, 'toGrid');
-
-    if (startDate.getHours() <= endDayHour && startDate.getHours() >= startDayHour && !appointmentIsLong) {
-      result.push(this._applyStartDateToObj(new Date(startDate), {
-        appointmentData: appointment,
-      }));
-
-      startDate.setDate(startDate.getDate() + 1);
-    }
-
-    while (appointmentIsLong && startDate.getTime() < endDate.getTime() && startDate < maxAllowedDate) {
-      const currentStartDate = new Date(startDate);
-      const currentEndDate = new Date(startDate);
-
-      this._checkStartDate(currentStartDate, originalStartDate, startDayHour);
-      this._checkEndDate(currentEndDate, endDate, endDayHour);
-
-      const appointmentData = deepExtendArraySafe({}, appointment, true);
-      const appointmentSettings = {};
-      this._applyStartDateToObj(currentStartDate, appointmentSettings);
-      this._applyEndDateToObj(currentEndDate, appointmentSettings);
-      appointmentData.settings = appointmentSettings;
-      result.push(appointmentData);
-
-      startDate = dateUtils.trimTime(startDate);
-      startDate.setDate(startDate.getDate() + 1);
-      startDate.setHours(startDayHour);
-    }
-
-    return result;
-  }
-
-  _checkStartDate(currentDate, originalDate, startDayHour) {
-    if (!dateUtils.sameDate(currentDate, originalDate) || currentDate.getHours() <= startDayHour) {
-      currentDate.setHours(startDayHour, 0, 0, 0);
-    } else {
-      currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
-    }
-  }
-
-  _checkEndDate(currentDate, originalDate, endDayHour) {
-    if (!dateUtils.sameDate(currentDate, originalDate) || currentDate.getHours() > endDayHour) {
-      currentDate.setHours(endDayHour, 0, 0, 0);
-    } else {
-      currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
     }
   }
 

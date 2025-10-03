@@ -30,9 +30,6 @@ export interface SchedulerInternalOptions {
   };
   _draggingMode: 'outlook' | 'default';
   _appointmentTooltipOffset: { x: number; y: number };
-  _appointmentCountPerCell: number;
-  _collectorOffset: number;
-  _appointmentOffset: number;
   appointmentPopupTemplate: template;
   disabledExpr: string;
   visibleExpr: string;

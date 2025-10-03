@@ -1,5 +1,5 @@
 import timeZoneUtils from '../../m_utils_time_zone';
-import type { ListEntity } from '../../view_model_new/types';
+import type { ListEntity } from '../../view_model/types';
 import { setOptionHour } from './base';
 
 export const calculateStartViewDate = (currentDate: Date, startDayHour: number): Date => {

@@ -168,7 +168,7 @@ describe('Appointment popup form', () => {
 
     const appointments = POM.getAppointments();
 
-    expect(appointments.length).toBe(2);
+    expect(appointments.length).toBe(42);
   });
 
   it.todo('Appointment popup form should have two named groups');

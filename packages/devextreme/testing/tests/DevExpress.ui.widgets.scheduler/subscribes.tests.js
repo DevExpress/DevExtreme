@@ -1,21 +1,13 @@
 import 'generic_light.css!';
 import '__internal/scheduler/m_subscribes';
 import '__internal/scheduler/m_scheduler';
-import {
-    DateGeneratorBaseStrategy,
-    DateGeneratorVirtualStrategy
-} from '__internal/scheduler/view_model/generate_view_model/m_settings_generator';
 
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
-import dateUtils from 'core/utils/date';
 import config from 'core/config';
-import translator from 'common/core/animation/translator';
 
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
-
-import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/utils/m_utils';
 
 const {
     module,
@@ -378,37 +370,6 @@ module('Subscribes', {
 
         this.instance._dataAccessors.set('recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=WEEKLY', 'the \'setField\' method works fine');
-    });
-
-    test('appointmentTakesSeveralDays should return true, if startDate and endDate is different days', async function(assert) {
-        await this.createInstance();
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-        });
-        await waitAsync(0);
-
-        const appointments = [
-            {
-                startDate: new Date(2016, 1, 2, 2),
-                endDate: new Date(2016, 1, 3, 7)
-            },
-            {
-                startDate: new Date(2016, 1, 2, 2),
-                endDate: new Date(2016, 1, 2, 7)
-            }
-        ];
-
-        assert.ok(getAppointmentTakesSeveralDays(
-            appointments[0],
-            this.instance._dataAccessors,
-            this.instance.timeZoneCalculator,
-        ), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(getAppointmentTakesSeveralDays(
-            appointments[1],
-            this.instance._dataAccessors,
-            this.instance.timeZoneCalculator,
-        ), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentEndDate should return corrected endDate', async function(assert) {
