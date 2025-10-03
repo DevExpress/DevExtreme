@@ -1,6 +1,4 @@
-import {
-  DataTypes,
-} from 'devextreme-internal-tools/metadata';
+import { DataTypes } from 'devextreme-internal-tools/metadata';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { PATHS } from './paths';
