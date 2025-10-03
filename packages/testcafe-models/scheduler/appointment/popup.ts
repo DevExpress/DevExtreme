@@ -1,11 +1,11 @@
 import { Selector } from 'testcafe';
-import Form from 'testcafe-models/form/form';
-import Popup from 'testcafe-models/popup';
-import TextBox from 'testcafe-models/textBox';
-import TextArea from 'testcafe-models/textArea';
-import SelectBox from 'testcafe-models/selectBox';
-import DateBox from 'testcafe-models/dateBox';
-import Button from 'testcafe-models/button';
+import Form from '../../form/form';
+import Popup from '../../popup';
+import TextBox from '../../textBox';
+import TextArea from '../../textArea';
+import SelectBox from '../../selectBox';
+import DateBox from '../../dateBox';
+import Button from '../../button';
 
 export const CLASS = {
   popup: 'dx-popup.dx-widget',
