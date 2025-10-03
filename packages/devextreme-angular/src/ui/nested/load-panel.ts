@@ -49,14 +49,6 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get indicatorOptions(): any {
-        return this._getOption('indicatorOptions');
-    }
-    set indicatorOptions(value: any) {
-        this._setOption('indicatorOptions', value);
-    }
-
-    @Input()
     get indicatorSrc(): string {
         return this._getOption('indicatorSrc');
     }
