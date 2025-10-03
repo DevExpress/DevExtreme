@@ -337,6 +337,8 @@ class FileManagerThumbnailListBox extends CollectionWidget {
 
     _focusOutHandler() {}
 
+    _focusInHandler() {}
+
     _getItems() {
         return this.option('items') || [];
     }
