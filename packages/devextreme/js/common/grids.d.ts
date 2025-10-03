@@ -232,7 +232,7 @@ export type ColumnAIOptions = {
  */
 export interface ColumnBase<TRowData = any> {
   /**
-   * @docid
+   * @docid GridBaseColumn.ai
    * @public
    */
   ai?: ColumnAIOptions;
