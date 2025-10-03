@@ -5842,20 +5842,6 @@ declare module DevExpress.common.grids {
      */
     noDataText?: string;
     /**
-     * [descr:GridBaseOptions.onAIColumnRequestCreating]
-     */
-    onAIColumnRequestCreating?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        AIColumnRequestCreatingInfo<TRowData>
-    ) => void;
-    /**
-     * [descr:GridBaseOptions.onAIColumnResponseReceived]
-     */
-    onAIColumnResponseReceived?: (
-      e: DevExpress.common.core.events.EventInfo<TComponent> &
-        AIColumnResponseReceivedInfo
-    ) => void;
-    /**
      * [descr:GridBaseOptions.onAdaptiveDetailRowPreparing]
      */
     onAdaptiveDetailRowPreparing?: (
@@ -12094,6 +12080,22 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
+    /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
     export type CellClickEvent<
@@ -14195,6 +14197,18 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar | undefined;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -30514,6 +30528,22 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
     /**
+     * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
+    /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
     export type CellClickEvent<
@@ -32023,6 +32053,18 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar | undefined;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
