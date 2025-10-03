@@ -19,7 +19,7 @@ describe('templates-discovering (vue 3)', () => {
     expect(getDiscoveredTemplates(template)).toEqual([]);
   });
 
-  // to avoid creating templates from config-components
+  // To avoid creating templates from config-components
   it('doesn\'t discover implicit default slot', () => {
     const template = '<div>abc</div>';
     expect(getDiscoveredTemplates(template)).toEqual([]);
