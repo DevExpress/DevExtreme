@@ -8,9 +8,10 @@ export interface AiPromptEditorOptions {
   container: dxElementWrapper;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createComponent: CreateComponent<any>;
-  onSubmit?: () => void;
+  value?: string;
+  onSubmit?: () => Promise<void>;
   onCancel?: () => void;
-  onRefresh?: () => void;
+  onRefresh?: () => Promise<void>;
   popupOptions?: PopupProperties;
   editorOptions?: TextAreaProperties;
 }
