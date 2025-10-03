@@ -593,7 +593,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
-          template: this.createIconTemplate('user'), // TODO change icon
+          template: this.createIconTemplate('addcircleoutline'),
         },
         {
           itemType: 'group',
