@@ -10,7 +10,7 @@ Imd.makeMetadata({
   },
   mutations: [
     ...replaceTypes({
-      uid: 'common/grids:ColumnBase.ai',
+      uid: 'common/grids:ColumnAIOptions.popup',
       types: [types.object],
     }),
     ...replaceTypes({
