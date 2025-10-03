@@ -11,7 +11,6 @@ Ng.makeMetadata({
   },
   mutations: [
     removeMembers(/\/grids:ColumnBase.ai/),
-    removeMembers(/\/grids:LoadPanel.indicatorOptions/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
@@ -19,6 +18,7 @@ Ng.makeMetadata({
     removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/load_panel:dxLoadPanelOptions.indicatorOptions/),
+    removeMembers(/\/grids:LoadPanel.indicatorOptions/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
     removeMembers(/\/stepper:/),
