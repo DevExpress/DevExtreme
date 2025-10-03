@@ -457,7 +457,8 @@ export class ColumnsController extends modules.Controller {
 
     each(this._columns, function () {
       const column = this;
-      if (isDefined(column.groupIndex)) {
+
+      if (isDefined(column.groupIndex) && column.type !== 'ai') {
         result[column.groupIndex] = column;
       }
     });

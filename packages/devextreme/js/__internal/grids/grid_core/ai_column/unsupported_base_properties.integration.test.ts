@@ -202,7 +202,7 @@ describe('Unsupported properties', () => {
   });
 
   describe('Grouping properties', () => {
-    it('should have no group rows after put autoExpandGroup in props', async () => {
+    it('Should have no group rows after put group properties in props (first load)', async () => {
       const { instance } = await createDataGrid({
         dataSource,
         showBorders: true,
@@ -213,12 +213,125 @@ describe('Unsupported properties', () => {
             type: 'ai',
             name: 'AItest',
             autoExpandGroup: true,
+            groupIndex: 0,
+            allowGrouping: true,
+            calculateGroupValue: 'name',
+            groupCellTemplate: 'GroupCellTemplate',
+            showWhenGrouped: true,
           },
         ],
       });
 
       const groupRow = $(instance.element()).find(SELECTORS.groupRow);
-      expect(groupRow).toBeUndefined();
+      expect(groupRow.length).toBe(0);
+    });
+
+    it('Should have no group rows after put group properties in props (dynamic update)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+          },
+        ],
+      });
+      instance.columnOption('AItest', 'autoExpandGroup', true);
+      instance.columnOption('AItest', 'groupIndex', 0);
+      instance.columnOption('AItest', 'allowGrouping', true);
+      instance.columnOption('AItest', 'calculateGroupValue', 'name');
+      instance.columnOption('AItest', 'groupCellTemplate', 'GroupCellTemplate');
+      instance.columnOption('AItest', 'showWhenGrouped', true);
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow.length).toBe(0);
+    });
+
+    it('Should have no group rows after put group properties: autoExpandGroup, groupIndex, allowGrouping (first load)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            autoExpandGroup: true,
+            groupIndex: 0,
+            allowGrouping: true,
+          },
+        ],
+      });
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow.length).toBe(0);
+    });
+
+    it('Should have no group rows after put group properties: autoExpandGroup, groupIndex, allowGrouping (dynamic update)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+          },
+        ],
+      });
+      instance.columnOption('AItest', 'autoExpandGroup', true);
+      instance.columnOption('AItest', 'groupIndex', 0);
+      instance.columnOption('AItest', 'allowGrouping', true);
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow.length).toBe(0);
+    });
+
+    it('Should have no group rows after put group properties: calculateGroupValue, groupCellTemplate, showWhenGrouped (first load)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+            calculateGroupValue: 'name',
+            groupCellTemplate: 'GroupCellTemplate',
+            showWhenGrouped: true,
+          },
+        ],
+      });
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow.length).toBe(0);
+    });
+
+    it('Should have no group rows after put group properties: calculateGroupValue, groupCellTemplate, showWhenGrouped (dynamic update)', async () => {
+      const { instance } = await createDataGrid({
+        dataSource,
+        showBorders: true,
+        columns: [
+          'id',
+          {
+            caption: 'AI',
+            type: 'ai',
+            name: 'AItest',
+          },
+        ],
+      });
+      instance.columnOption('AItest', 'calculateGroupValue', 'name');
+      instance.columnOption('AItest', 'groupCellTemplate', 'GroupCellTemplate');
+      instance.columnOption('AItest', 'showWhenGrouped', true);
+
+      const groupRow = $(instance.element()).find(SELECTORS.groupRow);
+      expect(groupRow.length).toBe(0);
     });
   });
 });
