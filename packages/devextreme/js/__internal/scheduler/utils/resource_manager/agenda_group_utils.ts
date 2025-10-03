@@ -1,4 +1,4 @@
-import type { ListEntity } from '../../view_model_new/types';
+import type { ListEntity } from '../../view_model/types';
 import type { ResourceLoader } from '../loader/resource_loader';
 import type { ResourceId } from '../loader/types';
 import type { GroupNode } from './types';
