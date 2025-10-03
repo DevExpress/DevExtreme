@@ -1,19 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
-import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
 
 export class AiColumnController extends Controller {
-  private columnsController!: ColumnsController;
-
   private dataController!: DataController;
 
   private dataChangedHandler!: (e) => any;
 
   public init(): void {
-    this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
@@ -21,8 +15,6 @@ export class AiColumnController extends Controller {
 
     this.createAction('onAIColumnRequestCreating');
     this.createAction('onAIColumnResponseReceived');
-
-    this.addAiCommandColumn();
   }
 
   private createAIColumnRequest() {
@@ -33,10 +25,6 @@ export class AiColumnController extends Controller {
   private receiveAIColumnResponse() {
     const options = {};
     this.executeAction('onAIColumnResponseReceived', options);
-  }
-
-  private addAiCommandColumn(): void {
-    this.columnsController.addCommandColumn(getAiCommandColumnOptions());
   }
 
   private handleDataChanged(e) {
@@ -83,9 +71,3 @@ export class AiColumnController extends Controller {
     this.dataController.changed.remove(this.dataChangedHandler);
   }
 }
-
-export const aiColumnControllerModule = {
-  controllers: {
-    aiColumn: AiColumnController,
-  },
-};
