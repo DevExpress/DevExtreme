@@ -4,7 +4,8 @@ import {
 import type { RequestParams } from '@js/common/ai-integration';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
+// TODO: Temp workaround until .d.ts files are updated
+// import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
@@ -22,22 +23,27 @@ interface RequestResult {
 }
 
 const createDataGrid = async (
-  options: DataGridProperties = {},
+  // TODO: Temp workaround until .d.ts files are updated
+  // options: DataGridProperties = {},
+  options: any = {},
 ): Promise<{
   $container: dxElementWrapper;
   component: DataGridModel;
-  instance: DataGrid;
+  // TODO: Temp workaround until .d.ts files are updated
+  // instance: DataGrid;
+  instance: any;
 }> => new Promise((resolve) => {
   const $container = $('<div>')
     .attr('id', GRID_CONTAINER_ID)
     .appendTo(document.body);
 
   const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
+  const component = new DataGridModel($container.get(0) as HTMLElement);
 
   jest.runOnlyPendingTimers();
   resolve({
     $container,
-    component: new DataGridModel($container.get(0) as HTMLElement),
+    component,
     instance,
   });
 });

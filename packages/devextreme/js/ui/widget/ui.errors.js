@@ -274,7 +274,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1067
     */
-    E1067: 'All AI columns must have names.',
+    E1067: 'aiIntergration is not configured for the \'{0}\' column.',
 
     /**
     * @name ErrorsUIWidgets.W1001
