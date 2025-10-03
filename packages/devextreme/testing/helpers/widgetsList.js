@@ -15,7 +15,6 @@ const widgetsList = {
     DataGrid: require('ui/data_grid'),
     DateBox: require('ui/date_box'),
     DateRangeBox: require('ui/date_range_box'),
-    DeferRendering: require('ui/defer_rendering'),
     Drawer: require('ui/drawer'),
     DropDownBox: require('ui/drop_down_box'),
     FileManager: require('ui/file_manager'),
