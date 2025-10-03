@@ -147,6 +147,7 @@ const Gantt = memo(
 // owners:
 // Gantt
 type IColumnProps = React.PropsWithChildren<{
+  ai?: Record<string, any>;
   alignment?: HorizontalAlignment | undefined;
   allowFiltering?: boolean;
   allowHeaderFiltering?: boolean;

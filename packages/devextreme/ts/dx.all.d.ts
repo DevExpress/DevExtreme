@@ -4568,7 +4568,7 @@ declare module DevExpress.common.grids {
    */
   export interface ColumnBase<TRowData = any> {
     /**
-     * [descr:ColumnBase.ai]
+     * [descr:GridBaseColumn.ai]
      */
     ai?: ColumnAIOptions;
     /**

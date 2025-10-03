@@ -836,6 +836,7 @@ const DxColumnConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:ai": null,
     "update:alignment": null,
     "update:allowEditing": null,
     "update:allowExporting": null,
@@ -901,6 +902,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
+    ai: Object as PropType<Record<string, any>>,
     alignment: String as PropType<HorizontalAlignment>,
     allowEditing: Boolean,
     allowExporting: Boolean,

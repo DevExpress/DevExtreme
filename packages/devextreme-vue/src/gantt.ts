@@ -356,6 +356,7 @@ const DxColumnConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:ai": null,
     "update:alignment": null,
     "update:allowFiltering": null,
     "update:allowHeaderFiltering": null,
@@ -390,6 +391,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
+    ai: Object as PropType<Record<string, any>>,
     alignment: String as PropType<HorizontalAlignment>,
     allowFiltering: Boolean,
     allowHeaderFiltering: Boolean,

@@ -384,6 +384,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // TreeList
 type IColumnProps = React.PropsWithChildren<{
+  ai?: Record<string, any>;
   alignment?: HorizontalAlignment | undefined;
   allowEditing?: boolean;
   allowFiltering?: boolean;

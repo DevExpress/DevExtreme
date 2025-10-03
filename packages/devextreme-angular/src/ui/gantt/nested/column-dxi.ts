@@ -35,6 +35,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
+    get ai(): Record<string, any> {
+        return this._getOption('ai');
+    }
+    set ai(value: Record<string, any>) {
+        this._setOption('ai', value);
+    }
+
+    @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }

@@ -412,6 +412,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 // owners:
 // DataGrid
 type IColumnProps = React.PropsWithChildren<{
+  ai?: Record<string, any>;
   alignment?: HorizontalAlignment | undefined;
   allowEditing?: boolean;
   allowExporting?: boolean;

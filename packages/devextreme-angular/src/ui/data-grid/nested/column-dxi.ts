@@ -55,6 +55,14 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption implements AfterContentInit  {
     @Input()
+    get ai(): Record<string, any> {
+        return this._getOption('ai');
+    }
+    set ai(value: Record<string, any>) {
+        this._setOption('ai', value);
+    }
+
+    @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
     }
