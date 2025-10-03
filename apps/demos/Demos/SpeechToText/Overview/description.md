@@ -1,4 +1,6 @@
 Our [SpeechToText](/Documentation/ApiReference/UI_Components/dxSpeechToText) component allows you to integrate voice input within your DevExtreme-powered app. The component implements the Web Speech API [SpeechRecognition](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition) backend and supports [custom speech recognizers](/Documentation/ApiReference/UI_Components/dxSpeechToText/Configuration/#customSpeechRecognizer).
+
+For a complete overview of SpeechToText options, refer to the [SpeechToText API Reference](/Documentation/ApiReference/UI_Components/dxSpeechToText/).
 <!--split-->
 
 SpeechToText returns transcribed text in the [onResult](/Documentation/ApiReference/UI_Components/dxSpeechToText/Configuration/#onResult) handler as users speak. When speech stops, the component calls the [onEnd](/Documentation/ApiReference/UI_Components/dxSpeechToText/Configuration/#onEnd) handler and switches from the "listening" state to the initial state. You can customize SpeechToText behavior in the [speechRecognitionConfig](/Documentation/ApiReference/UI_Components/dxSpeechToText/Configuration/#speechRecognitionConfig) object.
