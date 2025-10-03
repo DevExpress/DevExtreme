@@ -8,13 +8,10 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
-import VerticalAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_vertical';
-import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal_month';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import eventsEngine from 'common/core/events/core/events_engine';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
-import commonUtils from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Resizable from 'ui/resizable';
