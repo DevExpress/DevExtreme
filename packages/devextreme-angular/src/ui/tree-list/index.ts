@@ -97,7 +97,6 @@ import { DxoFilterRowModule } from 'devextreme-angular/ui/nested';
 import { DxoOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoKeyboardNavigationModule } from 'devextreme-angular/ui/nested';
 import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoIndicatorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoPagerModule } from 'devextreme-angular/ui/nested';
 import { DxoPagingModule } from 'devextreme-angular/ui/nested';
 import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
@@ -2332,7 +2331,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoOperationDescriptionsModule,
     DxoKeyboardNavigationModule,
     DxoLoadPanelModule,
-    DxoIndicatorOptionsModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,
@@ -2475,7 +2473,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoOperationDescriptionsModule,
     DxoKeyboardNavigationModule,
     DxoLoadPanelModule,
-    DxoIndicatorOptionsModule,
     DxoPagerModule,
     DxoPagingModule,
     DxoRemoteOperationsModule,

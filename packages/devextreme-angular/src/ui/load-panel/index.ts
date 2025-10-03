@@ -46,7 +46,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoIndicatorOptionsModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLoadPanelAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelAtModule } from 'devextreme-angular/ui/load-panel/nested';
@@ -213,10 +212,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxLoadPanelOptions.indicatorOptions]
     
-     */
     @Input()
     get indicatorOptions(): LoadIndicatorOptions {
         return this._getOption('indicatorOptions');
@@ -748,7 +744,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoIndicatorOptionsModule,
     DxoLoadPanelAnimationModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,
@@ -777,7 +772,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoIndicatorOptionsModule,
     DxoLoadPanelAnimationModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,

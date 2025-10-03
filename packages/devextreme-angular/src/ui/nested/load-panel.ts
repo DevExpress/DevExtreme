@@ -15,7 +15,6 @@ import {
 
 
 import { Mode } from 'devextreme/common';
-import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
 
 import {
     DxIntegrationModule,
@@ -50,10 +49,10 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get indicatorOptions(): LoadIndicatorOptions {
+    get indicatorOptions(): any {
         return this._getOption('indicatorOptions');
     }
-    set indicatorOptions(value: LoadIndicatorOptions) {
+    set indicatorOptions(value: any) {
         this._setOption('indicatorOptions', value);
     }
 
