@@ -1,4 +1,4 @@
-// import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
