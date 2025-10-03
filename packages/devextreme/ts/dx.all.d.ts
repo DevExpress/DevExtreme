@@ -918,6 +918,10 @@ declare module DevExpress.aiIntegration {
       params: SmartPasteCommandParams,
       callbacks: RequestCallbacks<SmartPasteCommandResult>
     ): () => void;
+    generateColumn(
+      params: GenerateColumnCommandParams,
+      callbacks: RequestCallbacks<GenerateColumnCommandResult>
+    ): () => void;
   }
   /**
    * [descr:AIProvider]
@@ -978,6 +982,17 @@ declare module DevExpress.aiIntegration {
     format: string;
     instruction?: string;
   };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type GenerateColumnCommandParams = {
+    text: string;
+    data: Record<PropertyKey, unknown>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type GenerateColumnCommandResult = Record<PropertyKey, unknown>;
   /**
    * [descr:Prompt]
    */
