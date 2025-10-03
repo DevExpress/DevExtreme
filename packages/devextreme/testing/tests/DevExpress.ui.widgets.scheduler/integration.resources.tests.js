@@ -177,6 +177,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
                 onAppointmentFormOpeningRaised = true;
             },
+            editing: { legacyForm: true },
             resources: resources,
             dataSource: dataSource,
             currentDate: new Date(2015, 1, 9)
@@ -239,7 +240,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             dataSource: new DataSource({
                 store: [task1, task2]
             }),
-            currentDate: new Date(2015, 1, 9)
+            currentDate: new Date(2015, 1, 9),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(task1);
@@ -293,7 +295,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             dataSource: new DataSource({
                 store: [task]
             }),
-            currentDate: new Date(2015, 1, 9)
+            currentDate: new Date(2015, 1, 9),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(task);
@@ -343,7 +346,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         const scheduler = await createWrapper({
             resources: resources,
             dataSource: [appointment],
-            currentDate: new Date(2015, 4, 24)
+            currentDate: new Date(2015, 4, 24),
+            editing: { legacyForm: true }
         });
 
         scheduler.instance.showAppointmentPopup(appointment);
@@ -501,7 +505,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     load: loadStub,
                     byKey: byKeyStub
                 })
-            }]
+            }],
+            editing: { legacyForm: true }
         });
 
         assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
