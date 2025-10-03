@@ -907,11 +907,11 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiShowToast(): Promise<void> {
+  apiShowErrorToast(): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(() => {
         const gridInstance = getInstance() as any;
-        gridInstance.getController('errorHandling').showError('Error');
+        gridInstance.getController('errorHandling').showToastError('Error');
       },
       { dependencies: { getInstance } },
     )();

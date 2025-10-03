@@ -2,11 +2,11 @@ import $ from '@js/core/renderer';
 import type { Properties as ToastProperties } from '@js/ui/toast';
 import type dxToast from '@js/ui/toast';
 
-import modules from '../m_modules';
+import { View } from '../m_modules';
 
 const DEFAULT_POSITION = { my: 'center bottom', at: 'center bottom' };
 
-export class ToastView extends modules.View {
+export class ToastView extends View {
   private _toastInstance: dxToast | null = null;
 
   private _$toastContainer: any | null = null;
@@ -17,7 +17,7 @@ export class ToastView extends modules.View {
     }
   }
 
-  private _createToastInstance(options: ToastProperties = {}): dxToast | null {
+  private _createToastInstance(options: ToastProperties): dxToast | null {
     this._ensureToastContainer();
 
     if (this._toastInstance) {
@@ -39,16 +39,14 @@ export class ToastView extends modules.View {
   public showToast(message: string, options: ToastProperties = {}): void {
     const toast = this._createToastInstance(options);
     toast?.option({
-      message,
       ...options,
+      message,
       visible: true,
     });
   }
 
   public async hideToast(): Promise<void> {
-    if (this._toastInstance) {
-      await this._toastInstance.hide();
-    }
+    await this._toastInstance?.hide();
   }
 
   public dispose(): void {

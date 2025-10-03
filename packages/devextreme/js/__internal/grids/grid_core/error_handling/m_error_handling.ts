@@ -157,7 +157,7 @@ export class ErrorHandlingController extends modules.ViewController {
     }
   }
 
-  public showError(message: string) {
+  public showToastError(message: string) {
     this._toastViewController.showToast(message, { type: 'error' });
   }
 }
