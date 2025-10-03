@@ -78,16 +78,15 @@ import { AIIntegration } from './ai-integration';
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @public
  */
 export type AIColumnResponseReceivedInfo = {
   /**
    * @docid
-   * @type object
+   * @type GridBaseColumn
    */
   readonly column: ColumnBase;
-  /**
-   * @docid
-   */
+  /** @docid */
   error?: string;
   /**
    * @docid
@@ -104,11 +103,12 @@ export type AIColumnResponseReceivedInfo = {
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @public
  */
 export type AIColumnRequestCreatingInfo<TRowData=any> = {
   /**
    * @docid
-   * @type object
+   * @type GridBaseColumn
    */
   readonly column: ColumnBase;
   /**
@@ -116,18 +116,14 @@ export type AIColumnRequestCreatingInfo<TRowData=any> = {
    * @type Array<object>
    */
   readonly data: TRowData[];
-  /**
-   * @docid
-   */
+  /** @docid */
   cancel?: boolean;
   /**
    * @docid
    * @type object
    */
   additionalInfo?: Record<string, any>;
-  /**
-   * @docid
-   */
+  /** @docid */
   useCache?: boolean;
 };
 
@@ -169,9 +165,9 @@ export type AIColumnMode = 'auto' | 'manual';
 export type FixedPosition = 'left' | 'right' | 'sticky';
 
 /**
- * @public
- * @namespace DevExpress.common.grids
  * @docid
+ * @namespace DevExpress.common.grids
+ * @public
  */
 export type ColumnAIOptions = {
   /**
