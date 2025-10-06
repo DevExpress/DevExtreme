@@ -9,11 +9,11 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import EditingPreview from '@ts/ui/chat/editing_preview';
-import type { Properties as TextAreaOnSteroidsProperties } from '@ts/ui/text_area/text_area_with_toolbar';
-import TextAreaOnSteroids from '@ts/ui/text_area/text_area_with_toolbar';
+import type { Properties as TextAreaOnSteroidsProperties } from '@ts/ui/chat/message_box/chat_text_area';
+import TextAreaOnSteroids from '@ts/ui/chat/message_box/chat_text_area';
+import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
-import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
+import type { EnterKeyEvent, InputEvent } from '../../../../ui/text_area';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
@@ -104,12 +104,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderInputContainer();
   }
 
+  /** Why we need additional container? Why it is input container? */
   _renderInputContainer(): void {
-    const $messageBox = $('<div>')
+    const $inputContainer = $('<div>')
       .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
       .appendTo(this.element());
 
-    this._renderTextArea($messageBox);
+    this._renderTextArea($inputContainer);
   }
 
   _cancelMessageEdit(): void {
