@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { DataSource } from "devextreme-react/common/data";
+import React, { useState } from 'react';
+import { DataSource } from 'devextreme-react/common/data';
 import {
   Chart,
   ZoomAndPan,
@@ -13,12 +13,13 @@ import {
   Series,
   Animation,
   LoadingIndicator,
-} from "devextreme-react/chart";
+} from 'devextreme-react/chart';
+
 const HALFDAY = 43200000;
 let packetsLock = 0;
 const chartDataSource = new DataSource({
   store: [],
-  sort: "date",
+  sort: 'date',
   paginate: false,
 });
 const wholeRange = {
@@ -31,7 +32,7 @@ function App() {
     endValue: new Date(2017, 3, 15),
   });
   const handleChange = (e) => {
-    if (e.fullName === "argumentAxis.visualRange") {
+    if (e.fullName === 'argumentAxis.visualRange') {
       const stateStart = visualRange.startValue;
       const currentStart = e.value.startValue;
       if (stateStart.valueOf() !== currentStart.valueOf()) {
@@ -114,22 +115,22 @@ const uploadDataByVisualRange = (visualRange, component) => {
 const onVisualRangeChanged = (visualRange, component) => {
   const items = component.getDataSource().items();
   if (
-    !items.length ||
-    items[0].date - visualRange.startValue.getTime() >= HALFDAY ||
-    visualRange.endValue.getTime() - items[items.length - 1].date >= HALFDAY
+    !items.length
+    || items[0].date - visualRange.startValue.getTime() >= HALFDAY
+    || visualRange.endValue.getTime() - items[items.length - 1].date >= HALFDAY
   ) {
     uploadDataByVisualRange(visualRange, component);
   }
 };
 function getDataFrame(args) {
-  let params = "?";
+  let params = '?';
   params += `startVisible=${args.startVisible}
     &endVisible=${args.endVisible}`;
   return fetch(`https://js.devexpress.com/Demos/NetCore/api/TemperatureData${params}`).then(
-    (response) => response.json()
+    (response) => response.json(),
   );
 }
 function getDateString(dateTime) {
-  return dateTime ? dateTime.toLocaleDateString("en-US") : "";
+  return dateTime ? dateTime.toLocaleDateString('en-US') : '';
 }
 export default App;
