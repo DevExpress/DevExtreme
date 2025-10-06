@@ -8,7 +8,7 @@ import DateBox from '../../dateBox';
 import Button from '../../button';
 
 export const SELECTORS = {
-  appointmentPopup: `.dx-scheduler-appointment-popup${Popup.className}`,
+  appointmentPopup: `.dx-scheduler-appointment-popup.dx-popup`,
   form: `.dx-scheduler-form`,
   doneButton: `.dx-popup-done.dx-button.dx-widget`,
   cancelButton: `.dx-popup-cancel.dx-button.dx-widget`,

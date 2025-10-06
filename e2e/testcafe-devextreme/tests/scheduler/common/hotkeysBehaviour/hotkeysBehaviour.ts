@@ -68,8 +68,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
   test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const collector = scheduler.collectors.find('3');
-    const { appointmentPopup } = scheduler;
-    const { appointmentTooltip } = scheduler;
+    const { appointmentPopup, appointmentTooltip } = scheduler;
 
     await t
       .click(collector.element)
