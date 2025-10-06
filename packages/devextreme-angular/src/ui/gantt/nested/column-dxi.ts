@@ -24,6 +24,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-column',
@@ -31,7 +32,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiGanttColumnComponent,
+        }
+    ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
@@ -355,7 +362,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

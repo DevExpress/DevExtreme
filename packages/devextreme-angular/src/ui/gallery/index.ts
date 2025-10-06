@@ -38,16 +38,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -68,6 +68,12 @@ import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
     ]
 })
 export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxGallery<TItem, TKey> = null;
 
     /**
@@ -720,26 +726,6 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Output() wrapAroundChange: EventEmitter<boolean>;
-
-
-
-
-    @ContentChildren(DxiGalleryItemComponent)
-    get itemsChildren(): QueryList<DxiGalleryItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiGalleryItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

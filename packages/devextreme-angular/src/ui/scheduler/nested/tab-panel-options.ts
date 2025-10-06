@@ -12,9 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -29,11 +27,13 @@ import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSchedulerItemComponent } from './item-dxi';
-import { DxiSchedulerTabPanelOptionsItemComponent } from './tab-panel-options-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-scheduler-tab-panel-options',
@@ -43,7 +43,12 @@ import { DxiSchedulerTabPanelOptionsItemComponent } from './tab-panel-options-it
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoSchedulerTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -430,25 +435,9 @@ export class DxoSchedulerTabPanelOptionsComponent extends NestedOption implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerTabPanelOptionsItemComponent)) tabPanelOptionsItemsChildren!: QueryList<DxiSchedulerTabPanelOptionsItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.tabPanelOptionsItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },
@@ -469,12 +458,6 @@ export class DxoSchedulerTabPanelOptionsComponent extends NestedOption implement
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabPanelOptionsItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

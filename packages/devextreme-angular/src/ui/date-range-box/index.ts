@@ -45,7 +45,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -82,10 +83,10 @@ import { DxoDateRangeBoxPositionModule } from 'devextreme-angular/ui/date-range-
 import { DxoDateRangeBoxShowModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDateRangeBoxButtonComponent } from 'devextreme-angular/ui/date-range-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -113,6 +114,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxDateRangeBox = null;
 
     /**
@@ -1501,26 +1513,6 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiDateRangeBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDateRangeBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDateRangeBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

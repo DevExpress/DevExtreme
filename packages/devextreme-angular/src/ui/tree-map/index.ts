@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoColorizerModule } from 'devextreme-angular/ui/nested';
@@ -82,8 +82,6 @@ import { DxoTreeMapTooltipBorderModule } from 'devextreme-angular/ui/tree-map/ne
 import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/nested';
 
 
-
-
 /**
  * [descr:dxTreeMap]
 
@@ -103,6 +101,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     ]
 })
 export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxTreeMap = null;
 
     /**
@@ -755,10 +754,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
-
-
-
 
 
 

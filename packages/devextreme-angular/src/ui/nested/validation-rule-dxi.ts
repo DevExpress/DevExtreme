@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-validation-rule',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiValidationRuleComponent,
+        }
+    ]
 })
 export class DxiValidationRuleComponent extends CollectionNestedOption {
     @Input()

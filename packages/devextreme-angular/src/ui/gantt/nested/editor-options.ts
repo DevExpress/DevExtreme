@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -25,10 +24,13 @@ import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, Dispo
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGanttButtonComponent } from './button-dxi';
 
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-gantt-editor-options',
@@ -39,6 +41,11 @@ import { DxiGanttButtonComponent } from './button-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoGanttEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -491,18 +498,9 @@ export class DxoGanttEditorOptionsComponent extends NestedOption implements OnDe
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGanttButtonComponent))
-    get buttonsChildren(): QueryList<DxiGanttButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

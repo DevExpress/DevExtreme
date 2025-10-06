@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,6 +23,9 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-diagram-item',
@@ -31,9 +33,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiDiagramItemComponent,
+        }
+    ]
 })
 export class DxiDiagramItemComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get icon(): string {
         return this._getOption('icon');
@@ -95,14 +108,6 @@ export class DxiDiagramItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
-    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
