@@ -17,25 +17,48 @@ import Chart, {
 import SelectBox from 'devextreme-react/select-box';
 import { months, monthLabel } from './data.js';
 
+const year = 2017;
+let selectedMonth = 1;
+const startOfMonthStr = (month) => `${month}/01/${year}`;
+const endOfMonthStr = (month) => {
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = month === 12 ? year + 1 : year;
+  const lastDay = new Date(nextYear, nextMonth - 1, 0).getDate();
+  return `${month}/${lastDay}/${year}`;
+};
 const chartDataSource = new DataSource({
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
+  key: 'Date',
+  load: () => {
+    const startVisible = startOfMonthStr(selectedMonth);
+    const endVisible = endOfMonthStr(selectedMonth);
+    const url = 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData'
+      + `?startVisible=${encodeURIComponent(startVisible)}`
+      + `&endVisible=${encodeURIComponent(endVisible)}`
+      + `&startBound=${encodeURIComponent(startVisible)}`
+      + `&endBound=${encodeURIComponent(endVisible)}`;
+    return fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
+        return r.json();
+      })
+      .then((arr) =>
+        arr.map((item) => ({
+          ...item,
+          Temperature: (item.MinTemp + item.MaxTemp) / 2,
+          Date: new Date(item.Date),
+        })));
   },
-  postProcess(results) {
-    return results[0].DayItems;
-  },
-  expand: 'DayItems',
-  filter: ['Id', '=', 1],
   paginate: false,
 });
 function onValueChanged(data) {
-  chartDataSource.filter(['Id', '=', data.value]);
+  selectedMonth = data.value;
   chartDataSource.load();
 }
 function customizeLabel(e) {
   return `${e.valueText}${'&#176C'}`;
+}
+function customizeArgumentAxisLabel(e) {
+  return new Date(e.value).getDate().toString();
 }
 function customizeTooltip(arg) {
   return {
@@ -46,7 +69,7 @@ function App() {
   return (
     <div id="chart-demo">
       <Chart
-        title="Temperature in Seattle , 2017"
+        title={`Temperature in Seattle, ${year}`}
         dataSource={chartDataSource}
       >
         <Size height={420} />
@@ -59,6 +82,7 @@ function App() {
             visible={true}
             opacity={0.5}
           />
+          <Label customizeText={customizeArgumentAxisLabel} />
         </ArgumentAxis>
         <CommonPaneSettings>
           <Border
@@ -69,7 +93,7 @@ function App() {
           />
         </CommonPaneSettings>
         <Series
-          argumentField="Number"
+          argumentField="Date"
           valueField="Temperature"
           type="spline"
         />
@@ -91,7 +115,7 @@ function App() {
           inputAttr={monthLabel}
           displayExpr="name"
           items={months}
-          defaultValue={1}
+          defaultValue={selectedMonth}
           onValueChanged={onValueChanged}
         />
       </div>

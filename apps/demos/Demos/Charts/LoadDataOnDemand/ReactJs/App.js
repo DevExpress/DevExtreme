@@ -85,18 +85,11 @@ function App() {
 }
 const uploadDataByVisualRange = (visualRange, component) => {
   const dataSource = component.getDataSource();
-  const storage = dataSource.items();
   const ajaxArgs = {
     startVisible: getDateString(visualRange.startValue),
     endVisible: getDateString(visualRange.endValue),
-    startBound: getDateString(storage.length ? storage[0].date : null),
-    endBound: getDateString(storage.length ? storage[storage.length - 1].date : null),
   };
-  if (
-    ajaxArgs.startVisible !== ajaxArgs.startBound
-    && ajaxArgs.endVisible !== ajaxArgs.endBound
-    && !packetsLock
-  ) {
+  if (!packetsLock) {
     packetsLock += 1;
     component.showLoadingIndicator();
     getDataFrame(ajaxArgs)
@@ -132,10 +125,8 @@ const onVisualRangeChanged = (visualRange, component) => {
 function getDataFrame(args) {
   let params = '?';
   params += `startVisible=${args.startVisible}
-    &endVisible=${args.endVisible}
-    &startBound=${args.startBound}
-    &endBound=${args.endBound}`;
-  return fetch(`https://js.devexpress.com/Demos/WidgetsGallery/data/temperatureData${params}`).then(
+    &endVisible=${args.endVisible}`;
+  return fetch(`https://js.devexpress.com/Demos/NetCore/api/TemperatureData${params}`).then(
     (response) => response.json(),
   );
 }
