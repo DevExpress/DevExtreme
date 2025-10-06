@@ -1,5 +1,5 @@
-import React from 'react';
-import { DataSource } from 'devextreme-react/common/data';
+import React from "react";
+import { DataSource } from "devextreme-react/common/data";
 import Chart, {
   ValueAxis,
   ArgumentAxis,
@@ -13,10 +13,9 @@ import Chart, {
   Tooltip,
   Export,
   LoadingIndicator,
-} from 'devextreme-react/chart';
-import SelectBox from 'devextreme-react/select-box';
-import { months, monthLabel } from './data.js';
-
+} from "devextreme-react/chart";
+import SelectBox from "devextreme-react/select-box";
+import { months, monthLabel } from "./data.js";
 const year = 2017;
 let selectedMonth = 1;
 const startOfMonthStr = (month) => `${month}/01/${year}`;
@@ -27,12 +26,12 @@ const endOfMonthStr = (month) => {
   return `${month}/${lastDay}/${year}`;
 };
 const chartDataSource = new DataSource({
-  key: 'Date',
+  key: "Date",
   load: () => {
     const startVisible = startOfMonthStr(selectedMonth);
     const endVisible = endOfMonthStr(selectedMonth);
     const url =
-      'https://js.devexpress.com/Demos/NetCore/api/TemperatureData' +
+      "https://js.devexpress.com/Demos/NetCore/api/TemperatureData" +
       `?startVisible=${encodeURIComponent(startVisible)}` +
       `&endVisible=${encodeURIComponent(endVisible)}` +
       `&startBound=${encodeURIComponent(startVisible)}` +
@@ -47,7 +46,7 @@ const chartDataSource = new DataSource({
           ...item,
           Temperature: (item.MinTemp + item.MaxTemp) / 2,
           Date: new Date(item.Date),
-        })),
+        }))
       );
   },
   paginate: false,
@@ -57,14 +56,14 @@ function onValueChanged(data) {
   chartDataSource.load();
 }
 function customizeLabel(e) {
-  return `${e.valueText}${'&#176C'}`;
+  return `${e.valueText}${"&#176C"}`;
 }
 function customizeArgumentAxisLabel(e) {
   return new Date(e.value).getDate().toString();
 }
 function customizeTooltip(arg) {
   return {
-    text: `${arg.valueText}${'&#176C'}`,
+    text: `${arg.valueText}${"&#176C"}`,
   };
 }
 function App() {
