@@ -457,7 +457,7 @@ QUnit.module('options changed callbacks', {
         assert.ok(!instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
     });
 
-    QUnit.test('LoadPanel with custom indicator (deprecated)', function(assert) {
+    QUnit.test('LoadPanel with custom indicator (deprecated from 25.2)', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
         const instance = this.element
             .dxLoadPanel({
@@ -476,39 +476,36 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('LoadPanel with custom indicator', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
+        const customSize = 120;
+        const indicatorOptions = {
+            indicatorSrc: url,
+            animationType: 'sparkle',
+            height: customSize,
+            width: customSize,
+        };
+        const updatedOptions = {
+            indicatorSrc: '',
+            animationType: 'circle',
+            height: undefined,
+            width: undefined,
+        };
         const instance = this.element
             .dxLoadPanel({
                 showIndicator: true,
-                indicatorOptions: {
-                    indicatorSrc: url
-                },
+                indicatorOptions,
             })
             .dxLoadPanel('instance');
         instance.show();
 
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
 
-        assert.equal(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
-        instance.option('indicatorOptions.indicatorSrc', '');
-        assert.equal(instance.option('indicatorOptions.indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
-    });
-
-    QUnit.test('indicatorSrc option change', function(assert) {
-        const url = '../../testing/content/customLoadIndicator.png';
-        const instance = this.element
-            .dxLoadPanel({
-                showIndicator: true
-            })
-            .dxLoadPanel('instance');
-        instance.show();
-
-        instance.option('indicatorOptions.indicatorSrc', url);
-
-        const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
-
-        assert.strictEqual(loadIndicatorInstance.option('indicatorSrc'), url, 'custom indicator option installed successfully');
-        instance.option('indicatorOptions.indicatorSrc', '');
-        assert.equal(instance.option('indicatorOptions.indicatorSrc'), loadIndicatorInstance.option('indicatorSrc'), 'custom indicator option changed successfully');
+        Object.entries(indicatorOptions).forEach(([optionName, value]) => {
+            assert.strictEqual(loadIndicatorInstance.option(optionName), value, `custom ${optionName} option installed successfully`);
+        });
+        Object.entries(updatedOptions).forEach(([optionName, value]) => {
+            instance.option(`indicatorOptions.${optionName}`, value);
+            assert.strictEqual(loadIndicatorInstance.option(optionName), value, `custom ${optionName} option changed successfully`);
+        });
     });
 
     QUnit.test('indicatorOptions.indicatorSrc option change when showIndicator is false', function(assert) {
