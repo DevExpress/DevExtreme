@@ -152,7 +152,7 @@ test('ScrollTo works correctly with RTL mode', async (t) => {
   height: 580,
 }));
 
-test('ScrollTo works correctly with timeline views (native, sync header/workspace)', async (t) => {
+test('ScrollTo works correctly with timeline views (native, sync header/workspace) (T749957)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const views = [{ name: 'timelineDay' }, { name: 'timelineWeek' }];
