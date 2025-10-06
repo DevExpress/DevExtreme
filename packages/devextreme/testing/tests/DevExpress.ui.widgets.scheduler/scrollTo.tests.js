@@ -3,6 +3,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const { test, module, testStart } = QUnit;
 
