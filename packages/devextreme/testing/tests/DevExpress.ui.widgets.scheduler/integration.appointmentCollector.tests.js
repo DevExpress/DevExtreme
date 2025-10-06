@@ -62,6 +62,9 @@ module('Integration: collector', baseConfig, () => {
             onAppointmentFormOpening: e => {
                 const startDate = e.form.getEditor('startDate').option('value');
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
+            },
+            editing: {
+                legacyForm: true
             }
         });
 

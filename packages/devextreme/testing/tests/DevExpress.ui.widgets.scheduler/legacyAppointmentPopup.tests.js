@@ -40,10 +40,13 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
 const createInstance = (options) => {
     const defaultOption = {
         dataSource: [],
-        maxAppointmentsPerCell: 2
+        maxAppointmentsPerCell: 2,
+        editing: {
+            legacyForm: true,
+        }
     };
 
-    return createWrapper($.extend(defaultOption, options));
+    return createWrapper($.extend(true, defaultOption, options));
 };
 
 const moduleOptions = {
@@ -800,7 +803,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         assert.equal(popupChoiceAppointmentEdit.length, 1, 'Popup with choice edit mode is rendered');
 
         popupChoiceAppointmentEdit.find('.dx-popup-bottom .dx-button:eq(1)').trigger('dxclick');
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Appointment popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Appointment popup is rendered');
 
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateBox = form.getEditor('startDate');
@@ -815,10 +818,10 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
     });
 
     QUnit.test('showAppointmentPopup should work correctly after scheduler repainting', async function(assert) {
@@ -826,11 +829,11 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
         scheduler.instance.repaint();
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
     });
 
     QUnit.test('changing editing should work correctly after showing popup', async function(assert) {
@@ -850,9 +853,9 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
         scheduler.instance.hideAppointmentPopup();
-        assert.equal($('.dx-scheduler-appointment-popup').length, 1, 'Popup is hidden');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 1, 'Popup is hidden');
     });
 
     QUnit.test('hideAppointmentPopup should hide a popup and save changes', async function(assert) {
@@ -863,9 +866,9 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ text: '1', startDate: new Date(2016, 9, 10), endDate: new Date(2016, 9, 11) }, true);
 
-        assert.equal($('.dx-scheduler-appointment-popup').length, 2, 'Popup is rendered');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 2, 'Popup is rendered');
         scheduler.instance.hideAppointmentPopup(true);
-        assert.equal($('.dx-scheduler-appointment-popup').length, 1, 'Popup is hidden');
+        assert.equal($('.dx-scheduler-legacy-appointment-popup').length, 1, 'Popup is hidden');
         assert.equal($('.dx-scheduler-appointment').length, 1, 'appointment is created');
     });
 
@@ -874,7 +877,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: 'appointment 1' });
 
-        const $form = $('.dx-scheduler-appointment-popup').find('.dx-form').not('.dx-recurrence-editor-container');
+        const $form = $('.dx-scheduler-legacy-appointment-popup').find('.dx-form').not('.dx-recurrence-editor-container');
         assert.equal($form.length, 1, 'Form was rendered');
 
         scheduler.instance.hideAppointmentPopup();
@@ -911,11 +914,11 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
     });
 
     QUnit.test('Popup should contain editors and components with right dx-rtl classes and rtlEnabled option value', async function(assert) {
-        const scheduler = await createWrapper({ rtlEnabled: true });
+        const scheduler = await createWrapper({ rtlEnabled: true, editing: { legacyForm: true } });
 
         scheduler.instance.showAppointmentPopup({});
 
-        const $innerSwitch = $('.dx-scheduler-appointment-popup .dx-switch').eq(0);
+        const $innerSwitch = $('.dx-scheduler-legacy-appointment-popup .dx-switch').eq(0);
 
         assert.ok($innerSwitch.hasClass('dx-rtl'), 'Inner editor has dx-rtl class');
         assert.equal($innerSwitch.dxSwitch('instance').option('rtlEnabled'), true, 'rtlEnabled option value is right');
@@ -926,7 +929,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const $dateBox = $popupContent.find('.dx-datebox').eq(0);
 
         assert.equal($dateBox.length, 1, 'Start date box is rendered');
@@ -941,7 +944,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
             scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
 
-            const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+            const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
             const startDateBox = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
 
             startDateBox.open();
@@ -958,7 +961,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const $dateBox = $popupContent.find('.dx-datebox').eq(1);
 
         assert.equal($dateBox.length, 1, 'End datebox is rendered');
@@ -973,7 +976,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
             scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' });
 
-            const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+            const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
             const endDateBox = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
 
             endDateBox.open();
@@ -1036,7 +1039,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 10), endDate: new Date(2015, 1, 13), text: 'caption' });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const startDateBox = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
         const endDateBox = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
 
@@ -1054,7 +1057,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         scheduler.instance.showAppointmentPopup({ startDate: '1/10/2015', endDate: '1/13/2015', text: 'caption' });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const startDateBox = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
         const endDateBox = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
 
@@ -1217,7 +1220,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             endDate: new Date(2015, 1, 2, 7), text: 'caption', description: 'First task of this day'
         });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const $allDayEditor = $popupContent.find('.dx-switch').eq(0);
         const allDayEditor = $allDayEditor.dxSwitch('instance');
 
@@ -1248,7 +1251,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             allDay: true
         }, true, null);
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const $allDayEditor = $popupContent.find('.dx-switch').eq(0);
         const allDayEditor = $allDayEditor.dxSwitch('instance');
 
@@ -1284,7 +1287,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             recurrenceException: null
         });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const startDate = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
         const dateToTest = new Date();
 
@@ -1309,7 +1312,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             recurrenceException: null
         });
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const endDate = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
         const dateToTest = new Date();
 
@@ -1332,7 +1335,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
             recurrenceException: null
         }, true, null);
 
-        const $popupContent = $('.dx-scheduler-appointment-popup .dx-popup-content');
+        const $popupContent = $('.dx-scheduler-legacy-appointment-popup .dx-popup-content');
         const startDate = $popupContent.find('.dx-datebox').eq(0).dxDateBox('instance');
         const endDate = $popupContent.find('.dx-datebox').eq(1).dxDateBox('instance');
         const dateToTest = new Date();
@@ -1359,7 +1362,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         const form = scheduler.instance.getAppointmentDetailsForm();
         const validation = sinon.stub(form, 'validate');
 
-        $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+        $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
 
         assert.ok(validation.calledOnce);
     });
@@ -1499,7 +1502,7 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
 
         sinon.stub(form, 'validate').returns({ isValid: false });
 
-        $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+        $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
 
         assert.notOk(addingAppointment.calledOnce);
     });
@@ -1534,7 +1537,7 @@ QUnit.module('Appointment Popup', moduleOptions, () => {
 
         const spy = sinon.spy(scheduler.instance, 'focus');
 
-        $('.dx-scheduler-appointment-popup .dx-overlay-content .dx-popup-cancel').trigger('dxclick');
+        $('.dx-scheduler-legacy-appointment-popup .dx-overlay-content .dx-popup-cancel').trigger('dxclick');
 
         assert.ok(spy.calledOnce, 'focus is called');
     });
