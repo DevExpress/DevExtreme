@@ -18,6 +18,7 @@ Ng.makeMetadata({
     removeMembers(/\/form:FormPredefinedButtonItem/),
     removeMembers(/\/drop_down_editor\/ui.drop_down_editor:FieldAddons/),
     removeMembers(/\/scheduler:Toolbar/),
+    removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
   ],
