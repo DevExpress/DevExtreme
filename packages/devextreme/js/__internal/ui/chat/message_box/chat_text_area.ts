@@ -1,6 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getOuterHeight } from '@js/core/utils/size';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -52,6 +53,14 @@ class TextAreaOnSteroids extends TextArea<Properties> {
   }
 
   _renderButtonContainers(): void {}
+
+  _getHeightDifference($input: dxElementWrapper): number {
+    const superResult = super._getHeightDifference($input);
+    const toolbarHeight = getOuterHeight(this._$toolbar);
+    const sum: number = superResult + toolbarHeight;
+
+    return sum;
+  }
 
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
