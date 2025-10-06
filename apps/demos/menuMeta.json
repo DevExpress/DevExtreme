@@ -5815,6 +5815,10 @@
                 "Title": "Virtual Mode",
                 "Name": "VirtualMode",
                 "Widget": "TreeView",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
+                ],
                 "DemoType": "Web"
               }
             ]
