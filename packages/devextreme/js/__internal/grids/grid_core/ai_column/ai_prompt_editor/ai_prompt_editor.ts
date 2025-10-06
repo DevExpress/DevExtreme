@@ -1,7 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { when } from '@js/core/utils/deferred';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
@@ -17,7 +16,7 @@ export class AiPromptEditor {
 
   private editorInstance!: TextArea;
 
-  private promptValue: string;
+  private value: string;
 
   constructor(
     private readonly options: AiPromptEditorOptions,
@@ -25,7 +24,7 @@ export class AiPromptEditor {
     const { container, createComponent } = options;
 
     container.addClass(CLASSES.aiPromptEditor);
-    this.promptValue = getValue(options.value);
+    this.value = getValue(options.value);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
   }
 
@@ -33,11 +32,15 @@ export class AiPromptEditor {
     this.popupInstance.option(`toolbarItems[${buttonIndex}].options.${optionName}`, optionValue);
   }
 
+  private updateToolbarItemVisibility(itemIndex: number, visible: boolean): void {
+    this.popupInstance.option(`toolbarItems[${itemIndex}].visible`, visible);
+  }
+
   private getTextAreaConfig(): TextAreaProperties {
     return {
-      value: this.promptValue,
+      value: this.value,
       onValueChanged: (e): void => {
-        this.updateButtonOption(1, 'disabled', !isValueChanged(this.promptValue, e.value));
+        this.updateButtonOption(1, 'disabled', !isValueChanged(this.value, e.value)); // Update the disable state of the Apply button
       },
       valueChangeEvent: 'input change keyup',
       ...this.options.editorOptions,
@@ -73,27 +76,27 @@ export class AiPromptEditor {
           widget: 'dxButton',
           options: this.getApplyButtonConfig(),
         },
+        {
+          toolbar: 'bottom',
+          location: 'after',
+          widget: 'dxButton',
+          visible: false,
+          options: this.getStopButtonConfig(),
+        },
       ],
       ...this.options.popupOptions,
     };
   }
 
   private getApplyButtonConfig(): ButtonProperties {
-    const { onSubmit } = this.options;
-
     return {
       text: messageLocalization.format('dxDataGrid-applyButton'),
-      disabled: !this.editorInstance || !isValueChanged(this.promptValue, this.editorInstance.option('value')),
+      disabled: !this.editorInstance || !isValueChanged(this.value, this.editorInstance.option('value')),
       elementAttr: {
         class: CLASSES.aiPromptEditorApplyButton,
       },
       onClick: (): void => {
-        this.promptValue = getValue(this.editorInstance.option('value'));
-        this.updateButtonOption(1, 'disabled', true);
-
-        when(onSubmit?.()).done(() => {
-          this.updateButtonOption(0, 'disabled', !this.promptValue);
-        });
+        this.applyButtonHandler();
       },
     };
   }
@@ -103,15 +106,40 @@ export class AiPromptEditor {
 
     return {
       text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
-      disabled: !this.promptValue,
+      disabled: !this.value,
       elementAttr: {
         class: CLASSES.aiPromptEditorRefreshButton,
       },
       onClick: (): void => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         onRefresh?.();
       },
     };
+  }
+
+  private getStopButtonConfig(): ButtonProperties {
+    return {
+      text: messageLocalization.format('dxDataGrid-stopButton'),
+      elementAttr: {
+        class: CLASSES.aiPromptEditorStopButton,
+      },
+      onClick: (): void => {
+        this.stopButtonHandler();
+      },
+    };
+  }
+
+  private setValue(value: string): void {
+    this.value = getValue(value);
+  }
+
+  private applyButtonHandler(): void {
+    const { onSubmit } = this.options;
+
+    onSubmit?.();
+  }
+
+  private stopButtonHandler(): void {
+    this.options.onStop?.();
   }
 
   public show(): Promise<boolean> {
@@ -120,5 +148,26 @@ export class AiPromptEditor {
 
   public hide(): Promise<boolean> {
     return this.popupInstance.hide();
+  }
+
+  public toggleDisableState(disabled: boolean): void {
+    this.updateButtonOption(0, 'disabled', disabled ? true : !this.value); // Update the disable state of the Regenerate data button
+    this.updateButtonOption(
+      1,
+      'disabled',
+      disabled ? true : !isValueChanged(this.value, this.editorInstance.option('value')),
+    ); // Update the disable state of the Apply button
+    this.editorInstance.option('disabled', disabled); // Update TextArea disable state
+  }
+
+  public updateApplyAndStopButtonsVisibility(isApplyButtonVisible: boolean): void {
+    this.updateToolbarItemVisibility(1, isApplyButtonVisible); // Update Apply button visibility
+    this.updateToolbarItemVisibility(2, !isApplyButtonVisible); // Update Stop button visibility
+  }
+
+  public updateValue(value: string): void {
+    this.setValue(value);
+    this.editorInstance.option('value', value);
+    this.updateButtonOption(0, 'disabled', !value); // Update the disable state of the Regenerate data button
   }
 }

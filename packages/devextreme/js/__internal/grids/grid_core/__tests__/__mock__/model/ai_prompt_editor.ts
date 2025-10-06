@@ -2,10 +2,14 @@ import Popup from '@js/ui/popup';
 
 const CLASSES = {
   wrapper: 'dx-overlay-wrapper',
+  toolbarItem: 'dx-toolbar-item',
+  stateInvisible: 'dx-state-invisible',
+  stateDisabled: 'dx-state-disabled',
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiPromptEditorTextArea: 'dx-ai-prompt-editor__text-area',
   aiPromptEditorRefreshButton: 'dx-ai-prompt-editor__refresh-button',
   aiPromptEditorApplyButton: 'dx-ai-prompt-editor__apply-button',
+  aiPromptEditorStopButton: 'dx-ai-prompt-editor__stop-button',
 };
 
 export class AiPromptEditorModel {
@@ -23,6 +27,10 @@ export class AiPromptEditorModel {
     return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorTextArea}`) as HTMLElement;
   }
 
+  public getTextArea(): HTMLTextAreaElement {
+    return this.getTextAreaElement().querySelector('textarea') as HTMLTextAreaElement;
+  }
+
   public getRefreshButtonElement(): HTMLElement {
     return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorRefreshButton}`) as HTMLElement;
   }
@@ -35,18 +43,36 @@ export class AiPromptEditorModel {
     return document.body.querySelector(`.${CLASSES.aiPromptEditor}.${CLASSES.wrapper}`) as HTMLElement;
   }
 
+  public getStopButtonElement(): HTMLElement {
+    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorStopButton}`) as HTMLElement;
+  }
+
   public changeTextAreaValue(value: string): void {
-    const textArea = this.getTextAreaElement().querySelector('textarea') as HTMLTextAreaElement;
+    const textArea = this.getTextArea();
 
     textArea.value = value;
     textArea.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   public isRefreshButtonDisabled(): boolean {
-    return this.getRefreshButtonElement().classList.contains('dx-state-disabled');
+    return this.getRefreshButtonElement().classList.contains(CLASSES.stateDisabled);
   }
 
   public isApplyButtonDisabled(): boolean {
-    return this.getApplyButtonElement().classList.contains('dx-state-disabled');
+    return this.getApplyButtonElement().classList.contains(CLASSES.stateDisabled);
+  }
+
+  public isApplyButtonVisible(): boolean {
+    const applyButton = this.getApplyButtonElement();
+    const toolbarItem = applyButton.closest(`.${CLASSES.toolbarItem}`);
+
+    return !!toolbarItem && !toolbarItem.classList.contains(CLASSES.stateInvisible);
+  }
+
+  public isStopButtonVisible(): boolean {
+    const stopButton = this.getStopButtonElement();
+    const toolbarItem = stopButton.closest(`.${CLASSES.toolbarItem}`);
+
+    return !!toolbarItem && !toolbarItem.classList.contains(CLASSES.stateInvisible);
   }
 }
