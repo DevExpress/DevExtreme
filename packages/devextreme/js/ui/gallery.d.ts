@@ -9,9 +9,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
-
-import { PointerInteractionEvent } from '../events';
+    PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
     CollectionWidgetItem,

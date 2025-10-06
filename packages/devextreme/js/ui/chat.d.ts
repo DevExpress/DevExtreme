@@ -18,9 +18,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     AsyncCancelable,
-} from '../common/core/events';
-
-import { InteractionEvent } from '../events';
+    InteractionEvent,
+} from '../events';
 
 import DataSource, { DataSourceLike } from '../data/data_source';
 

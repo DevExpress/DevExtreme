@@ -14,9 +14,6 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import {
     DxEvent,
     PointerInteractionEvent,
 } from '../events';

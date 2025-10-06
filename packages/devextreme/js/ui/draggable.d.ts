@@ -12,15 +12,14 @@ import {
     DragDirection,
 } from '../common';
 
-import { PointerInteractionEvent } from '../events';
-
 import {
+    PointerInteractionEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import dxSortable from './sortable';
 

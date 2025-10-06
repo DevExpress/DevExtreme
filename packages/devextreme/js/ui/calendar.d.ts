@@ -8,9 +8,8 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../common/core/events';
-
-import { InteractionEvent } from '../events';
+    InteractionEvent,
+} from '../events';
 
 import {
     template,
