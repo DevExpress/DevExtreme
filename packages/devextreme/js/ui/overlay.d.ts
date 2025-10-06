@@ -18,9 +18,6 @@ import {
 import {
     Cancelable,
     EventInfo,
-} from '../common/core/events';
-
-import {
     DxEvent,
     PointerInteractionEvent,
 } from '../events';

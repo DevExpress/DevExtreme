@@ -3,9 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { InteractionEvent } from '../events';
+    InteractionEvent,
+} from '../events';
 
 import {
     ValueChangedInfo,

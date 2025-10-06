@@ -8,9 +8,6 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
-
-import {
     InteractionEvent,
     PointerInteractionEvent,
 } from '../events';

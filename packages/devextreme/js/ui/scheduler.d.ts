@@ -1,6 +1,6 @@
 import {
-    UserDefinedElement,
-    DxElement,
+  UserDefinedElement,
+  DxElement,
 } from '../core/element';
 
 import {
@@ -14,21 +14,18 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    Cancelable,
-} from '../common/core/events';
-
-import {
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  Cancelable,
   DxEvent,
   PointerInteractionEvent,
 } from '../events';
 
 import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
-    CollectionWidgetItem,
+  CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
@@ -40,7 +37,7 @@ import dxSortable from './sortable';
 import { dxToolbarItem } from './toolbar';
 
 import Widget, {
-    WidgetOptions,
+  WidgetOptions,
 } from './widget/ui.widget';
 
 interface AppointmentDraggingEvent {

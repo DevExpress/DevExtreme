@@ -13,7 +13,7 @@ import {
     ChangedOptionInfo,
     EventInfo,
     InitializedEventInfo,
-} from '../common/core/events';
+} from '../events';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';

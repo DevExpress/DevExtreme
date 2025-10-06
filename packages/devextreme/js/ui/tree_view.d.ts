@@ -12,9 +12,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { PointerInteractionEvent } from '../events';
+    PointerInteractionEvent,
+} from '../events';
 
 import {
     CollectionWidgetItem,
