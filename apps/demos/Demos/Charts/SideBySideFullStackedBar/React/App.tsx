@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Chart, Series, CommonSeriesSettings, Legend, Export, Tooltip, ITooltipProps,
+  Chart, Series, CommonSeriesSettings, Legend, Export, Tooltip, ITooltipProps, ChartTypes,
 } from 'devextreme-react/chart';
 import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => ({
+const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg: ChartTypes.StackedPointInfo) => ({
   text: `${arg.percentText} - ${arg.valueText}`,
 });
 

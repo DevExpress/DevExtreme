@@ -106,3 +106,13 @@ export const getPropertyValue = ClientFunction((selector, property) => {
 
   return element.style[property];
 });
+
+export const addCaptionTo = ClientFunction((
+  elementSelector: string,
+  caption: string,
+  where: InsertPosition = 'beforebegin',
+) => {
+  const element = document.querySelector(elementSelector);
+
+  element?.insertAdjacentText(where, caption);
+});
