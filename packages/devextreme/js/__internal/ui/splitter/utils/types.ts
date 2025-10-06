@@ -1,5 +1,4 @@
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { DxEvent } from '@js/events';
 import type {
   ItemCollapsedEvent, ItemExpandedEvent, Properties, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
