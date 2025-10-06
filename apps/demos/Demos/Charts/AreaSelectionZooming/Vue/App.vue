@@ -71,7 +71,7 @@ import { birthLife } from './data.ts';
 
 const chart = ref();
 
-const customizeTooltip = (pointInfo: DxChartTypes.ChartPointInfo) => {
+const customizeTooltip = (pointInfo: DxChartTypes.CommonPointInfo) => {
   const { point: { data } } = pointInfo;
 
   return {

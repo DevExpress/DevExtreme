@@ -36966,7 +36966,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BubblePointInfo]
      */
-    export type BubblePointInfo = ChartPointInfo & {
+    export type BubblePointInfo = CommonPointInfo & {
       /**
        * [descr:BubblePointInfo.points]
        */
@@ -37068,10 +37068,6 @@ declare module DevExpress.viz {
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
-    /**
-     * [descr:ChartPointInfo]
-     */
-    export type ChartPointInfo = BasePointInfo<chartPointObject>;
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
     export type ChartSeriesAggregationMethod =
       | 'avg'
@@ -37498,6 +37494,10 @@ declare module DevExpress.viz {
       };
     };
     /**
+     * [descr:CommonPointInfo]
+     */
+    export type CommonPointInfo = BasePointInfo<chartPointObject>;
+    /**
      * [descr:dxChartCommonSeriesSettings]
      */
     export type CommonSeriesSettings = dxChartSeriesTypesCommonSeries & {
@@ -37729,7 +37729,7 @@ declare module DevExpress.viz {
      * [descr:dxChartPointInfo]
      */
     export type PointInfo =
-      | ChartPointInfo
+      | CommonPointInfo
       | StackedPointInfo
       | BubblePointInfo
       | CandleStickPointInfo
@@ -37834,7 +37834,7 @@ declare module DevExpress.viz {
     /**
      * [descr:StackedPointInfo]
      */
-    export type StackedPointInfo = ChartPointInfo & {
+    export type StackedPointInfo = CommonPointInfo & {
       /**
        * [descr:StackedPointInfo.percent]
        */

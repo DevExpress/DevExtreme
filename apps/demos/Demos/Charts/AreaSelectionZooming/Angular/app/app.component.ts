@@ -4,7 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
-import { type DxChartTypes } from 'devextreme-angular/ui/chart';
+import type { DxChartTypes } from 'devextreme-angular/ui/chart';
 
 import { Service, BirthLife } from './app.service';
 
@@ -37,7 +37,7 @@ export class AppComponent {
     this.component.instance.resetVisualRange();
   }
 
-  customizeTooltip(pointInfo: DxChartTypes.ChartPointInfo) {
+  customizeTooltip(pointInfo: DxChartTypes.CommonPointInfo) {
     const { data } = pointInfo.point;
     return {
       text: `${data.country} ${data.year}`,
