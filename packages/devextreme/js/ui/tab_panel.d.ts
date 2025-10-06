@@ -19,6 +19,8 @@ import {
     ItemInfo,
 } from '../common/core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import CollectionWidget, {
     SelectionChangeInfo,
     SelectionChangingEventBase,
@@ -91,7 +93,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_ItemHoldEvent
@@ -99,7 +101,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_ItemRenderedEvent
@@ -147,7 +149,7 @@ export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEv
  * @type object
  * @inherits NativeEventInfo,TabPanelItemInfo
  */
-export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & TabPanelItemInfo<TItem>;
+export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & TabPanelItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_TitleRenderedEvent

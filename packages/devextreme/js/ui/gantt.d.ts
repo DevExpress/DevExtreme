@@ -12,7 +12,10 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import {
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import {
     Column as TreeListColumn,
@@ -81,7 +84,7 @@ export type ContextMenuPreparingEvent = Cancelable & {
      * @docid _ui_gantt_ContextMenuPreparingEvent.event
      * @type event
      */
-    readonly event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+    readonly event?: DxEvent<PointerInteractionEvent>;
     /** @docid _ui_gantt_ContextMenuPreparingEvent.targetKey */
     readonly targetKey?: any;
     /** @docid _ui_gantt_ContextMenuPreparingEvent.targetType */

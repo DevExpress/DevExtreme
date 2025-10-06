@@ -19,7 +19,7 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import { DxEvent, PointerInteractionEvent } from '../events';
 
 import dxDraggable, {
     DraggableBase,
@@ -50,7 +50,7 @@ export interface AddEvent {
      * @docid _ui_sortable_AddEvent.event
      * @type event
      */
-    readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+    readonly event: DxEvent<PointerInteractionEvent>;
     /** @docid _ui_sortable_AddEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_AddEvent.itemElement */
@@ -85,7 +85,7 @@ export type DisposingEvent = EventInfo<dxSortable>;
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_DragChangeEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_DragChangeEvent.itemElement */
@@ -112,7 +112,7 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEv
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_DragEndEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_DragEndEvent.itemElement */
@@ -139,7 +139,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_DragMoveEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_DragMoveEvent.itemElement */
@@ -166,7 +166,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEven
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_DragStartEvent.itemData */
     itemData?: any;
     /** @docid _ui_sortable_DragStartEvent.itemElement */
@@ -199,7 +199,7 @@ export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo
  */
-export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type RemoveEvent = NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_RemoveEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_RemoveEvent.itemElement */
@@ -224,7 +224,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent 
  * @type object
  * @inherits NativeEventInfo
  */
-export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+export type ReorderEvent = NativeEventInfo<dxSortable, PointerInteractionEvent> & {
     /** @docid _ui_sortable_ReorderEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_sortable_ReorderEvent.itemElement */

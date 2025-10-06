@@ -19,6 +19,9 @@ import {
     ChangedOptionInfo,
     AsyncCancelable,
 } from '../common/core/events';
+
+import { InteractionEvent } from '../events';
+
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 /**
@@ -51,7 +54,7 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageEnteredEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type MessageEnteredEvent = NativeEventInfo<dxChat, InteractionEvent> & {
     /** @docid _ui_chat_MessageEnteredEvent.message */
     readonly message: Message;
 };

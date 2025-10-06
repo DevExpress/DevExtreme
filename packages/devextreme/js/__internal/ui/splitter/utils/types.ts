@@ -44,7 +44,6 @@ export type HandlerMap<T = SplitterEventMap> = {
   [K in keyof T]: (e: Partial<T[K]>) => void;
 };
 
-export type InteractionEvent = DxEvent<KeyboardEvent | PointerEvent | MouseEvent | TouchEvent>;
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
 export type CollapseEvents = 'onCollapsePrev' | 'onCollapseNext';
 export enum CollapseExpandDirection {

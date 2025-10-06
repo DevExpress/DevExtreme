@@ -16,6 +16,8 @@ import {
     ItemInfo,
 } from '../common/core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
@@ -79,7 +81,7 @@ export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_action_sheet_ItemHoldEvent
@@ -87,7 +89,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any>
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_action_sheet_ItemRenderedEvent

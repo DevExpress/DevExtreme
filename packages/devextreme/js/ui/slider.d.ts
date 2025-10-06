@@ -5,6 +5,8 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
+import { InteractionEvent } from '../events';
+
 import {
     ValueChangedInfo,
 } from './editor/editor';
@@ -66,7 +68,7 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider, InteractionEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated Use /common/SliderValueChangeMode instead

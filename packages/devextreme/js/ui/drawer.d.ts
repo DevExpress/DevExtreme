@@ -16,7 +16,10 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import {
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import Widget, {
     WidgetOptions,
@@ -77,7 +80,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      * @type_function_param1 event:event
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default null

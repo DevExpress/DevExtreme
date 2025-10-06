@@ -5,6 +5,8 @@ import {
   ChangedOptionInfo,
 } from '../common/core/events';
 
+import { InteractionEvent } from '../events';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import type { ButtonStyle, ButtonType } from './button';
 
@@ -72,7 +74,7 @@ export type CustomSpeechRecognizer = {
  * @type object
  * @inherits NativeEventInfo
  */
-export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
+export type StartClickEvent = NativeEventInfo<dxSpeechToText, InteractionEvent>;
 
 /**
  * @docid _ui_speech_to_text_StopClickEvent
@@ -80,7 +82,7 @@ export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | Mo
  * @type object
  * @inherits NativeEventInfo
  */
-export type StopClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
+export type StopClickEvent = NativeEventInfo<dxSpeechToText, InteractionEvent>;
 
 /**
  * @docid _ui_speech_to_text_ResultEvent

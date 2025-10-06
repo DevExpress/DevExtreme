@@ -12,6 +12,8 @@ import {
     ItemInfo,
 } from '../common/core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
     CollectionWidgetItem,
     SelectionChangeInfo,
@@ -74,7 +76,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMenu<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxMenu<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_menu_ItemRenderedEvent

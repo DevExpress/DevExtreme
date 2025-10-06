@@ -20,7 +20,10 @@ import {
     EventInfo,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import {
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import Widget, {
     WidgetOptions,
@@ -66,7 +69,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_param1 event:event
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default false

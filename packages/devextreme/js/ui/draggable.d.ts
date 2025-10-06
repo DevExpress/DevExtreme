@@ -12,6 +12,8 @@ import {
     DragDirection,
 } from '../common';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
     Cancelable,
     EventInfo,
@@ -123,7 +125,7 @@ export type DisposingEvent = EventInfo<dxDraggable>;
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerInteractionEvent> & {
     /** @docid _ui_draggable_DragEndEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_draggable_DragEndEvent.itemElement */
@@ -144,7 +146,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEven
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerInteractionEvent> & {
     /** @docid _ui_draggable_DragMoveEvent.itemData */
     readonly itemData?: any;
     /** @docid _ui_draggable_DragMoveEvent.itemElement */
@@ -165,7 +167,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEve
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerInteractionEvent> & {
     /** @docid _ui_draggable_DragStartEvent.itemData */
     itemData?: any;
     /** @docid _ui_draggable_DragStartEvent.itemElement */
