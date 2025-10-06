@@ -28,8 +28,8 @@ import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
   Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
-} from '@ts/ui/chat/messagebox';
-import MessageBox from '@ts/ui/chat/messagebox';
+} from '@ts/ui/chat/message_box/message_box';
+import MessageBox from '@ts/ui/chat/message_box/message_box';
 import type {
   EmptyViewTemplate,
   MessageEditingEvent,
