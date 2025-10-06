@@ -14,6 +14,8 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
     CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
@@ -112,7 +114,7 @@ export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, M
  * @type object
  * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
  */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, PointerInteractionEvent> & ItemInfo<TKey>;
 
 /**
  * @docid _ui_tree_view_ItemExpandedEvent
@@ -128,7 +130,7 @@ export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, Mo
  * @type object
  * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
  */
-export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, PointerInteractionEvent> & ItemInfo<TKey>;
 
 /**
  * @docid _ui_tree_view_ItemRenderedEvent

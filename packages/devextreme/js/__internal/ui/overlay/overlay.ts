@@ -32,7 +32,10 @@ import {
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
@@ -73,8 +76,7 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
 
-type PointerLikeNativeEvents = MouseEvent | PointerEvent | TouchEvent;
-export type PointerLikeEvent = DxEvent<PointerLikeNativeEvents>;
+export type PointerLikeEvent = DxEvent<PointerInteractionEvent>;
 
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 
@@ -137,7 +139,7 @@ export type PositioningEvent<
   TPosition = OverlayProperties['position'],
 > = NativeEventInfo<
   Overlay,
-  PointerLikeNativeEvents
+  PointerInteractionEvent
 > & {
   readonly position: TPosition;
 };

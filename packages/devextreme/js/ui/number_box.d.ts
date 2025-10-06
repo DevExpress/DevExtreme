@@ -5,6 +5,8 @@ import {
     ChangedOptionInfo,
 } from '../common/core/events';
 
+import { InteractionEvent } from '../events';
+
 import {
     TextEditorButton,
 } from '../common';
@@ -147,7 +149,7 @@ export type PasteEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxNumberBox, InteractionEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

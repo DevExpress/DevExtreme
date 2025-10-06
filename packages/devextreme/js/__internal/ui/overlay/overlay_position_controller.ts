@@ -10,6 +10,10 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
@@ -238,7 +242,7 @@ export class OverlayPositionController<
     this.restorePositionOnNextRender(shouldRestorePosition);
   }
 
-  detectVisualPositionChange(event?: PointerLikeEvent): void {
+  detectVisualPositionChange(event?: DxEvent<PointerInteractionEvent>): void {
     this._updateVisualPositionValue();
     this._raisePositionedEvents(event);
   }

@@ -20,7 +20,10 @@ import {
     ItemInfo,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import {
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import dxMenuBase, {
     dxMenuBaseOptions,
@@ -91,7 +94,7 @@ export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, Ke
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, PointerInteractionEvent> & ItemInfo<Item>;
 
 /**
  * @docid _ui_context_menu_ItemRenderedEvent
@@ -115,7 +118,7 @@ export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & Ch
  * @type object
  * @inherits NativeEventInfo
  */
-export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & {
+export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, PointerInteractionEvent> & {
     /** @docid _ui_context_menu_PositioningEvent.position */
     readonly position: PositionConfig;
 };
@@ -167,7 +170,7 @@ export interface dxContextMenuOptions<
      * @type_function_param1 event:event
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @type Array<dxContextMenuItem>

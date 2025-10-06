@@ -21,7 +21,10 @@ import {
     Cancelable,
 } from '../common/core/events';
 
-import { DxEvent } from '../events';
+import {
+  DxEvent,
+  PointerInteractionEvent,
+} from '../events';
 
 import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
@@ -136,7 +139,7 @@ export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, Ke
  * @type object
  * @inherits NativeEventInfo,TargetedAppointmentInfo
  */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & TargetedAppointmentInfo & {
   /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
@@ -304,7 +307,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardE
  * @type object
  * @inherits NativeEventInfo
  */
-export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & {
   /**
    * @docid _ui_scheduler_CellContextMenuEvent.cellData
    * @type object
