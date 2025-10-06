@@ -71,7 +71,7 @@ function App() {
   return (
     <div id="chart-demo">
       <Chart
-        title={`Temperature in Seattle , ${year}`}
+        title={`Temperature in Seattle, ${year}`}
         dataSource={chartDataSource}
       >
         <Size height={420} />

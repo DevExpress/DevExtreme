@@ -78,7 +78,7 @@ function customizeTooltip(arg: { valueText: string; }) {
 function App() {
   return (
     <div id="chart-demo">
-      <Chart title={`Temperature in Seattle , ${year}`} dataSource={chartDataSource}>
+      <Chart title={`Temperature in Seattle, ${year}`} dataSource={chartDataSource}>
         <Size height={420} />
         <ValueAxis valueType="numeric">
           <Grid opacity={0.2} />
