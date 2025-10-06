@@ -4,6 +4,6 @@ export {
     AIResponse,
     Prompt,
     RequestParams,
-    RequestParamsInfo,
+    RequestParamsData,
     Response,
 } from 'devextreme/common/ai-integration';

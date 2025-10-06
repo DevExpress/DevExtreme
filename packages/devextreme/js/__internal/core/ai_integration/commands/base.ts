@@ -1,8 +1,8 @@
-import type { AIResponse, RequestCallbacks, RequestParamsInfo } from '@js/common/ai-integration';
+import type { AIResponse, RequestCallbacks, RequestParamsData } from '@js/common/ai-integration';
 import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
 import type { RequestManager, RequestManagerCallbacks } from '@ts/core/ai_integration/core/request_manager';
 
-export abstract class BaseCommand<TParams extends RequestParamsInfo, TResult> {
+export abstract class BaseCommand<TParams extends RequestParamsData, TResult> {
   constructor(
     protected promptManager: PromptManager,
     protected requestManager: RequestManager,

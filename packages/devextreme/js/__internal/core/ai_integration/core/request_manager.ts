@@ -3,7 +3,7 @@ import type {
   AIResponse,
   Prompt,
   RequestParams,
-  RequestParamsInfo,
+  RequestParamsData,
 } from '@js/common/ai-integration';
 import errors from '@js/core/errors';
 
@@ -34,13 +34,13 @@ export class RequestManager {
   public sendRequest(
     prompt: Prompt,
     callbacks: RequestManagerCallbacks,
-    requestParams?: RequestParamsInfo,
+    data?: RequestParamsData,
   ): () => void {
     let aborted = false;
 
     const params: RequestManagerParams = {
       prompt,
-      requestParams,
+      data,
       onChunk: (chunk: string): void => { if (!aborted) { callbacks?.onChunk?.(chunk); } },
     };
 

@@ -21,7 +21,7 @@ export type Prompt = {
  * @namespace DevExpress.aiIntegration
  * @type object
  */
-export type RequestParamsInfo = Record<PropertyKey, any>;
+export type RequestParamsData = Record<PropertyKey, any>;
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
@@ -44,7 +44,7 @@ export type RequestParams = {
    * @docid
    * @public
    */
-  requestParams?: RequestParamsInfo;
+  data?: RequestParamsData;
 };
 
 /**

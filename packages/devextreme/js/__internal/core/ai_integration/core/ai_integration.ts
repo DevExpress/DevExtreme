@@ -12,7 +12,7 @@ import type {
   ProofreadCommandParams,
   ProofreadCommandResult,
   RequestCallbacks,
-  RequestParamsInfo,
+  RequestParamsData,
   ShortenCommandParams,
   ShortenCommandResult,
   SmartPasteCommandParams,
@@ -61,7 +61,7 @@ export const COMMANDS = {
   [CommandNames.SmartPaste]: SmartPasteCommand,
 } as const;
 
-export interface CommandDefinition<TParams extends RequestParamsInfo, TResult> {
+export interface CommandDefinition<TParams extends RequestParamsData, TResult> {
   command: BaseCommand<TParams, TResult>;
   params: TParams;
   result: TResult;
