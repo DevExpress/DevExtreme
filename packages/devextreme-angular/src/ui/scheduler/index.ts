@@ -338,9 +338,9 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     /**
      * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-
+    
      * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-
+    
      */
     @Input()
     get dropDownAppointmentTemplate(): any {
@@ -1168,9 +1168,9 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     @Output() dropDownAppointmentTemplateChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }>;
 
