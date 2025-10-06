@@ -16,7 +16,7 @@ import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 import type { EnterKeyEvent, InputEvent } from '../../../../ui/text_area';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
+export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
 export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
@@ -40,7 +40,9 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   text?: string;
 
+  /** To remove */
   toolbarItems?: ToolbarProperties['items'];
+  /** End */
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
@@ -56,7 +58,9 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: TextAreaOnSteroids;
 
+  /** Move to ChatTextArea */
   _sendButton?: Button;
+  /** End */
 
   _editingPreview!: EditingPreview | null;
 
@@ -75,12 +79,15 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      text: '',
+      /** To remove */
+      toolbarItems: [],
+      /** End */
       onMessageEntered: undefined,
-      onTypingStart: undefined,
-      onTypingEnd: undefined,
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
-      text: '',
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -101,13 +108,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       this._renderEditingPreview();
     }
 
-    this._renderInputContainer();
+    this._renderTextAreaContainer();
   }
 
-  /** Why we need additional container? Why it is input container? */
-  _renderInputContainer(): void {
+  _renderTextAreaContainer(): void {
     const $inputContainer = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
+      .addClass(CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS)
       .appendTo(this.element());
 
     this._renderTextArea($inputContainer);
@@ -151,13 +157,18 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       textAreaOptions,
     );
 
+    /** Will conflict with Enter on other buttons? */
     this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
+      debugger;
       if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
         event.preventDefault();
       }
     });
+    /** End */
 
+    /** Will conflict with Esc on Toolbar DropDowns? */
     this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
+      debugger;
       if (this.option('text')) {
         this._cancelMessageEdit();
       }
@@ -171,24 +182,31 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       hoverStateEnabled,
     } = this.option();
 
+    /** Move to ChatTextArea */
     const toolbarItems = this._getToolbarItems();
+    /** End */
 
     const options = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      /** To remove */
       toolbarOptions: {
         items: toolbarItems,
       },
+      /** Move to ChatTextArea */
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '8em',
+      /** End */
       onInput: (e: InputEvent): void => {
+        /** Move to ChatTextArea */
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
+        /** End */
 
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
@@ -207,6 +225,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     return options as TextAreaOnSteroidsProperties;
   }
 
+  /** Move to ChatTextArea */
   _getToolbarItems(): ToolbarProperties['items'] {
     const { toolbarItems } = this.option();
 
@@ -219,7 +238,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return items;
   }
+  /** End */
 
+  /** Move to ChatTextArea */
   _getDefaultBeforeToolbarItems(): ToolbarProperties['items'] {
     const {
       activeStateEnabled,
@@ -246,7 +267,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     return items;
   }
+  /** End */
 
+  /** Move to ChatTextArea */
   _getDefaultAfterToolbarItems(): ToolbarProperties['items'] {
     const {
       activeStateEnabled,
@@ -295,6 +318,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     return items;
   }
+  /** End */
 
   _createMessageEnteredAction(): void {
     this._messageEnteredAction = this._createActionByOption(
@@ -349,7 +373,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._typingEndAction?.();
 
     const { text = '' } = this._textArea.option();
-
     const { text: previewText } = this.option();
 
     if (previewText) {
@@ -360,21 +383,28 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       return;
     }
 
+    /** Move to ChatTextArea */
+    /** Make onSend action */
     this._textArea.reset();
     this._toggleButtonDisableState(true);
+    /** end */
 
     this._messageEnteredAction?.({ text, event: e.event });
   }
 
+  /** Move to ChatTextArea */
   _toggleButtonDisableState(state: boolean): void {
     this._sendButton?.option('disabled', state);
   }
+  /** End */
 
+  /** Move to ChatTextArea */
   _isValuableTextEntered(): boolean {
     const { text } = this._textArea.option();
 
     return !!text?.trim();
   }
+  /** End */
 
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
@@ -436,13 +466,17 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     }
   }
 
+  /** Move to ChatTextArea */
   _updateInputContainer(value: string | undefined): void {
+    /** Is it in law here in the updateInputContainer method? */
+    /** There is no any related things to InputContainer */
     this._textArea.option('value', value);
 
     const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
     this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
+  /** End */
 }
 
 export default MessageBox;
