@@ -85,9 +85,9 @@ export class AiColumnIntegrationController extends Controller {
       return aiIntegration as AIIntegration;
     }
 
-    const gridAiIntegration = this.component.option('aiIntegration');
+    const gridAiIntegration = this.option('aiIntegration');
     if (gridAiIntegration) {
-      return gridAiIntegration as AIIntegration;
+      return gridAiIntegration;
     }
 
     errors.log('E1067', columnName);

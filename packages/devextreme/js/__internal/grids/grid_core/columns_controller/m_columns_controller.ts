@@ -3,7 +3,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
@@ -91,6 +91,7 @@ export interface Column extends ColumnBase {
   type?: string;
   visibleWidth?: string | number;
   hidingPriority?: number;
+  ai?: ColumnAIOptions;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -143,11 +144,24 @@ export class ColumnsController extends modules.Controller {
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
   private getCommonColumnSettings(column): Partial<Column> {
-    if (!column?.type) {
-      return this.option('commonColumnSettings');
+    switch (true) {
+      case !column?.type:
+        return this.option('commonColumnSettings');
+      case column?.type === AI_COLUMN_NAME:
+        return this.getAiColumnSettings();
+      default:
+        return {};
     }
+  }
 
-    return column.type === AI_COLUMN_NAME ? { allowHiding: true } : {};
+  private getAiColumnSettings(): Partial<Column> {
+    return {
+      allowHiding: true,
+      ai: {
+        mode: 'auto',
+        showHeaderMenu: true,
+      },
+    };
   }
 
   public init(isApplyingUserState?): void {
@@ -278,7 +292,6 @@ export class ColumnsController extends modules.Controller {
         }
         break;
       case 'commonColumnSettings':
-      case 'commonAiColumnSettings':
       case 'columnAutoWidth':
       case 'allowColumnResizing':
       case 'allowColumnReordering':
@@ -405,7 +418,7 @@ export class ColumnsController extends modules.Controller {
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 
-    const settings = extend({
+    return extend({
       allowFixing: this.option('columnFixing.enabled'),
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       allowResizing: this.option('allowColumnResizing') || undefined,
@@ -416,13 +429,6 @@ export class ColumnsController extends modules.Controller {
       allowCollapsing: groupingOptions.allowCollapsing,
       allowGrouping: groupPanelOptions.allowColumnDragging && groupPanelOptions.visible || groupingOptions.contextMenuEnabled,
     }, commonColumnSettings);
-
-    if (column && column.type === 'ai') {
-      const commonAiColumnSettings = this.option('commonAiColumnSettings') || {};
-      settings.ai = extend({}, commonAiColumnSettings, column.ai);
-    }
-
-    return settings;
   }
 
   public isColumnOptionUsed(optionName): any {
@@ -1959,11 +1965,6 @@ export const columnsControllerModule: Module = {
         encodeHtml: true,
         trueText: messageLocalization.format('dxDataGrid-trueText'),
         falseText: messageLocalization.format('dxDataGrid-falseText'),
-      },
-      commonAiColumnSettings: {
-        aiIntegration: null,
-        mode: 'auto',
-        showHeaderMenu: true,
       },
       allowColumnReordering: false,
       allowColumnResizing: false,

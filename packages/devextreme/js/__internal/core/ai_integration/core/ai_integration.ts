@@ -82,8 +82,10 @@ export interface Commands {
   [CommandNames.Summarize]: CommandDefinition<SummarizeCommandParams, SummarizeCommandResult>;
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
   [CommandNames.SmartPaste]: CommandDefinition<SmartPasteCommandParams, SmartPasteCommandResult>;
-  // eslint-disable-next-line @stylistic/max-len
-  [CommandNames.GenerateColumn]: CommandDefinition<GenerateColumnCommandParams, GenerateColumnCommandResult>;
+  [CommandNames.GenerateColumn]: CommandDefinition<
+    GenerateColumnCommandParams,
+    GenerateColumnCommandResult
+  >;
 }
 
 export class AIIntegration implements IAIIntegration {

@@ -21,8 +21,7 @@ export class GenerateColumnCommand extends BaseCommand<
   }
 
   protected parseResult(response: string): GenerateColumnCommandResult {
-    let result: GenerateColumnCommandResult = {};
-    result = JSON.parse(response);
+    const result: GenerateColumnCommandResult = JSON.parse(response);
     return result;
   }
 
