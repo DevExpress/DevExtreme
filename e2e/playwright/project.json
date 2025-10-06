@@ -1,0 +1,30 @@
+{
+  "name": "devextreme-e2e-playwright",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/playwright",
+  "projectType": "application",
+  "targets": {
+    "test:docker": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test:docker"
+      },
+      "inputs": [
+        "{projectRoot}/**/*.js",
+        "{projectRoot}/**/*.ts"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint"
+      },
+      "inputs": [
+        "{projectRoot}/**/*"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}

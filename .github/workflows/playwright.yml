@@ -1,0 +1,128 @@
+name: Playwright Tests
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  push:
+    branches: [ 25_1 ]
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  BUILD_TEST_INTERNAL_PACKAGE: true
+
+jobs:
+  build:
+    name: build
+    strategy:
+      fail-fast: false
+
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        shell: bash
+        run: |
+          node ./tools/scripts/performance_log.js &
+          pnpx nx build devextreme
+
+      - name: Zip artifacts
+        working-directory: ./packages/devextreme
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-artifacts
+          path: ./packages/devextreme/artifacts.zip
+          retention-days: 1
+
+  test:
+    needs: [build]
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-artifacts
+          path: ./packages/devextreme
+
+      - name: Unpack artifacts
+        working-directory: ./packages/devextreme
+        run: 7z x artifacts.zip -aoa
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Run Playwright tests
+        working-directory: ./e2e/playwright
+        run: pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test:ci
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5

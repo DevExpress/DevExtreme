@@ -1,0 +1,24 @@
+{
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker:copy-artifacts": "node src/commands/copy-artifacts.js",
+    "docker:build": "docker build -f src/docker/Dockerfile -t playwright-tests .",
+    "docker:test:ci": "node src/commands/run-n-build-docker.js --env CI=1",
+    "docker:test": "node src/commands/run-n-build-docker.js",
+    "test:docker": "pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test",
+    "test:local": "pnpm exec playwright test",
+    "test:ui": "pnpm exec playwright test --ui",
+    "start": "node src/ui/server.js",
+    "lint": "eslint --ext .js,.ts ./src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "1.53.1",
+    "@types/node": "^22.15.30"
+  }
+}
