@@ -118,7 +118,7 @@ function applyDisableDatesToDateEditors(form) {
 
 function setComponentAria(element) {
   const prevAria = element?.attr('aria-label') || '';
-  const description = ariaDescription();
+  const description = ariaDescription.value;
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
   element?.attr('aria-label', nextAria);
 }
