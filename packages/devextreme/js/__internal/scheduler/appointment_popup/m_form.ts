@@ -555,7 +555,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createResourcesGroup(): GroupItem {
+  private createResourcesGroup(): GroupItem | undefined {
     const resourcesLoaders: ResourceLoader[] = Object.values(this.scheduler.getResourceById());
 
     const resourcesItems = resourcesLoaders.map((resourceLoader) => {
@@ -584,6 +584,7 @@ export class AppointmentForm {
 
     return {
       itemType: 'group',
+      visible: resourcesItems.length > 0,
       colCount: 2,
       colCountByScreen: {
         xs: 2,
@@ -593,7 +594,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
-          template: this.createIconTemplate('addcircleoutline'),
+          template: this.createIconTemplate('user'), // TODO: change icon to 'addcircleoutline'
         },
         {
           itemType: 'group',
@@ -691,11 +692,7 @@ export class AppointmentForm {
     this.dxForm.endUpdate();
   }
 
-  private createIconTemplate(iconName: string): (data: any, itemElement: dxElementWrapper) => void {
-    return (data, itemElement): void => {
-      const iconElement = $('<i>');
-      iconElement.addClass('dx-icon').addClass(`dx-icon-${iconName}`);
-      itemElement.append(iconElement);
-    };
+  private createIconTemplate(iconName: string): () => void {
+    return (): dxElementWrapper => $('<i>').addClass('dx-icon').addClass(`dx-icon-${iconName}`);
   }
 }

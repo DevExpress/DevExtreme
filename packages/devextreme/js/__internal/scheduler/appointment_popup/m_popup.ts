@@ -13,7 +13,7 @@ import { current, isFluent } from '@js/ui/themes';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
 import type { SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
+import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
@@ -197,7 +197,7 @@ export class AppointmentPopup {
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
     const { resources } = this.scheduler.getResourceManager();
-    const groupValues = getAppointmentGroupValues(
+    const groupValues = getRawAppointmentGroupValues(
       appointmentAdapter.source as SafeAppointment,
       resources,
     );
