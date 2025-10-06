@@ -109,7 +109,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this._deprecatedOptions = {
       ...this._deprecatedOptions,
       // @ts-expect-error ts-error
-      indicatorSrc: { since: '25.2', message: 'Use indicatorSrc in indicatorOptions' },
+      indicatorSrc: { since: '25.2', alias: 'indicatorOptions.indicatorSrc' },
     };
   }
 
