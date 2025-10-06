@@ -3,7 +3,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Appointment popup form`
+fixture.disablePageReloads`Legacy appointment popup form`
   .page(url(__dirname, '../../container.html'));
 
 test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
@@ -32,6 +32,7 @@ test('Subject and description fields should be empty after showing popup on empt
   currentDate: new Date(2017, 4, 22),
   height: 600,
   width: 600,
+  editing: { legacyForm: true },
   dataSource: [
     {
       text: 'Website Re-Design Plan',
@@ -70,6 +71,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
   currentDate: new Date(2017, 4, 22),
   height: 600,
   width: 600,
+  editing: { legacyForm: true },
   onAppointmentFormOpening: (e) => {
     const items = [{
       name: 'show1',
@@ -130,6 +132,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
   currentView: 'month',
   currentDate: new Date(2017, 4, 25),
   endDayHour: 20,
+  editing: { legacyForm: true },
   dataSource: [{
     text: 'Google AdWords Strategy',
     startDate: new Date(2017, 4, 1),
@@ -169,6 +172,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
     disabled: true,
     recurrenceRule: 'FREQ=DAILY',
   }],
+  editing: { legacyForm: true },
   currentView: 'week',
   recurrenceEditMode: 'series',
   currentDate: new Date(2017, 4, 25),
@@ -191,6 +195,7 @@ test('AppointmentForm should display correct dates in work-week when firstDayOfW
 }).before(async () => createWidget('dxScheduler', {
   views: ['workWeek'],
   currentView: 'workWeek',
+  editing: { legacyForm: true },
   currentDate: new Date(2021, 5, 28),
   startDayHour: 5,
   height: 600,

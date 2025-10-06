@@ -41,6 +41,7 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   startDayHour: 9,
   endDayHour: 14,
   height: 600,
+  editing: { legacyForm: true },
 }));
 
 test('Should correctly update appointment if dataSource is a Store with key array', async (t) => {
@@ -82,6 +83,7 @@ test('Should correctly update appointment if dataSource is a Store with key arra
       startDayHour: 9,
       endDayHour: 14,
       height: 600,
+      editing: { legacyForm: true },
     }).dxScheduler('instance');
     devExpress.fx.off = true;
   }, { dependencies: { SCHEDULER_SELECTOR, INITIAL_APPOINTMENT_TITLE } });
@@ -111,6 +113,7 @@ test('Appointment EditForm screenshot', async (t) => {
     startDate: new Date(2021, 2, 29, 9, 30),
     endDate: new Date(2021, 2, 29, 11, 30),
   }],
+  editing: { legacyForm: true },
   views: ['day'],
   currentView: 'day',
   currentDate: new Date(2021, 2, 29),
