@@ -6,6 +6,13 @@ fixture('Charts.Export')
     ctx.initialWindowSize = [900, 600];
   });
 
+declare global {
+  interface Window {
+    originalCreateObjectURL: (obj: Blob | MediaSource) => string;
+    testedValue: string;
+  }
+}
+
 runManualTest('Charts', 'ExportCustomMarkup', (test) => {
   test('Export', async (t) => {
     let isFileCreateForDownload = false;
@@ -14,7 +21,9 @@ runManualTest('Charts', 'ExportCustomMarkup', (test) => {
       window.originalCreateObjectURL = URL.createObjectURL;
       window.testedValue = '';
 
+      // @ts-expect-error wrong type
       URL.createObjectURL = (blob) => {
+        // @ts-expect-error Blob.type is not typed
         window.testedValue = blob.type;
 
         return Promise.reject();
