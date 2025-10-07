@@ -49,11 +49,11 @@ export class DxoDataGridIndicatorOptionsComponent extends NestedOption implement
     }
 
     @Input()
-    get indicatorSrc(): string {
-        return this._getOption('indicatorSrc');
+    get src(): string {
+        return this._getOption('src');
     }
-    set indicatorSrc(value: string) {
-        this._setOption('indicatorSrc', value);
+    set src(value: string) {
+        this._setOption('src', value);
     }
 
     @Input()

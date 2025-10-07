@@ -478,16 +478,22 @@ QUnit.module('options changed callbacks', {
         const url = '../../testing/content/customLoadIndicator.png';
         const customSize = 120;
         const indicatorOptions = {
-            indicatorSrc: url,
+            src: url,
             animationType: 'sparkle',
             height: customSize,
             width: customSize,
         };
         const updatedOptions = {
-            indicatorSrc: '',
+            src: '',
             animationType: 'circle',
             height: undefined,
             width: undefined,
+        };
+        const optionNames = {
+            src: 'indicatorSrc',
+            animationType: 'animationType',
+            height: 'height',
+            width: 'width'
         };
         const instance = this.element
             .dxLoadPanel({
@@ -500,22 +506,22 @@ QUnit.module('options changed callbacks', {
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
 
         Object.entries(indicatorOptions).forEach(([optionName, value]) => {
-            assert.strictEqual(loadIndicatorInstance.option(optionName), value, `custom ${optionName} option installed successfully`);
+            assert.strictEqual(loadIndicatorInstance.option(optionNames[optionName]), value, `custom ${optionName} option installed successfully`);
         });
         Object.entries(updatedOptions).forEach(([optionName, value]) => {
             instance.option(`indicatorOptions.${optionName}`, value);
-            assert.strictEqual(loadIndicatorInstance.option(optionName), value, `custom ${optionName} option changed successfully`);
+            assert.strictEqual(loadIndicatorInstance.option(optionNames[optionName]), value, `custom ${optionName} option changed successfully`);
         });
     });
 
-    QUnit.test('indicatorOptions.indicatorSrc option change when showIndicator is false', function(assert) {
+    QUnit.test('indicatorOptions.src option change when showIndicator is false', function(assert) {
         const url = '../../testing/content/customLoadIndicator.png';
         const instance = this.element
             .dxLoadPanel({})
             .dxLoadPanel('instance');
 
         instance.show();
-        instance.option('indicatorOptions.indicatorSrc', url);
+        instance.option('indicatorOptions.src', url);
         instance.option('showIndicator', true);
 
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');

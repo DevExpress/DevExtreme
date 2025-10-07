@@ -773,7 +773,7 @@ declare module DevExpress {
     /**
      * [descr:ExportLoadPanel.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
     /**
      * [descr:ExportLoadPanel.showPane]
      */
@@ -6223,7 +6223,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
     /**
      * [descr:GridBaseOptions.loadPanel.shading]
      */
@@ -22255,27 +22255,6 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadIndicator>;
-    /**
-     * [descr:LoadIndicatorOptions]
-     */
-    export type LoadIndicatorOptions = {
-      /**
-       * [descr:LoadIndicatorOptions.animationType]
-       */
-      animationType?: LoadingAnimationType;
-      /**
-       * [descr:LoadIndicatorOptions.indicatorSrc]
-       */
-      indicatorSrc?: string;
-      /**
-       * [descr:LoadIndicatorOptions.height]
-       */
-      height?: number | string | undefined;
-      /**
-       * [descr:LoadIndicatorOptions.width]
-       */
-      width?: number | string | undefined;
-    };
     export type LoadingAnimationType = 'circle' | 'sparkle';
     /**
      * [descr:_ui_load_indicator_OptionChangedEvent]
@@ -22291,8 +22270,16 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxLoadIndicatorOptions
-    extends WidgetOptions<dxLoadIndicator>,
-      DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions {}
+    extends WidgetOptions<dxLoadIndicator> {
+    /**
+     * [descr:dxLoadIndicatorOptions.animationType]
+     */
+    animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
+    /**
+     * [descr:dxLoadIndicatorOptions.indicatorSrc]
+     */
+    indicatorSrc?: string;
+  }
   /**
    * [descr:dxLoadPanel]
    */
@@ -22323,6 +22310,27 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadPanel>;
+    /**
+     * [descr:LoadPanelIndicatorOptions]
+     */
+    export type LoadPanelIndicatorOptions = {
+      /**
+       * [descr:LoadPanelIndicatorOptions.animationType]
+       */
+      animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
+      /**
+       * [descr:LoadPanelIndicatorOptions.src]
+       */
+      src?: string;
+      /**
+       * [descr:LoadPanelIndicatorOptions.height]
+       */
+      height?: number | string | undefined;
+      /**
+       * [descr:LoadPanelIndicatorOptions.width]
+       */
+      width?: number | string | undefined;
+    };
     /**
      * [descr:_ui_load_panel_OptionChangedEvent]
      */
@@ -22389,7 +22397,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadIndicator.LoadIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */

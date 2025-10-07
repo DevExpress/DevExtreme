@@ -234,12 +234,14 @@ import {
 } from "devextreme/core/component";
 import {
  LoadingAnimationType,
- LoadIndicatorOptions,
 } from "devextreme/ui/load_indicator";
 import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
+import {
+ LoadPanelIndicatorOptions,
+} from "devextreme/ui/load_panel";
 import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
@@ -2434,13 +2436,13 @@ const DxIndicatorOptionsConfig = {
     "update:hoveredElement": null,
     "update:animationType": null,
     "update:height": null,
-    "update:indicatorSrc": null,
+    "update:src": null,
     "update:width": null,
   },
   props: {
     animationType: String as PropType<LoadingAnimationType>,
     height: [Number, String],
-    indicatorSrc: String,
+    src: String,
     width: [Number, String]
   }
 };
@@ -2561,7 +2563,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
-    indicatorOptions: Object as PropType<LoadIndicatorOptions | Record<string, any>>,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorOptions | Record<string, any>>,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,

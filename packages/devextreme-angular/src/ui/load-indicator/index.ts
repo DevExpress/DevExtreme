@@ -56,7 +56,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     instance: DxLoadIndicator = null;
 
     /**
-     * [descr:LoadIndicatorOptions.animationType]
+     * [descr:dxLoadIndicatorOptions.animationType]
     
      */
     @Input()
@@ -82,7 +82,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:LoadIndicatorOptions.height]
+     * [descr:DOMComponentOptions.height]
     
      */
     @Input()
@@ -108,7 +108,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:LoadIndicatorOptions.indicatorSrc]
+     * [descr:dxLoadIndicatorOptions.indicatorSrc]
     
      */
     @Input()
@@ -147,7 +147,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:LoadIndicatorOptions.width]
+     * [descr:DOMComponentOptions.width]
     
      */
     @Input()

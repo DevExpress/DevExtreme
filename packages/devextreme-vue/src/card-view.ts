@@ -116,6 +116,7 @@ import {
 } from "devextreme/ui/filter_builder";
 import {
  dxLoadPanelOptions,
+ LoadPanelIndicatorOptions,
  ContentReadyEvent as LoadPanelContentReadyEvent,
  DisposingEvent as LoadPanelDisposingEvent,
  HiddenEvent,
@@ -183,7 +184,6 @@ import {
 } from "devextreme/common/ai-integration";
 import {
  LoadingAnimationType,
- LoadIndicatorOptions,
 } from "devextreme/ui/load_indicator";
 import {
  dxTabPanelOptions,
@@ -2089,13 +2089,13 @@ const DxIndicatorOptionsConfig = {
     "update:hoveredElement": null,
     "update:animationType": null,
     "update:height": null,
-    "update:indicatorSrc": null,
+    "update:src": null,
     "update:width": null,
   },
   props: {
     animationType: String as PropType<LoadingAnimationType>,
     height: [Number, String],
-    indicatorSrc: String,
+    src: String,
     width: [Number, String]
   }
 };
@@ -2295,7 +2295,7 @@ const DxLoadPanelConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object as PropType<LoadIndicatorOptions | Record<string, any>>,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorOptions | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],

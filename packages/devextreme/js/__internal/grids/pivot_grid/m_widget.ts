@@ -287,7 +287,7 @@ class PivotGrid extends Widget {
     this._deprecatedOptions = {
       ...this._deprecatedOptions,
       // @ts-expect-error ts-error
-      'loadPanel.indicatorSrc': { since: '25.2', alias: 'loadPanel.indicatorOptions.indicatorSrc' },
+      'loadPanel.indicatorSrc': { since: '25.2', alias: 'loadPanel.indicatorOptions.src' },
     };
   }
 

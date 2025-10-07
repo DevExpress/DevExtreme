@@ -1,4 +1,4 @@
-import { LoadIndicatorOptions } from '../ui/load_indicator';
+import { LoadPanelIndicatorOptions } from '../ui/load_panel';
 
 /**
  * @docid
@@ -40,7 +40,7 @@ export interface ExportLoadPanel {
   /**
    * @docid
    */
-  indicatorOptions?: LoadIndicatorOptions;
+  indicatorOptions?: LoadPanelIndicatorOptions;
   /**
    * @docid
    * @default true

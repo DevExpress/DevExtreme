@@ -19,8 +19,7 @@ import {
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { event } from 'devextreme/events/events.types';
-import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
+import { LoadPanelIndicatorOptions, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
@@ -214,10 +213,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
     
     @Input()
-    get indicatorOptions(): LoadIndicatorOptions {
+    get indicatorOptions(): LoadPanelIndicatorOptions {
         return this._getOption('indicatorOptions');
     }
-    set indicatorOptions(value: LoadIndicatorOptions) {
+    set indicatorOptions(value: LoadPanelIndicatorOptions) {
         this._setOption('indicatorOptions', value);
     }
 
@@ -557,7 +556,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() indicatorOptionsChange: EventEmitter<LoadIndicatorOptions>;
+    @Output() indicatorOptionsChange: EventEmitter<LoadPanelIndicatorOptions>;
 
     /**
     

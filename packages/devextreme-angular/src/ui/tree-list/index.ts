@@ -36,7 +36,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { LoadIndicatorOptions } from 'devextreme/ui/load_indicator';
+import { LoadPanelIndicatorOptions } from 'devextreme/ui/load_panel';
 import { event } from 'devextreme/events/events.types';
 
 import DxTreeList from 'devextreme/ui/tree_list';
@@ -832,10 +832,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -1881,7 +1881,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorOptions, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     

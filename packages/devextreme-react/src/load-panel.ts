@@ -224,7 +224,7 @@ const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componen
 type IIndicatorOptionsProps = React.PropsWithChildren<{
   animationType?: LoadingAnimationType;
   height?: number | string | undefined;
-  indicatorSrc?: string;
+  src?: string;
   width?: number | string | undefined;
 }>
 const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {

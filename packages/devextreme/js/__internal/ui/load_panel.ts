@@ -109,7 +109,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     this._deprecatedOptions = {
       ...this._deprecatedOptions,
       // @ts-expect-error ts-error
-      indicatorSrc: { since: '25.2', alias: 'indicatorOptions.indicatorSrc' },
+      indicatorSrc: { since: '25.2', alias: 'indicatorOptions.src' },
     };
   }
 
@@ -221,11 +221,12 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     }
 
     const { indicatorOptions = {}, indicatorSrc } = this.option();
+    const { src, ...restIndicatorOptions } = indicatorOptions;
 
     this._createComponent(this._$indicator, LoadIndicator, {
       elementAttr: this._getAriaAttributes(),
-      indicatorSrc,
-      ...indicatorOptions,
+      indicatorSrc: src ?? indicatorSrc,
+      ...restIndicatorOptions,
     });
   }
 
