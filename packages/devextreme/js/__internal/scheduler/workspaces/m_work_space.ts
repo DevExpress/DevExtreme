@@ -861,6 +861,19 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
   }
 
+  updateHeaderPanelScrollbarPadding() {
+    if (hasWindow() && this._$headerPanelContainer) {
+      const scrollbarWidth = this._getScrollbarWidth();
+      this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
+    }
+  }
+
+  _getScrollbarWidth() {
+    const containerElement = $(this._dateTableScrollable.container()).get(0) as HTMLElement;
+    const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+    return scrollbarWidth;
+  }
+
   _isGroupsSpecified(resources) {
     return this.option('groups')?.length && resources;
   }
@@ -1043,6 +1056,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     this._dateTableScrollable.update();
     this._headerScrollable?.update();
     this._sidebarScrollable?.update();
+    this.updateHeaderPanelScrollbarPadding();
   }
 
   _getTimePanelRowCount() {
