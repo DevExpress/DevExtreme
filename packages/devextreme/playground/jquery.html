@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,7 +42,44 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <style>
+        .demo-container {
+            min-width: 720px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .options {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-width: 280px;
+            background-color: rgba(191, 191, 191, 0.15);
+            gap: 16px;
+        }
+
+        .dx-chat {
+            max-width: 480px;
+        }
+
+        .caption {
+            font-size: var(--dx-font-size-sm);
+            font-weight: 500;
+        }
+
+        .dx-avatar {
+            border: 1px solid var(--dx-color-border);
+        }
+    </style>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,14 +87,143 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div class="dx-viewport demo-container">
+            <div class="chat-container">
+                <div id="chat"></div>
+            </div>
+        </div>
+
         <script>
             $(() => {
-                $("#button").dxChat({
-                    height: 600,
-                    width: 500,
+                const customStore = new DevExpress.data.CustomStore({
+                    key: 'id',
+                    load: async () => messages,
+                    insert: async (message) => {
+                        messages.push(message);
+                        return message;
+                    },
                 });
+
+                const dataSource = new DevExpress.data.DataSource({
+                    store: customStore,
+                    paginate: false,
+                });
+
+                const chat = $('#chat').dxChat({
+                    height: 600,
+                    dataSource,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    reloadOnChange: false,
+                    user: currentUser,
+                    onMessageEntered(e) {
+                        const { message } = e;
+
+                        dataSource.store().push([{
+                            type: 'insert',
+                            data: {
+                                id: new DevExpress.data.Guid(),
+                                ...message,
+                            },
+                        }]);
+                    },
+                    onMessageDeleted(e) {
+                        const { message } = e;
+
+                        dataSource.store().push([{
+                            type: 'update',
+                            key: message.id,
+                            data: { isDeleted: true },
+                        }]);
+                    },
+                    onMessageUpdated(e) {
+                        const { message, text } = e;
+
+                        dataSource.store().push([{
+                            type: 'update',
+                            key: message.id,
+                            data: { text, isEdited: true },
+                        }]);
+                    },
+                }).dxChat('instance');
+
+                const editingStrategy = {
+                    enabled: true,
+                    disabled: false,
+                    custom: ({ component, message }) => {
+                        const { items, user } = component.option();
+                        const userId = user.id;
+
+                        const lastNotDeletedMessage = items.findLast(
+                            (item) => item.author?.id === userId && !item.isDeleted
+                        );
+
+                        return message.id === lastNotDeletedMessage?.id;
+                    },
+                };
             });
+
+
+            const getTimestamp = function (date, offsetMinutes = 0) {
+                return date.getTime() + offsetMinutes * 60000;
+            };
+
+            const date = new Date();
+            date.setHours(0, 0, 0, 0);
+
+            const currentUser = {
+                id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
+                name: 'John Doe',
+            };
+
+            const supportAgent = {
+                id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
+                name: 'Support Agent',
+                avatarUrl: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/petersmith.png',
+            };
+
+            const messages = [
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -9),
+                    author: supportAgent,
+                    text: 'Hello, John!\nHow can I assist you today?',
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    text: "Hi, I'm having trouble accessing my account.",
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    text: 'It says my password is incorrect.',
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: currentUser,
+                    isDeleted: true,
+                },
+                {
+                    id: new DevExpress.data.Guid(),
+                    timestamp: getTimestamp(date, -7),
+                    author: supportAgent,
+                    text: 'I can help you with that. Can you please confirm your UserID for security purposes?',
+                    isEdited: true,
+                },
+            ];
+
+            const editingOptions = [
+                { text: 'Enabled', key: 'enabled' },
+                { text: 'Disabled', key: 'disabled' },
+                { text: 'Only the last message (custom)', key: 'custom' },
+            ];
         </script>
     </div>
 </body>
