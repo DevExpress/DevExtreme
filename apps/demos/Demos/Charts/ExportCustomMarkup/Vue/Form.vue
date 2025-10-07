@@ -1,5 +1,3 @@
-<!-- eslint-disable vue/max-len -->
-
 <template>
   <div class="custom_markup_container">
     <svg
@@ -26,7 +24,11 @@
       />
       <text
         transform="translate(30,89)"
-        style="fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;"
+        :style="{ fill: '#fff',
+                  fontFamily: fontFamily,
+                  fontSize: '36px',
+                  fontWeight: 'bold',
+        }"
       >
         <tspan
           x="0"
@@ -43,7 +45,11 @@
       </text>
       <text
         transform="translate(32,199)"
-        style="opacity: 0.8; fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 14px;"
+        :style="{ opacity: '0.8',
+                  fill: '#fff',
+                  fontFamily: fontFamily,
+                  fontSize: '14px'
+        }"
       >
         <tspan
           x="0"
@@ -59,6 +65,7 @@
 </template>
 <script setup lang="ts">
 
+const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 defineExpose({
   getMarkup() {
     // @ts-ignore

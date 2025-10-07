@@ -40,13 +40,13 @@ export class AppComponent {
     this.buildingData = service.getBuildingData();
   }
 
-  // eslint-disable-next-line consistent-return
   customizeTooltip({ layer, attribute }) {
     if (layer.name === 'rooms') {
       return {
         text: `Square: ${attribute('square')} ft&#178`,
       };
     }
+    return null;
   }
 }
 
