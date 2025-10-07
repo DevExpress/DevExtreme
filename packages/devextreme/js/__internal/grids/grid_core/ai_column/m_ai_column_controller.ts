@@ -72,7 +72,7 @@ export class AiColumnController extends Controller {
   }
 
   public abortAIColumnRequest(columnName: string): void {
-
+    this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
   public sendAIColumnRequest(columnName: string): void {

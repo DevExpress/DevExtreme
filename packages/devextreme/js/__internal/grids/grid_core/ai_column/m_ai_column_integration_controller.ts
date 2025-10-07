@@ -9,18 +9,22 @@ import errors from '@js/ui/widget/ui.errors';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
+import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
 
 export class AiColumnIntegrationController extends Controller {
-  private abort?: () => void;
+  private aborts: Record<string, (() => void) | undefined> = { };
 
   private columnsController!: ColumnsController;
 
   private dataController!: DataController;
 
+  private errorHandlingController!: ErrorHandlingController;
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+    this.errorHandlingController = this.getController('errorHandling');
   }
 
   public sendRequest(columnName: string): void {
@@ -40,40 +44,43 @@ export class AiColumnIntegrationController extends Controller {
         text: prompt,
         data,
       },
-      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(),
+      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName),
     );
-    this.abort = abort;
+    this.aborts[columnName] = abort;
   }
 
-  private processCommandCompletion(): void {
-    this.abort?.();
-    this.abort = undefined;
+  private processCommandCompletion(columnName: string): void {
+    this.abortRequest(columnName);
   }
 
-  private updateResults(result: string): void {
+  private updateResults(columnName: string, result: string): void {
     // Update the results in the UI or internal state
   }
 
-  private getAICommandCallbacks<T>(): RequestCallbacks<T> {
+  private getAICommandCallbacks<T>(columnName: string): RequestCallbacks<T> {
     const callbacks = {
       onComplete: (finalResponse: T): void => {
-        this.updateResults(String(finalResponse));
-        this.processCommandCompletion();
+        if (this.isRequestAwaitingCompletion(columnName)) {
+          this.updateResults(columnName, String(finalResponse));
+          this.processCommandCompletion(columnName);
+        }
       },
-      onError: (): void => {
-        this.processCommandCompletion();
+      onError: (error: Error): void => {
+        this.showError(error.message);
+        this.processCommandCompletion(columnName);
       },
     };
 
     return callbacks;
   }
 
-  public abortRequest(): void {
-
+  public abortRequest(columnName: string): void {
+    this.aborts[columnName]?.();
+    this.aborts[columnName] = undefined;
   }
 
   public showError(message: string): void {
-
+    this.errorHandlingController?.showToastError(message);
   }
 
   private getAiIntegration(columnName: string): AIIntegration | null {
@@ -92,5 +99,9 @@ export class AiColumnIntegrationController extends Controller {
 
     errors.log('E1067', columnName);
     return null;
+  }
+
+  private isRequestAwaitingCompletion(columnName: string): boolean {
+    return !!this.aborts[columnName];
   }
 }

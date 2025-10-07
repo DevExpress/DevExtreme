@@ -915,3 +915,108 @@ describe('aiMode', () => {
     expect(columnSendRequestSpy).toBeCalledTimes(0);
   });
 });
+
+describe('API Methods', () => {
+  const columnSendRequestStartedSpy = jest.fn();
+  const columnSendRequestResolvedSpy = jest.fn();
+  const abortSpy = jest.fn();
+
+  beforeEach(() => {
+    beforeTest();
+    columnSendRequestStartedSpy.mockClear();
+    columnSendRequestResolvedSpy.mockClear();
+    abortSpy.mockClear();
+  });
+
+  afterEach(afterTest);
+
+  describe('abortAIColumnRequest', () => {
+    const aiIntegrationResult = (): RequestResult => ({
+      promise: new Promise<string>((resolve) => {
+        columnSendRequestStartedSpy();
+        // Timeouts are mocked and do not delay tests execution
+        setTimeout(() => {
+          columnSendRequestResolvedSpy();
+          resolve('1');
+        }, 10000);
+      }),
+      abort: (): void => {
+        abortSpy();
+      },
+    });
+
+    const columnAiIntegration = new AIIntegration({
+      sendRequest(): RequestResult {
+        return aiIntegrationResult();
+      },
+    });
+    it('should have no effect after the promise is resolved', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+
+      instance.abortAIColumnRequest('myColumn');
+      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(1);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should interrupt a promise and call abortSpy', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is NOT enough time to resolve a promise
+      jest.advanceTimersByTime(1000);
+
+      instance.abortAIColumnRequest('myColumn');
+      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+});
