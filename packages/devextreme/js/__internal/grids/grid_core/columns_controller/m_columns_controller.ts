@@ -84,6 +84,8 @@ import {
   updateSerializers,
 } from './m_columns_controller_utils';
 
+const COMMAND_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
+
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
   index?: number;
@@ -452,13 +454,21 @@ export class ColumnsController extends modules.Controller {
     return this.getColumns().some((column) => column.isBand);
   }
 
+  private _columnCanBeGrouped(column) {
+    if (!column) return false;
+
+    return isDefined(column.groupIndex) && !column.command && !COMMAND_COLUMN_TYPES.includes(column.type);
+  }
+
   public getGroupColumns() {
     const result: any = [];
+
+    const that = this;
 
     each(this._columns, function () {
       const column = this;
 
-      if (isDefined(column.groupIndex) && column.type !== 'ai') {
+      if (that._columnCanBeGrouped(column)) {
         result[column.groupIndex] = column;
       }
     });
