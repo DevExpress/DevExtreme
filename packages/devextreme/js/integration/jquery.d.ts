@@ -12,7 +12,6 @@ import dxContextMenu, { Properties as ContextMenuProperties } from '../ui/contex
 import dxDataGrid, { Properties as DataGridProperties } from '../ui/data_grid';
 import dxDateBox, { Properties as DateBoxProperties } from '../ui/date_box';
 import dxDateRangeBox, { Properties as DateRangeBoxProperties } from '../ui/date_range_box';
-import dxDeferRendering, { Properties as DeferRenderingProperties } from '../ui/defer_rendering';
 import dxDiagram, { Properties as DiagramProperties } from '../ui/diagram';
 import dxDraggable, { Properties as DraggableProperties } from '../ui/draggable';
 import dxDrawer, { Properties as DrawerProperties } from '../ui/drawer';
@@ -217,12 +216,6 @@ declare global {
         dxDateRangeBox(options: DateRangeBoxProperties): JQuery;
         dxDateRangeBox(options: string): any;
         dxDateRangeBox(options: string, ...params: any[]): any;
-
-        dxDeferRendering(): JQuery;
-        dxDeferRendering(options: 'instance'): dxDeferRendering;
-        dxDeferRendering(options: DeferRenderingProperties): JQuery;
-        dxDeferRendering(options: string): any;
-        dxDeferRendering(options: string, ...params: any[]): any;
 
         dxDiagram(): JQuery;
         dxDiagram(options: 'instance'): dxDiagram;

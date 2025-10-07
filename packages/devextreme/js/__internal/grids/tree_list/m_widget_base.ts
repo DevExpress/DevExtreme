@@ -51,7 +51,9 @@ treeListCore.registerModulesOrder([
   'summary',
   'columnFixing',
   'export',
-  'gridView']);
+  'toast',
+  'gridView',
+]);
 
 class TreeList extends GridCoreWidget<dxTreeListOptions> {
   private _initMarkup() {

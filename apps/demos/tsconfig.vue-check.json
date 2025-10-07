@@ -1,10 +1,36 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "strict": false
+    "lib": ["es2023", "DOM", "DOM.Iterable"],
+    "strict": true
   },
   "include": [
-    "Demos/**/Vue/**/*.vue"
+    "Demos/Diagram/**/Vue/**/*.vue",
+    "Demos/Gantt/**/Vue/**/*.vue",
+    "Demos/FileManager/**/Vue/**/*.vue",
+    "Demos/Localization/**/Vue/**/*.vue",
+    "Demos/Chat/**/Vue/**/*.vue",
+    "Demos/Common/CustomTextEditorButtons/Vue/**/*.vue",
+    "Demos/Common/EditorsRightToLeftSupport/Vue/**/*.vue",
+    "Demos/Common/PopupAndNotificationsOverview/Vue/**/*.vue",
+    "Demos/DropDownBox/**/Vue/**/*.vue",
+    "Demos/DropDownButton/**/Vue/**/*.vue",
+    "Demos/FileUploader/**/Vue/**/*.vue",
+    "Demos/Form/**/Vue/**/*.vue",
+    "Demos/HtmlEditor/**/Vue/**/*.vue",
+    "Demos/LoadPanel/**/Vue/**/*.vue",
+    "Demos/Lookup/**/Vue/**/*.vue",
+    "Demos/Map/**/Vue/**/*.vue",
+    "Demos/NumberBox/**/Vue/**/*.vue",
+    "Demos/Popup/**/Vue/**/*.vue",
+    "Demos/RadioGroup/**/Vue/**/*.vue",
+    "Demos/RangeSlider/**/Vue/**/*.vue",
+    "Demos/SelectBox/**/Vue/**/*.vue",
+    "Demos/Slider/**/Vue/**/*.vue",
+    "Demos/TagBox/**/Vue/**/*.vue",
+    "Demos/TextArea/**/Vue/**/*.vue",
+    "Demos/TextBox/**/Vue/**/*.vue",
+    "Demos/Toast/**/Vue/**/*.vue",
+    "Demos/Validation/**/Vue/**/*.vue"
   ]
 }

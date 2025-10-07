@@ -49,6 +49,7 @@ import {
  * @docid
  * @type object
  * @namespace DevExpress.viz
+ * @hidden
  */
 export type BasePointInfo<TPoint extends basePointObject> = {
   /**

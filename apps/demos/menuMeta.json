@@ -1961,8 +1961,10 @@
                 "Name": "ServerSideDataProcessing",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/MonthNames.cs"
+                  "/Models/SampleData/MonthNames.cs",
+                  "/Controllers/ApiControllers/TemperatureDataController.cs"
                 ],
                 "DemoType": "Viz"
               },
@@ -4991,6 +4993,24 @@
               "/Models/SampleData/DropDownButtonData.cs"
             ],
             "ShowOnMainPage": true
+          }
+        ]
+      },
+      {
+        "Name": "Speech To Text",
+        "Equivalents": "dxSpeechToText, dx-speechtotext, VoiceInput, VoiceToText, AIDictation, MicrophoneInput, SpeechRecognition, SpeechTranscription, MicInput",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Equivalents": "voice input, speech recognition, speech transcription, voice to text, voice dictation, voice recognition, microphone input, AI dictation, voice typing, mic input",
+            "DocUrl": "",
+            "Widget": "SpeechToText",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },
