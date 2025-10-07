@@ -1,5 +1,5 @@
 import mustache from 'mustache';
-import path from 'path';
+import { join } from 'path';
 import {
   writeFileSync,
   readFileSync,
@@ -8,7 +8,7 @@ import {
 } from 'fs';
 
 const reportDir = './testing/artifacts/axe-reports';
-const template = readFileSync(path.join(__dirname, 'template.md'), { encoding: 'utf8' });
+const template = readFileSync(join(__dirname, 'template.md'), { encoding: 'utf8' });
 
 function replaceBase64(html) {
   return html.replace(/data:image\/png;base64.+"/, '..."');
@@ -39,7 +39,7 @@ export function createMdReport({ testName, results }) {
     mkdirSync(reportDir, { recursive: true });
   }
 
-  writeFileSync(path.join(reportDir, `${testName}.md`), mdString);
+  writeFileSync(join(reportDir, `${testName}.md`), mdString);
 }
 
 export function createTestCafeReport(violations) {

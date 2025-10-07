@@ -14,9 +14,12 @@ fixture('FileUploader.CustomDropzone')
 runManualTest('FileUploader', 'CustomDropzone', (test) => {
   const triggerDragEnter = async (dropZoneSelector, items) => {
     await ClientFunction(() => {
+      // @ts-expect-error $ is not typed
       const $dropZone = $(dropZoneSelector);
       const { left, top } = $dropZone.offset();
+      // @ts-expect-error $ is not typed
       $dropZone.trigger($.Event('dragenter', {
+        // @ts-expect-error $ is not typed
         originalEvent: $.Event('dragenter', {
           dataTransfer: {
             items,
