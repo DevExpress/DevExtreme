@@ -323,7 +323,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'positionChange' },
             { emit: 'visibleChange' }

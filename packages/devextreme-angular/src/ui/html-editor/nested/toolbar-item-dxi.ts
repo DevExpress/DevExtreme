@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -29,11 +28,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorCommandComponent } from './command-dxi';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
@@ -41,10 +43,22 @@ import { DxiHtmlEditorCommandComponent } from './command-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiHtmlEditorToolbarItemComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
     @Input()
     get acceptedValues(): Array<boolean | number | string> {
         return this._getOption('acceptedValues');
@@ -170,14 +184,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
-    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

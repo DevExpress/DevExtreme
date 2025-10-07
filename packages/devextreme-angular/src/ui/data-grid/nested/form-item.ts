@@ -14,9 +14,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -32,20 +30,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridAsyncRuleComponent } from './async-rule-dxi';
-import { DxiDataGridCompareRuleComponent } from './compare-rule-dxi';
-import { DxiDataGridCustomRuleComponent } from './custom-rule-dxi';
-import { DxiDataGridEmailRuleComponent } from './email-rule-dxi';
-import { DxiDataGridNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiDataGridPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiDataGridRangeRuleComponent } from './range-rule-dxi';
-import { DxiDataGridRequiredRuleComponent } from './required-rule-dxi';
-import { DxiDataGridStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-form-item',
@@ -56,7 +48,12 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoDataGridFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -175,53 +172,6 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiDataGridAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridCompareRuleComponent)) compareRulesChildren!: QueryList<DxiDataGridCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridCustomRuleComponent)) customRulesChildren!: QueryList<DxiDataGridCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridEmailRuleComponent)) emailRulesChildren!: QueryList<DxiDataGridEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridNumericRuleComponent)) numericRulesChildren!: QueryList<DxiDataGridNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridPatternRuleComponent)) patternRulesChildren!: QueryList<DxiDataGridPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiDataGridRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiDataGridRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiDataGridStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridValidationRuleComponent)) validationRulesChildren!: QueryList<DxiDataGridValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-
-
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -251,20 +201,6 @@ export class DxoDataGridFormItemComponent extends NestedOption implements AfterV
     }
 
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({
