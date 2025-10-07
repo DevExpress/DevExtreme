@@ -460,11 +460,11 @@ export default [
   ...compat.extends('devextreme/testcafe').map(config => ({
     ...config,
     rules: changeRulesToStylistic(config.rules || {}),
-    files: ['testing/**/*.js', 'utils/visual-tests/**/*.*'],
+    files: ['testing/**/*.{js,ts}', 'utils/visual-tests/**/*.*'],
   })),
 
   {
-    files: ['testing/**/*.js'],
+    files: ['testing/**/*.{js,ts}'],
     languageOptions: {
       globals: {
         testUtils: true,
