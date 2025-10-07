@@ -386,6 +386,7 @@ FRAMEWORKS.forEach((approach) => {
         ...visualTestSettings[approachLowerCase],
       }) || {};
 
+      // eslint-disable-next-line @typescript-eslint/prefer-includes
       if (process.env.STRATEGY === 'accessibility' && ACCESSIBILITY_UNSUPPORTED_COMPONENTS.indexOf(widgetName) > -1) {
         return;
       }
