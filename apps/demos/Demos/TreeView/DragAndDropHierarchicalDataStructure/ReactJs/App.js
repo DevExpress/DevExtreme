@@ -46,8 +46,7 @@ const moveNode = (fromNode, toNode, fromItems, toItems, isDropInsideItem) => {
   }
 };
 const getNodeContainingArray = (node, rootArray) =>
-
-  node === null || node.parent === null ? rootArray : node.parent.itemData.items;
+  !node?.parent ? rootArray : node.parent.itemData.items;
 const isChildNode = (parentNode, childNode) => {
   let { parent } = childNode;
   while (parent !== null) {

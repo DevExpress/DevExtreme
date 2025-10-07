@@ -58,7 +58,6 @@ export class AppComponent {
     return 'employee';
   }
 
-  // eslint-disable-next-line consistent-return
   itemCustomDataExpr(obj, value) {
     if (value === undefined) {
       return {
@@ -80,6 +79,7 @@ export class AppComponent {
     obj.Email = value.Email;
     obj.Skype = value.Skype;
     obj.Mobile_Phone = value.Mobile_Phone;
+    return null;
   }
 
   requestLayoutUpdateHandler(e) {

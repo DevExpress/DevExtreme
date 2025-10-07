@@ -60,7 +60,6 @@ const dataSource = data;
 
 const isMonthView = computed(() => currentView.value === 'month');
 
-// eslint-disable-next-line consistent-return
 const ariaDescription = computed(() => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
@@ -77,6 +76,7 @@ const ariaDescription = computed(() => {
   if (disabledDates?.length > 1) {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
+  return '';
 });
 
 function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
@@ -118,6 +118,8 @@ function applyDisableDatesToDateEditors(form) {
 
 function setComponentAria(element) {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr('aria-label', `${prevAria} ${ariaDescription.value}`);
+  const description = ariaDescription.value;
+  const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+  element?.attr('aria-label', nextAria);
 }
 </script>

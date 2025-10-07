@@ -10,7 +10,6 @@ import TimeCell from './TimeCell.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
-// eslint-disable-next-line consistent-return
 const ariaDescription = () => {
   const disabledDates = holidays
     .filter((date) => !Utils.isWeekend(date))
@@ -28,6 +27,7 @@ const ariaDescription = () => {
   if (disabledDates?.length > 1) {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
+  return '';
 };
 const notifyDisableDate = () => {
   notify(
@@ -71,7 +71,9 @@ const onAppointmentUpdating = (e) => {
 };
 const setComponentAria = (element) => {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
+  const description = ariaDescription();
+  const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+  element?.attr('aria-label', nextAria);
 };
 const App = () => {
   const [currentView, setCurrentView] = useState(views[0]);
