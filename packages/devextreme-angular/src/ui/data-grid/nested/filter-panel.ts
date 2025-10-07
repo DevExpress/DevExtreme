@@ -81,7 +81,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterEnabledChange' }
         ]);

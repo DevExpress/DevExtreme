@@ -35,7 +35,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
@@ -68,15 +69,11 @@ import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFormButtonItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormEmptyItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormGroupItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormSimpleItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -97,6 +94,22 @@ import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxForm = null;
 
     /**
@@ -825,66 +838,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiFormButtonItemComponent)
-    get buttonItemsChildren(): QueryList<DxiFormButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set buttonItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormButtonItemComponent');
-    }
-
-    @ContentChildren(DxiFormEmptyItemComponent)
-    get emptyItemsChildren(): QueryList<DxiFormEmptyItemComponent> {
-        return this._getOption('items');
-    }
-    set emptyItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormEmptyItemComponent');
-    }
-
-    @ContentChildren(DxiFormGroupItemComponent)
-    get groupItemsChildren(): QueryList<DxiFormGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set groupItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormGroupItemComponent');
-    }
-
-    @ContentChildren(DxiFormItemComponent)
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormItemComponent');
-    }
-
-    @ContentChildren(DxiFormSimpleItemComponent)
-    get simpleItemsChildren(): QueryList<DxiFormSimpleItemComponent> {
-        return this._getOption('items');
-    }
-    set simpleItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormSimpleItemComponent');
-    }
-
-    @ContentChildren(DxiFormTabbedItemComponent)
-    get tabbedItemsChildren(): QueryList<DxiFormTabbedItemComponent> {
-        return this._getOption('items');
-    }
-    set tabbedItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormTabbedItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

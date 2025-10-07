@@ -30,7 +30,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -58,8 +58,6 @@ import { DxoToastShowModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
 
 
-
-
 /**
  * [descr:dxToast]
 
@@ -77,6 +75,7 @@ import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
     ]
 })
 export class DxToastComponent extends DxComponent implements OnDestroy {
+
     instance: DxToast = null;
 
     /**
@@ -681,10 +680,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
-
 
 
 

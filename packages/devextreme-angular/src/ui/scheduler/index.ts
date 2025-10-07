@@ -42,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
@@ -61,12 +62,11 @@ import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nes
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
-
-import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
-import { DxiViewComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiSchedulerResourceComponent } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/nested';
+import { 
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_resources,
+           PROPERTY_TOKEN_views,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -87,6 +87,22 @@ import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/neste
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_resources)
+    set _resourcesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('resources', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_views)
+    set _viewsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('views', value);
+    }
+
     instance: DxScheduler = null;
 
     /**
@@ -1453,42 +1469,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiSchedulerResourceComponent)
-    get resourcesChildren(): QueryList<DxiSchedulerResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesChildren(value) {
-        this._setChildren('resources', value, 'DxiSchedulerResourceComponent');
-    }
-
-    @ContentChildren(DxiSchedulerViewComponent)
-    get viewsChildren(): QueryList<DxiSchedulerViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsChildren(value) {
-        this._setChildren('views', value, 'DxiSchedulerViewComponent');
-    }
-
-
-    @ContentChildren(DxiResourceComponent)
-    get resourcesLegacyChildren(): QueryList<DxiResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesLegacyChildren(value) {
-        this._setChildren('resources', value, 'DxiResourceComponent');
-    }
-
-    @ContentChildren(DxiViewComponent)
-    get viewsLegacyChildren(): QueryList<DxiViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsLegacyChildren(value) {
-        this._setChildren('views', value, 'DxiViewComponent');
-    }
 
 
 

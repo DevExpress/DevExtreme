@@ -79,7 +79,6 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'pageIndexChange' },
             { emit: 'pageSizeChange' }

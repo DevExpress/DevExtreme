@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-range-selector-break',
@@ -26,7 +27,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_breaks,
+           useExisting: DxiRangeSelectorBreakComponent,
+        }
+    ]
 })
 export class DxiRangeSelectorBreakComponent extends CollectionNestedOption {
     @Input()
