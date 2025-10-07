@@ -1,10 +1,10 @@
-import { Properties } from 'devextreme/ui/gallery.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import { Properties } from 'devextreme/ui/gallery';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const gallery = [
   {
