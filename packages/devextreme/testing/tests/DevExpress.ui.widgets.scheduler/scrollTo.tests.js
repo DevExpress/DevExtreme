@@ -428,8 +428,6 @@ module('ScrollTo', {
             const date = new Date(2020, 8, 7, 9);
             scheduler.instance.scrollTo(date);
 
-            await waitAsync(50);
-
             assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering');
         });
 
@@ -453,8 +451,6 @@ module('ScrollTo', {
             const date = new Date(2020, 8, 7, 9);
             scheduler.instance.scrollTo(date, { ownerId: 2 });
 
-            await waitAsync(50);
-
             assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with grouping');
         });
 
@@ -472,8 +468,6 @@ module('ScrollTo', {
             const date = new Date(2020, 8, 7, 9);
             scheduler.instance.scrollTo(date, undefined, true);
 
-            await waitAsync(50);
-
             assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with all-day panel');
         });
 
@@ -490,8 +484,6 @@ module('ScrollTo', {
 
             const date = new Date(2020, 8, 7, 9);
             scheduler.instance.scrollTo(date);
-
-            await waitAsync(50);
 
             assert.ok(scrollByStub.calledOnce, 'ScrollBy was called after asynchronous rendering with RTL');
         });
