@@ -19,7 +19,7 @@ export class AiPromptEditor {
   private value: string;
 
   constructor(
-    private readonly options: AiPromptEditorOptions,
+    private options: AiPromptEditorOptions,
   ) {
     const { container, createComponent } = options;
 
@@ -168,6 +168,11 @@ export class AiPromptEditor {
   public updateValue(value: string): void {
     this.setValue(value);
     this.editorInstance.option('value', value);
-    this.updateButtonOption(0, 'disabled', !value); // Update the disable state of the Regenerate data button
+  }
+
+  public updateOptions(options: AiPromptEditorOptions): void {
+    this.options = options;
+    this.updateValue(getValue(options.value));
+    this.popupInstance.option(this.getPopupConfig());
   }
 }

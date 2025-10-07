@@ -662,13 +662,9 @@ describe('Public Methods', () => {
         popupOptions: { visible: true },
       });
 
-      // Initially no value - Refresh disabled
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
-
       instance.updateValue('new value');
 
       expect(POM.getTextArea().value).toBe('new value');
-      expect(POM.isRefreshButtonDisabled()).toBe(false);
     });
 
     it('should update internal value and disable Regenerate Data button', () => {
@@ -677,13 +673,9 @@ describe('Public Methods', () => {
         popupOptions: { visible: true },
       });
 
-      // Initially has value - Refresh enabled
-      expect(POM.isRefreshButtonDisabled()).toBe(false);
-
       instance.updateValue('');
 
       expect(POM.getTextArea().value).toBe('');
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
     });
   });
 
@@ -708,6 +700,34 @@ describe('Public Methods', () => {
       await instance.hide();
 
       expect(POM.isVisible()).toBe(false);
+    });
+  });
+
+  describe('when updateOptions is called', () => {
+    it('should update the prompt editor options', async () => {
+      const { container, instance, POM } = createAiPromptEditor({
+        value: 'updated prompt',
+        popupOptions: { visible: true },
+      });
+
+      await instance.show();
+
+      expect(POM.getTextArea().value).toBe('updated prompt');
+      expect(POM.isRefreshButtonDisabled()).toBe(false);
+      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.isApplyButtonVisible()).toBe(true);
+
+      instance.updateOptions({
+        container,
+        value: '',
+        createComponent: createComponentMock,
+        popupOptions: { visible: true },
+      });
+
+      expect(POM.getTextArea().value).toBe('');
+      expect(POM.isRefreshButtonDisabled()).toBe(true);
+      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.isApplyButtonVisible()).toBe(true);
     });
   });
 });
