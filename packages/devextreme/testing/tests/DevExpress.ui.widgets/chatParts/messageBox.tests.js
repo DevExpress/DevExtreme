@@ -7,13 +7,13 @@ import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
     CHAT_MESSAGEBOX_BUTTON_CLASS,
-} from '__internal/ui/chat/messagebox';
+} from '__internal/ui/chat/message_box/message_box';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
 import EditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/editing_preview';
+} from '__internal/ui/chat/message_box/editing_preview';
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
