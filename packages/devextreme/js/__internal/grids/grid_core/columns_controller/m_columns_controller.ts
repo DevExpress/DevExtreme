@@ -84,7 +84,7 @@ import {
   updateSerializers,
 } from './m_columns_controller_utils';
 
-const COMMAND_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
+const COMMAND_COLUMN_TYPES = ['adaptive', 'buttons', 'selection', 'drag', 'ai'];
 
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
