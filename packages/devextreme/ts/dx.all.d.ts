@@ -910,9 +910,9 @@ declare module DevExpress.aiIntegration {
       params: SmartPasteCommandParams,
       callbacks: RequestCallbacks<SmartPasteCommandResult>
     ): () => void;
-    generateColumn(
-      params: GenerateColumnCommandParams,
-      callbacks: RequestCallbacks<GenerateColumnCommandResult>
+    generateGridColumn(
+      params: GenerateGridColumnCommandParams,
+      callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
   }
   /**
@@ -977,14 +977,14 @@ declare module DevExpress.aiIntegration {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type GenerateColumnCommandParams = {
+  export type GenerateGridColumnCommandParams = {
     text: string;
     data: Record<PropertyKey, unknown>;
   };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type GenerateColumnCommandResult = Record<PropertyKey, unknown>;
+  export type GenerateGridColumnCommandResult = Record<PropertyKey, unknown>;
   /**
    * [descr:Prompt]
    */
