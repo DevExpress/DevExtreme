@@ -299,19 +299,23 @@ describe('Unsupported properties', () => {
       });
     });
 
+    const templateFn = (element, options) => {
+      element.text(`${options?.value ?? 'group'}`);
+    };
+
     describe.each([
       { calculateGroupValue: 'name', groupCellTemplate: undefined, showWhenGrouped: false },
-      { calculateGroupValue: undefined, groupCellTemplate: 'template', showWhenGrouped: false },
-      { calculateGroupValue: 'name', groupCellTemplate: 'template', showWhenGrouped: false },
+      { calculateGroupValue: undefined, groupCellTemplate: templateFn, showWhenGrouped: false },
+      { calculateGroupValue: 'name', groupCellTemplate: templateFn, showWhenGrouped: false },
       { calculateGroupValue: undefined, groupCellTemplate: undefined, showWhenGrouped: false },
       { calculateGroupValue: 'name', groupCellTemplate: undefined, showWhenGrouped: true },
-      { calculateGroupValue: undefined, groupCellTemplate: 'template', showWhenGrouped: true },
-      { calculateGroupValue: 'name', groupCellTemplate: 'template', showWhenGrouped: true },
+      { calculateGroupValue: undefined, groupCellTemplate: templateFn, showWhenGrouped: true },
+      { calculateGroupValue: 'name', groupCellTemplate: templateFn, showWhenGrouped: true },
       { calculateGroupValue: undefined, groupCellTemplate: undefined, showWhenGrouped: true },
     ])(
       'Group properties combinations calculateGroupValue, groupCellTemplate, showWhenGrouped)',
       ({ calculateGroupValue, groupCellTemplate, showWhenGrouped }) => {
-        it(`Should have no group rows after put group properties calculateGroupValue=${calculateGroupValue}, groupCellTemplate=${groupCellTemplate}, showWhenGrouped=${showWhenGrouped} (first load)`, async () => {
+        it(`Should have no group rows after put group properties calculateGroupValue=${calculateGroupValue}, groupCellTemplate=${groupCellTemplate ? 'function' : 'undefined'}, showWhenGrouped=${showWhenGrouped} (first load)`, async () => {
           const { instance } = await createDataGrid({
             dataSource,
             showBorders: true,
