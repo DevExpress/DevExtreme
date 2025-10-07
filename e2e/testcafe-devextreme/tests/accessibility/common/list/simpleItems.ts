@@ -7,9 +7,10 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../../container.html'));
 
 const simpleItems = ['Item_1', 'Item_2', 'Item_3'];
+const simpleItemsPaged = { store: simpleItems, pageSize: 2 };
 
 const optionsWithSimpleItems: Options<Properties> = {
-  dataSource: [[], simpleItems],
+  dataSource: [[], simpleItems, simpleItemsPaged],
   height: [400],
   grouped: [false],
   searchEnabled: [true, false],
