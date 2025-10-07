@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   AIIntegration,
-  GenerateColumnCommandParams,
-  GenerateColumnCommandResult,
+  GenerateGridColumnCommandParams,
+  GenerateGridColumnCommandResult,
   RequestCallbacks,
 } from '@js/common/ai-integration';
 import errors from '@js/ui/widget/ui.errors';
@@ -35,12 +35,12 @@ export class AiColumnIntegrationController extends Controller {
         return acc;
       }, {});
     const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
-    const abort = aiIntegration.generateColumn(
+    const abort = aiIntegration.generateGridColumn(
       {
         text: prompt,
         data,
       },
-      this.getAICommandCallbacks<GenerateColumnCommandResult>(),
+      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(),
     );
     this.abort = abort;
   }

@@ -9,8 +9,8 @@ import type {
   ExecuteCommandResult,
   ExpandCommandParams,
   ExpandCommandResult,
-  GenerateColumnCommandParams,
-  GenerateColumnCommandResult,
+  GenerateGridColumnCommandParams,
+  GenerateGridColumnCommandResult,
   ProofreadCommandParams,
   ProofreadCommandResult,
   RequestCallbacks,
@@ -38,7 +38,7 @@ import {
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
-import { GenerateColumnCommand } from '../commands/generateColumn';
+import { GenerateGridColumnCommand } from '../commands/generateGridColumn';
 
 export const enum CommandNames {
   ChangeStyle = 'changeStyle',
@@ -50,7 +50,7 @@ export const enum CommandNames {
   Summarize = 'summarize',
   Translate = 'translate',
   SmartPaste = 'smartPaste',
-  GenerateColumn = 'generateColumn',
+  GenerateGridColumn = 'generateGridColumn',
 }
 
 export const COMMANDS = {
@@ -63,7 +63,7 @@ export const COMMANDS = {
   [CommandNames.Summarize]: SummarizeCommand,
   [CommandNames.Translate]: TranslateCommand,
   [CommandNames.SmartPaste]: SmartPasteCommand,
-  [CommandNames.GenerateColumn]: GenerateColumnCommand,
+  [CommandNames.GenerateGridColumn]: GenerateGridColumnCommand,
 } as const;
 
 export interface CommandDefinition<TParams, TResult> {
@@ -82,9 +82,9 @@ export interface Commands {
   [CommandNames.Summarize]: CommandDefinition<SummarizeCommandParams, SummarizeCommandResult>;
   [CommandNames.Translate]: CommandDefinition<TranslateCommandParams, TranslateCommandResult>;
   [CommandNames.SmartPaste]: CommandDefinition<SmartPasteCommandParams, SmartPasteCommandResult>;
-  [CommandNames.GenerateColumn]: CommandDefinition<
-    GenerateColumnCommandParams,
-    GenerateColumnCommandResult
+  [CommandNames.GenerateGridColumn]: CommandDefinition<
+    GenerateGridColumnCommandParams,
+    GenerateGridColumnCommandResult
   >;
 }
 
@@ -221,12 +221,12 @@ export class AIIntegration implements IAIIntegration {
     );
   }
 
-  public generateColumn(
-    params: GenerateColumnCommandParams,
-    callbacks: RequestCallbacks<GenerateColumnCommandResult>,
+  public generateGridColumn(
+    params: GenerateGridColumnCommandParams,
+    callbacks: RequestCallbacks<GenerateGridColumnCommandResult>,
   ): () => void {
     return this.executeCommand(
-      CommandNames.GenerateColumn,
+      CommandNames.GenerateGridColumn,
       params,
       callbacks,
     );

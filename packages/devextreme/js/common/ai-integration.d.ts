@@ -126,7 +126,7 @@ export type SmartPasteCommandParams = {
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type GenerateColumnCommandParams = {
+export type GenerateGridColumnCommandParams = {
   text: string;
   data: Record<PropertyKey, unknown>;
 };
@@ -182,7 +182,7 @@ export type SmartPasteCommandResult = Array<{
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type GenerateColumnCommandResult = Record<PropertyKey, unknown>;
+export type GenerateGridColumnCommandResult = Record<PropertyKey, unknown>;
 
 /**
  * @namespace DevExpress.aiIntegration
@@ -254,7 +254,7 @@ export class AIIntegration {
    */
   smartPaste(params: SmartPasteCommandParams, callbacks: RequestCallbacks<SmartPasteCommandResult>): () => void;
   /**
-   * @publicName generateColumn(params, callbacks)
+   * @publicName generateGridColumn(params, callbacks)
    */
-  generateColumn(params: GenerateColumnCommandParams, callbacks: RequestCallbacks<GenerateColumnCommandResult>): () => void;
+  generateGridColumn(params: GenerateGridColumnCommandParams, callbacks: RequestCallbacks<GenerateGridColumnCommandResult>): () => void;
 }
