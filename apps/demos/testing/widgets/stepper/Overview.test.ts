@@ -36,7 +36,7 @@ runManualTest('Stepper', 'Overview', (test) => {
       .click($(`#${RTL_MODE_CHECK_BOX_ID}`))
       .click($(`#${ORIENTATION_BUTTON_GROUP_ID}`).find('.dx-button').nth(0));
 
-    const steppers = await $(`.${STEP_LIST_CLASS}`);
+    const steppers = $(`.${STEP_LIST_CLASS}`);
 
     await t
       .click($(`#${NAVIGATION_MODE_BUTTON_GROUP_ID}`).find('.dx-button').nth(1));

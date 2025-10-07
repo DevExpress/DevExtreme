@@ -355,6 +355,8 @@ module.exports = {
       '@typescript-eslint/no-useless-constructor': 0,
       '@typescript-eslint/explicit-module-boundary-types': 0, // was warn
       'deprecation/deprecation': 'error',
+      '@typescript-eslint/require-await': 0,
+      '@typescript-eslint/prefer-nullish-coalescing': 0,
     },
   }, {
     files: [
