@@ -230,7 +230,6 @@ class PivotGrid extends Widget {
         width: 200,
         height: 70,
         showIndicator: true,
-        indicatorSrc: '',
         showPane: true,
       },
       texts: {
