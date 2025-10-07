@@ -5,7 +5,7 @@ import MessageBox, {
     CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
     CHAT_MESSAGEBOX_BUTTON_CLASS,
-} from '__internal/ui/chat/messagebox';
+} from '__internal/ui/chat/message_box/message_box';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
