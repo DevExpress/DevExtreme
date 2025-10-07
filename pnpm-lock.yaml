@@ -13,8 +13,8 @@ catalogs:
       specifier: 4.1.62
       version: 4.1.62
     devextreme-quill:
-      specifier: 1.7.5
-      version: 1.7.5
+      specifier: 1.7.6
+      version: 1.7.6
 
 overrides:
   '@devexpress/callsite-record@^4.1.6': 4.1.6
@@ -275,7 +275,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.5
+        version: 1.7.6
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -885,7 +885,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.5
+        version: 1.7.6
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1024,7 +1024,7 @@ importers:
         version: 4.1.62
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.5
+        version: 1.7.6
       inferno:
         specifier: ^7.4.9
         version: 7.4.11
@@ -9687,8 +9687,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.5:
-    resolution: {integrity: sha512-tb6YEqZgiNZXI/oUfjAYZr1gfiWGhB8TfG8Y9WiFnIeQQiJtS5zFCI4B7iWv1Yd8gxyLddGJONqqYKytOlNMSQ==}
+  devextreme-quill@1.7.6:
+    resolution: {integrity: sha512-tIAnvHcQYarpPQwhjO9HaKmB4oDRdz/DPZ8Edo5EFeiYWcejgCl6kSeLgGoFWprPWlWkQUIZI3kBJXDRbXIOBg==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -23812,15 +23812,13 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -23880,7 +23878,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24295,7 +24293,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -29985,7 +29983,7 @@ snapshots:
       winston: 3.10.0
       yargs: 17.7.2
 
-  devextreme-quill@1.7.5:
+  devextreme-quill@1.7.6:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
