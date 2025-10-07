@@ -285,10 +285,6 @@
 
     // T105728
     box-sizing: content-box;
-
-    &.dx-drag-command-cell {
-      padding: 0;
-    }
   }
 
   .dx-#{$widget-name}-columns-separator {
