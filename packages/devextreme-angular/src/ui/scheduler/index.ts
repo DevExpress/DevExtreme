@@ -30,6 +30,7 @@ import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimi
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
@@ -51,15 +52,38 @@ import { DxiResourceModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
+import { DxoSchedulerAiOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerAsyncRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerButtonItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerButtonOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerColCountByScreenModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerCompareRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerCustomRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerEditingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerEmailRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerEmptyItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerFormModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerGroupItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerLabelModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerNumericRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerPatternRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerRangeRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerRequiredRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerResourceModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerSimpleItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerStringLengthRuleModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabbedItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerTabPanelOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerTabPanelOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerValidationRuleModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
 
 import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
@@ -337,29 +361,14 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-    
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-    
-     */
-    @Input()
-    get dropDownAppointmentTemplate(): any {
-        return this._getOption('dropDownAppointmentTemplate');
-    }
-    set dropDownAppointmentTemplate(value: any) {
-        this._setOption('dropDownAppointmentTemplate', value);
-    }
-
-
-    /**
      * [descr:dxSchedulerOptions.editing]
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean } {
+    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }) {
+    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } }) {
         this._setOption('editing', value);
     }
 
@@ -850,10 +859,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
+    get views(): Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[] {
         return this._getOption('views');
     }
-    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
+    set views(value: Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]) {
         this._setOption('views', value);
     }
 
@@ -1165,14 +1174,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownAppointmentTemplateChange: EventEmitter<any>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }>;
+    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean, form?: undefined | { items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, onCanceled?: ((formData: any) => void), onSaved?: ((formData: any) => void) } }>;
 
     /**
     
@@ -1438,7 +1440,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
+    @Output() viewsChange: EventEmitter<Array<Record<string, any> | string> | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: undefined | ViewType }[]>;
 
     /**
     
@@ -1540,7 +1542,6 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'dateSerializationFormatChange' },
             { emit: 'descriptionExprChange' },
             { emit: 'disabledChange' },
-            { emit: 'dropDownAppointmentTemplateChange' },
             { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
             { emit: 'endDateExprChange' },
@@ -1642,15 +1643,38 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoSchedulerAiOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
+    DxiSchedulerAsyncRuleModule,
+    DxiSchedulerButtonItemModule,
+    DxoSchedulerButtonOptionsModule,
+    DxoSchedulerColCountByScreenModule,
+    DxiSchedulerCompareRuleModule,
+    DxiSchedulerCustomRuleModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerEmailRuleModule,
+    DxiSchedulerEmptyItemModule,
+    DxoSchedulerFormModule,
+    DxiSchedulerGroupItemModule,
     DxiSchedulerItemModule,
+    DxoSchedulerLabelModule,
+    DxiSchedulerNumericRuleModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
+    DxiSchedulerPatternRuleModule,
+    DxiSchedulerRangeRuleModule,
+    DxiSchedulerRequiredRuleModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxiSchedulerSimpleItemModule,
+    DxiSchedulerStringLengthRuleModule,
+    DxiSchedulerTabModule,
+    DxiSchedulerTabbedItemModule,
+    DxoSchedulerTabPanelOptionsModule,
+    DxiSchedulerTabPanelOptionsItemModule,
     DxoSchedulerToolbarModule,
     DxiSchedulerToolbarItemModule,
+    DxiSchedulerValidationRuleModule,
     DxiSchedulerViewModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1662,15 +1686,38 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoSchedulerAiOptionsModule,
     DxoSchedulerAppointmentDraggingModule,
+    DxiSchedulerAsyncRuleModule,
+    DxiSchedulerButtonItemModule,
+    DxoSchedulerButtonOptionsModule,
+    DxoSchedulerColCountByScreenModule,
+    DxiSchedulerCompareRuleModule,
+    DxiSchedulerCustomRuleModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerEmailRuleModule,
+    DxiSchedulerEmptyItemModule,
+    DxoSchedulerFormModule,
+    DxiSchedulerGroupItemModule,
     DxiSchedulerItemModule,
+    DxoSchedulerLabelModule,
+    DxiSchedulerNumericRuleModule,
     DxoSchedulerOptionsModule,
     DxiSchedulerOptionsItemModule,
+    DxiSchedulerPatternRuleModule,
+    DxiSchedulerRangeRuleModule,
+    DxiSchedulerRequiredRuleModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxiSchedulerSimpleItemModule,
+    DxiSchedulerStringLengthRuleModule,
+    DxiSchedulerTabModule,
+    DxiSchedulerTabbedItemModule,
+    DxoSchedulerTabPanelOptionsModule,
+    DxiSchedulerTabPanelOptionsItemModule,
     DxoSchedulerToolbarModule,
     DxiSchedulerToolbarItemModule,
+    DxiSchedulerValidationRuleModule,
     DxiSchedulerViewModule,
     DxTemplateModule
   ]

@@ -8,7 +8,7 @@ import dxSpeechToText, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, ResultEvent, StartClickEvent, StopClickEvent } from "devextreme/ui/speech_to_text";
+import type { ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, ResultEvent, StartClickEvent, StopClickEvent } from "devextreme/ui/speech_to_text";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -17,6 +17,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 type ISpeechToTextOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
+  onEnd?: ((e: EndEvent) => void) | undefined;
   onError?: ((e: ErrorEvent) => void) | undefined;
   onInitialized?: ((e: InitializedEvent) => void);
   onResult?: ((e: ResultEvent) => void) | undefined;
@@ -43,7 +44,7 @@ const SpeechToText = memo(
         }
       ), []);
 
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onError","onInitialized","onResult","onStartClick","onStopClick"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEnd","onError","onInitialized","onResult","onStartClick","onStopClick"]), []);
 
       const expectedChildren = useMemo(() => ({
         customSpeechRecognizer: { optionName: "customSpeechRecognizer", isCollectionItem: false },

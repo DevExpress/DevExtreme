@@ -3,7 +3,7 @@
 import TreeList from './m_widget_base';
 
 import './m_state_storing';
-import './module_not_extended/ai_column_controller';
+import './module_not_extended/ai_column';
 import './module_not_extended/column_chooser';
 import './m_master_detail';
 import './editing/m_editing';
@@ -29,5 +29,6 @@ import './module_not_extended/headers_keyboard_navigation';
 import './module_not_extended/virtual_columns';
 import './m_focus';
 import './module_not_extended/row_dragging';
+import './module_not_extended/toast';
 
 export default TreeList;

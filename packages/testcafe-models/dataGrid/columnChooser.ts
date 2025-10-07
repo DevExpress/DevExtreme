@@ -73,6 +73,18 @@ export default class ColumnChooser extends FocusableElement {
     return this.content.find(`.${CLASS.treeViewItem}`);
   }
 
+  async getColumnTexts(): Promise<string[]> {
+    const result: string[] = [];
+    const columns = this.getColumns();
+    const columnCount = await columns.count;
+
+    for (let i = 0; i < columnCount; i += 1) {
+      result.push(await columns.nth(i).textContent);
+    }
+
+    return result;
+  }
+
   getTitle(): Selector {
     return this.content.find(`.${CLASS.itemContent}.${CLASS.itemContentToolbar}`).nth(0);
   }

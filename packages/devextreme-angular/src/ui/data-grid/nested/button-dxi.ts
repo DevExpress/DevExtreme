@@ -18,6 +18,8 @@ import { DOCUMENT } from '@angular/common';
 
 import dxDataGrid from 'devextreme/ui/data_grid';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import { TextEditorButtonLocation } from 'devextreme/common';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,
@@ -73,10 +75,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get name(): DataGridPredefinedColumnButton | string {
+    get name(): DataGridPredefinedColumnButton | string | undefined {
         return this._getOption('name');
     }
-    set name(value: DataGridPredefinedColumnButton | string) {
+    set name(value: DataGridPredefinedColumnButton | string | undefined) {
         this._setOption('name', value);
     }
 
@@ -110,6 +112,22 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
     set visible(value: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean)) {
         this._setOption('visible', value);
+    }
+
+    @Input()
+    get location(): TextEditorButtonLocation {
+        return this._getOption('location');
+    }
+    set location(value: TextEditorButtonLocation) {
+        this._setOption('location', value);
+    }
+
+    @Input()
+    get options(): dxButtonOptions | undefined {
+        return this._getOption('options');
+    }
+    set options(value: dxButtonOptions | undefined) {
+        this._setOption('options', value);
     }
 
 

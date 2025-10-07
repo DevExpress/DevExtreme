@@ -109,14 +109,6 @@ declare global {
     dxDateRangeBox(options: string): any;
     dxDateRangeBox(options: string, ...params: any[]): any;
 
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
-    dxDeferRendering(
-      options: DevExpress.ui.dxDeferRendering.Properties
-    ): JQuery;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-
     dxDiagram(): JQuery;
     dxDiagram(options: 'instance'): DevExpress.ui.dxDiagram;
     dxDiagram(options: DevExpress.ui.dxDiagram.Properties): JQuery;
@@ -1313,6 +1305,10 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.defaultUseCurrencyAccountingStyle]
      */
     defaultUseCurrencyAccountingStyle?: boolean;
+    /**
+     * [descr:GlobalConfig.copyStylesToShadowDom]
+     */
+    copyStylesToShadowDom?: boolean;
     /**
      * [descr:GlobalConfig.editorStylingMode]
      */
@@ -4470,13 +4466,101 @@ declare module DevExpress.common.grids {
      */
     readonly formOptions: any;
   };
+  export type AIColumnMode = 'auto' | 'manual';
+  /**
+   * [descr:AIColumnRequestCreatingInfo]
+   */
+  export type AIColumnRequestCreatingInfo<TRowData = any> = {
+    /**
+     * [descr:AIColumnRequestCreatingInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.data]
+     */
+    readonly data: TRowData[];
+    /**
+     * [descr:AIColumnRequestCreatingInfo.cancel]
+     */
+    cancel?: boolean;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.useCache]
+     */
+    useCache?: boolean;
+  };
+  /**
+   * [descr:AIColumnResponseReceivedInfo]
+   */
+  export type AIColumnResponseReceivedInfo = {
+    /**
+     * [descr:AIColumnResponseReceivedInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.error]
+     */
+    error?: string;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.data]
+     */
+    data: any[];
+    /**
+     * [descr:AIColumnResponseReceivedInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+  };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:ColumnAIOptions]
+   */
+  export type ColumnAIOptions = {
+    /**
+     * [descr:ColumnAIOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
+    /**
+     * [descr:ColumnAIOptions.prompt]
+     */
+    prompt?: string;
+    /**
+     * [descr:ColumnAIOptions.mode]
+     */
+    mode?: AIColumnMode;
+    /**
+     * [descr:ColumnAIOptions.showHeaderMenu]
+     */
+    showHeaderMenu?: boolean;
+    /**
+     * [descr:ColumnAIOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:ColumnAIOptions.emptyText]
+     */
+    emptyText?: string;
+    /**
+     * [descr:ColumnAIOptions.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:ColumnAIOptions.editorOptions]
+     */
+    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+  };
   /**
    * [descr:GridBaseColumn]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ColumnBase<TRowData = any> {
+    /**
+     * [descr:GridBaseColumn.ai]
+     */
+    ai?: ColumnAIOptions;
     /**
      * [descr:GridBaseColumn.alignment]
      */
@@ -5309,6 +5393,27 @@ declare module DevExpress.common.grids {
    */
   export interface GridBase<TRowData = any, TKey = any> {
     /**
+     * [descr:GridBase.abortAIColumnRequest(columnName)]
+     */
+    abortAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.sendAIColumnRequest(columnName)]
+     */
+    sendAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.refreshAIColumn(columnName)]
+     */
+    refreshAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.clearAIColumn(columnName)]
+     */
+    clearAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.getAIColumnText(columnName, key)]
+     */
+    getAIColumnText(columnName: string, key: TKey): string;
+
+    /**
      * [descr:GridBase.beginCustomLoading(messageText)]
      */
     beginCustomLoading(messageText: string): void;
@@ -5596,6 +5701,10 @@ declare module DevExpress.common.grids {
     GridBaseOptionsBlank<TComponent, TRowData, TKey>,
     'focusStateEnabled'
   > & {
+    /**
+     * [descr:GridBaseOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -11863,7 +11972,11 @@ declare module DevExpress.ui {
      * [descr:dxDataGrid.totalCount()]
      */
     totalCount(): number;
-
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -11958,6 +12071,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
@@ -14060,6 +14189,18 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar | undefined;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -14490,76 +14631,6 @@ declare module DevExpress.ui {
         KeyboardEvent | MouseEvent | PointerEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * [descr:dxDeferRendering]
-   */
-  export class dxDeferRendering extends Widget<dxDeferRenderingOptions> {}
-  module dxDeferRendering {
-    /**
-     * [descr:_ui_defer_rendering_ContentReadyEvent]
-     */
-    export type ContentReadyEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_DisposingEvent]
-     */
-    export type DisposingEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_InitializedEvent]
-     */
-    export type InitializedEvent =
-      DevExpress.common.core.events.InitializedEventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_OptionChangedEvent]
-     */
-    export type OptionChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering> &
-        DevExpress.common.core.events.ChangedOptionInfo;
-    export type Properties = dxDeferRenderingOptions;
-    /**
-     * [descr:_ui_defer_rendering_RenderedEvent]
-     */
-    export type RenderedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_ShownEvent]
-     */
-    export type ShownEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-  }
-  /**
-   * [descr:dxDeferRenderingOptions]
-   * @deprecated [depNote:dxDeferRenderingOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxDeferRenderingOptions
-    extends WidgetOptions<dxDeferRendering> {
-    /**
-     * [descr:dxDeferRenderingOptions.animation]
-     */
-    animation?: DevExpress.common.core.animation.AnimationConfig | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.onRendered]
-     */
-    onRendered?: (e: DevExpress.ui.dxDeferRendering.RenderedEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.onShown]
-     */
-    onShown?: (e: DevExpress.ui.dxDeferRendering.ShownEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.renderWhen]
-     */
-    renderWhen?: PromiseLike<void> | boolean | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.showLoadIndicator]
-     */
-    showLoadIndicator?: boolean;
-    /**
-     * [descr:dxDeferRenderingOptions.staggerItemSelector]
-     */
-    staggerItemSelector?: string | undefined;
   }
   /**
    * [descr:dxDiagram]
@@ -25676,11 +25747,6 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
-     * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
-     * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
-     */
-    scrollToTime(hours: number, minutes: number, date?: Date): void;
-    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
@@ -26264,17 +26330,6 @@ declare module DevExpress.ui {
      */
     descriptionExpr?: string;
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-     */
-    dropDownAppointmentTemplate?:
-      | template
-      | ((
-          itemData: any,
-          itemIndex: number,
-          contentElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
      * [descr:dxSchedulerOptions.editing]
      */
     editing?:
@@ -26304,6 +26359,25 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.editing.allowUpdating]
            */
           allowUpdating?: boolean;
+          /**
+           * [descr:dxSchedulerOptions.editing.form]
+           */
+          form?:
+            | {
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.items]
+                 */
+                items?: Array<DevExpress.ui.dxForm.Item>;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onSaved]
+                 */
+                onSaved?: (formData: any) => void;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
+                 */
+                onCanceled?: (formData: any) => void;
+              }
+            | undefined;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -26609,17 +26683,6 @@ declare module DevExpress.ui {
             | template
             | ((
                 model: DevExpress.ui.dxScheduler.AppointmentTooltipTemplateData,
-                itemIndex: number,
-                contentElement: DevExpress.core.DxElement
-              ) => string | DevExpress.core.UserDefinedElement);
-          /**
-           * [descr:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           * @deprecated [depNote:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           */
-          dropDownAppointmentTemplate?:
-            | template
-            | ((
-                itemData: any,
                 itemIndex: number,
                 contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
@@ -27763,6 +27826,13 @@ declare module DevExpress.ui {
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxSpeechToText>;
     /**
+     * [descr:_ui_speech_to_text_EndEvent]
+     */
+    export type EndEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
      * [descr:_ui_speech_to_text_ErrorEvent]
      */
     export type ErrorEvent =
@@ -27856,6 +27926,11 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onError]
        */
       onError?: ((e: ErrorEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onEnd]
+       */
+      onEnd?: ((e: EndEvent) => void) | undefined;
     }
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
@@ -30292,6 +30367,12 @@ declare module DevExpress.ui {
       childrenOnly: boolean
     ): DevExpress.core.utils.DxPromise<void>;
 
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
+
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -30387,6 +30468,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
@@ -31897,6 +31994,18 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar | undefined;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
@@ -36857,7 +36966,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BubblePointInfo]
      */
-    export type BubblePointInfo = ChartPointInfo & {
+    export type BubblePointInfo = CommonPointInfo & {
       /**
        * [descr:BubblePointInfo.points]
        */
@@ -36959,10 +37068,6 @@ declare module DevExpress.viz {
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
-    /**
-     * [descr:ChartPointInfo]
-     */
-    export type ChartPointInfo = BasePointInfo<chartPointObject>;
     export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
     export type ChartSeriesAggregationMethod =
       | 'avg'
@@ -37389,6 +37494,10 @@ declare module DevExpress.viz {
       };
     };
     /**
+     * [descr:CommonPointInfo]
+     */
+    export type CommonPointInfo = BasePointInfo<chartPointObject>;
+    /**
      * [descr:dxChartCommonSeriesSettings]
      */
     export type CommonSeriesSettings = dxChartSeriesTypesCommonSeries & {
@@ -37620,7 +37729,7 @@ declare module DevExpress.viz {
      * [descr:dxChartPointInfo]
      */
     export type PointInfo =
-      | ChartPointInfo
+      | CommonPointInfo
       | StackedPointInfo
       | BubblePointInfo
       | CandleStickPointInfo
@@ -37725,7 +37834,7 @@ declare module DevExpress.viz {
     /**
      * [descr:StackedPointInfo]
      */
-    export type StackedPointInfo = ChartPointInfo & {
+    export type StackedPointInfo = CommonPointInfo & {
       /**
        * [descr:StackedPointInfo.percent]
        */

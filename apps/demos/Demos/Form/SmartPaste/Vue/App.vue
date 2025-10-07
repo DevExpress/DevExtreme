@@ -129,6 +129,7 @@ import {
   DxForm, DxItem, DxButtonItem, DxGroupItem,
 } from 'devextreme-vue/form';
 import type { ValidationRule } from 'devextreme-vue/common';
+import type { RequestParams, Response } from 'devextreme-vue/common/ai-integration';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import DxTextArea from 'devextreme-vue/text-area';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
@@ -157,17 +158,17 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
-  return result;
+  return result || '';
 }
 
 const aiIntegration = new AIIntegration({
-  sendRequest({ prompt }) {
+  sendRequest({ prompt }: RequestParams) {
     const controller = new AbortController();
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system || '' },
+      { role: 'user', content: prompt.user || '' },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
@@ -176,7 +177,7 @@ const aiIntegration = new AIIntegration({
       showNotification('Something went wrong. Please try again.', '#form', true);
     });
 
-    const result = {
+    const result: Response = {
       promise,
       abort: () => {
         controller.abort();

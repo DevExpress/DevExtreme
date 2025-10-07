@@ -13,6 +13,7 @@ QUnit.module('SpeechRecognitionAdapter', {
             constructor() {
                 this.start = sinon.spy();
                 this.stop = sinon.spy();
+                this.onstart = null;
                 this.onresult = null;
                 this.onerror = null;
                 this.onend = null;
@@ -118,6 +119,7 @@ QUnit.module('SpeechRecognitionAdapter', {
         const speechRecognition = adapter._speechRecognition;
 
         adapter.start();
+        speechRecognition.onstart();
         adapter.stop();
 
         assert.ok(speechRecognition.start.calledOnce, 'start called');
@@ -130,6 +132,63 @@ QUnit.module('SpeechRecognitionAdapter', {
 
         adapter.dispose();
         assert.strictEqual(adapter._speechRecognition, null, 'cleared after dispose');
+    });
+
+    QUnit.test('should not call start when listening', function(assert) {
+        const adapter = this.createAdapter();
+        const speechRecognition = adapter._speechRecognition;
+
+        speechRecognition.onstart();
+        adapter.start();
+
+        assert.ok(speechRecognition.start.notCalled, 'start not called');
+    });
+
+    QUnit.test('should not call stop if not listening', function(assert) {
+        const adapter = this.createAdapter();
+        const speechRecognition = adapter._speechRecognition;
+
+        adapter.stop();
+
+        assert.ok(speechRecognition.stop.notCalled, 'stop not called');
+    });
+
+    QUnit.test('should update _isListening on onstart/onend', function(assert) {
+        const adapter = this.createAdapter();
+        const speechRecognition = adapter._speechRecognition;
+
+        assert.strictEqual(adapter._isListening, false, 'initially not listening');
+
+        speechRecognition.onstart();
+        assert.strictEqual(adapter._isListening, true, 'set to listening after onstart');
+
+        speechRecognition.onend();
+        assert.strictEqual(adapter._isListening, false, 'reset to false after onend');
+    });
+
+    QUnit.test('should return true from isAvailable when SpeechRecognition is supported', function(assert) {
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), true, 'isAvailable returns true when SpeechRecognition exists');
+    });
+
+    QUnit.test('should return false from isAvailable when SpeechRecognition is not supported', function(assert) {
+        window.SpeechRecognition = undefined;
+        window.webkitSpeechRecognition = undefined;
+
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), false, 'isAvailable returns false when SpeechRecognition is not supported');
+    });
+
+    QUnit.test('should return false from isAvailable after dispose', function(assert) {
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), true, 'isAvailable returns true before dispose');
+
+        adapter.dispose();
+
+        assert.strictEqual(adapter.isAvailable(), false, 'isAvailable returns false after dispose');
     });
 });
 

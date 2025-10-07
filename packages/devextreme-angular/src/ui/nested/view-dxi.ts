@@ -96,14 +96,6 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dropDownAppointmentTemplate(): any {
-        return this._getOption('dropDownAppointmentTemplate');
-    }
-    set dropDownAppointmentTemplate(value: any) {
-        this._setOption('dropDownAppointmentTemplate', value);
-    }
-
-    @Input()
     get endDayHour(): number {
         return this._getOption('endDayHour');
     }

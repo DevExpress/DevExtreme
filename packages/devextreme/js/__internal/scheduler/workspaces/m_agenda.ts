@@ -518,7 +518,7 @@ class SchedulerAgenda extends WorkSpace {
     const startDateMinutes = newDate.getMinutes();
 
     if (this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
-      this.scrollToTime(startDateHour, startDateMinutes, newDate);
+      this.scrollTo(newDate);
     }
   }
 
