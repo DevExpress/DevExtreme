@@ -6,5 +6,10 @@
     "path": "./",
     "pathPattern": "${TEST}.png"
   },
-  "pageLoadTimeout": 10000
+  "pageLoadTimeout": 10000,
+  "compilerOptions": {
+    "typescript": {
+      "configPath": "./tsconfig.json"
+    }
+  }
 }
