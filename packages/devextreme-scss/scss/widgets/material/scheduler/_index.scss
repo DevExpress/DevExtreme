@@ -522,11 +522,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-appointment-popup {
   > .dx-overlay-content > .dx-toolbar.dx-widget {
     > .dx-toolbar-items-container {
-      height: 64px;
+      height: $material-scheduler-appointment-popup-toolbar-height;
     }
 
     .dx-toolbar-label {
-      font-size: 18px;
+      font-size: $material-scheduler-appointment-popup-toolbar-label-size;
     }
   }
 
@@ -535,8 +535,12 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       color: $scheduler-form-icon-color;
 
       &.dx-field-item {
-        height: 48px;
-        padding-inline-end: 4px;
+        height: $material-scheduler-appointment-popup-icon-container-height;
+        padding-inline-end: $material-scheduler-appointment-popup-icon-padding-right;
+
+        .dx-icon {
+          font-size: $material-scheduler-appointment-popup-icon-size;
+        }
       }
     }
 
@@ -546,15 +550,15 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
     .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
-      margin-top: 33px;
+      margin-top: $material-scheduler-appointment-popup-description-icon-margin-top;
     }
 
     .dx-field-item:not(.dx-first-col) {
-      padding-inline-start: 6px;
+      padding-inline-start: $material-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-field-item:not(.dx-last-col) {
-      padding-inline-end: 6px;
+      padding-inline-end: $material-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-field-item:not(.dx-first-row) {
@@ -566,17 +570,17 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
-      height: 54px;
-      padding-inline-start: 16px;
+      height: $material-scheduler-appointment-popup-all-day-item-height;
+      padding-inline-start: $material-scheduler-appointment-popup-all-day-item-padding-left;
 
       .dx-field-item-label-text {
-        font-size: 16px;
+        font-size: $material-scheduler-appointment-popup-all-day-item-font-size;
         color: $base-text-color;
       }
 
       .dx-field-item-content {
         .dx-switch.dx-widget {
-          margin-bottom: 3px;
+          margin-bottom: $material-scheduler-appointment-popup-all-day-item-margin-bottom;
         }
       }
     }

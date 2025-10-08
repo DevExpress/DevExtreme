@@ -23,6 +23,13 @@ $fluent-tooltip-marker-dimension: null !default;
 $fluent-scheduler-appointment-tooltip-title-margin-top: null !default;
 $fluent-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
+$fluent-scheduler-appointment-popup-toolbar-height: null !default;
+$fluent-scheduler-appointment-popup-icon-container-height: null !default;
+$fluent-scheduler-appointment-popup-icon-padding-right: null !default;
+$fluent-scheduler-appointment-popup-description-icon-margin-top: null !default;
+$fluent-scheduler-appointment-popup-item-padding-horizontal: null !default;
+$fluent-scheduler-appointment-popup-all-day-item-height: null !default;
+
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
 
@@ -90,6 +97,13 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-appointment-tooltip-title-margin-top: 0 !default;
   $fluent-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
 
+  $fluent-scheduler-appointment-popup-toolbar-height: 56px !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: 32px !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: 10px !default;
+  $fluent-scheduler-appointment-popup-description-icon-margin-top: 24px !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: 6px !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: 40px !default;
+
   $agenda-appointment-title-font-size: 14px;
 }
 
@@ -123,6 +137,13 @@ $header-panel-time-cell-padding: null !default;
   $fluent-tooltip-marker-dimension: 18px !default;
   $fluent-scheduler-appointment-tooltip-title-margin-top: 3px !default;
   $fluent-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
+
+  $fluent-scheduler-appointment-popup-toolbar-height: 48px !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: 24px !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: 8px !default;
+  $fluent-scheduler-appointment-popup-description-icon-margin-top: 18px !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: 4px !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: 30px !default;
 
   $agenda-appointment-title-font-size: 13px;
 }

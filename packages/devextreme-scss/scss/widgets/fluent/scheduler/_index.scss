@@ -581,11 +581,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-appointment-popup {
   > .dx-overlay-content > .dx-toolbar.dx-widget {
     > .dx-toolbar-items-container {
-      height: 56px;
-    }
-
-    .dx-toolbar-label {
-      font-size: 18px;
+      height: $fluent-scheduler-appointment-popup-toolbar-height;
     }
   }
 
@@ -594,8 +590,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       color: $scheduler-form-icon-color;
 
       &.dx-field-item.dx-flex-layout {
-        height: 32px;
-        padding-inline-end: 10px;
+        height: $fluent-scheduler-appointment-popup-icon-container-height;
+        padding-inline-end: $fluent-scheduler-appointment-popup-icon-padding-right;
       }
     }
 
@@ -605,19 +601,19 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
     .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
-      margin-top: 24px;
+      margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
     .dx-field-item:not(.dx-first-col) {
-      padding-inline-start: 6px;
+      padding-inline-start: $fluent-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-field-item:not(.dx-last-col) {
-      padding-inline-end: 6px;
+      padding-inline-end: $fluent-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
-      height: 40px;
+      height: $fluent-scheduler-appointment-popup-all-day-item-height;
 
       .dx-field-item-content {
         .dx-switch.dx-widget {
