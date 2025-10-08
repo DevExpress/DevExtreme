@@ -76,9 +76,7 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
 
-export type PointerLikeEvent = DxEvent<PointerInteractionEvent>;
-
-type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
+type EventHandler = (e: DxEvent<PointerInteractionEvent>) => boolean | undefined;
 
 type TabTerminatorHandler = (e: KeyboardEvent) => void;
 
@@ -164,7 +162,7 @@ export interface OverlayActions<
 }
 
 ready(() => {
-  const callback = (e: PointerLikeEvent): void => {
+  const callback = (e: DxEvent<PointerInteractionEvent>): void => {
     for (let i = OVERLAY_STACK.length - 1; i >= 0; i -= 1) {
       if (!OVERLAY_STACK[i]._proxiedDocumentDownHandler?.(e)) {
         return;
@@ -435,7 +433,7 @@ class Overlay<
 
   _initHideOnOutsideClickHandler(): void {
     this._proxiedDocumentDownHandler = (
-      e: PointerLikeEvent,
+      e: DxEvent<PointerInteractionEvent>,
     ): boolean => this._documentDownHandler(e);
   }
 
@@ -445,7 +443,7 @@ class Overlay<
     this._initPositionController();
   }
 
-  _documentDownHandler(e: PointerLikeEvent): boolean {
+  _documentDownHandler(e: DxEvent<PointerInteractionEvent>): boolean {
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
@@ -472,7 +470,7 @@ class Overlay<
     return Boolean(propagateOutsideClick);
   }
 
-  _shouldHideOnOutsideClick(e: PointerLikeEvent): boolean {
+  _shouldHideOnOutsideClick(e: DxEvent<PointerInteractionEvent>): boolean {
     const { hideOnOutsideClick } = this.option();
 
     if (isFunction(hideOnOutsideClick)) {
@@ -482,7 +480,7 @@ class Overlay<
     return Boolean(hideOnOutsideClick);
   }
 
-  _outsideClickHandler(e: PointerLikeEvent): void {
+  _outsideClickHandler(e: DxEvent<PointerInteractionEvent>): void {
     const { shading } = this.option();
 
     if (shading) {
