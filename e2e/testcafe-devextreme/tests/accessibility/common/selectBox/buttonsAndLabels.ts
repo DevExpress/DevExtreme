@@ -12,15 +12,21 @@ const items = [
   'SuperPlasma 50',
 ];
 
-const options: Options<Properties> = {
-  dataSource: [[], items],
+const regularOptions: Options<Properties> = {
+  dataSource: [items],
   value: [items[0]],
   label: [undefined, 'label'],
   showClearButton: [true, false],
   showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const customOptions: Options<Properties> = {
+  dataSource: [items],
+  value: [items[0]],
+  label: [undefined, 'label'],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
-    undefined,
     [
       {
         name: 'today',
@@ -42,10 +48,16 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const regularConfiguration: Configuration = {
   component: 'dxSelectBox',
   a11yCheckConfig,
-  options,
+  options: regularOptions,
+};
+const customConfiguration: Configuration = {
+  component: 'dxSelectBox',
+  a11yCheckConfig,
+  options: customOptions,
 };
 
-testAccessibility(configuration);
+testAccessibility(regularConfiguration);
+testAccessibility(customConfiguration);

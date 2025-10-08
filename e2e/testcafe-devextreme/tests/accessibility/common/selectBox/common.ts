@@ -12,17 +12,27 @@ const items = [
   'SuperPlasma 50',
 ];
 
-const options: Options<Properties> = {
+const commonOptions: Options<Properties> = {
   dataSource: [[], items],
   value: [undefined, items[0]],
   disabled: [true, false],
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
-  opened: [true, false],
-  deferRendering: [true, false],
   placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const options: Options<Properties> = {
+  ...commonOptions,
+  opened: [true, false],
+  deferRendering: [true],
+};
+
+const noDeferredOptions: Options<Properties> = {
+  ...commonOptions,
+  opened: [false],
+  deferRendering: [false],
 };
 
 const a11yCheckConfig = {
@@ -37,5 +47,11 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
 };
+const noDeferredConfiguration: Configuration = {
+  component: 'dxSelectBox',
+  a11yCheckConfig,
+  options: noDeferredOptions,
+};
 
 testAccessibility(configuration);
+testAccessibility(noDeferredConfiguration);
