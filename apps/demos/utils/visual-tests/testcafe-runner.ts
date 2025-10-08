@@ -221,7 +221,7 @@ async function main() {
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,
-    });
+    })
 
   await tester.close();
   process.exit(failedCount);
