@@ -1447,7 +1447,10 @@ describe('API Methods', () => {
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
-    // TODO: Implement after cache is implemented
+    // TODO: Implement after cache is done
     it('should clear column cache', async () => { });
   });
+
+  // TODO: implement after column cache is done
+  describe('getAIColumnValue', () => { });
 });
