@@ -11,8 +11,6 @@ const now = new Date();
 const options: Options<Properties> = {
   value: [now],
   label: [undefined, 'label'],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   opened: [true],
   buttons: [

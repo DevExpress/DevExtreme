@@ -16,9 +16,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   type: ['date', 'time', 'datetime'],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  deferRendering: [true, false],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
