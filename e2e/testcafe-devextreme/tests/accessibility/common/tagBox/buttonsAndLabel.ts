@@ -15,12 +15,19 @@ const items = [
   'SuperPlasma 50',
 ];
 
-const options: Options<Properties> = {
-  dataSource: [[], items],
+const regularOptions: Options<Properties> = {
+  dataSource: [items],
   value: [[items[0]]],
   label: [undefined, 'label'],
   showClearButton: [true, false],
   showDropDownButton: [true, false],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const customOptions: Options<Properties> = {
+  dataSource: [items],
+  value: [[items[0]]],
+  label: [undefined, 'label'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
@@ -51,11 +58,18 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const regularConfiguration: Configuration = {
   component: 'dxTagBox',
   a11yCheckConfig,
-  options,
+  options: regularOptions,
+  created,
+};
+const customConfiguration: Configuration = {
+  component: 'dxTagBox',
+  a11yCheckConfig,
+  options: customOptions,
   created,
 };
 
-testAccessibility(configuration);
+testAccessibility(regularConfiguration);
+testAccessibility(customConfiguration);

@@ -24,7 +24,6 @@ const options: Options<Properties> = {
   searchTimeout: [0],
   showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
