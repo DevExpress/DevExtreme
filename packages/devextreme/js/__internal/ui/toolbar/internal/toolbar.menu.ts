@@ -6,7 +6,10 @@ import { ChildDefaultTemplate } from '@js/core/templates/child_default_template'
 import { getOuterHeight } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { DataSourceLike } from '@js/data/data_source';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import type { Item as ListItem, ItemClickEvent } from '@js/ui/list';
 import type { dxPopupAnimation } from '@js/ui/popup';
@@ -275,7 +278,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       height: 'auto',
       width: 'auto',
       hideOnOutsideClick: (
-        e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+        e: DxEvent<PointerInteractionEvent>,
       ) => this._closeOutsideDropDownHandler(e),
       hideOnParentScroll: true,
       shading: false,
@@ -321,7 +324,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   }
 
   _closeOutsideDropDownHandler(
-    e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+    e: DxEvent<PointerInteractionEvent>,
   ): boolean {
     const isOutsideClick = !$(e.target).closest(this.$element()).length;
 

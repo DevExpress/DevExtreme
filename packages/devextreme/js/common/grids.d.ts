@@ -39,6 +39,8 @@ import {
   NativeEventInfo,
 } from './core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
   DxPromise,
 } from '../core/utils/deferred';
@@ -2552,7 +2554,7 @@ export interface PagingBase {
   pageSize?: number;
 }
 
-export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
+export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerInteractionEvent>, 'component' | 'event'>>;
 
 /**
  * @docid
