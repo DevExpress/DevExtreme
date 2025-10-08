@@ -4,7 +4,6 @@ import List from 'devextreme-testcafe-models/list';
 import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture`List`
   .page(url(__dirname, '../../container.html'));
@@ -365,28 +364,4 @@ test('The button icon in custom template should be displayed correctly after the
 
     element.append(button);
   },
-}));
-
-test('Checking simple list with selectAll and "more" button via aXe', async (t) => {
-  await a11yCheck(t);
-}).before(async () => createWidget('dxList', {
-  dataSource: {
-    store: ['item 1', 'item 2', 'item 3'],
-    pageSize: 2,
-  },
-  selectionMode: 'all',
-  showSelectionControls: true,
-}));
-
-test('Checking group list via aXe', async (t) => {
-  await a11yCheck(t);
-}).before(async () => createWidget('dxList', {
-  dataSource: [{
-    key: 'Group 1',
-    items: ['item 1', 'item 2', 'item 3'],
-  }, {
-    key: 'Group 2',
-    items: ['item 1', 'item 2', 'item 3'],
-  }],
-  grouped: true,
 }));

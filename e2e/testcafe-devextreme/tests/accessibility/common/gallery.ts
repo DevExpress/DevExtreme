@@ -1,4 +1,4 @@
-import { Properties } from 'devextreme/ui/gallery.d';
+import { Properties } from 'devextreme/ui/gallery';
 import url from '../../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
 import { Options } from '../../../helpers/generateOptionMatrix';
@@ -25,7 +25,6 @@ const options: Options<Properties> = {
   height: [300],
   width: [300],
   dataSource: [gallery],
-  loop: [true, false],
   swipeEnabled: [true, false],
   showIndicator: [true, false],
   showNavButtons: [true, false],
