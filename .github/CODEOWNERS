@@ -309,7 +309,6 @@
 /apps/demos/Demos/Form/**                                      @DevExpress/devextreme-navigation
 
 /packages/testcafe-models/form/**                              @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/form/**                         @DevExpress/devextreme-navigation
 /e2e/testcafe-devextreme/tests/accessibility/form/**           @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.ui.widgets.form/**  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/form*                    @DevExpress/devextreme-navigation
