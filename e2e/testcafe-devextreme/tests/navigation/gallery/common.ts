@@ -29,32 +29,33 @@ test('click on indicator item should change selected item', async (t) => {
   test(`Gallery. Check normal and focus state. showIndicator=${showIndicator}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await setAttribute('#container', 'style', 'width: 120px; height: 120px;');
-
     await testScreenshot(t, takeScreenshot, `Gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
-    await t
-      .click('#container');
+    await t.click('#container');
 
     await testScreenshot(t, takeScreenshot, `Focused gallery. showIndicator=${showIndicator}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => createWidget('dxGallery', {
-    height: 110,
-    showIndicator,
-    items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
-    itemTemplate(item: string) {
-      const result = $('<div>');
+  }).before(async () => {
+    await setAttribute('#container', 'style', 'width: 120px; height: 120px;');
 
-      $('<img>')
-        .attr({ src: item })
-        .height(100)
-        .width(100)
-        .appendTo(result);
+    return createWidget('dxGallery', {
+      height: 110,
+      showIndicator,
+      items: [BLACK_PIXEL, RED_PIXEL, YELLOW_PIXEL],
+      itemTemplate(item: string) {
+        const result = $('<div>');
 
-      return result;
-    },
-  }));
+        $('<img>')
+          .attr({ src: item })
+          .height(100)
+          .width(100)
+          .appendTo(result);
+
+        return result;
+      },
+    });
+  });
 });
