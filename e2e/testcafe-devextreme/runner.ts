@@ -37,30 +37,32 @@ const changeTheme = async (t: TestController, themeName: string): Promise<void> 
     (window as any).DevExpress.ui.themes.ready(resolve);
     (window as any).DevExpress.ui.themes.current(themeName);
   }), { dependencies: { themeName } });
-  
-  return await changeThemeClientFn.with({ boundTestRun: t })();
+
+  return changeThemeClientFn.with({ boundTestRun: t })();
 };
 
 const addShadowRootTree = async (t: TestController): Promise<void> => {
   const addShadowRootClientFn = ClientFunction(() => {
     const root = document.querySelector('#parentContainer') as HTMLElement;
-    const childNodes = root.childNodes;
-    
+    const { childNodes } = root;
+
     if (!root.shadowRoot) {
       root.attachShadow({ mode: 'open' });
     }
-    
+
     const shadowContainer = document.createElement('div');
-    shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
-    
+    shadowContainer.append(...Array.from(childNodes));
+
     root.shadowRoot!.appendChild(shadowContainer);
   });
-  
+
   await addShadowRootClientFn.with({ boundTestRun: t })();
 };
 
-const wait = async (timeout: number): Promise<void> => 
-  new Promise(resolve => setTimeout(resolve, timeout));
+const wait = async (
+  timeout: number,
+// eslint-disable-next-line no-promise-executor-return
+): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
 
 const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> => {
   try {
@@ -69,7 +71,7 @@ const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> =
     if (attempt <= 1) {
       throw error;
     }
-    
+
     /* eslint-disable no-console */
     console.log('\n > error occurred during testcafe launch!\n');
     console.error(error);
@@ -77,7 +79,7 @@ const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> =
     await wait(LAUNCH_RETRY_TIMEOUT);
     console.info('\n > retry launching testcafe\n');
     /* eslint-enable no-console */
-    return await retry(action, attempt - 1);
+    return retry(action, attempt - 1);
   }
 };
 
@@ -93,14 +95,14 @@ function setShadowDom(args: ParsedArgs): void {
   process.env.shadowDom = args.shadowDom.toString();
 }
 
-function expandBrowserAlias(browser: string, _componentFolder?: string): string {
+function expandBrowserAlias(browser: string): string {
   switch (browser) {
     case 'chrome:devextreme-shr2':
-    return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
+      return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
     case 'chrome:docker':
-    return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
+      return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     default:
-    return browser;
+      return browser;
   }
 }
 
@@ -120,7 +122,7 @@ function getArgs(): ParsedArgs {
       theme: '',
       shadowDom: false,
       skipUnstable: true,
-    }
+    },
   }) as ParsedArgs;
 }
 
@@ -128,144 +130,153 @@ const split = <T>(array: T[], chunkCount: number): T[][] => {
   const fixturesInChunkCount = Math.ceil(array.length / chunkCount);
   const arr = [...array];
   const res: T[][] = [];
-  
+
   while (arr.length) {
     res.push(arr.splice(0, fixturesInChunkCount));
   }
-  
+
   return res;
 };
 
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let testCafe: TestCafe;
 
 createTestCafe(TESTCAFE_CONFIG)
-.then(async (tc: TestCafe) => {
-  testCafe = tc;
-  
-  const args = getArgs();
-  const testName = args.test.trim();
-  const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
-  const indices = args.indices.trim();
-  let componentFolder = args.componentFolder.trim();
-  const file = args.file.trim();
-  
-  setTestingPlatform(args);
-  setTestingTheme(args);
-  setShadowDom(args);
-  
-  componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-  if (fs.existsSync('./screenshots')) {
-    fs.rmSync('./screenshots', { recursive: true });
-  }
-  
-  const browsers = args.browsers
-  .split(' ')
-  .map((browser) => expandBrowserAlias(browser));
-  
-  // eslint-disable-next-line no-console
-  console.info('Browsers:', browsers);
-  
-  const runner: Runner = testCafe.createRunner()
-  .browsers(browsers)
-  .reporter(reporter)
-  .src([`./tests/${componentFolder}/${file}.ts`]);
-  
-  runner.compilerOptions({
-    'typescript': {
-      customCompilerModulePath: '../../node_modules/typescript',
+  .then(async (tc: TestCafe) => {
+    testCafe = tc;
+
+    const args = getArgs();
+    const testName = args.test.trim();
+    const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
+    const indices = args.indices.trim();
+    let componentFolder = args.componentFolder.trim();
+    const file = args.file.trim();
+
+    setTestingPlatform(args);
+    setTestingTheme(args);
+    setShadowDom(args);
+
+    componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+    if (fs.existsSync('./screenshots')) {
+      fs.rmSync('./screenshots', { recursive: true });
     }
-  });
-  
-  runner.concurrency(args.concurrency || 3);
-  
-  const filters: FilterFunction[] = [];
-  
-  if (indices) {
-    const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
-    const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
-    const fixtureChunks = split(fixtures, total);
-    const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
-    
-    /* eslint-disable no-console */
-    console.info(' === test run config ===');
-    console.info(` > indices: current = ${current} | total = ${total}`);
-    console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
-    console.info(' > all fixtures: ', fixtureChunks);
-    console.info(' > fixtures: ', targetFixtureChunk, '\n');
-    /* eslint-enable no-console */
-    
-    const targetBasenames = new Set(
-      targetFixtureChunk.map(filePath => path.basename(filePath))
-    );
-    
-    filters.push((_testName: string, _fixtureName: string, fixturePath: string) => {
-      return targetBasenames.has(path.basename(fixturePath));
-    });
-  }
-  
-  if (testName) {
-    filters.push((name: string) => name === testName);
-  }
-  
-  if (args.skipUnstable) {
-    filters.push((_testName: string, _fixtureName: string, _fixturePath: string, testMeta?: any) => {
-      return !(testMeta as any)?.unstable;
-    });
-  }
-  
-  if (filters.length) {
-    runner.filter((...filterArgs: Parameters<FilterFunction>) => {
-      for (let i = 0; i < filters.length; i++) {
-        if (!filters[i](...filterArgs)) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }
-  
-  if (args.cache) {
-    (runner as any).cache = args.cache;
-  }
-  
-  const runOptions: RunOptions = {
-    quarantineMode: { successThreshold: 1, attemptLimit: 10 },
-    // @ts-expect-error
-    hooks: {
-      test: {
-        before: async (t: TestController) => {
-          const [width, height] = DEFAULT_BROWSER_SIZE;
-          await t.resizeWindow(width, height);
-          
-          if (args.shadowDom) {
-            await addShadowRootTree(t);
-          }
-          
-          if (args.theme) {
-            await changeTheme(t, args.theme);
-          }
-        },
-        after: async () => {
-          await testPageUtils.clearTestPage();
-        }
+
+    const browsers = args.browsers
+      .split(' ')
+      .map((browser) => expandBrowserAlias(browser));
+
+    // eslint-disable-next-line no-console
+    console.info('Browsers:', browsers);
+
+    const runner: Runner = testCafe.createRunner()
+      .browsers(browsers)
+      .reporter(reporter)
+      .src([`./tests/${componentFolder}/${file}.ts`]);
+
+    runner.compilerOptions({
+      typescript: {
+        customCompilerModulePath: '../../node_modules/typescript',
       },
-    },
-  };
-  
-  if (args.browsers === 'chrome:docker') {
-    runOptions.disableScreenshots = true;
-  }
-  
-  return await retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
-})
-.then((failedCount: number) => {
-  testCafe.close();
-  process.exit(failedCount);
-})
-.catch((error: Error) => {
-  console.error('TestCafe execution failed:', error);
-  if (testCafe) {
+    });
+
+    runner.concurrency(args.concurrency || 4);
+
+    const filters: FilterFunction[] = [];
+
+    if (indices) {
+      const [current, total] = indices.split(/_|of|\\|\//ig).map((x) => +x);
+      const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
+      const fixtureChunks = split(fixtures, total);
+      const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
+
+      /* eslint-disable no-console */
+      console.info(' === test run config ===');
+      console.info(` > indices: current = ${current} | total = ${total}`);
+      console.info(' > glob: ', [`./tests/${componentFolder}/*.ts`]);
+      console.info(' > all fixtures: ', fixtureChunks);
+      console.info(' > fixtures: ', targetFixtureChunk, '\n');
+      /* eslint-enable no-console */
+
+      const targetBaseNames = new Set(
+        targetFixtureChunk.map((filePath) => path.basename(filePath)),
+      );
+
+      filters.push((
+        _testName: string,
+        _fixtureName: string,
+        fixturePath: string,
+      ) => targetBaseNames.has(path.basename(fixturePath)));
+    }
+
+    if (testName) {
+      filters.push((name: string) => name === testName);
+    }
+
+    if (args.skipUnstable) {
+      filters.push((
+        _testName: string,
+        _fixtureName: string,
+        _fixturePath: string,
+        testMeta?: any,
+      ) => !(testMeta)?.unstable);
+    }
+
+    if (filters.length) {
+      runner.filter((...filterArgs: Parameters<FilterFunction>) => {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < filters.length; i += 1) {
+          if (!filters[i](...filterArgs)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    if (args.cache) {
+      (runner as any).cache = args.cache;
+    }
+
+    const runOptions: RunOptions = {
+      quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+      // @ts-expect-error ts-error
+      hooks: {
+        test: {
+          before: async (t: TestController) => {
+            if (!componentFolder.includes('accessibility')) {
+              const [width, height] = DEFAULT_BROWSER_SIZE;
+              await t.resizeWindow(width, height);
+            }
+
+            if (args.shadowDom) {
+              await addShadowRootTree(t);
+            }
+
+            if (args.theme) {
+              await changeTheme(t, args.theme);
+            }
+          },
+          after: async () => {
+            await testPageUtils.clearTestPage();
+          },
+        },
+      },
+    };
+
+    if (args.browsers === 'chrome:docker') {
+      runOptions.disableScreenshots = true;
+    }
+
+    return retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
+  })
+  .then((failedCount: number) => {
     testCafe.close();
-  }
-  process.exit(1);
-});
+    process.exit(failedCount);
+  })
+  .catch((error: Error) => {
+    console.error('TestCafe execution failed:', error);
+    if (testCafe) {
+      testCafe.close();
+    }
+    process.exit(1);
+  });
