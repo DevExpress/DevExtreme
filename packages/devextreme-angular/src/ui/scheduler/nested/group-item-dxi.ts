@@ -12,9 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -28,15 +26,13 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiSchedulerButtonItemComponent } from './button-item-dxi';
-import { DxiSchedulerEmptyItemComponent } from './empty-item-dxi';
-import { DxiSchedulerItemComponent } from './item-dxi';
-import { DxiSchedulerSimpleItemComponent } from './simple-item-dxi';
-import { DxiSchedulerTabbedItemComponent } from './tabbed-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-scheduler-group-item',
@@ -44,10 +40,22 @@ import { DxiSchedulerTabbedItemComponent } from './tabbed-item-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiSchedulerGroupItemComponent,
+        }
+    ]
 })
 export class DxiSchedulerGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -158,37 +166,6 @@ export class DxiSchedulerGroupItemComponent extends CollectionNestedOption imple
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerButtonItemComponent)) buttonItemsChildren!: QueryList<DxiSchedulerButtonItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiSchedulerEmptyItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerGroupItemComponent)) groupItemsChildren!: QueryList<DxiSchedulerGroupItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiSchedulerSimpleItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiSchedulerTabbedItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonItemsChildren.toArray(),
-            ...this.emptyItemsChildren.toArray(),
-            ...this.groupItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-            ...this.simpleItemsChildren.toArray(),
-            ...this.tabbedItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -199,6 +176,8 @@ export class DxiSchedulerGroupItemComponent extends CollectionNestedOption imple
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         templateHost.setHost(this);
+        this.itemType = 'group';
+    
     }
 
     setTemplate(template: DxTemplateDirective) {
@@ -214,16 +193,6 @@ export class DxiSchedulerGroupItemComponent extends CollectionNestedOption imple
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,10 +21,13 @@ import { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-toolbar',
@@ -36,6 +38,11 @@ import { DxiDataGridItemComponent } from './item-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -65,14 +72,6 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDataGridItemComponent))
-    get itemsChildren(): QueryList<DxiDataGridItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
