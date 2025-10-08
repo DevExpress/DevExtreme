@@ -19,21 +19,9 @@ const defaultItems: GalleryItem[] = [{
   Name: 'Second',
 }];
 
-function defaultItemTemplate(item: GalleryItem) {
-  const result = document.createElement('div');
-  const span = document.createElement('span');
-
-  span.innerText = item.Name;
-  result.appendChild(span);
-
-  return result;
-}
-
 const options: Options<Properties> = {
   items: [undefined, defaultItems],
-  itemTemplate: [undefined, defaultItemTemplate],
   width: [undefined, '100%'],
-  loop: [undefined, true],
   showIndicator: [undefined, false],
 };
 

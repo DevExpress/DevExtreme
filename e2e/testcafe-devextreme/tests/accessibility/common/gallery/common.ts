@@ -25,7 +25,6 @@ const options: Options<Properties> = {
   height: [300],
   width: [300],
   dataSource: [gallery],
-  loop: [true, false],
   swipeEnabled: [true, false],
   showIndicator: [true, false],
   showNavButtons: [true, false],
