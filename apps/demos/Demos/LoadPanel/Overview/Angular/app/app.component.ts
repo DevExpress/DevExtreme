@@ -30,8 +30,7 @@ export class AppComponent {
 
   loadingVisible = false;
 
-  // eslint-disable-next-line spellcheck/spell-checker
-  constructor(private cdr: ChangeDetectorRef, service: Service) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, service: Service) {
     this.employee = service.getEmployee();
   }
 
@@ -43,8 +42,7 @@ export class AppComponent {
 
   onHidden() {
     this.employeeInfo = this.employee;
-    // eslint-disable-next-line spellcheck/spell-checker
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   showLoadPanel() {

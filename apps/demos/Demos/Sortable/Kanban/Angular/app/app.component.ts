@@ -27,8 +27,7 @@ export class AppComponent {
 
   statuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  employees: Record<'ID', Employee> | {} = {};
+  employees: Record<'ID', Employee> = {};
 
   constructor(service: Service) {
     const tasks = service.getTasks();
