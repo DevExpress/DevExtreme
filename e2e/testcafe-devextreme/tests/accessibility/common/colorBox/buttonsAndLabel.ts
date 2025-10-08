@@ -31,6 +31,13 @@ const customOptions: Options<Properties> = {
   ],
 };
 
+const insidePopupOptions: Options<Properties> = {
+  value: ['#f05b41'],
+  opened: [true],
+  editAlphaChannel: [true, false],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
 const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
@@ -48,6 +55,12 @@ const customConfiguration: Configuration = {
   a11yCheckConfig,
   options: customOptions,
 };
+const insidePopupConfiguration: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: insidePopupOptions,
+};
 
 testAccessibility(regularConfiguration);
 testAccessibility(customConfiguration);
+testAccessibility(insidePopupConfiguration);

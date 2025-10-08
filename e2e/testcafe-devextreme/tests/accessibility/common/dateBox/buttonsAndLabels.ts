@@ -8,13 +8,21 @@ fixture.disablePageReloads`Accessibility`
 
 const now = new Date();
 
-const options: Options<Properties> = {
+const regularOptions: Options<Properties> = {
+  value: [now],
+  label: [undefined, 'label'],
+  showClearButton: [true, false],
+  showDropDownButton: [true, false],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+  opened: [true],
+};
+
+const customOptions: Options<Properties> = {
   value: [now],
   label: [undefined, 'label'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   opened: [true],
   buttons: [
-    undefined,
     [
       {
         name: 'today',
@@ -36,10 +44,16 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const regularConfiguration: Configuration = {
   component: 'dxDateBox',
   a11yCheckConfig,
-  options,
+  options: regularOptions,
+};
+const customConfiguration: Configuration = {
+  component: 'dxDateBox',
+  a11yCheckConfig,
+  options: customOptions,
 };
 
-testAccessibility(configuration);
+testAccessibility(regularConfiguration);
+testAccessibility(customConfiguration);
