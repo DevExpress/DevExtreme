@@ -8,7 +8,8 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     template,
@@ -74,7 +75,7 @@ export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, InteractionEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {

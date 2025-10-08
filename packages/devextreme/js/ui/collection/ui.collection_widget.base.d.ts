@@ -16,6 +16,8 @@ import {
     AsyncCancelable,
 } from '../../common/core/events';
 
+import { PointerInteractionEvent } from '../../events';
+
 import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
@@ -107,7 +109,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -118,7 +120,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent, PointerInteractionEvent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null

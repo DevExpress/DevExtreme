@@ -28,6 +28,7 @@ import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
 import type {
   Cancelable, DxEvent,
+  PointerInteractionEvent,
 } from '@js/events';
 import type {
   CollectionWidgetItem as CollectionWidgetItemProperties,
@@ -116,7 +117,7 @@ export interface PostprocessRenderItemInfo<TItem> {
   itemIndex: number;
 }
 
-export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+export type InkRippleEvent = DxEvent<PointerInteractionEvent>;
 export type Constructor<T> = new (...args: unknown[]) => T;
 
 export interface CollectionWidgetBaseProperties<
