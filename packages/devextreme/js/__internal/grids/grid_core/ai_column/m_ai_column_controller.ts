@@ -76,11 +76,11 @@ export class AiColumnController extends Controller {
   }
 
   public refreshAIColumn(columnName: string): void {
-    this.refreshAIColumnInternal(columnName);
+    this.aiColumnIntegrationController.sendAIColumnRequest(columnName);
   }
 
   public clearAIColumn(columnName: string): void {
-
+    this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
   public getAIColumnText(columnName: string, key: any): void {

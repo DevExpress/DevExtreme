@@ -135,4 +135,8 @@ export class AiColumnIntegrationController extends Controller {
   private isRequestAwaitingCompletion(columnName: string): boolean {
     return !!this.aborts[columnName];
   }
+
+  public dispose(): void {
+    Object.keys(this.aborts).forEach((columnName) => this.abortRequest(columnName));
+  }
 }
