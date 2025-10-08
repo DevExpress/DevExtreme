@@ -84,8 +84,8 @@ import {
   updateSerializers,
 } from './m_columns_controller_utils';
 
-// const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
-const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['buttons', 'ai'];
+const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'selection', 'drag', 'ai'];
+// const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['buttons', 'ai'];
 
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
@@ -458,7 +458,7 @@ export class ColumnsController extends modules.Controller {
   private _columnCanBeGrouped(column) {
     if (!column) return false;
 
-    return isDefined(column.groupIndex) && !column.command && !UNSUPPORTED_GROUPING_COLUMN_TYPES.includes(column.type);
+    return isDefined(column.groupIndex) && !UNSUPPORTED_GROUPING_COLUMN_TYPES.includes(column.type);
   }
 
   public getGroupColumns() {
