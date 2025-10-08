@@ -32,13 +32,16 @@ export class AiColumnIntegrationController extends Controller {
     if (!aiIntegration) {
       return;
     }
+    const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
+    if (!prompt) {
+      return;
+    }
     const data = this.dataController.items()
       .filter((row) => row.rowType === 'data')
       .reduce<Record<PropertyKey, unknown>>((acc, row) => {
         acc[JSON.stringify(row.key) as PropertyKey] = row.data;
         return acc;
       }, {});
-    const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
     const abort = aiIntegration.generateGridColumn(
       {
         text: prompt,

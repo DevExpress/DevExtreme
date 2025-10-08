@@ -570,6 +570,9 @@ describe('aiIntegration', () => {
           type: 'ai',
           caption: 'AI Column',
           name: 'myColumn',
+          ai: {
+            prompt: 'Test prompt',
+          },
         },
       ],
     });
@@ -592,6 +595,9 @@ describe('aiIntegration', () => {
           type: 'ai',
           caption: 'AI Column',
           name: 'myColumn',
+          ai: {
+            prompt: 'Test prompt',
+          },
         },
       ],
     });
@@ -617,6 +623,7 @@ describe('aiIntegration', () => {
           name: 'myColumn',
           ai: {
             aiIntegration: columnAiIntegration,
+            prompt: 'Test prompt',
           },
         },
       ],
@@ -641,10 +648,13 @@ describe('aiIntegration', () => {
           type: 'ai',
           caption: 'AI Column',
           name: 'myColumn',
+          ai: {
+            prompt: 'Test prompt',
+          },
         },
       ],
     });
-    instance.columnOption('myColumn', 'ai', { aiIntegration: columnAiIntegration });
+    instance.columnOption('myColumn', 'ai', { aiIntegration: columnAiIntegration, prompt: 'Test prompt' });
     instance.option('aiIntegration', rootAiIntegration);
     instance.sendAIColumnRequest('myColumn');
     expect(columnSendRequestSpy).toHaveBeenCalled();
@@ -825,6 +835,7 @@ describe('aiMode', () => {
           name: 'myColumn',
           ai: {
             aiIntegration: columnAiIntegration,
+            prompt: 'Test prompt',
           },
         },
       ],
@@ -917,14 +928,14 @@ describe('aiMode', () => {
 });
 
 describe('API Methods', () => {
-  const columnSendRequestStartedSpy = jest.fn();
-  const columnSendRequestResolvedSpy = jest.fn();
+  const columnSendRequestStarted = jest.fn();
+  const columnSendRequestResolved = jest.fn();
   const abortSpy = jest.fn();
 
   beforeEach(() => {
     beforeTest();
-    columnSendRequestStartedSpy.mockClear();
-    columnSendRequestResolvedSpy.mockClear();
+    columnSendRequestStarted.mockClear();
+    columnSendRequestResolved.mockClear();
     abortSpy.mockClear();
   });
 
@@ -933,10 +944,10 @@ describe('API Methods', () => {
   describe('abortAIColumnRequest', () => {
     const aiIntegrationResult = (): RequestResult => ({
       promise: new Promise<string>((resolve) => {
-        columnSendRequestStartedSpy();
+        columnSendRequestStarted();
         // Timeouts are mocked and do not delay tests execution
         setTimeout(() => {
-          columnSendRequestResolvedSpy();
+          columnSendRequestResolved();
           resolve('1');
         }, 10000);
       }),
@@ -973,15 +984,15 @@ describe('API Methods', () => {
         ],
       });
 
-      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
-      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
       // There is enough time to resolve a promise
       jest.advanceTimersByTime(10000);
 
       instance.abortAIColumnRequest('myColumn');
-      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
-      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
     it('should interrupt a promise and call abortSpy', async () => {
@@ -1007,15 +1018,66 @@ describe('API Methods', () => {
         ],
       });
 
-      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
-      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
       // There is NOT enough time to resolve a promise
       jest.advanceTimersByTime(1000);
 
       instance.abortAIColumnRequest('myColumn');
-      expect(columnSendRequestStartedSpy).toHaveBeenCalledTimes(1);
-      expect(columnSendRequestResolvedSpy).toHaveBeenCalledTimes(0);
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('sendAIColumnRequest', () => {
+    it('should send a request only if there is a prompt', async () => {
+      const aiIntegrationResult = (): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          columnSendRequestResolved();
+          resolve('1');
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAiIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResult();
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+              mode: 'manual',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+
+      instance.columnOption('myColumn', 'ai.prompt', 'Test prompt');
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
+      await Promise.resolve();
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
   });
