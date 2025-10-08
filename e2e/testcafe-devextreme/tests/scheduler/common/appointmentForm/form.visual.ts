@@ -8,7 +8,10 @@ import { changeTheme } from '../../../../helpers/changeTheme';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Appointment Form: Main Form`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .after(async () => {
+    await changeTheme('generic.light');
+  });
 
 const SCHEDULER_SELECTOR = '#container';
 
@@ -51,8 +54,10 @@ const getResources = () => ([
   },
 ]);
 
+const windowSize: [number, number] = [1500, 1500];
+
 // ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-['fluent.blue.light'].forEach((theme) => {
+['fluent.blue.light', 'fluent.blue.light.compact'].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: true },
     { isRecurringAppointment: false, isAllDay: false },
@@ -83,7 +88,7 @@ const getResources = () => ([
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => {
+    }, windowSize).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
@@ -106,7 +111,7 @@ const getResources = () => ([
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => {
+    }, windowSize).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
@@ -132,7 +137,7 @@ const getResources = () => ([
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => {
+    }, windowSize).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
@@ -156,7 +161,7 @@ const getResources = () => ([
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => {
+    }, windowSize).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
