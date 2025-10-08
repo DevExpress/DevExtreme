@@ -13,15 +13,26 @@ const initialValue = [
   new Date(now.getTime() + msInDay * 3),
 ];
 
-const options: Options<Properties> = {
+const commonOptions: Options<Properties> = {
   value: [initialValue],
   disabled: [true, false],
   readOnly: [true, false],
   multiView: [true, false],
-  opened: [true, false],
   startDatePlaceholder: [undefined, 'startDatePlaceholder'],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const options: Options<Properties> = {
+  ...commonOptions,
+  opened: [true, false],
+  deferRendering: [true],
+};
+
+const noDeferredOptions: Options<Properties> = {
+  ...commonOptions,
+  opened: [false],
+  deferRendering: [false],
 };
 
 const a11yCheckConfig = {
@@ -36,5 +47,11 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
 };
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDateRangeBox',
+  a11yCheckConfig,
+  options: noDeferredOptions,
+};
 
 testAccessibility(configuration);
+testAccessibility(noDeferredConfiguration);

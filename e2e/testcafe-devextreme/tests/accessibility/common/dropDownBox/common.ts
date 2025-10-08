@@ -8,12 +8,23 @@ fixture.disablePageReloads`Accessibility`
 
 const items = ['Download Trial For Visual Studio', 'Download Trial For All Platforms', 'Package Managers'];
 
-const options: Options<Properties> = {
+const commonOptions: Options<Properties> = {
   dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
-  opened: [true, false],
   inputAttr: [{ 'aria-label': 'DropDownBox' }],
+};
+
+const options: Options<Properties> = {
+  ...commonOptions,
+  opened: [true, false],
+  deferRendering: [true],
+};
+
+const noDeferredOptions: Options<Properties> = {
+  ...commonOptions,
+  opened: [false],
+  deferRendering: [false],
 };
 
 const a11yCheckConfig = {
@@ -26,5 +37,11 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
 };
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDropDownBox',
+  a11yCheckConfig,
+  options: noDeferredOptions,
+};
 
 testAccessibility(configuration);
+testAccessibility(noDeferredConfiguration);

@@ -6,13 +6,24 @@ import { Options } from '../../../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../../container.html'));
 
-const options: Options<Properties> = {
+const commonOptions: Options<Properties> = {
   value: [undefined, '#f05b41'],
   disabled: [true, false],
   readOnly: [true, false],
   placeholder: [undefined, 'placeholder'],
-  opened: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const options: Options<Properties> = {
+  ...commonOptions,
+  opened: [true, false],
+  deferRendering: [true],
+};
+
+const noDeferredOptions: Options<Properties> = {
+  ...commonOptions,
+  opened: [false],
+  deferRendering: [false],
 };
 
 const a11yCheckConfig = {
@@ -27,5 +38,11 @@ const configuration: Configuration = {
   a11yCheckConfig,
   options,
 };
+const noDeferredConfiguration: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: noDeferredOptions,
+};
 
 testAccessibility(configuration);
+testAccessibility(noDeferredConfiguration);
