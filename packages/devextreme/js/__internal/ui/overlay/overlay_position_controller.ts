@@ -10,11 +10,14 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import swatch from '@ts/core/utils/swatch_container';
 import type {
   OverlayActions,
   OverlayProperties,
-  PointerLikeEvent,
 } from '@ts/ui/overlay/overlay';
 
 import windowUtils from '../../core/utils/m_window';
@@ -238,7 +241,7 @@ export class OverlayPositionController<
     this.restorePositionOnNextRender(shouldRestorePosition);
   }
 
-  detectVisualPositionChange(event?: PointerLikeEvent): void {
+  detectVisualPositionChange(event?: DxEvent<PointerInteractionEvent>): void {
     this._updateVisualPositionValue();
     this._raisePositionedEvents(event);
   }
@@ -297,7 +300,7 @@ export class OverlayPositionController<
     this.detectVisualPositionChange();
   }
 
-  _raisePositionedEvents(event?: PointerLikeEvent): void {
+  _raisePositionedEvents(event?: DxEvent<PointerInteractionEvent>): void {
     const previousPosition = this._previousVisualPosition;
     const newPosition = this._visualPosition;
 

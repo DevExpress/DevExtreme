@@ -17,5 +17,6 @@
     "./Demos/**/React/**/*.tsx",
     "./Demos/**/Vue/**/*.ts",
     "./Demos/**/Angular/**/*.ts",
+    "./testing/**/*.ts"
   ]
 }

@@ -3,7 +3,10 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { ItemClickEvent } from '@js/ui/list';
 import type dxOverlay from '@js/ui/overlay';
 import { ListBase } from '@ts/ui/list/list.base';
@@ -34,7 +37,7 @@ class EditDecoratorContext extends EditDecorator {
       shading: false,
       deferRendering: true,
       hideOnParentScroll: true,
-      hideOnOutsideClick: (e: DxEvent<MouseEvent | PointerEvent | TouchEvent>): boolean => !$(e.target).closest(`.${CONTEXTMENU_CLASS}`).length,
+      hideOnOutsideClick: (e: DxEvent<PointerInteractionEvent>): boolean => !$(e.target).closest(`.${CONTEXTMENU_CLASS}`).length,
       animation: {
         show: {
           type: 'slide',

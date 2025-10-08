@@ -17,9 +17,9 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import dxPopup, {
     dxPopupAnimation,
@@ -145,7 +145,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default true
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default true

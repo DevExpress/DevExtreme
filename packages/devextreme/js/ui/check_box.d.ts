@@ -3,7 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import Editor, {
     EditorOptions,
@@ -48,7 +49,7 @@ export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxCheckBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCheckBox, InteractionEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
