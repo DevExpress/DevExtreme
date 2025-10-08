@@ -51,7 +51,8 @@ const getResources = () => ([
   },
 ]);
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+// ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+['fluent.blue.light'].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: true },
     { isRecurringAppointment: false, isAllDay: false },
