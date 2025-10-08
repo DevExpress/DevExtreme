@@ -5,6 +5,7 @@ import fx from '@js/common/core/animation/fx';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Popup from '@js/ui/popup';
+import ProgressBar from '@js/ui/progress_bar';
 import TextArea from '@js/ui/text_area';
 import { AiPromptEditorModel } from '@ts/grids/grid_core//__tests__/__mock__/model/ai_prompt_editor';
 
@@ -123,6 +124,23 @@ describe('AiPromptEditor', () => {
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',
+        },
+      ]);
+    });
+  });
+
+  describe('when creating an instance', () => {
+    it('should create ProgressBar using createComponent', () => {
+      const { POM } = createAiPromptEditor({ popupOptions: { visible: true } });
+
+      expect(createComponentMock.mock.calls[2]).toEqual([
+        $(POM.getProgressBarElement()),
+        ProgressBar,
+        {
+          value: false,
+          visible: false,
+          showStatus: false,
+          width: '100%',
         },
       ]);
     });
@@ -728,6 +746,32 @@ describe('Public Methods', () => {
       expect(POM.isRefreshButtonDisabled()).toBe(true);
       expect(POM.isApplyButtonDisabled()).toBe(true);
       expect(POM.isApplyButtonVisible()).toBe(true);
+    });
+  });
+
+  describe('when setLoading is called', () => {
+    it('should show progress bar when isLoading is true', () => {
+      const { instance, POM } = createAiPromptEditor({
+        popupOptions: { visible: true },
+      });
+
+      expect(POM.isProgressBarVisible()).toBe(false);
+
+      instance.setLoading(true);
+
+      expect(POM.isProgressBarVisible()).toBe(true);
+    });
+
+    it('should hide progress bar when isLoading is false', () => {
+      const { instance, POM } = createAiPromptEditor({
+        popupOptions: { visible: true },
+      });
+
+      instance.setLoading(true);
+      expect(POM.isProgressBarVisible()).toBe(true);
+
+      instance.setLoading(false);
+      expect(POM.isProgressBarVisible()).toBe(false);
     });
   });
 });

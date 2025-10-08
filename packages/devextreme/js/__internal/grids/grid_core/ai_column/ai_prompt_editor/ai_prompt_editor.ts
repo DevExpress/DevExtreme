@@ -1,9 +1,9 @@
 import messageLocalization from '@js/common/core/localization/message';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup';
+import ProgressBar from '@js/ui/progress_bar';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import TextArea from '@js/ui/text_area';
 
@@ -15,6 +15,8 @@ export class AiPromptEditor {
   private readonly popupInstance: Popup;
 
   private editorInstance!: TextArea;
+
+  private progressBar!: ProgressBar;
 
   private value: string;
 
@@ -52,16 +54,29 @@ export class AiPromptEditor {
       ...DEFAULT_POPUP_OPTIONS,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: CLASSES.aiPromptEditor },
-      contentTemplate: (): dxElementWrapper => {
-        const $editorContainer = $('<div>').addClass(CLASSES.aiPromptEditorTextArea);
+      contentTemplate: ($container): void => {
+        const $editorContainer = $('<div>')
+          .addClass(CLASSES.aiPromptEditorTextArea)
+          .appendTo($container);
+        const $progressContainer = $('<div>')
+          .addClass(CLASSES.aiPromptEditorProgressBar)
+          .appendTo($container);
 
         this.editorInstance = this.options.createComponent(
           $editorContainer,
           TextArea,
           this.getTextAreaConfig(),
         );
-
-        return $editorContainer;
+        this.progressBar = this.options.createComponent(
+          $progressContainer,
+          ProgressBar,
+          {
+            value: false,
+            visible: false,
+            showStatus: false,
+            width: '100%',
+          },
+        );
       },
       toolbarItems: [
         {
@@ -163,6 +178,10 @@ export class AiPromptEditor {
   public toggleApplyButtonVisibility(visible: boolean): void {
     this.updateToolbarItemVisibility(1, visible); // Update Apply button visibility
     this.updateToolbarItemVisibility(2, !visible); // Update Stop button visibility
+  }
+
+  public setLoading(isLoading: boolean): void {
+    this.progressBar.option('visible', isLoading);
   }
 
   public updateValue(value: string): void {

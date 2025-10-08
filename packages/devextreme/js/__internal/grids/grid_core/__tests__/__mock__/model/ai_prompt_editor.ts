@@ -10,6 +10,7 @@ const CLASSES = {
   aiPromptEditorRefreshButton: 'dx-ai-prompt-editor__refresh-button',
   aiPromptEditorApplyButton: 'dx-ai-prompt-editor__apply-button',
   aiPromptEditorStopButton: 'dx-ai-prompt-editor__stop-button',
+  aiPromptEditorProgressBar: 'dx-ai-prompt-editor__progressbar',
 };
 
 export class AiPromptEditorModel {
@@ -47,6 +48,10 @@ export class AiPromptEditorModel {
     return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorStopButton}`) as HTMLElement;
   }
 
+  public getProgressBarElement(): HTMLElement {
+    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorProgressBar}`) as HTMLElement;
+  }
+
   public changeTextAreaValue(value: string): void {
     const textArea = this.getTextArea();
 
@@ -74,5 +79,11 @@ export class AiPromptEditorModel {
     const toolbarItem = stopButton.closest(`.${CLASSES.toolbarItem}`);
 
     return !!toolbarItem && !toolbarItem.classList.contains(CLASSES.stateInvisible);
+  }
+
+  public isProgressBarVisible(): boolean {
+    const progressBar = this.getProgressBarElement();
+
+    return !!progressBar && !progressBar.classList.contains(CLASSES.stateInvisible);
   }
 }

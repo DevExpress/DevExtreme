@@ -10,4 +10,5 @@ export const CLASSES = {
   aiPromptEditorRefreshButton: 'dx-ai-prompt-editor__refresh-button',
   aiPromptEditorApplyButton: 'dx-ai-prompt-editor__apply-button',
   aiPromptEditorStopButton: 'dx-ai-prompt-editor__stop-button',
+  aiPromptEditorProgressBar: 'dx-ai-prompt-editor__progressbar',
 };
