@@ -18,7 +18,7 @@ import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 500;
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
@@ -256,13 +256,6 @@ export class AppointmentPopup {
       this._addMissingDSTTime(adapter, clonedAdapter);
 
       const appointment = clonedAdapter.source;
-
-      const { allDayExpr } = this.scheduler.getDataAccessors().expr;
-
-      if (allDayExpr in appointment && appointment[allDayExpr] === undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete appointment[allDayExpr];
-      }
 
       switch (this.state.action) {
         case ACTION_TO_APPOINTMENT.CREATE:
