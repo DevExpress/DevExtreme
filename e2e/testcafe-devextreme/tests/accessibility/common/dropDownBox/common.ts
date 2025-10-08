@@ -13,7 +13,6 @@ const options: Options<Properties> = {
   disabled: [true, false],
   readOnly: [true, false],
   opened: [true, false],
-  deferRendering: [true, false],
   inputAttr: [{ 'aria-label': 'DropDownBox' }],
 };
 

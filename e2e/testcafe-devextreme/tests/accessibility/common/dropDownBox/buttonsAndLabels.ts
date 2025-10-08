@@ -8,14 +8,20 @@ fixture.disablePageReloads`Accessibility`
 
 const items = ['Download Trial For Visual Studio', 'Download Trial For All Platforms', 'Package Managers'];
 
-const options: Options<Properties> = {
-  dataSource: [[], items],
+const regularOptions: Options<Properties> = {
+  dataSource: [items],
   value: [items[0]],
   label: [undefined, 'label'],
   showClearButton: [true, false],
   showDropDownButton: [true, false],
+  inputAttr: [{ 'aria-label': 'DropDownBox' }],
+};
+
+const customOptions: Options<Properties> = {
+  dataSource: [items],
+  value: [items[0]],
+  label: [undefined, 'label'],
   buttons: [
-    undefined,
     [
       {
         name: 'today',
@@ -36,10 +42,16 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const regularConfiguration: Configuration = {
   component: 'dxDropDownBox',
   a11yCheckConfig,
-  options,
+  options: regularOptions,
+};
+const customConfiguration: Configuration = {
+  component: 'dxDropDownBox',
+  a11yCheckConfig,
+  options: customOptions,
 };
 
-testAccessibility(configuration);
+testAccessibility(regularConfiguration);
+testAccessibility(customConfiguration);
