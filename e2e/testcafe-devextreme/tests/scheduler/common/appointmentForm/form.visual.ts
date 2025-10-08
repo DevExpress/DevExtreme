@@ -9,7 +9,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Appointment Form: Main Form`
   .page(url(__dirname, '../../../container.html'))
-  .after(async () => {
+  .afterEach(async () => {
     await changeTheme('generic.light');
   });
 
@@ -56,8 +56,14 @@ const getResources = () => ([
 
 const windowSize: [number, number] = [1500, 1500];
 
-// ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-['fluent.blue.light', 'fluent.blue.light.compact'].forEach((theme) => {
+[
+  'generic.light',
+  'generic.light.compact',
+  // 'material.blue.light',
+  // 'material.blue.light.compact',
+  // 'fluent.blue.light',
+  // 'fluent.blue.light.compact',
+].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: true },
     { isRecurringAppointment: false, isAllDay: false },
