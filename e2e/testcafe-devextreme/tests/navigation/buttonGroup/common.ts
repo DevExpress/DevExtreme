@@ -36,32 +36,32 @@ fixture.disablePageReloads`ButtonGroup_Styles`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'display: flex; flex-direction: column; width: 600px;');
+    await setStyleAttribute(Selector('#container'), 'width: 600px');
     await setAttribute('#container', 'class', 'dx-theme-generic-typography');
 
-    const widgets = [
+    // eslint-disable-next-line no-restricted-syntax
+    for (const state of [
       'dx-state-default',
       'dx-state-focused',
       'dx-state-hover',
       'dx-state-active',
       'dx-state-selected',
-    ].map(async (state) => {
+    ]) {
+      await appendElementTo('#container', 'div', `mode${state}`, {});
+      await addCaptionTo(`#mode${state}`, state, 'beforeend');
       await appendElementTo('#container', 'div', `buttongroup${state}`, {});
-      await addCaptionTo(`#buttongroup${state}`, state);
 
       const items = defaultItems.map((item) => ({
         ...item,
         elementAttr: { class: state },
       }));
 
-      return createWidget('dxButtonGroup', {
+      await createWidget('dxButtonGroup', {
         elementAttr: { style: 'margin-bottom: 20px' },
         items,
         stylingMode,
         selectionMode: 'none',
       }, `#buttongroup${state}`);
-    });
-
-    await Promise.all(widgets);
+    }
   });
 });
