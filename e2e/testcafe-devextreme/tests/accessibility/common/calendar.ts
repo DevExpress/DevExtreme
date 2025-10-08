@@ -14,9 +14,6 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   disabled: [true, false],
   readOnly: [true, false],
-  showTodayButton: [true, false],
-  showWeekNumbers: [true, false],
-  zoomLevel: ['century', 'decade', 'month', 'year'],
 };
 
 const a11yCheckConfig = {
@@ -31,7 +28,11 @@ const a11yCheckConfig = {
 const configurationWithSingleSelectionMode: Configuration = {
   component: 'dxCalendar',
   a11yCheckConfig,
-  options: { ...options, value: [undefined, now] },
+  options: {
+    ...options,
+    zoomLevel: ['century', 'decade', 'month', 'year'],
+    value: [undefined, now],
+  },
 };
 
 testAccessibility(configurationWithSingleSelectionMode);
@@ -41,6 +42,9 @@ const configurationWithoutSingleSelectionMode: Configuration = {
   a11yCheckConfig,
   options: {
     ...options,
+    showTodayButton: [true, false],
+    showWeekNumbers: [true, false],
+    zoomLevel: ['month'],
     value: [[now, now + msInDay]],
     selectionMode: ['multiple', 'range'],
   },
