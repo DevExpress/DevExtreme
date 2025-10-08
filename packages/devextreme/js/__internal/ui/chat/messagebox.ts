@@ -2,6 +2,7 @@ import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
+import type { InteractionEvent } from '@js/events';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -21,7 +22,7 @@ export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent =
-  NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
+  NativeEventInfo<MessageBox, InteractionEvent> &
   { text?: string };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;

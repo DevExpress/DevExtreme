@@ -8,9 +8,17 @@ import messageLocalization from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { DxEvent } from '@js/events';
 import type {
-  ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
+  DxEvent,
+  InteractionEvent,
+  PointerInteractionEvent,
+} from '@js/events';
+import type {
+  ItemCollapsedEvent,
+  ItemExpandedEvent,
+  ResizeEndEvent,
+  ResizeEvent,
+  ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -22,7 +30,9 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import type {
-  HandlerMap, InteractionEvent, ResizeHandleEventMap, ResizeOffset,
+  HandlerMap,
+  ResizeHandleEventMap,
+  ResizeOffset,
 } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -319,31 +329,31 @@ class ResizeHandle extends Widget<ResizeHandleProperties> {
     this._attachEventHandlers();
   }
 
-  _resizeStartHandler(e: InteractionEvent): void {
+  _resizeStartHandler(e: DxEvent<InteractionEvent>): void {
     this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
-  _resizeHandler(e: InteractionEvent): void {
+  _resizeHandler(e: DxEvent<InteractionEvent>): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
-  _resizeEndHandler(e: InteractionEvent): void {
+  _resizeEndHandler(e: DxEvent<InteractionEvent>): void {
     this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
   }
 
-  _collapsePrevHandler(e: InteractionEvent): void {
+  _collapsePrevHandler(e: DxEvent<InteractionEvent>): void {
     this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
       event: e,
     });
   }
 
-  _collapseNextHandler(e: InteractionEvent): void {
+  _collapseNextHandler(e: DxEvent<InteractionEvent>): void {
     this._getAction(COLLAPSE_EVENT.onCollapseNext)({
       event: e,
     });
@@ -471,7 +481,7 @@ class ResizeHandle extends Widget<ResizeHandleProperties> {
     eventsEngine.off(this._$collapseNextButton, this.CLICK_EVENT_NAME);
   }
 
-  _doubleClickHandler(e: DxEvent<PointerEvent | MouseEvent | TouchEvent>): void {
+  _doubleClickHandler(e: DxEvent<PointerInteractionEvent>): void {
     const { showCollapsePrev, showCollapseNext } = this.option();
 
     if (showCollapsePrev === true) {

@@ -1,6 +1,6 @@
 import {
-    UserDefinedElement,
-    DxElement,
+  UserDefinedElement,
+  DxElement,
 } from '../core/element';
 
 import {
@@ -14,18 +14,18 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    Cancelable,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  Cancelable,
+  DxEvent,
+  PointerInteractionEvent,
+} from '../events';
 
 import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
-    CollectionWidgetItem,
+  CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
@@ -37,7 +37,7 @@ import dxSortable from './sortable';
 import { dxToolbarItem } from './toolbar';
 
 import Widget, {
-    WidgetOptions,
+  WidgetOptions,
 } from './widget/ui.widget';
 
 interface AppointmentDraggingEvent {
@@ -136,7 +136,7 @@ export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, Ke
  * @type object
  * @inherits NativeEventInfo,TargetedAppointmentInfo
  */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & TargetedAppointmentInfo & {
   /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
@@ -304,7 +304,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardE
  * @type object
  * @inherits NativeEventInfo
  */
-export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & {
   /**
    * @docid _ui_scheduler_CellContextMenuEvent.cellData
    * @type object
