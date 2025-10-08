@@ -1389,7 +1389,7 @@ describe('API Methods', () => {
 
   describe('clearAIColumn', () => {
     // TODO: Implement after data showing in the cell is done
-    it('should clear cell values', async () => { });
+    // it('should clear cell values', async () => { });
 
     it('should abort the previous request of the same column', async () => {
       const aiIntegrationResult = (): RequestResult => ({
@@ -1448,9 +1448,9 @@ describe('API Methods', () => {
     });
 
     // TODO: Implement after cache is done
-    it('should clear column cache', async () => { });
+    // it('should clear column cache', async () => { });
   });
 
   // TODO: implement after column cache is done
-  describe('getAIColumnValue', () => { });
+  // describe('getAIColumnValue', () => { });
 });
