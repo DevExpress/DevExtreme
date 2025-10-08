@@ -1,11 +1,11 @@
 import { Message, User, Properties } from 'devextreme/ui/chat.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { avatarUrl } from '../../chat/data';
+import url from '../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { avatarUrl } from '../chat/data';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const userWithAvatar: User = {
   id: 1,

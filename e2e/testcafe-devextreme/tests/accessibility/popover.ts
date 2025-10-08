@@ -1,11 +1,11 @@
 import { Properties } from 'devextreme/ui/popover.d';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
-import { isMaterial, isMaterialBased } from '../../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
+import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
   visible: [true],

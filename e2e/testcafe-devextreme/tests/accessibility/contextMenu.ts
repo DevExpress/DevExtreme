@@ -1,11 +1,11 @@
 import { Item, Properties } from 'devextreme/ui/context_menu.d';
 import ContextMenu from 'devextreme-testcafe-models/contextMenu';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const items: Item[] = [
   { text: 'remove', icon: 'remove', items: [{ text: 'item_1' }, { text: 'item_2' }] },

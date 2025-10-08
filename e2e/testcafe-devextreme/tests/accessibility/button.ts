@@ -1,13 +1,13 @@
 import { ClientFunction } from 'testcafe';
 import { Properties } from 'devextreme/ui/button.d';
 import Button from 'devextreme-testcafe-models/button';
-import { isMaterialBased } from '../../../helpers/themeUtils';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import { isMaterialBased } from '../../helpers/themeUtils';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const optionsWithSimpleItems: Options<Properties> = {
   useSubmitBehavior: [true, false],

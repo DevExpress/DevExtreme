@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/date_box.d';
-import url from '../../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
-import { Options } from '../../../../helpers/generateOptionMatrix';
+import url from '../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
+import { Options } from '../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const now = new Date();
 

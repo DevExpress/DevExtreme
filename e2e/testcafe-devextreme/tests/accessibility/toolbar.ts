@@ -1,11 +1,11 @@
 import { Properties } from 'devextreme/ui/toolbar.d';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const generateItems = (count) => {
   const items: { text: string; locateInMenu: string }[] = [];
