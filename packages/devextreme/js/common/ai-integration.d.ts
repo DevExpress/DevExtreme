@@ -20,12 +20,14 @@ export type Prompt = {
  * @docid
  * @namespace DevExpress.aiIntegration
  * @type object
+ * @public
  */
 export type RequestParamsData = Record<PropertyKey, any>;
 /**
  * @docid
  * @namespace DevExpress.aiIntegration
  * @type object
+ * @public
  */
 export type AIResponse = string | Record<PropertyKey, any>;
 

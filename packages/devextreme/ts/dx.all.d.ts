@@ -922,7 +922,6 @@ declare module DevExpress.aiIntegration {
   };
   /**
    * [descr:AIResponse]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type AIResponse = string | Record<PropertyKey, any>;
   /**
@@ -1022,7 +1021,6 @@ declare module DevExpress.aiIntegration {
   };
   /**
    * [descr:RequestParamsData]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RequestParamsData = Record<PropertyKey, any>;
   /**
