@@ -1080,5 +1080,61 @@ describe('API Methods', () => {
       await Promise.resolve();
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
+
+    it('should abort the previous request of the same column', async () => {
+      const aiIntegrationResult = (): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          columnSendRequestStarted();
+          // Timeouts are mocked and do not delay tests execution
+          setTimeout(() => {
+            columnSendRequestResolved();
+            resolve('1');
+          }, 10000);
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAiIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResult();
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+
+      // There is NOT enough time to resolve a promise
+      jest.advanceTimersByTime(5000);
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(2);
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });

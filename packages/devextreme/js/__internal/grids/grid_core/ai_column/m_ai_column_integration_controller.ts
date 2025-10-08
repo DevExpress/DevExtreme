@@ -36,6 +36,10 @@ export class AiColumnIntegrationController extends Controller {
     if (!prompt) {
       return;
     }
+
+    if (this.isRequestAwaitingCompletion(columnName)) {
+      this.abortRequest(columnName);
+    }
     const data = this.dataController.items()
       .filter((row) => row.rowType === 'data')
       .reduce<Record<PropertyKey, unknown>>((acc, row) => {
