@@ -10,8 +10,6 @@ export class AiColumnController extends Controller {
 
   private columnsController!: ColumnsController;
 
-  private aiColumnCacheController!: AiColumnCacheController;
-
   private aiColumnIntegrationController!: AiColumnIntegrationController;
 
   private dataChangedHandler!: (e) => any;
@@ -20,10 +18,8 @@ export class AiColumnController extends Controller {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
 
-    this.aiColumnCacheController = new AiColumnCacheController(this.component);
     this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
-    this.aiColumnCacheController.init();
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
@@ -43,7 +39,7 @@ export class AiColumnController extends Controller {
   }
 
   private refreshAIColumnInternal(columnName: string): void {
-    this.aiColumnIntegrationController.sendRequest(columnName);
+    this.aiColumnIntegrationController.refreshAIColumn(columnName);
   }
 
   private handleDataChanged(e) {
@@ -76,7 +72,7 @@ export class AiColumnController extends Controller {
   }
 
   public sendAIColumnRequest(columnName: string): void {
-    this.aiColumnIntegrationController.sendRequest(columnName);
+    this.aiColumnIntegrationController.sendAIColumnRequest(columnName);
   }
 
   public refreshAIColumn(columnName: string): void {

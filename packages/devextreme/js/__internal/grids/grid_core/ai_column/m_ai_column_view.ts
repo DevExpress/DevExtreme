@@ -1,7 +1,7 @@
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import { View } from '../m_modules';
 import type { AiColumnController } from './m_ai_column_controller';
-import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
+import { getAiCommandColumnOptions } from './utils';
 
 export class AiColumnView extends View {
   private columnsController!: ColumnsController;

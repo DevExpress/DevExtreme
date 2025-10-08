@@ -11,6 +11,8 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
+import { AiColumnCacheController } from './m_ai_column_cache_controller';
+import { getData, reduceDataCachedKeys } from './utils';
 
 export class AiColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
@@ -21,13 +23,26 @@ export class AiColumnIntegrationController extends Controller {
 
   private errorHandlingController!: ErrorHandlingController;
 
+  private aiColumnCacheController!: AiColumnCacheController;
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
     this.errorHandlingController = this.getController('errorHandling');
+
+    this.aiColumnCacheController = new AiColumnCacheController(this.component);
+    this.aiColumnCacheController.init();
   }
 
-  public sendRequest(columnName: string): void {
+  public sendAIColumnRequest(columnName: string): void {
+    this.sendRequest(columnName, true);
+  }
+
+  public refreshAIColumn(columnName: string): void {
+    this.sendRequest(columnName, false);
+  }
+
+  private sendRequest(columnName: string, force: boolean): void {
     const aiIntegration = this.getAiIntegration(columnName);
     if (!aiIntegration) {
       return;
@@ -40,18 +55,20 @@ export class AiColumnIntegrationController extends Controller {
     if (this.isRequestAwaitingCompletion(columnName)) {
       this.abortRequest(columnName);
     }
-    const data = this.dataController.items()
-      .filter((row) => row.rowType === 'data')
-      .reduce<Record<PropertyKey, unknown>>((acc, row) => {
-        acc[JSON.stringify(row.key) as PropertyKey] = row.data;
-        return acc;
-      }, {});
+
+    let data = getData(this.dataController.items());
+    const keys = Object.keys(data);
+    const cachedResponse: Record<PropertyKey, string> = force
+      ? {}
+      : this.aiColumnCacheController.getCachedResponse(columnName, keys);
+    data = reduceDataCachedKeys(data, cachedResponse);
+
     const abort = aiIntegration.generateGridColumn(
       {
         text: prompt,
         data,
       },
-      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName),
+      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName, cachedResponse),
     );
     this.aborts[columnName] = abort;
   }
@@ -60,15 +77,22 @@ export class AiColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
-  private updateResults(columnName: string, result: string): void {
+  private updateResults(
+    columnName: string,
+    result: string,
+    cachedData: Record<PropertyKey, string>,
+  ): void {
     // Update the results in the UI or internal state
   }
 
-  private getAICommandCallbacks<T>(columnName: string): RequestCallbacks<T> {
+  private getAICommandCallbacks<T>(
+    columnName: string,
+    cachedResponse: Record<PropertyKey, string>,
+  ): RequestCallbacks<T> {
     const callbacks = {
       onComplete: (finalResponse: T): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
-          this.updateResults(columnName, String(finalResponse));
+          this.updateResults(columnName, String(finalResponse), cachedResponse);
           this.processCommandCompletion(columnName);
         }
       },
