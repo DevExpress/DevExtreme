@@ -61,6 +61,11 @@ const allowReordering = function (that) {
   return that.option('allowColumnReordering') || that.getController('columns').isColumnOptionUsed('allowReordering');
 };
 
+type ColumnIndex = number | {
+  rowIndex: number;
+  columnIndex: number;
+};
+
 export class TrackerView extends modules.View {
   private _positionChanged: any;
 
@@ -1516,7 +1521,12 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   private allowDrop(parameters) {
-    return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
+    return this._columnsController.allowMoveColumn(
+      this.addColumnIndexOffset(parameters.sourceColumnIndex),
+      this.addColumnIndexOffset(parameters.targetColumnIndex),
+      parameters.sourceLocation,
+      parameters.targetLocation,
+    );
   }
 
   public drag(parameters) {
@@ -1573,6 +1583,19 @@ export class DraggingHeaderViewController extends modules.ViewController {
     }
   }
 
+  private addColumnIndexOffset(columnIndex: ColumnIndex): ColumnIndex {
+    const offset = this._columnsController.getColumnIndexOffset();
+
+    if (isObject(columnIndex)) {
+      return {
+        ...columnIndex,
+        columnIndex: columnIndex.columnIndex + offset,
+      };
+    }
+
+    return columnIndex + offset;
+  }
+
   private drop(parameters) {
     const { sourceColumnElement } = parameters;
 
@@ -1589,7 +1612,12 @@ export class DraggingHeaderViewController extends modules.ViewController {
         separator.hide();
       }
 
-      this._columnsController.moveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
+      this._columnsController.moveColumn(
+        this.addColumnIndexOffset(parameters.sourceColumnIndex),
+        this.addColumnIndexOffset(parameters.targetColumnIndex),
+        parameters.sourceLocation,
+        parameters.targetLocation,
+      );
     }
   }
 }

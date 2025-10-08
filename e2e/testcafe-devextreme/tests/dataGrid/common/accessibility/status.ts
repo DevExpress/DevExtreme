@@ -75,8 +75,6 @@ test('Accessibility: DataGrid general status should contains correct text after 
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
 
-  // await t.debug();
-
   const applyFilterBtn = dataGrid.getHeaderPanel().getApplyFilterButton();
   await t.typeText(filterEditor.input(), 'A')
     .click(applyFilterBtn);
