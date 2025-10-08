@@ -179,7 +179,7 @@ createTestCafe(TESTCAFE_CONFIG)
       },
     });
 
-    runner.concurrency(args.concurrency || 3);
+    runner.concurrency(args.concurrency || 4);
 
     const filters: FilterFunction[] = [];
 
@@ -218,7 +218,7 @@ createTestCafe(TESTCAFE_CONFIG)
         _fixtureName: string,
         _fixturePath: string,
         testMeta?: any,
-      ) => !(testMeta)?.unstable);
+      ) => !testMeta?.unstable);
     }
 
     if (filters.length) {
@@ -243,8 +243,10 @@ createTestCafe(TESTCAFE_CONFIG)
       hooks: {
         test: {
           before: async (t: TestController) => {
-            const [width, height] = DEFAULT_BROWSER_SIZE;
-            await t.resizeWindow(width, height);
+            if (!componentFolder.includes('accessibility')) {
+              const [width, height] = DEFAULT_BROWSER_SIZE;
+              await t.resizeWindow(width, height);
+            }
 
             if (args.shadowDom) {
               await addShadowRootTree(t);
@@ -268,12 +270,14 @@ createTestCafe(TESTCAFE_CONFIG)
     return retry(() => runner.run(runOptions), LAUNCH_RETRY_ATTEMPTS);
   })
   .then((failedCount: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     testCafe.close();
     process.exit(failedCount);
   })
   .catch((error: Error) => {
     console.error('TestCafe execution failed:', error);
     if (testCafe) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       testCafe.close();
     }
     process.exit(1);
