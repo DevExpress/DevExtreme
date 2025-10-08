@@ -6,13 +6,18 @@ import { Options } from '../../../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../../container.html'));
 
-const options: Options<Properties> = {
+const options1: Options<Properties> = {
   value: ['#f05b41'],
   label: [undefined, 'label'],
   showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const options2: Options<Properties> = {
+  value: ['#f05b41'],
+  label: [undefined, 'label'],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
-    undefined,
     [
       {
         name: 'today',
@@ -34,10 +39,16 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const configuration1: Configuration = {
   component: 'dxColorBox',
   a11yCheckConfig,
-  options,
+  options: options1,
+};
+const configuration2: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: options2,
 };
 
-testAccessibility(configuration);
+testAccessibility(configuration1);
+testAccessibility(configuration2);

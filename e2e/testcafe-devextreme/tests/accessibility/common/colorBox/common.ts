@@ -11,9 +11,7 @@ const options: Options<Properties> = {
   disabled: [true, false],
   readOnly: [true, false],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   opened: [true, false],
-  deferRendering: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
