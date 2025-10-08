@@ -297,6 +297,96 @@ test('Columns should be rendered correctly after reinit of columns controller', 
   },
 }));
 
+test('Columns reordering should work with virtual columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 100000 });
+
+  await t.drag(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
+    -110,
+    0,
+  );
+
+  await t
+    .expect(await takeScreenshot('data-grid__virtual-columns__reoder.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  allowColumnReordering: true,
+  height: 440,
+  dataSource: generateData(150, 500),
+  columns: generateColumns(500),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));
+
+test('Grouping should work with virtual columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 100000 });
+
+  await t.dragToElement(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
+    dataGrid.getGroupPanel().element,
+  );
+
+  await t
+    .expect(await takeScreenshot('data-grid__virtual-columns__grouping.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 440,
+  groupPanel: {
+    visible: true,
+  },
+  dataSource: generateData(150, 500),
+  columns: generateColumns(500),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));
+
+test('Column chooser should work with virtual columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 100000 });
+
+  await t.click(dataGrid.getColumnChooserButton());
+  await t.expect(
+    dataGrid.getColumnChooser().isOpened,
+  ).ok();
+
+  await t.dragToElement(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(499).element,
+    dataGrid.getColumnChooser().content,
+  );
+  await t
+    .expect(await takeScreenshot('data-grid__virtual-columns__column-chooser.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 440,
+  columnChooser: {
+    enabled: true,
+  },
+  dataSource: generateData(150, 500),
+  columns: generateColumns(500),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));
+
 test('Group row should have right colspan with summary, virtual columns and fixed columns (T1221369)', async (t) => {
   const grid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
