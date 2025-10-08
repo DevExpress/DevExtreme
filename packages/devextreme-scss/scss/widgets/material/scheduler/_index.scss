@@ -520,6 +520,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-popup {
+  > .dx-overlay-content {
+    border-radius: $material-scheduler-appointment-popup-border-radius;
+  }
+
   > .dx-overlay-content > .dx-toolbar.dx-widget {
     > .dx-toolbar-items-container {
       height: $material-scheduler-appointment-popup-toolbar-height;

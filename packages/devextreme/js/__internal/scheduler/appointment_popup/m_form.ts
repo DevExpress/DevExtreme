@@ -201,8 +201,8 @@ export class AppointmentForm {
         this.createSubjectGroup(),
         this.createDateRangeGroup(),
         this.createRepeatGroup(),
-        this.createDescriptionGroup(),
         this.createResourcesGroup(),
+        this.createDescriptionGroup(),
       ],
     } as GroupItem;
   }

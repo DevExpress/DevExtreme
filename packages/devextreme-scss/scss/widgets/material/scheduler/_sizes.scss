@@ -42,6 +42,7 @@ $agenda-appointment-title-font-size: null !default;
 $material-scheduler-header-height: null !default;
 $material-scheduler-header-offset: null !default;
 
+$material-scheduler-appointment-popup-border-radius: null !default;
 $material-scheduler-appointment-popup-toolbar-height: null !default;
 $material-scheduler-appointment-popup-toolbar-label-size: null !default;
 $material-scheduler-appointment-popup-icon-size: null !default;
@@ -83,6 +84,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-tooltip-title-margin-top: 4px !default;
   $material-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
 
+  $material-scheduler-appointment-popup-border-radius: 8px !default;
   $material-scheduler-appointment-popup-toolbar-height: 64px !default;
   $material-scheduler-appointment-popup-toolbar-label-size: 18px !default;
   $material-scheduler-appointment-popup-icon-size: 24px !default;
@@ -124,6 +126,7 @@ $scheduler-timeline-cell-height: 50px !default;
   $material-scheduler-appointment-tooltip-title-margin-top: 3px !default;
   $material-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
 
+  $material-scheduler-appointment-popup-border-radius: 4px !default;
   $material-scheduler-appointment-popup-toolbar-height: 52px !default;
   $material-scheduler-appointment-popup-toolbar-label-size: 16px !default;
   $material-scheduler-appointment-popup-icon-size: 18px !default;

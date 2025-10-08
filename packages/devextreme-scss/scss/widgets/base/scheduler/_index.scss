@@ -462,6 +462,10 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-appointment-popup {
+    .dx-popup-content {
+      overflow-x: hidden;
+    }
+
     .dx-form {
       /* Icons alignment */
       .dx-scheduler-form-group-with-icon .dx-box-item:has(.dx-scheduler-form-icon) {
