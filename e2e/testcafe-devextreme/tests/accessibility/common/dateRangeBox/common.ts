@@ -19,10 +19,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   multiView: [true, false],
   opened: [true, false],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   startDatePlaceholder: [undefined, 'startDatePlaceholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
 };

@@ -13,14 +13,19 @@ const initialValue = [
   new Date(now.getTime() + msInDay * 3),
 ];
 
-const options: Options<Properties> = {
+const regularOptions: Options<Properties> = {
   value: [initialValue],
   showClearButton: [true, false],
   showDropDownButton: [true, false],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const customOptions: Options<Properties> = {
+  value: [initialValue],
+  endDateInputAttr: [{ 'aria-label': 'aria-label' }],
+  startDateInputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
-    undefined,
     [
       {
         name: 'today',
@@ -42,10 +47,16 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const regularConfiguration: Configuration = {
   component: 'dxDateRangeBox',
   a11yCheckConfig,
-  options,
+  options: regularOptions,
+};
+const customConfiguration: Configuration = {
+  component: 'dxDateRangeBox',
+  a11yCheckConfig,
+  options: customOptions,
 };
 
-testAccessibility(configuration);
+testAccessibility(regularConfiguration);
+testAccessibility(customConfiguration);
