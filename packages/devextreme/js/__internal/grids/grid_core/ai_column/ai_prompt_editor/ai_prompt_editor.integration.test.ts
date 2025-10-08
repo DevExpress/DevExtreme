@@ -612,13 +612,13 @@ describe('Public Methods', () => {
     });
   });
 
-  describe('when updateApplyAndStopButtonsVisibility is called', () => {
+  describe('when toggleApplyButtonVisibility is called', () => {
     it('should show Apply and hide Stop when isApplyButtonVisible is true', () => {
       const { instance, POM } = createAiPromptEditor({
         popupOptions: { visible: true },
       });
 
-      instance.updateApplyAndStopButtonsVisibility(true);
+      instance.toggleApplyButtonVisibility(true);
 
       expect(POM.isApplyButtonVisible()).toBe(true);
       expect(POM.isStopButtonVisible()).toBe(false);
@@ -629,7 +629,7 @@ describe('Public Methods', () => {
         popupOptions: { visible: true },
       });
 
-      instance.updateApplyAndStopButtonsVisibility(false);
+      instance.toggleApplyButtonVisibility(false);
 
       expect(POM.isApplyButtonVisible()).toBe(false);
       expect(POM.isStopButtonVisible()).toBe(true);
@@ -645,12 +645,12 @@ describe('Public Methods', () => {
       expect(POM.isStopButtonVisible()).toBe(false);
 
       // Hide Apply, show Stop
-      instance.updateApplyAndStopButtonsVisibility(false);
+      instance.toggleApplyButtonVisibility(false);
       expect(POM.isApplyButtonVisible()).toBe(false);
       expect(POM.isStopButtonVisible()).toBe(true);
 
       // Show Apply, hide Stop
-      instance.updateApplyAndStopButtonsVisibility(true);
+      instance.toggleApplyButtonVisibility(true);
       expect(POM.isApplyButtonVisible()).toBe(true);
       expect(POM.isStopButtonVisible()).toBe(false);
     });

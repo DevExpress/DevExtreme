@@ -160,9 +160,9 @@ export class AiPromptEditor {
     this.editorInstance.option('disabled', disabled); // Update TextArea disable state
   }
 
-  public updateApplyAndStopButtonsVisibility(isApplyButtonVisible: boolean): void {
-    this.updateToolbarItemVisibility(1, isApplyButtonVisible); // Update Apply button visibility
-    this.updateToolbarItemVisibility(2, !isApplyButtonVisible); // Update Stop button visibility
+  public toggleApplyButtonVisibility(visible: boolean): void {
+    this.updateToolbarItemVisibility(1, visible); // Update Apply button visibility
+    this.updateToolbarItemVisibility(2, !visible); // Update Stop button visibility
   }
 
   public updateValue(value: string): void {
