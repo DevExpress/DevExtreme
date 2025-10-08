@@ -96,6 +96,7 @@ class Chat extends Widget<Properties> {
       showUserName: true,
       showMessageTimestamp: true,
       typingUsers: [],
+      fileUploaderOptions: {},
       onMessageEntered: undefined,
       reloadOnChange: true,
       onTypingStart: undefined,
@@ -410,6 +411,7 @@ class Chat extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      fileUploaderOptions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -420,6 +422,7 @@ class Chat extends Widget<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      fileUploaderOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -453,6 +456,14 @@ class Chat extends Widget<Properties> {
     const emptyViewId = this._messageList.getEmptyViewId();
 
     this._messageBox.updateInputAria(emptyViewId);
+  }
+
+  updateMessageBoxFileUrl(file: File, downloadUrl: string): void {
+    const fileInfo = this._messageBox._filesToSend?.get(file);
+
+    if (fileInfo) {
+      fileInfo.downloadUrl = downloadUrl;
+    }
   }
 
   _createMessageEnteredAction(): void {
@@ -519,13 +530,15 @@ class Chat extends Widget<Properties> {
   }
 
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
-    const { text, event } = e;
+    // @ts-expect-error
+    const { text, event, attachments } = e;
     const { user } = this.option();
 
     const message: Message = {
       timestamp: new Date(),
       author: user,
       text,
+      attachments,
     };
 
     // @ts-expect-error

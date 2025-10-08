@@ -1,3 +1,4 @@
+import { Properties as FileUploaderProperties } from './file_uploader';
 import {
     Format,
 } from '../common/core/localization';
@@ -249,6 +250,11 @@ export type TextMessage = MessageBase & {
      * @public
      */
     isEdited?: boolean;
+    /**
+     * @docid
+     * @public
+     */
+    attachments?: { fileName?: string; fileSize?: number; downloadUrl?: string }[];
 };
 
 /**
@@ -380,6 +386,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @default {}
+     * @public
+     */
+    fileUploaderOptions?: FileUploaderProperties;
     /**
      * @docid
      * @default null

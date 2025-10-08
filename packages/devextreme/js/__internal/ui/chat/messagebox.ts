@@ -4,17 +4,21 @@ import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
+import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import EditingPreview from '@ts/ui/chat/editing_preview';
+import FileUploader from '@ts/ui/file_uploader';
 import TextArea from '@ts/ui/m_text_area';
 
 import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
+export const CHAT_MESSAGEBOX_FILE_UPLOADER_CLASS = 'dx-chat-messagebox-file-uploader';
 export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+export const CHAT_MESSAGEBOX_FILE_UPLOADING_BUTTON_CLASS = 'dx-chat-messagebox-file-uploading-button';
 export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
@@ -25,6 +29,13 @@ export type MessageEnteredEvent =
   { text?: string };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
+
+export interface FileInfo {
+  isUploaded?: boolean;
+  fileName?: string;
+  downloadUrl?: string;
+  fileSize?: number;
+}
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
@@ -46,10 +57,18 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageUpdating?: (e: { text: string }) => void;
 
   text?: string;
+
+  fileUploaderOptions?: FileUploaderProperties;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: TextArea;
+
+  _fileUploader!: FileUploader;
+
+  _fileUploadingButton!: Button;
+
+  _filesToSend?: Map<File, FileInfo>;
 
   _button!: Button;
 
@@ -76,6 +95,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
       text: '',
+      fileUploaderOptions: {},
     };
   }
 
@@ -105,7 +125,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .appendTo(this.element());
 
     this._renderTextArea($messageBox);
+    this._renderUploadingButton($messageBox);
     this._renderButton($messageBox);
+    this._renderFileUploader(this.$element());
   }
 
   _cancelMessageEdit(): void {
@@ -134,6 +156,41 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
+  _renderFileUploader($parent: dxElementWrapper): void {
+    const $fileUploader = $('<div>').addClass(CHAT_MESSAGEBOX_FILE_UPLOADER_CLASS);
+    const { fileUploaderOptions } = this.option();
+    $parent.prepend($fileUploader);
+    this._filesToSend = new Map();
+
+    this._fileUploader = this._createComponent($fileUploader, FileUploader, {
+      ...fileUploaderOptions,
+      dialogTrigger: this._fileUploadingButton?.element(),
+      visible: false,
+      onValueChanged: ({ component, value }) => {
+        component.option('visible', value !== undefined && value.length > 0);
+      },
+      onUploadStarted: ({ file }) => {
+        this._filesToSend?.set(file, {
+          isUploaded: false,
+          fileName: file.name,
+          fileSize: file.size,
+        });
+        const shouldButtonBeDisabled = !this._isSendButtonActive();
+
+        this._toggleButtonDisableState(shouldButtonBeDisabled);
+      },
+      onUploaded: ({ file }) => {
+        const fileInfo = this._filesToSend?.get(file) ?? {};
+        fileInfo.isUploaded = true;
+
+        const shouldButtonBeDisabled = !this._isSendButtonActive();
+        this._toggleButtonDisableState(shouldButtonBeDisabled);
+      },
+      // uploadMode: 'useButtons',
+      uploadMode: 'instantly',
+    });
+  }
+
   _renderTextArea($parent: dxElementWrapper): void {
     const {
       activeStateEnabled,
@@ -155,7 +212,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       valueChangeEvent: 'input',
       maxHeight: '8em',
       onInput: (e: InputEvent): void => {
-        const shouldButtonBeDisabled = !this._isValuableTextEntered();
+        const shouldButtonBeDisabled = !this._isSendButtonActive();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
 
@@ -174,7 +231,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
 
     this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
-      if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
+      if (!event.shiftKey && this._isSendButtonActive() && !isMobile()) {
         event.preventDefault();
       }
     });
@@ -183,6 +240,27 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       if (this.option('text')) {
         this._cancelMessageEdit();
       }
+    });
+  }
+
+  _renderUploadingButton($parent: dxElementWrapper): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
+    const $button = $('<div>').addClass(CHAT_MESSAGEBOX_FILE_UPLOADING_BUTTON_CLASS);
+
+    $parent.append($button);
+
+    this._fileUploadingButton = this._createComponent<Button, ButtonProperties>($button, Button, {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      icon: 'attach',
+      type: 'default',
+      stylingMode: 'text',
     });
   }
 
@@ -257,7 +335,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
-    if (!this._isValuableTextEntered()) {
+    if (!this._isSendButtonActive()) {
       return;
     }
 
@@ -279,17 +357,41 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._textArea.reset();
     this._toggleButtonDisableState(true);
 
-    this._messageEnteredAction?.({ text, event: e.event });
+    const messageEnteredArgs = { text, event: e.event };
+
+    if (this._filesToSend?.size) {
+      // @ts-expect-error
+      messageEnteredArgs.attachments = this._getAttachments();
+    }
+    this._filesToSend?.clear();
+    this._fileUploader?.clear();
+
+    this._messageEnteredAction?.(messageEnteredArgs);
+  }
+
+  _getAttachments(): FileInfo[] | undefined {
+    if (!this._filesToSend?.size) {
+      return undefined;
+    }
+    return Array.from(this._filesToSend.values())
+      .filter(({ isUploaded }) => Boolean(isUploaded))
+      .map(({ fileName, fileSize, downloadUrl }) => ({ fileName, fileSize, downloadUrl }));
   }
 
   _toggleButtonDisableState(state: boolean): void {
     this._button.option('disabled', state);
   }
 
-  _isValuableTextEntered(): boolean {
+  _isSendButtonActive(): boolean {
     const { text } = this._textArea.option();
+    let allFilesAreReady = false;
 
-    return !!text?.trim();
+    if (this._filesToSend?.size) {
+      allFilesAreReady = Array.from(this._filesToSend.values())
+        .every((fileInfo) => fileInfo.isUploaded === true);
+    }
+
+    return !!text?.trim() || allFilesAreReady;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -355,7 +457,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _updateInputContainer(value: string | undefined): void {
     this._textArea.option('value', value);
 
-    const shouldButtonBeDisabled = !this._isValuableTextEntered();
+    const shouldButtonBeDisabled = !this._isSendButtonActive();
 
     this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
