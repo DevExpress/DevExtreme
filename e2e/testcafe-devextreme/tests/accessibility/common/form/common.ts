@@ -19,7 +19,6 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   alignItemLabels: [true, false],
   showOptionalMark: [true, false],
-  showColonAfterLabel: [true, false],
   formData: [formData],
 };
 

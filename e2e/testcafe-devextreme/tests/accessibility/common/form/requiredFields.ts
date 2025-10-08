@@ -17,7 +17,6 @@ const items: Properties['items'] = [{
 
 const options: Options<Properties> = {
   height: [200],
-  requiredMark: [undefined, '#'],
   showRequiredMark: [true, false],
   showValidationSummary: [true, false],
   items: [items],
