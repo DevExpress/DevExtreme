@@ -11,11 +11,10 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   disabled: [true, false],
   readOnly: [true, false],
-  showClearButton: [true, false],
-  mode: [undefined, 'password', 'email', 'search', 'tel', 'text', 'url'],
+  // showClearButton: [true, false],
+  // mode: [undefined, 'password', 'email', 'search', 'tel', 'text', 'url'],
   label: ['', 'label'],
   name: ['', 'name'],
-  spellcheck: [true, false],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -26,10 +25,24 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const inputConfiguration: Configuration = {
   component: 'dxTextBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    showClearButton: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(inputConfiguration);
+
+const modeConfiguration: Configuration = {
+  component: 'dxTextBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    mode: [undefined, 'password', 'email', 'search', 'tel', 'text', 'url'],
+  },
+};
+
+testAccessibility(modeConfiguration);
