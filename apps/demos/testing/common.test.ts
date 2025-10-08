@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
-import { ClientFunction } from 'testcafe';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
@@ -15,6 +14,7 @@ import {
   waitForAngularLoading,
   shouldSkipDemo,
   FRAMEWORKS,
+  execCode,
 } from '../utils/visual-tests/matrix-test-helper';
 import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
@@ -24,17 +24,6 @@ import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
-
-const execCode = ClientFunction((code) => {
-  // eslint-disable-next-line no-eval
-  const result = eval(code);
-  if (result && typeof result.then === 'function') {
-    // eslint-disable-next-line no-promise-executor-return
-    return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
-  }
-
-  return Promise.resolve();
-});
 
 const injectStyle = (style) => `
     var style = document.createElement('style');
@@ -60,13 +49,16 @@ const getTestSpecificSkipRules = (testName) => {
   }
 };
 
-FRAMEWORKS.forEach((approach) => {
+Object.values(FRAMEWORKS).forEach((approach) => {
   if (!shouldRunFramework(approach)) { return; }
   fixture(approach)
     .beforeEach(async (t) => {
       // eslint-disable-next-line spellcheck/spell-checker
       t.ctx.watchDogHandle = setTimeout(() => { throw new Error('test timeout exceeded'); }, 3 * 60 * 1000);
-      await t.resizeWindow(1000, 800);
+
+      if (process.env.STRATEGY !== 'accessibility') {
+        await t.resizeWindow(1000, 800);
+      }
     })
     // eslint-disable-next-line spellcheck/spell-checker
     .afterEach(async (t) => clearTimeout(t.ctx.watchDogHandle))
