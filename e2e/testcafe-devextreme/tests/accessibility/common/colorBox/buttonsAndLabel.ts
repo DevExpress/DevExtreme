@@ -9,7 +9,6 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: ['#f05b41'],
   label: [undefined, 'label'],
-  showClearButton: [true, false],
   showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [

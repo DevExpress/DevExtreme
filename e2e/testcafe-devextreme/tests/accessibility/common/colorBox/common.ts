@@ -10,7 +10,6 @@ const options: Options<Properties> = {
   value: [undefined, '#f05b41'],
   disabled: [true, false],
   readOnly: [true, false],
-  editAlphaChannel: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   opened: [true, false],
