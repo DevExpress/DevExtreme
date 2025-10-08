@@ -2,7 +2,7 @@
   "name": "devextreme-testcafe-tests",
   "version": "25.1.5",
   "scripts": {
-    "test": "node ./runner.js",
+    "test": "ts-node ./runner.ts",
     "lint": "eslint --ext .js,.ts .",
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
@@ -11,7 +11,7 @@
     "@babel/plugin-transform-runtime": "7.19.6",
     "@testcafe-community/axe": "3.5.0",
     "@types/jquery": "3.5.29",
-    "@typescript-eslint/eslint-plugin": "catalog:eslint8",
+    "@typescript-eslint/eslint-plugin": "catalog:eslint8",  
     "@typescript-eslint/parser": "catalog:eslint8",
     "axe-core": "4.10.3",
     "devextreme": "workspace:*",
@@ -27,6 +27,7 @@
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
-    "testcafe": "2.5.0"
+    "testcafe": "2.5.0",
+    "ts-node": "10.9.2"
   }
 }
