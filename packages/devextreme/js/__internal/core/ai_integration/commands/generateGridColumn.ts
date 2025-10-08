@@ -7,7 +7,7 @@ export class GenerateGridColumnCommand extends BaseCommand<
   GenerateGridColumnCommandResult
 > {
   protected getTemplateName(): PromptTemplateName {
-    return 'generateColumn';
+    return 'generateGridColumn';
   }
 
   protected buildPromptData(params: GenerateGridColumnCommandParams): PromptData {

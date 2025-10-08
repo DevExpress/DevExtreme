@@ -385,7 +385,6 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' },
             { emit: 'zoomLevelChange' }

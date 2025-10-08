@@ -12,7 +12,10 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { PanelLocation, Properties } from '@js/ui/drawer';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -138,7 +141,7 @@ class Drawer extends Widget<DrawerProperties> {
     super._initTemplates();
   }
 
-  _viewContentWrapperClickHandler(e: DxEvent<MouseEvent | PointerEvent | TouchEvent>): void {
+  _viewContentWrapperClickHandler(e: DxEvent<PointerInteractionEvent>): void {
     const { opened, shading } = this.option();
     let { closeOnOutsideClick } = this.option();
 

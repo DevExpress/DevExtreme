@@ -10,11 +10,15 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { isString } from '@js/core/utils/type';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { Properties } from '@js/ui/toast';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { OverlayProperties, PointerLikeEvent } from '@ts/ui/overlay/overlay';
+import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 
 const ready = readyCallbacks.add;
 
@@ -54,7 +58,7 @@ const DEFAULT_MARGIN = 20;
 ready(() => {
   const element = domAdapter.getDocument();
 
-  const callback = (e: PointerLikeEvent): void => {
+  const callback = (e: DxEvent<PointerInteractionEvent>): void => {
     for (let i = TOAST_STACK.length - 1; i >= 0; i -= 1) {
       if (!TOAST_STACK[i]._proxiedDocumentDownHandler?.(e)) {
         return;
@@ -281,7 +285,7 @@ class Toast<
   }
 
   // @ts-expect-error Violation of the Principle of Liskov Substitutability
-  // eslint-disable-next-line class-methods-use-this
+
   _overlayStack(): Toast[] {
     return TOAST_STACK;
   }

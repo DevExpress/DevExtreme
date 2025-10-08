@@ -29,14 +29,12 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 
 import { DxoSpeechToTextCustomSpeechRecognizerModule } from 'devextreme-angular/ui/speech-to-text/nested';
 import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular/ui/speech-to-text/nested';
-
-
 
 
 
@@ -53,6 +51,7 @@ import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular
     ]
 })
 export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
+
     instance: DxSpeechToText = null;
 
     
@@ -465,10 +464,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
 
 
 
