@@ -85,7 +85,7 @@ import {
 } from './m_columns_controller_utils';
 
 // const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'selection', 'drag', 'ai'];
-const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['buttons', 'ai'];
+const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['ai'];
 
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
