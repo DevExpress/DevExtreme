@@ -17,6 +17,7 @@ const config = {
   useJQuery: undefined,
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
+  copyStylesToShadowDom: true,
 
   floatingActionButtonConfig: {
     icon: 'add',

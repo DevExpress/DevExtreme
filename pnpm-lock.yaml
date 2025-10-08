@@ -7,14 +7,14 @@ settings:
 catalogs:
   default:
     devexpress-diagram:
-      specifier: 2.2.19
-      version: 2.2.19
+      specifier: 2.2.24
+      version: 2.2.24
     devexpress-gantt:
       specifier: 4.1.62
       version: 4.1.62
     devextreme-quill:
-      specifier: 1.7.4
-      version: 1.7.4
+      specifier: 1.7.6
+      version: 1.7.6
 
 overrides:
   '@devexpress/callsite-record@^4.1.6': 4.1.6
@@ -251,7 +251,7 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
@@ -275,7 +275,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.7.6
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -870,7 +870,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
@@ -885,7 +885,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.7.6
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1018,13 +1018,13 @@ importers:
         version: 3.0.13
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.19
+        version: 2.2.24
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.62
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.4
+        version: 1.7.6
       inferno:
         specifier: ^7.4.9
         version: 7.4.11
@@ -3307,6 +3307,9 @@ packages:
 
   '@devexpress/utils@1.4.3':
     resolution: {integrity: sha512-UmmIwVRGQ6u6itE/zJ1xNmMuugXo/t1fWBtjROb7mhq2nY4ecDBdnRIqogKWAasGbMbhCxW9+ijkgRaNBVCIzQ==}
+
+  '@devexpress/utils@1.4.8':
+    resolution: {integrity: sha512-XVqyeYjqWjbcAUOxaUc6f93MATuVyFE2eec10Qm7X3/QLkKPBh2cJt5OOw4bkW4fC8SG8NZwjVITt08Tr+CXpQ==}
 
   '@devextreme-generator/angular@3.0.12':
     resolution: {integrity: sha512-u5h6ego2TqZuVcV43eEisD4/xmlGSOifXXcL9nU+3G8BCxLPhJ3eCq3EHlnN2y0j1Zmiy+oMGNGID3+DOl5MIQ==}
@@ -9660,8 +9663,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.19:
-    resolution: {integrity: sha512-obmeIqphCGJ9WQuWYCDc0cNB5gIZHc+NS5UNXFhuHZwnOUaKtruCTfE/YIxXEHSD7Arc2pkfodeIa2cDtUo9lw==}
+  devexpress-diagram@2.2.24:
+    resolution: {integrity: sha512-PD3mW50OFS44PnqUq2ywJHYDeNFWCIPhXCeLHkzg2BEdDufGGpW73Ux5z3F9NtW91sP0qNE1f1PrsR+3CIN0jA==}
 
   devexpress-gantt@4.1.62:
     resolution: {integrity: sha512-8ULKoAyStlFnATNkkYFZWB7eQHrxJPallq04+HHiu9fn1TIRz0SgYlQdZuXoOmEhcRhaNwk5d+38sJ6OMC0HnQ==}
@@ -9684,8 +9687,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.4:
-    resolution: {integrity: sha512-Jb8rkK/frapLCZjQuVszyQdDSpJd7L84Zpym5c4KNS3oCDe8idXGaeRG1JP1rE5g2HjHTVQDwKBT1nOwMyCpkw==}
+  devextreme-quill@1.7.6:
+    resolution: {integrity: sha512-tIAnvHcQYarpPQwhjO9HaKmB4oDRdz/DPZ8Edo5EFeiYWcejgCl6kSeLgGoFWprPWlWkQUIZI3kBJXDRbXIOBg==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -21938,6 +21941,10 @@ snapshots:
     dependencies:
       tslib: 2.3.1
 
+  '@devexpress/utils@1.4.8':
+    dependencies:
+      tslib: 2.3.1
+
   '@devextreme-generator/angular@3.0.12(lwsxw2kgboo7ei5ffbskpgie2a)':
     dependencies:
       '@devextreme-generator/core': 3.0.12(lwsxw2kgboo7ei5ffbskpgie2a)
@@ -23805,15 +23812,13 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -23873,7 +23878,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24288,7 +24293,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -29945,9 +29950,9 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.19:
+  devexpress-diagram@2.2.24:
     dependencies:
-      '@devexpress/utils': 1.4.3
+      '@devexpress/utils': 1.4.8
       es6-object-assign: 1.1.0
 
   devexpress-gantt@4.1.62:
@@ -29978,7 +29983,7 @@ snapshots:
       winston: 3.10.0
       yargs: 17.7.2
 
-  devextreme-quill@1.7.4:
+  devextreme-quill@1.7.6:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7

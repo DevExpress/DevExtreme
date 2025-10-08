@@ -339,6 +339,15 @@ QUnit.test('Legend update should call trigger core content rerender', function(a
     assert.strictEqual(gauge.renderCount, initialRenderCount + 1);
 });
 
+QUnit.test('gauge legend should have the same reference to _incidentOccurred as gauge itself (T1307508)', function(assert) {
+    const gauge = this.createGauge({});
+
+    const gaugeIncidentOccurred = gauge._incidentOccurred;
+    const legendIncidentOccurred = gauge._themeManager.theme('legend')._incidentOccurred;
+
+    assert.strictEqual(gaugeIncidentOccurred, legendIncidentOccurred, 'functions are the same');
+});
+
 QUnit.module('Center Template', environment);
 
 QUnit.test('Should create group for center template on widget creating', function(assert) {

@@ -3,9 +3,9 @@ import 'common/data/odata/store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import { LocalStore } from 'ui/pivot_grid/local_store';
-import { sort } from 'ui/pivot_grid/data_source.utils';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
+import { LocalStore } from '__internal/grids/pivot_grid/local_store/m_local_store';
+import { sort } from '__internal/grids/pivot_grid/data_source/m_data_source_utils';
+import pivotGridUtils from '__internal/grids/grid_core/m_utils';
 import config from 'core/config';
 import formatHelper from 'format_helper';
 import ajaxMock from '../../helpers/ajaxMock.js';
