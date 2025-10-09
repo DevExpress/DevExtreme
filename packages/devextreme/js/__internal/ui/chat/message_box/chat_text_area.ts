@@ -23,7 +23,7 @@ export type Properties = TextAreaProperties & {
   onSend?: (e: ClickEvent | EnterKeyEvent) => void;
 };
 
-class TextAreaOnSteroids extends TextArea<Properties> {
+class ChatTextArea extends TextArea<Properties> {
   _$toolbar?: dxElementWrapper | null;
 
   _toolbar?: Toolbar | null;
@@ -251,4 +251,4 @@ class TextAreaOnSteroids extends TextArea<Properties> {
   }
 }
 
-export default TextAreaOnSteroids;
+export default ChatTextArea;
