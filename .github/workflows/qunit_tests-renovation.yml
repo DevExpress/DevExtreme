@@ -65,7 +65,7 @@ jobs:
     - name: Zip artifacts
       working-directory: ./packages/devextreme
       run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles testing/tests/Renovation/widgets.json
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.htmlEditor, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
+        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.htmlEditor, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz ]
 
     steps:
     - name: Get sources

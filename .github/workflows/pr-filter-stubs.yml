@@ -178,13 +178,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  qunit_tests12:
-    name: 'Constel renovation'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   # testcafe_tests.yml
   testcafe_tests_accessibility_1:
     name: 'accessibility (1/7)'
