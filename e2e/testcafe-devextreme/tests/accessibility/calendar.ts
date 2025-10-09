@@ -11,7 +11,6 @@ const now = new Date().getTime();
 
 const options: Options<Properties> = {
   name: ['', 'name'],
-  hint: [undefined, 'hint'],
   disabled: [true, false],
   readOnly: [true, false],
 };

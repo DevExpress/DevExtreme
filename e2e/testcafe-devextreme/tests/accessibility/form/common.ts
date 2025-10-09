@@ -16,7 +16,6 @@ const formData = {
 
 const options: Options<Properties> = {
   height: [200],
-  hint: [undefined, 'hint'],
   alignItemLabels: [true, false],
   showOptionalMark: [true, false],
   formData: [formData],

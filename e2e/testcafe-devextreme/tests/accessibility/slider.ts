@@ -53,7 +53,6 @@ const appearanceConfiguration: Configuration = {
   a11yCheckConfig,
   options: {
     ...options,
-    hint: [undefined, 'hint'],
     name: ['', 'name'],
     height: [undefined, 250],
     width: [undefined, '50%'],

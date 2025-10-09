@@ -48,7 +48,6 @@ const infoConfiguration: Configuration = {
   a11yCheckConfig,
   options: {
     ...options,
-    hint: [undefined, 'hint'],
     name: ['', 'name'],
   },
 };
