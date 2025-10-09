@@ -52,6 +52,9 @@ export class AiPromptEditor {
   private getPopupConfig(): PopupProperties {
     return {
       ...DEFAULT_POPUP_OPTIONS,
+      shading: false,
+      shadingColor: 'transparent',
+      hideOnOutsideClick: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: CLASSES.aiPromptEditor },
       contentTemplate: ($container): void => {
@@ -139,6 +142,18 @@ export class AiPromptEditor {
     this.value = getValue(value);
   }
 
+  private toggleDisableState(disabled: boolean): void {
+    this.updateButtonOption(0, 'disabled', disabled ? true : !this.value); // Update the disable state of the Regenerate data button
+    this.updateButtonOption(
+      1,
+      'disabled',
+      disabled ? true : !isValueChanged(this.value, this.editorInstance.option('value')),
+    ); // Update the disable state of the Apply button
+    this.editorInstance.option('disabled', disabled); // Update TextArea disable state
+    this.popupInstance.option('shading', disabled);
+    this.popupInstance.option('hideOnOutsideClick', !disabled);
+  }
+
   public getEditorValue(): string {
     return this.editorInstance.option('value') as string;
   }
@@ -153,16 +168,6 @@ export class AiPromptEditor {
 
   public isVisible(): boolean {
     return this.popupInstance.option('visible') === true;
-  }
-
-  public toggleDisableState(disabled: boolean): void {
-    this.updateButtonOption(0, 'disabled', disabled ? true : !this.value); // Update the disable state of the Regenerate data button
-    this.updateButtonOption(
-      1,
-      'disabled',
-      disabled ? true : !isValueChanged(this.value, this.editorInstance.option('value')),
-    ); // Update the disable state of the Apply button
-    this.editorInstance.option('disabled', disabled); // Update TextArea disable state
   }
 
   public toggleApplyButtonVisibility(visible: boolean): void {
@@ -196,12 +201,6 @@ export class AiPromptEditor {
       case 'regenerate':
         this.setLoading(true);
         this.toggleDisableState(true);
-        break;
-
-      case 'stop':
-        this.setLoading(false);
-        this.toggleDisableState(false);
-        this.toggleApplyButtonVisibility(true);
         break;
 
       default:

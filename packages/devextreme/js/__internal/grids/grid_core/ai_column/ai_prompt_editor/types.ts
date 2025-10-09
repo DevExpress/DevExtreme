@@ -12,8 +12,9 @@ export interface AiPromptEditorOptions {
   onSubmit?: () => void;
   onRefresh?: () => void;
   onStop?: () => void;
+  onClose?: () => void;
   popupOptions?: PopupProperties;
   editorOptions?: TextAreaProperties;
 }
 
-export type AiPromptEditorAction = 'apply' | 'stop' | 'regenerate';
+export type AiPromptEditorAction = 'apply' | 'regenerate';

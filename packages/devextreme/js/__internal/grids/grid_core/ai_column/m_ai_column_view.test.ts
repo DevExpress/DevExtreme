@@ -149,7 +149,8 @@ describe('AiColumnView', () => {
           onSubmit: expect.any(Function),
           onRefresh: expect.any(Function),
           popupOptions: {
-            shading: false,
+            container: document.body,
+            onHiding: expect.any(Function),
             position: {
               my: 'right top',
               at: 'right bottom',
@@ -341,18 +342,25 @@ describe('AiColumnView', () => {
           aiPromptEditorPOM,
         } = createAiColumnView();
 
+        mockAiColumnController.sendAIColumnRequest
+          .mockImplementation((_, callBacks) => {
+            setTimeout(() => {
+              (callBacks as any).onComplete.call(aiColumnView);
+            });
+          });
+
         await aiColumnView.showPromptEditor($cellElement, mockColumn);
 
         const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
         aiPromptEditorPOM.changeTextAreaValue('test prompt');
         aiPromptEditorPOM.getApplyButtonElement().click();
-
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('apply');
+        (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
 
         aiPromptEditorPOM.getStopButtonElement().click();
+        jest.runAllTimers();
 
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
         expect(mockAiColumnController.abortAIColumnRequest).toHaveBeenCalledTimes(1);
       });
     });
@@ -436,6 +444,25 @@ describe('AiColumnView', () => {
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+      });
+    });
+
+    describe('onHiding', () => {
+      it('should update prompt editor state and abort AI request', async () => {
+        const {
+          $cellElement,
+          aiColumnView,
+        } = createAiColumnView();
+
+        await aiColumnView.showPromptEditor($cellElement, mockColumn);
+
+        const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+
+        await aiColumnView.hidePromptEditor();
+
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
+        expect(mockAiColumnController.abortAIColumnRequest).toHaveBeenCalledTimes(1);
       });
     });
   });

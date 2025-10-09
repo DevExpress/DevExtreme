@@ -73,6 +73,9 @@ describe('AiPromptEditor', () => {
           width: 360,
           height: 'auto',
           title: 'AI Prompt Editor',
+          hideOnOutsideClick: true,
+          shading: false,
+          shadingColor: 'transparent',
           contentTemplate: expect.any(Function),
           wrapperAttr: { class: 'dx-ai-prompt-editor' },
           toolbarItems: [
@@ -582,62 +585,6 @@ describe('Public Methods', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  describe('when toggleDisableState is called', () => {
-    it('should disable all controls when disabled is true', () => {
-      const { instance, POM } = createAiPromptEditor({
-        value: 'initial text',
-        popupOptions: { visible: true },
-      });
-
-      // Initially enabled
-      expect(POM.isRefreshButtonDisabled()).toBe(false);
-      expect(POM.isApplyButtonDisabled()).toBe(true); // Apply is disabled because no changes
-      expect(POM.getTextArea().disabled).toBe(false);
-
-      instance.toggleDisableState(true);
-
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-      expect(POM.getTextArea().disabled).toBe(true);
-    });
-
-    it('should enable controls based on state when disabled is false', () => {
-      const { instance, POM } = createAiPromptEditor({
-        value: 'initial text',
-        popupOptions: { visible: true },
-      });
-
-      // Disable first
-      instance.toggleDisableState(true);
-      // Then enable
-      instance.toggleDisableState(false);
-
-      expect(POM.isRefreshButtonDisabled()).toBe(false); // Should be enabled because value exists
-      expect(POM.isApplyButtonDisabled()).toBe(true); // Should remain disabled because no changes
-      expect(POM.getTextArea().disabled).toBe(false);
-    });
-
-    describe('when no initial value is provided', () => {
-      it('should enable controls based on state when disabled is false', () => {
-        const { instance, POM } = createAiPromptEditor({
-          popupOptions: { visible: true },
-        });
-
-        // Disable first
-        instance.toggleDisableState(true);
-        // Then enable
-        instance.toggleDisableState(false);
-
-        expect(POM.isRefreshButtonDisabled())
-          .toBe(true); // Should be disabled because value is empty
-        expect(POM.isApplyButtonDisabled())
-          .toBe(true); // Should remain disabled because no changes
-        expect(POM.getTextArea().disabled)
-          .toBe(false);
-      });
-    });
-  });
-
   describe('when toggleApplyButtonVisibility is called', () => {
     it('should show Apply and hide Stop when isApplyButtonVisible is true', () => {
       const { instance, POM } = createAiPromptEditor({
@@ -799,6 +746,8 @@ describe('Public Methods', () => {
         expect(POM.isProgressBarVisible()).toBe(false);
         expect(POM.isApplyButtonVisible()).toBe(true);
         expect(POM.isStopButtonVisible()).toBe(false);
+        expect(POM.getPopupInstance().option('shading')).toBe(false);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
 
         instance.updateStateOnAction('apply');
 
@@ -808,6 +757,8 @@ describe('Public Methods', () => {
         expect(POM.getTextArea().disabled).toBe(true);
         expect(POM.isApplyButtonVisible()).toBe(false);
         expect(POM.isStopButtonVisible()).toBe(true);
+        expect(POM.getPopupInstance().option('shading')).toBe(true);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
       });
     });
 
@@ -824,6 +775,8 @@ describe('Public Methods', () => {
         expect(POM.isRefreshButtonDisabled()).toBe(false);
         expect(POM.getTextArea().disabled).toBe(false);
         expect(POM.isProgressBarVisible()).toBe(false);
+        expect(POM.getPopupInstance().option('shading')).toBe(false);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
 
         instance.updateStateOnAction('regenerate');
 
@@ -834,10 +787,12 @@ describe('Public Methods', () => {
         // Apply button visibility should remain unchanged for regenerate action
         expect(POM.isApplyButtonVisible()).toBe(true);
         expect(POM.isStopButtonVisible()).toBe(false);
+        expect(POM.getPopupInstance().option('shading')).toBe(true);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
       });
     });
 
-    describe('with stop action', () => {
+    describe('without action parameter', () => {
       it('should clear loading, enable controls and show apply button', () => {
         const { instance, POM } = createAiPromptEditor({
           value: 'initial text',
@@ -855,37 +810,8 @@ describe('Public Methods', () => {
         expect(POM.getTextArea().disabled).toBe(true);
         expect(POM.isApplyButtonVisible()).toBe(false);
         expect(POM.isStopButtonVisible()).toBe(true);
-
-        instance.updateStateOnAction('stop');
-
-        expect(POM.isProgressBarVisible()).toBe(false);
-        // Should be enabled because text was changed
-        expect(POM.isApplyButtonDisabled()).toBe(false);
-        expect(POM.isRefreshButtonDisabled()).toBe(false);
-        expect(POM.getTextArea().disabled).toBe(false);
-        expect(POM.isApplyButtonVisible()).toBe(true);
-        expect(POM.isStopButtonVisible()).toBe(false);
-      });
-    });
-
-    describe('with default action', () => {
-      it('should clear loading, enable controls and show apply button', () => {
-        const { instance, POM } = createAiPromptEditor({
-          value: 'initial text',
-          popupOptions: { visible: true },
-        });
-
-        // First set to apply state
-        POM.changeTextAreaValue('changed text');
-        instance.updateStateOnAction('apply');
-
-        // Verify apply state is set
-        expect(POM.isProgressBarVisible()).toBe(true);
-        expect(POM.isApplyButtonDisabled()).toBe(true);
-        expect(POM.isRefreshButtonDisabled()).toBe(true);
-        expect(POM.getTextArea().disabled).toBe(true);
-        expect(POM.isApplyButtonVisible()).toBe(false);
-        expect(POM.isStopButtonVisible()).toBe(true);
+        expect(POM.getPopupInstance().option('shading')).toBe(true);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
 
         instance.updateStateOnAction();
 
@@ -896,6 +822,8 @@ describe('Public Methods', () => {
         expect(POM.getTextArea().disabled).toBe(false);
         expect(POM.isApplyButtonVisible()).toBe(true);
         expect(POM.isStopButtonVisible()).toBe(false);
+        expect(POM.getPopupInstance().option('shading')).toBe(false);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
       });
     });
   });

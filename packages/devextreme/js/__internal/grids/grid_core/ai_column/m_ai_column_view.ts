@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import domAdapter from '@ts/core/m_dom_adapter';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import { View } from '../m_modules';
@@ -39,7 +40,7 @@ export class AiColumnView extends View {
         );
       },
       onStop: (): void => {
-        this.promptEditorInstance.updateStateOnAction('stop');
+        this.promptEditorInstance.updateStateOnAction();
         this.aiColumnController.abortAIColumnRequest();
       },
       onRefresh: (): void => {
@@ -56,7 +57,11 @@ export class AiColumnView extends View {
         });
       },
       popupOptions: {
-        shading: false,
+        container: domAdapter.getBody(),
+        onHiding: (): void => {
+          this.promptEditorInstance.updateStateOnAction();
+          this.aiColumnController.abortAIColumnRequest();
+        },
         position: {
           my: `${alignment} top`,
           at: `${alignment} bottom`,
