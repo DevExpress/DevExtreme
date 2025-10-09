@@ -2,6 +2,7 @@ import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
+import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -31,6 +32,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   focusStateEnabled?: boolean;
 
   hoverStateEnabled?: boolean;
+
+  fileUploaderOptions?: FileUploaderProperties;
 
   text?: string;
 
@@ -65,6 +68,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      fileUploaderOptions: undefined,
       text: '',
       onMessageEntered: undefined,
       onMessageEditCanceled: undefined,
@@ -238,28 +242,32 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
-      case 'hoverStateEnabled': {
+      case 'hoverStateEnabled':
         this._textArea.option(name, value);
         this._editingPreview?.option(name, value);
         break;
-      }
+
+      case 'fileUploaderOptions':
+        this._textArea.option(name, value);
+        break;
+
       case 'onMessageEntered':
         this._createMessageEnteredAction();
-
         break;
+
       case 'onTypingStart':
         this._createTypingStartAction();
-
         break;
+
       case 'onTypingEnd':
         this._createTypingEndAction();
-
         break;
+
       case 'text':
         this._updateEditingPreview(value);
         this._textArea.option('value', value);
-
         break;
+
       default:
         super._optionChanged(args);
     }

@@ -3,10 +3,14 @@ import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight } from '@js/core/utils/size';
-import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
+import type {
+  ClickEvent,
+  InitializedEvent,
+} from '@js/ui/button';
 import type Button from '@js/ui/button';
+import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { EnterKeyEvent } from '@js/ui/text_area';
-import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -20,6 +24,8 @@ const TEXT_AREA_WITH_TOOLBAR = 'dx-textarea-with-toolbar';
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
 export type Properties = TextAreaProperties & {
+  fileUploaderOptions?: FileUploaderProperties;
+
   onSend?: (e: ClickEvent | EnterKeyEvent) => void;
 };
 
@@ -41,6 +47,7 @@ class ChatTextArea extends TextArea<Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '8em',
+      fileUploaderOptions: undefined,
     };
   }
 
@@ -93,90 +100,78 @@ class ChatTextArea extends TextArea<Properties> {
     );
   }
 
-  _getToolbarItems(): ToolbarProperties['items'] {
+  _getToolbarItems(): ToolbarItem[] {
+    const { fileUploaderOptions } = this.option();
+
     const items = [
-      ...this._getDefaultBeforeToolbarItems() ?? [],
-      ...this._getDefaultAfterToolbarItems() ?? [],
+      this._getSendButtonConfig(),
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    if (fileUploaderOptions) {
+      items.push(this._getFileUploaderButtonConfig());
+    }
+
     return items;
   }
 
-  _getDefaultBeforeToolbarItems(): ToolbarProperties['items'] {
+  _getFileUploaderButtonConfig(): ToolbarItem {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
-    const items = [
-      {
-        widget: 'dxButton',
-        location: 'before',
-        options: {
-          activeStateEnabled,
-          focusStateEnabled,
-          hoverStateEnabled,
-          icon: 'attach',
-          onClick: (): void => {
-            // eslint-disable-next-line no-alert
-            alert('FileUpploader integration');
-          },
+    const configuration = {
+      widget: 'dxButton',
+      location: 'before',
+      options: {
+        activeStateEnabled,
+        focusStateEnabled,
+        hoverStateEnabled,
+        icon: 'attach',
+        /** TO REMOVE */
+        onClick: (): void => {
+          // eslint-disable-next-line no-alert
+          alert('FileUpploader integration');
         },
       },
-    ];
+    } as ToolbarItem;
 
-    return items;
+    return configuration;
   }
 
-  _getDefaultAfterToolbarItems(): ToolbarProperties['items'] {
+  _getSendButtonConfig(): ToolbarItem {
     const {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      /** Filter items if unavailable */
-      // speechToTextEnabled,
-      // attachmentsEnabled,
     } = this.option();
 
-    const items = [
-      {
-        widget: 'dxSpeechToText',
-        location: 'after',
-        options: {
-          activeStateEnabled,
-          focusStateEnabled,
-          hoverStateEnabled,
-          stylingMode: 'text',
+    const configuration = {
+      widget: 'dxButton' as const,
+      location: 'after' as const,
+      options: {
+        activeStateEnabled,
+        focusStateEnabled,
+        hoverStateEnabled,
+        icon: 'arrowright',
+        type: 'default',
+        stylingMode: 'contained',
+        disabled: true,
+        elementAttr: {
+          class: CHAT_MESSAGEBOX_BUTTON_CLASS,
+          'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
+        },
+        onClick: (e: ClickEvent): void => {
+          this._processSendPress(e);
+        },
+        onInitialized: (e: InitializedEvent): void => {
+          this._sendButton = e.component;
         },
       },
-      {
-        widget: 'dxButton',
-        location: 'after',
-        options: {
-          activeStateEnabled,
-          focusStateEnabled,
-          hoverStateEnabled,
-          icon: 'arrowright',
-          type: 'default',
-          stylingMode: 'contained',
-          disabled: true,
-          elementAttr: {
-            class: CHAT_MESSAGEBOX_BUTTON_CLASS,
-            'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
-          },
-          onClick: (e: ClickEvent): void => {
-            this._processSendPress(e);
-          },
-          onInitialized: (e): void => {
-            this._sendButton = e.component;
-          },
-        } as ButtonProperties,
-      },
-    ];
+    };
 
-    return items;
+    return configuration;
   }
 
   _toggleButtonDisableState(state: boolean): void {
@@ -193,7 +188,6 @@ class ChatTextArea extends TextArea<Properties> {
     return sum;
   }
 
-  /** Trigger of onInput-action */
   _keyPressHandler(e: InputEvent): void {
     super._keyPressHandler(e);
 
