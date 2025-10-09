@@ -19,8 +19,7 @@ safeSizeTest('ContextMenu items render', async (t) => {
     .pressKey('down')
     .pressKey('up')
     .pressKey('right')
-    .pressKey('up')
-    .wait(600);
+    .pressKey('up');
 
   await testScreenshot(t, takeScreenshot, 'ContextMenu scrolling.png');
 
