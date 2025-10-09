@@ -9,11 +9,11 @@ import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
+import Popover from '@ts/ui/popover/m_popover';
 
 import {
   addItem, convertToInnerStructure,
@@ -871,7 +871,7 @@ class FilterBuilder extends Widget<any> {
     const $popup = $('<div>')
       .addClass(options.menu.cssClass).appendTo($container);
     // @ts-expect-error
-    this._createComponent($popup, Popup, {
+    this._createComponent($popup, Popover, {
       onHiding: options.menu.onHiding,
       onHidden: options.menu.onHidden,
       rtlEnabled: options.menu.rtlEnabled,
@@ -892,8 +892,6 @@ class FilterBuilder extends Widget<any> {
       },
       visible: true,
       focusStateEnabled: false,
-      preventScrollEvents: false,
-      container: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
@@ -901,7 +899,6 @@ class FilterBuilder extends Widget<any> {
       height: 'auto',
       showTitle: false,
       _wrapperClassExternal: options.menu.cssClass,
-      _ignorePreventScrollEventsDeprecation: true,
     });
   }
 
