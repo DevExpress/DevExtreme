@@ -116,7 +116,7 @@ import {
 } from "devextreme/ui/filter_builder";
 import {
  dxLoadPanelOptions,
- LoadPanelIndicatorOptions,
+ LoadPanelIndicatorProperties,
  ContentReadyEvent as LoadPanelContentReadyEvent,
  DisposingEvent as LoadPanelDisposingEvent,
  HiddenEvent,
@@ -2295,7 +2295,7 @@ const DxLoadPanelConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object as PropType<LoadPanelIndicatorOptions | Record<string, any>>,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],

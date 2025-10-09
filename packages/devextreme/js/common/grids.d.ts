@@ -57,7 +57,7 @@ import {
   SimpleItem,
 } from '../ui/form';
 
-import { LoadPanelIndicatorOptions } from '../ui/load_panel';
+import { LoadPanelIndicatorProperties } from '../ui/load_panel';
 
 import {
   Properties as PopupProperties,
@@ -2600,7 +2600,7 @@ export type LoadPanel = {
   /**
    * @docid GridBaseOptions.loadPanel.indicatorOptions
    */
-  indicatorOptions?: LoadPanelIndicatorOptions;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   /**
    * @docid GridBaseOptions.loadPanel.shading
    * @default false

@@ -28,7 +28,7 @@ import type { Component } from "devextreme/core/component";
 import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { LoadPanelIndicatorOptions } from "devextreme/ui/load_panel";
+import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
 import type dxOverlay from "devextreme/ui/overlay";
 import type DOMComponent from "devextreme/core/dom_component";
@@ -2210,7 +2210,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | Mode;
   height?: number | string;
-  indicatorOptions?: LoadPanelIndicatorOptions;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;

@@ -6,7 +6,7 @@ import {
  event,
 } from "devextreme/events/events.types";
 import {
- LoadPanelIndicatorOptions,
+ LoadPanelIndicatorProperties,
  ContentReadyEvent,
  DisposingEvent,
  HiddenEvent,
@@ -88,7 +88,7 @@ const componentConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    indicatorOptions: Object as PropType<LoadPanelIndicatorOptions | Record<string, any>>,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],

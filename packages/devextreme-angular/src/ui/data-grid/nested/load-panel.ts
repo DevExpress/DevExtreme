@@ -15,7 +15,7 @@ import {
 
 
 import { Mode } from 'devextreme/common';
-import { LoadPanelIndicatorOptions } from 'devextreme/ui/load_panel';
+import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -50,10 +50,10 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get indicatorOptions(): LoadPanelIndicatorOptions {
+    get indicatorOptions(): LoadPanelIndicatorProperties {
         return this._getOption('indicatorOptions');
     }
-    set indicatorOptions(value: LoadPanelIndicatorOptions) {
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
         this._setOption('indicatorOptions', value);
     }
 

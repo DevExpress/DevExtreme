@@ -246,7 +246,7 @@ import {
  ShowTextMode,
 } from "devextreme/ui/toolbar";
 import {
- LoadPanelIndicatorOptions,
+ LoadPanelIndicatorProperties,
 } from "devextreme/ui/load_panel";
 import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -2859,7 +2859,7 @@ const DxLoadPanelConfig = {
   props: {
     enabled: [Boolean, String] as PropType<boolean | Mode>,
     height: [Number, String],
-    indicatorOptions: Object as PropType<LoadPanelIndicatorOptions | Record<string, any>>,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,

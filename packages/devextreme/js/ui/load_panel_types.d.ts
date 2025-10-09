@@ -1,5 +1,5 @@
 export {
-  LoadPanelIndicatorOptions,
+  LoadPanelIndicatorProperties,
   ContentReadyEvent,
   DisposingEvent,
   HidingEvent,

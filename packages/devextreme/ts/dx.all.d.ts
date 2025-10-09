@@ -773,7 +773,7 @@ declare module DevExpress {
     /**
      * [descr:ExportLoadPanel.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:ExportLoadPanel.showPane]
      */
@@ -6223,7 +6223,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:GridBaseOptions.loadPanel.shading]
      */
@@ -22311,23 +22311,23 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadPanel>;
     /**
-     * [descr:LoadPanelIndicatorOptions]
+     * [descr:LoadPanelIndicatorProperties]
      */
-    export type LoadPanelIndicatorOptions = {
+    export type LoadPanelIndicatorProperties = {
       /**
-       * [descr:LoadPanelIndicatorOptions.animationType]
+       * [descr:LoadPanelIndicatorProperties.animationType]
        */
       animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
       /**
-       * [descr:LoadPanelIndicatorOptions.src]
+       * [descr:LoadPanelIndicatorProperties.src]
        */
       src?: string;
       /**
-       * [descr:LoadPanelIndicatorOptions.height]
+       * [descr:LoadPanelIndicatorProperties.height]
        */
       height?: number | string | undefined;
       /**
-       * [descr:LoadPanelIndicatorOptions.width]
+       * [descr:LoadPanelIndicatorProperties.width]
        */
       width?: number | string | undefined;
     };
@@ -22397,7 +22397,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.indicatorOptions]
      */
-    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorOptions;
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */

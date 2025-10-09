@@ -29,7 +29,7 @@ import { LoadingAnimationType } from './load_indicator';
  * @docid
  * @public
  */
-export type LoadPanelIndicatorOptions = {
+export type LoadPanelIndicatorProperties = {
     /**
      * @docid
      * @default 'circle'
@@ -170,7 +170,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @public
      */
-    indicatorOptions?: LoadPanelIndicatorOptions;
+    indicatorOptions?: LoadPanelIndicatorProperties;
     /**
      * @docid
      * @default 60 &for(Material)
