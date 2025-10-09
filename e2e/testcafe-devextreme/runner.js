@@ -17,7 +17,6 @@ const TESTCAFE_CONFIG = {
     port1: 1437,
     port2: 1438,
     // eslint-disable-next-line spellcheck/spell-checker
-    experimentalProxyless: true,
 };
 
 const changeTheme = async(t, themeName) => createTestCafe.ClientFunction(() => new Promise((resolve) => {
@@ -103,7 +102,7 @@ createTestCafe(TESTCAFE_CONFIG)
             }
         });
 
-        runner.concurrency(args.concurrency || 3);
+        runner.concurrency(args.concurrency || 4);
 
         const split = (array, chunkCount) => {
             const fixturesInChunkCount = Math.ceil(array.length / chunkCount);
@@ -168,8 +167,10 @@ createTestCafe(TESTCAFE_CONFIG)
         runOptions.hooks = {
             test: {
                 before: async(t) => {
-                    const [width, height] = DEFAULT_BROWSER_SIZE;
-                    await t.resizeWindow(width, height);
+                    if(!componentFolder.includes('accessibility')) {
+                        const [width, height] = DEFAULT_BROWSER_SIZE;
+                        await t.resizeWindow(width, height);
+                    }
 
                     if(args.shadowDom) {
                         await addShadowRootTree(t);
