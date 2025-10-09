@@ -218,7 +218,7 @@
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-ts lint-dts lint-texts",
     "lint-js": "eslint --quiet '**/*.js'",
-    "lint-ts": "eslint --quiet '**/*.{tsx,ts}' --ignore-pattern /testing/renovation/ --ignore-pattern '**/*.d.ts'",
+    "lint-ts": "eslint --quiet '**/*.{tsx,ts}' --ignore-pattern '**/*.d.ts'",
     "lint-dts": "eslint './js/**/*.d.ts'",
     "lint-staged": "lint-staged",
     "lint-texts": "node build/linters/validate-non-latin-symbols.js",
