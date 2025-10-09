@@ -509,48 +509,6 @@ jobs:
     steps:
       - run: exit 1
 
-  testcafe_tests34:
-    name: 'form (1/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests35:
-    name: 'form (2/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests_form_material_1:
-    name: 'form - material (1/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests_form_material_2:
-    name: 'form - material (2/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests38:
-    name: 'form - fluent (1/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests39:
-    name: 'form - fluent (2/2)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   testcafe_tests_editors_1:
     name: 'editors (1/3)'
     needs: [ changesSegregation ]
