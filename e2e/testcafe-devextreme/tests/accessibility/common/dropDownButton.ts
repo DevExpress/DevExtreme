@@ -14,13 +14,8 @@ const options: Options<Properties> = {
   // stylingMode: ['contained', 'outlined', 'text'],
   // type: ['normal', 'success', 'danger', 'default'],
   text: [undefined, 'Download Trial'],
-  icon: [undefined, 'save'],
-  splitButton: [true, false],
   disabled: [true, false],
-  useSelectMode: [true, false],
-  showArrowIcon: [true, false],
-  opened: [true, false],
-  deferRendering: [true, false],
+  icon: [undefined, 'save'],
 };
 
 const a11yCheckConfig = {
@@ -30,10 +25,41 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const noSplitButtonConfiguration: Configuration = {
   component: 'dxDropDownButton',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    splitButton: [false],
+    showArrowIcon: [true, false],
+  },
+};
+testAccessibility(noSplitButtonConfiguration);
+
+const deferredConfiguration: Configuration = {
+  component: 'dxDropDownButton',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [true, false],
+    splitButton: [true],
+    useSelectMode: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDropDownButton',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    splitButton: [true],
+    useSelectMode: [true, false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);
