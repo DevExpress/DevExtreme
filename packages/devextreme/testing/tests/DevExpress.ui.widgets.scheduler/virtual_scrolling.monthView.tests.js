@@ -29,8 +29,7 @@ const printOffset = offset => [
 
 testStart(() => initTestMarkup());
 
-// TODO: transform it to jest with snapshots and unskip
-module.skip('Virtual scrolling Month View', () => {
+module('Virtual scrolling Month View', () => {
     module('Regular appointments', () => {
         test('Regular appointments should be rendered correctly if horizontal grouping', async function(assert) {
             const scheduler = await createWrapper({
@@ -283,29 +282,29 @@ module.skip('Virtual scrolling Month View', () => {
                             top: -9837,
                             width: 150
                         }, {
-                            left: -9574,
-                            top: -9837,
-                            width: 450
-                        }, {
                             left: -10324,
                             top: -9762,
                             width: 150
                         }, {
-                            left: -9649,
-                            top: -9762,
-                            width: 525
-                        }, {
                             left: -10324,
                             top: -9687,
                             width: 150
-                        }, {
-                            left: -9649,
-                            top: -9687,
-                            width: 525
                         }, {
                             left: -10324,
                             top: -9612,
                             width: 75
+                        }, {
+                            left: -9574,
+                            top: -9837,
+                            width: 450
+                        }, {
+                            left: -9649,
+                            top: -9762,
+                            width: 525
+                        }, {
+                            left: -9649,
+                            top: -9687,
+                            width: 525
                         }, {
                             left: -9649,
                             top: -9612,
@@ -512,72 +511,6 @@ module.skip('Virtual scrolling Month View', () => {
             });
         });
 
-        ['horizontal', 'vertical'].forEach(groupOrientation => {
-            test(`Appointment should be correctly croped if Month view  and "${groupOrientation}" group orientation`, async function(assert) {
-                const longAppointment = {
-                    startDate: new Date(2015, 2, 4, 0, 10),
-                    endDate: new Date(2015, 2, 4, 23, 50)
-                };
-                const scheduler = await createWrapper({
-                    currentDate: new Date(2015, 2, 4),
-                    scrolling: {
-                        mode: 'virtual'
-                    },
-                    views: [{
-                        type: 'month',
-                        groupOrientation: groupOrientation
-                    }],
-                    currentView: 'month',
-                    dataSource: [longAppointment],
-                    height: 400
-                });
-
-                const { instance } = scheduler;
-                const workspace = instance.getWorkSpace();
-                const { viewDataProvider } = workspace;
-                const scrollable = workspace.getScrollable();
-
-                workspace.renderer.getRenderTimeout = () => -1;
-
-                return asyncWrapper(assert, promise => {
-                    [
-                        1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
-                    ].forEach(scrollY => {
-                        promise = asyncScrollTest(
-                            assert,
-                            promise,
-                            () => {
-                                const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
-
-                                assert.equal(
-                                    settings.groupIndex,
-                                    0,
-                                    `group index is correct when scrolled to ${scrollY}`
-                                );
-
-                                const startViewDate = viewDataProvider.findGroupCellStartDate(
-                                    settings.groupIndex,
-                                    settings.info.appointment.startDate,
-                                    settings.info.appointment.endDate
-                                );
-
-                                assert.deepEqual(
-                                    dateUtils.trimTime(settings.info.appointment.startDate),
-                                    startViewDate,
-                                    'start date is correct'
-                                );
-                            },
-                            scrollable,
-                            { y: scrollY }
-                        );
-                    });
-
-                    return promise;
-                });
-            });
-        });
-
         module('Group by date', () => {
             test('Regular appointment should be rendered correctly if grouped by date', async function(assert) {
                 const resources = [{
@@ -631,27 +564,30 @@ module.skip('Virtual scrolling Month View', () => {
                     [{
                         scrollX: 1066,
                         expectedSettings: {
-                            hMax: 1650,
-                            left: 1575
+                            left: -9490,
+                            top: -9687,
+                            width: 75,
                         }
                     }, {
                         scrollX: 1300,
                         expectedSettings: {
-                            hMax: 1950,
-                            left: 1575
+                            left: -9724,
+                            top: -9687,
+                            width: 75,
                         }
                     }].forEach(({ scrollX, expectedSettings }) => {
                         promise = asyncScrollTest(
                             assert,
                             promise,
                             () => {
-                                const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
+                                const appointmentRect = scheduler.appointments
+                                    .getAppointment(0)
+                                    .get(0)
+                                    .getBoundingClientRect();
 
-                                assert.ok(true, `scrollX: ${scrollX}`);
-
-                                assert.equal(settings.hMax, expectedSettings.hMax, 'Last group cell position is correct');
-                                assert.equal(settings.left, expectedSettings.left, 'Cell left position is correct');
+                                assert.roughEqual(appointmentRect.left, expectedSettings.left, 2.01, 'appointment left is correct');
+                                assert.roughEqual(appointmentRect.top, expectedSettings.top, 2.01, 'appointment top is correct');
+                                assert.roughEqual(appointmentRect.width, expectedSettings.width, 2.01, 'appointment width is correct');
                             },
                             scrollable,
                             { left: scrollX }

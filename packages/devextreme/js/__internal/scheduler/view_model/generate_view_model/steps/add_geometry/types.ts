@@ -70,3 +70,13 @@ export interface GeometryOptions {
   groupSize: RealSize;
   panelSize: RealSize;
 }
+
+export interface VirtualCropOptions {
+  isVirtualScrolling: boolean;
+  getVirtualBounds: (groupIndex: number) => {
+    hMax: number;
+    hMin: number;
+    vMax: number;
+    vMin: number;
+  };
+}

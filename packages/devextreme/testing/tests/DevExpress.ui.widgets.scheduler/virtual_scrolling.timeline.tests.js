@@ -27,15 +27,14 @@ const printOffset = offset => [
 
 testStart(() => initTestMarkup());
 
-// TODO: transform it to jest with snapshots and unskip
-module.skip('Virtual scrolling timelines', () => {
+module('Virtual scrolling timelines', () => {
     module('Appointments', () => {
         module('timelineDay', () => {
             test('multiday appointment should be rendered correctly', async function(assert) {
                 const data = [{
                     text: 'Appt-001',
                     startDate: new Date(2021, 1, 2, 15, 45),
-                    endDate: new Date(2021, 1, 3, 10, 15)
+                    endDate: new Date(2021, 1, 3, 10, 15),
                 }];
 
                 const scheduler = await createWrapper({
@@ -71,7 +70,7 @@ module.skip('Virtual scrolling timelines', () => {
                             expectedRects: [{
                                 left: -9099,
                                 top: -9817,
-                                width: 2600
+                                width: 300
                             }]
                         },
                         {
@@ -79,23 +78,23 @@ module.skip('Virtual scrolling timelines', () => {
                             expectedRects: [{
                                 left: -10099,
                                 top: -9817,
-                                width: 2600
+                                width: 1300
                             }]
                         },
                         {
                             offset: { x: 4200 },
                             expectedRects: [{
-                                left: -11099,
+                                left: -10399,
                                 top: -9817,
-                                width: 2600
+                                width: 1600
                             }]
                         },
                         {
                             offset: { x: 5200 },
                             expectedRects: [{
-                                left: -12099,
+                                left: -10399,
                                 top: -9817,
-                                width: 2600
+                                width: 900
                             }]
                         },
                         {
@@ -212,7 +211,7 @@ module.skip('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -9099,
                                     top: -9522,
-                                    width: 1800
+                                    width: 400
                                 }]
                             },
                             {
@@ -244,7 +243,7 @@ module.skip('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9669,
-                                    width: 1650
+                                    width: 1600
                                 }]
                             },
                             {

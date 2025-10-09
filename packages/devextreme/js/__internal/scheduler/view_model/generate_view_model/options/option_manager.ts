@@ -8,7 +8,7 @@ import type {
   PanelName,
 } from '../../types';
 import type { CollectorOptions } from '../steps/add_collector/types';
-import type { GeometryOptions } from '../steps/add_geometry/types';
+import type { GeometryOptions, VirtualCropOptions } from '../steps/add_geometry/types';
 import { getGroupSize } from './get_group_size';
 import { getMonthIntervals } from './get_month_intervals';
 import { getPanelCollectorOptions } from './get_panel_collector_options';
@@ -169,5 +169,48 @@ export class OptionManager {
 
   getGeometryOptions(panelName: PanelName): GeometryOptions {
     return this.getPanelOptions(panelName).geometryOptions;
+  }
+
+  getVirtualCropOptions(): VirtualCropOptions {
+    const { cellSize } = this.getPanelOptions('regularPanel').geometryOptions;
+    const { positionHelper, virtualScrollingDispatcher } = this.schedulerStore.getWorkSpace();
+    const {
+      hasAllDayPanel,
+      groupCount,
+      groupOrientation,
+      isVirtualScrolling,
+      isRTLEnabled,
+    } = this.options;
+    const {
+      cellCountInsideLeftVirtualCell,
+      cellCountInsideRightVirtualCell,
+      cellCountInsideTopVirtualRow,
+    } = virtualScrollingDispatcher;
+    const hVirtualItemsCount = isRTLEnabled
+      ? cellCountInsideRightVirtualCell
+      : cellCountInsideLeftVirtualCell;
+    const isVerticalGrouping = groupCount > 0 && groupOrientation === 'vertical';
+    const isGroupedAllDayPanel = isVerticalGrouping && hasAllDayPanel;
+
+    return {
+      isVirtualScrolling,
+      getVirtualBounds: (groupIndex: number) => this.cache.memo(`virtualBounds${groupIndex}`, () => {
+        const hMin = hVirtualItemsCount * cellSize.width;
+        const vMin = cellCountInsideTopVirtualRow * cellSize.height;
+        const hMax = positionHelper.getHorizontalMax(groupIndex);
+        const vMax = positionHelper.getVerticalMax({
+          groupIndex,
+          isVirtualScrolling,
+          showAllDayPanel: hasAllDayPanel,
+          supportAllDayRow: hasAllDayPanel,
+          isGroupedAllDayPanel,
+          isVerticalGrouping,
+        });
+
+        return {
+          hMax, hMin, vMax, vMin,
+        };
+      }),
+    };
   }
 }
