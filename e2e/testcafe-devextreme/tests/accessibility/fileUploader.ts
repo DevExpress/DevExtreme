@@ -11,7 +11,6 @@ const file: File[] = [{
   name: 'Item_1.png',
   type: 'image/png',
   size: 1024,
-  bytes: () => Promise.resolve(new Uint8Array(new ArrayBuffer(1024))),
   webkitRelativePath: '',
   slice: () => new Blob(),
   stream: () => new ReadableStream(),
