@@ -8,10 +8,7 @@ import { changeTheme } from '../../../../helpers/changeTheme';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Appointment Form: Main Form`
-  .page(url(__dirname, '../../../container.html'))
-  .afterEach(async () => {
-    await changeTheme('generic.light');
-  });
+  .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
 
@@ -57,10 +54,10 @@ const getResources = () => ([
 const windowSize: [number, number] = [1500, 1500];
 
 [
-  'generic.light',
-  'generic.light.compact',
-  // 'material.blue.light',
-  // 'material.blue.light.compact',
+  // 'generic.light',
+  // 'generic.light.compact',
+  'material.blue.light',
+  'material.blue.light.compact',
   // 'fluent.blue.light',
   // 'fluent.blue.light.compact',
 ].forEach((theme) => {
@@ -102,6 +99,8 @@ const windowSize: [number, number] = [1500, 1500];
         currentView: 'week',
         currentDate: new Date(2021, 2, 25).toISOString(),
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     safeSizeTest(`appointment main form with timezones (${theme})`, async (t) => {
@@ -128,6 +127,8 @@ const windowSize: [number, number] = [1500, 1500];
           allowTimeZoneEditing: true,
         },
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     safeSizeTest(`appointment main form with resources (${theme})`, async (t) => {
@@ -152,6 +153,8 @@ const windowSize: [number, number] = [1500, 1500];
         currentDate: new Date(2021, 2, 25).toISOString(),
         resources: getResources(),
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     safeSizeTest(`appointment main form with resources and timezones (${theme})`, async (t) => {
@@ -179,6 +182,8 @@ const windowSize: [number, number] = [1500, 1500];
           allowTimeZoneEditing: true,
         },
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 });
