@@ -17,15 +17,15 @@ test('Should correctly update appointment if dataSource is a simple array', asyn
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.textEditor.element)
-    .typeText(appointmentPopup.textEditor.element, ADDITIONAL_TITLE_TEXT)
-    .expect(appointmentPopup.textEditor.element.value)
+    .click(appointmentPopup.subjectElement)
+    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
+    .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.saveButton.element)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -48,15 +48,15 @@ test('Should correctly update appointment if dataSource is a Store with key arra
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
   const updatedAppointment = scheduler.getAppointment(UPDATED_APPOINTMENT_TITLE);
-  const { appointmentPopup } = scheduler;
+  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
 
   await t
     .doubleClick(appointment.element, CLICK_OPTIONS)
-    .click(appointmentPopup.textEditor.element)
-    .typeText(appointmentPopup.textEditor.element, ADDITIONAL_TITLE_TEXT)
-    .expect(appointmentPopup.textEditor.element.value)
+    .click(appointmentPopup.subjectElement)
+    .typeText(appointmentPopup.subjectElement, ADDITIONAL_TITLE_TEXT)
+    .expect(appointmentPopup.subjectElement.value)
     .eql(UPDATED_APPOINTMENT_TITLE)
-    .click(appointmentPopup.saveButton.element)
+    .click(appointmentPopup.doneButton)
     .expect(updatedAppointment.element.exists)
     .ok();
 }).before(async () => {

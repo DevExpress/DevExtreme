@@ -8,7 +8,7 @@ import DateBox from '../../dateBox';
 import Button from '../../button';
 
 export const SELECTORS = {
-  appointmentPopup: `.dx-scheduler-appointment-popup.dx-overlay-wrapper`,
+  appointmentPopup: `.dx-scheduler-appointment-popup.dx-popup.dx-widget`,
   form: `.dx-scheduler-form`,
   doneButton: `.dx-popup-done.dx-button.dx-widget`,
   cancelButton: `.dx-popup-cancel.dx-button.dx-widget`,
@@ -27,8 +27,8 @@ export const SELECTORS = {
 export default class AppointmentPopup {
   popup: Popup = new Popup(SELECTORS.appointmentPopup);
 
-  saveButton: Button = new Button(this.popup.topToolbar.find(SELECTORS.doneButton));
-  cancelButton: Button = new Button(this.popup.topToolbar.find(SELECTORS.cancelButton));
+  saveButton: Button = new Button(this.popup.getToolbar().find(SELECTORS.doneButton));
+  cancelButton: Button = new Button(this.popup.getToolbar().find(SELECTORS.cancelButton));
 
   form: Form = new Form(this.popup.content.find(SELECTORS.form));
 
