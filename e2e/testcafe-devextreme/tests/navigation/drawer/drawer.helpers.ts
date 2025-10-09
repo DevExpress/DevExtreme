@@ -23,7 +23,6 @@ export const createDrawer = ClientFunction(({
     const $templateView = $('<div style="background-color: aquamarine; height: 100%;">').appendTo($drawer);
 
     $('<div id="inner">')
-      .css('width', '500px')
       .text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Penatibus et magnis dis parturient. Eget dolor morbi non arcu risus. Tristique magna sit amet purus gravida quis blandit. Auctor urna nunc id cursus metus aliquam eleifend mi in.')
       .appendTo($templateView);
 

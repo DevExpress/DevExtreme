@@ -98,7 +98,7 @@ safeSizeTest('Drawer hidden', async (t) => {
     });
   },
 }, {
-  testCase: 'SelectBox inside drawer',
+  testCase: 'SelectBox outside drawer',
   selector: '.dx-texteditor-container',
   createOuterContent: ($container: JQuery) => {
     ($('<div id="content">').appendTo($container) as any).dxSelectBox({
