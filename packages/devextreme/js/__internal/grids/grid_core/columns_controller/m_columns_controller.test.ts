@@ -9,8 +9,7 @@ import type { DataGridCommandColumnType, Properties as DataGridProperties } from
 import DataGrid from '@js/ui/data_grid';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
-import { UNSUPPORTED_GROUPING_COLUMN_TYPES } from './m_columns_controller';
-
+const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'detailExpand', 'groupExpand', 'selection', 'drag', 'ai'];
 const GRID_CONTAINER_ID = 'gridContainer';
 
 const createDataGrid = async (

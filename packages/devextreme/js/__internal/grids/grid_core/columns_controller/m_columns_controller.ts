@@ -84,8 +84,6 @@ import {
   updateSerializers,
 } from './m_columns_controller_utils';
 
-export const UNSUPPORTED_GROUPING_COLUMN_TYPES = ['adaptive', 'buttons', 'selection', 'drag', 'ai'];
-
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
   index?: number;
@@ -457,7 +455,7 @@ export class ColumnsController extends modules.Controller {
   private _columnCanBeGrouped(column) {
     if (!column) return false;
 
-    return isDefined(column.groupIndex) && !UNSUPPORTED_GROUPING_COLUMN_TYPES.includes(column.type);
+    return isDefined(column.groupIndex) && !column.type;
   }
 
   public getGroupColumns() {
