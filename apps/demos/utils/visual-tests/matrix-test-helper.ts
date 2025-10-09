@@ -4,7 +4,22 @@ import { ClientFunction, Selector } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
+export const FRAMEWORKS = {
+  jquery: 'jQuery',
+  react: 'React',
+  vue: 'Vue',
+  angular: 'Angular'
+};
+
+export const execCode = ClientFunction((code) => {
+  // eslint-disable-next-line no-eval
+  const result = eval(code);
+  if (result && typeof result.then === 'function') {
+    return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
+  }
+
+  return Promise.resolve();
+});
 
 const settings = {
   concurrency: undefined,
@@ -173,8 +188,14 @@ export function shouldRunFramework(currentFramework) {
 }
 
 export function shouldRunTestAtIndex(testIndex) {
-  return (settings.current === settings.total ? 0 : settings.current)
-    === ((testIndex % settings.total) || 0);
+  if (!settings.total) {
+    return true;
+  }
+
+  const part = testIndex % settings.total;
+  const currentPart = settings.current - 1;
+
+  return part === currentPart;
 }
 
 const SKIPPED_TESTS = {
@@ -369,7 +390,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
 }
 
 export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  if (shouldSkipDemo(currentFramework, product, demo, skippedTests)) {
+  if (shouldSkipDemo(FRAMEWORKS[currentFramework], product, demo, skippedTests)) {
     return false;
   }
 
@@ -410,14 +431,15 @@ export function runManualTestCore(
 ) {
   const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
-  const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
+  const index = settings.manualTestIndex;
 
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
 
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
+  const testCodeSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/test-code.js`, (x) => x) || '';
 
   let testURL = '';
 
@@ -427,24 +449,29 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
   } else {
-    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
 
   const test = testObject.clientScripts([
     { module: 'mockdate' },
+    join(__dirname, './inject/test-utils.js'),
     ...clientScriptSource,
   ])
     .page(testURL);
 
   test.before?.(async (t) => {
+    if (testCodeSource) {
+      await execCode(testCodeSource);
+    }
+
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
 
-    if (framework === 'Angular') {
+    if (FRAMEWORKS[framework] === 'Angular') {
       await waitForAngularLoading();
     }
   });
@@ -464,9 +491,8 @@ export function runManualTest(widget, demo, callback) {
     return;
   }
 
-  FRAMEWORKS.forEach((framework) => {
-    runManualTestCore(test, widget, demo, framework, callback);
-  });
+  const framework = settings.targetFramework;
+  runManualTestCore(test, widget, demo, framework, callback);
 }
 
 export function getPortByIndex(testIndex) {
@@ -475,7 +501,7 @@ export function getPortByIndex(testIndex) {
 
 export function updateConfig(customSettings) {
   settings.verbose = true;
-  settings.manualTestIndex = 0;
+  settings.manualTestIndex = settings.current ? (settings.current - 1) : 0;
   settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|jquery|react|vue)\/.*/i;
   settings.demoFilesExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
   settings.commonEtalonsExpr = /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i;
