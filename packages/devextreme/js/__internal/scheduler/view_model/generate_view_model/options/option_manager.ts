@@ -172,7 +172,7 @@ export class OptionManager {
   }
 
   getVirtualCropOptions(): VirtualCropOptions {
-    const { cellSize } = this.getPanelOptions('regularPanel').geometryOptions;
+    const { cellSize, panelSize } = this.getPanelOptions('regularPanel').geometryOptions;
     const { positionHelper, virtualScrollingDispatcher } = this.schedulerStore.getWorkSpace();
     const {
       hasAllDayPanel,
@@ -197,7 +197,7 @@ export class OptionManager {
       getVirtualBounds: (groupIndex: number) => this.cache.memo(`virtualBounds${groupIndex}`, () => {
         const hMin = hVirtualItemsCount * cellSize.width;
         const vMin = cellCountInsideTopVirtualRow * cellSize.height;
-        const hMax = positionHelper.getHorizontalMax(groupIndex);
+        const hMax = positionHelper.getHorizontalMax(groupIndex) || Infinity;
         const vMax = positionHelper.getVerticalMax({
           groupIndex,
           isVirtualScrolling,
@@ -205,10 +205,13 @@ export class OptionManager {
           supportAllDayRow: hasAllDayPanel,
           isGroupedAllDayPanel,
           isVerticalGrouping,
-        });
+        }) || Infinity;
 
         return {
-          hMax, hMin, vMax, vMin,
+          hMin: isRTLEnabled ? panelSize.width - hMax : hMin,
+          hMax: isRTLEnabled ? panelSize.width - hMin : hMax,
+          vMin,
+          vMax,
         };
       }),
     };

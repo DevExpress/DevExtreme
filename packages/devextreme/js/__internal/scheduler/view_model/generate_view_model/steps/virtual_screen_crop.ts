@@ -28,11 +28,9 @@ export const cropByVirtualScreen = <T extends GroupIndex & Geometry>(
       const width = Math.min(hMax, right) - left;
       const height = Math.min(vMax, bottom) - top;
 
-      if (width > 0 && height > 0) {
-        acc.push({
-          ...item, left, width, top, height,
-        });
-      }
+      acc.push({
+        ...item, left, width, top, height,
+      });
     }
 
     return acc;
