@@ -1,9 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
-import type Button from '@js/ui/button';
-import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type { ClickEvent } from '@js/ui/button';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
