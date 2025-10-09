@@ -15,10 +15,11 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties,
+  Properties as PublicProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -41,6 +42,10 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
+type Properties = PublicProperties & {
+  fileUploaderOptions?: FileUploaderProperties;
+};
 
 class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
@@ -76,34 +81,35 @@ class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      showDayHeaders: true,
       activeStateEnabled: true,
+      alerts: [],
+      dataSource: null,
+      dayHeaderFormat: 'shortdate',
       editing: {
         allowUpdating: false,
         allowDeleting: false,
       },
+      emptyViewTemplate: null,
+      fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
       items: [],
-      dataSource: null,
-      user: { id: new Guid().toString() },
-      dayHeaderFormat: 'shortdate',
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
-      emptyViewTemplate: null,
-      alerts: [],
-      showAvatar: true,
-      showUserName: true,
-      showMessageTimestamp: true,
-      typingUsers: [],
-      onMessageEntered: undefined,
       reloadOnChange: true,
-      onTypingStart: undefined,
-      onTypingEnd: undefined,
-      onMessageEditingStart: undefined,
-      onMessageEditCanceled: undefined,
-      onMessageDeleting: undefined,
+      showAvatar: true,
+      showDayHeaders: true,
+      showMessageTimestamp: true,
+      showUserName: true,
+      typingUsers: [],
+      user: { id: new Guid().toString() },
       onMessageDeleted: undefined,
+      onMessageDeleting: undefined,
+      onMessageEditCanceled: undefined,
+      onMessageEditingStart: undefined,
+      onMessageEntered: undefined,
+      onTypingEnd: undefined,
+      onTypingStart: undefined,
     };
   }
 
@@ -570,6 +576,7 @@ class Chat extends Widget<Properties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+      case 'fileUploaderOptions':
         this._messageBox.option(name, value);
         break;
       case 'user': {
