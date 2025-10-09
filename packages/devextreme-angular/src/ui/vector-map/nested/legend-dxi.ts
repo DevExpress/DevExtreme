@@ -22,6 +22,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-legend',
@@ -29,7 +30,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_legends,
+           useExisting: DxiVectorMapLegendComponent,
+        }
+    ]
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     @Input()

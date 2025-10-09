@@ -6,7 +6,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isPlainObject } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { Properties } from '@js/ui/speed_dial_action';
 import { isMaterial } from '@js/ui/themes';
 import { render } from '@ts/core/utils/m_ink_ripple';
@@ -240,7 +243,7 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     $element: dxElementWrapper,
     value: boolean,
 
-    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
+    event?: DxEvent<PointerInteractionEvent>,
   ): void {
     super._toggleActiveState($element, value, event);
 

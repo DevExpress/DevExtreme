@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -35,7 +35,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -79,8 +79,6 @@ import { DxoBarGaugeTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested
 import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
 
 
-
-
 /**
  * [descr:dxBarGauge]
 
@@ -100,6 +98,7 @@ import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/
     ]
 })
 export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxBarGauge = null;
 
     /**
@@ -720,10 +719,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Output() valuesChange: EventEmitter<Array<number>>;
-
-
-
-
 
 
 

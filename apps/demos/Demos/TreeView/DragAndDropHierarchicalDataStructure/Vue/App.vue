@@ -168,7 +168,7 @@ function moveNode(fromNode: Node, toNode: Node, fromItems, toItems, isDropInside
   }
 }
 function getNodeContainingArray(node: Node, rootArray: Node[]) {
-  return node === null || node.parent === null
+  return !node?.parent
     ? rootArray
     : node.parent.itemData.items;
 }

@@ -25,7 +25,7 @@ import {
   isDefined, isFunction, isPlainObject, isPrimitive, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent, NativeEventInfo } from '@js/events';
+import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
   Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
@@ -1802,7 +1802,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       $itemContainer,
       clickEventNamespace,
       itemSelector,
-      (e: DxEvent<MouseEvent | PointerEvent | TouchEvent>): void => {
+      (e: DxEvent<InteractionEvent>): void => {
         if ($(e.target).hasClass(CHECK_BOX_ICON_CLASS) || $(e.target).hasClass(CHECK_BOX_CLASS)) {
           return;
         }
@@ -1848,7 +1848,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _itemClick(
     args: NativeEventInfo<
       TreeViewBase,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      InteractionEvent
     > & CollectionItemInfo<TreeViewItem>,
   ): void {
     const { event, itemData } = args;
@@ -1861,7 +1861,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _processItemClick(
-    e: DxEvent<KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>,
+    e: DxEvent<InteractionEvent>,
     $item: dxElementWrapper,
   ): void {
     const itemData = this._getItemData($item);

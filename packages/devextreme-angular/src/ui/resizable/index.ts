@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -53,6 +51,7 @@ import {
     ]
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
+
     instance: DxResizable = null;
 
     /**
@@ -321,10 +320,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string>;
-
-
-
-
 
 
 
