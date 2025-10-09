@@ -9,25 +9,9 @@ fixture.disablePageReloads`Accessibility`
 const items = ['Download Trial For Visual Studio', 'Download Trial For All Platforms', 'Package Managers'];
 
 const options: Options<Properties> = {
-  dataSource: [[], items],
+  dataSource: [items],
   value: [items[0]],
   label: [undefined, 'label'],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
   inputAttr: [{ 'aria-label': 'DropDownBox' }],
 };
 
@@ -36,10 +20,37 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const standardButtonsConfiguration: Configuration = {
   component: 'dxDropDownBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    showClearButton: [true, false],
+    showDropDownButton: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(standardButtonsConfiguration);
+
+const customButtonsConfiguration: Configuration = {
+  component: 'dxDropDownBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    buttons: [
+      [
+        {
+          name: 'today',
+          location: 'before',
+          options: {
+            text: 'Today',
+            stylingMode: 'text',
+            onClick: () => {},
+          },
+        },
+      ],
+    ],
+  },
+};
+
+testAccessibility(customButtonsConfiguration);

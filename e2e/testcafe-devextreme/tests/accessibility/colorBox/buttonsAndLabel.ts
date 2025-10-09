@@ -9,23 +9,7 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: ['#f05b41'],
   label: [undefined, 'label'],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const a11yCheckConfig = {
@@ -35,10 +19,37 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const standardButtonsConfiguration: Configuration = {
   component: 'dxColorBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    showClearButton: [true, false],
+    showDropDownButton: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(standardButtonsConfiguration);
+
+const customButtonsConfiguration: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    buttons: [
+      [
+        {
+          name: 'today',
+          location: 'before',
+          options: {
+            text: 'Today',
+            stylingMode: 'text',
+            onClick: () => {},
+          },
+        },
+      ],
+    ],
+  },
+};
+
+testAccessibility(customButtonsConfiguration);

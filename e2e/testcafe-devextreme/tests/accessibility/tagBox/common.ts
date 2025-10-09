@@ -22,9 +22,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
-  showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 

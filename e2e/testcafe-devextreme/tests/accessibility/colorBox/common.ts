@@ -10,11 +10,7 @@ const options: Options<Properties> = {
   value: [undefined, '#f05b41'],
   disabled: [true, false],
   readOnly: [true, false],
-  editAlphaChannel: [true, false],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
-  opened: [true, false],
-  deferRendering: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
@@ -25,10 +21,39 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxColorBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);
+
+const alphaChanelConfiguration: Configuration = {
+  component: 'dxColorBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [true],
+    editAlphaChannel: [true],
+    deferRendering: [true],
+  },
+};
+
+testAccessibility(alphaChanelConfiguration);

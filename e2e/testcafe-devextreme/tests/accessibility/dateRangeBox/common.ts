@@ -18,11 +18,7 @@ const options: Options<Properties> = {
   disabled: [true, false],
   readOnly: [true, false],
   multiView: [true, false],
-  opened: [true, false],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   startDatePlaceholder: [undefined, 'startDatePlaceholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
 };
@@ -34,10 +30,26 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxDateRangeBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDateRangeBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);

@@ -16,9 +16,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   type: ['date', 'time', 'datetime'],
   placeholder: [undefined, 'placeholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  deferRendering: [true, false],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
@@ -50,11 +48,28 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxDateBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
   created,
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDateBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+  created,
+};
+
+testAccessibility(noDeferredConfiguration);

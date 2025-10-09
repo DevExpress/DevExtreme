@@ -15,24 +15,8 @@ const initialValue = [
 
 const options: Options<Properties> = {
   value: [initialValue],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const a11yCheckConfig = {
@@ -42,10 +26,37 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const standardButtonsConfiguration: Configuration = {
   component: 'dxDateRangeBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    showClearButton: [true, false],
+    showDropDownButton: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(standardButtonsConfiguration);
+
+const customButtonsConfiguration: Configuration = {
+  component: 'dxDateRangeBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    buttons: [
+      [
+        {
+          name: 'today',
+          location: 'before',
+          options: {
+            text: 'Today',
+            stylingMode: 'text',
+            onClick: () => {},
+          },
+        },
+      ],
+    ],
+  },
+};
+
+testAccessibility(customButtonsConfiguration);

@@ -14,8 +14,6 @@ const options: Options<Properties> = {
   value: [undefined, 'Item_1'],
   disabled: [true, false],
   readOnly: [true, false],
-  opened: [true, false],
-  deferRendering: [true, false],
   searchTimeout: [0],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
@@ -27,10 +25,26 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxAutocomplete',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxAutocomplete',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);

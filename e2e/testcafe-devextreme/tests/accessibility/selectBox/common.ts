@@ -19,8 +19,6 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
-  opened: [true, false],
-  deferRendering: [true, false],
   placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
@@ -32,10 +30,26 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxSelectBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxSelectBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);

@@ -12,8 +12,6 @@ const options: Options<Properties> = {
   dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
-  opened: [true, false],
-  deferRendering: [true, false],
   inputAttr: [{ 'aria-label': 'DropDownBox' }],
 };
 
@@ -22,10 +20,26 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxDropDownBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxDropDownBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);

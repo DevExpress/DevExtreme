@@ -16,26 +16,10 @@ const items = [
 ];
 
 const options: Options<Properties> = {
-  dataSource: [[], items],
+  dataSource: [items],
   value: [[items[0]]],
   label: [undefined, 'label'],
-  showClearButton: [true, false],
-  showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const created = async (t: TestController): Promise<void> => {
@@ -51,11 +35,51 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const standardButtonsConfiguration: Configuration = {
   component: 'dxTagBox',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    showClearButton: [true, false],
+    showDropDownButton: [true, false],
+  },
   created,
 };
 
-testAccessibility(configuration);
+testAccessibility(standardButtonsConfiguration);
+
+const customButtonsConfiguration: Configuration = {
+  component: 'dxTagBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    buttons: [
+      [
+        {
+          name: 'today',
+          location: 'before',
+          options: {
+            text: 'Today',
+            stylingMode: 'text',
+            onClick: () => {},
+          },
+        },
+      ],
+    ],
+  },
+  created,
+};
+
+testAccessibility(customButtonsConfiguration);
+
+const popupConfiguration: Configuration = {
+  component: 'dxTagBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [true],
+    showSelectionControls: [true, false],
+  },
+};
+
+testAccessibility(popupConfiguration);
