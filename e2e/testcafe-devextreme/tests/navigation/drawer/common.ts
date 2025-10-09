@@ -5,10 +5,10 @@ import { Position } from 'devextreme/common';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createDrawer } from './drawer.helpers';
-import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
+import { isFluent, testScreenshot } from '../../../helpers/themeUtils';
 
 const testFixture = () => {
-  if (isMaterialBased()) {
+  if (!isFluent()) {
     // Theme non-dependent tests
     return fixture.disablePageReloads.skip;
   }
