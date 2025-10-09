@@ -1,12 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import { Properties } from 'devextreme/ui/date_box.d';
 import DateBox from 'devextreme-testcafe-models/dateBox';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const now = new Date();
 
@@ -17,6 +17,13 @@ const options: Options<Properties> = {
   type: ['date', 'time', 'datetime'],
   placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const buttonsOptions: Options<Properties> = {
+  value: [now],
+  label: [undefined, 'label'],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+  opened: [true],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
@@ -73,3 +80,38 @@ const noDeferredConfiguration: Configuration = {
 };
 
 testAccessibility(noDeferredConfiguration);
+
+const standardButtonsConfiguration: Configuration = {
+  component: 'dxDateBox',
+  a11yCheckConfig,
+  options: {
+    ...buttonsOptions,
+    showClearButton: [true, false],
+    showDropDownButton: [true, false],
+  },
+};
+
+testAccessibility(standardButtonsConfiguration);
+
+const customButtonsConfiguration: Configuration = {
+  component: 'dxDateBox',
+  a11yCheckConfig,
+  options: {
+    ...buttonsOptions,
+    buttons: [
+      [
+        {
+          name: 'today',
+          location: 'before',
+          options: {
+            text: 'Today',
+            stylingMode: 'text',
+            onClick: () => {},
+          },
+        },
+      ],
+    ],
+  },
+};
+
+testAccessibility(customButtonsConfiguration);

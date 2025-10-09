@@ -1,13 +1,13 @@
 import { Properties } from 'devextreme/ui/tag_box.d';
 import TagBox from 'devextreme-testcafe-models/tagBox';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const items = [
   'HD Video Player',
@@ -16,13 +16,38 @@ const items = [
 ];
 
 const options: Options<Properties> = {
+  dataSource: [[], items],
+  value: [undefined, [items[0]]],
+  disabled: [true, false],
+  readOnly: [true, false],
+  searchEnabled: [true, false],
+  searchTimeout: [0],
+  placeholder: [undefined, 'placeholder'],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const buttonsOptions: Options<Properties> = {
   dataSource: [items],
   value: [[items[0]]],
   label: [undefined, 'label'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
-const created = async (t: TestController): Promise<void> => {
+const created = async (t: TestController, optionConfiguration): Promise<void> => {
+  const { disabled, readOnly } = optionConfiguration;
+
+  if (disabled || readOnly) {
+    return;
+  }
+
+  const tagBox = new TagBox(defaultSelector);
+
+  await t
+    .click(tagBox.element)
+    .wait(TIME_TO_WAIT);
+};
+
+const buttonsCreated = async (t: TestController): Promise<void> => {
   const tagBox = new TagBox(defaultSelector);
 
   await t
@@ -35,15 +60,24 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
+const configuration: Configuration = {
+  component: 'dxTagBox',
+  a11yCheckConfig,
+  options,
+  created,
+};
+
+testAccessibility(configuration);
+
 const standardButtonsConfiguration: Configuration = {
   component: 'dxTagBox',
   a11yCheckConfig,
   options: {
-    ...options,
+    ...buttonsOptions,
     showClearButton: [true, false],
     showDropDownButton: [true, false],
   },
-  created,
+  created: buttonsCreated,
 };
 
 testAccessibility(standardButtonsConfiguration);
@@ -52,7 +86,7 @@ const customButtonsConfiguration: Configuration = {
   component: 'dxTagBox',
   a11yCheckConfig,
   options: {
-    ...options,
+    ...buttonsOptions,
     buttons: [
       [
         {
@@ -67,7 +101,7 @@ const customButtonsConfiguration: Configuration = {
       ],
     ],
   },
-  created,
+  created: buttonsCreated,
 };
 
 testAccessibility(customButtonsConfiguration);

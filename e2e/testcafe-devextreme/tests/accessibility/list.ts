@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/list.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const groupedItems = [
   {
@@ -37,13 +37,34 @@ const groupedItems = [
   },
 ];
 
-const options: Options<Properties> = {
+const simpleItems = ['Item_1', 'Item_2', 'Item_3'];
+const simpleItemsPaged = { store: simpleItems, pageSize: 2 };
+
+const groupedOptions: Options<Properties> = {
   dataSource: [groupedItems],
   height: [400],
   grouped: [true],
   collapsibleGroups: [true, false],
   searchEnabled: [true, false],
   showSelectionControls: [true],
+  selectionMode: ['all', 'multiple', 'none', 'single'],
+};
+
+const optionsWithItemDeleting: Options<Properties> = {
+  dataSource: [simpleItems],
+  height: [400],
+  grouped: [false],
+  searchEnabled: [true],
+  allowItemDeleting: [true, false],
+  itemDeleteMode: ['toggle', 'context', 'slideButton', 'slideItem', 'static', 'swipe'],
+};
+
+const optionsWithSimpleItems: Options<Properties> = {
+  dataSource: [[], simpleItems, simpleItemsPaged],
+  height: [400],
+  grouped: [false],
+  searchEnabled: [true, false],
+  showSelectionControls: [true, false],
   selectionMode: ['all', 'multiple', 'none', 'single'],
 };
 
@@ -54,10 +75,26 @@ const a11yCheckConfig = {
   },
 };
 
-const configuration: Configuration = {
+const groupedConfiguration: Configuration = {
   component: 'dxList',
   a11yCheckConfig,
-  options,
+  options: groupedOptions,
 };
 
-testAccessibility(configuration);
+testAccessibility(groupedConfiguration);
+
+const configurationWithItemDeleting: Configuration = {
+  component: 'dxList',
+  a11yCheckConfig,
+  options: optionsWithItemDeleting,
+};
+
+testAccessibility(configurationWithItemDeleting);
+
+const configurationWithSimpleItems: Configuration = {
+  component: 'dxList',
+  a11yCheckConfig,
+  options: optionsWithSimpleItems,
+};
+
+testAccessibility(configurationWithSimpleItems);

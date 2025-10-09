@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/select_box.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../container.html'));
 
 const items = [
   'HD Video Player',
@@ -13,6 +13,17 @@ const items = [
 ];
 
 const options: Options<Properties> = {
+  dataSource: [[], items],
+  value: [undefined, items[0]],
+  disabled: [true, false],
+  readOnly: [true, false],
+  searchEnabled: [true, false],
+  searchTimeout: [0],
+  placeholder: [undefined, 'placeholder'],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
+};
+
+const buttonsOptions: Options<Properties> = {
   dataSource: [items],
   value: [items[0]],
   label: [undefined, 'label'],
@@ -26,11 +37,35 @@ const a11yCheckConfig = {
   },
 };
 
-const standardButtonsConfiguration: Configuration = {
+const deferredConfiguration: Configuration = {
   component: 'dxSelectBox',
   a11yCheckConfig,
   options: {
     ...options,
+    opened: [true, false],
+    deferRendering: [true],
+  },
+};
+
+testAccessibility(deferredConfiguration);
+
+const noDeferredConfiguration: Configuration = {
+  component: 'dxSelectBox',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    opened: [false],
+    deferRendering: [false],
+  },
+};
+
+testAccessibility(noDeferredConfiguration);
+
+const standardButtonsConfiguration: Configuration = {
+  component: 'dxSelectBox',
+  a11yCheckConfig,
+  options: {
+    ...buttonsOptions,
     showClearButton: [true, false],
     showDropDownButton: [true, false],
   },
@@ -42,7 +77,7 @@ const customButtonsConfiguration: Configuration = {
   component: 'dxSelectBox',
   a11yCheckConfig,
   options: {
-    ...options,
+    ...buttonsOptions,
     buttons: [
       [
         {
