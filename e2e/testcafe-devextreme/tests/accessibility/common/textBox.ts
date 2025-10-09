@@ -9,12 +9,8 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: [undefined, 'value'],
   placeholder: [undefined, 'placeholder'],
-  disabled: [true, false],
-  readOnly: [true, false],
-  // showClearButton: [true, false],
-  // mode: [undefined, 'password', 'email', 'search', 'tel', 'text', 'url'],
-  label: ['', 'label'],
-  name: ['', 'name'],
+  showClearButton: [true, false],
+  mode: ['password', 'email', 'search', 'tel', 'text', 'url'],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -25,24 +21,26 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const inputConfiguration: Configuration = {
+const availabilityConfiguration: Configuration = {
   component: 'dxTextBox',
   a11yCheckConfig,
   options: {
     ...options,
-    showClearButton: [true, false],
+    disabled: [true, false],
+    readOnly: [true, false],
   },
 };
 
-testAccessibility(inputConfiguration);
+testAccessibility(availabilityConfiguration);
 
-const modeConfiguration: Configuration = {
+const infoConfiguration: Configuration = {
   component: 'dxTextBox',
   a11yCheckConfig,
   options: {
     ...options,
-    mode: [undefined, 'password', 'email', 'search', 'tel', 'text', 'url'],
+    label: ['', 'label'],
+    name: ['', 'name'],
   },
 };
 
-testAccessibility(modeConfiguration);
+testAccessibility(infoConfiguration);

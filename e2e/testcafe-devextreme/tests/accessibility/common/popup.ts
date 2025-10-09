@@ -29,12 +29,6 @@ const toolbarItems: ToolbarItem[] = [
 const options: Options<Properties> = {
   width: [300],
   height: [280],
-  visible: [true, false],
-  showTitle: [true, false],
-  title: [undefined, 'title'],
-  dragEnabled: [true, false],
-  showCloseButton: [true, false],
-  toolbarItems: [undefined, toolbarItems],
 };
 
 const a11yCheckConfig = isMaterialBased() ? {
@@ -43,10 +37,29 @@ const a11yCheckConfig = isMaterialBased() ? {
   rules: { 'color-contrast': { enabled: !isMaterial() } },
 } : {};
 
-const configuration: Configuration = {
+const visibleConfiguration: Configuration = {
   component: 'dxPopup',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    visible: [true],
+    showTitle: [true, false],
+    title: [undefined, 'title'],
+    dragEnabled: [true, false],
+    showCloseButton: [true, false],
+    toolbarItems: [undefined, toolbarItems],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(visibleConfiguration);
+
+const invisibleConfiguration: Configuration = {
+  component: 'dxPopup',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    visible: [false],
+  },
+};
+
+testAccessibility(invisibleConfiguration);
