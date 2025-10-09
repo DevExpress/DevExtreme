@@ -1,5 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight } from '@js/core/utils/size';
@@ -10,6 +11,7 @@ import type {
 import type Button from '@js/ui/button';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { EnterKeyEvent } from '@js/ui/text_area';
+import { current, isMaterial } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -50,6 +52,20 @@ class ChatTextArea extends TextArea<Properties> {
       maxHeight: '8em',
       fileUploaderOptions: undefined,
     };
+  }
+
+  _defaultOptionsRules(): DefaultOptionsRule<Properties>[] {
+    const rules = [
+      ...super._defaultOptionsRules(),
+      {
+        device: (): boolean => isMaterial(current()),
+        options: {
+          stylingMode: 'outlined' as const,
+        },
+      },
+    ];
+
+    return rules;
   }
 
   _supportedKeys(): SupportedKeys {
