@@ -55,7 +55,15 @@ describe('AiPromptEditor', () => {
 
   describe('when creating an instance', () => {
     it('should create Popup using createComponent', () => {
-      const { container } = createAiPromptEditor();
+      const onSubmit = (): void => {};
+      const onStop = (): void => {};
+      const onRefresh = (): void => {};
+
+      const { container } = createAiPromptEditor({
+        onSubmit,
+        onStop,
+        onRefresh,
+      });
 
       expect(createComponentMock.mock.calls[0]).toEqual([
         container,
@@ -78,7 +86,7 @@ describe('AiPromptEditor', () => {
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__refresh-button',
                 },
-                onClick: expect.any(Function),
+                onClick: onRefresh,
               },
             },
             {
@@ -91,7 +99,7 @@ describe('AiPromptEditor', () => {
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__apply-button',
                 },
-                onClick: expect.any(Function),
+                onClick: onSubmit,
               },
             },
             {
@@ -104,7 +112,7 @@ describe('AiPromptEditor', () => {
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__stop-button',
                 },
-                onClick: expect.any(Function),
+                onClick: onStop,
               },
             },
           ],
@@ -772,6 +780,123 @@ describe('Public Methods', () => {
 
       instance.setLoading(false);
       expect(POM.isProgressBarVisible()).toBe(false);
+    });
+  });
+
+  describe('when updateStateOnAction is called', () => {
+    describe('with apply action', () => {
+      it('should set loading, disable controls and hide apply button', () => {
+        const { instance, POM } = createAiPromptEditor({
+          value: 'initial text',
+          popupOptions: { visible: true },
+        });
+
+        // Change text to enable apply button initially
+        POM.changeTextAreaValue('changed text');
+        expect(POM.isApplyButtonDisabled()).toBe(false);
+        expect(POM.isRefreshButtonDisabled()).toBe(false);
+        expect(POM.getTextArea().disabled).toBe(false);
+        expect(POM.isProgressBarVisible()).toBe(false);
+        expect(POM.isApplyButtonVisible()).toBe(true);
+        expect(POM.isStopButtonVisible()).toBe(false);
+
+        instance.updateStateOnAction('apply');
+
+        expect(POM.isProgressBarVisible()).toBe(true);
+        expect(POM.isApplyButtonDisabled()).toBe(true);
+        expect(POM.isRefreshButtonDisabled()).toBe(true);
+        expect(POM.getTextArea().disabled).toBe(true);
+        expect(POM.isApplyButtonVisible()).toBe(false);
+        expect(POM.isStopButtonVisible()).toBe(true);
+      });
+    });
+
+    describe('with regenerate action', () => {
+      it('should set loading and disable controls', () => {
+        const { instance, POM } = createAiPromptEditor({
+          value: 'initial text',
+          popupOptions: { visible: true },
+        });
+
+        // Change text to enable apply button initially
+        POM.changeTextAreaValue('changed text');
+        expect(POM.isApplyButtonDisabled()).toBe(false);
+        expect(POM.isRefreshButtonDisabled()).toBe(false);
+        expect(POM.getTextArea().disabled).toBe(false);
+        expect(POM.isProgressBarVisible()).toBe(false);
+
+        instance.updateStateOnAction('regenerate');
+
+        expect(POM.isProgressBarVisible()).toBe(true);
+        expect(POM.isApplyButtonDisabled()).toBe(true);
+        expect(POM.isRefreshButtonDisabled()).toBe(true);
+        expect(POM.getTextArea().disabled).toBe(true);
+        // Apply button visibility should remain unchanged for regenerate action
+        expect(POM.isApplyButtonVisible()).toBe(true);
+        expect(POM.isStopButtonVisible()).toBe(false);
+      });
+    });
+
+    describe('with stop action', () => {
+      it('should clear loading, enable controls and show apply button', () => {
+        const { instance, POM } = createAiPromptEditor({
+          value: 'initial text',
+          popupOptions: { visible: true },
+        });
+
+        // First set to apply state
+        POM.changeTextAreaValue('changed text');
+        instance.updateStateOnAction('apply');
+
+        // Verify apply state is set
+        expect(POM.isProgressBarVisible()).toBe(true);
+        expect(POM.isApplyButtonDisabled()).toBe(true);
+        expect(POM.isRefreshButtonDisabled()).toBe(true);
+        expect(POM.getTextArea().disabled).toBe(true);
+        expect(POM.isApplyButtonVisible()).toBe(false);
+        expect(POM.isStopButtonVisible()).toBe(true);
+
+        instance.updateStateOnAction('stop');
+
+        expect(POM.isProgressBarVisible()).toBe(false);
+        // Should be enabled because text was changed
+        expect(POM.isApplyButtonDisabled()).toBe(false);
+        expect(POM.isRefreshButtonDisabled()).toBe(false);
+        expect(POM.getTextArea().disabled).toBe(false);
+        expect(POM.isApplyButtonVisible()).toBe(true);
+        expect(POM.isStopButtonVisible()).toBe(false);
+      });
+    });
+
+    describe('with default action', () => {
+      it('should clear loading, enable controls and show apply button', () => {
+        const { instance, POM } = createAiPromptEditor({
+          value: 'initial text',
+          popupOptions: { visible: true },
+        });
+
+        // First set to apply state
+        POM.changeTextAreaValue('changed text');
+        instance.updateStateOnAction('apply');
+
+        // Verify apply state is set
+        expect(POM.isProgressBarVisible()).toBe(true);
+        expect(POM.isApplyButtonDisabled()).toBe(true);
+        expect(POM.isRefreshButtonDisabled()).toBe(true);
+        expect(POM.getTextArea().disabled).toBe(true);
+        expect(POM.isApplyButtonVisible()).toBe(false);
+        expect(POM.isStopButtonVisible()).toBe(true);
+
+        instance.updateStateOnAction();
+
+        expect(POM.isProgressBarVisible()).toBe(false);
+        // Should be enabled because text was changed
+        expect(POM.isApplyButtonDisabled()).toBe(false);
+        expect(POM.isRefreshButtonDisabled()).toBe(false);
+        expect(POM.getTextArea().disabled).toBe(false);
+        expect(POM.isApplyButtonVisible()).toBe(true);
+        expect(POM.isStopButtonVisible()).toBe(false);
+      });
     });
   });
 });

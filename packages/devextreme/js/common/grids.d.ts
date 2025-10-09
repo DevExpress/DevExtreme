@@ -77,7 +77,7 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from './core/animation';
 import { PagerBase } from '../ui/pagination';
-import { AIIntegration } from './ai-integration';
+import { AIIntegration, GenerateGridColumnCommandResult, RequestCallbacks } from './ai-integration';
 
 /**
  * @docid
@@ -1511,7 +1511,7 @@ export interface GridBase<TRowData = any, TKey = any> {
    * @publicName sendAIColumnRequest(columnName)
    * @public
    */
-  sendAIColumnRequest(columnName: string): void;
+  sendAIColumnRequest(columnName: string, callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>): void;
   /**
    * @docid
    * @publicName refreshAIColumn(columnName)

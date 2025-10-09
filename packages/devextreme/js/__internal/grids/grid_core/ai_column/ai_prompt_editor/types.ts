@@ -15,3 +15,5 @@ export interface AiPromptEditorOptions {
   popupOptions?: PopupProperties;
   editorOptions?: TextAreaProperties;
 }
+
+export type AiPromptEditorAction = 'apply' | 'stop' | 'regenerate';

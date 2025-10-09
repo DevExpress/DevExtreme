@@ -8,7 +8,7 @@ import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import TextArea from '@js/ui/text_area';
 
 import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
-import type { AiPromptEditorOptions } from './types';
+import type { AiPromptEditorAction, AiPromptEditorOptions } from './types';
 import { getValue, isValueChanged } from './utils';
 
 export class AiPromptEditor {
@@ -110,24 +110,18 @@ export class AiPromptEditor {
       elementAttr: {
         class: CLASSES.aiPromptEditorApplyButton,
       },
-      onClick: (): void => {
-        this.applyButtonHandler();
-      },
+      onClick: this.options.onSubmit,
     };
   }
 
   private getRegenerateDataButtonConfig(): ButtonProperties {
-    const { onRefresh } = this.options;
-
     return {
       text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
       disabled: !this.value,
       elementAttr: {
         class: CLASSES.aiPromptEditorRefreshButton,
       },
-      onClick: (): void => {
-        onRefresh?.();
-      },
+      onClick: this.options.onRefresh,
     };
   }
 
@@ -137,9 +131,7 @@ export class AiPromptEditor {
       elementAttr: {
         class: CLASSES.aiPromptEditorStopButton,
       },
-      onClick: (): void => {
-        this.stopButtonHandler();
-      },
+      onClick: this.options.onStop,
     };
   }
 
@@ -147,14 +139,8 @@ export class AiPromptEditor {
     this.value = getValue(value);
   }
 
-  private applyButtonHandler(): void {
-    const { onSubmit } = this.options;
-
-    onSubmit?.();
-  }
-
-  private stopButtonHandler(): void {
-    this.options.onStop?.();
+  public getEditorValue(): string {
+    return this.editorInstance.option('value') as string;
   }
 
   public show(): Promise<boolean> {
@@ -163,6 +149,10 @@ export class AiPromptEditor {
 
   public hide(): Promise<boolean> {
     return this.popupInstance.hide();
+  }
+
+  public isVisible(): boolean {
+    return this.popupInstance.option('visible') === true;
   }
 
   public toggleDisableState(disabled: boolean): void {
@@ -187,6 +177,39 @@ export class AiPromptEditor {
   public updateValue(value: string): void {
     this.setValue(value);
     this.editorInstance.option('value', value);
+  }
+
+  /**
+   * Updates the component state based on the current action
+   * @param action - The current action being performed
+   */
+  public updateStateOnAction(
+    action?: AiPromptEditorAction,
+  ): void {
+    switch (action) {
+      case 'apply':
+        this.setLoading(true);
+        this.toggleDisableState(true);
+        this.toggleApplyButtonVisibility(false);
+        break;
+
+      case 'regenerate':
+        this.setLoading(true);
+        this.toggleDisableState(true);
+        break;
+
+      case 'stop':
+        this.setLoading(false);
+        this.toggleDisableState(false);
+        this.toggleApplyButtonVisibility(true);
+        break;
+
+      default:
+        this.setLoading(false);
+        this.toggleDisableState(false);
+        this.toggleApplyButtonVisibility(true);
+        break;
+    }
   }
 
   public updateOptions(options: AiPromptEditorOptions): void {

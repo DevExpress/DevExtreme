@@ -5455,7 +5455,10 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBase.sendAIColumnRequest(columnName)]
      */
-    sendAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(
+      columnName: string,
+      callBacks?: DevExpress.aiIntegration.RequestCallbacks<DevExpress.aiIntegration.GenerateGridColumnCommandResult>
+    ): void;
     /**
      * [descr:GridBase.refreshAIColumn(columnName)]
      */
@@ -12040,7 +12043,10 @@ declare module DevExpress.ui {
      */
     totalCount(): number;
     abortAIColumnRequest(columnName: string): void;
-    sendAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(
+      columnName: string,
+      callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>
+    ): void;
     refreshAIColumn(columnName: string): void;
     clearAIColumn(columnName: string): void;
     getAIColumnText(columnName: string, key: TKey): string;
@@ -30452,7 +30458,10 @@ declare module DevExpress.ui {
     ): DevExpress.core.utils.DxPromise<void>;
 
     abortAIColumnRequest(columnName: string): void;
-    sendAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(
+      columnName: string,
+      callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>
+    ): void;
     refreshAIColumn(columnName: string): void;
     clearAIColumn(columnName: string): void;
     getAIColumnText(columnName: string, key: TKey): string;

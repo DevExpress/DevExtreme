@@ -29,17 +29,71 @@ export class AiColumnView extends View {
       value: column.ai?.prompt ?? '',
       container: this.element(),
       createComponent: this._createComponent.bind(this),
+      onSubmit: (): void => {
+        this.promptEditorInstance.updateStateOnAction('apply');
+        this.columnsController.columnOption(
+          column.index,
+          'ai.prompt',
+          this.promptEditorInstance.getEditorValue(),
+          true,
+        );
+      },
+      onStop: (): void => {
+        this.promptEditorInstance.updateStateOnAction('stop');
+        this.aiColumnController.abortAIColumnRequest();
+      },
+      onRefresh: (): void => {
+        this.promptEditorInstance.updateStateOnAction('regenerate');
+
+        this.aiColumnController.refreshAIColumn(column.name as string, {
+          onComplete: (): void => {
+            this.promptEditorInstance.updateStateOnAction();
+          },
+          onError: (): void => {
+            // TODO: show error notification
+            this.promptEditorInstance.updateStateOnAction();
+          },
+        });
+      },
       popupOptions: {
         shading: false,
         position: {
           my: `${alignment} top`,
           at: `${alignment} bottom`,
-          of: $cellElement.get(0),
+          of: `.dx-header-row td[aria-colindex="${(column.index ?? 0) + 1}"]`,
           collision: 'fit',
           boundary: this.component.element(),
         },
       },
     };
+  }
+
+  // TODO: support changing all columns and the entire column
+  public optionChanged(args): void {
+    if (args.name !== 'columns') {
+      return;
+    }
+
+    const column = this.columnsController.getColumnByPath(args.fullName);
+
+    if (column.type !== AI_COLUMN_NAME) {
+      return;
+    }
+
+    const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
+
+    if (columnOptionName === 'ai.prompt') {
+      this.promptEditorInstance?.updateValue(args.value);
+      this.aiColumnController.sendAIColumnRequest(column.name as string, {
+        onComplete: (): void => {
+          this.promptEditorInstance?.updateStateOnAction();
+        },
+        onError: (): void => {
+          // TODO: show error notification
+          this.promptEditorInstance?.updateStateOnAction();
+        },
+      });
+    }
   }
 
   public init(): void {

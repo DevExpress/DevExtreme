@@ -1449,7 +1449,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     loadDescendants(keys: Array<TKey>, childrenOnly: boolean): DxPromise<void>;
 
     abortAIColumnRequest(columnName: string): void;
-    sendAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string, callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>): void;
     refreshAIColumn(columnName: string): void;
     clearAIColumn(columnName: string): void;
     getAIColumnText(columnName: string, key: TKey): string;
@@ -1877,6 +1877,8 @@ export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TK
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
+// eslint-disable-next-line import/first
+import { RequestCallbacks, GenerateGridColumnCommandResult } from '../common/ai-integration';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
