@@ -7,6 +7,7 @@ import dxChat from 'devextreme/ui/chat';
 const CLASS = {
   input: 'dx-texteditor-input',
   messageList: 'dx-chat-messagelist',
+  /** Probably should be replaced */
   messageBoxButton: 'dx-chat-messagebox-button',
   scrollable: 'dx-scrollable',
   textArea: 'dx-textarea',

@@ -32,6 +32,7 @@ const moduleConfig = {
 
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
+            /** Probably should be replaced */
             this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
             this.sendButton = Button.getInstance(this.$sendButton);
 

@@ -14,6 +14,7 @@ import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+/** Probably should be removed */
 import { CHAT_MESSAGEBOX_BUTTON_CLASS } from '@ts/ui/chat/message_box/message_box';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
@@ -159,6 +160,7 @@ class ChatTextArea extends TextArea<Properties> {
         stylingMode: 'contained',
         disabled: true,
         elementAttr: {
+          /** Probably should be removed */
           class: CHAT_MESSAGEBOX_BUTTON_CLASS,
           'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
         },

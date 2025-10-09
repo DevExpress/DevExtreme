@@ -4,6 +4,7 @@ import MessageBox, {
     CHAT_MESSAGEBOX_CLASS,
     CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
+    /** Probably should be removed */
     CHAT_MESSAGEBOX_BUTTON_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
 
@@ -46,6 +47,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual($textArea.hasClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS), true);
         });
 
+        /** Probably should be removed */
         QUnit.test(`send button should have ${CHAT_MESSAGEBOX_BUTTON_CLASS} class`, function(assert) {
             const $button = this.$element.find(`.${BUTTON_CLASS}`);
 
