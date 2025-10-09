@@ -15,6 +15,7 @@ import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_CLASS,
+    /** Probably should be removed */
     CHAT_MESSAGEBOX_BUTTON_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
@@ -101,6 +102,7 @@ const moduleConfig = {
             this.textArea = this.$textArea.dxTextArea('instance');
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
+            /** Probably should be replaced */
             this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
         };
 
