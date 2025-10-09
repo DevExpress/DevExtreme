@@ -5,8 +5,8 @@ import type { ClickEvent } from '@js/ui/button';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as TextAreaOnSteroidsProperties } from '@ts/ui/chat/message_box/chat_text_area';
-import TextAreaOnSteroids from '@ts/ui/chat/message_box/chat_text_area';
+import type { Properties as ChatTextAreaProperties } from '@ts/ui/chat/message_box/chat_text_area';
+import ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
 import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
 import type { EnterKeyEvent, InputEvent } from '../../../../ui/text_area';
@@ -46,7 +46,7 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
-  _textArea!: TextAreaOnSteroids;
+  _textArea!: ChatTextArea;
 
   _editingPreview!: EditingPreview | null;
 
@@ -136,7 +136,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     this._textArea = this._createComponent(
       $textArea,
-      TextAreaOnSteroids,
+      ChatTextArea,
       textAreaOptions,
     );
 
@@ -147,7 +147,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _getTextAreaOptions(): TextAreaOnSteroidsProperties {
+  _getTextAreaOptions(): ChatTextAreaProperties {
     const {
       activeStateEnabled,
       focusStateEnabled,
@@ -167,7 +167,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       },
     };
 
-    return options as TextAreaOnSteroidsProperties;
+    return options as ChatTextAreaProperties;
   }
 
   _createMessageEnteredAction(): void {
