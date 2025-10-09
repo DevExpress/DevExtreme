@@ -4,7 +4,6 @@ let ownerDocumentStyleSheet = null;
 
 function createConstructedStyleSheet(rootNode) {
   try {
-    // eslint-disable-next-line no-undef
     return new CSSStyleSheet();
   } catch (err) {
     const styleElement = rootNode.ownerDocument.createElement('style');
@@ -43,22 +42,65 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
   }
 }
 
+const sheetHashes = new WeakMap();
+export function computeStyleSheetsHash(styleSheets) {
+  let hash = 2166136261;
+
+  for (const sheet of styleSheets) {
+    if (sheetHashes.has(sheet)) {
+      hash ^= sheetHashes.get(sheet);
+      continue;
+    }
+
+    let localHash = 2166136261;
+    try {
+      for (const rule of sheet.cssRules) {
+        const text = rule.cssText;
+        for (let i = 0; i < text.length; i++) {
+          localHash ^= text.charCodeAt(i);
+          localHash += (localHash << 1) + (localHash << 4) + (localHash << 7) + (localHash << 8) + (localHash << 24);
+        }
+      }
+    } catch (_) {
+      // ignore
+    }
+
+    localHash >>>= 0;
+    sheetHashes.set(sheet, localHash);
+    hash ^= localHash;
+  }
+
+  return hash >>> 0;
+}
+
+const injectedRootStates = new WeakMap();
+
 export function addShadowDomStyles($element) {
   const el = $element.get(0);
   const root = el.getRootNode?.();
+  if (!root?.host) return;
 
-  if (!root?.host) {
-    return;
+  let state = injectedRootStates.get(root);
+  if (!state) {
+    state = {
+      injectedGlobal: false,
+      lastLocalHash: null,
+    };
+    injectedRootStates.set(root, state);
   }
 
-  if (!ownerDocumentStyleSheet) {
+  if (!ownerDocumentStyleSheet && !state.injectedGlobal) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
-
     processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+    state.injectedGlobal = true;
   }
+
+  const localHash = computeStyleSheetsHash(root.styleSheets);
+  if (state.lastLocalHash === localHash) return;
+
+  state.lastLocalHash = localHash;
 
   const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
-
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);
 
   root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
@@ -103,11 +145,9 @@ export function getShadowElementsFromPoint(x, y, root) {
 
     for (let i = 0; i < el.childNodes.length; i++) {
       const childNode = el.childNodes[i];
-
-      // eslint-disable-next-line no-undef
       if (childNode.nodeType === Node.ELEMENT_NODE
                && isPositionInElementRectangle(childNode, x, y)
-               // eslint-disable-next-line no-undef
+
                && getComputedStyle(childNode).pointerEvents !== 'none'
       ) {
         elementQueue.push(childNode);
