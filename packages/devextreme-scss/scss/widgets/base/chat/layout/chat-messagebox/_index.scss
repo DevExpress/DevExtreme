@@ -10,6 +10,23 @@
   align-items: flex-end;
 }
 
-.dx-chat-messagebox-textarea {
+.dx-chat-messagebox-textarea.dx-textarea {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
+
+  &.dx-texteditor {
+    > .dx-texteditor-container {
+      .dx-texteditor-input,
+      .dx-placeholder::before {
+        padding: 0;
+      }
+    }
+  }
+}
+
+.dx-textarea-toolbar.dx-toolbar {
+  .dx-toolbar-items-container {
+    height: auto;
+  }
 }
