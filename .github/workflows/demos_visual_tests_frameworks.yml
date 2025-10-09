@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v3
         with:
           version: 9
           run_install: false
@@ -102,7 +102,7 @@ jobs:
       with:
         name: devextreme-sources
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v3
       with:
         version: 9
         run_install: false
@@ -207,7 +207,7 @@ jobs:
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v3
         with:
           version: 9
           run_install: false
@@ -290,7 +290,7 @@ jobs:
       with:
         node-version: '20'
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v3
       with:
         version: 9
         run_install: false
@@ -322,6 +322,28 @@ jobs:
       env:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: ${{ matrix.command }}
+
+    - name: Run lint on changed demos
+      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+      run: |
+        pnpx nx lint-non-demos
+
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint-demos on changed files"
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          if [ ! -z "$CHANGED_DEMOS" ]; then
+            echo "Changed demo files: $CHANGED_DEMOS"
+            pnpx eslint $CHANGED_DEMOS
+          else
+            echo "No demo files changed, skipping lint-demos"
+          fi
+        else
+          echo "changed-files.json not found"
+          pnpm run lint-demos
+        fi
 
     - name: Run lint on changed demos
       if: github.event_name != 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
@@ -366,7 +388,7 @@ jobs:
         name: changed-demos
         path: apps/demos
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v3
       with:
         version: 9
         run_install: false
@@ -474,7 +496,7 @@ jobs:
         name: changed-demos
         path: apps/demos
 
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v3
       with:
         version: 9
         run_install: false
