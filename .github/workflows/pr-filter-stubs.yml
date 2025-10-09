@@ -180,105 +180,84 @@ jobs:
       - run: exit 1
   # testcafe_tests.yml
   testcafe_tests_accessibility_1:
-    name: 'accessibility (1/5)'
+    name: 'accessibility (1/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests_accessibility_2:
-    name: 'accessibility (2/5)'
+    name: 'accessibility (2/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests_accessibility_3:
-    name: 'accessibility (3/5)'
+    name: 'accessibility (3/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests_accessibility_4:
-    name: 'accessibility (4/5)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests_accessibility_5:
-    name: 'accessibility (5/5)'
+    name: 'accessibility (4/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests6:
-    name: 'accessibility - material (1/5)'
+    name: 'accessibility - material (1/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests7:
-    name: 'accessibility - material (2/5)'
+    name: 'accessibility - material (2/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests8:
-    name: 'accessibility - material (3/5)'
+    name: 'accessibility - material (3/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests9:
-    name: 'accessibility - material (4/5)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests10:
-    name: 'accessibility - material (5/5)'
+    name: 'accessibility - material (4/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests13:
-    name: 'accessibility - fluent (1/5)'
+    name: 'accessibility - fluent (1/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests14:
-    name: 'accessibility - fluent (2/5)'
+    name: 'accessibility - fluent (2/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests15:
-    name: 'accessibility - fluent (3/5)'
+    name: 'accessibility - fluent (3/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   testcafe_tests16:
-    name: 'accessibility - fluent (4/5)'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  testcafe_tests17:
-    name: 'accessibility - fluent (5/5)'
+    name: 'accessibility - fluent (4/4)'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
