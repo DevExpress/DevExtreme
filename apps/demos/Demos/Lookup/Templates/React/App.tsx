@@ -14,6 +14,7 @@ const getDisplayExpr = (item: { FirstName: string; LastName: string; }) => (item
 export default function App() {
   return (
     <div>
+      <div> </div>
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Custom Field Template</div>
         <div className="dx-field">

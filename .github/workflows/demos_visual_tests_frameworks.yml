@@ -244,7 +244,6 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -285,46 +284,43 @@ jobs:
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 5.0.408
-
-    - name: Prepare dotnet
-      run: |
-        dotnet new globaljson --sdk-version 5.0.408
-        dotnet tool install -g dotnet-format --version 5.1.225507
-
     - name: Run lint
       working-directory: apps/demos
       env:
-        CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: pnpx nx lint
+      run: |
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint on changed files only"
+          pnpx nx affected:lint --base=origin/${{ github.event.repository.default_branch }} --head=HEAD
+        else
+          echo "Running lint on all files"
+          pnpx nx lint
+        fi
 
   check_generated_demos:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-    needs: build-demos
+    needs:
+      - build-devextreme
+      - get-changes
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 pnpm run convert-to-js
-          - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 pnpm run convert-to-js
-          - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 pnpm run convert-to-js
-          - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 pnpm run convert-to-js
-          - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 pnpm run convert-to-js
+          - name: Check generated demos
+            command: pnpm run convert-to-js
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
 
     - uses: pnpm/action-setup@v4
       with:
@@ -369,8 +365,16 @@ jobs:
 
     - name: Check generated JS demos
       working-directory: apps/demos
+      env:
+        CHANGEDFILEINFOSPATH: changed-files.json
       run: |
-        ${{ matrix.command }}
+        if [ -f "changed-files.json" ]; then
+          echo "Running convert-to-js on changed files only"
+          ${{ matrix.command }}
+        else
+          echo "Running convert-to-js on all files"
+          ${{ matrix.command }}
+        fi
 
         git add ./Demos -N
 
@@ -384,6 +388,7 @@ jobs:
 
   testcafe:
     needs: build-demos
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
       matrix:
@@ -415,7 +420,6 @@ jobs:
         name: devextreme-sources
 
     - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
       uses: actions/download-artifact@v4
       with:
         name: changed-demos

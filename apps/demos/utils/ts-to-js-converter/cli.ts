@@ -32,10 +32,35 @@ function findFoldersWithTsxFiles(directory) {
 
 const getPatterns = () => {
   const CONSTEL = process.env.CONSTEL;
+  const CHANGEDFILEINFOSPATH = process.env.CHANGEDFILEINFOSPATH;
   const userArgs = process.argv.slice(2);
 
   if (userArgs.length > 0 && userArgs[0] !== 'split') {
     return userArgs;
+  }
+
+  // Check for changed files first
+  if (CHANGEDFILEINFOSPATH && fs.existsSync(CHANGEDFILEINFOSPATH)) {
+    try {
+      const changedFiles = JSON.parse(fs.readFileSync(CHANGEDFILEINFOSPATH, 'utf8'));
+      const changedReactDemos = changedFiles
+        .filter(file => file.includes('/React/') && file.endsWith('.tsx'))
+        .map(file => {
+          const demoPath = file.replace(/^apps\/demos\//, '').replace(/\/[^\/]+\.tsx?$/, '');
+          return demoPath;
+        })
+        .filter((value, index, self) => self.indexOf(value) === index);
+      
+      if (changedReactDemos.length > 0) {
+        consola.info(`Found ${changedReactDemos.length} changed React demos:`, changedReactDemos);
+        return changedReactDemos;
+      } else {
+        consola.info('No changed React demos found, skipping conversion');
+        return [];
+      }
+    } catch (error) {
+      consola.warn('Failed to read changed files info:', error.message);
+    }
   }
 
   if (CONSTEL == null) {
