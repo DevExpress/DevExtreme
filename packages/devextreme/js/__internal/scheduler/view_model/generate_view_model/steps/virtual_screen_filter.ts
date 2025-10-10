@@ -3,13 +3,6 @@ import type ViewDataProvider from '../../../workspaces/view_model/m_view_data_pr
 import { isAppointmentMatchedIntervals } from '../../common/is_appointment_matched_intervals';
 import type { ListEntity } from '../../types';
 
-interface GroupInfo {
-  allDay: boolean;
-  startDate: Date;
-  endDate: Date;
-  groupIndex: number;
-}
-
 export const filterByVirtualScreen = <T extends ListEntity>(
   entities: T[],
   viewDataProvider: ViewDataProvider,
@@ -20,24 +13,22 @@ export const filterByVirtualScreen = <T extends ListEntity>(
   }
 
   const groupsInfo = viewDataProvider.getCompletedGroupsInfo();
-  const groupMap = new Map<number, GroupInfo>();
+  const groupIntervalsMap = new Map<number, { min: number; max: number }>();
   groupsInfo.forEach((group) => {
-    groupMap.set(group.groupIndex, group);
+    groupIntervalsMap.set(group.groupIndex, {
+      min: timeZoneUtils.createUTCDateWithLocalOffset(group.startDate).getTime(),
+      max: timeZoneUtils.createUTCDateWithLocalOffset(group.endDate).getTime(),
+    });
   });
 
   return entities.filter((appointment) => {
-    const groupInfo = groupMap.get(appointment.groupIndex);
-    if (!groupInfo) {
+    const groupInterval = groupIntervalsMap.get(appointment.groupIndex);
+    if (!groupInterval) {
       return false;
     }
     if (appointment.isAllDayPanelOccupied) {
       return true;
     }
-
-    const groupInterval = {
-      min: timeZoneUtils.createUTCDateWithLocalOffset(groupInfo.startDate).getTime(),
-      max: timeZoneUtils.createUTCDateWithLocalOffset(groupInfo.endDate).getTime(),
-    };
 
     return isAppointmentMatchedIntervals(
       { startDate: appointment.startDateUTC, endDate: appointment.endDateUTC },

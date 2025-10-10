@@ -70,3 +70,13 @@ export interface GeometryOptions {
   groupSize: RealSize;
   panelSize: RealSize;
 }
+
+export interface VirtualCropOptions {
+  isVirtualScrolling: boolean;
+  getVirtualScreen: (groupIndex: number) => {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+}
