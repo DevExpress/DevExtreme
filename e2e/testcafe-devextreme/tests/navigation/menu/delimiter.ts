@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Item } from 'devextreme/ui/menu.d';
 import Menu from 'devextreme-testcafe-models/menu';
-import { setAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -83,19 +83,20 @@ const items: Item[] = [
 }, {
   orientation: 'vertical',
   collision: 'bottom',
-  style: 'padding-top: 350px;',
+  style: 'padding-top: 400px;',
 }, {
   orientation: 'vertical',
   collision: 'right',
-  style: 'padding-left: 350px;',
+  style: 'padding-left: 300px;',
 }, {
   orientation: 'vertical',
   collision: 'bottom right',
-  style: 'padding-top: 350px; padding-left: 350px;',
+  style: 'padding-top: 400px; padding-left: 300px;',
 }].forEach(({ orientation, collision, style }) => {
   const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
   safeSizeTest(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
     const menu = new Menu();
 
     await t.click(menu.getItem(3));
@@ -106,7 +107,8 @@ const items: Item[] = [
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, [500, 500]).before(async () => {
-    await setAttribute('#container', 'style', style);
+    await appendElementTo('#container', 'div', 'menu');
+    await setAttribute('#container', 'style', `${style} width: 500px; height: 500px; box-sizing: border-box;`);
 
     await createWidget(
       'dxMenu',
@@ -114,7 +116,7 @@ const items: Item[] = [
         items,
         orientation,
       },
-      '#container',
+      '#menu',
     );
   });
 });
