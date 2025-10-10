@@ -230,6 +230,7 @@ class ChatTextArea extends TextArea<Properties> {
         this._createSendAction();
         break;
 
+      case 'fileUploaderOptions':
       default:
         super._optionChanged(args);
     }
