@@ -1,4 +1,5 @@
 export {
+  LoadingAnimationType,
   LoadPanelIndicatorProperties,
   ContentReadyEvent,
   DisposingEvent,
