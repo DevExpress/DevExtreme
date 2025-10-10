@@ -22,6 +22,12 @@
 
     &.dx-texteditor {
       border-radius: $textarea-border-radius;
+
+      &.dx-editor-outlined::before {
+        height: $textarea-border-radius;
+        border-bottom-left-radius: $textarea-border-radius;
+        border-bottom-right-radius: $textarea-border-radius;
+      }
     }
   }
 
