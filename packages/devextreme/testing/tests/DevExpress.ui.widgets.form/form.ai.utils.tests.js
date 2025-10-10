@@ -1,5 +1,4 @@
-import { getItemFormatInfo, parseResultForEditorType } from '__internal/ui/form/form.ai.utils';
-import errors from 'ui/widget/ui.errors';
+import { getFieldType, getItemFormatInfo } from '__internal/ui/form/form.ai.utils';
 
 const formItemComponents = [
     'dxAutocomplete',
@@ -82,131 +81,23 @@ QUnit.module('getItemFormatInfo', () => {
     });
 });
 
-QUnit.module('parseResultForEditorType', () => {
-    [
-        {
-            editorType: 'dxCalendar',
-            correctValue: '2025-08-29',
-            incorrectValues: [{ value: '{}', description: 'not a date' }],
-            expectedType: 'date',
-        },
-        {
-            editorType: 'dxColorBox',
-            correctValue: '#fff',
-            incorrectValues: [{ value: '{}', description: 'not a color' }],
-            expectedType: 'color',
-        },
-        {
-            editorType: 'dxDateBox',
-            correctValue: '2025-08-29',
-            incorrectValues: [{ value: '{}', description: 'not a date' }],
-            expectedType: 'date',
-        },
-        {
-            editorType: 'dxHtmlEditor',
-            correctValue: 'string',
-            incorrectValues: [{ value: ['string'], description: 'array' }],
-            expectedType: 'string',
-        },
-        {
-            editorType: 'dxNumberBox',
-            correctValue: '3.14',
-            incorrectValues: [{ value: 'five', description: 'not a number' }],
-            expectedType: 'number',
-        },
-        {
-            editorType: 'dxSlider',
-            correctValue: '3.14',
-            incorrectValues: [{ value: 'five', description: 'not a number' }],
-            expectedType: 'number',
-        },
-    ].forEach(({ editorType, correctValue, incorrectValues, expectedType }) => {
-        QUnit.test(`should return correct value for ${editorType}`, function(assert) {
-            const value = correctValue;
+QUnit.module('getFieldType', () => {
+    formItemComponents.forEach((editorType) => {
+        QUnit.test(`should return correct format for ${editorType}`, function(assert) {
+            const format = getFieldType(editorType);
+            const expectedFormats = {
+                dxDateBox: 'date',
+                dxCalendar: 'date',
+                dxDateRangeBox: 'dateRange',
+                dxColorBox: 'color',
+                dxCheckBox: 'boolean',
+                dxSwitch: 'boolean',
+                dxNumberBox: 'number',
+                dxSlider: 'number',
+                dxRangeSlider: 'numberRange',
+            };
 
-            assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
-        });
-
-        incorrectValues.forEach(({ value, description }) => {
-            QUnit.test(`should throw an error for ${description} value for ${editorType}`, function(assert) {
-                assert.throws(
-                    () => parseResultForEditorType('dataField', editorType, value),
-                    errors.Error('E1064', 'dataField', JSON.stringify(value), expectedType),
-                    `error for ${JSON.stringify(value)} is thrown with correct parameters`,
-                );
-            });
-        });
-    });
-
-    [{
-        editorType: 'dxDateRangeBox',
-        correctValues: [
-            { value: ['2025-08-29', '2025-08-29'], description: 'two dates' },
-            { value: ['2025-08-29'], description: 'one date' },
-            { value: [], description: 'an empty array' },
-        ],
-        incorrectValues: [
-            { value: '{}', description: 'string' },
-            { value: ['2025-08-29', '{}'], description: 'array with not a date' },
-            { value: ['2025-08-29', '2025-08-29', '2025-08-29'], description: 'array of more than two items' },
-        ],
-        expectedType: 'date range'
-    }, {
-        editorType: 'dxRangeSlider',
-        correctValues: [
-            { value: ['3.14', '3.14'], description: 'two numbers' },
-            { value: ['3.14'], description: 'one number' },
-            { value: [], description: 'an empty array' },
-        ],
-        incorrectValues: [
-            { value: '{}', description: 'string' },
-            { value: ['3.14', 'five'], description: 'array with not a number' },
-            { value: ['3.14', '3.14', '3.14'], description: 'array of more than two items' },
-        ],
-        expectedType: 'number range'
-    }].forEach(({ editorType, correctValues, incorrectValues, expectedType }) => {
-        correctValues.forEach(({ value, description }) => {
-            QUnit.test(`should return correct value for ${description} for ${editorType}`, function(assert) {
-                assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} is correct value for ${editorType}`);
-            });
-        });
-
-        incorrectValues.forEach(({ value, description }) => {
-            QUnit.test(`should throw an error for ${description} value for ${editorType}`, function(assert) {
-                assert.throws(
-                    () => parseResultForEditorType('dataField', editorType, value),
-                    errors.Error('E1064', 'dataField', JSON.stringify(value), expectedType),
-                    `error for ${JSON.stringify(value)} is thrown with correct parameters`,
-                );
-            });
-        });
-    });
-
-    ['dxCheckBox', 'dxSwitch'].forEach((editorType) => {
-        QUnit.test(`should return correct value for ${editorType}`, function(assert) {
-            assert.strictEqual(parseResultForEditorType('', editorType, 'false'), false, 'returned false for string "false"');
-            assert.strictEqual(parseResultForEditorType('', editorType, 'true'), true, 'returned true for string "true"');
-        });
-
-        QUnit.test(`should throw an error for a not boolean value for ${editorType}`, function(assert) {
-            const value = '.';
-            assert.throws(
-                () => parseResultForEditorType('dataField', editorType, value),
-                errors.Error('E1064', 'dataField', JSON.stringify(value), 'boolean'),
-                `error for ${JSON.stringify(value)} is thrown with correct parameters`,
-            );
-        });
-    });
-
-    ['dxAutocomplete', 'dxDropDownBox', 'dxLookup', 'dxRadioGroup', 'dxSelectBox', 'dxTagBox', 'dxTextArea', 'dxTextBox'].forEach((editorType) => {
-        QUnit.test(`should return same string value for ${editorType}`, function(assert) {
-            const value = 'string';
-            assert.strictEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} value returned for ${editorType}`);
-        });
-
-        QUnit.test(`should return same array value for ${editorType}`, function(assert) {
-            const value = ['string'];
-            assert.deepEqual(parseResultForEditorType('', editorType, value), value, `${JSON.stringify(value)} returned for ${editorType}`);
+            assert.strictEqual(format, expectedFormats[editorType] || 'string', `${editorType} format is correct`);
         });
     });
 });
