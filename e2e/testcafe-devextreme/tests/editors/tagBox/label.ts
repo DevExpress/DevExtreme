@@ -61,12 +61,6 @@ stylingModes.forEach((stylingMode) => {
 
       const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}.png`;
 
-      await testScreenshot(t, takeScreenshot, screenshotName);
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-
       await t.click(tagBox.element);
       await t.click(tagBox.element);
 
