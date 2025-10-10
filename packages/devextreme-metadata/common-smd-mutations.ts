@@ -1,7 +1,4 @@
-import {
-  replaceTypes,
-  ReplaceTypesMutation,
-} from 'devextreme-internal-tools/ts/config/metadata';
+import { replaceTypes, ReplaceTypesMutation } from 'devextreme-internal-tools/ts/config/metadata';
 
 const commonSeriesOptions = [
   'area',
