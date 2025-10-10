@@ -31,6 +31,7 @@
   $chat-messagebox-border-color,
   $chat-messagebox-gap,
   $chat-messagebox-textarea-border-radius,
+  $chat-messagebox-toolbar-min-height,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
