@@ -29,7 +29,6 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
@@ -51,6 +50,7 @@ import {
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
 import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/m_widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
@@ -213,7 +213,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _cellsSelectionController: any;
 
-  _dateTableScrollable: any;
+  _dateTableScrollable!: Scrollable;
 
   _selectionChangedAction: any;
 
@@ -909,6 +909,19 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
   }
 
+  updateHeaderPanelScrollbarPadding() {
+    if (hasWindow() && this._$headerPanelContainer) {
+      const scrollbarWidth = this._getScrollbarWidth();
+      this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
+    }
+  }
+
+  _getScrollbarWidth() {
+    const containerElement = $(this._dateTableScrollable.container()).get(0) as HTMLElement;
+    const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+    return scrollbarWidth;
+  }
+
   _isGroupsSpecified(groupValues?: GroupValues) {
     return this.option('groups')?.length && groupValues;
   }
@@ -1074,6 +1087,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._dateTableScrollable.update();
     this._headerScrollable?.update();
     this._sidebarScrollable?.update();
+    this.updateHeaderPanelScrollbarPadding();
   }
 
   _getTimePanelRowCount() {
