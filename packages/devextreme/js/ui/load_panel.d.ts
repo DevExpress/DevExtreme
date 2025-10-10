@@ -25,6 +25,8 @@ import {
 
 import { LoadingAnimationType } from './load_indicator';
 
+export { LoadingAnimationType };
+
 /**
  * @docid
  * @public
