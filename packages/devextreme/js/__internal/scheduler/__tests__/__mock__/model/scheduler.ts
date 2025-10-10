@@ -33,6 +33,11 @@ export class SchedulerModel {
     );
   }
 
+  getCollectorTexts(): string[] {
+    const collectors = this.container.querySelectorAll('.dx-scheduler-appointment-collector');
+    return getTexts(collectors);
+  }
+
   getDateTableContent(): string[] {
     const cells = this.container.querySelectorAll('.dx-scheduler-date-table-cell');
     return getTexts(cells);

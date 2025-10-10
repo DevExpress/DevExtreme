@@ -49,7 +49,7 @@ import {
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
-import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
+import type { ViewType } from '@ts/scheduler/types';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/m_widget_notify_scheduler';
@@ -67,6 +67,7 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
+import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
@@ -840,10 +841,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
     this.virtualScrollingDispatcher.attachScrollableEvents();
     this.renderer = new VirtualScrollingRenderer(this);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDataSourceChanged(argument?: SafeAppointment[]): void {
   }
 
   isGroupedAllDayPanel() {
@@ -1950,6 +1947,19 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
     }));
+  }
+
+  getPanelDOMSize(panelName: 'allDayPanel' | 'regularPanel'): { width: number; height: number } {
+    return panelName === 'allDayPanel'
+      ? this.cache.memo('allDayPanelSize', () => getBoundingRect(this._$allDayPanel.get(0)))
+      : this.cache.memo('regularPanelSize', () => getBoundingRect(this._getDateTable().get(0)));
+  }
+
+  getCollectorDimension(isCollectorCompact: boolean, panelName: 'allDayPanel' | 'regularPanel') {
+    return this.cache.memo(`collectorSize-${panelName}`, () => CompactAppointmentsHelper.measureCollectorDimensions(
+      panelName === 'allDayPanel' ? this.getAllDayContainer() : this.getFixedContainer(),
+      isCollectorCompact,
+    ));
   }
 
   _getDateTableDOMElementsInfo() {

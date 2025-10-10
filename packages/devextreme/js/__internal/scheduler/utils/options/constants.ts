@@ -103,11 +103,9 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   },
   _draggingMode: 'outlook',
   _appointmentTooltipOffset: { x: 0, y: 0 },
-  _appointmentCountPerCell: 2,
-  _collectorOffset: 0,
-  _appointmentOffset: 26,
   appointmentPopupTemplate: 'appointmentPopup',
   disabledExpr: 'disabled',
+  visibleExpr: 'visible',
   allowMultipleCellSelection: true,
 };
 
@@ -158,9 +156,6 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
           if (!wordIndex) $(element).append(' ' as unknown as Element);
         });
       },
-      _appointmentCountPerCell: 1,
-      _collectorOffset: 20,
-      _appointmentOffset: 30,
     },
   },
   {
