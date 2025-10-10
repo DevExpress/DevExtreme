@@ -54,7 +54,7 @@ const createDateRangeBox = async (options?: any, state?: string): Promise<string
 test('DateRangeBox styles', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'DateRangeBox styles.png');
+  await testScreenshot(t, takeScreenshot, 'DateRangeBox styles.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -82,7 +82,7 @@ test('DateRangeBox styles', async (t) => {
 test('DateRangeBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'DateRangeBox with buttons container.png');
+  await testScreenshot(t, takeScreenshot, 'DateRangeBox with buttons container.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -106,17 +106,17 @@ labelModes.forEach((labelMode) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dateRangeBox = new DateRangeBox(`#${t.ctx.id}`);
 
-    await testScreenshot(t, takeScreenshot, 'Placeholder and label by default.png');
+    await testScreenshot(t, takeScreenshot, `Placeholder and label by default labelMode=${labelMode}.png`, { element: '#container' });
 
     await t
       .click(dateRangeBox.getStartDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, 'Placeholder and label on start date input focus.png');
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on start date input focus labelMode=${labelMode}.png`, { element: '#container' });
 
     await t
       .click(dateRangeBox.getEndDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, 'Placeholder and label on end date input focus.png');
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on end date input labelMode=${labelMode} focus.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())

@@ -57,7 +57,7 @@ test('The validation message overlay for DateRangeBox should be correctly positi
     await new Form(`#${id}`).validate();
   }
 
-  await testScreenshot(t, takeScreenshot, 'The validation message overlay position for DateRangeBox before opening.png');
+  await testScreenshot(t, takeScreenshot, 'The validation message overlay position for DateRangeBox before opening.png', { element: '#container' });
 
   for (const id of t.ctx.ids) {
     const form = new Form(`#${id}`);
@@ -70,7 +70,7 @@ test('The validation message overlay for DateRangeBox should be correctly positi
       .click(dateRangeBox.dropDownButton);
   }
 
-  await testScreenshot(t, takeScreenshot, 'The validation message overlay position for DateRangeBox after opening.png');
+  await testScreenshot(t, takeScreenshot, 'The validation message overlay position for DateRangeBox after opening.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
