@@ -621,7 +621,8 @@ module('Virtual scrolling Month View', () => {
                         { id: 1, text: 'rc_001' },
                         { id: 2, text: 'rc_002' },
                         { id: 3, text: 'rc_003' },
-                        { id: 4, text: 'rc_004' }
+                        { id: 4, text: 'rc_004' },
+                        { id: 5, text: 'rc_005' }
                     ]
                 }],
                 scrolling: {

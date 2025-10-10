@@ -505,6 +505,7 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 2500,
                                 appointmentRects: [
+                                    { left: -9713, top: -10093, height: 4 },
                                     { left: -9713, top: -9742, height: 500 }
                                 ]
                             },
@@ -1605,6 +1606,7 @@ module('Virtual scrolling integration', () => {
                                 { left: -9524, top: -9864, height: 25, width: 75 },
                                 { left: -9449, top: -9864, height: 25, width: 75 },
                                 { left: -8774, top: -9864, height: 25, width: 75 },
+                                { left: -8699, top: -9864, height: 25, width: 5 },
                             ]
                         },
                         {
@@ -1632,7 +1634,8 @@ module('Virtual scrolling integration', () => {
                                 { left: -9624, top: -9864, height: 25, width: 75 },
                                 { left: -9549, top: -9864, height: 25, width: 75 },
                                 { left: -9474, top: -9864, height: 25, width: 75 },
-                                { left: -9399, top: -9864, height: 25, width: 75 }
+                                { left: -9399, top: -9864, height: 25, width: 75 },
+                                { left: -8724, top: -9864, height: 25, width: 5 },
                             ]
                         },
                         {
