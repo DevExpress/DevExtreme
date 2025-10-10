@@ -2,12 +2,13 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TagBox from 'devextreme-testcafe-models/tagBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo,
   setStyleAttribute,
+  insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -36,6 +37,10 @@ stylingModes.forEach((stylingMode) => {
       value: [...Array(5)].map((_, i) => `item${i}`),
       stylingMode,
     };
+
+    if (isMaterial()) {
+      await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+    }
 
     await appendElementTo('#container', 'div', 'tagBox1', { });
     await appendElementTo('#container', 'div', 'tagBox2', { });
