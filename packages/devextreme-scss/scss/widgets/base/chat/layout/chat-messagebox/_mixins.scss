@@ -1,14 +1,15 @@
 @mixin chat-messagebox(
-  $padding,
-  $border-color,
+  $messagebox-padding,
+  $messagebox-border-color,
   $gap,
   $textarea-border-radius,
+  $textarea-padding,
   $toolbar-min-height
 ) {
   .dx-chat-messagebox {
-    padding: $padding;
-    border-top-color: $border-color;
-    gap: $padding;
+    padding: $messagebox-padding;
+    border-top-color: $messagebox-border-color;
+    gap: $messagebox-padding;
   }
 
   .dx-chat-messagebox-textarea-container {
@@ -17,8 +18,7 @@
 
   .dx-chat-messagebox-textarea.dx-textarea {
     gap: $gap;
-    /** MAKE WITH VARS */
-    padding: 12px; // Fluent 12 (8). For Material 16 (12), Generic 9 (5)
+    padding: $textarea-padding;
 
     &.dx-texteditor {
       border-radius: $textarea-border-radius;
