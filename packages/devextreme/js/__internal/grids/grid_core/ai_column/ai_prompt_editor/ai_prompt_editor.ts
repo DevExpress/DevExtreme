@@ -205,16 +205,11 @@ export class AiPromptEditor {
   ): void {
     switch (action) {
       case 'apply':
+      case 'regenerate':
         this.setLoading(true);
         this.toggleDisableState(true);
         this.toggleApplyButtonVisibility(false);
         break;
-
-      case 'regenerate':
-        this.setLoading(true);
-        this.toggleDisableState(true);
-        break;
-
       default:
         this.setLoading(false);
         this.toggleDisableState(false);

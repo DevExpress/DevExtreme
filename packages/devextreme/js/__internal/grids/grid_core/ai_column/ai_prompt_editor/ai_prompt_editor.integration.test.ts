@@ -797,8 +797,8 @@ describe('Public Methods', () => {
         expect(POM.isRefreshButtonDisabled()).toBe(true);
         expect(POM.getTextArea().disabled).toBe(true);
         // Apply button visibility should remain unchanged for regenerate action
-        expect(POM.isApplyButtonVisible()).toBe(true);
-        expect(POM.isStopButtonVisible()).toBe(false);
+        expect(POM.isApplyButtonVisible()).toBe(false);
+        expect(POM.isStopButtonVisible()).toBe(true);
         expect(POM.getPopupInstance().option('shading')).toBe(true);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
       });
