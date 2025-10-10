@@ -197,7 +197,7 @@ export class OptionManager {
       getVirtualScreen: (groupIndex: number) => this.cache.memo(`virtualScreen${groupIndex}`, () => {
         const left = hVirtualItemsCount * cellSize.width;
         const top = cellCountInsideTopVirtualRow * cellSize.height;
-        const right = positionHelper.getHorizontalMax(groupIndex) || Infinity;
+        const right = Math.round(positionHelper.getHorizontalMax(groupIndex)) || Infinity;
         const bottom = positionHelper.getVerticalMax({
           groupIndex,
           isVirtualScrolling,
@@ -205,7 +205,7 @@ export class OptionManager {
           supportAllDayRow: hasAllDayPanel,
           isGroupedAllDayPanel,
           isVerticalGrouping,
-        }) || Infinity;
+        });
 
         return {
           left: isRTLEnabled ? panelSize.width - right : left,
