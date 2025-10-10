@@ -416,6 +416,12 @@ pnpm run clean              # From devextreme package
 pnpm run webserver          # From root, then visit localhost:8080
 ```
 
+## Code Style and Conventions
+
+**IMPORTANT:** All code contributions must follow the rules defined in `.github/instructions/`.
+
+Before making any changes, always check `.github/instructions/` directory for file-specific or pattern-specific coding conventions and rules that apply to the files you're modifying.
+
 ## Trust These Instructions
 
 These instructions are based on actual repository analysis including:
