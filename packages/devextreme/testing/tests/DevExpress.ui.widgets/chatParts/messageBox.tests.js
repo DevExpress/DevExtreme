@@ -6,7 +6,6 @@ import config from 'core/config';
 import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
-    CHAT_MESSAGEBOX_BUTTON_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
@@ -17,6 +16,7 @@ import EditingPreview, {
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -32,8 +32,7 @@ const moduleConfig = {
 
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            /** Probably should be replaced */
-            this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
+            this.$sendButton = this.$element.find(`.${BUTTON_CLASS}`).at(-1);
             this.sendButton = Button.getInstance(this.$sendButton);
 
             this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
