@@ -1031,7 +1031,12 @@ export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & Red
 /** @public */
 export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDraggingReorderEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragReorderInfo
+ */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
 /**
@@ -2560,11 +2565,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared',
+'onReorder'>;
 
 /**
-* @hidden
-*/
+ * @hidden
+ */
 type Events = {
 /**
  * @docid dxDataGridOptions.onAdaptiveDetailRowPreparing
@@ -2691,5 +2697,16 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  * @type_function_param1 e:{ui/data_grid:ToolbarPreparingEvent}
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+
+/* Nested Components */
+/* RowDragging */
+/**
+ * @docid dxDataGridOptions.rowDragging.onReorder
+ * @type_function_param1 e:{ui/data_grid:RowDraggingReorderEvent}
+ * @skip
+ */
+onReorder?: ((e: RowDraggingReorderEvent) => void);
+/* RowDragging */
+/* Nested Components */
 };
 /// #ENDDEBUG

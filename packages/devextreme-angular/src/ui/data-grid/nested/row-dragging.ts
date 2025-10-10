@@ -19,6 +19,7 @@ import dxDraggable from 'devextreme/ui/draggable';
 import { DragDirection, DragHighlight } from 'devextreme/common';
 import { GridBase } from 'devextreme/common/grids';
 import { event } from 'devextreme/events/events.types';
+import { RowDraggingReorderEvent } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,
@@ -189,10 +190,10 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get onReorder(): ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
+    get onReorder(): ((e: RowDraggingReorderEvent) => void) {
         return this._getOption('onReorder');
     }
-    set onReorder(value: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
+    set onReorder(value: ((e: RowDraggingReorderEvent) => void)) {
         this._setOption('onReorder', value);
     }
 

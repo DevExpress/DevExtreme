@@ -824,7 +824,12 @@ export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & Red
 /** @public */
 export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_RowDraggingReorderEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,RowDraggingEventInfo,DragReorderInfo
+ */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
 /** @public */
@@ -1880,11 +1885,13 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAIColumnRequestCreating' | 'onAIColumnResponseReceived' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared',
+'onReorder'
+>;
 
 /**
-* @hidden
-*/
+ * @hidden
+ */
 type Events = {
 /**
  * @docid dxTreeListOptions.onAdaptiveDetailRowPreparing
@@ -2011,5 +2018,16 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  * @type_function_param1 e:{ui/tree_list:ToolbarPreparingEvent}
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+
+/* Nested Components */
+/* RowDragging */
+/**
+ * @docid dxTreeListOptions.rowDragging.onReorder
+ * @type_function_param1 e:{ui/tree_list:RowDraggingReorderEvent}
+ * @skip
+ */
+onReorder?: ((e: RowDraggingReorderEvent) => void);
+/* RowDragging */
+/* Nested Components */
 };
 /// #ENDDEBUG

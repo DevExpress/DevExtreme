@@ -13,6 +13,7 @@ Ng.makeMetadata({
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
+    removeMembers(/\/(data_grid|tree_list):Events\.onReorder/),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),

@@ -107,6 +107,7 @@ import {
  SelectionSensitivity,
  DataGridExportFormat,
  DataGridPredefinedToolbarItem,
+ RowDraggingReorderEvent,
  DataGridScrollMode,
  dxDataGridToolbarItem,
 } from "devextreme/ui/data_grid";
@@ -3416,7 +3417,7 @@ const DxRowDraggingConfig = {
     onDragMove: Function as PropType<((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
     onDragStart: Function as PropType<((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)>,
     onRemove: Function as PropType<((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
-    onReorder: Function as PropType<((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)>,
+    onReorder: Function as PropType<((e: RowDraggingReorderEvent) => void)>,
     scrollSensitivity: Number,
     scrollSpeed: Number,
     showDragIcons: Boolean

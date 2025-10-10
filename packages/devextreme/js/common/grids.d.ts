@@ -1003,10 +1003,17 @@ export type DragDropInfo = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type DragReorderInfo = {
+  /** @docid */
   readonly dropInsideItem: boolean;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   promise?: PromiseLike<void>;
 };
 
@@ -2887,16 +2894,32 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowDraggingEventInfo<TRowData = any> {
+  /** @docid */
   readonly itemData?: TRowData;
+  /** @docid */
   readonly itemElement: DxElement;
+  /** @docid */
   readonly fromIndex: number;
+  /** @docid */
   readonly toIndex: number;
+  /**
+   * @docid
+   * @type dxSortable|dxDraggable
+   */
   readonly fromComponent: Sortable | Draggable;
+  /**
+   * @docid
+   * @type dxSortable|dxDraggable
+   */
   readonly toComponent: Sortable | Draggable;
+  /** @docid */
   readonly fromData?: any;
+  /** @docid */
   readonly toData?: any;
 }
 

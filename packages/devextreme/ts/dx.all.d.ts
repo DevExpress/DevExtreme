@@ -5162,10 +5162,17 @@ declare module DevExpress.common.grids {
     readonly dropInsideItem: boolean;
   };
   /**
+   * [descr:DragReorderInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type DragReorderInfo = {
+    /**
+     * [descr:DragReorderInfo.dropInsideItem]
+     */
     readonly dropInsideItem: boolean;
+    /**
+     * [descr:DragReorderInfo.promise]
+     */
     promise?: PromiseLike<void>;
   };
   /**
@@ -6494,16 +6501,41 @@ declare module DevExpress.common.grids {
     showDragIcons?: boolean;
   };
   /**
+   * [descr:RowDraggingEventInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowDraggingEventInfo<TRowData = any> {
+    /**
+     * [descr:RowDraggingEventInfo.itemData]
+     */
     readonly itemData?: TRowData;
+    /**
+     * [descr:RowDraggingEventInfo.itemElement]
+     */
     readonly itemElement: DevExpress.core.DxElement;
+    /**
+     * [descr:RowDraggingEventInfo.fromIndex]
+     */
     readonly fromIndex: number;
+    /**
+     * [descr:RowDraggingEventInfo.toIndex]
+     */
     readonly toIndex: number;
+    /**
+     * [descr:RowDraggingEventInfo.fromComponent]
+     */
     readonly fromComponent: Sortable | Draggable;
+    /**
+     * [descr:RowDraggingEventInfo.toComponent]
+     */
     readonly toComponent: Sortable | Draggable;
+    /**
+     * [descr:RowDraggingEventInfo.fromData]
+     */
     readonly fromData?: any;
+    /**
+     * [descr:RowDraggingEventInfo.toData]
+     */
     readonly toData?: any;
   }
   export type RowDraggingTemplateData<TRowData = any> = {
@@ -13475,6 +13507,9 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_RowDraggingReorderEvent]
+     */
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
@@ -31501,6 +31536,9 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.RowDraggingEventInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_RowDraggingReorderEvent]
+     */
     export type RowDraggingReorderEvent<
       TRowData = any,
       TKey = any
