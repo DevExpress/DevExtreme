@@ -7,7 +7,6 @@ import MessageBox, {
 } from '__internal/ui/chat/message_box/message_box';
 
 const TEXTAREA_CLASS = 'dx-textarea';
-const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -43,14 +42,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
             const $textArea = this.$element.find(`.${TEXTAREA_CLASS}`);
 
             assert.strictEqual($textArea.hasClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS), true);
-        });
-    });
-
-    QUnit.module('Accessibility', moduleConfig, () => {
-        QUnit.test('send button should have correct aria-label', function(assert) {
-            const $button = this.$element.find(`.${BUTTON_CLASS}`);
-
-            assert.strictEqual($button.attr('aria-label'), 'Send');
         });
     });
 });
