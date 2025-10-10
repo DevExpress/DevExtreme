@@ -4,13 +4,13 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight } from '@js/core/utils/size';
+import type { NativeEventInfo } from '@js/events';
 import type {
   ClickEvent,
   InitializedEvent,
 } from '@js/ui/button';
 import type Button from '@js/ui/button';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
-import type { EnterKeyEvent } from '@js/ui/text_area';
 import { current, isMaterial } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
@@ -24,10 +24,14 @@ const TEXT_AREA_WITH_TOOLBAR = 'dx-textarea-with-toolbar';
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
+type EnterKeyEvent = NativeEventInfo<ChatTextArea, KeyboardEvent>;
+
+export type SendEvent = ClickEvent | EnterKeyEvent;
+
 export type Properties = TextAreaProperties & {
   fileUploaderOptions?: FileUploaderProperties;
 
-  onSend?: (e: ClickEvent | EnterKeyEvent) => void;
+  onSend?: (e: SendEvent) => void;
 };
 
 class ChatTextArea extends TextArea<Properties> {
@@ -37,8 +41,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _sendButton?: Button;
 
-  /** KeyboardEvent should be replaced with EnterKeyEvent */
-  _sendAction?: (e: Partial<ClickEvent | KeyboardEvent>) => void;
+  _sendAction?: (e: SendEvent) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -72,7 +75,11 @@ class ChatTextArea extends TextArea<Properties> {
       enter: (e): void => {
         if (!e?.shiftKey && this._isValuableTextEntered() && !isMobile()) {
           e.preventDefault();
-          this._processSendPress(e);
+          this._processSendButtonActivation({
+            component: this,
+            element: this.element(),
+            event: e,
+          });
         }
       },
     };
@@ -172,7 +179,7 @@ class ChatTextArea extends TextArea<Properties> {
           'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
         },
         onClick: (e: ClickEvent): void => {
-          this._processSendPress(e);
+          this._processSendButtonActivation(e);
         },
         onInitialized: (e: InitializedEvent): void => {
           this._sendButton = e.component;
@@ -204,7 +211,7 @@ class ChatTextArea extends TextArea<Properties> {
     this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
 
-  _processSendPress(e: ClickEvent | KeyboardEvent): void {
+  _processSendButtonActivation(e: SendEvent): void {
     this._sendAction?.(e);
     this.reset();
     this._toggleButtonDisableState(true);
