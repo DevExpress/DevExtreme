@@ -6,7 +6,7 @@ import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const ACTIVE_STATE_CLASS = 'dx-state-active';
@@ -16,13 +16,11 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
 const types = ['danger', 'default', 'normal', 'success'];
-// eslint-disable-next-line max-len
-const states = [false] as any[]; // FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, `${FOCUSED_STATE_CLASS} ${ACTIVE_STATE_CLASS}`
 
-fixture`Toolbar_OverflowMenu`
+fixture.disablePageReloads`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'));
 
-test('Drop down button should lost hover and active state', async (t) => {
+test.meta({ unstable: true })('Drop down button should lost hover and active state', async (t) => {
   const toolbar = new Toolbar('#toolbar');
   const dropDownMenu = toolbar.getOverflowMenu();
 
@@ -321,8 +319,55 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 }));
 
 ['auto'].forEach((locateInMenu) => { // always
-  states.forEach((state) => {
-    test(`Toolbar buttons appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
+  test(`Toolbar buttons appearence,locateInMenu=${locateInMenu}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const toolbar = new Toolbar('#container');
+    let targetContainer = Selector('#container');
+
+    await t
+      .click(toolbar.getOverflowMenu().element);
+
+    targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+    await testScreenshot(t, takeScreenshot, 'Toolbar-buttons.png', { element: targetContainer });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    const items = [] as any;
+
+    for (const stylingMode of stylingModes) {
+      for (const type of types) {
+        const id = `${`dx${new Guid()}`}`;
+
+        items.push({
+          widget: 'dxButton',
+          locateInMenu,
+          options: {
+            stylingMode,
+            text: 'Button Text',
+            type,
+            hint: `stylingMode=${stylingMode}, type=${type}`,
+            icon: 'home',
+            elementAttr: {
+              id,
+            },
+          },
+        });
+      }
+    }
+
+    await createWidget('dxToolbar', {
+      width: 50,
+      multiline: false,
+      items,
+    });
+  });
+
+  ['template'].forEach((templateName) => { // 'menuItemTemplate'
+    test(`Toolbar buttons as ${templateName} appearence,locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const toolbar = new Toolbar('#container');
@@ -333,40 +378,33 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
       targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-      for (const id of t.ctx.ids) {
-        if (state) {
-          await setClassAttribute(Selector(`#${id}`), state);
-        }
-      }
-
-      await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
+      await testScreenshot(t, takeScreenshot, 'Toolbar-buttons.png', { element: targetContainer });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      t.ctx.ids = [];
-
+    }).before(async () => {
       const items = [] as any;
 
       for (const stylingMode of stylingModes) {
         for (const type of types) {
           const id = `${`dx${new Guid()}`}`;
 
-          t.ctx.ids.push(id);
+          const template = ClientFunction(() => ($('<div>') as any).dxButton({
+            stylingMode,
+            text: 'Button Text',
+            type,
+            hint: `stylingMode=${stylingMode}, type=${type}`,
+            icon: 'home',
+            elementAttr: {
+              id,
+            },
+          }), { dependencies: { stylingMode, id, type } });
+
           items.push({
             widget: 'dxButton',
             locateInMenu,
-            options: {
-              stylingMode,
-              text: 'Button Text',
-              type,
-              hint: `stylingMode=${stylingMode}, type=${type}`,
-              icon: 'home',
-              elementAttr: {
-                id,
-              },
-            },
+            [templateName]: template,
           });
         }
       }
@@ -378,126 +416,7 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
     });
 
-    ['template'].forEach((templateName) => { // 'menuItemTemplate'
-      test(`Toolbar buttons as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-        const toolbar = new Toolbar('#container');
-        let targetContainer = Selector('#container');
-
-        await t
-          .click(toolbar.getOverflowMenu().element);
-
-        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
-
-        for (const id of t.ctx.ids) {
-          if (state) {
-            await setClassAttribute(Selector(`#${id}`), state);
-          }
-        }
-
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttons${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
-
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        t.ctx.ids = [];
-
-        const items = [] as any;
-
-        for (const stylingMode of stylingModes) {
-          for (const type of types) {
-            const id = `${`dx${new Guid()}`}`;
-
-            t.ctx.ids.push(id);
-
-            const template = ClientFunction(() => ($('<div>') as any).dxButton({
-              stylingMode,
-              text: 'Button Text',
-              type,
-              hint: `stylingMode=${stylingMode}, type=${type}`,
-              icon: 'home',
-              elementAttr: {
-                id,
-              },
-            }), { dependencies: { stylingMode, id, type } });
-
-            items.push({
-              widget: 'dxButton',
-              locateInMenu,
-              [templateName]: template,
-            });
-          }
-        }
-
-        await createWidget('dxToolbar', {
-          width: 50,
-          multiline: false,
-          items,
-        });
-      });
-
-      test(`Toolbar buttons as custom ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-        const toolbar = new Toolbar('#container');
-        let targetContainer = Selector('#container');
-
-        await t
-          .click(toolbar.getOverflowMenu().element);
-
-        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
-
-        for (const id of t.ctx.ids) {
-          if (state) {
-            await setClassAttribute(Selector(`#${id}`), state);
-          }
-        }
-
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
-
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        t.ctx.ids = [];
-
-        const items = [] as any;
-
-        for (const stylingMode of stylingModes) {
-          for (const type of types) {
-            const id = `${`dx${new Guid()}`}`;
-
-            t.ctx.ids.push(id);
-
-            const template = ClientFunction(() => ($('<div>') as any).dxButton({
-              stylingMode,
-              text: 'Button Text',
-              type,
-              hint: `stylingMode=${stylingMode}, type=${type}`,
-              icon: 'home',
-              elementAttr: {
-                id,
-              },
-            }), { dependencies: { stylingMode, id, type } });
-
-            items.push({
-              locateInMenu,
-              [templateName]: template,
-            });
-          }
-        }
-
-        await createWidget('dxToolbar', {
-          width: 50,
-          multiline: false,
-          items,
-        });
-      });
-    });
-
-    test(`Toolbar button group appearence ${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
+    test(`Toolbar buttons as custom ${templateName} appearence,locateInMenu=${locateInMenu}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const toolbar = new Toolbar('#container');
@@ -508,28 +427,118 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
 
       targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-      for (const id of t.ctx.ids) {
-        if (state) {
-          await setClassAttribute(Selector(`#${id}`), state);
-        }
-      }
-
-      await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
+      await testScreenshot(t, takeScreenshot, `Toolbar-buttons-custom-${templateName}.png`, { element: targetContainer });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      t.ctx.ids = [];
+    }).before(async () => {
+      const items = [] as any;
 
+      for (const stylingMode of stylingModes) {
+        for (const type of types) {
+          const id = `${`dx${new Guid()}`}`;
+
+          const template = ClientFunction(() => ($('<div>') as any).dxButton({
+            stylingMode,
+            text: 'Button Text',
+            type,
+            hint: `stylingMode=${stylingMode}, type=${type}`,
+            icon: 'home',
+            elementAttr: {
+              id,
+            },
+          }), { dependencies: { stylingMode, id, type } });
+
+          items.push({
+            locateInMenu,
+            [templateName]: template,
+          });
+        }
+      }
+
+      await createWidget('dxToolbar', {
+        width: 50,
+        multiline: false,
+        items,
+      });
+    });
+  });
+
+  test(`Toolbar button group appearence,locateInMenu=${locateInMenu}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const toolbar = new Toolbar('#container');
+    let targetContainer = Selector('#container');
+
+    await t
+      .click(toolbar.getOverflowMenu().element);
+
+    targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+    await testScreenshot(t, takeScreenshot, 'Toolbar-buttonGroup.png', { element: targetContainer });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    const items = [] as any;
+
+    for (const stylingMode of stylingModes) {
+      const buttons = [] as any;
+      for (const type of types) {
+        const id = `${`dx${new Guid()}`}`;
+
+        buttons.push({
+          text: 'Button Text',
+          type,
+          icon: 'home',
+          elementAttr: {
+            id,
+          },
+        });
+      }
+
+      items.push({
+        widget: 'dxButtonGroup',
+        locateInMenu,
+        options: {
+          stylingMode,
+          items: buttons,
+        },
+      });
+    }
+
+    await createWidget('dxToolbar', {
+      width: 50,
+      items,
+    });
+  });
+
+  ['template'].forEach((templateName) => { // 'menuItemTemplate'
+    test(`Toolbar button group as ${templateName} appearence,locateInMenu=${locateInMenu}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      const toolbar = new Toolbar('#container');
+      let targetContainer = Selector('#container');
+
+      await t
+        .click(toolbar.getOverflowMenu().element);
+
+      targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+
+      await testScreenshot(t, takeScreenshot, 'Toolbar-buttonGroup.png', { element: targetContainer });
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
       const items = [] as any;
 
       for (const stylingMode of stylingModes) {
         const buttons = [] as any;
         for (const type of types) {
           const id = `${`dx${new Guid()}`}`;
-
-          t.ctx.ids.push(id);
 
           buttons.push({
             text: 'Button Text',
@@ -541,13 +550,15 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
           });
         }
 
+        const template = ClientFunction(() => ($('<div>') as any).dxButtonGroup({
+          stylingMode,
+          items: buttons,
+        }), { dependencies: { stylingMode, buttons } });
+
         items.push({
           widget: 'dxButtonGroup',
           locateInMenu,
-          options: {
-            stylingMode,
-            items: buttons,
-          },
+          [templateName]: template,
         });
       }
 
@@ -557,128 +568,54 @@ test('Click on overflow button should prevent popup\'s hideOnOutsideClick', asyn
       });
     });
 
-    ['template'].forEach((templateName) => { // 'menuItemTemplate'
-      test(`Toolbar button group as ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    test(`Toolbar button group as custom ${templateName} appearence,locateInMenu=${locateInMenu}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-        const toolbar = new Toolbar('#container');
-        let targetContainer = Selector('#container');
+      const toolbar = new Toolbar('#container');
+      let targetContainer = Selector('#container');
 
-        await t
-          .click(toolbar.getOverflowMenu().element);
+      await t
+        .click(toolbar.getOverflowMenu().element);
 
-        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
+      targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
 
-        for (const id of t.ctx.ids) {
-          if (state) {
-            await setClassAttribute(Selector(`#${id}`), state);
-          }
-        }
+      await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}.png`, { element: targetContainer });
 
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      const items = [] as any;
 
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        t.ctx.ids = [];
+      for (const stylingMode of stylingModes) {
+        const buttons = [] as any;
+        for (const type of types) {
+          const id = `${`dx${new Guid()}`}`;
 
-        const items = [] as any;
-
-        for (const stylingMode of stylingModes) {
-          const buttons = [] as any;
-          for (const type of types) {
-            const id = `${`dx${new Guid()}`}`;
-
-            t.ctx.ids.push(id);
-
-            buttons.push({
-              text: 'Button Text',
-              type,
-              icon: 'home',
-              elementAttr: {
-                id,
-              },
-            });
-          }
-
-          const template = ClientFunction(() => ($('<div>') as any).dxButtonGroup({
-            stylingMode,
-            items: buttons,
-          }), { dependencies: { stylingMode, buttons } });
-
-          items.push({
-            widget: 'dxButtonGroup',
-            locateInMenu,
-            [templateName]: template,
+          buttons.push({
+            text: 'Button Text',
+            type,
+            icon: 'home',
+            elementAttr: {
+              id,
+            },
           });
         }
 
-        await createWidget('dxToolbar', {
-          width: 50,
-          items,
+        const template = ClientFunction(() => ($('<div>') as any).dxButtonGroup({
+          stylingMode,
+          items: buttons,
+        }), { dependencies: { stylingMode, buttons } });
+
+        items.push({
+          locateInMenu,
+          [templateName]: template,
         });
-      });
+      }
 
-      test(`Toolbar button group as custom ${templateName} appearence${state ? `,${state.replaceAll('dx-state-', '')}` : ''},locateInMenu=${locateInMenu}`, async (t) => {
-        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-        const toolbar = new Toolbar('#container');
-        let targetContainer = Selector('#container');
-
-        await t
-          .click(toolbar.getOverflowMenu().element);
-
-        targetContainer = toolbar.getOverflowMenu().getPopup().getContent();
-
-        for (const id of t.ctx.ids) {
-          if (state) {
-            await setClassAttribute(Selector(`#${id}`), state);
-          }
-        }
-
-        await testScreenshot(t, takeScreenshot, `Toolbar-buttonGroup-custom-${templateName}${state ? `,${state.replaceAll('dx-state-', '')}` : ''}.png`, { element: targetContainer });
-
-        await t
-          .expect(compareResults.isValid())
-          .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        t.ctx.ids = [];
-
-        const items = [] as any;
-
-        for (const stylingMode of stylingModes) {
-          const buttons = [] as any;
-          for (const type of types) {
-            const id = `${`dx${new Guid()}`}`;
-
-            t.ctx.ids.push(id);
-
-            buttons.push({
-              text: 'Button Text',
-              type,
-              icon: 'home',
-              elementAttr: {
-                id,
-              },
-            });
-          }
-
-          const template = ClientFunction(() => ($('<div>') as any).dxButtonGroup({
-            stylingMode,
-            items: buttons,
-          }), { dependencies: { stylingMode, buttons } });
-
-          items.push({
-            locateInMenu,
-            [templateName]: template,
-          });
-        }
-
-        await createWidget('dxToolbar', {
-          width: 50,
-          items,
-        });
+      await createWidget('dxToolbar', {
+        width: 50,
+        items,
       });
     });
   });

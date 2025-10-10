@@ -32,11 +32,10 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
 };
 
 const getCurrentTheme = async (t: TestController): Promise<string> => {
-    const currentTheme = await ClientFunction(() => {
-        return (window as any).DevExpress.ui.themes.current();
-    }).with({ boundTestRun: t })();
+  // eslint-disable-next-line max-len
+  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
 
-    return currentTheme;
+  return currentTheme;
 };
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
@@ -245,7 +244,7 @@ createTestCafe(TESTCAFE_CONFIG)
     }
 
     const runOptions: RunOptions = {
-      quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+      quarantineMode: { successThreshold: 1, attemptLimit: 5 },
       disableNativeAutomation: true,
       // @ts-expect-error ts-error
       hooks: {
@@ -260,12 +259,13 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
+            if (!componentFolder.includes('dataGrid')) {
+              const currentTheme = await getCurrentTheme(t) || 'generic.light';
+              const newTheme = args.theme || 'generic.light';
 
-            const currentTheme = await getCurrentTheme(t) || 'generic.light';
-            const newTheme = args.theme || 'generic.light';
-            
-            if (currentTheme !== newTheme) {
-              await changeTheme(t, newTheme);
+              if (currentTheme !== newTheme) {
+                await changeTheme(t, newTheme);
+              }
             }
           },
           after: async (t: TestController) => {

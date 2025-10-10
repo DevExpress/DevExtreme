@@ -6,7 +6,7 @@ import url from '../../../helpers/getPageUrl';
 
 const DX_DIALOG_CLASS = 'dx-dialog';
 
-fixture`Dialog`
+fixture.disablePageReloads`Dialog`
   .page(url(__dirname, '../../container.html'));
 
 [
