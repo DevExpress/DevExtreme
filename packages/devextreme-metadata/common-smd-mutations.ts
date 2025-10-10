@@ -9,7 +9,7 @@ const commonSeriesOptions = [
   'fullStackedBar',
   'fullStackedLine',
   'fullStackedSplineArea',
-  'fullstackedSpline',
+  'fullStackedSpline',
   'line',
   'rangeArea',
   'rangeBar',
