@@ -31,6 +31,14 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
   port2: 1438,
 };
 
+const getCurrentTheme = async (t: TestController): Promise<string> => {
+    const currentTheme = await ClientFunction(() => {
+        return (window as any).DevExpress.ui.themes.current();
+    }).with({ boundTestRun: t })();
+
+    return currentTheme;
+};
+
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
   const changeThemeClientFn = ClientFunction(() => new Promise<void>((resolve) => {
     (window as any).DevExpress.ui.themes.ready(resolve);
@@ -252,12 +260,16 @@ createTestCafe(TESTCAFE_CONFIG)
               await addShadowRootTree(t);
             }
 
-            if (args.theme) {
-              await changeTheme(t, args.theme);
+
+            const currentTheme = await getCurrentTheme(t) || 'generic.light';
+            const newTheme = args.theme || 'generic.light';
+            
+            if (currentTheme !== newTheme) {
+              await changeTheme(t, newTheme);
             }
           },
-          after: async () => {
-            await testPageUtils.clearTestPage();
+          after: async (t: TestController) => {
+            await testPageUtils.clearTestPage(t);
           },
         },
       },
