@@ -8,7 +8,6 @@ fixture.disablePageReloads`Accessibility`
 
 const options: Options<Properties> = {
   label: ['', 'label'],
-  hint: [undefined, 'hint'],
   icon: [undefined, 'save'],
 };
 

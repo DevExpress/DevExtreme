@@ -11,11 +11,6 @@ const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 201
 const options: Options<Properties> = {
   value: [undefined, longText],
   placeholder: [undefined, 'placeholder'],
-  disabled: [true, false],
-  readOnly: [true, false],
-  label: ['', 'label'],
-  name: ['', 'name'],
-  spellcheck: [true, false],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
@@ -26,10 +21,37 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const configuration: Configuration = {
+const availabilityConfiguration: Configuration = {
   component: 'dxTextArea',
   a11yCheckConfig,
-  options,
+  options: {
+    ...options,
+    disabled: [true, false],
+    readOnly: [true, false],
+  },
 };
 
-testAccessibility(configuration);
+testAccessibility(availabilityConfiguration);
+
+const infoConfiguration: Configuration = {
+  component: 'dxTextArea',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    label: ['', 'label'],
+    name: ['', 'name'],
+  },
+};
+
+testAccessibility(infoConfiguration);
+
+const spellcheckConfiguration: Configuration = {
+  component: 'dxTextArea',
+  a11yCheckConfig,
+  options: {
+    ...options,
+    spellcheck: [true],
+  },
+};
+
+testAccessibility(spellcheckConfiguration);

@@ -12,7 +12,6 @@ const options: Options<Properties> = {
   dataSource: [[], items],
   height: [300],
   loop: [true, false],
-  hint: [undefined, 'hint'],
   noDataText: [undefined, 'no data text'],
   focusStateEnabled: [true],
 };
