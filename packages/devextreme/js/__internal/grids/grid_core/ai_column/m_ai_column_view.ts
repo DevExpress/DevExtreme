@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import domAdapter from '@ts/core/m_dom_adapter';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
@@ -45,16 +46,7 @@ export class AiColumnView extends View {
       },
       onRefresh: (): void => {
         this.promptEditorInstance.updateStateOnAction('regenerate');
-
-        this.aiColumnController.refreshAIColumn(column.name as string, {
-          onComplete: (): void => {
-            this.promptEditorInstance.updateStateOnAction();
-          },
-          onError: (): void => {
-            // TODO: show error notification
-            this.promptEditorInstance.updateStateOnAction();
-          },
-        });
+        this.aiColumnController.refreshAIColumn(column.name as string);
       },
       popupOptions: {
         container: domAdapter.getBody(),
@@ -89,15 +81,7 @@ export class AiColumnView extends View {
 
     if (columnOptionName === 'ai.prompt') {
       this.promptEditorInstance?.updateValue(args.value);
-      this.aiColumnController.sendAIColumnRequest(column.name as string, {
-        onComplete: (): void => {
-          this.promptEditorInstance?.updateStateOnAction();
-        },
-        onError: (): void => {
-          // TODO: show error notification
-          this.promptEditorInstance?.updateStateOnAction();
-        },
-      });
+      this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
   }
 
@@ -106,9 +90,17 @@ export class AiColumnView extends View {
     this.aiColumnController = this.getController('aiColumn');
 
     this.addAiCommandColumn();
+    this.aiColumnController.aiRequestCompleted.add(() => {
+      this.promptEditorInstance?.updateStateOnAction();
+    });
+    this.aiColumnController.aiRequestRejected.add(() => {
+      this.promptEditorInstance?.updateStateOnAction();
+    });
   }
 
-  public showPromptEditor($cellElement: dxElementWrapper, column: Column): Promise<boolean> {
+  public showPromptEditor(cellElement: HTMLElement, column: Column): Promise<boolean> {
+    const $cellElement = $(cellElement);
+
     if (!$cellElement?.length || column?.type !== AI_COLUMN_NAME) {
       return Promise.resolve(false);
     }
