@@ -110,7 +110,7 @@ const popupConfiguration: Configuration = {
   component: 'dxTagBox',
   a11yCheckConfig,
   options: {
-    ...options,
+    ...buttonsOptions,
     opened: [true],
     showSelectionControls: [true, false],
   },
