@@ -11,7 +11,6 @@ const options: Options<Properties> = {
   showIndicator: [true, false],
   showPane: [true, false],
   message: [undefined, 'message'],
-  hint: [undefined, 'hint'],
   delay: [undefined, 3000],
 };
 
