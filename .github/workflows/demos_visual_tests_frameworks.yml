@@ -320,6 +320,10 @@ jobs:
           else
             echo "No demo files changed, skipping lint-demos"
           fi
+        else
+          echo "changed-files.json not found"
+          pnpm run lint-demos
+        fi
 
   check_generated_demos:
     name: ${{ matrix.name }}
