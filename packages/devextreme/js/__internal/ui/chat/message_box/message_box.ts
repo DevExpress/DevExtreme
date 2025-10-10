@@ -153,12 +153,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _getTextAreaOptions(): ChatTextAreaProperties {
     const {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
 
     const options = {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
       onInput: (e: InputEvent): void => {

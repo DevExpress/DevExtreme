@@ -414,6 +414,7 @@ class Chat extends Widget<Properties> {
   _renderMessageBox(): void {
     const {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
     } = this.option();
@@ -424,6 +425,7 @@ class Chat extends Widget<Properties> {
 
     const configuration: MessageBoxProperties = {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
       onMessageEntered: (e) => {
