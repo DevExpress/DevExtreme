@@ -103,18 +103,18 @@ test('Menu items render', async (t) => {
       .pressKey('down')
       .pressKey('down');
 
-    await testScreenshot(t, takeScreenshot, `Menu item with link and icon focused, adaptivityEnabled=${adaptivityEnabled}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Menu item with link and icon focused, adaptivityEnabled=${adaptivityEnabled}.png`);
 
     await t
       .pressKey('down')
       .pressKey('down');
 
-    await testScreenshot(t, takeScreenshot, `Menu item with link focused, adaptivityEnabled=${adaptivityEnabled}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Menu item with link focused, adaptivityEnabled=${adaptivityEnabled}.png`);
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [200, 400]).before(async () => {
+  }, [250, 500]).before(async () => {
     await appendElementTo('#container', 'div', 'menu');
     await setAttribute('#container', 'style', 'width: 200px; height: 400px;');
 

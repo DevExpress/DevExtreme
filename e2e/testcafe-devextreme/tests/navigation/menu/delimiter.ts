@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Item } from 'devextreme/ui/menu.d';
 import Menu from 'devextreme-testcafe-models/menu';
-import { setAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -68,54 +68,40 @@ const items: Item[] = [
   ));
 });
 
-[{
-  orientation: 'horizontal',
-  collision: 'bottom',
-  style: 'padding-top: 450px;',
-}, {
-  orientation: 'horizontal',
-  collision: 'right',
-  style: 'padding-left: 100px;',
-}, {
-  orientation: 'horizontal',
-  collision: 'bottom right',
-  style: 'padding-top: 450px; padding-left: 100px;',
-}, {
-  orientation: 'vertical',
-  collision: 'bottom',
-  style: 'padding-top: 350px;',
-}, {
-  orientation: 'vertical',
-  collision: 'right',
-  style: 'padding-left: 350px;',
-}, {
-  orientation: 'vertical',
-  collision: 'bottom right',
-  style: 'padding-top: 350px; padding-left: 350px;',
-}].forEach(({ orientation, collision, style }) => {
-  const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
-  safeSizeTest(testName, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const menu = new Menu();
+['horizontal', 'vertical'].forEach((orientation) => {
+  ['bottom', 'right', 'bottom right'].forEach((collision) => {
+    const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
+    safeSizeTest(testName, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const menu = new Menu();
 
-    await t.click(menu.getItem(3));
+      await t.click(menu.getItem(3));
 
-    await testScreenshot(t, takeScreenshot, `${testName}.png`);
+      await testScreenshot(t, takeScreenshot, `${testName}.png`);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [500, 500]).before(async () => {
-    await setAttribute('#container', 'style', style);
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }, [515, 515]).before(async () => {
+      await appendElementTo('#container', 'div', 'menu');
+      const additionalStyles = {
+        bottom: 'justify-content: start;',
+        right: 'align-content: start;',
+      };
+      await setAttribute('#container', 'style', `width: 500px; height: 500px; display: grid; ${additionalStyles[collision] ?? ''}`);
 
-    await createWidget(
-      'dxMenu',
-      {
-        items,
-        orientation,
-      },
-      '#container',
-    );
+      await createWidget(
+        'dxMenu',
+        {
+          elementAttr: {
+            style: 'align-self: end; justify-self: end;',
+          },
+          items,
+          orientation,
+        },
+        '#menu',
+      );
+    });
   });
 });
 
