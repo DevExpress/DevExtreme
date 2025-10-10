@@ -76,6 +76,8 @@ describe('AiPromptEditor', () => {
           hideOnOutsideClick: true,
           shading: false,
           shadingColor: 'transparent',
+          dragEnabled: true,
+          resizeEnabled: true,
           contentTemplate: expect.any(Function),
           wrapperAttr: { class: 'dx-ai-prompt-editor' },
           toolbarItems: [
@@ -85,6 +87,8 @@ describe('AiPromptEditor', () => {
               widget: 'dxButton',
               options: {
                 text: 'Regenerate Data',
+                icon: 'refresh',
+                stylingMode: 'outlined',
                 disabled: true,
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__refresh-button',
@@ -98,6 +102,9 @@ describe('AiPromptEditor', () => {
               widget: 'dxButton',
               options: {
                 text: 'Apply',
+                icon: 'arrowright',
+                stylingMode: 'contained',
+                type: 'default',
                 disabled: true,
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__apply-button',
@@ -112,6 +119,9 @@ describe('AiPromptEditor', () => {
               visible: false,
               options: {
                 text: 'Stop',
+                icon: 'square',
+                stylingMode: 'contained',
+                type: 'default',
                 elementAttr: {
                   class: 'dx-ai-prompt-editor__stop-button',
                 },
@@ -132,6 +142,8 @@ describe('AiPromptEditor', () => {
         $(POM.getTextAreaElement()),
         TextArea,
         {
+          height: '100%',
+          minHeight: 80,
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',

@@ -41,6 +41,8 @@ export class AiPromptEditor {
   private getTextAreaConfig(): TextAreaProperties {
     return {
       value: this.value,
+      minHeight: 80,
+      height: '100%',
       onValueChanged: (e): void => {
         this.updateButtonOption(1, 'disabled', !isValueChanged(this.value, e.value)); // Update the disable state of the Apply button
       },
@@ -54,6 +56,8 @@ export class AiPromptEditor {
       ...DEFAULT_POPUP_OPTIONS,
       shading: false,
       shadingColor: 'transparent',
+      dragEnabled: true,
+      resizeEnabled: true,
       hideOnOutsideClick: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: CLASSES.aiPromptEditor },
@@ -108,6 +112,9 @@ export class AiPromptEditor {
 
   private getApplyButtonConfig(): ButtonProperties {
     return {
+      type: 'default',
+      icon: 'arrowright',
+      stylingMode: 'contained',
       text: messageLocalization.format('dxDataGrid-applyButton'),
       disabled: !this.editorInstance || !isValueChanged(this.value, this.editorInstance.option('value')),
       elementAttr: {
@@ -119,6 +126,8 @@ export class AiPromptEditor {
 
   private getRegenerateDataButtonConfig(): ButtonProperties {
     return {
+      icon: 'refresh',
+      stylingMode: 'outlined',
       text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
       disabled: !this.value,
       elementAttr: {
@@ -130,6 +139,9 @@ export class AiPromptEditor {
 
   private getStopButtonConfig(): ButtonProperties {
     return {
+      type: 'default',
+      icon: 'square',
+      stylingMode: 'contained',
       text: messageLocalization.format('dxDataGrid-stopButton'),
       elementAttr: {
         class: CLASSES.aiPromptEditorStopButton,
