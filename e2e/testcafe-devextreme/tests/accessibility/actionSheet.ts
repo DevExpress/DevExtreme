@@ -16,7 +16,6 @@ const items = [
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  hint: [undefined, 'hint'],
   title: [undefined, 'title'],
   cancelText: [undefined, 'Cancel'],
   showTitle: [true, false],

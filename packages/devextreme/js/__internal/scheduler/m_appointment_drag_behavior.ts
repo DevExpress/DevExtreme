@@ -5,7 +5,7 @@ import Draggable from '@js/ui/draggable';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_DATA_KEY } from './constants';
 import { isSchedulerComponent } from './utils/is_scheduler_component';
-import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
+import type { AppointmentViewModelPlain } from './view_model/types';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 

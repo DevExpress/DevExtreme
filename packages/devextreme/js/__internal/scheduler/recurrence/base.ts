@@ -1,16 +1,8 @@
-import dateUtils from '@js/core/utils/date';
-
 import type { Rule } from './types';
 
-const toMs = dateUtils.dateToMilliseconds;
-
-export const getAsciiStringByDate = (date: Date): string => {
-  const currentOffset = date.getTimezoneOffset() * toMs('minute');
-  const offsetDate = new Date(date.getTime() + currentOffset);
-
-  return `${offsetDate.getFullYear() + `0${offsetDate.getMonth() + 1}`.slice(-2) + `0${offsetDate.getDate()}`.slice(-2)
-  }T${`0${offsetDate.getHours()}`.slice(-2)}${`0${offsetDate.getMinutes()}`.slice(-2)}${`0${offsetDate.getSeconds()}`.slice(-2)}Z`;
-};
+export const getAsciiStringByDate = (date: Date): string => `${
+  date.getUTCFullYear() + `0${date.getUTCMonth() + 1}`.slice(-2) + `0${date.getUTCDate()}`.slice(-2)
+}T${`0${date.getUTCHours()}`.slice(-2)}${`0${date.getUTCMinutes()}`.slice(-2)}${`0${date.getUTCSeconds()}`.slice(-2)}Z`;
 
 export const getRecurrenceString = (rule: Rule): string | undefined => {
   if (!rule?.freq) {

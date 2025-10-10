@@ -23,6 +23,41 @@ import {
     PositionAlignment,
 } from '../common';
 
+import { LoadingAnimationType } from './load_indicator';
+
+export { LoadingAnimationType };
+
+/**
+ * @docid
+ * @public
+ */
+export type LoadPanelIndicatorProperties = {
+    /**
+     * @docid
+     * @default 'circle'
+     * @public
+     */
+    animationType?: LoadingAnimationType;
+    /**
+     * @docid
+     * @default ''
+     * @public
+     */
+    src?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    height?: number | string | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    width?: number | string | undefined;
+};
+
 /**
  * @docid _ui_load_panel_ContentReadyEvent
  * @public
@@ -130,8 +165,14 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default ""
      * @public
+     * @deprecated dxLoadPanelOptions.indicatorOptions
      */
     indicatorSrc?: string;
+    /**
+     * @docid
+     * @public
+     */
+    indicatorOptions?: LoadPanelIndicatorProperties;
     /**
      * @docid
      * @default 60 &for(Material)

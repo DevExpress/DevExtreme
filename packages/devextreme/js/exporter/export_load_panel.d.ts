@@ -1,3 +1,5 @@
+import { LoadPanelIndicatorProperties } from '../ui/load_panel';
+
 /**
  * @docid
  * @type object
@@ -32,8 +34,13 @@ export interface ExportLoadPanel {
   /**
    * @docid
    * @default ""
+   * @deprecated ExportLoadPanel.indicatorOptions
    */
   indicatorSrc?: string;
+  /**
+   * @docid
+   */
+  indicatorOptions?: LoadPanelIndicatorProperties;
   /**
    * @docid
    * @default true

@@ -21,7 +21,6 @@ const options: Options<Properties> = {
   items: [generateItems(10)],
   disabled: [true, false],
   width: [undefined, 50],
-  hint: [undefined, 'hint'],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {

@@ -1,5 +1,5 @@
 import {
-  describe, expect, it, jest,
+  describe, expect, it,
 } from '@jest/globals';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '@ts/scheduler/constants';
 
@@ -13,16 +13,11 @@ import {
   getKeyByGroup,
   getSkippedHoursInRange,
   isAppointmentTakesAllDay,
-  isDataOnWeekend, isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied,
+  isDataOnWeekend,
+  isGroupingByDate,
+  isHorizontalGroupingApplied,
+  isVerticalGroupingApplied,
 } from '../index';
-
-jest.mock(
-  '@ts/scheduler/view_model/filtering/m_appointment_filter',
-  () => ({
-    AppointmentFilterBaseStrategy: jest.fn(() => ({ strategy: 'base' })),
-    AppointmentFilterVirtualStrategy: jest.fn(() => ({ strategy: 'virtual' })),
-  }),
-);
 
 describe('base utils', () => {
   describe('getDatesWithoutTime', () => {

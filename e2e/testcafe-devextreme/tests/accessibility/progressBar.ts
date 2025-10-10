@@ -11,7 +11,6 @@ const options: Options<Properties> = {
   min: [0],
   max: [100],
   disabled: [true, false],
-  hint: [undefined, 'hint'],
   showStatus: [true, false],
   elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };

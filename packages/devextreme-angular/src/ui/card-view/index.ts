@@ -93,6 +93,7 @@ import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/
 import { DxoCardViewHeaderFilterModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewIndicatorOptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLabelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewLoadPanelModule } from 'devextreme-angular/ui/card-view/nested';
@@ -1416,6 +1417,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
+    DxoCardViewIndicatorOptionsModule,
     DxiCardViewItemModule,
     DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,
@@ -1497,6 +1499,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
+    DxoCardViewIndicatorOptionsModule,
     DxiCardViewItemModule,
     DxoCardViewLabelModule,
     DxoCardViewLoadPanelModule,

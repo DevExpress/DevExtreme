@@ -1851,9 +1851,6 @@ testComponentDefaults(Scheduler,
     {},
     {
         useDropDownViewSwitcher: true,
-        _appointmentCountPerCell: 1,
-        _collectorOffset: 20,
-        _appointmentOffset: 30
     },
     function() {
         this.origIsMaterialBased = themes.isMaterialBased;
