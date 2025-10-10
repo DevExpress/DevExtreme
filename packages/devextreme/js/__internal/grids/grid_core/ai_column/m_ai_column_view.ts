@@ -81,7 +81,7 @@ export class AiColumnView extends View {
 
     const column = this.columnsController.getColumnByPath(args.fullName);
 
-    if (column.type !== AI_COLUMN_NAME) {
+    if (column?.type !== AI_COLUMN_NAME) {
       return;
     }
 
