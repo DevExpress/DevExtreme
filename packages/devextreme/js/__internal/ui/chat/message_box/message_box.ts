@@ -1,16 +1,17 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { ClickEvent } from '@js/ui/button';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
+import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as ChatTextAreaProperties } from '@ts/ui/chat/message_box/chat_text_area';
+import type {
+  Properties as ChatTextAreaProperties,
+  SendEvent,
+} from '@ts/ui/chat/message_box/chat_text_area';
 import ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
 import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
-
-import type { EnterKeyEvent, InputEvent } from '../../../../ui/text_area';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
@@ -167,7 +168,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
       },
-      onSend: (e: ClickEvent | EnterKeyEvent): void => {
+      onSend: (e: SendEvent): void => {
         this._sendHandler(e);
       },
     };
@@ -219,7 +220,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._typingEndTimeoutId = undefined;
   }
 
-  _sendHandler(e: ClickEvent | EnterKeyEvent): void {
+  _sendHandler(e: SendEvent): void {
     this._clearTypingEndTimeout();
     this._typingEndAction?.();
 
