@@ -116,6 +116,7 @@ import {
 } from "devextreme/ui/filter_builder";
 import {
  dxLoadPanelOptions,
+ LoadPanelIndicatorProperties,
  ContentReadyEvent as LoadPanelContentReadyEvent,
  DisposingEvent as LoadPanelDisposingEvent,
  HiddenEvent,
@@ -181,6 +182,9 @@ import {
 import {
  AIIntegration,
 } from "devextreme/common/ai-integration";
+import {
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
 import {
  dxTabPanelOptions,
  dxTabPanelItem,
@@ -2079,6 +2083,29 @@ const DxHide = defineComponent(DxHideConfig);
   to: { isCollectionItem: false, optionName: "to" }
 };
 
+const DxIndicatorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:animationType": null,
+    "update:height": null,
+    "update:src": null,
+    "update:width": null,
+  },
+  props: {
+    animationType: String as PropType<LoadingAnimationType>,
+    height: [Number, String],
+    src: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxIndicatorOptionsConfig);
+
+const DxIndicatorOptions = defineComponent(DxIndicatorOptionsConfig);
+
+(DxIndicatorOptions as any).$_optionName = "indicatorOptions";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
@@ -2232,6 +2259,7 @@ const DxLoadPanelConfig = {
     "update:hideOnParentScroll": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:indicatorOptions": null,
     "update:indicatorSrc": null,
     "update:maxHeight": null,
     "update:maxWidth": null,
@@ -2267,6 +2295,7 @@ const DxLoadPanelConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],
@@ -2300,6 +2329,7 @@ const DxLoadPanel = defineComponent(DxLoadPanelConfig);
 (DxLoadPanel as any).$_optionName = "loadPanel";
 (DxLoadPanel as any).$_expectedChildren = {
   animation: { isCollectionItem: false, optionName: "animation" },
+  indicatorOptions: { isCollectionItem: false, optionName: "indicatorOptions" },
   position: { isCollectionItem: false, optionName: "position" }
 };
 
@@ -3291,6 +3321,7 @@ export {
   DxHeaderFilter,
   DxHeaderPanel,
   DxHide,
+  DxIndicatorOptions,
   DxItem,
   DxLabel,
   DxLoadPanel,
