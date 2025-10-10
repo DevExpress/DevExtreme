@@ -144,11 +144,6 @@ class ChatTextArea extends TextArea<Properties> {
         focusStateEnabled,
         hoverStateEnabled,
         icon: 'attach',
-        /** TO REMOVE */
-        onClick: (): void => {
-          // eslint-disable-next-line no-alert
-          alert('FileUpploader integration');
-        },
       },
     } as ToolbarItem;
 
@@ -163,8 +158,8 @@ class ChatTextArea extends TextArea<Properties> {
     } = this.option();
 
     const configuration = {
-      widget: 'dxButton' as const,
-      location: 'after' as const,
+      widget: 'dxButton',
+      location: 'after',
       options: {
         activeStateEnabled,
         focusStateEnabled,
@@ -183,7 +178,7 @@ class ChatTextArea extends TextArea<Properties> {
           this._sendButton = e.component;
         },
       },
-    };
+    } as ToolbarItem;
 
     return configuration;
   }
