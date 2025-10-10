@@ -34,7 +34,7 @@ test('Messagelist empty view scenarios', async (t) => {
 
   await chat.option({
     width: 200,
-    height: 200,
+    height: 250,
     disabled: false,
   });
 

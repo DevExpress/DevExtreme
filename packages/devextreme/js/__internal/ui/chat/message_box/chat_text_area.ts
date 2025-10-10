@@ -265,10 +265,6 @@ class ChatTextArea extends TextArea<Properties> {
     return Boolean(text?.trim());
   }
 
-  isValuableTextEntered(): boolean {
-    return this._isValuableTextEntered();
-  }
-
   _dispose(): void {
     this._toolbar?.dispose();
     this._$toolbar?.remove();
