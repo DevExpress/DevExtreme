@@ -1,10 +1,11 @@
+import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight } from '@js/core/utils/size';
-import type { NativeEventInfo } from '@js/events';
+import type { DxEvent, NativeEventInfo } from '@js/events';
 import type {
   ClickEvent,
   InitializedEvent,
@@ -72,17 +73,28 @@ class ChatTextArea extends TextArea<Properties> {
   _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
-      enter: (e): void => {
-        if (!e?.shiftKey && this._isValuableTextEntered() && !isMobile()) {
+      enter: (e: DxEvent<KeyboardEvent>): void => {
+        if (this._shouldSendMessageOnEnter(e)) {
           e.preventDefault();
-          this._processSendButtonActivation({
-            component: this,
-            element: this.element(),
-            event: e,
-          });
         }
       },
     };
+  }
+
+  _enterKeyHandlerUp(e: DxEvent<KeyboardEvent>): void {
+    super._enterKeyHandlerUp(e);
+
+    if (normalizeKeyName(e) !== 'enter') {
+      return;
+    }
+
+    if (this._shouldSendMessageOnEnter(e)) {
+      this._processSendButtonActivation({
+        component: this,
+        element: this.element(),
+        event: e,
+      });
+    }
   }
 
   _init(): void {
@@ -215,6 +227,10 @@ class ChatTextArea extends TextArea<Properties> {
     this._sendAction?.(e);
     this.reset();
     this._toggleButtonDisableState(true);
+  }
+
+  _shouldSendMessageOnEnter(e: DxEvent<KeyboardEvent>): boolean {
+    return !e?.shiftKey && this._isValuableTextEntered() && !isMobile();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

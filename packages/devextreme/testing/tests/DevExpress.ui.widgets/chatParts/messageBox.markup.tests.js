@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 import MessageBox, {
     CHAT_MESSAGEBOX_CLASS,
-    CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS,
+    CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
 
@@ -36,7 +36,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             const $messageBoxContent = this.$element.children();
 
             assert.strictEqual($messageBoxContent.length, 1, 'message box content has one elements');
-            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS), true, 'message box contains input container');
+            assert.strictEqual($messageBoxContent.eq(0).hasClass(CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS), true, 'message box contains input container');
         });
 
         QUnit.test(`textarea field should have ${CHAT_MESSAGEBOX_TEXTAREA_CLASS} class`, function(assert) {
