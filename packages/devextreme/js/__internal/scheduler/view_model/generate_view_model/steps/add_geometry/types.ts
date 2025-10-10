@@ -73,10 +73,10 @@ export interface GeometryOptions {
 
 export interface VirtualCropOptions {
   isVirtualScrolling: boolean;
-  getVirtualBounds: (groupIndex: number) => {
-    hMax: number;
-    hMin: number;
-    vMax: number;
-    vMin: number;
+  getVirtualScreen: (groupIndex: number) => {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
   };
 }

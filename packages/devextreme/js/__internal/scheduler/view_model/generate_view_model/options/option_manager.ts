@@ -194,11 +194,11 @@ export class OptionManager {
 
     return {
       isVirtualScrolling,
-      getVirtualBounds: (groupIndex: number) => this.cache.memo(`virtualBounds${groupIndex}`, () => {
-        const hMin = hVirtualItemsCount * cellSize.width;
-        const vMin = cellCountInsideTopVirtualRow * cellSize.height;
-        const hMax = positionHelper.getHorizontalMax(groupIndex) || Infinity;
-        const vMax = positionHelper.getVerticalMax({
+      getVirtualScreen: (groupIndex: number) => this.cache.memo(`virtualScreen${groupIndex}`, () => {
+        const left = hVirtualItemsCount * cellSize.width;
+        const top = cellCountInsideTopVirtualRow * cellSize.height;
+        const right = positionHelper.getHorizontalMax(groupIndex) || Infinity;
+        const bottom = positionHelper.getVerticalMax({
           groupIndex,
           isVirtualScrolling,
           showAllDayPanel: hasAllDayPanel,
@@ -208,10 +208,10 @@ export class OptionManager {
         }) || Infinity;
 
         return {
-          hMin: isRTLEnabled ? panelSize.width - hMax : hMin,
-          hMax: isRTLEnabled ? panelSize.width - hMin : hMax,
-          vMin,
-          vMax,
+          left: isRTLEnabled ? panelSize.width - right : left,
+          right: isRTLEnabled ? panelSize.width - left : right,
+          top,
+          bottom,
         };
       }),
     };

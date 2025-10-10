@@ -5,11 +5,11 @@ import { cropByVirtualScreen } from './virtual_screen_crop';
 
 const options: VirtualCropOptions = {
   isVirtualScrolling: true,
-  getVirtualBounds: () => ({
-    hMax: 1000,
-    hMin: 500,
-    vMax: 1000,
-    vMin: 500,
+  getVirtualScreen: () => ({
+    left: 500,
+    right: 1000,
+    top: 500,
+    bottom: 1000,
   }),
 };
 
