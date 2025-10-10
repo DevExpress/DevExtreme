@@ -238,6 +238,7 @@ createTestCafe(TESTCAFE_CONFIG)
 
     const runOptions: RunOptions = {
       quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+      disableNativeAutomation: true,
       // @ts-expect-error ts-error
       hooks: {
         test: {
