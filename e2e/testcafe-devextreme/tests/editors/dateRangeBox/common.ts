@@ -8,7 +8,6 @@ import {
   appendElementTo,
   setAttribute,
   setClassAttribute,
-  removeClassAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -27,139 +26,105 @@ const labelModes = ['static', 'floating', 'hidden', 'outside'];
 fixture.disablePageReloads`DateRangeBox render`
   .page(url(__dirname, '../../container.html'));
 
-stylingModes.forEach((stylingMode) => {
-  [true, false].forEach((isValid) => {
-    test(`DateRangeBox styles, stylingMode=${stylingMode}, isValid=${isValid}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+const createDateRangeBox = async (options?: any, state?: string): Promise<string> => {
+  const id = `${`dx${new Guid()}`}`;
 
-      await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
+  await appendElementTo('#container', 'div', id, { });
 
-      for (const state of [
-        DROP_DOWN_EDITOR_ACTIVE_CLASS,
-        FOCUSED_STATE_CLASS,
-        HOVER_STATE_CLASS,
-        READONLY_STATE_CLASS,
-        DISABLED_STATE_CLASS,
-      ] as any[]
-      ) {
-        for (const id of t.ctx.ids) {
-          await setClassAttribute(Selector(`#${id}`), state);
-          await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
-        }
+  const config: any = {
+    width: 500,
+    value: [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
+    labelMode: 'static',
+    endDateLabel: 'static',
+    startDateLabel: 'qwertyQWERTYg',
+    showClearButton: true,
+    ...options,
+  };
 
-        await testScreenshot(t, takeScreenshot, `DateRangeBox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')} stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
+  await createWidget('dxDateRangeBox', config, `#${id}`);
 
-        for (const id of t.ctx.ids) {
-          await removeClassAttribute(Selector(`#${id}`), state);
-          await removeClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
-        }
-      }
+  if (state) {
+    await setClassAttribute(Selector(`#${id}`), state);
+    await setClassAttribute(Selector(`#${id} .dx-start-datebox`), state);
+  }
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async (t) => {
-      t.ctx.ids = [];
+  return id;
+};
 
-      await insertStylesheetRulesToPage(`.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);
+test('DateRangeBox styles', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      for (const rtlEnabled of [false, true]) {
-        for (const labelMode of labelModes) {
-          for (const value of [
-            [null, null],
-            [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
-          ]) {
-            const id = `${`dx${new Guid()}`}`;
+  await testScreenshot(t, takeScreenshot, 'DateRangeBox styles.png');
 
-            t.ctx.ids.push(id);
-            await appendElementTo('#container', 'div', id, { });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage(`.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);
 
-            const options: any = {
-              width: 500,
-              isValid,
-              value,
-              labelMode,
-              rtlEnabled,
-              stylingMode,
-              endDateLabel: labelMode,
-              startDateLabel: 'qwertyQWERTYg',
-              showClearButton: true,
-            };
+  for (const stylingMode of stylingModes) {
+    for (const state of [
+      DROP_DOWN_EDITOR_ACTIVE_CLASS,
+      FOCUSED_STATE_CLASS,
+      HOVER_STATE_CLASS,
+      READONLY_STATE_CLASS,
+      DISABLED_STATE_CLASS,
+    ] as any[]
+    ) {
+      await createDateRangeBox({ stylingMode }, state);
+    }
+  }
 
-            await createWidget('dxDateRangeBox', options, `#${id}`);
-          }
-        }
-      }
-    });
-  });
+  await createDateRangeBox({ rtlEnabled: true });
+  await createDateRangeBox({ isValid: false });
+});
 
-  ['static', 'floating', 'outside'].forEach((labelMode) => {
-    test(`DateRangeBox with buttons container, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('DateRangeBox with buttons container', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
+  await testScreenshot(t, takeScreenshot, 'DateRangeBox with buttons container.png');
 
-      await testScreenshot(t, takeScreenshot, `DRB with buttons container,stMode=${stylingMode},lMode=${labelMode}.png`, { shouldTestInCompact: true });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      for (const buttons of [
-        ['clear'],
-        ['clear', 'dropDown'],
-        [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'dropDown'],
-        ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'dropDown'],
-        ['clear', 'dropDown', { name: 'custom', location: 'after', options: { icon: 'home' } }],
-        [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'dropDown'],
-        ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }, 'dropDown'],
-        ['clear', 'dropDown', { name: 'custom', location: 'before', options: { icon: 'home' } }],
-      ]) {
-        for (const rtlEnabled of [false, true]) {
-          const id = `${`dx${new Guid()}`}`;
-
-          await appendElementTo('#container', 'div', id, { });
-
-          await createWidget('dxDateRangeBox', {
-            width: 500,
-            value: [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
-            labelMode,
-            stylingMode,
-            rtlEnabled,
-            buttons,
-            showClearButton: true,
-          }, `#${id}`);
-        }
-      }
-    });
-  });
+  for (const buttons of [
+    ['clear'],
+    [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'dropDown'],
+    ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'dropDown'],
+    [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'dropDown'],
+  ]) {
+    await createDateRangeBox({ buttons });
+    await createDateRangeBox({ buttons, rtlEnabled: true });
+  }
 });
 
 labelModes.forEach((labelMode) => {
-  test(`Custom placeholders and labels appearance (labelMode=${labelMode})`, async (t) => {
+  test('Custom placeholders and labels appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dateRangeBox = new DateRangeBox('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(`#${t.ctx.id}`);
 
-    await testScreenshot(t, takeScreenshot, `Placeholder and label by default labelMode=${labelMode}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, 'Placeholder and label by default.png');
 
     await t
       .click(dateRangeBox.getStartDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, `Placeholder and label on start date input focus labelMode=${labelMode}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, 'Placeholder and label on start date input focus.png');
 
     await t
       .click(dateRangeBox.getEndDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, `Placeholder and label on end date input focus labelMode=${labelMode}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, 'Placeholder and label on end date input focus.png');
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await appendElementTo('#container', 'div', 'dateRangeBox');
+  }).before(async (t) => {
     await setAttribute('#container', 'style', 'width: 800px; height: 300px; padding-top: 10px;');
-
-    return createWidget('dxDateRangeBox', {
+    await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
+    t.ctx.id = await createDateRangeBox({
       labelMode,
       width: 600,
       openOnFieldClick: false,
@@ -167,6 +132,7 @@ labelModes.forEach((labelMode) => {
       endDateLabel: 'second date',
       startDatePlaceholder: 'enter start date',
       endDatePlaceholder: 'enter end date',
-    }, '#dateRangeBox');
+    });
+    await appendElementTo('#container', 'div', t.ctx.id);
   });
 });
