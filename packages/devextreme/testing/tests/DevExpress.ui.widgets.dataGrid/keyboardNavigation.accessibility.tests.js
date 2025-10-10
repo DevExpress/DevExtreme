@@ -336,8 +336,8 @@ QUnit.module('Keyboard navigation accessibility', {
             columns: [
                 { dataField: 'name' },
                 { dataField: 'date', dataType: 'date' },
+                { dataField: 'phone', dataType: 'number' },
                 { dataField: 'room', dataType: 'number', groupIndex: 0 },
-                { dataField: 'phone', dataType: 'number' }
             ]
         };
 
