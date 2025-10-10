@@ -2,7 +2,8 @@
   $padding,
   $border-color,
   $gap,
-  $textarea-border-radius
+  $textarea-border-radius,
+  $toolbar-min-height
 ) {
   .dx-chat-messagebox {
     padding: $padding;
@@ -26,8 +27,7 @@
 
   .dx-textarea-toolbar.dx-toolbar {
     .dx-toolbar-items-container {
-      /** MAKE WITH VARS */
-      min-height: 32px; // Fluent 32 (24). For Material 36 (28), Generic 36 (26)
+      min-height: $toolbar-min-height;
     }
   }
 }
