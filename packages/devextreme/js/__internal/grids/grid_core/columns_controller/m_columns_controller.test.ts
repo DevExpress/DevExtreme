@@ -28,7 +28,7 @@ const createDataGrid = async (
     instance.off('contentReady', contentReadyHandler);
   };
 
-  instance.on('conetntReady', contentReadyHandler);
+  instance.on('contentReady', contentReadyHandler);
 });
 
 const getGrid = (): DataGrid => {
