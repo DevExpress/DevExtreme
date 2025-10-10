@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
@@ -31,6 +31,9 @@ stylingModes.forEach((stylingMode) => {
     };
 
     await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
+    if (isMaterial()) {
+      await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
+    }
 
     await appendElementTo('#container', 'div', 'numberBox1', { });
     await appendElementTo('#container', 'div', 'numberBox2', { });
