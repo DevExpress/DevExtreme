@@ -114,9 +114,9 @@ test('Menu items render', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [250, 400]).before(async () => {
+  }, [250, 500]).before(async () => {
     await appendElementTo('#container', 'div', 'menu');
-    await setAttribute('#container', 'style', 'width: 250px; height: 400px;');
+    await setAttribute('#container', 'style', 'width: 200px; height: 400px;');
 
     const items: Item[] = [{
       text: 'Items 1',
