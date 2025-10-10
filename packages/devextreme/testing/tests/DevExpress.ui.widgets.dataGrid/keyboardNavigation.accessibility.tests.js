@@ -775,6 +775,7 @@ QUnit.module('Keyboard navigation accessibility', {
             columns: [
                 { dataField: 'name', allowSorting: true, allowFiltering: true },
                 { dataField: 'date', dataType: 'date' },
+                { dataField: 'AdditionalPhone', dataType: 'number' },
                 { dataField: 'room', dataType: 'number', groupIndex: 0 },
                 { dataField: 'phone', dataType: 'number' }
             ]
@@ -789,7 +790,7 @@ QUnit.module('Keyboard navigation accessibility', {
         dataGridWrapper.headerPanel.getGroupPanelItem(0).focus();
         this.ctrlDown();
         // assert
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         dataGridWrapper.headers.getHeaderItem(0, 0).focus();
@@ -803,7 +804,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act, assert
         this.ctrlUp();
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         this.ctrlUp();
@@ -811,7 +812,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act, assert
         this.ctrlDown();
-        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 0).is(':focus'), 'focused element');
+        assert.ok(dataGridWrapper.headers.getHeaderItem(0, 1).is(':focus'), 'focused element');
 
         // act, assert
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT).focus();
