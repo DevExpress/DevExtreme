@@ -7,7 +7,7 @@ import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
 } from '__internal/ui/chat/message_box/message_box';
-import TextArea from '__internal/ui/m_text_area';
+import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import EditingPreview, {
     CHAT_EDITING_PREVIEW_CLASS,
@@ -28,11 +28,13 @@ const moduleConfig = {
             this.$element = $(this.instance.$element());
 
             this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
-            this.textArea = TextArea.getInstance(this.$textArea);
+            this.textArea = ChatTextArea.getInstance(this.$textArea);
 
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            this.$sendButton = this.$element.find(`.${BUTTON_CLASS}`).at(-1);
+            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+            this.$sendButton = $($buttons[$buttons.length - 1]);
+
             this.sendButton = Button.getInstance(this.$sendButton);
 
             this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
@@ -60,18 +62,19 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
         QUnit.test('send button should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
-                icon: 'sendfilled',
+                icon: 'arrowright',
                 type: 'default',
-                stylingMode: 'text',
+                stylingMode: 'contained',
                 disabled: true,
+                type: 'default',
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, this.sendButton.option(key), `${key} value is correct`);
+                assert.deepEqual(this.sendButton.option(key), value, `${key} value is correct`);
             });
         });
 
-        QUnit.test('TextArea should be initialized with the corresponding configuration', function(assert) {
+        QUnit.test('ChatTextArea should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
@@ -80,7 +83,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 valueChangeEvent: 'input'
             };
 
-            const textArea = TextArea.getInstance(this.$textArea);
+            const textArea = ChatTextArea.getInstance(this.$textArea);
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
                 assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);

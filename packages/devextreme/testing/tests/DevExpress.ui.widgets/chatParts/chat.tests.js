@@ -38,6 +38,7 @@ import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
 import MessageBubble from '__internal/ui/chat/messagebubble';
+import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -96,9 +97,10 @@ const moduleConfig = {
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
             this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
-            this.textArea = this.$textArea.dxTextArea('instance');
+            this.textArea = ChatTextArea.getInstance(this.$textArea);
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            this.$sendButton = this.$element.find(`.${BUTTON_CLASS}`).at(-1);
+            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+            this.$sendButton = $($buttons[$buttons.length - 1]);
         };
 
         this.reinit = (options) => {
