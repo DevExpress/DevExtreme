@@ -187,6 +187,7 @@ createTestCafe(TESTCAFE_CONFIG)
       const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
       const fixtureChunks = split(fixtures, total);
       const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
+      const targetFixtureChunkSet = new Set(targetFixtureChunk);
 
       /* eslint-disable no-console */
       console.info(' === test run config ===');
@@ -201,8 +202,8 @@ createTestCafe(TESTCAFE_CONFIG)
         _fixtureName: string,
         fixturePath: string,
       ) => {
-        console.log('fixturePath', fixturePath, targetFixtureChunk);
-        return targetFixtureChunk.some((path) => fixturePath.includes(path));
+        const testPath = fixturePath.split('/testcafe-devextreme/')[1];
+        return targetFixtureChunkSet.has(testPath);
       });
     }
 
