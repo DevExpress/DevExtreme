@@ -200,7 +200,10 @@ createTestCafe(TESTCAFE_CONFIG)
         _testName: string,
         _fixtureName: string,
         fixturePath: string,
-      ) => targetFixtureChunk.includes(fixturePath));
+      ) => {
+        console.log('fixturePath', fixturePath, targetFixtureChunk);
+        return targetFixtureChunk.some((path) => fixturePath.includes(path));
+      });
     }
 
     if (testName) {
