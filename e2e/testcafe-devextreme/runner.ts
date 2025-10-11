@@ -149,7 +149,6 @@ createTestCafe(TESTCAFE_CONFIG)
     const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
     const indices = args.indices.trim();
     let componentFolder = args.componentFolder.trim();
-    const pathRE = new RegExp(`./tests/${componentFolder ? `${componentFolder}/` : ''}(.*).ts`);
     const file = args.file.trim();
 
     setTestingPlatform(args);
@@ -197,15 +196,11 @@ createTestCafe(TESTCAFE_CONFIG)
       console.info(' > fixtures: ', targetFixtureChunk, '\n');
       /* eslint-enable no-console */
 
-      const targetBaseNames = new Set(
-        targetFixtureChunk.map((filePath) => pathRE.exec(filePath)?.[1]),
-      );
-
       filters.push((
         _testName: string,
         _fixtureName: string,
         fixturePath: string,
-      ) => targetBaseNames.has(pathRE.exec(fixturePath)?.[1]));
+      ) => targetFixtureChunk.includes(fixturePath));
     }
 
     if (testName) {
