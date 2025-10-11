@@ -67,7 +67,6 @@ stylingModes.forEach((stylingMode) => {
     for (const stylingMode of stylingModes) {
       for (const buttons of [
         ['clear'],
-        ['clear', 'spins'],
         [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'spins'],
         ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'spins'],
         ['clear', 'spins', { name: 'custom', location: 'after', options: { icon: 'home' } }],

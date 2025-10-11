@@ -21,10 +21,10 @@ const types = ['date', 'datetime', 'time'];
 fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
 
-test(`DateBox styles`, async (t) => {
+test('DateBox styles', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, `Datebox.png`, { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Datebox.png', { shouldTestInCompact: true });
 
   for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
     for (const id of t.ctx.ids) {
