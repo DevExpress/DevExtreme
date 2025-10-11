@@ -1,6 +1,5 @@
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { globSync } from 'glob';
@@ -150,6 +149,7 @@ createTestCafe(TESTCAFE_CONFIG)
     const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
     const indices = args.indices.trim();
     let componentFolder = args.componentFolder.trim();
+    const pathRE = new RegExp(`./tests/${componentFolder ? `${componentFolder}/` : ''}(.*).ts`);
     const file = args.file.trim();
 
     setTestingPlatform(args);
@@ -198,14 +198,14 @@ createTestCafe(TESTCAFE_CONFIG)
       /* eslint-enable no-console */
 
       const targetBaseNames = new Set(
-        targetFixtureChunk.map((filePath) => path.basename(filePath)),
+        targetFixtureChunk.map((filePath) => pathRE.exec(filePath)?.[1]),
       );
 
       filters.push((
         _testName: string,
         _fixtureName: string,
         fixturePath: string,
-      ) => targetBaseNames.has(path.basename(fixturePath)));
+      ) => targetBaseNames.has(pathRE.exec(fixturePath)?.[1]));
     }
 
     if (testName) {
@@ -274,6 +274,7 @@ createTestCafe(TESTCAFE_CONFIG)
     process.exit(failedCount);
   })
   .catch((error: Error) => {
+    // eslint-disable-next-line no-console
     console.error('TestCafe execution failed:', error);
     if (testCafe) {
       testCafe.close();
