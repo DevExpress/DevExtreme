@@ -17,10 +17,7 @@ positions.forEach((position) => {
     const dateBox = new DateBox('#container');
     await dateBox.option('value', new Date(2022, 6, 14));
 
-    await testScreenshot(t, takeScreenshot, `Datebox validation message with position=${position}.png`, {
-      shouldTestInCompact: true,
-      compactCallBack: async () => dateBox.option('value', new Date(2022, 6, 15)),
-    });
+    await testScreenshot(t, takeScreenshot, `Datebox validation message with position=${position}.png`);
 
     await t
       .expect(compareResults.isValid())
@@ -41,5 +38,40 @@ positions.forEach((position) => {
         message: 'out of range',
       }],
     });
+  });
+});
+
+safeSizeTest('DateBox ValidationMessage position is correct', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const id of t.ctx.ids) {
+    const dateBox = new DateBox(`#${id}`);
+    await dateBox.option('value', new Date(2022, 6, 14));
+  }
+
+  await testScreenshot(t, takeScreenshot, 'Datebox validation message.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [600, 400]).before(async () => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const position of positions) {
+    await createWidget('dxDateBox', {
+      elementAttr: { style: 'display: inline-block; margin: 50px 100px 0 0;' },
+      width: 150,
+      height: 40,
+      validationMessageMode: 'always',
+      validationMessagePosition: position,
+    });
+  }
+
+  return createWidget('dxValidator', {
+    validationRules: [{
+      type: 'range',
+      max: new Date(1),
+      message: 'out of range',
+    }],
   });
 });
