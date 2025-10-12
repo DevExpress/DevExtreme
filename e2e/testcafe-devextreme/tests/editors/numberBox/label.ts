@@ -27,7 +27,7 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
   const id = `${`dx${new Guid()}`}`;
 
   await appendElementTo('#container', 'div', id, {});
-  await createWidget('dxTextBox', {
+  await createWidget('dxNumberBox', {
     value: Math.PI,
     showClearButton: true,
     showSpinButtons: true,
