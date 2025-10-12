@@ -75,6 +75,7 @@ test('DateBox with buttons container', async (t) => {
           value: new Date(2021, 9, 17),
           stylingMode,
           buttons,
+          showClearButton: true,
           isValid,
         }, `#${id}`);
       }

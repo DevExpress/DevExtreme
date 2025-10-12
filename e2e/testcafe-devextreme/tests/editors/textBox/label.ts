@@ -22,6 +22,7 @@ const buttonsList: (string | TextEditorButton)[][] = [
   ['clear'],
   ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
   [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
+  ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
 ];
 
 const TEXTBOX_CLASS = 'dx-textbox';
@@ -182,7 +183,7 @@ test('Textbox with buttons container', async (t) => {
   for (const stylingMode of stylingModes) {
     // eslint-disable-next-line no-restricted-syntax
     for (const buttons of buttonsList) {
-      await createTextBox({ stylingMode, buttons });
+      await createTextBox({ stylingMode, buttons, showClearButton: true });
     }
   }
 });
