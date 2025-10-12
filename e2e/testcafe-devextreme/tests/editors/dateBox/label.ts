@@ -63,6 +63,8 @@ test('DateBox with buttons container', async (t) => {
       ['clear'],
       ['clear', 'dropDown'],
       [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'dropDown'],
+      ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'dropDown'],
+      ['clear', 'dropDown', { name: 'custom', location: 'after', options: { icon: 'home' } }],
     ]) {
       for (const isValid of [true, false]) {
         const id = `${`dx${new Guid()}`}`;
@@ -73,7 +75,6 @@ test('DateBox with buttons container', async (t) => {
           value: new Date(2021, 9, 17),
           stylingMode,
           buttons,
-          showClearButton: true,
           isValid,
         }, `#${id}`);
       }

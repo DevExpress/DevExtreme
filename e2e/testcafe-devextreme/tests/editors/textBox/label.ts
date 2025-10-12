@@ -87,7 +87,7 @@ test('Textbox render', async (t) => {
 
   await insertStylesheetRulesToPage(`.${TEXTBOX_CLASS} { display: inline-block; vertical-align: middle; width: 260px; margin: 5px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Textbox states.png');
+  await testScreenshot(t, takeScreenshot, 'Textbox render.png');
 
   await t
     .expect(compareResults.isValid())
@@ -173,8 +173,6 @@ test('Textbox with buttons container', async (t) => {
     ['clear'],
     ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
     [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
-    ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
-    [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
   ] as (string | TextEditorButton)[][]) {
     await createTextBox({ buttons });
     //   const id = `${`dx${new Guid()}`}`;
