@@ -35,7 +35,7 @@ test('Symbol parts in label should not be cropped', async (t) => {
 
     const options: any = {
       width: 220,
-      label: 'label text',
+      label: 'qwerty QWERTY 1234567890',
       stylingMode,
       showClearButton: true,
       value: new Date(2021, 9, 17, 16, 34),
