@@ -184,6 +184,9 @@ test('Textbox with buttons container', async (t) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const buttons of buttonsList) {
       await createTextBox({ stylingMode, buttons, showClearButton: true });
+      await createTextBox({
+        stylingMode, buttons, showClearButton: true, isValid: false,
+      });
     }
   }
 });
