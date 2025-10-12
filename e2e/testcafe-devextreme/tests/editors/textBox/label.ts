@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import type { Properties } from 'devextreme/ui/text_box.d';
 import type { LabelMode, EditorStyle, TextEditorButton } from 'devextreme/common';
 import { Selector } from 'testcafe';
@@ -19,6 +18,11 @@ fixture.disablePageReloads`TextBox_Label`
 // const labelModes: LabelMode[] = ['floating', 'static', 'hidden', 'outside'];
 const visibleLabelModes: LabelMode[] = ['floating', 'static', 'outside'];
 const stylingModes: EditorStyle[] = ['outlined', 'underlined', 'filled'];
+const buttonsList: (string | TextEditorButton)[][] = [
+  ['clear'],
+  ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
+  [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
+];
 
 const TEXTBOX_CLASS = 'dx-textbox';
 const HOVER_STATE_CLASS = 'dx-state-hover';
@@ -93,8 +97,11 @@ test('Textbox render', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const labelMode of visibleLabelModes) {
+      // eslint-disable-next-line no-restricted-syntax
       for (const placeholder of ['Placeholder', '']) {
         await createTextBox({
           text: undefined,
@@ -107,6 +114,7 @@ test('Textbox render', async (t) => {
       await createTextBox({ text: 'Text value' });
       await createTextBox({ rtlEnabled: true });
     }
+    // eslint-disable-next-line no-restricted-syntax
     for (const placeholder of ['Placeholder', '']) {
       await createTextBox({
         text: undefined,
@@ -138,7 +146,9 @@ test('Textbox states', async (t) => {
     INVALID_STATE_CLASS,
     `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
   ];
+  // eslint-disable-next-line no-restricted-syntax
   for (const state of states) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const placeholder of ['Placeholder', '']) {
       await createTextBox({
         text: undefined,
@@ -168,28 +178,13 @@ test('Textbox with buttons container', async (t) => {
     await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
   }
 
-  // for (const isValid of [true, false]) {
-  for (const buttons of [
-    ['clear'],
-    ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
-    [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
-  ] as (string | TextEditorButton)[][]) {
-    await createTextBox({ buttons });
-    //   const id = `${`dx${new Guid()}`}`;
-
-    //   await appendElementTo('#container', 'div', id, {});
-
-    //   await createWidget('dxTextBox', {
-    //     width: 300,
-    //     value: 'Text',
-    //     label: 'Label Text',
-    //     buttons,
-    //     showClearButton: true,
-    //     isValid,
-    //   }, `#${id}`);
-    // }
+  // eslint-disable-next-line no-restricted-syntax
+  for (const stylingMode of stylingModes) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const buttons of buttonsList) {
+      await createTextBox({ stylingMode, buttons });
+    }
   }
-  // }
 });
 
 stylingModes.forEach((stylingMode) => {

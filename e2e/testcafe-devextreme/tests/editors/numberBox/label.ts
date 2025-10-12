@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import type { Properties, NumberBoxPredefinedButton } from 'devextreme/ui/number_box.d';
 import type { EditorStyle, TextEditorButton } from 'devextreme/common';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
@@ -37,40 +36,34 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
 
   return id;
 };
+test('Label for dxNumberBox', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-stylingModes.forEach((stylingMode) => {
-  test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await testScreenshot(t, takeScreenshot, 'NumberBox label.png', { element: '#container' });
 
-    await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`, { element: '#container' });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
+  if (isMaterial()) {
+    await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
+  }
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const componentOption = {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const stylingMode of stylingModes) {
+    await createNumberBox({
       label: 'label text',
       stylingMode,
-    };
-
-    await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
-    if (isMaterial()) {
-      await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
-    }
-
-    await appendElementTo('#container', 'div', 'numberBox1', { });
-    await appendElementTo('#container', 'div', 'numberBox2', { });
-
-    await createWidget('dxNumberBox', {
-      ...componentOption,
+      // @ts-expect-error string instead of number
       value: 'text',
-    }, '#numberBox1');
-
-    await createWidget('dxNumberBox', {
-      ...componentOption,
+    });
+    await createNumberBox({
+      label: 'label text',
+      stylingMode,
       value: 123,
-    }, '#numberBox2');
-  });
+    });
+  }
 });
 
 test('NumberBox with buttons container', async (t) => {
@@ -86,7 +79,9 @@ test('NumberBox with buttons container', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const buttons of buttonsList) {
       await createNumberBox({ stylingMode, buttons });
     }
