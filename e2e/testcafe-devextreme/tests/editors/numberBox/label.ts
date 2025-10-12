@@ -73,12 +73,12 @@ stylingModes.forEach((stylingMode) => {
   });
 });
 
-test(`NumberBox with buttons container`, async (t) => {
+test('NumberBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
 
-  await testScreenshot(t, takeScreenshot, `NumberBox render with buttons container.png`, { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png', { shouldTestInCompact: true });
 
   await removeStylesheetRulesFromPage();
 
