@@ -71,7 +71,7 @@ test('NumberBox with buttons container', async (t) => {
 
   await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png');
 
   await removeStylesheetRulesFromPage();
 

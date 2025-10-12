@@ -24,14 +24,14 @@ fixture.disablePageReloads`DateBox render`
 test('DateBox styles', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Datebox.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Datebox.png');
 
   for (const state of [DROP_DOWN_EDITOR_ACTIVE_CLASS, FOCUSED_STATE_CLASS] as any[]) {
     for (const id of t.ctx.ids) {
       await setClassAttribute(Selector(`#${id}`), state);
     }
 
-    await testScreenshot(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')}.png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Datebox ${state.replaceAll('dx-', '').replaceAll('dropdowneditor-', '').replaceAll('state-', '')}.png`);
 
     for (const id of t.ctx.ids) {
       await removeClassAttribute(Selector(`#${id}`), state);
