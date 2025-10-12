@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import type { Properties } from 'devextreme/ui/text_box.d';
-import type { LabelMode, EditorStyle, TextEditorButton } from 'devextreme/js/common.d';
+import type { LabelMode, EditorStyle, TextEditorButton } from 'devextreme/common';
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TextBox from 'devextreme-testcafe-models/textBox';
