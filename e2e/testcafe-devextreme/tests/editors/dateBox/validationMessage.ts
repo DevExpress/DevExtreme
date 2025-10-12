@@ -1,9 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateBox from 'devextreme-testcafe-models/dateBox';
+import Guid from 'devextreme/core/guid';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateBox ValidationMessagePosition`
   .page(url(__dirname, '../../container.html'));
@@ -55,23 +57,30 @@ safeSizeTest('DateBox ValidationMessage position is correct', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [600, 400]).before(async () => {
+}, [600, 400]).before(async (t) => {
+  t.ctx.ids = [];
+
   // eslint-disable-next-line no-restricted-syntax
   for (const position of positions) {
+    const id = `${`dx${new Guid()}`}`;
+
+    await appendElementTo('#container', 'div', id, {});
+
+    t.ctx.ids.push(id);
     await createWidget('dxDateBox', {
       elementAttr: { style: 'display: inline-block; margin: 50px 100px 0 0;' },
       width: 150,
       height: 40,
       validationMessageMode: 'always',
       validationMessagePosition: position,
-    });
-  }
+    }, `#${id}`);
 
-  return createWidget('dxValidator', {
-    validationRules: [{
-      type: 'range',
-      max: new Date(1),
-      message: 'out of range',
-    }],
-  });
+    await createWidget('dxValidator', {
+      validationRules: [{
+        type: 'range',
+        max: new Date(1),
+        message: 'out of range',
+      }],
+    }, `#${id}`);
+  }
 });
