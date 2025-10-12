@@ -53,7 +53,7 @@ const ANIMATION_DELAY = 500;
         showTitle: true,
         rtlEnabled,
         visible: true,
-        animation: undefined,
+        animation: { show: { duration: 0 }, hide: { duration: 0 } },
         target: COMPONENT_SELECTOR,
         hideOnOutsideClick: true,
         toolbarItems: [{
