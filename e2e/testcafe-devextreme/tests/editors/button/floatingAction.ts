@@ -56,6 +56,7 @@ for (const label of ['Add Row', '']) {
         icon,
         index: 1,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action');
 
       await createWidget('dxSpeedDialAction', {
@@ -63,6 +64,7 @@ for (const label of ['Add Row', '']) {
         icon: 'trash',
         index: 2,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action-trash');
     });
 
@@ -86,6 +88,7 @@ for (const label of ['Add Row', '']) {
         label,
         icon,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action');
     });
   }
@@ -113,6 +116,7 @@ test('FAB with two speed dial action buttons', async (t) => {
     icon: 'plus',
     index: 1,
     visible: true,
+    animation: { show: { duration: 0 } },
   }, '#speed-dial-action');
 
   await createWidget('dxSpeedDialAction', {
@@ -120,6 +124,7 @@ test('FAB with two speed dial action buttons', async (t) => {
     icon: 'trash',
     index: 2,
     visible: true,
+    animation: { show: { duration: 0 } },
   }, '#speed-dial-action-trash');
 });
 
@@ -150,6 +155,7 @@ for (const label of ['Add Row', '']) {
         label,
         icon,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action');
     }).after(async () => {
       await changeTheme(`${process.env.theme}`);
@@ -183,6 +189,7 @@ for (const label of ['Add Row', '']) {
         icon,
         index: 1,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action');
 
       await createWidget('dxSpeedDialAction', {
@@ -190,6 +197,7 @@ for (const label of ['Add Row', '']) {
         icon: 'trash',
         index: 2,
         visible: true,
+        animation: { show: { duration: 0 } },
       }, '#speed-dial-action-trash');
     }).after(async () => {
       await changeTheme(`${process.env.theme}`);
@@ -221,6 +229,7 @@ test('FAB with two speed dial action buttons', async (t) => {
     icon: 'plus',
     index: 1,
     visible: true,
+    animation: { show: { duration: 0 } },
   }, '#speed-dial-action');
 
   await createWidget('dxSpeedDialAction', {
@@ -228,6 +237,7 @@ test('FAB with two speed dial action buttons', async (t) => {
     icon: 'trash',
     index: 2,
     visible: true,
+    animation: { show: { duration: 0 } },
   }, '#speed-dial-action-trash');
 }).after(async () => {
   await changeTheme(`${process.env.theme}`);
