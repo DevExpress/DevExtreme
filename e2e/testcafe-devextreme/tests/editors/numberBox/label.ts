@@ -36,7 +36,7 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
 
   return id;
 };
-test.only('Label for dxNumberBox', async (t) => {
+test('Label for dxNumberBox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'NumberBox label.png', { element: '#container' });
