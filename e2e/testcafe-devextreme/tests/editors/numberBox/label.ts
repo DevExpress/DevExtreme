@@ -2,7 +2,7 @@ import type { Properties, NumberBoxPredefinedButton } from 'devextreme/ui/number
 import type { EditorStyle, TextEditorButton } from 'devextreme/common';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
@@ -46,9 +46,6 @@ test.only('Label for dxNumberBox', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await insertStylesheetRulesToPage('#container { display: flex; flex-direction: column; width: 300px; height: 400px; gap: 8px; }');
-  if (isMaterial()) {
-    await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
-  }
 
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
