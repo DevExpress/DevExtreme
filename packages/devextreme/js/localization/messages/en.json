@@ -291,19 +291,20 @@
 
         "dxScheduler-recurrenceRepeatEvery": "Repeat Every",
         "dxScheduler-recurrenceRepeatOn": "Repeat On",
-        "dxScheduler-recurrenceEnd": "End repeat",
+        "dxScheduler-recurrenceStart": "Start",
+        "dxScheduler-recurrenceEnd": "End",
         "dxScheduler-recurrenceAfter": "After",
         "dxScheduler-recurrenceOn": "On",
 
         "dxScheduler-recurrenceUntilDateLabel": "Date when repeat ends",
         "dxScheduler-recurrenceOccurrenceLabel": "Number of occurrences",
 
-        "dxScheduler-recurrenceRepeatMinutely": "minute(s)",
-        "dxScheduler-recurrenceRepeatHourly": "hour(s)",
-        "dxScheduler-recurrenceRepeatDaily": "day(s)",
-        "dxScheduler-recurrenceRepeatWeekly": "week(s)",
-        "dxScheduler-recurrenceRepeatMonthly": "month(s)",
-        "dxScheduler-recurrenceRepeatYearly": "year(s)",
+        "dxScheduler-recurrenceRepeatMinutely": "Minute(s)",
+        "dxScheduler-recurrenceRepeatHourly": "Hour(s)",
+        "dxScheduler-recurrenceRepeatDaily": "Day(s)",
+        "dxScheduler-recurrenceRepeatWeekly": "Week(s)",
+        "dxScheduler-recurrenceRepeatMonthly": "Month(s)",
+        "dxScheduler-recurrenceRepeatYearly": "Year(s)",
 
         "dxScheduler-switcherDay": "Day",
         "dxScheduler-switcherWeek": "Week",

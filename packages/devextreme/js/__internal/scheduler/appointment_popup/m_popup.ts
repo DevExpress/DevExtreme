@@ -50,6 +50,10 @@ export class AppointmentPopup {
         data: null,
       },
     };
+
+    // Make popup accessible to form
+    this.scheduler.appointmentPopup = this;
+    this.form.popup = this;
   }
 
   get visible() {
@@ -377,5 +381,80 @@ export class AppointmentPopup {
     return shiftDifference
       ? new Date(clonedDate.getTime() + shiftDifference * dateUtils.dateToMilliseconds('hour'))
       : clonedDate;
+  }
+
+  updateToolbarForRecurrence(): void {
+    if (!this.popup) {
+      return;
+    }
+
+    const toolbarItems: ToolbarItem[] = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'back',
+          stylingMode: 'text',
+          onClick: (): void => {
+            this.form.showMainGroup();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          stylingMode: 'contained',
+          type: 'default',
+          onClick: (e): void => {
+            this.form.showMainGroup();
+            e.cancel = true;
+            this.saveEditDataAsync();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        widget: 'dxButton',
+        options: {
+          text: messageLocalization.format('Cancel'),
+          stylingMode: 'outlined',
+          onClick: (): void => {
+            if (this.form._isRecurrenceFormVisible) {
+              this.form.showMainGroup(false);
+            }
+            this.hide();
+          },
+        },
+      },
+    ];
+
+    this.popup.option('toolbarItems', toolbarItems);
+    this.popup.option('showTitle', false);
+  }
+
+  updateToolbarForMain(): void {
+    if (!this.popup) {
+      return;
+    }
+
+    const allowUpdating = this.state.action !== null
+      && (this.state.action === ACTION_TO_APPOINTMENT.CREATE
+        || this.scheduler.getEditingConfig().allowUpdating);
+
+    const toolbarItems = this._getPopupToolbarItems(allowUpdating);
+    this.popup.option('toolbarItems', toolbarItems);
+    this.popup.option('showTitle', true);
+    this.popup.option('title', messageLocalization.format('dxScheduler-editPopupTitle'));
   }
 }

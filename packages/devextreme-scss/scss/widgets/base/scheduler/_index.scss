@@ -463,9 +463,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-appointment-popup {
     .dx-form {
-      /* Icons alignment */
+      .dx-scheduler-form-main-hidden, .dx-scheduler-form-recurrence-hidden {
+        display: none;
+      }
+
       .dx-scheduler-form-group-with-icon .dx-box-item:has(.dx-scheduler-form-icon) {
-        flex: 0 1 auto !important; // stylelint-disable-line declaration-no-important
+        flex: 0 1 auto;
         align-items: end;
       }
 
@@ -484,7 +487,6 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      /* Editors alignment */
       .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
         align-items: center;
 
@@ -498,7 +500,10 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       .dx-scheduler-form-start-date-group .dx-item,
-      .dx-scheduler-form-end-date-group .dx-item {
+      .dx-scheduler-form-end-date-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-every-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-on-monthly-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-on-yearly-group .dx-item {
         align-items: end;
 
         .dx-datebox input.dx-texteditor-input {
@@ -506,7 +511,79 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      /* Repeat editor separator */
+      .dx-scheduler-form-recurrence-end-container {
+        > .dx-box-item {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .dx-scheduler-form-recurrence-end-radio {
+        .dx-field-item-content {
+          height: 100%;
+          padding: 0;
+        }
+
+        .dx-radiogroup {
+          padding: 0;
+          height: 100%;
+        }
+
+        .dx-item.dx-radiobutton {
+          margin: 8px 0 0 0;
+          padding: 0;
+          height: 32px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        .dx-radiogroup-item {
+          align-items: center;
+        }
+      }
+
+      .dx-scheduler-form-recurrence-end-inputs {
+        .dx-box-item-content {
+          height: 100%;
+          padding: 0;
+        }
+
+        .dx-box-item {
+          height: 32px;
+          margin: 0;
+          padding: 0;
+
+          &:not(:first-child) {
+            margin-top: 8px;
+          }
+
+          .dx-box-item-content {
+            height: 32px;
+            padding: 0;
+          }
+        }
+
+        .dx-field-item,
+        .dx-empty-item {
+          height: 32px;
+          margin: 0;
+          padding: 0;
+        }
+
+        .dx-field-item-content {
+          padding: 0;
+          height: 32px;
+        }
+
+        .dx-texteditor,
+        .dx-numberbox {
+          height: 32px;
+        }
+      }
+
       .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
         overflow: visible;
         position: relative;
@@ -519,6 +596,19 @@ $scheduler-appointment-form-label-padding: 20px;
           width: 1px;
           height: 100%;
           background-color: $scheduler-base-border-color;
+        }
+      }
+
+      .dx-scheduler-recurrence-byday-buttons {
+        display: flex;
+        gap: 8px;
+
+        .dx-button {
+          border-radius: 50%;
+
+          .dx-button-content {
+            padding: 0;
+          }
         }
       }
     }
