@@ -28,7 +28,7 @@ export class AiColumnView extends View {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
 
     return {
-      value: column.ai?.prompt ?? '',
+      prompt: column.ai?.prompt ?? '',
       container: this.element(),
       createComponent: this._createComponent.bind(this),
       onSubmit: (): void => {
@@ -80,7 +80,7 @@ export class AiColumnView extends View {
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
     if (columnOptionName === 'ai.prompt') {
-      this.promptEditorInstance?.updateValue(args.value);
+      this.promptEditorInstance?.updatePrompt(args.value);
       this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
   }

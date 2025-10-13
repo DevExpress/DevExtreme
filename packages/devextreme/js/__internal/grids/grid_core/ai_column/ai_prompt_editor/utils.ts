@@ -1,6 +1,6 @@
-export const getValue = (value: string | undefined): string => value ?? '';
+export const getPrompt = (prompt: string | undefined): string => prompt ?? '';
 
-export const isValueChanged = (
-  initialValue: string | undefined,
-  currentValue: string | undefined,
-): boolean => getValue(initialValue) !== getValue(currentValue);
+export const isPromptChanged = (
+  initialPrompt: string | undefined,
+  currentPrompt: string | undefined,
+): boolean => getPrompt(initialPrompt) !== getPrompt(currentPrompt);

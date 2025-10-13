@@ -9,7 +9,7 @@ import TextArea from '@js/ui/text_area';
 
 import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
 import type { AiPromptEditorAction, AiPromptEditorOptions } from './types';
-import { getValue, isValueChanged } from './utils';
+import { getPrompt, isPromptChanged } from './utils';
 
 export class AiPromptEditor {
   private readonly popupInstance: Popup;
@@ -18,7 +18,7 @@ export class AiPromptEditor {
 
   private progressBar!: ProgressBar;
 
-  private value: string;
+  private prompt: string;
 
   constructor(
     private options: AiPromptEditorOptions,
@@ -26,7 +26,7 @@ export class AiPromptEditor {
     const { container, createComponent } = options;
 
     container.addClass(CLASSES.aiPromptEditor);
-    this.value = getValue(options.value);
+    this.prompt = getPrompt(options.prompt);
     this.popupInstance = createComponent(container, Popup, this.getPopupConfig());
   }
 
@@ -40,11 +40,11 @@ export class AiPromptEditor {
 
   private getTextAreaConfig(): TextAreaProperties {
     return {
-      value: this.value,
+      value: this.prompt,
       minHeight: 80,
       height: '100%',
       onValueChanged: (e): void => {
-        this.updateButtonOption(1, 'disabled', !isValueChanged(this.value, e.value)); // Update the disable state of the Apply button
+        this.updateButtonOption(1, 'disabled', !isPromptChanged(this.prompt, e.value)); // Update the disable state of the Apply button
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
@@ -117,7 +117,7 @@ export class AiPromptEditor {
       icon: 'arrowright',
       stylingMode: 'contained',
       text: messageLocalization.format('dxDataGrid-applyButton'),
-      disabled: !this.editorInstance || !isValueChanged(this.value, this.editorInstance.option('value')),
+      disabled: !this.editorInstance || !isPromptChanged(this.prompt, this.editorInstance.option('value')),
       elementAttr: {
         class: CLASSES.aiPromptEditorApplyButton,
       },
@@ -130,7 +130,7 @@ export class AiPromptEditor {
       icon: 'refresh',
       stylingMode: 'outlined',
       text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
-      disabled: !this.value,
+      disabled: !this.prompt,
       elementAttr: {
         class: CLASSES.aiPromptEditorRefreshButton,
       },
@@ -151,16 +151,16 @@ export class AiPromptEditor {
     };
   }
 
-  private setValue(value: string): void {
-    this.value = getValue(value);
+  private setPrompt(prompt: string): void {
+    this.prompt = getPrompt(prompt);
   }
 
   private toggleDisableState(disabled: boolean): void {
-    this.updateButtonOption(0, 'disabled', disabled ? true : !this.value); // Update the disable state of the Regenerate data button
+    this.updateButtonOption(0, 'disabled', disabled ? true : !this.prompt); // Update the disable state of the Regenerate data button
     this.updateButtonOption(
       1,
       'disabled',
-      disabled ? true : !isValueChanged(this.value, this.editorInstance.option('value')),
+      disabled ? true : !isPromptChanged(this.prompt, this.editorInstance.option('value')),
     ); // Update the disable state of the Apply button
     this.editorInstance.option('disabled', disabled); // Update TextArea disable state
     this.popupInstance.option('shading', disabled);
@@ -192,9 +192,9 @@ export class AiPromptEditor {
     this.progressBar.option('visible', isLoading);
   }
 
-  public updateValue(value: string): void {
-    this.setValue(value);
-    this.editorInstance.option('value', value);
+  public updatePrompt(prompt: string): void {
+    this.setPrompt(prompt);
+    this.editorInstance.option('value', prompt);
   }
 
   /**
@@ -221,7 +221,7 @@ export class AiPromptEditor {
 
   public updateOptions(options: AiPromptEditorOptions): void {
     this.options = options;
-    this.updateValue(getValue(options.value));
+    this.updatePrompt(getPrompt(options.prompt));
     this.popupInstance.option(this.getPopupConfig());
   }
 }

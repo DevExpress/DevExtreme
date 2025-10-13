@@ -147,7 +147,7 @@ describe('AiColumnView', () => {
 
         expect(AiPromptEditor).toHaveBeenCalledTimes(1);
         expect(AiPromptEditor).toHaveBeenCalledWith({
-          value: '',
+          prompt: '',
           container: aiColumnView.element(),
           createComponent: expect.any(Function),
           onStop: expect.any(Function),
@@ -496,7 +496,7 @@ describe('AiColumnView', () => {
         value: 'new prompt value',
       });
 
-      expect(promptEditorInstance.updateValue).toHaveBeenCalledWith('new prompt value');
+      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(mockAiColumnController.sendAIColumnRequest).toHaveBeenCalledWith('aiColumn');
     });
 
@@ -523,7 +523,7 @@ describe('AiColumnView', () => {
 
       const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-      expect(promptEditorInstance.updateValue).toHaveBeenCalledWith('new prompt value');
+      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
     });
 
@@ -550,7 +550,7 @@ describe('AiColumnView', () => {
 
       const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-      expect(promptEditorInstance.updateValue).toHaveBeenCalledWith('new prompt value');
+      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
     });

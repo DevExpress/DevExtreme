@@ -175,7 +175,7 @@ describe('AiPromptEditor', () => {
       const onRefreshMock = jest.fn();
 
       const { POM } = createAiPromptEditor({
-        value: 'test',
+        prompt: 'test',
         popupOptions: { visible: true },
         onRefresh: onRefreshMock,
       });
@@ -243,7 +243,7 @@ describe('Regenerate Data button', () => {
   describe('when initial value is empty string', () => {
     it('should be disabled', () => {
       const { POM } = createAiPromptEditor({
-        value: '',
+        prompt: '',
         popupOptions: { visible: true },
       });
 
@@ -254,7 +254,7 @@ describe('Regenerate Data button', () => {
   describe('when initial value is provided', () => {
     it('should be enabled', () => {
       const { POM } = createAiPromptEditor({
-        value: 'initial text',
+        prompt: 'initial text',
         popupOptions: { visible: true },
       });
 
@@ -280,7 +280,7 @@ describe('Apply button', () => {
   describe('when initial value is provided', () => {
     it('should be disabled', () => {
       const { POM } = createAiPromptEditor({
-        value: 'initial text',
+        prompt: 'initial text',
         popupOptions: { visible: true },
       });
 
@@ -305,7 +305,7 @@ describe('Apply button', () => {
   describe('when text area value changes from non-empty', () => {
     it('should be enabled', () => {
       const { POM } = createAiPromptEditor({
-        value: 'initial text',
+        prompt: 'initial text',
         popupOptions: { visible: true },
       });
 
@@ -320,7 +320,7 @@ describe('Apply button', () => {
   describe('when text area value is changed back to initial value', () => {
     it('should be disabled', () => {
       const { POM } = createAiPromptEditor({
-        value: 'initial text',
+        prompt: 'initial text',
         popupOptions: { visible: true },
       });
 
@@ -642,24 +642,24 @@ describe('Public Methods', () => {
     });
   });
 
-  describe('when updateValue is called', () => {
+  describe('when updatePrompt is called', () => {
     it('should update internal value and enable Regenerate Data button', () => {
       const { instance, POM } = createAiPromptEditor({
         popupOptions: { visible: true },
       });
 
-      instance.updateValue('new value');
+      instance.updatePrompt('new value');
 
       expect(POM.getTextArea().value).toBe('new value');
     });
 
     it('should update internal value and disable Regenerate Data button', () => {
       const { instance, POM } = createAiPromptEditor({
-        value: 'initial text',
+        prompt: 'initial text',
         popupOptions: { visible: true },
       });
 
-      instance.updateValue('');
+      instance.updatePrompt('');
 
       expect(POM.getTextArea().value).toBe('');
     });
@@ -692,7 +692,7 @@ describe('Public Methods', () => {
   describe('when updateOptions is called', () => {
     it('should update the prompt editor options', async () => {
       const { container, instance, POM } = createAiPromptEditor({
-        value: 'updated prompt',
+        prompt: 'updated prompt',
         popupOptions: { visible: true },
       });
 
@@ -705,7 +705,7 @@ describe('Public Methods', () => {
 
       instance.updateOptions({
         container,
-        value: '',
+        prompt: '',
         createComponent: createComponentMock,
         popupOptions: { visible: true },
       });
@@ -747,7 +747,7 @@ describe('Public Methods', () => {
     describe('with apply action', () => {
       it('should set loading, disable controls and hide apply button', () => {
         const { instance, POM } = createAiPromptEditor({
-          value: 'initial text',
+          prompt: 'initial text',
           popupOptions: { visible: true },
         });
 
@@ -778,7 +778,7 @@ describe('Public Methods', () => {
     describe('with regenerate action', () => {
       it('should set loading and disable controls', () => {
         const { instance, POM } = createAiPromptEditor({
-          value: 'initial text',
+          prompt: 'initial text',
           popupOptions: { visible: true },
         });
 
@@ -808,7 +808,7 @@ describe('Public Methods', () => {
     describe('without action parameter', () => {
       it('should clear loading, enable controls and show apply button', () => {
         const { instance, POM } = createAiPromptEditor({
-          value: 'initial text',
+          prompt: 'initial text',
           popupOptions: { visible: true },
         });
 
