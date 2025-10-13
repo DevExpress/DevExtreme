@@ -3,9 +3,10 @@ import { Item } from 'devextreme/ui/menu.d';
 import Menu from 'devextreme-testcafe-models/menu';
 import {
   insertStylesheetRulesToPage,
-  appendElementTo, setAttribute,
+  appendElementTo,
+  setAttribute,
 } from '../../../helpers/domUtils';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
@@ -18,82 +19,16 @@ test('Menu items render', async (t) => {
 
   const menu = new Menu();
 
-  const expandMenuItems = async () => {
-    await t
-      .click(menu.getItem(0))
-      .pressKey('down')
-      .pressKey('down')
-      .pressKey('right');
-  };
-
-  await expandMenuItems();
-
-  if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.dark' });
-    await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container', theme: 'generic.contrast' });
-  }
-
-  await testScreenshot(t, takeScreenshot, 'Menu render items.png', {
-    element: '#container',
-    shouldTestInCompact: true,
-    compactCallBack: async () => {
-      await menu.repaint();
-      await expandMenuItems();
-    },
-  });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await appendElementTo('#container', 'div', 'menu');
-
-  await setAttribute('#container', 'class', 'dx-theme-generic-typography');
-  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
-
-  await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important }');
-
-  const menuItems = [
-    {
-      text: 'remove',
-      icon: 'remove',
-      items: [
-        {
-          text: 'user',
-          icon: 'user',
-          disabled: true,
-          items: [{
-            text: 'user_1',
-          }],
-        },
-        {
-          text: 'save',
-          icon: 'save',
-          items: [
-            { text: 'export', icon: 'export' },
-            { text: 'edit', icon: 'edit' },
-          ],
-        },
-      ],
-    },
-    { text: 'user', icon: 'user' },
-    {
-      text: 'coffee',
-      icon: 'coffee',
-      disabled: true,
-    },
-  ] as Item[];
-
-  return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
-});
-
-test('Menu selected focused item', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const menu = new Menu();
-
   await t
     .click(menu.getItem(0))
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('right');
+
+  await testScreenshot(t, takeScreenshot, 'Menu render items.png', { element: '#container' });
+
+  await t
+    .click(menu.getItem(1))
     .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Menu selected focused item.png', {
@@ -105,14 +40,33 @@ test('Menu selected focused item', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'menu');
-  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 200px; height: 200px; padding: 8px;');
-
+  await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
   await insertStylesheetRulesToPage('.custom-class { border: 2px solid green !important }');
 
-  const menuItems = [
+  const menuItems: Item[] = [
     {
       text: 'remove',
       icon: 'remove',
+      items: [
+        {
+          text: 'user',
+          icon: 'user',
+          disabled: true,
+          items: [{ text: 'user_1' }],
+        },
+        {
+          text: 'save',
+          icon: 'save',
+          items: [
+            { text: 'export', icon: 'export' },
+            { text: 'edit', icon: 'edit' },
+          ],
+        },
+      ],
+    },
+    {
+      text: 'user',
+      icon: 'user',
       items: [
         {
           text: 'user',
@@ -125,210 +79,106 @@ test('Menu selected focused item', async (t) => {
         },
       ],
     },
-    { text: 'user', icon: 'user' },
-  ] as Item[];
+    {
+      text: 'coffee',
+      icon: 'coffee',
+      disabled: true,
+    },
+  ];
 
   return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
 });
 
-safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const menu = new Menu();
+[true, false].forEach((adaptivityEnabled) => {
+  safeSizeTest(`Menu item with link, adaptivityEnabled=${adaptivityEnabled}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const menu = new Menu(adaptivityEnabled);
 
-  await t
-    .click(menu.getItem(1))
-    .pressKey('down');
+    if (adaptivityEnabled) {
+      await t.click(menu.getHamburgerButton());
+    }
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu more than root item.png');
+    await t
+      .click(menu.getItem(0))
+      .pressKey('down')
+      .pressKey('down');
 
-  await t
-    .click(menu.getItem(2))
-    .pressKey('down');
+    await testScreenshot(t, takeScreenshot, `Menu item with link and icon focused, adaptivityEnabled=${adaptivityEnabled}.png`);
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item.png');
+    await t
+      .pressKey('down')
+      .pressKey('down');
 
-  await setAttribute('#container', 'style', 'padding-top: 450px;');
+    await testScreenshot(t, takeScreenshot, `Menu item with link focused, adaptivityEnabled=${adaptivityEnabled}.png`);
 
-  await t
-    .click(menu.getItem(1))
-    .pressKey('down');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [250, 500]).before(async () => {
+    await appendElementTo('#container', 'div', 'menu');
+    await setAttribute('#container', 'style', 'width: 200px; height: 400px;');
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu more than root item, bottom collision.png');
+    const items: Item[] = [{
+      text: 'Items 1',
+      items: [{
+        text: 'Item 1',
+      }, {
+        text: 'Item 2',
+        icon: 'bookmark',
+        url: 'https://js.devexpress.com/',
+      }, {
+        icon: 'more',
+        url: 'https://js.devexpress.com/',
+      }, {
+        text: 'Item 4',
+        url: 'https://js.devexpress.com/',
+      }],
+    }];
 
-  await t
-    .click(menu.getItem(2))
-    .pressKey('down');
+    if (adaptivityEnabled) {
+      items.push(
+        { text: 'Items 2' },
+        { text: 'Items 3' },
+        { text: 'Items 4' },
+      );
+    }
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item, bottom collision.png');
-
-  await setAttribute('#container', 'style', 'padding-left: 100px;');
-
-  await t
-    .click(menu.getItem(3))
-    .pressKey('down');
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, right collision.png');
-
-  await setAttribute('#container', 'style', 'padding-top: 450px; padding-left: 100px;');
-
-  await t
-    .click(menu.getItem(2))
-    .click(menu.getItem(3));
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, bottom right collision.png');
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}, [500, 500]).before(async () => {
-  const menuItems = [{
-    text: 'Video Players',
-  }, {
-    text: 'Televisions',
-    items: [{
-      id: '2_1',
-      text: 'SuperLCD 42',
-    }, {
-      id: '2_2',
-      text: 'SuperLED 42',
-    }],
-  }, {
-    text: 'Monitors',
-    items: [{
-      id: '3_1',
-      text: '19"',
-    }, {
-      id: '3_2',
-      text: '21"',
-    }],
-  }, {
-    text: 'Projectors',
-    items: [{
-      id: '4_1',
-      text: 'Projector Plus',
-    }],
-  }] as Item[];
-
-  return createWidget('dxMenu', { items: menuItems }, '#container');
+    return createWidget('dxMenu', {
+      adaptivityEnabled,
+      items,
+    }, '#menu');
+  });
 });
 
-safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t) => {
+safeSizeTest('Menu scrolling', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
-
-  await t
-    .click(menu.getItem(2))
-    .pressKey('down');
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical.png');
-
-  await setAttribute('#container', 'style', 'padding-top: 400px;');
-
-  await t
-    .click(menu.getItem(1))
-    .pressKey('down')
-    .pressKey('down');
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom collision.png');
-
-  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 350px;');
-
-  await t
-    .click(menu.getItem(2));
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, right collision.png');
-
-  await setAttribute('#container', 'style', 'padding-top: 400px; padding-left: 350px;');
 
   await t
     .click(menu.getItem(0))
-    .click(menu.getItem(1));
+    .pressKey('down')
+    .pressKey('up')
+    .pressKey('right')
+    .pressKey('up');
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom right collision.png');
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}, [500, 500]).before(async () => {
-  const menuItems = [{
-    text: 'Video Players',
-  }, {
-    text: 'Televisions',
-    items: [{
-      id: '2_1',
-      text: 'SuperLCD 42',
-    }, {
-      id: '2_2',
-      text: 'SuperLED 42',
-    }],
-  }, {
-    text: 'Monitors',
-    items: [{
-      id: '3_1',
-      text: '19"',
-    }, {
-      id: '3_2',
-      text: '21"',
-    }],
-  }, {
-    text: 'Projectors',
-    items: [{
-      id: '4_1',
-      text: 'Projector Plus',
-    }],
-  }] as Item[];
-
-  return createWidget('dxMenu', { items: menuItems, orientation: 'vertical' }, '#container');
-});
-
-safeSizeTest('Menu delimiter appearance when the Menu is used as a toolbar item', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const menu = new Menu();
-
-  await t
-    .click(menu.getItem(1));
-
-  await testScreenshot(t, takeScreenshot, 'Delimiter, menu as toolbar item.png');
+  await testScreenshot(t, takeScreenshot, 'Menu scrolling.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [500, 500]).before(async () => {
-  const toolbarItems = [
-    {
-      location: 'before',
-      widget: 'dxMenu',
-      options: {
-        items: [{
-          text: 'Video Players',
-        }, {
-          text: 'Televisions',
-          items: [{
-            id: '2_1',
-            text: 'SuperLCD 42',
-          }, {
-            id: '2_2',
-            text: 'SuperLED 42',
-          }],
-        }],
-      },
-    }, {
-      location: 'before',
-      widget: 'dxButton',
-      options: {
-        icon: 'undo',
-      },
-    }, {
-      location: 'before',
-      widget: 'dxButton',
-      options: {
-        icon: 'redo',
-      },
-    },
-  ];
+  const items: any[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 
-  return createWidget('dxToolbar', {
-    items: toolbarItems,
-    width: '100%',
-  }, '#container');
+  items[98].items = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
+
+  await createWidget('dxMenu', {
+    items: [
+      {
+        text: 'root',
+        items,
+      },
+    ],
+    showFirstSubmenuMode: 'onClick',
+    hideSubmenuOnMouseLeave: true,
+  });
 });
