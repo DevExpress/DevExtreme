@@ -1930,7 +1930,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  upload(fileData: File[]): void {
+  upload(fileData?: File[]): void {
     const { uploadMode } = this.option();
     if (uploadMode === 'useForm') {
       return;
