@@ -1,6 +1,5 @@
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { globSync } from 'glob';
@@ -188,6 +187,7 @@ createTestCafe(TESTCAFE_CONFIG)
       const fixtures = globSync([`./tests/${componentFolder}/*.ts`]);
       const fixtureChunks = split(fixtures, total);
       const targetFixtureChunk = fixtureChunks[current - 1] ?? [];
+      const targetFixtureChunkSet = new Set(targetFixtureChunk);
 
       /* eslint-disable no-console */
       console.info(' === test run config ===');
@@ -197,15 +197,14 @@ createTestCafe(TESTCAFE_CONFIG)
       console.info(' > fixtures: ', targetFixtureChunk, '\n');
       /* eslint-enable no-console */
 
-      const targetBaseNames = new Set(
-        targetFixtureChunk.map((filePath) => path.basename(filePath)),
-      );
-
       filters.push((
         _testName: string,
         _fixtureName: string,
         fixturePath: string,
-      ) => targetBaseNames.has(path.basename(fixturePath)));
+      ) => {
+        const testPath = fixturePath.split('/testcafe-devextreme/')[1];
+        return targetFixtureChunkSet.has(testPath);
+      });
     }
 
     if (testName) {
@@ -275,6 +274,7 @@ createTestCafe(TESTCAFE_CONFIG)
     process.exit(failedCount);
   })
   .catch((error: Error) => {
+    // eslint-disable-next-line no-console
     console.error('TestCafe execution failed:', error);
     if (testCafe) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
