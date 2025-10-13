@@ -46,6 +46,7 @@ export class AiPromptEditor {
       onValueChanged: (e): void => {
         this.updateButtonOption(1, 'disabled', !isValueChanged(this.value, e.value)); // Update the disable state of the Apply button
       },
+      placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
       ...this.options.editorOptions,
     };

@@ -105,6 +105,7 @@
 
 
         "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Brug {0} til at vise kolonner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Træk en kolonne fra gruppepanelet hertil",

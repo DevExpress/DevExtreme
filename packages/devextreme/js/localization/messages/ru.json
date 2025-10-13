@@ -105,6 +105,7 @@
 
 
         "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Используйте {0} чтобы отобразить столбцы",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетащите столбец из панели группировки",

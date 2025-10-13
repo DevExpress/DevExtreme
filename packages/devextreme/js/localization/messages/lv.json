@@ -105,6 +105,7 @@
 
 
         "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
         "dxDataGrid-applyButton": "Apply",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Izmanto {0} lai attēlotu kolonnas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Nomest kolonu no grupēšanas paneļa šeit",
