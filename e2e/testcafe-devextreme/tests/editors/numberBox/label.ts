@@ -47,11 +47,10 @@ test('Label for dxNumberBox', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
-  await t.resizeWindow(300, 400);
+}).before(async () => {
   await removeStylesheetRulesFromPage();
 
-  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; max-width: 300px; height: 400px; padding: 8px;');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
   }
@@ -72,9 +71,8 @@ test('Label for dxNumberBox', async (t) => {
       value: 123,
     });
   }
-}).after(async (t) => {
+}).after(async () => {
   await removeStylesheetRulesFromPage();
-  await restoreBrowserSize(t);
 });
 
 test('NumberBox with buttons container', async (t) => {
