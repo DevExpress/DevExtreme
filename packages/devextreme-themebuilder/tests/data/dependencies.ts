@@ -57,7 +57,7 @@ export const dependencies: FlatStylesDependencies = {
   treeview: ['validation', 'button', 'loadindicator', 'textbox', 'checkbox'],
   menu: ['validation', 'button', 'loadindicator', 'textbox', 'contextmenu', 'checkbox', 'treeview'],
   filterbuilder: ['validation', 'button', 'loadindicator', 'textbox', 'checkbox', 'treeview', 'popup', 'numberbox', 'loadpanel', 'scrollview', 'list', 'selectbox', 'calendar', 'box', 'datebox'],
-  datagrid: ['loadindicator', 'loadpanel', 'validation', 'button', 'textbox', 'contextmenu', 'scrollview', 'popup', 'toolbar', 'checkbox', 'treeview', 'numberbox', 'list', 'selectbox', 'calendar', 'box', 'datebox', 'multiview', 'tabs', 'tabpanel', 'responsivebox', 'form', 'menu', 'filterbuilder', 'buttongroup', 'dropdownbutton', 'sortable'],
+  datagrid: ['loadindicator', 'loadpanel', 'validation', 'button', 'textbox', 'contextmenu', 'scrollview', 'popup', 'progressbar', 'toolbar', 'checkbox', 'treeview', 'numberbox', 'list', 'selectbox', 'calendar', 'box', 'datebox', 'multiview', 'tabs', 'tabpanel', 'responsivebox', 'form', 'menu', 'filterbuilder', 'buttongroup', 'dropdownbutton', 'sortable', 'textarea'],
   treelist: ['loadindicator', 'loadpanel', 'validation', 'button', 'textbox', 'contextmenu', 'scrollview', 'popup', 'toolbar'],
   pivotgrid: ['validation', 'button', 'loadindicator', 'textbox', 'contextmenu', 'popup', 'loadpanel', 'checkbox', 'treeview', 'scrollview', 'list'],
   scheduler: ['validation', 'button', 'popup', 'loadindicator', 'loadpanel', 'multiview', 'tabs', 'tabpanel', 'box', 'responsivebox', 'textbox', 'numberbox', 'checkbox', 'calendar', 'scrollview', 'list', 'selectbox', 'datebox', 'form', 'buttongroup', 'radiogroup', 'textarea', 'tagbox', 'switch', 'dropdownbutton', 'popover', 'tooltip', 'toolbar'],
