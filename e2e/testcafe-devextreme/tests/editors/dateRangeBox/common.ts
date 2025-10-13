@@ -26,6 +26,8 @@ const labelModes = ['static', 'floating', 'hidden', 'outside'];
 fixture.disablePageReloads`DateRangeBox render`
   .page(url(__dirname, '../../container.html'));
 
+const TEST_VALUE = [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)];
+
 const createDateRangeBox = async (options?: any, state?: string): Promise<string> => {
   const id = `${`dx${new Guid()}`}`;
 
@@ -33,7 +35,6 @@ const createDateRangeBox = async (options?: any, state?: string): Promise<string
 
   const config: any = {
     width: 500,
-    value: [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)],
     labelMode: 'static',
     endDateLabel: 'static',
     startDateLabel: 'qwertyQWERTYg',
@@ -71,12 +72,12 @@ test('DateRangeBox styles', async (t) => {
       DISABLED_STATE_CLASS,
     ] as any[]
     ) {
-      await createDateRangeBox({ stylingMode }, state);
+      await createDateRangeBox({ value: TEST_VALUE, stylingMode }, state);
     }
   }
 
-  await createDateRangeBox({ rtlEnabled: true });
-  await createDateRangeBox({ isValid: false });
+  await createDateRangeBox({ value: TEST_VALUE, rtlEnabled: true });
+  await createDateRangeBox({ value: TEST_VALUE, isValid: false });
 });
 
 test('DateRangeBox with buttons container', async (t) => {
@@ -96,8 +97,8 @@ test('DateRangeBox with buttons container', async (t) => {
     ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'dropDown'],
     [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'dropDown'],
   ]) {
-    await createDateRangeBox({ buttons });
-    await createDateRangeBox({ buttons, rtlEnabled: true });
+    await createDateRangeBox({ value: TEST_VALUE, buttons });
+    await createDateRangeBox({ value: TEST_VALUE, buttons, rtlEnabled: true });
   }
 });
 
