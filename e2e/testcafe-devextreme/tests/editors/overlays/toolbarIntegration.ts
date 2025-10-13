@@ -7,7 +7,7 @@ import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 
 fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
@@ -128,7 +128,7 @@ const ANIMATION_DELAY = 500;
               text: 'Close',
             },
           }],
-        })
+        });
       });
     });
   });

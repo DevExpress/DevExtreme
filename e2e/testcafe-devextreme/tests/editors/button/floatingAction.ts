@@ -4,7 +4,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { getThemePostfix, isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
 import { changeTheme } from '../../../helpers/changeTheme';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -79,7 +79,7 @@ for (const label of ['Add Row', '']) {
     }).before(async () => {
       await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
       if (isMaterial()) {
-        await setStyleAttribute(Selector('.dx-overlay-wrapper'), 'font-family: sans-serif !important;');
+        await insertStylesheetRulesToPage('.dx-overlay-wrapper { font-family: sans-serif !important; }');
       }
       await appendElementTo('#container', 'div', 'speed-dial-action');
 
