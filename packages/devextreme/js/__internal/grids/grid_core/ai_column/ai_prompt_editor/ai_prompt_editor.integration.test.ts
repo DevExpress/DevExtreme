@@ -7,7 +7,7 @@ import $ from '@js/core/renderer';
 import Popup from '@js/ui/popup';
 import ProgressBar from '@js/ui/progress_bar';
 import TextArea from '@js/ui/text_area';
-import { AiPromptEditorModel } from '@ts/grids/grid_core//__tests__/__mock__/model/ai_prompt_editor';
+import { AiPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
 
 import { AiPromptEditor } from './ai_prompt_editor';
 import type { AiPromptEditorOptions } from './types';

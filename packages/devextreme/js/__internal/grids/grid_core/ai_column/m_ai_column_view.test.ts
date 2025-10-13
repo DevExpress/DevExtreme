@@ -11,7 +11,8 @@ import fx from '@js/common/core/animation/fx';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
-import { AiPromptEditorModel } from '@ts/grids/grid_core//__tests__/__mock__/model/ai_prompt_editor';
+import wrapInstanceWithMocks from '@ts/grids/grid_core/__tests__/__mock__/helpers/wrapInstance';
+import { AiPromptEditorModel } from '@ts/grids/grid_core/__tests__/__mock__/model/ai_prompt_editor';
 
 import type { Column } from '../columns_controller/m_columns_controller';
 import { AiPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
@@ -20,26 +21,11 @@ import { AiColumnView } from './m_ai_column_view';
 
 jest.mock('./ai_prompt_editor/ai_prompt_editor', (): any => {
   const original = jest.requireActual<any>('./ai_prompt_editor/ai_prompt_editor');
-  const wrapInstanceWithMocks = (instance: AiPromptEditor): AiPromptEditor => {
-    const proto = Object.getPrototypeOf(instance);
-
-    Object.getOwnPropertyNames(proto).forEach((key): void => {
-      const originalMethod = instance[key];
-      if (typeof originalMethod === 'function' && key !== 'constructor') {
-        instance[key] = jest.fn(function mockMethod(...args: any[]) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return originalMethod.apply(this, args) as any;
-        });
-      }
-    });
-
-    return instance;
-  };
 
   return {
     ...original,
     AiPromptEditor: jest.fn((...args: any[]) => {
-      const instance = new original.AiPromptEditor(...args);
+      const instance: AiPromptEditor = new original.AiPromptEditor(...args);
       return wrapInstanceWithMocks(instance);
     }),
   };
