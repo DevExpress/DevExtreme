@@ -3,6 +3,9 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
+import type { Properties as DateRangeBoxProperties } from 'devextreme/ui/date_range_box.d';
+import type { Properties as DropDownEditorProperties } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor.d';
+import type { EditorStyle, LabelMode } from 'devextreme/common';
 import {
   insertStylesheetRulesToPage,
   appendElementTo,
@@ -20,15 +23,18 @@ const HOVER_STATE_CLASS = 'dx-state-hover';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-const stylingModes = ['outlined', 'underlined', 'filled'];
-const labelModes = ['static', 'floating', 'hidden', 'outside'];
+const stylingModes: EditorStyle[] = ['outlined', 'underlined', 'filled'];
+const labelModes: LabelMode[] = ['static', 'floating', 'hidden', 'outside'];
 
 fixture.disablePageReloads`DateRangeBox render`
   .page(url(__dirname, '../../container.html'));
 
 const TEST_VALUE = [new Date(2021, 9, 17, 16, 34), new Date(2021, 9, 18, 16, 34)];
 
-const createDateRangeBox = async (options?: any, state?: string): Promise<string> => {
+const createDateRangeBox = async (
+  options?: DateRangeBoxProperties,
+  state?: string,
+): Promise<string> => {
   const id = `${`dx${new Guid()}`}`;
 
   await appendElementTo('#container', 'div', id, { });
@@ -91,14 +97,23 @@ test('DateRangeBox with buttons container', async (t) => {
 }).before(async () => {
   await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-  for (const buttons of [
+  const testButtons: DropDownEditorProperties['buttons'][] = [
     ['clear'],
     [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'dropDown'],
     ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'dropDown'],
     [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'dropDown'],
-  ]) {
-    await createDateRangeBox({ value: TEST_VALUE, buttons });
-    await createDateRangeBox({ value: TEST_VALUE, buttons, rtlEnabled: true });
+  ];
+
+  for (const buttons of testButtons) {
+    await createDateRangeBox({
+      value: TEST_VALUE,
+      buttons,
+    });
+    await createDateRangeBox({
+      value: TEST_VALUE,
+      buttons,
+      rtlEnabled: true,
+    });
   }
 });
 
