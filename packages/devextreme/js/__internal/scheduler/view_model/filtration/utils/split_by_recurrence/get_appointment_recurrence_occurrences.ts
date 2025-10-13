@@ -44,20 +44,6 @@ const getUnreachableShift = (
   }
 };
 
-const getDSTChanges = (
-  targetTimeZoneChange: number,
-  appointmentTimeZoneChange: number,
-): number => {
-  if (targetTimeZoneChange < 0 && appointmentTimeZoneChange < 0) {
-    return Math.min(targetTimeZoneChange, appointmentTimeZoneChange);
-  }
-  if (targetTimeZoneChange > 0 && appointmentTimeZoneChange > 0) {
-    return Math.max(targetTimeZoneChange, appointmentTimeZoneChange);
-  }
-
-  return targetTimeZoneChange + appointmentTimeZoneChange;
-};
-
 export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointmentEntity >(
   appointment: T,
   {
@@ -109,17 +95,17 @@ export const getAppointmentRecurrenceOccurrences = <T extends MinimalAppointment
       const endDateMs = startDateMs + duration;
       const startDateInfo = getDateInformation(startDateMs, timeZone);
       const startDateAppointmentOffset = getDateOffsetMs(startDateMs, startDateTimeZone);
-      const startDateDSTChange = getDSTChanges(
-        startDateOffsetBase - startDateInfo.offsetMs,
-        startDateAppointmentOffsetBase - startDateAppointmentOffset,
-      );
+
+      const startChange = startDateOffsetBase - startDateInfo.offsetMs;
+      const startAppointmentChange = startDateAppointmentOffsetBase - startDateAppointmentOffset;
+      const startDateDSTChange = startDateTimeZone ? startAppointmentChange : startChange;
 
       const endDateInfo = getDateInformation(endDateMs, timeZone);
       const endDateAppointmentOffset = getDateOffsetMs(endDateMs, endDateTimeZone);
-      const endDateDSTChange = getDSTChanges(
-        startDateOffsetBase - endDateInfo.offsetMs,
-        endDateAppointmentOffsetBase - endDateAppointmentOffset,
-      );
+
+      const endChange = startDateOffsetBase - endDateInfo.offsetMs;
+      const endAppointmentChange = endDateAppointmentOffsetBase - endDateAppointmentOffset;
+      const endDateDSTChange = endDateTimeZone ? endAppointmentChange : endChange;
 
       const [startDateFix, endDateFix] = getUnreachableShiftRecurrence(startDateInfo, endDateInfo);
       const sourceStartDate = startDateMs + startDateDSTChange;
