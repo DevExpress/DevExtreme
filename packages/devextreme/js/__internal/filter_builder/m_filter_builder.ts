@@ -9,11 +9,11 @@ import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import Popover from '@js/ui/popover';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
-import Popover from '@ts/ui/popover/m_popover';
 
 import {
   addItem, convertToInnerStructure,
