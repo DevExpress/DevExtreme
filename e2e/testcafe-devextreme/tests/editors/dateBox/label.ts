@@ -33,15 +33,11 @@ test('Symbol parts in label should not be cropped', async (t) => {
 
     await appendElementTo('#container', 'div', id, { });
 
-    const options: any = {
-      width: 220,
+    await createWidget('dxDateBox', {
       label: 'qwerty QWERTY 1234567890',
       stylingMode,
-      showClearButton: true,
-      value: new Date(2021, 9, 17, 16, 34),
-    };
-
-    await createWidget('dxDateBox', options, `#${id}`);
+      value: new Date(1900, 0, 1),
+    }, `#${id}`);
   }
 });
 
