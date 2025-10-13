@@ -1,6 +1,6 @@
 {
   "name": "wrappers-testing",
-  "version": "25.1.5",
+  "version": "25.1.6",
   "description": "DevExtreme wrappers for e2e tests in components & frameworks",
   "scripts": {
     "dev:react19": "vite builders/react19",
