@@ -49,7 +49,7 @@ test('Label for dxNumberBox', async (t) => {
 }).before(async () => {
   await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
   if (isMaterial()) {
-    await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
+    await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
   }
 
   // eslint-disable-next-line no-restricted-syntax
