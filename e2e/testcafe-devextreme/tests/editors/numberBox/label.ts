@@ -8,6 +8,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -37,7 +38,7 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
   return id;
 };
 
-test('Label for dxNumberBox', async (t) => {
+safeSizeTest('Label for dxNumberBox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'NumberBox label.png', { element: '#container' });
@@ -45,7 +46,7 @@ test('Label for dxNumberBox', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [300, 400]).before(async () => {
   await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
