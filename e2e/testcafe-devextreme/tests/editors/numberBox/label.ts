@@ -47,7 +47,7 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
+  await insertStylesheetRulesToPage('#container { box-sizing: border-box; padding: 8px; }');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
   }
