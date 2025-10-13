@@ -61,7 +61,7 @@ test('Label for dxNumberBox', async (t) => {
   }
 });
 
-test.only('NumberBox with buttons container', async (t) => {
+test('NumberBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png');
