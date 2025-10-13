@@ -3,7 +3,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 
 function nodesByEvent(event) {
   const insideDxParent = (element) => {
-    const el = element?.closest?.('[class^="dx-"], [class*=" dx-"]');
+    const el = element?.closest?.('[class^="dx-"]:not(body), [class*=" dx-"]:not(body)');
 
     return !!el;
   };
