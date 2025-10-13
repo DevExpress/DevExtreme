@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
-import { getThemePostfix, testScreenshot } from '../../../helpers/themeUtils';
+import { getThemePostfix, isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
@@ -77,7 +77,10 @@ for (const label of ['Add Row', '']) {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px; font-family: sans-serif !important;');
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      if (isMaterial()) {
+        await setStyleAttribute(Selector('.dx-overlay-wrapper'), 'font-family: sans-serif !important;');
+      }
       await appendElementTo('#container', 'div', 'speed-dial-action');
 
       await setGlobalConfig();
