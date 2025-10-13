@@ -77,7 +77,7 @@ for (const label of ['Add Row', '']) {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px; font-family: sans-serif !important;');
       await appendElementTo('#container', 'div', 'speed-dial-action');
 
       await setGlobalConfig();
