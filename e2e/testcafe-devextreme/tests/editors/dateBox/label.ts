@@ -12,6 +12,7 @@ import {
 const DATEBOX_CLASS = 'dx-datebox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
+const visibleLabelModes = ['floating', 'static', 'outside'];
 
 fixture.disablePageReloads`DateBox_Label`
   .page(url(__dirname, '../../container.html'));
@@ -26,18 +27,21 @@ test('Symbol parts in label should not be cropped', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateBox');
-  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 600px; padding: 8px;');
 
   for (const stylingMode of stylingModes) {
-    const id = `${`dx${new Guid()}`}`;
+    for (const labelMode of visibleLabelModes) {
+      const id = `${`dx${new Guid()}`}`;
 
-    await appendElementTo('#container', 'div', id, { });
+      await appendElementTo('#container', 'div', id, { });
 
-    await createWidget('dxDateBox', {
-      label: 'qwerty QWERTY 1234567890',
-      stylingMode,
-      value: new Date(1900, 0, 1),
-    }, `#${id}`);
+      await createWidget('dxDateBox', {
+        label: 'qwerty QWERTY 1234567890',
+        stylingMode,
+        labelMode,
+        value: new Date(1900, 0, 1),
+      }, `#${id}`);
+    }
   }
 });
 
