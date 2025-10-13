@@ -167,7 +167,7 @@ test('Textbox with buttons container', async (t) => {
 
   await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 4px; }');
 
-  await testScreenshot(t, takeScreenshot, 'Textbox with buttons container.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Textbox with buttons container.png');
 
   await removeStylesheetRulesFromPage();
 
