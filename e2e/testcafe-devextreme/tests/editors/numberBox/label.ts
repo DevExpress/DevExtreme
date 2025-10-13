@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import type { Properties, NumberBoxPredefinedButton } from 'devextreme/ui/number_box.d';
 import type { EditorStyle, TextEditorButton } from 'devextreme/common';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
@@ -7,8 +8,8 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
+  setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -37,8 +38,7 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
 
   return id;
 };
-
-safeSizeTest('Label for dxNumberBox', async (t) => {
+test('Label for dxNumberBox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'NumberBox label.png', { element: '#container' });
@@ -46,23 +46,25 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('#container { box-sizing: border-box; padding: 8px; }');
+}).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
   }
 
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
-    await createNumberBox({
+    const options = {
       label: 'label text',
       stylingMode,
+    };
+    await createNumberBox({
+      ...options,
       // @ts-expect-error string instead of number
       value: 'text',
     });
     await createNumberBox({
-      label: 'label text',
-      stylingMode,
+      ...options,
       value: 123,
     });
   }
