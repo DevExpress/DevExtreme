@@ -1,4 +1,6 @@
 /* eslint-disable no-restricted-syntax */
+import type { DatePickerType, DateType, Properties } from 'devextreme/ui/date_box.d';
+import { EditorStyle } from 'devextreme/common';
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
@@ -15,11 +17,31 @@ const DATEBOX_CLASS = 'dx-datebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const pickerTypes = ['calendar', 'list', 'native', 'rollers'];
-const types = ['date', 'datetime', 'time'];
+const stylingModes: EditorStyle[] = ['outlined', 'underlined', 'filled'];
+const pickerTypes: DatePickerType[] = ['calendar', 'list', 'native', 'rollers'];
+const types: DateType[] = ['date', 'datetime', 'time'];
 
 fixture.disablePageReloads`DateBox render`
   .page(url(__dirname, '../../container.html'));
+
+const createDateBox = async (options?: Properties, state?: string): Promise<string> => {
+  const id = `${`dx${new Guid()}`}`;
+
+  await appendElementTo('#container', 'div', id, {});
+  await createWidget('dxDateBox', {
+    width: 220,
+    label: 'label text',
+    showClearButton: true,
+    value: new Date(2021, 9, 17, 16, 34),
+    ...options,
+  }, `#${id}`);
+
+  if (state) {
+    await setClassAttribute(Selector(`#${id}`), state);
+  }
+
+  return id;
+};
 
 test('DateBox styles', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -46,23 +68,20 @@ test('DateBox styles', async (t) => {
 
   await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block; margin: 5px; }`);
 
-  for (const type of types) {
-    for (const pickerType of pickerTypes) {
-      const id = `${`dx${new Guid()}`}`;
-
-      t.ctx.ids.push(id);
-      await appendElementTo('#container', 'div', id, { });
-
-      const options: any = {
-        width: 220,
-        label: 'label text',
-        showClearButton: true,
-        pickerType,
+  for (const stylingMode of stylingModes) {
+    for (const type of types) {
+      const options = {
+        stylingMode,
         type,
-        value: new Date(2021, 9, 17, 16, 34),
       };
+      for (const pickerType of pickerTypes) {
+        const id = await createDateBox({ ...options, pickerType });
 
-      await createWidget('dxDateBox', options, `#${id}`);
+        t.ctx.ids.push(id);
+      }
+
+      const id = await createDateBox({ ...options, rtlEnabled: true });
+      t.ctx.ids.push(id);
     }
   }
 });
