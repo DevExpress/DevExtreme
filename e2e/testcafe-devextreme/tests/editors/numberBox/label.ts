@@ -5,9 +5,7 @@ import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import {
-  appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
-} from '../../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -63,19 +61,17 @@ test('Label for dxNumberBox', async (t) => {
   }
 });
 
-test('NumberBox with buttons container', async (t) => {
+test.only('NumberBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
-
   await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png');
-
-  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
+
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
     // eslint-disable-next-line no-restricted-syntax
