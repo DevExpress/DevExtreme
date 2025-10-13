@@ -48,11 +48,13 @@ test('Label for dxNumberBox', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async (t) => {
+  await t.resizeWindow(300, 400);
+  await removeStylesheetRulesFromPage();
+
   await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
   }
-  await t.resizeWindow(300, 400);
 
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
@@ -71,6 +73,7 @@ test('Label for dxNumberBox', async (t) => {
     });
   }
 }).after(async (t) => {
+  await removeStylesheetRulesFromPage();
   await restoreBrowserSize(t);
 });
 
