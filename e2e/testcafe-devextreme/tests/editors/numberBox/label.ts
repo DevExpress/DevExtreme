@@ -10,6 +10,7 @@ import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
+import { restoreBrowserSize } from '../../../helpers/restoreBrowserSize';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -46,11 +47,12 @@ test('Label for dxNumberBox', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}).before(async (t) => {
   await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; height: 400px; padding: 8px;');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
   }
+  await t.resizeWindow(300, 400);
 
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
@@ -68,6 +70,8 @@ test('Label for dxNumberBox', async (t) => {
       value: 123,
     });
   }
+}).after(async (t) => {
+  await restoreBrowserSize(t);
 });
 
 test('NumberBox with buttons container', async (t) => {
