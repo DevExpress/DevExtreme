@@ -7,7 +7,7 @@ import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { setStyleAttribute } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
@@ -43,7 +43,7 @@ const ANIMATION_DELAY = 500;
           .ok(compareResults.errorMessages());
       }, [600, 400]).before(async () => {
         if (isMaterial()) {
-          await setStyleAttribute(Selector('.dx-overlay-wrapper'), 'font-family: sans-serif !important;');
+          await insertStylesheetRulesToPage('.dx-overlay-wrapper { font-family: sans-serif !important; }');
         }
         return createWidget(name as 'dxPopup' | 'dxPopover', {
           showCloseButton: true,
