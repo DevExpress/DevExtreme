@@ -36,7 +36,7 @@ const createNumberBox = async (options?: Properties): Promise<string> => {
 
   return id;
 };
-test('Label for dxNumberBox', async (t) => {
+test.only('Label for dxNumberBox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'NumberBox label.png', { element: '#container' });
@@ -45,7 +45,7 @@ test('Label for dxNumberBox', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await insertStylesheetRulesToPage('#container { box-sizing: border-box; width: 300px; height: 400px; padding: 8px; }');
+  await insertStylesheetRulesToPage('#container { display: flex; flex-direction: column; width: 300px; height: 400px; gap: 8px; }');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif }');
   }
