@@ -18,7 +18,7 @@ const moduleConfig = {
 };
 
 QUnit.module('Validate Dependencies', moduleConfig, () => {
-    test('Finish to Start dependency type should move successor - when t1.start == t2.start and t1.end == t2.end', function(assert) {
+    test('Finish to Start dependency type should move successor - when t1.start == t2.start and t1.end == t2.end', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 0;
@@ -36,7 +36,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -56,12 +56,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -72,7 +72,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(task1.end, updatedTask2.start);
     });
-    test('Finish to Start dependency type should move successor - when predecessor finishes after successor starts', function(assert) {
+    test('Finish to Start dependency type should move successor - when predecessor finishes after successor starts', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 0;
@@ -90,7 +90,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -110,12 +110,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -126,7 +126,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(task1.end, updatedTask2.start);
     });
-    test('Finish to Start dependency type should NOT move successor - when predecessor finishes before successor starts', function(assert) {
+    test('Finish to Start dependency type should NOT move successor - when predecessor finishes before successor starts', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 0;
@@ -144,7 +144,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -164,12 +164,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -180,7 +180,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task2.end, updatedTask2.end);
         assert.notDeepEqual(task1.end, updatedTask2.start);
     });
-    test('Finish to Start dependency type should NOT move successor - when predecessor.end == successor.start', function(assert) {
+    test('Finish to Start dependency type should NOT move successor - when predecessor.end == successor.start', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 0;
@@ -198,7 +198,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -218,12 +218,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -234,7 +234,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(task1.end, updatedTask2.start);
     });
-    test('Start to Start dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', function(assert) {
+    test('Start to Start dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -252,7 +252,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -272,12 +272,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -289,7 +289,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Start to Start dependency type should NOT move successor - when predecessor starts before successor starts', function(assert) {
+    test('Start to Start dependency type should NOT move successor - when predecessor starts before successor starts', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -307,7 +307,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -327,12 +327,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -345,7 +345,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
 
     });
-    test('Start to Start dependency type should move successor - when predecessor starts after suscessor starts', function(assert) {
+    test('Start to Start dependency type should move successor - when predecessor starts after suscessor starts', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -363,7 +363,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -383,12 +383,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -400,7 +400,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task1.start, updatedTask2.start);
         assert.deepEqual(task1.end, updatedTask2.end);
     });
-    test('Finish to Finish dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', function(assert) {
+    test('Finish to Finish dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 2;
@@ -418,7 +418,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -438,12 +438,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -455,7 +455,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Finish to Finish dependency type should NOT move successor - when predecessor finishes before successor finishes', function(assert) {
+    test('Finish to Finish dependency type should NOT move successor - when predecessor finishes before successor finishes', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 2;
@@ -473,7 +473,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -493,12 +493,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -511,7 +511,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
 
     });
-    test('Finish to Finish dependency type should move successor - when predecessor finishes after suscessor finishes', function(assert) {
+    test('Finish to Finish dependency type should move successor - when predecessor finishes after suscessor finishes', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 2;
@@ -529,7 +529,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -549,12 +549,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -567,7 +567,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task1.end, updatedTask2.end);
 
     });
-    test('Start to Finish dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', function(assert) {
+    test('Start to Finish dependency type should NOT move successor - when t1.start == t2.start and t1.end == t2.end', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 3;
@@ -585,7 +585,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -605,12 +605,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -622,7 +622,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Start to Finish dependency type should move successor - when predecessor starts after successor finishes', function(assert) {
+    test('Start to Finish dependency type should move successor - when predecessor starts after successor finishes', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 3;
@@ -640,7 +640,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -660,12 +660,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -676,7 +676,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(task1.start, updatedTask2.end);
     });
-    test('Start to Finish dependency type should NOT move successor - when predecessor start before successor finishes', function(assert) {
+    test('Start to Finish dependency type should NOT move successor - when predecessor start before successor finishes', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 3;
@@ -694,7 +694,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -714,12 +714,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -730,7 +730,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task2.end, updatedTask2.end);
         assert.notDeepEqual(task1.start, updatedTask2.end);
     });
-    test('Start to Finish dependency type should NOT move successor - when predecessor.start == successor.end', function(assert) {
+    test('Start to Finish dependency type should NOT move successor - when predecessor.start == successor.end', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 3;
@@ -748,7 +748,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -768,12 +768,12 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
@@ -784,7 +784,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(task2.end, updatedTask2.end);
         assert.deepEqual(task1.start, updatedTask2.end);
     });
-    test('Move predecessor should move successor', function(assert) {
+    test('Move predecessor should move successor', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -802,7 +802,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -825,17 +825,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-05-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -846,7 +846,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Move predecessor should NOT move successor when enablePredecessorGap = true', function(assert) {
+    test('Move predecessor should NOT move successor when enablePredecessorGap = true', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 3;
@@ -864,7 +864,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -887,17 +887,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -908,7 +908,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(updatedTask1.start, updatedTask2.start);
         assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Move predecessor should move successor even if enablePredecessorGap = true when under validation already', function(assert) {
+    test('Move predecessor should move successor even if enablePredecessorGap = true when under validation already', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -926,7 +926,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -949,17 +949,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -970,7 +970,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.deepEqual(updatedTask1.start, updatedTask2.start);
         assert.deepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('Move predecessor should NOT move successor even if enablePredecessorGap = true and lockPredecessorToSuccessor = false  when under validation already', function(assert) {
+    test('Move predecessor should NOT move successor even if enablePredecessorGap = true and lockPredecessorToSuccessor = false  when under validation already', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 1;
@@ -988,7 +988,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -1011,17 +1011,17 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         const newEnd = new Date('2019-01-24T09:00:00.000Z');
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         getGanttViewCore(this.instance).validationController.lockPredecessorToSuccessor = false;
         const taskData = getGanttViewCore(this.instance).getTaskByPublicId(globalPrevInsertedKey);
         const taskMoveCommand = getGanttViewCore(this.instance).commandManager.updateTaskCommand;
         taskMoveCommand.execute(taskData.internalId, { start: newStart, end: newEnd });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const updatedTask1 = this.instance.getTaskData(globalPrevInsertedKey);
         const updatedTask2 = this.instance.getTaskData(globalLastInsertedKey);
 
@@ -1032,7 +1032,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         assert.notDeepEqual(updatedTask1.start, updatedTask2.start);
         assert.notDeepEqual(updatedTask1.end, updatedTask2.end);
     });
-    test('TaskEdit dialog dependency validation', function(assert) {
+    test('TaskEdit dialog dependency validation', async function(assert) {
         let globalLastInsertedKey = 0;
         let globalPrevInsertedKey = 0;
         const globalDependencyType = 0;
@@ -1050,7 +1050,7 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
             globalPrevInsertedKey = globalLastInsertedKey;
             globalLastInsertedKey = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const task1 = {
             'my_id': 1000,
@@ -1070,15 +1070,15 @@ QUnit.module('Validate Dependencies', moduleConfig, () => {
         };
 
         this.instance.insertTask(task1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.insertTask(task2);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
         const dependency = { predecessorId: globalPrevInsertedKey, successorId: globalLastInsertedKey, type: globalDependencyType };
         this.instance.insertDependency(dependency);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         this.instance.showTaskDetailsDialog(globalLastInsertedKey);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 

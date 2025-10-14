@@ -19,29 +19,29 @@ const moduleConfig = {
 };
 
 QUnit.module('FullScreen Mode', moduleConfig, () => {
-    test('FullScreen is switching', function(assert) {
+    test('FullScreen is switching', async function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         this.instance.option('height', 200);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
 
         assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled');
-        this.clock.tick(10);
+        await this.clock.tick(10);
         fullScreenCommand.executeInternal();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
         fullScreenCommand.execute();
         assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, false, 'Normal mode is enabled after FullScreen mode');
 
     });
-    test('is taking up entire screen', function(assert) {
+    test('is taking up entire screen', async function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         this.instance.option('height', 200);
         this.instance.option('width', 400);
         this.instance.option('taskListWidth', 200);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '1.normalMode: gantt height < window height');
         assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '1.normalMode: gantt width < window width');
@@ -49,7 +49,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '1.fullScreenMode: gantt height == window height');
         assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '1.fullScreenMode: gantt width == window width');
         fullScreenCommand.execute();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '2.normalMode: gantt height < window height');
         assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '2.normalMode: gantt width < window width');
         fullScreenCommand.execute();
@@ -58,16 +58,16 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         fullScreenCommand.execute();
     });
 
-    test('task editng is possible', function(assert) {
+    test('task editng is possible', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         fullScreenCommand.execute();
         assert.strictEqual(getGanttViewCore(this.instance).fullScreenModeHelper.isInFullScreenMode, true, 'FullScreen mode is enabled');
         showTaskEditDialog(this.instance);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -82,7 +82,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         titleTextBox.option('value', testTitle);
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
@@ -96,18 +96,18 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
         fullScreenCommand.execute();
     });
-    test('panel sizes are the same', function(assert) {
+    test('panel sizes are the same', async function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
         let leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in FullScreen');
         fullScreenCommand.execute();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const diff = Math.abs(leftPanelWidth - Math.floor(this.instance._splitter._leftPanelPercentageWidth));
         assert.ok(diff < 2, 'left Panel Width is not changed in NormalMode');
-        this.clock.tick(10);
+        await this.clock.tick(10);
         fullScreenCommand.execute();
         const splitterWrapper = this.$element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
         const splitter = this.$element.find(Consts.SPLITTER_SELECTOR);
@@ -169,9 +169,9 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in Normal mode');
     });
 
-    test('Check full screen after refresh (T1230629)', function(assert) {
+    test('Check full screen after refresh (T1230629)', async function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         this.instance.option({
             'height': 200,
             'width': 400,
@@ -189,7 +189,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
                 ]
             }
         });
-        this.clock.tick(10);
+        await this.clock.tick(10);
 
         const triggerToolbarItemClick = (isFirst) => {
             const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
@@ -202,21 +202,21 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
 
         // toggle to full screen
         triggerToolbarItemClick(true);
-        this.clock.tick(500);
+        await this.clock.tick(500);
         assert.ok(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode on');
         assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '2.fullScreenMode: gantt height == window height');
         assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '2.fullScreenMode: gantt width == window width');
 
         // refresh
         triggerToolbarItemClick(false);
-        this.clock.tick(500);
+        await this.clock.tick(500);
         assert.ok(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode on');
         assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '3.fullScreenMode: gantt height == window height');
         assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '3.fullScreenMode: gantt width == window width');
 
         // toggle to normal screen
         triggerToolbarItemClick(true);
-        this.clock.tick(500);
+        await this.clock.tick(500);
         assert.notOk(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode off');
         assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '4.normalMode: gantt height < window height');
         assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '4.normalMode: gantt width < window width');

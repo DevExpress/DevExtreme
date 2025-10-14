@@ -21,7 +21,7 @@ const moduleConfig = {
 };
 
 QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
-    test('array, auto update parents on', function(assert) {
+    test('array, auto update parents on', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -39,18 +39,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('array, auto update parents off', function(assert) {
+    test('array, auto update parents off', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -68,18 +68,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('user data source with load/update, auto update parents on', function(assert) {
+    test('user data source with load/update, auto update parents on', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -121,18 +121,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('user data source with load/update, auto update parents off', function(assert) {
+    test('user data source with load/update, auto update parents off', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -174,18 +174,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('user custom store with load/update, auto update parents on', function(assert) {
+    test('user custom store with load/update, auto update parents on', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -227,18 +227,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('user dcustom store with load/update, auto update parents off', function(assert) {
+    test('user dcustom store with load/update, auto update parents off', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -280,18 +280,18 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: false }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         const updatedStart = new Date('2019-02-21');
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { start: updatedStart });
         this.instance._ganttTreeList.updateDataSource();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.start, updatedStart, 'new task start is updated');
     });
-    test('remove task when filtering (T1015311)', function(assert) {
+    test('remove task when filtering (T1015311)', async function(assert) {
         const tasks = [
             { 'id': 1, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
             { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
@@ -311,13 +311,13 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             tasks: { dataSource: tasksDataSource },
             editing: { enabled: true }
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal(this.instance._treeList.getVisibleRows().length, 4, 'tasks filtered');
         this.instance.deleteTask('4');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal(this.instance._treeList.getVisibleRows().length, 3, 'tasks removed');
     });
-    test('check render for ds with delay T1024748', function(assert) {
+    test('check render for ds with delay T1024748', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -350,16 +350,16 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
 
         const titleText = $(this.instance._treeList.getCellElement(0, 0)).text();
         assert.equal(titleText, tasks[0].title, 'title cell text is right');
 
-        this.clock.tick(200);
+        await this.clock.tickAsync(200);
         const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
         assert.equal(taskText, tasks[0].title, 'Custom task text works correctly');
     });
-    test('insert and update task with func field setter (T1163857)', function(assert) {
+    test('insert and update task with func field setter (T1163857)', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
 
@@ -384,12 +384,12 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             editing: { enabled: true },
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const updatedTaskId = 3;
         let updatedProgress = 23;
         getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { progress: updatedProgress });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         let updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
         assert.equal(updatedTask.progressFake, updatedProgress, 'task progress is updated');

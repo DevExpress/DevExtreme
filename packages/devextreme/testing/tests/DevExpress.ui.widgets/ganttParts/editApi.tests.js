@@ -18,10 +18,10 @@ const moduleConfig = {
 };
 
 QUnit.module('Edit api', moduleConfig, () => {
-    test('task insert', function(assert) {
+    test('task insert', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskData = {
             title: 'My text',
@@ -32,7 +32,7 @@ QUnit.module('Edit api', moduleConfig, () => {
 
         const tasksCount = data.tasks.length;
         this.instance.insertTask(taskData);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = data.tasks[data.tasks.length - 1];
@@ -41,7 +41,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdTask.end, taskData.end, 'new task end is right');
         assert.equal(createdTask.parentId, taskData.parentId, 'new task parentId is right');
     });
-    test('task insert to root', function(assert) {
+    test('task insert to root', async function(assert) {
         const myTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
             { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
@@ -56,7 +56,7 @@ QUnit.module('Edit api', moduleConfig, () => {
             editing: { enabled: true }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             title: 'My text',
@@ -67,30 +67,30 @@ QUnit.module('Edit api', moduleConfig, () => {
 
         const tasksCount = myTasks.length;
         this.instance.insertTask(data);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(myTasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = myTasks[myTasks.length - 1];
         assert.equal(createdTask.parentId, data.parentId, 'new task parentId is right');
     });
-    test('task delete', function(assert) {
+    test('task delete', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const tasksCount = data.tasks.length;
         const taskToDelete = data.tasks[tasksCount - 1];
         this.instance.deleteTask(taskToDelete.id);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.tasks.length, tasksCount - 1, 'new task was deleted');
         const removedTask = data.tasks.filter((t) => t.id === taskToDelete.id)[0];
         assert.equal(removedTask, undefined, 'task was removed');
     });
-    test('taskUpdate', function(assert) {
+    test('taskUpdate', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskToUpdate = data.tasks[0];
         const taskData = {
@@ -101,14 +101,14 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
 
         this.instance.updateTask(taskToUpdate.id, taskData);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(taskToUpdate.title, taskData.title, 'task title is updated');
         assert.equal(taskToUpdate.start, taskData.start, 'new task start is updated');
         assert.equal(taskToUpdate.end, taskData.end, 'new task end is updated');
         assert.equal(taskToUpdate.progress, taskData.progress, 'new task progress is updated');
     });
-    test('taskUpdate with custom and core fields', function(assert) {
+    test('taskUpdate with custom and core fields', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
 
@@ -134,7 +134,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
         this.instance.option('tasks', tasksMap);
         this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             ItemName: 'New',
@@ -142,12 +142,12 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
 
         this.instance.updateTask(task.Id, data);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(task.ItemName, data.ItemName, 'task title is updated');
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
     });
-    test('update task color and title in auto parent mode (T976669, T978287)', function(assert) {
+    test('update task color and title in auto parent mode (T976669, T978287)', async function(assert) {
         const tasks = [ {
             Id: 1,
             ParentId: 0,
@@ -184,21 +184,21 @@ QUnit.module('Edit api', moduleConfig, () => {
             columns: [{ dataField: 'ItemName', caption: 'Task' }]
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             ItemName: 'New',
             TaskColor: 'yellow'
         };
         this.instance.updateTask(1, data);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const firstTreeListTitleText = $(this.instance._treeList.getCellElement(0, 0)).text();
         assert.equal(firstTreeListTitleText, data.ItemName, 'title text was modified');
         assert.equal(tasks[0].ItemName, data.ItemName, 'task title is updated');
         assert.equal(tasks[0].TaskColor, data.TaskColor, 'task color  is updated');
     });
-    test('taskUpdate with only custom field', function(assert) {
+    test('taskUpdate with only custom field', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         let values;
@@ -225,27 +225,27 @@ QUnit.module('Edit api', moduleConfig, () => {
         this.instance.option('tasks', tasksMap);
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
         this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             CustomText: 'new text'
         };
 
         this.instance.updateTask(task.Id, data);
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
 
         assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
         assert.equal(task.CustomText, values.CustomText, 'onTaskUpdated is triggrered');
     });
-    test('insertDependency', function(assert) {
+    test('insertDependency', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.dependencies.length;
         const dependencyData = { 'predecessorId': 2, 'successorId': 4, 'type': 0 };
         this.instance.insertDependency(dependencyData);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.dependencies.length, count + 1, 'new dependency was not created');
         const createdDependency = data.dependencies[data.dependencies.length - 1];
@@ -253,24 +253,24 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
         assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
     });
-    test('insertDependency with validation (T1034713)', function(assert) {
+    test('insertDependency with validation (T1034713)', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         const dependencies = [];
         this.instance.option('dependencies', { dataSource: dependencies });
         this.instance.option('editing.enabled', true);
         this.instance.option('validation.validateDependencies', true);
         this.instance.option('validation.autoUpdateParentTasks', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = dependencies.length;
         let dependencyData = { 'predecessorId': 2, 'successorId': 4, 'type': 0 };
         this.instance.insertDependency(dependencyData);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(dependencies.length, count, 'new dependency was not created');
         dependencyData = { 'predecessorId': 6, 'successorId': 7, 'type': 0 };
         this.instance.insertDependency(dependencyData);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(dependencies.length, count + 1, 'new dependency was created');
         const createdDependency = dependencies[dependencies.length - 1];
@@ -278,26 +278,26 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
         assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
     });
-    test('deleteDependency', function(assert) {
+    test('deleteDependency', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.dependencies.length;
         const dependencyToDelete = data.dependencies[count - 1];
         this.instance.deleteDependency(dependencyToDelete.id);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const $confirmDialog = $('body').find(Consts.POPUP_SELECTOR);
         const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $yesButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.dependencies.length, count - 1, 'new dependency was deleted');
         const removedDependency = data.dependencies.filter((t) => t.id === dependencyToDelete.id)[0];
         assert.equal(removedDependency, undefined, 'dependency was removed');
     });
-    test('insertResource + onResourceInserted', function(assert) {
+    test('insertResource + onResourceInserted', async function(assert) {
         let values;
         let keyExists = false;
         this.createInstance(options.allSourcesOptions);
@@ -306,13 +306,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             values = e.values;
             keyExists = !!e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const resourcesCount = data.resources.length;
         const assignmentsCount = data.resourceAssignments.length;
         const resourceData = { text: 'My text' };
         this.instance.insertResource(resourceData, [2]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resources.length, resourcesCount + 1, 'new resource was created');
         assert.equal(data.resourceAssignments.length, assignmentsCount + 1, 'new assignment was created');
@@ -325,7 +325,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.ok(keyExists, 'key created');
         assert.equal(values.text, resourceData.text, 'new task title is right');
     });
-    test('insertResource (T959410)', function(assert) {
+    test('insertResource (T959410)', async function(assert) {
         let assignedValues;
         let assigningValues;
         let resKey;
@@ -339,11 +339,11 @@ QUnit.module('Edit api', moduleConfig, () => {
             assignedValues = e.values;
             assignmentKey = !!e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = { text: 'My text' };
         this.instance.insertResource(data, [2]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.ok(assignmentKey, 'key created');
         assert.equal(assigningValues.taskId, 2, 'assigning task key');
@@ -351,7 +351,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(assignedValues.taskId, 2, 'assigned task key');
         assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
     });
-    test('insertResource + assignResourceToTask (T959410)', function(assert) {
+    test('insertResource + assignResourceToTask (T959410)', async function(assert) {
         let assignedValues;
         let assigningValues;
         let resKey;
@@ -365,13 +365,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             assignedValues = e.values;
             assignmentKey = !!e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = { text: 'My text' };
         this.instance.insertResource(data);
-        this.clock.tick(200);
+        await this.clock.tickAsync(200);
         this.instance.assignResourceToTask(resKey, 2);
-        this.clock.tick(200);
+        await this.clock.tickAsync(200);
 
         assert.ok(assignmentKey, 'key created');
         assert.equal(assigningValues.taskId, 2, 'assigning task key');
@@ -379,7 +379,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(assignedValues.taskId, 2, 'assigned task key');
         assert.equal(assignedValues.resourceId, resKey, 'assigned resource key');
     });
-    test('deleteResource + onResourceDeleted', function(assert) {
+    test('deleteResource + onResourceDeleted', async function(assert) {
         let key;
         let values;
 
@@ -389,12 +389,12 @@ QUnit.module('Edit api', moduleConfig, () => {
             key = e.key;
             values = e.values;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.resources.length;
         const resourceToDelete = data.resources[count - 1];
         this.instance.deleteResource(resourceToDelete.id);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resources.length, count - 1, 'resources was deleted');
         const removedResource = data.resources.filter((t) => t.id === resourceToDelete.id)[0];
@@ -402,7 +402,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(key, resourceToDelete.id, 'check key');
         assert.equal(values.text, resourceToDelete.text, 'check key');
     });
-    test('assignResourceToTask', function(assert) {
+    test('assignResourceToTask', async function(assert) {
         let values;
         let keyExists = false;
         this.createInstance(options.allSourcesOptions);
@@ -411,13 +411,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             values = e.values;
             keyExists = !!e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.resourceAssignments.length;
         const taskToAssign = data.tasks[data.tasks.length - 1];
         const resourceToAssign = data.resources[data.resources.length - 1];
         this.instance.assignResourceToTask(resourceToAssign.id, taskToAssign.id);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resourceAssignments.length, count + 1, 'resource was assigned');
         const newAssignment = data.resourceAssignments[data.resourceAssignments.length - 1];
@@ -428,7 +428,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(values.resourceId, resourceToAssign.id, 'new resource id in event');
         assert.equal(values.taskId, taskToAssign.id, 'new task id in event');
     });
-    test('unassignResourceFromTask', function(assert) {
+    test('unassignResourceFromTask', async function(assert) {
         let values;
         let key;
         this.createInstance(options.allSourcesOptions);
@@ -437,13 +437,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             values = e.values;
             key = e.key;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.resourceAssignments.length;
         const toDelete = data.resourceAssignments[count - 1];
-        // eslint-disable-next-line spellcheck/spell-checker
+
         this.instance.unassignResourceFromTask(toDelete.resourceId, toDelete.taskId);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resourceAssignments.length, count - 1, 'resource was not deassigned');
         const removedAssignment = data.resourceAssignments.filter((t) => t.id === toDelete.id)[0];
@@ -453,27 +453,27 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(values.resourceId, toDelete.resourceId, 'resource id in event');
         assert.equal(values.taskId, toDelete.taskId, 'task id in event');
     });
-    test('unassignAllResourcesFromTask', function(assert) {
+    test('unassignAllResourcesFromTask', async function(assert) {
         let values;
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('onResourceUnassigned', (e) => {
             values = e.values;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const count = data.resourceAssignments.length;
         const toDelete = data.resourceAssignments[count - 1];
-        // eslint-disable-next-line spellcheck/spell-checker
+
         this.instance.unassignAllResourcesFromTask(toDelete.taskId);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resourceAssignments.length, count - 2, 'resources were deassigned');
         const removedAssignments = data.resourceAssignments.filter((t) => t.taskId === toDelete.taskId);
         assert.equal(removedAssignments.length, 0, 'assigmnents were removed');
         assert.equal(values.taskId, toDelete.taskId, 'task id in event');
     });
-    test('getTaskData', function(assert) {
+    test('getTaskData', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         const task = {
             Id: 1,
@@ -495,7 +495,7 @@ QUnit.module('Edit api', moduleConfig, () => {
             progressExpr: 'TaskProgress'
         };
         this.instance.option('tasks', tasksMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskData = this.instance.getTaskData(1);
         assert.equal(taskData['ItemName'], task['ItemName'], 'title');
@@ -503,7 +503,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(taskData['SprintEndDate'], task['SprintEndDate'], 'end');
         assert.equal(taskData['TaskProgress'], task['TaskProgress'], 'progress');
     });
-    test('getDependencyData', function(assert) {
+    test('getDependencyData', async function(assert) {
         const dependency = {
             Id: 1,
             PredecessorTask: 1,
@@ -519,15 +519,15 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
         this.createInstance(options.tasksOnlyOptions);
         this.instance.option('dependencies', dependencyMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const dependencyData = this.instance.getDependencyData(1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal(dependencyData['PredecessorTask'], dependency['PredecessorTask'], 'PredecessorTask');
         assert.equal(dependencyData['SuccessorTask'], dependency['SuccessorTask'], 'SuccessorTask');
         assert.equal(dependencyData['DependencyType'], dependency['DependencyType'], 'DependencyType');
     });
-    test('getResourceData', function(assert) {
+    test('getResourceData', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         const resource = { Id: 1, ResourceText: 'My text', ResourceColor: 'black' };
         const resourceMap = {
@@ -537,13 +537,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             colorExpr: 'ResourceColor'
         };
         this.instance.option('resources', resourceMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const resourceData = this.instance.getResourceData(1);
         assert.equal(resourceData['ResourceText'], resource['ResourceText'], 'ResourceText');
         assert.equal(resourceData['ResourceColor'], resource['ResourceColor'], 'ResourceColor');
     });
-    test('getResourceAssignmentData', function(assert) {
+    test('getResourceAssignmentData', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         const assignment = { Id: 1, TaskKey: 1, ResourceKey: 2 };
         const assignmentMap = {
@@ -553,13 +553,13 @@ QUnit.module('Edit api', moduleConfig, () => {
             resourceIdExpr: 'ResourceKey'
         };
         this.instance.option('resourceAssignments', assignmentMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const assignmentData = this.instance.getResourceAssignmentData(1);
         assert.equal(assignmentData['TaskKey'], assignment['TaskKey'], 'TaskKey');
         assert.equal(assignmentData['ResourceKey'], assignment['ResourceKey'], 'ResourceKey');
     });
-    test('getTaskResources', function(assert) {
+    test('getTaskResources', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         const resources = [
             { Id: 1, ResourceText: 'My text', ResourceColor: 'black' },
@@ -583,7 +583,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
         this.instance.option('resources', resourceMap);
         this.instance.option('resourceAssignments', assignmentMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const taskResources = this.instance.getTaskResources(1);
         assert.equal(taskResources.length, 2, 'length');
@@ -592,7 +592,7 @@ QUnit.module('Edit api', moduleConfig, () => {
 
         assert.equal(this.instance.getTaskResources(100).length, 0, 'resources for not exists task  should be empty array');
     });
-    test('getVisibleKeys', function(assert) {
+    test('getVisibleKeys', async function(assert) {
         const my_tasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
             { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
@@ -631,7 +631,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         };
 
         this.createInstance(my_allSourcesOptions);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(this.instance.getVisibleTaskKeys().length, my_tasks.length, 'task keys');
         assert.equal(this.instance.getVisibleDependencyKeys().length, my_dependencies.length, 'dependencies keys');
@@ -642,14 +642,14 @@ QUnit.module('Edit api', moduleConfig, () => {
         this.instance.option('dependencies', { dataSource: [] });
         this.instance.option('resources', { dataSource: [] });
         this.instance.option('resourceAssignments', { dataSource: [] });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(this.instance.getVisibleTaskKeys().length, 0, 'task keys');
         assert.equal(this.instance.getVisibleDependencyKeys().length, 0, 'dependencies keys');
         assert.equal(this.instance.getVisibleResourceKeys().length, 0, 'resources keys');
         assert.equal(this.instance.getVisibleResourceAssignmentKeys().length, 0, 'resource assignments keys');
     });
-    test('double task insert - check infinite loop on selection (T980191)', function(assert) {
+    test('double task insert - check infinite loop on selection (T980191)', async function(assert) {
         const myTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
             { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
@@ -664,7 +664,7 @@ QUnit.module('Edit api', moduleConfig, () => {
             editing: { enabled: true }
         };
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             title: 'My text',
@@ -676,10 +676,10 @@ QUnit.module('Edit api', moduleConfig, () => {
         const tasksCount = myTasks.length;
         this.instance.insertTask(data);
         this.instance.insertTask(data);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal(myTasks.length, tasksCount + 2, 'new task was created in ds');
     });
-    test('taskUpdate with only custom field and update custom field in onTaskUpdating should trigger onTaskUpdated', function(assert) {
+    test('taskUpdate with only custom field and update custom field in onTaskUpdating should trigger onTaskUpdated', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         let values = {};
@@ -706,24 +706,24 @@ QUnit.module('Edit api', moduleConfig, () => {
         this.instance.option('tasks', tasksMap);
         this.instance.option('onTaskUpdated', (e) => { values = e.values; });
         this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const onTaskUpdatingText = 'new custom text';
         this.instance.option('onTaskUpdating', (e) => {
             e.newValues['CustomText'] = onTaskUpdatingText;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = {
             CustomText: 'new text'
         };
         this.instance.updateTask(task.Id, data);
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         const taskData = this.instance.getTaskData(1);
 
         assert.equal(taskData.CustomText, onTaskUpdatingText, 'task cust field  is updated');
         assert.equal(values.CustomText, onTaskUpdatingText, 'onTaskUpdated is triggrered');
     });
-    test('updateTask with empty or standard data should not raise Updating event (T1034933)', function(assert) {
+    test('updateTask with empty or standard data should not raise Updating event (T1034933)', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         const task = {
@@ -747,34 +747,34 @@ QUnit.module('Edit api', moduleConfig, () => {
             progressExpr: 'TaskProgress'
         };
         this.instance.option('tasks', tasksMap);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         let receivedValues;
         this.instance.option('onTaskUpdating', (e) => { receivedValues = e.newValues; });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         this.instance.updateTask(task.Id);
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.notOk(receivedValues);
 
         this.instance.updateTask(task.Id, {});
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.notOk(receivedValues);
 
         this.instance.updateTask(task.Id, { TaskProgress: task.TaskProgress });
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.notOk(receivedValues);
 
         this.instance.updateTask(task.Id, { ItemName: task.ItemName });
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.notOk(receivedValues);
 
 
         this.instance.updateTask(task.Id, { SprintStartDate: task.SprintStartDate });
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.notOk(receivedValues);
 
         this.instance.updateTask(task.Id, { TaskProgress: task.TaskProgress, ItemName: 'myText' });
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
         assert.ok(receivedValues);
         assert.notOk(receivedValues['SprintStartDate']);
         assert.notOk(receivedValues['SprintEndDate']);
@@ -782,7 +782,7 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.notOk(receivedValues['TaskProgress']);
         assert.equal(receivedValues['ItemName'], 'myText');
     });
-    test('updateTask with custom data - check Updating cancel', function(assert) {
+    test('updateTask with custom data - check Updating cancel', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         let updatingEventTriggered = false;
@@ -810,17 +810,17 @@ QUnit.module('Edit api', moduleConfig, () => {
         this.instance.option('tasks', tasksMap);
         this.instance.option('onTaskUpdated', (e) => { updatedEventTriggered = true; });
         this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         this.instance.option('onTaskUpdating', (e) => {
             updatingEventTriggered = true;
             e.cancel = true;
         });
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const data = { CustomText: 'new text' };
         this.instance.updateTask(task.Id, data);
-        this.clock.tick(300);
+        await this.clock.tickAsync(300);
 
         assert.ok(updatingEventTriggered, 'Updating event raised');
         assert.notOk(updatedEventTriggered, 'onTaskUpdated is not triggrered');

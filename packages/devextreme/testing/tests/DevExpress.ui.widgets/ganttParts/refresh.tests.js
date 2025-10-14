@@ -21,29 +21,29 @@ const moduleConfig = {
 };
 
 QUnit.module('Refresh', moduleConfig, () => {
-    test('should render treeList after refresh()', function(assert) {
+    test('should render treeList after refresh()', async function(assert) {
         this.createInstance(options.tasksOnlyOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         this.instance.refresh();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const treeListElements = this.$element.find(Consts.TREELIST_SELECTOR);
         assert.strictEqual(treeListElements.length, 1);
     });
-    test('should render task wrapper for each task after refresh()', function(assert) {
+    test('should render task wrapper for each task after refresh()', async function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         this.instance.refresh();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const elements = this.$element.find(Consts.TASK_WRAPPER_SELECTOR);
         assert.equal(elements.length, data.tasks.length - 1);
     });
-    test('should store task changes after refresh() ', function(assert) {
+    test('should store task changes after refresh() ', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick(10);
+        await this.clock.tick(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -58,16 +58,16 @@ QUnit.module('Refresh', moduleConfig, () => {
         titleTextBox.option('value', testTitle);
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tick(10);
         let firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
         this.instance.refresh();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text is the same after repaint()');
     });
-    test('check data load on refresh and repaint', function(assert) {
+    test('check data load on refresh and repaint', async function(assert) {
         const task = { 'id': 1, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' };
         let dataLoaded = false;
         this.createInstance({
@@ -94,23 +94,23 @@ QUnit.module('Refresh', moduleConfig, () => {
                 { dataField: 'end', caption: 'End Date' }
             ]
         });
-        this.clock.tick(10);
+        await this.clock.tick(10);
 
         dataLoaded = false;
         const oldTitle = task.title;
         task.title = 'test';
         this.instance.repaint();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         assert.notOk(dataLoaded);
         assert.equal(this.instance.getTaskData(1).title, oldTitle);
         this.instance.refresh();
-        this.clock.tick(10);
+        await this.clock.tick(10);
         assert.ok(dataLoaded);
         assert.equal(this.instance.getTaskData(1).title, 'test');
     });
-    test('check selected row index index after refresh', function(assert) {
+    test('check selected row index index after refresh', async function(assert) {
         this.createInstance(options.allSourcesOptions);
-        this.clock.tick(10);
+        await this.clock.tick(10);
 
         assert.equal(this.instance.option('selectedRowKey'), undefined);
 
@@ -119,14 +119,14 @@ QUnit.module('Refresh', moduleConfig, () => {
             .eq(2)
             .trigger('dxclick');
 
-        this.clock.tick(10);
+        await this.clock.tick(10);
 
         assert.notEqual(this.instance.option('selectedRowKey'), undefined);
 
         const selectedRowKey = this.instance.option('selectedRowKey');
 
         this.instance.refresh();
-        this.clock.tick(10);
+        await this.clock.tick(10);
 
         assert.equal(this.instance.option('selectedRowKey'), selectedRowKey);
     });

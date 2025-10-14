@@ -19,28 +19,28 @@ const moduleConfig = {
 };
 
 QUnit.module('Dialogs', moduleConfig, () => {
-    test('common', function(assert) {
+    test('common', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         showTaskEditDialog(this.instance);
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 1, 'dialog is shown');
         this.instance.repaint();
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 0, 'dialog is missed after widget repainting');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         showTaskEditDialog(this.instance);
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 1, 'dialog is shown');
         this.instance.dispose();
         assert.equal($('body').find(Consts.POPUP_SELECTOR).length, 0, 'dialog is missed after widget disposing');
     });
-    test('task editing', function(assert) {
+    test('task editing', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -70,7 +70,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.ok(isValidStartTextBox, 'not empty start validation');
         assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
@@ -84,13 +84,13 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
     });
 
-    test('task editing then show resource dialog and restore task state', function(assert) {
+    test('task editing then show resource dialog and restore task state', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -115,11 +115,11 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $showResourceDialogButton = $dialog.find('.dx-popup-content').find('.dx-button').eq(0);
         $showResourceDialogButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const $closeResourceDialogButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $closeResourceDialogButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
 
@@ -136,12 +136,12 @@ QUnit.module('Dialogs', moduleConfig, () => {
     });
 
 
-    test('showTaskDetailsDialog', function(assert) {
+    test('showTaskDetailsDialog', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         this.instance.showTaskDetailsDialog(1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         let $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -171,13 +171,13 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.ok(isValidStartTextBox, 'not empty start validation');
         assert.ok(isValidEndTextBox, 'not empty end validation');
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const firstTreeListTitleText = this.$element.find(Consts.TREELIST_DATA_ROW_SELECTOR).first().find('td').eq(2).text();
         assert.equal(firstTreeListTitleText, testTitle, 'title text was modified');
 
         this.instance.option('editing.enabled', false);
         this.instance.showTaskDetailsDialog(1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const inputs = $dialog.find('.dx-texteditor-input');
@@ -185,12 +185,12 @@ QUnit.module('Dialogs', moduleConfig, () => {
         // Enabled boolean attributes return '' in jQuery 4+ and their name ('readonly') in jQuery 3
         assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
     });
-    test('resources editing', function(assert) {
+    test('resources editing', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         getGanttViewCore(this.instance).commandManager.showResourcesDialog.execute();
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -215,24 +215,24 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const $confirmDialog = $('body').find(Consts.POPUP_SELECTOR);
         const $yesButton = $confirmDialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $yesButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(data.resources[0].text, secondResourceText, 'first resource removed from ds');
         assert.equal(data.resources[1].text, thirdResourceText, 'second resource ds');
         assert.equal(data.resources[2].text, newResourceText, 'new resource ds');
     });
-    test('task progress not reset check (T890805)', function(assert) {
+    test('task progress not reset check (T890805)', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         showTaskEditDialog(this.instance);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
 
@@ -245,14 +245,14 @@ QUnit.module('Dialogs', moduleConfig, () => {
         titleTextBox.option('value', testTitle);
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
         assert.equal(data.tasks[0].progress, 31, 'progress reset');
     });
-    test('showing taskEditDialog after resources dialog is closed', function(assert) {
+    test('showing taskEditDialog after resources dialog is closed', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
@@ -263,7 +263,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $showResourcesButton = $dialog.find('.dx-texteditor-buttons-container').find('.dx-button').eq(0);
         $showResourcesButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const expectedResourceTitleText = messageLocalization.format('dxGantt-dialogResourceManagerTitle');
         popupTitleText = $dialog.find('.dx-popup-title').text();
@@ -271,39 +271,39 @@ QUnit.module('Dialogs', moduleConfig, () => {
 
         const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
         $okButton.trigger('dxclick');
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         popupTitleText = $dialog.find('.dx-popup-title').text();
         assert.equal(expectedTaskEditTitleText, popupTitleText, 'taskEditPopup title shown again');
     });
-    test('assign resource dxTagBox is disabled when allowTaskResourceUpdating is false', function(assert) {
+    test('assign resource dxTagBox is disabled when allowTaskResourceUpdating is false', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('editing.allowTaskResourceUpdating', false);
 
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const tagBox = $dialog.find('.dx-tag-container > .dx-texteditor-input');
         assert.ok(tagBox.attr('aria-readOnly'), 'resource tagBox is readOnly');
     });
-    test('show edit resource dialog button is disabled when allowResourceAdding and allowResourceDeleting are false ', function(assert) {
+    test('show edit resource dialog button is disabled when allowResourceAdding and allowResourceDeleting are false ', async function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);
         this.instance.option('editing.allowResourceAdding', false);
         this.instance.option('editing.allowResourceDeleting', false);
 
         this.instance.option('selectedRowKey', 1);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const button = $dialog.find('.dx-texteditor-buttons-container > .dx-button');
         assert.ok(button.attr('aria-disabled'), 'button is disabled');
     });
-    test('task edit dialog not shown on new task adding (T1110285)', function(assert) {
+    test('task edit dialog not shown on new task adding (T1110285)', async function(assert) {
 
         const myTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
@@ -321,7 +321,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         showTaskEditDialog(this.instance);
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
@@ -332,7 +332,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal($dialog.length, 1, 'dialog exists');
         const $closeButton = $('.dx-closebutton');
         $closeButton.triggerHandler('dxclick');
-        this.clock.tick(1000);
+        await this.clock.tickAsync(1000);
 
         assert.notOk(dialogInstance.option('visible'), 'dialog is not visible');
         // insert task
@@ -344,7 +344,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         };
 
         this.instance.insertTask(taskData);
-        this.clock.tick(1000);
+        await this.clock.tickAsync(1000);
         assert.notOk(dialogInstance.option('visible'), 'dialog is not visible');
     });
 });

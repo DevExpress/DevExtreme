@@ -18,7 +18,7 @@ const moduleConfig = {
 };
 
 QUnit.module('Sorting', moduleConfig, () => {
-    test('clear sorting', function(assert) {
+    test('clear sorting', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -42,7 +42,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -64,7 +64,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
 
         this.instance._treeList.clearSorting();
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -86,7 +86,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
     });
 
-    test('clear sorting in autoUpdateParentTasks == true', function(assert) {
+    test('clear sorting in autoUpdateParentTasks == true', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -110,7 +110,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -132,7 +132,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
 
         this.instance._treeList.clearSorting();
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -154,7 +154,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
     });
 
-    test('insert new task and update', function(assert) {
+    test('insert new task and update', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -192,10 +192,10 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         this.instance.insertTask(task1);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
 
         let treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
@@ -226,7 +226,7 @@ QUnit.module('Sorting', moduleConfig, () => {
 
 
         this.instance.updateTask(2, { 'index': 10 });
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -256,7 +256,7 @@ QUnit.module('Sorting', moduleConfig, () => {
 
 
         this.instance._treeList.clearSorting();
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -286,7 +286,7 @@ QUnit.module('Sorting', moduleConfig, () => {
 
     });
 
-    test('insert new task and update in autoUpdateParentTasks == true', function(assert) {
+    test('insert new task and update in autoUpdateParentTasks == true', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -324,10 +324,10 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         this.instance.insertTask(task1);
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
 
         let treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
@@ -358,7 +358,7 @@ QUnit.module('Sorting', moduleConfig, () => {
 
 
         this.instance.updateTask(2, { 'index': 10 });
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -388,7 +388,7 @@ QUnit.module('Sorting', moduleConfig, () => {
 
 
         this.instance._treeList.clearSorting();
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIndexText1 = $(this.instance._treeList.getCellElement(0, 2)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -419,7 +419,7 @@ QUnit.module('Sorting', moduleConfig, () => {
     });
 
 
-    test('change sorting', function(assert) {
+    test('change sorting', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -444,7 +444,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         let treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         let treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -468,7 +468,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         const $treeListIdHeader = this.$element.find(Consts.TREELIST_HEADER_ROW_SELECTOR).children().eq(0);
         $treeListIdHeader.trigger('dxclick');
 
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
@@ -490,7 +490,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         assert.equal(treeListTitleText3, taskText3);
     });
 
-    test('check task count after sorting (T1118628)', function(assert) {
+    test('check task count after sorting (T1118628)', async function(assert) {
         const start = new Date('2019-02-19');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -509,20 +509,20 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
         assert.equal(this.instance._treeList.getVisibleRows().length, 3);
 
         const $treeListIdHeader = this.$element.find(Consts.TREELIST_HEADER_ROW_SELECTOR).children().eq(0);
         $treeListIdHeader.trigger('dxclick');
-        this.clock.tick(500);
+        await this.clock.tickAsync(500);
 
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
         assert.equal(this.instance._treeList.getVisibleRows().length, 3);
     });
 
-    test('check sorting by invisible column (T1283506)', function(assert) {
+    test('check sorting by invisible column (T1283506)', async function(assert) {
         const start = new Date('2019-02-21');
         const end = new Date('2019-02-26');
         const tasks = [
@@ -551,7 +551,7 @@ QUnit.module('Sorting', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick(10);
+        await this.clock.tickAsync(10);
 
         const treeListIdText1 = $(this.instance._treeList.getCellElement(0, 0)).text();
         const treeListTitleText1 = $(this.instance._treeList.getCellElement(0, 1)).text();
