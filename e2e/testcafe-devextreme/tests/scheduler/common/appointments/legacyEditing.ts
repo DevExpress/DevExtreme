@@ -102,7 +102,7 @@ test('Appointment EditForm screenshot', async (t) => {
     .expect(await takeScreenshot('appointment-popup-screenshot.png', appointment.element))
     .ok()
     // assert
-    .expect(scheduler.appointmentPopup.popup.element.exists)
+    .expect(scheduler.legacyAppointmentPopup.element.exists)
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
