@@ -129,7 +129,6 @@ const EXPECTED = {
   test(`onAppointmentAdding and onAppointmentAdded (offset: ${offset})`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const cell = scheduler.getDateTableCell(1, 2);
-    const popupDoneButton = scheduler.appointmentPopup.doneButton;
 
     const expectedAppointmentData = {
       allDay: false,
@@ -139,7 +138,7 @@ const EXPECTED = {
     };
 
     await t.doubleClick(cell);
-    await t.click(popupDoneButton);
+    await t.click(scheduler.appointmentPopup.saveButton.element);
 
     const [appointmentAddingData] = await CallbackTestHelper
       .getClientResults(API_CALLBACKS.appointmentAdding);

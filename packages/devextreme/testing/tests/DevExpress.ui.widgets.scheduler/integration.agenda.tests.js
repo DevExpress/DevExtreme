@@ -1220,7 +1220,8 @@ module('Integration: Agenda', moduleConfig, () => {
             startDateExpr: 'Start',
             dataSource: [
                 { Start: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 1, 30), text: 'a' }
-            ]
+            ],
+            editing: { legacyForm: true }
         });
 
         const $appointment = $(instance.$element()).find('.dx-scheduler-appointment').eq(1);

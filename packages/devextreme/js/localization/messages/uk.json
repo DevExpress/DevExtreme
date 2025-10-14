@@ -266,7 +266,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Тема",
         "dxScheduler-editorLabelStartDate": "Дата початку",
         "dxScheduler-editorLabelEndDate": "Дата завершення",

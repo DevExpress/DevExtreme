@@ -1,8 +1,46 @@
+import $ from '@js/core/renderer';
+import type dxForm from '@js/ui/form';
+import type dxPopup from '@js/ui/popup';
+
 export class PopupModel {
   element: HTMLDivElement;
 
+  component: dxPopup;
+
   constructor(element: HTMLDivElement) {
     this.element = element;
+
+    // @ts-expect-error
+    this.component = $('.dx-scheduler-appointment-popup.dx-popup.dx-widget').dxPopup('instance') as dxPopup;
+  }
+
+  get form(): dxForm {
+    // @ts-expect-error
+    return $(this.element.querySelector('.dx-form')).dxForm('instance') as dxForm;
+  }
+
+  get startDate(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
+  }
+
+  get startTime(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-start-time-editor .dx-datebox.dx-widget');
+  }
+
+  get startTimeZone(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-start-date-timezone-editor .dx-selectbox.dx-widget');
+  }
+
+  get endDate(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-end-date-editor .dx-datebox.dx-widget');
+  }
+
+  get endTime(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-end-time-editor .dx-datebox.dx-widget');
+  }
+
+  get endTimeZone(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-end-date-timezone-editor .dx-selectbox.dx-widget');
   }
 
   getLabelIdByText = (labelText: string): string => {
@@ -100,14 +138,14 @@ export class PopupModel {
 
   getForm = (): HTMLElement | null => this.element.querySelector('.dx-form');
 
-  getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title');
+  getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title .dx-toolbar-label');
 
-  getDoneButton = (): HTMLButtonElement => {
-    const doneButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
-    if (!doneButton) {
+  getSaveButton = (): HTMLButtonElement => {
+    const saveButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
+    if (!saveButton) {
       throw new Error('Done button not found');
     }
-    return doneButton;
+    return saveButton;
   };
 
   getCancelButton = (): HTMLButtonElement => {

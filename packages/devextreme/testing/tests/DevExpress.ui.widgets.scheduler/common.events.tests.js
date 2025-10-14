@@ -622,7 +622,10 @@ QUnit.module('Events', {
         };
         const scheduler = await createWrapper({
             currentView: 'month',
-            onAppointmentFormOpening: stub
+            onAppointmentFormOpening: stub,
+            editing: {
+                legacyForm: true
+            },
         });
 
         scheduler.instance.showAppointmentPopup(data);
