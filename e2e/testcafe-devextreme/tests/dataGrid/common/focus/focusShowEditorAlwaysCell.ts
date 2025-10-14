@@ -4,7 +4,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture`Focus - cell with showEditorAlways`
+fixture.disablePageReloads`Focus - cell with showEditorAlways`
   .page(url(__dirname, '../../../container.html'));
 
 const SELECTOR = '#container';

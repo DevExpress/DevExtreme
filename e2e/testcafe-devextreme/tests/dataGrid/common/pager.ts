@@ -178,7 +178,7 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await t.click(dataGrid.element()); // don't know why but test isn't reproduces without this click
 
-  await dataGrid.scrollBy({ y: 100 });
+  await dataGrid.scrollBy(t, { y: 100 });
 
   await t.click(pager.getPageSizeSelectBox().element);
   await t.click(pager.getPopupPageSizes().withText('All'));
@@ -214,7 +214,7 @@ test('Page index should not reset when scrolling while the grid is being refresh
     .eql(2);
 
   await dataGrid.apiRefresh();
-  await dataGrid.scrollBy({ y: 20 });
+  await dataGrid.scrollBy(t, { y: 20 });
 
   await t
     .expect(dataGrid.option('paging.pageIndex'))

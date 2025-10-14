@@ -5,7 +5,6 @@ import url from '../../../../helpers/getPageUrl';
 import { scrollTo } from '../../helpers/utils';
 import {
   insertStylesheetRulesToPage,
-  removeStylesheetRulesFromPage,
 } from '../../../../helpers/domUtils';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
@@ -38,6 +37,4 @@ safeSizeTest('Cell width set in css should be correct for virtual scrolling afte
     currentDate: new Date(2021, 2, 28),
     height: 300,
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });

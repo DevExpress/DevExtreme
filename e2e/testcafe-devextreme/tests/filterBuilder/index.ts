@@ -7,7 +7,7 @@ import url from '../../helpers/getPageUrl';
 import { fields, filter } from './data';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-fixture`Editing events`
+fixture.disablePageReloads`Editing events`
   .page(url(__dirname, '../container.html'));
 
 test('Field dropdown popup', async (t) => {

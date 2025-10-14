@@ -30,6 +30,9 @@ test('Focus the last cell in the row that contains focus when pressing the End k
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Focus the first cell in the row that contains focus when pressing the Home key', async (t) => {
@@ -54,6 +57,9 @@ test('Focus the first cell in the row that contains focus when pressing the Home
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to last cell in the row that contains focus when pressing the End key', async (t) => {
@@ -78,6 +84,9 @@ test('Navigate to last cell in the row that contains focus when pressing the End
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the row that contains focus when pressing the Home key', async (t) => {
@@ -109,6 +118,9 @@ test('Navigate to first cell in the row that contains focus when pressing the Ho
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to last cell in the row that contains focus when focusedRowEnabled is true', async (t) => {
@@ -134,6 +146,9 @@ test('Navigate to last cell in the row that contains focus when focusedRowEnable
   width: 800,
   showBorders: true,
   focusedRowEnabled: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the row that contains focus when row dragging is enabled', async (t) => {
@@ -169,6 +184,9 @@ test('Navigate to first cell in the row that contains focus when row dragging is
     allowReordering: true,
     showDragIcons: true,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigation should not work when pressing the End key when the row is in edit state', async (t) => {
@@ -194,6 +212,9 @@ test('Navigation should not work when pressing the End key when the row is in ed
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
   editing: {
     editRowKey: 'val_0_0',
   },
@@ -223,6 +244,7 @@ test('Navigate to last cell in the row that contains focus when virtual columns 
   showBorders: true,
   scrolling: {
     useNative: false,
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -258,6 +280,7 @@ test('Navigate to first cell in the row that contains focus when virtual columns
   showBorders: true,
   scrolling: {
     useNative: false,
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -284,6 +307,9 @@ test('Navigate to last cell in the row that contains focus when adaptivity is en
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
   customizeColumns(columns) {
     columns[columns.length - 1].hidingPriority = 0;
     columns.splice(columns.length - 2, 0, { type: 'adaptive', width: 100 });
@@ -322,6 +348,9 @@ test('Navigate to first cell in the row that contains focus when adaptivity is e
   customizeColumns(columns) {
     columns[0].hidingPriority = 0;
     columns.push({ type: 'adaptive', width: 100 });
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
@@ -396,6 +425,9 @@ test('Navigate to last cell in the last row when pressing the Ctrl+End key', asy
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to first cell in the first row when pressing the Ctrl + Home key', async (t) => {
@@ -429,6 +461,9 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
   height: 500,
   width: 800,
   showBorders: true,
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 test('Navigate to last cell in the last row when virtual scrolling is enabled', async (t) => {
@@ -455,6 +490,7 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
   showBorders: true,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     useNative: false,
   },
 }));
@@ -492,6 +528,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   showBorders: true,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     useNative: false,
   },
 }));
@@ -524,6 +561,7 @@ test('Navigate to last cell in the last row when virtual scrolling and columns a
   scrolling: {
     mode: 'virtual',
     columnRenderingMode: 'virtual',
+    showScrollbar: 'never',
   },
 }));
 
@@ -563,6 +601,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
   width: 800,
   scrolling: {
     mode: 'virtual',
+    showScrollbar: 'never',
     columnRenderingMode: 'virtual',
   },
 }));
@@ -617,6 +656,8 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.expect(dataGrid.isReady()).ok();
+
     // act
     await t
       .click(dataGrid.getDataCell(0, 0).element)
@@ -639,6 +680,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       mode: 'virtual',
       columnRenderingMode: 'virtual',
       useNative,
+      showScrollbar: 'never',
     },
     customizeColumns(columns) {
       columns.push({ type: 'drag' });
