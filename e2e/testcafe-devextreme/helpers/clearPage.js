@@ -2,10 +2,10 @@
 const testCafe = require('testcafe');
 
 module.exports = {
-    clearTestPage: async function() {
+    clearTestPage: async function(testController) {
         const shadowDom = process.env.shadowDom === 'true';
 
-        await testCafe.ClientFunction(() => {
+        const clearTestPageFn = testCafe.ClientFunction(() => {
             const widgetSelector = '.dx-widget';
             const $elements = $(widgetSelector)
                 .filter((_, element) => $(element).parents(widgetSelector).length === 0);
@@ -46,6 +46,8 @@ module.exports = {
             dependencies: {
                 shadowDom,
             }
-        })();
+        });
+
+        await clearTestPageFn.with({ boundTestRun: testController })();
     }
 };

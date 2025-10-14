@@ -34,6 +34,9 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
     mode: 'row',
     allowUpdating: true,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 safeSizeTest('The form edit mode: Edit row when there are sticky columns', async (t) => {
@@ -58,6 +61,9 @@ safeSizeTest('The form edit mode: Edit row when there are sticky columns', async
   editing: {
     mode: 'form',
     allowUpdating: true,
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
@@ -88,6 +94,9 @@ safeSizeTest('The batch edit mode: Edit cell whene there are sticky columns', as
     columns[1].fixed = true;
     columns[1].fixedPosition = 'left';
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
@@ -116,6 +125,9 @@ safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
   customizeColumns(columns) {
     columns[1].fixed = true;
     columns[1].fixedPosition = 'left';
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
@@ -148,6 +160,9 @@ safeSizeTest('The batch edit mode: Edit fixed cell with sticky position', async 
     columns[3].fixed = true;
     columns[3].fixedPosition = 'sticky';
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 safeSizeTest('The cell edit mode: Edit fixed cell with validation rule', async (t) => {
@@ -177,6 +192,9 @@ safeSizeTest('The cell edit mode: Edit fixed cell with validation rule', async (
   columnWidth: 200,
   customizeColumns(columns) {
     columns[0].validationRules = [{ type: 'required' }];
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
@@ -210,6 +228,9 @@ safeSizeTest('The cell edit mode: Edit fixed cell with the sticky position and v
     columns[2].fixedPosition = 'sticky';
     columns[2].validationRules = [{ type: 'required' }];
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 safeSizeTest('The cell edit mode: Edit cell with validation rule when there fixed columns', async (t) => {
@@ -235,6 +256,9 @@ safeSizeTest('The cell edit mode: Edit cell with validation rule when there fixe
   editing: {
     mode: 'cell',
     allowUpdating: true,
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
   columnWidth: 150,
   customizeColumns(columns) {
@@ -267,6 +291,9 @@ safeSizeTest('The cell edit mode: Edit last unfixed cell with validation rule wh
     mode: 'cell',
     allowUpdating: true,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
   columnWidth: 200,
   customizeColumns(columns) {
     columns[5].validationRules = [{ type: 'required' }];
@@ -297,6 +324,9 @@ safeSizeTest('The cell edit mode: The validation message and a revert button sho
     mode: 'cell',
     allowUpdating: true,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
   columnWidth: 200,
   customizeColumns(columns) {
     columns[0].validationRules = [{ type: 'required' }];
@@ -325,6 +355,9 @@ safeSizeTest('The cell edit mode: The focus overlay element should scroll vertic
   editing: {
     mode: 'cell',
     allowUpdating: true,
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
   columnWidth: 200,
 }));

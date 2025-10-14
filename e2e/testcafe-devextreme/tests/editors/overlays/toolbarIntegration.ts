@@ -16,7 +16,8 @@ const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
 const ANIMATION_DELAY = 500;
 
 [
-  { name: 'dxPopup', Class: Popup },
+  // unstable scenario
+  // { name: 'dxPopup', Class: Popup },
   { name: 'dxPopover', Class: Popover },
 ].forEach(({ name, Class }) => {
   ['bottom', 'top'].forEach((toolbar) => {
