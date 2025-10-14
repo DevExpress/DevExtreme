@@ -7,6 +7,7 @@ class DataOption extends Component {
         this._optionName = optionName;
         this._getLoadPanel = getLoadPanel;
         this._dataSourceChangedCallback = dataSourceChangedCallback;
+        this._pendingReloadRequestInfo = null;
     }
     insert(data, callback, errorCallback) {
         this._showLoadPanel();
@@ -77,6 +78,46 @@ class DataOption extends Component {
     }
     _getItems() {
         return this._getStore()._array || this._dataSource.items();
+    }
+    _createPendingReloadRequestPromise() {
+        let resolve = null;
+
+        let promise = new Promise(_resolve => {
+            resolve = _resolve;
+        });
+
+        promise = promise.then(() => {
+            return new Promise(_resolve => {
+                this._reloadDataSource()
+                    .done(data => {
+                        _resolve(data);
+                    });
+            });
+        });
+
+        return { promise, resolve, counter: 1 };
+    }
+    _addPendingReloadRequest() {
+        if(!this._pendingReloadRequestInfo) {
+            this._pendingReloadRequestInfo = this._createPendingReloadRequestPromise();
+        } else {
+            this._pendingReloadRequestInfo.counter++;
+        }
+    }
+    _resolvePendingReloadRequests() {
+        if(!this._pendingReloadRequestInfo) { return; }
+
+        this._pendingReloadRequestInfo.counter--;
+        if(this._pendingReloadRequestInfo.counter <= 0) {
+            this._pendingReloadRequestInfo.resolve();
+        }
+
+        return this._pendingReloadRequestInfo.promise
+            .then(data => {
+                this._pendingReloadRequestInfo = null;
+
+                return data;
+            });
     }
     _reloadDataSource() {
         return this._dataSource.load();

@@ -315,6 +315,8 @@ class Gantt extends Widget {
     _onRecordInserted(optionName, record, callback) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
+            dataOption._addPendingReloadRequest();
+
             const data = GanttHelper.getStoreObject(this.option(optionName), record);
             const isTaskInsert = optionName === GANTT_TASKS;
             if(isTaskInsert) {
@@ -328,7 +330,8 @@ class Gantt extends Widget {
                 this._executeFuncSetters(optionName, record, insertedId);
                 this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseInsertedAction(optionName, data, insertedId); }, true, isTaskInsert);
                 this._ganttTreeList.saveExpandedKeys();
-                dataOption._reloadDataSource().done(data => {
+
+                dataOption._resolvePendingReloadRequests().then(data => {
                     if(isTaskInsert) {
                         this._ganttTreeList.onTaskInserted(insertedId, record.parentId);
                     }
@@ -340,6 +343,8 @@ class Gantt extends Widget {
         const dataOption = this[`_${optionName}Option`];
         const isTaskUpdated = optionName === GANTT_TASKS;
         if(dataOption) {
+            dataOption._addPendingReloadRequest();
+
             const data = this._mappingHelper.convertCoreToMappedData(optionName, values);
             const hasCustomFieldsData = isTaskUpdated && this._customFieldsManager.cache.hasData(key);
             if(hasCustomFieldsData) {
@@ -349,17 +354,19 @@ class Gantt extends Widget {
                 this._executeFuncSetters(optionName, values, key);
                 this._ganttTreeList.saveExpandedKeys();
                 this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseUpdatedAction(optionName, data, key); }, true, isTaskUpdated);
-                dataOption._reloadDataSource();
+                dataOption._resolvePendingReloadRequests();
             });
         }
     }
     _onRecordRemoved(optionName, key, data) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
+            dataOption._addPendingReloadRequest();
+
             dataOption.remove(key, () => {
                 this._ganttTreeList.saveExpandedKeys();
                 this._dataProcessingHelper.addCompletionAction(() => { this._actionsManager.raiseDeletedAction(optionName, key, this._mappingHelper.convertCoreToMappedData(optionName, data)); }, true, optionName === GANTT_TASKS);
-                dataOption._reloadDataSource();
+                dataOption._resolvePendingReloadRequests();
             });
         }
     }
