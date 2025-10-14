@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import type { Properties, NumberBoxPredefinedButton } from 'devextreme/ui/number_box.d';
 import type { EditorStyle, TextEditorButton } from 'devextreme/common';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
@@ -8,7 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, insertStylesheetRulesToPage,
-  setStyleAttribute,
 } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
@@ -48,7 +46,7 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [350, 450]).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 400px;');
+  await insertStylesheetRulesToPage('#container { display: flex; flex-direction: column; width: 300px; height: 400px; gap: 8px; }');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
   }
