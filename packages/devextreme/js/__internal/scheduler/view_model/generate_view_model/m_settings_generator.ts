@@ -3,6 +3,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { getAsciiStringByDate } from '@ts/scheduler/recurrence/base';
 
 import { createFormattedDateText } from '../../appointments/m_text_utils';
 import timeZoneUtils from '../../m_utils_time_zone';
@@ -79,15 +80,25 @@ export class DateGeneratorBaseStrategy {
 
     const itemGroupIndices = this._getGroupIndices(this.rawAppointment);
 
-    let appointmentList = this._createAppointments(appointmentAdapter, itemGroupIndices);
+    let sourceList = this._createAppointments(appointmentAdapter, itemGroupIndices);
+    sourceList = this.excludeLocalDST(sourceList, appointmentAdapter);
+    sourceList = this._getProcessedByAppointmentTimeZone(sourceList, appointmentAdapter); // T983264
 
-    appointmentList = this._getProcessedByAppointmentTimeZone(appointmentList, appointmentAdapter); // T983264
-
-    if (this._canProcessNotNativeTimezoneDates(appointmentAdapter)) {
-      appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointmentAdapter);
+    if (appointmentAdapter.isRecurrent && appointmentAdapter.recurrenceException) {
+      const exceptions = new Set(appointmentAdapter.recurrenceException?.split(','));
+      sourceList = sourceList
+        .filter((item) => !exceptions.has(getAsciiStringByDate(item.startDate)));
     }
 
-    let dateSettings = this._createGridAppointmentList(appointmentList, appointmentAdapter);
+    let appointmentList = sourceList;
+    if (appointmentAdapter.isRecurrent && (
+      !this.timeZone
+      || timeZoneUtils.isEqualLocalTimeZone(this.timeZone)
+    )) {
+      appointmentList = this._getProcessedNativeTimezoneDates(appointmentList, appointmentAdapter);
+    }
+
+    let dateSettings = this._createGridAppointmentList(appointmentList, sourceList, appointmentAdapter);
 
     const firstViewDates = this._getAppointmentsFirstViewDate(dateSettings);
 
@@ -135,15 +146,15 @@ export class DateGeneratorBaseStrategy {
           endDate: this.timeZoneCalculator.getOffsets(a.endDate, appointment.endDateTimeZone),
         };
 
-        const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
-        const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
+        const startDateOffsetDiff = appointment.startDateTimeZone
+          ? appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment
+          : 0;
+        const endDateOffsetDiff = appointment.endDateTimeZone
+          ? appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment
+          : 0;
 
-        if (sourceOffsets.startDate.appointment !== sourceOffsets.startDate.common) {
-          a.startDate = new Date(a.startDate.getTime() + startDateOffsetDiff * toMs('hour'));
-        }
-        if (sourceOffsets.endDate.appointment !== sourceOffsets.endDate.common) {
-          a.endDate = new Date(a.endDate.getTime() + endDateOffsetDiff * toMs('hour'));
-        }
+        a.startDate = new Date(a.startDate.getTime() + startDateOffsetDiff * toMs('hour'));
+        a.endDate = new Date(a.endDate.getTime() + endDateOffsetDiff * toMs('hour'));
       });
     }
 
@@ -210,7 +221,7 @@ export class DateGeneratorBaseStrategy {
     return this.timeZoneCalculator.getOffsets(date).common;
   }
 
-  _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
+  _getProcessedNativeTimezoneDates(appointmentList, appointment) {
     return appointmentList.map((item) => {
       let diffStartDateOffset = this._getCommonOffset(appointment.startDate) - this._getCommonOffset(item.startDate);
       let diffEndDateOffset = this._getCommonOffset(appointment.endDate) - this._getCommonOffset(item.endDate);
@@ -222,8 +233,8 @@ export class DateGeneratorBaseStrategy {
       diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
       diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
 
-      const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
-      let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
+      const newStartDate = new Date(item.startDate.getTime() - diffStartDateOffset * toMs('hour'));
+      let newEndDate = new Date(item.endDate.getTime() - diffEndDateOffset * toMs('hour'));
 
       const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, 'toGrid');
       const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, 'toGrid');
@@ -310,7 +321,7 @@ export class DateGeneratorBaseStrategy {
     return result;
   }
 
-  _createGridAppointmentList(appointmentList, appointmentAdapter) {
+  excludeLocalDST(appointmentList, appointmentAdapter) {
     return appointmentList.map((source) => {
       const offsetDifference = appointmentAdapter.startDate.getTimezoneOffset() - source.startDate.getTimezoneOffset();
 
@@ -319,6 +330,12 @@ export class DateGeneratorBaseStrategy {
         source.endDate = dateUtilsTs.addOffsets(source.endDate, [offsetDifference * toMs('minute')]);
       }
 
+      return source;
+    });
+  }
+
+  _createGridAppointmentList(appointmentList, sourceList, appointmentAdapter) {
+    return appointmentList.map((source, index) => {
       const duration = source.endDate.getTime() - source.startDate.getTime();
       const startDate = this.timeZoneCalculator.createDate(source.startDate, 'toGrid');
       const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
@@ -327,7 +344,7 @@ export class DateGeneratorBaseStrategy {
         startDate,
         endDate,
         allDay: appointmentAdapter.allDay || false,
-        source, // TODO
+        source: sourceList[index],
       };
     });
   }

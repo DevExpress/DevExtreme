@@ -59,7 +59,7 @@ export class AppointmentViewModelGenerator {
     });
     const viewModelPlain = appointmentRenderingStrategyName === 'agenda'
       ? adaptAgendaSettings(viewModel, dataAccessors, timeZoneCalculator)
-      : addCollector(viewModel, timeZoneCalculator);
+      : addCollector(viewModel);
 
     return {
       positionMap,
