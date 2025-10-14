@@ -366,7 +366,8 @@ jobs:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-    needs: build-demos
+    needs:
+      - build-devextreme
 
     strategy:
       fail-fast: false
