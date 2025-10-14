@@ -153,6 +153,7 @@ jobs:
 
   get-changes:
     runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request'
     name: Get changed demos
     timeout-minutes: 5
 
@@ -263,7 +264,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      if: github.event_name == 'pull_request'
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -321,6 +322,46 @@ jobs:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: ${{ matrix.command }}
 
+    - name: Run lint on changed demos
+      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+      run: |
+        pnpx nx lint-non-demos
+
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint-demos on changed files"
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          if [ ! -z "$CHANGED_DEMOS" ]; then
+            echo "Changed demo files: $CHANGED_DEMOS"
+            pnpx eslint $CHANGED_DEMOS
+          else
+            echo "No demo files changed, skipping lint-demos"
+          fi
+        else
+          echo "changed-files.json not found"
+          pnpm run lint-demos
+        fi
+
+    - name: Run lint on changed demos
+      if: github.event_name != 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+      run: |
+        pnpx nx lint-non-demos
+
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint-demos on changed files"
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          if [ ! -z "$CHANGED_DEMOS" ]; then
+            echo "Changed demo files: $CHANGED_DEMOS"
+            pnpx eslint $CHANGED_DEMOS
+          else
+            echo "No demo files changed, skipping lint-demos"
+          fi
+
   check_generated_demos:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
@@ -345,6 +386,13 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v4
+
+    - name: Download artifacts
+      if: github.event_name == 'pull_request'
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
 
     - uses: pnpm/action-setup@v3
       with:
@@ -405,6 +453,7 @@ jobs:
 
   testcafe:
     needs: build-demos
+    if: contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
       matrix:
@@ -434,13 +483,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
-
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
 
     - uses: pnpm/action-setup@v3
       with:
