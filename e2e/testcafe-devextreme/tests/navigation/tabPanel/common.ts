@@ -51,7 +51,24 @@ fixture.disablePageReloads`TabPanel_common`
       itemTemplate: (_, __, itemElement) => {
         ($('<div>').css('marginTop', '10px') as any)
           .dxTabs({
-            items: [...dataSource],
+            items: [
+              {
+                title: 'John Heart',
+                text: 'John Heart',
+              }, {
+                title: 'Olivia Peyton',
+                text: 'Olivia Peyton',
+              }, {
+                title: 'Robert Reagan',
+                text: 'Robert Reagan',
+              }, {
+                title: 'Greta Sims',
+                text: 'Greta Sims',
+              }, {
+                title: 'Olivia Peyton',
+                text: 'Olivia Peyton',
+              },
+            ],
             width: 300,
             showNavButtons: true,
           })
@@ -129,6 +146,7 @@ test('TabPanel focus borders after change selectedIndex in runtime', async (t) =
   return createWidget('dxTabPanel', {
     dataSource,
     height: 120,
+    width: 300,
   });
 });
 
