@@ -43,7 +43,7 @@ const ANIMATION_DELAY = 500;
           .ok(compareResults.errorMessages());
       }, [600, 400]).before(async () => {
         if (isMaterial()) {
-          await insertStylesheetRulesToPage('.dx-overlay-wrapper { font-family: sans-serif !important; }');
+          await insertStylesheetRulesToPage('.dx-overlay-content, .dx-overlay-content input { font-family: sans-serif !important; }');
         }
         return createWidget(name as 'dxPopup' | 'dxPopover', {
           showCloseButton: true,
