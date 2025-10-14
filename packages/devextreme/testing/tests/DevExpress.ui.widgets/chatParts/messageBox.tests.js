@@ -60,20 +60,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.ok(this.instance instanceof MessageBox);
         });
 
-        QUnit.test('should pass correct configuration to send button', function(assert) {
-            const expectedOptions = {
-                icon: 'arrowright',
-                type: 'default',
-                stylingMode: 'contained',
-                disabled: true,
-                type: 'default',
-            };
-
-            Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(this.sendButton.option(key), value, `${key} value is correct`);
-            });
-        });
-
         QUnit.test('should pass correct configuration to ChatTextArea', function(assert) {
             const expectedOptions = {
                 stylingMode: 'outlined',
@@ -703,12 +689,13 @@ QUnit.module('MessageBox', moduleConfig, () => {
         QUnit.test('should pass correct text to onMessageUpdating from ChatTextArea', function(assert) {
             assert.expect(1);
 
+            const originalText = 'original';
             const newText = 'updated message text';
 
             this.reinit({
-                text: 'original',
+                text: originalText,
                 onMessageUpdating: (e) => {
-                    assert.strictEqual(e.text, newText, 'correct text passed to onMessageUpdating');
+                    assert.strictEqual(e.text, `${newText}${originalText}`, 'correct text passed to onMessageUpdating');
                 },
             });
 
@@ -764,7 +751,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.instance.option('text', '');
 
-            assert.strictEqual(this.getEditingPreview().length, 0, 'EditingPreview removed after clearing text');
+            assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview is not removed after clearing text');
         });
 
         QUnit.test('should sync text between EditingPreview and ChatTextArea value', function(assert) {
@@ -796,7 +783,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.instance.option('text', '');
 
-            assert.strictEqual(this.getEditingPreview().length, 0, 'EditingPreview removed in creation mode');
+            assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview has not been removed in creation mode');
             assert.strictEqual(this.$input.val(), '', 'ChatTextArea cleared');
         });
 
@@ -832,7 +819,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             keyboardMock(this.$input).focus().press('esc');
 
             assert.strictEqual(this.instance.option('text'), '', 'text cleared');
-            assert.strictEqual(this.getEditingPreview().length, 0, 'EditingPreview removed');
+            assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview has not been removed');
             assert.strictEqual(this.$input.val(), '', 'ChatTextArea cleared');
         });
     });

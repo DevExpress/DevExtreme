@@ -157,6 +157,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      text,
     } = this.option();
 
     const options = {
@@ -164,6 +165,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      value: text,
       onInput: (e: InputEvent): void => {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
