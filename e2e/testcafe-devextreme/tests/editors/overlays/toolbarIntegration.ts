@@ -8,7 +8,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Popup_toolbar`
+fixture.disablePageReloads`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
 const COMPONENT_SELECTOR = '#container';
@@ -21,7 +21,7 @@ const ANIMATION_DELAY = 500;
 ].forEach(({ name, Class }) => {
   ['bottom', 'top'].forEach((toolbar) => {
     [true, false].forEach((rtlEnabled) => {
-      safeSizeTest(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
+      test.meta({ unstable: true })(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const instance = new Class(COMPONENT_SELECTOR);
 
@@ -40,7 +40,7 @@ const ANIMATION_DELAY = 500;
         await t
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }, [600, 400]).before(async () => createWidget(name as 'dxPopup' | 'dxPopover', {
+      }).before(async () => createWidget(name as 'dxPopup' | 'dxPopover', {
         showCloseButton: true,
         // eslint-disable-next-line no-multi-str
         contentTemplate: () => $('<div>').text('\

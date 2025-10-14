@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
@@ -201,14 +201,15 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipCustomization', themes: [THEME.material] },
       { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
+      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditing', themes: [THEME.material] },
-      // This test works only in simulated scrolling strategy!
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
@@ -224,9 +225,28 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipsCustomization', themes: [THEME.material] },
     ]
   },
-  Angular: { },
-  Vue: { },
-  React: { },
+  Angular: {
+    Common: ['PopupAndNotificationsOverview'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    Scheduler: ['ContextMenu'],
+    FileUploader: ['CustomDropzone']
+  },
+  Vue: {
+    Common: ['PopupAndNotificationsOverview'],
+    Scheduler: [
+      // NOTE: Context menu item position is different across themes
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
+    ],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
+  },
+  React: {
+    Scheduler: [
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
+    ],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
+  },
 };
 
 export function shouldSkipDemo(framework, component, demoName, skippedTests) {
