@@ -500,7 +500,9 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-scheduler-form-date-range-group .dx-box-item:has(.dx-scheduler-form-icon),
       .dx-scheduler-form-description-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon) {
+      .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon),
+      .dx-scheduler-form-recurrence-repeat-every-group .dx-box-item:has(.dx-scheduler-form-icon),
+      .dx-scheduler-form-recurrence-end-repeat-group .dx-box-item:has(.dx-scheduler-form-icon) {
         align-items: start;
       }
 
@@ -539,9 +541,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       /* Recurrence End section - Grid layout with equal heights */
-      .dx-scheduler-form-recurrence-end-container {
-        padding-top: 0 !important;
-        
+      .dx-scheduler-form-recurrence-end-repeat-group {
         > .dx-box-item {
           height: 100%;
           margin: 0;
