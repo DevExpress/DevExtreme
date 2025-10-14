@@ -769,6 +769,9 @@ export class RecurrentForm {
       this.setEditorValue('count', rules.count || 1);
 
       this._updateRepeatEndInputsState(repeatEndValue);
+
+      const currentFreq = rules.freq ? String(rules.freq).toLowerCase() : 'daily';
+      this.updateRecurrenceRepeatOnVisibility(currentFreq, currentFreq, true);
     });
   }
 
