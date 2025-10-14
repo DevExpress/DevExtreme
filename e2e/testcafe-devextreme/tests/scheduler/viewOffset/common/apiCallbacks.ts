@@ -7,7 +7,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import url from '../../../../helpers/getPageUrl';
 
 // NOTE: Disable page reloads will break the tests!
-fixture`Offset: Api callbacks`
+fixture.disablePageReloads`Offset: Api callbacks`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';

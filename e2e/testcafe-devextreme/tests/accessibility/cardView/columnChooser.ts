@@ -1,8 +1,7 @@
 import CardView from 'devextreme-testcafe-models/cardView';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - ColumnChooser.Visual`
   .page(url(__dirname, '../../container.html'));
@@ -10,17 +9,11 @@ fixture.disablePageReloads`CardView - ColumnChooser.Visual`
 const CARD_VIEW_SELECTOR = '#container';
 
 test('column chooser in \'select\' mode', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const columnChooser = cardView.getColumnChooser();
 
   await cardView.apiShowColumnChooser();
 
-  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser_select_mode.png', { element: columnChooser.content });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   columnChooser: {
     enabled: true,
@@ -43,17 +36,14 @@ test('column chooser in \'select\' mode', async (t) => {
 }));
 
 test('column chooser in \'dragAndDrop\' mode', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const columnChooser = cardView.getColumnChooser();
 
   await cardView.apiShowColumnChooser();
 
-  await testScreenshot(t, takeScreenshot, 'card-view_column-chooser_drag_mode.png', { element: columnChooser.content });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  const a11yCheckConfig = {
+    rules: { 'color-contrast': { enabled: false } },
+  };
+  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   columnChooser: {
     enabled: true,
@@ -73,16 +63,11 @@ test('column chooser in \'dragAndDrop\' mode', async (t) => {
 }));
 
 test('cardView with opened columnChooser', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
   await cardView.apiShowColumnChooser();
 
-  await testScreenshot(t, takeScreenshot, 'card-view_with_opened_column-chooser.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: Array.from({ length: 50 }, (_, i) => ({ value: `value_${i}` })),
   columnChooser: {

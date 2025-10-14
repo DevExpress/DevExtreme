@@ -1,9 +1,8 @@
 import CardView from 'devextreme-testcafe-models/cardView';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`Selection.Visual`
   .page(url(__dirname, '../../container.html'));
@@ -11,14 +10,7 @@ fixture.disablePageReloads`Selection.Visual`
 const CARD_VIEW_SELECTOR = '#container';
 
 test('Single mode', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_single_selection.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -50,14 +42,7 @@ test('Single mode', async (t) => {
 }));
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'none\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_none.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -90,14 +75,7 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'none
 }));
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'always\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_always.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -130,25 +108,11 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'alwa
 }));
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onClick\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
-  const firstSelectCheckboxItemContent = cardView
-    .getCard(0)
-    .getToolbarItemContent(0);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onClick_1.png', { element: cardView.element });
-
-  await t.hover(firstSelectCheckboxItemContent);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onClick_2.png', { element: cardView.element });
 
   await t.hover(cardView.element);
 
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onClick_3.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -181,14 +145,7 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onCl
 }));
 
 test('Multiple mode with a selected card and showCheckBoxesMode = \'onClick\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_checkbox_visibility_with_showCheckBoxesMode_=_onClick.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -222,14 +179,7 @@ test('Multiple mode with a selected card and showCheckBoxesMode = \'onClick\'', 
 }));
 
 test('Multiple mode with selected cards and showCheckBoxesMode = \'onClick\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_checkboxes_visibility_with_showCheckBoxesMode_=_onClick.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -263,27 +213,14 @@ test('Multiple mode with selected cards and showCheckBoxesMode = \'onClick\'', a
 }));
 
 test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onLongTap\'', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const firstCard = cardView.getCard(0);
 
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onLongTap_1.png', { element: cardView.element });
-
   await ClientFunction((card) => {
     $(card()).trigger('dxhold');
   })(firstCard.element);
 
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onLongTap_2.png', { element: cardView.element });
-
-  await ClientFunction((card) => {
-    $(card()).trigger('dxhold');
-  })(firstCard.element);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onLongTap_3.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -316,14 +253,7 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onLo
 }));
 
 test('Multiple mode without Select All/Deselect All', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView(CARD_VIEW_SELECTOR);
-
-  await testScreenshot(t, takeScreenshot, 'card-view_miltiple_selection_without_select-all.png', { element: cardView.element });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {

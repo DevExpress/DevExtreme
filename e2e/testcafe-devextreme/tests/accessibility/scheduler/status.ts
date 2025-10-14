@@ -1,9 +1,9 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`a11y - appointment`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const today = '2025-04-30T15:00:00.000Z';
 const appointments = [

@@ -2,14 +2,15 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
-import { getData } from '../../helpers/generateDataSourceData';
-import { Themes } from '../../../../helpers/themes';
-import { changeTheme } from '../../../../helpers/changeTheme';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { getData } from '../../dataGrid/helpers/generateDataSourceData';
+import { Themes } from '../../../helpers/themes';
+import { changeTheme } from '../../../helpers/changeTheme';
 
-fixture.disablePageReloads`Common tests with axe`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Common tests`
+  .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -21,6 +22,9 @@ const DATA_GRID_SELECTOR = '#container';
   Themes.fluentBlue,
   Themes.fluentBlueDark,
 ].forEach((theme) => {
+  const a11yCheckConfig = theme === Themes.genericLight ? {} : {
+    runOnly: 'color-contrast',
+  };
   const isFluent = theme === Themes.fluentBlue || theme === Themes.fluentBlueDark;
   const screenshotCheck = async (
     t: TestController,
@@ -44,6 +48,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'no-data', theme, dataGrid.element);
     }
@@ -64,6 +69,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'sorting-and-group-panel', theme, dataGrid.element);
     }
@@ -103,6 +109,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'paging-full-display-mode', theme, dataGrid.element);
     }
@@ -142,6 +149,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'paging-compact-display-mode', theme, dataGrid.element);
     }
@@ -181,6 +189,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'grouping-and-summary', theme, dataGrid.element);
     }
@@ -248,6 +257,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-command-name': { enabled: true },
+      },
+    });
     if (isFluent) {
       await screenshotCheck(t, 'filter-row-menu', theme, dataGrid.element);
     }
@@ -299,6 +315,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'header-filter-menu', theme, dataGrid.element);
     }
@@ -338,6 +355,7 @@ const DATA_GRID_SELECTOR = '#container';
       .eql('[Field 1] Contains \'val\'');
 
     // act
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'filter-panel', theme, dataGrid.element);
     }
@@ -387,6 +405,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'color-contrast': { enabled: false },
+      },
+    });
     if (isFluent) {
       await screenshotCheck(t, 'filter-builder', theme, dataGrid.element);
     }
@@ -420,6 +445,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'search-panel', theme, dataGrid.element);
     }
@@ -451,6 +477,13 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'color-contrast': { enabled: false },
+      },
+    }, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'search-panel-highlight', theme, dataGrid.element);
     }
@@ -487,6 +520,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(2).isSelected)
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'selection', theme, dataGrid.element);
     }
@@ -523,6 +557,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(1).isFocusedRow)
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'focused-row', theme, dataGrid.element);
     }
@@ -554,6 +589,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'fixed-columns', theme, dataGrid.element);
     }
@@ -615,6 +651,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, a11yCheckConfig);
     if (isFluent) {
       await screenshotCheck(t, 'column-chooser-drag_and_drop-mode', theme, dataGrid.element);
     }
@@ -670,6 +707,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'scrollable-region-focusable': { enabled: false },
+      },
+    });
     if (isFluent) {
       await screenshotCheck(t, 'column-chooser-select-mode', theme, dataGrid.element);
     }
@@ -725,6 +769,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-required-children': { enabled: false },
+      },
+    });
     if (isFluent) {
       await screenshotCheck(t, 'empty-column-chooser', theme, dataGrid.element);
     }
@@ -762,6 +813,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
+      await a11yCheck(t);
       if (isFluent) {
         await screenshotCheck(t, `row-editing-mode-with-useIcons=${useIcons}`, theme, dataGrid.element);
       }
@@ -809,6 +861,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
+      await a11yCheck(t);
       if (isFluent) {
         await screenshotCheck(t, `row-edit-state-with-useIcons=${useIcons}`, theme, dataGrid.element);
       }
@@ -858,6 +911,10 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+    });
     if (isFluent) {
       await screenshotCheck(t, 'row-editing-mode', theme, dataGrid.element);
     }
@@ -904,6 +961,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'batch-editing-mode-edit_cell', theme, dataGrid.element);
     }
@@ -950,6 +1008,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'row-editing-mode-modified_cell', theme, dataGrid.element);
     }
@@ -996,6 +1055,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'row-editing-mode-delete_row', theme, dataGrid.element);
     }
@@ -1042,6 +1102,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'form-editing-mode', theme, dataGrid.element);
     }
@@ -1088,6 +1149,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'popup-editing-mode', theme, dataGrid.element);
     }
@@ -1138,6 +1200,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'validation-in-cell-editing-mode', theme, dataGrid.element);
     }
@@ -1196,6 +1259,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t);
     if (isFluent) {
       await screenshotCheck(t, 'error-row', theme, dataGrid.element);
     }
@@ -1246,6 +1310,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'adaptive-row', theme, dataGrid.element);
     }
@@ -1275,6 +1340,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     if (isFluent) {
       await screenshotCheck(t, 'row-drag-and-drop', theme, dataGrid.element);
     }
@@ -1315,6 +1381,10 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+    });
     if (isFluent) {
       await screenshotCheck(t, 'export-button', theme, dataGrid.element);
     }
@@ -1356,6 +1426,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        region: { enabled: false },
+      },
+    });
     if (isFluent) {
       await screenshotCheck(t, 'context-menu', theme, dataGrid.element);
     }

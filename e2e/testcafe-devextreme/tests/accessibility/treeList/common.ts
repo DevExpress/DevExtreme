@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { Themes } from '../../../helpers/themes';
 import { changeTheme } from '../../../helpers/changeTheme';
 
-fixture`Testing with axe`
+fixture.disablePageReloads`TreeList - a11y`
   .page(url(__dirname, '../../container.html'));
 
 const TREE_LIST_SELECTOR = '#container';
