@@ -100,7 +100,7 @@ test('Should initiate load next page if some items in the current load are invis
     .expect(list.getVisibleItems().count)
     .eql(isMaterial() ? 4 : 6);
 
-  await testScreenshot(t, takeScreenshot, 'List loding with part items invisible on loaded page.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'List loading with part items invisible on loaded page.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
