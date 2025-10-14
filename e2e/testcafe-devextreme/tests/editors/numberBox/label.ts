@@ -7,7 +7,7 @@ import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
+  appendElementTo, insertStylesheetRulesToPage,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
@@ -48,8 +48,6 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }, [350, 450]).before(async () => {
-  await removeStylesheetRulesFromPage();
-
   await setStyleAttribute(Selector('#container'), 'width: 300px; height: 400px;');
   if (isMaterial()) {
     await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
@@ -71,23 +69,19 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
       value: 123,
     });
   }
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('NumberBox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
-
   await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png');
-
-  await removeStylesheetRulesFromPage();
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
+
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
     // eslint-disable-next-line no-restricted-syntax
