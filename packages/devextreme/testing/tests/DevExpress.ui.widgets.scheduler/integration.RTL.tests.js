@@ -28,28 +28,28 @@ module('RTL', moduleConfig, () => {
                 month: [
                     {
                         top: 256,
-                        left: 250
+                        left: 599
                     }, {
                         top: 256,
-                        left: 599
+                        left: 250
                     }
                 ],
                 week: [
                     {
                         top: 0,
-                        left: 241
+                        left: 539
                     }, {
                         top: 0,
-                        left: 539
+                        left: 241
                     }
                 ],
                 day: [
                     {
                         top: 0,
-                        left: 25
+                        left: 324
                     }, {
                         top: 0,
-                        left: 324
+                        left: 25
                     }
                 ]
             };
@@ -90,7 +90,7 @@ module('RTL', moduleConfig, () => {
                 scheduler.option('currentView', view);
                 await waitAsync(0);
 
-                [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
+                [getAppointment(0), getAppointment(1)].sort().forEach((appointment, index) => {
                     const position = translator.locate(appointment);
 
                     assert.roughEqual(Math.round(position.left), expectedValue[index].left, 3.01, `left position of ${index} appointment should be correct in ${view} view`);

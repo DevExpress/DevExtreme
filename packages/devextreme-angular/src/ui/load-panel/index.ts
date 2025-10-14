@@ -19,7 +19,7 @@ import {
 
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { event } from 'devextreme/events/events.types';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
+import { LoadPanelIndicatorProperties, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionAlignment } from 'devextreme/common';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
@@ -52,6 +52,7 @@ import { DxoLoadPanelBoundaryOffsetModule } from 'devextreme-angular/ui/load-pan
 import { DxoLoadPanelCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelIndicatorOptionsModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelMyModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
@@ -209,8 +210,20 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     }
 
 
+    
+    @Input()
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
+    }
+
+
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
+    
+     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
     
      */
     @Input()
@@ -542,6 +555,13 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() indicatorOptionsChange: EventEmitter<LoadPanelIndicatorProperties>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() indicatorSrcChange: EventEmitter<string>;
 
     /**
@@ -672,6 +692,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
             { emit: 'hideOnParentScrollChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'indicatorOptionsChange' },
             { emit: 'indicatorSrcChange' },
             { emit: 'maxHeightChange' },
             { emit: 'maxWidthChange' },
@@ -723,6 +744,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoLoadPanelCollisionModule,
     DxoLoadPanelFromModule,
     DxoLoadPanelHideModule,
+    DxoLoadPanelIndicatorOptionsModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
     DxoLoadPanelPositionModule,
@@ -750,6 +772,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoLoadPanelCollisionModule,
     DxoLoadPanelFromModule,
     DxoLoadPanelHideModule,
+    DxoLoadPanelIndicatorOptionsModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
     DxoLoadPanelPositionModule,

@@ -15,6 +15,7 @@ import {
 
 
 import { Mode } from 'devextreme/common';
+import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 
 import {
     DxIntegrationModule,
@@ -46,6 +47,14 @@ export class DxoTreeListLoadPanelComponent extends NestedOption implements OnDes
     }
     set height(value: number | string) {
         this._setOption('height', value);
+    }
+
+    @Input()
+    get indicatorOptions(): LoadPanelIndicatorProperties {
+        return this._getOption('indicatorOptions');
+    }
+    set indicatorOptions(value: LoadPanelIndicatorProperties) {
+        this._setOption('indicatorOptions', value);
     }
 
     @Input()

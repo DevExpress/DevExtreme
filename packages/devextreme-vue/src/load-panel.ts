@@ -6,6 +6,7 @@ import {
  event,
 } from "devextreme/events/events.types";
 import {
+ LoadPanelIndicatorProperties,
  ContentReadyEvent,
  DisposingEvent,
  HiddenEvent,
@@ -29,6 +30,9 @@ import {
  AnimationType,
  CollisionResolutionCombination,
 } from "devextreme/common/core/animation";
+import {
+ LoadingAnimationType,
+} from "devextreme/ui/load_indicator";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -42,6 +46,7 @@ type AccessibleOptions = Pick<Properties,
   "hideOnParentScroll" |
   "hint" |
   "hoverStateEnabled" |
+  "indicatorOptions" |
   "indicatorSrc" |
   "maxHeight" |
   "maxWidth" |
@@ -83,6 +88,7 @@ const componentConfig = {
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
+    indicatorOptions: Object as PropType<LoadPanelIndicatorProperties | Record<string, any>>,
     indicatorSrc: String,
     maxHeight: [Number, String],
     maxWidth: [Number, String],
@@ -120,6 +126,7 @@ const componentConfig = {
     "update:hideOnParentScroll": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:indicatorOptions": null,
     "update:indicatorSrc": null,
     "update:maxHeight": null,
     "update:maxWidth": null,
@@ -154,6 +161,7 @@ const componentConfig = {
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
       animation: { isCollectionItem: false, optionName: "animation" },
+      indicatorOptions: { isCollectionItem: false, optionName: "indicatorOptions" },
       position: { isCollectionItem: false, optionName: "position" }
     };
   }
@@ -311,6 +319,29 @@ const DxHide = defineComponent(DxHideConfig);
   to: { isCollectionItem: false, optionName: "to" }
 };
 
+const DxIndicatorOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:animationType": null,
+    "update:height": null,
+    "update:src": null,
+    "update:width": null,
+  },
+  props: {
+    animationType: String as PropType<LoadingAnimationType>,
+    height: [Number, String],
+    src: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxIndicatorOptionsConfig);
+
+const DxIndicatorOptions = defineComponent(DxIndicatorOptionsConfig);
+
+(DxIndicatorOptions as any).$_optionName = "indicatorOptions";
+
 const DxMyConfig = {
   emits: {
     "update:isActive": null,
@@ -461,6 +492,7 @@ export {
   DxCollision,
   DxFrom,
   DxHide,
+  DxIndicatorOptions,
   DxMy,
   DxOffset,
   DxPosition,

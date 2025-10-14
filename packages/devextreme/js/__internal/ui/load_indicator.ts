@@ -82,7 +82,6 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
