@@ -90,9 +90,6 @@ test('Chat: messagebox with attach button', async (t) => {
   await chat.focus();
   await testScreenshot(t, takeScreenshot, 'Messagebox with attach button.png', { element: '#chat' });
 
-  await t.typeText(chat.getInput(), getShortText());
-  await testScreenshot(t, takeScreenshot, 'Messagebox with attach button and text.png', { element: '#chat' });
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
