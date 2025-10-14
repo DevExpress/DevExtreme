@@ -467,6 +467,31 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-form {
+      position: relative;
+      overflow: hidden;
+      
+      .dx-scheduler-form-main-group {
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(0);
+        
+        &.dx-scheduler-form-main-hidden {
+          transform: translateX(-100%);
+        }
+      }
+
+      .dx-scheduler-form-recurrence-group {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(100%);
+        
+        &:not(.dx-scheduler-form-recurrence-hidden) {
+          transform: translateX(0);
+        }
+      }
+
       /* Icons alignment */
       .dx-scheduler-form-group-with-icon .dx-box-item:has(.dx-scheduler-form-icon) {
         flex: 0 1 auto !important; // stylelint-disable-line declaration-no-important
@@ -475,7 +500,9 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-scheduler-form-date-range-group .dx-box-item:has(.dx-scheduler-form-icon),
       .dx-scheduler-form-description-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon) {
+      .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon),
+      .dx-scheduler-form-recurrence-repeat-every-group .dx-box-item:has(.dx-scheduler-form-icon),
+      .dx-scheduler-form-recurrence-end-repeat-group .dx-box-item:has(.dx-scheduler-form-icon) {
         align-items: start;
       }
 
@@ -502,11 +529,90 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       .dx-scheduler-form-start-date-group .dx-item,
-      .dx-scheduler-form-end-date-group .dx-item {
+      .dx-scheduler-form-end-date-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-every-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-on-monthly-group .dx-item,
+      .dx-scheduler-form-recurrence-repeat-on-yearly-group .dx-item {
         align-items: end;
 
         .dx-datebox input.dx-texteditor-input {
           padding-inline-end: 0;
+        }
+      }
+
+      /* Recurrence End section - Grid layout with equal heights */
+      .dx-scheduler-form-recurrence-end-repeat-group {
+        > .dx-box-item {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      // RadioGroup column
+      .dx-scheduler-form-recurrence-end-radio {
+        .dx-field-item-content {
+          height: 100%;
+          padding: 0;
+        }
+
+        .dx-radiogroup {
+          padding: 0;
+          height: 100%;
+        }
+
+        .dx-item.dx-radiobutton {
+          margin: 8px 0 0 0;
+          padding: 0;
+          height: 32px !important; // stylelint-disable-line declaration-no-important
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        .dx-radiogroup-item {
+          align-items: center;
+        }
+      }
+
+      // Inputs column
+      .dx-scheduler-form-recurrence-end-inputs {
+        .dx-box-item-content {
+          height: 100%;
+          padding: 0;
+        }
+
+        .dx-box-item {
+          height: 32px;
+          margin: 0;
+          padding: 0;
+
+          &:not(:first-child) {
+            margin-top: 8px;
+          }
+
+          .dx-box-item-content {
+            height: 32px;
+            padding: 0;
+          }
+        }
+
+        .dx-field-item,
+        .dx-empty-item {
+          height: 32px;
+          margin: 0;
+          padding: 0 !important; // stylelint-disable-line declaration-no-important
+        }
+
+        .dx-field-item-content {
+          padding: 0 !important; // stylelint-disable-line declaration-no-important
+          height: 32px;
+        }
+
+        .dx-texteditor,
+        .dx-numberbox {
+          height: 32px;
         }
       }
 
@@ -523,6 +629,20 @@ $scheduler-appointment-form-label-padding: 20px;
           width: 1px;
           height: 100%;
           background-color: $scheduler-base-border-color;
+        }
+      }
+
+      /* Recurrence Day Buttons */
+      .dx-scheduler-recurrence-byday-buttons {
+        display: flex;
+        gap: 8px;
+
+        .dx-button {
+          border-radius: 50%;
+
+          .dx-button-content {
+            padding: 0;
+          }
         }
       }
     }

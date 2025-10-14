@@ -18,11 +18,10 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import { APPOINTMENT_FORM_GROUP_NAMES } from './m_form_constants';
+import { RecurrenceRule, RecurrentForm } from './m_recurrent_form';
 
-export const APPOINTMENT_FORM_GROUP_NAMES = {
-  Main: 'mainGroup',
-  Recurrence: 'recurrenceGroup',
-};
+export { APPOINTMENT_FORM_GROUP_NAMES };
 
 const CLASSES = {
   form: 'dx-scheduler-form',
@@ -39,6 +38,9 @@ const CLASSES = {
   repeatGroup: 'dx-scheduler-form-repeat-group',
   descriptionGroup: 'dx-scheduler-form-description-group',
   resourcesGroup: 'dx-scheduler-form-resources-group',
+  recurrenceRepeatEveryGroup: 'dx-scheduler-form-recurrence-repeat-every-group',
+  recurrenceRepeatOnMonthlyGroup: 'dx-scheduler-form-recurrence-repeat-on-monthly-group',
+  recurrenceRepeatOnYearlyGroup: 'dx-scheduler-form-recurrence-repeat-on-yearly-group',
 
   textEditor: 'dx-scheduler-form-text-editor',
   allDaySwitch: 'dx-scheduler-form-all-day-switch',
@@ -100,6 +102,16 @@ export class AppointmentForm {
 
   private _dxForm?: dxForm;
 
+  private _recurrenceRule!: RecurrenceRule;
+
+  private _recurrentForm?: RecurrentForm;
+
+  public _isRecurrenceFormVisible = false;
+
+  private _isUpdatingRepeatEditor = false;
+
+  public popup?: any;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
   }
@@ -114,6 +126,8 @@ export class AppointmentForm {
 
   set formData(formData: Record<string, any>) {
     this.dxForm.option('formData', formData);
+    const recurrenceRule = this.recurrenceRule ?? '';
+    this._recurrenceRule = new RecurrenceRule(recurrenceRule);
   }
 
   get startDate(): Date | null {
@@ -134,21 +148,35 @@ export class AppointmentForm {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
     const value = this.formData[recurrenceRuleExpr] as string | undefined;
 
-    return value ?? null;
+    // Treat empty string as null
+    return value && value.trim() !== '' ? value : null;
+  }
+
+  get isRecurrenceFormVisible(): boolean {
+    return this._isRecurrenceFormVisible;
   }
 
   constructor(scheduler: any) {
     this.scheduler = scheduler;
+    this._recurrenceRule = new RecurrenceRule('');
   }
 
   create(): void {
     const mainGroup = this.createMainFormGroup();
 
-    const items = [mainGroup];
+    // Create RecurrentForm instance (dxForm will be updated after form creation)
+    this._recurrentForm = new RecurrentForm(this.scheduler, this.dxForm, this._recurrenceRule);
+    const recurrenceGroup = this._recurrentForm.createRecurrenceFormGroup();
+
+    const items = [mainGroup, recurrenceGroup];
 
     this.setStylingModeToEditors(mainGroup);
+    this.setStylingModeToEditors(recurrenceGroup);
 
     this.createForm(items);
+
+    // Update the dxForm reference in RecurrentForm now that it's created
+    this._recurrentForm.dxForm = this.dxForm;
   }
 
   private createForm(items: FormProperties['items']): dxForm {
@@ -205,10 +233,6 @@ export class AppointmentForm {
         this.createDescriptionGroup(),
       ],
     } as GroupItem;
-  }
-
-  private createRecurrenceFormGroup(): GroupItem {
-    throw new Error('Method not implemented.');
   }
 
   private createSubjectGroup(): GroupItem {
@@ -519,6 +543,54 @@ export class AppointmentForm {
             onContentReady: (): void => {
               this.updateRepeatEditor();
             },
+            onValueChanged: (e): void => {
+              if (this._isUpdatingRepeatEditor) {
+                return;
+              }
+
+              const { value, previousValue } = e;
+              const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+
+              if (value === 'never') {
+                // Clear recurrence rule and stay on main form
+                // Use empty string to ensure scheduler saves the change
+                this.dxForm.updateData(recurrenceRuleExpr, '');
+
+                // Clear all recurrence-related fields from formData
+                this.dxForm.updateData('freq', null);
+                this.dxForm.updateData('interval', null);
+                this.dxForm.updateData('repeatEnd', null);
+                this.dxForm.updateData('count', null);
+                this.dxForm.updateData('until', null);
+
+                this._recurrenceRule.makeRules('');
+                if (this._recurrentForm) {
+                  this._recurrentForm.tempRecurrenceRule = undefined;
+                }
+              } else {
+                // Initialize or update recurrence rule
+                if (!this.recurrenceRule) {
+                  this._recurrenceRule.makeRule('freq', value);
+                  this._recurrenceRule.makeRule('interval', 1);
+                  const recurrenceString = this._recurrenceRule.getRecurrenceString();
+                  this.dxForm.updateData(recurrenceRuleExpr, recurrenceString);
+                } else {
+                  // Update frequency if recurrence already exists
+                  this._recurrenceRule.makeRules(this.recurrenceRule);
+                  this._recurrenceRule.makeRule('freq', value);
+                  const recurrenceString = this._recurrenceRule.getRecurrenceString();
+                  this.dxForm.updateData(recurrenceRuleExpr, recurrenceString);
+                }
+
+                // Open recurrence form only if user actively changed the value
+                // (not on initialization)
+                if (previousValue !== undefined && previousValue !== value) {
+                  this.showRecurrenceGroup();
+                }
+              }
+
+              this.updateRepeatEditor();
+            },
           } as SelectBoxProperties,
         },
       ],
@@ -626,8 +698,107 @@ export class AppointmentForm {
     }
   }
 
-  private showRecurrenceGroup(): void {
-    throw new Error('Method not implemented.');
+  showRecurrenceGroup(): void {
+    this._isRecurrenceFormVisible = true;
+
+    if (!this._recurrentForm) {
+      return;
+    }
+
+    // Create temporary copy of recurrence rule for editing
+    const currentRule = this.recurrenceRule;
+
+    if (currentRule) {
+      this._recurrentForm.tempRecurrenceRule = new RecurrenceRule(currentRule);
+    } else {
+      this._recurrentForm.tempRecurrenceRule = new RecurrenceRule('');
+    }
+
+    // Switch forms using CSS classes
+    const $formElement = $(this.dxForm.element());
+    const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
+    const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
+
+    mainGroup.addClass('dx-scheduler-form-main-hidden');
+    recurrenceGroup.removeClass('dx-scheduler-form-recurrence-hidden');
+
+    // Update RecurrenceForm editors - they should be in DOM now
+    // setTimeout is necessary here because CSS transition hides/shows form groups
+    // and we need to wait for DOM to be ready before updating editor values
+
+    setTimeout(() => {
+      this._recurrentForm?.updateRecurrenceFormValues();
+    }, 50);
+
+    if (this.popup && typeof this.popup.updateToolbarForRecurrence === 'function') {
+      this.popup.updateToolbarForRecurrence();
+    }
+  }
+
+  showMainGroup(saveChanges = true): void {
+    this._isRecurrenceFormVisible = false;
+
+    if (!this._recurrentForm) {
+      return;
+    }
+
+    // Apply changes from temp recurrence rule to actual recurrence rule
+    if (saveChanges && this._recurrentForm.tempRecurrenceRule) {
+      const tempRecurrenceString = this._recurrentForm.tempRecurrenceRule.getRecurrenceString();
+
+      // Update actual recurrence rule
+      this._recurrenceRule = this._recurrentForm.tempRecurrenceRule;
+      this._recurrentForm.recurrenceRule = this._recurrenceRule;
+
+      // Update formData with new recurrence rule
+      const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+      this.dxForm.updateData(recurrenceRuleExpr, tempRecurrenceString ?? undefined);
+
+      // Update repeat editor value to reflect current frequency
+      const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
+
+      if (repeatEditor) {
+        const { freq } = this._recurrenceRule.getRules();
+
+        if (freq) {
+          this._isUpdatingRepeatEditor = true;
+          const freqValue = freq.toLowerCase();
+          repeatEditor.option('value', freqValue);
+
+          // Force update buttons immediately after value change
+          const buttons = this.getRepeatEditorButtons();
+          repeatEditor.option('buttons', buttons);
+          this._isUpdatingRepeatEditor = false;
+        } else {
+          // If no freq, set to never
+          this._isUpdatingRepeatEditor = true;
+          repeatEditor.option('value', 'never');
+          repeatEditor.option('buttons', this.getRepeatEditorButtons());
+          this._isUpdatingRepeatEditor = false;
+        }
+      }
+    } else if (!saveChanges) {
+      // Just discard temp changes
+      this._recurrentForm.tempRecurrenceRule = undefined;
+    }
+
+    // Switch forms using CSS classes
+    const $formElement = $(this.dxForm.element());
+    const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
+    const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
+
+    mainGroup.removeClass('dx-scheduler-form-main-hidden');
+    recurrenceGroup.addClass('dx-scheduler-form-recurrence-hidden');
+
+    if (this.popup && typeof this.popup.updateToolbarForMain === 'function') {
+      this.popup.updateToolbarForMain();
+    }
+
+    // Only update repeat editor if changes were not saved
+    // (if saved, we already updated it above with the correct values)
+    if (!saveChanges) {
+      this.updateRepeatEditor();
+    }
   }
 
   private updateDateEditorsValues(): void {
@@ -643,24 +814,49 @@ export class AppointmentForm {
   }
 
   private updateRepeatEditor(): void {
+    if (this._isUpdatingRepeatEditor) {
+      return;
+    }
+
     const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
 
     if (!repeatEditor) {
       return;
     }
 
-    repeatEditor.option('buttons', this.getRepeatEditorButtons());
+    this._isUpdatingRepeatEditor = true;
+
+    try {
+      // Sync selectBox value with recurrence rule
+      const currentRule = this.recurrenceRule;
+      if (currentRule) {
+        this._recurrenceRule.makeRules(currentRule);
+        const { freq } = this._recurrenceRule.getRules();
+        if (freq && repeatEditor.option('value') !== freq.toLowerCase()) {
+          repeatEditor.option('value', freq.toLowerCase());
+        }
+      } else if (repeatEditor.option('value') !== 'never') {
+        repeatEditor.option('value', 'never');
+      }
+
+      repeatEditor.option('buttons', this.getRepeatEditorButtons());
+    } finally {
+      this._isUpdatingRepeatEditor = false;
+    }
   }
 
   private getRepeatEditorButtons(): TextEditorButton[] {
     const buttons: TextEditorButton[] = [];
 
-    if (this.recurrenceRule !== undefined) {
+    const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
+    const selectedValue = repeatEditor?.option('value');
+
+    if (selectedValue && selectedValue !== 'never') {
       buttons.push({
         location: 'after',
         name: 'settings',
         options: {
-          icon: 'optionsoutline', // todo this icon is missing in font
+          icon: 'preferences',
           stylingMode: 'text',
           onClick: (): void => {
             this.showRecurrenceGroup();
