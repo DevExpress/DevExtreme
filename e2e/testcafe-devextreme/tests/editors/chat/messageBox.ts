@@ -81,3 +81,27 @@ test('Chat: messagebox with editing preview', async (t) => {
     height: 600,
   }, '#chat');
 });
+
+test('Chat: messagebox with attach button', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const chat = new Chat('#chat');
+
+  await chat.focus();
+  await testScreenshot(t, takeScreenshot, 'Messagebox with attach button.png', { element: '#chat' });
+
+  await t.typeText(chat.getInput(), getShortText());
+  await testScreenshot(t, takeScreenshot, 'Messagebox with attach button and text.png', { element: '#chat' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'chat');
+
+  return createWidget('dxChat', {
+    width: 400,
+    height: 600,
+    fileUploaderOptions: {},
+  }, '#chat');
+});
