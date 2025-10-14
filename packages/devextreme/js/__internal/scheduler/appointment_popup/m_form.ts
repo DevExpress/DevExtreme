@@ -148,7 +148,6 @@ export class AppointmentForm {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
     const value = this.formData[recurrenceRuleExpr] as string | undefined;
 
-    // Treat empty string as null
     return value && value.trim() !== '' ? value : null;
   }
 
@@ -164,7 +163,6 @@ export class AppointmentForm {
   create(): void {
     const mainGroup = this.createMainFormGroup();
 
-    // Create RecurrentForm instance (dxForm will be updated after form creation)
     this._recurrentForm = new RecurrentForm(this.scheduler, this.dxForm, this._recurrenceRule);
     const recurrenceGroup = this._recurrentForm.createRecurrenceFormGroup();
 
@@ -175,7 +173,6 @@ export class AppointmentForm {
 
     this.createForm(items);
 
-    // Update the dxForm reference in RecurrentForm now that it's created
     this._recurrentForm.dxForm = this.dxForm;
   }
 
@@ -552,11 +549,8 @@ export class AppointmentForm {
               const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
               if (value === 'never') {
-                // Clear recurrence rule and stay on main form
-                // Use empty string to ensure scheduler saves the change
                 this.dxForm.updateData(recurrenceRuleExpr, '');
 
-                // Clear all recurrence-related fields from formData
                 this.dxForm.updateData('freq', null);
                 this.dxForm.updateData('interval', null);
                 this.dxForm.updateData('repeatEnd', null);
@@ -568,22 +562,18 @@ export class AppointmentForm {
                   this._recurrentForm.tempRecurrenceRule = undefined;
                 }
               } else {
-                // Initialize or update recurrence rule
                 if (!this.recurrenceRule) {
                   this._recurrenceRule.makeRule('freq', value);
                   this._recurrenceRule.makeRule('interval', 1);
                   const recurrenceString = this._recurrenceRule.getRecurrenceString();
                   this.dxForm.updateData(recurrenceRuleExpr, recurrenceString);
                 } else {
-                  // Update frequency if recurrence already exists
                   this._recurrenceRule.makeRules(this.recurrenceRule);
                   this._recurrenceRule.makeRule('freq', value);
                   const recurrenceString = this._recurrenceRule.getRecurrenceString();
                   this.dxForm.updateData(recurrenceRuleExpr, recurrenceString);
                 }
 
-                // Open recurrence form only if user actively changed the value
-                // (not on initialization)
                 if (previousValue !== undefined && previousValue !== value) {
                   this.showRecurrenceGroup();
                 }
@@ -705,7 +695,6 @@ export class AppointmentForm {
       return;
     }
 
-    // Create temporary copy of recurrence rule for editing
     const currentRule = this.recurrenceRule;
 
     if (currentRule) {
@@ -714,7 +703,6 @@ export class AppointmentForm {
       this._recurrentForm.tempRecurrenceRule = new RecurrenceRule('');
     }
 
-    // Switch forms using CSS classes
     const $formElement = $(this.dxForm.element());
     const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
     const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
@@ -722,13 +710,7 @@ export class AppointmentForm {
     mainGroup.addClass('dx-scheduler-form-main-hidden');
     recurrenceGroup.removeClass('dx-scheduler-form-recurrence-hidden');
 
-    // Update RecurrenceForm editors - they should be in DOM now
-    // setTimeout is necessary here because CSS transition hides/shows form groups
-    // and we need to wait for DOM to be ready before updating editor values
-
-    setTimeout(() => {
-      this._recurrentForm?.updateRecurrenceFormValues();
-    }, 50);
+    this._recurrentForm?.updateRecurrenceFormValues();
 
     if (this.popup && typeof this.popup.updateToolbarForRecurrence === 'function') {
       this.popup.updateToolbarForRecurrence();
@@ -742,19 +724,15 @@ export class AppointmentForm {
       return;
     }
 
-    // Apply changes from temp recurrence rule to actual recurrence rule
     if (saveChanges && this._recurrentForm.tempRecurrenceRule) {
       const tempRecurrenceString = this._recurrentForm.tempRecurrenceRule.getRecurrenceString();
 
-      // Update actual recurrence rule
       this._recurrenceRule = this._recurrentForm.tempRecurrenceRule;
       this._recurrentForm.recurrenceRule = this._recurrenceRule;
 
-      // Update formData with new recurrence rule
       const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
       this.dxForm.updateData(recurrenceRuleExpr, tempRecurrenceString ?? undefined);
 
-      // Update repeat editor value to reflect current frequency
       const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
 
       if (repeatEditor) {
@@ -765,12 +743,10 @@ export class AppointmentForm {
           const freqValue = freq.toLowerCase();
           repeatEditor.option('value', freqValue);
 
-          // Force update buttons immediately after value change
           const buttons = this.getRepeatEditorButtons();
           repeatEditor.option('buttons', buttons);
           this._isUpdatingRepeatEditor = false;
         } else {
-          // If no freq, set to never
           this._isUpdatingRepeatEditor = true;
           repeatEditor.option('value', 'never');
           repeatEditor.option('buttons', this.getRepeatEditorButtons());
@@ -778,11 +754,9 @@ export class AppointmentForm {
         }
       }
     } else if (!saveChanges) {
-      // Just discard temp changes
       this._recurrentForm.tempRecurrenceRule = undefined;
     }
 
-    // Switch forms using CSS classes
     const $formElement = $(this.dxForm.element());
     const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
     const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
@@ -794,8 +768,6 @@ export class AppointmentForm {
       this.popup.updateToolbarForMain();
     }
 
-    // Only update repeat editor if changes were not saved
-    // (if saved, we already updated it above with the correct values)
     if (!saveChanges) {
       this.updateRepeatEditor();
     }
@@ -827,7 +799,6 @@ export class AppointmentForm {
     this._isUpdatingRepeatEditor = true;
 
     try {
-      // Sync selectBox value with recurrence rule
       const currentRule = this.recurrenceRule;
       if (currentRule) {
         this._recurrenceRule.makeRules(currentRule);

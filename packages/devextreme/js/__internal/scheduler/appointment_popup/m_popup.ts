@@ -51,7 +51,6 @@ export class AppointmentPopup {
       },
     };
 
-    // Make popup accessible to form
     this.scheduler.appointmentPopup = this;
     this.form.popup = this;
   }
