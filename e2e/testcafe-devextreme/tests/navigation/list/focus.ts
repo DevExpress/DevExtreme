@@ -4,7 +4,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`List`
+fixture.disablePageReloads`List`
   .page(url(__dirname, '../../container.html'));
 
 const LIST_ITEM_DELETE_BUTTON = 'dx-list-static-delete-button';

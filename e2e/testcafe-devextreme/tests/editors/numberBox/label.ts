@@ -16,7 +16,7 @@ fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
+  test.meta({ unstable: true })(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`, { element: '#container' });
