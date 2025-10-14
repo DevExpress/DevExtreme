@@ -54,6 +54,10 @@ const CLASSES = {
   descriptionEditor: 'dx-scheduler-form-description-editor',
 
   recurrenceSettingsButton: 'dx-scheduler-form-recurrence-settings-button',
+  mainHidden: 'dx-scheduler-form-main-hidden',
+  recurrenceGroup: 'dx-scheduler-form-recurrence-group',
+  mainGroupClass: 'dx-scheduler-form-main-group',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
 };
 
 const EDITOR_NAMES = {
@@ -704,11 +708,11 @@ export class AppointmentForm {
     }
 
     const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
-    const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
+    const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
+    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
-    mainGroup.addClass('dx-scheduler-form-main-hidden');
-    recurrenceGroup.removeClass('dx-scheduler-form-recurrence-hidden');
+    mainGroup.addClass(CLASSES.mainHidden);
+    recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
 
     this._recurrentForm?.updateRecurrenceFormValues();
 
@@ -758,11 +762,11 @@ export class AppointmentForm {
     }
 
     const $formElement = $(this.dxForm.element());
-    const mainGroup = $formElement.find('.dx-scheduler-form-main-group');
-    const recurrenceGroup = $formElement.find('.dx-scheduler-form-recurrence-group');
+    const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
+    const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
-    mainGroup.removeClass('dx-scheduler-form-main-hidden');
-    recurrenceGroup.addClass('dx-scheduler-form-recurrence-hidden');
+    mainGroup.removeClass(CLASSES.mainHidden);
+    recurrenceGroup.addClass(CLASSES.recurrenceHidden);
 
     if (this.popup && typeof this.popup.updateToolbarForMain === 'function') {
       this.popup.updateToolbarForMain();

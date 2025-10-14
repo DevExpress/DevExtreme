@@ -27,6 +27,11 @@ const CLASSES = {
   recurrenceRepeatOnYearlyGroup: 'dx-scheduler-form-recurrence-repeat-on-yearly-group',
   recurrenceEndGroup: 'dx-scheduler-form-recurrence-end-group',
   recurrenceEndContainer: 'dx-scheduler-form-recurrence-end-repeat-group',
+  recurrenceByDayButtons: 'dx-scheduler-recurrence-byday-buttons',
+  recurrenceGroupRoot: 'dx-scheduler-form-recurrence-group',
+  recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
+  recurrenceEndRadio: 'dx-scheduler-form-recurrence-end-radio',
+  recurrenceEndInputs: 'dx-scheduler-form-recurrence-end-inputs',
 };
 
 const frequenciesMessages = [
@@ -252,7 +257,7 @@ export class RecurrentForm {
     itemElement: any,
   ): void {
     const container = $('<div>')
-      .addClass('dx-scheduler-recurrence-byday-buttons')
+      .addClass(CLASSES.recurrenceByDayButtons)
       .appendTo(itemElement);
 
     const byDay = this._daysOfWeekByRules();
@@ -363,7 +368,7 @@ export class RecurrentForm {
     return {
       name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
       itemType: 'group',
-      cssClass: 'dx-scheduler-form-recurrence-group dx-scheduler-form-recurrence-hidden',
+      cssClass: `${CLASSES.recurrenceGroupRoot} ${CLASSES.recurrenceHidden}`,
       colSpan: 1,
       items: [
         this.createRecurrenceStartDateGroup(),
@@ -646,7 +651,7 @@ export class RecurrentForm {
               colSpan: 1,
               dataField: 'repeatEnd',
               editorType: 'dxRadioGroup',
-              cssClass: 'dx-scheduler-form-recurrence-end-radio',
+              cssClass: CLASSES.recurrenceEndRadio,
               label: {
                 visible: false,
               },
@@ -669,7 +674,7 @@ export class RecurrentForm {
             },
             {
               itemType: 'group',
-              cssClass: 'dx-scheduler-form-recurrence-end-inputs',
+              cssClass: CLASSES.recurrenceEndInputs,
               colSpan: 1,
               items: [
                 {
