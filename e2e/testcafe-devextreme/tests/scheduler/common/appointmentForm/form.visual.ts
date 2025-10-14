@@ -60,10 +60,10 @@ const getResources = () => ([
 const windowSize: [number, number] = [1500, 1500];
 
 [
-  'generic.light',
-  'generic.light.compact',
-  // 'material.blue.light',
-  // 'material.blue.light.compact',
+  // 'generic.light',
+  // 'generic.light.compact',
+  'material.blue.light',
+  'material.blue.light.compact',
   // 'fluent.blue.light',
   // 'fluent.blue.light.compact',
 ].forEach((theme) => {
