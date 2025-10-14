@@ -314,7 +314,13 @@ jobs:
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
             pnpx eslint $CHANGED_DEMOS
@@ -325,46 +331,6 @@ jobs:
           echo "changed-files.json not found"
           pnpm run lint-demos
         fi
-
-    - name: Run lint on changed demos
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      working-directory: apps/demos
-      env:
-        DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: |
-        pnpx nx lint-non-demos
-
-        if [ -f "changed-files.json" ]; then
-          echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
-          if [ ! -z "$CHANGED_DEMOS" ]; then
-            echo "Changed demo files: $CHANGED_DEMOS"
-            pnpx eslint $CHANGED_DEMOS
-          else
-            echo "No demo files changed, skipping lint-demos"
-          fi
-        else
-          echo "changed-files.json not found"
-          pnpm run lint-demos
-        fi
-
-    - name: Run lint on changed demos
-      if: github.event_name != 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      working-directory: apps/demos
-      env:
-        DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: |
-        pnpx nx lint-non-demos
-
-        if [ -f "changed-files.json" ]; then
-          echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
-          if [ ! -z "$CHANGED_DEMOS" ]; then
-            echo "Changed demo files: $CHANGED_DEMOS"
-            pnpx eslint $CHANGED_DEMOS
-          else
-            echo "No demo files changed, skipping lint-demos"
-          fi
 
   check_generated_demos:
     name: ${{ matrix.name }}
