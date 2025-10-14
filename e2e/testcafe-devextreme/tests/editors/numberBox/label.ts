@@ -54,6 +54,7 @@ safeSizeTest('Label for dxNumberBox', async (t) => {
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
     const options = {
+      width: '100%',
       label: 'label text',
       stylingMode,
     };
