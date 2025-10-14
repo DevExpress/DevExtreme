@@ -33,8 +33,7 @@ QUnit.test('node is focused after focusing on element', function(assert) {
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
-}),
-
+});
 
 QUnit.test('down arrow move focus to the next element', function(assert) {
     const $treeView = initTree({
@@ -58,7 +57,7 @@ QUnit.test('down arrow move focus to the next element', function(assert) {
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.ok($secondNode.hasClass('dx-state-focused'), 'next item was focused after down was pressed');
-}),
+});
 
 QUnit.test('down arrow move focus to the next element for virtual mode & slow DS', function(assert) {
     const $treeView = initTree({
@@ -83,7 +82,7 @@ QUnit.test('down arrow move focus to the next element for virtual mode & slow DS
     keyboard.keyDown('down');
 
     assert.ok($secondNode.hasClass('dx-state-focused'), 'next item was focused after down was pressed');
-}),
+});
 
 QUnit.test('home key pressing move focus to the first element', function(assert) {
     const $treeView = initTree({
@@ -106,7 +105,7 @@ QUnit.test('home key pressing move focus to the first element', function(assert)
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.ok($secondNode.hasClass('dx-state-focused'), 'first item was focused after home was pressed');
-}),
+});
 
 QUnit.test('shift+home key pressing extends selection up to the top-most node', function(assert) {
     const $treeView = initTree({
@@ -126,36 +125,21 @@ QUnit.test('shift+home key pressing extends selection up to the top-most node', 
 
     assert.strictEqual($topNodeCheckBox.dxCheckBox('instance').option('value'), true, 'top node was selected');
     assert.strictEqual($secondNodeCheckBox.dxCheckBox('instance').option('value'), true, 'node was selected');
-}),
+});
 
-[true, false].forEach(function(selectByClick) {
-    ['single', 'multiple'].forEach(function(selectionMode) {
-        QUnit.test(`shift+end key pressing without checkBoxes, selectByClick=${selectByClick}, selectionMode=${selectionMode}`, function(assert) {
-            const $treeView = initTree({
-                focusStateEnabled: true,
-                height: 500,
-                selectByClick,
-                selectionMode,
-                items: $.extend(true, [], DATA[0])
-            });
-            const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(-1);
-
-            $item.trigger('dxclick');
-            $treeView.trigger($.Event('keydown', { key: 'Home', shiftKey: true }));
-
-            const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
-
-            if(selectByClick) {
-                assert.strictEqual(
-                    selectedNodes.length,
-                    selectionMode === 'multiple' ? DATA[0].length : 1
-                );
-            } else {
-                assert.deepEqual(selectedNodes, []);
-            }
-        });
+QUnit.test('shift+home key pressing without checkBoxes', function(assert) {
+    const $treeView = initTree({
+        focusStateEnabled: true,
+        height: 500,
+        items: $.extend(true, [], DATA[0])
     });
-}),
+    const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(2);
+
+    $firstItem.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'Home', shiftKey: true }));
+
+    assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+});
 
 QUnit.test('end key pressing move focus to the last element', function(assert) {
     const $treeView = initTree({
@@ -178,7 +162,7 @@ QUnit.test('end key pressing move focus to the last element', function(assert) {
 
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.ok($secondNode.hasClass('dx-state-focused'), 'last item was focused after end was pressed');
-}),
+});
 
 QUnit.test('shift+end key pressing extends selection up to the last node', function(assert) {
     const $treeView = initTree({
@@ -198,36 +182,21 @@ QUnit.test('shift+end key pressing extends selection up to the last node', funct
 
     assert.strictEqual($lastNodeCheckBox.dxCheckBox('instance').option('value'), true, 'last node was selected');
     assert.strictEqual($secondNodeCheckBox.dxCheckBox('instance').option('value'), true, 'node was selected');
-}),
+});
 
-[true, false].forEach(function(selectByClick) {
-    ['single', 'multiple'].forEach(function(selectionMode) {
-        QUnit.test(`shift+end key pressing without checkBoxes, selectByClick=${selectByClick}, selectionMode=${selectionMode}`, function(assert) {
-            const $treeView = initTree({
-                focusStateEnabled: true,
-                height: 500,
-                selectByClick,
-                selectionMode,
-                items: $.extend(true, [], DATA[0])
-            });
-            const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-
-            $item.trigger('dxclick');
-            $treeView.trigger($.Event('keydown', { key: 'End', shiftKey: true }));
-
-            const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
-
-            if(selectByClick) {
-                assert.strictEqual(
-                    selectedNodes.length,
-                    selectionMode === 'multiple' ? DATA[0].length : 1
-                );
-            } else {
-                assert.deepEqual(selectedNodes, []);
-            }
-        });
+QUnit.test('shift+end key pressing without checkBoxes', function(assert) {
+    const $treeView = initTree({
+        focusStateEnabled: true,
+        height: 500,
+        items: $.extend(true, [], DATA[0])
     });
-}),
+    const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+
+    $firstItem.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'End', shiftKey: true }));
+
+    assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+});
 
 QUnit.test('up arrow move focus to the previous element', function(assert) {
     const $treeView = initTree({
@@ -247,7 +216,7 @@ QUnit.test('up arrow move focus to the previous element', function(assert) {
     keyboard.keyDown('up');
 
     assert.ok($secondNode.hasClass('dx-state-focused'), 'previous item was focused after up was pressed');
-}),
+});
 
 QUnit.test('down arrow move focus on item with the same level', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -269,7 +238,7 @@ QUnit.test('down arrow move focus on item with the same level', function(assert)
     $firstItem.trigger('dxpointerdown');
     keyboard.keyDown('down');
     assert.ok($secondNode.hasClass('dx-state-focused'), 'next item with the same level was focused after down was pressed');
-}),
+});
 
 QUnit.test('shiftDown key test', function(assert) {
     const $treeView = initTree({
@@ -285,30 +254,21 @@ QUnit.test('shiftDown key test', function(assert) {
     $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
 
     assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
-}),
+});
 
-[true, false].forEach(function(selectByClick) {
-    QUnit.test(`shiftDown key test without checkBoxes and selectByClick=${selectByClick}`, function(assert) {
-        const $treeView = initTree({
-            focusStateEnabled: true,
-            height: 500,
-            selectByClick,
-            items: $.extend(true, [], DATA[0])
-        });
-        const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-
-        $item.trigger('dxpointerdown');
-        $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
-
-        const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
-
-        if(selectByClick) {
-            assert.strictEqual(selectedNodes[0].itemData.key, DATA[0][1].key);
-        } else {
-            assert.deepEqual(selectedNodes, []);
-        }
+QUnit.test('shiftDown key test without checkBoxes', function(assert) {
+    const $treeView = initTree({
+        focusStateEnabled: true,
+        height: 500,
+        items: $.extend(true, [], DATA[0])
     });
-}),
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+
+    $item.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
+
+    assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+});
 
 QUnit.test('up arrow move focus on item with same level', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -329,7 +289,7 @@ QUnit.test('up arrow move focus on item with same level', function(assert) {
     keyboard.keyDown('up');
 
     assert.ok($secondNode.hasClass('dx-state-focused'), 'previous item was focused after up was pressed');
-}),
+});
 
 QUnit.test('shiftUp key test', function(assert) {
     const $treeView = initTree({
@@ -345,30 +305,21 @@ QUnit.test('shiftUp key test', function(assert) {
     $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
 
     assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
-}),
+});
 
-[true, false].forEach(function(selectByClick) {
-    QUnit.test(`shiftUp key test without checkBoxes and selectByClick=${selectByClick}`, function(assert) {
-        const $treeView = initTree({
-            focusStateEnabled: true,
-            height: 500,
-            selectByClick,
-            items: $.extend(true, [], DATA[0])
-        });
-        const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-
-        $item.trigger('dxpointerdown');
-        $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
-
-        const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
-
-        if(selectByClick) {
-            assert.strictEqual(selectedNodes[0].itemData.key, DATA[0][2].key);
-        } else {
-            assert.deepEqual(selectedNodes, []);
-        }
+QUnit.test('shiftUp key test without checkBoxes', function(assert) {
+    const $treeView = initTree({
+        focusStateEnabled: true,
+        height: 500,
+        items: $.extend(true, [], DATA[0])
     });
-}),
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(1);
+
+    $item.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
+
+    assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+});
 
 QUnit.test('left/right arrow collapse/expand node-container', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -397,7 +348,7 @@ QUnit.test('left/right arrow collapse/expand node-container', function(assert) {
     assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.ok($treeView.find('.' + internals.NODE_CLASS).eq(1).is(':hidden'), 'child item is hidden');
     assert.ok(!$iconItem.hasClass('dx-treeview-toggle-item-visibility-opened'), 'icon item indicate closed state');
-}),
+});
 
 QUnit.test('item-icon indicate closed state after retry to collapse node', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -417,7 +368,7 @@ QUnit.test('item-icon indicate closed state after retry to collapse node', funct
 
     keyboard.keyDown('left');
     assert.ok(!$iconItem.hasClass('dx-treeview-toggle-item-visibility-opened'), 'icon item indicate closed state');
-}),
+});
 
 QUnit.test('left arrow focus parent node-container', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -444,7 +395,7 @@ QUnit.test('left arrow focus parent node-container', function(assert) {
     $childItem.trigger('dxpointerdown');
     keyboard.keyDown('left');
     assert.ok($parentNode.hasClass('dx-state-focused'), 'parent item take focus');
-}),
+});
 
 QUnit.test('right arrow focus child node, if parent container is expanded', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -466,7 +417,7 @@ QUnit.test('right arrow focus child node, if parent container is expanded', func
     const $childNode = $treeView.find('.dx-treeview-node').eq(1);
 
     assert.ok($childNode.hasClass('dx-state-focused'), 'child item take focus');
-}),
+});
 
 QUnit.test('asterisk key test', function(assert) {
     const data = [
@@ -514,7 +465,7 @@ QUnit.test('asterisk key test', function(assert) {
 
     const $parentNode = $treeView.find('.dx-treeview-node').eq(0);
     assert.ok($parentNode.hasClass('dx-state-focused'));
-}),
+});
 
 QUnit.test('minus key test', function(assert) {
     const data = $.extend(true, [], DATA[1]);
@@ -540,7 +491,7 @@ QUnit.test('minus key test', function(assert) {
     $treeView.trigger($.Event('keydown', { key: '-' }));
 
     assert.strictEqual(collapseFired, 2, 'onItemCollapsed was fired desired number of times');
-}),
+});
 
 QUnit.test('right arrow should update expanded field of item and node', function(assert) {
     const $treeView = initTree({
@@ -874,4 +825,83 @@ QUnit.testInActiveWindow('First list item should be focused on the tab key press
     assert.ok($treeView.find('.' + internals.NODE_CLASS).first().hasClass('dx-state-focused'), 'first node is focused');
     assert.ok($treeView.hasClass('dx-state-focused'), 'treeview is focused');
     assert.ok($treeView.find('.dx-scrollable-content').hasClass('dx-state-focused'), 'scrollable is focused');
+});
+
+QUnit.module('keyboard navigation when showCheckBoxesMode=none and selectByClick=true', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.createTreeView = function(selectionMode) {
+            return $('#treeView').dxTreeView({
+                focusStateEnabled: true,
+                height: 500,
+                selectByClick: true,
+                selectionMode,
+                items: $.extend(true, [], DATA[0])
+            });
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+        fx.off = false;
+    }
+});
+
+['single', 'multiple'].forEach(function(selectionMode) {
+    QUnit.test(`shift+home key pressing, selectionMode=${selectionMode}`, function(assert) {
+        const $treeView = this.createTreeView(selectionMode);
+        const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(-1);
+
+        $item.trigger('dxclick');
+        $treeView.trigger($.Event('keydown', { key: 'Home', shiftKey: true }));
+
+        const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
+
+        assert.strictEqual(
+            selectedNodes.length,
+            selectionMode === 'multiple' ? DATA[0].length : 1
+        );
+    });
+});
+
+['single', 'multiple'].forEach(function(selectionMode) {
+    QUnit.test(`shift+end key pressing, selectionMode=${selectionMode}`, function(assert) {
+        const $treeView = this.createTreeView(selectionMode);
+        const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+
+        $item.trigger('dxclick');
+        $treeView.trigger($.Event('keydown', { key: 'End', shiftKey: true }));
+
+        const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
+
+        assert.strictEqual(
+            selectedNodes.length,
+            selectionMode === 'multiple' ? DATA[0].length : 1
+        );
+    });
+});
+
+QUnit.test('shiftDown key test', function(assert) {
+    const $treeView = this.createTreeView();
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+
+    $item.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
+
+    const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
+
+    assert.strictEqual(selectedNodes[0].itemData.key, DATA[0][1].key);
+});
+
+QUnit.test('shiftUp key test', function(assert) {
+    const $treeView = this.createTreeView();
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+
+    $item.trigger('dxpointerdown');
+    $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
+
+    const selectedNodes = $treeView.dxTreeView('instance').getSelectedNodes();
+
+    assert.strictEqual(selectedNodes[0].itemData.key, DATA[0][2].key);
 });
