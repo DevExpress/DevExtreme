@@ -1,4 +1,4 @@
-name: QUnit tests for renovation
+name: QUnit tests
 
 concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
@@ -77,12 +77,30 @@ jobs:
   qunit-tests:
     needs: build
     runs-on: devextreme-shr2
-    name: Constel ${{ matrix.CONSTEL }}
+    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}
     timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.htmlEditor, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz ]
+        CONSTEL: [
+          export,
+          misc,
+          ui,
+          ui.widgets(1/2),
+          ui.widgets(2/2),
+          ui.editors,
+          ui.htmlEditor,
+          ui.grid,
+          ui.scheduler(1/2),
+          ui.scheduler(2/2),
+          viz
+        ]
+        TIMEZONE: ['']
+        include:
+          - CONSTEL: ui.scheduler(1/2)
+            TIMEZONE: US/Pacific
+          - CONSTEL: ui.scheduler(2/2)
+            TIMEZONE: US/Pacific
 
     steps:
     - name: Get sources
@@ -91,9 +109,11 @@ jobs:
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
       with:
-        name: Constel ${{ matrix.CONSTEL }}
+        name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}
         constel: ${{ matrix.CONSTEL }}
-        useCsp: "false"
+        timezone: ${{ matrix.TIMEZONE }}
+        useCsp: 'false'
+        # useCsp: 'true'
 
   notify:
     runs-on: devextreme-shr2
