@@ -20,17 +20,15 @@ export class AiColumnController extends Controller {
 
     this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
+    this.aiColumnIntegrationController.showResultsCallback = this.showResults.bind(this);
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
-
-    this.createAction('onAIColumnRequestCreating');
-    this.createAction('onAIColumnResponseReceived');
   }
 
   private createAIColumnRequest() {
-    const options = {};
-    this.executeAction('onAIColumnRequestCreating', options);
+    const args = {};
+    this.executeAction('onAIColumnRequestCreating', args);
   }
 
   private receiveAIColumnResponse() {
@@ -40,6 +38,14 @@ export class AiColumnController extends Controller {
 
   private refreshAIColumnInternal(columnName: string): void {
     this.aiColumnIntegrationController.refreshAIColumn(columnName);
+  }
+
+  private showResults(
+    columnName: string,
+    result: string,
+    cachedData: Record<PropertyKey, string>,
+  ): void {
+    // Update the results in the UI or internal state
   }
 
   private handleDataChanged(e) {

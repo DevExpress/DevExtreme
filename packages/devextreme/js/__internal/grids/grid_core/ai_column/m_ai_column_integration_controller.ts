@@ -25,6 +25,12 @@ export class AiColumnIntegrationController extends Controller {
 
   private aiColumnCacheController!: AiColumnCacheController;
 
+  public showResultsCallback?: (
+    columnName: string,
+    result: string,
+    cachedData: Record<PropertyKey, string>,
+  ) => void;
+
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
@@ -77,14 +83,6 @@ export class AiColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
-  private updateResults(
-    columnName: string,
-    result: string,
-    cachedData: Record<PropertyKey, string>,
-  ): void {
-    // Update the results in the UI or internal state
-  }
-
   private getAICommandCallbacks<T>(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
@@ -92,7 +90,7 @@ export class AiColumnIntegrationController extends Controller {
     const callbacks = {
       onComplete: (finalResponse: T): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
-          this.updateResults(columnName, String(finalResponse), cachedResponse);
+          this.showResultsCallback?.(columnName, String(finalResponse), cachedResponse);
           this.processCommandCompletion(columnName);
         }
       },
