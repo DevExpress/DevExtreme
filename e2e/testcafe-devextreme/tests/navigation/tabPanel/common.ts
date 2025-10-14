@@ -16,99 +16,53 @@ const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
 
-test('TabPanel borders with scrolling', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'TabPanel borders with scrolling.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  const dataSource = [
-    {
-      title: 'John Heart',
-      text: 'John Heart',
-    }, {
-      title: 'Olivia Peyton',
-      text: 'Olivia Peyton',
-    }, {
-      title: 'Robert Reagan',
-      text: 'Robert Reagan',
-    }, {
-      title: 'Greta Sims',
-      text: 'Greta Sims',
-    }, {
-      title: 'Olivia Peyton',
-      text: 'Olivia Peyton',
-    },
-  ] as Item[];
-
-  const tabPanelOptions = {
-    dataSource,
-    itemTemplate: (_, __, itemElement) => {
-      ($('<div>').css('marginTop', '10px') as any)
-        .dxTabs({
-          items: [
-            {
-              title: 'John Heart',
-              text: 'John Heart',
-            }, {
-              title: 'Olivia Peyton',
-              text: 'Olivia Peyton',
-            }, {
-              title: 'Robert Reagan',
-              text: 'Robert Reagan',
-            }, {
-              title: 'Greta Sims',
-              text: 'Greta Sims',
-            }, {
-              title: 'Olivia Peyton',
-              text: 'Olivia Peyton',
-            },
-          ],
-          width: 300,
-          showNavButtons: true,
-        })
-        .appendTo(itemElement);
-    },
-    height: 120,
-    width: 300,
-    showNavButtons: true,
-  };
-
-  return createWidget('dxTabPanel', tabPanelOptions);
-});
-
-['primary', 'secondary'].forEach((stylingMode) => {
-  test(`Tab item width in a bounded container, stylingMode=${stylingMode}`, async (t) => {
+['with scrolling', 'without scrolling'].forEach((mode) => {
+  const testName = `TabPanel borders ${mode}`;
+  test(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Tab item width in a bounded container, stylingMode=${stylingMode}.png`, { element: '#tabpanel' });
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await appendElementTo('#container', 'div', 'tabpanel');
-    await setAttribute('#container', 'style', 'width: 200px;');
+    const dataSource: Item[] = [
+      {
+        title: 'John Heart',
+        text: 'John Heart',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      }, {
+        title: 'Robert Reagan',
+        text: 'Robert Reagan',
+      }, {
+        title: 'Greta Sims',
+        text: 'Greta Sims',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      },
+    ];
 
-    const dataSource = [
-      { title: 'John Heart', text: 'John Heart' },
-      { title: 'Marina Thomas', text: 'Marina Thomas' },
-      { title: 'Robert Reagan', text: 'Robert Reagan' },
-      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
-      { title: 'Ed Holmes', text: 'Ed Holmes' },
-      { title: 'Wally Hobbs', text: 'Wally Hobbs' },
-      { title: 'Brad Jameson', text: 'Brad Jameson' },
-    ] as Item[];
-
-    const options = {
+    const tabPanelOptions = {
       dataSource,
-      height: 250,
+      itemTemplate: (_, __, itemElement) => {
+        ($('<div>').css('marginTop', '10px') as any)
+          .dxTabs({
+            items: [...dataSource],
+            width: 300,
+            showNavButtons: true,
+          })
+          .appendTo(itemElement);
+      },
+      height: 120,
+      width: mode === 'with scrolling' ? 300 : 900,
+      showNavButtons: true,
     };
 
-    return createWidget('dxTabPanel', options, '#tabpanel');
+    return createWidget('dxTabPanel', tabPanelOptions);
   });
 });
 
@@ -125,30 +79,27 @@ test('TabPanel text-overflow with tabsPosition left', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const dataSource = [
+  const dataSource: Item[] = [
     { icon: 'user', text: 'John Heart', title: 'John Heart' },
     { icon: 'user', text: 'Marina Elizabeth Thomas Grace Sophia', title: 'Mariya Elizabeth Thomas Grace Sophia' },
     { icon: 'user', text: 'Robert Reagan', title: 'Robert Reagan' },
     { icon: 'user', text: 'Greta Sims', title: 'Greta Sims' },
-  ] as Item[];
+  ];
 
-  const options = {
+  return createWidget('dxTabPanel', {
     dataSource,
     width: 600,
     height: 250,
     tabsPosition: 'left',
     showNavButtons: true,
-  };
-
-  return createWidget('dxTabPanel', options);
+  });
 });
 
 test('TabPanel focus borders after change selectedIndex in runtime', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const tabPanel = new TabPanel('#container');
-
-  await tabPanel.option({ selectedIndex: 1 } as any);
+  await tabPanel.option('selectedIndex', 1);
 
   await testScreenshot(t, takeScreenshot, 'TabPanel focus borders.png', { element: '#container' });
 
@@ -156,7 +107,7 @@ test('TabPanel focus borders after change selectedIndex in runtime', async (t) =
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const dataSource = [
+  const dataSource: Item[] = [
     {
       title: 'John Heart',
       text: 'John Heart',
@@ -173,27 +124,39 @@ test('TabPanel focus borders after change selectedIndex in runtime', async (t) =
       title: 'Olivia Peyton',
       text: 'Olivia Peyton',
     },
-  ] as Item[];
+  ];
 
-  const tabPanelOptions = {
+  return createWidget('dxTabPanel', {
     dataSource,
     height: 120,
-    width: 300,
-  };
-
-  return createWidget('dxTabPanel', tabPanelOptions);
+  });
 });
 
-test('TabPanel borders without scrolling', async (t) => {
+test('TabPanel navigation buttons hover', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TabPanel borders without scrolling.png', { element: '#container' });
+  await t.click('body', {
+    offsetX: -10,
+    offsetY: -10,
+  });
+
+  const rightNavButton = Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`);
+  await t
+    .click(rightNavButton)
+    .hover(rightNavButton);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel right navigation button hovered.png', { element: '#container' });
+
+  const leftNavButton = Selector(`.${TABS_LEFT_NAV_BUTTON_CLASS}`);
+  await t.hover(leftNavButton);
+
+  await testScreenshot(t, takeScreenshot, 'TabPanel left navigation button hovered.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const dataSource = [
+  const dataSource: Item[] = [
     {
       title: 'John Heart',
       text: 'John Heart',
@@ -210,105 +173,47 @@ test('TabPanel borders without scrolling', async (t) => {
       title: 'Olivia Peyton',
       text: 'Olivia Peyton',
     },
-  ] as Item[];
+  ];
 
   const tabPanelOptions = {
     dataSource,
-    itemTemplate: (_, __, itemElement) => {
-      ($('<div>').css('marginTop', '10px') as any)
-        .dxTabs({
-          items: [
-            {
-              title: 'John Heart',
-              text: 'John Heart',
-            }, {
-              title: 'Olivia Peyton',
-              text: 'Olivia Peyton',
-            }, {
-              title: 'Robert Reagan',
-              text: 'Robert Reagan',
-            }, {
-              title: 'Greta Sims',
-              text: 'Greta Sims',
-            }, {
-              title: 'Olivia Peyton',
-              text: 'Olivia Peyton',
-            },
-          ],
-          width: 300,
-          showNavButtons: true,
-        })
-        .appendTo(itemElement);
-    },
     height: 120,
-    width: 900,
+    width: 400,
     showNavButtons: true,
+    selectedIndex: 2,
+    useInkRipple: false,
   };
 
   return createWidget('dxTabPanel', tabPanelOptions);
 });
 
-[true, false].forEach((rtlEnabled) => {
-  test(`TabPanel when its disabled item has focus if rtlEnabled=${rtlEnabled}`, async (t) => {
+['top', 'right', 'bottom', 'left'].forEach((tabsPosition) => {
+  const testName = `TabPanel without focus,tabsPosition=${tabsPosition}`;
+  test(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const tabPanel = new TabPanel('#container');
-    const direction = rtlEnabled ? 'left' : 'right';
 
     await t.click('body', {
       offsetX: -10,
       offsetY: -10,
     });
 
-    await testScreenshot(t, takeScreenshot, `TabPanel without focus,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t.pressKey('tab');
-    await testScreenshot(t, takeScreenshot, `TabPanel available item focused,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t.pressKey(direction);
-    await testScreenshot(t, takeScreenshot, `TabPanel disabled item focused,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t.pressKey(direction);
-
-    const firstItem = tabPanel.getItem(0);
-
-    await t.dispatchEvent(firstItem.element, 'mousedown');
-    await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,rtl=${rtlEnabled}.png`, { element: '#container' });
-    await t.dispatchEvent(firstItem.element, 'mouseup');
-
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
-
-    await t.hover(firstItem.element);
-    await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await tabPanel.option('showNavButtons', true);
-
-    const navigationButton = Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`);
-    await t.hover(navigationButton);
-    await testScreenshot(t, takeScreenshot, `TabPanel ${direction} navigation button hovered, rtl=${rtlEnabled}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await ClientFunction(() => {
-      (window as any).DevExpress.ui.dxTabs.defaultOptions({
-        options: {
-          useInkRipple: false,
-        },
-      });
-    })();
+    await appendElementTo('#container', 'div', 'tabpanel');
+    await appendElementTo('#container', 'div', 'tabpanel-rtl');
+    await setAttribute('#container', 'style', 'display: flex; gap: 40px; flex-direction: column; width: fit-content;');
 
-    const dataSource = [
+    const dataSource: Item[] = [
       {
         title: 'John Heart',
         text: 'John Heart',
       }, {
         title: 'Olivia Peyton',
         text: 'Olivia Peyton',
-        disabled: true,
       }, {
         title: 'Robert Reagan',
         text: 'Robert Reagan',
@@ -319,284 +224,56 @@ test('TabPanel borders without scrolling', async (t) => {
         title: 'Olivia Peyton',
         text: 'Olivia Peyton',
       },
-    ] as Item[];
+    ];
 
     const tabPanelOptions = {
       dataSource,
-      height: 120,
+      height: 250,
       width: 450,
-      rtlEnabled,
-      // prevent firing dxinactive event for to avoid failing test
-      itemHoldTimeout: 5000,
+      tabsPosition,
+      useInkRipple: false,
     };
 
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
-  test(`Tab borders in TabPanel with expanded tabs if rtlEnabled=${rtlEnabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const direction = rtlEnabled ? 'left' : 'right';
-
-    await t
-      .pressKey('tab')
-      .pressKey(direction)
-      .pressKey(direction);
-
-    await testScreenshot(t, takeScreenshot, `TabPanel with expanded tabs,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      height: 120,
-      width: 450,
-      rtlEnabled,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
-  test(`Tab borders in TabPanel with long tabs if rtlEnabled=${rtlEnabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const direction = rtlEnabled ? 'left' : 'right';
-
-    await testScreenshot(t, takeScreenshot, `TabPanel long tabs,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .pressKey('tab')
-      .pressKey(direction)
-      .pressKey(direction);
-
-    await testScreenshot(t, takeScreenshot, `TabPanel long tabs,2 tab selected,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      width: 700,
-      rtlEnabled,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
-  test(`Tab borders in TabPanel with long not stretched tabs if ${rtlEnabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const direction = rtlEnabled ? 'left' : 'right';
-
-    await t
-      .pressKey('tab')
-      .pressKey(direction);
-
-    await testScreenshot(t, takeScreenshot, `TabPanel long not stretched tabs,rtl=${rtlEnabled}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      width: 720,
-      rtlEnabled,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
+    await createWidget('dxTabPanel', tabPanelOptions, '#tabpanel');
+    return createWidget('dxTabPanel', { ...tabPanelOptions, rtlEnabled: true }, '#tabpanel-rtl');
   });
 });
 
-['right', 'bottom', 'left'].forEach((tabsPosition) => {
-  test(`TabPanel with tabsPosition=${tabsPosition}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('TabPanel item focus when clicking on multiview', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const tabPanel = new TabPanel('#container');
+  const tabPanel = new TabPanel('#container');
+  await t.click(tabPanel.multiView.element);
+  await testScreenshot(t, takeScreenshot, 'TabPanel item focus when clicking on multiview.png', { element: '#container' });
 
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const dataSource: Item[] = [
+    {
+      title: 'John Heart',
+      text: 'John Heart',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    }, {
+      title: 'Robert Reagan',
+      text: 'Robert Reagan',
+    }, {
+      title: 'Greta Sims',
+      text: 'Greta Sims',
+    }, {
+      title: 'Olivia Peyton',
+      text: 'Olivia Peyton',
+    },
+  ];
 
-    await testScreenshot(t, takeScreenshot, `TabPanel without focus,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t.pressKey('tab');
-    await testScreenshot(t, takeScreenshot, `TabPanel available item focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t.pressKey('right');
-    await testScreenshot(t, takeScreenshot, `TabPanel disabled item focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t.pressKey('right');
-
-    const firstItem = tabPanel.getItem(0);
-
-    await t.dispatchEvent(firstItem.element, 'mousedown');
-    await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-    await t.dispatchEvent(firstItem.element, 'mouseup');
-
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
-
-    await t.hover(firstItem.element);
-    await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await ClientFunction(() => {
-      (window as any).DevExpress.ui.dxTabs.defaultOptions({
-        options: {
-          useInkRipple: false,
-        },
-      });
-    })();
-
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-        disabled: true,
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      height: 250,
-      width: 450,
-      tabsPosition,
-      // prevent firing dxinactive event for to avoid failing test
-      itemHoldTimeout: 5000,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
-  });
-
-  test(`TabPanel tabs selected item focus with tabsPosition=${tabsPosition}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    const tabPanel = new TabPanel('#container');
-
-    await t.click(tabPanel.multiView.element);
-    await testScreenshot(t, takeScreenshot, `TabPanel item focus when clicking on multiview,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t.pressKey('right');
-    await testScreenshot(t, takeScreenshot, `TabPanel disabled item is focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t.click(tabPanel.multiView.element);
-
-    await t.pressKey('left');
-    await testScreenshot(t, takeScreenshot, `TabPanel focus not selected item,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await ClientFunction(() => {
-      (window as any).DevExpress.ui.dxTabs.defaultOptions({
-        options: {
-          useInkRipple: false,
-        },
-      });
-    })();
-
-    const dataSource = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-        disabled: true,
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
-    ] as Item[];
-
-    const tabPanelOptions = {
-      dataSource,
-      height: 250,
-      width: 450,
-      tabsPosition,
-      selectedIndex: 1,
-      // prevent firing dxinactive event for to avoid failing test
-      itemHoldTimeout: 5000,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
+  return createWidget('dxTabPanel', {
+    dataSource,
+    height: 250,
+    width: 450,
+    useInkRipple: false,
   });
 });
 
@@ -614,7 +291,7 @@ positions.forEach((tabsPosition) => {
   }).before(async () => {
     await insertStylesheetRulesToPage('.dx-tabpanel { margin: 10px }');
 
-    const dataSource = [
+    const dataSource: Item[] = [
       {
         title: 'John Heart',
         text: 'John Heart',
@@ -622,7 +299,7 @@ positions.forEach((tabsPosition) => {
         title: 'Olivia Peyton',
         text: 'Olivia Peyton',
       },
-    ] as Item[];
+    ];
 
     return createWidget('dxTabPanel', {
       dataSource,
@@ -654,57 +331,6 @@ positions.forEach((tabsPosition) => {
   });
 });
 
-[true, false].forEach((rtlEnabled) => {
-  ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
-    test('TabPanel icon position', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      await testScreenshot(t, takeScreenshot, `TabPanel iconPosition=${iconPosition},rtl=${rtlEnabled}.png`, { element: '#container' });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      const dataSource = [
-        {
-          title: 'John Heart',
-          text: 'John Heart',
-          icon: 'plus',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-          disabled: true,
-          icon: 'plus',
-        }, {
-          title: 'Robert Reagan',
-          text: 'Robert Reagan',
-          icon: 'plus',
-        }, {
-          title: 'Greta Sims',
-          text: 'Greta Sims',
-          icon: 'plus',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-          icon: 'plus',
-        },
-      ] as Item[];
-
-      const tabPanelOptions = {
-        dataSource,
-        height: 250,
-        width: 450,
-        iconPosition,
-        rtlEnabled,
-        // prevent firing dxinactive event for to avoid failing test
-        itemHoldTimeout: 5000,
-      };
-
-      return createWidget('dxTabPanel', tabPanelOptions);
-    });
-  });
-});
-
 test('TabPanel tabs min-width', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -714,30 +340,21 @@ test('TabPanel tabs min-width', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await ClientFunction(() => {
-    (window as any).DevExpress.ui.dxTabs.defaultOptions({
-      options: {
-        useInkRipple: false,
-      },
-    });
-  })();
-
-  const dataSource = [
+  const dataSource: Item[] = [
     { text: 'ok', title: 'ok' },
     { icon: 'comment' },
     { icon: 'user' },
     { icon: 'money' },
     { text: 'ok', title: 'ok', icon: 'search' },
     { text: 'alignright', title: 'alignright', icon: 'alignright' },
-  ] as Item[];
+  ];
 
-  const tabPanelOptions = {
+  return createWidget('dxTabPanel', {
     dataSource,
     height: 250,
     width: 900,
-  };
-
-  return createWidget('dxTabPanel', tabPanelOptions);
+    useInkRipple: false,
+  });
 });
 
 ['left', 'right'].forEach((tabsPosition) => {
@@ -757,14 +374,11 @@ test('TabPanel tabs min-width', async (t) => {
       },
     ];
 
-    const tabPanelOptions = {
+    return createWidget('dxTabPanel', {
       dataSource,
       height: 120,
       width: 300,
-      showNavButtons: true,
       tabsPosition,
-    };
-
-    return createWidget('dxTabPanel', tabPanelOptions);
+    });
   });
 });
