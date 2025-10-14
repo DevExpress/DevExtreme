@@ -54,7 +54,7 @@ runs:
       if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome-headless-shell
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '141.0.7390.76'
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
