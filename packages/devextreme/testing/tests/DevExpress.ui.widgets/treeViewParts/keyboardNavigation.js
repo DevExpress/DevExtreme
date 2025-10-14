@@ -832,8 +832,6 @@ QUnit.module('keyboard navigation', {
 
     QUnit.module('keyboard navigation when showCheckBoxesMode=none and selectByClick=true', {
         beforeEach: function() {
-            fx.off = true;
-
             this.createTreeView = function(selectionMode) {
                 return $('#treeView').dxTreeView({
                     focusStateEnabled: true,
@@ -844,9 +842,6 @@ QUnit.module('keyboard navigation', {
                 });
             };
         },
-        afterEach: function() {
-            fx.off = false;
-        }
     }, () => {
         ['single', 'multiple'].forEach((selectionMode) => {
             QUnit.test(`shift+home key press should select all items up to the beginning of the list, selectionMode=${selectionMode}`, function(assert) {
