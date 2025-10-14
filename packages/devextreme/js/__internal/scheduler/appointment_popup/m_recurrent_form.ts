@@ -405,7 +405,7 @@ export class RecurrentForm {
           dataField: startDateExpr,
           editorType: 'dxDateBox',
           label: {
-            text: messageLocalization.format('dxScheduler-recurrenceStart'),
+            text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
           },
           validationRules: [{
             type: 'required',
