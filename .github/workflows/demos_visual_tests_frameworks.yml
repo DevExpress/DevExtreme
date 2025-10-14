@@ -315,7 +315,13 @@ jobs:
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
             pnpx eslint $CHANGED_DEMOS
@@ -337,7 +343,13 @@ jobs:
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
             pnpx eslint $CHANGED_DEMOS
@@ -359,7 +371,13 @@ jobs:
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
             pnpx eslint $CHANGED_DEMOS
