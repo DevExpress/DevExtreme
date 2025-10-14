@@ -28,7 +28,7 @@ const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
 const createUTCDateWithLocalOffset = (date) => {
   if (!date) {
-    return null;
+    return date;
   }
 
   return new Date(Date.UTC(
@@ -77,7 +77,7 @@ const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): numb
   return isMinus ? -result : result;
 };
 
-const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date()): number | undefined => {
+const calculateTimezoneByValue = (timeZone: string | undefined, date: Date | number = new Date()): number | undefined => {
   if (!timeZone) {
     return undefined;
   }
@@ -88,11 +88,16 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
     return undefined;
   }
 
-  if (!dateUtilsTs.isValidDate(date)) {
+  const dateObj = new Date(date);
+  if (!dateUtilsTs.isValidDate(dateObj)) {
     return undefined;
   }
 
-  return calculateTimezoneByValueCore(timeZone, date);
+  if (isEqualLocalTimeZone(timeZone)) {
+    return -dateObj.getTimezoneOffset() / MINUTES_IN_HOUR;
+  }
+
+  return calculateTimezoneByValueCore(timeZone, dateObj);
 };
 
 // 'GMT±XX:YY' or 'GMT' format

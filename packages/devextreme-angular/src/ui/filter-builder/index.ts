@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -56,12 +57,10 @@ import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-an
 import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
-
-import { DxiCustomOperationComponent } from 'devextreme-angular/ui/nested';
-import { DxiFieldComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFilterBuilderCustomOperationComponent } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxiFilterBuilderFieldComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { 
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -89,6 +88,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+
     instance: DxFilterBuilder = null;
 
     /**
@@ -557,42 +567,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiFilterBuilderCustomOperationComponent)
-    get customOperationsChildren(): QueryList<DxiFilterBuilderCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this._setChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
-    }
-
-    @ContentChildren(DxiFilterBuilderFieldComponent)
-    get fieldsChildren(): QueryList<DxiFilterBuilderFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this._setChildren('fields', value, 'DxiFilterBuilderFieldComponent');
-    }
-
-
-    @ContentChildren(DxiCustomOperationComponent)
-    get customOperationsLegacyChildren(): QueryList<DxiCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsLegacyChildren(value) {
-        this._setChildren('customOperations', value, 'DxiCustomOperationComponent');
-    }
-
-    @ContentChildren(DxiFieldComponent)
-    get fieldsLegacyChildren(): QueryList<DxiFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsLegacyChildren(value) {
-        this._setChildren('fields', value, 'DxiFieldComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

@@ -44,7 +44,6 @@ export class AppComponent {
 
   currentView = this.views[0];
 
-  // eslint-disable-next-line consistent-return
   ariaDescription = () => {
     const disabledDates = this.holidays
       .filter((date) => !this.isWeekend(date))
@@ -61,6 +60,7 @@ export class AppComponent {
     if (disabledDates?.length > 1) {
       return `${disabledDates.join(', ')} are disabled dates`;
     }
+    return '';
   };
 
   constructor(public dataService: DataService) {
@@ -176,7 +176,9 @@ export class AppComponent {
 
   setComponentAria(element): void {
     const prevAria = element?.attr('aria-label') || '';
-    element?.attr('aria-label', `${prevAria} ${this.ariaDescription()}`);
+    const description = this.ariaDescription();
+    const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
+    element?.attr('aria-label', nextAria);
   }
 }
 

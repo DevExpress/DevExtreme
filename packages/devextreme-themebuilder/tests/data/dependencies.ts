@@ -25,7 +25,6 @@ export const dependencies: FlatStylesDependencies = {
   datebox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'calendar', 'numberbox', 'loadpanel', 'scrollview', 'list', 'checkbox', 'selectbox', 'box'],
   daterangebox: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'calendar', 'numberbox', 'loadpanel', 'scrollview', 'datebox', 'list', 'checkbox', 'selectbox', 'box'],
   drawer: [],
-  deferrendering: ['loadindicator'],
   dropdownbox: ['validation', 'button', 'loadindicator', 'textbox', 'popup'],
   progressbar: ['validation'],
   fileuploader: ['validation', 'button', 'progressbar'],

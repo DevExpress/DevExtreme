@@ -3,7 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { noop } from '@js/core/utils/common';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
@@ -28,7 +28,6 @@ enum SpeechToTextState {
 }
 
 type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError' | 'onEnd'>;
-type PointerLikeEvent = KeyboardEvent | MouseEvent | PointerEvent | TouchEvent;
 
 const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onStartClick',
@@ -211,7 +210,7 @@ class SpeechToText extends Widget<Properties> {
     this._actions[name]?.({ component: this, element: this.element(), event });
   }
 
-  private _emitDxEvent<K extends keyof Pick<SpeechToTextActions, 'onStartClick' | 'onStopClick'>>(name: K, event?: DxEvent<PointerLikeEvent>): void {
+  private _emitDxEvent<K extends keyof Pick<SpeechToTextActions, 'onStartClick' | 'onStopClick'>>(name: K, event?: DxEvent<InteractionEvent>): void {
     this._actions[name]?.({ component: this, element: this.element(), event });
   }
 
@@ -228,7 +227,10 @@ class SpeechToText extends Widget<Properties> {
   }
 
   private _handleStartClick(e: ClickEvent): void {
-    if (!this._isCustomSpeechRecognitionEnabled()) {
+    const isCustomEnabled = this._isCustomSpeechRecognitionEnabled();
+    const isSRAvailable = this._speechRecognitionAdapter?.isAvailable();
+
+    if (!isCustomEnabled && isSRAvailable) {
       this._setState(SpeechToTextState.LISTENING);
 
       this._speechRecognitionAdapter?.start();
@@ -306,6 +308,7 @@ class SpeechToText extends Widget<Properties> {
     switch (name) {
       case 'customSpeechRecognizer':
         this._handleCustomEngineState();
+        this._initSpeechRecognitionAdapter();
         break;
 
       case 'speechRecognitionConfig':

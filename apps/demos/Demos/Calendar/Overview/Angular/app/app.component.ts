@@ -55,6 +55,10 @@ export class AppComponent {
     return day === 0 || day === 6;
   }
 
+  isHoliday(date: Date) {
+    return this.holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
+  }
+
   useCellTemplate({ value }) {
     this.cellTemplate = value ? 'custom' : 'cell';
   }
@@ -68,13 +72,7 @@ export class AppComponent {
       } else {
         if (this.isWeekend(date)) { cssClass = 'weekend'; }
 
-        // eslint-disable-next-line consistent-return
-        this.holidays.forEach((item) => {
-          if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-            cssClass = 'holiday';
-            return false;
-          }
-        });
+        if (this.isHoliday(date)) { cssClass = 'holiday'; }
       }
     }
 

@@ -2,7 +2,7 @@
   "name": "devextreme-testcafe-tests",
   "version": "25.2.0",
   "scripts": {
-    "test": "node ./runner.js",
+    "test": "ts-node ./runner.ts",
     "lint": "eslint",
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
@@ -20,6 +20,7 @@
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
     "testcafe": "2.5.0",
+    "ts-node": "10.9.2",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",

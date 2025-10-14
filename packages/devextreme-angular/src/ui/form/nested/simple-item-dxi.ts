@@ -12,9 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -30,20 +28,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiFormAsyncRuleComponent } from './async-rule-dxi';
-import { DxiFormCompareRuleComponent } from './compare-rule-dxi';
-import { DxiFormCustomRuleComponent } from './custom-rule-dxi';
-import { DxiFormEmailRuleComponent } from './email-rule-dxi';
-import { DxiFormNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiFormPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiFormRangeRuleComponent } from './range-rule-dxi';
-import { DxiFormRequiredRuleComponent } from './required-rule-dxi';
-import { DxiFormStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-form-simple-item',
@@ -51,10 +43,22 @@ import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiFormSimpleItemComponent,
+        }
+    ]
 })
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
     @Input()
     get aiOptions(): { disabled?: boolean, instruction?: string | undefined } {
         return this._getOption('aiOptions');
@@ -181,53 +185,6 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFormAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiFormAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormCompareRuleComponent)) compareRulesChildren!: QueryList<DxiFormCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormCustomRuleComponent)) customRulesChildren!: QueryList<DxiFormCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormEmailRuleComponent)) emailRulesChildren!: QueryList<DxiFormEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormNumericRuleComponent)) numericRulesChildren!: QueryList<DxiFormNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormPatternRuleComponent)) patternRulesChildren!: QueryList<DxiFormPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiFormRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiFormRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiFormStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormValidationRuleComponent)) validationRulesChildren!: QueryList<DxiFormValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-
-
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -238,6 +195,8 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         templateHost.setHost(this);
+        this.itemType = 'simple';
+    
     }
 
     setTemplate(template: DxTemplateDirective) {
@@ -253,20 +212,6 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({

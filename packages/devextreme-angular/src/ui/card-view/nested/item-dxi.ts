@@ -12,9 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -34,21 +32,15 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCardViewAsyncRuleComponent } from './async-rule-dxi';
-import { DxiCardViewCompareRuleComponent } from './compare-rule-dxi';
-import { DxiCardViewCustomRuleComponent } from './custom-rule-dxi';
-import { DxiCardViewEmailRuleComponent } from './email-rule-dxi';
-import { DxiCardViewNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiCardViewPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiCardViewRangeRuleComponent } from './range-rule-dxi';
-import { DxiCardViewRequiredRuleComponent } from './required-rule-dxi';
-import { DxiCardViewStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiCardViewTabComponent } from './tab-dxi';
-import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-item',
@@ -56,10 +48,32 @@ import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiCardViewItemComponent,
+        }
+    ]
 })
 export class DxiCardViewItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');
@@ -378,69 +392,6 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiCardViewAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewCompareRuleComponent)) compareRulesChildren!: QueryList<DxiCardViewCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewCustomRuleComponent)) customRulesChildren!: QueryList<DxiCardViewCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewEmailRuleComponent)) emailRulesChildren!: QueryList<DxiCardViewEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewNumericRuleComponent)) numericRulesChildren!: QueryList<DxiCardViewNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewPatternRuleComponent)) patternRulesChildren!: QueryList<DxiCardViewPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiCardViewRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiCardViewRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiCardViewStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewValidationRuleComponent)) validationRulesChildren!: QueryList<DxiCardViewValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-
-
-
-
-
-
-
-
-    @ContentChildren(forwardRef(() => DxiCardViewTabComponent))
-    get tabsChildren(): QueryList<DxiCardViewTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent))
-    get itemsChildren(): QueryList<DxiCardViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -466,20 +417,6 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({

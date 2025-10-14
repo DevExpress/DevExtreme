@@ -3,7 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import Editor, {
     ValueChangedInfo,
@@ -48,7 +49,7 @@ export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSwitch, InteractionEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

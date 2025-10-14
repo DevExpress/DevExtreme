@@ -51,12 +51,14 @@ QUnit.test('Header should be initialized with correct views and currentView opti
             'intervalCount': 1,
             'name': 'Day',
             'type': 'day',
+            'skippedDays': [],
         },
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
             'name': 'Week',
             'type': 'week',
+            'skippedDays': [],
         }
     ];
     assert.deepEqual(header.option('views'), expectedViews, 'Scheduler header has a correct views option');

@@ -55,8 +55,6 @@ $fluent-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$fluent-scheduler-compact-appointment-button-border-radius: 12px;
-
 $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -396,33 +394,60 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
-  .dx-scheduler-appointment-collector {
-    margin-top: $fluent-scheduler-dropdown-appointment-margin-top;
-    margin-left: 52px;
-  }
-
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
   }
 }
 
-
-.dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-appointment-collector {
-    margin: 0;
+.dx-scheduler:not(.dx-scheduler-adaptive) {
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $fluent-scheduler-dropdown-button-vertical-margin;
+      }
+    }
   }
 
+  .dx-scheduler-work-space.dx-scheduler-work-space-month:not(.dx-rtl) .dx-scheduler-appointment-collector {
+    margin-left: 52px;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-rtl .dx-scheduler-appointment-collector {
+    margin-right: 52px;
+  }
+}
+
+.dx-scheduler-adaptive {
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
     white-space: nowrap;
+  }
+
+  .dx-scheduler-appointment-collector {
+    margin: $fluent-scheduler-dropdown-button-adaptive-margin;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $fluent-scheduler-dropdown-button-adaptive-vertical-margin;
+      }
+    }
   }
 }
 
 .dx-scheduler-appointment-collector {
-  margin-top: $fluent-scheduler-dropdown-day-margin;
+  height: $fluent-scheduler-dropdown-button-height;
+  margin: $fluent-scheduler-dropdown-button-margin;
   position: absolute;
 
   &.dx-button {
-    border-radius: $fluent-scheduler-compact-appointment-button-border-radius;
+    border-radius: $fluent-scheduler-dropdown-button-height;
     height: $fluent-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;
@@ -581,11 +606,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-appointment-popup {
   > .dx-overlay-content > .dx-toolbar.dx-widget {
     > .dx-toolbar-items-container {
-      height: 56px;
-    }
-
-    .dx-toolbar-label {
-      font-size: 18px;
+      height: $fluent-scheduler-appointment-popup-toolbar-height;
     }
   }
 
@@ -594,8 +615,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
       color: $scheduler-form-icon-color;
 
       &.dx-field-item.dx-flex-layout {
-        height: 32px;
-        padding-inline-end: 10px;
+        height: $fluent-scheduler-appointment-popup-icon-container-height;
+        padding-inline-end: $fluent-scheduler-appointment-popup-icon-padding-right;
       }
     }
 
@@ -605,19 +626,19 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
     .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
-      margin-top: 24px;
+      margin-top: $fluent-scheduler-appointment-popup-description-icon-margin-top;
     }
 
     .dx-field-item:not(.dx-first-col) {
-      padding-inline-start: 6px;
+      padding-inline-start: $fluent-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-field-item:not(.dx-last-col) {
-      padding-inline-end: 6px;
+      padding-inline-end: $fluent-scheduler-appointment-popup-item-padding-horizontal;
     }
 
     .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
-      height: 40px;
+      height: $fluent-scheduler-appointment-popup-all-day-item-height;
 
       .dx-field-item-content {
         .dx-switch.dx-widget {

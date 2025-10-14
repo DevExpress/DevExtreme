@@ -14,8 +14,8 @@ import {
 
 
 
+import { ColumnAIOptions, FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
-import { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
@@ -24,6 +24,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-column',
@@ -31,9 +32,23 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiGanttColumnComponent,
+        }
+    ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
+    @Input()
+    get ai(): ColumnAIOptions {
+        return this._getOption('ai');
+    }
+    set ai(value: ColumnAIOptions) {
+        this._setOption('ai', value);
+    }
+
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -347,7 +362,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

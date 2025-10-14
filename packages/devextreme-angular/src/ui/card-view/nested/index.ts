@@ -43,6 +43,7 @@ export * from './group-operation-descriptions';
 export * from './header-filter';
 export * from './header-panel';
 export * from './hide';
+export * from './indicator-options';
 export * from './item-dxi';
 export * from './label';
 export * from './load-panel';

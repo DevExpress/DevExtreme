@@ -13,7 +13,9 @@ fixture.disablePageReloads`Appointment Form: Main Form`
 const SCHEDULER_SELECTOR = '#container';
 
 const openAppointmentPopup = async (
+  t: TestController,
   appointment: any,
+  isRecurringAppointment: boolean,
 ): Promise<AppointmentPopup> => {
   await ClientFunction((appointmentData) => {
     const instance = ($('#container') as any).dxScheduler('instance');
@@ -21,6 +23,10 @@ const openAppointmentPopup = async (
   })(appointment);
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  if (isRecurringAppointment) {
+    await t.click(Scheduler.getEditRecurrenceDialog().series);
+  }
 
   return scheduler.appointmentPopup;
 };
@@ -51,7 +57,16 @@ const getResources = () => ([
   },
 ]);
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+const windowSize: [number, number] = [1500, 1500];
+
+[
+  'generic.light',
+  'generic.light.compact',
+  'material.blue.light',
+  'material.blue.light.compact',
+  'fluent.blue.light',
+  'fluent.blue.light.compact',
+].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: true },
     { isRecurringAppointment: false, isAllDay: false },
@@ -72,11 +87,11 @@ const getResources = () => ([
     safeSizeTest(`appointment main form (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const appointmentPopup = await openAppointmentPopup(appointment);
+      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
         `scheduler__appointment__main-form.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.popup.content,
+        appointmentPopup.contentElement,
       );
 
       await t
@@ -88,85 +103,39 @@ const getResources = () => ([
         dataSource: [appointment],
         views: ['week'],
         currentView: 'week',
-        currentDate: new Date(2021, 2, 25).toISOString(),
+        currentDate: new Date(2021, 2, 25),
       });
-    });
-
-    safeSizeTest(`appointment main form with timezones (${theme})`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const appointmentPopup = await openAppointmentPopup(appointment);
-
-      await takeScreenshot(
-        `scheduler__appointment__main-form__with-timezones.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.popup.content,
-      );
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [appointment],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25).toISOString(),
-        editing: {
-          allowTimeZoneEditing: true,
-        },
-      });
-    });
-
-    safeSizeTest(`appointment main form with resources (${theme})`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const appointmentPopup = await openAppointmentPopup(appointment);
-
-      await takeScreenshot(
-        `scheduler__appointment__main-form__with-resources.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.popup.content,
-      );
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [appointment],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25).toISOString(),
-        resources: getResources(),
-      });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     safeSizeTest(`appointment main form with resources and timezones (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const appointmentPopup = await openAppointmentPopup(appointment);
+      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
 
       await takeScreenshot(
         `scheduler__appointment__main-form__with-resources-and-timezones.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.popup.content,
+        appointmentPopup.contentElement,
       );
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async () => {
+    }, windowSize).before(async () => {
       await changeTheme(theme);
       await createWidget('dxScheduler', {
         dataSource: [appointment],
         views: ['week'],
         currentView: 'week',
-        currentDate: new Date(2021, 2, 25).toISOString(),
+        currentDate: new Date(2021, 2, 25),
         resources: getResources(),
         editing: {
           allowTimeZoneEditing: true,
         },
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 });

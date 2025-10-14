@@ -85,4 +85,8 @@ export class SpeechRecognitionAdapter {
   dispose(): void {
     this._speechRecognition = null;
   }
+
+  isAvailable(): boolean {
+    return Boolean(this._speechRecognition);
+  }
 }

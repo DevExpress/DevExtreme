@@ -8,7 +8,9 @@ import DateBox from '../../dateBox';
 import Button from '../../button';
 
 export const SELECTORS = {
-  appointmentPopup: `.dx-scheduler-appointment-popup.dx-popup`,
+  appointmentPopup: `.dx-scheduler-appointment-popup.dx-popup.dx-widget`,
+  appointmentPopupContent: '.dx-scheduler-appointment-popup .dx-overlay-content',
+  appointmentPopupToolbar: '.dx-scheduler-appointment-popup .dx-popup-title',
   form: `.dx-scheduler-form`,
   doneButton: `.dx-popup-done.dx-button.dx-widget`,
   cancelButton: `.dx-popup-cancel.dx-button.dx-widget`,
@@ -25,28 +27,30 @@ export const SELECTORS = {
 };
 
 export default class AppointmentPopup {
-  popup: Popup = new Popup(this.scheduler.find(SELECTORS.appointmentPopup));
+  popup: Popup = new Popup(SELECTORS.appointmentPopup);
+  contentElement: Selector = Selector(SELECTORS.appointmentPopupContent);
+  toolbarElement: Selector = Selector(SELECTORS.appointmentPopupToolbar);
 
-  saveButton: Button = new Button(this.popup.topToolbar.find(SELECTORS.doneButton));
-  cancelButton: Button = new Button(this.popup.topToolbar.find(SELECTORS.cancelButton));
+  saveButton: Button = new Button(this.toolbarElement.find(SELECTORS.doneButton));
+  cancelButton: Button = new Button(this.toolbarElement.find(SELECTORS.cancelButton));
 
-  form: Form = new Form(this.popup.content.find(SELECTORS.form));
+  form: Form = new Form(this.contentElement.find(SELECTORS.form));
 
-  textEditor: TextBox = new TextBox(this.popup.content.find(SELECTORS.textEditor));
+  textEditor: TextBox = new TextBox(this.contentElement.find(SELECTORS.textEditor));
 
-  allDaySwitch: Selector = Selector(this.popup.content.find(SELECTORS.allDaySwitch));
+  allDaySwitch: Selector = Selector(this.contentElement.find(SELECTORS.allDaySwitch));
 
-  startDateEditor: DateBox = new DateBox(this.popup.content.find(SELECTORS.startDateEditor));
-  startTimeEditor: DateBox = new DateBox(this.popup.content.find(SELECTORS.startTimeEditor));
-  startTimeZoneEditor: SelectBox = new SelectBox(this.popup.content.find(SELECTORS.startTimeZoneEditor));
+  startDateEditor: DateBox = new DateBox(this.contentElement.find(SELECTORS.startDateEditor));
+  startTimeEditor: DateBox = new DateBox(this.contentElement.find(SELECTORS.startTimeEditor));
+  startTimeZoneEditor: SelectBox = new SelectBox(this.contentElement.find(SELECTORS.startTimeZoneEditor));
 
-  endDateEditor: DateBox = new DateBox(this.popup.content.find(SELECTORS.endDateEditor));
-  endTimeEditor: DateBox = new DateBox(this.popup.content.find(SELECTORS.endTimeEditor));
-  endTimeZoneEditor: SelectBox = new SelectBox(this.popup.content.find(SELECTORS.endTimeZoneEditor));
+  endDateEditor: DateBox = new DateBox(this.contentElement.find(SELECTORS.endDateEditor));
+  endTimeEditor: DateBox = new DateBox(this.contentElement.find(SELECTORS.endTimeEditor));
+  endTimeZoneEditor: SelectBox = new SelectBox(this.contentElement.find(SELECTORS.endTimeZoneEditor));
 
-  repeatEditor: SelectBox = new SelectBox(this.popup.content.find(SELECTORS.repeatEditor));
+  repeatEditor: SelectBox = new SelectBox(this.contentElement.find(SELECTORS.repeatEditor));
 
-  descriptionEditor: TextArea = new TextArea(this.popup.content.find(SELECTORS.descriptionEditor));
+  descriptionEditor: TextArea = new TextArea(this.contentElement.find(SELECTORS.descriptionEditor));
 
   constructor(private readonly scheduler: Selector) { }
 }
