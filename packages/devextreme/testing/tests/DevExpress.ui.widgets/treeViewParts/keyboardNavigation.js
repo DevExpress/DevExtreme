@@ -833,7 +833,6 @@ QUnit.module('keyboard navigation', {
     QUnit.module('keyboard navigation when showCheckBoxesMode=none and selectByClick=true', {
         beforeEach: function() {
             fx.off = true;
-            this.clock = sinon.useFakeTimers();
 
             this.createTreeView = function(selectionMode) {
                 return $('#treeView').dxTreeView({
@@ -846,7 +845,6 @@ QUnit.module('keyboard navigation', {
             };
         },
         afterEach: function() {
-            this.clock.restore();
             fx.off = false;
         }
     }, () => {
