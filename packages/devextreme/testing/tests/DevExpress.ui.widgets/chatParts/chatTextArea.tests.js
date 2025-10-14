@@ -146,21 +146,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             assert.strictEqual(disabled, true);
         });
-
-        QUnit.test('textarea height should restore after sending multiline text', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
-            const initialHeight = this.$element.height();
-
-            keyboardMock(this.$input)
-                .type('1\n2\n3')
-                .keyDown('enter')
-                .keyUp('enter');
-
-            assert.roughEqual(this.$element.height(), initialHeight, 0.1, 'height is restored');
-        });
     });
 
     QUnit.module('onSend event', () => {

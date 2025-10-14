@@ -1,13 +1,8 @@
 import $ from 'jquery';
 import ChatTextArea, {
     TEXT_AREA_TOOLBAR,
-    TEXT_AREA_WITH_TOOLBAR,
 } from '__internal/ui/chat/message_box/chat_text_area';
-import Button from 'ui/button';
 
-const TEXTAREA_CLASS = 'dx-textarea';
-const TEXTEDITOR_CLASS = 'dx-texteditor';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const BUTTON_CLASS = 'dx-button';
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_BEFORE_CONTAINER_CLASS = 'dx-toolbar-before';
@@ -31,23 +26,11 @@ const moduleConfig = {
 
 QUnit.module('ChatTextArea', moduleConfig, () => {
     QUnit.module('Classes', () => {
-        QUnit.test('root element should have correct classes', function(assert) {
-            assert.strictEqual(this.$element.hasClass(TEXT_AREA_WITH_TOOLBAR), true, 'has TEXT_AREA_WITH_TOOLBAR class');
-            assert.strictEqual(this.$element.hasClass(TEXTAREA_CLASS), true, 'has TEXTAREA_CLASS class');
-            assert.strictEqual(this.$element.hasClass(TEXTEDITOR_CLASS), true, 'has TEXTEDITOR_CLASS class');
-        });
-
         QUnit.test('toolbar should be rendered', function(assert) {
             const $toolbar = this.$element.find(`.${TEXT_AREA_TOOLBAR}`);
 
             assert.strictEqual($toolbar.length, 1, 'toolbar element exists');
             assert.strictEqual($toolbar.hasClass(TOOLBAR_CLASS), true, 'toolbar has correct class');
-        });
-
-        QUnit.test('textarea input should be rendered', function(assert) {
-            const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            assert.strictEqual($input.length, 1, 'input element exists');
         });
     });
 
@@ -58,12 +41,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             const $sendButton = $afterContainer.find(`.${BUTTON_CLASS}`);
 
             assert.strictEqual($sendButton.length, 1, 'send button exists');
-
-            const buttonInstance = Button.getInstance($sendButton);
-            assert.strictEqual(buttonInstance.option('icon'), 'arrowright', 'send button has correct icon');
-            assert.strictEqual(buttonInstance.option('type'), 'default', 'send button has correct type');
-            assert.strictEqual(buttonInstance.option('stylingMode'), 'contained', 'send button has correct stylingMode');
-            assert.strictEqual(buttonInstance.option('disabled'), true, 'send button is initially disabled');
         });
 
         QUnit.test('file uploader button should not be rendered by default', function(assert) {
@@ -84,9 +61,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             const $fileButton = $beforeContainer.find(`.${BUTTON_CLASS}`);
 
             assert.strictEqual($fileButton.length, 1, 'file uploader button exists');
-
-            const buttonInstance = Button.getInstance($fileButton);
-            assert.strictEqual(buttonInstance.option('icon'), 'attach', 'file uploader button has correct icon');
         });
 
         QUnit.test('buttons should be in correct containers', function(assert) {

@@ -20,8 +20,7 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
-const TEXT_AREA_TOOLBAR = 'dx-textarea-toolbar';
-const TEXT_AREA_WITH_TOOLBAR = 'dx-textarea-with-toolbar';
+export const TEXT_AREA_TOOLBAR = 'dx-textarea-toolbar';
 
 const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
@@ -111,7 +110,6 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(TEXT_AREA_WITH_TOOLBAR);
     super._initMarkup();
     this._renderToolbar();
   }
