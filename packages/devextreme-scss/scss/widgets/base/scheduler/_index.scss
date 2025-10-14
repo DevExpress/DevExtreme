@@ -540,6 +540,8 @@ $scheduler-appointment-form-label-padding: 20px;
 
       /* Recurrence End section - Grid layout with equal heights */
       .dx-scheduler-form-recurrence-end-container {
+        padding-top: 0 !important;
+        
         > .dx-box-item {
           height: 100%;
           margin: 0;
