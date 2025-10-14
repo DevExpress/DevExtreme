@@ -50,10 +50,7 @@ test('Label for dxNumberBox', async (t) => {
 }).before(async () => {
   await removeStylesheetRulesFromPage();
 
-  await setStyleAttribute(Selector('#container'), 'box-sizing: border-box; width: 300px; max-width: 300px; height: 400px; padding: 8px;');
-  if (isMaterial()) {
-    await insertStylesheetRulesToPage('#container .dx-widget, #container .dx-widget input { font-family: sans-serif; }');
-  }
+  await insertStylesheetRulesToPage('#container { display: flex; flex-direction: column; width: 300px !important; max-width: 300px !important; height: 400px; gap: 8px; }');
 
   // eslint-disable-next-line no-restricted-syntax
   for (const stylingMode of stylingModes) {
