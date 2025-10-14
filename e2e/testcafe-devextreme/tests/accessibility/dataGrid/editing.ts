@@ -1,11 +1,11 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { a11yCheck } from '../../../../helpers/accessibility/utils';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
-import { getData } from '../../helpers/generateDataSourceData';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { getData } from '../../dataGrid/helpers/generateDataSourceData';
 
-fixture`Editing tests with axe`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Editing tests with axe`
+  .page(url(__dirname, '../../container.html'));
 
 ([
   'cell',

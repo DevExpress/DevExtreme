@@ -4,7 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CardView - Sorting Behavior - Themes`
@@ -25,8 +24,6 @@ safeSizeTest('Default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
@@ -56,8 +53,6 @@ safeSizeTest('Default multiple sorting render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,

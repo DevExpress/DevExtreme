@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Public methods`
+fixture.disablePageReloads`Public methods`
   .page(url(__dirname, '../container.html'));
 
 const getItems = (): Record<string, unknown>[] => {

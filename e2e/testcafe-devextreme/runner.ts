@@ -1,10 +1,14 @@
+/* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { globSync } from 'glob';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
-import * as testPageUtils from './helpers/clearPage';
+import {
+  clearTestPage,
+  loadAxeCore,
+} from './helpers/testPageUtils';
 import 'nconf';
 
 interface ParsedArgs {
@@ -251,8 +255,20 @@ createTestCafe(TESTCAFE_CONFIG)
         test: {
           before: async (t: TestController) => {
             if (!componentFolder.includes('accessibility')) {
+              await t.eval(() => {
+                if (document.activeElement && document.activeElement !== document.body) {
+                  (document.activeElement as HTMLElement).blur();
+                }
+
+                window.getSelection()?.removeAllRanges();
+              });
+
+              await t.hover('html');
+
               const [width, height] = DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
+            } else {
+              await loadAxeCore(t);
             }
 
             if (args.shadowDom) {
@@ -269,7 +285,13 @@ createTestCafe(TESTCAFE_CONFIG)
             }
           },
           after: async (t: TestController) => {
-            await testPageUtils.clearTestPage(t);
+            await ClientFunction(() => {
+              const { localization } = (window as any).DevExpress;
+
+              localization.locale('en');
+            }).with({ boundTestRun: t })();
+
+            await clearTestPage(t);
           },
         },
       },
