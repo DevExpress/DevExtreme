@@ -60,12 +60,12 @@ const getResources = () => ([
 const windowSize: [number, number] = [1500, 1500];
 
 [
-  // 'generic.light',
-  // 'generic.light.compact',
+  'generic.light',
+  'generic.light.compact',
   'material.blue.light',
   'material.blue.light.compact',
-  // 'fluent.blue.light',
-  // 'fluent.blue.light.compact',
+  'fluent.blue.light',
+  'fluent.blue.light.compact',
 ].forEach((theme) => {
   [
     { isRecurringAppointment: false, isAllDay: true },
@@ -104,60 +104,6 @@ const windowSize: [number, number] = [1500, 1500];
         views: ['week'],
         currentView: 'week',
         currentDate: new Date(2021, 2, 25),
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
-
-    safeSizeTest(`appointment main form with timezones (${theme})`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
-
-      await takeScreenshot(
-        `scheduler__appointment__main-form__with-timezones.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.contentElement,
-      );
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }, windowSize).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [appointment],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25),
-        editing: {
-          allowTimeZoneEditing: true,
-        },
-      });
-    }).after(async () => {
-      await changeTheme('generic.light');
-    });
-
-    safeSizeTest(`appointment main form with resources (${theme})`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const appointmentPopup = await openAppointmentPopup(t, appointment, isRecurringAppointment);
-
-      await takeScreenshot(
-        `scheduler__appointment__main-form__with-resources.png (recurring=${isRecurringAppointment},allDay=${isAllDay},theme=${theme})`,
-        appointmentPopup.contentElement,
-      );
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }, windowSize).before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxScheduler', {
-        dataSource: [appointment],
-        views: ['week'],
-        currentView: 'week',
-        currentDate: new Date(2021, 2, 25),
-        resources: getResources(),
       });
     }).after(async () => {
       await changeTheme('generic.light');
