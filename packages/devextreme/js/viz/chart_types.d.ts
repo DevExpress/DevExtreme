@@ -61,7 +61,7 @@ export {
   BubblePointInfo,
   CandleStickPointInfo,
   RangePointInfo,
-  ChartPointInfo,
+  CommonPointInfo,
   PointInfo,
   ArgumentAxis,
   ArgumentAxisConstantLineStyle,

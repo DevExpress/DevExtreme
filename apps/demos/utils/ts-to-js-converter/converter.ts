@@ -48,7 +48,7 @@ const makeConfig = (
     rootDir: resolve.source('./'),
     module,
     moduleResolution: 'node',
-    esModuleInterop: false,
+    esModuleInterop: true,
     sourceMap: false,
     jsx: 'react-native',
     allowJs: true,

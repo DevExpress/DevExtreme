@@ -38,10 +38,9 @@ export class AppComponent {
 
     return (value < this.lowAverage)
       ? { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } }
-      : undefined;
+      : null;
   };
 
-  // eslint-disable-next-line consistent-return
   customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
     if (value > this.highAverage) {
       return {
@@ -50,6 +49,7 @@ export class AppComponent {
         customizeText: this.customizeText,
       };
     }
+    return null;
   };
 
   customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;

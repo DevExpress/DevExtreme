@@ -40,22 +40,22 @@ export class AppComponent {
     this.lowAverage = lowAverage;
   }
 
-  // eslint-disable-next-line consistent-return
   customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     if (value > this.highAverage) {
       return { color: this.highAverageColor };
     } if (value < this.lowAverage) {
       return { color: this.lowAverageColor };
     }
+    return null;
   };
 
-  // eslint-disable-next-line consistent-return
   customizeLabel: DxChartTypes.Properties['customizeLabel'] = ({ value }) => {
     if (value > this.highAverage) {
       return getLabelsSettings(this.highAverageColor);
     } if (value < this.lowAverage) {
       return getLabelsSettings(this.lowAverageColor);
     }
+    return null;
   };
 
   customizeText = customizeText;

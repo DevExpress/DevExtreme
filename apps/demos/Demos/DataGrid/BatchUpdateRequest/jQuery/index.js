@@ -53,7 +53,6 @@ $(() => {
   });
 
   function normalizeChanges(changes) {
-    // eslint-disable-next-line consistent-return
     return changes.map((c) => {
       switch (c.type) {
         case 'insert':
@@ -72,6 +71,8 @@ $(() => {
             type: c.type,
             key: c.key,
           };
+        default:
+          return c;
       }
     });
   }

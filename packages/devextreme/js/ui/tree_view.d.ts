@@ -12,7 +12,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    PointerInteractionEvent,
+} from '../events';
 
 import {
     CollectionWidgetItem,
@@ -114,7 +115,7 @@ export type ItemCollapsedEvent<TItem extends ItemLike = any, TKey = any> = Nativ
  * @type object
  * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem, TKey>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem, TKey>;
 
 /**
  * @docid _ui_tree_view_ItemExpandedEvent
@@ -130,7 +131,7 @@ export type ItemExpandedEvent<TItem extends ItemLike = any, TKey = any> = Native
  * @type object
  * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem, TKey>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem, TKey>;
 
 /**
  * @docid _ui_tree_view_ItemRenderedEvent

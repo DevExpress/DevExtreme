@@ -159,7 +159,7 @@ module('All day appointments common', config, () => {
 
                 let $appointment = scheduler.instance.$element().find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').eq(0);
 
-                assert.ok($appointment.hasClass('dx-scheduler-appointment-head'), 'Appointment part has reduced class');
+                assert.ok($appointment.hasClass('dx-scheduler-appointment-reduced'), 'Appointment part has reduced class');
 
                 scheduler.instance.option('currentDate', new Date(2015, 1, 6));
 

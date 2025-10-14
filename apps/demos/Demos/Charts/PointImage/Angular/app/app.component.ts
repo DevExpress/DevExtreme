@@ -29,7 +29,6 @@ export class AppComponent {
     this.iceHockeyStatistics = service.getIceHockeyStatistics();
   }
 
-  // eslint-disable-next-line consistent-return
   customizePoint: DxChartTypes.Properties['customizePoint'] = ({ value }) => {
     const color = {
       1: 'gold',
@@ -40,6 +39,7 @@ export class AppComponent {
     if (color) {
       return { image: { url: `../../../../images/Charts/PointImage/icon-medal-${color}.png`, width: 20, height: 20 }, visible: true };
     }
+    return null;
   };
 
   customizeText: DxChartTypes.ValueAxisLabel['customizeText'] = ({ valueText }) => ({

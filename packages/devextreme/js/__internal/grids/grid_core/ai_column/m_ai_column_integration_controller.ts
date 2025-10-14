@@ -1,9 +1,71 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type {
+  AIIntegration,
+  GenerateGridColumnCommandParams,
+  GenerateGridColumnCommandResult,
+  RequestCallbacks,
+} from '@js/common/ai-integration';
+import errors from '@js/ui/widget/ui.errors';
+
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 
 export class AiColumnIntegrationController extends Controller {
-  public sendRequest(columnName: string, data: any[], additionalInfo: Record<string, any>): void {
+  private abort?: () => void;
 
+  private columnsController!: ColumnsController;
+
+  private dataController!: DataController;
+
+  public init(): void {
+    this.columnsController = this.getController('columns');
+    this.dataController = this.getController('data');
+  }
+
+  public sendRequest(columnName: string): void {
+    const aiIntegration = this.getAiIntegration(columnName);
+    if (!aiIntegration) {
+      return;
+    }
+    const data = this.dataController.items()
+      .filter((row) => row.rowType === 'data')
+      .reduce<Record<PropertyKey, unknown>>((acc, row) => {
+        acc[JSON.stringify(row.key) as PropertyKey] = row.data;
+        return acc;
+      }, {});
+    const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
+    const abort = aiIntegration.generateGridColumn(
+      {
+        text: prompt,
+        data,
+      },
+      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(),
+    );
+    this.abort = abort;
+  }
+
+  private processCommandCompletion(): void {
+    this.abort?.();
+    this.abort = undefined;
+  }
+
+  private updateResults(result: string): void {
+    // Update the results in the UI or internal state
+  }
+
+  private getAICommandCallbacks<T>(): RequestCallbacks<T> {
+    const callbacks = {
+      onComplete: (finalResponse: T): void => {
+        this.updateResults(String(finalResponse));
+        this.processCommandCompletion();
+      },
+      onError: (): void => {
+        this.processCommandCompletion();
+      },
+    };
+
+    return callbacks;
   }
 
   public abortRequest(): void {
@@ -12,5 +74,23 @@ export class AiColumnIntegrationController extends Controller {
 
   public showError(message: string): void {
 
+  }
+
+  private getAiIntegration(columnName: string): AIIntegration | null {
+    if (!columnName) {
+      errors.log('E1066');
+    }
+    const aiIntegration = this.columnsController.columnOption(columnName, 'ai.aiIntegration');
+    if (aiIntegration) {
+      return aiIntegration as AIIntegration;
+    }
+
+    const gridAiIntegration = this.option('aiIntegration');
+    if (gridAiIntegration) {
+      return gridAiIntegration;
+    }
+
+    errors.log('E1067', columnName);
+    return null;
   }
 }

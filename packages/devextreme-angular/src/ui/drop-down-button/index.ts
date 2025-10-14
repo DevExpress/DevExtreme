@@ -39,7 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -70,10 +71,10 @@ import { DxoDropDownButtonPositionModule } from 'devextreme-angular/ui/drop-down
 import { DxoDropDownButtonShowModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxoDropDownButtonToModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-button/nested';
+import { 
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -94,6 +95,17 @@ import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxDropDownButton = null;
 
     /**
@@ -830,26 +842,6 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Output() wrapItemTextChange: EventEmitter<boolean>;
-
-
-
-
-    @ContentChildren(DxiDropDownButtonItemComponent)
-    get itemsChildren(): QueryList<DxiDropDownButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiDropDownButtonItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
 
 
 

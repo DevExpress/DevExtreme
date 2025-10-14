@@ -2,7 +2,7 @@
   <div id="chart-demo">
     <DxChart
       :data-source="chartDataSource"
-      title="Temperature in Seattle , 2017"
+      :title="`Temperature in Seattle, ${year}`"
     >
       <DxSize :height="420"/>
       <DxValueAxis
@@ -16,6 +16,7 @@
           :visible="true"
           :opacity="0.5"
         />
+        <DxLabel :customize-text="customizeArgumentAxisLabelText"/>
       </DxArgumentAxis>
       <DxCommonPaneSettings>
         <DxBorder
@@ -26,7 +27,7 @@
         />
       </DxCommonPaneSettings>
       <DxSeries
-        argument-field="Number"
+        argument-field="Date"
         value-field="Temperature"
         type="spline"
       />
@@ -45,7 +46,7 @@
         :width="150"
         :items="months"
         :input-attr="{ 'aria-label': 'Month' }"
-        :value="1"
+        :value="selectedMonth"
         :on-value-changed="onValueChanged"
         value-expr="id"
         display-expr="name"
@@ -73,25 +74,50 @@ import { DataSource } from 'devextreme-vue/common/data';
 
 import { months } from './data.ts';
 
+const year = 2017;
+let selectedMonth = 1;
+
+const startOfMonthStr = (month: number): string => `${month}/01/${year}`;
+const endOfMonthStr = (month: number): string => {
+  const nextMonth = (month === 12) ? 1 : month + 1;
+  const nextYear = (month === 12) ? year + 1 : year;
+
+  const lastDay = new Date(nextYear, nextMonth - 1, 0).getDate();
+
+  return `${month}/${lastDay}/${year}`;
+};
+
 const chartDataSource = new DataSource({
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
+  key: 'Date',
+  load: () => {
+    const startVisible = startOfMonthStr(selectedMonth);
+    const endVisible = endOfMonthStr(selectedMonth);
+    const url = 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData'
+      + `?startVisible=${encodeURIComponent(startVisible)}`
+      + `&endVisible=${encodeURIComponent(endVisible)}`
+      + `&startBound=${encodeURIComponent(startVisible)}`
+      + `&endBound=${encodeURIComponent(endVisible)}`;
+
+    return fetch(url)
+      .then((r) => {
+        if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
+        return r.json();
+      })
+      .then((arr) => arr.map((item) => ({
+        ...item,
+        Temperature: (item.MinTemp + item.MaxTemp) / 2,
+        Date: new Date(item.Date),
+      })));
   },
-  postProcess(results) {
-    return results[0].DayItems;
-  },
-  expand: 'DayItems',
-  filter: ['Id', '=', 1],
   paginate: false,
 });
 const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
+const customizeArgumentAxisLabelText = ({ value }) => new Date(value).getDate().toString();
 const customizeTooltip = ({ valueText }) => ({
   text: `${valueText}${'&#176C'}`,
 });
 function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-  chartDataSource.filter(['Id', '=', value]);
+  selectedMonth = value;
   chartDataSource.load();
 }
 </script>

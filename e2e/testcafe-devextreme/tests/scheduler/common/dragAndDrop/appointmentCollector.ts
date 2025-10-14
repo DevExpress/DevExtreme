@@ -82,18 +82,19 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
   startDayHour: 9,
 }));
 
-test('Drag-n-drop in same table cell', async (t) => {
+test('Drag-n-drop in the same table cell', async (t) => {
   const scheduler = new Scheduler('#container');
-  const collector = scheduler.collectors.find('2');
   const { appointmentTooltip } = scheduler;
   const appointmentTooltipItem = appointmentTooltip.getListItem('Approve Personal Computer Upgrade Plan');
 
   await t
-    .click(collector.element)
+    .click(scheduler.collectors.find('2').element)
     .expect(appointmentTooltip.isVisible()).ok()
-    .drag(appointmentTooltipItem.element, 0, 20)
-    .click(collector.element)
+    .drag(appointmentTooltipItem.element, 0, -90)
+    .click(scheduler.collectors.find('2').element)
     .expect(appointmentTooltip.isVisible())
+    .ok()
+    .expect(appointmentTooltipItem.element.exists)
     .ok();
 }).before(async () => createScheduler({
   views: ['week'],

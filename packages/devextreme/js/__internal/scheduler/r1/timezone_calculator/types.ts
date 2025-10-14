@@ -1,4 +1,4 @@
-export type DateType = Date | string;
+export type DateType = Date | string | number;
 
 export interface TimeZoneCalculatorOptions {
   timeZone?: string;
