@@ -247,7 +247,6 @@ jobs:
     name: Lint code base
     needs:
       - build-devextreme
-      - get-changes
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
@@ -419,6 +418,7 @@ jobs:
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: github.event_name == 'pull_request'
       working-directory: apps/demos
       run: |
         if [ -f "changed-files.json" ]; then
