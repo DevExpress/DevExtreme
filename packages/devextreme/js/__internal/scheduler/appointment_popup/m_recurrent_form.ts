@@ -11,6 +11,7 @@ import type dxForm from '@js/ui/form';
 import type { Properties as NumberBoxProperties } from '@js/ui/number_box';
 import type { Properties as RadioGroupProperties } from '@js/ui/radio_group';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
+import { capitalize } from '@ts/core/utils/capitalize';
 
 import type Scheduler from '../m_scheduler';
 import { getRecurrenceString, parseRecurrenceRule } from '../recurrence/base';
@@ -48,7 +49,7 @@ const frequenciesMessages = [
 ];
 
 const frequencies = frequenciesMessages.map((item) => ({
-  text: messageLocalization.format(item.recurrence),
+  text: capitalize(messageLocalization.format(item.recurrence)),
   value: item.value,
 }));
 
