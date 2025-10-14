@@ -169,13 +169,6 @@ export class RecurrentForm {
     }
   }
 
-  private setDisabled(name: string, disabled: boolean): void {
-    const editor = this.dxForm?.getEditor(name);
-    if (editor) {
-      editor.option({ disabled });
-    }
-  }
-
   private formUpdate<T>(fn: () => T): T {
     if (!this.dxForm) {
       return fn();
@@ -931,9 +924,9 @@ export class RecurrentForm {
         if (freq === FREQ.DAILY || freq === FREQ.HOURLY) {
           this.clearTempRules('byday', 'bymonth', 'bymonthday');
         }
-
-        this.setEditorValue('freq', freq);
       }));
+
+      this.setEditorValue('freq', freq);
     }
   }
 
