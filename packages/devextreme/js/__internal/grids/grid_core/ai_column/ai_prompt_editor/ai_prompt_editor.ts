@@ -116,7 +116,7 @@ export class AiPromptEditor {
       type: 'default',
       icon: 'arrowright',
       stylingMode: 'contained',
-      text: messageLocalization.format('dxDataGrid-applyButton'),
+      text: messageLocalization.format('dxDataGrid-aiPromptEditorApplyButton'),
       disabled: !this.editorInstance || !isPromptChanged(this.prompt, this.editorInstance.option('value')),
       elementAttr: {
         class: CLASSES.aiPromptEditorApplyButton,
@@ -129,7 +129,7 @@ export class AiPromptEditor {
     return {
       icon: 'refresh',
       stylingMode: 'outlined',
-      text: messageLocalization.format('dxDataGrid-regenerateDataButton'),
+      text: messageLocalization.format('dxDataGrid-aiPromptEditorRegenerateButton'),
       disabled: !this.prompt,
       elementAttr: {
         class: CLASSES.aiPromptEditorRefreshButton,
@@ -143,7 +143,7 @@ export class AiPromptEditor {
       type: 'default',
       icon: 'square',
       stylingMode: 'contained',
-      text: messageLocalization.format('dxDataGrid-stopButton'),
+      text: messageLocalization.format('dxDataGrid-aiPromptEditorStopButton'),
       elementAttr: {
         class: CLASSES.aiPromptEditorStopButton,
       },
