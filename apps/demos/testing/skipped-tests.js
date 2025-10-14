@@ -3,65 +3,47 @@ import { THEME } from '../utils/visual-tests/helpers/theme-utils';
 export const skippedTests = {
   jQuery: {
     Charts: [
+      { demo: 'AjaxRequest', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
+      // NOTE: Requires preload font, which not work in testcafe
+      { demo: 'SpiderWeb', themes: [THEME.material] },
     ],
-    Gantt: [
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    // Gantt: ['TaskTemplate', 'Validation'],
+    Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Angular: {
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Common: ['PopupAndNotificationsOverview'],
+    Gantt: ['TaskTemplate', 'Validation'],
+    DataGrid: [
+      // jQuery demo uses a different show-checkboxes mode
+      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
+      { demo: 'SignalRService', themes: [THEME.fluent] },
     ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ChartIntegration', themes: [THEME.material] },
-    ],
-    TreeList: [
-      { demo: 'BatchEditing', themes: [THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-      { demo: 'FormEditing', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
-      { demo: 'Resizing', themes: [THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   React: {
     DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
-      { demo: 'EditStateManagement', themes: [THEME.material] },
+      // jQuery demo uses a different show-checkboxes mode
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      { demo: 'CellEditing', themes: [THEME.material] },
+      { demo: 'Toolbar', themes: [THEME.fluent] },
+      { demo: 'SignalRService', themes: [THEME.fluent] },
     ],
-    Gantt: [
-      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Scheduler: [
+      // NOTE: 'GroupByDate' demo has problems with rendering
+      { demo: 'GroupByDate', themes: [THEME.fluent] },
     ],
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
+    Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
+    Gantt: ['Validation'],
   },
   Vue: {
-    Map: [
-      { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    Common: ['PopupAndNotificationsOverview'],
+    Charts: ['PointsAggregation'],
+    DataGrid: [
+      // jQuery demo uses a different show-checkboxes mode
+      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
+      { demo: 'SignalRService', themes: [THEME.fluent] },
     ],
+    Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
+    Gantt: ['Validation'],
   },
 };
