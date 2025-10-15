@@ -978,12 +978,14 @@ describe('API Methods', () => {
             name: 'myColumn',
             ai: {
               aiIntegration: columnAiIntegration,
+              mode: 'manual',
               prompt: 'Test prompt',
             },
           },
         ],
       });
 
+      instance.sendAIColumnRequest('myColumn');
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
@@ -1012,12 +1014,14 @@ describe('API Methods', () => {
             name: 'myColumn',
             ai: {
               aiIntegration: columnAiIntegration,
+              mode: 'manual',
               prompt: 'Test prompt',
             },
           },
         ],
       });
 
+      instance.sendAIColumnRequest('myColumn');
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
       expect(abortSpy).toHaveBeenCalledTimes(0);
