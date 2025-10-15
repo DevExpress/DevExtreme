@@ -204,7 +204,7 @@ describe('AiColumnView', () => {
             }),
           }),
         );
-        expect(aiPromptEditorPOM.getTextArea().value).toBe('updated prompt');
+        expect(aiPromptEditorPOM.getTextArea().getInputElement().value).toBe('updated prompt');
       });
 
       it('should configure popup position correctly for left alignment', async () => {
@@ -329,8 +329,8 @@ describe('AiColumnView', () => {
 
         await aiColumnView.showPromptEditor(cellElement, columnWithIndex);
 
-        aiPromptEditorPOM.changeTextAreaValue('test prompt');
-        aiPromptEditorPOM.getApplyButtonElement().click();
+        aiPromptEditorPOM.getTextArea().setValue('test prompt');
+        aiPromptEditorPOM.getApplyButton().getElement().click();
 
         expect(aiColumnView.getPromptEditorInstance().updateStateOnAction).toHaveBeenCalledWith('apply');
         expect(mockColumnsController.columnOption).toHaveBeenCalledWith(
@@ -361,11 +361,11 @@ describe('AiColumnView', () => {
 
         const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-        aiPromptEditorPOM.changeTextAreaValue('test prompt');
-        aiPromptEditorPOM.getApplyButtonElement().click();
+        aiPromptEditorPOM.getTextArea().setValue('test prompt');
+        aiPromptEditorPOM.getApplyButton().getElement().click();
         (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
 
-        aiPromptEditorPOM.getStopButtonElement().click();
+        aiPromptEditorPOM.getStopButton().getElement().click();
         jest.runAllTimers();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
@@ -386,7 +386,7 @@ describe('AiColumnView', () => {
 
         const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-        aiPromptEditorPOM.getRefreshButtonElement().click();
+        aiPromptEditorPOM.getRefreshButton().getElement().click();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('regenerate');
         expect(mockAiColumnController.refreshAIColumn).toHaveBeenCalledWith('testColumn');
@@ -411,7 +411,7 @@ describe('AiColumnView', () => {
 
         const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-        aiPromptEditorPOM.getRefreshButtonElement().click();
+        aiPromptEditorPOM.getRefreshButton().getElement().click();
         (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
 
         jest.runAllTimers();
@@ -439,7 +439,7 @@ describe('AiColumnView', () => {
 
         const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-        aiPromptEditorPOM.getRefreshButtonElement().click();
+        aiPromptEditorPOM.getRefreshButton().getElement().click();
         (promptEditorInstance.updateStateOnAction as jest.Mock).mockClear();
 
         jest.runAllTimers();

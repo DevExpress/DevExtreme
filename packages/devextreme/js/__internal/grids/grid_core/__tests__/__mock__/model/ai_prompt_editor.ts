@@ -1,4 +1,7 @@
 import Popup from '@js/ui/popup';
+import { ProgressBarModel } from '@ts/ui/__tests__/__mock__/model/progress_bar';
+import { TextAreaModel } from '@ts/ui/__tests__/__mock__/model/text_area';
+import { ButtonModel } from '@ts/ui/button/__tests__/__mock__/model/button';
 
 const CLASSES = {
   wrapper: 'dx-overlay-wrapper',
@@ -24,66 +27,45 @@ export class AiPromptEditorModel {
     return Popup.getInstance(this.root) as Popup;
   }
 
-  public getTextAreaElement(): HTMLElement {
-    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorTextArea}`) as HTMLElement;
-  }
-
-  public getTextArea(): HTMLTextAreaElement {
-    return this.getTextAreaElement().querySelector('textarea') as HTMLTextAreaElement;
-  }
-
-  public getRefreshButtonElement(): HTMLElement {
-    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorRefreshButton}`) as HTMLElement;
-  }
-
-  public getApplyButtonElement(): HTMLElement {
-    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorApplyButton}`) as HTMLElement;
+  public getTextArea(): TextAreaModel {
+    return new TextAreaModel(
+      this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorTextArea}`) as HTMLElement,
+    );
   }
 
   public getWrapperElement(): HTMLElement {
     return document.body.querySelector(`.${CLASSES.aiPromptEditor}.${CLASSES.wrapper}`) as HTMLElement;
   }
 
-  public getStopButtonElement(): HTMLElement {
-    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorStopButton}`) as HTMLElement;
+  public getRefreshButton(): ButtonModel {
+    return new ButtonModel(this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorRefreshButton}`) as HTMLElement);
   }
 
-  public getProgressBarElement(): HTMLElement {
-    return this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorProgressBar}`) as HTMLElement;
+  public getApplyButton(): ButtonModel {
+    return new ButtonModel(this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorApplyButton}`) as HTMLElement);
   }
 
-  public changeTextAreaValue(value: string): void {
-    const textArea = this.getTextArea();
-
-    textArea.value = value;
-    textArea.dispatchEvent(new Event('input', { bubbles: true }));
+  public getStopButton(): ButtonModel {
+    return new ButtonModel(this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorStopButton}`) as HTMLElement);
   }
 
-  public isRefreshButtonDisabled(): boolean {
-    return this.getRefreshButtonElement().classList.contains(CLASSES.stateDisabled);
+  public getProgressBar(): ProgressBarModel {
+    return new ProgressBarModel(
+      this.getWrapperElement().querySelector(`.${CLASSES.aiPromptEditorProgressBar}`) as HTMLElement,
+    );
   }
 
-  public isApplyButtonDisabled(): boolean {
-    return this.getApplyButtonElement().classList.contains(CLASSES.stateDisabled);
-  }
-
-  public isApplyButtonVisible(): boolean {
-    const applyButton = this.getApplyButtonElement();
+  public isApplyToolbarItemVisible(): boolean {
+    const applyButton = this.getApplyButton().getElement();
     const toolbarItem = applyButton.closest(`.${CLASSES.toolbarItem}`);
 
     return !!toolbarItem && !toolbarItem.classList.contains(CLASSES.stateInvisible);
   }
 
-  public isStopButtonVisible(): boolean {
-    const stopButton = this.getStopButtonElement();
+  public isStopToolbarItemVisible(): boolean {
+    const stopButton = this.getStopButton().getElement();
     const toolbarItem = stopButton.closest(`.${CLASSES.toolbarItem}`);
 
     return !!toolbarItem && !toolbarItem.classList.contains(CLASSES.stateInvisible);
-  }
-
-  public isProgressBarVisible(): boolean {
-    const progressBar = this.getProgressBarElement();
-
-    return !!progressBar && !progressBar.classList.contains(CLASSES.stateInvisible);
   }
 }

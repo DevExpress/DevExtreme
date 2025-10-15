@@ -139,7 +139,7 @@ describe('AiPromptEditor', () => {
       const { POM } = createAiPromptEditor({ popupOptions: { visible: true } });
 
       expect(createComponentMock.mock.calls[1]).toEqual([
-        $(POM.getTextAreaElement()),
+        $(POM.getTextArea().getElement()),
         TextArea,
         {
           height: '100%',
@@ -158,7 +158,7 @@ describe('AiPromptEditor', () => {
       const { POM } = createAiPromptEditor({ popupOptions: { visible: true } });
 
       expect(createComponentMock.mock.calls[2]).toEqual([
-        $(POM.getProgressBarElement()),
+        $(POM.getProgressBar().getElement()),
         ProgressBar,
         {
           value: false,
@@ -180,7 +180,7 @@ describe('AiPromptEditor', () => {
         onRefresh: onRefreshMock,
       });
 
-      POM.getRefreshButtonElement().click();
+      POM.getRefreshButton().getElement().click();
 
       expect(onRefreshMock).toHaveBeenCalledTimes(1);
     });
@@ -195,8 +195,8 @@ describe('AiPromptEditor', () => {
         onSubmit: onSubmitMock,
       });
 
-      POM.changeTextAreaValue('test'); // Change the value to enable the "Apply" button
-      POM.getApplyButtonElement().click();
+      POM.getTextArea().setValue('test'); // Change the value to enable the "Apply" button
+      POM.getApplyButton().getElement().click();
 
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
     });
@@ -213,13 +213,13 @@ describe('AiPromptEditor', () => {
         onSubmit: onSubmitMock,
       });
 
-      POM.changeTextAreaValue('test'); // Change the value to enable the "Apply" button
-      POM.getApplyButtonElement().click();
+      POM.getTextArea().setValue('test'); // Change the value to enable the "Apply" button
+      POM.getApplyButton().getElement().click();
 
       expect(onStopMock).toHaveBeenCalledTimes(0);
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
 
-      POM.getStopButtonElement().click();
+      POM.getStopButton().getElement().click();
 
       expect(onStopMock).toHaveBeenCalledTimes(1);
     });
@@ -236,7 +236,7 @@ describe('Regenerate Data button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
+      expect(POM.getRefreshButton().isDisabled()).toBe(true);
     });
   });
 
@@ -247,7 +247,7 @@ describe('Regenerate Data button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
+      expect(POM.getRefreshButton().isDisabled()).toBe(true);
     });
   });
 
@@ -258,7 +258,7 @@ describe('Regenerate Data button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isRefreshButtonDisabled()).toBe(false);
+      expect(POM.getRefreshButton().isDisabled()).toBe(false);
     });
   });
 });
@@ -273,7 +273,7 @@ describe('Apply button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
     });
   });
 
@@ -284,7 +284,7 @@ describe('Apply button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
     });
   });
 
@@ -294,11 +294,11 @@ describe('Apply button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
 
-      POM.changeTextAreaValue('new text');
+      POM.getTextArea().setValue('new text');
 
-      expect(POM.isApplyButtonDisabled()).toBe(false);
+      expect(POM.getApplyButton().isDisabled()).toBe(false);
     });
   });
 
@@ -309,11 +309,11 @@ describe('Apply button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
 
-      POM.changeTextAreaValue('changed text');
+      POM.getTextArea().setValue('changed text');
 
-      expect(POM.isApplyButtonDisabled()).toBe(false);
+      expect(POM.getApplyButton().isDisabled()).toBe(false);
     });
   });
 
@@ -324,15 +324,15 @@ describe('Apply button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
 
       // Change value
-      POM.changeTextAreaValue('changed text');
-      expect(POM.isApplyButtonDisabled()).toBe(false);
+      POM.getTextArea().setValue('changed text');
+      expect(POM.getApplyButton().isDisabled()).toBe(false);
 
       // Change back to initial
-      POM.changeTextAreaValue('initial text');
-      expect(POM.isApplyButtonDisabled()).toBe(true);
+      POM.getTextArea().setValue('initial text');
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
     });
   });
 });
@@ -347,7 +347,7 @@ describe('Stop button', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isStopButtonVisible()).toBe(false);
+      expect(POM.isStopToolbarItemVisible()).toBe(false);
     });
   });
 });
@@ -362,8 +362,7 @@ describe('TextArea', () => {
         popupOptions: { visible: true },
       });
 
-      const textArea = POM.getTextArea();
-      expect(textArea.disabled).toBe(false);
+      expect(POM.getTextArea().getInputElement().disabled).toBe(false);
     });
   });
 });
@@ -380,8 +379,8 @@ describe('Public Methods', () => {
 
       instance.toggleApplyButtonVisibility(true);
 
-      expect(POM.isApplyButtonVisible()).toBe(true);
-      expect(POM.isStopButtonVisible()).toBe(false);
+      expect(POM.isApplyToolbarItemVisible()).toBe(true);
+      expect(POM.isStopToolbarItemVisible()).toBe(false);
     });
 
     it('should hide Apply and show Stop when isApplyButtonVisible is false', () => {
@@ -391,8 +390,8 @@ describe('Public Methods', () => {
 
       instance.toggleApplyButtonVisibility(false);
 
-      expect(POM.isApplyButtonVisible()).toBe(false);
-      expect(POM.isStopButtonVisible()).toBe(true);
+      expect(POM.isApplyToolbarItemVisible()).toBe(false);
+      expect(POM.isStopToolbarItemVisible()).toBe(true);
     });
 
     it('should toggle visibility correctly', () => {
@@ -401,18 +400,18 @@ describe('Public Methods', () => {
       });
 
       // Initially Apply is visible
-      expect(POM.isApplyButtonVisible()).toBe(true);
-      expect(POM.isStopButtonVisible()).toBe(false);
+      expect(POM.isApplyToolbarItemVisible()).toBe(true);
+      expect(POM.isStopToolbarItemVisible()).toBe(false);
 
       // Hide Apply, show Stop
       instance.toggleApplyButtonVisibility(false);
-      expect(POM.isApplyButtonVisible()).toBe(false);
-      expect(POM.isStopButtonVisible()).toBe(true);
+      expect(POM.isApplyToolbarItemVisible()).toBe(false);
+      expect(POM.isStopToolbarItemVisible()).toBe(true);
 
       // Show Apply, hide Stop
       instance.toggleApplyButtonVisibility(true);
-      expect(POM.isApplyButtonVisible()).toBe(true);
-      expect(POM.isStopButtonVisible()).toBe(false);
+      expect(POM.isApplyToolbarItemVisible()).toBe(true);
+      expect(POM.isStopToolbarItemVisible()).toBe(false);
     });
   });
 
@@ -424,7 +423,7 @@ describe('Public Methods', () => {
 
       instance.updatePrompt('new value');
 
-      expect(POM.getTextArea().value).toBe('new value');
+      expect(POM.getTextArea().getInputElement().value).toBe('new value');
     });
 
     it('should update internal value and disable Regenerate Data button', () => {
@@ -435,7 +434,7 @@ describe('Public Methods', () => {
 
       instance.updatePrompt('');
 
-      expect(POM.getTextArea().value).toBe('');
+      expect(POM.getTextArea().getInputElement().value).toBe('');
     });
   });
 
@@ -472,10 +471,10 @@ describe('Public Methods', () => {
 
       await instance.show();
 
-      expect(POM.getTextArea().value).toBe('updated prompt');
-      expect(POM.isRefreshButtonDisabled()).toBe(false);
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-      expect(POM.isApplyButtonVisible()).toBe(true);
+      expect(POM.getTextArea().getInputElement().value).toBe('updated prompt');
+      expect(POM.getRefreshButton().isDisabled()).toBe(false);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
+      expect(POM.isApplyToolbarItemVisible()).toBe(true);
 
       instance.updateOptions({
         container,
@@ -484,10 +483,10 @@ describe('Public Methods', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.getTextArea().value).toBe('');
-      expect(POM.isRefreshButtonDisabled()).toBe(true);
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-      expect(POM.isApplyButtonVisible()).toBe(true);
+      expect(POM.getTextArea().getInputElement().value).toBe('');
+      expect(POM.getRefreshButton().isDisabled()).toBe(true);
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
+      expect(POM.isApplyToolbarItemVisible()).toBe(true);
     });
   });
 
@@ -497,11 +496,11 @@ describe('Public Methods', () => {
         popupOptions: { visible: true },
       });
 
-      expect(POM.isProgressBarVisible()).toBe(false);
+      expect(POM.getProgressBar().isVisible()).toBe(false);
 
       instance.setLoading(true);
 
-      expect(POM.isProgressBarVisible()).toBe(true);
+      expect(POM.getProgressBar().isVisible()).toBe(true);
     });
 
     it('should hide progress bar when isLoading is false', () => {
@@ -510,10 +509,10 @@ describe('Public Methods', () => {
       });
 
       instance.setLoading(true);
-      expect(POM.isProgressBarVisible()).toBe(true);
+      expect(POM.getProgressBar().isVisible()).toBe(true);
 
       instance.setLoading(false);
-      expect(POM.isProgressBarVisible()).toBe(false);
+      expect(POM.getProgressBar().isVisible()).toBe(false);
     });
   });
 
@@ -526,24 +525,24 @@ describe('Public Methods', () => {
         });
 
         // Change text to enable apply button initially
-        POM.changeTextAreaValue('changed text');
-        expect(POM.isApplyButtonDisabled()).toBe(false);
-        expect(POM.isRefreshButtonDisabled()).toBe(false);
-        expect(POM.getTextArea().disabled).toBe(false);
-        expect(POM.isProgressBarVisible()).toBe(false);
-        expect(POM.isApplyButtonVisible()).toBe(true);
-        expect(POM.isStopButtonVisible()).toBe(false);
+        POM.getTextArea().setValue('changed text');
+        expect(POM.getApplyButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(false);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(false);
+        expect(POM.getProgressBar().isVisible()).toBe(false);
+        expect(POM.isApplyToolbarItemVisible()).toBe(true);
+        expect(POM.isStopToolbarItemVisible()).toBe(false);
         expect(POM.getPopupInstance().option('shading')).toBe(false);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
 
         instance.updateStateOnAction('apply');
 
-        expect(POM.isProgressBarVisible()).toBe(true);
-        expect(POM.isApplyButtonDisabled()).toBe(true);
-        expect(POM.isRefreshButtonDisabled()).toBe(true);
-        expect(POM.getTextArea().disabled).toBe(true);
-        expect(POM.isApplyButtonVisible()).toBe(false);
-        expect(POM.isStopButtonVisible()).toBe(true);
+        expect(POM.getProgressBar().isVisible()).toBe(true);
+        expect(POM.getApplyButton().isDisabled()).toBe(true);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(true);
+        expect(POM.isApplyToolbarItemVisible()).toBe(false);
+        expect(POM.isStopToolbarItemVisible()).toBe(true);
         expect(POM.getPopupInstance().option('shading')).toBe(true);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
       });
@@ -557,23 +556,23 @@ describe('Public Methods', () => {
         });
 
         // Change text to enable apply button initially
-        POM.changeTextAreaValue('changed text');
-        expect(POM.isApplyButtonDisabled()).toBe(false);
-        expect(POM.isRefreshButtonDisabled()).toBe(false);
-        expect(POM.getTextArea().disabled).toBe(false);
-        expect(POM.isProgressBarVisible()).toBe(false);
+        POM.getTextArea().setValue('changed text');
+        expect(POM.getApplyButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(false);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(false);
+        expect(POM.getProgressBar().isVisible()).toBe(false);
         expect(POM.getPopupInstance().option('shading')).toBe(false);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
 
         instance.updateStateOnAction('regenerate');
 
-        expect(POM.isProgressBarVisible()).toBe(true);
-        expect(POM.isApplyButtonDisabled()).toBe(true);
-        expect(POM.isRefreshButtonDisabled()).toBe(true);
-        expect(POM.getTextArea().disabled).toBe(true);
+        expect(POM.getProgressBar().isVisible()).toBe(true);
+        expect(POM.getApplyButton().isDisabled()).toBe(true);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(true);
         // Apply button visibility should remain unchanged for regenerate action
-        expect(POM.isApplyButtonVisible()).toBe(false);
-        expect(POM.isStopButtonVisible()).toBe(true);
+        expect(POM.isApplyToolbarItemVisible()).toBe(false);
+        expect(POM.isStopToolbarItemVisible()).toBe(true);
         expect(POM.getPopupInstance().option('shading')).toBe(true);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
       });
@@ -587,28 +586,28 @@ describe('Public Methods', () => {
         });
 
         // First set to apply state
-        POM.changeTextAreaValue('changed text');
+        POM.getTextArea().setValue('changed text');
         instance.updateStateOnAction('apply');
 
         // Verify apply state is set
-        expect(POM.isProgressBarVisible()).toBe(true);
-        expect(POM.isApplyButtonDisabled()).toBe(true);
-        expect(POM.isRefreshButtonDisabled()).toBe(true);
-        expect(POM.getTextArea().disabled).toBe(true);
-        expect(POM.isApplyButtonVisible()).toBe(false);
-        expect(POM.isStopButtonVisible()).toBe(true);
+        expect(POM.getProgressBar().isVisible()).toBe(true);
+        expect(POM.getApplyButton().isDisabled()).toBe(true);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(true);
+        expect(POM.isApplyToolbarItemVisible()).toBe(false);
+        expect(POM.isStopToolbarItemVisible()).toBe(true);
         expect(POM.getPopupInstance().option('shading')).toBe(true);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
 
         instance.updateStateOnAction('stop');
 
-        expect(POM.isProgressBarVisible()).toBe(false);
+        expect(POM.getProgressBar().isVisible()).toBe(false);
         // Should be enabled because text was changed
-        expect(POM.isApplyButtonDisabled()).toBe(false);
-        expect(POM.isRefreshButtonDisabled()).toBe(false);
-        expect(POM.getTextArea().disabled).toBe(false);
-        expect(POM.isApplyButtonVisible()).toBe(true);
-        expect(POM.isStopButtonVisible()).toBe(false);
+        expect(POM.getApplyButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(false);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(false);
+        expect(POM.isApplyToolbarItemVisible()).toBe(true);
+        expect(POM.isStopToolbarItemVisible()).toBe(false);
         expect(POM.getPopupInstance().option('shading')).toBe(false);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
       });
