@@ -80,6 +80,11 @@ import { weatherData } from './data.ts';
 const customizeTooltip = (
   {
     seriesName, value, lowErrorValue, highErrorValue,
+  }: {
+    seriesName: string;
+    value: number;
+    lowErrorValue: number;
+    highErrorValue: number;
   },
 ) => (
   { text: `${seriesName}: ${value} (range: ${lowErrorValue} - ${highErrorValue})` }

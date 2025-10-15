@@ -17,7 +17,7 @@
           :data-source="['always', 'none', 'onClick', 'onLongTap']"
           :input-attr="{ 'aria-label': 'Show Checkboxes Mode'}"
           :value="showCheckBoxesMode"
-          @value-changed="({ value }) => { showCheckBoxesMode = value; }"
+          @value-changed="onShowCheckBoxesModeChange"
           :disabled="selectionMode !== 'multiple'"
         />
       </div>
@@ -27,7 +27,7 @@
           :data-source="['allPages', 'page']"
           :input-attr="{ 'aria-label': 'Select All Mode'}"
           :value="selectAllMode"
-          @value-changed="e =>selectAllMode = e.value "
+          @value-changed="onSelectAllModeChange"
           :disabled="selectionMode !== 'multiple' || !allowSelectAll"
         />
       </div>
@@ -35,7 +35,7 @@
         <DxCheckBox
           text="Allow Select All"
           :value="allowSelectAll"
-          @value-changed="e => allowSelectAll = e.value"
+          @value-changed="onAllowSelectAllChange"
           :disabled="selectionMode !== 'multiple'"
         />
       </div>
@@ -80,7 +80,7 @@ import {
   DxCardView, DxColumn, DxSelection, DxCardCover,
 } from 'devextreme-vue/card-view';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import { DxCheckBox } from 'devextreme-vue/check-box';
+import { DxCheckBox, type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ FullName }: Employee): string {
@@ -101,6 +101,18 @@ const cardViewRef = ref();
 const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
   selectionMode.value = value;
   cardViewRef.value.instance.clearSelection();
+};
+
+const onShowCheckBoxesModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
+  showCheckBoxesMode.value = value;
+};
+
+const onSelectAllModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
+  selectAllMode.value = value;
+};
+
+const onAllowSelectAllChange = ({ value }: DxCheckBoxTypes.ValueChangedEvent): void => {
+  allowSelectAll.value = value;
 };
 </script>
 <style>

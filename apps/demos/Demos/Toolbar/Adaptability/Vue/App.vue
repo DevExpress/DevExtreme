@@ -318,7 +318,7 @@ import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import DxButton from 'devextreme-vue/button';
-import DxButtonGroup from 'devextreme-vue/button-group';
+import DxButtonGroup, { type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import DxResizable from 'devextreme-vue/resizable';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -347,14 +347,14 @@ const textAlign = ref(textAlignDefault);
 const fontSize = ref(fontSizeDefault);
 const heading = ref(headingDefault);
 
-function onTextAlignItemClick(e) {
+function onTextAlignItemClick(e: DxButtonGroupTypes.ItemClickEvent) {
   const { alignment, hint } = e.itemData;
 
   textAlign.value = alignment;
 
   onButtonClick(hint);
 }
-function onButtonClick(name) {
+function onButtonClick(name: string) {
   notify(`The "${name}" button has been clicked`);
 }
 function onUndoButtonClick() {
@@ -363,10 +363,10 @@ function onUndoButtonClick() {
 function onRedoButtonClick() {
   onButtonClick('Redo');
 }
-function onFontStyleItemClick(e) {
+function onFontStyleItemClick(e: DxButtonGroupTypes.ItemClickEvent) {
   onButtonClick(e.itemData.hint);
 }
-function onListTypeButtonClick(e) {
+function onListTypeButtonClick(e: DxButtonGroupTypes.ItemClickEvent) {
   onButtonClick(e.itemData.hint);
 }
 function onLinkButtonClick() {
@@ -390,7 +390,7 @@ function onAttachButtonClick() {
 function onAboutButtonClick() {
   onButtonClick('About');
 }
-function onSelectionChanged(name) {
+function onSelectionChanged(name: string) {
   notify(`The "${name}" value has been changed`);
 }
 function onFontSizeSelectionChanged() {

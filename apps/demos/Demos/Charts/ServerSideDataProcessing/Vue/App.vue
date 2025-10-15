@@ -111,11 +111,12 @@ const chartDataSource = new DataSource({
   },
   paginate: false,
 });
-const customizeLabelText = ({ valueText }) => `${valueText}${'&#176C'}`;
-const customizeArgumentAxisLabelText = ({ value }) => new Date(value).getDate().toString();
-const customizeTooltip = ({ valueText }) => ({
+const customizeLabelText = ({ valueText }: any) => `${valueText}${'&#176C'}`;
+const customizeArgumentAxisLabelText = ({ value }: any) => new Date(value).getDate().toString();
+const customizeTooltip = ({ valueText }: any) => ({
   text: `${valueText}${'&#176C'}`,
 });
+
 function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   selectedMonth = value;
   chartDataSource.load();

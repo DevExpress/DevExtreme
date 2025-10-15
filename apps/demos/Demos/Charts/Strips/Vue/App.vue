@@ -62,25 +62,28 @@ const highAverageColor = ref('#ff9b52');
 const lowAverageColor = ref('#6199e6');
 const dataSource = temperaturesData;
 
-const customizePoint = ({ value }) => {
+const customizePoint = ({ value }: any) => {
   if (value > highAverage) {
     return { color: highAverageColor.value };
   }
 
-  return (value < lowAverage) ? { color: lowAverageColor.value } : null;
+  return (value < lowAverage) ? { color: lowAverageColor.value } : {};
 };
-const customizeLabel = ({ value }) => {
+
+const customizeLabel = ({ value }: any) => {
   if (value > highAverage) {
     return getLabelsSettings(highAverageColor.value);
   }
-  return (value < lowAverage) ? getLabelsSettings(lowAverageColor.value) : null;
+  return (value < lowAverage) ? getLabelsSettings(lowAverageColor.value) : {};
 };
-const getLabelsSettings = (backgroundColor) => ({
+
+const getLabelsSettings = (backgroundColor: string) => ({
   visible: true,
   backgroundColor,
   customizeText,
 });
-const customizeText = ({ valueText }) => `${valueText}&#176F`;
+
+const customizeText = ({ valueText }: any) => `${valueText}&#176F`;
 </script>
 <style>
 #chart {
