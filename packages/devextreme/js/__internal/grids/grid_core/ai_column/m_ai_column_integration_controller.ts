@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   AIIntegration,
-  GenerateGridColumnCommandParams,
   GenerateGridColumnCommandResult,
   RequestCallbacks,
 } from '@js/common/ai-integration';
@@ -24,12 +23,6 @@ export class AiColumnIntegrationController extends Controller {
   private errorHandlingController!: ErrorHandlingController;
 
   private aiColumnCacheController!: AiColumnCacheController;
-
-  public showResultsCallback?: (
-    columnName: string,
-    result: string,
-    cachedData: Record<PropertyKey, string>,
-  ) => void;
 
   public init(): void {
     this.columnsController = this.getController('columns');
@@ -83,6 +76,14 @@ export class AiColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
+  private showResult(
+    columnName: string,
+    response: string,
+    cachedData: Record<PropertyKey, string>,
+  ): void {
+    // TODO
+  }
+
   private getAICommandCallbacks<T>(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
@@ -90,7 +91,7 @@ export class AiColumnIntegrationController extends Controller {
     const callbacks = {
       onComplete: (finalResponse: T): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
-          this.showResultsCallback?.(columnName, String(finalResponse), cachedResponse);
+          this.showResult(columnName, String(finalResponse), cachedResponse);
           this.processCommandCompletion(columnName);
         }
       },

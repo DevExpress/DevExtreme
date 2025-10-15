@@ -2,7 +2,6 @@
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
-import { AiColumnCacheController } from './m_ai_column_cache_controller';
 import { AiColumnIntegrationController } from './m_ai_column_integration_controller';
 
 export class AiColumnController extends Controller {
@@ -20,7 +19,6 @@ export class AiColumnController extends Controller {
 
     this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
     this.aiColumnIntegrationController.init();
-    this.aiColumnIntegrationController.showResultsCallback = this.showResults.bind(this);
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
@@ -55,10 +53,6 @@ export class AiColumnController extends Controller {
     for (const col of aiColumns) {
       this.refreshAIColumnInternal(col.name);
     }
-  }
-
-  private showResult(columnName: string, data: Record<PropertyKey, string>): void {
-    // TODO
   }
 
   // API methods
