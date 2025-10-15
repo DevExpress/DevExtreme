@@ -401,30 +401,10 @@ export class AppointmentForm {
     timezoneItemOptions?: SimpleItem,
   ): GroupItem {
     const { allowTimeZoneEditing } = this.scheduler.getEditingConfig();
-    const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+    const { startDateExpr } = this.scheduler.getDataAccessors().expr;
     const isStartDateEditor = dateExpr === startDateExpr;
 
     const getEditorsDate = (): Date | null => (isStartDateEditor ? this.startDate : this.endDate);
-
-    const correctDateRange = (previousDateValue: Date): void => {
-      const { startDate, endDate } = this;
-
-      if (!startDate || !endDate || startDate.getTime() <= endDate.getTime()) {
-        return;
-      }
-
-      if (isStartDateEditor) {
-        const duration = previousDateValue ? endDate.getTime() - previousDateValue.getTime() : 0;
-        const correctedEndDate = new Date(startDate.getTime() + duration);
-
-        this.dxForm.updateData(endDateExpr, correctedEndDate);
-      } else {
-        const duration = previousDateValue ? previousDateValue.getTime() - startDate.getTime() : 0;
-        const correctedStartDate = new Date(endDate.getTime() - duration);
-
-        this.dxForm.updateData(startDateExpr, correctedStartDate);
-      }
-    };
 
     const dateValueChanged = (e, modifyDate: (date: Date) => void): void => {
       const currentDate = getEditorsDate();
@@ -438,12 +418,16 @@ export class AppointmentForm {
         return;
       }
 
+      if (!e.event && currentDate.getTime() === e.value.getTime()) {
+        return;
+      }
+
       const previousDateValue = new Date(currentDate);
 
       modifyDate(currentDate);
 
       this.dxForm.updateData(dateExpr, currentDate);
-      correctDateRange(previousDateValue);
+      this.correctDateRange(previousDateValue, isStartDateEditor);
     };
 
     return {
@@ -777,7 +761,38 @@ export class AppointmentForm {
     }
   }
 
+  private correctDateRange(
+    previousStartDate?: Date,
+    isStartDateChanged = true,
+  ): void {
+    const { startDate, endDate } = this;
+
+    if (!startDate || !endDate || startDate.getTime() <= endDate.getTime()) {
+      return;
+    }
+
+    const { startDateExpr, endDateExpr } = this.scheduler.getDataAccessors().expr;
+
+    if (isStartDateChanged) {
+      const duration = previousStartDate
+        ? endDate.getTime() - previousStartDate.getTime()
+        : 0;
+      const correctedEndDate = new Date(startDate.getTime() + duration);
+
+      this.dxForm.updateData(endDateExpr, correctedEndDate);
+    } else {
+      const duration = previousStartDate
+        ? previousStartDate.getTime() - startDate.getTime()
+        : 0;
+      const correctedStartDate = new Date(endDate.getTime() - duration);
+
+      this.dxForm.updateData(startDateExpr, correctedStartDate);
+    }
+  }
+
   private updateDateEditorsValues(): void {
+    this.correctDateRange();
+
     const startDateEditor = this.dxForm.getEditor(EDITOR_NAMES.startDate);
     const startTimeEditor = this.dxForm.getEditor(EDITOR_NAMES.startTime);
     const endDateEditor = this.dxForm.getEditor(EDITOR_NAMES.endDate);
