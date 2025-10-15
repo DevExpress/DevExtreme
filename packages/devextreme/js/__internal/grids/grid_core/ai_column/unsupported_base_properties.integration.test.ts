@@ -7,6 +7,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
+import errors from '@js/ui/widget/ui.errors';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
 const SELECTORS = {
@@ -15,6 +16,12 @@ const SELECTORS = {
 };
 
 const GRID_CONTAINER_ID = 'gridContainer';
+
+const dataSource = [
+  { id: 1, name: 'Item 1', value: 1 },
+  { id: 2, name: 'Item 2', value: 2 },
+  { id: 3, name: 'Item 3', value: 3 },
+];
 
 const createDataGrid = async (
   options: DataGridProperties = {},
@@ -31,7 +38,6 @@ const createDataGrid = async (
   const component = new DataGridModel($container.get(0) as HTMLElement);
 
   jest.runOnlyPendingTimers();
-
   resolve({
     $container,
     component,
@@ -39,27 +45,24 @@ const createDataGrid = async (
   });
 });
 
-const getGrid = (): DataGrid => {
-  const $container = $(SELECTORS.gridContainer);
-  return ($container as any).dxDataGrid('instance') as DataGrid;
+const beforeTest = (): void => {
+  jest.useFakeTimers();
+  jest.spyOn(errors, 'log').mockImplementation(jest.fn());
 };
 
-const dataSource = [
-  { id: 1, name: 'Item 1' },
-  { id: 2, name: 'Item 2' },
-  { id: 3, name: 'Item 3' },
-];
+const afterTest = (): void => {
+  const $container = $(SELECTORS.gridContainer);
+  const dataGrid = ($container as any).dxDataGrid('instance') as DataGrid;
+
+  dataGrid.dispose();
+  $container.remove();
+  jest.clearAllMocks();
+  jest.useRealTimers();
+};
 
 describe('Unsupported properties', () => {
-  beforeEach(async () => {
-
-  });
-  afterEach(() => {
-    const dataGrid = getGrid();
-
-    dataGrid.dispose();
-    $(SELECTORS.gridContainer).remove();
-  });
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   describe('Sorting properties', () => {
     it('should have no sorting state in the header after a click (first load)', async () => {
@@ -78,7 +81,7 @@ describe('Unsupported properties', () => {
         ],
       });
 
-      const aiHeaders = component.getHeaderByText('AI');
+      const aiHeaders = component.getHeadersByText('AI');
       expect(aiHeaders).toHaveLength(1);
       expect(aiHeaders?.attr('aria-colindex')).toEqual('2');
       expect(aiHeaders?.attr('aria-sort')).toBeUndefined();
@@ -99,7 +102,7 @@ describe('Unsupported properties', () => {
         ],
       });
       instance.columnOption('AItest', 'allowSorting', true);
-      const aiTestHeader = component.getHeaderByText('AI');
+      const aiTestHeader = component.getHeadersByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -126,7 +129,7 @@ describe('Unsupported properties', () => {
           },
         ],
       });
-      const aiTestHeader = component.getHeaderByText('AI');
+      const aiTestHeader = component.getHeadersByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -151,7 +154,7 @@ describe('Unsupported properties', () => {
       });
       instance.columnOption('AItest', 'sortOrder', 'asc');
       instance.columnOption('AItest', 'sortIndex', 2);
-      const aiTestHeader = component.getHeaderByText('AI');
+      const aiTestHeader = component.getHeadersByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -174,7 +177,7 @@ describe('Unsupported properties', () => {
         ],
       });
 
-      const aiTestHeader = component.getHeaderByText('AI');
+      const aiTestHeader = component.getHeadersByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -194,7 +197,7 @@ describe('Unsupported properties', () => {
       });
       instance.columnOption('AItest', 'sortOrder', 'asc');
       instance.columnOption('AItest', 'calculateSortValue', 'name');
-      const aiTestHeader = component.getHeaderByText('AI');
+      const aiTestHeader = component.getHeadersByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
