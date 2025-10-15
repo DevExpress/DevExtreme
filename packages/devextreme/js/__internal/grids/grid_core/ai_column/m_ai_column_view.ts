@@ -26,6 +26,7 @@ export class AiColumnView extends View {
     column: Column,
   ): AiPromptEditorOptions {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
+    const visibleIndex = this.columnsController.getVisibleIndex(column.index);
 
     return {
       prompt: column.ai?.prompt ?? '',
@@ -57,7 +58,7 @@ export class AiColumnView extends View {
         position: {
           my: `${alignment} top`,
           at: `${alignment} bottom`,
-          of: `.dx-header-row td[aria-colindex="${(column.index ?? 0) + 1}"]`,
+          of: `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`,
           collision: 'fit',
           boundary: this.component.element(),
         },

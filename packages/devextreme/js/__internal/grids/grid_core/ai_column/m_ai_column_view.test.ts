@@ -37,6 +37,7 @@ const mockColumnsController = {
   columnOption: jest.fn(),
   getColumnByPath: jest.fn(),
   getColumnOptionNameByFullName: jest.fn(),
+  getVisibleIndex: jest.fn().mockReturnValue(0),
 };
 const mockAiColumnController = {
   abortAIColumnRequest: jest.fn(),
@@ -45,7 +46,12 @@ const mockAiColumnController = {
   aiRequestCompleted: Callbacks(),
   aiRequestRejected: Callbacks(),
 };
-const mockColumn = { type: 'ai', alignment: 'left', name: 'aiColumn' } as Column;
+const mockColumn = {
+  type: 'ai',
+  alignment: 'left',
+  name: 'aiColumn',
+  index: 0,
+} as Column;
 
 const createComponentMock = jest.fn((
   el: dxElementWrapper,
@@ -164,10 +170,23 @@ describe('AiColumnView', () => {
 
         await aiColumnView.showPromptEditor(cellElement, mockColumn);
 
+        expect(AiPromptEditor).toHaveBeenCalledTimes(1);
+        expect(AiPromptEditor).toHaveBeenCalledWith(
+          expect.objectContaining({
+            popupOptions: expect.objectContaining({
+              position: expect.objectContaining({
+                of: '.dx-header-row td[aria-colindex="1"]',
+              }),
+            }),
+          }),
+        );
+        expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(0);
+
         const newColumn = {
           ...mockColumn,
           ai: { prompt: 'updated prompt' },
         } as Column;
+        mockColumnsController.getVisibleIndex.mockReturnValue(1);
 
         await aiColumnView.showPromptEditor(
           cellElement,
@@ -176,6 +195,15 @@ describe('AiColumnView', () => {
 
         expect(AiPromptEditor).toHaveBeenCalledTimes(1); // Only one instance created
         expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledTimes(1);
+        expect(aiColumnView.getPromptEditorInstance().updateOptions).toHaveBeenCalledWith(
+          expect.objectContaining({
+            popupOptions: expect.objectContaining({
+              position: expect.objectContaining({
+                of: '.dx-header-row td[aria-colindex="2"]',
+              }),
+            }),
+          }),
+        );
         expect(aiPromptEditorPOM.getTextArea().value).toBe('updated prompt');
       });
 
