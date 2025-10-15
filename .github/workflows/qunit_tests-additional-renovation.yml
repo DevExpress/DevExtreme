@@ -72,29 +72,6 @@ jobs:
           path: packages/devextreme/artifacts.zip
           retention-days: 1
 
-# TODO Chrome133: skipped during chrome update
-# We should run performance tests with non headless chrome
-# It fails in headless mode
-
-#  qunit-tests-performance:
-#    needs: build
-#    runs-on: devextreme-shr2
-#    name: Performance
-#    timeout-minutes: 25
-#    steps:
-#      - name: Get sources
-#        uses: actions/checkout@v4
-#
-#      - name: Run QUnit tests
-#        uses: ./.github/actions/run-qunit-tests
-#        with:
-#          name: 'Performance'
-#          browser: 'chrome'
-#          isPerformance: 'true'
-#          useJQuery: 'true'
-#          headless: 'true'
-#          useCsp: 'false'
-
   qunit-tests-mobile-and-shadow-dom:
     needs: build
     runs-on: devextreme-shr2
@@ -213,7 +190,6 @@ jobs:
     name: Send notifications
     needs: [
       build,
-      # qunit-tests-performance,
       qunit-tests-mobile-and-shadow-dom,
       qunit-tests-firefox,
     ]

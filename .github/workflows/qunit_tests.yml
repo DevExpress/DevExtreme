@@ -77,7 +77,7 @@ jobs:
   qunit-tests:
     needs: build
     runs-on: devextreme-shr2
-    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}
+    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -117,6 +117,9 @@ jobs:
         name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
         constel: ${{ matrix.CONSTEL }}
         timezone: ${{ matrix.TIMEZONE }}
+        browser: 'chrome'
+        headless: 'true'
+        useJQuery: 'false'
         useCsp: ${{ matrix.CSP }}
 
   notify:
