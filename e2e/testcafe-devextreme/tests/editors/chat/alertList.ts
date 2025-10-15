@@ -7,12 +7,13 @@ import { createWidget } from '../../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`ChatAlertList`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .clientScripts([
+    { module: 'mockdate' },
+    { content: 'window.MockDate = MockDate;' },
+  ]);
 
-test.clientScripts([
-  { module: 'mockdate' },
-  { content: 'window.MockDate = MockDate;' },
-])('Alertlist appearance', async (t) => {
+test('Alertlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
