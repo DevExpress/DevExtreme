@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
   appendElementTo,
+  insertStylesheetRulesToPage,
   setAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
@@ -325,6 +326,7 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 18), new Date(2021, 9, 18)],
@@ -449,6 +451,7 @@ test('Start date cell in selected range', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 17), new Date(2021, 10, 6)],
@@ -562,6 +565,7 @@ test('End date cell in selected range', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 17), new Date(2021, 9, 23)],
@@ -662,17 +666,20 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
-    .click(dateRangeBox.getStartDateBox().input);
+    .click(dateRangeBox.getStartDateBox().input)
+    .hover(dateRangeBox.getStartDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on popup opening.png', { element: '#container' });
 
   await t
-    .click(dateRangeBox.getEndDateBox().input);
+    .click(dateRangeBox.getEndDateBox().input)
+    .hover(dateRangeBox.getEndDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on end date input focus.png', { element: '#container' });
 
   await t
-    .click(dateRangeBox.getStartDateBox().input);
+    .click(dateRangeBox.getStartDateBox().input)
+    .hover(dateRangeBox.getStartDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on start date input focus.png', { element: '#container' });
 
@@ -682,6 +689,7 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date('2020/02/20'), new Date('2020/02/22')],
