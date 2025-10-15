@@ -83,11 +83,8 @@ jobs:
       matrix:
         CONSTEL: [
           export,
-          misc(1/2),
-          misc(2/2),
+          misc,
           ui,
-          ui.widgets(1/2),
-          ui.widgets(2/2),
           ui.editors,
           ui.htmlEditor,
           ui.grid,
@@ -101,16 +98,15 @@ jobs:
         include:
           - CONSTEL: ui.scheduler(1/2)
             TIMEZONE: US/Pacific
-            CSP: 'true'
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
-            CSP: 'true'
-          - CONSTEL: misc(1/2)
+          - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
-          - CONSTEL: misc(2/2)
+          - CONSTEL: ui.widgets(1/2)
             CSP: 'false'
-            useJQuery: 'true'
+          - CONSTEL: ui.widgets(2/2)
+            CSP: 'false'
 
     steps:
     - name: Get sources
