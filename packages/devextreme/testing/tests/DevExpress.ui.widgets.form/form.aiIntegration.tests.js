@@ -314,9 +314,9 @@ QUnit.module('SmartPaste', () => {
 
             form.smartPaste('test');
             const fields = [
-                { name: 'name', format: 'text', instruction: undefined },
-                { name: 'orderCount', format: 'numeric value', instruction: undefined },
-                { name: 'date', format: 'date in ISO format', instruction: 'custom instruction' },
+                { name: 'name', format: 'text', instruction: undefined, type: 'string' },
+                { name: 'orderCount', format: 'numeric value', instruction: undefined, type: 'number' },
+                { name: 'date', format: 'date in ISO format', instruction: 'custom instruction', type: 'date' },
             ];
 
             assert.strictEqual(smartPaste.calledOnce, true, 'smartPaste command called');
@@ -1026,7 +1026,7 @@ QUnit.module('SmartPaste', () => {
                     const dataField = 'OnVacation';
                     const smartPaste = sinon.stub().callsFake((params, callbacks) => {
                         completionCallback = () => callbacks.onComplete([
-                            { name: dataField, value: `${value}` },
+                            { name: dataField, value },
                         ]);
                         return () => {};
                     });
@@ -1054,47 +1054,6 @@ QUnit.module('SmartPaste', () => {
                     }
                 });
             });
-
-            QUnit.test('should log an error and not update editor if value is not true or false', async function(assert) {
-                let completionCallback;
-                const dataField = 'OnVacation';
-                const value = '.';
-                const smartPaste = sinon.stub().callsFake((params, callbacks) => {
-                    completionCallback = () => {
-                        const loggerErrorSpy = sinon.spy(logger, 'error');
-                        callbacks.onComplete([
-                            { name: dataField, value },
-                        ]);
-                        assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'boolean'), 'throws correct error');
-                        loggerErrorSpy.restore();
-                    };
-                    return () => {};
-                });
-                const aiIntegration = { smartPaste: smartPaste };
-                const form = setupFormWithAi({
-                    formData: { OnVacation: undefined },
-                    aiIntegration,
-                    items: [
-                        { dataField, editorType: 'dxCheckBox', allowIndeterminateState: undefined },
-                    ]
-                });
-                const done = assert.async();
-
-                try {
-                    await form.smartPaste('test');
-                    completionCallback();
-
-                    setTimeout(() => {
-                        assert.strictEqual(form.getEditor(dataField).option('value'), undefined, 'new value was not set');
-                        assert.ok(true, 'gracefully continued');
-                        done();
-                    }, 10);
-                } catch(error) {
-                    assert.ok(false, `failed with error: ${error}`);
-                    done();
-                };
-            });
         });
 
         QUnit.module('dxSwitch', () => {
@@ -1104,7 +1063,7 @@ QUnit.module('SmartPaste', () => {
                     const dataField = 'OnVacation';
                     const smartPaste = sinon.stub().callsFake((params, callbacks) => {
                         completionCallback = () => callbacks.onComplete([
-                            { name: dataField, value: `${value}` },
+                            { name: dataField, value },
                         ]);
                         return () => {};
                     });
@@ -1131,48 +1090,6 @@ QUnit.module('SmartPaste', () => {
                         done();
                     }
                 });
-            });
-
-            QUnit.test('should log an error and not update editor if value is not true or false', async function(assert) {
-                let completionCallback;
-                const dataField = 'OnVacation';
-                const value = '.';
-                const smartPaste = sinon.stub().callsFake((params, callbacks) => {
-                    completionCallback = () => {
-                        const loggerErrorSpy = sinon.spy(logger, 'error');
-                        callbacks.onComplete([
-                            { name: dataField, value },
-                        ]);
-                        assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'boolean'), 'throws correct error');
-                        loggerErrorSpy.restore();
-                    };
-                    return () => {};
-                });
-                const aiIntegration = { smartPaste: smartPaste };
-                const form = setupFormWithAi({
-                    formData: { OnVacation: undefined },
-                    aiIntegration,
-                    items: [
-                        { dataField, editorType: 'dxSwitch' },
-                    ]
-                });
-                const defaultValue = form.getEditor(dataField).option('value');
-                const done = assert.async();
-
-                try {
-                    await form.smartPaste('test');
-                    completionCallback();
-
-                    setTimeout(() => {
-                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                        assert.ok(true, 'gracefully continued');
-                        done();
-                    }, 10);
-                } catch(error) {
-                    assert.ok(false, `failed with error: ${error}`);
-                    done();
-                };
             });
         });
 
@@ -1210,48 +1127,6 @@ QUnit.module('SmartPaste', () => {
                     done();
                 }
             });
-
-            QUnit.test('should log an error and not update editor if value is an array', async function(assert) {
-                let completionCallback;
-                const dataField = 'Hobbies';
-                const value = ['board games', 'video games'];
-                const smartPaste = sinon.stub().callsFake((params, callbacks) => {
-                    completionCallback = () => {
-                        const loggerErrorSpy = sinon.spy(logger, 'error');
-                        callbacks.onComplete([
-                            { name: dataField, value },
-                        ]);
-                        assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, JSON.stringify(value), 'string'), 'throws correct error');
-                        loggerErrorSpy.restore();
-                    };
-                    return () => {};
-                });
-                const aiIntegration = { smartPaste: smartPaste };
-                const form = setupFormWithAi({
-                    formData: {},
-                    aiIntegration,
-                    items: [
-                        { dataField, editorType: 'dxHtmlEditor' },
-                    ]
-                });
-                const defaultValue = form.getEditor(dataField).option('value');
-                const done = assert.async();
-
-                try {
-                    await form.smartPaste('test');
-                    completionCallback();
-
-                    setTimeout(() => {
-                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                        assert.ok(true, 'gracefully continued');
-                        done();
-                    }, 10);
-                } catch(error) {
-                    assert.ok(false, `failed with error: ${error}`);
-                    done();
-                }
-            });
         });
 
         QUnit.module('dxDateRangeBox', () => {
@@ -1281,48 +1156,6 @@ QUnit.module('SmartPaste', () => {
 
                     setTimeout(() => {
                         assert.deepEqual(form.getEditor(dataField).option('value'), value, 'text value was set');
-                        done();
-                    }, 10);
-                } catch(error) {
-                    assert.ok(false, `failed with error: ${error}`);
-                    done();
-                }
-            });
-
-            QUnit.test('should log an error and not update editor if value is not a date range', async function(assert) {
-                let completionCallback;
-                const dataField = 'ContractDates';
-                const value = 'board games';
-                const smartPaste = sinon.stub().callsFake((params, callbacks) => {
-                    completionCallback = () => {
-                        const loggerErrorSpy = sinon.spy(logger, 'error');
-                        callbacks.onComplete([
-                            { name: dataField, value },
-                        ]);
-                        assert.strictEqual(loggerErrorSpy.callCount, 1, 'one error was logged');
-                        assert.deepEqual(loggerErrorSpy.lastCall.args[0], errors.Error('E1064', dataField, `${JSON.stringify(value)}`, 'date range'), 'throws correct error');
-                        loggerErrorSpy.restore();
-                    };
-                    return () => {};
-                });
-                const aiIntegration = { smartPaste: smartPaste };
-                const form = setupFormWithAi({
-                    formData: {},
-                    aiIntegration,
-                    items: [
-                        { dataField, editorType: 'dxDateRangeBox' },
-                    ]
-                });
-                const defaultValue = form.getEditor(dataField).option('value');
-                const done = assert.async();
-
-                try {
-                    await form.smartPaste('test');
-                    completionCallback();
-
-                    setTimeout(() => {
-                        assert.strictEqual(form.getEditor(dataField).option('value'), defaultValue, 'new value was not set');
-                        assert.ok(true, 'gracefully continued');
                         done();
                     }, 10);
                 } catch(error) {

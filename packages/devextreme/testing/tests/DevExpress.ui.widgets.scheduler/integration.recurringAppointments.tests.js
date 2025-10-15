@@ -244,7 +244,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
                 recurrenceEditMode: 'series',
-                width: 1000
+                width: 1200
             });
 
             const updatedItem = {
@@ -338,7 +338,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     dataSource: [{ id: 1 }, { id: 2 }]
                 }],
                 recurrenceEditMode: 'occurrence',
-                width: 1000
+                width: 1200
             });
 
             const updatedItem = {
@@ -683,7 +683,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
-                firstDayOfWeek: 1
+                firstDayOfWeek: 1,
+                editing: { legacyForm: true }
             });
 
             const clock = sinon.useFakeTimers();
@@ -732,6 +733,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentAdding: (e) => {
                     e.appointmentData.customData.texts.push('456');
                 },
+                editing: { legacyForm: true },
                 firstDayOfWeek: 1
             });
 
@@ -880,7 +882,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
-                firstDayOfWeek: 1
+                firstDayOfWeek: 1,
+                editing: { legacyForm: true }
             });
             const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
@@ -1293,30 +1296,25 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         test('Recurrence exception should be adjusted by scheduler timezone', async function(assert) {
-            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
-            try {
-                const scheduler = await this.createInstance({
-                    dataSource: [{
-                        text: 'a',
-                        startDate: new Date(2018, 2, 26, 10),
-                        endDate: new Date(2018, 2, 26, 11),
-                        recurrenceRule: 'FREQ=DAILY',
-                        recurrenceException: '20180327T100000, 20180330T100000'
-                    }],
-                    views: ['month'],
-                    currentView: 'month',
-                    currentDate: new Date(2018, 2, 30),
-                    timeZone: 'Australia/Sydney',
-                    height: 600,
-                    width: 600
-                });
+            const scheduler = await this.createInstance({
+                dataSource: [{
+                    text: 'a',
+                    startDate: Date.UTC(2018, 2, 26, 8),
+                    endDate: Date.UTC(2018, 2, 26, 9),
+                    recurrenceRule: 'FREQ=DAILY',
+                    recurrenceException: '20180327T080000Z, 20180330T080000Z'
+                }],
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2018, 2, 30),
+                timeZone: 'Australia/Sydney',
+                height: 600,
+                width: 600
+            });
 
-                const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
+            const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
-                assert.equal($appointments.length, 11, 'correct number of the appointments');
-            } finally {
-                tzOffsetStub.restore();
-            }
+            assert.equal($appointments.length, 11, 'correct number of the appointments');
         });
 
         test('Single changed appointment should be rendered correctly in specified timeZone', async function(assert) {
@@ -1325,43 +1323,39 @@ supportedScrollingModes.forEach(scrollingMode => {
                 return;
             }
 
-            const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
-            try {
-                const scheduler = await this.createInstance({
-                    dataSource: [{
-                        text: 'Recurrence',
-                        startDate: '2018-05-23T10:00:00Z',
-                        endDate: '2018-05-23T10:30:00Z',
-                        recurrenceRule: 'FREQ=DAILY'
-                    }],
-                    views: ['week'],
-                    currentView: 'week',
-                    currentDate: new Date(2018, 4, 23),
-                    timeZone: 'Etc/UTC',
-                    height: 2000,
-                    width: 800
-                });
+            const scheduler = await this.createInstance({
+                dataSource: [{
+                    text: 'Recurrence',
+                    startDate: '2018-05-23T10:00:00Z',
+                    endDate: '2018-05-23T10:30:00Z',
+                    recurrenceRule: 'FREQ=DAILY'
+                }],
+                editing: { legacyForm: true },
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2018, 4, 23),
+                timeZone: 'Etc/UTC',
+                height: 2000,
+                width: 800
+            });
 
-                const clock = sinon.useFakeTimers();
-                $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
+            const clock = sinon.useFakeTimers();
+            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
 
-                $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
+            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
-                const $startDate = $('.dx-datebox').eq(0);
-                const startDate = $startDate.dxDateBox('instance');
-                const expectedStartDate = new Date(2018, 4, 23, 9, 0);
+            const $startDate = $('.dx-datebox').eq(0);
+            const startDate = $startDate.dxDateBox('instance');
+            const expectedStartDate = new Date(2018, 4, 23, 9, 0);
 
-                startDate.option('value', expectedStartDate);
-                $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-                await clock.tickAsync(300);
-                clock.restore();
+            startDate.option('value', expectedStartDate);
+            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
+            await clock.tickAsync(300);
+            clock.restore();
 
-                const actualStartDate = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(3).dxSchedulerAppointment('instance').option('startDate');
+            const actualStartDate = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(3).dxSchedulerAppointment('instance').option('startDate');
 
-                assert.deepEqual(actualStartDate, expectedStartDate, 'appointment starts in 9AM');
-            } finally {
-                tzOffsetStub.restore();
-            }
+            assert.deepEqual(actualStartDate, expectedStartDate, 'appointment starts in 9AM');
         });
 
         test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', async function(assert) {
@@ -1684,6 +1678,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=MINUTELY;COUNT=3'
                 }],
+                editing: { legacyForm: true },
                 currentDate: apptStartDate,
             });
 
@@ -1711,6 +1706,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=HOURLY;COUNT=3'
                 }],
+                editing: { legacyForm: true },
                 currentDate: apptStartDate,
             });
 

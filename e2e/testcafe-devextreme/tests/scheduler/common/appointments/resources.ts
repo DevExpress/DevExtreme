@@ -106,11 +106,10 @@ test('Scheduler should renders correctly if resource dataSource is not set', asy
 test('Resource with allowMultiple should be set correctly for new the appointment (T1075028)', async (t) => {
   const scheduler = new Scheduler('#container');
   const cell = scheduler.getDateTableCell(2, 0);
-  const popup = scheduler.appointmentPopup;
 
   await t
     .doubleClick(cell)
-    .expect(popup.element.exists)
+    .expect(scheduler.appointmentPopup.popup.isVisible())
     .ok();
 
   const resourceTagBox = new TagBox('.dx-tagbox');

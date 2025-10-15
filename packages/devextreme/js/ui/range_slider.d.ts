@@ -3,7 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     ValueChangedInfo,
@@ -53,7 +54,7 @@ export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, InteractionEvent | UIEvent | Event> & ValueChangedInfo & {
     /** @docid _ui_range_slider_ValueChangedEvent.start */
     readonly start?: number;
     /** @docid _ui_range_slider_ValueChangedEvent.end */

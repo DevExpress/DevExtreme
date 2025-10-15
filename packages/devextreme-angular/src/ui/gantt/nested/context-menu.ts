@@ -10,9 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -23,11 +21,13 @@ import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextre
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGanttContextMenuItemComponent } from './context-menu-item-dxi';
-import { DxiGanttItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-gantt-context-menu',
@@ -37,7 +37,12 @@ import { DxiGanttItemComponent } from './item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -60,21 +65,6 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemComponent)) contextMenuItemsChildren!: QueryList<DxiGanttContextMenuItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.contextMenuItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -92,12 +82,6 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.contextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

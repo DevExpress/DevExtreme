@@ -1,14 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
+import { AiColumnCacheController } from './m_ai_column_cache_controller';
+import { AiColumnIntegrationController } from './m_ai_column_integration_controller';
 
 export class AiColumnController extends Controller {
   private dataController!: DataController;
 
+  private columnsController!: ColumnsController;
+
+  private aiColumnCacheController!: AiColumnCacheController;
+
+  private aiColumnIntegrationController!: AiColumnIntegrationController;
+
   private dataChangedHandler!: (e) => any;
 
   public init(): void {
+    this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
+
+    this.aiColumnCacheController = new AiColumnCacheController(this.component);
+    this.aiColumnIntegrationController = new AiColumnIntegrationController(this.component);
+    this.aiColumnIntegrationController.init();
+    this.aiColumnCacheController.init();
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
@@ -27,8 +42,17 @@ export class AiColumnController extends Controller {
     this.executeAction('onAIColumnResponseReceived', options);
   }
 
-  private handleDataChanged(e) {
+  private refreshAIColumnInternal(columnName: string): void {
+    this.aiColumnIntegrationController.sendRequest(columnName);
+  }
 
+  private handleDataChanged(e) {
+    const aiColumns = this.columnsController.getColumns()
+      .filter((col) => col.type === 'ai'
+        && col.ai.mode === 'auto');
+    for (const col of aiColumns) {
+      this.refreshAIColumnInternal(col.name);
+    }
   }
 
   private showResult(columnName: string, data: Record<PropertyKey, string>): void {
@@ -52,11 +76,11 @@ export class AiColumnController extends Controller {
   }
 
   public sendAIColumnRequest(columnName: string): void {
-
+    this.aiColumnIntegrationController.sendRequest(columnName);
   }
 
   public refreshAIColumn(columnName: string): void {
-
+    this.refreshAIColumnInternal(columnName);
   }
 
   public clearAIColumn(columnName: string): void {

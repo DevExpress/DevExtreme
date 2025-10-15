@@ -567,14 +567,14 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 hide: () => $(CLASSES.dialog).find('.dx-closebutton.dx-button').trigger('dxclick')
             },
 
-            getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup, .dx-overlay-wrapper.dx-scheduler-legacy-appointment-popup'),
             getRecurrenceDialog: () => $(`${CLASSES.dialog}${CLASSES.popup}`),
             getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
                 return scrollableContainer.scrollHeight > scrollableContainer.clientHeight;
             },
-            getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget').dxPopup('instance'),
+            getPopupInstance: () => $('.dx-scheduler-appointment-popup.dx-widget, .dx-scheduler-legacy-appointment-popup.dx-widget').dxPopup('instance'),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             setPopupHeight: height => this.appointmentPopup.getPopupInstance().option('height', height),
             getToolbarElementByLocation: location => {

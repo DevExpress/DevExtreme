@@ -10,9 +10,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -32,19 +30,12 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDataGridAsyncRuleComponent } from './async-rule-dxi';
-import { DxiDataGridButtonComponent } from './button-dxi';
-import { DxiDataGridColumnButtonComponent } from './column-button-dxi';
-import { DxiDataGridCompareRuleComponent } from './compare-rule-dxi';
-import { DxiDataGridCustomRuleComponent } from './custom-rule-dxi';
-import { DxiDataGridEmailRuleComponent } from './email-rule-dxi';
-import { DxiDataGridNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiDataGridPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiDataGridRangeRuleComponent } from './range-rule-dxi';
-import { DxiDataGridRequiredRuleComponent } from './required-rule-dxi';
-import { DxiDataGridStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_columns,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-column',
@@ -52,9 +43,30 @@ import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiDataGridColumnComponent,
+        }
+    ]
 })
-export class DxiDataGridColumnComponent extends CollectionNestedOption implements AfterContentInit  {
+export class DxiDataGridColumnComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+    
     @Input()
     get ai(): ColumnAIOptions {
         return this._getOption('ai');
@@ -628,79 +640,9 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiDataGridAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridCompareRuleComponent)) compareRulesChildren!: QueryList<DxiDataGridCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridCustomRuleComponent)) customRulesChildren!: QueryList<DxiDataGridCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridEmailRuleComponent)) emailRulesChildren!: QueryList<DxiDataGridEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridNumericRuleComponent)) numericRulesChildren!: QueryList<DxiDataGridNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridPatternRuleComponent)) patternRulesChildren!: QueryList<DxiDataGridPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiDataGridRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiDataGridRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiDataGridStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridValidationRuleComponent)) validationRulesChildren!: QueryList<DxiDataGridValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-    @ContentChildren(forwardRef(() => DxiDataGridButtonComponent)) buttonsChildren!: QueryList<DxiDataGridButtonComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridColumnButtonComponent)) columnButtonsChildren!: QueryList<DxiDataGridColumnButtonComponent>
-    
-    setButtons() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonsChildren.toArray(),
-            ...this.columnButtonsChildren.toArray(),
-        ]);
-        this.setChildren('buttons', q);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @ContentChildren(forwardRef(() => DxiDataGridColumnComponent))
-    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this.setChildren('columns', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },
@@ -722,24 +664,6 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.setButtons();
-        
-        this.buttonsChildren.changes.subscribe(() => { this.setButtons() });
-        this.columnButtonsChildren.changes.subscribe(() => { this.setButtons() });
-    }
 }
 
 @NgModule({

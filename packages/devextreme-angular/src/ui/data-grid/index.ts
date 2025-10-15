@@ -36,6 +36,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
 import { event } from 'devextreme/events/events.types';
 import { Format } from 'devextreme/common/core/localization';
 
@@ -49,7 +50,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoColumnChooserModule } from 'devextreme-angular/ui/nested';
@@ -172,6 +174,7 @@ import { DxoDataGridGroupPanelModule } from 'devextreme-angular/ui/data-grid/nes
 import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridIndicatorOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridKeyboardNavigationModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridLabelModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -210,12 +213,19 @@ import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/ne
 import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
-
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDataGridColumnComponent } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/data-grid/nested';
+import { 
+           PROPERTY_TOKEN_validationRules,
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_changes,
+           PROPERTY_TOKEN_columns,
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+           PROPERTY_TOKEN_groupItems,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_sortByGroupSummaryInfo,
+           PROPERTY_TOKEN_toolbarItems,
+           PROPERTY_TOKEN_totalItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -236,6 +246,62 @@ import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/u
     ]
 })
 export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('changes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_groupItems)
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groupItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
+    set _sortByGroupSummaryInfoContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('sortByGroupSummaryInfo', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_totalItems)
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('totalItems', value);
+    }
+
     instance: DxDataGrid<TRowData, TKey> = null;
 
     /**
@@ -815,10 +881,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: { enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -1884,7 +1950,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<{ enabled?: boolean | Mode, height?: number | string, indicatorOptions?: LoadPanelIndicatorProperties, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -2102,42 +2168,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
-
-
-
-
-    @ContentChildren(DxiDataGridColumnComponent)
-    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiDataGridColumnComponent');
-    }
-
-    @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfosChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
-        return this._getOption('sortByGroupSummaryInfo');
-    }
-    set sortByGroupSummaryInfosChildren(value) {
-        this._setChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
-    }
-
-
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
-
-    @ContentChildren(DxiSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfoLegacyChildren(): QueryList<DxiSortByGroupSummaryInfoComponent> {
-        return this._getOption('sortByGroupSummaryInfo');
-    }
-    set sortByGroupSummaryInfoLegacyChildren(value) {
-        this._setChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent');
-    }
 
 
 
@@ -2449,6 +2479,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridHeaderFilterModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
+    DxoDataGridIndicatorOptionsModule,
     DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
     DxoDataGridLabelModule,
@@ -2611,6 +2642,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridHeaderFilterModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
+    DxoDataGridIndicatorOptionsModule,
     DxiDataGridItemModule,
     DxoDataGridKeyboardNavigationModule,
     DxoDataGridLabelModule,

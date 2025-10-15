@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -27,11 +26,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiConnectionPointComponent } from './connection-point-dxi';
 
+import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_connectionPoints,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-custom-shape',
@@ -39,10 +41,22 @@ import { DxiConnectionPointComponent } from './connection-point-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_customShapes,
+           useExisting: DxiCustomShapeComponent,
+        }
+    ]
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+    
     @Input()
     get allowEditImage(): boolean {
         return this._getOption('allowEditImage');
@@ -352,14 +366,6 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
         return 'customShapes';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiConnectionPointComponent))
-    get connectionPointsChildren(): QueryList<DxiConnectionPointComponent> {
-        return this._getOption('connectionPoints');
-    }
-    set connectionPointsChildren(value) {
-        this.setChildren('connectionPoints', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -10,9 +10,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -23,15 +21,13 @@ import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, d
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSchedulerButtonItemComponent } from './button-item-dxi';
-import { DxiSchedulerEmptyItemComponent } from './empty-item-dxi';
-import { DxiSchedulerGroupItemComponent } from './group-item-dxi';
-import { DxiSchedulerItemComponent } from './item-dxi';
-import { DxiSchedulerSimpleItemComponent } from './simple-item-dxi';
-import { DxiSchedulerTabbedItemComponent } from './tabbed-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-scheduler-form',
@@ -41,7 +37,12 @@ import { DxiSchedulerTabbedItemComponent } from './tabbed-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
         return this._getOption('items');
@@ -72,37 +73,6 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerButtonItemComponent)) buttonItemsChildren!: QueryList<DxiSchedulerButtonItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiSchedulerEmptyItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerGroupItemComponent)) groupItemsChildren!: QueryList<DxiSchedulerGroupItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiSchedulerSimpleItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiSchedulerTabbedItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonItemsChildren.toArray(),
-            ...this.emptyItemsChildren.toArray(),
-            ...this.groupItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-            ...this.simpleItemsChildren.toArray(),
-            ...this.tabbedItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -120,16 +90,6 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

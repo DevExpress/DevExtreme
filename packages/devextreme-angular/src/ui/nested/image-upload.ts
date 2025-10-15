@@ -10,7 +10,6 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -21,10 +20,13 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorImageUpload } from './base/html-editor-image-upload';
-import { DxiTabComponent } from './tab-dxi';
 
+import {
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-image-upload',
@@ -42,19 +44,16 @@ import { DxiTabComponent } from './tab-dxi';
     ]
 })
 export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+    
 
     protected get _optionPath() {
         return 'imageUpload';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

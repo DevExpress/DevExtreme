@@ -12,9 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -26,11 +24,13 @@ import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, Dispo
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridButtonComponent } from './button-dxi';
-import { DxiDataGridEditorOptionsButtonComponent } from './editor-options-button-dxi';
 
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-editor-options',
@@ -40,7 +40,12 @@ import { DxiDataGridEditorOptionsButtonComponent } from './editor-options-button
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDataGridEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoDataGridEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -493,25 +498,9 @@ export class DxoDataGridEditorOptionsComponent extends NestedOption implements O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridButtonComponent)) buttonsChildren!: QueryList<DxiDataGridButtonComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDataGridEditorOptionsButtonComponent)) editorOptionsButtonsChildren!: QueryList<DxiDataGridEditorOptionsButtonComponent>
-    
-    setButtons() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonsChildren.toArray(),
-            ...this.editorOptionsButtonsChildren.toArray(),
-        ]);
-        this.setChildren('buttons', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
@@ -530,12 +519,6 @@ export class DxoDataGridEditorOptionsComponent extends NestedOption implements O
     }
 
 
-    ngAfterContentInit() {
-        this.setButtons();
-        
-        this.buttonsChildren.changes.subscribe(() => { this.setButtons() });
-        this.editorOptionsButtonsChildren.changes.subscribe(() => { this.setButtons() });
-    }
 }
 
 @NgModule({

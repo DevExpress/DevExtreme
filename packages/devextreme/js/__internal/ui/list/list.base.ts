@@ -23,7 +23,12 @@ import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DataSourceLike } from '@js/data/data_source';
-import type { DxEvent, NativeEventInfo } from '@js/events';
+import type {
+  DxEvent,
+  InteractionEvent,
+  NativeEventInfo,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
@@ -869,16 +874,16 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         $element,
         eventNameClick,
         headerSelector,
-        (e: DxEvent<MouseEvent | PointerEvent | TouchEvent>): void => {
+        (e: DxEvent<PointerInteractionEvent>): void => {
           this._processGroupCollapse(e);
         },
       );
     }
   }
 
-  _processGroupCollapse(e: DxEvent<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>): void {
+  _processGroupCollapse(e: DxEvent<InteractionEvent>): void {
     const actionCallback = (
-      evt: NativeEventInfo<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>,
+      evt: NativeEventInfo<InteractionEvent>,
     ): void => {
       const { focusStateEnabled } = this.option();
       const $group = $(evt.event?.currentTarget).parent();
