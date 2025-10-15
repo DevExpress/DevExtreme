@@ -45,7 +45,6 @@ body {
   justify-content: center;
   align-items: center;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 </style>
