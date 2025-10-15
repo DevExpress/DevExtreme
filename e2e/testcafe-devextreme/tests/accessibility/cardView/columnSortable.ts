@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { getColumnItem, triggerDragEnd, triggerDragStart } from '../../cardView/columnSortable/utils';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`CardView - ColumnSortable.Visual`
+fixture.disablePageReloads`CardView - ColumnSortable`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

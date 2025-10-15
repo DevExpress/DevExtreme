@@ -255,13 +255,13 @@ createTestCafe(TESTCAFE_CONFIG)
         test: {
           before: async (t: TestController) => {
             if (!componentFolder.includes('accessibility')) {
-              await t.eval(() => {
+              await ClientFunction(() => {
                 if (document.activeElement && document.activeElement !== document.body) {
                   (document.activeElement as HTMLElement).blur();
                 }
 
                 window.getSelection()?.removeAllRanges();
-              });
+              }).with({ boundTestRun: t })();
 
               await t.hover('html');
 
@@ -285,12 +285,6 @@ createTestCafe(TESTCAFE_CONFIG)
             }
           },
           after: async (t: TestController) => {
-            await ClientFunction(() => {
-              const { localization } = (window as any).DevExpress;
-
-              localization.locale('en');
-            }).with({ boundTestRun: t })();
-
             await clearTestPage(t);
           },
         },

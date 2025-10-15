@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { checkOptions } from './axe_options';
 
-fixture.disablePageReloads`a11y - appointment`
+fixture.disablePageReloads`Scheduler - Appointment`
   .page(url(__dirname, '../../container.html'));
 
 const appointmentItem = {

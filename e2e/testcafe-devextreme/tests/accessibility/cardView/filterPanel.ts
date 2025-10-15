@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { baseConfig } from '../../cardView/filterPanel/helpers/baseConfig';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`CardView - FilterPanel Appearance`
+fixture.disablePageReloads`CardView - FilterPanel`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`a11y - appointment`
+fixture.disablePageReloads`Scheduler - Status`
   .page(url(__dirname, '../../container.html'));
 
 const today = '2025-04-30T15:00:00.000Z';

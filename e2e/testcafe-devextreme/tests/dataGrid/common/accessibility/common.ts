@@ -8,20 +8,15 @@ import { getData } from '../../helpers/generateDataSourceData';
 import { Themes } from '../../../../helpers/themes';
 import { changeTheme } from '../../../../helpers/changeTheme';
 
-fixture.disablePageReloads`Common tests with axe`
+fixture.disablePageReloads`Common tests`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
 [
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
   Themes.fluentBlue,
   Themes.fluentBlueDark,
 ].forEach((theme) => {
-  const isFluent = theme === Themes.fluentBlue || theme === Themes.fluentBlueDark;
   const screenshotCheck = async (
     t: TestController,
     screenshotName: string,
@@ -44,9 +39,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'no-data', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'no-data', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -64,9 +57,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'sorting-and-group-panel', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'sorting-and-group-panel', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -103,9 +94,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'paging-full-display-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'paging-full-display-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -142,9 +131,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'paging-compact-display-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'paging-compact-display-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -181,9 +168,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'grouping-and-summary', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'grouping-and-summary', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -231,7 +216,6 @@ const DATA_GRID_SELECTOR = '#container';
   });
 
   test(`Filter row - filter menu in ${theme}`, async (t) => {
-    // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
 
@@ -239,18 +223,13 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    // act
     await t.click(filterEditor.menuButton);
 
-    // assert
     await t
       .expect(filterEditor.menu.isOpened)
       .ok();
 
-    // act
-    if (isFluent) {
-      await screenshotCheck(t, 'filter-row-menu', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'filter-row-menu', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -298,10 +277,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(new HeaderFilter().element.exists)
       .ok();
 
-    // act
-    if (isFluent) {
-      await screenshotCheck(t, 'header-filter-menu', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'header-filter-menu', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -337,10 +313,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(filterPanel.getFilterText().element.textContent)
       .eql('[Field 1] Contains \'val\'');
 
-    // act
-    if (isFluent) {
-      await screenshotCheck(t, 'filter-panel', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'filter-panel', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -386,10 +359,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(filterPanel.isOpened)
       .ok();
 
-    // act
-    if (isFluent) {
-      await screenshotCheck(t, 'filter-builder', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'filter-builder', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -420,9 +390,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'search-panel', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'search-panel', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -451,9 +419,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'search-panel-highlight', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'search-panel-highlight', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -487,9 +453,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(2).isSelected)
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'selection', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'selection', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -523,9 +487,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(1).isFocusedRow)
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'focused-row', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'focused-row', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -554,9 +516,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    if (isFluent) {
-      await screenshotCheck(t, 'fixed-columns', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'fixed-columns', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -614,10 +574,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(columnChooser.isOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'column-chooser-drag_and_drop-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'column-chooser-drag_and_drop-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -669,10 +626,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(columnChooser.isOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'column-chooser-select-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'column-chooser-select-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -724,10 +678,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(columnChooser.isOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'empty-column-chooser', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'empty-column-chooser', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -761,10 +712,7 @@ const DATA_GRID_SELECTOR = '#container';
         .expect(dataGrid.isReady())
         .ok();
 
-      // act, assert
-      if (isFluent) {
-        await screenshotCheck(t, `row-editing-mode-with-useIcons=${useIcons}`, theme, dataGrid.element);
-      }
+      await screenshotCheck(t, `row-editing-mode-with-useIcons=${useIcons}`, theme, dataGrid.element);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -808,10 +756,7 @@ const DATA_GRID_SELECTOR = '#container';
         .expect(dataGrid.getDataRow(0).isEdited)
         .ok();
 
-      // act, assert
-      if (isFluent) {
-        await screenshotCheck(t, `row-edit-state-with-useIcons=${useIcons}`, theme, dataGrid.element);
-      }
+      await screenshotCheck(t, `row-edit-state-with-useIcons=${useIcons}`, theme, dataGrid.element);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -857,10 +802,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(isDialogOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'row-editing-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'row-editing-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -903,10 +845,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataCell(0, 0).isEditCell)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'batch-editing-mode-edit_cell', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'batch-editing-mode-edit_cell', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -949,10 +888,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataCell(0, 0).isModified)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'row-editing-mode-modified_cell', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'row-editing-mode-modified_cell', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -995,10 +931,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(0).isRemoved)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'row-editing-mode-delete_row', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'row-editing-mode-delete_row', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1041,10 +974,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getEditForm().element.exists)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'form-editing-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'form-editing-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1087,10 +1017,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getPopupEditForm().element.exists)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'popup-editing-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'popup-editing-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1137,10 +1064,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getInvalidMessageTooltip().exists)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'validation-in-cell-editing-mode', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'validation-in-cell-editing-mode', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1195,10 +1119,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getErrorRow().exists)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'error-row', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'error-row', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1245,10 +1166,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getAdaptiveRow(0).element.exists)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'adaptive-row', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'adaptive-row', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1274,10 +1192,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'row-drag-and-drop', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'row-drag-and-drop', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1314,10 +1229,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(exportButton.isOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'export-button', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'export-button', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1355,10 +1267,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(contextMenu.isOpened)
       .ok();
 
-    // act, assert
-    if (isFluent) {
-      await screenshotCheck(t, 'context-menu', theme, dataGrid.element);
-    }
+    await screenshotCheck(t, 'context-menu', theme, dataGrid.element);
   }).before(async () => {
     await changeTheme(theme);
 

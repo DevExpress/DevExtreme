@@ -39,7 +39,7 @@ async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
-fixture`Scrolling`
+fixture.disablePageReloads`Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
@@ -1152,7 +1152,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
   delete (window as any).testLoadCount;
 })());
 
-fixture`Remote Scrolling`
+fixture.disablePageReloads`Remote Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {

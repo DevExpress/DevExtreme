@@ -249,6 +249,12 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   await t.expect(titleText).eql('customTitle');
   await t.expect(emptyMessageText).eql('customEmptyText');
 }).before(async (t) => {
+  t.ctx.originalMessages = await t.eval(() => {
+    const { localization } = (window as any).DevExpress;
+
+    return localization.getMessagesByLocales();
+  });
+
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
       en: {
@@ -272,4 +278,10 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     dataSource: [],
     columns: [],
   });
+}).after(async (t) => {
+  await t.eval((messages) => {
+    const { localization } = (window as any).DevExpress;
+
+    localization.loadMessages(messages);
+  }, { dependencies: { messages: t.ctx.originalMessages } });
 });
