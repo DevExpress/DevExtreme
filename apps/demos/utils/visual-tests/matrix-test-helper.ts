@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
@@ -201,14 +201,15 @@ export function shouldRunTestAtIndex(testIndex) {
 const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipCustomization', themes: [THEME.material] },
       { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
+      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditing', themes: [THEME.material] },
-      // This test works only in simulated scrolling strategy!
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
@@ -225,143 +226,26 @@ const SKIPPED_TESTS = {
     ]
   },
   Angular: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'TooltipCustomization', themes: [THEME.material] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Scheduler: [
-      // NOTE: Context menu appearance is different in comparison to other frameworks
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Sortable: [
-      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    PivotGrid: [
-      { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    Common: ['PopupAndNotificationsOverview'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    Scheduler: ['ContextMenu'],
+    FileUploader: ['CustomDropzone']
   },
   Vue: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'FilteringAPI', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.generic] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Scheduler: [
-        // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-  },
-  React: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
+    Common: ['PopupAndNotificationsOverview'],
     Scheduler: [
       // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
+  },
+  React: {
+    Scheduler: [
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
-    Form: [
-      // Flaky issue: Source image size does not match target size
-      { demo: 'ItemCustomization', themes: [THEME.generic] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
   },
 };
 
