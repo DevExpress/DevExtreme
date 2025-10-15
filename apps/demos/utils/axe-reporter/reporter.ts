@@ -33,7 +33,7 @@ function simplifyResults(r) {
 
 export function createMdReport({ testName, results }) {
   // eslint-disable-next-line max-len
-  const mdString = mustache.render(template, { testName, results: simplifyResults(results) });
+  const mdString = mustache?.render(template, { testName, results: simplifyResults(results) }) || '';
 
   if (!existsSync(reportDir)) {
     mkdirSync(reportDir, { recursive: true });
