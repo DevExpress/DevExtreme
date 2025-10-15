@@ -90,7 +90,7 @@ export class AiColumnIntegrationController extends Controller {
       {
         text: prompt,
         data: reducedData,
-        params: args.additionalInfo,
+        additionalInfo: args.additionalInfo,
       },
       this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName, cachedResponse),
     );

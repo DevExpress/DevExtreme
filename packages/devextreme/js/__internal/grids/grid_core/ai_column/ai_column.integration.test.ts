@@ -1540,14 +1540,16 @@ describe('API Methods', () => {
 describe('API Handlers', () => {
   const columnSendRequestStarted = jest.fn();
   const columnSendRequestResolved = jest.fn();
-  const sendRequestSpy = jest.fn();
+  const sendRequestPromptSpy = jest.fn();
+  const sendRequestDataSpy = jest.fn();
   const abortSpy = jest.fn();
 
   beforeEach(() => {
     beforeTest();
     columnSendRequestStarted.mockClear();
     columnSendRequestResolved.mockClear();
-    sendRequestSpy.mockClear();
+    sendRequestPromptSpy.mockClear();
+    sendRequestDataSpy.mockClear();
     abortSpy.mockClear();
   });
 
@@ -1568,8 +1570,9 @@ describe('API Handlers', () => {
       },
     });
     const columnAiIntegration = new AIIntegration({
-      sendRequest({ prompt }): RequestResult {
-        sendRequestSpy(prompt);
+      sendRequest({ prompt, data }): RequestResult {
+        sendRequestPromptSpy(prompt);
+        sendRequestDataSpy(data);
         return aiIntegrationResult();
       },
     });
@@ -1694,7 +1697,7 @@ describe('API Handlers', () => {
       jest.advanceTimersByTime(10000);
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
-      expect(sendRequestSpy).toHaveBeenCalledWith(expect.objectContaining({
+      expect(sendRequestPromptSpy).toHaveBeenCalledWith(expect.objectContaining({
         user: expect.stringContaining('Data: {"2":{"id":2,"name":"Name 2","value":20}}'),
       }));
 
@@ -1734,13 +1737,18 @@ describe('API Handlers', () => {
       jest.advanceTimersByTime(10000);
       expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
       expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
-      expect(sendRequestSpy).toHaveBeenCalledWith(expect.objectContaining({
-        user: expect.stringContaining('Data: {"2":{"id":2,"name":"Name 2","value":20}}'),
+      expect(sendRequestDataSpy).toHaveBeenCalledWith(expect.objectContaining({
+        additionalInfo: { customData: 'My custom data' },
       }));
 
       await Promise.resolve();
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
+
+    // TODO: Implement after cache is done
+    // if('should take into account useCache property', async () => {
+
+    // });
   });
 
   // describe('onAIRequestCompleted', () => {
