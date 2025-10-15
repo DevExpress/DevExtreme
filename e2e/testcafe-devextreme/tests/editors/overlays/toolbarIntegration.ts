@@ -8,7 +8,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Popup_toolbar`
+fixture.disablePageReloads`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
 const COMPONENT_SELECTOR = '#container';
