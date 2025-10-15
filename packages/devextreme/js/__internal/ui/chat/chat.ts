@@ -26,10 +26,10 @@ import AlertList from '@ts/ui/chat/alertlist';
 import ConfirmationPopup from '@ts/ui/chat/confirmationpopup';
 import type {
   MessageEnteredEvent as MessageBoxMessageEnteredEvent,
-  Properties as MessageBoxProperties,
+  // Properties as MessageBoxProperties,
   TypingStartEvent as MessageBoxTypingStartEvent,
 } from '@ts/ui/chat/messagebox';
-import MessageBox from '@ts/ui/chat/messagebox';
+import type MessageBox from '@ts/ui/chat/messagebox';
 import type {
   EmptyViewTemplate,
   MessageEditingEvent,
@@ -43,7 +43,7 @@ const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
-  _messageBox!: MessageBox;
+  _messageBox?: MessageBox;
 
   _messageList!: MessageList;
 
@@ -310,7 +310,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
-        this._messageBox.option('text', e.message.text);
+        this._messageBox?.option('text', e.message.text);
         this._messageToEdit = e.message;
       },
     );
@@ -332,7 +332,7 @@ class Chat extends Widget<Properties> {
         {
           onApplyButtonClick: (): void => {
             if (this._messageToEdit === this._messageToDelete) {
-              this._messageBox.option('text', '');
+              this._messageBox?.option('text', '');
               this._messageEditCanceledAction?.({ message: this._messageToEdit });
               this._messageToEdit = undefined;
             }
@@ -386,7 +386,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       eventArgs.cancel,
       () => {
-        this._messageBox.option('text', '');
+        this._messageBox?.option('text', '');
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
       },
@@ -406,38 +406,38 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageBox(): void {
-    const {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-    } = this.option();
+    // const {
+    //   activeStateEnabled,
+    //   focusStateEnabled,
+    //   hoverStateEnabled,
+    // } = this.option();
 
     const $messageBox = $('<div>');
 
     this.$element().append($messageBox);
 
-    const configuration: MessageBoxProperties = {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      onMessageEntered: (e) => {
-        this._messageEnteredHandler(e);
-      },
-      onTypingStart: (e) => {
-        this._typingStartHandler(e);
-      },
-      onTypingEnd: () => {
-        this._typingEndHandler();
-      },
-      onMessageEditCanceled: () => {
-        this._messageEditCanceledHandler();
-      },
-      onMessageUpdating: (e) => {
-        this._messageUpdatingHandler(e);
-      },
-    };
+    // const configuration: MessageBoxProperties = {
+    //   activeStateEnabled,
+    //   focusStateEnabled,
+    //   hoverStateEnabled,
+    //   onMessageEntered: (e) => {
+    //     this._messageEnteredHandler(e);
+    //   },
+    //   onTypingStart: (e) => {
+    //     this._typingStartHandler(e);
+    //   },
+    //   onTypingEnd: () => {
+    //     this._typingEndHandler();
+    //   },
+    //   onMessageEditCanceled: () => {
+    //     this._messageEditCanceledHandler();
+    //   },
+    //   onMessageUpdating: (e) => {
+    //     this._messageUpdatingHandler(e);
+    //   },
+    // };
 
-    this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+    // this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
   }
 
   _updateRootAria(): void {
@@ -452,7 +452,7 @@ class Chat extends Widget<Properties> {
   _updateMessageBoxAria(): void {
     const emptyViewId = this._messageList.getEmptyViewId();
 
-    this._messageBox.updateInputAria(emptyViewId);
+    this._messageBox?.updateInputAria(emptyViewId);
   }
 
   _createMessageEnteredAction(): void {
@@ -570,7 +570,7 @@ class Chat extends Widget<Properties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-        this._messageBox.option(name, value);
+        this._messageBox?.option(name, value);
         break;
       case 'user': {
         const author = value as Properties[typeof name];
