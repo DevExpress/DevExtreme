@@ -24,16 +24,6 @@ export class AiColumnController extends Controller {
     this.dataController.changed.add(this.dataChangedHandler);
   }
 
-  private createAIColumnRequest() {
-    const args = {};
-    this.executeAction('onAIColumnRequestCreating', args);
-  }
-
-  private receiveAIColumnResponse() {
-    const options = {};
-    this.executeAction('onAIColumnResponseReceived', options);
-  }
-
   private refreshAIColumnInternal(columnName: string): void {
     this.aiColumnIntegrationController.refreshAIColumn(columnName);
   }

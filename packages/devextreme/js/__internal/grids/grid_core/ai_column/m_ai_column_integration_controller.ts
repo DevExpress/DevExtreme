@@ -11,7 +11,7 @@ import type { DataController } from '../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
 import { AiColumnCacheController } from './m_ai_column_cache_controller';
-import { getData, reduceDataCachedKeys } from './utils';
+import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 
 export class AiColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
@@ -31,6 +31,9 @@ export class AiColumnIntegrationController extends Controller {
 
     this.aiColumnCacheController = new AiColumnCacheController(this.component);
     this.aiColumnCacheController.init();
+
+    this.createAction('onAIColumnRequestCreating');
+    this.createAction('onAIColumnResponseReceived');
   }
 
   public sendAIColumnRequest(columnName: string): void {
@@ -41,12 +44,13 @@ export class AiColumnIntegrationController extends Controller {
     this.sendRequest(columnName, false);
   }
 
-  private sendRequest(columnName: string, force: boolean): void {
+  private sendRequest(columnName: string, useCache: boolean): void {
     const aiIntegration = this.getAiIntegration(columnName);
     if (!aiIntegration) {
       return;
     }
-    const prompt = this.columnsController.columnOption(columnName, 'ai.prompt');
+    const column = this.columnsController.getColumns().find((col) => col.name === columnName);
+    const { prompt } = column.ai;
     if (!prompt) {
       return;
     }
@@ -55,17 +59,38 @@ export class AiColumnIntegrationController extends Controller {
       this.abortRequest(columnName);
     }
 
-    let data = getData(this.dataController.items());
+    const rowItems = this.dataController.items();
+    const data = getDataFromRowItems(rowItems);
+    const args = {
+      column,
+      useCache,
+      cancel: false,
+      additionalInfo: { },
+      data,
+    };
+    this.executeAction('onAIColumnRequestCreating', args);
+
+    if (args.cancel) {
+      return;
+    }
+
     const keys = Object.keys(data);
-    const cachedResponse: Record<PropertyKey, string> = force
+    const cachedResponse: Record<PropertyKey, string> = useCache
       ? {}
       : this.aiColumnCacheController.getCachedResponse(columnName, keys);
-    data = reduceDataCachedKeys(data, cachedResponse);
+    const keyField = this.dataController.key();
+    const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
+    const areAllDataCached = Object.keys(reducedData).length === 0;
+    if (areAllDataCached) {
+      this.showResult(columnName, '', cachedResponse);
+      return;
+    }
 
     const abort = aiIntegration.generateGridColumn(
       {
         text: prompt,
-        data,
+        data: reducedData,
+        params: args.additionalInfo,
       },
       this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName, cachedResponse),
     );
@@ -92,6 +117,7 @@ export class AiColumnIntegrationController extends Controller {
       onComplete: (finalResponse: T): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
           this.showResult(columnName, String(finalResponse), cachedResponse);
+          this.executeAction('onAIColumnResponseReceived', {});
           this.processCommandCompletion(columnName);
         }
       },

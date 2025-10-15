@@ -1,4 +1,4 @@
-import type { Item } from '../data_controller/m_data_controller';
+import type { Item, UserData } from '../data_controller/m_data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
 export const getAiCommandColumnOptions = (): unknown => ({
@@ -8,28 +8,22 @@ export const getAiCommandColumnOptions = (): unknown => ({
   fixed: false,
 });
 
-export const getData = (items: Item[]): Record<string, unknown> => items
+export const getDataFromRowItems = (items: Item[]): UserData[] => items
   .filter((row) => row.rowType === 'data')
-  .reduce<Record<string, unknown>>((acc, row) => {
-    const keyField = row.key as string;
-    if (Array.isArray(row.data)) {
-      row.data.forEach((item: Record<string, unknown>) => {
-        const key = JSON.stringify(item[keyField]);
-        acc[key] = item;
-      });
-    }
-    return acc;
-  }, {});
+  .map((row) => row.data);
 
 export const reduceDataCachedKeys = (
-  data: Record<PropertyKey, unknown>,
+  data: UserData[],
   cachedData: Record<PropertyKey, string>,
+  keyField: string,
 ): Record<PropertyKey, unknown> => {
   const newData: Record<PropertyKey, unknown> = { };
-  for (const key of Object.keys(data)) {
+  for (const item of data) {
+    const key = item[keyField] as PropertyKey;
     if (!(key in cachedData)) {
-      newData[key] = data[key];
+      newData[key] = item;
     }
   }
+
   return newData;
 };
