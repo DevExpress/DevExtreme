@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`CardView - HeaderPanel`
+fixture.disablePageReloads`CardView - Sortable`
   .page(url(__dirname, '../../container.html'));
 
 const PARENT_CONTAINER = '#parentContainer';
@@ -34,87 +34,84 @@ const getDragCoordinates = async (
 
   const dragDirectionX = direction === 'left' ? -1 : 1;
   const dragOffsetX = Math
-    .round(dragDirectionX  * DRAG_MOVE_X_COEFFICIENT * itemWidth);
+    .round(dragDirectionX * DRAG_MOVE_X_COEFFICIENT * itemWidth);
   const dragOffsetY = Math
     .round(DRAG_MOVE_Y_COEFFICIENT * itemHeight);
 
   return { dragOffsetX, dragOffsetY };
 };
 
-  test('sortable indicator during dragging to first place', async (t) => {
-    const cardView = new CardView(CARD_VIEW_SELECTOR);
+test('sortable indicator during dragging to first place', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
 
-    const headerPanel = cardView.getHeaderPanel();
-    const item = headerPanel.getHeaderItem(1);
+  const headerPanel = cardView.getHeaderPanel();
+  const item = headerPanel.getHeaderItem(1);
 
-    const {
-      dragOffsetX,
-      dragOffsetY,
-    } = await getDragCoordinates(item.element, 'left');
-    await t.drag(item.element, dragOffsetX, dragOffsetY);
+  const {
+    dragOffsetX,
+    dragOffsetY,
+  } = await getDragCoordinates(item.element, 'left');
+  await t.drag(item.element, dragOffsetX, dragOffsetY);
 
-    await a11yCheck(t, a11yCheckConfig);
-  }).before(async () => {
-    await insertStylesheetRulesToPage(PARENT_STYLES);
-    await MouseUpEvents.disable(MouseAction.dragToOffset);
-    await createWidget('dxCardView', {
-      columns: ['Field A', 'Field B', 'Field C'],
-      allowColumnReordering: true,
-      width: 360,
-    });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
-    await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await a11yCheck(t, a11yCheckConfig);
+}).before(async () => {
+  await insertStylesheetRulesToPage(PARENT_STYLES);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await createWidget('dxCardView', {
+    columns: ['Field A', 'Field B', 'Field C'],
+    allowColumnReordering: true,
+    width: 360,
   });
+}).after(async () => {
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+});
 
-  test('sortable indicator during dragging to middle place', async (t) => {
-    const cardView = new CardView(CARD_VIEW_SELECTOR);
+test('sortable indicator during dragging to middle place', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
 
-    const headerPanel = cardView.getHeaderPanel();
-    const item = headerPanel.getHeaderItem(0);
+  const headerPanel = cardView.getHeaderPanel();
+  const item = headerPanel.getHeaderItem(0);
 
-    const {
-      dragOffsetX,
-      dragOffsetY,
-    } = await getDragCoordinates(item.element, 'right');
-    await t.drag(item.element, dragOffsetX, dragOffsetY);
+  const {
+    dragOffsetX,
+    dragOffsetY,
+  } = await getDragCoordinates(item.element, 'right');
+  await t.drag(item.element, dragOffsetX, dragOffsetY);
 
-    await a11yCheck(t, a11yCheckConfig);
-  }).before(async () => {
-    await insertStylesheetRulesToPage(PARENT_STYLES);
-    await MouseUpEvents.disable(MouseAction.dragToOffset);
-    await createWidget('dxCardView', {
-      columns: ['Field A', 'Field B', 'Field C'],
-      allowColumnReordering: true,
-      width: 360,
-    });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
-    await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await a11yCheck(t, a11yCheckConfig);
+}).before(async () => {
+  await insertStylesheetRulesToPage(PARENT_STYLES);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await createWidget('dxCardView', {
+    columns: ['Field A', 'Field B', 'Field C'],
+    allowColumnReordering: true,
+    width: 360,
   });
+}).after(async () => {
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+});
 
-  test('sortable indicator during dragging to last place', async (t) => {
-    const cardView = new CardView(CARD_VIEW_SELECTOR);
+test('sortable indicator during dragging to last place', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
 
-    const headerPanel = cardView.getHeaderPanel();
-    const item = headerPanel.getHeaderItem(1);
+  const headerPanel = cardView.getHeaderPanel();
+  const item = headerPanel.getHeaderItem(1);
 
-    const {
-      dragOffsetX,
-      dragOffsetY,
-    } = await getDragCoordinates(item.element, 'right');
-    await t.drag(item.element, dragOffsetX, dragOffsetY);
+  const {
+    dragOffsetX,
+    dragOffsetY,
+  } = await getDragCoordinates(item.element, 'right');
+  await t.drag(item.element, dragOffsetX, dragOffsetY);
 
-    await a11yCheck(t, a11yCheckConfig);
-  }).before(async () => {
-    await insertStylesheetRulesToPage(PARENT_STYLES);
-    await MouseUpEvents.disable(MouseAction.dragToOffset);
-    await createWidget('dxCardView', {
-      columns: ['Field A', 'Field B', 'Field C'],
-      allowColumnReordering: true,
-      width: 360,
-    });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
-    await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await a11yCheck(t, a11yCheckConfig);
+}).before(async () => {
+  await insertStylesheetRulesToPage(PARENT_STYLES);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await createWidget('dxCardView', {
+    columns: ['Field A', 'Field B', 'Field C'],
+    allowColumnReordering: true,
+    width: 360,
   });
+}).after(async () => {
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+});

@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../../cardView/helpers/simpleArrayData';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`CardView - Sorting Behavior`
+fixture.disablePageReloads`CardView - Sorting`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

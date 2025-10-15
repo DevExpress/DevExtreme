@@ -6,7 +6,7 @@ export interface A11yCheckOptions extends RunOptions {
   runOnly?: any;
 }
 
-const defaultOptions = {
+export const defaultA11yCheckOptions = {
   rules: {
     'color-contrast': { enabled: false },
   },
@@ -24,7 +24,7 @@ const createFullReport = (results, configuration) => {
 
 export const a11yCheck = async (
   t: TestController,
-  options: A11yCheckOptions = defaultOptions,
+  options: A11yCheckOptions = defaultA11yCheckOptions,
   selector?: ElementContext,
   configuration = {},
 ):

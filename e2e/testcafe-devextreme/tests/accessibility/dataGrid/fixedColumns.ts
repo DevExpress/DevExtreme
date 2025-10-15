@@ -3,9 +3,9 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import type { Properties } from 'devextreme/ui/data_grid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`Fixed columns tests with axe`
+fixture.disablePageReloads`DataGrid - Fixed columns`
   .page(url(__dirname, '../../container.html'));
 
 const pressKey = async (t: TestController, key: string, times = 1) => {
@@ -48,7 +48,7 @@ const getGridConfig = (needFixedColumnOnLeft = true): Properties => ({
 const COLUMNS_LENGTH = 8;
 
 test('Accessibility: Scrollable should have focusable element', async (t) => {
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => createWidget('dxDataGrid', getGridConfig()));
 
 test('Accessibility: Scrollable should have focusable element when navigate through fixed columns', async (t) => {
@@ -78,7 +78,7 @@ test('Accessibility: Scrollable should have focusable element when navigate thro
     const needCheckA11y = columnsByFixing[columnIndex];
 
     if (needCheckA11y) {
-      await a11yCheck(t);
+      await a11yCheck(t, defaultA11yCheckOptions, '#container');
     }
   }
 }).before(async () => createWidget('dxDataGrid', getGridConfig()));
@@ -87,14 +87,14 @@ test('Accessibility: Scrollable should always have focusable element when naviga
   const dataGrid = new DataGrid('#container');
 
   // focus first cell in second row
-  await a11yCheck(t);
+ await a11yCheck(t, defaultA11yCheckOptions, '#container');
   await t.click(dataGrid.getFixedDataCell(1, 0).element);
 
   await t
     .expect(dataGrid.getFixedDataCell(1, 0).element.focused)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 
   // focus last not fixed header cell
   await pressKey(t, 'shift+tab', 9);
@@ -105,7 +105,7 @@ test('Accessibility: Scrollable should always have focusable element when naviga
     .expect(headerCell.isFocused)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => createWidget('dxDataGrid', getGridConfig()));
 
 test('Accessibility: Scrollable should have focusable element when click out of the grid', async (t) => {
@@ -127,7 +127,7 @@ test('Accessibility: Scrollable should have focusable element when click out of 
       offsetY: dataGridOffsetBottom + 10,
     });
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => createWidget('dxDataGrid', getGridConfig()));
 
 test('Accessibility: Scrollable should have focusable element when navigate out of the grid', async (t) => {
@@ -146,7 +146,7 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
     .expect(Selector('#myButton').focused)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => {
   await ClientFunction(() => { $('<div id="myButton">').appendTo('body'); })();
   await createWidget('dxButton', { text: 'Focus' }, '#myButton');
@@ -169,5 +169,5 @@ test('Accessibility: Scrollable should have focusable when fixed on the right si
     .expect(dataGrid.getFixedDataCell(0, COLUMNS_LENGTH - 1).isFocused)
     .ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => createWidget('dxDataGrid', getGridConfig(false)));

@@ -2,7 +2,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`TreeList - Aria Label tests`
+fixture`TreeList - Aria`
   .page(url(__dirname, '../../container.html'));
 
 const tasks = [

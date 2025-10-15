@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`Search.Visual`
+fixture.disablePageReloads`CardView - Search`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

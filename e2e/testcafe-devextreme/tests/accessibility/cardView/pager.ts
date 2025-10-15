@@ -27,7 +27,7 @@ async function createCardViewWithPager(config: any = {}): Promise<any> {
     ...config,
   });
 }
-fixture.disablePageReloads`Pager`
+fixture.disablePageReloads`CardView - Pager`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';

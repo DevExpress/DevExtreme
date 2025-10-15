@@ -1,17 +1,17 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`Templates tests with axe`
+fixture`DataGrid - Templates`
   .page(url(__dirname, '../../container.html'));
 
-test('Accessibility: DataGrid with dataRowTemplate', async (t) => {
+test('DataGrid with dataRowTemplate', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await a11yCheck(t);
+  await a11yCheck(t, defaultA11yCheckOptions, '#container');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [...new Array(10)].map((_, i) => ({
     ID: i + 1,

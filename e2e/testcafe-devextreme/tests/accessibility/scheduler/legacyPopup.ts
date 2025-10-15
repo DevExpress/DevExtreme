@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`a11y - popup`
+fixture.disablePageReloads`Scheduler - Popup`
   .page(url(__dirname, '../../container.html'));
 
 const checkOptions = {
