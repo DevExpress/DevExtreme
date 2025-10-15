@@ -85,6 +85,7 @@ const App = () => {
               icon="trash"
               disabled={!selectedItemKeys.length}
               text="Delete Selected Records"
+              stylingMode="text"
             />
           </Item>
         </Toolbar>

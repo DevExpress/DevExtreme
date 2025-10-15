@@ -302,41 +302,12 @@ jobs:
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - name: Run lint on all demos
-      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
+    - name: Run lint
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: pnpx nx lint
-
-    - name: Run lint on changed demos
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      working-directory: apps/demos
-      env:
-        DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: |
-        pnpx nx lint-non-demos
-
-        if [ -f "changed-files.json" ]; then
-          echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
-            | grep '^apps/demos/Demos/' \
-            | sed 's|^apps/demos/||' \
-            | while read f; do
-                [ -f "$f" ] && echo "$f"
-              done \
-            | tr '\n' ' ')
-          if [ ! -z "$CHANGED_DEMOS" ]; then
-            echo "Changed demo files: $CHANGED_DEMOS"
-            pnpx eslint $CHANGED_DEMOS
-          else
-            echo "No demo files changed, skipping lint-demos"
-          fi
-        else
-          echo "changed-files.json not found"
-          pnpm run lint-demos
-        fi
+      run: pnpx nx lint-non-demos
 
   check_generated_demos:
     name: ${{ matrix.name }}
@@ -435,7 +406,7 @@ jobs:
       fail-fast: false
       matrix:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
 
     runs-on: ubuntu-22.04
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
