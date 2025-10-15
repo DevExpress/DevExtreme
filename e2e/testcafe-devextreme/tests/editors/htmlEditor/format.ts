@@ -1,6 +1,6 @@
 import SelectBox from 'devextreme-testcafe-models/selectBox';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`HtmlEditor - formats`
   .page(url(__dirname, '../container.html'));

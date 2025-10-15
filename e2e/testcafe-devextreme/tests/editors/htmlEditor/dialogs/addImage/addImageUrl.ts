@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
-import { isMaterial, testScreenshot } from '../../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor - add image url`
   .page(url(__dirname, '../../../container.html'));

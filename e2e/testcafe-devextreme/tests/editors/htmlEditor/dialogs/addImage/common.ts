@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 import { BASE64_IMAGE_1 } from './images/base64';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 

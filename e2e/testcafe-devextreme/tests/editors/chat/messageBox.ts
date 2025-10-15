@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
 import { getShortText, getLongText, createUser } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { appendElementTo } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ChatMessageBox`
   .page(url(__dirname, '../container.html'));

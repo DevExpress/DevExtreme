@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import FileUploader from 'devextreme-testcafe-models/fileUploader';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 const TEST_FILE = './images/test-image-1.png';
 

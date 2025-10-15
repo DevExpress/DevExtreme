@@ -4,10 +4,10 @@ import { ClientFunction } from 'testcafe';
 import { Message, User } from 'devextreme/ui/chat';
 import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { createUser, generateMessages, getLongText } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 

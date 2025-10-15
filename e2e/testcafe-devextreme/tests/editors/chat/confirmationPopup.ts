@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
 import { createUser } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`ChatConfirmationPopup`.page(
   url(__dirname, '../container.html'),

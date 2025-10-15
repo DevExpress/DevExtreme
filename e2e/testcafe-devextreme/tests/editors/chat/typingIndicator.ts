@@ -2,10 +2,10 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
 import { ClientFunction } from 'testcafe';
 import { createUser, generateMessages } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
-import { appendElementTo, insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
