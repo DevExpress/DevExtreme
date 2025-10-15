@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
-  appendElementTo,
+  appendElementTo, insertStylesheetRulesToPage,
   setAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
@@ -680,6 +680,7 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
 
