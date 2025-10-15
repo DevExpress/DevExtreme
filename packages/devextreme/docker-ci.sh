@@ -30,7 +30,6 @@ function run_test_impl {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
-    [ "$PERF" == "true" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
@@ -128,17 +127,6 @@ function run_test_impl {
                     --no-first-run
                     --no-default-browser-check
                     --disable-translate
-                )
-            fi
-
-            if [ "$PERF" == "true" ]; then
-                echo "Performance tests"
-                chrome_args+=(
-                    --disable-popup-blocking
-                    --enable-impl-side-painting
-                    --enable-skia-benchmarking
-                    --disable-web-security
-                    --remote-allow-origins=*
                 )
             fi
 
