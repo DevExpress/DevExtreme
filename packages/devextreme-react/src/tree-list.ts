@@ -25,8 +25,10 @@ import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
+import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
 import type dxOverlay from "devextreme/ui/overlay";
 import type DOMComponent from "devextreme/core/dom_component";
@@ -1791,6 +1793,27 @@ const Icons = Object.assign<typeof _componentIcons, NestedComponentMeta>(_compon
 });
 
 // owners:
+// LoadPanel
+type IIndicatorOptionsProps = React.PropsWithChildren<{
+  animationType?: LoadingAnimationType;
+  height?: number | string | undefined;
+  src?: string;
+  width?: number | string | undefined;
+}>
+const _componentIndicatorOptions = (props: IIndicatorOptionsProps) => {
+  return React.createElement(NestedOption<IIndicatorOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indicatorOptions",
+    },
+  });
+};
+
+const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, NestedComponentMeta>(_componentIndicatorOptions, {
+  componentType: "option",
+});
+
+// owners:
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
   cssClass?: string | undefined;
@@ -1890,6 +1913,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | Mode;
   height?: number | string;
+  indicatorOptions?: LoadPanelIndicatorProperties;
   indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;
@@ -1903,6 +1927,9 @@ const _componentLoadPanel = (props: ILoadPanelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "loadPanel",
+      ExpectedChildren: {
+        indicatorOptions: { optionName: "indicatorOptions", isCollectionItem: false }
+      },
     },
   });
 };
@@ -2990,6 +3017,8 @@ export {
   IHideProps,
   Icons,
   IIconsProps,
+  IndicatorOptions,
+  IIndicatorOptionsProps,
   Item,
   IItemProps,
   KeyboardNavigation,

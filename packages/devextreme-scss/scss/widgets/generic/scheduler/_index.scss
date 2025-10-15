@@ -220,7 +220,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-appointment-popup {
+.dx-scheduler-legacy-appointment-popup {
   .dx-popup-title {
     background-color: $scheduler-popup-title-bg;
 
@@ -244,7 +244,63 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 }
 
-.dx-scheduler-appointment-popup .dx-form-validation-summary {
+.dx-scheduler-appointment-popup {
+  > .dx-overlay-content > .dx-toolbar.dx-widget {
+    > .dx-toolbar-items-container {
+      height: $generic-scheduler-appointment-popup-toolbar-height;
+    }
+
+    .dx-toolbar-label {
+      font-size: $generic-scheduler-appointment-popup-toolbar-label-size;
+    }
+  }
+
+  .dx-form {
+    .dx-scheduler-form-icon {
+      color: $scheduler-form-icon-color;
+
+      &.dx-field-item {
+        height: $generic-scheduler-appointment-popup-icon-container-height;
+        padding-inline-end: $generic-scheduler-appointment-popup-icon-padding-right;
+
+        .dx-icon {
+          font-size: $generic-scheduler-appointment-popup-icon-size;
+        }
+      }
+    }
+
+    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
+      color: $scheduler-form-subject-icon-color;
+    }
+
+    .dx-scheduler-form-description-group .dx-scheduler-form-icon,
+    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
+      margin-top: $generic-scheduler-appointment-popup-description-icon-margin-top;
+    }
+
+    .dx-field-item:not(.dx-first-col) {
+      padding-inline-start: $generic-scheduler-appointment-popup-item-padding-horizontal;
+    }
+
+    .dx-field-item:not(.dx-last-col) {
+      padding-inline-end: $generic-scheduler-appointment-popup-item-padding-horizontal;
+    }
+
+    .dx-field-item:not(.dx-first-row) {
+      padding-top: $generic-scheduler-appointment-popup-item-padding-top;
+    }
+
+    .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
+      height: $generic-scheduler-appointment-popup-all-day-item-height;
+
+      .dx-field-item-label-text {
+        color: $base-text-color;
+      }
+    }
+  }
+}
+
+.dx-scheduler-legacy-appointment-popup .dx-form-validation-summary {
   padding: 10px 20px;
 }
 
@@ -312,16 +368,59 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 }
 
 .dx-scheduler-appointment-collector {
-  height: $generic-scheduler-appointment-collector-height;
+  height: $generic-scheduler-dropdown-button-height;
+  margin: $generic-scheduler-dropdown-button-margin;
 
   &.dx-state-hover {
     &::before {
-      border-radius: $generic-scheduler-appointment-collector-height;
+      border-radius: $generic-scheduler-dropdown-button-height;
     }
   }
 
   &.dx-button.dx-button-default {
-    border-radius: $generic-scheduler-appointment-collector-height;
+    border-radius: $generic-scheduler-dropdown-button-height;
+  }
+}
+
+.dx-scheduler-adaptive {
+  .dx-scheduler-appointment-collector {
+    margin: $generic-scheduler-dropdown-button-adaptive-margin;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $generic-scheduler-dropdown-button-adaptive-vertical-margin;
+      }
+    }
+  }
+}
+
+.dx-scheduler:not(.dx-scheduler-adaptive) {
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $generic-scheduler-dropdown-button-vertical-margin;
+      }
+    }
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month {
+    .dx-scheduler-appointment-collector {
+      margin-right: 33px;
+    }
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-scheduler-work-space-count {
+    .dx-scheduler-appointment-collector {
+      margin-right: 57px;
+    }
   }
 }
 

@@ -110,7 +110,7 @@ function showCloseButton() {
 .employeeInfo .employeePhoto {
   height: 100px;
   float: left;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
 }
 
 .employeeInfo .employeeNotes {

@@ -14,6 +14,7 @@ import type {
   ProofreadCommandParams,
   ProofreadCommandResult,
   RequestCallbacks,
+  RequestParamsData,
   ShortenCommandParams,
   ShortenCommandResult,
   SmartPasteCommandParams,
@@ -66,7 +67,7 @@ export const COMMANDS = {
   [CommandNames.GenerateGridColumn]: GenerateGridColumnCommand,
 } as const;
 
-export interface CommandDefinition<TParams, TResult> {
+export interface CommandDefinition<TParams extends RequestParamsData, TResult> {
   command: BaseCommand<TParams, TResult>;
   params: TParams;
   result: TResult;

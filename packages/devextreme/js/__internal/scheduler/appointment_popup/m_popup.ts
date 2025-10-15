@@ -1,43 +1,26 @@
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
-import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { getWidth } from '@js/core/utils/size';
+import { getWindow } from '@js/core/utils/window';
+import type { ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import {
-  getMaxWidth,
-  getPopupToolbarItems,
-  isPopupFullScreenNeeded,
-} from '@ts/scheduler/r1/appointment_popup/index';
+import { current, isFluent } from '@js/ui/themes';
 
 import { hide as hideLoading, show as showLoading } from '../m_loading';
+import type { SafeAppointment } from '../types';
 import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
 import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
-
-const toMs = dateUtils.dateToMilliseconds;
+import type { AppointmentForm } from './m_form';
 
 export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
-const DAY_IN_MS = toMs('day');
+const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 460;
 
-const POPUP_CONFIG = {
-  height: 'auto',
-  maxHeight: '100%',
-  showCloseButton: false,
-  showTitle: false,
-  preventScrollEvents: false,
-  enableBodyScroll: false,
-  defaultOptionsRules: [
-    {
-      device: () => devices.current().android,
-      options: {
-        showTitle: false,
-      },
-    },
-  ],
-  _ignorePreventScrollEventsDeprecation: true,
-};
+const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
 export const ACTION_TO_APPOINTMENT = {
   CREATE: 0,
@@ -48,7 +31,7 @@ export const ACTION_TO_APPOINTMENT = {
 export class AppointmentPopup {
   scheduler: any;
 
-  form: any;
+  form: AppointmentForm;
 
   popup: any;
 
@@ -83,13 +66,8 @@ export class AppointmentPopup {
       this.popup = this._createPopup(popupConfig);
     }
 
-    this.popup.option(
-      'toolbarItems',
-      getPopupToolbarItems(
-        config.isToolbarVisible,
-        (e) => this._doneButtonClickHandler(e),
-      ),
-    );
+    const toolbarItems = this._getPopupToolbarItems(config.isToolbarVisible);
+    this.popup.option('toolbarItems', toolbarItems);
 
     this.popup.show();
   }
@@ -112,12 +90,53 @@ export class AppointmentPopup {
 
   _createPopupConfig() {
     return {
-      ...POPUP_CONFIG,
-      onHiding: () => this.scheduler.focus(),
-      contentTemplate: () => this._createPopupContent(),
-      onShowing: (e) => this._onShowing(e),
+      height: 'auto',
+      maxHeight: '90%',
+      showCloseButton: false,
+      showTitle: true,
+      title: messageLocalization.format('dxScheduler-editPopupTitle'),
+      preventScrollEvents: false,
+      enableBodyScroll: false,
+      _ignorePreventScrollEventsDeprecation: true,
+      onHiding: (): void => { this.scheduler.focus(); },
+      contentTemplate: (): dxElementWrapper => {
+        this.form.create();
+        return this.form.dxForm.$element();
+      },
+      onShowing: (e): void => this._onShowing(e),
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
+  }
+
+  _getPopupToolbarItems(allowUpdating: boolean): ToolbarItem[] {
+    const result: ToolbarItem[] = [];
+
+    if (allowUpdating) {
+      result.push(
+        {
+          toolbar: 'top',
+          location: 'after',
+          options: {
+            onClick: (e) => this._doneButtonClickHandler(e),
+            stylingMode: 'contained',
+            type: 'default',
+            text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+          },
+          shortcut: 'done',
+        } as ToolbarItem,
+      );
+    }
+
+    result.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined',
+      },
+    } as ToolbarItem);
+
+    return result;
   }
 
   _onShowing(e) {
@@ -145,37 +164,8 @@ export class AppointmentPopup {
     });
   }
 
-  _createPopupContent() {
-    this._createForm();
-    return this.form.dxForm.$element(); // TODO
-  }
-
-  _createFormData(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
-    const resourceManager = this.scheduler.getResourceManager();
-    const rawAppointmentGroupValues = getRawAppointmentGroupValues(
-      rawAppointment,
-      resourceManager.resources,
-    );
-
-    return {
-      ...rawAppointment,
-      ...rawAppointmentGroupValues,
-      repeat: Boolean(appointment.recurrenceRule),
-    };
-  }
-
-  _createForm() {
-    const rawAppointment = this.state.appointment.data;
-    const formData = this._createFormData(rawAppointment);
-
-    this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
-  }
-
-  _isReadOnly(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
-
-    if (rawAppointment && appointment.disabled) {
+  _isReadOnly(appointmentAdapter: AppointmentAdapter): boolean {
+    if (Boolean(appointmentAdapter.source) && appointmentAdapter.disabled) {
       return true;
     }
 
@@ -186,49 +176,61 @@ export class AppointmentPopup {
     return !this.scheduler.getEditingConfig().allowUpdating;
   }
 
-  _createAppointmentAdapter(rawAppointment) {
+  _createAppointmentAdapter(rawAppointment): AppointmentAdapter {
     return new AppointmentAdapter(
       rawAppointment,
       this.scheduler.getDataAccessors(),
     );
   }
 
-  _updateForm() {
-    const { data } = this.state.appointment;
-    const appointment = this._createFormData(data);
-    const formData = this._createAppointmentAdapter(appointment)
+  _updateForm(): void {
+    const rawAppointment = this.state.appointment.data;
+    const appointmentAdapter = this._createAppointmentAdapter(rawAppointment)
       .clone()
-      .calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment')
-      .source;
+      .calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment');
 
-    this.form.readOnly = this._isReadOnly(formData);
-    this.form.updateFormData(formData);
+    const formData = this._createFormData(appointmentAdapter);
+
+    this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    this.form.formData = formData;
   }
 
-  triggerResize() {
+  _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
+    const { resources } = this.scheduler.getResourceManager();
+    const groupValues = getRawAppointmentGroupValues(
+      appointmentAdapter.source as SafeAppointment,
+      resources,
+    );
+
+    const { allDayExpr } = this.scheduler.getDataAccessors().expr;
+
+    return {
+      ...appointmentAdapter.source,
+      ...groupValues,
+      [allDayExpr]: Boolean(appointmentAdapter.allDay),
+    };
+  }
+
+  triggerResize(): void {
     if (this.popup) {
       triggerResizeEvent(this.popup.$element());
     }
   }
 
-  changeSize(isRecurrence) {
-    if (this.popup) {
+  updatePopupFullScreenMode(): void {
+    if (this.form.dxForm && this.visible) {
+      const isPopupFullScreenNeeded = () => {
+        const window = getWindow();
+        const width = window && getWidth(window);
+
+        return width < POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD;
+      };
+
       const isFullScreen = isPopupFullScreenNeeded();
-      const maxWidth = isFullScreen
-        ? '100%'
-        : getMaxWidth(isRecurrence);
+      const maxWidth = isFluent(current()) ? 380 : 420;
+
       this.popup.option('fullScreen', isFullScreen);
-      this.popup.option('maxWidth', maxWidth);
-    }
-  }
-
-  updatePopupFullScreenMode() {
-    if (this.form.dxForm && this.visible) { // TODO
-      const { formData } = this.form;
-      const dataAccessors = this.scheduler.getDataAccessors();
-      const isRecurrence = dataAccessors.get('recurrenceRule', formData);
-
-      this.changeSize(isRecurrence);
+      this.popup.option('maxWidth', isFullScreen ? '100%' : maxWidth);
     }
   }
 
@@ -239,28 +241,21 @@ export class AppointmentPopup {
 
     isShowLoadPanel && this._showLoadPanel();
 
-    when(validation?.complete || validation).done((validation) => {
-      if (validation && !validation.isValid) {
+    when(validation?.complete ?? validation).done((validation) => {
+      if (validation && !(validation as any).isValid) {
         hideLoading();
         deferred.resolve(false);
         return;
       }
 
-      const { repeat } = this.form.formData;
       const adapter = this._createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter
         .clone()
         .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
-      const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
 
       this._addMissingDSTTime(adapter, clonedAdapter);
 
-      if (shouldClearRecurrenceRule) {
-        clonedAdapter.recurrenceRule = '';
-      }
-
       const appointment = clonedAdapter.source;
-      delete appointment.repeat; // TODO
 
       switch (this.state.action) {
         case ACTION_TO_APPOINTMENT.CREATE:
@@ -373,7 +368,7 @@ export class AppointmentPopup {
     const shiftDifference = originTimezoneShift - clonedTimezoneShift;
 
     return shiftDifference
-      ? new Date(clonedDate.getTime() + shiftDifference * toMs('hour'))
+      ? new Date(clonedDate.getTime() + shiftDifference * dateUtils.dateToMilliseconds('hour'))
       : clonedDate;
   }
 }

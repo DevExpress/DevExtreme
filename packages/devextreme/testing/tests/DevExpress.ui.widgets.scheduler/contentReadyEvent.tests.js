@@ -104,7 +104,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
                             startDate: new Date(2016, 2, 15, 1),
                             endDate: new Date(2016, 2, 15, 2)
                         }]);
-                    }, 100);
+                    }, 50);
                     return d.promise();
                 }
             })

@@ -62,6 +62,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
      */
     indicatorSrc?: string;
 }
+
 /**
  * @docid
  * @inherits Widget

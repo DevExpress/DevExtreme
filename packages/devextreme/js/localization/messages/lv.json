@@ -266,7 +266,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Nosaukums",
         "dxScheduler-editorLabelStartDate": "Sākuma Datums",
         "dxScheduler-editorLabelEndDate": "Beigu Datums",

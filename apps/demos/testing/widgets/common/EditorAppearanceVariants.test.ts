@@ -28,7 +28,7 @@ runManualTest('Common', 'EditorAppearanceVariants', (test) => {
 
     const changeStylingMode = async (stylingMode) => {
       await t.click($(`.${SELECTBOX_CLASS}`).nth(0));
-      await t.click($('.dx-item').withText(stylingMode)).wait(500);
+      await t.click($('.dx-item').withText(stylingMode));
     };
 
     await asyncForEach(stylingModes, async (stylingMode) => {

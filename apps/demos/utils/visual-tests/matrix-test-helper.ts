@@ -1,10 +1,25 @@
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
+export const FRAMEWORKS = {
+  jquery: 'jQuery',
+  react: 'React',
+  vue: 'Vue',
+  angular: 'Angular'
+};
+
+export const execCode = ClientFunction((code) => {
+  // eslint-disable-next-line no-eval
+  const result = eval(code);
+  if (result && typeof result.then === 'function') {
+    return Promise.race([result, new Promise((resolve) => setTimeout(resolve, 60000))]);
+  }
+
+  return Promise.resolve();
+});
 
 const settings = {
   concurrency: undefined,
@@ -173,21 +188,28 @@ export function shouldRunFramework(currentFramework) {
 }
 
 export function shouldRunTestAtIndex(testIndex) {
-  return (settings.current === settings.total ? 0 : settings.current)
-    === ((testIndex % settings.total) || 0);
+  if (!settings.total) {
+    return true;
+  }
+
+  const part = testIndex % settings.total;
+  const currentPart = settings.current - 1;
+
+  return part === currentPart;
 }
 
 const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipCustomization', themes: [THEME.material] },
       { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
+      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'CellEditing', themes: [THEME.material] },
-      // This test works only in simulated scrolling strategy!
-      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
@@ -204,143 +226,26 @@ const SKIPPED_TESTS = {
     ]
   },
   Angular: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LoadDataOnDemand', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'TooltipCustomization', themes: [THEME.material] },
-      { demo: 'ExportCustomMarkup', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'Appearance', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AdvancedMasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'BatchEditing', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'AjaxRequest', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'InfiniteScrolling', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailView', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'SimpleArray', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MasterDetailAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'DataValidation', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSorting', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'OdataService', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Filtering', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'FilteringAPI', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'GroupSummaries', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RecordPaging', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'RowSelection', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'MultipleSelection', themes: [THEME.material, THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.material, THEME.fluent] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Scheduler: [
-      // NOTE: Context menu appearance is different in comparison to other frameworks
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    Sortable: [
-      { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    PivotGrid: [
-      { demo: 'IntegratedFieldChooser', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    Common: ['PopupAndNotificationsOverview'],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    Scheduler: ['ContextMenu'],
+    FileUploader: ['CustomDropzone']
   },
   Vue: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'AreaSelectionZooming', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'FilteringAPI', themes: [THEME.material] },
-      { demo: 'PopupEditing', themes: [THEME.generic] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Scheduler: [
-        // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
-  },
-  React: {
-    Common: [
-      { demo: 'PopupAndNotificationsOverview', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieResolveLabelOverlap', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'Crosshair', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'LegendMarkersCustomization', themes: [THEME.material] },
-    ],
-    DataGrid: [
-      { demo: 'BatchEditing', themes: [THEME.fluent] },
-      { demo: 'NewRecordPosition', themes: [THEME.fluent] },
-      { demo: 'CellEditing', themes: [THEME.fluent, THEME.material] },
-      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RowEditing', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'EditStateManagement', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
-      { demo: 'RecordGrouping', themes: [THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'StatePersistence', themes: [THEME.generic, THEME.fluent, THEME.material] },
-    ],
+    Common: ['PopupAndNotificationsOverview'],
     Scheduler: [
       // NOTE: Context menu item position is different across themes
-      { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
-    FileUploader: [
-      { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
+  },
+  React: {
+    Scheduler: [
+      { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
-    Form: [
-      // Flaky issue: Source image size does not match target size
-      { demo: 'ItemCustomization', themes: [THEME.generic] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipsCustomization', themes: [THEME.material] },
-    ],
+    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
+    FileUploader: ['CustomDropzone']
   },
 };
 
@@ -369,7 +274,7 @@ export function shouldSkipDemo(framework, component, demoName, skippedTests) {
 }
 
 export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  if (shouldSkipDemo(currentFramework, product, demo, skippedTests)) {
+  if (shouldSkipDemo(FRAMEWORKS[currentFramework], product, demo, skippedTests)) {
     return false;
   }
 
@@ -410,14 +315,15 @@ export function runManualTestCore(
 ) {
   const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
-  const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
+  const index = settings.manualTestIndex;
 
   if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
 
   const clientScriptSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/client-script.js`, (x) => [{ content: x }]) || [];
+  const testCodeSource = globalReadFrom(__dirname, `../../Demos/${widget}/${demo}/test-code.js`, (x) => x) || '';
 
   let testURL = '';
 
@@ -427,24 +333,29 @@ export function runManualTestCore(
     }
 
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/${widget}/${demo}/${FRAMEWORKS[framework]}/?theme=dx.${theme}`;
   } else {
-    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
-    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
+    testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
 
   const test = testObject.clientScripts([
     { module: 'mockdate' },
+    join(__dirname, './inject/test-utils.js'),
     ...clientScriptSource,
   ])
     .page(testURL);
 
   test.before?.(async (t) => {
+    if (testCodeSource) {
+      await execCode(testCodeSource);
+    }
+
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
 
-    if (framework === 'Angular') {
+    if (FRAMEWORKS[framework] === 'Angular') {
       await waitForAngularLoading();
     }
   });
@@ -464,9 +375,8 @@ export function runManualTest(widget, demo, callback) {
     return;
   }
 
-  FRAMEWORKS.forEach((framework) => {
-    runManualTestCore(test, widget, demo, framework, callback);
-  });
+  const framework = settings.targetFramework;
+  runManualTestCore(test, widget, demo, framework, callback);
 }
 
 export function getPortByIndex(testIndex) {
@@ -475,7 +385,7 @@ export function getPortByIndex(testIndex) {
 
 export function updateConfig(customSettings) {
   settings.verbose = true;
-  settings.manualTestIndex = 0;
+  settings.manualTestIndex = settings.current ? (settings.current - 1) : 0;
   settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|jquery|react|vue)\/.*/i;
   settings.demoFilesExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
   settings.commonEtalonsExpr = /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i;

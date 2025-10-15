@@ -266,7 +266,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Tárgy",
         "dxScheduler-editorLabelStartDate": "Kezdés dátuma",
         "dxScheduler-editorLabelEndDate": "Befejezés dátuma",

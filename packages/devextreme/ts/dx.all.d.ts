@@ -767,8 +767,13 @@ declare module DevExpress {
     showIndicator?: boolean;
     /**
      * [descr:ExportLoadPanel.indicatorSrc]
+     * @deprecated [depNote:ExportLoadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:ExportLoadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:ExportLoadPanel.showPane]
      */
@@ -925,6 +930,10 @@ declare module DevExpress.aiIntegration {
     sendRequest: (params: RequestParams) => Response;
   };
   /**
+   * [descr:AIResponse]
+   */
+  export type AIResponse = string | Record<PropertyKey, any>;
+  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type ChangeStyleCommandParams = {
@@ -972,6 +981,7 @@ declare module DevExpress.aiIntegration {
   export type FieldInfo = {
     name: string;
     format: string;
+    type?: SmartPasteFieldType;
     instruction?: string;
   };
   /**
@@ -1024,7 +1034,15 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.prompt]
      */
     prompt: Prompt;
+    /**
+     * [descr:RequestParams.data]
+     */
+    data?: RequestParamsData;
   };
+  /**
+   * [descr:RequestParamsData]
+   */
+  export type RequestParamsData = Record<PropertyKey, any>;
   /**
    * [descr:Response]
    */
@@ -1032,7 +1050,7 @@ declare module DevExpress.aiIntegration {
     /**
      * [descr:Response.promise]
      */
-    promise: Promise<string>;
+    promise: Promise<AIResponse>;
     /**
      * [descr:Response.abort]
      */
@@ -1060,8 +1078,31 @@ declare module DevExpress.aiIntegration {
    */
   export type SmartPasteCommandResult = Array<{
     name: string;
-    value: string | string[];
+    value: SmartPasteResultFieldType;
   }>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteFieldType =
+    | 'color'
+    | 'boolean'
+    | 'string'
+    | 'stringArray'
+    | 'number'
+    | 'numberRange'
+    | 'date'
+    | 'dateRange';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteResultFieldType =
+    | string
+    | string[]
+    | number
+    | number[]
+    | Date
+    | Date[]
+    | boolean;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -6227,8 +6268,13 @@ declare module DevExpress.common.grids {
     height?: number | string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
+     * @deprecated [depNote:GridBaseOptions.loadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:GridBaseOptions.loadPanel.shading]
      */
@@ -18710,7 +18756,10 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
-    export type AIResult = Record<string, string | string[]>;
+    export type AIResult = Record<
+      string,
+      DevExpress.aiIntegration.SmartPasteResultFieldType
+    >;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
@@ -22318,6 +22367,27 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadPanel>;
     /**
+     * [descr:LoadPanelIndicatorProperties]
+     */
+    export type LoadPanelIndicatorProperties = {
+      /**
+       * [descr:LoadPanelIndicatorProperties.animationType]
+       */
+      animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
+      /**
+       * [descr:LoadPanelIndicatorProperties.src]
+       */
+      src?: string;
+      /**
+       * [descr:LoadPanelIndicatorProperties.height]
+       */
+      height?: number | string | undefined;
+      /**
+       * [descr:LoadPanelIndicatorProperties.width]
+       */
+      width?: number | string | undefined;
+    };
+    /**
      * [descr:_ui_load_panel_OptionChangedEvent]
      */
     export type OptionChangedEvent =
@@ -22377,8 +22447,13 @@ declare module DevExpress.ui {
     height?: number | string;
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
+     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:dxLoadPanelOptions.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */

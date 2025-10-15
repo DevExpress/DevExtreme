@@ -1,7 +1,7 @@
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
 import type { ViewDataProviderType } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import type { AppointmentItemViewModel } from '../../view_model/generate_view_model/types';
+import type { AppointmentItemViewModel } from '../../view_model/types';
 
 export type Rect = Pick<DOMRect, 'top' | 'left' | 'width' | 'height'>;
 

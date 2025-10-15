@@ -28,15 +28,48 @@ export const setupSchedulerTestEnvironment = ({
     onScroll: jest.fn(),
     onEnd: jest.fn(),
   });
-  Element.prototype.getBoundingClientRect = jest.fn((): DOMRect => ({
-    width,
-    height,
-    top: 0,
-    left: 0,
-    bottom: height,
-    right: width,
-    x: 0,
-    y: 0,
-    toJSON: (): void => {},
-  }));
+
+  const { getComputedStyle } = window;
+  window.getComputedStyle = jest.fn(function (element: Element, pseudoElement?: string | null): any {
+    const styles = getComputedStyle.call(this, element, pseudoElement);
+
+    if (element.classList.contains('dx-scheduler-appointment-collector')) {
+      styles.setProperty('width', '24px');
+      styles.setProperty('height', '20px');
+      styles.setProperty('margin', '3px');
+    }
+
+    return styles;
+  });
+
+  Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
+    const classList: string[] = Array.from(this.classList);
+    switch (true) {
+      case classList.includes('dx-scheduler-date-table-cell')
+        || classList.includes('dx-scheduler-all-day-table-cell'):
+        return {
+          width,
+          height,
+          top: 0,
+          left: 0,
+          bottom: height,
+          right: width,
+          x: 0,
+          y: 0,
+          toJSON: (): void => {},
+        };
+      default:
+        return {
+          width: 0,
+          height: 0,
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          x: 0,
+          y: 0,
+          toJSON: (): void => {},
+        };
+    }
+  });
 };

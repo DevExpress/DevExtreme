@@ -132,7 +132,7 @@ test('it should render all-day appointments if allDayPanelMode is "all"', async 
   await t
     .expect(appointmentCount)
     .eql(1);
-  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, 'head', 793);
+  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, 'body', 793);
 
   await t
     .click(scheduler.toolbar.navigator.nextButton);
@@ -141,7 +141,7 @@ test('it should render all-day appointments if allDayPanelMode is "all"', async 
   await t
     .expect(appointmentCount)
     .eql(1);
-  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, undefined, 337);
+  await checkAllDayAppointment(t, scheduler, 'appt-01', 0, 'tail', 337);
 }).before(async () => createWidget(
   'dxScheduler',
   {

@@ -199,6 +199,7 @@ safeSizeTest('expand group icon should be clickable in scroll right max position
   },
   scrolling: {
     columnRenderingMode: 'virtual',
+    showScrollbar: 'never',
   },
   // NOTE: 3x columns (by 100px each) + 30px command column
   width: 330,

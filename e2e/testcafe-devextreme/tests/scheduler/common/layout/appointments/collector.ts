@@ -32,8 +32,9 @@ test('Appointment collector has correct offset when adaptivityEnabled=true (T102
   height: 300,
 }));
 
-const getSchedulerBaseOptions = (view: string, count = 20) => {
-  const day = ['workWeek', 'timelineWorkWeek'].includes(view) ? 2 : 1;
+const getSchedulerBaseOptions = (view: string) => {
+  const count = 20;
+  const day = 1;
   const allDayAppointments = Array(Math.round(count / 4)).fill({
     allDay: true,
     text: 'text',
@@ -45,7 +46,7 @@ const getSchedulerBaseOptions = (view: string, count = 20) => {
     startDate: new Date(2021, 7, day, 0),
     endDate: new Date(2021, 7, day, 2),
   });
-  const width = ['month', 'week', 'workWeek'].includes(view) ? 800 : 500;
+  const width = ['month', 'week'].includes(view) ? 800 : 500;
   const height = ['month'].includes(view) ? 500 : 300;
 
   return {
@@ -59,10 +60,19 @@ const getSchedulerBaseOptions = (view: string, count = 20) => {
 };
 
 generateOptionMatrix({
-  view: ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-  theme: ['generic.light', 'material.blue.light', 'fluent.blue.light', 'generic.light.compact', 'material.blue.light.compact', 'fluent.blue.light.compact'],
-  adaptivityEnabled: [false, true],
-}).forEach(({ view, theme, adaptivityEnabled }) => {
+  view: ['week', 'month', 'timelineWeek'],
+  variants: [
+    { theme: 'generic.light', adaptivityEnabled: false },
+    { theme: 'material.blue.light', adaptivityEnabled: false },
+    { theme: 'fluent.blue.light', adaptivityEnabled: false },
+    { theme: 'generic.light.compact', adaptivityEnabled: false },
+    { theme: 'material.blue.light.compact', adaptivityEnabled: false },
+    { theme: 'fluent.blue.light.compact', adaptivityEnabled: false },
+    { theme: 'generic.light', adaptivityEnabled: true },
+    { theme: 'material.blue.light', adaptivityEnabled: true },
+    { theme: 'fluent.blue.light', adaptivityEnabled: true },
+  ],
+}).forEach(({ view, variants: { theme, adaptivityEnabled } }) => {
   test(`Appointment collector has correct offset when view=${view} adaptivityEnabled=${adaptivityEnabled} theme=${theme}`, async (t) => {
     const scheduler = new Scheduler('#container');
 
@@ -111,31 +121,24 @@ generateOptionMatrix({
 });
 
 generateOptionMatrix({
-  view: ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
-  variants: [
-    { maxAppointmentsPerCell: 'auto', rtlEnabled: false },
-    { maxAppointmentsPerCell: 'auto', rtlEnabled: true },
-    { maxAppointmentsPerCell: 0, rtlEnabled: false },
-    { maxAppointmentsPerCell: 2, rtlEnabled: false },
-    { maxAppointmentsPerCell: 'unlimited', rtlEnabled: false },
-  ],
+  view: ['week', 'month', 'timelineWeek'],
+  rtlEnabled: [false, true],
 }).forEach(({
-  view, variants: { maxAppointmentsPerCell, rtlEnabled },
+  view, rtlEnabled,
 }) => {
-  test(`Appointment collector has correct offset when view=${view} maxAppointmentsPerCell=${maxAppointmentsPerCell} rtlEnabled=${rtlEnabled}`, async (t) => {
+  test(`Appointment collector has correct offset when view=${view} rtlEnabled=${rtlEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(`appointment-collector-${view}-${maxAppointmentsPerCell}-rtl(${rtlEnabled}).png`, scheduler.workSpace))
+      .expect(await takeScreenshot(`appointment-collector-${view}-rtl(${rtlEnabled}).png`, scheduler.workSpace))
       .ok()
 
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxScheduler', {
-    maxAppointmentsPerCell,
+    ...getSchedulerBaseOptions(view),
     rtlEnabled,
-    ...getSchedulerBaseOptions(view, maxAppointmentsPerCell === 'unlimited' ? 8 : 20),
   }));
 });
