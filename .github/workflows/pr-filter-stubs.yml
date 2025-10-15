@@ -123,14 +123,14 @@ jobs:
     steps:
       - run: exit 1
   qunit_tests4:
-    name: 'Constel ui.widgets(1/2)'
+    name: 'Constel ui.widgets(1/2)-no-csp'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   qunit_tests5:
-    name: 'Constel ui.widgets(2/2)'
+    name: 'Constel ui.widgets(2/2)-no-csp'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
