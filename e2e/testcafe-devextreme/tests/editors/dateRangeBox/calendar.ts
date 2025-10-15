@@ -1,7 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
-  appendElementTo, insertStylesheetRulesToPage,
+  appendElementTo,
+  insertStylesheetRulesToPage,
   setAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
@@ -645,6 +646,7 @@ test('Disabled dates on end date select (disableOutOfRangeSelection: true)', asy
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
 
