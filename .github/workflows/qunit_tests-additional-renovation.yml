@@ -208,30 +208,6 @@ jobs:
           headless: 'true'
           useCsp: 'true'
 
-  qunit-tests-no-csp:
-    needs: build
-    runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-no-csp
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        constel: [ 'misc(1/2)', 'misc(2/2)' ]
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Run QUnit tests
-        uses: ./.github/actions/run-qunit-tests
-        with:
-          name: ${{ matrix.constel }}-no-csp
-          constel: ${{ matrix.constel }}
-          browser: 'chrome'
-          useJQuery: 'true'
-          headless: 'true'
-          useCsp: 'false'
-
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
@@ -240,7 +216,6 @@ jobs:
       # qunit-tests-performance,
       qunit-tests-mobile-and-shadow-dom,
       qunit-tests-firefox,
-      qunit-tests-no-csp
     ]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 

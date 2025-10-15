@@ -96,11 +96,16 @@ jobs:
           viz
         ]
         TIMEZONE: ['']
+        CSP: ['true']
         include:
           - CONSTEL: ui.scheduler(1/2)
             TIMEZONE: US/Pacific
+            CSP: 'true'
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
+            CSP: 'true'
+          - CONSTEL: misc
+            CSP: 'false'
 
     steps:
     - name: Get sources
@@ -109,11 +114,10 @@ jobs:
     - name: Run QUnit tests
       uses: ./.github/actions/run-qunit-tests
       with:
-        name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}
+        name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
         constel: ${{ matrix.CONSTEL }}
         timezone: ${{ matrix.TIMEZONE }}
-        useCsp: 'false'
-        # useCsp: 'true'
+        useCsp: ${{ matrix.CSP }}
 
   notify:
     runs-on: devextreme-shr2
