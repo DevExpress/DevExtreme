@@ -32,6 +32,7 @@ import {
  RecurrenceEditMode,
  dxSchedulerScrolling,
  dxSchedulerToolbar,
+ SchedulerAppointmentFormIconsMode,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
@@ -750,11 +751,13 @@ const DxFormConfig = {
     "update:items": null,
     "update:onCanceled": null,
     "update:onSaved": null,
+    "update:showIcons": null,
   },
   props: {
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
     onCanceled: Function as PropType<((formData: any) => void)>,
-    onSaved: Function as PropType<((formData: any) => void)>
+    onSaved: Function as PropType<((formData: any) => void)>,
+    showIcons: String as PropType<SchedulerAppointmentFormIconsMode>
   }
 };
 
@@ -1184,6 +1187,7 @@ const DxResourceConfig = {
     "update:dataSource": null,
     "update:displayExpr": null,
     "update:fieldExpr": null,
+    "update:icon": null,
     "update:label": null,
     "update:useColorAsDefault": null,
     "update:valueExpr": null,
@@ -1194,6 +1198,7 @@ const DxResourceConfig = {
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((resource: any) => string)) | string>,
     fieldExpr: String,
+    icon: String,
     label: String,
     useColorAsDefault: Boolean,
     valueExpr: [Function, String] as PropType<((() => void)) | string>

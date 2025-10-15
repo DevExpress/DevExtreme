@@ -5,6 +5,7 @@ export {
   AllDayPanelMode,
   CellAppointmentsLimit,
   RecurrenceEditMode,
+  SchedulerAppointmentFormIconsMode,
   ViewType,
   SchedulerPredefinedToolbarItem,
   SchedulerPredefinedDateNavigatorItem,
