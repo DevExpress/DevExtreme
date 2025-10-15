@@ -19,8 +19,6 @@ env:
 jobs:
   build:
     name: build
-    strategy:
-      fail-fast: false
 
     runs-on: devextreme-shr2
     timeout-minutes: 15
@@ -120,15 +118,18 @@ jobs:
           { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups" },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
-          { componentFolder: "editors", name: "editors (1/3)", indices: "1/3" },
-          { componentFolder: "editors", name: "editors (2/3)", indices: "2/3" },
-          { componentFolder: "editors", name: "editors (3/3)", indices: "3/3" },
-          { componentFolder: "editors", name: "editors - material (1/3)", indices: "1/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (2/3)", indices: "2/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - material (3/3)", indices: "3/3", theme: 'material.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (1/3)", indices: "1/3", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (2/3)", indices: "2/3", theme: 'fluent.blue.light' },
-          { componentFolder: "editors", name: "editors - fluent (3/3)", indices: "3/3", theme: 'fluent.blue.light' },
+          { componentFolder: "editors", name: "editors (1/4)", indices: "1/4" },
+          { componentFolder: "editors", name: "editors (2/4)", indices: "2/4" },
+          { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
+          { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" },
+          { componentFolder: "editors", name: "editors - material (1/4)", indices: "1/4", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - material (2/4)", indices: "2/4", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - material (3/4)", indices: "3/4", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - material (4/4)", indices: "4/4", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - fluent (1/4)", indices: "1/4", theme: 'fluent.blue.light' },
+          { componentFolder: "editors", name: "editors - fluent (2/4)", indices: "2/4", theme: 'fluent.blue.light' },
+          { componentFolder: "editors", name: "editors - fluent (3/4)", indices: "3/4", theme: 'fluent.blue.light' },
+          { componentFolder: "editors", name: "editors - fluent (4/4)", indices: "4/4", theme: 'fluent.blue.light' },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
