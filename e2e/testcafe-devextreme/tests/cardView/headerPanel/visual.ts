@@ -188,7 +188,7 @@ test(
   width: 600,
 }));
 
-test.meta({ unstable: true })('render with horizontal scroll', async (t) => {
+test('render with horizontal scroll', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const firstItem = cardView.getHeaderPanel().getHeaderItem(0);

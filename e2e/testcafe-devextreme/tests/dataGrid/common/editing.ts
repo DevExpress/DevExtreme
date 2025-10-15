@@ -2789,8 +2789,10 @@ test('DataGrid - A new row is added above the existing row if the data source is
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   })
-    .before(async () => {
+    .before(async (t) => {
+      await t.debug();
       await changeTheme(theme);
+      await t.debug();
       await createWidget('dxDataGrid', {
         dataSource: [
           { Color: 'red' },

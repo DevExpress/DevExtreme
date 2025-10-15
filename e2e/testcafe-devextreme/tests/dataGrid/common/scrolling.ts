@@ -2,7 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
@@ -1678,8 +1678,6 @@ test('Warning should not be thrown if scrolling is virtual and height is specifi
         { column: 'value' },
       ],
     });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });
 

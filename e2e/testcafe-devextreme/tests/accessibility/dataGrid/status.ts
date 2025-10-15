@@ -1,7 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
-import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
@@ -32,7 +32,7 @@ test('Accessibility: DataGrid general status should contains correct text', asyn
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: DATA_SOURCE,
@@ -59,7 +59,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: DATA_SOURCE,
@@ -81,7 +81,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: DATA_SOURCE,
@@ -106,7 +106,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: DATA_SOURCE,
@@ -130,7 +130,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: DATA_SOURCE,

@@ -41,6 +41,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   columnAutoWidth: true,
   scrolling: {
     useNative: false,
+    showScrollbar: 'never',
   },
   customizeColumns: (columns) => {
     columns[5].fixed = true;
@@ -102,7 +103,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
       await changeTheme(Themes.genericLight);
     });
 
-  test.meta({ unstable: true })(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
+  safeSizeTest(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const dataRow = dataGrid.getDataRow(1);
@@ -118,7 +119,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  })
+  }, [900, 800])
     .before(async () => {
       await changeTheme(theme);
       await createWidget('dxDataGrid', {

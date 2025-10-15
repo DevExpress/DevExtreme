@@ -11,7 +11,7 @@ fixture.disablePageReloads`pivotGrid_headerFilter`
 
 const PIVOT_GRID_SELECTOR = '#container';
 
-test.meta({ unstable: true })('Header filter popup', async (t) => {
+test('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
 

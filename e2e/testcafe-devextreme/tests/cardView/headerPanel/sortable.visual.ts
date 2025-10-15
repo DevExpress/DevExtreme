@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { createWidget } from '../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../../container.html'));
@@ -71,7 +71,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 
@@ -109,7 +108,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 
@@ -147,7 +145,6 @@ const getDragCoordinates = async (
       width: 360,
     });
   }).after(async () => {
-    await removeStylesheetRulesFromPage();
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 });

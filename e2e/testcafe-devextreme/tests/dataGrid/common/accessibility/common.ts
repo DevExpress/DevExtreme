@@ -252,9 +252,7 @@ const DATA_GRID_SELECTOR = '#container';
           filterValue: [1, 7],
         },
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -294,9 +292,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -333,9 +329,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -376,9 +370,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -600,9 +592,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_5',
         'field_6',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -652,9 +642,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_5',
         'field_6',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -695,9 +683,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -732,9 +718,7 @@ const DATA_GRID_SELECTOR = '#container';
           'field_3',
           'field_4',
         ],
-      }, DATA_GRID_SELECTOR, {
-        disableFxAnimation: true,
-      });
+      }, DATA_GRID_SELECTOR);
     }).after(async () => {
       await changeTheme('generic.light');
     });
@@ -776,9 +760,7 @@ const DATA_GRID_SELECTOR = '#container';
           'field_3',
           'field_4',
         ],
-      }, DATA_GRID_SELECTOR, {
-        disableFxAnimation: true,
-      });
+      }, DATA_GRID_SELECTOR);
     }).after(async () => {
       await changeTheme('generic.light');
     });
@@ -821,9 +803,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -864,9 +844,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -907,9 +885,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -950,9 +926,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -993,9 +967,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1036,9 +1008,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1086,9 +1056,7 @@ const DATA_GRID_SELECTOR = '#container';
         'field_3',
         'field_4',
       ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1142,9 +1110,7 @@ const DATA_GRID_SELECTOR = '#container';
         e.isValid = false;
         e.errorText = 'Test';
       },
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1176,9 +1142,7 @@ const DATA_GRID_SELECTOR = '#container';
       columnWidth: 100,
       width: 800,
       columnHidingEnabled: true,
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1203,9 +1167,7 @@ const DATA_GRID_SELECTOR = '#container';
         allowReordering: true,
         showDragIcons: true,
       },
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1241,9 +1203,7 @@ const DATA_GRID_SELECTOR = '#container';
         formats: ['xlsx', 'pdf'],
         allowExportSelectedData: true,
       },
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
@@ -1282,9 +1242,7 @@ const DATA_GRID_SELECTOR = '#container';
       sorting: {
         mode: 'multiple',
       },
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
+    }, DATA_GRID_SELECTOR);
   }).after(async () => {
     await changeTheme('generic.light');
   });
