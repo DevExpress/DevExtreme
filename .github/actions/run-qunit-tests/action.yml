@@ -22,9 +22,6 @@ inputs:
   timezone:
     description: "Timezone for the test environment"
     default: ""
-  isPerformance:
-    description: "Indicates if performance testing should be conducted"
-    default: "false"
   headless:
     description: "Specifies if the browser should run in headless mode"
     default: "true"
@@ -131,7 +128,6 @@ runs:
         MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
         TZ: ${{ inputs.timezone }}
-        PERF: ${{ inputs.isPerformance }}
         NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}
         NO_CSP: ${{ inputs.useCsp == 'false' && 'true' || 'false' }}
         NORENOVATION: "false"

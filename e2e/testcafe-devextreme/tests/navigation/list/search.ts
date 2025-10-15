@@ -1,41 +1,33 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import List from 'devextreme-testcafe-models/list';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Search`
   .page(url(__dirname, '../../container.html'));
 
 test('List with search bar appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const list = new List('#container');
 
-  await testScreenshot(t, takeScreenshot, 'List with search and multiple selection.png', {
-    element: '#container',
-    shouldTestInCompact: true,
-  });
-
-  await list.option('selectionMode', 'single');
-
-  await testScreenshot(t, takeScreenshot, 'List with search and single selection.png', {
-    element: '#container',
-    shouldTestInCompact: true,
-  });
+  await testScreenshot(t, takeScreenshot, 'List with search.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const dataSource = Array.from({ length: 40 }, (_, i) => `Item_${i + 1}`);
+  await setAttribute('#container', 'style', 'display: flex; gap: 40px; padding: 8px; width: fit-content;');
 
-  return createWidget('dxList', {
+  const dataSource = Array.from({ length: 8 }, (_, i) => `Item_${i + 1}`);
+  const selectionModes = ['none', 'single', 'multiple', 'all'];
+
+  await Promise.all(selectionModes.map((mode) => appendElementTo('#container', 'div', `list-${mode}`)));
+  await Promise.all(selectionModes.map((mode) => createWidget('dxList', {
     dataSource,
     height: 400,
     width: 200,
     searchEnabled: true,
     showSelectionControls: true,
-    selectionMode: 'all',
-    selectByClick: false,
-  });
+    selectionMode: mode,
+  }, `#list-${mode}`)));
 });
