@@ -22,7 +22,7 @@ const ANIMATION_DELAY = 500;
 ].forEach(({ name, Class }) => {
   ['bottom', 'top'].forEach((toolbar) => {
     [true, false].forEach((rtlEnabled) => {
-      test.meta({ unstable: true })(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
+      safeSizeTest(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const instance = new Class(COMPONENT_SELECTOR);
 
@@ -41,7 +41,7 @@ const ANIMATION_DELAY = 500;
         await t
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async () => {
+      }, [600, 400]).before(async () => {
         if (isMaterial()) {
           await insertStylesheetRulesToPage('.dx-overlay-content, .dx-overlay-content input { font-family: sans-serif !important; }');
         }

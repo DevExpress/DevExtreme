@@ -4,7 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Grouping Panel - One group on different pages`
+fixture.disablePageReloads`Grouping Panel - One group on different pages`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';

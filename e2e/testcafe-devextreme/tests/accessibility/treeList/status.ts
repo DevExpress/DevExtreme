@@ -1,7 +1,7 @@
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import TreeList from 'devextreme-testcafe-models/treeList';
-import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
@@ -34,7 +34,7 @@ test('Accessibility: TreeList general status should contains correct text (rows 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
@@ -51,7 +51,7 @@ test('Accessibility: TreeList general status should contains correct text (rows 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
@@ -81,7 +81,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
@@ -106,7 +106,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
@@ -134,7 +134,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
   await t.expect(statusText).eql(expectedStatusText);
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,

@@ -1,5 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
@@ -20,7 +20,7 @@ fixture.disablePageReloads`DataGrid - Editing`
     await t
       .click(dataGrid.getToolbar().getItem(0));
 
-    await a11yCheck(t, defaultA11yCheckOptions, '#container');
+    await a11yCheck(t);
   }).before(() => createWidget('dxDataGrid', {
     dataSource: getData(3, 2),
     height: 400,

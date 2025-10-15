@@ -1,7 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
@@ -224,7 +224,7 @@ test('Header filter - filter menu', async (t) => {
     .expect(new HeaderFilter().element.exists)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -251,7 +251,7 @@ test('Filter panel', async (t) => {
     .expect(filterPanel.getFilterText().element.textContent)
     .eql('[Field 1] Contains \'val\'');
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -584,7 +584,7 @@ test('Empty column chooser', async (t) => {
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(10, 5),
     keyExpr: 'field_0',
@@ -616,7 +616,7 @@ test('Empty column chooser', async (t) => {
       .expect(dataGrid.getDataRow(0).isEdited)
       .ok();
 
-    await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(10, 5),
     keyExpr: 'field_0',
@@ -746,7 +746,7 @@ test('Batch editing mode - delete row', async (t) => {
     .expect(dataGrid.getDataRow(0).isRemoved)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -777,7 +777,7 @@ test('Form editing mode', async (t) => {
     .expect(dataGrid.getEditForm().element.exists)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -808,7 +808,7 @@ test('Popup editing mode', async (t) => {
     .expect(dataGrid.getPopupEditForm().element.exists)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -843,7 +843,7 @@ test('Validation in cell editing mode', async (t) => {
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -884,7 +884,7 @@ test('Error row', async (t) => {
     .expect(dataGrid.getErrorRow().exists)
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, DATA_GRID_SELECTOR);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',

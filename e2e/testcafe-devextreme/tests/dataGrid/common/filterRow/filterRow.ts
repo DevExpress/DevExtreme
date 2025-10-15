@@ -267,15 +267,15 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
 
   await dataGrid.isReady();
 
+  const ariaLabel = await filterEditor.menuButton.getAttribute('aria-label');
+
   await t
-    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .expect(ariaLabel)
     .eql('custom text');
 }).before(async (t) => {
-  t.ctx.originalMessages = await t.eval(() => {
-    const { localization } = (window as any).DevExpress;
-
-    return localization.getMessagesByLocales();
-  });
+  t.ctx.originalMessages = {
+    'dxDataGrid-ariaSearchBox': 'Search box',
+  };
 
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
@@ -295,9 +295,13 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
     },
   });
 }).after(async (t) => {
-  await t.eval((messages) => {
-    const { localization } = (window as any).DevExpress;
-
-    localization.loadMessages(messages);
-  }, { dependencies: { messages: t.ctx.originalMessages } });
+  await t.eval(
+    (messages) => {
+      (window as any).DevExpress.localization.loadMessages({ en: messages });
+    },
+    {
+      dependencies: { messages: t.ctx.originalMessages },
+      boundTestRun: t,
+    },
+  );
 });

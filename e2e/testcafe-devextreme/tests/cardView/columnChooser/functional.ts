@@ -160,11 +160,10 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   await t.expect(titleText).eql('customTitle');
   await t.expect(emptyMessageText).eql('customEmptyText');
 }).before(async (t) => {
-  t.ctx.originalMessages = await t.eval(() => {
-    const { localization } = (window as any).DevExpress;
-
-    return localization.getMessagesByLocales();
-  });
+  t.ctx.originalMessages = {
+    'dxDataGrid-columnChooserTitle': 'Column Chooser',
+    'dxDataGrid-columnChooserEmptyText': 'Drag a column here to hide it',
+  };
 
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
@@ -175,7 +174,7 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     });
   });
 
-  return createWidget('dxCardView', {
+  await createWidget('dxCardView', {
     dataSource: [],
     keyExpr: 'ID',
     cardsPerRow: 'auto',
@@ -188,9 +187,13 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     columns: [],
   });
 }).after(async (t) => {
-  await t.eval((messages) => {
-    const { localization } = (window as any).DevExpress;
-
-    localization.loadMessages(messages);
-  }, { dependencies: { messages: t.ctx.originalMessages } });
+  await t.eval(
+    (messages) => {
+      (window as any).DevExpress.localization.loadMessages({ en: messages });
+    },
+    {
+      dependencies: { messages: t.ctx.originalMessages },
+      boundTestRun: t,
+    },
+  );
 });

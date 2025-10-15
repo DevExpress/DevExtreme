@@ -1,5 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { a11yCheck, defaultA11yCheckOptions } from '../../../helpers/accessibility/utils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
@@ -14,7 +14,7 @@ test('Infinite scrolling', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
 }).before(() => createWidget('dxDataGrid', {
   dataSource: getData(1000, 2),
   height: 400,
@@ -31,7 +31,7 @@ test('Horizontal Virtual Scrolling', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await a11yCheck(t, defaultA11yCheckOptions, '#container');
+  await a11yCheck(t);
 }).before(() => createWidget('dxDataGrid', {
   dataSource: getData(20, 100),
   columnWidth: 100,
