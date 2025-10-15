@@ -6,14 +6,13 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`ChatAlertList`
-  .page(url(__dirname, '../../container.html'))
-  .clientScripts([
-    { module: 'mockdate' },
-    { content: 'window.MockDate = MockDate;' },
-  ]);
+fixture`ChatAlertList`
+  .page(url(__dirname, '../../container.html'));
 
-test('Alertlist appearance', async (t) => {
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])('Alertlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
@@ -51,9 +50,6 @@ test('Alertlist appearance', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await ClientFunction(() => {
-    if (typeof (window as any).MockDate === 'undefined') {
-      throw new Error('MockDate is not loaded');
-    }
     (window as any).MockDate.set('2024/10/18');
   })();
 
@@ -91,6 +87,5 @@ test('Alertlist appearance', async (t) => {
 }).after(async () => {
   await ClientFunction(() => {
     (window as any).MockDate.reset();
-    delete (window as any).MockDate;
   })();
 });
