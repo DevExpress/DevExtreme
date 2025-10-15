@@ -50,7 +50,7 @@ jobs:
           ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -59,8 +59,7 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-        BUILD_INPROGRESS_RENOVATION: "true"
-      run: pnpx nx build:dev
+      run: pnpx nx build:systemjs
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -84,7 +83,8 @@ jobs:
       matrix:
         CONSTEL: [
           export,
-          misc,
+          misc(1/2),
+          misc(2/2),
           ui,
           ui.widgets(1/2),
           ui.widgets(2/2),
@@ -97,6 +97,7 @@ jobs:
         ]
         TIMEZONE: ['']
         CSP: ['true']
+        useJQuery: ['false']
         include:
           - CONSTEL: ui.scheduler(1/2)
             TIMEZONE: US/Pacific
@@ -104,8 +105,12 @@ jobs:
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
             CSP: 'true'
-          - CONSTEL: misc
+          - CONSTEL: misc(1/2)
             CSP: 'false'
+            useJQuery: 'true'
+          - CONSTEL: misc(2/2)
+            CSP: 'false'
+            useJQuery: 'true'
 
     steps:
     - name: Get sources
@@ -117,9 +122,7 @@ jobs:
         name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
         constel: ${{ matrix.CONSTEL }}
         timezone: ${{ matrix.TIMEZONE }}
-        browser: 'chrome'
-        headless: 'true'
-        useJQuery: 'false'
+        useJQuery: ${{ matrix.useJQuery }}
         useCsp: ${{ matrix.CSP }}
 
   notify:
