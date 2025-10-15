@@ -108,11 +108,7 @@ export class AppointmentViewModelGenerator {
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        const appointment = setting?.info?.appointment as {
-          startDate: Date;
-          endDate: Date;
-          normalizedEndDate: Date;
-        } | undefined;
+        const appointment = setting?.info?.appointment as any | undefined;
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs

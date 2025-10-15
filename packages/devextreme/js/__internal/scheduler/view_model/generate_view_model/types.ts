@@ -31,7 +31,12 @@ export interface AppointmentViewModelSettingsInternal extends BaseViewModelSetti
   count: number;
   info: {
     sourceAppointment: SimpleAppointment;
-    appointment: SimpleAppointment;
+    appointment: SimpleAppointment & {
+      savedBeforeSplit: {
+        startDate: Date;
+        endDate: Date;
+      };
+    };
   };
   positionByMap: {
     rowIndex: number;

@@ -82,7 +82,11 @@ export const addCollector = (
     ...item,
     info: {
       sourceAppointment: item.info.sourceAppointment,
-      appointment: item.info.appointment,
+      appointment: {
+        ...item.info.appointment,
+        startDate: item.info.appointment.savedBeforeSplit.startDate,
+        endDate: item.info.appointment.savedBeforeSplit.endDate,
+      },
     },
   })).forEach((item) => {
     switch (true) {
