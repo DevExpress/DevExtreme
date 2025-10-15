@@ -115,6 +115,10 @@ export class AppointmentViewModelGenerator {
             .addOffsets(appointment.startDate, [viewOffset]);
           appointment.endDate = dateUtilsTs
             .addOffsets(appointment.endDate, [viewOffset]);
+          appointment.savedBeforeSplit.startDate = dateUtilsTs
+            .addOffsets(appointment.savedBeforeSplit.startDate, [viewOffset]);
+          appointment.savedBeforeSplit.endDate = dateUtilsTs
+            .addOffsets(appointment.savedBeforeSplit.endDate, [viewOffset]);
           appointment.normalizedEndDate = dateUtilsTs
             .addOffsets(appointment.normalizedEndDate, [viewOffset]);
           processedAppointments.add(appointment);

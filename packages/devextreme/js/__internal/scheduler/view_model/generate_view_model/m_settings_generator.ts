@@ -344,7 +344,7 @@ export class DateGeneratorBaseStrategy {
 
     gridAppointmentList.forEach((gridAppointment) => {
       const maxDate = new Date(this.dateRange[1]);
-      const { startDate, normalizedEndDate: endDateOfPart } = gridAppointment;
+      const { startDate, normalizedEndDate: endDateOfPart, savedBeforeSplit } = gridAppointment;
 
       const longStartDateParts = dateUtils.getDatesOfInterval(
         startDate,
@@ -363,6 +363,7 @@ export class DateGeneratorBaseStrategy {
             startDate: date,
             endDate,
             normalizedEndDate,
+            savedBeforeSplit,
             source: gridAppointment.source,
           };
         });
