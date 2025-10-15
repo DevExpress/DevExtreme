@@ -8,24 +8,21 @@ const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
-  colIndexAria: 'aria-colindex',
-  rowIndexAria: 'aria-rowindex',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   constructor(protected readonly root: HTMLElement) {}
 
   public getHeaderCells(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} [${SELECTORS.colIndexAria}]`);
+    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
   }
 
   public getHeaderCell(columnIndex: number): HTMLElement | null {
-    return this.root.querySelector(`.${SELECTORS.headerRowClass} [${SELECTORS.colIndexAria}="${columnIndex}"]`);
+    return this.getHeaderCells()[columnIndex];
   }
 
   public getCellElement(rowIndex: number, columnIndex: number): HTMLElement | null {
-    return this.root.querySelector(`.${SELECTORS.dataRowClass}[${SELECTORS.rowIndexAria}="${rowIndex}"]`)
-      ?.querySelector(`[${SELECTORS.colIndexAria}="${columnIndex}"]`) as HTMLElement | null;
+    return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`)[rowIndex]?.querySelectorAll('td')[columnIndex] as HTMLElement;
   }
 
   public getGroupRows(): NodeListOf<HTMLElement> {
@@ -45,8 +42,7 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   }
 
   public getHeaderByText(text: string): dxElementWrapper | undefined {
-    const $headers = this.getHeaderCells();
-    return $(Array.from($headers).find((el) => $(el).text().includes(text)));
+    return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
   }
 
   public abstract getInstance(): TInstance;
