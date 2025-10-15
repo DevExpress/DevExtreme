@@ -70,7 +70,7 @@ describe('Column Controller', () => {
           ],
         });
 
-        const groupRow = instance.getGroupColumns();
+        const groupRow = instance.getGroupRows();
         expect(groupRow.length).toBe(0);
       });
 
@@ -89,7 +89,7 @@ describe('Column Controller', () => {
 
         instance.apiColumnOption('AItest', 'type', columnType as DataGridCommandColumnType | undefined);
 
-        const groupRow = instance.getGroupColumns();
+        const groupRow = instance.getGroupRows();
         expect(groupRow.length).toBe(0);
       });
     });

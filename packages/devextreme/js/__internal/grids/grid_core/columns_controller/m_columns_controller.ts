@@ -453,7 +453,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   private _columnCanBeGrouped(column) {
-    if (!column) return false;
+    if (column?.type) return false;
 
     return isDefined(column.groupIndex) && !column.type;
   }
@@ -461,12 +461,12 @@ export class ColumnsController extends modules.Controller {
   public getGroupColumns() {
     const result: any = [];
 
-    const that = this;
+    const columnCanBeGrouped = this._columnCanBeGrouped;
 
     each(this._columns, function () {
       const column = this;
 
-      if (that._columnCanBeGrouped(column)) {
+      if (columnCanBeGrouped(column)) {
         result[column.groupIndex] = column;
       }
     });

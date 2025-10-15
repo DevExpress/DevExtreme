@@ -224,8 +224,8 @@ describe('Options', () => {
       const headerCell = component.getHeaderCell(3);
 
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-      expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(headerCell.textContent).toBe('Template');
+      expect(headerCell?.querySelectorAll('.template-class').length).toBe(1);
+      expect(headerCell?.textContent).toBe('Template');
     });
   });
 
@@ -260,8 +260,8 @@ describe('Options', () => {
       const dataCell = component.getCellElement(0, 3);
 
       expect(cellTemplate).toHaveBeenCalledTimes(1);
-      expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-      expect(dataCell.textContent).toBe('Template');
+      expect(dataCell?.querySelectorAll('.template-class').length).toBe(1);
+      expect(dataCell?.textContent).toBe('Template');
     });
   });
 
@@ -374,8 +374,8 @@ describe('columnOption', () => {
     const headerCell = component.getHeaderCell(3);
 
     expect(headerCellTemplate).toHaveBeenCalledTimes(1);
-    expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(headerCell.textContent).toBe('Template');
+    expect(headerCell?.querySelectorAll('.template-class').length).toBe(1);
+    expect(headerCell?.textContent).toBe('Template');
   });
 
   it('should apply cellTemplate to AI column', async () => {
@@ -409,8 +409,8 @@ describe('columnOption', () => {
     const dataCell = component.getCellElement(0, 3);
 
     expect(cellTemplate).toHaveBeenCalledTimes(1);
-    expect(dataCell.querySelectorAll('.template-class').length).toBe(1);
-    expect(dataCell.textContent).toBe('Template');
+    expect(dataCell?.querySelectorAll('.template-class').length).toBe(1);
+    expect(dataCell?.textContent).toBe('Template');
   });
 
   it('should apply alignment', async () => {
