@@ -1,7 +1,5 @@
-import { beforeEach } from 'node:test';
-
 import {
-  afterEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -12,7 +10,6 @@ import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data
 
 const SELECTORS = {
   gridContainer: '#gridContainer',
-  headerCell: '[aria-colindex]',
 };
 
 const GRID_CONTAINER_ID = 'gridContainer';
@@ -207,8 +204,8 @@ describe('Unsupported properties', () => {
   describe('Grouping properties', () => {
     it('Should have no group rows after put group properties in props (first load)', async () => {
       const { component } = await createDataGrid({
+        keyExpr: 'id',
         dataSource,
-        showBorders: true,
         columns: [
           'id',
           {

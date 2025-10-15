@@ -41,7 +41,7 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     }
   }
 
-  public getHeaderByText(text: string): dxElementWrapper | undefined {
+  public getHeadersByText(text: string): dxElementWrapper | undefined {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
   }
 
