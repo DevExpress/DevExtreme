@@ -7,7 +7,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ChatMessageBubble`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Chat: messagebubble', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

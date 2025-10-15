@@ -12,7 +12,7 @@ import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`ChatMessageList`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Messagelist empty view scenarios', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

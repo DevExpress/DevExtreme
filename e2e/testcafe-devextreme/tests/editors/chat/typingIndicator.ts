@@ -11,7 +11,7 @@ const CHAT_TYPINGINDICATOR_CIRCLE_CLASS = 'dx-chat-typingindicator-circle';
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`ChatTypingIndicator`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Chat: typing indicator with emptyview', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

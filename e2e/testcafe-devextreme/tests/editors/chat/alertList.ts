@@ -7,7 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`ChatAlertList`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test.clientScripts([
   { module: 'mockdate' },

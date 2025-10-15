@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`FileManager`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Custom DropDown width for Material and Fluent themes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
