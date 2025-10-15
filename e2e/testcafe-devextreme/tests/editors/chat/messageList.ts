@@ -379,7 +379,7 @@ test('Message list with editing context menu', async (t) => {
 });
 
 fixture`ChatMessageList: dayHeaders`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test.clientScripts([
   { module: 'mockdate' },
