@@ -50,6 +50,9 @@ test.clientScripts([
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await ClientFunction(() => {
+    if (typeof (window as any).MockDate === 'undefined') {
+      throw new Error('MockDate is not loaded');
+    }
     (window as any).MockDate.set('2024/10/18');
   })();
 
@@ -87,5 +90,6 @@ test.clientScripts([
 }).after(async () => {
   await ClientFunction(() => {
     (window as any).MockDate.reset();
+    delete (window as any).MockDate;
   })();
 });
