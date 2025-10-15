@@ -37,7 +37,7 @@ const dataSource = new PivotGridDataSource({
       dataField: 'city',
       width: 150,
       area: 'row',
-      selector(data) {
+      selector(data: Record<string, unknown>) {
         return `${data.city} (${data.country})`;
       },
     },

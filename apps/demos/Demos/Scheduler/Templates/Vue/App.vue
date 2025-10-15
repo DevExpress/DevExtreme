@@ -52,6 +52,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { type DxDateBoxTypes } from 'devextreme-vue/date-box';
 import { query as Query } from 'devextreme-vue/common/data';
 import AppointmentTemplate from './AppointmentTemplate.vue';
 import AppointmentTooltipTemplate from './AppointmentTooltipTemplate.vue';
@@ -59,7 +61,7 @@ import { data, moviesData, theatreData } from './data.ts';
 
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
-const scheduler = ref<DxScheduler['instance']>(null);
+const scheduler = ref<DxScheduler['instance']>();
 const currentDate = new Date(2021, 3, 27);
 const dataSource = data;
 const editing = { allowAdding: false };
@@ -69,8 +71,8 @@ function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
 }
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
   const { form } = e;
-  let movieInfo = getMovieById(e.appointmentData.movieId) || {};
-  let startDate = e.appointmentData.startDate as Date;
+  let movieInfo = getMovieById(e.appointmentData?.movieId) || {};
+  let startDate = e.appointmentData?.startDate as Date;
 
   form.option('items', [{
     label: {
@@ -82,7 +84,7 @@ function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEven
       items: moviesData,
       displayExpr: 'text',
       valueExpr: 'id',
-      onValueChanged(args) {
+      onValueChanged(args: DxSelectBoxTypes.ValueChangedEvent) {
         movieInfo = getMovieById(args.value);
 
         form.updateData('director', movieInfo.director);
@@ -105,8 +107,8 @@ function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEven
     editorOptions: {
       width: '100%',
       type: 'datetime',
-      onValueChanged(args) {
-        startDate = args.value as Date;
+      onValueChanged(args: DxDateBoxTypes.ValueChangedEvent) {
+        startDate = args.value;
         form.updateData('endDate', new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration));
       },
     },
@@ -124,14 +126,14 @@ function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEven
     editorType: 'dxRadioGroup',
     editorOptions: {
       dataSource: [5, 10, 15, 20],
-      itemTemplate(itemData) {
+      itemTemplate(itemData: string) {
         return '$'.concat(itemData);
       },
     },
   },
   ]);
 }
-const getMovieById = function (resourceId) {
+const getMovieById = function(resourceId: string) {
   return Query(moviesData)
     .filter(['id', resourceId])
     .toArray()[0];

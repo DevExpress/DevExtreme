@@ -76,7 +76,7 @@ const dataSource = new PivotGridDataSource({
   store: sales,
 });
 
-const customizeTooltip = function ({ seriesName, originalValue }) {
+const customizeTooltip = function({ seriesName, originalValue }: Record<string, any>) {
   const valueText = currencyFormatter.format(originalValue);
   return {
     html: `${seriesName} | Total<div class='currency'>${valueText}</div>`,

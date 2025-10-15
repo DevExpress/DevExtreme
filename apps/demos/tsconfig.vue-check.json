@@ -5,6 +5,9 @@
     "strict": true
   },
   "include": [
+    "Demos/Scheduler/**/Vue/**/*.vue",
+    "Demos/PivotGrid/**/Vue/**/*.vue",
+    "Demos/Pagination/**/Vue/**/*.vue",
     "Demos/Diagram/**/Vue/**/*.vue",
     "Demos/Gantt/**/Vue/**/*.vue",
     "Demos/FileManager/**/Vue/**/*.vue",
