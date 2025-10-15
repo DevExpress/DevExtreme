@@ -47,11 +47,11 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { versionSources, statisticsData } from './data.ts';
 
-function onSeriesClick({ target: series }: DxChartTypes.SeriesClickEvent): void {
-  if (series.isSelected()) {
-    series.clearSelection();
+function onSeriesClick(e: DxChartTypes.SeriesClickEvent): void {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    series.select();
+    e.target.select();
   }
 }
 </script>

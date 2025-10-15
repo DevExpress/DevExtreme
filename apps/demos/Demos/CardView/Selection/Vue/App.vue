@@ -98,21 +98,21 @@ const selectAllMode = ref<'allPages' | 'page'>('allPages');
 
 const cardViewRef = ref();
 
-const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
-  selectionMode.value = value;
+const onSelectionModeChange = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  selectionMode.value = e.value;
   cardViewRef.value.instance.clearSelection();
 };
 
-const onShowCheckBoxesModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
-  showCheckBoxesMode.value = value;
+const onShowCheckBoxesModeChange = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  showCheckBoxesMode.value = e.value;
 };
 
-const onSelectAllModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
-  selectAllMode.value = value;
+const onSelectAllModeChange = (e: DxSelectBoxTypes.ValueChangedEvent): void => {
+  selectAllMode.value = e.value;
 };
 
-const onAllowSelectAllChange = ({ value }: DxCheckBoxTypes.ValueChangedEvent): void => {
-  allowSelectAll.value = value;
+const onAllowSelectAllChange = (e: DxCheckBoxTypes.ValueChangedEvent): void => {
+  allowSelectAll.value = e.value;
 };
 </script>
 <style>

@@ -125,24 +125,24 @@ const allowSelectAll = ref(true);
 const selectByClick = ref(true);
 const allowColumnReordering = ref(false);
 
-function onModeChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
-  columnChooserMode.value = value;
+function onModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  columnChooserMode.value = e.value;
 }
 
-function onSearchEnabledChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-  searchEnabled.value = value;
+function onSearchEnabledChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  searchEnabled.value = e.value;
 }
 
-function onAllowSelectAllChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-  allowSelectAll.value = value;
+function onAllowSelectAllChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  allowSelectAll.value = e.value;
 }
 
-function onSelectByClickChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-  selectByClick.value = value;
+function onSelectByClickChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  selectByClick.value = e.value;
 }
 
-function onAllowColumnReorderingChanged({ value }: DxCheckBoxTypes.ValueChangedEvent) {
-  allowColumnReordering.value = value;
+function onAllowColumnReorderingChanged(e: DxCheckBoxTypes.ValueChangedEvent) {
+  allowColumnReordering.value = e.value;
 }
 
 </script>

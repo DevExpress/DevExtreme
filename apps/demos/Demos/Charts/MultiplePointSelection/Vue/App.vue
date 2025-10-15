@@ -41,11 +41,11 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { medalSources, medalStatistics } from './data.ts';
 
-function onPointClick({ target: point }: DxChartTypes.PointClickEvent): void {
-  if (point.isSelected()) {
-    point.clearSelection();
+function onPointClick(e: DxChartTypes.PointClickEvent): void {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    point.select();
+    e.target.select();
   }
 }
 </script>

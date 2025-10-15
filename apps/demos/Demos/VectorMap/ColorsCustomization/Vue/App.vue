@@ -45,9 +45,9 @@ function customizeTooltip(info: any) {
   }
   return {};
 }
-function click({ target }: DxVectorMapTypes.ClickEvent) {
-  if (target && countries[target.attribute('name')]) {
-    target.selected(!target.selected());
+function click(e: DxVectorMapTypes.ClickEvent) {
+  if (e.target && countries[e.target.attribute('name')]) {
+    e.target.selected(!e.target.selected());
   }
 }
 function customizeLayer(elements: any[]) {

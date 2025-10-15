@@ -103,7 +103,7 @@ const chartDataSource = new DataSource({
         if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
         return r.json();
       })
-      .then((arr) => arr.map((item) => ({
+      .then((arr) => arr.map((item: Record<string, any>) => ({
         ...item,
         Temperature: (item.MinTemp + item.MaxTemp) / 2,
         Date: new Date(item.Date),
