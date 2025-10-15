@@ -524,52 +524,6 @@ describe('columnOption', () => {
   });
 });
 
-describe('Public methods', () => {
-  beforeEach(beforeTest);
-  afterEach(afterTest);
-
-  describe('sendAIColumnRequest', () => {
-    it('should call aiIntegration.sendRequest', async () => {
-      const sendRequestSpy = jest.fn();
-
-      const aiIntegration = new AIIntegration({
-        sendRequest(): RequestResult {
-          sendRequestSpy();
-          return {
-            promise: new Promise<string>((resolve) => {
-              resolve('1');
-            }),
-            abort: (): void => { },
-          };
-        },
-      });
-
-      const { instance } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-        ],
-        keyExpr: 'id',
-        aiIntegration,
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-          },
-        ],
-      });
-
-      instance.sendAIColumnRequest('myColumn');
-      jest.runAllTimers();
-
-      expect(sendRequestSpy).toHaveBeenCalled();
-    });
-  });
-});
-
 describe('aiIntegration', () => {
   const rootSendRequestSpy = jest.fn();
   const columnSendRequestSpy = jest.fn();

@@ -340,7 +340,7 @@ describe('AiColumnView', () => {
         aiPromptEditorPOM.getStopButtonElement().click();
         jest.runAllTimers();
 
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
         expect(mockAiColumnController.abortAIColumnRequest).toHaveBeenCalledTimes(1);
       });
     });
@@ -389,7 +389,7 @@ describe('AiColumnView', () => {
         jest.runAllTimers();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
       });
 
       it('should update prompt editor state on error', async () => {
@@ -417,7 +417,7 @@ describe('AiColumnView', () => {
         jest.runAllTimers();
 
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
       });
     });
 
@@ -434,7 +434,7 @@ describe('AiColumnView', () => {
 
         await aiColumnView.hidePromptEditor();
 
-        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+        expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
         expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
         expect(mockAiColumnController.abortAIColumnRequest).toHaveBeenCalledTimes(1);
       });
@@ -538,7 +538,7 @@ describe('AiColumnView', () => {
 
       expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
-      expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith();
+      expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
     });
 
     describe('when prompt editor is not initialized', () => {

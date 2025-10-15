@@ -147,7 +147,7 @@ describe('AiPromptEditor', () => {
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',
-          placeholder: 'Prompt AI to generate the column\'s values',
+          placeholder: 'Prompt AI to generate column values...',
         },
       ]);
     });
@@ -335,99 +335,6 @@ describe('Apply button', () => {
       expect(POM.isApplyButtonDisabled()).toBe(true);
     });
   });
-
-  /*
-  describe('when it is clicked', () => {
-    it('should become disabled', () => {
-      const onSubmitMock = jest.fn();
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      POM.changeTextAreaValue('new text');
-      expect(POM.isApplyButtonDisabled()).toBe(false);
-
-      POM.getApplyButtonElement().click();
-
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-    });
-  });
-
-  describe('when it is clicked and text is changed again', () => {
-    it('should be enabled', async () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      // First change and apply
-      POM.changeTextAreaValue('new text');
-      POM.getApplyButtonElement().click();
-      await Promise.resolve();
-
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-
-      // Second change
-      POM.changeTextAreaValue('another text');
-
-      expect(POM.isApplyButtonDisabled()).toBe(false);
-    });
-  });
-
-  describe('when Stop button is clicked', () => {
-    it('should become disabled', () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      POM.changeTextAreaValue('new text');
-      POM.getApplyButtonElement().click();
-
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-
-      POM.getStopButtonElement().click();
-
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-    });
-  });
-
-  describe('when Stop button is clicked and initial value is set', () => {
-    it('should become enabled', async () => {
-      let rejectFn: () => void = () => {};
-      const onSubmitMock = jest.fn(() => new Promise<void>((_, reject) => {
-        rejectFn = reject;
-      }));
-      const onStopMock = jest.fn(() => {
-        rejectFn();
-        return Promise.resolve();
-      });
-
-      const { POM } = createAiPromptEditor({
-        value: 'initial text',
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-        onStop: onStopMock,
-      });
-
-      POM.changeTextAreaValue('new text');
-      POM.getApplyButtonElement().click();
-
-      expect(POM.isApplyButtonDisabled()).toBe(true);
-
-      POM.getStopButtonElement().click();
-      await Promise.resolve();
-
-      expect(POM.isApplyButtonDisabled()).toBe(false);
-    });
-  });
-  */
 });
 
 describe('Stop button', () => {
@@ -443,75 +350,6 @@ describe('Stop button', () => {
       expect(POM.isStopButtonVisible()).toBe(false);
     });
   });
-/*
-  describe('when Apply button is clicked', () => {
-    it('should become visible', () => {
-      let resolveFn: () => void = () => {};
-      const onSubmitMock = jest.fn(() => new Promise<void>((resolve) => {
-        resolveFn = resolve;
-      }));
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      expect(POM.isStopButtonVisible()).toBe(false);
-
-      POM.changeTextAreaValue('test');
-      POM.getApplyButtonElement().click();
-
-      expect(POM.isStopButtonVisible()).toBe(true);
-
-      resolveFn();
-    });
-  });
-
-  describe('when onSubmit completes', () => {
-    it('should become hidden', async () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      POM.changeTextAreaValue('test');
-      POM.getApplyButtonElement().click();
-
-      expect(POM.isStopButtonVisible()).toBe(true);
-
-      await Promise.resolve();
-
-      expect(POM.isStopButtonVisible()).toBe(false);
-    });
-  });
-
-  describe('when Apply button becomes visible', () => {
-    it('should be hidden', async () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      // Initially Apply is visible, Stop is hidden
-      expect(POM.isApplyButtonVisible()).toBe(true);
-      expect(POM.isStopButtonVisible()).toBe(false);
-
-      POM.changeTextAreaValue('test');
-      POM.getApplyButtonElement().click();
-
-      // During submit: Apply is hidden, Stop is visible
-      expect(POM.isApplyButtonVisible()).toBe(false);
-      expect(POM.isStopButtonVisible()).toBe(true);
-
-      await Promise.resolve();
-
-      expect(POM.isStopButtonVisible()).toBe(false);
-    });
-  }); */
 });
 
 describe('TextArea', () => {
@@ -528,70 +366,6 @@ describe('TextArea', () => {
       expect(textArea.disabled).toBe(false);
     });
   });
-
-  /*
-  describe('when Apply button is clicked', () => {
-    it('should become disabled', () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      const textArea = POM.getTextArea();
-
-      POM.changeTextAreaValue('test');
-      expect(textArea.disabled).toBe(false);
-
-      POM.getApplyButtonElement().click();
-      expect(textArea.disabled).toBe(true);
-    });
-
-    it('should become enabled after submit completes', async () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      const textArea = POM.getTextArea();
-
-      POM.changeTextAreaValue('test');
-      POM.getApplyButtonElement().click();
-
-      expect(textArea.disabled).toBe(true);
-
-      await Promise.resolve();
-
-      expect(textArea.disabled).toBe(false);
-    });
-  });
-
-  describe('when Stop button is clicked', () => {
-    it('should become enabled', async () => {
-      const onSubmitMock = jest.fn(() => Promise.resolve());
-
-      const { POM } = createAiPromptEditor({
-        popupOptions: { visible: true },
-        onSubmit: onSubmitMock,
-      });
-
-      const textArea = POM.getTextArea();
-
-      POM.changeTextAreaValue('test');
-      POM.getApplyButtonElement().click();
-
-      expect(textArea.disabled).toBe(true);
-
-      POM.getStopButtonElement().click();
-      await Promise.resolve();
-
-      expect(textArea.disabled).toBe(false);
-    });
-  });
-  */
 });
 
 describe('Public Methods', () => {
@@ -826,7 +600,7 @@ describe('Public Methods', () => {
         expect(POM.getPopupInstance().option('shading')).toBe(true);
         expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
 
-        instance.updateStateOnAction();
+        instance.updateStateOnAction('stop');
 
         expect(POM.isProgressBarVisible()).toBe(false);
         // Should be enabled because text was changed

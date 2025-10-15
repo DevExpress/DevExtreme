@@ -12,3 +12,7 @@ export const CLASSES = {
   aiPromptEditorStopButton: 'dx-ai-prompt-editor__stop-button',
   aiPromptEditorProgressBar: 'dx-ai-prompt-editor__progressbar',
 };
+
+export const REGENERATE_DATA_BUTTON_INDEX = 0;
+export const APPLY_BUTTON_INDEX = 1;
+export const STOP_BUTTON_INDEX = 2;

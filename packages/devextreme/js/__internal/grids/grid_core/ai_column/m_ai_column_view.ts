@@ -41,7 +41,7 @@ export class AiColumnView extends View {
         );
       },
       onStop: (): void => {
-        this.promptEditorInstance.updateStateOnAction();
+        this.promptEditorInstance.updateStateOnAction('stop');
         this.aiColumnController.abortAIColumnRequest();
       },
       onRefresh: (): void => {
@@ -51,7 +51,7 @@ export class AiColumnView extends View {
       popupOptions: {
         container: domAdapter.getBody(),
         onHiding: (): void => {
-          this.promptEditorInstance.updateStateOnAction();
+          this.promptEditorInstance.updateStateOnAction('stop');
           this.aiColumnController.abortAIColumnRequest();
         },
         position: {
@@ -91,10 +91,10 @@ export class AiColumnView extends View {
 
     this.addAiCommandColumn();
     this.aiColumnController.aiRequestCompleted.add(() => {
-      this.promptEditorInstance?.updateStateOnAction();
+      this.promptEditorInstance?.updateStateOnAction('stop');
     });
     this.aiColumnController.aiRequestRejected.add(() => {
-      this.promptEditorInstance?.updateStateOnAction();
+      this.promptEditorInstance?.updateStateOnAction('stop');
     });
   }
 

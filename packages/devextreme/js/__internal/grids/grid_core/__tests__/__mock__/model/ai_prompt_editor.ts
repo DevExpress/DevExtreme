@@ -17,7 +17,7 @@ export class AiPromptEditorModel {
   constructor(protected readonly root: HTMLElement) {}
 
   public isVisible(): boolean {
-    return !!Popup.getInstance(this.root)?.option('visible');
+    return this.getWrapperElement() !== null;
   }
 
   public getPopupInstance(): Popup {

@@ -17,4 +17,4 @@ export interface AiPromptEditorOptions {
   editorOptions?: TextAreaProperties;
 }
 
-export type AiPromptEditorAction = 'apply' | 'regenerate';
+export type AiPromptEditorAction = 'apply' | 'regenerate' | 'stop';

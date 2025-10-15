@@ -7,7 +7,11 @@ import ProgressBar from '@js/ui/progress_bar';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
 import TextArea from '@js/ui/text_area';
 
-import { CLASSES, DEFAULT_POPUP_OPTIONS } from './const';
+import {
+  APPLY_BUTTON_INDEX,
+  CLASSES, DEFAULT_POPUP_OPTIONS,
+  REGENERATE_DATA_BUTTON_INDEX, STOP_BUTTON_INDEX,
+} from './const';
 import type { AiPromptEditorAction, AiPromptEditorOptions } from './types';
 import { getPrompt, isPromptChanged } from './utils';
 
@@ -44,7 +48,7 @@ export class AiPromptEditor {
       minHeight: 80,
       height: '100%',
       onValueChanged: (e): void => {
-        this.updateButtonOption(1, 'disabled', !isPromptChanged(this.prompt, e.value)); // Update the disable state of the Apply button
+        this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !isPromptChanged(this.prompt, e.value)); // Update the disable state of the Apply button
       },
       placeholder: messageLocalization.format('dxDataGrid-aiPromptEditorPlaceholder'),
       valueChangeEvent: 'input change keyup',
@@ -156,11 +160,13 @@ export class AiPromptEditor {
   }
 
   private toggleDisableState(disabled: boolean): void {
-    this.updateButtonOption(0, 'disabled', disabled ? true : !this.prompt); // Update the disable state of the Regenerate data button
+    const editorValue = this.getEditorValue();
+
+    this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', disabled ? true : !this.prompt); // Update the disable state of the Regenerate data button
     this.updateButtonOption(
-      1,
+      APPLY_BUTTON_INDEX,
       'disabled',
-      disabled ? true : !isPromptChanged(this.prompt, this.editorInstance.option('value')),
+      disabled ? true : !isPromptChanged(this.prompt, editorValue),
     ); // Update the disable state of the Apply button
     this.editorInstance.option('disabled', disabled); // Update TextArea disable state
     this.popupInstance.option('shading', disabled);
@@ -184,8 +190,8 @@ export class AiPromptEditor {
   }
 
   public toggleApplyButtonVisibility(visible: boolean): void {
-    this.updateToolbarItemVisibility(1, visible); // Update Apply button visibility
-    this.updateToolbarItemVisibility(2, !visible); // Update Stop button visibility
+    this.updateToolbarItemVisibility(APPLY_BUTTON_INDEX, visible); // Update Apply button visibility
+    this.updateToolbarItemVisibility(STOP_BUTTON_INDEX, !visible); // Update Stop button visibility
   }
 
   public setLoading(isLoading: boolean): void {
@@ -202,8 +208,9 @@ export class AiPromptEditor {
    * @param action - The current action being performed
    */
   public updateStateOnAction(
-    action?: AiPromptEditorAction,
+    action: AiPromptEditorAction,
   ): void {
+    // eslint-disable-next-line default-case
     switch (action) {
       case 'apply':
       case 'regenerate':
@@ -211,7 +218,7 @@ export class AiPromptEditor {
         this.toggleDisableState(true);
         this.toggleApplyButtonVisibility(false);
         break;
-      default:
+      case 'stop':
         this.setLoading(false);
         this.toggleDisableState(false);
         this.toggleApplyButtonVisibility(true);
