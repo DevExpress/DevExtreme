@@ -45,8 +45,7 @@ export class AiPromptEditor {
   private getTextAreaConfig(): TextAreaProperties {
     return {
       value: this.prompt,
-      minHeight: 80,
-      height: '100%',
+      height: 140,
       onValueChanged: (e): void => {
         this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !isPromptChanged(this.prompt, e.value)); // Update the disable state of the Apply button
       },
