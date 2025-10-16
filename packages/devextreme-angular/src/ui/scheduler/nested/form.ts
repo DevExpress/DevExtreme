@@ -17,7 +17,7 @@ import {
 
 
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import { SchedulerAppointmentFormIconsMode } from 'devextreme/ui/scheduler';
+import { SchedulerAppointmentFormIconDisplay } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,
@@ -69,10 +69,10 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get showIcons(): SchedulerAppointmentFormIconsMode {
+    get showIcons(): SchedulerAppointmentFormIconDisplay {
         return this._getOption('showIcons');
     }
-    set showIcons(value: SchedulerAppointmentFormIconsMode) {
+    set showIcons(value: SchedulerAppointmentFormIconDisplay) {
         this._setOption('showIcons', value);
     }
 

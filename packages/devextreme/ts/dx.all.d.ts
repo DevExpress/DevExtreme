@@ -26174,7 +26174,7 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
-    export type SchedulerAppointmentFormIconsMode =
+    export type SchedulerAppointmentFormIconDisplay =
       | 'both'
       | 'main'
       | 'recurrence'
@@ -26472,7 +26472,7 @@ declare module DevExpress.ui {
                 /**
                  * [descr:dxSchedulerOptions.editing.form.showIcons]
                  */
-                showIcons?: DevExpress.ui.dxScheduler.SchedulerAppointmentFormIconsMode;
+                showIcons?: DevExpress.ui.dxScheduler.SchedulerAppointmentFormIconDisplay;
               }
             | undefined;
         };
