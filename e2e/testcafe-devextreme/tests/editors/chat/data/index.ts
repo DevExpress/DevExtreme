@@ -29,16 +29,10 @@ export const getLongText = (useLineBreaks = false, length = 1): string => {
   const longItemArray = Array(length).fill(longItem);
   const longString = longItemArray.join('');
 
-  const result = `${UUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
-
-  return result;
+  return `${UUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
 };
 
-export const getShortText = (useLineBreaks = false): string => {
-  const value = `Short${useLineBreaks ? lineBreaks : ' '}text`;
-
-  return value;
-};
+export const getShortText = (useLineBreaks = false): string => `Short${useLineBreaks ? lineBreaks : ' '}text`;
 
 export const generateMessages = (
   length: number,
@@ -49,8 +43,8 @@ export const generateMessages = (
   coefficient = 4,
   n = 1,
   isEdited = false,
-): Message[] => {
-  const messages = Array.from({ length: length * n }, (_, i) => {
+): Message[] => (
+  Array.from({ length: length * n }, (_, i) => {
     const text = useLongText
       ? getLongText(useLineBreaks)
       : getShortText(useLineBreaks);
@@ -63,18 +57,14 @@ export const generateMessages = (
       return i % coefficient === 0 ? userFirst : userSecond;
     };
 
-    const item = {
+    return {
       timestamp,
       author: getAuthor(),
       text,
       isEdited,
     };
-
-    return item;
-  });
-
-  return messages;
-};
+  })
+);
 
 export const generateImageMessage = (
   user: User,
