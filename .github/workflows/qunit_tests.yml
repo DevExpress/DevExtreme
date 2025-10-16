@@ -124,7 +124,7 @@ jobs:
   qunit-tests-shadow-dom:
     needs: build
     runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-${{ matrix.kind }}
+    name: ${{ matrix.constel }}-shadow-dom
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -146,11 +146,6 @@ jobs:
           'ui.scheduler(3/3)',
           'viz'
         ]
-        kind: [ 'shadow-dom' ]
-        include:
-          - kind: 'shadow-dom'
-            userAgent: ''
-            useShadowDom: true
 
     steps:
       - name: Get sources
@@ -159,11 +154,10 @@ jobs:
       - name: Run QUnit tests
         uses: ./.github/actions/run-qunit-tests
         with:
-          name: ${{ matrix.constel }}-${{ matrix.kind }}
+          name: ${{ matrix.constel }}-shadow-dom
           constel: ${{ matrix.constel }}
           useJQuery: 'true'
-          userAgent: ${{ matrix.userAgent }}
-          useShadowDom: ${{ matrix.useShadowDom }}
+          useShadowDom: 'true'
           useCsp: 'true'
 
   notify:
