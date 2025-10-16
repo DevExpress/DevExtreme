@@ -136,7 +136,7 @@ function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) 
   ];
 }
 function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-  e.itemData.onItemClick(e);
+  e.itemData?.onItemClick?.(e);
 }
 </script>
 

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import DxPivotGrid, {
   DxFieldChooser,
-  DxFieldPanel, 
+  DxFieldPanel,
   type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';

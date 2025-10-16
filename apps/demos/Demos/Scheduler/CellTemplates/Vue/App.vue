@@ -85,10 +85,11 @@ function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
 }
 
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
-  if (e.appointmentData?.startDate && !Utils.isValidAppointmentDate(new Date(e.appointmentData.startDate))) {
+  if (e.appointmentData?.startDate 
+      && !Utils.isValidAppointmentDate(new Date(e.appointmentData.startDate))) {
     e.cancel = true;
     notifyDisableDate();
-    applyDisableDatesToDateEditors(e.form); 
+    applyDisableDatesToDateEditors(e.form);
   }
 
 }
@@ -111,9 +112,9 @@ function notifyDisableDate() {
 }
 function applyDisableDatesToDateEditors(form: DxForm['instance']) {
   if (!form) {
-    return 
+    return;
   }
-  
+
   const startDateEditor = form.getEditor('startDate');
   startDateEditor?.option('disabledDates', holidays);
 

@@ -86,12 +86,11 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
       e.items?.push({
         text: 'Hide field',
         onItemClick() {
-          let fieldIndex: number;
           const dataSourceField: Record<string, any> = sourceField.groupName
-          ? dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-              : sourceField;
-          
-          fieldIndex = dataSourceField.index;
+            ? dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+            : sourceField;
+
+          const fieldIndex = dataSourceField.index;
 
           dataSource.field(fieldIndex, {
             area: null,
@@ -102,7 +101,7 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args: Record<string, any>) {
+      const setSummaryType = function (args: Record<string, any>) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });
