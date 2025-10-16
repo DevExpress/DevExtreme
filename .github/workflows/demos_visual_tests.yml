@@ -174,7 +174,7 @@ jobs:
       if: matrix.STRATEGY == 'accessibility'
       uses: actions/upload-artifact@v4
       with:
-        name: accessibility-reports-${{ env.JOB_NAME }}
+        name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
         path: apps/demos/testing/artifacts/axe-reports/*
         if-no-files-found: ignore
 
