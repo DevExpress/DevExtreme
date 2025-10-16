@@ -109,7 +109,7 @@ QUnit.module('Milestone', moduleConfig, () => {
 
     QUnit.test('position is correctly calculated', function(assert) {
         if(QUnit.urlParams['shadowDom']) {
-            assert(true);
+            assert.ok(true);
             return;
         }
 
