@@ -52,7 +52,7 @@ import { employees } from './data.ts';
 
 const getPageEmployees = (
   pageIndex: number,
-  pageSize: number
+  pageSize: number,
 ) => employees.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
 const pageSizes = [4, 6];
 const showInfo = true;
