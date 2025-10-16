@@ -41,7 +41,6 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   columnAutoWidth: true,
   scrolling: {
     useNative: false,
-    showScrollbar: 'never',
   },
   customizeColumns: (columns) => {
     columns[5].fixed = true;

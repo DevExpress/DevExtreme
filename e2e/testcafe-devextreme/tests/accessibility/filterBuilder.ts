@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import { fields, filter } from '../filterBuilder/data';
 import { a11yCheck } from '../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`Filter Builder Accessibility Tests`
+fixture.disablePageReloads`Filter Builder`
   .page(url(__dirname, '../container.html'));
 
 const elements = [

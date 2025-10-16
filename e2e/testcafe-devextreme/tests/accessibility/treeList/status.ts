@@ -5,7 +5,7 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`TreeList - Status`
+fixture`TreeList - Status`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_SOURCE = [
