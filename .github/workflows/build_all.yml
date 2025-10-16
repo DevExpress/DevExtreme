@@ -77,7 +77,7 @@ jobs:
           path: npm
 
       - name: Move devextreme package
-        run: mv ./npm/devextreme-2*.tgz ./e2e/devextreme-bundler-test/devextreme.tgz
+        run: mv ./npm/devextreme-2*.tgz ./e2e/devextreme-bundler/devextreme.tgz
 
       - name: Setup deps
         working-directory: ./e2e/devextreme-bundler-test
@@ -86,7 +86,7 @@ jobs:
           pnpm add ./devextreme.tgz
 
       - name: Build bundle
-        working-directory: ./e2e/devextreme-bundler-test
+        working-directory: ./e2e/devextreme-bundler
         run: |
           npx devextreme-bundler-init custom-bundle
           npx devextreme-bundler custom-bundle
