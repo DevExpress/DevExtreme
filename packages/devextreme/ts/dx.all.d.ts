@@ -11150,14 +11150,13 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_AttachmentDownloadEvent]
      */
-    export type AttachmentDownloadEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat> & {
-      /**
-       * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
-       */
-      readonly attachment?: TAttachment;
-    };
+    export type AttachmentDownloadEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+         */
+        readonly attachment?: Attachment;
+      };
     /**
      * [descr:_ui_chat_DisposingEvent]
      */

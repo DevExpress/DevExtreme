@@ -19,7 +19,7 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
 }
 
 type IChatOptionsNarrowedEvents = {
-  onAttachmentDownload?: ((e: AttachmentDownloadEvent<TAttachment>) => void) | undefined;
+  onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;

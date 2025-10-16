@@ -160,12 +160,9 @@ export type MessageUpdatedEvent = EventInfo<dxChat> & {
  * @type object
  * @inherits EventInfo
  */
-export type AttachmentDownloadEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat> & {
-  /**
-   * @docid _ui_chat_AttachmentDownloadEvent.attachment
-   * @type Attachment
-   */
-  readonly attachment?: TAttachment;
+export type AttachmentDownloadEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_AttachmentDownloadEvent.attachment */
+  readonly attachment?: Attachment;
 };
 
 /**
