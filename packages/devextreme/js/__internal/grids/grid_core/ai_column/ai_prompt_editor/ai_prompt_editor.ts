@@ -65,7 +65,7 @@ export class AiPromptEditor {
       resizeEnabled: true,
       hideOnOutsideClick: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
-      wrapperAttr: { class: CLASSES.aiPromptEditor },
+      wrapperAttr: { class: `${CLASSES.aiPromptEditor} ${CLASSES.aiDialog}` },
       contentTemplate: ($container): void => {
         const $editorContainer = $('<div>')
           .addClass(CLASSES.aiPromptEditorTextArea)

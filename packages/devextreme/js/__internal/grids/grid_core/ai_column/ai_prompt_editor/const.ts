@@ -5,6 +5,7 @@ export const DEFAULT_POPUP_OPTIONS = {
 };
 
 export const CLASSES = {
+  aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   aiPromptEditorTextArea: 'dx-ai-prompt-editor__text-area',
   aiPromptEditorRefreshButton: 'dx-ai-prompt-editor__refresh-button',
