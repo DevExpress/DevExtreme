@@ -1,12 +1,9 @@
-import type { PositionAlignment } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as ToastProperties } from '@js/ui/toast';
 import dxToast from '@js/ui/toast';
 
 import { View } from '../m_modules';
-
-const DEFAULT_POSITION = { my: 'center bottom' as PositionAlignment, at: 'center bottom' as PositionAlignment };
 
 export class ToastView extends View {
   private _toastInstance: dxToast | null = null;
@@ -24,7 +21,8 @@ export class ToastView extends View {
 
     this._toastInstance = this._createComponent(this._$toastContainer, dxToast, {
       position: {
-        ...DEFAULT_POSITION,
+        my: 'bottom',
+        at: 'bottom',
         of: this.component.$element().get(0),
       },
       ...options,
