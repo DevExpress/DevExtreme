@@ -1821,7 +1821,7 @@ describe('API Handlers', () => {
             }),
           }),
           data: 1,
-          additionalInfo: {},
+          additionalInfo: undefined,
           error: null,
         }),
       );
