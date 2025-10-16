@@ -1,7 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import type { RequestParams } from '@js/common/ai-integration';
+import type { GenerateGridColumnCommandResponse, RequestParams } from '@js/common/ai-integration';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
@@ -17,7 +17,7 @@ const SELECTORS = {
 const GRID_CONTAINER_ID = 'gridContainer';
 
 interface RequestResult {
-  promise: Promise<string>;
+  promise: Promise<GenerateGridColumnCommandResponse>;
   abort: () => void;
 }
 
@@ -1865,6 +1865,158 @@ describe('API Handlers', () => {
       jest.advanceTimersByTime(10000);
       await Promise.resolve();
       expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
+    });
+
+    it('should pass additional data to the handler', async () => {
+      const aiIntegrationCustomResult = (): RequestResult => ({
+        promise: new Promise<GenerateGridColumnCommandResponse>((resolve) => {
+          columnSendRequestStarted();
+          // Timeouts are mocked and do not delay tests execution
+          setTimeout(() => {
+            columnSendRequestResolved();
+            resolve(
+              {
+                data: '1',
+                additionalInfo: {
+                  customData: 'My custom data',
+                  value: 1,
+                },
+              },
+            );
+          }, 10000);
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+      const columnCustomAiIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationCustomResult();
+        },
+      });
+      const onAIColumnResponseReceived = jest.fn();
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnCustomAiIntegration,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnResponseReceived,
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledWith(
+        expect.objectContaining({
+          component: expect.objectContaining({ NAME: 'dxDataGrid' }),
+          element: expect.objectContaining({ id: GRID_CONTAINER_ID }),
+          column: expect.objectContaining({
+            name: 'myColumn',
+            ai: expect.objectContaining({
+              mode: 'manual',
+              prompt: 'Test prompt',
+            }),
+          }),
+          data: 1,
+          additionalInfo: { customData: 'My custom data', value: 1 },
+          error: null,
+        }),
+      );
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onAIColumnResponseReceived handler with error object if the request is rejected', async () => {
+      const aiIntegrationResultWithError = (): RequestResult => ({
+        promise: new Promise<string>((_resolve, reject) => {
+          columnSendRequestStarted();
+          // Timeouts are mocked and do not delay tests execution
+          setTimeout(() => {
+            reject(new Error('Test error'));
+          }, 10000);
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+      const columnAiIntegrationWithError = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResultWithError();
+        },
+      });
+      const onAIColumnResponseReceived = jest.fn();
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegrationWithError,
+              mode: 'manual',
+              prompt: 'Test prompt',
+            },
+          },
+        ],
+        onAIColumnResponseReceived,
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestStarted).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+      // There is enough time to resolve a promise
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledTimes(1);
+      expect(onAIColumnResponseReceived).toHaveBeenCalledWith(
+        expect.objectContaining({
+          component: expect.objectContaining({ NAME: 'dxDataGrid' }),
+          element: expect.objectContaining({ id: GRID_CONTAINER_ID }),
+          column: expect.objectContaining({
+            name: 'myColumn',
+            ai: expect.objectContaining({
+              mode: 'manual',
+              prompt: 'Test prompt',
+            }),
+          }),
+          data: null,
+          additionalInfo: undefined,
+          error: 'Test error',
+        }),
+      );
     });
   });
 });

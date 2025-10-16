@@ -222,7 +222,18 @@ export type SmartPasteCommandResult = Array<{
 /**
  * @namespace DevExpress.aiIntegration
  */
-export type GenerateGridColumnCommandResult = Record<PropertyKey, unknown>;
+export type GenerateGridColumnCommandResult = {
+  data: Record<PropertyKey, string>;
+  additionalInfo?: Record<string, unknown>;
+};
+
+/**
+ * @namespace DevExpress.aiIntegration
+ */
+export type GenerateGridColumnCommandResponse = string | {
+  data: string | Record<PropertyKey, string>;
+  additionalInfo?: Record<string, unknown>;
+};
 
 /**
  * @namespace DevExpress.aiIntegration

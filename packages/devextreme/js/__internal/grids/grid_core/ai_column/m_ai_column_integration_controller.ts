@@ -116,16 +116,16 @@ export class AiColumnIntegrationController extends Controller {
   private getAICommandCallbacks<T>(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
-  ): RequestCallbacks<T> {
+  ): RequestCallbacks<GenerateGridColumnCommandResult> {
     const column = this.columnsController.getColumnByName(columnName);
     const callbacks = {
-      onComplete: (finalResponse: T): void => {
+      onComplete: (finalResponse: GenerateGridColumnCommandResult): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
           const args = {
             column,
             error: null,
-            data: finalResponse,
-            additionalInfo: {},
+            data: finalResponse.data,
+            additionalInfo: finalResponse.additionalInfo,
           };
 
           this.executeAction('onAIColumnResponseReceived', args);
@@ -138,13 +138,14 @@ export class AiColumnIntegrationController extends Controller {
         }
       },
       onError: (error: Error): void => {
+        const message = error?.message ?? error;
         this.executeAction('onAIColumnResponseReceived', {
           column,
-          error: error.message,
+          error: message,
           data: null,
-          additionalInfo: {},
+          additionalInfo: undefined,
         });
-        this.showError(error.message);
+        this.showError(message);
         this.processCommandCompletion(columnName);
       },
     };
