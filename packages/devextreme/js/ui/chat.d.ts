@@ -160,9 +160,9 @@ export type MessageUpdatedEvent = EventInfo<dxChat> & {
  * @type object
  * @inherits EventInfo
  */
-export type AttachmentDownloadEvent = EventInfo<dxChat> & {
+export type AttachmentDownloadEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat> & {
   /** @docid _ui_chat_AttachmentDownloadEvent.attachment */
-  readonly attachment?: Attachment;
+  readonly attachment?: TAttachment;
 };
 
 /**
@@ -227,8 +227,6 @@ export type Attachment = {
      * @public
      */
     size: number;
-
-    [key: string]: any;
 };
 
 /**
@@ -275,12 +273,12 @@ export type MessageBase = {
  * @namespace DevExpress.ui.dxChat
  * @inherits MessageBase
  */
-export type TextMessage = MessageBase & {
+export type TextMessage<TAttachment extends Attachment = Attachment> = MessageBase & {
     /**
      * @docid
      * @public
      */
-    attachments?: Attachment[];
+    attachments?: TAttachment[];
     /**
      * @docid
      * @public

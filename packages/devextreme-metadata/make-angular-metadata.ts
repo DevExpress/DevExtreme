@@ -23,6 +23,7 @@ Ng.makeMetadata({
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
+    removeMembers(/\/chat:/),
   ],
   variables: {
     collectionItems: [...commonSmdCollectionItems],

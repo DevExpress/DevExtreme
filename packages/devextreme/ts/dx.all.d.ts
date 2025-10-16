@@ -11150,13 +11150,14 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_AttachmentDownloadEvent]
      */
-    export type AttachmentDownloadEvent =
-      DevExpress.common.core.events.EventInfo<dxChat> & {
-        /**
-         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
-         */
-        readonly attachment?: Attachment;
-      };
+    export type AttachmentDownloadEvent<
+      TAttachment extends Attachment = Attachment
+    > = DevExpress.common.core.events.EventInfo<dxChat> & {
+      /**
+       * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+       */
+      readonly attachment?: TAttachment;
+    };
     /**
      * [descr:_ui_chat_DisposingEvent]
      */
@@ -33981,8 +33982,6 @@ declare module DevExpress.ui.dxChat {
      * [descr:Attachment.size]
      */
     size: number;
-
-    [key: string]: any;
   };
   /**
    * [descr:ImageMessage]
@@ -34032,20 +34031,21 @@ declare module DevExpress.ui.dxChat {
   /**
    * [descr:TextMessage]
    */
-  export type TextMessage = MessageBase & {
-    /**
-     * [descr:TextMessage.attachments]
-     */
-    attachments?: Attachment[];
-    /**
-     * [descr:TextMessage.text]
-     */
-    text?: string;
-    /**
-     * [descr:TextMessage.isEdited]
-     */
-    isEdited?: boolean;
-  };
+  export type TextMessage<TAttachment extends Attachment = Attachment> =
+    MessageBase & {
+      /**
+       * [descr:TextMessage.attachments]
+       */
+      attachments?: TAttachment[];
+      /**
+       * [descr:TextMessage.text]
+       */
+      text?: string;
+      /**
+       * [descr:TextMessage.isEdited]
+       */
+      isEdited?: boolean;
+    };
   /**
    * [descr:User]
    */

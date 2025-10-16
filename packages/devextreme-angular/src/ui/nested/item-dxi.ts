@@ -31,7 +31,6 @@ import {
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
 
 import {
-    PROPERTY_TOKEN_attachments,
     PROPERTY_TOKEN_items,
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_tabs,
@@ -71,14 +70,6 @@ import {
         'shrink',
         'elementAttr',
         'hint',
-        'alt',
-        'attachments',
-        'author',
-        'id',
-        'isDeleted',
-        'isEdited',
-        'src',
-        'timestamp',
         'beginGroup',
         'closeMenuOnClick',
         'items',
@@ -136,16 +127,12 @@ import {
         'widthRatio',
         'expanded',
         'hasItems',
+        'id',
         'parentId'
     ]
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
     IDxTemplateHost {
-    @ContentChildren(PROPERTY_TOKEN_attachments)
-    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('attachments', value);
-    }
-    
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);

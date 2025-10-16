@@ -1,7 +1,5 @@
-export * from './alert-dxi';
 export * from './animation-config';
 export * from './animation-state';
-export * from './attachment-dxi';
 export * from './box-options';
 export * from './button-group-item-dxi';
 export * from './button-options';
@@ -54,8 +52,6 @@ export * from './splitter-options';
 export * from './tab-panel-options';
 export * from './text-box-options';
 export * from './text-editor-button-dxi';
-export * from './user-dxi';
-export * from './user';
 export * from './vector-map-projection-config';
 export * from './viz-font';
 export * from './viz-scale-break-dxi';
