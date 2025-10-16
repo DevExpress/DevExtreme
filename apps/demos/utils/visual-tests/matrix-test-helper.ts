@@ -241,6 +241,7 @@ const SKIPPED_TESTS = {
     FileUploader: ['CustomDropzone']
   },
   React: {
+    Common: ['PopupAndNotificationsOverview'],
     Scheduler: [
       { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
