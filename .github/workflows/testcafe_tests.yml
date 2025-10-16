@@ -10,15 +10,29 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_1]
+  workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     name: build
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
     timeout-minutes: 15
@@ -72,7 +86,8 @@ jobs:
 
   testcafe:
     name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
-    needs: [build]
+    if: needs.check-should-run.outputs.should-run == 'true'
+    needs: [check-should-run, build]
     strategy:
       fail-fast: false
       matrix:

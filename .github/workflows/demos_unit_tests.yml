@@ -9,12 +9,27 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches:
-      - "[0-9][0-9]_[0-9]"
+    branches: [25_1]
+  workflow_dispatch:
+
+env:
+  RUN_TESTS: true
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   test:
     name: Run unit tests
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: ubuntu-latest
     timeout-minutes: 60
