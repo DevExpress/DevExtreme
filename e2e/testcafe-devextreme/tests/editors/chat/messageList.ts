@@ -4,15 +4,15 @@ import { ClientFunction } from 'testcafe';
 import { Message, User } from 'devextreme/ui/chat';
 import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { createUser, generateMessages, getLongText } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture.disablePageReloads`ChatMessageList`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Messagelist empty view scenarios', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -379,7 +379,7 @@ test('Message list with editing context menu', async (t) => {
 });
 
 fixture`ChatMessageList: dayHeaders`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test.clientScripts([
   { module: 'mockdate' },
