@@ -63,7 +63,7 @@ QUnit.module('Milestone', moduleConfig, () => {
 
     test('custom template, custom html', function(assert) {
         const customHtml = $(document.createElement('div')).text('milestone');
-        const customTaskFunction = (item, container) => {
+        const customTaskFunction = (item, _) => {
             if(item.isMilestone) {
                 return customHtml.text();
             }
@@ -78,7 +78,7 @@ QUnit.module('Milestone', moduleConfig, () => {
 
     test('custom template, custom html + task html', function(assert) {
         const customHtml = $(document.createElement('div')).text('milestone');
-        const customTaskFunction = (item, container) => {
+        const customTaskFunction = (item, _) => {
             if(item.isMilestone) {
                 $(item.taskHTML[1].cloneNode(true)).appendTo(customHtml);
                 return customHtml.html();
@@ -107,7 +107,12 @@ QUnit.module('Milestone', moduleConfig, () => {
         assert.false(children.eq(0).hasClass(Consts.TASK_TITLE_SELECTOR), 'child is not task title');
     });
 
-    QUnit.skipInShadowDomMode('position is correctly calculated', function(assert) {
+    QUnit.test('position is correctly calculated', function(assert) {
+        if(QUnit.urlParams['shadowDom']) {
+            assert(true);
+            return;
+        }
+
         const { platform } = devices.real();
         if(['android', 'ios'].includes(platform)) {
             assert.expect(0);
@@ -118,7 +123,7 @@ QUnit.module('Milestone', moduleConfig, () => {
             { 'id': 2, 'parentId': 1, 'title': 'Milestone 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
             { 'id': 3, 'parentId': 2, 'title': 'Milestone 2', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
         ];
-        const customTaskFunction = (item, container) => {
+        const customTaskFunction = (item, _) => {
             if(item.isMilestone) {
                 const style = item.taskData.id === 2 ? 'width: 10px; height: 10px;' : 'width: 100px; height: 50px;';
                 return $(document.createElement('div')).attr('style', style);
