@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
 import { Selector } from 'testcafe';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import { testScreenshot } from '../../../../helpers/themeUtils';
-import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { createWidget } from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { getLongText } from '../../../chat/data';
-import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
@@ -18,7 +18,7 @@ const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const longResult = getLongText(false, 10);
 
 fixture.disablePageReloads`HtmlEditor: AIDialog`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 export async function openAIDialog(
   t: TestController,
