@@ -85,13 +85,12 @@ function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
 }
 
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
-  if (e.appointmentData?.startDate 
+  if (e.appointmentData?.startDate
       && !Utils.isValidAppointmentDate(new Date(e.appointmentData.startDate))) {
     e.cancel = true;
     notifyDisableDate();
     applyDisableDatesToDateEditors(e.form);
   }
-
 }
 function onAppointmentAdding(e: DxSchedulerTypes.AppointmentAddingEvent) {
   const isValidAppointment = Utils.isValidAppointment(e.component, e.appointmentData);
