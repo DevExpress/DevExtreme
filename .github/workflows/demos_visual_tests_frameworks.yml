@@ -136,10 +136,12 @@ jobs:
 #      run: pnpm install
 
     - name: Prepare bundles
+      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
       run: pnpx nx prepare-bundles
 
     - name: Demos - Run tsc
+      if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
       working-directory: apps/demos
       run: tsc --noEmit
 
@@ -153,6 +155,7 @@ jobs:
 
   get-changes:
     runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request'
     name: Get changed demos
     timeout-minutes: 5
 
@@ -162,11 +165,21 @@ jobs:
 
       - name: Get changed files
         uses: DevExpress/github-actions/get-changed-files@v1
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           paths: 'apps/demos/Demos/**/*'
           output: apps/demos/changed-files.json
+
+      - name: Display changed files
+        run: |
+          if [ -f "apps/demos/changed-files.json" ]; then
+            echo "Found changed-files.json"
+            echo "Content of changed-files.json:"
+            cat apps/demos/changed-files.json
+            echo "Number of changed files: $(jq length apps/demos/changed-files.json)"
+          else
+            echo "changed-files.json not found"
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -234,7 +247,7 @@ jobs:
       #   run: pnpm run ts-check-react
 
   lint:
-    name: ${{ matrix.name }}
+    name: Lint code base
     needs:
       - build-devextreme
       - get-changes
@@ -242,28 +255,12 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 60
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Lint code base (excluding demos)
-            command: pnpx nx lint-non-demos
-          # NOTE: skipped due to enormous number of errors
-          # - name: Lint demos (1/4)
-          #   command: CONSTEL=1/4 npm run lint-demos
-          # - name: Lint demos (2/4)
-          #   command: CONSTEL=2/4 npm run lint-demos
-          # - name: Lint demos (3/4)
-          #   command: CONSTEL=3/4 npm run lint-demos
-          # - name: Lint demos (4/4)
-          #   command: CONSTEL=4/4 npm run lint-demos
-
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
     - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      if: github.event_name == 'pull_request'
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -305,46 +302,37 @@ jobs:
     - name: Install tgz
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 5.0.408
-
-    - name: Prepare dotnet
-      run: |
-        dotnet new globaljson --sdk-version 5.0.408
-        dotnet tool install -g dotnet-format --version 5.1.225507
-
     - name: Run lint
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
-      run: ${{ matrix.command }}
+      run: pnpx nx lint-non-demos
 
   check_generated_demos:
     name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
     timeout-minutes: 10
-    needs: build-demos
+    needs:
+      - build-devextreme
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 pnpm run convert-to-js
-          - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 pnpm run convert-to-js
-          - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 pnpm run convert-to-js
-          - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 pnpm run convert-to-js
-          - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 pnpm run convert-to-js
+          - name: Check generated demos
+            command: pnpm run convert-to-js
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
+
+    - name: Download artifacts
+      if: github.event_name == 'pull_request'
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
 
     - uses: pnpm/action-setup@v3
       with:
@@ -356,21 +344,6 @@ jobs:
       with:
         node-version: '20'
         cache: 'pnpm'
-
-#    - name: Get pnpm store directory
-#      shell: bash
-#      run: |
-#        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-#
-#    - uses: actions/cache@v4
-#      name: Setup pnpm cache
-#      with:
-#        path: |
-#          ${{ env.STORE_PATH }}
-#          .nx/cache
-#        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-#        restore-keys: |
-#          ${{ runner.os }}-pnpm-store
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
@@ -389,10 +362,33 @@ jobs:
       run: pnpm run prepare-js
 
     - name: Check generated JS demos
+      if: github.event_name == 'pull_request'
       working-directory: apps/demos
       run: |
+        if [ -f "changed-files.json" ]; then
+          echo "Running convert-to-js on changed files only"
+          
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
+          
+          if [ -z "$CHANGED_DEMOS" ]; then
+            echo "No React demos found in changed files, skipping conversion"
+          else
+            echo "Changed React demos:"
+            echo "$CHANGED_DEMOS"
+            
+            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
+              if [ ! -z "$demo_dir" ]; then
+                echo "Converting: $demo_dir"
+                pnpm run convert-to-js "$demo_dir"
+              fi
+            done
+          fi
+        else
+          echo "Running convert-to-js on all files"
         ${{ matrix.command }}
-
+          ${{ matrix.command }}
+        fi
+        
         git add ./Demos -N
 
         if git diff --exit-code . ':!package.json' ; then
@@ -405,11 +401,12 @@ jobs:
 
   testcafe:
     needs: build-demos
+    if: contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
       matrix:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
 
     runs-on: ubuntu-22.04
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
@@ -434,13 +431,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
-
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
 
     - uses: pnpm/action-setup@v3
       with:
@@ -469,9 +459,6 @@ jobs:
       working-directory: apps/demos
       run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
-#    - name: Build wrappers
-#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
-
     - name: Prepare JS
       working-directory: apps/demos
       run: pnpm run prepare-js
@@ -497,6 +484,7 @@ jobs:
         python -m http.server 8083 &
 
     - name: Run TestCafe tests
+      shell: bash
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json

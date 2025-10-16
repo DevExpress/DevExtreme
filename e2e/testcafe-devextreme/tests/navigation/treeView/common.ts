@@ -1,11 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import TreeView from 'devextreme-testcafe-models/treeView';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-// eslint-disable-next-line import/extensions
-import { employees } from './data.js';
+import { employees } from './data';
 import { setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`TreeView`
@@ -149,13 +148,7 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
 
   await scrollable.scrollTo({ top: 1000 });
 
-  await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', {
-    element: '#container',
-    shouldTestInCompact: true,
-    compactCallBack: async () => {
-      await scrollable.scrollTo({ top: 1000 });
-    },
-  });
+  await testScreenshot(t, takeScreenshot, 'TreeView scrollable has correct height.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -172,17 +165,11 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
 
 [true, false].forEach((rtlEnabled) => {
   ['selectAll', 'normal', 'none'].forEach((showCheckBoxesMode) => {
-    test(`TreeView-selectAll,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
+    const testName = `TreeView selection showCheckBoxesMode=${showCheckBoxesMode},rtl=${rtlEnabled}`;
+    test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const screenshotName = `TreeView selection cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
-
-      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
-
-      if (!isMaterialBased()) {
-        await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
-        await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
-      }
+      await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
@@ -204,32 +191,28 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
   });
 });
 
-[true, false].forEach((rtlEnabled) => {
-  ['normal', 'none'].forEach((showCheckBoxesMode) => {
-    test(`TreeView with custom expander icons,showCheckBoxesMode=${showCheckBoxesMode}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+['normal', 'none'].forEach((showCheckBoxesMode) => {
+  const testName = `Treeview with custom icons showCheckBoxesMode=${showCheckBoxesMode}`;
+  test(testName, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      const screenshotName = `Treeview with custom icons cbm=${showCheckBoxesMode},rtl=${rtlEnabled}.png`;
+    await t.click(Selector('.dx-treeview-item').nth(1));
 
-      await t.click(Selector('.dx-treeview-item').nth(1));
+    await testScreenshot(t, takeScreenshot, `${testName}.png`, { element: '#container' });
 
-      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', shouldTestInCompact: true });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => createWidget('dxTreeView', {
-      items: employees,
-      width: 300,
-      showCheckBoxesMode,
-      rtlEnabled,
-      expandIcon: 'add',
-      collapseIcon: 'minus',
-      itemTemplate(item) {
-        return `<div>${item.fullName} (${item.position})</div>`;
-      },
-    }));
-  });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxTreeView', {
+    items: employees,
+    width: 300,
+    showCheckBoxesMode,
+    expandIcon: 'add',
+    collapseIcon: 'minus',
+    itemTemplate(item) {
+      return `<div>${item.fullName} (${item.position})</div>`;
+    },
+  }));
 });
 
 test('TreeView checkBox focus styles', async (t) => {
@@ -237,15 +220,15 @@ test('TreeView checkBox focus styles', async (t) => {
 
   await t.pressKey('tab');
 
-  await testScreenshot(t, takeScreenshot, 'Treeview indeterminate CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Treeview indeterminate CheckBox focus.png', { element: '#container' });
 
   await t.pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Treeview checked CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Treeview checked CheckBox focus.png', { element: '#container' });
 
   await t.pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Treeview unchecked CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Treeview unchecked CheckBox focus.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())

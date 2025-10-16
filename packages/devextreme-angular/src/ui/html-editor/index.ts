@@ -42,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoConverterModule } from 'devextreme-angular/ui/nested';
@@ -72,10 +73,12 @@ import { DxoHtmlEditorTableResizingModule } from 'devextreme-angular/ui/html-edi
 import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
-
-import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiHtmlEditorMentionComponent } from 'devextreme-angular/ui/html-editor/nested';
+import { 
+           PROPERTY_TOKEN_commands,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_mentions,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -103,6 +106,27 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_mentions)
+    set _mentionsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('mentions', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxHtmlEditor = null;
 
     /**
@@ -871,26 +895,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiHtmlEditorMentionComponent)
-    get mentionsChildren(): QueryList<DxiHtmlEditorMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsChildren(value) {
-        this._setChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
-    }
-
-
-    @ContentChildren(DxiMentionComponent)
-    get mentionsLegacyChildren(): QueryList<DxiMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsLegacyChildren(value) {
-        this._setChildren('mentions', value, 'DxiMentionComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,

@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,10 +23,13 @@ import { AxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeSelectorBreakComponent } from './break-dxi';
 
+import {
+    PROPERTY_TOKEN_breaks,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-range-selector-scale',
@@ -38,6 +40,11 @@ import { DxiRangeSelectorBreakComponent } from './break-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+    
     @Input()
     get aggregationGroupWidth(): number | undefined {
         return this._getOption('aggregationGroupWidth');
@@ -275,14 +282,6 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
         return 'scale';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiRangeSelectorBreakComponent))
-    get breaksChildren(): QueryList<DxiRangeSelectorBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,6 +16,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type {
   Item,
   ItemCollapsedEvent,
@@ -64,7 +65,6 @@ import {
   type EventMap,
   type FlexProperty,
   type HandlerMap,
-  type InteractionEvent,
   type PaneRestrictions,
   type RenderQueueItem,
 } from './utils/types';
@@ -122,7 +122,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
 
-  private _savedCollapsingEvent?: InteractionEvent;
+  private _savedCollapsingEvent?: DxEvent<InteractionEvent>;
 
   private _shouldRecalculateLayout?: boolean;
 
@@ -844,7 +844,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     );
 
     this._itemRestrictions.forEach((pane) => {
-      pane.maxSize = undefined;
+      if (item.collapsed) {
+        pane.maxSize = undefined;
+      }
       pane.resizable = undefined;
     });
 
@@ -955,7 +957,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _fireCollapsedStateChanged(
     isExpanded: boolean,
     $item: dxElementWrapper,
-    e?: InteractionEvent,
+    e?: DxEvent<InteractionEvent>,
   ): void {
     const eventName = isExpanded ? ITEM_EXPANDED_EVENT : ITEM_COLLAPSED_EVENT;
     const actionArgs = { event: e };

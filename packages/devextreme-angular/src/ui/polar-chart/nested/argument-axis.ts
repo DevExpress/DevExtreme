@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,11 +22,14 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiPolarChartConstantLineComponent } from './constant-line-dxi';
-import { DxiPolarChartStripComponent } from './strip-dxi';
 
+import {
+    PROPERTY_TOKEN_constantLines,
+    PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
@@ -38,6 +40,16 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
+    }
+    
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -291,22 +303,6 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
         return 'argumentAxis';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiPolarChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiPolarChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiPolarChartStripComponent))
-    get stripsChildren(): QueryList<DxiPolarChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

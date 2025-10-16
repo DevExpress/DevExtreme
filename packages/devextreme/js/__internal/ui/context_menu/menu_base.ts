@@ -6,7 +6,9 @@ import { asyncNoop, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
+import type {
+  DxEvent, ItemInfo, NativeEventInfo, PointerInteractionEvent,
+} from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
@@ -47,10 +49,10 @@ const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
 type ItemClickEvent<TComponent, TItem> =
-  NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent>
+  NativeEventInfo<TComponent, PointerInteractionEvent>
   & ItemInfo<TItem>;
 export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
-export type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+export type ClickEvent = DxEvent<PointerInteractionEvent>;
 export type ItemClickActionArguments<
   TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
   TItem extends dxMenuBaseItem = dxMenuBaseItem,

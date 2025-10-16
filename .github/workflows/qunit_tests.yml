@@ -1,0 +1,137 @@
+name: QUnit tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  push:
+    branches: [25_1]
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
+jobs:
+  build:
+    runs-on: devextreme-shr2
+    name: Build
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build
+      working-directory: ./packages/devextreme
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+        BUILD_INPROGRESS_RENOVATION: "true"
+      run: pnpx nx build:systemjs
+
+    - name: Zip artifacts
+      working-directory: ./packages/devextreme
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: devextreme-artifacts
+        path: packages/devextreme/artifacts.zip
+        retention-days: 1
+
+  qunit-tests:
+    needs: build
+    runs-on: devextreme-shr2
+    name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [
+          export,
+          misc,
+          ui,
+          ui.editors,
+          ui.htmlEditor,
+          ui.grid,
+          ui.scheduler(1/2),
+          ui.scheduler(2/2),
+          viz
+        ]
+        TIMEZONE: ['']
+        CSP: ['true']
+        useJQuery: ['false']
+        include:
+          - CONSTEL: ui.scheduler(1/2)
+            TIMEZONE: US/Pacific
+          - CONSTEL: ui.scheduler(2/2)
+            TIMEZONE: US/Pacific
+          - CONSTEL: misc
+            CSP: 'false'
+            useJQuery: 'true'
+          - CONSTEL: ui.widgets(1/2)
+            CSP: 'false'
+          - CONSTEL: ui.widgets(2/2)
+            CSP: 'false'
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Run QUnit tests
+      uses: ./.github/actions/run-qunit-tests
+      with:
+        name: Constel ${{ matrix.CONSTEL }}${{ matrix.TIMEZONE != '' && format('-{0}', matrix.TIMEZONE) || '' }}${{ matrix.CSP == 'false' && '-no-csp' || '' }}
+        constel: ${{ matrix.CONSTEL }}
+        timezone: ${{ matrix.TIMEZONE }}
+        useJQuery: ${{ matrix.useJQuery }}
+        useCsp: ${{ matrix.CSP }}
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [build, qunit-tests]
+    if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DevExpress/github-actions/send-teams-notification@v1
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme

@@ -25,8 +25,7 @@ safeSizeTest('Popup automatically update its height on window resize', async (t)
   const toolbar = new Toolbar('#container');
   const overflowMenu = toolbar.getOverflowMenu();
 
-  await t
-    .click(overflowMenu.element);
+  await t.click(overflowMenu.element);
 
   await testScreenshot(t, takeScreenshot, 'Toolbar menu popup before window resize.png');
 
@@ -47,8 +46,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
   const toolbar = new Toolbar('#container');
   const overflowMenu = toolbar.getOverflowMenu();
 
-  await t
-    .click(overflowMenu.element);
+  await t.click(overflowMenu.element);
 
   await testScreenshot(t, takeScreenshot, 'Toolbar menu popup collision with window border.png');
 
@@ -67,8 +65,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     const toolbar = new Toolbar('#container');
     const overflowMenu = toolbar.getOverflowMenu();
 
-    await t
-      .click(overflowMenu.element);
+    await t.click(overflowMenu.element);
 
     await testScreenshot(t, takeScreenshot, `Toolbar menu popup under container rtl=${rtlEnabled}.png`);
 
@@ -86,8 +83,7 @@ safeSizeTest('Popup should be position correctly with the window border collisio
     const toolbar = new Toolbar('#container');
     const overflowMenu = toolbar.getOverflowMenu();
 
-    await t
-      .click(overflowMenu.element);
+    await t.click(overflowMenu.element);
 
     await testScreenshot(t, takeScreenshot, `Toolbar menu popup above container rtl=${rtlEnabled}.png`);
 

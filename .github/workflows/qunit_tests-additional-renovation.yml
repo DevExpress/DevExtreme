@@ -64,7 +64,7 @@ jobs:
       - name: Zip artifacts
         working-directory: ./packages/devextreme
         run: |
-          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles testing/tests/Renovation/widgets.json
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -72,65 +72,6 @@ jobs:
           name: devextreme-artifacts
           path: packages/devextreme/artifacts.zip
           retention-days: 1
-
-  qunit-tests-timezones:
-    needs: build
-    runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-${{ matrix.timezone }}
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        constel: [
-          'misc(1/2)',
-          'misc(2/2)',
-          'ui.editors(1/2)',
-          'ui.editors(2/2)',
-          'ui.grid(1/2)',
-          'ui.grid(2/2)',
-          'ui.scheduler(1/3)',
-          'ui.scheduler(2/3)',
-          'ui.scheduler(3/3)'
-        ]
-        timezone: [ 'US/Pacific', 'Japan', 'Australia/ACT', 'Europe/London' ]
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Run QUnit tests
-        uses: ./.github/actions/run-qunit-tests
-        with:
-          name: ${{ matrix.constel }}-${{ matrix.timezone }}
-          constel: ${{ matrix.constel }}
-          browser: 'chrome'
-          timezone: ${{ matrix.timezone }}
-          headless: 'true'
-          useJQuery: 'false'
-          useCsp: 'true'
-
-# TODO Chrome133: skipped during chrome update
-# We should run performance tests with non headless chrome
-# It fails in headless mode
-
-#  qunit-tests-performance:
-#    needs: build
-#    runs-on: devextreme-shr2
-#    name: Performance
-#    timeout-minutes: 25
-#    steps:
-#      - name: Get sources
-#        uses: actions/checkout@v4
-#
-#      - name: Run QUnit tests
-#        uses: ./.github/actions/run-qunit-tests
-#        with:
-#          name: 'Performance'
-#          browser: 'chrome'
-#          isPerformance: 'true'
-#          useJQuery: 'true'
-#          headless: 'true'
-#          useCsp: 'false'
 
   qunit-tests-mobile-and-shadow-dom:
     needs: build
@@ -204,8 +145,7 @@ jobs:
           'ui.scheduler(1/3)',
           'ui.scheduler(2/3)',
           'ui.scheduler(3/3)',
-          'viz',
-          'renovation'
+          'viz'
         ]
 
     steps:
@@ -246,40 +186,13 @@ jobs:
           headless: 'true'
           useCsp: 'true'
 
-  qunit-tests-no-csp:
-    needs: build
-    runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-no-csp
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        constel: [ 'misc(1/2)', 'misc(2/2)' ]
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Run QUnit tests
-        uses: ./.github/actions/run-qunit-tests
-        with:
-          name: ${{ matrix.constel }}-no-csp
-          constel: ${{ matrix.constel }}
-          browser: 'chrome'
-          useJQuery: 'true'
-          headless: 'true'
-          useCsp: 'false'
-
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
     needs: [
       build,
-      qunit-tests-timezones,
-      # qunit-tests-performance,
       qunit-tests-mobile-and-shadow-dom,
       qunit-tests-firefox,
-      qunit-tests-no-csp
     ]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 

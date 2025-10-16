@@ -2,7 +2,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import Widget, {
     WidgetOptions,

@@ -370,7 +370,6 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'formDataChange' }
         ]);

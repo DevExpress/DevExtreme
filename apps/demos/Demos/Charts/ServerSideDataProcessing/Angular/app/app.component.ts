@@ -25,21 +25,50 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
+  private year: number = 2017;
+
   months: Month[];
+
+  selectedMonth: number;
 
   chartDataSource: DataSource;
 
+  private startOfMonthStr = (month) => `${month}/01/${this.year}`;
+
+  private endOfMonthStr = (month) => {
+    const nextMonth = (month === 12) ? 1 : month + 1;
+    const nextYear = (month === 12) ? this.year + 1 : this.year;
+
+    const lastDay = new Date(nextYear, nextMonth - 1, 0).getDate();
+
+    return `${month}/${lastDay}/${this.year}`;
+  };
+
   constructor(service: Service) {
     this.months = service.getMonths();
+    this.selectedMonth = 1;
     this.chartDataSource = new DataSource({
-      store: {
-        type: 'odata',
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/WeatherItems',
+      key: 'Date',
+      load: () => {
+        const startVisible = this.startOfMonthStr(this.selectedMonth);
+        const endVisible = this.endOfMonthStr(this.selectedMonth);
+        const url = 'https://js.devexpress.com/Demos/NetCore/api/TemperatureData'
+          + `?startVisible=${encodeURIComponent(startVisible)}`
+          + `&endVisible=${encodeURIComponent(endVisible)}`
+          + `&startBound=${encodeURIComponent(startVisible)}`
+          + `&endBound=${encodeURIComponent(endVisible)}`;
+
+        return fetch(url)
+          .then((r) => {
+            if (!r.ok) throw new Error(`Network response fails: ${r.status}`);
+            return r.json();
+          })
+          .then((arr) => arr.map((item) => ({
+            ...item,
+            Temperature: (item.MinTemp + item.MaxTemp) / 2,
+            Date: new Date(item.Date),
+          })));
       },
-      postProcess: (results) => results[0].DayItems,
-      expand: 'DayItems',
-      filter: ['Id', '=', 1],
       paginate: false,
     });
   }
@@ -54,8 +83,12 @@ export class AppComponent {
     return `${arg.valueText}&#176C`;
   }
 
+  customizeArgumentAxisText(arg) {
+    return new Date(arg.value).getDate();
+  }
+
   onValueChanged(data) {
-    this.chartDataSource.filter(['Id', '=', data.value]);
+    this.selectedMonth = data.value;
     this.chartDataSource.load();
   }
 }

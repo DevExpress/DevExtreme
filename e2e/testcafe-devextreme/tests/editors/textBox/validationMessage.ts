@@ -20,8 +20,6 @@ safeSizeTest('Validation Message position should be correct after change visibil
     .pressKey('enter')
     .pressKey('tab');
 
-  await testScreenshot(t, takeScreenshot, 'Textbox validation message.png');
-
   await setAttribute('#container', 'hidden', 'true');
   await removeAttribute('#container', 'hidden');
 

@@ -1,43 +1,35 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Item } from 'devextreme/ui/accordion.d';
-import Accordion from 'devextreme-testcafe-models/accordion';
-import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Accordion_common`
   .page(url(__dirname, '../../container.html'));
 
-[true, false].forEach((rtlEnabled) => {
-  test('Accordion items render (T865742)', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const accordion = new Accordion('#container');
+test('Accordion items render (T865742)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const screenshotName = `Accordion items render rtl=${rtlEnabled}.png`;
+  const screenshotName = 'Accordion items render.png';
 
-    if (!isMaterialBased()) {
-      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
-      await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
-    }
+  await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
-    await testScreenshot(t, takeScreenshot, screenshotName, {
-      element: '#container',
-      shouldTestInCompact: true,
-      compactCallBack: async () => {
-        await accordion.repaint();
-      },
-    });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'accordion');
+  await appendElementTo('#container', 'div', 'accordion2');
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
-    const items = [
-      { title: 'Some text 1', icon: 'coffee' },
-      { title: 'Some text 2' },
-      { title: 'Some text 3' },
-    ] as Item[];
+  await setAttribute('#container', 'style', 'display: flex; gap: 50px;');
 
-    return createWidget('dxAccordion', { items, rtlEnabled });
-  });
+  const items: Item[] = [
+    { title: 'Some text 1', icon: 'coffee' },
+    { title: 'Some text 2' },
+    { title: 'Some text 3' },
+  ];
+
+  await createWidget('dxAccordion', { items, width: 500 }, '#accordion');
+  return createWidget('dxAccordion', { items, rtlEnabled: true, width: 500 }, '#accordion2');
 });

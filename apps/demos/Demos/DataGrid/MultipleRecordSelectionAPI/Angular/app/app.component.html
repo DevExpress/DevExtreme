@@ -31,6 +31,7 @@
       <dx-button
         text="Clear Selection"
         [disabled]="!selectedRows?.length"
+        stylingMode="text"
         (onClick)="grid.instance.clearSelection()"
       >
       </dx-button>
