@@ -43,8 +43,7 @@ export const generateMessages = (
   coefficient = 4,
   n = 1,
   isEdited = false,
-): Message[] => (
-  Array.from({ length: length * n }, (_, i) => {
+): Message[] => Array.from({ length: length * n }, (_, i) => {
     const text = useLongText
       ? getLongText(useLineBreaks)
       : getShortText(useLineBreaks);
@@ -63,8 +62,7 @@ export const generateMessages = (
       text,
       isEdited,
     };
-  })
-);
+  });
 
 export const generateImageMessage = (
   user: User,
