@@ -22,6 +22,7 @@ import {
  TypingEndEvent,
  TypingStartEvent,
  User,
+ Attachment,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -236,6 +237,26 @@ const DxAlert = defineComponent(DxAlertConfig);
 
 (DxAlert as any).$_optionName = "alerts";
 (DxAlert as any).$_isCollectionItem = true;
+
+const DxAttachmentConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:name": null,
+    "update:size": null,
+  },
+  props: {
+    name: String,
+    size: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxAttachmentConfig);
+
+const DxAttachment = defineComponent(DxAttachmentConfig);
+
+(DxAttachment as any).$_optionName = "attachments";
+(DxAttachment as any).$_isCollectionItem = true;
 
 const DxAuthorConfig = {
   emits: {
@@ -466,7 +487,7 @@ const DxItemConfig = {
   },
   props: {
     alt: String,
-    attachments: Array as PropType<Array<Object>>,
+    attachments: Array as PropType<Array<Attachment>>,
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
     isDeleted: Boolean,
@@ -485,6 +506,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  attachment: { isCollectionItem: true, optionName: "attachments" },
   author: { isCollectionItem: false, optionName: "author" }
 };
 
@@ -566,6 +588,7 @@ export default DxChat;
 export {
   DxChat,
   DxAlert,
+  DxAttachment,
   DxAuthor,
   DxDayHeaderFormat,
   DxEditing,

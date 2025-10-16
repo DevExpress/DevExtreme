@@ -48,14 +48,6 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
     
     @Input()
-    get allowAdding(): boolean | Function {
-        return this._getOption('allowAdding');
-    }
-    set allowAdding(value: boolean | Function) {
-        this._setOption('allowAdding', value);
-    }
-
-    @Input()
     get allowDeleting(): boolean | Function {
         return this._getOption('allowDeleting');
     }
@@ -69,6 +61,14 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
     set allowUpdating(value: boolean | Function) {
         this._setOption('allowUpdating', value);
+    }
+
+    @Input()
+    get allowAdding(): boolean | Function {
+        return this._getOption('allowAdding');
+    }
+    set allowAdding(value: boolean | Function) {
+        this._setOption('allowAdding', value);
     }
 
     @Input()

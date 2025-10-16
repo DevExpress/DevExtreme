@@ -70,6 +70,13 @@ import {
         'shrink',
         'elementAttr',
         'hint',
+        'alt',
+        'author',
+        'id',
+        'isDeleted',
+        'isEdited',
+        'src',
+        'timestamp',
         'beginGroup',
         'closeMenuOnClick',
         'items',
@@ -127,7 +134,6 @@ import {
         'widthRatio',
         'expanded',
         'hasItems',
-        'id',
         'parentId'
     ]
 })

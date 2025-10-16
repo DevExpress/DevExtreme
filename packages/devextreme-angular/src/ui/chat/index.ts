@@ -44,8 +44,17 @@ import {
     CollectionNestedOption,
 } from 'devextreme-angular/core';
 
+import { DxiAlertModule } from 'devextreme-angular/ui/nested';
+import { DxoDayHeaderFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
+import { DxoMessageTimestampFormatModule } from 'devextreme-angular/ui/nested';
+import { DxiTypingUserModule } from 'devextreme-angular/ui/nested';
+import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
 import { DxiChatAlertModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatAttachmentModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatDayHeaderFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
@@ -56,12 +65,16 @@ import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 import { 
            PROPERTY_TOKEN_alerts,
+           PROPERTY_TOKEN_attachments,
            PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_typingUsers,
      } from 'devextreme-angular/core/tokens';
 
 
+/**
+ * [descr:dxChat]
 
+ */
 @Component({
     selector: 'dx-chat',
     standalone: true,
@@ -82,6 +95,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         this.setChildren('alerts', value);
     }
 
+    @ContentChildren(PROPERTY_TOKEN_attachments)
+    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('attachments', value);
+    }
+
     @ContentChildren(PROPERTY_TOKEN_items)
     set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('items', value);
@@ -94,7 +112,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     instance: DxChat = null;
 
+    /**
+     * [descr:WidgetOptions.accessKey]
     
+     */
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -104,7 +125,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.activeStateEnabled]
     
+     */
     @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
@@ -114,7 +138,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.alerts]
     
+     */
     @Input()
     get alerts(): Array<Alert> {
         return this._getOption('alerts');
@@ -124,7 +151,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.dataSource]
     
+     */
     @Input()
     get dataSource(): Array<Message> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
@@ -134,7 +164,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.dayHeaderFormat]
     
+     */
     @Input()
     get dayHeaderFormat(): Format {
         return this._getOption('dayHeaderFormat');
@@ -144,7 +177,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:WidgetOptions.disabled]
     
+     */
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -154,7 +190,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.editing]
     
+     */
     @Input()
     get editing(): { allowDeleting?: boolean | ((options: { component: dxChat, message: Message }) => boolean), allowUpdating?: boolean | ((options: { component: dxChat, message: Message }) => boolean) } {
         return this._getOption('editing');
@@ -164,7 +203,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:DOMComponentOptions.elementAttr]
     
+     */
     @Input()
     get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
@@ -174,7 +216,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.emptyViewTemplate]
     
+     */
     @Input()
     get emptyViewTemplate(): any {
         return this._getOption('emptyViewTemplate');
@@ -194,7 +239,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.focusStateEnabled]
     
+     */
     @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
@@ -204,7 +252,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:DOMComponentOptions.height]
     
+     */
     @Input()
     get height(): number | string | undefined {
         return this._getOption('height');
@@ -214,7 +265,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:WidgetOptions.hint]
     
+     */
     @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
@@ -224,7 +278,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.hoverStateEnabled]
     
+     */
     @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
@@ -234,7 +291,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.items]
     
+     */
     @Input()
     get items(): Array<Message> {
         return this._getOption('items');
@@ -244,7 +304,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.messageTemplate]
     
+     */
     @Input()
     get messageTemplate(): any {
         return this._getOption('messageTemplate');
@@ -254,7 +317,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.messageTimestampFormat]
     
+     */
     @Input()
     get messageTimestampFormat(): Format {
         return this._getOption('messageTimestampFormat');
@@ -264,7 +330,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.reloadOnChange]
     
+     */
     @Input()
     get reloadOnChange(): boolean {
         return this._getOption('reloadOnChange');
@@ -274,7 +343,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:DOMComponentOptions.rtlEnabled]
     
+     */
     @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
@@ -284,7 +356,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.showAvatar]
     
+     */
     @Input()
     get showAvatar(): boolean {
         return this._getOption('showAvatar');
@@ -294,7 +369,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.showDayHeaders]
     
+     */
     @Input()
     get showDayHeaders(): boolean {
         return this._getOption('showDayHeaders');
@@ -304,7 +382,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.showMessageTimestamp]
     
+     */
     @Input()
     get showMessageTimestamp(): boolean {
         return this._getOption('showMessageTimestamp');
@@ -314,7 +395,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.showUserName]
     
+     */
     @Input()
     get showUserName(): boolean {
         return this._getOption('showUserName');
@@ -324,7 +408,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.typingUsers]
     
+     */
     @Input()
     get typingUsers(): Array<User> {
         return this._getOption('typingUsers');
@@ -334,7 +421,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.user]
     
+     */
     @Input()
     get user(): User {
         return this._getOption('user');
@@ -344,7 +434,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:WidgetOptions.visible]
     
+     */
     @Input()
     get visible(): boolean {
         return this._getOption('visible');
@@ -354,7 +447,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:DOMComponentOptions.width]
     
+     */
     @Input()
     get width(): number | string | undefined {
         return this._getOption('width');
@@ -373,7 +469,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onDisposing]
     
     
      */
@@ -381,7 +477,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onInitialized]
     
     
      */
@@ -389,7 +485,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageDeleted]
     
     
      */
@@ -397,7 +493,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageDeleting]
     
     
      */
@@ -405,7 +501,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageEditCanceled]
     
     
      */
@@ -413,7 +509,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageEditingStart]
     
     
      */
@@ -421,7 +517,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageEntered]
     
     
      */
@@ -429,7 +525,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageUpdated]
     
     
      */
@@ -437,7 +533,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onMessageUpdating]
     
     
      */
@@ -445,7 +541,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onOptionChanged]
     
     
      */
@@ -453,7 +549,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onTypingEnd]
     
     
      */
@@ -461,7 +557,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:undefined]
+     * [descr:dxChatOptions.onTypingStart]
     
     
      */
@@ -762,7 +858,16 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 @NgModule({
   imports: [
     DxChatComponent,
+    DxiAlertModule,
+    DxoDayHeaderFormatModule,
+    DxoEditingModule,
+    DxiItemModule,
+    DxoAuthorModule,
+    DxoMessageTimestampFormatModule,
+    DxiTypingUserModule,
+    DxoUserModule,
     DxiChatAlertModule,
+    DxiChatAttachmentModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,
@@ -776,7 +881,16 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   ],
   exports: [
     DxChatComponent,
+    DxiAlertModule,
+    DxoDayHeaderFormatModule,
+    DxoEditingModule,
+    DxiItemModule,
+    DxoAuthorModule,
+    DxoMessageTimestampFormatModule,
+    DxiTypingUserModule,
+    DxoUserModule,
     DxiChatAlertModule,
+    DxiChatAttachmentModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,

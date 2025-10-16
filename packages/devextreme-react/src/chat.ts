@@ -8,10 +8,9 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, AttachmentDownloadEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, AttachmentDownloadEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { Format, ValidationStatus } from "devextreme/common";
-import type { Attachment } from "UNKNOWN_MODULE";
 
 import type UploadInfo from "devextreme/file_management/upload_info";
 
@@ -125,6 +124,26 @@ const _componentAlert = (props: IAlertProps) => {
 };
 
 const Alert = Object.assign<typeof _componentAlert, NestedComponentMeta>(_componentAlert, {
+  componentType: "option",
+});
+
+// owners:
+// Item
+type IAttachmentProps = React.PropsWithChildren<{
+  name?: string;
+  size?: number;
+}>
+const _componentAttachment = (props: IAttachmentProps) => {
+  return React.createElement(NestedOption<IAttachmentProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "attachments",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Attachment = Object.assign<typeof _componentAttachment, NestedComponentMeta>(_componentAttachment, {
   componentType: "option",
 });
 
@@ -281,7 +300,7 @@ const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, 
 // Chat
 type IItemProps = React.PropsWithChildren<{
   alt?: string;
-  attachments?: Array<Attachment>;
+  attachments?: Array<ChatAttachment>;
   author?: ChatUser;
   id?: number | string;
   isDeleted?: boolean;
@@ -298,6 +317,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        attachment: { optionName: "attachments", isCollectionItem: true },
         author: { optionName: "author", isCollectionItem: false }
       },
     },
@@ -381,6 +401,8 @@ export {
   ChatRef,
   Alert,
   IAlertProps,
+  Attachment,
+  IAttachmentProps,
   Author,
   IAuthorProps,
   DayHeaderFormat,

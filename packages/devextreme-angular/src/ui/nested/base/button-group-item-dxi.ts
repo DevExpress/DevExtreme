@@ -8,6 +8,7 @@ import {
 import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
+import { User } from 'devextreme/ui/chat';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
@@ -97,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType | string {
+    get type(): ButtonType | string | undefined {
         return this._getOption('type');
     }
-    set type(value: ButtonType | string) {
+    set type(value: ButtonType | string | undefined) {
         this._setOption('type', value);
     }
 
@@ -144,6 +145,55 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set hint(value: string) {
         this._setOption('hint', value);
+    }
+
+    get alt(): string {
+        return this._getOption('alt');
+    }
+    set alt(value: string) {
+        this._setOption('alt', value);
+    }
+
+    get author(): User {
+        return this._getOption('author');
+    }
+    set author(value: User) {
+        this._setOption('author', value);
+    }
+
+    get id(): number | string | undefined {
+        return this._getOption('id');
+    }
+    set id(value: number | string | undefined) {
+        this._setOption('id', value);
+    }
+
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
+    get src(): string {
+        return this._getOption('src');
+    }
+    set src(value: string) {
+        this._setOption('src', value);
+    }
+
+    get timestamp(): Date | number | string {
+        return this._getOption('timestamp');
+    }
+    set timestamp(value: Date | number | string) {
+        this._setOption('timestamp', value);
     }
 
     get beginGroup(): boolean {
@@ -543,13 +593,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set hasItems(value: boolean | undefined) {
         this._setOption('hasItems', value);
-    }
-
-    get id(): number | string | undefined {
-        return this._getOption('id');
-    }
-    set id(value: number | string | undefined) {
-        this._setOption('id', value);
     }
 
     get parentId(): number | string | undefined {

@@ -6,14 +6,15 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
 
 
-import { Attachment } from 'UNKNOWN_MODULE';
-import { User } from 'devextreme/ui/chat';
+import { Attachment, User } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -22,6 +23,9 @@ import {
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_attachments,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-chat-item',
@@ -38,6 +42,11 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiChatItemComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_attachments)
+    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('attachments', value);
+    }
+    
     @Input()
     get alt(): string {
         return this._getOption('alt');
