@@ -49,7 +49,10 @@ export class AiColumnIntegrationController extends Controller {
     if (!aiIntegration) {
       return;
     }
-    const column = this.columnsController.getColumns().find((col) => col.name === columnName);
+    const column = this.columnsController.getColumnByName(columnName);
+    if (!column?.ai) {
+      return;
+    }
     const { prompt } = column.ai;
     if (!prompt) {
       return;
@@ -82,7 +85,7 @@ export class AiColumnIntegrationController extends Controller {
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
     if (areAllDataCached) {
-      this.showResult(columnName, '', cachedResponse);
+      this.showResult(columnName, {}, cachedResponse);
       return;
     }
 
@@ -103,25 +106,44 @@ export class AiColumnIntegrationController extends Controller {
 
   private showResult(
     columnName: string,
-    response: string,
+    response: Record<PropertyKey, unknown>,
     cachedData: Record<PropertyKey, string>,
   ): void {
-    // TODO
+    // TODO: Implement result display logic
+    const mergedData = { ...cachedData, ...response };
   }
 
   private getAICommandCallbacks<T>(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
   ): RequestCallbacks<T> {
+    const column = this.columnsController.getColumnByName(columnName);
     const callbacks = {
       onComplete: (finalResponse: T): void => {
         if (this.isRequestAwaitingCompletion(columnName)) {
-          this.showResult(columnName, String(finalResponse), cachedResponse);
-          this.executeAction('onAIColumnResponseReceived', {});
+          const args = {
+            column,
+            error: null,
+            data: finalResponse,
+            additionalInfo: {},
+          };
+
+          this.executeAction('onAIColumnResponseReceived', args);
+          this.showResult(
+            columnName,
+            finalResponse as Record<PropertyKey, unknown>,
+            cachedResponse,
+          );
           this.processCommandCompletion(columnName);
         }
       },
       onError: (error: Error): void => {
+        this.executeAction('onAIColumnResponseReceived', {
+          column,
+          error: error.message,
+          data: null,
+          additionalInfo: {},
+        });
         this.showError(error.message);
         this.processCommandCompletion(columnName);
       },
