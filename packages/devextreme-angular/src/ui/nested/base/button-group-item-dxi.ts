@@ -8,7 +8,7 @@ import {
 import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { User } from 'devextreme/ui/chat';
+import { Attachment, User } from 'devextreme/ui/chat';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
@@ -152,6 +152,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set alt(value: string) {
         this._setOption('alt', value);
+    }
+
+    get attachments(): Array<Attachment> {
+        return this._getOption('attachments');
+    }
+    set attachments(value: Array<Attachment>) {
+        this._setOption('attachments', value);
     }
 
     get author(): User {

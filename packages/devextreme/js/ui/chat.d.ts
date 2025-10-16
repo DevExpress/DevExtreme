@@ -11,6 +11,10 @@ import {
     template,
 } from '../common';
 
+import {
+    Properties as FileUploaderOptions,
+} from './file_uploader';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -151,6 +155,17 @@ export type MessageUpdatedEvent = EventInfo<dxChat> & {
 };
 
 /**
+ * @docid _ui_chat_AttachmentDownloadEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type AttachmentDownloadEvent = EventInfo<dxChat> & {
+  /** @docid _ui_chat_AttachmentDownloadEvent.attachment */
+  readonly attachment?: Attachment;
+};
+
+/**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
@@ -199,6 +214,26 @@ export type Alert = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type Attachment = {
+    /**
+     * @docid
+     * @public
+     */
+    name: string;
+    /**
+     * @docid
+     * @public
+     */
+    size: number;
+
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
  * @type object
  * @hidden
  */
@@ -241,6 +276,11 @@ export type MessageBase = {
  * @inherits MessageBase
  */
 export type TextMessage = MessageBase & {
+    /**
+     * @docid
+     * @public
+     */
+    attachments?: Attachment[];
     /**
      * @docid
      * @public
@@ -308,6 +348,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     activeStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default null
+     * @type dxFileUploaderOptions
+     * @public
+     */
+    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode '>;
     /**
      * @docid
      * @default true
@@ -428,6 +475,14 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
+     * @type_function_param1 e:{ui/chat:AttachmentDownloadEvent}
+     * @action
+     * @public
+     */
+    onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
      * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
@@ -535,7 +590,7 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' 
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
   | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
-  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated'>;
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownload'>;
 
 /**
 * @hidden

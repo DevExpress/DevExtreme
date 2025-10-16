@@ -11148,6 +11148,16 @@ declare module DevExpress.ui {
   }
   module dxChat {
     /**
+     * [descr:_ui_chat_AttachmentDownloadEvent]
+     */
+    export type AttachmentDownloadEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+         */
+        readonly attachment?: Attachment;
+      };
+    /**
      * [descr:_ui_chat_DisposingEvent]
      */
     export type DisposingEvent =
@@ -11299,6 +11309,13 @@ declare module DevExpress.ui {
      */
     activeStateEnabled?: boolean;
     /**
+     * [descr:dxChatOptions.fileUploaderOptions]
+     */
+    fileUploaderOptions?: Omit<
+      DevExpress.ui.dxFileUploader.Properties,
+      'dialogTrigger' | 'showFileList' | 'uploadMode '
+    >;
+    /**
      * [descr:dxChatOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
@@ -11397,6 +11414,12 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.onAttachmentDownload]
+     */
+    onAttachmentDownload?:
+      | ((e: DevExpress.ui.dxChat.AttachmentDownloadEvent) => void)
+      | undefined;
     /**
      * [descr:dxChatOptions.onMessageEntered]
      */
@@ -33947,6 +33970,21 @@ declare module DevExpress.ui.dxChat {
     message?: string;
   };
   /**
+   * [descr:Attachment]
+   */
+  export type Attachment = {
+    /**
+     * [descr:Attachment.name]
+     */
+    name: string;
+    /**
+     * [descr:Attachment.size]
+     */
+    size: number;
+
+    [key: string]: any;
+  };
+  /**
    * [descr:ImageMessage]
    */
   export type ImageMessage = MessageBase & {
@@ -33995,6 +34033,10 @@ declare module DevExpress.ui.dxChat {
    * [descr:TextMessage]
    */
   export type TextMessage = MessageBase & {
+    /**
+     * [descr:TextMessage.attachments]
+     */
+    attachments?: Attachment[];
     /**
      * [descr:TextMessage.text]
      */

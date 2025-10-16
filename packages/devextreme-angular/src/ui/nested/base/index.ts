@@ -1,6 +1,7 @@
 export * from './alert-dxi';
 export * from './animation-config';
 export * from './animation-state';
+export * from './attachment-dxi';
 export * from './box-options';
 export * from './button-group-item-dxi';
 export * from './button-options';

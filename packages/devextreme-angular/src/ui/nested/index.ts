@@ -11,6 +11,7 @@ export * from './area';
 export * from './argument-axis';
 export * from './argument-format';
 export * from './at';
+export * from './attachment-dxi';
 export * from './author';
 export * from './auto-layout';
 export * from './background-color';
