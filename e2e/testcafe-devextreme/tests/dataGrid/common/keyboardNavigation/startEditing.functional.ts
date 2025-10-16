@@ -40,6 +40,8 @@ test('Editing should start by pressing enter after scrolling content with scroll
 test('editing.allowUpdating callback should receive correct row on tab key on first cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.scrollBy({ y: 10000 });
 
   await t
@@ -79,6 +81,8 @@ test('editing.allowUpdating callback should receive correct row on tab key on fi
 
 test('editing.allowUpdating callback should receive correct row on tab key on last cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.scrollBy({ y: 10000 });
 

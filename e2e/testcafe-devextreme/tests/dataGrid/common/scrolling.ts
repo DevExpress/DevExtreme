@@ -304,6 +304,10 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 test('Scroll position after grouping when RTL (T388508)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   // assert
   await t
     .expect(dataGrid.getScrollLeft())
@@ -421,8 +425,11 @@ safeSizeTest('Header container should have padding-right after expanding the mas
 }));
 
 test('Header container should have padding-right if grid has max-height and scrollbar is shown', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   async function getRightPadding(): Promise<number> {
     const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
     return parseFloat(padding);
@@ -775,6 +782,8 @@ test('New row should be rendered at the top when grid is scrolled in virtual scr
 
 safeSizeTest('New mode. Rows should be rendered properly when rowRenderingMode is virtual and max height (T1054920)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   let visibleRows = await dataGrid.apiGetVisibleRows();
 
@@ -1599,6 +1608,8 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
 test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.scrollBy({ left: 1000 });
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
@@ -1867,8 +1878,8 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   { theme: Themes.fluentBlue, useNative: false },
 ].forEach(({ theme, useNative }) => {
   test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (${theme} theme)`, async (t) => {
-    const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
 
     await t
       .expect(dataGrid.isReady())
