@@ -251,7 +251,6 @@
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
     "test-jest:all": "pnpm test-jest && pnpm test-jest:node",
-    "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },
   "bin": {

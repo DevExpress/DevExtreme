@@ -39,7 +39,6 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
-require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
 require('./build/gulp/state_manager');
 
