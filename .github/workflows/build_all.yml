@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - name: Get sources
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Download npm packages
         uses: actions/download-artifact@v4
