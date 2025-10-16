@@ -32,10 +32,10 @@ const getCaret = (input: HTMLInputElement): CaretRange => {
 };
 
 const setCaret = (input, position) => {
-  const body = domAdapter.getBody();
-  if (!body.contains(input) && !body.contains(input.getRootNode().host)) {
-    return;
-  }
+  // const body = domAdapter.getBody();
+  // if (!body.contains(input) && !body.contains(input.getRootNode().host)) {
+  //   return;
+  // }
 
   try {
     input.selectionStart = position.start;
@@ -43,7 +43,7 @@ const setCaret = (input, position) => {
   } catch (e) { /* empty */ }
 };
 // @ts-expect-error
-// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+
 const caret = (input, position?: any, force = false): CaretRange | undefined => {
   input = $(input).get(0);
 
