@@ -466,21 +466,11 @@ export class ColumnsController extends modules.Controller {
     return this.getColumns().some((column) => column.isBand);
   }
 
-  private _columnCanBeGrouped(column) {
-    if (column?.type) return false;
-
-    return isDefined(column.groupIndex) && !column.type;
-  }
-
   public getGroupColumns() {
     const result: any = [];
 
-    const columnCanBeGrouped = this._columnCanBeGrouped;
-
-    each(this._columns, function () {
-      const column = this;
-
-      if (columnCanBeGrouped(column)) {
+    (this._columns as Column[]).forEach((column) => {
+      if (isDefined(column.groupIndex) && !column.type) {
         result[column.groupIndex] = column;
       }
     });
