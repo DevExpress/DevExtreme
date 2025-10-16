@@ -78,7 +78,7 @@ describe('Unsupported properties', () => {
         ],
       });
 
-      const aiHeaders = component.getHeadersByText('AI');
+      const aiHeaders = component.getHeaderByText('AI');
       expect(aiHeaders).toHaveLength(1);
       expect(aiHeaders?.attr('aria-colindex')).toEqual('2');
       expect(aiHeaders?.attr('aria-sort')).toBeUndefined();
@@ -99,7 +99,7 @@ describe('Unsupported properties', () => {
         ],
       });
       instance.columnOption('AItest', 'allowSorting', true);
-      const aiTestHeader = component.getHeadersByText('AI');
+      const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -126,7 +126,7 @@ describe('Unsupported properties', () => {
           },
         ],
       });
-      const aiTestHeader = component.getHeadersByText('AI');
+      const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -151,7 +151,7 @@ describe('Unsupported properties', () => {
       });
       instance.columnOption('AItest', 'sortOrder', 'asc');
       instance.columnOption('AItest', 'sortIndex', 2);
-      const aiTestHeader = component.getHeadersByText('AI');
+      const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -174,7 +174,7 @@ describe('Unsupported properties', () => {
         ],
       });
 
-      const aiTestHeader = component.getHeadersByText('AI');
+      const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
@@ -194,7 +194,7 @@ describe('Unsupported properties', () => {
       });
       instance.columnOption('AItest', 'sortOrder', 'asc');
       instance.columnOption('AItest', 'calculateSortValue', 'name');
-      const aiTestHeader = component.getHeadersByText('AI');
+      const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
       expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
       expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();

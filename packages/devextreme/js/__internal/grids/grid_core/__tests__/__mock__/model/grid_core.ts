@@ -17,11 +17,11 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
   }
 
-  public getHeaderCell(columnIndex: number): HTMLElement | null {
+  public getHeaderCell(columnIndex: number): HTMLElement {
     return this.getHeaderCells()[columnIndex];
   }
 
-  public getCellElement(rowIndex: number, columnIndex: number): HTMLElement | null {
+  public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
     return this.root.querySelectorAll(`.${SELECTORS.dataRowClass}`)[rowIndex]?.querySelectorAll('td')[columnIndex] as HTMLElement;
   }
 
@@ -41,7 +41,7 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     }
   }
 
-  public getHeadersByText(text: string): dxElementWrapper | undefined {
+  public getHeaderByText(text: string): dxElementWrapper {
     return $(Array.from(this.getHeaderCells()).find((el) => $(el).text().includes(text)));
   }
 
