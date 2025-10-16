@@ -43,29 +43,26 @@ export const generateMessages = (
   coefficient = 4,
   n = 1,
   isEdited = false,
-): Message[] => (
-  Array.from({ length: length * n }, (_, i) => {
-    const text = useLongText
-      ? getLongText(useLineBreaks)
-      : getShortText(useLineBreaks);
+): Message[] => Array.from({ length: length * n }, (_, i) => {
+  const text = useLongText
+    ? getLongText(useLineBreaks)
+    : getShortText(useLineBreaks);
 
-    const getAuthor = () => {
-      if (n > 1) {
-        return i >= length ? userSecond : userFirst;
-      }
+  const getAuthor = () => {
+    if (n > 1) {
+      return i >= length ? userSecond : userFirst;
+    }
 
-      return i % coefficient === 0 ? userFirst : userSecond;
-    };
+    return i % coefficient === 0 ? userFirst : userSecond;
+  };
 
-    return {
-      timestamp,
-      author: getAuthor(),
-      text,
-      isEdited,
-    };
-  })
-);
-
+  return {
+    timestamp,
+    author: getAuthor(),
+    text,
+    isEdited,
+  };
+});
 export const generateImageMessage = (
   user: User,
   src: string,
