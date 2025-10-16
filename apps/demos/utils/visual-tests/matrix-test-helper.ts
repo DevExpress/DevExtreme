@@ -226,6 +226,7 @@ const SKIPPED_TESTS = {
     ]
   },
   Angular: {
+    Common: ['PopupAndNotificationsOverview'],
     DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone']
@@ -240,6 +241,7 @@ const SKIPPED_TESTS = {
     FileUploader: ['CustomDropzone']
   },
   React: {
+    Common: ['PopupAndNotificationsOverview'],
     Scheduler: [
       { demo: 'ContextMenu', themes: [THEME.fluent] },
     ],
