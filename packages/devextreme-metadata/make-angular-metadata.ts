@@ -13,6 +13,8 @@ Ng.makeMetadata({
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
+    removeMembers(/\/chat:TextMessage.attachments/),
+    removeMembers(/\/chat:dxChatOptions\.(fileUploaderOptions|onAttachmentDownload)/),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),
@@ -23,7 +25,6 @@ Ng.makeMetadata({
     removeMembers(/\/scheduler:dxSchedulerOptions\.editing\.form/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
-    removeMembers(/\/chat:/),
   ],
   variables: {
     collectionItems: [...commonSmdCollectionItems],
