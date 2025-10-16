@@ -78,12 +78,12 @@ describe('Unsupported properties', () => {
         ],
       });
 
-      const aiHeaders = component.getHeaderByText('AI');
-      expect(aiHeaders).toHaveLength(1);
-      expect(aiHeaders?.attr('aria-colindex')).toEqual('2');
-      expect(aiHeaders?.attr('aria-sort')).toBeUndefined();
-      (aiHeaders?.get(0) as HTMLElement).click();
-      expect(aiHeaders?.attr('aria-sort')).toBeUndefined();
+      const aiTestHeader = component.getHeaderByText('AI');
+      expect(aiTestHeader).toHaveLength(1);
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
+      (aiTestHeader.get(0) as HTMLElement).click();
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
     it('should have no sorting state in the header after a click (dynamic update)', async () => {
       const { instance, component } = await createDataGrid({
@@ -101,10 +101,10 @@ describe('Unsupported properties', () => {
       instance.columnOption('AItest', 'allowSorting', true);
       const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
-      expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
-      (aiTestHeader?.get(0) as HTMLElement).click();
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
+      (aiTestHeader.get(0) as HTMLElement).click();
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
     it('should have no sorting state in the header with sortOrder and sortIndex options (first load)', async () => {
       const { component } = await createDataGrid({
@@ -128,9 +128,9 @@ describe('Unsupported properties', () => {
       });
       const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
-      expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
-      expect(aiTestHeader?.attr('aria-roledescription')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-roledescription')).toBeUndefined();
     });
     it('should have no sorting state in the header with sortOrder and sortIndex options (dynamic update)', async () => {
       const { instance, component } = await createDataGrid({
@@ -153,9 +153,9 @@ describe('Unsupported properties', () => {
       instance.columnOption('AItest', 'sortIndex', 2);
       const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
-      expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
-      expect(aiTestHeader?.attr('aria-roledescription')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-roledescription')).toBeUndefined();
     });
     it('should have no sorting state in the header with calculateSortValue (first load)', async () => {
       const { component } = await createDataGrid({
@@ -176,8 +176,8 @@ describe('Unsupported properties', () => {
 
       const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
-      expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
     it('should have no sorting state in the header with calculateSortValue (dynamic update)', async () => {
       const { instance, component } = await createDataGrid({
@@ -196,8 +196,8 @@ describe('Unsupported properties', () => {
       instance.columnOption('AItest', 'calculateSortValue', 'name');
       const aiTestHeader = component.getHeaderByText('AI');
       expect(aiTestHeader).toHaveLength(1);
-      expect(aiTestHeader?.attr('aria-colindex')).toEqual('2');
-      expect(aiTestHeader?.attr('aria-sort')).toBeUndefined();
+      expect(aiTestHeader.attr('aria-colindex')).toEqual('2');
+      expect(aiTestHeader.attr('aria-sort')).toBeUndefined();
     });
   });
 
