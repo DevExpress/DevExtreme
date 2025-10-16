@@ -12,6 +12,7 @@ import {
 } from '../../../helpers/domUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const OVERLAY_CLASS = 'dx-overlay-content';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
@@ -89,37 +90,47 @@ if (!isMaterialBased()) {
 safeSizeTest('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup with no found data.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
+}, [300, 400]).before(async () => {
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
+
+  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
+});
 
 safeSizeTest('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup in loading.png');
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => createWidget('dxLookup', {
-  dataSource: {
-    load() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([1, 2, 3]);
-        }, 5000);
-      });
+}, [300, 400]).before(async () => {
+  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
+
+  return createWidget('dxLookup', {
+    dataSource: {
+      load() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve([1, 2, 3]);
+          }, 5000);
+        });
+      },
     },
-  },
-  valueExpr: 'id',
-  displayExpr: 'text',
-}));
+    valueExpr: 'id',
+    displayExpr: 'text',
+  });
+});
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
