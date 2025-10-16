@@ -32,6 +32,7 @@ const CLASSES = {
   recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
   recurrenceEndRadio: 'dx-scheduler-form-recurrence-end-radio',
   recurrenceEndInputs: 'dx-scheduler-form-recurrence-end-inputs',
+  freqEditor: 'dx-scheduler-form-recurrence-freq-editor',
 };
 
 const frequenciesMessages = [
@@ -501,6 +502,7 @@ export class RecurrentForm {
               itemType: 'simple',
               name: 'freq',
               dataField: 'freq',
+              cssClass: CLASSES.freqEditor,
               colSpan: 1,
               editorType: 'dxSelectBox',
               label: {
@@ -512,7 +514,7 @@ export class RecurrentForm {
                 valueExpr: 'value',
                 displayExpr: 'text',
                 onValueChanged: (args): void => {
-                  if (this._isUpdatingEditors) {
+                  if (this._isUpdatingEditors || !args.value) {
                     return;
                   }
 

@@ -164,6 +164,15 @@ export class AppointmentForm {
     this._recurrenceRule = new RecurrenceRule('');
   }
 
+  reset(): void {
+    if (this._dxForm) {
+      const repeatEditor = this._dxForm.getEditor(EDITOR_NAMES.repeat);
+      if (repeatEditor) {
+        repeatEditor.option('value', 'never');
+      }
+    }
+  }
+
   create(): void {
     const mainGroup = this.createMainFormGroup();
 

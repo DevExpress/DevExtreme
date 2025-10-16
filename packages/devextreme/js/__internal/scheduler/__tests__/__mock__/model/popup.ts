@@ -43,6 +43,14 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-end-date-timezone-editor .dx-selectbox.dx-widget');
   }
 
+  get repeatEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
+  }
+
+  get freqEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-freq-editor .dx-selectbox.dx-widget');
+  }
+
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
 

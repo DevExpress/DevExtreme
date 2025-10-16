@@ -101,7 +101,10 @@ export class AppointmentPopup {
       preventScrollEvents: false,
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
-      onHiding: (): void => { this.scheduler.focus(); },
+      onHiding: (): void => {
+        this.form.reset();
+        this.scheduler.focus();
+      },
       contentTemplate: (): dxElementWrapper => {
         this.form.create();
         return this.form.dxForm.$element();

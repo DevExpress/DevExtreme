@@ -371,8 +371,8 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Recurrence', () => {
-    it.skip('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', async () => {
-      const { scheduler, POM } = await createScheduler({
+    it('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', async () => {
+      const { POM } = await createScheduler({
         dataSource: [{
           text: 'Watercolor Landscape',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -390,20 +390,14 @@ describe('Appointment Popup Form', () => {
 
       POM.popup.getEditSeriesButton().click();
 
-      const { value: repeatInputRecurrence } = POM.popup.getSwitchByName('repeat');
-
-      scheduler.hideAppointmentPopup();
-      scheduler.showAppointmentPopup();
-
-      const { value: repeatInput } = POM.popup.getSwitchByName('repeat');
-
-      expect(repeatInputRecurrence).toBe('true');
-      expect(repeatInput).toBe('false');
+      // @ts-expect-error
+      const repeatEditorBeforeRecurrenceForm = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      expect(repeatEditorBeforeRecurrenceForm.option('value')).toBe('weekly');
     });
 
-    it.skip('Appointment popup shouldn\'t render recurrence editor, if previous was with recurrence', async () => {
+    it('Appointment popup shouldn\'t render recurrence settings, if previous was with recurrence', async () => {
       setupSchedulerTestEnvironment({ height: 200 });
-      const { POM } = await createScheduler({
+      const { POM, scheduler } = await createScheduler({
         dataSource: [{
           text: 'recurrent-app',
           startDate: new Date(2017, 4, 1, 9, 30),
@@ -422,51 +416,72 @@ describe('Appointment Popup Form', () => {
       });
 
       POM.openPopupByDblClick('recurrent-app');
+
       POM.popup.getEditSeriesButton().click();
 
-      expect(POM.popup.getSwitchByName('repeat').value).toBe('true');
-      expect(POM.popup.getInputByLabel('Subject').value).toBe('recurrent-app');
+      // @ts-expect-error
+      const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      const buttonsRecurrent = repeatEditorRecurrent.option('buttons');
+      const hasSettingsButtonRecurrent = buttonsRecurrent?.some((btn) => btn.name === 'settings');
 
-      jest.useFakeTimers();
+      expect(repeatEditorRecurrent.option('value')).toBe('daily');
+      expect(hasSettingsButtonRecurrent).toBe(true);
 
-      POM.popup.getCancelButton().click();
-
-      jest.runAllTimers();
+      scheduler.hideAppointmentPopup();
 
       POM.openPopupByDblClick('common-app');
 
-      expect(POM.popup.getSwitchByName('repeat').value).toBe('false');
-      expect(POM.popup.getInputByLabel('Subject').value).toBe('common-app');
+      // @ts-expect-error
+      const repeatEditorCommon = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      const buttonsCommon = repeatEditorCommon.option('buttons');
+      const hasSettingsButtonCommon = buttonsCommon?.some((btn) => btn.name === 'settings');
+
+      expect(repeatEditorCommon.option('value')).toBe('never');
+      expect(hasSettingsButtonCommon).toBe(false);
     });
 
-    it.skip('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', async () => {
+    it('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', async () => {
       const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
       const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
       const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
       scheduler.showAppointmentPopup(firstAppointment);
-      POM.popup.getSwitchByName('repeat').click();
 
-      POM.popup.selectRadio('After');
+      // @ts-expect-error
+      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      repeatEditor.option('value', 'weekly');
 
-      POM.popup.getSaveButton().click();
+      scheduler.hideAppointmentPopup();
 
       scheduler.showAppointmentPopup(secondAppointment);
-      POM.popup.getSwitchByName('repeat').click();
 
-      const radioValue = POM.popup.getSelectedRadioValue();
+      // @ts-expect-error
+      const repeatEditorSecond = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      const value = repeatEditorSecond.option('value');
 
-      expect(radioValue).toBe('Never');
+      expect(value).toBe('never');
     });
 
-    describe('Recurrence Editor visibility', () => {
-      it.todo('Recurrence editor container should be visible if recurrence rule was set');
-      it.todo('Recurrence editor container should be visible after changing its visibility value');
-      it.todo('Popup should show or not show reccurence editor after many opening with different data');
-      it.todo('Popup should show or not to show reccurence editor after many opening with and change visibility');
-      it.todo('Popup should not contain recurrence editor, if recurrenceRuleExpr is null');
-      it.todo('Popup should not contain recurrence editor, if recurrenceRuleExpr is \'\'');
-      it.todo('Multiple showing appointment popup for recurrence appointments and after update options should work correct');
+    it('Recurrence editor container should be visible after changing its visibility value', async () => {
+      const appointment = {
+        text: 'Test Appointment',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+      };
+
+      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const recurrenceGroup = $(POM.popup.element).find('.dx-scheduler-form-recurrence-group');
+
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+
+      // @ts-expect-error
+      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      repeatEditor.option('value', 'weekly');
+
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
     });
   });
 
