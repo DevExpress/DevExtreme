@@ -78,6 +78,8 @@ export type CellAppointmentsLimit = 'auto' | 'unlimited';
 /** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
+export type SchedulerAppointmentFormIconDisplay = 'both' | 'main' | 'recurrence' | 'none';
+/** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
@@ -656,6 +658,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
          * @public
          */
         onCanceled?: ((formData: any) => void);
+        /**
+         * @docid
+         * @default "main"
+         * @public
+         */
+        showIcons?: SchedulerAppointmentFormIconDisplay;
       } | undefined;
     };
     /**
@@ -912,6 +920,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default ""
        */
       fieldExpr?: string;
+      /**
+       * @docid
+       * @default ""
+       */
+      icon?: string;
       /**
        * @docid
        * @default ""
