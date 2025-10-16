@@ -163,7 +163,7 @@ export type SmartPasteCommandParams = {
 export type GenerateGridColumnCommandParams = {
   text: string;
   data: Record<PropertyKey, unknown>;
-  additionalInfo?: Record<string, unknown>;
+  additionalInfo?: Record<PropertyKey, unknown>;
 };
 
 /**
