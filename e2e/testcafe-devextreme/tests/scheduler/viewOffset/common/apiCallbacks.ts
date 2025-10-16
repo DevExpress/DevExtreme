@@ -6,7 +6,6 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 
-// NOTE: Disable page reloads will break the tests!
 fixture.disablePageReloads`Offset: Api callbacks`
   .page(url(__dirname, '../../../container.html'));
 

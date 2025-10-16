@@ -89,7 +89,7 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
       ? 'Tree list with 3 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it'
       : 'Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
     .expect(expandableRow.getAttribute('aria-expanded'))
-    .eql('false');
+    .eql(isMaterial() ? 'true' : 'false');
 
   // eslint-disable-next-line no-restricted-syntax
   for (const cell of expandableCells) {
