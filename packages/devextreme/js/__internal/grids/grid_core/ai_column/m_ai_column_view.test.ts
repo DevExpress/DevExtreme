@@ -499,10 +499,18 @@ describe('AiColumnView', () => {
 
       mockColumnsController.getColumnByPath.mockReturnValue(mockColumn);
       mockColumnsController.getColumnOptionNameByFullName.mockReturnValue('ai.prompt');
+      mockAiColumnController.sendAIColumnRequest
+        .mockImplementation(() => {
+          setTimeout(() => {
+            mockAiColumnController.aiRequestCompleted.fire();
+          });
+        });
 
       await aiColumnView.showPromptEditor(cellElement, mockColumn);
 
       const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+
+      (promptEditorInstance.getEditorValue as jest.Mock).mockReturnValue('new prompt value');
 
       aiColumnView.optionChanged({
         name: 'columns',
@@ -510,8 +518,12 @@ describe('AiColumnView', () => {
         value: 'new prompt value',
       });
 
-      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(mockAiColumnController.sendAIColumnRequest).toHaveBeenCalledWith('aiColumn');
+      expect(promptEditorInstance.updatePrompt).not.toHaveBeenCalled();
+
+      jest.runAllTimers();
+
+      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
     });
 
     it('should update prompt editor state on completion', async () => {
@@ -529,13 +541,15 @@ describe('AiColumnView', () => {
 
       await aiColumnView.showPromptEditor(cellElement, mockColumn);
 
+      const promptEditorInstance = aiColumnView.getPromptEditorInstance();
+
+      (promptEditorInstance.getEditorValue as jest.Mock).mockReturnValue('new prompt value');
+
       aiColumnView.optionChanged({
         name: 'columns',
         fullName: 'columns[0].ai.prompt',
         value: 'new prompt value',
       });
-
-      const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
       expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
@@ -564,7 +578,7 @@ describe('AiColumnView', () => {
 
       const promptEditorInstance = aiColumnView.getPromptEditorInstance();
 
-      expect(promptEditorInstance.updatePrompt).toHaveBeenCalledWith('new prompt value');
+      expect(promptEditorInstance.updatePrompt).not.toHaveBeenCalled();
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledTimes(1);
       expect(promptEditorInstance.updateStateOnAction).toHaveBeenCalledWith('stop');
     });

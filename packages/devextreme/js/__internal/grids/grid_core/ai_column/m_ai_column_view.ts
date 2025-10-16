@@ -81,7 +81,6 @@ export class AiColumnView extends View {
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
     if (columnOptionName === 'ai.prompt') {
-      this.promptEditorInstance?.updatePrompt(args.value);
       this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
   }
@@ -92,6 +91,7 @@ export class AiColumnView extends View {
 
     this.addAiCommandColumn();
     this.aiColumnController.aiRequestCompleted.add(() => {
+      this.promptEditorInstance?.updatePrompt(this.promptEditorInstance.getEditorValue());
       this.promptEditorInstance?.updateStateOnAction('stop');
     });
     this.aiColumnController.aiRequestRejected.add(() => {

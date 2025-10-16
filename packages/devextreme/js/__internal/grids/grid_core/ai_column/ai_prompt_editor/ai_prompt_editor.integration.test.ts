@@ -316,7 +316,7 @@ describe('Apply button', () => {
   });
 
   describe('when text area value is changed back to initial value', () => {
-    it('should be disabled', () => {
+    it('should be enabled', () => {
       const { POM } = createAiPromptEditor({
         prompt: 'initial text',
         popupOptions: { visible: true },
@@ -330,6 +330,24 @@ describe('Apply button', () => {
 
       // Change back to initial
       POM.getTextArea().setValue('initial text');
+      expect(POM.getApplyButton().isDisabled()).toBe(false);
+    });
+  });
+
+  describe('when text area value is reset from non-empty', () => {
+    it('should be disabled', () => {
+      const { POM } = createAiPromptEditor({
+        popupOptions: { visible: true },
+      });
+
+      expect(POM.getApplyButton().isDisabled()).toBe(true);
+
+      // Change value
+      POM.getTextArea().setValue('changed text');
+      expect(POM.getApplyButton().isDisabled()).toBe(false);
+
+      // Reset to empty
+      POM.getTextArea().setValue('');
       expect(POM.getApplyButton().isDisabled()).toBe(true);
     });
   });
@@ -525,7 +543,7 @@ describe('Public Methods', () => {
         // Change text to enable apply button initially
         POM.getTextArea().setValue('changed text');
         expect(POM.getApplyButton().isDisabled()).toBe(false);
-        expect(POM.getRefreshButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
         expect(POM.getTextArea().getInputElement().disabled).toBe(false);
         expect(POM.getProgressBar().isVisible()).toBe(false);
         expect(POM.isApplyToolbarItemVisible()).toBe(true);
@@ -556,7 +574,7 @@ describe('Public Methods', () => {
         // Change text to enable apply button initially
         POM.getTextArea().setValue('changed text');
         expect(POM.getApplyButton().isDisabled()).toBe(false);
-        expect(POM.getRefreshButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
         expect(POM.getTextArea().getInputElement().disabled).toBe(false);
         expect(POM.getProgressBar().isVisible()).toBe(false);
         expect(POM.getPopupInstance().option('shading')).toBe(false);
@@ -576,7 +594,7 @@ describe('Public Methods', () => {
       });
     });
 
-    describe('without action parameter', () => {
+    describe('with stop action after apply', () => {
       it('should clear loading, enable controls and show apply button', () => {
         const { instance, POM } = createAiPromptEditor({
           prompt: 'initial text',
@@ -602,6 +620,38 @@ describe('Public Methods', () => {
         expect(POM.getProgressBar().isVisible()).toBe(false);
         // Should be enabled because text was changed
         expect(POM.getApplyButton().isDisabled()).toBe(false);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(false);
+        expect(POM.isApplyToolbarItemVisible()).toBe(true);
+        expect(POM.isStopToolbarItemVisible()).toBe(false);
+        expect(POM.getPopupInstance().option('shading')).toBe(false);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(true);
+      });
+    });
+
+    describe('with stop action after regenerate data', () => {
+      it('should clear loading, enable controls and enable regenerate data button', () => {
+        const { instance, POM } = createAiPromptEditor({
+          prompt: 'initial text',
+          popupOptions: { visible: true },
+        });
+
+        instance.updateStateOnAction('regenerate');
+
+        expect(POM.getProgressBar().isVisible()).toBe(true);
+        expect(POM.getApplyButton().isDisabled()).toBe(true);
+        expect(POM.getRefreshButton().isDisabled()).toBe(true);
+        expect(POM.getTextArea().getInputElement().disabled).toBe(true);
+        expect(POM.isApplyToolbarItemVisible()).toBe(false);
+        expect(POM.isStopToolbarItemVisible()).toBe(true);
+        expect(POM.getPopupInstance().option('shading')).toBe(true);
+        expect(POM.getPopupInstance().option('hideOnOutsideClick')).toBe(false);
+
+        instance.updateStateOnAction('stop');
+
+        expect(POM.getProgressBar().isVisible()).toBe(false);
+        // Should be enabled because text was changed
+        expect(POM.getApplyButton().isDisabled()).toBe(true);
         expect(POM.getRefreshButton().isDisabled()).toBe(false);
         expect(POM.getTextArea().getInputElement().disabled).toBe(false);
         expect(POM.isApplyToolbarItemVisible()).toBe(true);
