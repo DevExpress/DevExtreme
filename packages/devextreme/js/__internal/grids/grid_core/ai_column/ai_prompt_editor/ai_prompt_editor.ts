@@ -62,7 +62,6 @@ export class AiPromptEditor {
       shading: false,
       shadingColor: 'transparent',
       dragEnabled: true,
-      resizeEnabled: true,
       hideOnOutsideClick: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: `${CLASSES.aiPromptEditor} ${CLASSES.aiDialog}` },

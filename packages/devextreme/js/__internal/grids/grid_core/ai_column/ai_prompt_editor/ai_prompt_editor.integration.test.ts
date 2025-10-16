@@ -77,7 +77,6 @@ describe('AiPromptEditor', () => {
           shading: false,
           shadingColor: 'transparent',
           dragEnabled: true,
-          resizeEnabled: true,
           contentTemplate: expect.any(Function),
           wrapperAttr: { class: 'dx-ai-prompt-editor dx-aidialog' },
           toolbarItems: [
