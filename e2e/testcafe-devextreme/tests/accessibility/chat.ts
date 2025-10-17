@@ -2,7 +2,7 @@ import { Message, User, Properties } from 'devextreme/ui/chat.d';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { avatarUrl } from '../chat/data';
+import { avatarUrl } from '../editors/chat/data';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
