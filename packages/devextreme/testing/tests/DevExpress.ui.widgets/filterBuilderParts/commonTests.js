@@ -39,7 +39,6 @@ import {
     clickByButtonAndSelectMenuItem
 } from './helpers.js';
 import { implementationsMap } from 'core/utils/size';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 QUnit.module('Rendering', function() {
     QUnit.test('field menu test', function(assert) {
@@ -349,10 +348,6 @@ QUnit.module('Rendering', function() {
 
     // T589341
     QUnit.test('the formatter is applied to a field with the date type', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         $('#container').dxFilterBuilder({
             value: ['Date', '=', ''],
             fields: [{

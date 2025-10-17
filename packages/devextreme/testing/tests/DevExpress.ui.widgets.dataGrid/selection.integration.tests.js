@@ -2,7 +2,6 @@ import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
@@ -20,10 +19,6 @@ QUnit.testStart(function() {
 QUnit.module('Initialization', baseModuleConfig, () => {
     // T837103
     QUnit.test('Enable rows hover with showCheckBoxesMode = onClick', function(assert) {
-        if(shouldSkipOnMobile(assert, 'hover is disabled for non-desktop devices')) {
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             columns: [
