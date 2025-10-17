@@ -1,8 +1,9 @@
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { isMaterial } from '../../../helpers/themeUtils';
 
-fixture`Aria Label tests`.page(url(__dirname, '../../container.html'));
+fixture`TreeList - Aria Label`.page(url(__dirname, '../../container.html'));
 
 const tasks = [
   {
@@ -84,13 +85,16 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
 
   await t
     .expect(treeList.getContainer().getAttribute('aria-label'))
-    .eql('Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
+    .eql(isMaterial()
+      ? 'Tree list with 3 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it'
+      : 'Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
     .expect(expandableRow.getAttribute('aria-expanded'))
-    .eql('false');
+    .eql(isMaterial() ? 'true' : 'false');
 
-  expandableCells.map(async (cell) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('false');
-  });
+  }
 
   await t
     .click(expandableRow)
@@ -98,9 +102,10 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true');
 
-  expandableCells.map(async (cell) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('true');
-  });
+  }
 }).before(async () => createWidget('dxTreeList', options));
 
 test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) => {
@@ -118,9 +123,10 @@ test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) =
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true');
 
-  expandableCells.map(async (cell) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('true');
-  });
+  }
 
   await t
     .click(expandableRow)
@@ -128,9 +134,10 @@ test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) =
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('false');
 
-  expandableCells.map(async (cell) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const cell of expandableCells) {
     await t.expect(cell.getAttribute('aria-expanded')).eql('false');
-  });
+  }
 }).before(async () => {
   options.expandedRowKeys = [1];
   await createWidget('dxTreeList', options);

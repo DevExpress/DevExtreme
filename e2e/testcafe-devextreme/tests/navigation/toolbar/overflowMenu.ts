@@ -20,7 +20,7 @@ const stateClasses = [FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, ACTIVE_STATE_CLASS
 fixture.disablePageReloads`Toolbar_OverflowMenu`
   .page(url(__dirname, '../../container.html'));
 
-test.meta({ unstable: true })('Drop down button should lost hover and active state', async (t) => {
+test('Drop down button should lost hover and active state', async (t) => {
   const toolbar = new Toolbar('#toolbar');
   const dropDownMenu = toolbar.getOverflowMenu();
 

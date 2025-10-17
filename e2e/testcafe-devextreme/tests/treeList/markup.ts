@@ -6,7 +6,7 @@ import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { Themes } from '../../helpers/themes';
 
-fixture`TreeList - Markup`
+fixture.disablePageReloads`TreeList - Markup`
   .disablePageReloads
   .page(url(__dirname, '../container.html'));
 
@@ -57,7 +57,7 @@ const tasksT1223168 = [{
   });
 
   // T1221037
-  test.meta({ unstable: true })('TreeList screenshot when the first cell has a template', async (t) => {
+  test('TreeList screenshot when the first cell has a template', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList('#container');
 
