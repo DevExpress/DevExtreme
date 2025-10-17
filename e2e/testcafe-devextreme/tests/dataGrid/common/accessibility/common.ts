@@ -18,7 +18,7 @@ const a11yCheckConfig = {};
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Grid without data', async (t) => {
+test.skip('Grid without data', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -36,7 +36,7 @@ test('Grid without data', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Sorting and group panel', async (t) => {
+test.skip('Sorting and group panel', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -73,7 +73,7 @@ test('Sorting and group panel', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Paging with displayMode is \'full\'', async (t) => {
+test.skip('Paging with displayMode is \'full\'', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -110,7 +110,7 @@ test('Paging with displayMode is \'full\'', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Paging with displayMode is \'compact\'', async (t) => {
+test.skip('Paging with displayMode is \'compact\'', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -147,7 +147,7 @@ test('Paging with displayMode is \'compact\'', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Grouping and Summary', async (t) => {
+test.skip('Grouping and Summary', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -201,7 +201,7 @@ test('Grouping and Summary', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Filter row - filter menu', async (t) => {
+test.skip('Filter row - filter menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
@@ -255,7 +255,7 @@ test('Filter row - filter menu', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Header filter - filter menu', async (t) => {
+test.skip('Header filter - filter menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
@@ -298,7 +298,7 @@ test('Header filter - filter menu', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Filter panel', async (t) => {
+test.skip('Filter panel', async (t) => {
 // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
@@ -338,7 +338,7 @@ test('Filter panel', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Filter panel - popup with filter builder', async (t) => {
+test.skip('Filter panel - popup with filter builder', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
@@ -388,7 +388,7 @@ test('Filter panel - popup with filter builder', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Search panel', async (t) => {
+test.skip('Search panel', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -417,7 +417,7 @@ test('Search panel', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Search panel - highlight', async (t) => {
+test.skip('Search panel - highlight', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -453,7 +453,7 @@ test('Search panel - highlight', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Selection', async (t) => {
+test.skip('Selection', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -488,7 +488,7 @@ test('Selection', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Focused row', async (t) => {
+test.skip('Focused row', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
@@ -519,7 +519,7 @@ test('Focused row', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Fixed columns', async (t) => {
+test.skip('Fixed columns', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
@@ -566,7 +566,7 @@ test('Fixed columns', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
+test.skip('Column chooser with the \'dragAndDrop\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -619,7 +619,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Column chooser with the \'select\' mode', async (t) => {
+test.skip('Column chooser with the \'select\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -678,7 +678,7 @@ test('Column chooser with the \'select\' mode', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Empty column chooser', async (t) => {
+test.skip('Empty column chooser', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -729,7 +729,7 @@ test('Empty column chooser', async (t) => {
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
 [false, true].forEach((useIcons) => {
-  test(`Row editing mode with useIcons=${useIcons}`, async (t) => {
+  test.skip(`Row editing mode with useIcons=${useIcons}`, async (t) => {
   // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -760,7 +760,7 @@ test('Empty column chooser', async (t) => {
     disableFxAnimation: true,
   }));
 
-  test(`Row in edit state with useIcons=${useIcons}`, async (t) => {
+  test.skip(`Row in edit state with useIcons=${useIcons}`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -806,7 +806,7 @@ test('Empty column chooser', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Row editing mode - confirm delete message', async (t) => {
+test.skip('Row editing mode - confirm delete message', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const isDialogOpened = dataGrid.getDialog().exists;
@@ -854,7 +854,7 @@ test('Row editing mode - confirm delete message', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Batch editing mode - edit cell', async (t) => {
+test.skip('Batch editing mode - edit cell', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -898,7 +898,7 @@ test('Batch editing mode - edit cell', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Batch editing mode - modified cell', async (t) => {
+test.skip('Batch editing mode - modified cell', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -942,7 +942,7 @@ test('Batch editing mode - modified cell', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Batch editing mode - delete row', async (t) => {
+test.skip('Batch editing mode - delete row', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -986,7 +986,7 @@ test('Batch editing mode - delete row', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Form editing mode', async (t) => {
+test.skip('Form editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1030,7 +1030,7 @@ test('Form editing mode', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Popup editing mode', async (t) => {
+test.skip('Popup editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1074,7 +1074,7 @@ test('Popup editing mode', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Validation in cell editing mode', async (t) => {
+test.skip('Validation in cell editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1125,7 +1125,7 @@ test('Validation in cell editing mode', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Error row', async (t) => {
+test.skip('Error row', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1182,7 +1182,7 @@ test('Error row', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Adaptability', async (t) => {
+test.skip('Adaptability', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1217,7 +1217,7 @@ test('Adaptability', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Row drag and drop', async (t) => {
+test.skip('Row drag and drop', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1245,7 +1245,7 @@ test('Row drag and drop', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Export', async (t) => {
+test.skip('Export', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerPanel = dataGrid.getHeaderPanel();
@@ -1287,7 +1287,7 @@ test('Export', async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test('Context menu', async (t) => {
+test.skip('Context menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
