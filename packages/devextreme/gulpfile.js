@@ -37,7 +37,7 @@ require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
-require('./build/gulp/generator/gulpfile');
+// require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
 require('./build/gulp/state_manager');
@@ -69,7 +69,7 @@ function createMainBatch(dev) {
 function createDefaultBatch(dev) {
     const tasks = dev ? [] : ['clean'];
     tasks.push('localization');
-    tasks.push(dev ? 'generate-components-dev' : 'generate-components');
+    // tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
 
     if(REMOVE_NON_PRODUCTION_MODULE) {
@@ -98,8 +98,8 @@ gulp.task('default-dev', createDefaultBatch(true));
 gulp.task('test-env', shell.task('node ./testing/launch'));
 
 gulp.task('dev-watch', gulp.parallel(
-    'generate-jquery-components-watch',
-    'generate-inferno-components-watch',
+    // 'generate-jquery-components-watch',
+    // 'generate-inferno-components-watch',
     'transpile-watch',
     'bundler-config-watch',
     'js-bundles-watch',
