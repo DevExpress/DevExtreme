@@ -6,6 +6,8 @@ import url from '../../../../helpers/getPageUrl';
 import { defaultConfig } from '../helpers/data';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { Themes } from '../../../../helpers/themes';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { isMaterial } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -33,6 +35,10 @@ fixture.disablePageReloads`Sticky columns - Filter row`
   }, [800, 800])
     .before(async () => {
       await changeTheme(theme);
+      if (isMaterial()) {
+        await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+      }
+
       await createWidget('dxDataGrid', {
         ...defaultConfig,
         filterRow: {

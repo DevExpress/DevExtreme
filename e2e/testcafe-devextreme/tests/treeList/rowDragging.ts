@@ -4,7 +4,7 @@ import ExpandableCell from 'devextreme-testcafe-models/treeList/expandableCell';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
-fixture`Row dragging`
+fixture.disablePageReloads`Row dragging`
   .page(url(__dirname, '../container.html'));
 
 const tasksT1228650 = [{

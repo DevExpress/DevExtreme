@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture`Keyboard Navigation - editOnKeyPress`
+fixture.disablePageReloads`Keyboard Navigation - editOnKeyPress`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
@@ -39,6 +39,8 @@ test('Editing should start by pressing enter after scrolling content with scroll
 
 test('editing.allowUpdating callback should receive correct row on tab key on first cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.scrollBy({ y: 10000 });
 
@@ -79,6 +81,8 @@ test('editing.allowUpdating callback should receive correct row on tab key on fi
 
 test('editing.allowUpdating callback should receive correct row on tab key on last cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.scrollBy({ y: 10000 });
 

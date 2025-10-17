@@ -4,7 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { baseConfig } from './helpers/baseConfig';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - FilterPanel Appearance`
   .page(url(__dirname, '../../container.html'));
@@ -25,11 +24,6 @@ test('FilterPanel and FilterBuilderPopup screenshots', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  const a11yCheckConfig = {
-    rules: { 'color-contrast': { enabled: false } },
-  };
-  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,

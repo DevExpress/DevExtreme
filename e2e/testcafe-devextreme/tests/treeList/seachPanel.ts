@@ -2,7 +2,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`SearchPanel`
+fixture.disablePageReloads`SearchPanel`
   .page(url(__dirname, '../container.html'));
 
 test('Items are shown in the original order after search is applied - T1274434 - 1', async (t) => {

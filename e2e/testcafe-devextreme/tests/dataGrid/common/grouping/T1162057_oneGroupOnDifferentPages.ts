@@ -3,9 +3,8 @@ import { RequestMock } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-// import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
-fixture`Grouping Panel - One group on different pages`
+fixture.disablePageReloads`Grouping Panel - One group on different pages`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';
