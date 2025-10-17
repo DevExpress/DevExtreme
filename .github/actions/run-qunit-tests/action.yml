@@ -7,9 +7,6 @@ inputs:
     required: true
   constel:
     description: "Name of the test group"
-  browser:
-    description: "Name of the browser"
-    default: "chrome"
   useJQuery:
     description: "Indicates if jQuery should be used"
     default: "false"
@@ -103,7 +100,6 @@ runs:
       shell: bash
       env:
         CONSTEL: ${{ inputs.constel }}
-        BROWSER: ${{ inputs.browser }}
         JQUERY: ${{ inputs.useJQuery }}
         MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
