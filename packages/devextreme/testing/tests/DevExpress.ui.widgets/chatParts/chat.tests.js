@@ -15,9 +15,8 @@ import AlertList from '__internal/ui/chat/alertlist';
 import MessageBox, {
     TYPING_END_DELAY,
     CHAT_MESSAGEBOX_CLASS,
-    CHAT_MESSAGEBOX_BUTTON_CLASS,
     CHAT_MESSAGEBOX_TEXTAREA_CLASS,
-} from '__internal/ui/chat/messagebox';
+} from '__internal/ui/chat/message_box/message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -33,12 +32,13 @@ import ArrayStore from 'common/data/array_store';
 import {
     CHAT_EDITING_PREVIEW_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
-} from '__internal/ui/chat/editing_preview';
+} from '__internal/ui/chat/message_box/editing_preview';
 import { CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS } from '__internal/ui/chat/confirmationpopup';
 import { POPUP_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { shouldSkipOnMobile } from '../../../helpers/device.js';
 import MessageBubble from '__internal/ui/chat/messagebubble';
+import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
@@ -96,12 +96,11 @@ const moduleConfig = {
 
             this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
-
             this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
-            this.textArea = this.$textArea.dxTextArea('instance');
+            this.textArea = ChatTextArea.getInstance(this.$textArea);
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-            this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
+            const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+            this.$sendButton = $($buttons[$buttons.length - 1]);
         };
 
         this.reinit = (options) => {

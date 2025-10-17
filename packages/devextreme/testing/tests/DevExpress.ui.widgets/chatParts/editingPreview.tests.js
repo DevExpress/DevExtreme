@@ -5,7 +5,7 @@ import EditingPreview, {
     CHAT_EDITING_PREVIEW_TEXT_CLASS,
     CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
     CHAT_EDITING_PREVIEW_CAPTION_CLASS,
-} from '__internal/ui/chat/editing_preview';
+} from '__internal/ui/chat/message_box/editing_preview';
 import messageLocalization from 'common/core/localization/message';
 import Button from 'ui/button';
 
