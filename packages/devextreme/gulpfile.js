@@ -38,7 +38,6 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
-require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
 
 if(env.TEST_CI) {
@@ -92,7 +91,6 @@ gulp.task('dev-watch', gulp.parallel(
     'generate-jquery-components-watch',
     'generate-inferno-components-watch',
     'transpile-watch',
-    'renovated-components-watch',
     'bundler-config-watch',
     'js-bundles-watch',
     'test-env'
