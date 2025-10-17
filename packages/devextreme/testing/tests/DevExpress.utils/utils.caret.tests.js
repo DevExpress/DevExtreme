@@ -74,27 +74,18 @@ testModule('caret', () => {
 
     test('\'setCaret\' does not raise an error when it is impossible to set a range', function(assert) {
         const caretPosition = { start: 1, end: 2 };
-        const initialDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionStart');
-        const getterSetterConfig = {
-            get: function() {
-                throw 'You can not get a selection';
-            },
-            set: function(value) {
-                throw 'You can not set a selection';
-            }
-        };
-
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', $.extend({}, initialDescriptor, getterSetterConfig));
-
         const input = $('<input>').appendTo('#qunit-fixture').get(0);
+
+        Object.defineProperty(input, 'selectionStart', {
+            set() { throw new Error('Cannot set selection'); },
+            get() { throw new Error('Cannot set selection'); },
+        });
 
         try {
             caret(input, caretPosition);
             assert.ok(true, 'exception is not thrown');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
-        } finally {
-            Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', initialDescriptor);
         }
     });
 
