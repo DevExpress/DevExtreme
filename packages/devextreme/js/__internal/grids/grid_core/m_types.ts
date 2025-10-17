@@ -40,6 +40,12 @@ type OptionsMethod<TOptions> =
 
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
+export type CreateComponent<TComponent extends Component<any>> = (
+  $container: dxElementWrapper,
+  component: new (...args) => TComponent,
+  options?: TComponent extends Component<infer TOptions> ? TOptions : never
+) => TComponent;
+
 export interface InternalGrid extends GridBaseType {
   _views: Views;
 
@@ -69,11 +75,7 @@ export interface InternalGrid extends GridBaseType {
 
   _disposed: any;
 
-  _createComponent: <TComponent extends Component<any>>(
-    $container: dxElementWrapper,
-    component: new (...args) => TComponent,
-    options?: TComponent extends Component<infer TOptions> ? TOptions : never
-  ) => TComponent;
+  _createComponent: CreateComponent<any>;
 
   _createAction: any;
 
