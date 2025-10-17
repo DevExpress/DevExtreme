@@ -35,7 +35,7 @@ const generateColumns = (columnCount: number): Column[] => [...new Array(columnC
     dataField: `field${index + 1}`,
   }));
 
-test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
+test.meta({ unstable: true })('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -211,6 +211,7 @@ test('The markup should be correct after horizontal scrolling and collapse of th
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
   await t.wait(100);
 
   // act

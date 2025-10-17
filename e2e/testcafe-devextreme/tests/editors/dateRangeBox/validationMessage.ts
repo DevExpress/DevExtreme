@@ -79,7 +79,6 @@ test('The validation message overlay for DateRangeBox should be correctly positi
   t.ctx.ids = [];
 
   await insertStylesheetRulesToPage(`
-    * { caret-color: transparent !important; }
     #container { width: 900px; height: 800px; display: flex; flex-direction: column; padding: 50px; }
     .dx-form { margin: 25px 50px; }
   `);

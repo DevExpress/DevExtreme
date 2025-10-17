@@ -262,7 +262,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     .expect(dataGrid.getGroupRow(0).isExpanded)
     .notOk();
 
-  await dataGrid.scrollBy({ x: 1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
 
   await t
     .expect(await takeScreenshot('group_row_scrolling_all_collapsed_fixed_columns.png', dataGrid.element))

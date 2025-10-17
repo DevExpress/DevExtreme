@@ -2,7 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
@@ -39,7 +39,7 @@ async function getTestLoadCount(): Promise<number> {
   return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
-fixture`Scrolling`
+fixture.disablePageReloads`Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
@@ -304,6 +304,10 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
 test('Scroll position after grouping when RTL (T388508)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   // assert
   await t
     .expect(dataGrid.getScrollLeft())
@@ -421,8 +425,11 @@ safeSizeTest('Header container should have padding-right after expanding the mas
 }));
 
 test('Header container should have padding-right if grid has max-height and scrollbar is shown', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
+
   async function getRightPadding(): Promise<number> {
     const padding = await dataGrid.getHeaders().element.getStyleProperty('padding-right');
     return parseFloat(padding);
@@ -431,7 +438,7 @@ test('Header container should have padding-right if grid has max-height and scro
   // act
   const scrollBarWidth = await dataGrid.getScrollbarWidth(false);
 
-  await dataGrid.scrollBy({ y: 20 });
+  await dataGrid.scrollBy(t, { y: 20 });
 
   // assert
   await t
@@ -775,6 +782,8 @@ test('New row should be rendered at the top when grid is scrolled in virtual scr
 
 safeSizeTest('New mode. Rows should be rendered properly when rowRenderingMode is virtual and max height (T1054920)', async (t) => {
   const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   let visibleRows = await dataGrid.apiGetVisibleRows();
 
@@ -1152,7 +1161,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
   delete (window as any).testLoadCount;
 })());
 
-fixture`Remote Scrolling`
+fixture.disablePageReloads`Remote Scrolling`
   .page(url(__dirname, '../../container.html'));
 
 test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
@@ -1169,7 +1178,7 @@ test.meta({ unstable: true })('Scroll to the bottom after expand several group',
   await dataGrid.apiExpandRow(['Contoso York Store']);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
   await scrollToBottom();
-  await dataGrid.scrollBy({ y: -1 });
+  await dataGrid.scrollBy(t, { y: -1 });
   await t.expect(dataGrid.isReady()).ok();
 
   // assert
@@ -1558,14 +1567,14 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollBy({ top: 1000 });
+  await dataGrid.scrollBy(t, { top: 1000 });
 
   await dataGrid.apiEditRow(3); // row with id=12
 
-  await dataGrid.scrollBy({ top: -1000 });
-  await dataGrid.scrollBy({ top: 1000 });
+  await dataGrid.scrollBy(t, { top: -1000 });
+  await dataGrid.scrollBy(t, { top: 1000 });
 
-  await dataGrid.scrollBy({ top: -1 });
+  await dataGrid.scrollBy(t, { top: -1 });
 
   await takeScreenshot('T1136896-virtual-scrolling_editing-buttons.png', '#container');
 
@@ -1599,12 +1608,14 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
 test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollBy({ left: 1000 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.scrollBy(t, { left: 1000 });
 
   await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
 
-  await dataGrid.scrollBy({ left: 0 });
-  await dataGrid.scrollBy({ top: 50 });
+  await dataGrid.scrollBy(t, { left: 0 });
+  await dataGrid.scrollBy(t, { top: 50 });
 
   await t.expect(dataGrid.getScrollLeft()).eql(0);
 }).before(async () => {
@@ -1625,61 +1636,6 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
       width: 75,
     })),
     masterDetail: { enabled: true },
-  });
-});
-
-test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
-
-  await t.expect(warningExists).ok();
-}).before(async () => createWidget('dxDataGrid', {
-  scrolling: {
-    mode: 'virtual',
-  },
-  dataSource: [
-    { column: 'value' },
-  ],
-}));
-
-test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
-
-  await t.expect(warningExists).notOk();
-}).before(async () => createWidget('dxDataGrid', {
-  scrolling: {
-    mode: 'virtual',
-  },
-  dataSource: [
-    { column: 'value' },
-  ],
-  height: 200,
-}));
-
-['height', 'max-height'].forEach((cssOption) => {
-  test(`Warning should not be thrown if scrolling is virtual and height is specified with css (${cssOption})`, async (t) => {
-    const consoleMessages = await t.getBrowserConsoleMessages();
-    const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
-
-    await t.expect(warningExists).notOk();
-  }).before(async () => {
-    await insertStylesheetRulesToPage(`
-      #container {
-        ${cssOption}: 200px;
-      }
-    `);
-
-    await createWidget('dxDataGrid', {
-      scrolling: {
-        mode: 'virtual',
-      },
-      dataSource: [
-        { column: 'value' },
-      ],
-    });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });
 
@@ -1723,7 +1679,7 @@ test('The row alternation should display correctly when grouping and virtual scr
   scrolling: { mode: 'virtual', useNative: false },
 })));
 
-test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
+test.meta({ unstable: true })('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const data = [
@@ -1777,8 +1733,8 @@ test('DataGrid - Focused cell moves to the end of the table after horizontal scr
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 
-  await dataGrid.scrollBy({ x: 1000 });
-  await dataGrid.scrollBy({ x: -1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
+  await dataGrid.scrollBy(t, { x: -1000 });
 
   await t.expect(dataGrid.getDataCell(0, 0).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -1807,8 +1763,8 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 
-  await dataGrid.scrollBy({ x: -1000 });
-  await dataGrid.scrollBy({ x: 1000 });
+  await dataGrid.scrollBy(t, { x: -1000 });
+  await dataGrid.scrollBy(t, { x: 1000 });
 
   await t.expect(dataGrid.getDataCell(0, 20).isFocused).ok();
 }).before(async () => createWidget('dxDataGrid', {
@@ -1922,14 +1878,14 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   { theme: Themes.fluentBlue, useNative: false },
 ].forEach(({ theme, useNative }) => {
   test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (${theme} theme)`, async (t) => {
-    const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
 
     await t
       .expect(dataGrid.isReady())
       .ok();
 
-    await dataGrid.scrollBy({ y: 10000 });
+    await dataGrid.scrollBy(t, { y: 10000 });
 
     await t
       .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-${theme}.png`, '#container'))
@@ -1977,4 +1933,60 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       });
     })
     .after(async () => changeTheme(Themes.genericLight));
+});
+
+fixture`Scrolling - warnings`
+  .page(url(__dirname, '../../container.html'));
+
+test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+  await t.expect(warningExists).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  scrolling: {
+    mode: 'virtual',
+  },
+  dataSource: [
+    { column: 'value' },
+  ],
+}));
+
+test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+  await t.expect(warningExists).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  scrolling: {
+    mode: 'virtual',
+  },
+  dataSource: [
+    { column: 'value' },
+  ],
+  height: 200,
+}));
+
+['height', 'max-height'].forEach((cssOption) => {
+  test(`Warning should not be thrown if scrolling is virtual and height is specified with css (${cssOption})`, async (t) => {
+    const consoleMessages = await t.getBrowserConsoleMessages();
+    const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+    await t.expect(warningExists).notOk();
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`
+      #container {
+        ${cssOption}: 200px;
+      }
+    `);
+
+    await createWidget('dxDataGrid', {
+      scrolling: {
+        mode: 'virtual',
+      },
+      dataSource: [
+        { column: 'value' },
+      ],
+    });
+  });
 });

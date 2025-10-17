@@ -170,8 +170,6 @@ test('Textbox with buttons container', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Textbox with buttons container.png');
 
-  await removeStylesheetRulesFromPage();
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

@@ -2,7 +2,8 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`Treelist - Editing`.page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Treelist - Editing`
+  .page(url(__dirname, '../../container.html'));
 
 // T1247158
 test('TreeList - Insertafterkey doesn\'t work on children nodes', async (t) => {
