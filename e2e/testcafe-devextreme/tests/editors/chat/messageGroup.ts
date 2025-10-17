@@ -6,16 +6,16 @@ import {
   generateMessages,
   getLongText,
 } from './data';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { appendElementTo, insertStylesheetRulesToPage, setStyleAttribute } from '../../helpers/domUtils';
-import asyncForEach from '../../helpers/asyncForEach';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { appendElementTo, insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
+import asyncForEach from '../../../helpers/asyncForEach';
 
 const AVATAR_SELECTOR = '.dx-avatar';
 
 fixture.disablePageReloads`ChatMessageGroup`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Chat: messagegroup, avatar rendering', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
