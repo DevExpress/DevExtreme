@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { extend } from 'devextreme/core/utils/extend';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -113,8 +113,6 @@ test('Group header CSS should work with vertical grouping and long resource name
 }).before(async () => {
   await insertStylesheetRulesToPage(CELL_SIZE_CSS);
   await createScheduler({ currentView: 'Vertical Grouping' });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('Group header CSS should work with horizontal grouping and long resource names', async (t) => {
@@ -131,8 +129,6 @@ test('Group header CSS should work with horizontal grouping and long resource na
 }).before(async () => {
   await insertStylesheetRulesToPage(CELL_SIZE_CSS);
   await createScheduler({ currentView: 'Horizontal Grouping' });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('Group header CSS should work with group by date and long resource names', async (t) => {
@@ -149,8 +145,6 @@ test('Group header CSS should work with group by date and long resource names', 
 }).before(async () => {
   await insertStylesheetRulesToPage(CELL_SIZE_CSS);
   await createScheduler({ currentView: 'Group By Date', groupByDate: true });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('Group header CSS should work with agenda view and long resource names', async (t) => {
@@ -167,6 +161,4 @@ test('Group header CSS should work with agenda view and long resource names', as
 }).before(async () => {
   await insertStylesheetRulesToPage(CELL_SIZE_CSS);
   await createScheduler({ currentView: 'agenda' });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });

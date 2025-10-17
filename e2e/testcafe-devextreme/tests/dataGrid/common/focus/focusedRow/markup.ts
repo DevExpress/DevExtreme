@@ -4,7 +4,7 @@ import { changeTheme } from '../../../../../helpers/changeTheme';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { Themes } from '../../../../../helpers/themes';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Focused row - markup`
   .page(url(__dirname, '../../../../container.html'));
@@ -143,6 +143,5 @@ fixture.disablePageReloads`Focused row - markup`
     });
   }).after(async () => {
     await changeTheme(Themes.genericLight);
-    await removeStylesheetRulesFromPage();
   });
 });

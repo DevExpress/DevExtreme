@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler header`
   .page(url(__dirname, '../../../container.html'));
@@ -182,6 +182,4 @@ test('Scheduler: maintain layout after horizontal scroll (T1306971)', async (t) 
     crossScrollingEnabled: true,
     width: 500,
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });

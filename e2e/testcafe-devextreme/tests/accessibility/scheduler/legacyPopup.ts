@@ -1,10 +1,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import { a11yCheck } from '../../../../helpers/accessibility/utils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture.disablePageReloads`a11y - popup`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Scheduler - Popup`
+  .page(url(__dirname, '../../container.html'));
 
 const checkOptions = {
   rules: {

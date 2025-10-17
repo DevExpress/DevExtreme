@@ -97,11 +97,7 @@ safeSizeTest('Check popup height with no found data option', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
-
-  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-});
+}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
 safeSizeTest('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -114,23 +110,19 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
-
-  return createWidget('dxLookup', {
-    dataSource: {
-      load() {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([1, 2, 3]);
-          }, 5000);
-        });
-      },
+}, [300, 400]).before(async () => createWidget('dxLookup', {
+  dataSource: {
+    load() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([1, 2, 3]);
+        }, 5000);
+      });
     },
-    valueExpr: 'id',
-    displayExpr: 'text',
-  });
-});
+  },
+  valueExpr: 'id',
+  displayExpr: 'text',
+}));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
