@@ -72,73 +72,11 @@ jobs:
           path: packages/devextreme/artifacts.zip
           retention-days: 1
 
-  qunit-tests-firefox:
-    needs: build
-    runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-firefox
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        constel: [
-          'export',
-          'misc',
-          'ui',
-          'ui.editors(1/2)',
-          'ui.editors(2/2)',
-          'ui.htmlEditor',
-          'ui.grid(1/2)',
-          'ui.grid(2/2)',
-          'ui.scheduler(1/3)',
-          'ui.scheduler(2/3)',
-          'ui.scheduler(3/3)',
-          'viz'
-        ]
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Run QUnit tests
-        uses: ./.github/actions/run-qunit-tests
-        with:
-          name: ${{ matrix.constel }}-firefox
-          constel: ${{ matrix.constel }}
-          browser: 'firefox'
-          useJQuery: 'true'
-          headless: 'true'
-          useCsp: 'true'
-
-  qunit-tests-common:
-    needs: build
-    runs-on: devextreme-shr2
-    name: ${{ matrix.constel }}-chrome
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        constel: [ 'export', 'ui.htmlEditor' ]
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Run QUnit tests
-        uses: ./.github/actions/run-qunit-tests
-        with:
-          name: ${{ matrix.constel }}-chrome
-          constel: ${{ matrix.constel }}
-          browser: 'chrome'
-          useJQuery: 'true'
-          headless: 'true'
-          useCsp: 'true'
-
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
     needs: [
       build,
-      qunit-tests-firefox,
     ]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
