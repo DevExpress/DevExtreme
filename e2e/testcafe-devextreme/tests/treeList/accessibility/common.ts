@@ -2,8 +2,8 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Themes } from '../../../helpers/themes';
-import { changeTheme } from '../../../helpers/changeTheme';
+// import { Themes } from '../../../helpers/themes';
+// import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`Testing with axe`
   .page(url(__dirname, '../../container.html'));
@@ -28,54 +28,41 @@ function getData(rowCount: number): Record<string, any>[] {
   return data;
 }
 
-[
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
-].forEach((theme) => {
-  const a11yCheckConfig = theme === Themes.genericLight ? {} : {
-    runOnly: 'color-contrast',
-  };
+// visual: generic.light
+// visual: generic.dark
+// visual: material.blue.light
+// visual: material.blue.dark
+test('Search panel, filter panel, pager and selection', async (t) => {
+  const treeList = new TreeList(TREE_LIST_SELECTOR);
 
-  test(`Search panel, filter panel, pager and selection in ${theme}`, async (t) => {
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+  await t
+    .expect(treeList.isReady())
+    .ok();
 
-    await t
-      .expect(treeList.isReady())
-      .ok();
-
-    await a11yCheck(t, a11yCheckConfig, TREE_LIST_SELECTOR);
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxTreeList', {
-      dataSource: getData(40),
-      keyExpr: 'id',
-      parentIdExpr: 'parentId',
-      rootValue: -1,
-      autoExpandAll: true,
-      paging: {
-        enabled: true,
-        pageSize: 5,
-      },
-      scrolling: {
-        mode: 'standard',
-      },
-      selection: {
-        mode: 'multiple',
-      },
-      searchPanel: {
-        visible: true,
-      },
-      columns: [
-        'id',
-        'parentId',
-        'field_1',
-        'field_2',
-      ],
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
-});
+  await a11yCheck(t, {}, TREE_LIST_SELECTOR);
+}).before(async () => createWidget('dxTreeList', {
+  dataSource: getData(40),
+  keyExpr: 'id',
+  parentIdExpr: 'parentId',
+  rootValue: -1,
+  autoExpandAll: true,
+  paging: {
+    enabled: true,
+    pageSize: 5,
+  },
+  scrolling: {
+    mode: 'standard',
+  },
+  selection: {
+    mode: 'multiple',
+  },
+  searchPanel: {
+    visible: true,
+  },
+  columns: [
+    'id',
+    'parentId',
+    'field_1',
+    'field_2',
+  ],
+}));
