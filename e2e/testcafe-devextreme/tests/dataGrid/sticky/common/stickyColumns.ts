@@ -2,8 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction, Selector } from 'testcafe';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
-import { Themes } from '../../../../helpers/themes';
-import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import { defaultConfig } from '../helpers/data';
@@ -55,114 +53,153 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   },
 }));
 
-[
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-  Themes.genericGreenMist,
-].forEach((theme) => {
-  safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-    const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+// visual: generic.greenMist.light
+safeSizeTest(`Header hover should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
 
-    await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.isReady()).ok();
 
-    await t.hover(headerCell.element);
+  await t.hover(headerCell.element);
 
-    await t.expect(headerCell.isHovered()).ok();
+  await t.expect(headerCell.isHovered()).ok();
 
-    await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
+  await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(generic.light).png`, dataGrid.element);
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [900, 800])
-    .before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        dataSource: getData(20, 15),
-        columnWidth: 100,
-        columnAutoWidth: true,
-        customizeColumns: (columns) => {
-          columns[5].fixed = true;
-          columns[5].fixedPosition = 'left';
-          columns[6].fixed = true;
-          columns[6].fixedPosition = 'left';
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800])
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(20, 15),
+      columnWidth: 100,
+      columnAutoWidth: true,
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'left';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'left';
 
-          columns[8].fixed = true;
-          columns[8].fixedPosition = 'right';
-          columns[9].fixed = true;
-          columns[9].fixedPosition = 'right';
-        },
-      });
-    })
-    .after(async (t) => {
-      await t.hover(Selector('body'));
-      await changeTheme(Themes.genericLight);
+        columns[8].fixed = true;
+        columns[8].fixedPosition = 'right';
+        columns[9].fixed = true;
+        columns[9].fixedPosition = 'right';
+      },
     });
-
-  test.meta({ unstable: true })(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-    const dataRow = dataGrid.getDataRow(1);
-
-    await t.expect(dataGrid.isReady()).ok();
-
-    await t.hover(dataRow.element);
-
-    await t.expect(dataRow.isHovered).ok();
-
-    await takeScreenshot(`datagrid_row_hover_with_fixed_columns_(${theme}).png`, dataGrid.element);
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
   })
-    .before(async () => {
-      await changeTheme(theme);
-      await createWidget('dxDataGrid', {
-        dataSource: getData(20, 15),
-        columnWidth: 100,
-        columnAutoWidth: true,
-        hoverStateEnabled: true,
-        customizeColumns: (columns) => {
-          columns[5].fixed = true;
-          columns[5].fixedPosition = 'left';
-          columns[6].fixed = true;
-          columns[6].fixedPosition = 'left';
+  .after(async (t) => {
+    await t.hover(Selector('body'));
+  });
 
-          columns[8].fixed = true;
-          columns[8].fixedPosition = 'right';
-          columns[9].fixed = true;
-          columns[9].fixedPosition = 'right';
-        },
-      });
-    })
-    .after(async (t) => {
-      await t.hover(Selector('body'));
-      await changeTheme(Themes.genericLight);
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+// visual: generic.greenMist.light
+test.meta({ unstable: true })(`Row hover should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const dataRow = dataGrid.getDataRow(1);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await t.hover(dataRow.element);
+
+  await t.expect(dataRow.isHovered).ok();
+
+  await takeScreenshot(`datagrid_row_hover_with_fixed_columns_(generic.light).png`, dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+})
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(20, 15),
+      columnWidth: 100,
+      columnAutoWidth: true,
+      hoverStateEnabled: true,
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'left';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'left';
+
+        columns[8].fixed = true;
+        columns[8].fixedPosition = 'right';
+        columns[9].fixed = true;
+        columns[9].fixedPosition = 'right';
+      },
     });
+  })
+  .after(async (t) => {
+    await t.hover(Selector('body'));
+  });
 
-  safeSizeTest(`Alternating rows should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+// visual: generic.greenMist.light
+safeSizeTest(`Alternating rows should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await takeScreenshot(`datagrid_row_alt_with_fixed_columns_(generic.light).png`, dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800])
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(20, 15),
+      columnWidth: 100,
+      columnAutoWidth: true,
+      rowAlternationEnabled: true,
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'left';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'left';
+
+        columns[8].fixed = true;
+        columns[8].fixedPosition = 'right';
+        columns[9].fixed = true;
+        columns[9].fixedPosition = 'right';
+      },
+    });
+  });
+
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+[0.9, 1.25, 1.5].forEach((zoom) => {
+  safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (generic.light theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await takeScreenshot(`datagrid_row_alt_with_fixed_columns_(${theme}).png`, dataGrid.element);
+    await takeScreenshot(`fixed_columns_with_${zoom * 100}%_zoom_(generic.light).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, [900, 800])
     .before(async () => {
-      await changeTheme(theme);
+      await ClientFunction((zoomValue: number) => {
+        $('body').css('zoom', zoomValue);
+      })(zoom);
       await createWidget('dxDataGrid', {
         dataSource: getData(20, 15),
         columnWidth: 100,
         columnAutoWidth: true,
-        rowAlternationEnabled: true,
         customizeColumns: (columns) => {
           columns[5].fixed = true;
           columns[5].fixedPosition = 'left';
@@ -177,57 +214,10 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
       });
     })
     .after(async () => {
-      await changeTheme(Themes.genericLight);
+      await ClientFunction(() => {
+        $('body').css('zoom', '');
+      })();
     });
-});
-
-[
-  Themes.genericLight,
-  Themes.materialBlue,
-  Themes.fluentBlue,
-].forEach((theme) => {
-  [0.9, 1.25, 1.5].forEach((zoom) => {
-    safeSizeTest(`Fixed columns should display correctly at ${zoom * 100}% zoom (${theme} theme)`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-
-      await t.expect(dataGrid.isReady()).ok();
-
-      await takeScreenshot(`fixed_columns_with_${zoom * 100}%_zoom_(${theme}).png`, dataGrid.element);
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }, [900, 800])
-      .before(async () => {
-        await ClientFunction((zoomValue: number) => {
-          $('body').css('zoom', zoomValue);
-        })(zoom);
-        await changeTheme(theme);
-        await createWidget('dxDataGrid', {
-          dataSource: getData(20, 15),
-          columnWidth: 100,
-          columnAutoWidth: true,
-          customizeColumns: (columns) => {
-            columns[5].fixed = true;
-            columns[5].fixedPosition = 'left';
-            columns[6].fixed = true;
-            columns[6].fixedPosition = 'left';
-
-            columns[8].fixed = true;
-            columns[8].fixedPosition = 'right';
-            columns[9].fixed = true;
-            columns[9].fixedPosition = 'right';
-          },
-        });
-      })
-      .after(async () => {
-        await ClientFunction(() => {
-          $('body').css('zoom', '');
-        })();
-        await changeTheme(Themes.genericLight);
-      });
-  });
 });
 
 safeSizeTest('The grid should display correctly when there is no data and there are fixed columns (T1269088)', async (t) => {
