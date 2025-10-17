@@ -155,7 +155,13 @@ function findNodeById(nodes: Node[], id: string): Node | null {
   }
   return null;
 }
-function moveNode(fromNode: Node, toNode: Node | null, fromItems: DriveItem[], toItems: any[], isDropInsideItem: boolean) {
+function moveNode(
+  fromNode: Node,
+  toNode: Node | null,
+  fromItems: DriveItem[],
+  toItems: any[],
+  isDropInsideItem: boolean
+) {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
 

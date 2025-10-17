@@ -23,7 +23,7 @@ import type { DxPieChartTypes } from 'devextreme-vue/pie-chart';
 
 defineProps<{
   info: DxPieChartTypes.PointInfo
-}>()
+}>();
 
 const getImagePath = (
   point: DxPieChartTypes.PointInfo['point'],

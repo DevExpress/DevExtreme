@@ -159,7 +159,12 @@ function findNodeById(nodes: Node[], id: string): Node | null {
   }
   return null;
 }
-function moveNode(fromNode: Node, toNode: Node | null, fromItems: DriveItem[], toItems: DriveItem[], isDropInsideItem: boolean) {
+function moveNode(
+  fromNode: Node, toNode: Node | null,
+  fromItems: DriveItem[],
+  toItems: DriveItem[],
+  isDropInsideItem: boolean,
+) {
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray
     ?.findIndex((item) => item.id === fromNode.itemData?.id) || -1;

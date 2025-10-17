@@ -1,11 +1,11 @@
 export const coordLinesData: {
   type: string;
-  features: Array<{
+  features: {
     geometry: {
       type: string;
       coordinates: number[][];
     };
-  }>;
+  }[];
 } = {
   type: 'FeatureCollection',
   features: [],

@@ -57,7 +57,12 @@ import DxChart, {
 import { DataSource } from 'devextreme-vue/common/data';
 import 'whatwg-fetch';
 
-type AjaxArgs = { startVisible: string; endVisible: string; startBound?: string; endBound?: string };
+type AjaxArgs = {
+  startVisible: string;
+  endVisible: string;
+  startBound?: string;
+  endBound?: string;
+};
 
 const HALFDAY = 43200000;
 const chart = ref();
@@ -103,7 +108,10 @@ function onVisualRangeChanged(): void {
   }
 }
 
-function uploadDataByVisualRange({ startValue, endValue }: { startValue: Date; endValue: Date }, component: any): void {
+function uploadDataByVisualRange(
+  { startValue, endValue }: { startValue: Date; endValue: Date },
+  component: any,
+): void {
   const dataSource = component.getDataSource();
   const ajaxArgs: AjaxArgs = {
     startVisible: getDateString(startValue),
