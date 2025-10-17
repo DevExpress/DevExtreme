@@ -18,15 +18,6 @@ const {
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 const isFocusingOnCaretChange = ios || mac;
 
-// const isElementInBody = (element: Element): boolean => {
-//   const body = domAdapter.getBody();
-
-//   const isElementItselfInBody = body.contains(element);
-//   const isHostElementInBody = body.contains((element.getRootNode() as ShadowRoot).host);
-
-//   return isElementItselfInBody || isHostElementInBody;
-// };
-
 const getCaret = (input: HTMLInputElement): CaretRange => {
   let range: CaretRange = {
     start: 0,
@@ -52,10 +43,6 @@ export const setCaret = (
   input: HTMLInputElement,
   selection: CaretRange,
 ): void => {
-  // if (!isElementInBody(input)) {
-  //   return;
-  // }
-
   try {
     input.selectionStart = selection.start;
     input.selectionEnd = selection.end;
