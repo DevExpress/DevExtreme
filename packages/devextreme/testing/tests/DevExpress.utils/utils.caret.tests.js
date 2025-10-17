@@ -28,15 +28,52 @@ testModule('caret', () => {
         assert.deepEqual(caret($input), caretPosition, 'caret position set correctly');
     });
 
-    test('T341277 - an exception if element is not in document', function(assert) {
+    test('setCaret should not be called if input is not in document (T341277)', function(assert) {
         const caretPosition = { start: 1, end: 2 };
         const input = document.createElement('input');
+        input.value = '12345';
+
+        // Mock getActiveElement to return null (not the input)
+        // This simulates the input not being focused/active
+        const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(null);
+
+        try {
+            const result = caret(input, caretPosition);
+
+            // When input is not active and isFocusingOnCaretChange is true (iOS/Mac),
+            // the function should return early (undefined) without setting caret
+            assert.strictEqual(result, undefined, 'caret() returned undefined (early exit)');
+
+            // Verify that selectionStart/End were not changed
+            // For a detached element without being set, these should be 0
+            assert.strictEqual(input.selectionStart, 0, 'selectionStart was not set');
+            assert.strictEqual(input.selectionEnd, 0, 'selectionEnd was not set');
+        } catch(e) {
+            assert.ok(false, `exception is thrown: ${e}`);
+        } finally {
+            getActiveElementStub.restore();
+        }
+    });
+
+    test('Exception has not been fired if input.selectionStart and input.selectionEnd fire exeptions (T341277)', function(assert) {
+        const caretPosition = { start: 1, end: 2 };
+        const input = {
+            set selectionStart(_value) {
+                throw 'You can not get a selection';
+            },
+            set selectionEnd(_value) {
+                throw 'You can not get a selection';
+            }
+        };
+        const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(input);
 
         try {
             caret(input, caretPosition);
             assert.ok(true, 'exception is not thrown');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
+        } finally {
+            getActiveElementStub.restore();
         }
     });
 

@@ -31,16 +31,24 @@ const getCaret = (input: HTMLInputElement): CaretRange => {
   return range;
 };
 
-const setCaret = (input, position) => {
+/**
+ * вторая часть выражения была добавлена во время поддержки ShodowDOM
+ * первая часть выражения судя по-всему была добавлена для того,
+ * чтобы запревентить input === undefined, НО
+ * input может существовать, но не быть приаттаченным к DOM
+ * да даже если input не принадлежит к этому body, то какая может быть опасность?
+ */
+
+export const setCaret = (input, position) => {
   // const body = domAdapter.getBody();
   // if (!body.contains(input) && !body.contains(input.getRootNode().host)) {
   //   return;
   // }
 
-  try {
-    input.selectionStart = position.start;
-    input.selectionEnd = position.end;
-  } catch (e) { /* empty */ }
+  // try {
+  input.selectionStart = position.start;
+  input.selectionEnd = position.end;
+  // } catch (e) { /* empty */ }
 };
 // @ts-expect-error
 
