@@ -17,7 +17,9 @@ const SELECTORS = {
   invisibleState: '.dx-state-invisible',
   viewSwitcher: '.dx-scheduler-view-switcher',
   viewSwitcherButton: '.dx-scheduler-view-switcher .dx-button',
+  viewButtonInDropdown: '.dx-scheduler-view-switcher-dropdown-button-content .dx-list-item',
 };
+const defaultViews = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'] as const;
 
 const createScheduler = (options: SchedulerProperties): Promise<{
   $container: dxElementWrapper; instance: Scheduler;
@@ -95,5 +97,61 @@ describe('ViewSwitcher', () => {
 
       expect(buttonText.text()).toBe('День');
     });
+  });
+
+  it('currentView should equal type or name if it is set by config on switch, useDropDownViewSwitcher=false', async () => {
+    const changes: string[] = [];
+    await createScheduler({
+      dataSource: [],
+      views: [...defaultViews, { name: 'Week 2', type: 'week' }],
+      currentView: 'timelineDay',
+      width: 10_000,
+      useDropDownViewSwitcher: false,
+      onOptionChanged: (e) => {
+        if (e.name === 'currentView') {
+          const currentView = e.component.option('currentView');
+          changes.push(currentView ?? '');
+        }
+      },
+    });
+
+    const buttons = document.querySelectorAll(SELECTORS.viewSwitcherButton);
+    buttons.forEach((button) => {
+      (button as HTMLButtonElement).click();
+    });
+
+    expect(changes).toEqual([
+      ...defaultViews,
+      'Week 2',
+    ]);
+  });
+
+  it('currentView should equal type or name if it is set by config on switch, useDropDownViewSwitcher=true', async () => {
+    const changes: string[] = [];
+    await createScheduler({
+      dataSource: [],
+      views: [...defaultViews, { name: 'Week 2', type: 'week' }],
+      currentView: 'timelineDay',
+      useDropDownViewSwitcher: true,
+      onOptionChanged: (e) => {
+        if (e.name === 'currentView') {
+          const currentView = e.component.option('currentView');
+          changes.push(currentView ?? '');
+        }
+      },
+    });
+
+    const dropdown = document.querySelector(SELECTORS.viewSwitcherButton) as HTMLButtonElement;
+    dropdown.click();
+    const buttons = document.querySelectorAll(SELECTORS.viewButtonInDropdown);
+    buttons.forEach((button) => {
+      (button as HTMLButtonElement).click();
+      dropdown.click();
+    });
+
+    expect(changes).toEqual([
+      ...defaultViews,
+      'Week 2',
+    ]);
   });
 });
