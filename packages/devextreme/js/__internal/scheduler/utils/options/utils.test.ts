@@ -38,7 +38,6 @@ describe('views utils', () => {
         output: {
           groupOrientation: 'horizontal',
           intervalCount: 1,
-          name: 'Day',
           type: 'day',
         },
       },
@@ -51,7 +50,6 @@ describe('views utils', () => {
         output: {
           agendaDuration: 7,
           intervalCount: 1,
-          name: 'Agenda',
           type: 'agenda',
         },
       },
@@ -66,55 +64,46 @@ describe('views utils', () => {
           {
             groupOrientation: 'horizontal',
             intervalCount: 1,
-            name: 'Day',
             type: 'day',
           },
           {
             groupOrientation: 'horizontal',
             intervalCount: 1,
-            name: 'Week',
             type: 'week',
           },
           {
             groupOrientation: 'horizontal',
             intervalCount: 1,
-            name: 'Work Week',
             type: 'workWeek',
           },
           {
             groupOrientation: 'horizontal',
             intervalCount: 1,
-            name: 'Month',
             type: 'month',
           },
           {
             groupOrientation: 'vertical',
             intervalCount: 1,
-            name: 'Timeline Day',
             type: 'timelineDay',
           },
           {
             groupOrientation: 'vertical',
             intervalCount: 1,
-            name: 'Timeline Week',
             type: 'timelineWeek',
           },
           {
             groupOrientation: 'vertical',
             intervalCount: 1,
-            name: 'Timeline Work Week',
             type: 'timelineWorkWeek',
           },
           {
             groupOrientation: 'vertical',
             intervalCount: 1,
-            name: 'Timeline Month',
             type: 'timelineMonth',
           },
           {
             agendaDuration: 7,
             intervalCount: 1,
-            name: 'Agenda',
             type: 'agenda',
           },
         ][index],
@@ -129,7 +118,6 @@ describe('views utils', () => {
       expect(getCurrentView('agenda', ['agenda'])).toEqual({
         agendaDuration: 7,
         intervalCount: 1,
-        name: 'Agenda',
         type: 'agenda',
       });
     });
@@ -138,7 +126,6 @@ describe('views utils', () => {
       expect(getCurrentView('agenda', ['month', { type: 'agenda' }])).toEqual({
         agendaDuration: 7,
         intervalCount: 1,
-        name: 'Agenda',
         type: 'agenda',
       });
     });
@@ -156,7 +143,6 @@ describe('views utils', () => {
       expect(getCurrentView('agenda', ['month'])).toEqual({
         agendaDuration: 7,
         intervalCount: 1,
-        name: 'Agenda',
         type: 'agenda',
       });
     });
@@ -165,7 +151,6 @@ describe('views utils', () => {
       expect(getCurrentView('agendaShort', ['month', 'agenda'])).toEqual({
         groupOrientation: 'horizontal',
         intervalCount: 1,
-        name: 'Month',
         type: 'month',
       });
     });
@@ -178,7 +163,6 @@ describe('views utils', () => {
       } as any])).toEqual({
         groupOrientation: 'horizontal',
         intervalCount: 1,
-        name: 'Day',
         type: 'day',
       });
     });
