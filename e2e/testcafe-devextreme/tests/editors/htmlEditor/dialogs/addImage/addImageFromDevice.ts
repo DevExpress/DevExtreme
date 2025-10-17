@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 const TEST_IMAGE_PATH_2 = './images/test-image-2.png';
 
 fixture`HtmlEditor - upload image from device`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Image from device should be inserted', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
