@@ -24,7 +24,6 @@ import type {
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
 import { VIEWS } from '../../utils/options/constants_view';
-import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DAY_HOURS = 24;
@@ -197,19 +196,17 @@ export const getHeaderCellText = (
 };
 
 export const isVerticalGroupingApplied = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && Boolean(groups.length);
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION && groupCount > 0;
 
-// TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
-  groupLeafs: GroupLeaf[],
+  groupCount: number,
   groupOrientation: GroupOrientation,
 ): number => {
-  const isVerticalGrouping = isVerticalGroupingApplied(groupLeafs, groupOrientation);
+  const isVerticalGrouping = isVerticalGroupingApplied(groupCount, groupOrientation);
 
-  return isVerticalGrouping ? 1 : groupLeafs.length;
+  return isVerticalGrouping ? 1 : groupCount;
 };
 
 const TIMELINE_VIEWS = [
@@ -275,10 +272,10 @@ export const getViewStartByOptions = (
 };
 
 export const calculateIsGroupedAllDayPanel = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation: GroupOrientation,
   isAllDayPanelVisible: boolean,
-): boolean => isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
+): boolean => isVerticalGroupingApplied(groupCount, groupOrientation) && isAllDayPanelVisible;
 
 export const calculateViewStartDate = (
   startDateOption: Date | undefined,
@@ -355,16 +352,16 @@ export const getCalculatedFirstDayOfWeek = (
   : dateLocalization.firstDayOfWeekIndex());
 
 export const isHorizontalGroupingApplied = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && Boolean(groups.length);
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && groupCount > 0;
 
 export const isGroupingByDate = (
-  groups: unknown[],
+  groupCount: number,
   groupOrientation: GroupOrientation | undefined,
   groupByDate: boolean,
 ): boolean => {
-  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+  const isHorizontalGrouping = isHorizontalGroupingApplied(groupCount, groupOrientation);
 
   return groupByDate && isHorizontalGrouping;
 };
