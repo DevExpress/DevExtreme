@@ -57,7 +57,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-safeSizeTest(`Header hover should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+safeSizeTest('Header hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(13);
@@ -68,7 +68,7 @@ safeSizeTest(`Header hover should display correctly when there are fixed columns
 
   await t.expect(headerCell.isHovered()).ok();
 
-  await takeScreenshot(`datagrid_header_hover_with_fixed_columns_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid_header_hover_with_fixed_columns_(generic.light).png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())
@@ -100,7 +100,7 @@ safeSizeTest(`Header hover should display correctly when there are fixed columns
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-test.meta({ unstable: true })(`Row hover should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+test.meta({ unstable: true })('Row hover should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const dataRow = dataGrid.getDataRow(1);
@@ -111,7 +111,7 @@ test.meta({ unstable: true })(`Row hover should display correctly when there are
 
   await t.expect(dataRow.isHovered).ok();
 
-  await takeScreenshot(`datagrid_row_hover_with_fixed_columns_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid_row_hover_with_fixed_columns_(generic.light).png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())
@@ -144,13 +144,13 @@ test.meta({ unstable: true })(`Row hover should display correctly when there are
 // visual: material.blue.light
 // visual: fluent.blue.light
 // visual: generic.greenMist.light
-safeSizeTest(`Alternating rows should display correctly when there are fixed columns (generic.light theme)`, async (t) => {
+safeSizeTest('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot(`datagrid_row_alt_with_fixed_columns_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid_row_alt_with_fixed_columns_(generic.light).png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())

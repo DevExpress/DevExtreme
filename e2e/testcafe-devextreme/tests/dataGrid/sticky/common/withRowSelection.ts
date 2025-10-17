@@ -13,17 +13,17 @@ fixture.disablePageReloads`Sticky columns - Row Selection`
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest(`The selected row should be displayed correctly when there are sticky columns (generic.light theme)`, async (t) => {
+safeSizeTest('The selected row should be displayed correctly when there are sticky columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t.expect(dataGrid.isReady()).ok();
 
-  await takeScreenshot(`row_selection_with_sticky_columns_1_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('row_selection_with_sticky_columns_1_(generic.light).png', dataGrid.element);
 
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot(`row_selection_with_sticky_columns_2_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('row_selection_with_sticky_columns_2_(generic.light).png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())

@@ -27,7 +27,7 @@ test('DataGrid - Contrast between icons in the Filter Row menu and their backgro
     .expect(filterMenu.element.exists)
     .ok();
   await t
-    .expect(await takeScreenshot(`T1257970-datagrid-menu-icon-contrast-generic.light.png`, dataGrid.element))
+    .expect(await takeScreenshot('T1257970-datagrid-menu-icon-contrast-generic.light.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -68,7 +68,7 @@ test('DataGrid - Filter icon should remain visible when it\'s focused', async (t
     .ok();
 
   await t
-    .expect(await takeScreenshot(`T1286345-datagrid-menu-icon-when-focused-generic.light.png`, dataGrid.element))
+    .expect(await takeScreenshot('T1286345-datagrid-menu-icon-when-focused-generic.light.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

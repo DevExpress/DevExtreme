@@ -181,14 +181,14 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest(`The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)`, async (t) => {
+safeSizeTest('The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
   await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 200, 35);
 
   await t
-    .expect(await takeScreenshot(`header_row_highlight_with_fixed_columns_(generic.light).png`, dataGrid.element))
+    .expect(await takeScreenshot('header_row_highlight_with_fixed_columns_(generic.light).png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

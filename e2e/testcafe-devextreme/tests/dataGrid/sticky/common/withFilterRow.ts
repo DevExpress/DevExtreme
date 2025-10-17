@@ -13,7 +13,7 @@ fixture.disablePageReloads`Sticky columns - Filter row`
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest(`Filter row with sticky columns (generic.light theme)`, async (t) => {
+safeSizeTest('Filter row with sticky columns (generic.light theme)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -21,11 +21,11 @@ safeSizeTest(`Filter row with sticky columns (generic.light theme)`, async (t) =
 
   await t.click(dataGrid.getHeaders().getFilterRow().getFilterCell(1).element);
 
-  await takeScreenshot(`filter_row_with_sticky_columns_1_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('filter_row_with_sticky_columns_1_(generic.light).png', dataGrid.element);
 
   await dataGrid.scrollTo(t, { x: 10000 });
 
-  await takeScreenshot(`filter_row_with_sticky_columns_2_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('filter_row_with_sticky_columns_2_(generic.light).png', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())

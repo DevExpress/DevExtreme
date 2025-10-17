@@ -1971,5 +1971,5 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
           ],
         },
       });
-    })
+    });
 });

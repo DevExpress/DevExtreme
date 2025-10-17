@@ -10,71 +10,69 @@ fixture.disablePageReloads`Master detail`
 
 // visual: material.blue.light
 // visual: generic.light
-test(`Checkbox align right in masterdetail (T1045321) generic.light`, async (t) => {
+test('Checkbox align right in masterdetail (T1045321) generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // assert
   await t
-    .expect(await takeScreenshot(`T1045321-generic.light.png`, '#container'))
+    .expect(await takeScreenshot('T1045321-generic.light.png', '#container'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: [{
-      ID: 1,
-      Prefix: 'Mr.',
-    }],
-    keyExpr: 'ID',
-    showBorders: true,
-    selection: {
-      mode: 'multiple',
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    Prefix: 'Mr.',
+  }],
+  keyExpr: 'ID',
+  showBorders: true,
+  selection: {
+    mode: 'multiple',
+  },
+  columns: [
+    {
+      dataField: 'Prefix',
+      caption: 'Title',
+      width: 400,
     },
-    columns: [
-      {
-        dataField: 'Prefix',
-        caption: 'Title',
-        width: 400,
-      },
-    ],
-    masterDetail: {
-      autoExpandAll: true,
-      enabled: true,
-      template(container) {
-        ($('<div>') as any)
-          .dxTreeList({
-            columnAutoWidth: true,
-            showBorders: true,
-            selection: {
-              mode: 'multiple',
+  ],
+  masterDetail: {
+    autoExpandAll: true,
+    enabled: true,
+    template(container) {
+      ($('<div>') as any)
+        .dxTreeList({
+          columnAutoWidth: true,
+          showBorders: true,
+          selection: {
+            mode: 'multiple',
+          },
+          dataSource: [{
+            ID: 1,
+            Title: 'CEO',
+            Hire_Date: '1995-01-15',
+          }],
+          rootValue: -1,
+          keyExpr: 'ID',
+          parentIdExpr: 'Head_ID',
+          columns: [
+            {
+              dataField: 'Title',
+              caption: 'Position',
+              width: 200,
             },
-            dataSource: [{
-              ID: 1,
-              Title: 'CEO',
-              Hire_Date: '1995-01-15',
-            }],
-            rootValue: -1,
-            keyExpr: 'ID',
-            parentIdExpr: 'Head_ID',
-            columns: [
-              {
-                dataField: 'Title',
-                caption: 'Position',
-                width: 200,
-              },
-              {
-                dataField: 'Hire_Date',
-                dataType: 'date',
-                width: 200,
-              },
-            ],
-            showRowLines: true,
-          })
-          .appendTo(container);
-      },
+            {
+              dataField: 'Hire_Date',
+              dataType: 'date',
+              width: 200,
+            },
+          ],
+          showRowLines: true,
+        })
+        .appendTo(container);
     },
-  });
-});
+  },
+}));
 
 // T1113525
 test('pageSizeSelector has correct layout inside masterDetail', async (t) => {

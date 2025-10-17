@@ -23,28 +23,26 @@ fixture.disablePageReloads`Column chooser`
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    return createWidget('dxDataGrid', {
-      dataSource: getData(20, 3),
-      height: 400,
-      showBorders: true,
-      columns: [{
-        dataField: 'field_0',
-        dataType: 'string',
-      }, {
-        dataField: 'field_1',
-        dataType: 'string',
-      }, {
-        dataField: 'field_2',
-        dataType: 'string',
-        visible: false,
-      }],
-      columnChooser: {
-        enabled: true,
-        mode,
-      },
-    });
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(20, 3),
+    height: 400,
+    showBorders: true,
+    columns: [{
+      dataField: 'field_0',
+      dataType: 'string',
+    }, {
+      dataField: 'field_1',
+      dataType: 'string',
+    }, {
+      dataField: 'field_2',
+      dataType: 'string',
+      visible: false,
+    }],
+    columnChooser: {
+      enabled: true,
+      mode,
+    },
+  }));
 });
 
 test('Column chooser checkboxes should be aligned correctly with plain structure', async (t) => {

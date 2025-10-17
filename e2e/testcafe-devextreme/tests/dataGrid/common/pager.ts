@@ -135,13 +135,13 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
 // visual: generic.light.compact
 // visual: material.blue.light
 // visual: material.blue.light.compact
-safeSizeTest(`Compact pager in the generic.light theme (T1057735)`, async (t) => {
+safeSizeTest('Compact pager in the generic.light theme (T1057735)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pagerElement = dataGrid.getPager().element;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot(`compact-pager-in-the-generic-light-theme.png`, pagerElement))
+    .expect(await takeScreenshot('compact-pager-in-the-generic-light-theme.png', pagerElement))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

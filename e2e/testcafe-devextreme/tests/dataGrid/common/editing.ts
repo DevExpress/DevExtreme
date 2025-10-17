@@ -2781,7 +2781,7 @@ test('DataGrid - ColorBox in DataGrid causes input value to appear behind color 
   await t.click(dataGrid.getDataCell(0, 0).element);
 
   await t
-    .expect(await takeScreenshot(`grid-form-editing-with-color-box_(generic.light)`, dataGrid.element))
+    .expect(await takeScreenshot('grid-form-editing-with-color-box_(generic.light)', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -2803,7 +2803,7 @@ test('DataGrid - ColorBox in DataGrid causes input value to appear behind color 
         }
       },
     });
-  })
+  });
 
 // T1291087
 test('The editCellTemplate template should not be called after clicking on a cell in another row and column', async (t) => {

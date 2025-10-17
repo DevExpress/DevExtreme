@@ -10,7 +10,7 @@ fixture.disablePageReloads`Focused row - markup`
 // TODO: Enable multi-theming testcafe run in the future.
 // visual: generic.light
 // visual: material.blue.light
-test(`markup - generic.light`, async (t) => {
+test('markup - generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const firstCell = dataGrid.getDataCell(0, 0);
@@ -25,7 +25,7 @@ test(`markup - generic.light`, async (t) => {
 
   await t.click(thirdCell.element);
 
-  await takeScreenshot(`focused-row_markup (generic.light).png`, dataGrid.element);
+  await takeScreenshot('focused-row_markup (generic.light).png', dataGrid.element);
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -63,14 +63,14 @@ test(`markup - generic.light`, async (t) => {
 
 // visual: generic.light
 // visual: material.blue.light
-test(`Invalid cells in a focused row should have the correct background color (T1197268) - generic.light`, async (t) => {
+test('Invalid cells in a focused row should have the correct background color (T1197268) - generic.light', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   // act
   await dataGrid.apiAddRow();
   await dataGrid.apiSaveEditData();
   // assert
-  await takeScreenshot(`focused-row-invalid-cells (generic.light).png`, dataGrid.element);
+  await takeScreenshot('focused-row-invalid-cells (generic.light).png', dataGrid.element);
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
@@ -101,17 +101,16 @@ test(`Invalid cells in a focused row should have the correct background color (T
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-test(`Link should not have background color in generic.light (T1282624)`, async (t) => {
+test('Link should not have background color in generic.light (T1282624)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
   // assert
-  await takeScreenshot(`focused-row-link-background (generic.light).png`, dataGrid.element);
+  await takeScreenshot('focused-row-link-background (generic.light).png', dataGrid.element);
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-
   await insertStylesheetRulesToPage('#container tr.dx-row-focused td { background-color: red }');
 
   await createWidget('dxDataGrid', {

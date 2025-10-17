@@ -15,7 +15,7 @@ const ROW_INDEX = 1;
 // visual: material.blue.light.compact
 // visual: fluent.blue.light
 // visual: fluent.blue.light.compact
-test(`When DataGrid has fixed column row height should not change when marked as deleted - generic.light`, async (t) => {
+test('When DataGrid has fixed column row height should not change when marked as deleted - generic.light', async (t) => {
   // Arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -42,7 +42,7 @@ test(`When DataGrid has fixed column row height should not change when marked as
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot(`datagrid-deleted-row-height-row-lines-and-fixed-column (generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid-deleted-row-height-row-lines-and-fixed-column (generic.light).png', dataGrid.element);
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -76,7 +76,7 @@ test(`When DataGrid has fixed column row height should not change when marked as
 // visual: material.blue.light.compact
 // visual: fluent.blue.light
 // visual: fluent.blue.light.compact
-test(`When DataGrid doesn't have fixed column row height should not change when marked as deleted - generic.light`, async (t) => {
+test('When DataGrid doesn\'t have fixed column row height should not change when marked as deleted - generic.light', async (t) => {
   // Arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -103,12 +103,11 @@ test(`When DataGrid doesn't have fixed column row height should not change when 
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot(`datagrid-deleted-row-height-row-lines-and-no-fixed-column (generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid-deleted-row-height-row-lines-and-no-fixed-column (generic.light).png', dataGrid.element);
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-
   await createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'John Smith' },
@@ -136,7 +135,7 @@ test(`When DataGrid doesn't have fixed column row height should not change when 
 // visual: material.blue.light.compact
 // visual: fluent.blue.light
 // visual: fluent.blue.light.compact
-test(`When not showing row lines and not fixed any column row height should not change when marked as deleted - generic.light`, async (t) => {
+test('When not showing row lines and not fixed any column row height should not change when marked as deleted - generic.light', async (t) => {
   // Arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -163,7 +162,7 @@ test(`When not showing row lines and not fixed any column row height should not 
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot(`datagrid-deleted-row-height-no-row-lines-and-no-fixed-column (generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid-deleted-row-height-no-row-lines-and-no-fixed-column (generic.light).png', dataGrid.element);
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -195,7 +194,7 @@ test(`When not showing row lines and not fixed any column row height should not 
 // visual: material.blue.light.compact
 // visual: fluent.blue.light
 // visual: fluent.blue.light.compact
-test(`When not showing row lines and DataGrid has any column row height should not change when marked as deleted - generic.light`, async (t) => {
+test('When not showing row lines and DataGrid has any column row height should not change when marked as deleted - generic.light', async (t) => {
   // Arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -222,7 +221,7 @@ test(`When not showing row lines and DataGrid has any column row height should n
     .eql(initialRowHeight, 'Row height should not change when marked as deleted');
 
   // Take a screenshot for visual verification
-  await takeScreenshot(`datagrid-deleted-row-height-no-row-lines-and-fixed-column (generic.light).png`, dataGrid.element);
+  await takeScreenshot('datagrid-deleted-row-height-no-row-lines-and-fixed-column (generic.light).png', dataGrid.element);
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());

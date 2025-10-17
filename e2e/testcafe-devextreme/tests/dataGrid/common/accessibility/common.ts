@@ -18,7 +18,7 @@ const a11yCheckConfig = {};
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Grid without data`, async (t) => {
+test('Grid without data', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -26,11 +26,9 @@ test(`Grid without data`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: [],
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -38,7 +36,7 @@ test(`Grid without data`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Sorting and group panel`, async (t) => {
+test('Sorting and group panel', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -46,30 +44,28 @@ test(`Sorting and group panel`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    groupPanel: {
-      visible: true,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    {
+      dataField: 'field_3',
+      sortOrder: 'asc',
+      sortIndex: 0,
     },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      {
-        dataField: 'field_3',
-        sortOrder: 'asc',
-        sortIndex: 0,
-      },
-      {
-        dataField: 'field_4',
-        sortOrder: 'desc',
-        sortIndex: 1,
-      },
-    ],
-  });
-});
+    {
+      dataField: 'field_4',
+      sortOrder: 'desc',
+      sortIndex: 1,
+    },
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -77,7 +73,7 @@ test(`Sorting and group panel`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Paging with displayMode is 'full'`, async (t) => {
+test('Paging with displayMode is \'full\'', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -85,31 +81,28 @@ test(`Paging with displayMode is 'full'`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(100, 5),
-    keyExpr: 'field_0',
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-    paging: {
-      pageSize: 5,
-    },
-    pager: {
-      visible: true,
-      allowedPageSizes: [5, 10, 'all'],
-      showPageSizeSelector: true,
-      showInfo: true,
-      showNavigationButtons: true,
-      displayMode: 'full',
-    },
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(100, 5),
+  keyExpr: 'field_0',
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+  paging: {
+    pageSize: 5,
+  },
+  pager: {
+    visible: true,
+    allowedPageSizes: [5, 10, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+    displayMode: 'full',
+  },
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -117,7 +110,7 @@ test(`Paging with displayMode is 'full'`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Paging with displayMode is 'compact'`, async (t) => {
+test('Paging with displayMode is \'compact\'', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -125,32 +118,28 @@ test(`Paging with displayMode is 'compact'`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(100, 5),
-    keyExpr: 'field_0',
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-    paging: {
-      pageSize: 5,
-    },
-    pager: {
-      visible: true,
-      allowedPageSizes: [5, 10, 'all'],
-      showPageSizeSelector: true,
-      showInfo: true,
-      showNavigationButtons: true,
-      displayMode: 'compact',
-    },
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(100, 5),
+  keyExpr: 'field_0',
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+  paging: {
+    pageSize: 5,
+  },
+  pager: {
+    visible: true,
+    allowedPageSizes: [5, 10, 'all'],
+    showPageSizeSelector: true,
+    showInfo: true,
+    showNavigationButtons: true,
+    displayMode: 'compact',
+  },
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -158,7 +147,7 @@ test(`Paging with displayMode is 'compact'`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Grouping and Summary`, async (t) => {
+test('Grouping and Summary', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -166,49 +155,45 @@ test(`Grouping and Summary`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(60, 5),
-    keyExpr: 'field_0',
-    columns: [
-      'field_0',
-      {
-        dataField: 'field_1',
-        groupIndex: 0,
-      },
-      {
-        dataField: 'field_2',
-        groupIndex: 1,
-      },
-      'field_3',
-      'field_4',
-    ],
-    paging: {
-      pageSize: 10,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(60, 5),
+  keyExpr: 'field_0',
+  columns: [
+    'field_0',
+    {
+      dataField: 'field_1',
+      groupIndex: 0,
     },
-    groupPanel: {
-      visible: true,
+    {
+      dataField: 'field_2',
+      groupIndex: 1,
     },
-    summary: {
-      groupItems: [{
-        column: 'field_3',
-        summaryType: 'count',
-        showInGroupFooter: true,
-      }, {
-        column: 'field_4',
-        summaryType: 'count',
-        showInGroupFooter: false,
-        alignByColumn: true,
-      }],
-      totalItems: [{
-        column: 'field_0',
-        summaryType: 'count',
-      }],
-    },
-  });
-});
+    'field_3',
+    'field_4',
+  ],
+  paging: {
+    pageSize: 10,
+  },
+  groupPanel: {
+    visible: true,
+  },
+  summary: {
+    groupItems: [{
+      column: 'field_3',
+      summaryType: 'count',
+      showInGroupFooter: true,
+    }, {
+      column: 'field_4',
+      summaryType: 'count',
+      showInGroupFooter: false,
+      alignByColumn: true,
+    }],
+    totalItems: [{
+      column: 'field_0',
+      summaryType: 'count',
+    }],
+  },
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -216,7 +201,7 @@ test(`Grouping and Summary`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Filter row - filter menu`, async (t) => {
+test('Filter row - filter menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
@@ -241,30 +226,28 @@ test(`Filter row - filter menu`, async (t) => {
       'aria-command-name': { enabled: true },
     },
   });
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5).map((item, index) => ({ ...item, index })),
-    keyExpr: 'field_0',
-    filterRow: {
-      visible: true,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5).map((item, index) => ({ ...item, index })),
+  keyExpr: 'field_0',
+  filterRow: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+    {
+      dataField: 'index',
+      dataType: 'number',
+      selectedFilterOperation: 'between',
+      filterValue: [1, 7],
     },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-      {
-        dataField: 'index',
-        dataType: 'number',
-        selectedFilterOperation: 'between',
-        filterValue: [1, 7],
-      },
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -272,7 +255,7 @@ test(`Filter row - filter menu`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Header filter - filter menu`, async (t) => {
+test('Header filter - filter menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
@@ -292,24 +275,22 @@ test(`Header filter - filter menu`, async (t) => {
 
   // act
   await a11yCheck(t);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    headerFilter: {
-      visible: true,
-    },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  headerFilter: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -317,7 +298,7 @@ test(`Header filter - filter menu`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Filter panel`, async (t) => {
+test('Filter panel', async (t) => {
 // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
@@ -331,27 +312,25 @@ test(`Filter panel`, async (t) => {
 
   // act
   await a11yCheck(t);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    filterPanel: {
-      visible: true,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  filterPanel: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    {
+      dataField: 'field_1',
+      filterValue: 'val',
     },
-    columns: [
-      'field_0',
-      {
-        dataField: 'field_1',
-        filterValue: 'val',
-      },
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -359,7 +338,7 @@ test(`Filter panel`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Filter panel - popup with filter builder`, async (t) => {
+test('Filter panel - popup with filter builder', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const filterPanel = dataGrid.getFilterPanel();
@@ -386,24 +365,22 @@ test(`Filter panel - popup with filter builder`, async (t) => {
       'color-contrast': { enabled: false },
     },
   });
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    filterPanel: {
-      visible: true,
-    },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  filterPanel: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -411,7 +388,7 @@ test(`Filter panel - popup with filter builder`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Search panel`, async (t) => {
+test('Search panel', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -419,22 +396,20 @@ test(`Search panel`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    searchPanel: {
-      visible: true,
-    },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  searchPanel: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -442,7 +417,7 @@ test(`Search panel`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Search panel - highlight`, async (t) => {
+test('Search panel - highlight', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -456,23 +431,21 @@ test(`Search panel - highlight`, async (t) => {
       'color-contrast': { enabled: false },
     },
   }, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    searchPanel: {
-      visible: true,
-      text: 'val',
-    },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  searchPanel: {
+    visible: true,
+    text: 'val',
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -480,7 +453,7 @@ test(`Search panel - highlight`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Selection`, async (t) => {
+test('Selection', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   await t
@@ -492,24 +465,22 @@ test(`Selection`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    selection: {
-      mode: 'multiple',
-      showCheckBoxesMode: 'always',
-    },
-    selectedRowKeys: ['val_1_0', 'val_2_0'],
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  selection: {
+    mode: 'multiple',
+    showCheckBoxesMode: 'always',
+  },
+  selectedRowKeys: ['val_1_0', 'val_2_0'],
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -517,7 +488,7 @@ test(`Selection`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Focused row`, async (t) => {
+test('Focused row', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
@@ -528,21 +499,19 @@ test(`Focused row`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    focusedRowEnabled: true,
-    focusedRowKey: 'val_1_0',
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  focusedRowEnabled: true,
+  focusedRowKey: 'val_1_0',
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -550,7 +519,7 @@ test(`Focused row`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Fixed columns`, async (t) => {
+test('Fixed columns', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
   // assert
@@ -559,39 +528,37 @@ test(`Fixed columns`, async (t) => {
     .ok();
 
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 7),
-    keyExpr: 'field_0',
-    columnFixing: {
-      // @ts-expect-error private option
-      legacyMode: true,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 7),
+  keyExpr: 'field_0',
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
+  columns: [
+    {
+      dataField: 'field_0',
+      fixed: true,
     },
-    columns: [
-      {
-        dataField: 'field_0',
-        fixed: true,
-      },
-      {
-        dataField: 'field_1',
-        fixed: true,
-      },
-      'field_2',
-      'field_3',
-      'field_4',
-      {
-        dataField: 'field_5',
-        fixed: true,
-        fixedPosition: 'right',
-      },
-      {
-        dataField: 'field_6',
-        fixed: true,
-        fixedPosition: 'right',
-      },
-    ],
-  });
-});
+    {
+      dataField: 'field_1',
+      fixed: true,
+    },
+    'field_2',
+    'field_3',
+    'field_4',
+    {
+      dataField: 'field_5',
+      fixed: true,
+      fixedPosition: 'right',
+    },
+    {
+      dataField: 'field_6',
+      fixed: true,
+      fixedPosition: 'right',
+    },
+  ],
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -599,7 +566,7 @@ test(`Fixed columns`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Column chooser with the 'dragAndDrop' mode`, async (t) => {
+test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -620,33 +587,31 @@ test(`Column chooser with the 'dragAndDrop' mode`, async (t) => {
 
   // act, assert
   await a11yCheck(t, a11yCheckConfig);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 7),
-    keyExpr: 'field_0',
-    columnChooser: {
-      enabled: true,
-      mode: 'dragAndDrop',
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 7),
+  keyExpr: 'field_0',
+  columnChooser: {
+    enabled: true,
+    mode: 'dragAndDrop',
+  },
+  columns: [
+    {
+      dataField: 'field_0',
+      visible: false,
     },
-    columns: [
-      {
-        dataField: 'field_0',
-        visible: false,
-      },
-      {
-        dataField: 'field_1',
-        visible: false,
-      },
-      'field_2',
-      'field_3',
-      'field_4',
-      'field_5',
-      'field_6',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+    {
+      dataField: 'field_1',
+      visible: false,
+    },
+    'field_2',
+    'field_3',
+    'field_4',
+    'field_5',
+    'field_6',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -654,7 +619,7 @@ test(`Column chooser with the 'dragAndDrop' mode`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Column chooser with the 'select' mode`, async (t) => {
+test('Column chooser with the \'select\' mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -681,33 +646,31 @@ test(`Column chooser with the 'select' mode`, async (t) => {
       'scrollable-region-focusable': { enabled: false },
     },
   });
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 7),
-    keyExpr: 'field_0',
-    columnChooser: {
-      enabled: true,
-      mode: 'select',
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 7),
+  keyExpr: 'field_0',
+  columnChooser: {
+    enabled: true,
+    mode: 'select',
+  },
+  columns: [
+    {
+      dataField: 'field_0',
+      visible: false,
     },
-    columns: [
-      {
-        dataField: 'field_0',
-        visible: false,
-      },
-      {
-        dataField: 'field_1',
-        visible: false,
-      },
-      'field_2',
-      'field_3',
-      'field_4',
-      'field_5',
-      'field_6',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+    {
+      dataField: 'field_1',
+      visible: false,
+    },
+    'field_2',
+    'field_3',
+    'field_4',
+    'field_5',
+    'field_6',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -715,7 +678,7 @@ test(`Column chooser with the 'select' mode`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Empty column chooser`, async (t) => {
+test('Empty column chooser', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const columnChooser = dataGrid.getColumnChooser();
@@ -742,24 +705,22 @@ test(`Empty column chooser`, async (t) => {
       'aria-required-children': { enabled: false },
     },
   });
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    columnChooser: {
-      enabled: true,
-    },
-    columns: [
-      'field_0',
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  columnChooser: {
+    enabled: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -779,27 +740,25 @@ test(`Empty column chooser`, async (t) => {
 
     // act, assert
     await a11yCheck(t);
-  }).before(async () => {
-    return createWidget('dxDataGrid', {
-      dataSource: getData(10, 5),
-      keyExpr: 'field_0',
-      editing: {
-        mode: 'row',
-        allowUpdating: true,
-        allowDeleting: true,
-        allowAdding: true,
-        useIcons,
-      },
-      columns: [
-        'field_1',
-        'field_2',
-        'field_3',
-        'field_4',
-      ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(10, 5),
+    keyExpr: 'field_0',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+      allowAdding: true,
+      useIcons,
+    },
+    columns: [
+      'field_1',
+      'field_2',
+      'field_3',
+      'field_4',
+    ],
+  }, DATA_GRID_SELECTOR, {
+    disableFxAnimation: true,
+  }));
 
   test(`Row in edit state with useIcons=${useIcons}`, async (t) => {
     // arrange
@@ -820,28 +779,25 @@ test(`Empty column chooser`, async (t) => {
 
     // act, assert
     await a11yCheck(t);
-  }).before(async () => {
-
-    return createWidget('dxDataGrid', {
-      dataSource: getData(10, 5),
-      keyExpr: 'field_0',
-      editing: {
-        mode: 'row',
-        allowUpdating: true,
-        allowDeleting: true,
-        allowAdding: true,
-        useIcons,
-      },
-      columns: [
-        'field_1',
-        'field_2',
-        'field_3',
-        'field_4',
-      ],
-    }, DATA_GRID_SELECTOR, {
-      disableFxAnimation: true,
-    });
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(10, 5),
+    keyExpr: 'field_0',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+      allowAdding: true,
+      useIcons,
+    },
+    columns: [
+      'field_1',
+      'field_2',
+      'field_3',
+      'field_4',
+    ],
+  }, DATA_GRID_SELECTOR, {
+    disableFxAnimation: true,
+  }));
 });
 
 // visual: generic.light
@@ -850,7 +806,7 @@ test(`Empty column chooser`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Row editing mode - confirm delete message`, async (t) => {
+test('Row editing mode - confirm delete message', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const isDialogOpened = dataGrid.getDialog().exists;
@@ -873,26 +829,24 @@ test(`Row editing mode - confirm delete message`, async (t) => {
     ...a11yCheckConfig,
     runOnly: '',
   });
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'row',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -900,7 +854,7 @@ test(`Row editing mode - confirm delete message`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Batch editing mode - edit cell`, async (t) => {
+test('Batch editing mode - edit cell', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -919,27 +873,24 @@ test(`Batch editing mode - edit cell`, async (t) => {
 
   // act, assert
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'batch',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -947,7 +898,7 @@ test(`Batch editing mode - edit cell`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Batch editing mode - modified cell`, async (t) => {
+test('Batch editing mode - modified cell', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -966,26 +917,24 @@ test(`Batch editing mode - modified cell`, async (t) => {
 
   // act, assert
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'batch',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -993,7 +942,7 @@ test(`Batch editing mode - modified cell`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Batch editing mode - delete row`, async (t) => {
+test('Batch editing mode - delete row', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1012,27 +961,24 @@ test(`Batch editing mode - delete row`, async (t) => {
 
   // act, assert
   await a11yCheck(t);
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'batch',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1040,7 +986,7 @@ test(`Batch editing mode - delete row`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Form editing mode`, async (t) => {
+test('Form editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1059,26 +1005,24 @@ test(`Form editing mode`, async (t) => {
 
   // act, assert
   await a11yCheck(t);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'form',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'form',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1086,7 +1030,7 @@ test(`Form editing mode`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Popup editing mode`, async (t) => {
+test('Popup editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1105,28 +1049,24 @@ test(`Popup editing mode`, async (t) => {
 
   // act, assert
   await a11yCheck(t);
-  
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'popup',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1134,7 +1074,7 @@ test(`Popup editing mode`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Validation in cell editing mode`, async (t) => {
+test('Validation in cell editing mode', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1157,29 +1097,27 @@ test(`Validation in cell editing mode`, async (t) => {
 
   // act, assert
   await a11yCheck(t);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'cell',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    {
+      dataField: 'field_1',
+      validationRules: [{ type: 'required' }],
     },
-    columns: [
-      {
-        dataField: 'field_1',
-        validationRules: [{ type: 'required' }],
-      },
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1187,7 +1125,7 @@ test(`Validation in cell editing mode`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Error row`, async (t) => {
+test('Error row', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1215,30 +1153,28 @@ test(`Error row`, async (t) => {
 
   // act, assert
   await a11yCheck(t);
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    editing: {
-      mode: 'row',
-      allowUpdating: true,
-      allowDeleting: true,
-      allowAdding: true,
-    },
-    columns: [
-      'field_1',
-      'field_2',
-      'field_3',
-      'field_4',
-    ],
-    onRowValidating(e) {
-      e.isValid = false;
-      e.errorText = 'Test';
-    },
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+    allowAdding: true,
+  },
+  columns: [
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+  onRowValidating(e) {
+    e.isValid = false;
+    e.errorText = 'Test';
+  },
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1246,7 +1182,7 @@ test(`Error row`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Adaptability`, async (t) => {
+test('Adaptability', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1265,18 +1201,15 @@ test(`Adaptability`, async (t) => {
 
   // act, assert
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 10),
-    keyExpr: 'field_0',
-    columnWidth: 100,
-    width: 800,
-    columnHidingEnabled: true,
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 10),
+  keyExpr: 'field_0',
+  columnWidth: 100,
+  width: 800,
+  columnHidingEnabled: true,
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1284,7 +1217,7 @@ test(`Adaptability`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Row drag and drop`, async (t) => {
+test('Row drag and drop', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -1295,19 +1228,16 @@ test(`Row drag and drop`, async (t) => {
 
   // act, assert
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    rowDragging: {
-      allowReordering: true,
-      showDragIcons: true,
-    },
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  rowDragging: {
+    allowReordering: true,
+    showDragIcons: true,
+  },
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1315,7 +1245,7 @@ test(`Row drag and drop`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Export`, async (t) => {
+test('Export', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const headerPanel = dataGrid.getHeaderPanel();
@@ -1339,20 +1269,17 @@ test(`Export`, async (t) => {
     ...a11yCheckConfig,
     runOnly: '',
   });
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    export: {
-      enabled: true,
-      formats: ['xlsx', 'pdf'],
-      allowExportSelectedData: true,
-    },
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  export: {
+    enabled: true,
+    formats: ['xlsx', 'pdf'],
+    allowExportSelectedData: true,
+  },
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));
 
 // visual: generic.light
 // visual: generic.dark
@@ -1360,7 +1287,7 @@ test(`Export`, async (t) => {
 // visual: material.blue.dark
 // visual: fluent.blue.light
 // visual: fluent.blue.dark
-test(`Context menu`, async (t) => {
+test('Context menu', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const contextMenu = dataGrid.getContextMenu();
@@ -1387,20 +1314,17 @@ test(`Context menu`, async (t) => {
       region: { enabled: false },
     },
   });
-}).before(async () => {
-
-  return createWidget('dxDataGrid', {
-    dataSource: getData(10, 5),
-    keyExpr: 'field_0',
-    columnFixing: {
-      enabled: true,
-      // @ts-expect-error private option
-      legacyMode: true,
-    },
-    sorting: {
-      mode: 'multiple',
-    },
-  }, DATA_GRID_SELECTOR, {
-    disableFxAnimation: true,
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  columnFixing: {
+    enabled: true,
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
+  sorting: {
+    mode: 'multiple',
+  },
+}, DATA_GRID_SELECTOR, {
+  disableFxAnimation: true,
+}));

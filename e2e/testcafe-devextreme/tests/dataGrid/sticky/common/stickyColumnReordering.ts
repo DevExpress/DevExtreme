@@ -221,7 +221,7 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-safeSizeTest(`Check the draggable source column while moving the fixed column on the right side (generic.light theme)`, async (t) => {
+safeSizeTest('Check the draggable source column while moving the fixed column on the right side (generic.light theme)', async (t) => {
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -231,7 +231,7 @@ safeSizeTest(`Check the draggable source column while moving the fixed column on
   // act
   await dataGrid.moveHeader(24, -200, 5, true);
 
-  await takeScreenshot(`draggable_source_column_with_fixed_columns_(generic.light).png`, dataGrid.element);
+  await takeScreenshot('draggable_source_column_with_fixed_columns_(generic.light).png', dataGrid.element);
 
   // assert
   await t
@@ -239,7 +239,6 @@ safeSizeTest(`Check the draggable source column while moving the fixed column on
     .ok(compareResults.errorMessages());
 }, [1000, 800])
   .before(async () => {
-
     await createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       columnAutoWidth: true,

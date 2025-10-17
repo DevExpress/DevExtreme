@@ -63,7 +63,7 @@ test('DataGrid - Validation message gets cut off in Fluent and Material themes (
   await t.click(dataCellEditLink);
   await t.pressKey('backspace enter');
 
-  await testScreenshot(t, takeScreenshot, `Invalid-message-word-wrapping-generic.light`, { element: dataGrid.element });
+  await testScreenshot(t, takeScreenshot, 'Invalid-message-word-wrapping-generic.light', { element: dataGrid.element });
 
   await t
     .expect(compareResults.isValid())
