@@ -1,5 +1,5 @@
 const meta: { [key: string]: string } = {
-  '$base-font-family': "system-ui, -apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
+  '$base-font-family': "-apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
   '$base-accent': '#337ab7',
   '$accordion-title-color': '#337ab7',
   '$accordion-item-title-opened-bg': 'transparent',

@@ -77,7 +77,7 @@ const textStyles = {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': 'system-ui, -apple-system, blinkmacsystemfont, avenir next, avenir, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
+  'font-family': '-apple-system, blinkmacsystemfont, avenir next, avenir, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
   'font-wight': '600',
 };

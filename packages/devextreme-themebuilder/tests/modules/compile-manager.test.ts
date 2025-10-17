@@ -51,7 +51,7 @@ describe('Compile manager - integration test on test sass', () => {
       outColorScheme: 'test-theme',
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  font-family: system-ui, -apple-system,blinkmacsystemfont,avenir next,avenir,segoe ui,helvetica neue,adwaita sans,cantarell,ubuntu,roboto,noto,helvetica,arial,sans-serif;
+  font-family: -apple-system,blinkmacsystemfont,avenir next,avenir,segoe ui,helvetica neue,adwaita sans,cantarell,ubuntu,roboto,noto,helvetica,arial,sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -69,7 +69,7 @@ describe('Compile manager - integration test on test sass', () => {
       assetsBasePath: 'base-path',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  font-family: system-ui, -apple-system,blinkmacsystemfont,avenir next,avenir,segoe ui,helvetica neue,adwaita sans,cantarell,ubuntu,roboto,noto,helvetica,arial,sans-serif;
+  font-family: -apple-system,blinkmacsystemfont,avenir next,avenir,segoe ui,helvetica neue,adwaita sans,cantarell,ubuntu,roboto,noto,helvetica,arial,sans-serif;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -88,7 +88,7 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        "$base-font-family": "system-ui, -apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
+        "$base-font-family": "-apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif",
         '$base-accent': '#337ab7',
       });
     });
@@ -100,7 +100,7 @@ describe('Compile manager - integration test on test sass', () => {
       noClean: true,
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  font-family: system-ui, -apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif;
+  font-family: -apple-system, blinkmacsystemfont, avenir next, avenir, segoe ui, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
