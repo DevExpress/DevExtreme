@@ -7,9 +7,6 @@ inputs:
     required: true
   constel:
     description: "Name of the test group"
-  browser:
-    description: "Name of the browser"
-    default: "chrome"
   useJQuery:
     description: "Indicates if jQuery should be used"
     default: "false"
@@ -48,29 +45,9 @@ runs:
 #        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Setup Chrome
-      if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome-headless-shell
       with:
         chrome-version: '133.0.6943.53'
-
-    - name: Setup Firefox profile
-      if: ${{ inputs.browser == 'firefox' }}
-      shell: bash
-      run: |
-        mkdir -p /tmp/firefox-profile
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
-
-    - name: Setup Firefox
-      if: ${{ inputs.browser == 'firefox' }}
-      id: setup-firefox
-      uses: browser-actions/setup-firefox@v1
-      with:
-        firefox-version: '122.0.1'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -123,7 +100,6 @@ runs:
       shell: bash
       env:
         CONSTEL: ${{ inputs.constel }}
-        BROWSER: ${{ inputs.browser }}
         JQUERY: ${{ inputs.useJQuery }}
         MOBILE_UA: ${{ inputs.userAgent }}
         SHADOW_DOM: ${{ inputs.useShadowDom }}
