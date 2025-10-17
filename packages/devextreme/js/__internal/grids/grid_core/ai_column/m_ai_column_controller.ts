@@ -48,8 +48,7 @@ export class AiColumnController extends Controller {
 
   private handleDataChanged(e) {
     const aiColumns = this.columnsController.getColumns()
-      .filter((col) => col.type === 'ai'
-        && col.ai.mode === 'auto');
+      .filter((col) => col.type === 'ai' && col.ai?.mode === 'auto');
     for (const col of aiColumns) {
       this.refreshAIColumnInternal(col.name);
     }
