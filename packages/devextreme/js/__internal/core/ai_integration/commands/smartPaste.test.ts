@@ -10,6 +10,8 @@ import type {
   RequestCallbacks,
   SmartPasteCommandParams,
   SmartPasteCommandResult,
+  SmartPasteFieldType,
+  SmartPasteResultFieldType,
 } from '@js/common/ai-integration';
 import { SmartPasteCommand } from '@ts/core/ai_integration/commands/smartPaste';
 import type { PromptData } from '@ts/core/ai_integration/core/prompt_manager';
@@ -74,10 +76,12 @@ describe('SmartPasteCommand', () => {
   });
 
   describe('parseResult', () => {
+    const fields = { fields: [{ name: 'Field1', format: 'text' }, { name: 'Field2', format: 'text' }] };
+
     it('should return the parsed result', () => {
       const response = 'Field1:::value1;;;Field2:::value2';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -93,7 +97,7 @@ describe('SmartPasteCommand', () => {
     it('should parse array values correctly', () => {
       const response = 'Field1:::value1:::value2;;;Field2:::value3:::value4:::value5';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [
         {
@@ -112,7 +116,7 @@ describe('SmartPasteCommand', () => {
     it('should not include an empty fields into parsed result', () => {
       const response = 'Field1:::value1;;;Field2:::';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -125,7 +129,7 @@ describe('SmartPasteCommand', () => {
     it('should process multiple delimiters and malformed field data correctly', () => {
       const response = 'Field1:::value1;;;;;;Field2';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [{
         name: 'Field1',
@@ -138,7 +142,7 @@ describe('SmartPasteCommand', () => {
     it('should trim string and array values in parseResult', () => {
       const response = 'Field1:::  value1  ;;;Field2:::  value2  ::: value3 ';
       // @ts-expect-error Access to protected property for a test
-      const result = command.parseResult(response);
+      const result = command.parseResult(response, fields);
 
       const expectedResult = [
         { name: 'Field1', value: 'value1' },
@@ -184,6 +188,180 @@ describe('SmartPasteCommand', () => {
 
       expect(typeof abort).toBe('function');
       expect(sendRequestSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('toTyped', () => {
+    const callToTyped = (
+      values: string[],
+      type?: SmartPasteFieldType,
+      fieldName?: string,
+    // @ts-expect-error Access to private static method for test
+    ): SmartPasteResultFieldType => SmartPasteCommand.toTyped(values, type, fieldName);
+
+    describe('Happy Path', () => {
+      it('should convert valid color', () => {
+        const result = callToTyped(['#ff0000'], 'color');
+        expect(result).toBe('#ff0000');
+      });
+
+      it('should convert valid boolean true', () => {
+        const result = callToTyped(['true'], 'boolean');
+        expect(result).toBe(true);
+      });
+
+      it('should convert valid boolean false', () => {
+        const result = callToTyped(['false'], 'boolean');
+        expect(result).toBe(false);
+      });
+
+      it('should convert valid string', () => {
+        const result = callToTyped(['test string'], 'string');
+        expect(result).toBe('test string');
+      });
+
+      it('should convert valid string array', () => {
+        const result = callToTyped(['item1', 'item2', 'item3'], 'stringArray');
+        expect(result).toEqual(['item1', 'item2', 'item3']);
+      });
+
+      it('should convert valid number', () => {
+        const result = callToTyped(['42.5'], 'number');
+        expect(result).toBe(42.5);
+      });
+
+      it('should convert valid number range', () => {
+        const result = callToTyped(['10', '20'], 'numberRange');
+        expect(result).toEqual([10, 20]);
+      });
+
+      it('should convert valid date', () => {
+        const result = callToTyped(['2024-01-15'], 'date');
+        expect(result).toEqual(new Date('2024-01-15'));
+      });
+
+      it('should convert valid date range', () => {
+        const result = callToTyped(['2024-01-15', '2024-01-20'], 'dateRange');
+        expect(result).toEqual([new Date('2024-01-15'), new Date('2024-01-20')]);
+      });
+    });
+
+    describe('Empty results', () => {
+      it.each<SmartPasteFieldType>([
+        'string',
+        'stringArray',
+        'color',
+        'boolean',
+        'number',
+        'numberRange',
+        'date',
+        'dateRange',
+      ])('should not throw for empty array when type=%s', (type) => {
+        expect(() => callToTyped([], type, 'testField')).not.toThrow();
+        expect(() => callToTyped([''], type, 'testField')).not.toThrow();
+        expect(callToTyped([], type, 'testField')).toBeUndefined();
+        expect(callToTyped([''], type, 'testField')).toBeUndefined();
+      });
+
+      it('should not throw for empty array when type is undefined', () => {
+        expect(() => callToTyped([], undefined, 'testField')).not.toThrow();
+      });
+    });
+
+    describe('Default values', () => {
+      it('should return default for undefined type with single value', () => {
+        const result = callToTyped(['single value']);
+        expect(result).toBe('single value');
+      });
+
+      it('should return default for undefined type with multiple values', () => {
+        const result = callToTyped(['value1', 'value2', 'value3']);
+        expect(result).toEqual(['value1', 'value2', 'value3']);
+      });
+
+      it('should return single value when single item in array for default type', () => {
+        const result = callToTyped(['single']);
+        expect(result).toBe('single');
+      });
+    });
+
+    describe('Exception handling', () => {
+      function buildErrorRegExp(value: unknown, field: string, type: string): RegExp {
+        function escapeRegExp(str: string): string {
+          return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        return new RegExp(
+          `E1064.*${
+            escapeRegExp(JSON.stringify(value))
+          }.*${
+            escapeRegExp(field)
+          }.*${
+            escapeRegExp(type)
+          }.*`,
+        );
+      }
+
+      const field = 'testField';
+      it('should throw error for invalid color', () => {
+        const value = ['invalid-color'];
+        expect(() => callToTyped(value, 'color', field))
+          .toThrow(buildErrorRegExp(value, field, 'color'));
+      });
+
+      it('should throw error for invalid boolean', () => {
+        const value = ['not-a-boolean'];
+        expect(() => callToTyped(value, 'boolean', field))
+          .toThrow(buildErrorRegExp(value, field, 'boolean'));
+      });
+
+      it('should throw error for invalid number', () => {
+        const value = ['not-a-number'];
+        expect(() => callToTyped(value, 'number', field))
+          .toThrow(buildErrorRegExp(value, field, 'number'));
+      });
+
+      it('should throw error when number range has single value', () => {
+        const value = ['10'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
+      });
+
+      it('should throw error when number range has more than 2 values', () => {
+        const value = ['10', '20', '30'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
+      });
+
+      it('should throw error when number range has invalid numbers', () => {
+        const value = ['10', 'invalid'];
+        expect(() => callToTyped(value, 'numberRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'number range'));
+      });
+
+      it('should throw error for invalid date', () => {
+        const value = ['invalid-date'];
+        expect(() => callToTyped(value, 'date', field))
+          .toThrow(buildErrorRegExp(value, field, 'date'));
+      });
+
+      it('should throw error when date range has single value', () => {
+        const value = ['2024-01-15'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
+      });
+
+      it('should throw error when date range has more than 2 values', () => {
+        const value = ['2024-01-15', '2024-01-20', '2024-01-25'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
+      });
+
+      it('should throw error when date range has invalid dates', () => {
+        const value = ['2024-01-15', 'invalid-date'];
+        expect(() => callToTyped(value, 'dateRange', field))
+          .toThrow(buildErrorRegExp(value, field, 'date range'));
+      });
     });
   });
 });

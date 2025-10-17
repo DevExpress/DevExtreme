@@ -24,7 +24,11 @@ import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent, EventInfo } from '@js/events';
+import type {
+  DxEvent,
+  EventInfo,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
@@ -53,8 +57,6 @@ export const DROP_DOWN_EDITOR_AFTER_FIELD_ADDON = 'dx-dropdowneditor-field-after
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 const isIOs = devices.current().platform === 'ios';
-
-type HideOnOutsideClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 
 export const DROP_DOWN_EDITOR_DEPRECATED_OPTIONS = {
   fieldTemplate: {
@@ -863,7 +865,7 @@ class DropDownEditor<
       shading: false,
       hideOnParentScroll: true,
       hideOnOutsideClick: (
-        e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+        e: DxEvent<PointerInteractionEvent>,
       ): boolean => this._closeOutsideDropDownHandler(e),
       animation: {
         show: {
@@ -987,7 +989,7 @@ class DropDownEditor<
     return positionSide;
   }
 
-  _closeOutsideDropDownHandler(event: HideOnOutsideClickEvent): boolean {
+  _closeOutsideDropDownHandler(event: DxEvent<PointerInteractionEvent>): boolean {
     const { target } = event;
 
     const $target = $(target);

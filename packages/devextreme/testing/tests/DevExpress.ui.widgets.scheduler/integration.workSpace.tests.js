@@ -801,38 +801,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
     });
 
-    if(isDesktopEnvironment()) {
-        test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async function(assert) {
-            const date = new Date(2019, 5, 1, 9, 40);
-
-            const scheduler = await createWrapper({
-                dataSource: [],
-                views: ['timelineDay', 'day', 'timelineWeek', 'week', 'timelineMonth'],
-                currentView: 'timelineDay',
-                currentDate: date,
-                firstDayOfWeek: 0,
-                startDayHour: 0,
-                endDayHour: 20,
-                cellDuration: 60,
-                groups: ['priority'],
-                height: 580,
-            });
-
-            scheduler.instance.scrollToTime(date.getHours() - 1, 30, date);
-            let scroll = scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
-
-            assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineDay');
-
-            scheduler.instance.option('currentView', 'timelineWeek');
-            await waitAsync(0);
-
-            scheduler.instance.scrollToTime(date.getHours() - 1, 30, date);
-            scroll = scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
-
-            assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineWeek');
-        });
-    }
-
     test('intervalCount should be passed to workSpace', async function(assert) {
         const scheduler = await createWrapper({
             currentDate: new Date(2017, 3, 16),

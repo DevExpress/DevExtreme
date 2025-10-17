@@ -115,19 +115,15 @@ test('Warning shouldn\'t be thrown in console in case currentView=\'agenda\' if 
   });
 });
 
-// TODO: In this test fixed incorrect behavior, after fixing it, test should be fall.
-// TODO: More details in T1100758 ticket
 test('Wrong behavior: editing recurrence appointment does not affect to appointment\'s data source(T1100758)', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.doubleClick(scheduler.getAppointment('Test').element);
   await t
-    .typeText(scheduler.appointmentPopup.subjectElement, 'Updated', { replace: true })
-    .click(scheduler.appointmentPopup.doneButton);
+    .typeText(scheduler.appointmentPopup.textEditor.element, 'Updated', { replace: true })
+    .click(scheduler.appointmentPopup.saveButton.element);
 
-  await t.expect(scheduler.getAppointment('Updated').element.exists).notOk();
-  // TODO: In correct behavior, expected assert is ok()
-  // TODO: await t.expect(scheduler.getAppointment('Updated').element.exists).ok();
+  await t.expect(scheduler.getAppointment('Updated').element.exists).ok();
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [{

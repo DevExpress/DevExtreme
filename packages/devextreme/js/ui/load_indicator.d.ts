@@ -2,7 +2,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import Widget, {
     WidgetOptions,
@@ -62,6 +62,7 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
      */
     indicatorSrc?: string;
 }
+
 /**
  * @docid
  * @inherits Widget

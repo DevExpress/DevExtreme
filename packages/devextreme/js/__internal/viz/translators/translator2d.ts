@@ -191,6 +191,7 @@ _Translator2d.prototype = {
           break;
         case 'semidiscrete':
           script = intervalTranslator;
+          // @ts-expect-error
           canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (dateUtils.addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
           break;
         case 'discrete':
@@ -541,8 +542,8 @@ _Translator2d.prototype = {
     let newMin = canvasOptions.rangeMinVisible.valueOf() - correction;
     let newMax = canvasOptions.rangeMaxVisible.valueOf() + correction;
 
-    newMin = isLogarithmic ? adjust(raiseToExt(newMin, canvasOptions.base)) : isDateTime ? new Date(newMin) : newMin;
-    newMax = isLogarithmic ? adjust(raiseToExt(newMax, canvasOptions.base)) : isDateTime ? new Date(newMax) : newMax;
+    newMin = (isLogarithmic ? adjust(raiseToExt(newMin, canvasOptions.base)) : isDateTime ? new Date(newMin) : newMin) as number;
+    newMax = (isLogarithmic ? adjust(raiseToExt(newMax, canvasOptions.base)) : isDateTime ? new Date(newMax) : newMax) as number;
 
     return {
       min: newMin,

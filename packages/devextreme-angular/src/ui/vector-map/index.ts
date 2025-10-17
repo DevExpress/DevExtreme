@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
@@ -90,14 +91,11 @@ import { DxoVectorMapTooltipModule } from 'devextreme-angular/ui/vector-map/nest
 import { DxoVectorMapTooltipBorderModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiLayerComponent } from 'devextreme-angular/ui/nested';
-import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiVectorMapAnnotationComponent } from 'devextreme-angular/ui/vector-map/nested';
-import { DxiVectorMapLayerComponent } from 'devextreme-angular/ui/vector-map/nested';
-import { DxiVectorMapLegendComponent } from 'devextreme-angular/ui/vector-map/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_layers,
+           PROPERTY_TOKEN_legends,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -119,6 +117,22 @@ import { DxiVectorMapLegendComponent } from 'devextreme-angular/ui/vector-map/ne
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_layers)
+    set _layersContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('layers', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_legends)
+    set _legendsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('legends', value);
+    }
+
     instance: DxVectorMap = null;
 
     /**
@@ -771,58 +785,6 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() zoomingEnabledChange: EventEmitter<boolean>;
-
-
-
-
-    @ContentChildren(DxiVectorMapAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiVectorMapAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiVectorMapAnnotationComponent');
-    }
-
-    @ContentChildren(DxiVectorMapLayerComponent)
-    get layersChildren(): QueryList<DxiVectorMapLayerComponent> {
-        return this._getOption('layers');
-    }
-    set layersChildren(value) {
-        this._setChildren('layers', value, 'DxiVectorMapLayerComponent');
-    }
-
-    @ContentChildren(DxiVectorMapLegendComponent)
-    get legendsChildren(): QueryList<DxiVectorMapLegendComponent> {
-        return this._getOption('legends');
-    }
-    set legendsChildren(value) {
-        this._setChildren('legends', value, 'DxiVectorMapLegendComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiLayerComponent)
-    get layersLegacyChildren(): QueryList<DxiLayerComponent> {
-        return this._getOption('layers');
-    }
-    set layersLegacyChildren(value) {
-        this._setChildren('layers', value, 'DxiLayerComponent');
-    }
-
-    @ContentChildren(DxiLegendComponent)
-    get legendsLegacyChildren(): QueryList<DxiLegendComponent> {
-        return this._getOption('legends');
-    }
-    set legendsLegacyChildren(value) {
-        this._setChildren('legends', value, 'DxiLegendComponent');
-    }
 
 
 

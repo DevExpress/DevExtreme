@@ -1,16 +1,15 @@
 $(() => {
   $('#simple-treeview').dxTreeView({
-    dataSource: new DevExpress.data.DataSource({
-      store: new DevExpress.data.ODataStore({
-        version: 2,
-        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
-      }),
+    dataSource: DevExpress.data.AspNet.createStore({
+      loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/TreeViewPlainData',
+      key: 'ID',
     }),
     dataStructure: 'plain',
-    keyExpr: 'Id',
-    displayExpr: 'Name',
+    keyExpr: 'ID',
+    displayExpr: 'Text',
     parentIdExpr: 'CategoryId',
     hasItemsExpr: 'IsGroup',
     virtualModeEnabled: true,
+    rootValue: null,
   });
 });

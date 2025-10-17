@@ -114,7 +114,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxAutocomplete from 'devextreme-vue/autocomplete';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSwitch from 'devextreme-vue/switch';
@@ -133,7 +133,7 @@ const displayExpr = ref('nameEn');
 const rtlEnabled = ref(false);
 const textValue = ref('text');
 
-function onLanguageChanged(args) {
+function onLanguageChanged(args: DxSelectBoxTypes.ValueChangedEvent) {
   const isRTL = args.value === languages[0];
 
   displayExpr.value = isRTL ? 'nameAr' : 'nameEn';

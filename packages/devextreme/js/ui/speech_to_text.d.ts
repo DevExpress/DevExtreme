@@ -3,7 +3,8 @@ import {
   NativeEventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-} from '../common/core/events';
+  InteractionEvent,
+} from '../events';
 
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import type { ButtonStyle, ButtonType } from './button';
@@ -72,7 +73,7 @@ export type CustomSpeechRecognizer = {
  * @type object
  * @inherits NativeEventInfo
  */
-export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
+export type StartClickEvent = NativeEventInfo<dxSpeechToText, InteractionEvent>;
 
 /**
  * @docid _ui_speech_to_text_StopClickEvent
@@ -80,7 +81,7 @@ export type StartClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | Mo
  * @type object
  * @inherits NativeEventInfo
  */
-export type StopClickEvent = NativeEventInfo<dxSpeechToText, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>;
+export type StopClickEvent = NativeEventInfo<dxSpeechToText, InteractionEvent>;
 
 /**
  * @docid _ui_speech_to_text_ResultEvent
@@ -97,6 +98,14 @@ export type ResultEvent = EventInfo<dxSpeechToText> & { event: Event };
  * @inherits EventInfo
  */
 export type ErrorEvent = EventInfo<dxSpeechToText> & { event: Event };
+
+/**
+ * @docid _ui_speech_to_text_EndEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type EndEvent = EventInfo<dxSpeechToText> & { event: Event };
 
 /**
  * @docid _ui_speech_to_text_ContentReadyEvent
@@ -225,6 +234,15 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
    * @public
    */
   onError?: ((e: ErrorEvent) => void) | undefined;
+
+  /**
+   * @docid dxSpeechToTextOptions.onEnd
+   * @default undefined
+   * @type_function_param1 e:{ui/speech_to_text:EndEvent}
+   * @action
+   * @public
+   */
+  onEnd?: ((e: EndEvent) => void) | undefined;
 }
 
 /**
@@ -258,7 +276,7 @@ type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 type EventsIntegrityCheckingHelper = CheckedEvents<
   FilterOutHidden<Properties>,
   Required<Events>,
-  'onStartClick' | 'onStopClick' | 'onResult' | 'onError'
+  'onStartClick' | 'onStopClick' | 'onResult' | 'onError' | 'onEnd'
 >;
 
 /**

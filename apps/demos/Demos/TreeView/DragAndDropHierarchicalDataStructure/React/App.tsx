@@ -57,8 +57,7 @@ const moveNode = (fromNode: Node, toNode: Node, fromItems, toItems, isDropInside
 };
 
 const getNodeContainingArray = (node: Node, rootArray) => (
-  // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  node === null || node.parent === null
+  !node?.parent
     ? rootArray
     : node.parent.itemData.items
 );

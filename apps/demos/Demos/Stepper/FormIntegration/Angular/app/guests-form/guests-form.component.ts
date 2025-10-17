@@ -21,10 +21,8 @@ export class GuestsFormComponent {
   @Input() validationGroup: string;
 
   ngOnChanges(changes: SimpleChanges) {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    if (changes['formData']) {
-      // eslint-disable-next-line @typescript-eslint/dot-notation
-      const value = changes['formData'].currentValue;
+    if (changes.formData) {
+      const value = changes.formData.currentValue;
 
       this.form?.instance?.reset(value);
     }

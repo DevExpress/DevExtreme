@@ -13,7 +13,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import FileSystemItem from '../file_management/file_system_item';
 

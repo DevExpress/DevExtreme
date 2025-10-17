@@ -19,6 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
 
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-toolbar-item',
@@ -26,7 +27,13 @@ import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_toolbarItems,
+           useExisting: DxiToolbarItemComponent,
+        }
+    ],
     inputs: [
         'cssClass',
         'disabled',

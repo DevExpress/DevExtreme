@@ -20,7 +20,21 @@ $generic-scheduler-agenda-appointment-font-size: null !default;
 $generic-scheduler-group-header-table-cell-width: null !default;
 $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
-$generic-scheduler-appointment-collector-height: null !default;
+$generic-scheduler-dropdown-button-height: null !default;
+$generic-scheduler-dropdown-button-margin: null !default;
+$generic-scheduler-dropdown-button-vertical-margin: null !default;
+$generic-scheduler-dropdown-button-adaptive-margin: null !default;
+$generic-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
+
+$generic-scheduler-appointment-popup-toolbar-height: null !default;
+$generic-scheduler-appointment-popup-toolbar-label-size: null !default;
+$generic-scheduler-appointment-popup-icon-size: null !default;
+$generic-scheduler-appointment-popup-icon-container-height: null !default;
+$generic-scheduler-appointment-popup-icon-padding-right: null !default;
+$generic-scheduler-appointment-popup-description-icon-margin-top: null !default;
+$generic-scheduler-appointment-popup-item-padding-horizontal: null !default;
+$generic-scheduler-appointment-popup-item-padding-top: null !default;
+$generic-scheduler-appointment-popup-all-day-item-height: null !default;
 
 $agenda-appointment-title-font-size: null !default;
 $scheduler-timeline-cell-height: null !default;
@@ -51,7 +65,21 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-left-border: 3px solid transparent !default;
   $generic-scheduler-appointment-transparent-right-border: 2px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 20px !default;
+  $generic-scheduler-dropdown-button-height: 20px !default;
+  $generic-scheduler-dropdown-button-margin: 3px 2px 3px 3px !default;
+  $generic-scheduler-dropdown-button-vertical-margin: 3px 2px 3px 0 !default;
+  $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
+
+  $generic-scheduler-appointment-popup-toolbar-height: 43px !default;
+  $generic-scheduler-appointment-popup-toolbar-label-size: 20px !default;
+  $generic-scheduler-appointment-popup-icon-size: 18px !default;
+  $generic-scheduler-appointment-popup-icon-container-height: 36px !default;
+  $generic-scheduler-appointment-popup-icon-padding-right: 5px !default;
+  $generic-scheduler-appointment-popup-description-icon-margin-top: 22px !default;
+  $generic-scheduler-appointment-popup-item-padding-horizontal: 5px !default;
+  $generic-scheduler-appointment-popup-item-padding-top: 20px !default;
+  $generic-scheduler-appointment-popup-all-day-item-height: 36px !default;
 
   $agenda-appointment-title-font-size: 16px;
 
@@ -81,7 +109,21 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-left-border: 2px solid transparent !default;
   $generic-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 17px !default;
+  $generic-scheduler-dropdown-button-height: 17px !default;
+  $generic-scheduler-dropdown-button-margin: 3px 1px 3px 3px !default;
+  $generic-scheduler-dropdown-button-vertical-margin: 3px 1px 3px 0 !default;
+  $generic-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $generic-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 0 !default;
+
+  $generic-scheduler-appointment-popup-toolbar-height: 39px !default;
+  $generic-scheduler-appointment-popup-toolbar-label-size: 18px !default;
+  $generic-scheduler-appointment-popup-icon-size: 14px !default;
+  $generic-scheduler-appointment-popup-icon-container-height: 24px !default;
+  $generic-scheduler-appointment-popup-icon-padding-right: 5px !default;
+  $generic-scheduler-appointment-popup-description-icon-margin-top: 18px !default;
+  $generic-scheduler-appointment-popup-item-padding-horizontal: 5px !default;
+  $generic-scheduler-appointment-popup-item-padding-top: 10px !default;
+  $generic-scheduler-appointment-popup-all-day-item-height: 24px !default;
 
   $agenda-appointment-title-font-size: 16px;
 

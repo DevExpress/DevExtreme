@@ -196,6 +196,7 @@ window.config = {
     'devextreme-angular/common/grids': 'bundles:devextreme-angular/devextreme-angular-common-grids.umd.js',
     'devextreme-angular/common': 'bundles:devextreme-angular/devextreme-angular-common.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
+    'devextreme-angular/core/tokens': 'bundles:devextreme-angular/devextreme-angular-core-tokens.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
       acc[`devextreme-angular/ui/${name}/nested`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}-nested.umd.js`;

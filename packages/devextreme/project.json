@@ -22,8 +22,7 @@
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
         "{projectRoot}/js/common/core/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx",
-        "{projectRoot}/testing/tests/Renovation/widgets.json"
+        "{projectRoot}/js/renovation/**/*.j.tsx"
       ]
     },
     "build-dist": {
@@ -64,8 +63,7 @@
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
         "{projectRoot}/js/common/core/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx",
-        "{projectRoot}/testing/tests/Renovation/widgets.json"
+        "{projectRoot}/js/renovation/**/*.j.tsx"
       ],
       "cache": true
     },

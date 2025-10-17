@@ -18,7 +18,6 @@ import { DxContextMenuModule } from 'devextreme-angular/ui/context-menu';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 import { DxDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box';
-import { DxDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering';
 import { DxDiagramModule } from 'devextreme-angular/ui/diagram';
 import { DxDraggableModule } from 'devextreme-angular/ui/draggable';
 import { DxDrawerModule } from 'devextreme-angular/ui/drawer';
@@ -106,7 +105,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxDataGridModule,
     DxDateBoxModule,
     DxDateRangeBoxModule,
-    DxDeferRenderingModule,
     DxDiagramModule,
     DxDraggableModule,
     DxDrawerModule,
@@ -193,7 +191,6 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxDataGridModule,
     DxDateBoxModule,
     DxDateRangeBoxModule,
-    DxDeferRenderingModule,
     DxDiagramModule,
     DxDraggableModule,
     DxDrawerModule,

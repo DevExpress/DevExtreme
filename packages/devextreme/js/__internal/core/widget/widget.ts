@@ -17,7 +17,10 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -525,7 +528,7 @@ class Widget<
     $element: dxElementWrapper,
     value: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
+    event?: DxEvent<PointerInteractionEvent>,
   ): void {
     this.option('isActive', value);
     $element.toggleClass(ACTIVE_STATE_CLASS, value);

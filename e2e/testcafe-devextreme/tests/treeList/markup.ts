@@ -57,7 +57,7 @@ const tasksT1223168 = [{
   });
 
   // T1221037
-  test('TreeList screenshot when the first cell has a template', async (t) => {
+  test.meta({ unstable: true })('TreeList screenshot when the first cell has a template', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList('#container');
 

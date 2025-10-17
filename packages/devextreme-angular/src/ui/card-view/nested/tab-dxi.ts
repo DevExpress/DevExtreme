@@ -12,9 +12,7 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -28,16 +26,14 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCardViewButtonItemComponent } from './button-item-dxi';
-import { DxiCardViewEmptyItemComponent } from './empty-item-dxi';
-import { DxiCardViewGroupItemComponent } from './group-item-dxi';
-import { DxiCardViewItemComponent } from './item-dxi';
-import { DxiCardViewSimpleItemComponent } from './simple-item-dxi';
-import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
 
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-card-view-tab',
@@ -45,10 +41,22 @@ import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_tabs,
+           useExisting: DxiCardViewTabComponent,
+        }
+    ]
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -135,37 +143,6 @@ export class DxiCardViewTabComponent extends CollectionNestedOption implements A
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewButtonItemComponent)) buttonItemsChildren!: QueryList<DxiCardViewButtonItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiCardViewEmptyItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewGroupItemComponent)) groupItemsChildren!: QueryList<DxiCardViewGroupItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiCardViewSimpleItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiCardViewTabbedItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.buttonItemsChildren.toArray(),
-            ...this.emptyItemsChildren.toArray(),
-            ...this.groupItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-            ...this.simpleItemsChildren.toArray(),
-            ...this.tabbedItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -191,16 +168,6 @@ export class DxiCardViewTabComponent extends CollectionNestedOption implements A
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

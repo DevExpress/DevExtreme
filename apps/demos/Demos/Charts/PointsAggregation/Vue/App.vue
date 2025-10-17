@@ -123,8 +123,9 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import { weatherData, aggregationFunctions, aggregationIntervals } from './data.ts';
 
 const useAggregation = ref(true);
-// eslint-disable-next-line vue/max-len
-const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(aggregationFunctions[0].func);
+const currentFunction = ref<DxChartTypes.ChartSeriesAggregationMethod>(
+  aggregationFunctions[0].func,
+);
 const currentInterval = ref(aggregationIntervals[0].interval);
 
 function calculateRangeArea({ data, intervalStart, intervalEnd }) {

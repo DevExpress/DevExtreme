@@ -259,7 +259,8 @@ module('Integration: Appointment Day, Week views', {
                     dataSource: new DataSource({
                         store: [task]
                     }),
-                    currentDate: new Date(2015, 3, 23)
+                    currentDate: new Date(2015, 3, 23),
+                    editing: { legacyForm: true }
                 });
 
                 scheduler.instance.showAppointmentPopup(task);
@@ -827,7 +828,8 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDateExpr: 'start',
                     endDateExpr: 'end',
-                    allDayExpr: 'AllDay'
+                    allDayExpr: 'AllDay',
+                    editing: { legacyForm: true }
                 });
                 scheduler.instance.showAppointmentPopup(tasks[0]);
                 scheduler.instance.hideAppointmentPopup();
@@ -901,6 +903,7 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDateExpr: 'StartDate',
                     endDateExpr: 'EndDate',
+                    editing: { legacyForm: true },
                     onAppointmentFormOpening: function(data) {
                         const form = data.form;
                         let startDate = data.appointmentData.StartDate;
@@ -941,7 +944,7 @@ module('Integration: Appointment Day, Week views', {
 
                 startDateEditor.option('value', '2016-05-25T10:40:00');
 
-                $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
+                $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
@@ -1089,10 +1092,16 @@ module('Integration: Appointment Day, Week views', {
 
                 assert.strictEqual(scheduler.appointments.compact.getButtonCount(), 2, 'Appointments are rendered');
 
-                const tailCoords = translator.locate(scheduler.appointments.compact.getButton(1));
+                const coords = [
+                    translator.locate(scheduler.appointments.compact.getButton(0)),
+                    translator.locate(scheduler.appointments.compact.getButton(1)),
+                ].sort((a, b) => a.left - b.left);
 
-                assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
-                assert.roughEqual(tailCoords.left, 196, 2, 'Appointment left is correct');
+                assert.strictEqual(coords[0].top, 600, 'Appointment top is correct');
+                assert.roughEqual(coords[0].left, 124, 2, 'Appointment left is correct');
+
+                assert.strictEqual(coords[1].top, 0, 'Appointment top is correct');
+                assert.roughEqual(coords[1].left, 199, 2, 'Appointment left is correct');
             });
 
             test('targetedAppointmentData should have valid targeted resource on onAppointmentClick event', async function(assert) {
@@ -1200,7 +1209,7 @@ module('Integration: Appointment Day, Week views', {
             }],
         });
 
-        const appointments = scheduler.appointmentList;
+        const appointments = scheduler.appointmentList.sort((a, b) => a.position.left - b.position.left);
 
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
@@ -1247,7 +1256,7 @@ module('Integration: Appointment Day, Week views', {
             }],
         });
 
-        const appointments = scheduler.appointmentList;
+        const appointments = scheduler.appointmentList.sort((a, b) => a.position.left - b.position.left);
 
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 

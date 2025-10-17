@@ -10,7 +10,7 @@ type SpeechRecognition = SpeechRecognitionConfig & {
 interface SpeechRecognitionEvents {
   onResult: (event: Event) => void;
   onError: (event: Event) => void;
-  onEnd: () => void;
+  onEnd: (event: Event) => void;
 }
 
 export const NOT_SUPPORTED_ERROR = 'E1065';
@@ -18,6 +18,8 @@ export const NOT_SUPPORTED_ERROR = 'E1065';
 const EVENT_NAMES = ['onresult', 'onerror', 'onend'];
 export class SpeechRecognitionAdapter {
   private _speechRecognition?: SpeechRecognition | null;
+
+  private _isListening = false;
 
   constructor(config: SpeechRecognitionConfig, events: SpeechRecognitionEvents) {
     const window = getWindow();
@@ -42,7 +44,15 @@ export class SpeechRecognitionAdapter {
     }
 
     // eslint-disable-next-line spellcheck/spell-checker
-    this._speechRecognition.onend = events.onEnd;
+    this._speechRecognition.onstart = (): void => {
+      this._isListening = true;
+    };
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._speechRecognition.onend = (event: Event): void => {
+      this._isListening = false;
+
+      events.onEnd(event);
+    };
     // eslint-disable-next-line spellcheck/spell-checker
     this._speechRecognition.onresult = events.onResult;
     this._speechRecognition.onerror = events.onError;
@@ -57,14 +67,26 @@ export class SpeechRecognitionAdapter {
   }
 
   start(): void {
+    if (this._isListening) {
+      return;
+    }
+
     this._speechRecognition?.start();
   }
 
   stop(): void {
+    if (!this._isListening) {
+      return;
+    }
+
     this._speechRecognition?.stop();
   }
 
   dispose(): void {
     this._speechRecognition = null;
+  }
+
+  isAvailable(): boolean {
+    return Boolean(this._speechRecognition);
   }
 }

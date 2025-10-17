@@ -4,7 +4,7 @@ import {
   FORM_LOAD_PANEL_CLASS,
   FORM_LOAD_PANEL_WRAPPER_CLASS,
 } from '@ts/ui/form/constants';
-import LoadIndicator, { AnimationType } from '@ts/ui/load_indicator';
+import { AnimationType } from '@ts/ui/load_indicator';
 import type { LoadPanelProperties } from '@ts/ui/load_panel';
 import type LoadPanel from '@ts/ui/load_panel';
 
@@ -72,6 +72,11 @@ export class FormLoadPanel {
       },
       visible: false,
       showIndicator: true,
+      indicatorOptions: {
+        animationType: AnimationType.Sparkle,
+        width: FORM_LOAD_INDICATOR_SIZE,
+        height: FORM_LOAD_INDICATOR_SIZE,
+      },
       showPane: false,
       shading: false,
       hideOnOutsideClick: false,
@@ -83,21 +88,5 @@ export class FormLoadPanel {
         class: FORM_LOAD_PANEL_WRAPPER_CLASS,
       },
     });
-
-    this._configureLoadIndicator();
-  }
-
-  private _configureLoadIndicator(): void {
-    const $loadIndicator = this._loadPanel?._$indicator;
-
-    if ($loadIndicator?.length) {
-      const loadIndicator = LoadIndicator.getInstance($loadIndicator.get(0));
-
-      loadIndicator.option({
-        animationType: AnimationType.Sparkle,
-        width: FORM_LOAD_INDICATOR_SIZE,
-        height: FORM_LOAD_INDICATOR_SIZE,
-      });
-    }
   }
 }

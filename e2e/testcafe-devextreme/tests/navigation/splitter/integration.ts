@@ -14,7 +14,8 @@ safeSizeTest('The splitter pane should be rendered with the correct ratio inside
   const tabPanel = new TabPanel('#container');
 
   await t
-    .click(tabPanel.tabs.getItem(1).element);
+    .click(tabPanel.tabs.getItem(1).element)
+    .click(tabPanel.multiView.element);
 
   await testScreenshot(t, takeScreenshot, 'Splitter in tab content, pane_1.size=`100px`.png', { element: '#container' });
 

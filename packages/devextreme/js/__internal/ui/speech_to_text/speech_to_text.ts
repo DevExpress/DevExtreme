@@ -3,7 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { noop } from '@js/core/utils/common';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
@@ -27,14 +27,14 @@ enum SpeechToTextState {
   DISABLED = 'disabled',
 }
 
-type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError'>;
-type PointerLikeEvent = KeyboardEvent | MouseEvent | PointerEvent | TouchEvent;
+type SpeechToTextActions = Pick<SpeechToTextProperties, 'onStartClick' | 'onStopClick' | 'onResult' | 'onError' | 'onEnd'>;
 
 const ACTIONS: (keyof SpeechToTextActions)[] = [
   'onStartClick',
   'onStopClick',
   'onResult',
   'onError',
+  'onEnd',
 ];
 
 type Properties = SpeechToTextProperties & {
@@ -68,6 +68,8 @@ class SpeechToText extends Widget<Properties> {
       onStopClick: undefined,
       onResult: undefined,
       onError: undefined,
+      onEnd: undefined,
+      speechRecognitionConfig: undefined,
     };
   }
 
@@ -204,11 +206,11 @@ class SpeechToText extends Widget<Properties> {
       : startText ?? '';
   }
 
-  private _emitNativeEvent<K extends keyof Pick<SpeechToTextActions, 'onResult' | 'onError'>>(name: K, event: Event): void {
+  private _emitNativeEvent<K extends keyof Pick<SpeechToTextActions, 'onResult' | 'onError' | 'onEnd'>>(name: K, event: Event): void {
     this._actions[name]?.({ component: this, element: this.element(), event });
   }
 
-  private _emitDxEvent<K extends keyof Pick<SpeechToTextActions, 'onStartClick' | 'onStopClick'>>(name: K, event?: DxEvent<PointerLikeEvent>): void {
+  private _emitDxEvent<K extends keyof Pick<SpeechToTextActions, 'onStartClick' | 'onStopClick'>>(name: K, event?: DxEvent<InteractionEvent>): void {
     this._actions[name]?.({ component: this, element: this.element(), event });
   }
 
@@ -225,7 +227,10 @@ class SpeechToText extends Widget<Properties> {
   }
 
   private _handleStartClick(e: ClickEvent): void {
-    if (!this._isCustomSpeechRecognitionEnabled()) {
+    const isCustomEnabled = this._isCustomSpeechRecognitionEnabled();
+    const isSRAvailable = this._speechRecognitionAdapter?.isAvailable();
+
+    if (!isCustomEnabled && isSRAvailable) {
       this._setState(SpeechToTextState.LISTENING);
 
       this._speechRecognitionAdapter?.start();
@@ -244,10 +249,12 @@ class SpeechToText extends Widget<Properties> {
     this._emitDxEvent('onStopClick', e.event);
   }
 
-  private _handleSpeechRecognitionEnd(): void {
+  private _handleSpeechRecognitionEnd(event: Event): void {
     if (this._state !== SpeechToTextState.DISABLED && !this._isCustomSpeechRecognitionEnabled()) {
       this._setState(SpeechToTextState.INITIAL);
     }
+
+    this._emitNativeEvent('onEnd', event);
   }
 
   private _handleSpeechRecognitionResult(event: Event): void {
@@ -256,6 +263,12 @@ class SpeechToText extends Widget<Properties> {
 
   private _handleSpeechRecognitionError(event: Event): void {
     this._emitNativeEvent('onError', event);
+  }
+
+  private _stopRecognitionOnDisable(disabled?: boolean): void {
+    if (disabled) {
+      this._speechRecognitionAdapter?.stop();
+    }
   }
 
   private _setState(newState: SpeechToTextState): void {
@@ -295,6 +308,7 @@ class SpeechToText extends Widget<Properties> {
     switch (name) {
       case 'customSpeechRecognizer':
         this._handleCustomEngineState();
+        this._initSpeechRecognitionAdapter();
         break;
 
       case 'speechRecognitionConfig':
@@ -315,6 +329,7 @@ class SpeechToText extends Widget<Properties> {
       case 'disabled':
         this._button?.option(name, value);
         this._setState(value ? SpeechToTextState.DISABLED : SpeechToTextState.INITIAL);
+        this._stopRecognitionOnDisable(value);
         break;
 
       case 'startIcon':

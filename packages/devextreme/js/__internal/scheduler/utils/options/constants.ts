@@ -10,7 +10,6 @@ import type { SchedulerInternalOptions, SchedulerOptionsRule } from './types';
 
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
-const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 
 export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   views: ['day', 'week'],
@@ -25,7 +24,6 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
   dataSource: null,
   customizeDateNavigatorText: undefined,
   appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
-  dropDownAppointmentTemplate: DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME,
   appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
   dataCellTemplate: undefined,
   timeCellTemplate: undefined,
@@ -105,11 +103,9 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   },
   _draggingMode: 'outlook',
   _appointmentTooltipOffset: { x: 0, y: 0 },
-  _appointmentCountPerCell: 2,
-  _collectorOffset: 0,
-  _appointmentOffset: 26,
   appointmentPopupTemplate: 'appointmentPopup',
   disabledExpr: 'disabled',
+  visibleExpr: 'visible',
   allowMultipleCellSelection: true,
 };
 
@@ -117,10 +113,6 @@ export const DEFAULT_SCHEDULER_INTEGRATION_OPTIONS = {
   integrationOptions: {
     useDeferUpdateForTemplates: false,
   },
-};
-
-export const DEPRECATED_SCHEDULER_OPTIONS = {
-  dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
 };
 
 export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
@@ -164,9 +156,6 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
           if (!wordIndex) $(element).append(' ' as unknown as Element);
         });
       },
-      _appointmentCountPerCell: 1,
-      _collectorOffset: 20,
-      _appointmentOffset: 30,
     },
   },
   {

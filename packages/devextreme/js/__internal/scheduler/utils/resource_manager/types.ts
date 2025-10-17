@@ -11,5 +11,5 @@ export interface GroupNode {
 }
 
 export interface GroupLeaf extends GroupNode {
-  groupIndex: string | number;
+  groupIndex: number;
 }

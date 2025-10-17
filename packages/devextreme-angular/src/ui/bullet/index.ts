@@ -30,7 +30,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
@@ -48,8 +48,6 @@ import { DxoBulletMarginModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletShadowModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
-
-
 
 
 /**
@@ -70,6 +68,7 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
     ]
 })
 export class DxBulletComponent extends DxComponent implements OnDestroy {
+
     instance: DxBullet = null;
 
     /**
@@ -490,10 +489,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() valueChange: EventEmitter<number>;
-
-
-
-
 
 
 

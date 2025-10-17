@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
+import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxSpeechToText from 'devextreme/ui/speech_to_text';
@@ -29,14 +29,12 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 
 import { DxoSpeechToTextCustomSpeechRecognizerModule } from 'devextreme-angular/ui/speech-to-text/nested';
 import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular/ui/speech-to-text/nested';
-
-
 
 
 
@@ -53,6 +51,7 @@ import { DxoSpeechToTextSpeechRecognitionConfigModule } from 'devextreme-angular
     ]
 })
 export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
+
     instance: DxSpeechToText = null;
 
     
@@ -276,6 +275,14 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
     
     
      */
+    @Output() onEnd: EventEmitter<EndEvent>;
+
+    /**
+    
+     * [descr:undefined]
+    
+    
+     */
     @Output() onError: EventEmitter<ErrorEvent>;
 
     /**
@@ -461,10 +468,6 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -476,6 +479,7 @@ export class DxSpeechToTextComponent extends DxComponent implements OnDestroy {
         this._createEventEmitters([
             { subscribe: 'contentReady', emit: 'onContentReady' },
             { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'end', emit: 'onEnd' },
             { subscribe: 'error', emit: 'onError' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
