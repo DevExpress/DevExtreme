@@ -77,7 +77,7 @@ const textStyles = {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': '\'Segoe UI\',\'Open Sans Condensed\',-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
+  'font-family': 'system-ui, -apple-system, blinkmacsystemfont, avenir next, avenir, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
   'font-wight': '600',
 };
