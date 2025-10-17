@@ -52,6 +52,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Check storage
+      run: df -h
+
     - name: Build
       working-directory: ./packages/devextreme
       shell: bash
