@@ -83,7 +83,9 @@ function calculateOrderDateFilterExpression(
 
 type HeaderFilterDataSourceArg = {
   dataSource: {
-    postProcess: (results: Array<{ text: string; value: unknown }>) => Array<{ text: string; value: unknown }>;
+    postProcess: (
+      results: Array<{ text: string; value: unknown }>,
+    ) => Array<{ text: string; value: unknown }>;
   };
 };
 

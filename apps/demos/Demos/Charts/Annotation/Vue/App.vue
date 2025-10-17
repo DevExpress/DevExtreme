@@ -62,7 +62,6 @@ import {
 } from 'devextreme-vue/chart';
 import { dataSource, annotationSources } from './data.ts';
 
-
 const customizeTooltip = ({ description }: Record<string, any>) => ({ html: `<div class='tooltip'>${description}</div>` });
 </script>
 <style scoped>

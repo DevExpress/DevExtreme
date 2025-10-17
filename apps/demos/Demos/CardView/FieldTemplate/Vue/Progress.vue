@@ -1,11 +1,11 @@
 <template>
-    <div className="task__progress">
-        <DxProgressBar
-            :value="value"
-            :element-attr="{ 'aria-label': 'Progress Bar' }"
-            :statusFormat="statusFormat"
-        />
-    </div>
+  <div className="task__progress">
+    <DxProgressBar
+      :value="value"
+      :element-attr="{ 'aria-label': 'Progress Bar' }"
+      :statusFormat="statusFormat"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
