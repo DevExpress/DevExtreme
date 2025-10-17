@@ -34,7 +34,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
       weekDayRightVirtualCellCount,
       weekDayRightVirtualCellWidth,
     } = dateHeaderData;
-    const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation)
+    const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation)
       && !groupByDate;
 
     return (
