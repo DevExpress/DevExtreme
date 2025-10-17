@@ -71,8 +71,10 @@ test('Total summary should be focusable', async (t) => {
 }));
 
 test('Focused total summary should have right appearance with sticky columns', async (t) => {
-  const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getDataRow(3).element);
   await t
@@ -103,6 +105,9 @@ test('Focused total summary should have right appearance with sticky columns', a
         summaryType: 'count',
       },
     ],
+  },
+  scrolling: {
+    showScrollbar: 'never',
   },
 }));
 
