@@ -29,24 +29,16 @@ testModule('caret', () => {
     });
 
     test('exception should not be thrown if the input is not attached to the DOM (T341277)', function(assert) {
-        const originalDescriptors = {
-            selectionStart: Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionStart'),
-            selectionEnd: Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionEnd'),
-        };
-
         const setterStub = sinon.stub();
+        const input = document.createElement('input');
 
-        const throwingDescriptor = {
-            set: function() {
+        Object.defineProperty(input, 'selectionStart', {
+            set() {
                 setterStub();
                 throw new Error('Cannot set selection');
             },
-        };
+        });
 
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', { ...originalDescriptors.selectionStart, ...throwingDescriptor });
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionEnd', { ...originalDescriptors.selectionEnd, ...throwingDescriptor });
-
-        const input = document.createElement('input');
         const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(input);
 
         try {
@@ -58,9 +50,6 @@ testModule('caret', () => {
             assert.ok(false, 'exception is thrown');
         } finally {
             getActiveElementStub.restore();
-
-            Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', originalDescriptors.selectionStart);
-            Object.defineProperty(HTMLInputElement.prototype, 'selectionEnd', originalDescriptors.selectionEnd);
         }
     });
 
