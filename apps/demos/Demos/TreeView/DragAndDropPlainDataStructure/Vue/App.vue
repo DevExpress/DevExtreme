@@ -61,7 +61,7 @@ import { nextTick, ref } from 'vue';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
 
-import service from './data.ts';
+import service, { type DriveItem } from './data.ts';
 import type { FileSystemItem } from './types';
 
 type DxSortableInstance = DxSortable['instance'];
@@ -155,8 +155,8 @@ function findNodeById(nodes: Node[], id: string): Node | null {
   }
   return null;
 }
-function moveNode(fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) {
-  const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
+function moveNode(fromNode: Node, toNode: Node | null, fromItems: DriveItem[], toItems: any[], isDropInsideItem: boolean) {
+  const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);
 
   const toIndex = toNode === null || isDropInsideItem

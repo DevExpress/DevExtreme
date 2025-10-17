@@ -2,7 +2,7 @@
   <div class="state-tooltip">
     <img :src="getImagePath(info.point)"><h4 class="state">{{ info.argument }}</h4>
     <div class="capital">
-      <span class="caption">Capital</span>: {{ info.point.data.capital }}
+      <span class="caption">Capital</span>: {{ info.point?.data.capital }}
     </div>
     <div>
       <span class="caption">Population</span>:
@@ -11,24 +11,23 @@
     </div>
     <div>
       <span class="caption">Area</span>:
-      <span class="area-km">{{ formatNumber(info.point.data.area) }}</span>
+      <span class="area-km">{{ formatNumber(info.point?.data.area) }}</span>
       km<sup>2</sup>
-      (<span class="area-mi">{{ formatNumber(0.3861 * info.point.data.area) }}</span>
+      (<span class="area-mi">{{ formatNumber(0.3861 * info.point?.data.area) }}</span>
       mi<sup>2</sup>)
     </div>
   </div>
 </template>
 <script setup lang="ts">
-
 import type { DxPieChartTypes } from 'devextreme-vue/pie-chart';
 
-withDefaults(defineProps<{
-  info?: DxPieChartTypes.PointInfo
-}>(), {
-  info: () => ({} as DxPieChartTypes.PointInfo),
-});
+defineProps<{
+  info: DxPieChartTypes.PointInfo
+}>()
 
-const getImagePath = ({ data }: DxPieChartTypes.PointInfo['point']) => `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
+const getImagePath = (
+  point: DxPieChartTypes.PointInfo['point'],
+) => `../../../../images/flags/${point?.data.name.replace(/\s/, '')}.svg`;
 const formatNumber = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 }).format;

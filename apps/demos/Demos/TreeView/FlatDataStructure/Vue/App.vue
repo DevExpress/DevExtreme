@@ -29,8 +29,8 @@ import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import service from './data.ts';
 import type { Product } from './types';
 
-const products: DxTreeViewTypes.Item[] = service.getProducts();
-const currentItem = ref<DxTreeViewTypes.Item>(products[0]);
+const products: Product[] = service.getProducts();
+const currentItem = ref<Product>(products[0]);
 
 function selectItem({ itemData }: DxTreeViewTypes.ItemClickEvent<Product>) {
   if (itemData) {

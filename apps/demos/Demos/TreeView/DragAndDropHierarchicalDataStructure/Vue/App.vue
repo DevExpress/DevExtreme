@@ -60,7 +60,7 @@
 import { nextTick, ref } from 'vue';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
-import service from './data.ts';
+import service, { type DriveItem } from './data.ts';
 import type { FileSystemItem } from './types';
 
 type DxSortableInstance = DxSortable['instance'];
@@ -141,7 +141,7 @@ function findNode(treeView: DxTreeView['instance'], index: number) {
   }
   return null;
 }
-function findNodeById(nodes: DxTreeViewTypes.Node[], id: string): DxTreeViewTypes.Node | null {
+function findNodeById(nodes: Node[], id: string): Node | null {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData?.id === id) {
       return nodes[i];
@@ -159,7 +159,7 @@ function findNodeById(nodes: DxTreeViewTypes.Node[], id: string): DxTreeViewType
   }
   return null;
 }
-function moveNode(fromNode: DxTreeViewTypes.Node, toNode: DxTreeViewTypes.Node | null, fromItems: DriveItem[], toItems: DriveItem[], isDropInsideItem: boolean) {
+function moveNode(fromNode: Node, toNode: Node | null, fromItems: DriveItem[], toItems: DriveItem[], isDropInsideItem: boolean) {
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray
     ?.findIndex((item) => item.id === fromNode.itemData?.id) || -1;
@@ -178,12 +178,12 @@ function moveNode(fromNode: DxTreeViewTypes.Node, toNode: DxTreeViewTypes.Node |
     toNodeContainingArray?.splice(toIndex, 0, fromNode.itemData);
   }
 }
-function getNodeContainingArray(node: DxTreeViewTypes.Node | null, rootArray: DriveItem[]) {
+function getNodeContainingArray(node: Node | null, rootArray: DriveItem[]) {
   return node === null || node.parent === null
     ? rootArray
     : node.parent?.itemData?.items || rootArray;
 }
-function isChildNode(parentNode: DxTreeViewTypes.Node, childNode: DxTreeViewTypes.Node) {
+function isChildNode(parentNode: Node, childNode: Node) {
   let { parent } = childNode;
   while (parent) {
     if (parent.itemData?.id === parentNode.itemData?.id) {

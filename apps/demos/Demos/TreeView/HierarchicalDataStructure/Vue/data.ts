@@ -1,6 +1,6 @@
-import { type DxTreeViewTypes } from 'devextreme-vue/cjs/tree-view';
+import type { Product } from "./types";
 
-const products: DxTreeViewTypes.Item[] = [{
+const products: Product[] = [{
   id: '1',
   text: 'Stores',
   expanded: true,
