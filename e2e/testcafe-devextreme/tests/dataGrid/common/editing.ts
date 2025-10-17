@@ -2430,28 +2430,29 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     })();
   });
 });
-
-[
-  {
-    theme: 'material.blue.light',
-    useIcons: true,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: true,
-  },
-  {
-    theme: 'material.blue.light',
-    useIcons: false,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: false,
-  },
-].forEach(({ theme, useIcons }) => {
+// visual: generic.light
+// visual: material.blue.light
+[true, false,
+  // {
+  //   theme: 'material.blue.light',
+  //   useIcons: true,
+  // },
+  // {
+  //   theme: 'generic.light',
+  //   useIcons: true,
+  // },
+  // {
+  //   theme: 'material.blue.light',
+  //   useIcons: false,
+  // },
+  // {
+  //   theme: 'generic.light',
+  //   useIcons: false,
+  // },
+].forEach((useIcons) => {
   // T1179114
   // TODO Chrome133: skipped during chrome update
-  test.skip(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+  test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
@@ -2463,52 +2464,46 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
       .eql(20)
       .expect(secondCustomIcon.clientWidth)
       .eql(20)
-      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-generic-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxDataGrid', {
-      width: 600,
-      dataSource: [{
-        Id: 0,
-        name: 'test',
-      }],
-      keyExpr: 'Id',
-      editing: {
-        mode: 'row',
-        allowUpdating: true,
-        allowDeleting: true,
-        useIcons,
-      },
-      columns: ['Id', 'name', {
-        type: 'buttons',
-        width: 200,
-        buttons: [
-          {
-            name: 'delete',
-            disabled: false,
-          },
-          {
-            name: 'delete',
-            disabled: true,
-          },
-          {
-            icon: encodedIcon,
-            disabled: false,
-          },
-          {
-            icon: encodedIcon,
-            disabled: true,
-          },
-        ],
-      }],
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    width: 600,
+    dataSource: [{
+      Id: 0,
+      name: 'test',
+    }],
+    keyExpr: 'Id',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+      useIcons,
+    },
+    columns: ['Id', 'name', {
+      type: 'buttons',
+      width: 200,
+      buttons: [
+        {
+          name: 'delete',
+          disabled: false,
+        },
+        {
+          name: 'delete',
+          disabled: true,
+        },
+        {
+          icon: encodedIcon,
+          disabled: false,
+        },
+        {
+          icon: encodedIcon,
+          disabled: true,
+        },
+      ],
+    }],
+  }));
 });
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {

@@ -1918,7 +1918,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
   { useNative: true },
   { useNative: false },
 ].forEach(({ useNative }) => {
-  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (generic.light theme)`, async (t) => {
+  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
