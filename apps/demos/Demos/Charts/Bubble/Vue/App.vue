@@ -76,12 +76,7 @@ const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 
 const customizeText = (e: { value: string | number | Date }): string => `${e.value}M`;
 
-const customizeTooltip = (pointInfo: {
-  point: { tag: string };
-  argumentText: string;
-  valueText: string;
-  size: number
-}): { text: string } => ({
+const customizeTooltip = (pointInfo: Record<string, any>): { text: string } => ({
   text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
 });
 

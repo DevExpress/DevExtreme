@@ -50,18 +50,13 @@ import DxChart, {
   DxTitle,
   DxLegend,
   DxExport,
-  DxTooltip,
+  DxTooltip, 
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 
 const customizeTooltip = ({
   openValue, closeValue, highValue, lowValue,
-}: {
-  openValue: number;
-  closeValue: number;
-  highValue: number;
-  lowValue: number;
-}) => ({
+}: Record<string, any>) => ({
   text: `Open: $${openValue}<br/>
 Close: $${closeValue}<br/>
 High: $${highValue}<br/>

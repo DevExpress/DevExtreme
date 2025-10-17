@@ -39,11 +39,12 @@ import DxPieChart, {
   DxLabel,
   DxConnector,
   DxExport,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import { populationByRegions } from './data.ts';
 
-const customizeTooltip = ({ valueText, percent }: { valueText: string; percent: number }) => ({
-  text: `${valueText} - ${(percent * 100).toFixed(2)}%`,
+const customizeTooltip = ({ valueText, percent }: DxPieChartTypes.PointInfo) => ({
+  text: `${valueText} - ${((percent || 0) * 100).toFixed(2)}%`,
 });
 </script>
 <style>
