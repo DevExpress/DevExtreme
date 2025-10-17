@@ -103,6 +103,12 @@
         "dxNumberBox-invalidValueMessage": "Værdien skal være et tal",
         "dxNumberBox-noDataText": "Ingen data",
 
+
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+        "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+        "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+        "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Brug {0} til at vise kolonner",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Træk en kolonne fra gruppepanelet hertil",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Brug {0}, eller træk en kolonne fra gruppepanelet",
