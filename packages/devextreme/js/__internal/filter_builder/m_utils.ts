@@ -446,13 +446,18 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
   const filterExpression = convertToInnerCondition(condition, customOperations);
   const customOperation = customOperations.length && getCustomOperation(customOperations, filterExpression[1]);
 
-  if (customOperation && customOperation.calculateFilterExpression) {
+  if (customOperation?.calculateFilterExpression) {
     return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, fields]);
-  } if (field.createFilterExpression) {
+  }
+
+  if (field.createFilterExpression) {
     return field.createFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
-  } if (field.calculateFilterExpression) {
+  }
+
+  if (field.calculateFilterExpression) {
     return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
   }
+
   return field.defaultCalculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
 }
 

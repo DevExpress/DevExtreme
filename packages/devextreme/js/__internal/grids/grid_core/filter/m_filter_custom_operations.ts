@@ -12,7 +12,7 @@ function baseOperation(grid) {
   const calculateFilterExpression = function (filterValue, field, fields) {
     const result: string[] = [];
     const lastIndex = filterValue.length - 1;
-    filterValue && filterValue.forEach((value, index) => {
+    filterValue?.forEach((value, index) => {
       if (isCondition(value) || isGroup(value)) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
         result.push(filterExpression);
@@ -20,11 +20,16 @@ function baseOperation(grid) {
         const filterExpression = getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter');
         result.push(filterExpression);
       }
-      index !== lastIndex && result.push('or');
+
+      if (index !== lastIndex) {
+        result.push('or');
+      }
     });
+
     if (result.length === 1) {
       return result[0];
     }
+
     return result;
   };
 

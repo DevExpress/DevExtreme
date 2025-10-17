@@ -25,22 +25,22 @@ const makeArray = (value) => (type(value) === 'string' ? value.split() : value);
 
 const hasDot = (x) => /\./.test(x);
 
-const pad = (text, length, right) => {
-  text = String(text);
-  while (text.length < length) {
-    text = right ? `${text}0` : `0${text}`;
-  }
-  return text;
+// consider to use String.prototype.padEnd() or String.prototype.padStart()
+const pad = (text: unknown, length: number, right?: boolean): string => {
+  let textString = String(text);
+
+  textString = right ? textString.padEnd(length, '0') : textString.padStart(length, '0');
+
+  return textString;
 };
 
-const formatISO8601 = (date, skipZeroTime, skipTimezone) => {
+const formatISO8601 = (date: Date, skipZeroTime?: boolean, skipTimezone?: boolean): string => {
   const bag: string[] = [];
 
   const isZeroTime = () => date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
-  // @ts-expect-error
-  const padLeft2 = (text) => pad(text, 2);
+  const padLeft2 = (text: unknown) => pad(text, 2);
 
-  bag.push(date.getFullYear());
+  bag.push(date.getFullYear().toString());
   bag.push('-');
   bag.push(padLeft2(date.getMonth() + 1));
   bag.push('-');
@@ -56,28 +56,29 @@ const formatISO8601 = (date, skipZeroTime, skipTimezone) => {
 
     if (date.getMilliseconds()) {
       bag.push('.');
-      // @ts-expect-error
       bag.push(pad(date.getMilliseconds(), 3));
     }
 
     if (!skipTimezone) {
-      bag.push('Z');
+      bag.push('Z'); // -01:00 || Z
     }
   }
 
   return bag.join('');
 };
 
-const parseISO8601 = (isoString) => {
+const parseISO8601 = (isoString: string) => {
   const result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000);
-  const chunks = isoString.replace('Z', '').split('T');
-  const date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]);
-  const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
-  // @ts-expect-error
+  const [dateChunk, timeChunk] = isoString.replace('Z', '').split('T');
+  const date = /(\d{4})-(\d{2})-(\d{2})/.exec(dateChunk);
+  const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(timeChunk);
+
+  if (!date) {
+    return null;
+  }
+
   result.setFullYear(Number(date[1]));
-  // @ts-expect-error
   result.setMonth(Number(date[2]) - 1);
-  // @ts-expect-error
   result.setDate(Number(date[3]));
 
   if (Array.isArray(time) && time.length) {
@@ -124,7 +125,7 @@ const toAbsoluteUrl = (basePath, relativePath) => {
 
 const param = (params) => {
   const result = [];
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, no-restricted-syntax, guard-for-in
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in
   for (const name in params) {
     // @ts-expect-error
     result.push(`${name}=${params[name]}`);
@@ -138,7 +139,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
     if (!(this[key] instanceof Date)) {
       return value;
     }
-    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     value = formatISO8601(this[key]);
     switch (protocolVersion) {
       case 2:
@@ -377,7 +378,7 @@ export const EdmLiteral = Class.inherit({
   },
 });
 
-const transformTypes = (obj, options = {}) => {
+const transformTypes = (obj, options = {}): void => {
   each(obj, (key, value) => {
     if (value !== null && typeof value === 'object') {
       if ('results' in value) {
@@ -399,8 +400,9 @@ const transformTypes = (obj, options = {}) => {
           // @ts-expect-error
           const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
           obj[key] = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
+        // OData v4 format
         } else if (ISO8601_DATE_REGEX.test(value)) {
-          obj[key] = new Date(parseISO8601(obj[key]).valueOf());
+          obj[key] = new Date(parseISO8601(obj[key])!.valueOf());
         }
       }
     }
@@ -415,7 +417,7 @@ export const serializePropName = (propName) => (propName instanceof EdmLiteral
   ? propName.valueOf()
   : propName.replace(/\./g, '/'));
 
-const serializeValueV4 = (value) => {
+const serializeValueV4 = (value: unknown) => {
   if (value instanceof Date) {
     return formatISO8601(value, false, false);
   }
@@ -425,6 +427,7 @@ const serializeValueV4 = (value) => {
   if (Array.isArray(value)) {
     return `[${value.map((item) => serializeValueV4(item)).join(',')}]`;
   }
+
   return serializeValueV2(value);
 };
 
@@ -435,9 +438,15 @@ const serializeValueV2 = (value) => {
   if (value instanceof Guid) {
     return `guid'${value}'`;
   }
+
   if (value instanceof EdmLiteral) {
     return value.valueOf();
   }
+
+  if (typeof value === 'string' && ISO8601_DATE_REGEX.test(value)) {
+    return formatISO8601(new Date(value), false, false);
+  }
+
   if (typeof value === 'string') {
     return serializeString(value);
   }

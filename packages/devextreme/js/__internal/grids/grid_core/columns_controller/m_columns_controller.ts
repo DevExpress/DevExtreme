@@ -1177,6 +1177,7 @@ export class ColumnsController extends modules.Controller {
       if (gridCoreUtils.isDateType(column.dataType) && column.serializationFormat === undefined) {
         column.serializationFormat = dateSerializationFormat;
       }
+
       if (lookup && gridCoreUtils.isDateType(lookup.dataType) && column.serializationFormat === undefined) {
         lookup.serializationFormat = dateSerializationFormat;
       }
