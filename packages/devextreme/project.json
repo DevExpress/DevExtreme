@@ -51,7 +51,6 @@
       ],
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
-        { "env": "BUILD_INPROGRESS_RENOVATION" },
         { "env": "DEVEXTREME_TEST_CI" },
         { "env": "DOTNET_CLI_TELEMETRY_OPTOUT" },
         { "env": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE" },
