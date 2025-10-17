@@ -20,6 +20,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-tab',
@@ -27,7 +28,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_tabs,
+           useExisting: DxiHtmlEditorTabComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     @Input()

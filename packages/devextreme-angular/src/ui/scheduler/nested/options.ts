@@ -12,9 +12,7 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    QueryList
 } from '@angular/core';
 
 
@@ -27,11 +25,13 @@ import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSchedulerItemComponent } from './item-dxi';
-import { DxiSchedulerOptionsItemComponent } from './options-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-scheduler-options',
@@ -41,7 +41,12 @@ import { DxiSchedulerOptionsItemComponent } from './options-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -261,25 +266,9 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerOptionsItemComponent)) optionsItemsChildren!: QueryList<DxiSchedulerOptionsItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.optionsItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'selectedItemKeysChange' },
             { emit: 'selectedItemsChange' }
@@ -299,12 +288,6 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.optionsItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

@@ -183,7 +183,8 @@ module('Common', moduleConfig, () => {
                     currentView: 'day',
                     firstDayOfWeek: 1,
                     dataSource: [config.appointment],
-                    timeZone: config.schedulerTimeZone
+                    timeZone: config.schedulerTimeZone,
+                    editing: config.editing,
                 });
 
                 assert.equal(scheduler.appointments.getDateText(), config.expectedContent, 'Appointment content has correct dates');
@@ -200,15 +201,17 @@ module('Common', moduleConfig, () => {
 
             cases.forEach(config => {
                 test(`Appointment should have correct size, position and popup content if ${config.caseName}`, async function(assert) {
+                    const schedulerOptions = { ...config, editing: { legacyForm: true } };
+
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
-                            await runTest(config, assert);
+                            await runTest(schedulerOptions, assert);
                         } finally {
                             tzOffsetStub.restore();
                         }
                     } else {
-                        await runTest(config, assert);
+                        await runTest(schedulerOptions, assert);
                     }
                 });
             });
@@ -306,6 +309,7 @@ module('Common', moduleConfig, () => {
                             allowTimeZoneEditing: true,
                             allowAdding: true,
                             allowUpdating: true,
+                            legacyForm: true,
                         },
                         height: 600,
                         appointmentDragging: {
@@ -1776,7 +1780,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ timeZone: timeZones.NewYork }); // -4 offset
+                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, editing: { legacyForm: true } }); // -4 offset
 
                 scheduler.appointments.dblclick(index);
 
@@ -1804,7 +1808,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler();
+                const scheduler = await createScheduler({ editing: { legacyForm: true } });
 
                 scheduler.appointments.dblclick(index);
 
@@ -1835,6 +1839,9 @@ module('Appointment popup', moduleConfig, () => {
                     dataSource: new DataSource({
                         store: [appointment]
                     }),
+                    editing: {
+                        legacyForm: true,
+                    },
                     currentDate: new Date(2015, 3, 23),
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
@@ -1852,7 +1859,7 @@ module('Appointment popup', moduleConfig, () => {
             });
     });
 
-    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set',
+    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set, legacyForm',
         async function(assert) {
             const scheduler = await createWrapper({
                 dataSource: new DataSource({
@@ -1861,7 +1868,8 @@ module('Appointment popup', moduleConfig, () => {
                 currentDate: new Date(2015, 3, 23),
                 startDateExpr: 'Start',
                 endDateExpr: 'End',
-                timeZone: 'Asia/Calcutta'
+                timeZone: 'Asia/Calcutta',
+                editing: { legacyForm: true }
             });
 
             pointerMock(scheduler.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
@@ -1906,17 +1914,7 @@ module('Appointment popup', moduleConfig, () => {
     });
 });
 
-module('Fixed client time zone offset', {
-    beforeEach() {
-        this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
-        fx.off = true;
-    },
-
-    afterEach() {
-        this.tzOffsetStub.restore();
-        fx.off = false;
-    }
-}, () => {
+module('Fixed client time zone offset', () => {
     test('Appointment should have right width in workspace with timezone', async function(assert) {
         const scheduler = await createWrapper({
             dataSource: [],
@@ -1952,14 +1950,14 @@ module('Fixed client time zone offset', {
             firstDayOfWeek: 1,
             dataSource: [{
                 text: 'Approve New Online Marketing Strategy',
-                startDate: new Date(2015, 4, 25, 8),
-                endDate: new Date(2015, 4, 25, 12),
+                startDate: Date.UTC(2015, 4, 25, 6),
+                endDate: Date.UTC(2015, 4, 25, 10),
                 startDateTimeZone: 'Africa/Brazzaville',
                 endDateTimeZone: 'Africa/Brazzaville'
             }, {
                 text: 'Stand-up meeting',
-                startDate: new Date(2015, 4, 25, 18),
-                endDate: new Date(2015, 4, 25, 20),
+                startDate: Date.UTC(2015, 4, 25, 16),
+                endDate: Date.UTC(2015, 4, 25, 18),
                 startDateTimeZone: 'Africa/Brazzaville',
                 endDateTimeZone: 'Africa/Brazzaville'
             }],
@@ -1973,17 +1971,17 @@ module('Fixed client time zone offset', {
         const $second = $appointments.eq(1);
         const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
 
-        assert.roughEqual(getOuterHeight($first), cellHeight * 4, 2.001, 'Appointment height is correct');
-        assert.roughEqual(getOuterHeight($second), cellHeight * 4, 2.001, 'Appointment height is correct');
+        assert.roughEqual(getOuterHeight($first), cellHeight * 6, 2.001, 'Appointment height is correct');
+        assert.roughEqual(getOuterHeight($second), cellHeight * 2, 2.001, 'Appointment height is correct');
 
-        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '6:00 AM - 10:00 AM', 'First appointment is correct');
-        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM - 6:00 PM', 'Second appointment is correct');
+        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '7:00 AM - 11:00 AM', 'First appointment is correct');
+        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '5:00 PM - 7:00 PM', 'Second appointment is correct');
     });
 
     test('Appointment should be rendered correctly if timeZones is changed', async function(assert) {
         const appointments = [{
-            startDate: new Date(2015, 1, 4, 5).toString(),
-            endDate: new Date(2015, 1, 4, 6).toString(),
+            startDate: Date.UTC(2015, 1, 4, 4),
+            endDate: Date.UTC(2015, 1, 4, 5),
             text: 'abc'
         }];
 
@@ -2003,7 +2001,7 @@ module('Fixed client time zone offset', {
         const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);
         const cellHeight = getOuterHeight(rootElement.find(CLASSES.dateTableCell).eq(0));
 
-        assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, 'Appointment top is correct');
+        assert.roughEqual($appointment.position().top, cellHeight * 6, 2.001, 'Appointment top is correct');
     });
 
     test('Appointment should be rendered correctly when appointment timeZone was set', async function(assert) {
@@ -2042,8 +2040,8 @@ module('Fixed client time zone offset', {
             timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
-                startDate: new Date(2015, 5, 8, 10),
-                endDate: new Date(2015, 5, 10, 1),
+                startDate: Date.UTC(2015, 5, 8, 8),
+                endDate: Date.UTC(2015, 5, 9, 23),
                 allDay: true
             }]
         });
@@ -2089,6 +2087,7 @@ module('Fixed client time zone offset', {
         $appointment.trigger('dxclick');
     });
 
+    // TODO(10): manual test is correct, but automated one fails because start date shifts with end date
     test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', async function(assert) {
         const scheduler = await createWrapper({
             currentDate: new Date(2015, 5, 12),
@@ -2100,8 +2099,8 @@ module('Fixed client time zone offset', {
             timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
-                startDate: new Date(2015, 5, 12, 10).toString(),
-                endDate: new Date(2015, 5, 12, 12).toString(),
+                startDate: Date.UTC(2015, 5, 12, 8),
+                endDate: Date.UTC(2015, 5, 12, 10),
                 recurrenceRule: 'FREQ=DAILY',
                 startDateTimeZone: timeZones.Lima, // -5
                 endDateTimeZone: timeZones.Lima
@@ -2182,6 +2181,7 @@ module('Fixed client time zone offset', {
         appointmentTimeZone: timeZones.Lima,
         text: 'Appointment with custom tz that is equal to scheduler tz should be resized correctly'
     }].forEach(testCase => {
+        // TODO(10): manual test is correct, but automated one fails
         test(`${testCase.text}(T392414)`, async function(assert) {
             const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 25),
@@ -2221,33 +2221,33 @@ module('Fixed client time zone offset', {
         const data = [
             {
                 schedule: 'Appointment 1',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 2',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 3',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 4',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 5',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             },
             {
                 schedule: 'Appointment 6',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
+                startDate: Date.UTC(2018, 8, 16, 23),
+                endDate: Date.UTC(2018, 8, 17, 0)
             }
         ];
 
@@ -2264,15 +2264,15 @@ module('Fixed client time zone offset', {
         });
 
         scheduler.appointments.compact.click();
-        assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
+        assert.equal(scheduler.tooltip.getDateText(), 'September 16 11:00 PM - September 17 12:00 AM', 'Dates are correct');
     });
 
     test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', async function(assert) {
         const scheduler = await createWrapper({
             dataSource: [{
                 text: 'Stand-up meeting',
-                startDate: new Date(2015, 4, 25, 17),
-                endDate: new Date(2015, 4, 25, 17, 30),
+                startDate: Date.UTC(2015, 4, 25, 15),
+                endDate: Date.UTC(2015, 4, 25, 15, 30),
                 startDateTimeZone: timeZones.Lima, // -5
                 endDateTimeZone: timeZones.Lima
             }],

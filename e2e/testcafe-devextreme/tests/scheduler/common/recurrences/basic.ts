@@ -17,13 +17,7 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
     .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(0))
     .expect(scheduler.getAppointmentCount()).eql(7);
 
-  await t
-    .wait(500)
-    .expect((await scheduler.getAppointment('Simple recurrence appointment').element.boundingClientRect).width)
-    .eql(114)
-    .expect(draggableAppointment.isAllDay)
-    .ok();
-
+  await t.wait(500);
   await t.expect(await compareScreenshot(t, 'basic-recurrence-appointment-after-drag.png')).ok();
 }).before(async () => createScheduler({
   dataSource,

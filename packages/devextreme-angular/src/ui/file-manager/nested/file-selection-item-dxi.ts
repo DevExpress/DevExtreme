@@ -22,6 +22,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-file-manager-file-selection-item',
@@ -29,7 +30,13 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_fileSelectionItems,
+           useExisting: DxiFileManagerFileSelectionItemComponent,
+        }
+    ]
 })
 export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
     @Input()

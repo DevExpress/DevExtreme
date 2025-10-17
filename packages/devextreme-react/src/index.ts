@@ -18,7 +18,6 @@ export { ContextMenu } from "./context-menu";
 export { DataGrid } from "./data-grid";
 export { DateBox } from "./date-box";
 export { DateRangeBox } from "./date-range-box";
-export { DeferRendering } from "./defer-rendering";
 export { Diagram } from "./diagram";
 export { Draggable } from "./draggable";
 export { Drawer } from "./drawer";

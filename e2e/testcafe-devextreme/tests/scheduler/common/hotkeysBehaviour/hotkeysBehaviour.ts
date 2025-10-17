@@ -57,7 +57,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
       .click(appointment.element)
       .expect(appointment.isFocused).ok()
       .pressKey('enter')
-      .expect(appointmentPopup.isVisible())
+      .expect(appointmentPopup.popup.isVisible())
       .ok();
   }).before(async () => createScheduler({
     views: [view],
@@ -68,8 +68,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
   test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async (t) => {
     const scheduler = new Scheduler('#container');
     const collector = scheduler.collectors.find('3');
-    const { appointmentPopup } = scheduler;
-    const { appointmentTooltip } = scheduler;
+    const { appointmentPopup, appointmentTooltip } = scheduler;
 
     await t
       .click(collector.element)
@@ -83,7 +82,7 @@ fixture.disablePageReloads`Hotkeys for appointments update and navigation`
       .pressKey('enter')
       .expect(appointmentTooltip.isVisible())
       .notOk()
-      .expect(appointmentPopup.isVisible())
+      .expect(appointmentPopup.popup.isVisible())
       .ok();
   }).before(async () => createScheduler({
     views: [view],

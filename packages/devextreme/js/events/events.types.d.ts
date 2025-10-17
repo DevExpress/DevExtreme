@@ -109,6 +109,16 @@ export type dxEvent = EventObject;
 export type event = DxEvent;
 
 /**
+ * @hidden
+ */
+export type PointerInteractionEvent = MouseEvent | TouchEvent | PointerEvent;
+
+/**
+ * @hidden
+ */
+export type InteractionEvent = PointerInteractionEvent | KeyboardEvent;
+
+/**
  * @docid eventsMethods.triggerHandler
  * @publicName triggerHandler(element, event)
  * @namespace DevExpress.events

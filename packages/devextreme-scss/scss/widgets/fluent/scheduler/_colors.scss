@@ -64,6 +64,8 @@ $scheduler-workspace-accent-color: $base-accent !default;
 $scheduler-current-time-cell-color: $base-accent !default;
 $scheduler-time-indicator-color: #eb5757 !default;
 $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
+$scheduler-form-subject-icon-color: null !default;
+$scheduler-form-icon-color: $base-text-color !default;
 $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
 $scheduler-workspace-month-text-color: color.change($base-text-color, $alpha: 0.54) !default;
 $scheduler-dropdown-appointment-date-color: color.change($base-text-color, $alpha: 0.54) !default;
@@ -88,6 +90,7 @@ $agenda-appointment-text-color: $base-text-color !default;
 $header-panel-cell-date: null !default;
 
 @if $mode == "light" {
+  $scheduler-form-subject-icon-color: lighten(saturate(adjust-hue($base-accent, 3), 2.21), 44.31) !default;
   $scheduler-workspace-month-text-color: #707070;
   $scheduler-appointment-text-color: #000 !default;
   $scheduler-panel-text-color: #707070;
@@ -109,6 +112,7 @@ $header-panel-cell-date: null !default;
 }
 
 @if $mode == "dark" {
+  $scheduler-form-subject-icon-color: darken(desaturate(adjust-hue($base-accent, -3), 11.06), 36.27);
   $scheduler-workspace-month-text-color: #999;
   $scheduler-appointment-base-color: darken($base-accent, 48%) !default;
   $scheduler-appointment-text-color: #fff !default;

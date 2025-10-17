@@ -33,7 +33,6 @@ ui.dxChat = require('../../../ui/chat');
 ui.dxDateBox = require('../../../ui/date_box');
 ui.dxDateRangeBox = require('../../../ui/date_range_box');
 ui.dxDrawer = require('../../../ui/drawer');
-ui.dxDeferRendering = require('../../../ui/defer_rendering');
 ui.dxDropDownBox = require('../../../ui/drop_down_box');
 ui.dxFileUploader = require('../../../ui/file_uploader');
 ui.dxForm = require('../../../ui/form');

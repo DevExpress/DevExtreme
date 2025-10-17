@@ -266,7 +266,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Oggetto",
         "dxScheduler-editorLabelStartDate": "Data inizio",
         "dxScheduler-editorLabelEndDate": "Data fine",

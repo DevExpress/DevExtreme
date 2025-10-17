@@ -280,6 +280,9 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   grouping: {
     autoExpandAll: false,
   },
+  scrolling: {
+    showScrollbar: 'never',
+  },
 }));
 
 [false, true].forEach((rtlEnabled) => {

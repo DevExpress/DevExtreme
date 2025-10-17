@@ -22,7 +22,6 @@ export { DxContextMenuComponent, DxContextMenuModule } from 'devextreme-angular/
 export { DxDataGridComponent, DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 export { DxDateBoxComponent, DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 export { DxDateRangeBoxComponent, DxDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box';
-export { DxDeferRenderingComponent, DxDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering';
 export { DxDiagramComponent, DxDiagramModule } from 'devextreme-angular/ui/diagram';
 export { DxDraggableComponent, DxDraggableModule } from 'devextreme-angular/ui/draggable';
 export { DxDrawerComponent, DxDrawerModule } from 'devextreme-angular/ui/drawer';
