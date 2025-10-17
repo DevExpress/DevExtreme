@@ -237,7 +237,7 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
     .click(filterEditor.menuButton)
     .click(filterEditor.menu.getItemByText('Between'));
 
-  await dataGrid.scrollBy({ x: 999 });
+  await dataGrid.scrollBy(t, { x: 999 });
   await t
     .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png', dataGrid.element))
     .ok()
@@ -267,13 +267,14 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
 
   await dataGrid.isReady();
 
+  const ariaLabel = await filterEditor.menuButton.getAttribute('aria-label');
+
   await t
-    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .expect(ariaLabel)
     .eql('custom text');
 }).before(async (t) => {
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
-      // Replace "en" with the target locale of the dictionary
       en: {
         'dxDataGrid-ariaSearchBox': 'custom text',
       },
@@ -290,7 +291,5 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
     },
   });
 }).after(async (t) => {
-  // To reset localization messages
-  await t
-    .eval(() => location.reload());
+  await t.eval(() => location.reload());
 });

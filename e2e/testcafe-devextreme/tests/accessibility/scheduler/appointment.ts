@@ -1,11 +1,11 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { a11yCheck } from '../../../../helpers/accessibility/utils';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 import { checkOptions } from './axe_options';
 
-fixture.disablePageReloads`a11y - appointment`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`Scheduler - Appointment`
+  .page(url(__dirname, '../../container.html'));
 
 const appointmentItem = {
   text: 'App 1',

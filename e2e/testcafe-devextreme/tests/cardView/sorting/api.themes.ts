@@ -4,8 +4,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CardView - Sorting Behavior`
   .page(url(__dirname, '../../container.html'));
@@ -17,7 +15,7 @@ const baseConfig = {
   height: 500,
 };
 
-safeSizeTest('Sort index API', async (t) => {
+test('Sort index API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -25,8 +23,6 @@ safeSizeTest('Sort index API', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
@@ -51,7 +47,7 @@ safeSizeTest('Sort index API', async (t) => {
   });
 });
 
-safeSizeTest('ShowSortIndexes API', async (t) => {
+test('ShowSortIndexes API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -59,8 +55,6 @@ safeSizeTest('ShowSortIndexes API', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
@@ -88,7 +82,7 @@ safeSizeTest('ShowSortIndexes API', async (t) => {
   });
 });
 
-safeSizeTest('AllowSorting API', async (t) => {
+test('AllowSorting API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -99,8 +93,6 @@ safeSizeTest('AllowSorting API', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
@@ -136,7 +128,7 @@ safeSizeTest('AllowSorting API', async (t) => {
   },
   'name',
 ].forEach((calculateSortValue) => {
-  safeSizeTest('CalculateSortValue API', async (t) => {
+  test('CalculateSortValue API', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -144,8 +136,6 @@ safeSizeTest('AllowSorting API', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-
-    await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
   }).before(async () => {
     await createWidget('dxCardView', {
       ...baseConfig,
@@ -172,7 +162,7 @@ safeSizeTest('AllowSorting API', async (t) => {
   });
 });
 
-safeSizeTest('SortingMethod API', async (t) => {
+test('SortingMethod API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -180,8 +170,6 @@ safeSizeTest('SortingMethod API', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,

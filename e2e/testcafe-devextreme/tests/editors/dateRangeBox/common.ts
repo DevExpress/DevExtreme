@@ -139,7 +139,7 @@ labelModes.forEach((labelMode) => {
       .ok(compareResults.errorMessages());
   }).before(async (t) => {
     await setAttribute('#container', 'style', 'width: 800px; height: 300px; padding-top: 10px;');
-    await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
+
     t.ctx.id = await createDateRangeBox({
       labelMode,
       width: 600,

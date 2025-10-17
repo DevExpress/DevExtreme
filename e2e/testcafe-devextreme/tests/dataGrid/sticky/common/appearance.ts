@@ -5,6 +5,8 @@ import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 import { Themes } from '../../../../helpers/themes';
 import { changeTheme } from '../../../../helpers/changeTheme';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { isMaterial } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -49,6 +51,9 @@ fixture.disablePageReloads`FixedColumns - appearance`
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
+      if (isMaterial()) {
+        await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+      }
 
       return createWidget('dxDataGrid', {
         dataSource: getData(13, 40),

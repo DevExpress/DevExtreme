@@ -2793,6 +2793,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
   })
     .before(async () => {
       await changeTheme(theme);
+
       await createWidget('dxDataGrid', {
         dataSource: [
           { Color: 'red' },

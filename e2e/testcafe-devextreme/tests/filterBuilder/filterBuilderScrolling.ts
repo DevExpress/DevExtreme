@@ -7,9 +7,8 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
 
-fixture`Filter Builder Scrolling Test`.page(
-  url(__dirname, '../container.html'),
-);
+fixture.disablePageReloads`Filter Builder Scrolling Test`
+  .page(url(__dirname, '../container.html'));
 
 // T1273328
 safeSizeTest('FilterBuilder - The field drop-down window moves with the page scroll', async (t) => {
