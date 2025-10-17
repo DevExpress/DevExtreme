@@ -68,7 +68,7 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
       await changeTheme(Themes.genericLight);
     });
 
-  test.meta({ unstable: true })(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
+  test(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList(TREE_LIST_SELECTOR);
     const dataRow = treeList.getDataRow(1);

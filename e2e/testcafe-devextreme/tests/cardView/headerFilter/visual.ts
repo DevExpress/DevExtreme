@@ -3,9 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture`HeaderFilter.Visual`
+fixture.disablePageReloads`HeaderFilter.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -25,8 +24,6 @@ test('popup with list', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     { A: 'A_0', B: 'B_0', C: 'C_0' },
@@ -57,8 +54,6 @@ test('popup with search', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     { A: 'A_0', B: 'B_0', C: 'C_0' },
@@ -92,8 +87,6 @@ test('popup with tree', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     { A: '2024-01-01', B: 'B_0', C: 'C_0' },

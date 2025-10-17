@@ -845,7 +845,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   isGroupedAllDayPanel() {
     return calculateIsGroupedAllDayPanel(
-      this.option('groups'),
+      this.option('groups').length,
       this.option('groupOrientation') as any,
       this.isAllDayPanelVisible as any,
     );

@@ -1,12 +1,12 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import type { Properties } from 'devextreme/ui/data_grid';
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import { a11yCheck } from '../../../../helpers/accessibility/utils';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture`Fixed columns tests with axe`
-  .page(url(__dirname, '../../../container.html'));
+fixture.disablePageReloads`DataGrid - Fixed columns`
+  .page(url(__dirname, '../../container.html'));
 
 const pressKey = async (t: TestController, key: string, times = 1) => {
   for (let i = 0; i < times; i += 1) {

@@ -1,10 +1,8 @@
 'use strict';
 
 const gulp = require('gulp');
-const file = require('gulp-file');
 const del = require('del');
 const path = require('path');
-const fs = require('fs');
 const { generateComponents } = require('@devextreme-generator/build-helpers');
 const { InfernoGenerator } = require('@devextreme-generator/inferno');
 const ts = require('gulp-typescript');
@@ -33,8 +31,6 @@ const SRC = [
     '!js/renovation/**/__tests__/**/*',
     '!js/renovation/test_utils/**/*'
 ];
-
-const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
 
 const knownErrors = [
     'js/renovation/component_wrapper/',
@@ -119,25 +115,6 @@ function generateInfernoComponents(distPath, babelConfig, dev) {
     };
 }
 
-function processRenovationMeta() {
-    const widgetsMeta = generator
-        .getComponentsMeta()
-        .filter(meta =>
-            meta.decorator &&
-            meta.decorator.jQuery &&
-            meta.decorator.jQuery.register === 'true' &&
-            fs.existsSync(meta.path));
-
-    const metaJson = JSON.stringify(widgetsMeta.map(meta => ({
-        widgetName: `dx${meta.name}`,
-        ...meta,
-        path: path.relative(COMPAT_TESTS_PARTS, meta.path).replace(/\\/g, '/')
-    })), null, 2);
-
-    return file('widgets.json', metaJson, { src: true })
-        .pipe(gulp.dest(COMPAT_TESTS_PARTS));
-}
-
 gulp.task('generate-jquery-components-clean', deleteJQueryComponents);
 
 gulp.task('generate-jquery-components-run', function generateJQuery() {
@@ -155,13 +132,11 @@ gulp.task('generate-components', gulp.series(
     generateInfernoComponents('./', transpileConfig.cjs),
     ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
     ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
-    processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
     generateInfernoComponents('./', transpileConfig.cjs, true),
-    processRenovationMeta
 ));
 
 gulp.task('generate-inferno-components-watch', function() {

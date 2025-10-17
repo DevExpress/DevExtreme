@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { remoteApiIdGroupMock, remoteApiMock, remoteData } from '../helpers/remoteApiMock';
 
-fixture`HeaderFilter.RemoteDataSource.Functional`
+fixture.disablePageReloads`HeaderFilter.RemoteDataSource.Functional`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
