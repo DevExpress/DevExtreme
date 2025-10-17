@@ -542,6 +542,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
       /* Recurrence End section - Grid layout with equal heights */
       .dx-scheduler-form-recurrence-end-repeat-group {
+        .dx-field-item-label {
+          height: 32px;
+          display: flex;
+          align-items: center;
+        }
+
         > .dx-box-item {
           height: 100%;
           margin: 0;
@@ -620,6 +626,10 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
         overflow: visible;
         position: relative;
+
+        .dx-icon {
+          color: $scheduler-workspace-accent-color;
+        }
 
         &::after {
           content: '';
