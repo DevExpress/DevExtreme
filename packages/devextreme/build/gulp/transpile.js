@@ -18,7 +18,6 @@ const through2 = require('through2');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
-const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
 const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
@@ -177,7 +176,6 @@ const transpileRenovation = () => transpile(
     ctx.TRANSPILED_RENOVATION_PATH,
     {
         jsPipes: [
-            replaceWidgets(true),
             cachedJsBabelCjs(),
             touch()
         ],
@@ -191,7 +189,6 @@ const transpileProd = (dist, isEsm) => transpile(
     {
         jsPipes: [
             removeDebug(),
-            replaceWidgets(false),
             isEsm ? babel(transpileConfig.esm) : cachedJsBabelCjs()
         ],
         tsPipes: [
@@ -253,22 +250,6 @@ gulp.task('transpile', (done) => {
     });
 });
 
-gulp.task('renovated-components-watch', () => {
-    return gulp
-        .watch(
-            [renovatedComponentsPath + '.js'],
-            function transpileRenovatedComponents(done) {
-                gulp.series(
-                    reloadConfig,
-                    transpileRenovation(),
-                    transpileRenovationProd()
-                )(done);
-            }
-        )
-        .on('ready', () => console.log('renovated-components task is watching for changes...'));
-
-});
-
 
 const watchJsTask = () => {
     const watchTask = watch(src)
@@ -282,12 +263,10 @@ const watchJsTask = () => {
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH));
     watchTask
-        .pipe(replaceWidgets(true))
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
     watchTask
         .pipe(removeDebug())
-        .pipe(replaceWidgets(true))
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
     return watchTask;

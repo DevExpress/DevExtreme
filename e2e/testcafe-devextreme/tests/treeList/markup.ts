@@ -3,7 +3,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
-fixture`TreeList - Markup`
+fixture.disablePageReloads`TreeList - Markup`
   .disablePageReloads
   .page(url(__dirname, '../container.html'));
 

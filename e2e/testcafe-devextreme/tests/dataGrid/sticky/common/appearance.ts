@@ -19,7 +19,7 @@ fixture.disablePageReloads`FixedColumns - appearance`
   (showRowLines) => {
     // T1268664
     const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
-    test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
+    test.meta({ unstable: true })(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);

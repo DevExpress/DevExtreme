@@ -4,6 +4,8 @@ import { data as elementData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
 import { isFunction } from '@js/core/utils/type';
 
+import type { GroupNode } from './utils/resource_manager/types';
+
 const ROW_SELECTOR = 'tr';
 
 class SchedulerTableCreator {
@@ -139,7 +141,7 @@ class SchedulerTableCreator {
     return rows;
   }
 
-  makeGroupedTableFromJSON(type, data, config) {
+  makeGroupedTableFromJSON(tree: GroupNode[], config?) {
     let table;
     const cellStorage: any[] = [];
     let rowIndex = 0;
@@ -147,8 +149,6 @@ class SchedulerTableCreator {
     config = config || {};
 
     const cellTag = config.cellTag || 'td';
-    const childrenField = config.childrenField || 'children';
-    const titleField = config.titleField || 'title';
     const { groupTableClass } = config;
     const { groupRowClass } = config;
     const { groupCellClass } = config;
@@ -162,14 +162,14 @@ class SchedulerTableCreator {
       }
     }
 
-    function getChildCount(item) {
-      if (item[childrenField]) {
-        return item[childrenField].length;
+    function getChildCount(item: GroupNode) {
+      if (item.children) {
+        return item.children.length;
       }
       return 0;
     }
 
-    function createCell(text, childCount, index, data) {
+    function createCell(text: string, childCount, index, node: GroupNode) {
       const cell = {
         element: domAdapter.createElement(cellTag),
         childCount,
@@ -181,7 +181,7 @@ class SchedulerTableCreator {
 
       const cellText = (domAdapter as any).createTextNode(text);
       if (typeof groupCellCustomContent === 'function') {
-        groupCellCustomContent(cell.element, cellText, index, data);
+        groupCellCustomContent(cell.element, cellText, index, node);
       } else {
         cell.element.appendChild(cellText);
       }
@@ -189,10 +189,10 @@ class SchedulerTableCreator {
       return cell;
     }
 
-    function generateCells(data) {
-      for (let i = 0; i < data.length; i++) {
-        const childCount = getChildCount(data[i]);
-        const cell = createCell(data[i][titleField], childCount, i, data[i]);
+    function generateCells(groupNodes: GroupNode[]) {
+      for (let i = 0; i < groupNodes.length; i++) {
+        const childCount = getChildCount(groupNodes[i]);
+        const cell = createCell(groupNodes[i].resourceText, childCount, i, groupNodes[i]);
 
         if (!cellStorage[rowIndex]) {
           cellStorage[rowIndex] = [];
@@ -200,7 +200,7 @@ class SchedulerTableCreator {
         cellStorage[rowIndex].push(cell);
 
         if (childCount) {
-          generateCells(data[i][childrenField]);
+          generateCells(groupNodes[i].children);
         } else {
           rowIndex++;
         }
@@ -238,7 +238,7 @@ class SchedulerTableCreator {
     }
 
     createTable();
-    generateCells(data);
+    generateCells(tree);
     putCellsToRows();
 
     return table;

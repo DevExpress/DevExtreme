@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Pagination Base Properties`
+fixture.disablePageReloads`Pagination Base Properties`
   .page(url(__dirname, '../container.html'));
 
 test('Pagination width and height property', async (t) => {

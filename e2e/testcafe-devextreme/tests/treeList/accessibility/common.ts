@@ -2,8 +2,6 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-// import { Themes } from '../../../helpers/themes';
-// import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture`Testing with axe`
   .page(url(__dirname, '../../container.html'));

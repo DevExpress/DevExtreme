@@ -3,8 +3,6 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { Selector } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-// import { changeTheme } from '../../../helpers/changeTheme';
-// import { Themes } from '../../../helpers/themes';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const TREE_LIST_SELECTOR = '#container';

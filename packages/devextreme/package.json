@@ -238,7 +238,6 @@
     "build:systemjs": "gulp transpile-systemjs",
     "compile:r": "tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
-    "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
     "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
@@ -251,7 +250,6 @@
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
     "test-jest:all": "pnpm test-jest && pnpm test-jest:node",
-    "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },
   "bin": {

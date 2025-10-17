@@ -242,6 +242,7 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
   const emptyMessage = columnChooser.getEmptyMessage();
   const titleText = await title.innerText;
   const emptyMessageText = await emptyMessage.innerText;
+
   await t.expect(titleText).eql('customTitle');
   await t.expect(emptyMessageText).eql('customEmptyText');
 }).before(async (t) => {
@@ -268,4 +269,6 @@ test('ColumnChooser should receive and render custom texts', async (t) => {
     dataSource: [],
     columns: [],
   });
+}).after(async (t) => {
+  await t.eval(() => location.reload());
 });
