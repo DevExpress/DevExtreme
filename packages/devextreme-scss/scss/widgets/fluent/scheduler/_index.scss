@@ -633,7 +633,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     .dx-scheduler-form-recurrence-end-repeat-group .dx-texteditor-input {
       padding-left: 8px;
       padding-right: 8px;
-      padding-inline-end: 8px !important;
+      padding-inline-end: 8px !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-field-item:not(.dx-first-col) {
