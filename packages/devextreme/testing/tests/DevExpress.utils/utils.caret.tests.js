@@ -28,52 +28,39 @@ testModule('caret', () => {
         assert.deepEqual(caret($input), caretPosition, 'caret position set correctly');
     });
 
-    test('setCaret should not be called if input is not in document (T341277)', function(assert) {
-        const caretPosition = { start: 1, end: 2 };
-        const input = document.createElement('input');
-        input.value = '12345';
-
-        // Mock getActiveElement to return null (not the input)
-        // This simulates the input not being focused/active
-        const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(null);
-
-        try {
-            const result = caret(input, caretPosition);
-
-            // When input is not active and isFocusingOnCaretChange is true (iOS/Mac),
-            // the function should return early (undefined) without setting caret
-            assert.strictEqual(result, undefined, 'caret() returned undefined (early exit)');
-
-            // Verify that selectionStart/End were not changed
-            // For a detached element without being set, these should be 0
-            assert.strictEqual(input.selectionStart, 0, 'selectionStart was not set');
-            assert.strictEqual(input.selectionEnd, 0, 'selectionEnd was not set');
-        } catch(e) {
-            assert.ok(false, `exception is thrown: ${e}`);
-        } finally {
-            getActiveElementStub.restore();
-        }
-    });
-
-    test('Exception has not been fired if input.selectionStart and input.selectionEnd fire exeptions (T341277)', function(assert) {
-        const caretPosition = { start: 1, end: 2 };
-        const input = {
-            set selectionStart(_value) {
-                throw 'You can not get a selection';
-            },
-            set selectionEnd(_value) {
-                throw 'You can not get a selection';
-            }
+    test('exception should not be thrown if the input is not attached to the DOM (T341277)', function(assert) {
+        const originalDescriptors = {
+            selectionStart: Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionStart'),
+            selectionEnd: Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'selectionEnd'),
         };
+
+        const setterStub = sinon.stub();
+
+        const throwingDescriptor = {
+            set: function() {
+                setterStub();
+                throw new Error('Cannot set selection');
+            },
+        };
+
+        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', { ...originalDescriptors.selectionStart, ...throwingDescriptor });
+        Object.defineProperty(HTMLInputElement.prototype, 'selectionEnd', { ...originalDescriptors.selectionEnd, ...throwingDescriptor });
+
+        const input = document.createElement('input');
         const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').returns(input);
 
         try {
-            caret(input, caretPosition);
+            caret(input, { start: 1, end: 2 });
+
+            assert.strictEqual(setterStub.callCount, 1, 'setter has been called');
             assert.ok(true, 'exception is not thrown');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
         } finally {
             getActiveElementStub.restore();
+
+            Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', originalDescriptors.selectionStart);
+            Object.defineProperty(HTMLInputElement.prototype, 'selectionEnd', originalDescriptors.selectionEnd);
         }
     });
 
@@ -117,9 +104,9 @@ testModule('caret', () => {
             assert.ok(true, 'exception is not thrown');
         } catch(e) {
             assert.ok(false, 'exception is thrown');
+        } finally {
+            Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', initialDescriptor);
         }
-
-        Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', initialDescriptor);
     });
 
     [false, true].forEach((forceSetCaret) => {
