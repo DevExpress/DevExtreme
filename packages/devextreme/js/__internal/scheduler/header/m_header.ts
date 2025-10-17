@@ -215,8 +215,8 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     }
   }
 
-  _updateCurrentView(view: NormalizedView) {
-    this.option('onCurrentViewChange')(view.name ?? view.type);
+  _updateCurrentView(view: Required<NormalizedView>) {
+    this.option('onCurrentViewChange')(view.name);
   }
 
   _updateCalendarValueAndCurrentDate(date) {
