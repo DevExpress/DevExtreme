@@ -46,7 +46,7 @@ const customizeTooltip = (arg: any) => ((arg.attribute('population'))
   ? { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` } : {});
 
 const customizeText = (
-    { index, start, end }: Record<string, any> & { end: number;  index: number;  start: number; }) => {
+  { index, start, end }: Record<string, any> & { end: number; index: number; start: number; }) => {
   if (index === 0) {
     return '< 0.5%';
   }

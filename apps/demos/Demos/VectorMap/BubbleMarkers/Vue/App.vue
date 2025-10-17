@@ -44,7 +44,7 @@ import {
   DxLegend,
   DxSource,
   DxTooltip,
-  type DxVectorMapTypes
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 import { markers } from './data.ts';
 

@@ -39,7 +39,7 @@ import { ref, type Ref } from 'vue';
 import DxList, { DxItemDragging } from 'devextreme-vue/list';
 import * as data from './data.ts';
 
-type Task = {id: number, text: string};
+type Task = { id: number, text: string };
 
 const doingTasks = ref<Task[]>(data.doingTasks);
 const plannedTasks = ref<Task[]>(data.plannedTasks);

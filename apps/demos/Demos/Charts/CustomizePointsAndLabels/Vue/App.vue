@@ -56,7 +56,7 @@ const dataSource = temperaturesData;
 
 const customizeText = ({ valueText }: { valueText: string }) => `${valueText}&#176F`;
 
-const customizePoint = ({ value }: { value: number}) => {
+const customizePoint = ({ value }: { value: number }) => {
   if (value > highAverage) {
     return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } };
   }

@@ -146,12 +146,12 @@ function findNodeById(nodes: DxTreeViewTypes.Node[], id: string): DxTreeViewType
     if (nodes[i].itemData?.id === id) {
       return nodes[i];
     }
-    
+
     const nodeChildren = nodes[i].children;
-    
+
     if (nodeChildren) {
       const node = nodeChildren ? findNodeById(nodeChildren, id) : null;
-      
+
       if (node) {
         return node;
       }
@@ -163,7 +163,7 @@ function moveNode(fromNode: DxTreeViewTypes.Node, toNode: DxTreeViewTypes.Node |
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray
     ?.findIndex((item) => item.id === fromNode.itemData?.id) || -1;
-  
+
   if (fromIndex !== -1 && fromNodeContainingArray) {
     fromNodeContainingArray.splice(fromIndex, 1);
   }
@@ -198,7 +198,7 @@ function getTopVisibleNode(component: DxSortableInstance) {
     const treeViewElement = component.element();
     const treeViewTopPosition = treeViewElement.getBoundingClientRect().top;
     const nodes = treeViewElement.querySelectorAll('.dx-treeview-node');
-    
+
     for (let i = 0; i < nodes.length; i += 1) {
       const nodeTopPosition = nodes[i].getBoundingClientRect().top;
       if (nodeTopPosition >= treeViewTopPosition) {

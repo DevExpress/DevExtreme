@@ -82,7 +82,7 @@ import {
   DxTooltip,
   DxCrosshair,
 } from 'devextreme-vue/chart';
-import type { chartPointAggregationInfoObject } from "devextreme/viz/chart";
+import type { chartPointAggregationInfoObject } from 'devextreme/viz/chart';
 import { CustomStore } from 'devextreme-vue/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.vue';
@@ -129,9 +129,9 @@ function calculateCandle(e: chartPointAggregationInfoObject) {
 function customizePoint(pointInfo: Record<string, any>) {
   if (pointInfo.seriesName === 'Volume') {
     const point = chartRef.value?.instance
-        ?.getAllSeries()[0]
-        .getPointsByArg(pointInfo.argument)[0]
-        .data;
+      ?.getAllSeries()[0]
+      .getPointsByArg(pointInfo.argument)[0]
+      .data;
 
     if (point && point.close >= point.open) {
       return { color: '#1db2f5' };

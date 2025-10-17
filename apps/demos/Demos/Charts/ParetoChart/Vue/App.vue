@@ -73,9 +73,9 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { complaintsData } from './data.ts';
 
-function customizeTooltip({ argumentText, points }: { 
-  argumentText: string; 
-  points: Array<{ seriesName: string; valueText: string }> 
+function customizeTooltip({ argumentText, points }: {
+  argumentText: string;
+  points: Array<{ seriesName: string; valueText: string }>
 }) {
   return {
     html: `<div><div class='tooltip-header'>${

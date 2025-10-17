@@ -70,7 +70,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxControlBar,
-  type DxVectorMapTypes,  
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 
 import DxTextBox from 'devextreme-vue/text-box';

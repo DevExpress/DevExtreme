@@ -62,7 +62,7 @@ function customizePoint({ value }: { value: number }) {
   if (value === 3) {
     return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
   }
-  
+
   return {};
 }
 

@@ -36,7 +36,7 @@ const bounds = [-180, 85, 180, -60];
 function customizeTooltip(info: any) {
   const name = info.attribute('name');
   const country = countries[name];
-  
+
   if (country) {
     return {
       text: `${name}: ${country.totalArea}M km&#178`,

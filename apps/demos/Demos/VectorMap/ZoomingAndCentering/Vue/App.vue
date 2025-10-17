@@ -46,7 +46,7 @@ function customizeTooltip(info: any) {
   if (info.layer.type === 'marker') {
     return { text: info.attribute('name') };
   }
-  
+
   return {};
 }
 function markerClick(e: DxVectorMapTypes.ClickEvent) {

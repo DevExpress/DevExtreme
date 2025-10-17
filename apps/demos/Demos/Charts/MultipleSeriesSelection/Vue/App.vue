@@ -43,7 +43,7 @@ import DxChart, {
   DxFormat,
   DxLegend,
   DxExport,
-  type DxChartTypes,  
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { versionSources, statisticsData } from './data.ts';
 

@@ -123,7 +123,7 @@ function getItems(driveName: string) {
     ? itemsDriveC.value
     : itemsDriveD.value;
 }
-function calculateToIndex(e: DxSortableTypes.DragEndEvent | DxSortableTypes.DragChangeEvent ) {
+function calculateToIndex(e: DxSortableTypes.DragEndEvent | DxSortableTypes.DragChangeEvent) {
   if (e.fromComponent !== e.toComponent || e.dropInsideItem) {
     return e.toIndex || 0;
   }
@@ -147,7 +147,7 @@ function findNodeById(nodes: Node[], id: string): Node | null {
     if (nodes[i].children) {
       const nodeChildren = nodes[i].children;
       const node = nodeChildren ? findNodeById(nodeChildren, id) : null;
-      
+
       if (node) {
         return node;
       }
@@ -186,7 +186,7 @@ function moveChildren(node: Node, fromDataSource: DriveItem[], toDataSource: any
     const fromIndex = fromDataSource.findIndex((item) => item.id === child.itemData?.id);
     if (fromIndex !== -1) {
       fromDataSource.splice(fromIndex, 1);
-      toDataSource.splice(toDataSource.length, 0, child.itemData);;
+      toDataSource.splice(toDataSource.length, 0, child.itemData);
     }
   });
 }

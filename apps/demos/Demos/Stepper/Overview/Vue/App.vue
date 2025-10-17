@@ -80,7 +80,7 @@ import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-gr
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { steps, orientations, navigationModes, type Step } from './data.ts';
 
-type Fields =  Array<keyof Step>;
+type Fields = Array<keyof Step>;
 
 const orientation = ref(orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);

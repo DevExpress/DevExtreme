@@ -64,7 +64,7 @@ import {
   DxBorder,
   DxExport,
   DxTooltip,
-  
+
 } from 'devextreme-vue/chart';
 import type { LegendItem } from 'devextreme-vue/common/charts';
 import service from './data.ts';

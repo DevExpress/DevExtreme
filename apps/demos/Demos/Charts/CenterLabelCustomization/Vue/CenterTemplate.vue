@@ -29,7 +29,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
-import { type DxPieChart } from "devextreme-vue/pie-chart";
+import { type DxPieChart } from 'devextreme-vue/pie-chart';
 
 type DxPieChartInstance = DxPieChart['instance'];
 
@@ -37,27 +37,25 @@ const props = defineProps<{
   pieChart: DxPieChartInstance
 }>();
 
-const country = computed(() => {
-  return props ? props.pieChart
-      ?.getAllSeries()[0]
-      ?.getVisiblePoints()[0]
-      ?.data
-      ?.country as string : '';
-});
+const country = computed(() => props ? props.pieChart
+  ?.getAllSeries()[0]
+  ?.getVisiblePoints()[0]
+  ?.data
+  ?.country as string : '');
 
 const getImagePath = (countryName: string): string => `../../../../images/flags/${countryName.replace(/\s/, '').toLowerCase()}.svg`;
 const calculateTotal = (pieChart: DxPieChartInstance): string => {
   const points = pieChart?.getAllSeries()[0]?.getVisiblePoints() || [];
-  
+
   return formatNumber(
-      points.reduce<number>((s: number, p) => {
-        if (typeof p.originalValue == 'number') {
-          return s + p.originalValue;
-        }
-        
-        return s;
-      }, 0)
-  )
+    points.reduce<number>((s: number, p) => {
+      if (typeof p.originalValue === 'number') {
+        return s + p.originalValue;
+      }
+
+      return s;
+    }, 0),
+  );
 };
 
 const formatNumber = new Intl.NumberFormat('en-US', {

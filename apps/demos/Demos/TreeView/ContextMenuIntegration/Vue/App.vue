@@ -48,7 +48,7 @@ function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
   selectedTreeItem.value = e.itemData;
   const contextMenu = contextMenuRef.value.instance;
   const isProductItem = !e.itemData.items;
-  
+
   contextMenu.option('items[0].visible', !isProductItem);
   contextMenu.option('items[1].visible', !isProductItem);
   contextMenu.option('items[2].visible', isProductItem);
@@ -60,11 +60,11 @@ function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
 function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
   const treeView = treeViewRef.value.instance;
   let logEntry = '';
-  
-  if(!selectedTreeItem.value) {
+
+  if (!selectedTreeItem.value) {
     return;
   }
- 
+
   switch (e.itemData?.id) {
     case 'expand': {
       logEntry = `The '${selectedTreeItem.value.text}' group was expanded`;
