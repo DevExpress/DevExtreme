@@ -333,16 +333,10 @@ export const getViewName = (view: RawViewType): string | undefined => {
   return view;
 };
 
-export const getViewText = (view: RawViewType): string => {
-  const viewName = getViewName(view);
-  const viewText = messageLocalization.format(`dxScheduler-switcher${viewName}`);
-
-  if (!viewText) {
-    return viewName ?? '';
-  }
-
-  return viewText;
-};
+export const getViewText = (
+  view: NormalizedView,
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+): string => view.name || messageLocalization.format(`dxScheduler-switcher${view.type}`);
 
 export const formatViews = (
   views: NormalizedView[],
