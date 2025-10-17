@@ -1,4 +1,4 @@
-import { type DxTreeViewTypes } from 'devextreme-vue/cjs/tree-view';
+import { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 
 const products: DxTreeViewTypes.Item[] = [{
   id: '1',
