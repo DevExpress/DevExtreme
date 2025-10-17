@@ -70,7 +70,10 @@ function getOrderDay(rowData: Order) {
 }
 
 function calculateOrderDateFilterExpression(
-  this: DxCardViewTypes.Column, value, selectedFilterOperations, target,
+  this: DxCardViewTypes.Column,
+  value: unknown,
+  selectedFilterOperations: string | null,
+  target: string,
 ) {
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
@@ -78,8 +81,14 @@ function calculateOrderDateFilterExpression(
   return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target) as any;
 }
 
-function orderDateHeaderFilterDataSource(data) {
-  data.dataSource.postProcess = function (results) {
+type HeaderFilterDataSourceArg = {
+  dataSource: {
+    postProcess: (results: Array<{ text: string; value: unknown }>) => Array<{ text: string; value: unknown }>;
+  };
+};
+
+function orderDateHeaderFilterDataSource(data: HeaderFilterDataSourceArg): void {
+  data.dataSource.postProcess = function (results: Array<{ text: string; value: unknown }>) {
     results.push({
       text: 'Weekends',
       value: 'weekends',

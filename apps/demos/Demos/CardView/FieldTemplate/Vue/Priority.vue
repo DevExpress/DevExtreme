@@ -16,7 +16,9 @@ const props = defineProps<{
 const priority = computed(() =>
   priorities.find((p) => p.id === props.priorityID),
 );
-const priorityClassName = `task__priority task__priority--${priority.value.postfix}`;
+const priorityClassName = computed(() => 
+  `task__priority task__priority--${priority.value?.postfix || ''}`
+);
 </script>
 
 <style>

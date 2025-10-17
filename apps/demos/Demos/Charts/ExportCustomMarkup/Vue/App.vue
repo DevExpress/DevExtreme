@@ -75,7 +75,7 @@ import Form from './Form.vue';
 const form = ref();
 const chart = ref();
 
-const prepareMarkup = (chartSVG, markup) => {
+const prepareMarkup = (chartSVG: string, markup: string): SVGElement => {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -92,7 +92,7 @@ const prepareMarkup = (chartSVG, markup) => {
   return svg;
 };
 
-function onClick() {
+function onClick(): void {
   const chartSVG = chart.value.instance.svg();
   const formContent = form.value.getMarkup();
 
@@ -101,11 +101,11 @@ function onClick() {
     height: 420,
     margin: 0,
     format: 'png',
-    svgToCanvas(svg, canvas) {
+    svgToCanvas(svg: SVGElement, canvas: HTMLCanvasElement) {
       return new Promise((resolve) => {
         const v = Canvg.fromString(
-          canvas.getContext('2d'),
-          new XMLSerializer().serializeToString(svg),
+            canvas.getContext("2d")!,
+            new XMLSerializer().serializeToString(svg)
         );
 
         resolve(v.render());
