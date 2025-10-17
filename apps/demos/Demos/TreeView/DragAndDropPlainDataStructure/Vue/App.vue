@@ -160,7 +160,7 @@ function moveNode(
   toNode: Node | null,
   fromItems: DriveItem[],
   toItems: any[],
-  isDropInsideItem: boolean
+  isDropInsideItem: boolean,
 ) {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData?.id);
   fromItems.splice(fromIndex, 1);

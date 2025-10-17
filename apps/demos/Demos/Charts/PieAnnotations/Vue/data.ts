@@ -1,4 +1,5 @@
 import { type DxPieChartTypes } from 'devextreme-vue/pie-chart';
+
 type Annotation = Record<string, any> & { location?: DxPieChartTypes.PieChartAnnotationLocation };
 
 const annotationSources: Annotation[] = [{
