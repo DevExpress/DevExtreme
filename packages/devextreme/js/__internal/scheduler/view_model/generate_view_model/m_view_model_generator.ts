@@ -59,7 +59,7 @@ export class AppointmentViewModelGenerator {
     });
     const viewModelPlain = appointmentRenderingStrategyName === 'agenda'
       ? adaptAgendaSettings(viewModel, dataAccessors, timeZoneCalculator)
-      : addCollector(viewModel, timeZoneCalculator);
+      : addCollector(viewModel);
 
     return {
       positionMap,
@@ -108,17 +108,17 @@ export class AppointmentViewModelGenerator {
     for (const model of viewModel) {
       // eslint-disable-next-line no-restricted-syntax
       for (const setting of model.settings ?? []) {
-        const appointment = setting?.info?.appointment as {
-          startDate: Date;
-          endDate: Date;
-          normalizedEndDate: Date;
-        } | undefined;
+        const appointment = setting?.info?.appointment as any | undefined;
 
         if (appointment && !processedAppointments.has(appointment)) {
           appointment.startDate = dateUtilsTs
             .addOffsets(appointment.startDate, [viewOffset]);
           appointment.endDate = dateUtilsTs
             .addOffsets(appointment.endDate, [viewOffset]);
+          appointment.savedBeforeSplit.startDate = dateUtilsTs
+            .addOffsets(appointment.savedBeforeSplit.startDate, [viewOffset]);
+          appointment.savedBeforeSplit.endDate = dateUtilsTs
+            .addOffsets(appointment.savedBeforeSplit.endDate, [viewOffset]);
           appointment.normalizedEndDate = dateUtilsTs
             .addOffsets(appointment.normalizedEndDate, [viewOffset]);
           processedAppointments.add(appointment);

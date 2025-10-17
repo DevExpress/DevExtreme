@@ -1,5 +1,4 @@
 import { isDefined } from '@js/core/utils/type';
-import type { TimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import { plainViewModel } from './plain_view_model';
@@ -74,7 +73,6 @@ const processVirtualAppointment = (
 
 export const addCollector = (
   viewModel: AppointmentViewModelInternal[],
-  timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentViewModelPlain[] => {
   const internalViewModelItems = plainViewModel(viewModel);
   const result: AppointmentViewModelPlain[] = [];
@@ -86,8 +84,8 @@ export const addCollector = (
       sourceAppointment: item.info.sourceAppointment,
       appointment: {
         ...item.info.appointment,
-        startDate: timeZoneCalculator.createDate(item.info.sourceAppointment.startDate, 'toGrid'),
-        endDate: timeZoneCalculator.createDate(item.info.sourceAppointment.endDate, 'toGrid'),
+        startDate: item.info.appointment.savedBeforeSplit.startDate,
+        endDate: item.info.appointment.savedBeforeSplit.endDate,
       },
     },
   })).forEach((item) => {
