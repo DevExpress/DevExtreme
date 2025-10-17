@@ -84,15 +84,13 @@
 
             WORKER_COUNT;
 
-        var isWinPhone = /iemobile/i.test(navigator.userAgent) || /Windows Phone 10/.test(navigator.userAgent);
-
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
                 return 1; // NOTE: more than 1 window cause problems with tests that use focus
 
             var ua = navigator.userAgent;
 
-            if(window.ActiveXObject !== undefined || isWinPhone)
+            if(window.ActiveXObject !== undefined)
                 return 1;
 
             return 2;
