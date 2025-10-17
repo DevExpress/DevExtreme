@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../../helpers/createWidget';
 import { BASE64_IMAGE_1 } from './images/base64';
-import { testScreenshot } from '../../../../helpers/themeUtils';
+import { testScreenshot } from '../../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
-fixture.disablePageReloads`HtmlEditor - common`
-  .page(url(__dirname, '../../../container.html'));
+fixture`HtmlEditor - common`
+  .page(url(__dirname, '../../../../container.html'));
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
