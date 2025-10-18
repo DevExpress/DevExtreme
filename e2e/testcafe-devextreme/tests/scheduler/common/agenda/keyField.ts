@@ -3,7 +3,6 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-// TODO fixture.disablePageReloads lead to fail random test in current file
 fixture`Agenda:KeyField`
   .page(url(__dirname, '../../../container.html'));
 
@@ -141,5 +140,5 @@ test('Wrong behavior: editing recurrence appointment does not affect to appointm
     currentDate: new Date(2021, 2, 28),
     recurrenceEditMode: 'series',
     height: 600,
-  }, '#container', { disableFxAnimation: true });
+  }, '#container');
 });

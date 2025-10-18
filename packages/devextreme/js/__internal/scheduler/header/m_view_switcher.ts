@@ -17,7 +17,7 @@ const ClASS = {
 
 const getViewsAndSelectedView = (header: SchedulerHeader) => {
   const views = formatViews(header.option('views'));
-  const selectedView = header.option('currentView').name;
+  const selectedView = getViewName(header.option('currentView'));
   const isSelectedViewInViews = views.some((view) => view.name === selectedView);
 
   return {

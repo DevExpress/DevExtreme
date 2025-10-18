@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
@@ -87,8 +87,6 @@ test('Cell sizes customization should work', async (t) => {
   await createScheduler({
     views,
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
@@ -109,6 +107,4 @@ test('Cell sizes customization should work when all-day panel is enabled', async
     showAllDayPanel: true,
     currentView: 'week',
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });

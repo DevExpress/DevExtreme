@@ -3,12 +3,11 @@
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import { fields, filter } from './data';
+import { fields, filter } from '../filterBuilder/data';
 import { a11yCheck } from '../../helpers/accessibility/utils';
 
-fixture`Filter Builder Accessibility Tests`.page(
-  url(__dirname, '../container.html'),
-);
+fixture.disablePageReloads`Filter Builder`
+  .page(url(__dirname, '../container.html'));
 
 const elements = [
   {

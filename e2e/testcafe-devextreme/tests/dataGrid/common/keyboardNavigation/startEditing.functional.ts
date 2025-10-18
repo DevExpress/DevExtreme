@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture`Keyboard Navigation - editOnKeyPress`
+fixture.disablePageReloads`Keyboard Navigation - editOnKeyPress`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
@@ -11,7 +11,7 @@ const DATA_GRID_SELECTOR = '#container';
 test('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await dataGrid.scrollBy({ y: 10000 });
+  await dataGrid.scrollBy(t, { y: 10000 });
 
   await t.click(dataGrid.getDataCell(49, 1).element);
   await t.pressKey('enter');
@@ -40,7 +40,9 @@ test('Editing should start by pressing enter after scrolling content with scroll
 test('editing.allowUpdating callback should receive correct row on tab key on first cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await dataGrid.scrollBy({ y: 10000 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.scrollBy(t, { y: 10000 });
 
   await t
     .click(dataGrid.getDataCell(49, 0).element)
@@ -80,7 +82,9 @@ test('editing.allowUpdating callback should receive correct row on tab key on fi
 test('editing.allowUpdating callback should receive correct row on tab key on last cell with virtual scrolling (T1290811)', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-  await dataGrid.scrollBy({ y: 10000 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.scrollBy(t, { y: 10000 });
 
   await t
     .click(dataGrid.getDataCell(48, 1).element)

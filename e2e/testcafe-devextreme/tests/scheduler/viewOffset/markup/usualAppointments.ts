@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import { generateAppointments } from '../../helpers/generateAppointments';
 
@@ -163,9 +163,6 @@ first day: ${views[0].firstDayOfWeek}
             startDayHour,
             endDayHour,
           });
-        })
-        .after(async () => {
-          await removeStylesheetRulesFromPage();
         });
     });
   });
