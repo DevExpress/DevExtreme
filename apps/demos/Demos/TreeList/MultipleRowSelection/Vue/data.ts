@@ -1,3 +1,18 @@
+export interface Employee {
+  ID: 1,
+  Head_ID: 0,
+  Full_Name: string,
+  Prefix: string,
+  Title: string,
+  City: string,
+  State: string,
+  Email: string,
+  Skype: string,
+  Mobile_Phone: string,
+  Birth_Date: string,
+  Hire_Date: string,
+}
+
 export const employees = [{
   ID: 1,
   Head_ID: 0,
