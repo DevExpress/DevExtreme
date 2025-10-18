@@ -45,7 +45,7 @@ onMounted(() => {
 function refreshDataSource() {
   if (filterBuilderRef.value?.instance) {
     dataSource.filter(filterBuilderRef.value.instance.getFilterExpression());
-    dataSource.load();  
+    dataSource.load();
   }
 }
 </script>

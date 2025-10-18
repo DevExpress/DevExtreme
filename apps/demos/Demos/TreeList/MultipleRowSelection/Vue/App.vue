@@ -63,7 +63,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import {DxTreeList, DxSelection, DxColumn, type DxTreeListTypes } from 'devextreme-vue/tree-list';
+import { DxTreeList, DxSelection, DxColumn, type DxTreeListTypes } from 'devextreme-vue/tree-list';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { employees, type Employee } from './data.ts';

@@ -84,9 +84,9 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     columnWidths: [40, 40, 30, 30, 40],
     customizeCell({ gridCell, pdfCell }: { gridCell?: DataGridCell, pdfCell?: PdfCell }) {
       if (!(pdfCell?.font && pdfCell.text)) {
-        return
+        return;
       }
-      
+
       if (gridCell?.rowType === 'data' && gridCell?.column?.dataField === 'Phone') {
         pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
       } else if (gridCell?.rowType === 'group') {
@@ -98,10 +98,10 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     customDrawCell(options) {
       const { gridCell, pdfCell } = options;
 
-      if (options.rect 
-          && pdfCell?.text 
-          && pdfCell.padding?.left 
-          && gridCell?.rowType === 'data' 
+      if (options.rect
+          && pdfCell?.text
+          && pdfCell.padding?.left
+          && gridCell?.rowType === 'data'
           && gridCell.column?.dataField === 'Website') {
         options.cancel = true;
         doc.setFontSize(11);

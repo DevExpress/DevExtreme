@@ -66,7 +66,7 @@ const onExporting = ({ component }: DxDataGridTypes.ExportingEvent) => {
     onRowExporting: (e) => {
       if (e.rowCells) {
         const isHeader = e.rowCells[0].text === 'Picture';
-        
+
         if (!isHeader) {
           e.rowHeight = 40;
         }
