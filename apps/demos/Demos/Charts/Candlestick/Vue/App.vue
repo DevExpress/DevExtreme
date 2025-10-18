@@ -50,7 +50,7 @@ import DxChart, {
   DxTitle,
   DxLegend,
   DxExport,
-  DxTooltip, 
+  DxTooltip,
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 

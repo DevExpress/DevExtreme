@@ -41,14 +41,11 @@ import DxPieChart, {
   DxTitle,
   DxTooltip,
   DxSubtitle,
+  type DxPieChartTypes,
 } from 'devextreme-vue/pie-chart';
 import { exportImportData } from './data.ts';
 
-const customizeTooltip = ({ argumentText, seriesName, valueText }: {
-  argumentText: string;
-  seriesName: string;
-  valueText: string
-}) => ({
+const customizeTooltip = ({ argumentText, seriesName, valueText }: DxPieChartTypes.PointInfo) => ({
   text: `${argumentText}<br>${seriesName}: ${valueText}B`,
 });
 </script>
