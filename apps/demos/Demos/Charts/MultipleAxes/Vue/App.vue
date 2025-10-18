@@ -62,7 +62,7 @@ import DxChart, {
   DxTitle,
   DxGrid,
   DxFormat,
-  type DxChartTypes,  
+  type DxChartTypes,
 } from 'devextreme-vue/chart';
 import { continentSources, populationData } from './data.ts';
 
