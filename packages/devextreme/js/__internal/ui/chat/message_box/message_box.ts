@@ -1,22 +1,21 @@
 import type { NativeEventInfo } from '@js/common/core/events';
-import messageLocalization from '@js/common/core/localization/message';
-import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
-import Button from '@js/ui/button';
+import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
+import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import EditingPreview from '@ts/ui/chat/editing_preview';
-import TextArea from '@ts/ui/m_text_area';
-
-import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
+import type {
+  Properties as ChatTextAreaProperties,
+  SendEvent,
+} from '@ts/ui/chat/message_box/chat_text_area';
+import ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
+import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-export const CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS = 'dx-chat-messagebox-input-container';
+export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
 export const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
-export const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
@@ -27,14 +26,16 @@ export type MessageEnteredEvent =
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
 
-const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
-
 export interface Properties extends DOMComponentProperties<MessageBox> {
   activeStateEnabled?: boolean;
 
   focusStateEnabled?: boolean;
 
   hoverStateEnabled?: boolean;
+
+  fileUploaderOptions?: FileUploaderProperties;
+
+  text?: string;
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
@@ -45,14 +46,10 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageEditCanceled?: () => void;
 
   onMessageUpdating?: (e: { text: string }) => void;
-
-  text?: string;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
-  _textArea!: TextArea;
-
-  _button!: Button;
+  _textArea!: ChatTextArea;
 
   _editingPreview!: EditingPreview | null;
 
@@ -71,12 +68,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      fileUploaderOptions: undefined,
+      text: '',
       onMessageEntered: undefined,
-      onTypingStart: undefined,
-      onTypingEnd: undefined,
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
-      text: '',
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -97,16 +95,15 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       this._renderEditingPreview();
     }
 
-    this._renderInputContainer();
+    this._renderTextAreaContainer();
   }
 
-  _renderInputContainer(): void {
-    const $messageBox = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_INPUT_CONTAINER_CLASS)
+  _renderTextAreaContainer(): void {
+    const $inputContainer = $('<div>')
+      .addClass(CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS)
       .appendTo(this.element());
 
-    this._renderTextArea($messageBox);
-    this._renderButton($messageBox);
+    this._renderTextArea($inputContainer);
   }
 
   _cancelMessageEdit(): void {
@@ -136,49 +133,16 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _renderTextArea($parent: dxElementWrapper): void {
-    const {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-    } = this.option();
-
     const $textArea = $('<div>').addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS);
+    const textAreaOptions = this._getTextAreaOptions();
 
     $parent.append($textArea);
 
-    this._textArea = this._createComponent($textArea, TextArea, {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      stylingMode: 'outlined',
-      placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
-      autoResizeEnabled: true,
-      valueChangeEvent: 'input',
-      maxHeight: '8em',
-      onInput: (e: InputEvent): void => {
-        const shouldButtonBeDisabled = !this._isValuableTextEntered();
-
-        this._toggleButtonDisableState(shouldButtonBeDisabled);
-
-        this._triggerTypingStartAction(e);
-        this._updateTypingEndTimeout();
-      },
-      onEnterKey: (e: EnterKeyEvent): void => {
-        if (isMobile()) {
-          return;
-        }
-
-        if (!e.event?.shiftKey) {
-          this._sendHandler(e);
-        }
-      },
-    });
-
-    this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
-      if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
-        event.preventDefault();
-      }
-    });
+    this._textArea = this._createComponent(
+      $textArea,
+      ChatTextArea,
+      textAreaOptions,
+    );
 
     this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
       if (this.option('text')) {
@@ -187,30 +151,31 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _renderButton($parent: dxElementWrapper): void {
+  _getTextAreaOptions(): ChatTextAreaProperties {
     const {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      text,
     } = this.option();
 
-    const $button = $('<div>').addClass(CHAT_MESSAGEBOX_BUTTON_CLASS);
-
-    $parent.append($button);
-
-    this._button = this._createComponent<Button, ButtonProperties>($button, Button, {
+    const options = {
       activeStateEnabled,
+      fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
-      icon: 'sendfilled',
-      type: 'default',
-      stylingMode: 'text',
-      disabled: true,
-      elementAttr: { 'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel') },
-      onClick: (e): void => {
+      value: text,
+      onInput: (e: InputEvent): void => {
+        this._triggerTypingStartAction(e);
+        this._updateTypingEndTimeout();
+      },
+      onSend: (e: SendEvent): void => {
         this._sendHandler(e);
       },
-    });
+    };
+
+    return options as ChatTextAreaProperties;
   }
 
   _createMessageEnteredAction(): void {
@@ -257,16 +222,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._typingEndTimeoutId = undefined;
   }
 
-  _sendHandler(e: ClickEvent | EnterKeyEvent): void {
-    if (!this._isValuableTextEntered()) {
-      return;
-    }
-
+  _sendHandler(e: SendEvent): void {
     this._clearTypingEndTimeout();
     this._typingEndAction?.();
 
     const { text = '' } = this._textArea.option();
-
     const { text: previewText } = this.option();
 
     if (previewText) {
@@ -277,20 +237,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       return;
     }
 
-    this._textArea.reset();
-    this._toggleButtonDisableState(true);
-
     this._messageEnteredAction?.({ text, event: e.event });
-  }
-
-  _toggleButtonDisableState(state: boolean): void {
-    this._button.option('disabled', state);
-  }
-
-  _isValuableTextEntered(): boolean {
-    const { text } = this._textArea.option();
-
-    return !!text?.trim();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -299,29 +246,32 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
-      case 'hoverStateEnabled': {
-        this._button.option(name, value);
+      case 'hoverStateEnabled':
         this._textArea.option(name, value);
         this._editingPreview?.option(name, value);
         break;
-      }
+
+      case 'fileUploaderOptions':
+        this._textArea.option(name, value);
+        break;
+
       case 'onMessageEntered':
         this._createMessageEnteredAction();
-
         break;
+
       case 'onTypingStart':
         this._createTypingStartAction();
-
         break;
+
       case 'onTypingEnd':
         this._createTypingEndAction();
-
         break;
+
       case 'text':
         this._updateEditingPreview(value);
-        this._updateInputContainer(value);
-
+        this._textArea.option('value', value);
         break;
+
       default:
         super._optionChanged(args);
     }
@@ -351,14 +301,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } else {
       this._renderEditingPreview();
     }
-  }
-
-  _updateInputContainer(value: string | undefined): void {
-    this._textArea.option('value', value);
-
-    const shouldButtonBeDisabled = !this._isValuableTextEntered();
-
-    this._toggleButtonDisableState(shouldButtonBeDisabled);
   }
 }
 
