@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import { getFullThemeName, getThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { getThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage, setClassAttribute } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Toast`
