@@ -36,7 +36,7 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
 
 function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
-  if (!itemData.items) {
+  if (itemData && !itemData.items) {
     notify(`The "${itemData.text}" item was clicked`, 'success', 1500);
   }
 }

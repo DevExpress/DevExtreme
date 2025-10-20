@@ -1,5 +1,5 @@
 <template>
-    <button className="task__link-button">{{ employee.Name }}</button>
+    <button className="task__link-button">{{ employee?.Name }}</button>
 </template>
 
 <script setup lang="ts">

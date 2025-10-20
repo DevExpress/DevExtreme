@@ -63,14 +63,14 @@ import DxChart, {
   DxZoomAndPan,
   DxCrosshair,
   DxLegend,
-  DxBorder,
+  DxBorder, 
 } from 'devextreme-vue/chart';
 import DxButton from 'devextreme-vue/button';
 import { birthLife } from './data.ts';
 
 const chart = ref();
 
-const customizeTooltip = ({ point: { data: { country, year } } }) => ({
+const customizeTooltip = ({ point: { data: { country, year } } }: any ) => ({
   text: `${country} ${year}`,
 });
 function resetZoom() {
