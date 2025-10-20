@@ -102,7 +102,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DxSpeechToText, type DxSpeechToTextTypes } from 'devextreme-vue/speech-to-text';
+import { DxSpeechToText } from 'devextreme-vue/speech-to-text';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
@@ -126,7 +126,7 @@ const type = ref<DxButtonTypes.ButtonType>('default');
 const hint = ref('Start voice recognition');
 const disabled = ref(false);
 const textAreaValue = ref('');
-const language = ref(languages[0]);
+const language = ref<string>(languages[0]);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
@@ -159,7 +159,7 @@ function onStartClick() {
 function onStopClick() {
   stopHandler();
 }
-function onResult({ event }: DxSpeechToTextTypes.ResultEvent) {
+function onResult({ event }: Record<string, any>) {
   const { results } = event;
   const resultText = Object.values(results)
     .map((resultItem: Record<string, any>) => resultItem[0].transcript)

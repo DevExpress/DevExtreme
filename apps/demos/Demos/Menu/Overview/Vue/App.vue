@@ -77,10 +77,12 @@ function isProductItem(item: ProductType | ProductItemType): item is ProductItem
 }
 
 function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
-  const product = e.itemData as ProductItemType;
-  
-  if (isProductItem(product )) {
-    currentProduct.value = product;
+  if (e.itemData) {
+    const product = e.itemData as ProductItemType;
+
+    if (isProductItem(product)) {
+      currentProduct.value = product;
+    }
   }
 }
 </script>
