@@ -1,5 +1,4 @@
 "use client"
-export { ExplicitTypes } from "devextreme/ui/chat";
 import * as React from "react";
 import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxChat, {
@@ -19,23 +18,22 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
-type IChatOptionsNarrowedEvents<TAttachment = any> = {
-  onAttachmentDownload?: ((e: AttachmentDownloadEvent<TAttachment>) => void) | undefined;
-  onDisposing?: ((e: DisposingEvent<TAttachment>) => void);
-  onInitialized?: ((e: InitializedEvent<TAttachment>) => void);
-  onMessageDeleted?: ((e: MessageDeletedEvent<TAttachment>) => void) | undefined;
-  onMessageDeleting?: ((e: MessageDeletingEvent<TAttachment>) => void) | undefined;
-  onMessageEditCanceled?: ((e: MessageEditCanceledEvent<TAttachment>) => void) | undefined;
-  onMessageEditingStart?: ((e: MessageEditingStartEvent<TAttachment>) => void) | undefined;
-  onMessageEntered?: ((e: MessageEnteredEvent<TAttachment>) => void) | undefined;
-  onMessageUpdated?: ((e: MessageUpdatedEvent<TAttachment>) => void) | undefined;
-  onMessageUpdating?: ((e: MessageUpdatingEvent<TAttachment>) => void) | undefined;
-  onTypingEnd?: ((e: TypingEndEvent<TAttachment>) => void) | undefined;
-  onTypingStart?: ((e: TypingStartEvent<TAttachment>) => void) | undefined;
+type IChatOptionsNarrowedEvents = {
+  onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
+  onDisposing?: ((e: DisposingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
+  onMessageDeleting?: ((e: MessageDeletingEvent) => void) | undefined;
+  onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
+  onMessageEditingStart?: ((e: MessageEditingStartEvent) => void) | undefined;
+  onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
+  onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
+  onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
+  onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
+  onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
 }
 
-type IChatOptions<TAttachment = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TAttachment>, IChatOptionsNarrowedEvents<TAttachment>> & IHtmlOptions & {
-  dataSource?: Properties<TAttachment>["dataSource"];
+type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {
   emptyViewRender?: (...params: any) => React.ReactNode;
   emptyViewComponent?: React.ComponentType<any>;
   messageRender?: (...params: any) => React.ReactNode;
@@ -44,13 +42,13 @@ type IChatOptions<TAttachment = any> = React.PropsWithChildren<ReplaceFieldTypes
   onItemsChange?: (value: Array<Message>) => void;
 }>
 
-interface ChatRef<TAttachment = any> {
-  instance: () => dxChat<TAttachment>;
+interface ChatRef {
+  instance: () => dxChat;
 }
 
 const Chat = memo(
   forwardRef(
-    <TAttachment = any>(props: React.PropsWithChildren<IChatOptions<TAttachment>>, ref: ForwardedRef<ChatRef<TAttachment>>) => {
+    (props: React.PropsWithChildren<IChatOptions>, ref: ForwardedRef<ChatRef>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -93,7 +91,7 @@ const Chat = memo(
       ]), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<IChatOptions<TAttachment>>>, {
+        React.createElement(BaseComponent<React.PropsWithChildren<IChatOptions>>, {
           WidgetClass: dxChat,
           ref: baseRef,
           subscribableOptions,
@@ -106,7 +104,7 @@ const Chat = memo(
       );
     },
   ),
-) as <TAttachment = any>(props: React.PropsWithChildren<IChatOptions<TAttachment>> & { ref?: Ref<ChatRef<TAttachment>> }) => ReactElement | null;
+) as (props: React.PropsWithChildren<IChatOptions> & { ref?: Ref<ChatRef> }) => ReactElement | null;
 
 
 // owners:

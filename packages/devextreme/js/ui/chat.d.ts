@@ -33,7 +33,7 @@ import DataSource, { DataSourceLike } from '../data/data_source';
  * @type object
  * @inherits EventInfo
  */
-export type DisposingEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>>;
+export type DisposingEvent = EventInfo<dxChat>;
 
 /**
  * @docid _ui_chat_InitializedEvent
@@ -41,7 +41,7 @@ export type DisposingEvent<TAttachment extends Attachment = Attachment> = EventI
  * @type object
  * @inherits InitializedEventInfo
  */
-export type InitializedEvent<TAttachment extends Attachment = Attachment> = InitializedEventInfo<dxChat<TAttachment>>;
+export type InitializedEvent = InitializedEventInfo<dxChat>;
 
 /**
  * @docid _ui_chat_OptionChangedEvent
@@ -49,7 +49,7 @@ export type InitializedEvent<TAttachment extends Attachment = Attachment> = Init
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & ChangedOptionInfo;
+export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
  * @docid _ui_chat_MessageEnteredEvent
@@ -57,9 +57,9 @@ export type OptionChangedEvent<TAttachment extends Attachment = Attachment> = Ev
  * @type object
  * @inherits NativeEventInfo
  */
-export type MessageEnteredEvent<TAttachment extends Attachment = Attachment> = NativeEventInfo<dxChat<TAttachment>, InteractionEvent> & {
+export type MessageEnteredEvent = NativeEventInfo<dxChat, InteractionEvent> & {
     /** @docid _ui_chat_MessageEnteredEvent.message */
-    readonly message: Message<TAttachment>;
+    readonly message: Message;
 };
 
 /**
@@ -68,7 +68,7 @@ export type MessageEnteredEvent<TAttachment extends Attachment = Attachment> = N
  * @type object
  * @inherits NativeEventInfo
  */
-export type TypingStartEvent<TAttachment extends Attachment = Attachment> = NativeEventInfo<dxChat<TAttachment>, UIEvent & { target: HTMLInputElement }> & {
+export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLInputElement }> & {
     /** @docid _ui_chat_TypingStartEvent.user */
     readonly user?: User;
 };
@@ -79,7 +79,7 @@ export type TypingStartEvent<TAttachment extends Attachment = Attachment> = Nati
  * @type object
  * @inherits EventInfo
  */
-export type TypingEndEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & {
+export type TypingEndEvent = EventInfo<dxChat> & {
     /** @docid _ui_chat_TypingEndEvent.user */
     readonly user: User;
 };
@@ -90,9 +90,9 @@ export type TypingEndEvent<TAttachment extends Attachment = Attachment> = EventI
  * @type object
  * @inherits AsyncCancelable,EventInfo
  */
-export type MessageDeletingEvent<TAttachment extends Attachment = Attachment> = AsyncCancelable & EventInfo<dxChat<TAttachment>> & {
+export type MessageDeletingEvent = AsyncCancelable & EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageDeletingEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
 };
 
 /**
@@ -101,9 +101,9 @@ export type MessageDeletingEvent<TAttachment extends Attachment = Attachment> = 
  * @type object
  * @inherits EventInfo
  */
-export type MessageDeletedEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & {
+export type MessageDeletedEvent = EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageDeletedEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
 };
 
 /**
@@ -112,9 +112,9 @@ export type MessageDeletedEvent<TAttachment extends Attachment = Attachment> = E
  * @type object
  * @inherits AsyncCancelable,EventInfo
  */
-export type MessageEditingStartEvent<TAttachment extends Attachment = Attachment> = AsyncCancelable & EventInfo<dxChat<TAttachment>> & {
+export type MessageEditingStartEvent = AsyncCancelable & EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageEditingStartEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
 };
 
 /**
@@ -123,9 +123,9 @@ export type MessageEditingStartEvent<TAttachment extends Attachment = Attachment
  * @type object
  * @inherits EventInfo
  */
-export type MessageEditCanceledEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & {
+export type MessageEditCanceledEvent = EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageEditCanceledEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
 };
 
 /**
@@ -134,9 +134,9 @@ export type MessageEditCanceledEvent<TAttachment extends Attachment = Attachment
  * @type object
  * @inherits AsyncCancelable,EventInfo
  */
-export type MessageUpdatingEvent<TAttachment extends Attachment = Attachment> = AsyncCancelable & EventInfo<dxChat<TAttachment>> & {
+export type MessageUpdatingEvent = AsyncCancelable & EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageUpdatingEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
   /** @docid _ui_chat_MessageUpdatingEvent.text */
   readonly text: string;
 };
@@ -147,9 +147,9 @@ export type MessageUpdatingEvent<TAttachment extends Attachment = Attachment> = 
  * @type object
  * @inherits EventInfo
  */
-export type MessageUpdatedEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & {
+export type MessageUpdatedEvent = EventInfo<dxChat> & {
   /** @docid _ui_chat_MessageUpdatedEvent.message */
-  readonly message: Message<TAttachment>;
+  readonly message: Message;
   /** @docid _ui_chat_MessageUpdatedEvent.text */
   readonly text: string;
 };
@@ -160,9 +160,9 @@ export type MessageUpdatedEvent<TAttachment extends Attachment = Attachment> = E
  * @type object
  * @inherits EventInfo
  */
-export type AttachmentDownloadEvent<TAttachment extends Attachment = Attachment> = EventInfo<dxChat<TAttachment>> & {
+export type AttachmentDownloadEvent = EventInfo<dxChat> & {
   /** @docid _ui_chat_AttachmentDownloadEvent.attachment */
-  readonly attachment?: TAttachment;
+  readonly attachment?: Attachment;
 };
 
 /**
@@ -317,17 +317,17 @@ export type ImageMessage = MessageBase & {
  * @public
  * @inherits TextMessage,ImageMessage
  */
-export type Message<TAttachment extends Attachment = Attachment> = TextMessage<TAttachment> | ImageMessage;
+export type Message = TextMessage | ImageMessage;
 
 /** @public */
-export type MessageTemplateData<TAttachment extends Attachment = Attachment> = {
-    readonly component: dxChat<TAttachment>;
-    readonly message?: Message<TAttachment>;
+export type MessageTemplateData = {
+    readonly component: dxChat;
+    readonly message?: Message;
 };
 
 /** @public */
-export type EmptyViewTemplateData<TAttachment extends Attachment = Attachment> = {
-    readonly component: dxChat<TAttachment>;
+export type EmptyViewTemplateData = {
+    readonly component: dxChat;
     readonly texts: {
         readonly message: string;
         readonly prompt: string;
@@ -340,7 +340,7 @@ export type EmptyViewTemplateData<TAttachment extends Attachment = Attachment> =
  * @public
  * @docid
  */
-export interface dxChatOptions<TAttachment extends Attachment = Attachment> extends WidgetOptions<dxChat<TAttachment>> {
+export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default true
@@ -353,7 +353,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @type dxFileUploaderOptions
      * @public
      */
-    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode'>;
+    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode '>;
     /**
      * @docid
      * @default true
@@ -377,7 +377,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @fires dxChatOptions.onOptionChanged
      * @public
      */
-    items?: Array<Message<TAttachment>>;
+    items?: Array<Message>;
     /**
      * @docid
      * @public
@@ -388,13 +388,13 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
        * @default false
        * @public
        */
-      allowUpdating?: boolean | ((options: { component?: dxChat<TAttachment>; message?: Message<TAttachment> }) => boolean);
+      allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
       /**
        * @docid
        * @default false
        * @public
        */
-      allowDeleting?: boolean | ((options: { component?: dxChat<TAttachment>; message?: Message<TAttachment> }) => boolean);
+      allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
     };
     /**
      * @docid
@@ -402,14 +402,14 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @type_function_return string|Element|jQuery
      * @public
      */
-    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData<TAttachment>, itemElement: DxElement) => string | UserDefinedElement);
+    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<Message<TAttachment>> | null;
+    dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
      * @default 'shortdate'
@@ -434,7 +434,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @type_function_return string|Element|jQuery
      * @public
      */
-    messageTemplate?: template | null | ((data: MessageTemplateData<TAttachment>, messageBubbleElement: DxElement) => string | UserDefinedElement);
+    messageTemplate?: template | null | ((data: MessageTemplateData, messageBubbleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default 'shorttime'
@@ -478,7 +478,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onAttachmentDownload?: ((e: AttachmentDownloadEvent<TAttachment>) => void) | undefined;
+    onAttachmentDownload?: ((e: AttachmentDownloadEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -486,7 +486,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageEntered?: ((e: MessageEnteredEvent<TAttachment>) => void) | undefined;
+    onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -494,7 +494,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingStartEvent) => void) | undefined ;
+    onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
     /**
      * @docid
      * @default undefined
@@ -510,7 +510,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageDeleting?: ((e: MessageDeletingEvent<TAttachment>) => void) | undefined;
+    onMessageDeleting?: ((e: MessageDeletingEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -518,7 +518,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageDeleted?: ((e: MessageDeletedEvent<TAttachment>) => void) | undefined;
+    onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -526,7 +526,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageEditingStart?: ((e: MessageEditingStartEvent<TAttachment>) => void) | undefined;
+    onMessageEditingStart?: ((e: MessageEditingStartEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -534,7 +534,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageEditCanceled?: ((e: MessageEditCanceledEvent<TAttachment>) => void) | undefined;
+    onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -542,7 +542,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageUpdating?: ((e: MessageUpdatingEvent<TAttachment>) => void) | undefined;
+    onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -550,7 +550,7 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
      * @action
      * @public
      */
-    onMessageUpdated?: ((e: MessageUpdatedEvent<TAttachment>) => void) | undefined;
+    onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
 }
 
 /**
@@ -559,27 +559,27 @@ export interface dxChatOptions<TAttachment extends Attachment = Attachment> exte
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxChat<TAttachment extends Attachment = Attachment> extends Widget<Properties<TAttachment>> {
+export default class dxChat extends Widget<Properties> {
     /**
      * @docid
      * @publicName renderMessage(message)
      * @public
      */
-    renderMessage(message: Message<TAttachment>): void;
+    renderMessage(message: Message): void;
 
-    getDataSource(): DataSource<Message<TAttachment>>;
+    getDataSource(): DataSource<Message>;
 }
 
 /** @public */
-export type ExplicitTypes<TAttachment extends Attachment = Attachment> = {
-    Properties: Properties<TAttachment>;
-    DisposingEvent: DisposingEvent<TAttachment>;
-    InitializedEvent: InitializedEvent<TAttachment>;
-    OptionChangedEvent: OptionChangedEvent<TAttachment>;
+export type ExplicitTypes = {
+    Properties: Properties;
+    DisposingEvent: DisposingEvent;
+    InitializedEvent: InitializedEvent;
+    OptionChangedEvent: OptionChangedEvent;
 };
 
 /** @public */
-export type Properties<TAttachment extends Attachment = Attachment> = dxChatOptions<TAttachment>;
+export type Properties = dxChatOptions;
 
 /// #DEBUG
 // eslint-disable-next-line import/first

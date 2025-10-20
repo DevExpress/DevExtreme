@@ -21,7 +21,6 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/chat';
 
 import DataSource from 'devextreme/data/data_source';
 import dxChat from 'devextreme/ui/chat';
@@ -89,7 +88,7 @@ import {
         IterableDifferHelper
     ]
 })
-export class DxChatComponent<TAttachment = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
 
     @ContentChildren(PROPERTY_TOKEN_alerts)
     set _alertsContentChildren(value: QueryList<CollectionNestedOption>) {
@@ -111,7 +110,7 @@ export class DxChatComponent<TAttachment = any> extends DxComponent implements O
         this.setChildren('typingUsers', value);
     }
 
-    instance: DxChat<TAttachment> = null;
+    instance: DxChat = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

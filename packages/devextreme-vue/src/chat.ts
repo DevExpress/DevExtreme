@@ -1,4 +1,3 @@
-export { ExplicitTypes } from "devextreme/ui/chat";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";

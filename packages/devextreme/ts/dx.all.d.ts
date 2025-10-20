@@ -11138,166 +11138,148 @@ declare module DevExpress.ui {
   /**
    * [descr:dxChat]
    */
-  export class dxChat<
-    TAttachment extends DevExpress.ui.dxChat.Attachment = DevExpress.ui.dxChat.Attachment
-  > extends Widget<DevExpress.ui.dxChat.Properties<TAttachment>> {
+  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
     /**
      * [descr:dxChat.renderMessage(message)]
      */
-    renderMessage(message: DevExpress.ui.dxChat.Message<TAttachment>): void;
+    renderMessage(message: DevExpress.ui.dxChat.Message): void;
 
-    getDataSource(): DevExpress.common.data.DataSource<
-      DevExpress.ui.dxChat.Message<TAttachment>
-    >;
+    getDataSource(): DevExpress.common.data.DataSource<DevExpress.ui.dxChat.Message>;
   }
   module dxChat {
     /**
      * [descr:_ui_chat_AttachmentDownloadEvent]
      */
-    export type AttachmentDownloadEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-      /**
-       * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
-       */
-      readonly attachment?: TAttachment;
-    };
+    export type AttachmentDownloadEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+         */
+        readonly attachment?: Attachment;
+      };
     /**
      * [descr:_ui_chat_DisposingEvent]
      */
-    export type DisposingEvent<TAttachment extends Attachment = Attachment> =
-      DevExpress.common.core.events.EventInfo<dxChat<TAttachment>>;
-    export type EmptyViewTemplateData<
-      TAttachment extends Attachment = Attachment
-    > = {
-      readonly component: dxChat<TAttachment>;
+    export type DisposingEvent =
+      DevExpress.common.core.events.EventInfo<dxChat>;
+    export type EmptyViewTemplateData = {
+      readonly component: dxChat;
       readonly texts: {
         readonly message: string;
         readonly prompt: string;
       };
     };
-    export type ExplicitTypes<TAttachment extends Attachment = Attachment> = {
-      Properties: Properties<TAttachment>;
-      DisposingEvent: DisposingEvent<TAttachment>;
-      InitializedEvent: InitializedEvent<TAttachment>;
-      OptionChangedEvent: OptionChangedEvent<TAttachment>;
+    export type ExplicitTypes = {
+      Properties: Properties;
+      DisposingEvent: DisposingEvent;
+      InitializedEvent: InitializedEvent;
+      OptionChangedEvent: OptionChangedEvent;
     };
     /**
      * [descr:_ui_chat_InitializedEvent]
      */
-    export type InitializedEvent<TAttachment extends Attachment = Attachment> =
-      DevExpress.common.core.events.InitializedEventInfo<dxChat<TAttachment>>;
+    export type InitializedEvent =
+      DevExpress.common.core.events.InitializedEventInfo<dxChat>;
     /**
      * [descr:_ui_chat_MessageDeletedEvent]
      */
-    export type MessageDeletedEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-      /**
-       * [descr:_ui_chat_MessageDeletedEvent.message]
-       */
-      readonly message: Message<TAttachment>;
-    };
+    export type MessageDeletedEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_MessageDeletedEvent.message]
+         */
+        readonly message: Message;
+      };
     /**
      * [descr:_ui_chat_MessageDeletingEvent]
      */
-    export type MessageDeletingEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.AsyncCancelable &
-      DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-        /**
-         * [descr:_ui_chat_MessageDeletingEvent.message]
-         */
-        readonly message: Message<TAttachment>;
-      };
+    export type MessageDeletingEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageDeletingEvent.message]
+           */
+          readonly message: Message;
+        };
     /**
      * [descr:_ui_chat_MessageEditCanceledEvent]
      */
-    export type MessageEditCanceledEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-      /**
-       * [descr:_ui_chat_MessageEditCanceledEvent.message]
-       */
-      readonly message: Message<TAttachment>;
-    };
+    export type MessageEditCanceledEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_MessageEditCanceledEvent.message]
+         */
+        readonly message: Message;
+      };
     /**
      * [descr:_ui_chat_MessageEditingStartEvent]
      */
-    export type MessageEditingStartEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.AsyncCancelable &
-      DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-        /**
-         * [descr:_ui_chat_MessageEditingStartEvent.message]
-         */
-        readonly message: Message<TAttachment>;
-      };
+    export type MessageEditingStartEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageEditingStartEvent.message]
+           */
+          readonly message: Message;
+        };
     /**
      * [descr:_ui_chat_MessageEnteredEvent]
      */
-    export type MessageEnteredEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.NativeEventInfo<
-      dxChat<TAttachment>,
-      DevExpress.events.InteractionEvent
-    > & {
-      /**
-       * [descr:_ui_chat_MessageEnteredEvent.message]
-       */
-      readonly message: Message<TAttachment>;
-    };
-    export type MessageTemplateData<
-      TAttachment extends Attachment = Attachment
-    > = {
-      readonly component: dxChat<TAttachment>;
-      readonly message?: Message<TAttachment>;
+    export type MessageEnteredEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxChat,
+        DevExpress.events.InteractionEvent
+      > & {
+        /**
+         * [descr:_ui_chat_MessageEnteredEvent.message]
+         */
+        readonly message: Message;
+      };
+    export type MessageTemplateData = {
+      readonly component: dxChat;
+      readonly message?: Message;
     };
     /**
      * [descr:_ui_chat_MessageUpdatedEvent]
      */
-    export type MessageUpdatedEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
-      /**
-       * [descr:_ui_chat_MessageUpdatedEvent.message]
-       */
-      readonly message: Message<TAttachment>;
-      /**
-       * [descr:_ui_chat_MessageUpdatedEvent.text]
-       */
-      readonly text: string;
-    };
-    /**
-     * [descr:_ui_chat_MessageUpdatingEvent]
-     */
-    export type MessageUpdatingEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.AsyncCancelable &
-      DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
+    export type MessageUpdatedEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
         /**
-         * [descr:_ui_chat_MessageUpdatingEvent.message]
+         * [descr:_ui_chat_MessageUpdatedEvent.message]
          */
-        readonly message: Message<TAttachment>;
+        readonly message: Message;
         /**
-         * [descr:_ui_chat_MessageUpdatingEvent.text]
+         * [descr:_ui_chat_MessageUpdatedEvent.text]
          */
         readonly text: string;
       };
     /**
+     * [descr:_ui_chat_MessageUpdatingEvent]
+     */
+    export type MessageUpdatingEvent =
+      DevExpress.common.core.events.AsyncCancelable &
+        DevExpress.common.core.events.EventInfo<dxChat> & {
+          /**
+           * [descr:_ui_chat_MessageUpdatingEvent.message]
+           */
+          readonly message: Message;
+          /**
+           * [descr:_ui_chat_MessageUpdatingEvent.text]
+           */
+          readonly text: string;
+        };
+    /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
-    export type OptionChangedEvent<
-      TAttachment extends Attachment = Attachment
-    > = DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> &
-      DevExpress.common.core.events.ChangedOptionInfo;
-    export type Properties<TAttachment extends Attachment = Attachment> =
-      dxChatOptions<TAttachment>;
+    export type OptionChangedEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> &
+        DevExpress.common.core.events.ChangedOptionInfo;
+    export type Properties = dxChatOptions;
     /**
      * [descr:_ui_chat_TypingEndEvent]
      */
-    export type TypingEndEvent<TAttachment extends Attachment = Attachment> =
-      DevExpress.common.core.events.EventInfo<dxChat<TAttachment>> & {
+    export type TypingEndEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
         /**
          * [descr:_ui_chat_TypingEndEvent.user]
          */
@@ -11306,9 +11288,9 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_TypingStartEvent]
      */
-    export type TypingStartEvent<TAttachment extends Attachment = Attachment> =
+    export type TypingStartEvent =
       DevExpress.common.core.events.NativeEventInfo<
-        dxChat<TAttachment>,
+        dxChat,
         UIEvent & { target: HTMLInputElement }
       > & {
         /**
@@ -11321,9 +11303,7 @@ declare module DevExpress.ui {
    * [descr:dxChatOptions]
    * @deprecated [depNote:dxChatOptions]
    */
-  export interface dxChatOptions<
-    TAttachment extends DevExpress.ui.dxChat.Attachment = DevExpress.ui.dxChat.Attachment
-  > extends WidgetOptions<dxChat<TAttachment>> {
+  export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * [descr:dxChatOptions.activeStateEnabled]
      */
@@ -11333,7 +11313,7 @@ declare module DevExpress.ui {
      */
     fileUploaderOptions?: Omit<
       DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode'
+      'dialogTrigger' | 'showFileList' | 'uploadMode '
     >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
@@ -11350,7 +11330,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxChatOptions.items]
      */
-    items?: Array<DevExpress.ui.dxChat.Message<TAttachment>>;
+    items?: Array<DevExpress.ui.dxChat.Message>;
     /**
      * [descr:dxChatOptions.editing]
      */
@@ -11361,8 +11341,8 @@ declare module DevExpress.ui {
       allowUpdating?:
         | boolean
         | ((options: {
-            component?: dxChat<TAttachment>;
-            message?: DevExpress.ui.dxChat.Message<TAttachment>;
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
           }) => boolean);
       /**
        * [descr:dxChatOptions.editing.allowDeleting]
@@ -11370,8 +11350,8 @@ declare module DevExpress.ui {
       allowDeleting?:
         | boolean
         | ((options: {
-            component?: dxChat<TAttachment>;
-            message?: DevExpress.ui.dxChat.Message<TAttachment>;
+            component?: dxChat;
+            message?: DevExpress.ui.dxChat.Message;
           }) => boolean);
     };
     /**
@@ -11381,15 +11361,13 @@ declare module DevExpress.ui {
       | template
       | null
       | ((
-          data: DevExpress.ui.dxChat.EmptyViewTemplateData<TAttachment>,
+          data: DevExpress.ui.dxChat.EmptyViewTemplateData,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxChatOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<
-      DevExpress.ui.dxChat.Message<TAttachment>
-    > | null;
+    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
      * [descr:dxChatOptions.dayHeaderFormat]
      */
@@ -11409,7 +11387,7 @@ declare module DevExpress.ui {
       | template
       | null
       | ((
-          data: DevExpress.ui.dxChat.MessageTemplateData<TAttachment>,
+          data: DevExpress.ui.dxChat.MessageTemplateData,
           messageBubbleElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
@@ -11440,19 +11418,19 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onAttachmentDownload]
      */
     onAttachmentDownload?:
-      | ((e: DevExpress.ui.dxChat.AttachmentDownloadEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.AttachmentDownloadEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEntered]
      */
     onMessageEntered?:
-      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onTypingStart]
      */
     onTypingStart?:
-      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
+      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onTypingEnd]
@@ -11464,41 +11442,37 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onMessageDeleting]
      */
     onMessageDeleting?:
-      | ((e: DevExpress.ui.dxChat.MessageDeletingEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.MessageDeletingEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageDeleted]
      */
     onMessageDeleted?:
-      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEditingStart]
      */
     onMessageEditingStart?:
-      | ((
-          e: DevExpress.ui.dxChat.MessageEditingStartEvent<TAttachment>
-        ) => void)
+      | ((e: DevExpress.ui.dxChat.MessageEditingStartEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEditCanceled]
      */
     onMessageEditCanceled?:
-      | ((
-          e: DevExpress.ui.dxChat.MessageEditCanceledEvent<TAttachment>
-        ) => void)
+      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageUpdating]
      */
     onMessageUpdating?:
-      | ((e: DevExpress.ui.dxChat.MessageUpdatingEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.MessageUpdatingEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageUpdated]
      */
     onMessageUpdated?:
-      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent<TAttachment>) => void)
+      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
       | undefined;
   }
   /**
@@ -34024,9 +33998,7 @@ declare module DevExpress.ui.dxChat {
   /**
    * [descr:Message]
    */
-  export type Message<TAttachment extends Attachment = Attachment> =
-    | TextMessage<TAttachment>
-    | ImageMessage;
+  export type Message = TextMessage | ImageMessage;
   /**
    * [descr:MessageBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
