@@ -1,11 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
-import { getThemePostfix, isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, setStyleAttribute } from '../../../helpers/domUtils';
-import { changeTheme } from '../../../helpers/changeTheme';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const FA_MAIN_BUTTON_CLASS = 'dx-fa-button-main';
@@ -129,19 +128,17 @@ fixture.disablePageReloads`FloatingAction - compact theme`
 
 for (const label of ['Add Row', '']) {
   for (const icon of ['home', '']) {
-    test(`FAB with one speed dial action button in compact, label: ${label}, icon: ${icon}`, async (t) => {
+    test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`FAB with one speed dial action button,label='${label}',icon='${icon}'${getThemePostfix(`${process.env.theme}-compact`)}.png`, '#container'))
+        .expect(await takeScreenshot(`FAB with one speed dial action button,label='${label}',icon='${icon}'.png`, '#container'))
         .ok();
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await changeTheme(`${process.env.theme}.compact`);
-
       await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
       await appendElementTo('#container', 'div', 'speed-dial-action');
 
@@ -152,8 +149,6 @@ for (const label of ['Add Row', '']) {
         icon,
         visible: true,
       }, '#speed-dial-action');
-    }).after(async () => {
-      await changeTheme(`${process.env.theme}`);
     });
 
     test(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
@@ -163,16 +158,12 @@ for (const label of ['Add Row', '']) {
         .click(Selector('body'))
         .click(Selector(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));
 
-      await t
-        .expect(await takeScreenshot(`FAB is opened with two speed dial actions,label='${label}',icon='${icon}'${getThemePostfix(`${process.env.theme}-compact`)}.png`, '#container'))
-        .ok();
+      await testScreenshot(t, takeScreenshot, `FAB is opened with two speed dial actions,label='${label}',icon='${icon}'.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
-      await changeTheme(`${process.env.theme}.compact`);
-
       await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
       await appendElementTo('#container', 'div', 'speed-dial-action');
       await appendElementTo('#container', 'div', 'speed-dial-action-trash');
@@ -192,8 +183,6 @@ for (const label of ['Add Row', '']) {
         index: 2,
         visible: true,
       }, '#speed-dial-action-trash');
-    }).after(async () => {
-      await changeTheme(`${process.env.theme}`);
     });
   }
 }
@@ -202,15 +191,13 @@ test('FAB with two speed dial action buttons', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot(`FAB with two speed dial action buttons${getThemePostfix(`${process.env.theme}-compact`)}.png`, '#container'))
+    .expect(await takeScreenshot('FAB with two speed dial action buttons.png', '#container'))
     .ok();
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme(`${process.env.theme}.compact`);
-
   await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
   await appendElementTo('#container', 'div', 'speed-dial-action');
   await appendElementTo('#container', 'div', 'speed-dial-action-trash');
@@ -230,6 +217,4 @@ test('FAB with two speed dial action buttons', async (t) => {
     index: 2,
     visible: true,
   }, '#speed-dial-action-trash');
-}).after(async () => {
-  await changeTheme(`${process.env.theme}`);
 });

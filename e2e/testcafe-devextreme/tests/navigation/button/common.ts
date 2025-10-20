@@ -5,8 +5,10 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import {
   addCaptionTo,
   appendElementTo,
+  insertStylesheetRulesToPage,
   setAttribute,
   setClassAttribute,
+  setStyleAttribute,
 } from '../../../helpers/domUtils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -111,3 +113,35 @@ test('Button in rtl modes', async (t) => {
     }, `#button-${index}`),
   ));
 });
+
+test('Button: svg icon as background should be fit within icon element (T1178813)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Button with svg icon as background.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await insertStylesheetRulesToPage('.dx-icon-custom { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAB4klEQVR4nO3WTYiPURQG8N/M+ByEjQUxRQpJKSkhFigLo8jGQqGURDZY2CMpliI2PhZslLKxJBaUCCkUMxELja8pwoxuncW7mZn3fe9fb2meuqt7n+c8995z7zmMojVox1G81RDOYhBvmgi+LIKncakJA5cj+ABWNGHgQxg4pyG8xxmM/VcBVuMCXuIbenELe9GFiViH47iLd+jHq0jOBXUDT8a1QoINNX6OMP8Lx+KplkYnHoTARxyOnUzCHOzATXzHHzzHSWzATEzHRtwuGEnzpXExSA8xY5h1bZgwzHwHHodWStZSWBy76sMseTgQwb9gVVnSqSCle8vBuLi+pLWtCvFRkJZnGlgTOk+qEj8FcWqmgd2hc74q8UcQx2ca2BU66Q+phN4gzs40sDJ0XlT9A+4FcX2mgY4oz0nrSBXiiTofxxDYElVyIOpF+shGxNow0IMxLTCxJ37MpHm6DKENz4KwXWtwJ/T2lyXsLJzClMzg3YWaUlqrHfeDeCVOpQ464xUknX1VyYvwtXB3lZ5SrL8a/Kd1G5Zu/A6RVFqXxjFujl4w7e4zXkfvsBXTMA83gpeakyUysClEBmuM/uiWstEVPUJPXEvKj0NYGDVjPg5GtvdF+b2Oua0IPor/G38BnW+XcSzQwtUAAAAASUVORK5CYII="); }');
+
+  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 200px;');
+  await appendElementTo('#container', 'div', 'button');
+  await appendElementTo('#container', 'div', 'fixedWidthButton');
+  await appendElementTo('#container', 'div', 'iconOnlyButton');
+
+  await createWidget('dxButton', {
+    text: 'svg icon',
+    icon: 'custom',
+  }, '#button');
+
+  await createWidget('dxButton', {
+    text: 'fixed width + svg icon',
+    icon: 'custom',
+    width: 200,
+  }, '#fixedWidthButton');
+
+  await createWidget('dxButton', {
+    icon: 'custom',
+  }, '#iconOnlyButton');
+}); s;
