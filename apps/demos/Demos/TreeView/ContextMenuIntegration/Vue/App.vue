@@ -39,12 +39,12 @@ import type { Product } from './types';
 
 const products = ref(service.getProducts());
 const menuItems = ref(service.getMenuItems());
-const logItems = ref([]);
-const selectedTreeItem = ref<Product>(undefined);
+const logItems = ref<string[]>([]);
+const selectedTreeItem = ref<Record<string, any>>();
 const treeViewRef = ref();
 const contextMenuRef = ref();
 
-function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
+function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
   selectedTreeItem.value = e.itemData;
   const contextMenu = contextMenuRef.value.instance;
   const isProductItem = !e.itemData.items;
@@ -54,14 +54,18 @@ function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product
   contextMenu.option('items[2].visible', isProductItem);
   contextMenu.option('items[3].visible', isProductItem);
 
-  contextMenu.option('items[0].disabled', e.node.expanded);
-  contextMenu.option('items[1].disabled', !e.node.expanded);
+  contextMenu.option('items[0].disabled', e.node?.expanded);
+  contextMenu.option('items[1].disabled', !e.node?.expanded);
 }
-function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<Product>) {
+function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
   const treeView = treeViewRef.value.instance;
   let logEntry = '';
 
-  switch (e.itemData.id) {
+  if (!selectedTreeItem.value) {
+    return;
+  }
+
+  switch (e.itemData?.id) {
     case 'expand': {
       logEntry = `The '${selectedTreeItem.value.text}' group was expanded`;
       treeView.expandItem(selectedTreeItem.value.id);
@@ -83,7 +87,7 @@ function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<Product>) {
     default:
       break;
   }
-  logItems.value = logItems.value.concat(logEntry);
+  logItems.value = logItems.value.concat([logEntry]);
 }
 </script>
 <style scoped>

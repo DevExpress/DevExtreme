@@ -57,7 +57,7 @@
         :vehicle="vehicle"
         :id="ID"
         :model="`${TrademarkName} ${Name}`"
-        :price="fields?.find(f => f.column?.dataField === 'Price')?.text"
+        :price="getPriceText(fields)"
         :category-name="CategoryName"
         :modification="Modification"
         :body-style-name="BodyStyleName"
@@ -90,13 +90,20 @@ import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'd
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
-import { vehicles } from './data.ts';
+import { vehicles, type Vehicle } from './data.ts';
 import { ref } from 'vue';
 
 const popupVisible = ref(false);
-const currentVehicle = ref(null);
+const currentVehicle = ref<Vehicle | undefined>();
 
-function showInfo(vehicle) {
+function getPriceText(
+  fields?: Array<{ column?: { dataField?: string }, text?: string }>,
+): string {
+  const priceField = fields?.find((field) => field?.column?.dataField === 'Price');
+  return priceField?.text || '';
+}
+
+function showInfo(vehicle: Vehicle) {
   currentVehicle.value = vehicle;
   popupVisible.value = true;
 }

@@ -440,6 +440,10 @@ export class SelectionController extends modules.Controller {
           this.selectRows(selectedRowKeys).always(() => {
             this._fireSelectionChanged();
           });
+        } else {
+          this.refresh().always(() => {
+            this._fireSelectionChanged();
+          });
         }
 
         this._columnsController.updateColumns();

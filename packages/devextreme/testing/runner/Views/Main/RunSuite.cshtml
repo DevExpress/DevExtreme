@@ -6,9 +6,8 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
-    var renovationPart = Model.NoRenovation ? "" : "-renovation";
     var cspPart = Model.NoCsp ? "" : "-systemjs";
-    var npmModule = "transpiled" + renovationPart + cspPart;
+    var npmModule = "transpiled" + cspPart;
     var testingBasePath = Model.NoCsp ? "~/packages/devextreme/testing/" : "~/packages/devextreme/artifacts/transpiled-testing/";
 
     string GetJQueryUrl() {
@@ -131,12 +130,6 @@
                 id: "nojquery",
                 label: "No jQuery",
                 tooltip: "Don't use jQuery for widget rendering"
-            });
-
-            QUnit.config.urlConfig.push({
-                id: "norenovation",
-                label: "No Renovation",
-                tooltip: "Use norenovation components with old tests",
             });
 
             QUnit.config.urlConfig.push({

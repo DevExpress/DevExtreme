@@ -31,10 +31,10 @@ import {
   getLinearGradient,
   getRadialGradient,
   getPatternImage,
-} from './utils.js';
+} from './utils.ts';
 import { data } from './data.ts';
 
-function customizePoint(point) {
+function customizePoint(point: any) {
   const color = point.series.getPointsByArg(point.argument)[0].getColor();
   let fillId;
   switch (point.argument) {
@@ -59,7 +59,8 @@ function customizePoint(point) {
 
   return { color: { fillId } };
 }
-const customizeText = ({ argument }) => argument;
+
+const customizeText = ({ argument }: any) => argument;
 </script>
 
 <style>

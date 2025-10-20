@@ -70,11 +70,13 @@ import {
   DxVectorMap,
   DxLayer,
   DxControlBar,
+  type DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 
 import DxTextBox from 'devextreme-vue/text-box';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxSwitch from 'devextreme-vue/switch';
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { viewportCoordinates } from './data.ts';
 
@@ -89,10 +91,10 @@ const map = ref();
 function continentChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   map.value.instance.viewport(value);
 }
-function centerChanged({ center }) {
+function centerChanged({ center }: DxVectorMapTypes.CenterChangedEvent) {
   currentCenter.value = `${center[0].toFixed(3)}, ${center[1].toFixed(3)}`;
 }
-function zoomFactorChanged({ zoomFactor }) {
+function zoomFactorChanged({ zoomFactor }: DxVectorMapTypes.ZoomFactorChangedEvent) {
   currentZoomFactor.value = zoomFactor.toFixed(2);
 }
 </script>
