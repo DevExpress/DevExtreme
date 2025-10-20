@@ -389,7 +389,7 @@ export class AppointmentPopup {
         location: 'before',
         widget: 'dxButton',
         options: {
-          icon: 'arrowleft',
+          icon: 'back',
           stylingMode: 'text',
           onClick: (): void => {
             this.form.showMainGroup();
