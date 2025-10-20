@@ -149,8 +149,9 @@ const setAlternatingRowsBackground = (
   dataGrid: DxDataGrid['instance'], gridCell: DataGridCell, pdfCell: Cell,
 ) => {
   if (gridCell.rowType === 'data') {
-    const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
-    if (rowIndex % 2 === 0) {
+    const rowIndex = dataGrid?.getRowIndexByKey(gridCell.data.Product_ID);
+    
+    if (rowIndex && rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
     }
   }
