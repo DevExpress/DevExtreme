@@ -67,7 +67,7 @@
 
 const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 defineExpose({
-  getMarkup() {
+  getMarkup(): string {
     // @ts-ignore
     return this.$el.innerHTML;
   },

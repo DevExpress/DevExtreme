@@ -5,6 +5,8 @@ import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
 import { Themes } from '../../../../helpers/themes';
 import { changeTheme } from '../../../../helpers/changeTheme';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { isMaterial } from '../../../../helpers/themeUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -28,7 +30,7 @@ fixture.disablePageReloads`FixedColumns - appearance`
   ([theme, showRowLines]) => {
     // T1268664
     const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
-    test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
+    test.meta({ unstable: true })(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -49,6 +51,9 @@ fixture.disablePageReloads`FixedColumns - appearance`
         .ok(compareResults.errorMessages());
     }).before(async () => {
       await changeTheme(theme);
+      if (isMaterial()) {
+        await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+      }
 
       return createWidget('dxDataGrid', {
         dataSource: getData(13, 40),

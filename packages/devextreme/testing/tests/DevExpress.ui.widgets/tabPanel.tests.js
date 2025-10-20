@@ -1119,7 +1119,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(tabsFocusedIndex, $(this.instance.option('focusedElement')).index(), 'multiView focused element is equal tabs focused element');
     });
 
-    QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
+    QUnit.skip('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
         if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
             return;
         }

@@ -2,7 +2,7 @@ import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
-fixture`FilterBuilder - Field naming`
+fixture.disablePageReloads`FilterBuilder - Field naming`
   .page(url(__dirname, '../container.html'));
 
 // T1253754

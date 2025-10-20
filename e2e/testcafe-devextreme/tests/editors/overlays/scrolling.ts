@@ -14,7 +14,7 @@ import {
 
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
-fixture`Popup scrolling`
+fixture.disablePageReloads`Popup scrolling`
   .page(url(__dirname, '../../container.html'));
 
 if (!isMaterialBased()) {

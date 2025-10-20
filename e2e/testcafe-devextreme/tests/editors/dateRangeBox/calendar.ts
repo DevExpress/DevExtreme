@@ -662,17 +662,20 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
-    .click(dateRangeBox.getStartDateBox().input);
+    .click(dateRangeBox.getStartDateBox().input)
+    .hover(dateRangeBox.getStartDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on popup opening.png', { element: '#container' });
 
   await t
-    .click(dateRangeBox.getEndDateBox().input);
+    .click(dateRangeBox.getEndDateBox().input)
+    .hover(dateRangeBox.getEndDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on end date input focus.png', { element: '#container' });
 
   await t
-    .click(dateRangeBox.getStartDateBox().input);
+    .click(dateRangeBox.getStartDateBox().input)
+    .hover(dateRangeBox.getStartDateBox().input);
 
   await testScreenshot(t, takeScreenshot, 'DRB disabled dates on start date input focus.png', { element: '#container' });
 
