@@ -3,7 +3,6 @@ import positionUtils from 'common/core/animation/position';
 import translator from 'common/core/animation/translator';
 import browser from 'core/utils/browser';
 import fixtures from '../../helpers/positionFixtures.js';
-import devices from 'core/devices.js';
 import { implementationsMap } from 'core/utils/size';
 import { getWindow } from 'core/utils/window.js';
 
