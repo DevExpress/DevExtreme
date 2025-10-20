@@ -278,6 +278,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       margin-top: $generic-scheduler-appointment-popup-description-icon-margin-top;
     }
 
+    .dx-scheduler-form-recurrence-end-repeat-group .dx-field-item-label {
+      height: $generic-scheduler-appointment-popup-all-day-item-height;
+    }
+
     .dx-field-item:not(.dx-first-col) {
       padding-inline-start: $generic-scheduler-appointment-popup-item-padding-horizontal;
     }
