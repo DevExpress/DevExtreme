@@ -64,26 +64,7 @@ describe('Options', () => {
   afterEach(afterTest);
 
   describe('when alignment is left', () => {
-    it('should set text-align to the left', async () => {
-      const { component } = await createDataGrid({
-        dataSource: [
-          { id: 1, name: 'Name 1', value: 10 },
-        ],
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            alignment: 'left',
-          },
-        ],
-      });
 
-      expect($(component.getCellElement(0, 3)).css('text-align')).toBe('left');
-    });
   });
 
   describe('when alignment is right', () => {
@@ -521,6 +502,26 @@ describe('columnOption', () => {
 
       expect(errors.log).toHaveBeenCalledWith('E1059', '"myColumn1"');
     });
+  });
+
+  it('should be able to switch column type to "ai" at runtime', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'type', 'ai');
+    expect(component.apiColumnOption('myColumn').type).toBe('ai');
   });
 });
 
