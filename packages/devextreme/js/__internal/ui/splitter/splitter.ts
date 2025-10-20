@@ -627,9 +627,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     if (itemData.splitter) {
       this._onItemTemplateRendered(itemTemplate, args)();
       // @ts-expect-error
-      return itemTemplate.source
-        ? itemTemplate.source()
-        : $();
+      return itemTemplate.source ? itemTemplate.source() : $();
     }
 
     return super._createItemByTemplate(itemTemplate, args);
