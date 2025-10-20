@@ -73,7 +73,7 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { complaintsData } from './data.ts';
 
-function customizeTooltip(pointInfo) {
+function customizeTooltip(pointInfo: Record<string, any>) {
   return {
     html: `<div><div class='tooltip-header'>${
       pointInfo.argumentText
@@ -88,7 +88,8 @@ function customizeTooltip(pointInfo) {
     }</span>% </div></div></div>`,
   };
 }
-const customizePercentageText = ({ valueText }) => `${valueText}%`;
+
+const customizePercentageText = ({ valueText }: { valueText: string }) => `${valueText}%`;
 const data = complaintsData.sort((a, b) => b.count - a.count);
 const totalCount = data.reduce((prevValue, item) => prevValue + item.count, 0);
 

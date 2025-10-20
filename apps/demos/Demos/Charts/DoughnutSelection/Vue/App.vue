@@ -30,7 +30,7 @@ import DxPieChart, {
 } from 'devextreme-vue/pie-chart';
 import { olympicMedals } from './data.ts';
 
-function pointClickHandler({ target }) {
+function pointClickHandler({ target }: { target: { select: () => void } }): void {
   target.select();
 }
 </script>
