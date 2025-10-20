@@ -24,7 +24,7 @@ pnpm install --frozen-lockfile
 
 **Node.js:** Version 20.x is required (CI uses Node 20)
 **pnpm:** Version 9.15.4 (managed via packageManager field)
-**.NET SDK:** Version 6.0.x required for building the test runner (packages/devextreme/testing/runner)
+**.NET SDK:** Version 8.0.x required for building the test runner (packages/devextreme/testing/runner)
 
 ### First-Time Setup
 
@@ -159,11 +159,10 @@ pnpm run clean
 7. NPM package preparation
 
 **Important environment variables:**
-- `DEVEXTREME_TEST_CI=true` - Enables test mode (skips some production steps)
-- `BUILD_ESM_PACKAGE=true` - Builds ESM modules
+- `DEVEXTREME_TEST_CI=true` - Enables test mode (skips building npm package)
+- `BUILD_ESM_PACKAGE=true` - Builds ESM modules (skips building npm package)
 - `BUILD_TESTCAFE=true` - Builds for TestCafe tests
 - `BUILD_TEST_INTERNAL_PACKAGE=true` - Builds internal test package
-- `BUILD_INPROGRESS_RENOVATION=true` - Includes in-progress renovation components
 
 ## Testing
 
@@ -243,7 +242,7 @@ npm run lint-staged
 **3. Build All (`.github/workflows/build_all.yml`):**
 - Runs `pnpm run all:build`
 - Tests custom bundle creation
-- Requires .NET 6.0.x
+- Requires .NET 8.0.x
 - Timeout: varies
 
 **4. Wrapper Tests (`.github/workflows/wrapper_tests.yml`):**
@@ -253,7 +252,7 @@ npm run lint-staged
 - Timeout: 20 minutes
 
 **5. QUnit Tests (`.github/workflows/qunit_tests-renovation.yml`):**
-- Builds with `DEVEXTREME_TEST_CI=true` and `BUILD_INPROGRESS_RENOVATION=true`
+- Builds with `DEVEXTREME_TEST_CI=true`
 - Runs tests in parallel across multiple constellations
 - Timeout: 60 minutes
 
@@ -319,9 +318,10 @@ pnpm run lint-ts -- --fix
    pnpm run vue:regenerate
    ```
 
-6. **If you modified TypeScript declarations:**
+6. **If you modified TypeScript declarations or devextreme-internal-tools:**
    ```bash
    cd packages/devextreme
+   pnpm run regenerate-all
    pnpm run update-ts-reexports
    pnpm run update-ts-bundle
    ```
@@ -337,7 +337,7 @@ pnpm run lint-ts -- --fix
 **✅ DO:**
 - Always use `pnpm install --frozen-lockfile`
 - Build before testing: `pnpx nx build:dev devextreme`
-- Run `pnpm run regenerate-all` after modifying wrapper generators
+- Run `pnpm run regenerate-all` after modifying wrapper generators, TypeScript declarations, or devextreme-internal-tools (may affect code generators and/or metadata generators)
 - Use Nx commands for better caching: `pnpx nx build devextreme`
 - Check CI workflows to understand what will be validated
 
