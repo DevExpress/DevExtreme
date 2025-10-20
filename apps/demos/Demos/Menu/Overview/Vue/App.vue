@@ -70,15 +70,17 @@ const showFirstSubmenuModes = computed(() => showSubmenuModes.find(
 ));
 const orientation = ref<DxMenuTypes.Orientation>('horizontal');
 const hideSubmenuOnMouseLeave = ref(false);
-const currentProduct = ref<ProductItemType>(null);
+const currentProduct = ref<ProductItemType>();
 
 function isProductItem(item: ProductType | ProductItemType): item is ProductItemType {
   return !('items' in item);
 }
 
 function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
-  if (isProductItem(e.itemData)) {
-    currentProduct.value = e.itemData;
+  const product = e.itemData as ProductItemType;
+  
+  if (isProductItem(product )) {
+    currentProduct.value = product;
   }
 }
 </script>

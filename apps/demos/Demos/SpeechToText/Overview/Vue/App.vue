@@ -102,7 +102,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DxSpeechToText } from 'devextreme-vue/speech-to-text';
+import { DxSpeechToText, type DxSpeechToTextTypes } from 'devextreme-vue/speech-to-text';
 import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxButton, type DxButtonTypes } from 'devextreme-vue/button';
 import { DxSelectBox } from 'devextreme-vue/select-box';
@@ -130,7 +130,7 @@ const language = ref(languages[0]);
 const interimResults = ref(true);
 const continuous = ref(false);
 const animation = ref(true);
-const speechRecognitionConfig = computed(() => ({
+const speechRecognitionConfig: Record<string, any> = computed(() => ({
   interimResults: interimResults.value,
   continuous: continuous.value,
   lang: langMap[language.value],
@@ -159,10 +159,10 @@ function onStartClick() {
 function onStopClick() {
   stopHandler();
 }
-function onResult({ event }) {
+function onResult({ event }: DxSpeechToTextTypes.ResultEvent) {
   const { results } = event;
   const resultText = Object.values(results)
-    .map((resultItem) => resultItem[0].transcript)
+    .map((resultItem: Record<string, any>) => resultItem[0].transcript)
     .join(' ');
   textAreaValue.value = resultText;
 
