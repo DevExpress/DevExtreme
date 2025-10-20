@@ -49,14 +49,12 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Day',
             'type': 'day',
             'skippedDays': [],
         },
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Week',
             'type': 'week',
             'skippedDays': [],
         }

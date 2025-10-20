@@ -321,7 +321,7 @@ export class ColumnsController extends modules.Controller {
   private _columnOptionChanged(args) {
     let columnOptionValue = {};
     const column = this.getColumnByPath(args.fullName);
-    const columnOptionName = args.fullName.replace(COLUMN_OPTION_REGEXP, '');
+    const columnOptionName = this.getColumnOptionNameByFullName(args.fullName);
 
     if (column) {
       if (columnOptionName) {
@@ -1952,6 +1952,10 @@ export class ColumnsController extends modules.Controller {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isNeedToRenderVirtualColumns(scrollPosition: number): boolean {
     return false;
+  }
+
+  public getColumnOptionNameByFullName(fullName: string): string {
+    return fullName.replace(COLUMN_OPTION_REGEXP, '');
   }
 }
 
