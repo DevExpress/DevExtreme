@@ -3,7 +3,7 @@
     <DxProgressBar
       :value="value"
       :element-attr="{ 'aria-label': 'Progress Bar' }"
-      :statusFormat="(_, value: number) => `${value}%`"
+      :statusFormat="statusFormat"
     />
   </div>
 </template>
@@ -14,6 +14,8 @@ import { DxProgressBar } from 'devextreme-vue/progress-bar';
 const props = defineProps<{
   value: number,
 }>();
+
+const statusFormat = (_: unknown, value: number) => `${value}%`;
 </script>
 
 <style>

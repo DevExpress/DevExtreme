@@ -20,7 +20,7 @@ withDefaults(defineProps<{
   item: () => ({} as itemType),
 });
 
-function currency(data) {
+function currency(data: number) {
   return currencyFormatter.format(data);
 }
 const currencyFormatter = new Intl.NumberFormat('en-US', {

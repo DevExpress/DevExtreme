@@ -108,7 +108,7 @@ import {
   DxLinearGauge, DxScale, DxLabel, DxValueIndicator,
 } from 'devextreme-vue/linear-gauge';
 
-const customizeText = ({ valueText }) => `${valueText} %`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} %`;
 </script>
 <style scoped>
 #gauge-demo {
