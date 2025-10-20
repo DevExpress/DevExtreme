@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+
 import type { DIContext } from '@ts/core/di';
 import { setupStateManager } from '@ts/core/state_manager/index';
 
