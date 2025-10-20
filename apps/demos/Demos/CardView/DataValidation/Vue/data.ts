@@ -18,7 +18,7 @@ export interface Employee {
   departmentID: number;
   department: string;
   status: string;
-  notes: string;
+  notes: string | null;
   pictureName: string;
   picture: string;
 }
