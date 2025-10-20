@@ -38,7 +38,7 @@ const SCROLL_BAR_MOVE_EVENT_NAME = `dxc-scroll-move${EVENTS_NS}`;
 const SCROLL_BAR_END_EVENT_NAME = `dxc-scroll-end${EVENTS_NS}`;
 
 const GESTURE_TIMEOUT = 300;
-const MIN_DRAG_DELTA = 5;
+const MIN_DRAG_DELTA = 50;
 
 const _min = Math.min;
 const _max = Math.max;
