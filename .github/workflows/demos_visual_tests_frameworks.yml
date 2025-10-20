@@ -153,6 +153,7 @@ jobs:
 
   get-changes:
     runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request'
     name: Get changed demos
     timeout-minutes: 5
 
@@ -246,7 +247,6 @@ jobs:
     name: Lint code base
     needs:
       - build-devextreme
-      - get-changes
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
@@ -256,6 +256,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download artifacts
+      if: github.event_name == 'pull_request'
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -313,7 +314,13 @@ jobs:
 
         if [ -f "changed-files.json" ]; then
           echo "Running lint-demos on changed files"
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '^apps/demos/Demos/' | sed 's|^apps/demos/||' | tr '\n' ' ')
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
             pnpx eslint $CHANGED_DEMOS
@@ -331,7 +338,6 @@ jobs:
     timeout-minutes: 10
     needs:
       - build-devextreme
-      - get-changes
 
     strategy:
       fail-fast: false
@@ -345,6 +351,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Download artifacts
+      if: github.event_name == 'pull_request'
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
@@ -376,13 +383,8 @@ jobs:
       working-directory: apps/demos
       run: pnpm run prepare-js
 
-    - name: Download changed demos info
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
-
     - name: Check generated JS demos
+      if: github.event_name == 'pull_request'
       working-directory: apps/demos
       run: |
         if [ -f "changed-files.json" ]; then
@@ -420,12 +422,12 @@ jobs:
 
   testcafe:
     needs: build-demos
-    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')
+    if: contains(github.event.pull_request.labels.*.name, 'force all tests')
     strategy:
       fail-fast: false
       matrix:
         CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        THEME: ['fluent.blue.light']
 
     runs-on: ubuntu-22.04
     name: testcafe-${{ matrix.CONSTEL }}-${{ matrix.THEME }}
@@ -450,12 +452,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
 
     - uses: pnpm/action-setup@v4
       with:

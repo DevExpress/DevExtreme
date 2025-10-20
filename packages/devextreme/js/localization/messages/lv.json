@@ -103,6 +103,12 @@
         "dxNumberBox-invalidValueMessage": "Vērtībai jābūt skaitlim",
         "dxNumberBox-noDataText": "Nav datu",
 
+
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+        "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+        "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+        "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Izmanto {0} lai attēlotu kolonnas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Nomest kolonu no grupēšanas paneļa šeit",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Izmanto {0} vai nomet kolonnu no grupēšanas paneļa",
@@ -266,7 +272,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Nosaukums",
         "dxScheduler-editorLabelStartDate": "Sākuma Datums",
         "dxScheduler-editorLabelEndDate": "Beigu Datums",

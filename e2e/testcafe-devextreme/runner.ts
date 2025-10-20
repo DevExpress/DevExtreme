@@ -1,10 +1,14 @@
+/* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as process from 'process';
 import parseArgs from 'minimist';
 import { globSync } from 'glob';
 import { DEFAULT_BROWSER_SIZE } from './helpers/const';
-import * as testPageUtils from './helpers/clearPage';
+import {
+  clearTestPage,
+  loadAxeCore,
+} from './helpers/testPageUtils';
 import 'nconf';
 
 interface ParsedArgs {
@@ -29,6 +33,13 @@ const TESTCAFE_CONFIG: Partial<TestCafeConfigurationOptions> = {
   hostname: 'localhost',
   port1: 1437,
   port2: 1438,
+};
+
+const getCurrentTheme = async (t: TestController): Promise<string> => {
+  // eslint-disable-next-line @stylistic/max-len
+  const currentTheme = await ClientFunction(() => (window as any).DevExpress.ui.themes.current()).with({ boundTestRun: t })();
+
+  return currentTheme;
 };
 
 const changeTheme = async (t: TestController, themeName: string): Promise<void> => {
@@ -237,26 +248,44 @@ createTestCafe(TESTCAFE_CONFIG)
     }
 
     const runOptions: RunOptions = {
-      quarantineMode: { successThreshold: 1, attemptLimit: 10 },
+      quarantineMode: { successThreshold: 1, attemptLimit: 5 },
+      disableNativeAutomation: true,
       // @ts-expect-error ts-error
       hooks: {
         test: {
           before: async (t: TestController) => {
             if (!componentFolder.includes('accessibility')) {
+              await ClientFunction(() => {
+                if (document.activeElement && document.activeElement !== document.body) {
+                  (document.activeElement as HTMLElement).blur();
+                }
+
+                window.getSelection()?.removeAllRanges();
+              }).with({ boundTestRun: t })();
+
+              await t.hover('html');
+
               const [width, height] = DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
+            } else {
+              await loadAxeCore(t);
             }
 
             if (args.shadowDom) {
               await addShadowRootTree(t);
             }
 
-            if (args.theme) {
-              await changeTheme(t, args.theme);
+            if (!componentFolder.includes('dataGrid')) {
+              const currentTheme = await getCurrentTheme(t) || 'generic.light';
+              const newTheme = args.theme || 'generic.light';
+
+              if (currentTheme !== newTheme) {
+                await changeTheme(t, newTheme);
+              }
             }
           },
-          after: async () => {
-            await testPageUtils.clearTestPage();
+          after: async (t: TestController) => {
+            await clearTestPage(t);
           },
         },
       },

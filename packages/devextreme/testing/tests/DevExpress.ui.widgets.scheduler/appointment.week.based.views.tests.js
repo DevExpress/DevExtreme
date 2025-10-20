@@ -259,7 +259,8 @@ module('Integration: Appointment Day, Week views', {
                     dataSource: new DataSource({
                         store: [task]
                     }),
-                    currentDate: new Date(2015, 3, 23)
+                    currentDate: new Date(2015, 3, 23),
+                    editing: { legacyForm: true }
                 });
 
                 scheduler.instance.showAppointmentPopup(task);
@@ -827,7 +828,8 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDateExpr: 'start',
                     endDateExpr: 'end',
-                    allDayExpr: 'AllDay'
+                    allDayExpr: 'AllDay',
+                    editing: { legacyForm: true }
                 });
                 scheduler.instance.showAppointmentPopup(tasks[0]);
                 scheduler.instance.hideAppointmentPopup();
@@ -901,6 +903,7 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDateExpr: 'StartDate',
                     endDateExpr: 'EndDate',
+                    editing: { legacyForm: true },
                     onAppointmentFormOpening: function(data) {
                         const form = data.form;
                         let startDate = data.appointmentData.StartDate;
@@ -941,7 +944,7 @@ module('Integration: Appointment Day, Week views', {
 
                 startDateEditor.option('value', '2016-05-25T10:40:00');
 
-                $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
+                $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 

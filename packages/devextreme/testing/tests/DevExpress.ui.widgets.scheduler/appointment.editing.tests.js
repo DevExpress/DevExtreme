@@ -100,7 +100,8 @@ module('Integration: Appointment editing', {
                     recurrenceEditMode: 'series',
                     views: ['month'],
                     startDateExpr: 'start',
-                    endDateExpr: 'end'
+                    endDateExpr: 'end',
+                    editing: { legacyForm: true },
                 });
 
                 scheduler.appointments.dblclick(0);
@@ -209,7 +210,11 @@ module('Integration: Appointment editing', {
                     store: this.tasks
                 });
 
-                const scheduler = await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+                const scheduler = await this.createInstance({
+                    currentDate: new Date(2015, 1, 9),
+                    dataSource: data,
+                    editing: { legacyForm: true }
+                });
                 const addAppointment = scheduler.instance.addAppointment;
                 const spy = sinon.spy(() => new Deferred());
                 const newItem = { startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption' };
@@ -217,7 +222,7 @@ module('Integration: Appointment editing', {
                 try {
                     scheduler.instance.showAppointmentPopup(newItem, true);
 
-                    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     assert.ok(spy.calledOnce, 'Add method is called');
                     assert.deepEqual(spy.getCall(0).args[0], newItem, 'New item is correct');
@@ -306,7 +311,11 @@ module('Integration: Appointment editing', {
                     store: this.tasks
                 });
 
-                const scheduler = await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+                const scheduler = await this.createInstance({
+                    currentDate: new Date(2015, 1, 9),
+                    dataSource: data,
+                    editing: { legacyForm: true }
+                });
 
                 const updateAppointment = scheduler.instance.updateAppointment;
                 const spy = sinon.spy(() => new Deferred());
@@ -315,7 +324,7 @@ module('Integration: Appointment editing', {
                 try {
                     scheduler.instance.showAppointmentPopup(updatedItem);
 
-                    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     hide();
 

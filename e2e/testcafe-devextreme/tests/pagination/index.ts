@@ -2,7 +2,7 @@ import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Pagination Base Properties`
+fixture.disablePageReloads`Pagination Base Properties`
   .page(url(__dirname, '../container.html'));
 
 test('Pagination visibile property', async (t) => {

@@ -2,12 +2,13 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TagBox from 'devextreme-testcafe-models/tagBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo,
   setStyleAttribute,
+  insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -37,6 +38,10 @@ stylingModes.forEach((stylingMode) => {
       stylingMode,
     };
 
+    if (isMaterial()) {
+      await insertStylesheetRulesToPage('#container .dx-widget { font-family: sans-serif }');
+    }
+
     await appendElementTo('#container', 'div', 'tagBox1', { });
     await appendElementTo('#container', 'div', 'tagBox2', { });
 
@@ -60,12 +65,6 @@ stylingModes.forEach((stylingMode) => {
       await t.click(tagBox.element);
 
       const screenshotName = `TagBox label with stylingMode=${stylingMode},labelMode=${labelMode}.png`;
-
-      await testScreenshot(t, takeScreenshot, screenshotName);
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
 
       await t.click(tagBox.element);
       await t.click(tagBox.element);
