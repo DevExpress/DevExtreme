@@ -131,9 +131,7 @@ for (const label of ['Add Row', '']) {
     test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await t
-        .expect(await takeScreenshot(`FAB with one speed dial action button,label='${label}',icon='${icon}'.png`, '#container'))
-        .ok();
+      await testScreenshot(t, takeScreenshot, `FAB with one speed dial action button,label='${label}',icon='${icon}'.png`, { element: '#container' });
 
       await t
         .expect(compareResults.isValid())
@@ -190,9 +188,7 @@ for (const label of ['Add Row', '']) {
 test('FAB with two speed dial action buttons', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t
-    .expect(await takeScreenshot('FAB with two speed dial action buttons.png', '#container'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'FAB with two speed dial action buttons.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
