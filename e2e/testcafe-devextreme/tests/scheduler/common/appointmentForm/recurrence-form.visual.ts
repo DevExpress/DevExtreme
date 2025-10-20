@@ -46,7 +46,7 @@ const setRepeatEvery = async (
   t: TestController,
   interval: number,
 ): Promise<void> => {
-  const intervalEditor = Selector('.dx-scheduler-form-recurrence-interval-editor [type="text"]');
+  const intervalEditor = Selector('.dx-scheduler-form-recurrence-repeat-every-group [type="text"]');
   await t
     .selectText(intervalEditor)
     .typeText(intervalEditor, interval.toString(), { replace: true });
