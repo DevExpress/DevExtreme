@@ -582,6 +582,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
       margin-top: $material-scheduler-appointment-popup-description-icon-margin-top;
     }
 
+    .dx-scheduler-form-recurrence-end-repeat-group .dx-field-item-label {
+      padding-left: 0;
+    }
+
     .dx-field-item:not(.dx-first-col) {
       padding-inline-start: $material-scheduler-appointment-popup-item-padding-horizontal;
     }
