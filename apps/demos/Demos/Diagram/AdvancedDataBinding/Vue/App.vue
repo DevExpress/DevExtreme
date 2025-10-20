@@ -62,26 +62,23 @@ const itemStyleExpr = ({ type }: { type: string }) => ({
 function itemTypeExpr(obj: any, value: any) {
   if (value) {
     obj.type = (value === 'rectangle') ? undefined : 'group';
-  } else {
-    return obj.type === 'group' ? 'ellipse' : 'rectangle';
+    return null;
   }
-  return null;
+  return obj.type === 'group' ? 'ellipse' : 'rectangle';
 }
 function itemWidthExpr(obj: any, value: any) {
   if (value) {
     obj.width = value;
-  } else {
-    return obj.width || (obj.type === 'group' && 1.5) || 1;
+    return null;
   }
-  return null;
+  return obj.width || (obj.type === 'group' && 1.5) || 1;
 }
 function itemHeightExpr(obj: any, value: any) {
   if (value) {
     obj.height = value;
-  } else {
-    return obj.height || (obj.type === 'group' && 1) || 0.75;
+    return null;
   }
-  return null;
+  return obj.height || (obj.type === 'group' && 1) || 0.75;
 }
 </script>
 <style scoped>

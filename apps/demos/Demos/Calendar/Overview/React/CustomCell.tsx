@@ -5,13 +5,18 @@ export function isWeekend(date: Date) {
   return day === 0 || day === 6;
 }
 
+const holidays = [
+  [1, 0],
+  [4, 6],
+  [25, 11],
+];
+
+export function isHoliday(date: Date) {
+  return holidays.some((item) => date.getDate() === item[0] && date.getMonth() === item[1]);
+}
+
 function getCellCssClass({ date, view }) {
   let cssClass = '';
-  const holidays = [
-    [1, 0],
-    [4, 6],
-    [25, 11],
-  ];
 
   if (view === 'month') {
     if (!date) {
@@ -21,11 +26,9 @@ function getCellCssClass({ date, view }) {
         cssClass = 'weekend';
       }
 
-      holidays.forEach((item) => {
-        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-          cssClass = 'holiday';
-        }
-      });
+      if (isHoliday(date)) {
+        cssClass = 'holiday';
+      }
     }
   }
 

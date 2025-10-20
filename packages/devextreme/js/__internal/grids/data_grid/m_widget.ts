@@ -33,5 +33,6 @@ import './module_not_extended/virtual_columns';
 import './export/m_export';
 import './focus/m_focus';
 import './module_not_extended/row_dragging';
+import './module_not_extended/toast';
 
 export default DataGrid;

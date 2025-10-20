@@ -1,3 +1,5 @@
+import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
+
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
 import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
@@ -19,6 +21,14 @@ export class SchedulerModel {
     return this.getPopup();
   }
 
+  get toolbar(): ToolbarModel {
+    return new ToolbarModel(this.container.querySelector('.dx-scheduler-header'));
+  }
+
+  getStatusContent(): string {
+    return this.container.querySelector('.dx-scheduler-a11y-status-container')?.textContent ?? '';
+  }
+
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {
     if (!text) {
       return createAppointmentModel(this.container.querySelector('.dx-scheduler-appointment'));
@@ -31,6 +41,11 @@ export class SchedulerModel {
     return [...this.container.querySelectorAll('.dx-scheduler-appointment')].map(
       (element) => createAppointmentModel(element as HTMLDivElement),
     );
+  }
+
+  getCollectorTexts(): string[] {
+    const collectors = this.container.querySelectorAll('.dx-scheduler-appointment-collector');
+    return getTexts(collectors);
   }
 
   getDateTableContent(): string[] {

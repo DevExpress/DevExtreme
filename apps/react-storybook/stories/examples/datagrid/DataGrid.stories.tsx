@@ -13,6 +13,7 @@ import DataGrid, {
 } from "devextreme-react/data-grid";
 import DiscountCell from "./DiscountCell";
 import ODataStore from "devextreme/data/odata/store";
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
 
 const columnOptions = {
     regularColumns: [
@@ -252,22 +253,85 @@ export const ColumnReordering: Story = {
             allowColumnDragging: true,
         },
     }
-  }
+};
 
-  const generatedData = generateData(10, 100);
+const generatedData = generateData(10, 100);
 
-  export const ColumnReorderingWithVirtualColumns: Story = {
-    argTypes: {
-        columns: {
-            control: 'object',
-            mapping: null,
-        },
+export const ColumnReorderingWithVirtualColumns: Story = {
+argTypes: {
+    columns: {
+        control: 'object',
+        mapping: null,
     },
+},
+args: {
+    allowColumnReordering: true,
+    rtlEnabled: false,
+    columnWidth: 100,
+    dataSource: generatedData,
+    columns: Object.keys(generatedData[0]),
+}
+}
+
+export const AiColumn: Story = {
     args: {
+        dataSource: countries,
+        columns: [
+            {
+                caption: 'AI Column 1',
+                type: 'ai',
+                name: 'test',
+                ai: {
+                    aiIntegration: new AIIntegration({
+                        sendRequest() {
+                            return {
+                                promise: new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve('{"text":"Test response from AI Column 1"}');
+                                    }, 5000);
+                                }),
+                                abort: () => {
+                                },
+                            };
+                        },
+                    }),
+                },
+            },
+            'Country', 'Area', 'Population_Urban', 'Population_Rural',
+            {
+                caption: 'AI Column 2',
+                type: 'ai',
+                name: 'test',
+                ai: {
+                    aiIntegration: new AIIntegration({
+                        sendRequest() {
+                            return {
+                                promise: new Promise((resolve) => {
+                                    setTimeout(() => {
+                                        resolve('{"text":"Test response from AI Column 2"}');
+                                    }, 5000);
+                                }),
+                                abort: () => {
+                                },
+                            };
+                        },
+                    }),
+                },
+            }
+        ],
+        allowColumnResizing: true,
         allowColumnReordering: true,
-        rtlEnabled: false,
-        columnWidth: 100,
-        dataSource: generatedData,
-        columns: Object.keys(generatedData[0]),
+        onContextMenuPreparing: (e) => {
+            if (e.target === 'header' && e.column?.type === 'ai') {
+                e.items = e.items || [];
+                e.items.push({
+                    text: 'Show AI Prompt Editor',
+                    onItemClick: () => {
+                        // @ts-expect-error
+                        e.component.getView('aiColumnView').showPromptEditor(e.event.target, e.column);
+                    },
+                });
+            }
+        }
     }
-  }
+};

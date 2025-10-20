@@ -44,7 +44,7 @@ async function editingPopupTestFunction(t: TestController, screenshotName: strin
   await t.click(appointmentDialog.series);
 
   const { appointmentPopup } = scheduler;
-  await t.click(appointmentPopup.doneButton);
+  await t.click(appointmentPopup.saveButton.element);
 
   await takeScreenshot(`${SCREENSHOT_BASE_NAME}__${screenshotName}.png`, screenshotZone);
 

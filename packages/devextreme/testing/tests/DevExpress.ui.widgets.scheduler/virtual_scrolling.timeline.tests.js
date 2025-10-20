@@ -34,7 +34,7 @@ module('Virtual scrolling timelines', () => {
                 const data = [{
                     text: 'Appt-001',
                     startDate: new Date(2021, 1, 2, 15, 45),
-                    endDate: new Date(2021, 1, 3, 10, 15)
+                    endDate: new Date(2021, 1, 3, 10, 15),
                 }];
 
                 const scheduler = await createWrapper({
@@ -243,7 +243,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9669,
-                                    width: 1650
+                                    width: 1600
                                 }]
                             },
                             {

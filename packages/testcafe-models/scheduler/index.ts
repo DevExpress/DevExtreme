@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import Widget from '../internal/widget';
+import LegacyAppointmentPopup from './appointment/legacyPopup';
 import AppointmentPopup from './appointment/popup';
 import AppointmentTooltip from './appointment/tooltip';
 import AppointmentDialog from './appointment/dialog';
@@ -76,6 +77,8 @@ export default class Scheduler extends Widget {
 
   readonly workSpaceScroll: { left: Promise<number>; top: Promise<number> };
 
+  readonly legacyAppointmentPopup: LegacyAppointmentPopup;
+
   readonly appointmentPopup: AppointmentPopup;
 
   readonly appointmentTooltip: AppointmentTooltip;
@@ -121,6 +124,7 @@ export default class Scheduler extends Widget {
       top: this.workspaceScrollable.scrollTop,
     };
 
+    this.legacyAppointmentPopup = new LegacyAppointmentPopup(this.element);
     this.appointmentPopup = new AppointmentPopup(this.element);
     this.appointmentTooltip = new AppointmentTooltip(this.element);
     this.reducedIconTooltip = new ReducedIconTooltip();

@@ -3,11 +3,10 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../../helpers/callbackTestHelper';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 
-// NOTE: Disable page reloads will break the tests!
-fixture`Offset: Api callbacks`
+fixture.disablePageReloads`Offset: Api callbacks`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
@@ -123,13 +122,11 @@ const EXPECTED = {
     await CallbackTestHelper.clearClientData([
       API_CALLBACKS.appointmentRendered,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   test(`onAppointmentAdding and onAppointmentAdded (offset: ${offset})`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const cell = scheduler.getDateTableCell(1, 2);
-    const popupDoneButton = scheduler.appointmentPopup.doneButton;
 
     const expectedAppointmentData = {
       allDay: false,
@@ -139,7 +136,7 @@ const EXPECTED = {
     };
 
     await t.doubleClick(cell);
-    await t.click(popupDoneButton);
+    await t.click(scheduler.appointmentPopup.saveButton.element);
 
     const [appointmentAddingData] = await CallbackTestHelper
       .getClientResults(API_CALLBACKS.appointmentAdding);
@@ -183,7 +180,6 @@ const EXPECTED = {
       API_CALLBACKS.appointmentAdding,
       API_CALLBACKS.appointmentAdded,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   test(`onAppointmentClick and onAppointmentDbClick (offset: ${offset})`, async (t) => {
@@ -243,7 +239,6 @@ const EXPECTED = {
       API_CALLBACKS.appointmentClick,
       API_CALLBACKS.appointmentDblClick,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   test(`onAppointmentTooltipShowing and onAppointmentFormOpening (offset: ${offset})`, async (t) => {
@@ -307,7 +302,6 @@ const EXPECTED = {
       API_CALLBACKS.appointmentTooltipShowing,
       API_CALLBACKS.appointmentFormOpening,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   // NOTE: onAppointmentDeleting event has a targetedAppointmentData field.
@@ -364,7 +358,6 @@ const EXPECTED = {
       API_CALLBACKS.appointmentDeleting,
       API_CALLBACKS.appointmentDeleted,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   test(`onAppointmentUpdating and onAppointmentUpdated (offset: ${offset})`, async (t) => {
@@ -423,7 +416,6 @@ const EXPECTED = {
       API_CALLBACKS.appointmentUpdating,
       API_CALLBACKS.appointmentUpdated,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 
   test(`onAppointmentContextMenu (offset: ${offset})`, async (t) => {
@@ -465,6 +457,5 @@ const EXPECTED = {
     await CallbackTestHelper.clearClientData([
       API_CALLBACKS.appointmentContextMenu,
     ]);
-    await removeStylesheetRulesFromPage();
   });
 });

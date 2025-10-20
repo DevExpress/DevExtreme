@@ -165,5 +165,30 @@ QUnit.module('SpeechRecognitionAdapter', {
         speechRecognition.onend();
         assert.strictEqual(adapter._isListening, false, 'reset to false after onend');
     });
+
+    QUnit.test('should return true from isAvailable when SpeechRecognition is supported', function(assert) {
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), true, 'isAvailable returns true when SpeechRecognition exists');
+    });
+
+    QUnit.test('should return false from isAvailable when SpeechRecognition is not supported', function(assert) {
+        window.SpeechRecognition = undefined;
+        window.webkitSpeechRecognition = undefined;
+
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), false, 'isAvailable returns false when SpeechRecognition is not supported');
+    });
+
+    QUnit.test('should return false from isAvailable after dispose', function(assert) {
+        const adapter = this.createAdapter();
+
+        assert.strictEqual(adapter.isAvailable(), true, 'isAvailable returns true before dispose');
+
+        adapter.dispose();
+
+        assert.strictEqual(adapter.isAvailable(), false, 'isAvailable returns false after dispose');
+    });
 });
 

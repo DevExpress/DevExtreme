@@ -35,3 +35,39 @@ test('selected class should not be added to the button after hovering (T1222079)
   selectedItemKeys: ['Button_1'],
   disabled: true,
 }));
+test('selected class should be set after reenabling (T1308601)', async (t) => {
+  const buttonGroup = new ButtonGroup('#container');
+
+  await buttonGroup.option('disabled', true);
+  await buttonGroup.option('disabled', false);
+
+  await t
+    .click(buttonGroup.getItem(1).element);
+
+  await buttonGroup.option('disabled', true);
+  await buttonGroup.option('disabled', false);
+
+  await t
+    .click(buttonGroup.getItem(0).element);
+
+  await t
+    .expect(buttonGroup.getItem(0).isSelected)
+    .ok()
+    .expect(buttonGroup.isItemSelected(0))
+    .ok();
+
+  await t
+    .hover(buttonGroup.getItem(1).element);
+
+  await t
+    .expect(buttonGroup.getItem(0).isSelected)
+    .ok()
+    .expect(buttonGroup.isItemSelected(0))
+    .ok();
+}).before(async () => createWidget('dxButtonGroup', {
+  items: [
+    { text: 'Button_1' },
+    { text: 'Button_2' },
+  ],
+  selectedItemKeys: ['Button_1'],
+}));

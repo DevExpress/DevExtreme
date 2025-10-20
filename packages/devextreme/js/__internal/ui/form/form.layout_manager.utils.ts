@@ -8,7 +8,10 @@ import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type {
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type {
   FormItemComponent, FormLabelMode, LabelLocation, SimpleItem,
 } from '@js/ui/form';
@@ -253,7 +256,7 @@ function getDropDownEditorOptions(
       // Do not overwrite boolean hideOnOutsideClick
       if (openOnFieldClick && isFunction(initialHideOnOutsideClick)) {
         const hideOnOutsideClick = (
-          e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+          e: DxEvent<PointerInteractionEvent>,
         ): boolean => {
           const $target = $(e.target);
           const $label = $parent.find(`label[for="${editorInputId}"]`);

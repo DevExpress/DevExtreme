@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxToast, type DxToastTypes } from 'devextreme-vue/toast';
-import { type DxCheckBoxTypes } from 'devextreme-vue/cjs/check-box';
+import { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import { products, type Product } from './data.ts';
 import ProductItem from './ProductItem.vue';
 

@@ -1,6 +1,6 @@
 import {
-    UserDefinedElement,
-    DxElement,
+  UserDefinedElement,
+  DxElement,
 } from '../core/element';
 
 import {
@@ -14,30 +14,30 @@ import {
 import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    EventInfo,
-    NativeEventInfo,
-    InitializedEventInfo,
-    ChangedOptionInfo,
-    Cancelable,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+  EventInfo,
+  NativeEventInfo,
+  InitializedEventInfo,
+  ChangedOptionInfo,
+  Cancelable,
+  DxEvent,
+  PointerInteractionEvent,
+} from '../events';
 
 import { dxButtonGroupOptions, dxButtonGroupItem } from './button_group';
 import {
-    CollectionWidgetItem,
+  CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
 
-import dxForm from './form';
+import dxForm, { Item as FormItem } from './form';
 import dxPopup from './popup';
 
 import dxSortable from './sortable';
 import { dxToolbarItem } from './toolbar';
 
 import Widget, {
-    WidgetOptions,
+  WidgetOptions,
 } from './widget/ui.widget';
 
 interface AppointmentDraggingEvent {
@@ -77,6 +77,8 @@ export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
 /** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+/** @public */
+export type SchedulerAppointmentFormIconDisplay = 'both' | 'main' | 'recurrence' | 'none';
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
@@ -136,7 +138,7 @@ export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, Ke
  * @type object
  * @inherits NativeEventInfo,TargetedAppointmentInfo
  */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & TargetedAppointmentInfo & {
   /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
@@ -304,7 +306,7 @@ export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardE
  * @type object
  * @inherits NativeEventInfo
  */
-export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, PointerInteractionEvent> & {
   /**
    * @docid _ui_scheduler_CellContextMenuEvent.cellData
    * @type object
@@ -629,6 +631,40 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default true
        */
       allowUpdating?: boolean;
+      /**
+       * @docid
+       * @default undefined
+       * @public
+       */
+      form?: {
+        /**
+         * @docid
+         * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
+         * @default []
+         * @public
+         */
+        items?: Array<FormItem>;
+        /**
+         * @docid
+         * @type_function_param1 formData:object
+         * @default undefined
+         * @public
+         */
+        onSaved?: ((formData: any) => void);
+        /**
+         * @docid
+         * @type_function_param1 formData:object
+         * @default undefined
+         * @public
+         */
+        onCanceled?: ((formData: any) => void);
+        /**
+         * @docid
+         * @default "main"
+         * @public
+         */
+        showIcons?: SchedulerAppointmentFormIconDisplay;
+      } | undefined;
     };
     /**
      * @docid
@@ -884,6 +920,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default ""
        */
       fieldExpr?: string;
+      /**
+       * @docid
+       * @default ""
+       */
+      icon?: string;
       /**
        * @docid
        * @default ""

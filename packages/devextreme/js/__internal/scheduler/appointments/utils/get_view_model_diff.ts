@@ -1,8 +1,8 @@
 import { equalByValue } from '@js/core/utils/common';
 
 import type { SafeAppointment } from '../../types';
-import type { AppointmentDataSource } from '../../view_model/generate_view_model/data_provider/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from '../../view_model/generate_view_model/types';
+import type { AppointmentDataSource } from '../../view_model/m_appointment_data_source';
+import type { AppointmentViewModelPlain } from '../../view_model/types';
 import type { DiffItem } from './get_arrays_diff';
 import { getArraysDiff } from './get_arrays_diff';
 

@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 
-fixture`Columns`
+fixture.disablePageReloads`Columns`
   .page(url(__dirname, '../container.html'));
 
 // T1054312

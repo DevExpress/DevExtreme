@@ -6,7 +6,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { tasksApiMock } from './apiMocks/tasksApiMock';
 
-fixture`Selection`
+fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../container.html'));
 
 // T1109666

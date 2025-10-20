@@ -4,28 +4,28 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
-import { borderConfigs, rtlAndRowAltConfigs } from '../helpers/testMatrixConfig';
+import { borderConfigs } from '../helpers/testMatrixConfig';
 
 const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../../container.html'));
 
-borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
-  rtlAndRowAltConfigs.forEach(({ rtlEnabled, rowAlternationEnabled }) => {
-    safeSizeTest(`Sticky column + Band sticky column + Sticky column: sticky positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+borderConfigs.forEach(({ showColumnLines, showBorders }) => {
+  [true, false].forEach((rtlEnabled) => {
+    safeSizeTest(`Sticky column + Band sticky column + Sticky column: sticky positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-8)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-8)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-8)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-8)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -33,11 +33,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns[1].fixed = true;
@@ -67,19 +65,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky column + Band sticky column + Sticky column: left positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Sticky column + Band sticky column + Sticky column: left positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-9)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-9)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-9)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-9)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -87,11 +85,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns[1].fixed = true;
@@ -121,19 +117,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky column + Band sticky column + Sticky column: right positions (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Sticky column + Band sticky column + Sticky column: right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-10)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-10)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-10)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-10)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -141,11 +137,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns[1].fixed = true;
@@ -175,19 +169,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky column with left position + Sticky column with sticky position (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Band sticky column with left position + Sticky column with sticky position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-11)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-11)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-11)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-11)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -195,11 +189,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.splice(1, 0, {
@@ -226,19 +218,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky column with sticky position + Band sticky column with right position (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Sticky column with sticky position + Band sticky column with right position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-12)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-12)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-12)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-12)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -246,11 +238,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.splice(columns.length - 1, 0, {
@@ -277,19 +267,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Sticky column with left position + Band sticky column with sticky position (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Sticky column with left position + Band sticky column with sticky position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-13)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-13)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-13)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-13)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -297,11 +287,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns[0].fixed = true;
@@ -328,19 +316,19 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       },
     }));
 
-    safeSizeTest(`Band sticky column with sticky position + Sticky column with right position (showRowLines = ${showRowLines}, showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
+    safeSizeTest(`Band sticky column with sticky position + Sticky column with right position (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async (t) => {
       // arrange
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(dataGrid.isReady()).ok();
 
-      await takeScreenshot(`band-columns-1-(case-14)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-1-(case-14)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`band-columns-2-(case-14)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`band-columns-2-(case-14)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -348,11 +336,9 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
-      showRowLines,
       showColumnLines,
       showBorders,
       rtlEnabled,
-      rowAlternationEnabled,
       columnAutoWidth: true,
       customizeColumns: (columns) => {
         columns.splice(columns.length - 1, 0, {

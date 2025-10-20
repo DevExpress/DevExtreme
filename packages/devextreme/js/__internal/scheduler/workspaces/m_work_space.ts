@@ -29,7 +29,6 @@ import {
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
@@ -50,7 +49,8 @@ import {
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
-import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
+import type { ViewType } from '@ts/scheduler/types';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 import type NotifyScheduler from '../base/m_widget_notify_scheduler';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
@@ -67,6 +67,7 @@ import {
   VERTICAL_GROUP_COUNT_CLASSES,
   VIRTUAL_CELL_CLASS,
 } from '../m_classes';
+import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
@@ -213,7 +214,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _cellsSelectionController: any;
 
-  _dateTableScrollable: any;
+  _dateTableScrollable!: Scrollable;
 
   _selectionChangedAction: any;
 
@@ -842,13 +843,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.renderer = new VirtualScrollingRenderer(this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onDataSourceChanged(argument?: SafeAppointment[]): void {
-  }
-
   isGroupedAllDayPanel() {
     return calculateIsGroupedAllDayPanel(
-      this.option('groups'),
+      this.option('groups').length,
       this.option('groupOrientation') as any,
       this.isAllDayPanelVisible as any,
     );
@@ -907,6 +904,19 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
       this._$headerPanelEmptyCell.css('width', timePanelWidth + groupPanelWidth);
     }
+  }
+
+  updateHeaderPanelScrollbarPadding() {
+    if (hasWindow() && this._$headerPanelContainer) {
+      const scrollbarWidth = this._getScrollbarWidth();
+      this._$headerPanelContainer.css('paddingRight', `${scrollbarWidth}px`);
+    }
+  }
+
+  _getScrollbarWidth() {
+    const containerElement = $(this._dateTableScrollable.container()).get(0) as HTMLElement;
+    const scrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
+    return scrollbarWidth;
   }
 
   _isGroupsSpecified(groupValues?: GroupValues) {
@@ -1074,6 +1084,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._dateTableScrollable.update();
     this._headerScrollable?.update();
     this._sidebarScrollable?.update();
+    this.updateHeaderPanelScrollbarPadding();
   }
 
   _getTimePanelRowCount() {
@@ -1936,6 +1947,19 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
     }));
+  }
+
+  getPanelDOMSize(panelName: 'allDayPanel' | 'regularPanel'): { width: number; height: number } {
+    return panelName === 'allDayPanel'
+      ? this.cache.memo('allDayPanelSize', () => getBoundingRect(this._$allDayPanel.get(0)))
+      : this.cache.memo('regularPanelSize', () => getBoundingRect(this._getDateTable().get(0)));
+  }
+
+  getCollectorDimension(isCollectorCompact: boolean, panelName: 'allDayPanel' | 'regularPanel') {
+    return this.cache.memo(`collectorSize-${panelName}`, () => CompactAppointmentsHelper.measureCollectorDimensions(
+      panelName === 'allDayPanel' ? this.getAllDayContainer() : this.getFixedContainer(),
+      isCollectorCompact,
+    ));
   }
 
   _getDateTableDOMElementsInfo() {

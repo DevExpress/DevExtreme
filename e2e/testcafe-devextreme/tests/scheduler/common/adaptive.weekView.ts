@@ -170,9 +170,9 @@ safeSizeTest('With a large browser width, should be visible common appointment i
     .expect(roughEqual(firstAppointmentLeftAfterResize, 215))
     .ok()
 
-    .expect(roughEqual(secondAppointmentTopAfterResize, 256))
+    .expect(roughEqual(secondAppointmentTopAfterResize, 240))
     .ok()
-    .expect(roughEqual(secondAppointmentLeftAfterResize, 236.5))
+    .expect(roughEqual(secondAppointmentLeftAfterResize, 239.5))
     .ok();
 }, [350, 600])
   .before(async () => createScheduler(sampleData));

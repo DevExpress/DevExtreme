@@ -32,4 +32,5 @@ export class Cache {
 
 export const globalCache = {
   timezones: new Cache(),
+  DST: new Cache(),
 };

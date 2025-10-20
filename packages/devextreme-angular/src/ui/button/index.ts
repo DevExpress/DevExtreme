@@ -29,10 +29,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -54,6 +52,7 @@ import {
     ]
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
+
     instance: DxButton = null;
 
     /**
@@ -474,10 +473,6 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
-
-
-
 
 
 

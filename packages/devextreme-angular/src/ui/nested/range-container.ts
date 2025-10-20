@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,10 +23,13 @@ import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeComponent } from './range-dxi';
 
+import {
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-range-container',
@@ -38,6 +40,11 @@ import { DxiRangeComponent } from './range-dxi';
     providers: [NestedOptionHost]
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
+    }
+    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -115,14 +122,6 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
         return 'rangeContainer';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiRangeComponent))
-    get rangesChildren(): QueryList<DxiRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

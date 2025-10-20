@@ -49,14 +49,14 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Day',
             'type': 'day',
+            'skippedDays': [],
         },
         {
             'groupOrientation': 'horizontal',
             'intervalCount': 1,
-            'name': 'Week',
             'type': 'week',
+            'skippedDays': [],
         }
     ];
     assert.deepEqual(header.option('views'), expectedViews, 'Scheduler header has a correct views option');
@@ -258,7 +258,7 @@ QUnit.test('Scheduler should not throw an error when the details form is opened 
 });
 
 QUnit.test('The \'scrollingEnabled\' option of an appointment form should be \'true\'', async function(assert) {
-    await this.createInstance();
+    await this.createInstance({ editing: { legacyForm: true } });
     this.instance.showAppointmentPopup({ startDate: new Date() });
 
     assert.strictEqual(this.instance.getAppointmentDetailsForm().option('scrollingEnabled'), true, 'the scrollingEnabled option is OK');

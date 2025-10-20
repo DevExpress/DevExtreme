@@ -259,7 +259,7 @@ QUnit.module('State Management', moduleConfig, () => {
         const $button = this.getButton();
         $button.trigger('dxclick');
 
-        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'manual control works');
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'native speech recognition processes');
     });
 
     QUnit.test('should handle state transitions with disabled component', function(assert) {
@@ -648,6 +648,32 @@ QUnit.module('Custom Engine Integration', moduleConfig, () => {
 
         assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'enabled not missed');
     });
+
+    QUnit.test('should reinitialize speech recognition adapter when custom engine settings change', function(assert) {
+        this.reinit({
+            customSpeechRecognizer: {
+                enabled: true,
+                isListening: false,
+            }
+        });
+
+        assert.strictEqual(this.getAdapter(), undefined, 'adapter is unavailable on init');
+
+        this.instance.option('customSpeechRecognizer', {
+            enabled: false,
+            isListening: false,
+        });
+
+        const adapter = this.getAdapter();
+
+        assert.ok(adapter.isAvailable(), 'adapter is available after CSR reinitialization');
+
+        const startSpy = sinon.spy(adapter, 'start');
+        this.getButton().trigger('dxclick');
+
+        assert.ok(startSpy.calledOnce, 'reinitialized adapter works correctly');
+        assert.ok(this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state changes correctly with reinitialized adapter');
+    });
 });
 
 QUnit.module('Options', moduleConfig, () => {
@@ -902,6 +928,19 @@ QUnit.module('SpeechRecognitionAdapter integration', moduleConfig, () => {
         this.getButton().trigger('dxclick');
 
         assert.ok(startSpy.calledOnce, 'start called once on button click');
+    });
+
+    QUnit.test('should not start recognition when adapter is not available', function(assert) {
+        this.reinit();
+        const speechRecognitionAdapter = this.getAdapter();
+        const startSpy = sinon.spy(speechRecognitionAdapter, 'start');
+
+        sinon.stub(speechRecognitionAdapter, 'isAvailable').returns(false);
+
+        this.getButton().trigger('dxclick');
+
+        assert.ok(startSpy.notCalled, 'start not called when adapter is not available');
+        assert.ok(!this.$element.hasClass(SPEECH_TO_TEXT_LISTENING_CLASS), 'state not changed to listening when adapter unavailable');
     });
 
     QUnit.test('should call stop on speechRecognitionAdapter when stop button clicked', function(assert) {

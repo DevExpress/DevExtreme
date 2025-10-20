@@ -22,8 +22,8 @@ testStart(() => {
 
 const ADAPTIVE_COLLECTOR_DEFAULT_SIZE = 28;
 const ADAPTIVE_COLLECTOR_BOTTOM_OFFSET = 40;
-const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 5;
-const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
+const ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 2;
+const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 2;
 
 const baseConfig = {
     beforeEach: function() {
@@ -62,6 +62,9 @@ module('Integration: collector', baseConfig, () => {
             onAppointmentFormOpening: e => {
                 const startDate = e.form.getEditor('startDate').option('value');
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
+            },
+            editing: {
+                legacyForm: true
             }
         });
 
@@ -202,30 +205,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material-based themes', async function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
-
-        try {
-            themes.isMaterialBased = () => true;
-
-            const scheduler = await createInstance({
-                currentDate: new Date(2019, 2, 4),
-                views: ['month'],
-                width: 840,
-                height: 500,
-                currentView: 'month',
-                firstDayOfWeek: 1
-            });
-
-            assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
-            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
-        } finally {
-            themes.isMaterialBased = origIsMaterialBased;
-        }
-    });
-
     test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', async function(assert) {
-        const WEEK_VIEW_BUTTON_OFFSET = 5;
+        const WEEK_VIEW_BUTTON_OFFSET = 2;
 
         const scheduler = await createInstance({
             currentDate: new Date(2019, 2, 4),
@@ -361,26 +342,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
 
         scheduler.appointments.compact.click(0);
         assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
-    });
-
-    test('Appointment collector should have correct coordinates: rtl mode', async function(assert) {
-        const scheduler = await createInstance({
-            currentDate: new Date(2019, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 500,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-        const $collector = scheduler.appointments.compact.getButton(0);
-
-        const collectorCoordinates = translator.locate($collector);
-        const expectedCoordinates = scheduler.workSpace.getCell(7).position();
-        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 36;
-
-        assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
     test('Collapsed appointment should raise the onAppointmentClick event', async function(assert) {
@@ -817,7 +778,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getCell(8).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
     });
 
@@ -855,7 +816,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const buttonCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getAllDayCell(1).position();
 
-        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Left coordinate is OK');
+        assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + (scheduler.workSpace.getAllDayCellWidth() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE - 2 * ADAPTIVE_COLLECTOR_RIGHT_OFFSET) / 2, 1.001, 'Left coordinate is OK');
         assert.roughEqual(buttonCoordinates.top, (scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
     });
 
@@ -906,7 +867,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerWidth(), 55.4, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
 
         scheduler.instance.option('width', 1000);
@@ -914,10 +875,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const $firstAppointment = scheduler.appointments.getAppointment(0);
         const $secondAppointment = scheduler.appointments.getAppointment(1);
 
-        assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($firstAppointment.outerWidth(), 49.1, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
 
-        assert.roughEqual($secondAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
+        assert.roughEqual($secondAppointment.outerWidth(), 49.1, 1.001, 'Width is OK');
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
     });
 
