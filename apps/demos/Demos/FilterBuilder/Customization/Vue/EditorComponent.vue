@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import DxTagBox from 'devextreme-vue/tag-box';
+import DxTagBox, { type DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import { categories } from './data.ts';
 
 const props = withDefaults(defineProps<{
@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{
   conditionInfo: () => ({} as Record<string, any>),
 });
 
-function onValueChanged(e) {
+function onValueChanged(e: DxTagBoxTypes.ValueChangedEvent) {
   props.conditionInfo.setValue(e.value && e.value.length ? e.value : null);
 }
 </script>
