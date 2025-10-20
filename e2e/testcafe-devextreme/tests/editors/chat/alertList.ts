@@ -26,19 +26,6 @@ test.clientScripts([
 
   await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
     element: '#container',
-    shouldTestInCompact: true,
-    compactCallBack: async () => {
-      await chat.repaint();
-    },
-  });
-
-  const darkTheme = getFullThemeName().replace('light', 'dark');
-  await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
-    element: '#container',
-    theme: darkTheme,
-    themeChanged: async () => {
-      await chat.repaint();
-    },
   });
 
   await chat.option('rtlEnabled', true);

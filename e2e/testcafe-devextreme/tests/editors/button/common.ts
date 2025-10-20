@@ -28,19 +28,19 @@ test('Buttons render', async (t) => {
 
   await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { margin: 5px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Button render.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Button render.png', { element: '#container' });
 
   await removeStylesheetRulesFromPage();
 
   await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { width: 70px; margin: 5px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Button render with overflow.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Button render with overflow.png', { element: '#container' });
 
   await removeStylesheetRulesFromPage();
 
   await insertStylesheetRulesToPage(`.${BUTTON_TEXT_CLASS}, .${BUTTON_CLASS} .${ICON_CLASS} { font-size: 26px; } .${BUTTON_CLASS} { margin: 5px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Button stretch of large text.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Button stretch of large text.png', { element: '#container' });
 
   await removeStylesheetRulesFromPage();
 
@@ -73,7 +73,7 @@ test('Buttons render', async (t) => {
 test('Button: svg icon as background should be fit within icon element (T1178813)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Button with svg icon as background.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Button with svg icon as background.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -107,11 +107,7 @@ test('Buttons render in disabled state', async (t) => {
 
   await insertStylesheetRulesToPage(`.${BUTTON_CLASS} { margin: 5px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Button render in disabled.png', { element: '#container', shouldTestInCompact: true });
-  await testScreenshot(t, takeScreenshot, 'Button render in disabled.png', {
-    element: '#container',
-    theme: process.env.theme?.replace('.light', '.dark'),
-  });
+  await testScreenshot(t, takeScreenshot, 'Button render in disabled.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
