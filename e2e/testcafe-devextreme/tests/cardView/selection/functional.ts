@@ -968,3 +968,32 @@ test('Switching the showCheckBoxesMode option from always to onClick at runtime 
     showCheckBoxesMode: 'always',
   },
 }));
+
+test('"Deselect all" should work after changing showCheckboxMode', async (t) => {
+  const cardView = new CardView('#container');
+
+  await cardView.option('selection.showCheckBoxesMode', 'onClick');
+
+  await t.click(
+    cardView.getToolbar().getClearSelectionButton(),
+  );
+
+  await t
+    .expect(cardView.getToolbar().isClearSelectionButtonDisabled())
+    .ok();
+
+  for (let i = 0; i < 6; i += 1) {
+    await t
+      .expect(cardView.getCard(i).isSelected)
+      .notOk();
+  }
+}).before(async () => createWidget('dxCardView', {
+  dataSource: [
+    { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 },
+  ],
+  keyExpr: 'a',
+  selection: {
+    mode: 'multiple',
+  },
+  selectedCardKeys: [1, 2],
+}));

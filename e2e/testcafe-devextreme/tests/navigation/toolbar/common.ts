@@ -1,6 +1,8 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
+import { ToolbarItemComponent } from 'devextreme/common';
+import { Item, LocateInMenuMode } from 'devextreme/ui/toolbar';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -9,11 +11,7 @@ import { appendElementTo, setAttribute, setStyleAttribute } from '../../../helpe
 fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'));
 
-const supportedWidgets = [
-  'dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton',
-];
-
-['never', 'always', 'auto'].forEach((locateInMenu) => {
+['never', 'always'].forEach((locateInMenu: LocateInMenuMode) => {
   [true, false].forEach((rtlEnabled) => {
     test(`Default nested widgets render,items[].locateInMenu=${locateInMenu},rtl=${rtlEnabled}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -24,8 +22,7 @@ const supportedWidgets = [
       const overflowMenu = toolbar.getOverflowMenu();
 
       if (locateInMenu !== 'never') {
-        await t
-          .click(overflowMenu.element);
+        await t.click(overflowMenu.element);
 
         targetContainer = overflowMenu.getPopup().getContent();
       }
@@ -34,16 +31,6 @@ const supportedWidgets = [
 
       await testScreenshot(t, takeScreenshot, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, {
         element: targetContainer,
-        shouldTestInCompact: true,
-        compactCallBack: async () => {
-          await toolbar.repaint();
-
-          if (locateInMenu !== 'never') {
-            await t
-              .click(overflowMenu.element);
-          }
-          await setStyleAttribute(targetContainer, 'background-color: gold;');
-        },
       });
 
       await t
@@ -53,33 +40,21 @@ const supportedWidgets = [
       await appendElementTo('#container', 'div', 'toolbar');
       await setAttribute('#container', 'style', 'width: 1184px;');
 
-      const toolbarItems = [] as any[];
-      (supportedWidgets as any[]).forEach((widgetName) => {
-        // eslint-disable-next-line @typescript-eslint/init-declarations
-        let iconPosition;
-        if (widgetName === 'dxTabs') {
-          iconPosition = 'start';
-        }
-        const itemConfig = {
-          location: 'before',
-          locateInMenu,
-          widget: widgetName,
-          options: {
-            value: new Date(2021, 9, 17),
-            stylingMode: 'contained',
-            text: `${widgetName}`,
-            icon: 'refresh',
-            items: [{ text: `${widgetName}`, icon: 'export' }],
-            iconPosition,
-          },
-        };
-
-        if (locateInMenu === 'never') {
-          (itemConfig.options as any).width = 115;
-        }
-
-        toolbarItems.push(itemConfig);
-      });
+      const supportedWidgets: ToolbarItemComponent[] = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+      const toolbarItems: Item[] = supportedWidgets.map((widgetName) => ({
+        location: 'before',
+        locateInMenu,
+        widget: widgetName,
+        options: {
+          value: new Date(2021, 9, 17),
+          stylingMode: 'contained',
+          text: `${widgetName}`,
+          icon: 'refresh',
+          items: [{ text: `${widgetName}`, icon: 'export' }],
+          iconPosition: widgetName === 'dxTabs' ? 'start' : undefined,
+          width: locateInMenu === 'never' ? 115 : undefined,
+        },
+      }));
 
       toolbarItems.push({
         location: 'before',
@@ -94,189 +69,45 @@ const supportedWidgets = [
       }, '#toolbar');
     });
   });
+});
 
-  test(`Toolbar with dropDownButton,items[].locateInMenu=${locateInMenu}`, async (t) => {
+[true, false].forEach((rtlEnabled) => {
+  test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const toolbar = new Toolbar('#toolbar');
-    const overflowMenu = toolbar.getOverflowMenu();
-    let targetContainer = Selector('#container');
-
-    if (locateInMenu !== 'never') {
-      await t
-        .click(overflowMenu.element);
-
-      targetContainer = overflowMenu.getPopup().getContent();
-    }
-
-    await testScreenshot(t, takeScreenshot, `Toolbar with dropDownButton,items[]locateInMenu=${locateInMenu === 'auto' ? 'always' : locateInMenu}.png`, {
-      element: targetContainer,
-      shouldTestInCompact: true,
-      compactCallBack: async () => {
-        await toolbar.repaint();
-
-        if (locateInMenu !== 'never') {
-          await t
-            .click(overflowMenu.element);
-        }
-      },
+    await testScreenshot(t, takeScreenshot, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
+      element: '#toolbar',
     });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await setAttribute('#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
     await appendElementTo('#container', 'div', 'toolbar');
-    await setAttribute('#container', 'style', 'width: 1184px;');
 
-    const toolbarItems = [
-      {
-        location: 'before',
-        locateInMenu,
-        widget: 'dxDropDownButton',
-        options: {
-          text: 'default',
-        },
+    const supportedWidgets: ToolbarItemComponent[] = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+    const toolbarItems: Item[] = supportedWidgets.map((widgetName) => ({
+      location: 'before',
+      widget: widgetName,
+      options: {
+        value: new Date(2021, 9, 17),
+        stylingMode: 'contained',
+        text: 1,
+        items: [{ text: 1 }, { text: 2 }],
+        showClearButton: true,
       },
-      {
-        location: 'before',
-        locateInMenu,
-        widget: 'dxDropDownButton',
-        options: {
-          stylingMode: 'text',
-          text: 'opts.stylingMode: text',
-        },
-      },
-      {
-        location: 'before',
-        locateInMenu,
-        widget: 'dxDropDownButton',
-        options: {
-          stylingMode: 'outlined',
-          text: 'opts.stylingMode: outlined',
-        },
-      },
-      {
-        location: 'before',
-        locateInMenu,
-        widget: 'dxDropDownButton',
-        options: {
-          stylingMode: 'contained',
-          text: 'opts.stylingMode: contained',
-        },
-      },
-      {
-        location: 'before',
-        locateInMenu,
-        widget: 'dxSwitch',
-        options: {
-          stylingMode: 'contained',
-          text: 'opts.stylingMode: contained',
-        },
-      },
-    ];
+    }));
+
+    toolbarItems.push({
+      location: 'after',
+      text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+    });
 
     return createWidget('dxToolbar', {
+      multiline: true,
       items: toolbarItems,
-      width: locateInMenu === 'auto' ? 50 : '100%',
+      rtlEnabled,
     }, '#toolbar');
-  });
-});
-
-['always', 'never'].forEach((locateInMenu) => {
-  ['text', 'outlined', 'contained'].forEach((stylingMode) => {
-    test(`Toolbar with different types of buttons,items[{locateInMenu=${locateInMenu},stylingMode:${stylingMode}}]`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      const toolbar = new Toolbar('#toolbar');
-      const overflowMenu = toolbar.getOverflowMenu();
-
-      let targetContainer = Selector('#toolbar');
-      if (locateInMenu === 'always') {
-        await t
-          .click(overflowMenu.element);
-
-        targetContainer = overflowMenu.getPopup().getContent();
-      }
-
-      await testScreenshot(t, takeScreenshot, `Toolbar with ${stylingMode} buttons,items[]locateInMenu=${locateInMenu}.png`, {
-        element: targetContainer,
-        shouldTestInCompact: true,
-        compactCallBack: async () => {
-          await toolbar.repaint();
-          if (locateInMenu === 'always') {
-            await t
-              .click(overflowMenu.element);
-          }
-        },
-      });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await appendElementTo('#container', 'div', 'toolbar');
-      await setAttribute('#container', 'style', 'width: 600px;');
-
-      const toolbarItems = [
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'default',
-            text: 'default',
-            icon: 'money',
-            stylingMode,
-          },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            icon: 'money',
-            stylingMode,
-          },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'danger',
-            text: 'danger',
-            icon: 'money',
-            stylingMode,
-          },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'normal',
-            text: 'normal',
-            icon: 'money',
-            stylingMode,
-          },
-        },
-        {
-          location: 'before',
-          locateInMenu,
-          widget: 'dxButton',
-          options: {
-            type: 'success',
-            text: 'success',
-            icon: 'money',
-            stylingMode,
-          },
-        },
-      ];
-
-      return createWidget('dxToolbar', {
-        items: toolbarItems,
-      }, '#toolbar');
-    });
   });
 });

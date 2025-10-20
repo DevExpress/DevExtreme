@@ -103,6 +103,12 @@
         "dxNumberBox-invalidValueMessage": "数値を指定してください。",
         "dxNumberBox-noDataText": "データがありません",
 
+
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+        "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+        "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+        "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "{0} を使用して列を表示してください",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "グループパネルからここに列をドラッグしてください",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "{0} を使用するか、グループ パネルから列をドラッグしてください",

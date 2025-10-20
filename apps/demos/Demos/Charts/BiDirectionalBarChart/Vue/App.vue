@@ -46,10 +46,10 @@ import DxChart, {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 
-const customizeTooltip = (e: DxChartTypes.CommonPointInfo) => ({
+const customizeTooltip = (e: DxChartTypes.PointInfo) => ({
   text: Math.abs(Number(e.valueText)),
 });
-const customizeLabel = ({ value }) => `${Math.abs(value)}%`;
+const customizeLabel = ({ value }: Record<string, any>) => `${Math.abs(value)}%`;
 </script>
 <style>
 #chart {

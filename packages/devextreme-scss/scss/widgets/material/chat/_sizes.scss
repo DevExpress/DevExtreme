@@ -13,7 +13,8 @@ $chat-bubble-delete-gap: null !default;
 $chat-bubble-delete-icon-size: null !default;
 $chat-messagebox-padding: null !default;
 $chat-messagebox-textarea-border-radius: $base-border-radius * 2 !default;
-$chat-messagebox-buton-gap: null !default;
+$chat-messagebox-textarea-padding: null !default;
+$chat-messagebox-toolbar-min-height: null !default;
 $chat-messagebox-gap: 8px !default;
 $chat-messagelist-padding: null !default;
 $chat-messagegroup-gap: 4px !default;
@@ -64,12 +65,13 @@ $chat-confirmation-popup-toolbar-padding-inline: null !default;
 $chat-confirmation-popup-toolbar-gap: null !default;
 
 @if $size == "default" {
-  $chat-messagebox-buton-gap: 10px !default;
   $chat-bubble-border-radius: 8px !default;
   $chat-bubble-padding: 8px 16px !default;
   $chat-bubble-delete-gap: 4px !default;
   $chat-bubble-delete-icon-size: 20px !default;
   $chat-messagebox-padding: 20px !default;
+  $chat-messagebox-textarea-padding: 16px !default;
+  $chat-messagebox-toolbar-min-height: 36px !default;
   $chat-messagelist-padding: 20px !default;
   $chat-messagegroup-padding: 24px !default;
 
@@ -100,12 +102,13 @@ $chat-confirmation-popup-toolbar-gap: null !default;
 }
 
 @else if $size == "compact" {
-  $chat-messagebox-buton-gap: 7px !default;
   $chat-bubble-border-radius: 4px !default;
   $chat-bubble-padding: 6px 8px !default;
   $chat-bubble-delete-gap: 2px !default;
   $chat-bubble-delete-icon-size: 16px !default;
   $chat-messagebox-padding: 16px !default;
+  $chat-messagebox-textarea-padding: 12px !default;
+  $chat-messagebox-toolbar-min-height: 28px !default;
   $chat-messagelist-padding: 16px !default;
   $chat-messagegroup-padding: 12px !default;
 

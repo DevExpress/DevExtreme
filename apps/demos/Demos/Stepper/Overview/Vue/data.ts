@@ -1,6 +1,13 @@
 import { type Orientation } from "devextreme-vue/common";
 
-export const steps = [
+export interface Step {
+  text: string,
+  label: string,
+  icon: string,
+  optional?: boolean,
+}
+
+export const steps: Step[] = [
   {
     text: 'A',
     label: 'Cart',

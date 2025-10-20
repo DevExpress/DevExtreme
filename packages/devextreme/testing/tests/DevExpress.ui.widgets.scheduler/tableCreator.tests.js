@@ -3,51 +3,51 @@ import tableCreatorModule from '__internal/scheduler/m_table_creator';
 const { tableCreator } = tableCreatorModule;
 
 const FIXTURE_DATA = [{
-    title: 'o1',
+    resourceText: 'o1',
     children: [{
-        title: 'r1',
+        resourceText: 'r1',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }, {
-        title: 'r2',
+        resourceText: 'r2',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }, {
-        title: 'r3',
+        resourceText: 'r3',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }]
 }, {
-    title: 'o2',
+    resourceText: 'o2',
     children: [{
-        title: 'r1',
+        resourceText: 'r1',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }, {
-        title: 'r2',
+        resourceText: 'r2',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }, {
-        title: 'r3',
+        resourceText: 'r3',
         children: [{
-            title: 'a1'
+            resourceText: 'a1'
         }, {
-            title: 'a2'
+            resourceText: 'a2'
         }]
     }]
 }];
@@ -63,7 +63,7 @@ function checkCell(cell, expectedData, assert) {
 QUnit.module('Vertical table');
 
 QUnit.test('Default rendering', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA);
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA);
     const rows = table.getElementsByTagName('tr');
     const cells = table.getElementsByTagName('td');
 
@@ -104,7 +104,7 @@ QUnit.test('Default rendering', async function(assert) {
 });
 
 QUnit.test('Cells rendering using the \'th\' tag', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA, {
         cellTag: 'th'
     });
 
@@ -114,7 +114,7 @@ QUnit.test('Cells rendering using the \'th\' tag', async function(assert) {
 });
 
 QUnit.test('Custom css class for the table', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA, {
         groupTableClass: 'group-table'
     });
 
@@ -122,7 +122,7 @@ QUnit.test('Custom css class for the table', async function(assert) {
 });
 
 QUnit.test('Custom css class for rows', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA, {
         groupRowClass: 'group-row'
     });
 
@@ -134,7 +134,7 @@ QUnit.test('Custom css class for rows', async function(assert) {
 });
 
 QUnit.test('Custom css class for cells', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA, {
         groupCellClass: 'group-cell'
     });
 
@@ -146,7 +146,7 @@ QUnit.test('Custom css class for cells', async function(assert) {
 });
 
 QUnit.test('Custom content for cells', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
+    const table = tableCreator.makeGroupedTableFromJSON(FIXTURE_DATA, {
         groupCellCustomContent: function(cell, cellText) {
             const innerCellContent = document.createElement('div');
             innerCellContent.className = 'cell-content';
@@ -161,22 +161,4 @@ QUnit.test('Custom content for cells', async function(assert) {
     Array.prototype.forEach.call(cells, function(cell) {
         assert.equal(cell.getElementsByClassName('cell-content').length, 1, 'The cell content is OK');
     });
-});
-
-QUnit.test('Custom \'children\' and \'title\' fields', async function(assert) {
-    const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, [{
-        name: 'One', items: [
-            { name: 'Sub 1' },
-            { name: 'Sub 2' }
-        ]
-    }], {
-        childrenField: 'items',
-        titleField: 'name'
-    });
-
-    const rows = table.getElementsByTagName('tr');
-
-    assert.equal(rows.length, 2, 'Rows are OK');
-    assert.equal(rows[0].getElementsByTagName('td').length, 2, 'Cells are OK');
-    assert.equal(rows[1].getElementsByTagName('td').length, 1, 'Cell is OK');
 });

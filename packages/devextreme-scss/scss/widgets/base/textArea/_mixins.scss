@@ -8,7 +8,7 @@
   $underlined-top-padding,
 ) {
   .dx-textarea {
-    .dx-texteditor-input-container {
+    > .dx-texteditor-container > .dx-texteditor-input-container {
       margin: $input-container-margin;
     }
 

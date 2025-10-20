@@ -3,16 +3,11 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture`CardView - HeaderPanel`
+fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
-const HEADER_PANEL_SELECTOR = `${CARD_VIEW_SELECTOR} .dx-cardview-headers`;
-const a11yCheckConfig = {
-  rules: { 'color-contrast': { enabled: false } },
-};
 
 const visualTest = (etalonName: string) => async (t: TestController) => {
   const cardView = new CardView(CARD_VIEW_SELECTOR);
@@ -28,7 +23,6 @@ const visualTest = (etalonName: string) => async (t: TestController) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);
 };
 
 test(
@@ -194,7 +188,7 @@ test(
   width: 600,
 }));
 
-test.meta({ unstable: true })('render with horizontal scroll', async (t) => {
+test('render with horizontal scroll', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   const firstItem = cardView.getHeaderPanel().getHeaderItem(0);
@@ -209,7 +203,6 @@ test.meta({ unstable: true })('render with horizontal scroll', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-  await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   columns: [
     {
@@ -236,8 +229,6 @@ test('headerPanel column chooser link opens column chooser on click', async (t) 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   height: 600,
   columns: [

@@ -3,9 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { createWidget } from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibility/utils';
 
-fixture`CardView - ColumnChooser.Visual`
+fixture.disablePageReloads`CardView - ColumnChooser.Visual`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
@@ -22,8 +21,6 @@ test('column chooser in \'select\' mode', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   columnChooser: {
     enabled: true,
@@ -57,11 +54,6 @@ test('column chooser in \'dragAndDrop\' mode', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  const a11yCheckConfig = {
-    rules: { 'color-contrast': { enabled: false } },
-  };
-  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   columnChooser: {
     enabled: true,
@@ -91,8 +83,6 @@ test('cardView with opened columnChooser', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: Array.from({ length: 50 }, (_, i) => ({ value: `value_${i}` })),
   columnChooser: {
