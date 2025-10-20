@@ -1,4 +1,4 @@
-import type { Product } from './types';
+import type { Product } from "./types";
 
 const products: Product[] = [{
   id: '1',

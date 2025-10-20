@@ -44,16 +44,18 @@ import DxPieChart, {
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { populationData } from './data.ts';
 
-const selectedRegion = ref(null);
+const selectedRegion = ref<string>();
 const pieChart = ref();
 
 const customizeTooltip = ({ argumentText, valueText }: DxPieChartTypes.PointInfo) => ({
   text: `${argumentText}<br/>${valueText}`,
 });
-function onPointClick({ target: point }) {
+
+function onPointClick({ target: point }: DxPieChartTypes.PointClickEvent) {
   point.showTooltip();
-  selectedRegion.value = point.argument;
+  selectedRegion.value = (point as Record<string, any>).argument;
 }
+
 function onRegionChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
   pieChart.value.instance
     .getAllSeries()[0]

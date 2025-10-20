@@ -35,7 +35,8 @@ const createDataGrid = async (
   const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
   const component = new DataGridModel($container.get(0) as HTMLElement);
 
-  jest.runOnlyPendingTimers();
+  jest.runAllTimers();
+
   resolve({
     $container,
     component,
@@ -548,6 +549,7 @@ describe('aiIntegration', () => {
       return aiIntegrationResult();
     },
   });
+
   const columnAiIntegration = new AIIntegration({
     sendRequest(): RequestResult {
       columnSendRequestSpy();
@@ -578,6 +580,7 @@ describe('aiIntegration', () => {
     expect(rootSendRequestSpy).toHaveBeenCalled();
     expect(columnSendRequestSpy).not.toHaveBeenCalled();
   });
+
   it('should be taken from grid level if it set up (dynamic update)', async () => {
     const { instance } = await createDataGrid({
       dataSource: [
@@ -600,6 +603,7 @@ describe('aiIntegration', () => {
     expect(rootSendRequestSpy).toHaveBeenCalled();
     expect(columnSendRequestSpy).not.toHaveBeenCalled();
   });
+
   it('should be taken from column level if it set up (first load)', async () => {
     const { instance } = await createDataGrid({
       dataSource: [
@@ -800,6 +804,7 @@ describe('aiMode', () => {
     const aiMode = instance.columnOption('myColumn', 'ai.mode');
     expect(aiMode).toBe('auto');
   });
+
   it('should call aiIntegration.sendRequest with every visible rows change', async () => {
     const dataSource = Array.from({ length: 100 }, (_, i) => ({
       id: i + 1,

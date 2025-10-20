@@ -1,4 +1,17 @@
-export const tasks = [{
+export interface Task {
+  Task_ID: number,
+  Task_Assigned_Employee_ID: number,
+  Task_Owner_ID: number,
+  Task_Subject: string,
+  Task_Start_Date: string,
+  Task_Due_Date: string,
+  Task_Status: string,
+  Task_Priority: number,
+  Task_Completion: number,
+  Task_Parent_ID: number,
+}
+
+export const tasks: Task[] = [{
   Task_ID: 1,
   Task_Assigned_Employee_ID: 1,
   Task_Owner_ID: 1,

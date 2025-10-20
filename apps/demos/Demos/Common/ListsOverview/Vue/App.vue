@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxTileView from 'devextreme-vue/tile-view';
-import DxList from 'devextreme-vue/list';
+import DxList, { type DxListTypes } from 'devextreme-vue/list';
 import { ArrayStore } from 'devextreme-vue/common/data';
 import { data } from './data.ts';
 
@@ -91,9 +91,9 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
-const currency = (d) => currencyFormatter.format(d);
+const currency = (d: number) => currencyFormatter.format(d);
 
-function listSelectionChanged(e) {
+function listSelectionChanged(e: DxListTypes.SelectionChangedEvent) {
   currentHotel.value = e.addedItems[0];
 }
 </script>

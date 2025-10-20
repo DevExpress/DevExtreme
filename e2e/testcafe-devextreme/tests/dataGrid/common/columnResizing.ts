@@ -4,7 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`Column resizing`
+fixture.disablePageReloads`Column resizing`
   .page(url(__dirname, '../../container.html'));
 
 test('column separator should starts from the parent', async (t) => {

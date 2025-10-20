@@ -36,11 +36,12 @@ import DxTreeMap, {
 } from 'devextreme-vue/tree-map';
 import { citiesPopulation } from './data.ts';
 
-const drillInfo = ref([]);
+const drillInfo = ref<Record<string, any>[]>([]);
 
 function nodeClick({ node }: DxTreeMapTypes.ClickEvent) {
   node.drillDown();
 }
+
 function drill(e: DxTreeMapTypes.DrillEvent) {
   drillInfo.value = [];
   for (let node = e.node.getParent(); node; node = node.getParent()) {
@@ -55,7 +56,8 @@ function drill(e: DxTreeMapTypes.DrillEvent) {
     });
   }
 }
-function drillInfoClick(node) {
+
+function drillInfoClick(node: Record<string, any>) {
   node?.drillDown();
 }
 </script>

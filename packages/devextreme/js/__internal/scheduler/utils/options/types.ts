@@ -7,7 +7,6 @@ export type ViewObject = Extract<RawViewType, object>;
 export type View = ViewObject & Required<Pick<ViewObject,
   'groupOrientation'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >> & {
   skippedDays: number[];
@@ -15,7 +14,6 @@ export type View = ViewObject & Required<Pick<ViewObject,
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
-  | 'name'
   | 'type'
 >> & {
   skippedDays: number[];
