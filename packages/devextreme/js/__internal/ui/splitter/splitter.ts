@@ -667,7 +667,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._layout = this._getDefaultLayoutBasedOnSize();
+        this._layout = this._getDefaultLayoutBasedOnSize(property === 'size' ? item : undefined);
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
@@ -965,13 +965,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._itemEventHandler($item, eventName, actionArgs);
   }
 
-  _getDefaultLayoutBasedOnSize(): number[] {
-    this._updateItemsRestrictions();
+  _getDefaultLayoutBasedOnSize(item?: Item): number[] {
+    this._updateItemsRestrictions(item);
 
     return getDefaultLayout(this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(): void {
+  _updateItemsRestrictions(currentItem?: Item): void {
     const { orientation, items = [] } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -981,7 +981,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
+        resizable: item === currentItem ? false : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
