@@ -144,4 +144,4 @@ test('Button: svg icon as background should be fit within icon element (T1178813
   await createWidget('dxButton', {
     icon: 'custom',
   }, '#iconOnlyButton');
-}); s;
+});
