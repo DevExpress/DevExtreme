@@ -67,7 +67,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxMenu from 'devextreme-vue/menu';
 import DxTreeView from 'devextreme-vue/tree-view';
 import DxAccordion from 'devextreme-vue/accordion';
@@ -79,7 +79,7 @@ const languages = [
 ];
 const rtlEnabled = ref(false);
 
-function selectLanguage(e) {
+function selectLanguage(e: DxSelectBoxTypes.ValueChangedEvent) {
   rtlEnabled.value = e.value === languages[0];
 }
 </script>

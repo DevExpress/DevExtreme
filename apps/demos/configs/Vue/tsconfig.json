@@ -4,6 +4,6 @@
     "lib": ["es2023"],
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   }
 }
