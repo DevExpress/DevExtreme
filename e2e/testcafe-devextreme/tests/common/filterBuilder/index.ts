@@ -1,13 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { DataType } from 'devextreme/ui/filter_builder';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 import { fields, filter } from './data';
-import { testScreenshot } from '../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Editing events`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Field dropdown popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
