@@ -40,7 +40,7 @@ import { salesAmount, colorizationOptions } from './data.ts';
 
 const selectedType = ref(colorizationOptions[2].name);
 const typeOptions = computed(
-  () => colorizationOptions.find(({ name }) => name === selectedType.value).options,
+  () => colorizationOptions.find(({ name }) => name === selectedType.value)?.options || {},
 );
 const customizeTooltip = ({ node, node: { data: { name } }, valueText }: Record<string, any>) => (
   {

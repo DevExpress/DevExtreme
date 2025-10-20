@@ -11,11 +11,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import 'whatwg-fetch';
 
-function createChildren(parent) {
-  const parentId = parent ? parent.itemData.id : '';
+function createChildren(parent: DxTreeViewTypes.Node) {
+  const parentId = parent?.itemData ? parent.itemData.id : '';
 
   return fetch(`https://js.devexpress.com/Demos/NetCore/api/TreeViewData?parentId=${parentId}`)
     .then((response) => response.json())

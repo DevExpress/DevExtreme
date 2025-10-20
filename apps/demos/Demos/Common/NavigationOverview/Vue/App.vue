@@ -90,7 +90,7 @@ const countryData = ref<Record<string, any>>(continents[0].items[0]);
 const citiesData = ref(continents[0].items[0].cities);
 
 function changeSelection({ itemData }: DxTreeViewTypes.ItemSelectionChangedEvent) {
-  if (itemData.cities) {
+  if (itemData?.cities) {
     countryData.value = itemData;
     citiesData.value = itemData.cities;
     tabPanelIndex.value = 0;
