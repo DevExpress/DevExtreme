@@ -49,6 +49,9 @@ for (const label of ['Add Row', '']) {
       await appendElementTo('#container', 'div', 'speed-dial-action-trash');
 
       await setGlobalConfig();
+      if (isMaterial()) {
+        await insertStylesheetRulesToPage('.dx-overlay-wrapper { font-family: sans-serif !important; }');
+      }
 
       await createWidget('dxSpeedDialAction', {
         label,
@@ -103,98 +106,10 @@ test('FAB with two speed dial action buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
-  await appendElementTo('#container', 'div', 'speed-dial-action');
-  await appendElementTo('#container', 'div', 'speed-dial-action-trash');
-
-  await setGlobalConfig();
-
-  await createWidget('dxSpeedDialAction', {
-    label: 'Add row',
-    icon: 'plus',
-    index: 1,
-    visible: true,
-  }, '#speed-dial-action');
-
-  await createWidget('dxSpeedDialAction', {
-    label: 'Remove Row',
-    icon: 'trash',
-    index: 2,
-    visible: true,
-  }, '#speed-dial-action-trash');
-});
-
-fixture.disablePageReloads`FloatingAction - compact theme`
-  .page(url(__dirname, '../../container.html'));
-
-for (const label of ['Add Row', '']) {
-  for (const icon of ['home', '']) {
-    test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      await testScreenshot(t, takeScreenshot, `FAB with one speed dial action button,label='${label}',icon='${icon}'.png`, { element: '#container' });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
-      await appendElementTo('#container', 'div', 'speed-dial-action');
-
-      await setGlobalConfig();
-
-      await createWidget('dxSpeedDialAction', {
-        label,
-        icon,
-        visible: true,
-      }, '#speed-dial-action');
-    });
-
-    test(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      await t
-        .click(Selector('body'))
-        .click(Selector(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));
-
-      await testScreenshot(t, takeScreenshot, `FAB is opened with two speed dial actions,label='${label}',icon='${icon}'.png`, { element: '#container' });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
-      await appendElementTo('#container', 'div', 'speed-dial-action');
-      await appendElementTo('#container', 'div', 'speed-dial-action-trash');
-
-      await setGlobalConfig();
-
-      await createWidget('dxSpeedDialAction', {
-        label,
-        icon,
-        index: 1,
-        visible: true,
-      }, '#speed-dial-action');
-
-      await createWidget('dxSpeedDialAction', {
-        label: 'Remove Row',
-        icon: 'trash',
-        index: 2,
-        visible: true,
-      }, '#speed-dial-action-trash');
-    });
+  if (isMaterial()) {
+    await insertStylesheetRulesToPage('.dx-overlay-wrapper { font-family: sans-serif !important; }');
   }
-}
 
-test('FAB with two speed dial action buttons', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'FAB with two speed dial action buttons.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
   await appendElementTo('#container', 'div', 'speed-dial-action');
   await appendElementTo('#container', 'div', 'speed-dial-action-trash');
 
