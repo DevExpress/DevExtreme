@@ -218,6 +218,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         },
         scrolling: {
           mode: 'virtual',
+          showScrollbar: 'never',
           useNative,
         },
         onContentReady(e) {
@@ -265,13 +266,6 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         });
 
         dataGrid.repaint();
-      })();
-    })
-    .after(async () => {
-      await ClientFunction(() => {
-        const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-        dataGrid?.dispose();
       })();
     });
 });
