@@ -14,6 +14,7 @@ $fluent-html-editor-add-image-dialog-tabs-padding: null !default;
 $fluent-aidialog-selects-gap: null !default;
 $fluent-aidialog-content-gap: null !default;
 $fluent-aidialog-content-padding: null !default;
+$fluent-aidialog-border-radius: null !default;
 
 @if $size == "default" {
   $fluent-toolbar-size-editor-width: 120px !default;
@@ -24,6 +25,7 @@ $fluent-aidialog-content-padding: null !default;
   $fluent-aidialog-selects-gap: 8px;
   $fluent-aidialog-content-gap: 16px;
   $fluent-aidialog-content-padding: 16px 24px;
+  $fluent-aidialog-border-radius: $base-border-radius * 2 !default;
 }
 
 @else if $size == "compact" {
@@ -35,6 +37,7 @@ $fluent-aidialog-content-padding: null !default;
   $fluent-aidialog-selects-gap: 4px;
   $fluent-aidialog-content-gap: 12px;
   $fluent-aidialog-content-padding: 12px 16px;
+  $fluent-aidialog-border-radius: $base-border-radius !default;
 }
 
 $fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;
