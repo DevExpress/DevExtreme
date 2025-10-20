@@ -42,7 +42,7 @@ export const languages = [
   'German',
 ];
 
-export const langMap = {
+export const langMap: Record<string, string> = {
   "Auto-detect": '',
   "English": 'en-US',
   "Spanish": 'es-ES',

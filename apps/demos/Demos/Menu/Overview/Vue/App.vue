@@ -78,7 +78,7 @@ function isProductItem(item: ProductType | ProductItemType): item is ProductItem
 
 function itemClick(e: DxMenuTypes.ItemClickEvent<ProductType>) {
   if (e.itemData) {
-    const product = e.itemData as ProductItemType;
+    const product = e.itemData as ProductType;
 
     if (isProductItem(product)) {
       currentProduct.value = product;
