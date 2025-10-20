@@ -3,7 +3,7 @@
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import { fields, filter } from '../filterBuilder/data';
+import { fields, filter } from '../common/filterBuilder/data';
 import { a11yCheck } from '../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`Filter Builder`
