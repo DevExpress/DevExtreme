@@ -4,7 +4,6 @@ paths-ignore:
   - "/artifacts/**"
   - "/packages/devextreme/artifacts/transpiled/**"                # not prod code  
   - "/packages/devextreme/artifacts/transpiled-esm-npm/**"        # not prod code
-  - "/packages/devextreme/artifacts/transpiled-renovation/**"     # not prod code
   - "/packages/devextreme/artifacts/transpiled-renovation-npm/**" # not prod code
   - "/packages/devextreme/artifacts/npm/devextreme-dist/**"       # same as artifacts/js, removed to optimize
   - "/packages/devextreme/artifacts/npm/devextreme/cjs/**"        # same as npm/devextreme/esm/**, removed to optimize
