@@ -5,6 +5,10 @@
     "strict": true
   },
   "include": [
+    "Demos/DataGrid/**/Vue/**/*.vue",
+    "Demos/FilterBuilder/**/Vue/**/*.vue",
+    "Demos/TreeList/**/Vue/**/*.vue",
+    "Demos/Sortable/**/Vue/**/*.vue",
     "Demos/Accordion/**/Vue/**/*.vue",
     "Demos/ActionSheet/**/Vue/**/*.vue",
     "Demos/CardView/**/Vue/**/*.vue",

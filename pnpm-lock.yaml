@@ -546,6 +546,9 @@ importers:
       '@types/eslint':
         specifier: 8.56.2
         version: 8.56.2
+      '@types/file-saver-es':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/fs-extra':
         specifier: 11.0.2
         version: 11.0.2
@@ -7066,6 +7069,9 @@ packages:
 
   '@types/extend@3.0.4':
     resolution: {integrity: sha512-ArMouDUTJEz1SQRpFsT2rIw7DeqICFv5aaVzLSIYMYQSLcwcGOfT3VyglQs/p7K3F7fT4zxr0NWxYZIdifD6dA==}
+
+  '@types/file-saver-es@2.0.3':
+    resolution: {integrity: sha512-1N7YkjKDfSSlBq9TCbNelivW+CkqEGh6HWzOP2w8znKsyASufdp8ymxnmKs67hyO9r175xMUu1e2w50xfBD4Ew==}
 
   '@types/filing-cabinet@2.5.3':
     resolution: {integrity: sha512-kRW1wCa+nf3o3MXfHb5XbaWUywmnwJTGXpe9l+ZdD3Bv6mZGpRZgLQbu6M05YHdsyllKNzzHSC/cf/c4zxrLbA==}
@@ -26690,6 +26696,8 @@ snapshots:
       '@types/serve-static': 1.15.7
 
   '@types/extend@3.0.4': {}
+
+  '@types/file-saver-es@2.0.3': {}
 
   '@types/filing-cabinet@2.5.3': {}
 
