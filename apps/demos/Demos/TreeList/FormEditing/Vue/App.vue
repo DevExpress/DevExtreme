@@ -81,7 +81,13 @@
 </template>
 <script setup lang="ts">
 import {
-  DxTreeList, DxEditing, DxColumn, DxValidationRule, DxLookup, DxButton, type DxTreeListTypes,
+  DxTreeList,
+  DxEditing,
+  DxColumn,
+  DxValidationRule,
+  DxLookup,
+  DxButton,
+  type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import { employees } from './data.ts';
 
@@ -92,7 +98,7 @@ const lookupData = {
 };
 
 function onEditorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
-  if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+  if (e.dataField === 'Head_ID' && e.row?.data.ID === 1) {
     e.editorOptions.disabled = true;
     e.editorOptions.value = null;
   }
@@ -100,8 +106,8 @@ function onEditorPreparing(e: DxTreeListTypes.EditorPreparingEvent) {
 function onInitNewRow(e: DxTreeListTypes.InitNewRowEvent) {
   e.data.Head_ID = 1;
 }
-function allowDeleting(e) {
-  return e.row.data.ID !== 1;
+function allowDeleting({ row }: { row: DxTreeListTypes.Row }) {
+  return row.data.ID !== 1;
 }
 </script>
 <style scoped>
