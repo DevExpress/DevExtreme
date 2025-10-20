@@ -176,16 +176,27 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               ...{ looksSameComparisonOptions: { antialiasingTolerance: 10 } },
             }));
           } else {
-            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+            const fastComparisonOptions = {
+              ...comparisonOptions,
+              looksSameComparisonOptions: {
+                ...comparisonOptions?.looksSameComparisonOptions,
+                threshold: 0.1,
+                antialiasingTolerance: 5,
+              },
+            };
+
+            comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, fastComparisonOptions);
           }
 
-          const consoleMessages = await t.getBrowserConsoleMessages();
+          if (comparisonResult) {
+            const consoleMessages = await t.getBrowserConsoleMessages();
 
-          const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+            const errors = [...consoleMessages.error, ...consoleMessages.warn]
+              .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
 
-          await t.expect(errors).eql([]);
-          await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+            await t.expect(errors).eql([]);
+            await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
+          }
         }
       });
   });

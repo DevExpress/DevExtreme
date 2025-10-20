@@ -13,11 +13,11 @@ runManualTest('Charts', 'ZoomingAndScrollingAPI', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag($('.slider').nth(0), 500, 0, { offsetX: 10, offsetY: 10 });
-    await t.wait(1000);
+    // await t.wait(1000);
     await testScreenshot(t, takeScreenshot, 'range_selector_slider_drag.png');
 
     await t.click($('.area-tracker'), { offsetX: 400 });
-    await t.wait(1000);
+    // await t.wait(1000);
     await testScreenshot(t, takeScreenshot, 'range_selector_click_to_empty_place.png');
 
     await t

@@ -1,9 +1,6 @@
 import createTestCafe from 'testcafe';
 import fs from 'fs';
 
-process.env.LANG = 'en_US.UTF-8';
-process.env.LC_ALL = 'en_US.UTF-8';
-
 function reporter() {
   return {
     noColors: false,
@@ -220,7 +217,7 @@ async function main() {
 
   const failedCount = await runner
     .reporter(reporters)
-    .browsers(process.env.BROWSERS || 'chrome --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning --disable-dev-shm-usage')
+    .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning --disable-dev-shm-usage')
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,

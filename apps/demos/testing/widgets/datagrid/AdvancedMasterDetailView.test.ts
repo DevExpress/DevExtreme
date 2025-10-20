@@ -28,7 +28,7 @@ runManualTest('DataGrid', 'AdvancedMasterDetailView', (test) => {
         .find('.dx-command-expand'),
     );
 
-    await t.wait(200);
+    // await t.wait(200);
 
     await testScreenshot(t, takeScreenshot, 'datagrid_advanced_master_detail_view_2_desktop.png');
 
@@ -45,7 +45,7 @@ runManualTest('DataGrid', 'AdvancedMasterDetailView', (test) => {
         .nth(1),
     );
 
-    await t.wait(200);
+    // await t.wait(200);
 
     await testScreenshot(t, takeScreenshot, 'datagrid_advanced_master_detail_view_4_desktop.png');
 
