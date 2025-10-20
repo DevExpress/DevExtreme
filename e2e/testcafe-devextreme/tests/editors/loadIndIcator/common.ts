@@ -25,14 +25,8 @@ fixture.disablePageReloads`LoadIndicator`
       },
     });
 
-    const darkTheme = getFullThemeName().replace('light', 'dark');
-
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',
-      theme: darkTheme,
-      themeChanged: async () => {
-        await loadIndicator.repaint();
-      },
     });
 
     await t

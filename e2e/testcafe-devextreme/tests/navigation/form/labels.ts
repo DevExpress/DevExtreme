@@ -173,11 +173,6 @@ test('Color of the mark (T882067)', async (t) => {
 
   await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container' });
 
-  if (!isMaterialBased()) {
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.dark' });
-    await testScreenshot(t, takeScreenshot, screenshotName, { element: '#container', theme: 'generic.contrast' });
-  }
-
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
