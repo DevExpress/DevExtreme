@@ -10,7 +10,7 @@ import {
   setClassAttribute,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { getDarkThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const valueModes = [false, true, undefined];
 
@@ -30,7 +30,7 @@ fixture.disablePageReloads`CheckBox`
   test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())

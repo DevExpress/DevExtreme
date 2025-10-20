@@ -4,7 +4,7 @@ import { ClientFunction } from 'testcafe';
 import { createUser } from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture`ChatAlertList`
   .page(url(__dirname, '../../container.html'));
