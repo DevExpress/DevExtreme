@@ -11313,7 +11313,7 @@ declare module DevExpress.ui {
      */
     fileUploaderOptions?: Omit<
       DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode '
+      'dialogTrigger' | 'showFileList' | 'uploadMode'
     >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
@@ -11430,7 +11430,7 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onTypingStart]
      */
     onTypingStart?:
-      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onTypingEnd]
@@ -34030,21 +34030,22 @@ declare module DevExpress.ui.dxChat {
   /**
    * [descr:TextMessage]
    */
-  export type TextMessage<TAttachment extends Attachment = Attachment> =
-    MessageBase & {
-      /**
-       * [descr:TextMessage.attachments]
-       */
-      attachments?: TAttachment[];
-      /**
-       * [descr:TextMessage.text]
-       */
-      text?: string;
-      /**
-       * [descr:TextMessage.isEdited]
-       */
-      isEdited?: boolean;
-    };
+  export type TextMessage = MessageBase & {
+    /**
+     * [descr:TextMessage.attachments]
+     */
+    attachments?: Attachment[];
+    /**
+     * [descr:TextMessage.text]
+     */
+    text?: string;
+    /**
+     * [descr:TextMessage.isEdited]
+     */
+    isEdited?: boolean;
+
+    [key: string]: any;
+  };
   /**
    * [descr:User]
    */

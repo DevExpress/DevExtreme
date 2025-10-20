@@ -273,13 +273,13 @@ export type MessageBase = {
  * @namespace DevExpress.ui.dxChat
  * @inherits MessageBase
  */
-export type TextMessage<TAttachment extends Attachment = Attachment> = MessageBase & {
+export type TextMessage = MessageBase & {
     /**
      * @docid
      * @public
      * @type Array<Attachment>
      */
-    attachments?: TAttachment[];
+    attachments?: Attachment[];
     /**
      * @docid
      * @public
@@ -290,6 +290,8 @@ export type TextMessage<TAttachment extends Attachment = Attachment> = MessageBa
      * @public
      */
     isEdited?: boolean;
+
+    [key: string]: any;
 };
 
 /**
@@ -353,7 +355,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type dxFileUploaderOptions
      * @public
      */
-    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode '>;
+    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode'>;
     /**
      * @docid
      * @default true
@@ -494,7 +496,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @action
      * @public
      */
-    onTypingStart?: ((e: TypingEndEvent) => void) | undefined ;
+    onTypingStart?: ((e: TypingStartEvent) => void) | undefined ;
     /**
      * @docid
      * @default undefined
