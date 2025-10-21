@@ -761,7 +761,7 @@ export class AppointmentForm {
     mainGroup.removeClass(CLASSES.mainHidden);
     recurrenceGroup.addClass(CLASSES.recurrenceHidden);
 
-    if (this.popup && typeof this.popup.updateToolbarForMain === 'function') {
+    if (this.popup) {
       this.popup.updateToolbarForMain();
     }
 
