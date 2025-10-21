@@ -63,6 +63,46 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-end-editor .dx-radiogroup.dx-widget');
   }
 
+  get recurrenceGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
+  }
+
+  get recurrenceSettingsButton(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-button');
+  }
+
+  get recurrenceRepeatEveryInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-every-group [type="text"]');
+  }
+
+  get recurrenceWeekDayButtons(): Element | null {
+    return this.element.querySelector('.dx-scheduler-recurrence-byday-buttons');
+  }
+
+  get recurrenceMonthDayInput(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-monthly-group [type="text"]');
+  }
+
+  get recurrenceYearlyInputs(): NodeListOf<Element> {
+    return this.element.querySelectorAll('.dx-scheduler-form-recurrence-repeat-on-yearly-group [type="text"]');
+  }
+
+  get recurrenceEndRadioGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-radio');
+  }
+
+  get recurrenceEndInputGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-inputs');
+  }
+
+  get recurrenceMonthlyGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-monthly-group');
+  }
+
+  get recurrenceYearlyGroup(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-yearly-group');
+  }
+
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
 
@@ -206,5 +246,149 @@ export class PopupModel {
       throw new Error('Edit series button not found');
     }
     return editSeriesButton;
+  };
+
+  openRecurrenceSettings = (): void => {
+    if (!this.repeatEditor) {
+      throw new Error('Repeat editor not found');
+    }
+
+    // @ts-expect-error
+    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
+    const buttons = repeatEditorInstance.option('buttons');
+    const settingsButton = buttons?.find((btn: { name: string }) => btn.name === 'settings');
+
+    if (settingsButton?.options?.onClick) {
+      settingsButton.options.onClick();
+    } else {
+      throw new Error('Settings button not found or onClick is not defined');
+    }
+  };
+
+  openRecurrenceForm = (freq = 'Daily'): void => {
+    if (!this.repeatEditor) {
+      throw new Error('Repeat editor not found');
+    }
+
+    // @ts-expect-error
+    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
+    repeatEditorInstance.option('value', freq.toLowerCase());
+
+    // Trigger the settings to open
+    this.openRecurrenceSettings();
+  };
+
+  setRecurrenceInterval = (interval: number): void => {
+    const input = this.recurrenceRepeatEveryInput as HTMLInputElement;
+    if (!input) {
+      throw new Error('Recurrence interval input not found');
+    }
+
+    input.value = interval.toString();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  selectRecurrenceWeekDays = (days: string[]): void => {
+    const buttonsContainer = this.recurrenceWeekDayButtons;
+    if (!buttonsContainer) {
+      throw new Error('Week day buttons not found');
+    }
+
+    days.forEach((day) => {
+      const dayKey = day.slice(0, 2).toUpperCase();
+      const button = buttonsContainer.querySelector(`[data-day-key="${dayKey}"]`) as HTMLElement;
+
+      if (!button) {
+        throw new Error(`Day button for "${day}" not found`);
+      }
+
+      button.click();
+    });
+  };
+
+  setRecurrenceMonthDay = (day: number): void => {
+    const input = this.recurrenceMonthDayInput as HTMLInputElement;
+    if (!input) {
+      throw new Error('Month day input not found');
+    }
+
+    input.value = day.toString();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  setRecurrenceYearlyDate = (month: number, day: number): void => {
+    const inputs = this.recurrenceYearlyInputs;
+    if (inputs.length < 2) {
+      throw new Error('Yearly date inputs not found');
+    }
+
+    const monthInput = inputs[0] as HTMLInputElement;
+    const dayInput = inputs[1] as HTMLInputElement;
+
+    monthInput.value = month.toString();
+    monthInput.dispatchEvent(new Event('input', { bubbles: true }));
+    monthInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    dayInput.value = day.toString();
+    dayInput.dispatchEvent(new Event('input', { bubbles: true }));
+    dayInput.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  setRecurrenceEnd = (type: 'never' | 'count' | 'until', value?: number | string): void => {
+    const radioGroup = this.recurrenceEndRadioGroup;
+    const inputGroup = this.recurrenceEndInputGroup;
+
+    if (!radioGroup) {
+      throw new Error('Recurrence end radio group not found');
+    }
+
+    const radioButtons = radioGroup.querySelectorAll('.dx-radiobutton');
+
+    switch (type) {
+      case 'never': {
+        const neverRadio = radioButtons[0] as HTMLElement;
+        if (neverRadio) {
+          neverRadio.click();
+        }
+        break;
+      }
+      case 'until': {
+        const untilRadio = radioButtons[1] as HTMLElement;
+        if (untilRadio) {
+          untilRadio.click();
+        }
+
+        if (value !== undefined && inputGroup) {
+          const untilInput = inputGroup.querySelector('[type="text"]') as HTMLInputElement;
+          if (untilInput) {
+            untilInput.value = value.toString();
+            untilInput.dispatchEvent(new Event('input', { bubbles: true }));
+            untilInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+        break;
+      }
+      case 'count': {
+        const countRadio = radioButtons[2] as HTMLElement;
+        if (countRadio) {
+          countRadio.click();
+        }
+
+        if (value !== undefined && inputGroup) {
+          const inputs = inputGroup.querySelectorAll('[type="text"]');
+          const countInput = inputs[1] as HTMLInputElement;
+          if (countInput) {
+            countInput.value = value.toString();
+            countInput.dispatchEvent(new Event('input', { bubbles: true }));
+            countInput.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+        break;
+      }
+      default:
+        break;
+    }
   };
 }

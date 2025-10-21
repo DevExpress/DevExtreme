@@ -473,7 +473,7 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(appointment);
 
-      const recurrenceGroup = $(POM.popup.element).find('.dx-scheduler-form-recurrence-group');
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
       expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
 
@@ -543,13 +543,9 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'weekly');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
-        const dayButtons = $(POM.popup.element).find('.dx-scheduler-recurrence-byday-buttons');
+        const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
         expect(dayButtons.length).toBeGreaterThan(0);
 
         const buttons7Days = dayButtons.find('.dx-button');
@@ -571,22 +567,17 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'monthly');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
-        const monthlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-monthly-group');
-        expect(monthlyGroup.length).toBe(1);
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeTruthy();
 
         // @ts-expect-error
         const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
         expect(freqEditor.option('value')).toBe('monthly');
 
-        const dayButtons = $(POM.popup.element).find('.dx-scheduler-recurrence-byday-buttons');
-        expect(dayButtons.length).toBe(0);
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
       });
 
       it('Should show month and day inputs when frequency is yearly', async () => {
@@ -604,15 +595,10 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'yearly');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
-        const yearlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-yearly-group');
-        expect(yearlyGroup.length).toBeDefined();
+        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+        expect(yearlyGroup).toBeTruthy();
 
         // eslint-disable-next-line spellcheck/spell-checker
         const bymonthEditor = POM.popup.getSwitchByName('bymonth');
@@ -643,25 +629,19 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'daily');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
         const freqEditor = POM.popup.getSwitchByName('freq');
         expect(freqEditor.value).toBe('daily');
 
-        const dayButtons = $(POM.popup.element).find('.dx-scheduler-recurrence-byday-buttons');
-        expect(dayButtons.length).toBe(0);
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
 
-        const monthlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-monthly-group');
-        expect(monthlyGroup.length).toBe(0);
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeNull();
 
-        const yearlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-yearly-group');
-        expect(yearlyGroup.length).toBe(0);
+        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+        expect(yearlyGroup).toBeNull();
       });
 
       it('Should hide all repeat-on options for hourly frequency', async () => {
@@ -679,26 +659,20 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'hourly');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
         // @ts-expect-error
         const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
         expect(freqEditor.option('value')).toBe('hourly');
 
-        const dayButtons = $(POM.popup.element).find('.dx-scheduler-recurrence-byday-buttons');
-        expect(dayButtons.length).toBe(0);
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
 
-        const monthlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-monthly-group');
-        expect(monthlyGroup.length).toBe(0);
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeNull();
 
-        const yearlyGroup = $(POM.popup.element)
-          .find('.dx-scheduler-form-recurrence-repeat-on-yearly-group');
-        expect(yearlyGroup.length).toBe(0);
+        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+        expect(yearlyGroup).toBeNull();
       });
     });
 
@@ -726,21 +700,16 @@ describe('Appointment Popup Form', () => {
 
         // @ts-expect-error
         const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        const buttons = repeatEditorRecurrent.option('buttons');
 
         expect(repeatEditorRecurrent.option('value')).toBe('weekly');
 
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
         // @ts-expect-error
         const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
         expect(freqEditor.option('value')).toBe('weekly');
 
-        const dayButtons = $(POM.popup.element)
-          .find('.dx-scheduler-recurrence-byday-buttons .dx-button');
+        const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
         const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
         expect(selectedButtons.length).toBe(3);
 
@@ -771,11 +740,7 @@ describe('Appointment Popup Form', () => {
         const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
         repeatEditor.option('value', 'daily');
 
-        const buttons = repeatEditor.option('buttons');
-        const settingsButton = buttons?.find((btn) => btn.name === 'settings');
-        if (settingsButton?.options?.onClick) {
-          settingsButton.options.onClick();
-        }
+        POM.popup.openRecurrenceSettings();
 
         // @ts-expect-error
         const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
