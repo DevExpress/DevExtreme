@@ -71,11 +71,7 @@ jobs:
         retention-days: 1
 
   testcafe:
-    name: ${{ matrix.ARGS.name }}${{
-      (matrix.ARGS.theme != null && matrix.ARGS.theme != '')
-      && format(' - {0}', split(matrix.ARGS.theme, '.')[0])
-      || ' - fluent'
-    }}
+    name: ${{ matrix.ARGS.name }}${{ matrix.ARGS.theme == null || matrix.ARGS.theme == '' && ' - fluent' }}
     needs: [build]
     strategy:
       fail-fast: false
