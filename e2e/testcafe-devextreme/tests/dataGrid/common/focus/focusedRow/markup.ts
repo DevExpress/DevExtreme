@@ -71,7 +71,7 @@ test('Invalid cells in a focused row should have the correct background color (T
   await dataGrid.apiAddRow();
   await dataGrid.apiSaveEditData();
   // assert
-  await takeScreenshot('focused-row-invalid-cells (generic.light).png', dataGrid.element);
+  await takeScreenshot('focused-row-invalid-cells (generic.light).png');
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {

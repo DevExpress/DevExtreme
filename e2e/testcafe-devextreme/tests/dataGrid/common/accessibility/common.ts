@@ -5,8 +5,6 @@ import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilt
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
-// import { Themes } from '../../../../helpers/themes';
-// import { changeTheme } from '../../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Common tests`
   .page(url(__dirname, '../../../container.html'));
@@ -18,12 +16,11 @@ const DATA_GRID_SELECTOR = '#container';
 const screenshotCheck = async (
   t: TestController,
   screenshotName: string,
-  element: Selector,
 ) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot(`${screenshotName}.png`, element))
+    .expect(await takeScreenshot(`${screenshotName}.png`))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -36,7 +33,7 @@ test('Grid without data', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'no-data', dataGrid.element);
+  await screenshotCheck(t, 'no-data');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
 }));
@@ -48,7 +45,7 @@ test('Sorting and group panel', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'sorting-and-group-panel', dataGrid.element);
+  await screenshotCheck(t, 'sorting-and-group-panel');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -79,7 +76,7 @@ test('Paging with displayMode is \'full\'', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'paging-full-display-mode', dataGrid.element);
+  await screenshotCheck(t, 'paging-full-display-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(100, 5),
   keyExpr: 'field_0',
@@ -110,7 +107,7 @@ test('Paging with displayMode is \'compact\'', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'paging-compact-display-mode', dataGrid.element);
+  await screenshotCheck(t, 'paging-compact-display-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(100, 5),
   keyExpr: 'field_0',
@@ -141,7 +138,7 @@ test('Grouping and Summary', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'grouping-and-summary', dataGrid.element);
+  await screenshotCheck(t, 'grouping-and-summary');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(60, 5),
   keyExpr: 'field_0',
@@ -196,7 +193,7 @@ test('Filter row - filter menu', async (t) => {
     .expect(filterEditor.menu.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'filter-row-menu', dataGrid.element);
+  await screenshotCheck(t, 'filter-row-menu');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5).map((item, index) => ({ ...item, index })),
   keyExpr: 'field_0',
@@ -236,7 +233,7 @@ test('Header filter - filter menu', async (t) => {
     .expect(new HeaderFilter().element.exists)
     .ok();
 
-  await screenshotCheck(t, 'header-filter-menu', dataGrid.element);
+  await screenshotCheck(t, 'header-filter-menu');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -264,7 +261,7 @@ test('Filter panel', async (t) => {
     .expect(filterPanel.getFilterText().element.textContent)
     .eql('[Field 1] Contains \'val\'');
 
-  await screenshotCheck(t, 'filter-panel', dataGrid.element);
+  await screenshotCheck(t, 'filter-panel');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -302,7 +299,7 @@ test('Filter panel - popup with filter builder', async (t) => {
     .expect(filterPanel.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'filter-builder', dataGrid.element);
+  await screenshotCheck(t, 'filter-builder');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -325,7 +322,7 @@ test('Search panel', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'search-panel', dataGrid.element);
+  await screenshotCheck(t, 'search-panel');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -348,7 +345,7 @@ test('Search panel - highlight', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'search-panel-highlight', dataGrid.element);
+  await screenshotCheck(t, 'search-panel-highlight');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -376,7 +373,7 @@ test('Selection', async (t) => {
     .expect(dataGrid.getDataRow(2).isSelected)
     .ok();
 
-  await screenshotCheck(t, 'selection', dataGrid.element);
+  await screenshotCheck(t, 'selection');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -404,7 +401,7 @@ test('Focused row', async (t) => {
     .expect(dataGrid.getDataRow(1).isFocusedRow)
     .ok();
 
-  await screenshotCheck(t, 'focused-row', dataGrid.element);
+  await screenshotCheck(t, 'focused-row');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -427,7 +424,7 @@ test('Fixed columns', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'fixed-columns', dataGrid.element);
+  await screenshotCheck(t, 'fixed-columns');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 7),
   keyExpr: 'field_0',
@@ -479,7 +476,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
     .expect(columnChooser.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'column-chooser-drag_and_drop-mode', dataGrid.element);
+  await screenshotCheck(t, 'column-chooser-drag_and_drop-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 7),
   keyExpr: 'field_0',
@@ -523,7 +520,7 @@ test('Column chooser with the \'select\' mode', async (t) => {
     .expect(columnChooser.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'column-chooser-select-mode', dataGrid.element);
+  await screenshotCheck(t, 'column-chooser-select-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 7),
   keyExpr: 'field_0',
@@ -567,7 +564,7 @@ test('Empty column chooser', async (t) => {
     .expect(columnChooser.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'empty-column-chooser', dataGrid.element);
+  await screenshotCheck(t, 'empty-column-chooser');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -593,7 +590,7 @@ test('Empty column chooser', async (t) => {
       .expect(dataGrid.isReady())
       .ok();
 
-    await screenshotCheck(t, `row-editing-mode-with-useIcons=${useIcons}`, dataGrid.element);
+    await screenshotCheck(t, `row-editing-mode-with-useIcons=${useIcons}`);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(10, 5),
     keyExpr: 'field_0',
@@ -629,7 +626,7 @@ test('Empty column chooser', async (t) => {
       .expect(dataGrid.getDataRow(0).isEdited)
       .ok();
 
-    await screenshotCheck(t, `row-edit-state-with-useIcons=${useIcons}`, dataGrid.element);
+    await screenshotCheck(t, `row-edit-state-with-useIcons=${useIcons}`);
   }).before(async () => createWidget('dxDataGrid', {
     dataSource: getData(10, 5),
     keyExpr: 'field_0',
@@ -667,7 +664,7 @@ test('Row editing mode - confirm delete message', async (t) => {
     .expect(isDialogOpened)
     .ok();
 
-  await screenshotCheck(t, 'row-editing-mode', dataGrid.element);
+  await screenshotCheck(t, 'row-editing-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -702,7 +699,7 @@ test('Batch editing mode - edit cell', async (t) => {
     .expect(dataGrid.getDataCell(0, 0).isEditCell)
     .ok();
 
-  await screenshotCheck(t, 'batch-editing-mode-edit_cell', dataGrid.element);
+  await screenshotCheck(t, 'batch-editing-mode-edit_cell');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -737,7 +734,7 @@ test('Batch editing mode - modified cell', async (t) => {
     .expect(dataGrid.getDataCell(0, 0).isModified)
     .ok();
 
-  await screenshotCheck(t, 'row-editing-mode-modified_cell', dataGrid.element);
+  await screenshotCheck(t, 'row-editing-mode-modified_cell');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -772,7 +769,7 @@ test('Batch editing mode - delete row', async (t) => {
     .expect(dataGrid.getDataRow(0).isRemoved)
     .ok();
 
-  await screenshotCheck(t, 'row-editing-mode-delete_row', dataGrid.element);
+  await screenshotCheck(t, 'row-editing-mode-delete_row');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -807,7 +804,7 @@ test('Form editing mode', async (t) => {
     .expect(dataGrid.getEditForm().element.exists)
     .ok();
 
-  await screenshotCheck(t, 'form-editing-mode', dataGrid.element);
+  await screenshotCheck(t, 'form-editing-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -842,7 +839,7 @@ test('Popup editing mode', async (t) => {
     .expect(dataGrid.getPopupEditForm().element.exists)
     .ok();
 
-  await screenshotCheck(t, 'popup-editing-mode', dataGrid.element);
+  await screenshotCheck(t, 'popup-editing-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -881,7 +878,7 @@ test('Validation in cell editing mode', async (t) => {
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await screenshotCheck(t, 'validation-in-cell-editing-mode', dataGrid.element);
+  await screenshotCheck(t, 'validation-in-cell-editing-mode');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -928,7 +925,7 @@ test('Error row', async (t) => {
     .expect(dataGrid.getErrorRow().exists)
     .ok();
 
-  await screenshotCheck(t, 'error-row', dataGrid.element);
+  await screenshotCheck(t, 'error-row');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -967,7 +964,7 @@ test('Adaptability', async (t) => {
     .expect(dataGrid.getAdaptiveRow(0).element.exists)
     .ok();
 
-  await screenshotCheck(t, 'adaptive-row', dataGrid.element);
+  await screenshotCheck(t, 'adaptive-row');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 10),
   keyExpr: 'field_0',
@@ -985,7 +982,7 @@ test('Row drag and drop', async (t) => {
     .expect(dataGrid.isReady())
     .ok();
 
-  await screenshotCheck(t, 'row-drag-and-drop', dataGrid.element);
+  await screenshotCheck(t, 'row-drag-and-drop');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -1014,7 +1011,7 @@ test('Export', async (t) => {
     .expect(exportButton.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'export-button', dataGrid.element);
+  await screenshotCheck(t, 'export-button');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
@@ -1044,7 +1041,7 @@ test('Context menu', async (t) => {
     .expect(contextMenu.isOpened)
     .ok();
 
-  await screenshotCheck(t, 'context-menu', dataGrid.element);
+  await screenshotCheck(t, 'context-menu');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
   keyExpr: 'field_0',
