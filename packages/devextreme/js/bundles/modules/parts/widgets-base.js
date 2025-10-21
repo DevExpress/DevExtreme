@@ -23,6 +23,7 @@ ui.hideToasts = require('../../../ui/toast/hide_toasts');
 ui.dxActionSheet = require('../../../ui/action_sheet');
 ui.dxAutocomplete = require('../../../ui/autocomplete');
 ui.dxBox = require('../../../ui/box');
+ui.dxFile = require('../../../ui/file');
 ui.dxButton = require('../../../ui/button');
 ui.dxDropDownButton = require('../../../ui/drop_down_button');
 ui.dxButtonGroup = require('../../../ui/button_group');

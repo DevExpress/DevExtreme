@@ -15,7 +15,6 @@
   $chat-avatar-color,
   $chat-avatar-background-color,
 );
-@include chat-header($chat-header-padding);
 @include chat-alertlist(
   $chat-alertlist-color,
   $chat-alerts-padding-block,

@@ -1,3 +1,64 @@
 .dx-chat-file {
-  display: inline-flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 30%;
+  display: flex;
+  align-items: center;
+  padding: 7px 8px;
+  min-width: 240px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024;
+}
+
+.dx-chat-file-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  color: #707070;
+
+  .dx-icon.dx-icon-file {
+    font-size: 20px;
+  }
+}
+
+.dx-chat-file-name {
+  display: block;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  min-width: 0;
+  margin-inline-end: 9px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2857;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dx-chat-file-size {
+  display: block;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 42px;
+  min-width: 0;
+  text-align: end;
+  font-size: 10px;
+  color: #707070;
+}
+
+.dx-chat-file-download-button {
+  width: 32px;
+  height: 32px;
+  outline: 0.5px solid #8787875e;
+  flex: 0 0 32px;
+  min-width: 32px;
 }

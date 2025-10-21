@@ -1,4 +1,5 @@
-import type { dxElementWrapper } from '@js/core/renderer';
+import registerComponent from '@js/core/component_registrator';
+// import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 // import type {
 //   ClickEvent,
@@ -21,8 +22,7 @@ export type Properties = WidgetProperties & {
 };
 
 const CHAT_FILE_CLASS = 'dx-chat-file';
-const CHAT_FILE_MAIN_CLASS = 'dx-chat-file-main';
-const CHAT_FILE_META_CLASS = 'dx-chat-file-meta';
+const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
 const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
 const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
@@ -63,62 +63,52 @@ class File extends Widget<Properties> {
   }
 
   _renderSections(): void {
-    this._renderMain();
-    this._renderMeta();
+    this._renderIcon();
+    this._renderName();
+    this._renderSize();
+    this._renderButton();
   }
 
-  _renderMain(): void {
-    const $mainSection = $('<div>').addClass(CHAT_FILE_MAIN_CLASS);
+  _renderIcon(): void {
+    const $icon = getImageContainer('file') ?? $('<i>');
 
-    this.$element().append($mainSection);
+    const $iconContainer = $('<div>')
+      .addClass(CHAT_FILE_ICON_CONTAINER_CLASS)
+      .append($icon);
 
-    this._renderIcon($mainSection);
-    this._renderName($mainSection);
+    this.$element().append($iconContainer);
   }
 
-  _renderIcon($section: dxElementWrapper): void {
-    const $icon = getImageContainer('file') ?? $('<div>');
-
-    $section.append($icon);
-  }
-
-  _renderName($section: dxElementWrapper): void {
+  _renderName(): void {
     const { data } = this.option();
-    const { name } = data ?? {};
+    const { name = '' } = data ?? {};
 
-    const $name = $('<span>')
+    const $name = $('<div>')
       .addClass(CHAT_FILE_NAME_CLASS)
-      .text(name ?? '');
+      .text(name)
+      .attr('title', name);
 
-    $section.append($name);
+    this.$element().append($name);
   }
 
-  _renderMeta(): void {
-    const $metaSection = $('<div>').addClass(CHAT_FILE_META_CLASS);
-
-    this.$element().append($metaSection);
-
-    this._renderSize($metaSection);
-    this._renderButton($metaSection);
-  }
-
-  _renderSize($section: dxElementWrapper): void {
+  _renderSize(): void {
     const { data } = this.option();
     const { size } = data ?? {};
 
     const text = `${size ?? 0} KB`;
 
-    const $size = $('<span>')
+    const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
-      .text(text);
+      .text(text)
+      .attr('title', text);
 
-    $section.append($size);
+    this.$element().append($size);
   }
 
-  _renderButton($section: dxElementWrapper): void {
+  _renderButton(): void {
     const $button = $('<div>').addClass(CHAT_FILE_DOWNLOAD_BUTTON_CLASS);
 
-    $section.append($button);
+    this.$element().append($button);
   }
 
   // _getSendButtonConfig(): any {
@@ -176,5 +166,7 @@ class File extends Widget<Properties> {
     super._dispose();
   }
 }
+
+registerComponent('dxFile', File);
 
 export default File;
