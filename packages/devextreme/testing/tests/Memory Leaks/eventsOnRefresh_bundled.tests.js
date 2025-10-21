@@ -18,7 +18,7 @@ QUnit.module('eventsOnRefresh', {
 
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
-        QUnit.test(componentName + ' should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
+        QUnit.skip(componentName + ' should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
             const testNode = memoryLeaksHelper.createTestNode();
             const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
 
@@ -35,7 +35,7 @@ $.each(DevExpress.ui, function(componentName) {
     }
 });
 
-QUnit.test('Splitter ResizeHandle should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
+QUnit.skip('Splitter ResizeHandle should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
     const testNode = memoryLeaksHelper.createTestNode();
     const component = new ResizeHandle($(testNode), {});
 

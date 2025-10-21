@@ -100,7 +100,10 @@ jobs:
             TIMEZONE: US/Pacific
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
-          - CONSTEL: misc
+          - CONSTEL: misc(1/2)
+            CSP: 'false'
+            useJQuery: 'true'
+          - CONSTEL: misc(2/2)
             CSP: 'false'
             useJQuery: 'true'
           - CONSTEL: ui.widgets(1/2)
