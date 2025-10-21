@@ -709,7 +709,7 @@ export class AppointmentForm {
 
     this._recurrentForm?.updateRecurrenceFormValues();
 
-    if (this.popup && typeof this.popup.updateToolbarForRecurrence === 'function') {
+    if (this.popup) {
       this.popup.updateToolbarForRecurrence();
     }
   }
