@@ -403,7 +403,7 @@ export class RecurrentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: RecurrentForm.createIconTemplate('clock'),
+          template: RecurrentForm.createIconTemplate('calendardatestartoutline'),
         },
         {
           colSpan: 1,
@@ -636,7 +636,7 @@ export class RecurrentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: RecurrentForm.createIconTemplate('description'),
+          template: RecurrentForm.createIconTemplate('calendardateendoutline'),
         },
         {
           itemType: 'group',
