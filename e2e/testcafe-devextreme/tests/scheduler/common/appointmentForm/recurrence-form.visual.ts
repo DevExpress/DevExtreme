@@ -1,5 +1,5 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import RecurrenceForm from 'devextreme-testcafe-models/scheduler/appointment/recurrenceForm';
+import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
@@ -10,19 +10,25 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 fixture.disablePageReloads`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
 
+const SCHEDULER_SELECTOR = '#container';
+
 const openAppointmentPopup = async (
   t: TestController,
   appointment: any,
   isRecurringAppointment = false,
-): Promise<void> => {
+): Promise<AppointmentPopup> => {
   await ClientFunction((appointmentData) => {
     const instance = ($('#container') as any).dxScheduler('instance');
     instance.showAppointmentPopup(appointmentData);
   })(appointment);
 
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
   if (isRecurringAppointment) {
     await t.click(Scheduler.getEditRecurrenceDialog().series);
   }
+
+  return scheduler.appointmentPopup;
 };
 
 const themes = [
@@ -42,7 +48,6 @@ themes.forEach((theme) => {
   ].forEach(({ repeatEnd, value }) => {
     safeSizeTest(`daily frequency with repeat end ${repeatEnd} (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const recurrenceForm = new RecurrenceForm();
 
       const appointment = {
         text: 'Daily Appointment',
@@ -50,13 +55,13 @@ themes.forEach((theme) => {
         endDate: new Date('2024-01-01T11:00:00'),
       };
 
-      await openAppointmentPopup(t, appointment);
-      await recurrenceForm.open(t, 'Daily');
-      await recurrenceForm.setRepeatEnd(t, repeatEnd as any, value);
+      const appointmentPopup = await openAppointmentPopup(t, appointment);
+      await appointmentPopup.openRecurrenceForm(t, 'Daily');
+      await appointmentPopup.setRecurrenceEnd(t, repeatEnd as any, value);
 
       await takeScreenshot(
         `scheduler__recurrence-form__daily__repeat-end-${repeatEnd}.png (theme=${theme})`,
-        recurrenceForm.element,
+        appointmentPopup.recurrence.group,
       );
 
       await t
@@ -83,7 +88,6 @@ themes.forEach((theme) => {
   ].forEach(({ days, label }) => {
     safeSizeTest(`weekly frequency with days ${label} (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const recurrenceForm = new RecurrenceForm();
 
       const appointment = {
         text: 'Weekly Appointment',
@@ -91,14 +95,14 @@ themes.forEach((theme) => {
         endDate: new Date('2024-01-01T11:00:00'),
       };
 
-      await openAppointmentPopup(t, appointment);
-      await recurrenceForm.open(t, 'Weekly');
-      await recurrenceForm.selectWeekDays(t, days);
-      await recurrenceForm.setRepeatEnd(t, 'count', 15);
+      const appointmentPopup = await openAppointmentPopup(t, appointment);
+      await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+      await appointmentPopup.selectRecurrenceWeekDays(t, days);
+      await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
       await takeScreenshot(
         `scheduler__recurrence-form__weekly__${label}.png (theme=${theme})`,
-        recurrenceForm.element,
+        appointmentPopup.recurrence.group,
       );
 
       await t
@@ -123,7 +127,6 @@ themes.forEach((theme) => {
   [2, 5].forEach((interval) => {
     safeSizeTest(`weekly frequency with interval ${interval} (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const recurrenceForm = new RecurrenceForm();
 
       const appointment = {
         text: 'Weekly Appointment',
@@ -131,14 +134,14 @@ themes.forEach((theme) => {
         endDate: new Date('2024-01-01T11:00:00'),
       };
 
-      await openAppointmentPopup(t, appointment);
-      await recurrenceForm.open(t, 'Weekly');
-      await recurrenceForm.setRepeatEvery(t, interval);
-      await recurrenceForm.selectWeekDays(t, ['Monday', 'Friday']);
+      const appointmentPopup = await openAppointmentPopup(t, appointment);
+      await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+      await appointmentPopup.setRecurrenceInterval(t, interval);
+      await appointmentPopup.selectRecurrenceWeekDays(t, ['Monday', 'Friday']);
 
       await takeScreenshot(
         `scheduler__recurrence-form__weekly__interval-${interval}.png (theme=${theme})`,
-        recurrenceForm.element,
+        appointmentPopup.recurrence.group,
       );
 
       await t
@@ -162,7 +165,6 @@ themes.forEach((theme) => {
   [1, 15].forEach((day) => {
     safeSizeTest(`monthly frequency with day ${day} (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const recurrenceForm = new RecurrenceForm();
 
       const appointment = {
         text: 'Monthly Appointment',
@@ -170,14 +172,14 @@ themes.forEach((theme) => {
         endDate: new Date('2024-01-01T11:00:00'),
       };
 
-      await openAppointmentPopup(t, appointment);
-      await recurrenceForm.open(t, 'Monthly');
-      await recurrenceForm.setMonthDay(t, day);
-      await recurrenceForm.setRepeatEnd(t, 'count', 12);
+      const appointmentPopup = await openAppointmentPopup(t, appointment);
+      await appointmentPopup.openRecurrenceForm(t, 'Monthly');
+      await appointmentPopup.setRecurrenceMonthDay(t, day);
+      await appointmentPopup.setRecurrenceEnd(t, 'count', 12);
 
       await takeScreenshot(
         `scheduler__recurrence-form__monthly__day-${day}.png (theme=${theme})`,
-        recurrenceForm.element,
+        appointmentPopup.recurrence.group,
       );
 
       await t
@@ -204,7 +206,6 @@ themes.forEach((theme) => {
   ].forEach(({ month, day, label }) => {
     safeSizeTest(`yearly frequency with ${label} (${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-      const recurrenceForm = new RecurrenceForm();
 
       const appointment = {
         text: 'Yearly Appointment',
@@ -212,14 +213,14 @@ themes.forEach((theme) => {
         endDate: new Date('2024-01-01T11:00:00'),
       };
 
-      await openAppointmentPopup(t, appointment);
-      await recurrenceForm.open(t, 'Yearly');
-      await recurrenceForm.setYearlyDate(t, month, day);
-      await recurrenceForm.setRepeatEnd(t, 'until', '01/01/2030');
+      const appointmentPopup = await openAppointmentPopup(t, appointment);
+      await appointmentPopup.openRecurrenceForm(t, 'Yearly');
+      await appointmentPopup.setRecurrenceYearlyDate(t, month, day);
+      await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
       await takeScreenshot(
         `scheduler__recurrence-form__yearly__${label}.png (theme=${theme})`,
-        recurrenceForm.element,
+        appointmentPopup.recurrence.group,
       );
 
       await t
@@ -242,7 +243,6 @@ themes.forEach((theme) => {
 themes.forEach((theme) => {
   safeSizeTest(`hourly frequency (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const recurrenceForm = new RecurrenceForm();
 
     const appointment = {
       text: 'Hourly Appointment',
@@ -250,14 +250,14 @@ themes.forEach((theme) => {
       endDate: new Date('2024-01-01T11:00:00'),
     };
 
-    await openAppointmentPopup(t, appointment);
-    await recurrenceForm.open(t, 'Hourly');
-    await recurrenceForm.setRepeatEvery(t, 2);
-    await recurrenceForm.setRepeatEnd(t, 'count', 20);
+    const appointmentPopup = await openAppointmentPopup(t, appointment);
+    await appointmentPopup.openRecurrenceForm(t, 'Hourly');
+    await appointmentPopup.setRecurrenceInterval(t, 2);
+    await appointmentPopup.setRecurrenceEnd(t, 'count', 20);
 
     await takeScreenshot(
       `scheduler__recurrence-form__hourly.png (theme=${theme})`,
-      recurrenceForm.element,
+      appointmentPopup.recurrence.group,
     );
 
     await t
@@ -279,7 +279,6 @@ themes.forEach((theme) => {
 themes.forEach((theme) => {
   safeSizeTest(`editing existing recurrence rule (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const recurrenceForm = new RecurrenceForm();
 
     const appointment = {
       text: 'Existing Recurrent',
@@ -288,12 +287,12 @@ themes.forEach((theme) => {
       recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
     };
 
-    await openAppointmentPopup(t, appointment, true);
-    await recurrenceForm.openSettings(t);
+    const appointmentPopup = await openAppointmentPopup(t, appointment, true);
+    await appointmentPopup.openRecurrenceSettings(t);
 
     await takeScreenshot(
       `scheduler__recurrence-form__editing-existing.png (theme=${theme})`,
-      recurrenceForm.element,
+      appointmentPopup.recurrence.group,
     );
 
     await t
