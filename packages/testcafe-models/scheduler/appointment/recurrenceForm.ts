@@ -11,6 +11,7 @@ export const SELECTORS = {
   radioGroup: '.dx-scheduler-form-recurrence-end-radio',
   inputGroup: '.dx-scheduler-form-recurrence-end-inputs',
   listOption: '.dx-list-item',
+  settingsButton: '.dx-scheduler-form-recurrence-settings-button',
 };
 
 export default class RecurrenceForm {
@@ -32,6 +33,8 @@ export default class RecurrenceForm {
 
   inputGroup: Selector;
 
+  settingsButton: Selector;
+
   constructor() {
     this.element = Selector(SELECTORS.recurrenceGroup);
     this.repeatEditor = Selector(SELECTORS.repeatEditor);
@@ -42,6 +45,7 @@ export default class RecurrenceForm {
     this.yearlyMonthInput = Selector(SELECTORS.yearlyMonthInput);
     this.radioGroup = Selector(SELECTORS.radioGroup);
     this.inputGroup = Selector(SELECTORS.inputGroup);
+    this.settingsButton = Selector(SELECTORS.settingsButton);
   }
 
   async open(t: TestController, freq = 'Daily'): Promise<void> {
@@ -54,7 +58,7 @@ export default class RecurrenceForm {
   }
 
   async openSettings(t: TestController): Promise<void> {
-    await t.click(this.repeatEditorButton);
+    await t.click(this.settingsButton);
     await t.wait(500);
   }
 
