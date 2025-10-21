@@ -41,7 +41,7 @@
         "devextreme-aspnet-data": "5.0.0",
         "devextreme-aspnet-data-nojquery": "5.0.0",
         "devextreme-cldr-data": "1.0.3",
-        "devextreme-exceljs-fork": "^4.4.2",
+        "devextreme-exceljs-fork": "^4.4.3",
         "devextreme-quill": "catalog:",
         "dx-systemjs-vue-browser": "1.1.2",
         "esbuild": "0.25.0",
