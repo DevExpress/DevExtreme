@@ -47,8 +47,6 @@ test('When DataGrid has fixed column row height should not change when marked as
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  // await changeTheme(theme);
-
   await createWidget('dxDataGrid', {
     dataSource: [
       { id: 1, name: 'John Smith' },

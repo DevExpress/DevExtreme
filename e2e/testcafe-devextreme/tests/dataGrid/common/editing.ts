@@ -2432,24 +2432,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
 });
 // visual: generic.light
 // visual: material.blue.light
-[true, false,
-  // {
-  //   theme: 'material.blue.light',
-  //   useIcons: true,
-  // },
-  // {
-  //   theme: 'generic.light',
-  //   useIcons: true,
-  // },
-  // {
-  //   theme: 'material.blue.light',
-  //   useIcons: false,
-  // },
-  // {
-  //   theme: 'generic.light',
-  //   useIcons: false,
-  // },
-].forEach((useIcons) => {
+[true, false].forEach((useIcons) => {
   // T1179114
   // TODO Chrome133: skipped during chrome update
   test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
