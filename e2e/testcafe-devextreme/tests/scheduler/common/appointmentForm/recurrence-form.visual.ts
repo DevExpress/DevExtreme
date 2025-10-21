@@ -135,6 +135,7 @@ const themes = [
   'fluent.blue.light.compact',
 ];
 
+// Test 1: Daily frequency with different repeat end options
 themes.forEach((theme) => {
   [
     { repeatEnd: 'never', value: undefined },
@@ -178,6 +179,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 2: Weekly frequency with day selection
 themes.forEach((theme) => {
   [
     { days: ['Monday', 'Wednesday', 'Friday'], label: 'mon-wed-fri' },
@@ -221,6 +223,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 3: Weekly frequency with different repeat every (interval)
 themes.forEach((theme) => {
   [2, 5].forEach((interval) => {
     safeSizeTest(`weekly frequency with interval ${interval} (${theme})`, async (t) => {
@@ -261,6 +264,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 4: Monthly frequency with different days of month
 themes.forEach((theme) => {
   [1, 15].forEach((day) => {
     safeSizeTest(`monthly frequency with day ${day} (${theme})`, async (t) => {
@@ -300,6 +304,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 5: Yearly frequency with different months and days
 themes.forEach((theme) => {
   [
     { month: 1, day: 1, label: 'jan-1' },
@@ -342,6 +347,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 6: Hourly frequency
 themes.forEach((theme) => {
   safeSizeTest(`hourly frequency (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -379,6 +385,7 @@ themes.forEach((theme) => {
   });
 });
 
+// Test 7: Editing existing recurrence rule
 themes.forEach((theme) => {
   safeSizeTest(`editing existing recurrence rule (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

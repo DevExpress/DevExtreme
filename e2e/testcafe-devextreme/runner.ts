@@ -111,10 +111,6 @@ function expandBrowserAlias(browser: string): string {
       return 'chrome:headless --no-sandbox --disable-gpu --window-size=1200,800 --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --font-render-hinting=none --disable-font-subpixel-positioning';
     case 'chrome:docker':
       return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
-    case 'chrome:visual':
-      return 'chrome:headless --force-device-scale-factor=1 --window-size=1200,800';
-    case 'chrome:visible':
-      return 'chrome --force-device-scale-factor=1 --window-size=1200,800';
     default:
       return browser;
   }
@@ -253,8 +249,8 @@ createTestCafe(TESTCAFE_CONFIG)
 
     const runOptions: RunOptions = {
       quarantineMode: { successThreshold: 1, attemptLimit: 5 },
-      // @ts-expect-error ts-error
       disableNativeAutomation: true,
+      // @ts-expect-error ts-error
       hooks: {
         test: {
           before: async (t: TestController) => {
