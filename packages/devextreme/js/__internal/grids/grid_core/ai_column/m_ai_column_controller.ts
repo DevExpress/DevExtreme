@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { GenerateGridColumnCommandResult, RequestCallbacks } from '@js/common/ai-integration';
 import type { Callback } from '@js/core/utils/callbacks';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -32,10 +33,6 @@ export class AiColumnController extends Controller {
 
     this.dataChangedHandler = this.handleDataChanged.bind(this);
     this.dataController.changed.add(this.dataChangedHandler);
-  }
-
-  private refreshAIColumnInternal(columnName: string): void {
-    this.aiColumnIntegrationController.refreshAIColumn(columnName);
   }
 
   private showResults(
@@ -74,20 +71,24 @@ export class AiColumnController extends Controller {
   public sendAIColumnRequest(
     columnName: string,
   ): void {
-    this.aiColumnIntegrationController.sendRequest(columnName, true, {
-      onComplete: (data) => {
-        this.aiRequestCompleted.fire(data);
-      },
-      onError: (error: Error) => {
-        this.aiRequestRejected.fire(error);
-      },
-    });
+    this.aiColumnIntegrationController.sendRequest(columnName, true, this.getRequestCallbacks());
   }
 
   public refreshAIColumn(
     columnName: string,
   ): void {
     this.sendAIColumnRequest(columnName);
+  }
+
+  private getRequestCallbacks(): RequestCallbacks<GenerateGridColumnCommandResult> {
+    return {
+      onComplete: (data): void => {
+        this.aiRequestCompleted.fire(data);
+      },
+      onError: (error: Error): void => {
+        this.aiRequestRejected.fire(error);
+      },
+    };
   }
 
   public clearAIColumn(columnName: string): void {

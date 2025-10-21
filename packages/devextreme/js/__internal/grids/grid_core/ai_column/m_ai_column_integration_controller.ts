@@ -36,14 +36,6 @@ export class AiColumnIntegrationController extends Controller {
     this.createAction('onAIColumnResponseReceived');
   }
 
-  public sendAIColumnRequest(columnName: string): void {
-    this.sendRequest(columnName, true);
-  }
-
-  public refreshAIColumn(columnName: string): void {
-    this.sendRequest(columnName, false);
-  }
-
   public sendRequest(
     columnName: string,
     useCache: boolean,

@@ -66,25 +66,6 @@ export class AiColumnView extends View {
     };
   }
 
-  // TODO: support changing all columns and the entire column
-  public optionChanged(args): void {
-    if (args.name !== 'columns') {
-      return;
-    }
-
-    const column = this.columnsController.getColumnByPath(args.fullName);
-
-    if (column?.type !== AI_COLUMN_NAME) {
-      return;
-    }
-
-    const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
-
-    if (columnOptionName === 'ai.prompt') {
-      this.aiColumnController.sendAIColumnRequest(column.name as string);
-    }
-  }
-
   public init(): void {
     this.columnsController = this.getController('columns');
     this.aiColumnController = this.getController('aiColumn');
