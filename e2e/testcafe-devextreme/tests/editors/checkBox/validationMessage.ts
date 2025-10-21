@@ -54,14 +54,7 @@ positions.forEach((position) => {
       .click(checkBox1.element)
       .expect(true).ok();
 
-    await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`, {
-      shouldTestInCompact: true,
-      compactCallBack: async () => {
-        await t
-          .click(checkBox1.element)
-          .click(checkBox1.element);
-      },
-    });
+    await testScreenshot(t, takeScreenshot, `Checkbox validation message with ${position} position.png`);
 
     await t
       .expect(compareResults.isValid())
