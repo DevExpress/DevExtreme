@@ -484,7 +484,7 @@ describe('Appointment Popup Form', () => {
       expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
     });
 
-    it('Should discard changes when canceling from recurrence form', async () => {
+    it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
       const data = [
         {
           text: 'meet',
