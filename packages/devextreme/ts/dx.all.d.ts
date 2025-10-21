@@ -26013,6 +26013,11 @@ declare module DevExpress.ui {
         Omit<AppointmentDraggingEvent, 'itemData'> & {
           itemData?: any;
         };
+    export type AppointmentFormIconsShowMode =
+      | 'both'
+      | 'main'
+      | 'recurrence'
+      | 'none';
     /**
      * [descr:_ui_scheduler_AppointmentFormOpeningEvent]
      */
@@ -26174,11 +26179,6 @@ declare module DevExpress.ui {
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxSchedulerOptions;
     export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
-    export type SchedulerAppointmentFormIconDisplay =
-      | 'both'
-      | 'main'
-      | 'recurrence'
-      | 'none';
     export type SchedulerPredefinedDateNavigatorItem =
       | 'prev'
       | 'next'
@@ -26470,9 +26470,9 @@ declare module DevExpress.ui {
                  */
                 onCanceled?: (formData: any) => void;
                 /**
-                 * [descr:dxSchedulerOptions.editing.form.showIcons]
+                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
                  */
-                showIcons?: DevExpress.ui.dxScheduler.SchedulerAppointmentFormIconDisplay;
+                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
               }
             | undefined;
         };
