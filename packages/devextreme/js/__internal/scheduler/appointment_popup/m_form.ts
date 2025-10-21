@@ -148,11 +148,11 @@ export class AppointmentForm {
     return value ? new Date(dateSerialization.deserializeDate(value)) : null;
   }
 
-  get recurrenceRule(): string | null {
+  get recurrenceRule(): string | undefined {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
     const value = this.formData[recurrenceRuleExpr] as string | undefined;
 
-    return value && value.trim() !== '' ? value : null;
+    return value?.trim() !== '' ? value : undefined;
   }
 
   get isRecurrenceFormVisible(): boolean {
