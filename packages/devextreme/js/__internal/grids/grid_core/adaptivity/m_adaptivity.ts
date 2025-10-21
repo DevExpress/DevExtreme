@@ -44,6 +44,7 @@ const ADAPTIVE_ROW_TYPE = 'detailAdaptive';
 
 const FORM_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_ITEM_MODIFIED = 'dx-item-modified';
+const ADAPTIVE_ROW_SELECTOR = 'tr.dx-adaptive-detail-row';
 
 const HIDDEN_COLUMN_CLASS = 'hidden-column';
 const ADAPTIVE_COLUMN_BUTTON_CLASS = 'adaptive-more';
@@ -502,6 +503,23 @@ export class AdaptiveColumnsController extends modules.ViewController {
           viewName,
           $cells: $hiddenCells,
         });
+      }
+    }
+  }
+
+  public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
+    const hasAdaptiveColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
+
+    if (hasAdaptiveColumns) {
+      for (let i = 0; i < COLUMN_VIEWS.length; i++) {
+        // @ts-expect-error
+        const view = this.getView(COLUMN_VIEWS[i]);
+        if (view && view.isVisible() && view.element()) {
+          const $rowsFixedTable = view.element();
+          each($rowsFixedTable.find(ADAPTIVE_ROW_SELECTOR), (_, item) => {
+            $(item).css('display', isBestFit ? 'none' : '');
+          });
+        }
       }
     }
   }
@@ -1301,6 +1319,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _toggleBestFitMode(isBestFit) {
+    this._adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
     isBestFit && this._adaptiveColumnsController._showHiddenColumns();
     super._toggleBestFitMode(isBestFit);
   }
