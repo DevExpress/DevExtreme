@@ -109,7 +109,7 @@ jobs:
           { componentFolder: "editors", name: "editors (1/4)", indices: "1/4" },
           { componentFolder: "editors", name: "editors (2/4)", indices: "2/4" },
           { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
-          { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" }
+          { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "filterBuilder", name: "filterBuilder" },
           { componentFolder: "pagination", name: "pagination" },
