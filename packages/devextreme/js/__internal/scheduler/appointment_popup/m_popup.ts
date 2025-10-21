@@ -51,7 +51,6 @@ export class AppointmentPopup {
       },
     };
 
-    this.scheduler.appointmentPopup = this;
     this.form.popup = this;
   }
 
