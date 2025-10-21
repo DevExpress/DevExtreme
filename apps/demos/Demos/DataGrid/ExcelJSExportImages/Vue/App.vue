@@ -47,7 +47,7 @@ import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme-vue/common/export/excel';
+import { type DataGridCell, exportDataGrid } from 'devextreme-vue/common/export/excel';
 import { employees } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
@@ -59,9 +59,9 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     worksheet,
     autoFilterEnabled: true,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Picture') {
+    customizeCell: ({ gridCell, excelCell }: { gridCell?: DataGridCell, excelCell?: any }) => {
+      if (gridCell?.rowType === 'data') {
+        if (gridCell.column?.dataField === 'Picture') {
           excelCell.value = undefined;
 
           const image = workbook.addImage({

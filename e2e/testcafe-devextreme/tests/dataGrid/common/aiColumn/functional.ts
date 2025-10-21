@@ -2,7 +2,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
-fixture`Ai Column.Common`
+fixture.disablePageReloads`Ai Column.Common`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

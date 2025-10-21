@@ -27,10 +27,12 @@ export interface TextAreaProperties extends Omit<Properties,
   _shouldAttachKeyboardEvents?: boolean;
 }
 
-class TextArea extends TextBox<TextAreaProperties> {
+class TextArea<
+  TProperties extends TextAreaProperties = TextAreaProperties,
+> extends TextBox<TProperties> {
   _eventY!: number;
 
-  _getDefaultOptions(): TextAreaProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       spellcheck: true,
@@ -146,10 +148,23 @@ class TextArea extends TextBox<TextAreaProperties> {
   }
 
   _getHeightDifference($input: dxElementWrapper): number {
-    return getVerticalOffsets(this.$element().get(0), false)
-      + getVerticalOffsets(this._$textEditorContainer.get(0), false)
-      + getVerticalOffsets(this._$textEditorInputContainer.get(0), true)
-      + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
+    const verticalElementOffset = getVerticalOffsets(this.$element().get(0), false);
+    const verticalEditorContainerOffset = getVerticalOffsets(
+      this._$textEditorContainer.get(0),
+      false,
+    );
+    const verticalInputContainerOffsets = getVerticalOffsets(
+      this._$textEditorInputContainer.get(0),
+      true,
+    );
+    const inputMargin = getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
+
+    const sum = verticalElementOffset
+      + verticalEditorContainerOffset
+      + verticalInputContainerOffsets
+      + inputMargin;
+
+    return sum;
   }
 
   _updateInputHeight(): void {
@@ -198,12 +213,20 @@ class TextArea extends TextBox<TextAreaProperties> {
     }
   }
 
-  _getBoundaryHeight(optionName) {
+  _getBoundaryHeight(optionName: string): number | undefined {
     const boundaryValue = this.option(optionName);
 
     if (isDefined(boundaryValue)) {
-      return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement, this.$element().get(0));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return typeof boundaryValue === 'number'
+        ? boundaryValue : parseHeight(
+          boundaryValue,
+          this.$element().get(0).parentElement,
+          this.$element().get(0),
+        );
     }
+
+    return undefined;
   }
 
   _renderInputType(): void {}
@@ -228,7 +251,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<TextAreaProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value } = args;
 
     switch (name) {

@@ -30,7 +30,6 @@ function run_test_impl {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
-    [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
     if [ -n "$TZ" ]; then
@@ -79,92 +78,72 @@ function run_test_impl {
 
     echo "URL: $url"
 
-    case "$BROWSER" in
+    local chrome_command=$CHROME_CMD
+    local chrome_args=(
+        --no-sandbox
+        --headless
+        --disable-gpu
+        --disable-partial-raster
+        --disable-skia-runtime-opts
+        --no-first-run
+        --run-all-compositor-stages-before-draw
+        --disable-new-content-rendering-timeout
+        --disable-background-timer-throttling
+        --disable-renderer-backgrounding
+        --disable-threaded-animation
+        --disable-threaded-scrolling
+        --disable-checker-imaging
+        --disable-image-animation-resync
+        --use-gl="swiftshader"
+        --disable-features=PaintHolding
+        --disable-features=ScriptStreaming
+        --disable-features=LazyFrameLoading
+        --font-render-hinting=none
+        --disable-font-subpixel-positioning
+        --disable-extensions
+    )
 
-        "firefox")
-            kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
+    if [ "$NO_HEADLESS" == "true" ]; then
+        chrome_command="dbus-launch --exit-with-session $chrome_command"
+        chrome_args+=(
+            --no-first-run
+            --no-default-browser-check
+            --disable-translate
+        )
+    fi
 
-            local profile_path="/firefox-profile"
-            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
-            local firefox_args="-profile $profile_path $url"
-            [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
+    if [ -n "$MOBILE_UA" ]; then
+        local user_agent
 
-            firefox --version
-            echo "$firefox_args"
+        if [ "$MOBILE_UA" == "ios10" ]; then
+            user_agent="Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1)"
+        elif [ "$MOBILE_UA" == "android6" ]; then
+            user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
+        else
+            return 1
+        fi
 
-            firefox $firefox_args &
-        ;;
+        echo "Mobile user agent: $MOBILE_UA"
 
-        *)
-            local chrome_command=$CHROME_CMD
-            local chrome_args=(
-                --no-sandbox
-                --headless
-                --disable-gpu
-                --disable-partial-raster
-                --disable-skia-runtime-opts
-                --no-first-run
-                --run-all-compositor-stages-before-draw
-                --disable-new-content-rendering-timeout
-                --disable-background-timer-throttling
-                --disable-renderer-backgrounding
-                --disable-threaded-animation
-                --disable-threaded-scrolling
-                --disable-checker-imaging
-                --disable-image-animation-resync
-                --use-gl="swiftshader"
-                --disable-features=PaintHolding
-                --disable-features=ScriptStreaming
-                --disable-features=LazyFrameLoading
-                --font-render-hinting=none
-                --disable-font-subpixel-positioning
-                --disable-extensions
-            )
-
-            if [ "$NO_HEADLESS" == "true" ]; then
-                chrome_command="dbus-launch --exit-with-session $chrome_command"
-                chrome_args+=(
-                    --no-first-run
-                    --no-default-browser-check
-                    --disable-translate
-                )
-            fi
-
-            if [ -n "$MOBILE_UA" ]; then
-                local user_agent
-
-                if [ "$MOBILE_UA" == "ios10" ]; then
-                    user_agent="Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1)"
-                elif [ "$MOBILE_UA" == "android6" ]; then
-                    user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
-                else
-                    return 1
-                fi
-
-                echo "Mobile user agent: $MOBILE_UA"
-
-                chrome_args+=(
-                    --user-agent="'$user_agent'"
-                    --enable-viewport
-                    --touch-events
-                    --enable-overlay-scrollbar
-                    --enable-features=OverlayScrollbar
-                )
-            fi
-            if [ "$GITHUBACTION" == "true" ]; then
-                echo "$chrome_command"
-                printf '  %s\n' "${chrome_args[@]}"
-            else
-                tput setaf 6
-                echo "$chrome_command"
-                printf '  %s\n' "${chrome_args[@]}"
-                tput setaf 9
-            fi
-            eval "$chrome_command --version"
-            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
-        ;;
-
-    esac
+        chrome_args+=(
+            --user-agent="'$user_agent'"
+            --enable-viewport
+            --touch-events
+            --enable-overlay-scrollbar
+            --enable-features=OverlayScrollbar
+        )
+    fi
+    if [ "$GITHUBACTION" == "true" ]; then
+        echo "$chrome_command"
+        printf '  %s\n' "${chrome_args[@]}"
+    else
+        tput setaf 6
+        echo "$chrome_command"
+        printf '  %s\n' "${chrome_args[@]}"
+        tput setaf 9
+    fi
+    eval "$chrome_command --version"
+    eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
 
     start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1

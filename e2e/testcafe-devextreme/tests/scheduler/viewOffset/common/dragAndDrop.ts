@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Offset: Drag-n-drop appointments`
@@ -110,9 +110,6 @@ const getScreenshotName = (
         currentView: views[0].type,
         offset,
       });
-    })
-      .after(async () => {
-        await removeStylesheetRulesFromPage();
-      });
+    });
   });
 });

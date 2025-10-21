@@ -54,7 +54,7 @@ import { windSources, windRoseData } from './data.ts';
 
 const selectedPeriod = ref(windRoseData[0].period);
 const periodValues = computed(
-  () => windRoseData.find(({ period }) => period === selectedPeriod.value).values,
+  () => windRoseData.find(({ period }) => period === selectedPeriod.value)?.values || [],
 );
 
 function onLegendClick({ target }: DxPolarChartTypes.LegendClickEvent) {

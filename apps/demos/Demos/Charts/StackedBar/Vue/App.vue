@@ -51,7 +51,7 @@ import service from './data.ts';
 
 const dataSource = service.getMaleAgeData();
 
-const customizeTooltip = ({ seriesName, valueText }) => ({ text: `${seriesName} years: ${valueText}` });
+const customizeTooltip = ({ seriesName, valueText }: any) => ({ text: `${seriesName} years: ${valueText}` });
 </script>
 <style>
 #chart {

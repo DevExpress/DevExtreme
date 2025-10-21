@@ -81,7 +81,7 @@ const isChief = (position: string) => position && ['CEO', 'CMO'].indexOf(positio
 
 const isCloneIconVisible = (e: { row: DxDataGridTypes.Row }) => !e.row.isEditing;
 
-const isCloneIconDisabled = (e: { row: DxDataGridTypes.Row }) => isChief(e.row.data.Position);
+const isCloneIconDisabled = (e: { row: DxDataGridTypes.Row }) => !!isChief(e.row.data.Position);
 
 const isDeleteIconVisible = (e: { row: DxDataGridTypes.Row }) => !isChief(e.row.data.Position);
 

@@ -1,7 +1,15 @@
-import type { FileSystemItem } from './types';
+export interface DriveItem {
+  id: string,
+  parentId?: string | undefined,
+  name: string,
+  icon: string,
+  isDirectory: boolean,
+  expanded?: boolean,
+  items?: DriveItem[]
+}
 
-const itemsDriveD: FileSystemItem[] = [];
-const itemsDriveC: FileSystemItem[] = [{
+const itemsDriveD: DriveItem[] = [];
+const itemsDriveC: DriveItem[] = [{
   id: '1',
   name: 'Documents',
   icon: 'activefolder',

@@ -4,7 +4,7 @@ import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTex
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
-fixture`Header Filter T1163100 change filter icon`
+fixture.disablePageReloads`Header Filter T1163100 change filter icon`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';

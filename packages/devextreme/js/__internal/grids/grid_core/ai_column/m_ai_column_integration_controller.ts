@@ -44,7 +44,11 @@ export class AiColumnIntegrationController extends Controller {
     this.sendRequest(columnName, false);
   }
 
-  private sendRequest(columnName: string, useCache: boolean): void {
+  public sendRequest(
+    columnName: string,
+    useCache: boolean,
+    callbacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
+  ): void {
     const aiIntegration = this.getAiIntegration(columnName);
     if (!aiIntegration) {
       return;
@@ -95,7 +99,11 @@ export class AiColumnIntegrationController extends Controller {
         data: reducedData,
         additionalInfo: args.additionalInfo,
       },
-      this.getAICommandCallbacks<GenerateGridColumnCommandResult>(columnName, cachedResponse),
+      this.getAICommandCallbacks(
+        columnName,
+        cachedResponse,
+        callbacks,
+      ),
     );
     this.aborts[columnName] = abort;
   }
@@ -113,9 +121,10 @@ export class AiColumnIntegrationController extends Controller {
     const mergedData = { ...cachedData, ...response };
   }
 
-  private getAICommandCallbacks<T>(
+  private getAICommandCallbacks(
     columnName: string,
     cachedResponse: Record<PropertyKey, string>,
+    callBacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
   ): RequestCallbacks<GenerateGridColumnCommandResult> {
     const column = this.columnsController.getColumnByName(columnName);
     const callbacks = {
@@ -135,6 +144,7 @@ export class AiColumnIntegrationController extends Controller {
             cachedResponse,
           );
           this.processCommandCompletion(columnName);
+          callBacks?.onComplete?.(finalResponse);
         }
       },
       onError: (error: Error): void => {
@@ -147,6 +157,7 @@ export class AiColumnIntegrationController extends Controller {
         });
         this.showError(message);
         this.processCommandCompletion(columnName);
+        callBacks?.onError?.(error);
       },
     };
 
@@ -185,6 +196,7 @@ export class AiColumnIntegrationController extends Controller {
   }
 
   public dispose(): void {
+    super.dispose();
     Object.keys(this.aborts).forEach((columnName) => this.abortRequest(columnName));
   }
 }

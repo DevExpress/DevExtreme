@@ -81,6 +81,7 @@ import {
   DxTreeList, DxColumn, DxLookup, type DxTreeListTypes,
 } from 'devextreme-vue/tree-list';
 import DxNumberBox from 'devextreme-vue/number-box';
+import { type CustomStore } from 'devextreme-vue/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
@@ -106,12 +107,12 @@ const focusedRowKey = ref(45);
 function onFocusedRowChanged(e: DxTreeListTypes.FocusedRowChangedEvent) {
   const rowData = e.row && e.row.data;
   let cellValue;
-  let assigned;
+  let assigned: string = '';
 
   if (rowData) {
     cellValue = e.component.cellValue(e.row.rowIndex, 'Assigned');
-    taskEmployees.byKey(cellValue).done((item) => {
-      assigned = item.Name;
+    taskEmployees.byKey(cellValue).done((item: Record<string, unknown>) => {
+      assigned = item.Name as string;
     });
 
     taskSubject.value = rowData.Task_Subject;

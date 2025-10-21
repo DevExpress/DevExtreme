@@ -2,7 +2,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
   appendElementTo,
-  insertStylesheetRulesToPage,
   setAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
@@ -326,7 +325,6 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 18), new Date(2021, 9, 18)],
@@ -451,7 +449,6 @@ test('Start date cell in selected range', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 17), new Date(2021, 10, 6)],
@@ -565,7 +562,6 @@ test('End date cell in selected range', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date(2021, 9, 17), new Date(2021, 9, 23)],
@@ -689,7 +685,6 @@ test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async 
 }).before(async () => {
   await appendElementTo('#container', 'div', 'dateRangeBox');
   await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
 
   return createWidget('dxDateRangeBox', {
     value: [new Date('2020/02/20'), new Date('2020/02/22')],

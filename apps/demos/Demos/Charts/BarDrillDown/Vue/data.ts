@@ -1,4 +1,10 @@
-const data = [
+interface DataItem {
+  arg: string;
+  val: number;
+  parentID: string;
+}
+
+const data: DataItem[] = [
   { arg: 'Asia', val: 3007613498, parentID: '' },
   { arg: 'North America', val: 493603615, parentID: '' },
   { arg: 'Europe', val: 438575293, parentID: '' },
@@ -29,7 +35,7 @@ const data = [
 ];
 
 export default {
-  filterData(name) {
+  filterData(name: string): DataItem[] {
     return data.filter((item) => item.parentID === name);
   },
 };

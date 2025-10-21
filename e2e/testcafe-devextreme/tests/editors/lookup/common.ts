@@ -97,11 +97,7 @@ safeSizeTest('Check popup height with no found data option', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
-
-  return createWidget('dxLookup', { dataSource: [], searchEnabled: true });
-});
+}, [300, 400]).before(async () => createWidget('dxLookup', { dataSource: [], searchEnabled: true }));
 
 safeSizeTest('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -114,23 +110,19 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [300, 400]).before(async () => {
-  await insertStylesheetRulesToPage('* { caret-color: transparent !important; }');
-
-  return createWidget('dxLookup', {
-    dataSource: {
-      load() {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([1, 2, 3]);
-          }, 5000);
-        });
-      },
+}, [300, 400]).before(async () => createWidget('dxLookup', {
+  dataSource: {
+    load() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([1, 2, 3]);
+        }, 5000);
+      });
     },
-    valueExpr: 'id',
-    displayExpr: 'text',
-  });
-});
+  },
+  valueExpr: 'id',
+  displayExpr: 'text',
+}));
 
 test('Placeholder is visible after items option change when value is not chosen (T1099804)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -151,19 +143,19 @@ test('Placeholder is visible after items option change when value is not chosen 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: fit-content;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: 100px;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png');
 
   await t
     .expect(compareResults.isValid())

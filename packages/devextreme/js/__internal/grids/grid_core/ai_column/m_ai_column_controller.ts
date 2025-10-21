@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Callback } from '@js/core/utils/callbacks';
+
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
@@ -12,6 +14,14 @@ export class AiColumnController extends Controller {
   private aiColumnIntegrationController!: AiColumnIntegrationController;
 
   private dataChangedHandler!: (e) => any;
+
+  public aiRequestCompleted!: Callback;
+
+  public aiRequestRejected!: Callback;
+
+  protected callbackNames(): string[] {
+    return ['aiRequestCompleted', 'aiRequestRejected'];
+  }
 
   public init(): void {
     this.columnsController = this.getController('columns');
@@ -38,10 +48,10 @@ export class AiColumnController extends Controller {
 
   private handleDataChanged(e) {
     const aiColumns = this.columnsController.getColumns()
-      .filter((col) => col.type === 'ai'
-        && col.ai.mode === 'auto');
+      .filter((col) => col.type === 'ai' && (!col.ai?.mode || col.ai.mode === 'auto'));
+
     for (const col of aiColumns) {
-      this.refreshAIColumnInternal(col.name);
+      this.refreshAIColumn(col.name);
     }
   }
 
@@ -61,12 +71,23 @@ export class AiColumnController extends Controller {
     this.aiColumnIntegrationController.abortRequest(columnName);
   }
 
-  public sendAIColumnRequest(columnName: string): void {
-    this.aiColumnIntegrationController.sendAIColumnRequest(columnName);
+  public sendAIColumnRequest(
+    columnName: string,
+  ): void {
+    this.aiColumnIntegrationController.sendRequest(columnName, true, {
+      onComplete: (data) => {
+        this.aiRequestCompleted.fire(data);
+      },
+      onError: (error: Error) => {
+        this.aiRequestRejected.fire(error);
+      },
+    });
   }
 
-  public refreshAIColumn(columnName: string): void {
-    this.aiColumnIntegrationController.sendAIColumnRequest(columnName);
+  public refreshAIColumn(
+    columnName: string,
+  ): void {
+    this.sendAIColumnRequest(columnName);
   }
 
   public clearAIColumn(columnName: string): void {

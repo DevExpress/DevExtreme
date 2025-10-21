@@ -48,9 +48,9 @@ import {
 } from 'devextreme-vue/chart';
 import { dataSource } from './data.ts';
 
-function customizePoint({ data: { type } }) {
-  let color;
-  let hoverStyle;
+function customizePoint({ data: { type } }: { data: { type: string } }) {
+  let color: string | undefined;
+  let hoverStyle: { border: { color: string } } | undefined;
 
   switch (type) {
     case 'Star':

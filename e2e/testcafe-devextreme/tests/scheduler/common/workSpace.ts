@@ -7,7 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { Themes } from '../../../helpers/themes';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../../container.html'));
@@ -358,8 +358,6 @@ test('[T716993]: should has horizontal scrollbar with multiple resources and fix
     }],
     crossScrollingEnabled: true,
   });
-}).after(async () => {
-  await removeStylesheetRulesFromPage();
 });
 
 test('Scheduler appointments should change color on update resources', async (t) => {
