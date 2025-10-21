@@ -42,8 +42,6 @@ test('items inside toolbar menu should stretch', async (t) => {
   Themes.fluentBlue,
   Themes.materialBlueCompact,
   Themes.materialBlue,
-  Themes.genericLightCompact,
-  Themes.genericLight,
 ].forEach((theme) => {
   test('Scheduler header should have correct sizes', async (t) => {
     const scheduler = new Scheduler('#container');

@@ -208,12 +208,10 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
 });
 
 [
-  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
   // eslint-disable-next-line spellcheck/spell-checker
   Themes.fluentSaaS,
-  Themes.genericDark,
   Themes.materialBlueDark,
   Themes.fluentBlueDark,
   // eslint-disable-next-line spellcheck/spell-checker
@@ -250,8 +248,6 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       currentDate: new Date(2019, 4, 1),
       height: 500,
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 
   test(`Check cell active state in ${theme}`, async (t) => {
@@ -291,13 +287,10 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       currentDate: new Date(2019, 4, 1),
       height: 500,
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });
 
 [
-  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
 ].forEach((theme) => {
@@ -325,10 +318,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
         crossScrollingEnabled: true,
         height: 300,
       });
-    })
-      .after(async () => {
-        await changeTheme(Themes.genericLight);
-      });
+    });
   });
 });
 

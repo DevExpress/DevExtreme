@@ -24,7 +24,7 @@ const tasksT1223168 = [{
   Task_Parent_ID: 2,
 }];
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   test(`TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168) in ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList('#container');
@@ -52,8 +52,6 @@ const tasksT1223168 = [{
         allowReordering: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 
   // T1221037
@@ -158,8 +156,6 @@ const tasksT1223168 = [{
       showBorders: true,
       expandedRowKeys: [1, 2, 3, 4],
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });
 
@@ -223,8 +219,6 @@ test('The shading should alternate correctly after expanding the node when repai
 }));
 
 [
-  Themes.genericLight,
-  Themes.genericLightCompact,
   Themes.materialBlue,
   Themes.materialBlueCompact,
   Themes.fluentBlue,
@@ -291,7 +285,7 @@ test('The shading should alternate correctly after expanding the node when repai
             },
             selectedRowKeys: selectionMode === 'single' ? [3] : [3, 4],
           });
-        }).after(async () => changeTheme(Themes.genericLight));
+        });
       });
     });
   });

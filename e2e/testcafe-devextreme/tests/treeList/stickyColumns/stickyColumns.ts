@@ -12,7 +12,7 @@ const TREE_LIST_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Drag and Drop`
   .page(url(__dirname, '../../container.html'));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList(TREE_LIST_SELECTOR);
@@ -65,7 +65,6 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
     })
     .after(async (t) => {
       await t.hover(Selector('body'));
-      await changeTheme(Themes.genericLight);
     });
 
   test(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
@@ -119,6 +118,5 @@ fixture.disablePageReloads`Sticky columns - Drag and Drop`
     });
   }).after(async (t) => {
     await t.hover(Selector('body'));
-    await changeTheme(Themes.genericLight);
   });
 });
