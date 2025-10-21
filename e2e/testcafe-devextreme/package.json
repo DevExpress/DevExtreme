@@ -19,7 +19,7 @@
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
-    "testcafe": "3.7.0",
+    "testcafe": "3.7.2",
     "ts-node": "10.9.2",
     "eslint": "catalog:",
     "@eslint/eslintrc": "catalog:",

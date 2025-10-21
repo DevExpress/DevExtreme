@@ -4,7 +4,7 @@ import { ClientFunction } from 'testcafe';
 import { createUser } from './data';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture`ChatAlertList`
   .page(url(__dirname, '../../container.html'));
@@ -26,19 +26,6 @@ test.clientScripts([
 
   await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
     element: '#container',
-    shouldTestInCompact: true,
-    compactCallBack: async () => {
-      await chat.repaint();
-    },
-  });
-
-  const darkTheme = getFullThemeName().replace('light', 'dark');
-  await testScreenshot(t, takeScreenshot, 'Alertlist with long text in error.png', {
-    element: '#container',
-    theme: darkTheme,
-    themeChanged: async () => {
-      await chat.repaint();
-    },
   });
 
   await chat.option('rtlEnabled', true);

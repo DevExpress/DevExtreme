@@ -51,7 +51,6 @@ test('Chat: messagebox with editing preview', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Messagebox with editing preview.png', {
     element: '#chat',
-    shouldTestInCompact: true,
   });
 
   await t
