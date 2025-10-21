@@ -1,27 +1,39 @@
 @mixin chat-messagebox(
-  $padding,
-  $border-color,
+  $messagebox-padding,
+  $messagebox-border-color,
   $gap,
   $textarea-border-radius,
-  $button-gap
+  $textarea-padding,
+  $toolbar-min-height
 ) {
   .dx-chat-messagebox {
-    padding: $padding;
-    border-top-color: $border-color;
-    gap: $padding;
+    padding: $messagebox-padding;
+    border-top-color: $messagebox-border-color;
+    gap: $messagebox-padding;
   }
 
-  .dx-chat-messagebox-input-container {
+  .dx-chat-messagebox-textarea-container {
     gap: $gap;
   }
 
-  .dx-chat-messagebox-textarea {
-    &.dx-textarea.dx-texteditor {
+  .dx-chat-messagebox-textarea.dx-textarea {
+    gap: $gap;
+    padding: $textarea-padding;
+
+    &.dx-texteditor {
       border-radius: $textarea-border-radius;
+
+      &.dx-editor-outlined::before {
+        height: $textarea-border-radius;
+        border-bottom-left-radius: $textarea-border-radius;
+        border-bottom-right-radius: $textarea-border-radius;
+      }
     }
   }
 
-  .dx-chat-messagebox-button {
-    margin-bottom: $button-gap;
+  .dx-textarea-toolbar.dx-toolbar {
+    .dx-toolbar-items-container {
+      min-height: $toolbar-min-height;
+    }
   }
 }

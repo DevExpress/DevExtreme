@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   info: () => ({} as Record<string, any>),
 });
-const name = props.info.attribute('name');
+const name: string = props.info.attribute('name');
 const countryGDPData = countriesGDP[name];
 const totalGDP = countryGDPData?.total;
 const format = new Intl.NumberFormat('en-US', {

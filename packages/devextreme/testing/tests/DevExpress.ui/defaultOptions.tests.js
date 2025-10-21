@@ -16,13 +16,14 @@ import Avatar from '__internal/ui/chat/avatar';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
-import ChatMessageBox from '__internal/ui/chat/messagebox';
+import ChatMessageBox from '__internal/ui/chat/message_box/message_box';
+import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
-import ChatEditingPreview from '__internal/ui/chat/editing_preview';
+import ChatEditingPreview from '__internal/ui/chat/message_box/editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1362,6 +1363,7 @@ testComponentDefaults(Chat,
         items: [],
         alerts: [],
         typingUsers: [],
+        fileUploaderOptions: undefined,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
@@ -1391,11 +1393,26 @@ testComponentDefaults(ChatMessageBox,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
+        fileUploaderOptions: undefined,
+        text: '',
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
         onMessageEditCanceled: undefined,
         onMessageUpdating: undefined,
+    }
+);
+
+testComponentDefaults(ChatTextArea,
+    {},
+    {
+        stylingMode: 'outlined',
+        placeholder: 'Type a message',
+        autoResizeEnabled: true,
+        valueChangeEvent: 'input',
+        maxHeight: '8em',
+        fileUploaderOptions: undefined,
+        onSend: undefined,
     }
 );
 

@@ -14,7 +14,6 @@ const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const watch = require('gulp-watch');
 const cache = require('gulp-cache');
-const through2 = require('through2');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
@@ -24,7 +23,6 @@ const transpileConfig = require('./transpile-config');
 
 const createTsCompiler = require('./typescript/compiler');
 
-require('./generator/gulpfile');
 const { SideEffectFinder } = require('./side-effects-finder');
 
 const sideEffectFinder = new SideEffectFinder();
@@ -32,14 +30,12 @@ const src = [
     'js/**/*.*',
     '!js/**/*.d.ts',
     '!js/**/*.{tsx,ts}',
-    '!js/renovation/code_coverage/**/*.*',
     '!js/__internal/**/*.*',
 ];
 
 const esmTranspileSrc = src.concat([
     '!js/bundles/**/*',
     '!js/viz/docs/**/*',
-    '!js/renovation/**/*',
     '!**/*.json'
 ]);
 
@@ -163,26 +159,6 @@ const transpileDefault = () => transpile(src, ctx.TRANSPILED_PATH, {
     tsPipes: [ babel(transpileConfig.tsCjs) ],
 });
 
-const touch = () => through2.obj(function(file, enc, cb) {
-    if(file.stat) {
-        // eslint-disable-next-line spellcheck/spell-checker
-        file.stat.atime = file.stat.mtime = file.stat.ctime = new Date();
-    }
-    cb(null, file);
-});
-
-const transpileRenovation = () => transpile(
-    src,
-    ctx.TRANSPILED_RENOVATION_PATH,
-    {
-        jsPipes: [
-            cachedJsBabelCjs(),
-            touch()
-        ],
-        tsPipes: [ babel(transpileConfig.tsCjs) ],
-    },
-);
-
 const transpileProd = (dist, isEsm) => transpile(
     src,
     dist,
@@ -242,7 +218,6 @@ gulp.task('transpile', (done) => {
             'bundler-config',
             transpileTs(compiler, srcTsPattern),
             transpileDefault(),
-            transpileRenovation(),
             transpileRenovationProd(),
             ifEsmPackage('transpile-esm'),
             transpileTsClean(),
@@ -263,9 +238,6 @@ const watchJsTask = () => {
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH));
     watchTask
-        .pipe(babel(transpileConfig.cjs))
-        .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH));
-    watchTask
         .pipe(removeDebug())
         .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
@@ -285,7 +257,6 @@ const watchTsTask = async() => {
         }))
         .pipe(babel(transpileConfig.tsCjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH))
-        .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
         .pipe(removeDebug())
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
 };
