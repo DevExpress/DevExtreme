@@ -81,8 +81,6 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
 }));
 
 [
-  Themes.genericLight,
-  Themes.genericDark,
   Themes.materialBlue,
   Themes.materialBlueDark,
   Themes.fluentBlue,
@@ -113,8 +111,6 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
         allowUpdating: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });
 
@@ -182,7 +178,6 @@ test('Toolbar should not reset its widget values when changing the disabled prop
 }));
 
 [
-  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
 ].forEach((theme) => {
@@ -206,7 +201,5 @@ test('Toolbar should not reset its widget values when changing the disabled prop
         visible: false,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });

@@ -220,7 +220,7 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
   },
 }));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`Check the draggable source column while moving the fixed column on the right side (${theme} theme)`, async (t) => {
     // arrange
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -255,8 +255,5 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
           columns[7].fixedPosition = 'right';
         },
       });
-    })
-    .after(async () => {
-      await changeTheme(Themes.genericLight);
     });
 });

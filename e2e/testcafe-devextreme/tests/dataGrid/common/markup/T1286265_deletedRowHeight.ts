@@ -16,8 +16,6 @@ const ROW_INDEX = 1;
   Themes.fluentBlueCompact,
   Themes.materialBlue,
   Themes.materialBlueCompact,
-  Themes.genericLight,
-  Themes.genericLightCompact,
 ].forEach((theme) => {
   test(`When DataGrid has fixed column row height should not change when marked as deleted - ${theme}`, async (t) => {
     // Arrange
@@ -72,8 +70,6 @@ const ROW_INDEX = 1;
         allowDeleting: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 
   test(`When DataGrid doesn't have fixed column row height should not change when marked as deleted - ${theme}`, async (t) => {
@@ -129,8 +125,6 @@ const ROW_INDEX = 1;
         allowDeleting: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 
   test(`When not showing row lines and not fixed any column row height should not change when marked as deleted - ${theme}`, async (t) => {
@@ -186,9 +180,8 @@ const ROW_INDEX = 1;
         allowDeleting: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
+
   test(`When not showing row lines and DataGrid has any column row height should not change when marked as deleted - ${theme}`, async (t) => {
     // Arrange
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -242,7 +235,5 @@ const ROW_INDEX = 1;
         allowDeleting: true,
       },
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });

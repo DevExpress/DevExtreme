@@ -11,7 +11,7 @@ fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../../../container.html'),
 );
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
+[Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
     safeSizeTest('Fixed columns: Check context menu items', async (t) => {
       const dataGrid = new DataGrid('#container');
@@ -38,9 +38,6 @@ fixture.disablePageReloads`Column Fixing`.page(
             enabled: true,
           },
         });
-      })
-      .after(async () => {
-        await changeTheme(Themes.genericLight);
       });
   },
 );

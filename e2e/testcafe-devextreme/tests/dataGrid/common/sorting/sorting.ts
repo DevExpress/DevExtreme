@@ -88,7 +88,7 @@ test.skip('Multiple sorting alphabetical icons should be correct in Fluent Theme
       ],
     });
   },
-).after(async () => { await changeTheme(Themes.genericLight); });
+);
 
 test('Sorting and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
   const dataGrid = new DataGrid('#container');

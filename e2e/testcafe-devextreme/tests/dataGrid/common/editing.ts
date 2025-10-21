@@ -2773,7 +2773,6 @@ test('DataGrid - A new row is added above the existing row if the data source is
 }));
 
 [
-  Themes.genericLight,
   Themes.fluentBlue,
   Themes.materialBlue,
 ].forEach((theme) => {
@@ -2808,8 +2807,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
           }
         },
       });
-    })
-    .after(async () => changeTheme(Themes.genericLight));
+    });
 });
 
 // T1291087

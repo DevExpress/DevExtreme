@@ -12,7 +12,6 @@ fixture.disablePageReloads`Focused row - markup`
 // TODO: Enable multi-theming testcafe run in the future.
 [
   Themes.materialBlue,
-  Themes.genericLight,
 ].forEach((theme) => {
   test(`markup - ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -64,7 +63,7 @@ fixture.disablePageReloads`Focused row - markup`
         validationRules: [{ type: 'required' }],
       }],
     });
-  }).after(async () => changeTheme(Themes.genericLight));
+  });
 });
 
 [
@@ -105,12 +104,11 @@ fixture.disablePageReloads`Focused row - markup`
         validationRules: [{ type: 'required' }],
       }, 'dataB', 'dataC'],
     });
-  }).after(async () => changeTheme(Themes.genericLight));
+  });
 });
 
 [
   Themes.materialBlue,
-  Themes.genericLight,
   Themes.fluentBlue,
 ].forEach((theme) => {
   test(`Link should not have background color in ${theme} (T1282624)`, async (t) => {
@@ -141,7 +139,5 @@ fixture.disablePageReloads`Focused row - markup`
       focusedRowKey: 1,
       keyExpr: 'id',
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });

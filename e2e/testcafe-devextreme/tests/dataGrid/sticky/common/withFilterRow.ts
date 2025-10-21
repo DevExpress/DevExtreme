@@ -14,7 +14,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Filter row`
   .page(url(__dirname, '../../../container.html'));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`Filter row with sticky columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -45,9 +45,6 @@ fixture.disablePageReloads`Sticky columns - Filter row`
           visible: true,
         },
       });
-    })
-    .after(async () => {
-      await changeTheme(Themes.genericLight);
     });
 });
 

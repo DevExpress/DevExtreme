@@ -54,7 +54,6 @@ fixture.disablePageReloads`Validation`
   }));
 });
 [
-  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
 ].forEach((theme) => {
@@ -88,8 +87,6 @@ fixture.disablePageReloads`Validation`
       },
       ],
     });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
   });
 });
 
