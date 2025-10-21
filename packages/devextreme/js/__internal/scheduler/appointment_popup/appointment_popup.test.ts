@@ -395,7 +395,7 @@ describe('Appointment Popup Form', () => {
       expect(repeatEditorBeforeRecurrenceForm.option('value')).toBe('weekly');
     });
 
-    it('Appointment popup shouldn\'t render recurrence settings, if previous was with recurrence', async () => {
+    it('Repeat editor should have value "never" if previous appointment was recurrent', async () => {
       setupSchedulerTestEnvironment({ height: 200 });
       const { POM, scheduler } = await createScheduler({
         dataSource: [{
