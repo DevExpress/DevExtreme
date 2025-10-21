@@ -32,7 +32,7 @@ import {
  RecurrenceEditMode,
  dxSchedulerScrolling,
  dxSchedulerToolbar,
- SchedulerAppointmentFormIconDisplay,
+ AppointmentFormIconsShowMode,
  SchedulerPredefinedToolbarItem,
  DateNavigatorItemProperties,
  SchedulerPredefinedDateNavigatorItem,
@@ -748,16 +748,16 @@ const DxFormConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:iconsShowMode": null,
     "update:items": null,
     "update:onCanceled": null,
     "update:onSaved": null,
-    "update:showIcons": null,
   },
   props: {
+    iconsShowMode: String as PropType<AppointmentFormIconsShowMode>,
     items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
     onCanceled: Function as PropType<((formData: any) => void)>,
-    onSaved: Function as PropType<((formData: any) => void)>,
-    showIcons: String as PropType<SchedulerAppointmentFormIconDisplay>
+    onSaved: Function as PropType<((formData: any) => void)>
   }
 };
 
