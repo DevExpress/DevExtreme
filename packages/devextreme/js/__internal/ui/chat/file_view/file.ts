@@ -93,7 +93,7 @@ class File extends Widget<Properties> {
     const { data } = this.option();
     const { size } = data;
 
-    const text = `${size} KB`;
+    const text = `${size} B`;
 
     const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
