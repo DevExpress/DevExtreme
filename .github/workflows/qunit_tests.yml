@@ -83,8 +83,7 @@ jobs:
       matrix:
         CONSTEL: [
           export,
-          misc(1/2),
-          misc(2/2),
+          misc,
           ui,
           ui.editors,
           ui.htmlEditor,
@@ -101,10 +100,7 @@ jobs:
             TIMEZONE: US/Pacific
           - CONSTEL: ui.scheduler(2/2)
             TIMEZONE: US/Pacific
-          - CONSTEL: misc(1/2)
-            CSP: 'false'
-            useJQuery: 'true'
-          - CONSTEL: misc(2/2)
+          - CONSTEL: misc
             CSP: 'false'
             useJQuery: 'true'
           - CONSTEL: ui.widgets(1/2)

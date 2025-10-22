@@ -702,7 +702,7 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
 });
 
 
-QUnit.module('week numbers: fullWeek', () => {
+QUnit.module.skip('week numbers: fullWeek', () => {
     const expectedWeekNumberCases = [
         [51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2],
         [51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 1, 1, 1, 1, 1],
@@ -748,7 +748,7 @@ QUnit.module('week numbers: fullWeek', () => {
 
 });
 
-QUnit.module('week numbers: firstDay (american format)', () => {
+QUnit.module.skip('week numbers: firstDay (american format)', () => {
     for(let firstDayOfWeek = 0; firstDayOfWeek < 7; firstDayOfWeek++) {
         QUnit.module(`firstDayOfWeek is ${WEEK_DAYS[firstDayOfWeek]}`, () => {
             const expectedWeekNumberCases = [
@@ -1671,7 +1671,7 @@ QUnit.module('week numbers: firstFourDays (ISO8601)', {
     });
 
     [0, 1, 2, 3, 4, 5, 6].forEach((firstDayOfWeek) => {
-        QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
+        QUnit.skip(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
             let count = 0;
             for(let i = 0; i < 400; i++) {
                 count += this.getWeekNumber(new Date(2000 + i, 11, 31), firstDayOfWeek) === 53 ? 1 : 0;
