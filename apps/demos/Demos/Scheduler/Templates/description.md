@@ -4,7 +4,7 @@ The following DevExtreme Scheduler properties can be used to specify custom temp
 
 * Tooltip: [appointmentTooltipTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentTooltipTemplate) / **views[]**.[appointmentTooltipTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentTooltipTemplate).
 
-To customize our built-in appointment edit form, use the [onAppointmentFormOpening](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) handler. In this demo, this handler adds custom fields to the appointment edit form.
+To customize our built-in Appointment Detail form, use the [onAppointmentFormOpening](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) handler. In this demo, this handler adds custom fields to the Appointment Detail form.
 
 Image Source: **Wikimedia Commons**
 <!--split-->
