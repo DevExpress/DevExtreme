@@ -1,42 +1,50 @@
 @mixin chat-file(
-  
+  $chat-container-min-width, // 17.14em
+  $chat-container-padding, // 7px 8px
+  $chat-container-background-color, // #fff
+  $chat-container-border-radius, // 4px
+  $chat-container-box-shadow, // 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024
+  $chat-button-size, // 32px
+  $chat-secondary-font-size, // 10px
+  $chat-secondary-color, // #707070
+  $chat-base-section-gap, // 4px
+  $chat-file-size-max-width // 3em
 ) {
   .dx-chat-file {
-    padding: 7px 8px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024;
+    min-width: $chat-container-min-width;
+    padding: $chat-container-padding;
+    background-color: $chat-container-background-color;
+    border-radius: $chat-container-border-radius;
+    box-shadow: $chat-container-box-shadow;
   }
 
   .dx-chat-file-icon-container {
-    flex: 0 0 32px;
-    width: 32px;
-    height: 32px;
+    flex-basis: $chat-button-size;
+    width: $chat-button-size;
+    height: $chat-button-size;
 
     .dx-icon {
-      font-size: 20px;
-      color: #707070;
+      color: $chat-secondary-color;
     }
   }
 
   .dx-chat-file-name {
-    margin-inline-end: 8px;
-    margin-inline-start: 4px;
-    font-weight: 600;
-    line-height: 1.2857;
+    margin-inline-end: $chat-base-section-gap * 2; // 8px
+    margin-inline-start: $chat-base-section-gap;
   }
   
   .dx-chat-file-size {
-    margin-inline-end: 4px;
-    font-size: 10px;
-    color: #707070;
+    max-width: $chat-file-size-max-width;
+    margin-inline-end: $chat-base-section-gap;
+    font-size: $chat-secondary-font-size;
+    color: $chat-secondary-color;
   }
 
   .dx-chat-file-download-button {
-    width: 32px;
-    height: 32px;
+    width: $chat-button-size;
+    height: $chat-button-size;
     outline: 0.5px solid #8787875e; // TO REMOVE
-    flex-basis: 32px;
-    min-width: 32px; // TO REMOVE
+    flex-basis: $chat-button-size;
+    min-width: $chat-button-size; // TO REMOVE
   }
 }
