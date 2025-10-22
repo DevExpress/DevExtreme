@@ -19,3 +19,5 @@ import './chatParts/typingIndicator.markup.tests.js';
 import './chatParts/editingPreview.markup.tests.js';
 import './chatParts/chatTextArea.markup.tests.js';
 import './chatParts/chat.markup.tests.js';
+import './chatParts/fileView.markup.tests.js';
+
