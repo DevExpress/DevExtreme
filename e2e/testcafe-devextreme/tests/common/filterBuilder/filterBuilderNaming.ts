@@ -1,9 +1,9 @@
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
-import { createWidget } from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`FilterBuilder - Field naming`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T1253754
 test('FilterBuilder - First field uses the dataField property while subsequent fields use the name property in the filter value', async (t) => {
