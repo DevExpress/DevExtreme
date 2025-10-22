@@ -17,13 +17,14 @@ import { extend } from '@js/core/utils/extend';
 import { getOffset, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { DxEvent, NativeEventInfo } from '@js/events';
+import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { ButtonStyle, ButtonType, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
 import { fromPromise } from '@ts/core/utils/m_deferred';
+import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -180,7 +181,7 @@ interface FileUploaderChunkUploadResponse {
   error?: string;
 }
 
-type CancelButtonClickEvent = NativeEventInfo<KeyboardEvent | MouseEvent | PointerEvent> & {
+type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
 export interface Properties extends PublicProperties {
@@ -1456,7 +1457,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
 
     $('<div>')
-      .addClass(`${FILEUPLOADER_FILE_ICON_CLASS} dx-icon dx-icon-${getFileIconName(fileName)}`)
+      .addClass(`${FILEUPLOADER_FILE_ICON_CLASS} ${ICON_CLASS} ${ICON_CLASS}-${getFileIconName(fileName)}`)
       .appendTo($container);
   }
 

@@ -1,52 +1,50 @@
-export const getFileIconName = (filename = ''): string => {
+/* eslint-disable spellcheck/spell-checker */
+
+type IconName = 'image' | 'video' | 'music' | 'pdffile' | 'textdocument' | 'exportxlsx' | 'folder' | 'file';
+
+const EXTENTIONS_MAP: Record<string, IconName> = {
+  jpg: 'image',
+  jpeg: 'image',
+  png: 'image',
+  gif: 'image',
+  bmp: 'image',
+  webp: 'image',
+  mp4: 'video',
+  mov: 'video',
+  avi: 'video',
+  webm: 'video',
+  mkv: 'video',
+  mp3: 'music',
+  wav: 'music',
+  ogg: 'music',
+  m4a: 'music',
+  flac: 'music',
+  doc: 'textdocument',
+  docx: 'textdocument',
+  txt: 'textdocument',
+  rtf: 'textdocument',
+  md: 'textdocument',
+  xls: 'exportxlsx',
+  xlsx: 'exportxlsx',
+  csv: 'exportxlsx',
+  ods: 'exportxlsx',
+  zip: 'folder',
+  rar: 'folder',
+  '7z': 'folder',
+  tar: 'folder',
+  gz: 'folder',
+  pdf: 'pdffile',
+};
+
+const DEFAULT_ICON: IconName = 'file';
+
+export const getFileIconName = (filename = ''): IconName => {
   const lastDotIndex = filename.lastIndexOf('.');
 
   if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
-    return 'file';
+    return DEFAULT_ICON;
   }
 
-  const extension = filename.slice(lastDotIndex + 1);
-
-  switch (extension) {
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-    case 'bmp':
-    case 'webp':
-      return 'image';
-    case 'mp4':
-    case 'mov':
-    case 'avi':
-    case 'webm':
-    case 'mkv':
-      return 'video';
-    case 'mp3':
-    case 'wav':
-    case 'ogg':
-    case 'm4a':
-    case 'flac':
-      return 'music';
-    case 'pdf':
-      return 'pdffile';
-    case 'doc':
-    case 'docx':
-    case 'txt':
-    case 'rtf':
-    case 'md':
-      return 'textdocument';
-    case 'xls':
-    case 'xlsx':
-    case 'csv':
-    case 'ods':
-      return 'exportxlsx';
-    case 'zip':
-    case 'rar':
-    case '7z':
-    case 'tar':
-    case 'gz':
-      return 'folder';
-    default:
-      return 'file';
-  }
+  const extension = filename.slice(lastDotIndex + 1).toLowerCase();
+  return EXTENTIONS_MAP[extension] || DEFAULT_ICON;
 };
