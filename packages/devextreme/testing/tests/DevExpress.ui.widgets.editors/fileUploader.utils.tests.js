@@ -45,5 +45,5 @@ QUnit.module('getFileIconName', () => {
 
             assert.strictEqual(iconName, result);
         });
-    })
+    });
 });

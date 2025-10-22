@@ -27,6 +27,7 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
+
 import { getFileIconName } from './file_uploader.utils';
 
 const window = getWindow();
@@ -1357,7 +1358,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       .appendTo(this._$filesContainer);
 
     this._renderFileIcon(value.name, $fileContainer);
-    
+
     file.$file = $('<div>')
       .addClass(FILEUPLOADER_FILE_CLASS)
       .appendTo($fileContainer);
@@ -1425,6 +1426,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _cancelButtonPosition } = this.option();
 
     const $uploadButton = this._getUploadButton(file);
@@ -1439,13 +1441,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
       if (_cancelButtonPosition === 'end') {
         $container.append($cancelButton);
 
-        return
+        return;
       }
       $container.prepend($cancelButton);
     }
   }
 
   _renderFileIcon(fileName: string, $container: dxElementWrapper): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _showFileIcon } = this.option();
 
     if (!_showFileIcon) {
@@ -1475,9 +1478,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
       $('<div>').addClass(`${FILEUPLOADER_BUTTON_CLASS} ${FILEUPLOADER_CANCEL_BUTTON_CLASS}`),
       Button,
       {
-        onClick: (): void => { 
-          this._removeFile(file); 
-          this._cancelButtonClickAction?.({file: file.value});
+        onClick: (): void => {
+          this._removeFile(file);
+          this._cancelButtonClickAction?.({ file: file.value });
         },
         icon: 'close',
         visible: allowCanceling,
@@ -1521,7 +1524,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
     });
 
     file.onAbort.add(() => {
-      console.log('onAbort');
       file.uploadButton?.option({
         visible: true,
         disabled: false,
@@ -2058,11 +2060,12 @@ class FileUploader extends Editor<FileUploaderProperties> {
       onClick: (): void => {
         this._preventFilesUploading([file]);
         this._removeFile(file);
-        this._cancelButtonClickAction?.({file});
+        this._cancelButtonClickAction?.({ file });
       },
     });
 
     const hideCancelButton = (): void => {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       const { _hideCancelButtonOnUpload } = this.option();
 
       if (!_hideCancelButtonOnUpload) {

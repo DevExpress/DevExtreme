@@ -2617,7 +2617,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         });
         const fileUploader = $fileUploader.dxFileUploader('instance');
 
-        simulateFileChoose($fileUploader, [{ name: 'fakefile'}]);
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
 
         const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
 
@@ -2666,13 +2666,13 @@ QUnit.module('file uploading', moduleConfig, () => {
                 _showFileIcon: true,
             });
 
-            simulateFileChoose($fileUploader, [{ name: `fakefile.${extension}`}]);
+            simulateFileChoose($fileUploader, [{ name: `fakefile.${extension}` }]);
 
             const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
 
             assert.ok($fileIcon.hasClass(`dx-icon-${icon}`), `icon has dx-icon-${icon} class`);
         });
-    })
+    });
 
     QUnit.test('cancel button should be placed to the end if _cancelButtonPosition is set to "end"', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
@@ -2680,7 +2680,7 @@ QUnit.module('file uploading', moduleConfig, () => {
             _cancelButtonPosition: 'end',
         });
 
-        simulateFileChoose($fileUploader, [{ name: 'fakefile'}]);
+        simulateFileChoose($fileUploader, [{ name: 'fakefile' }]);
 
         const $cancelButtonContainer = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).parent();
         const $fileContainer = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
@@ -3650,7 +3650,7 @@ QUnit.module('uploading events', moduleConfig, () => {
 
     QUnit.test('onCancelButtonClick should be called with correct arguments on cancel button click', function(assert) {
         assert.expect(3);
-        
+
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             _hideCancelButtonOnUpload: false,
@@ -3660,7 +3660,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             assert.strictEqual($(element).is($fileUploader), true, 'element is passed');
             assert.strictEqual(component, fileUploader, 'component is passed');
             assert.strictEqual(file.value, fakeFile, 'file is passed');
-        }
+        };
 
         fileUploader.option('onCancelButtonClick', onCancelButtonClick);
 
