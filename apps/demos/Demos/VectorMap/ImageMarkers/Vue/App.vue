@@ -25,6 +25,7 @@
   </DxVectorMap>
 </template>
 <script setup lang="ts">
+// @ts-ignore
 import * as mapsData from 'devextreme-dist/js/vectormap-data/usa.js';
 import {
   DxVectorMap,

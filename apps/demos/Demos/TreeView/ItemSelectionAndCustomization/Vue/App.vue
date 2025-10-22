@@ -88,7 +88,7 @@ import { ref } from 'vue';
 import { type SingleOrMultiple } from 'devextreme-vue/common';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { employees } from './data.ts';
 import type { Employee } from './types';
@@ -115,14 +115,14 @@ function syncSelection() {
     .getSelectedNodes()
     .map((node: DxTreeViewTypes.Node<Employee>) => node.itemData);
 }
-function showCheckBoxesModeValueChanged(e) {
+function showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   if (e.value === 'selectAll') {
     selectionModeValue.value = 'multiple';
     isRecursiveDisabled.value = false;
   }
   isSelectionModeDisabled.value = e.value === 'selectAll';
 }
-function selectionModeValueChanged(e) {
+function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   if (e.value === 'single') {
     selectNodesRecursiveValue.value = false;
     treeViewRef.value.instance.unselectAll();

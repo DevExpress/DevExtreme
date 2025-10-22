@@ -469,9 +469,8 @@ export class ColumnsController extends modules.Controller {
   public getGroupColumns() {
     const result: any = [];
 
-    each(this._columns, function () {
-      const column = this;
-      if (isDefined(column.groupIndex)) {
+    (this._columns as Column[]).forEach((column) => {
+      if (isDefined(column.groupIndex) && !column.type) {
         result[column.groupIndex] = column;
       }
     });
