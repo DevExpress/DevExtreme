@@ -1,14 +1,14 @@
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
+import url from '../../../helpers/getPageUrl';
 import { fields, filter } from './data';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
-import { createWidget } from '../../helpers/createWidget';
-import { testScreenshot } from '../../helpers/themeUtils';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { createWidget } from '../../../helpers/createWidget';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Filter Builder Scrolling Test`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 // T1273328
 safeSizeTest('FilterBuilder - The field drop-down window moves with the page scroll', async (t) => {

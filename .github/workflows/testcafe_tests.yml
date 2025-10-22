@@ -110,8 +110,6 @@ jobs:
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "filterBuilder", name: "filterBuilder" },
           { componentFolder: "pagination", name: "pagination" },
-          # Works only in generic theme which is deprecated
-#          { componentFolder: "gantt", name: "gantt" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 45
@@ -170,11 +168,7 @@ jobs:
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
       run: |
-        if [ "${{ matrix.ARGS.theme }}" != "" ]; then
-          THEME="--theme ${{ matrix.ARGS.theme }}"
-        else
-          THEME="--theme fluent.blue.light"
-        fi
+        [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
