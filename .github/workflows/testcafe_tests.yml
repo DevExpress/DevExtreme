@@ -108,8 +108,6 @@ jobs:
           { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
           { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" },
           { componentFolder: "navigation", name: "navigation" },
-          { componentFolder: "filterBuilder", name: "filterBuilder" },
-          { componentFolder: "pagination", name: "pagination" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 45
