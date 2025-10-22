@@ -29,10 +29,10 @@
   }
 
   .dx-chat-file-name {
-    margin-inline-end: $chat-base-section-gap * 2; // 8px
+    margin-inline-end: $chat-base-section-gap * 2;
     margin-inline-start: $chat-base-section-gap;
   }
-  
+
   .dx-chat-file-size {
     max-width: $chat-file-size-max-width;
     margin-inline-end: $chat-base-section-gap;
@@ -43,7 +43,6 @@
   .dx-chat-file-download-button {
     width: $chat-button-size;
     height: $chat-button-size;
-    outline: 0.5px solid #8787875e; // TO REMOVE
     flex-basis: $chat-button-size;
   }
 }

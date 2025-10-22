@@ -68,8 +68,8 @@ $chat-confirmation-popup-toolbar-gap: null !default;
 
 $chat-container-min-width: 17.14em !default;
 $chat-container-padding: 7px 8px !default;
-$chat-container-border-radius: 4px !default; // Replace with base border-radius
-$chat-button-size: 32px !default; // Replace with base button width
+$chat-container-border-radius: $fluent-base-border-radius !default;
+$chat-button-size: $fluent-button-height !default;
 $chat-secondary-font-size: 10px !default;
 $chat-base-section-gap: 4px !default;
 $chat-file-size-max-width: 3em !default;
