@@ -32,7 +32,7 @@ jobs:
         with:
           script: core.setFailed('Changes in apps/**/*.md shouldn\'t be mixed with changes in other files')
 
-  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests-additional-renovation.yml, qunit_tests-renovation.yml, testcafe_tests.yml
+  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests.yml, testcafe_tests.yml
   build1:
     name: 'build'
     needs: [ changesSegregation ]
@@ -85,21 +85,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
-  # qunit_tests-additional-renovation.yml - qunit-tests-mobile-and-shadow-dom
-  qunit_tests-additional-renovation1:
-    name: 'ui.htmlEditor-android6'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
-  qunit_tests-additional-renovation2:
-    name: 'ui.htmlEditor-firefox'
-    needs: [ changesSegregation ]
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 1
   # qunit_tests
   qunit_tests1:
     name: 'Constel export'
@@ -123,14 +108,14 @@ jobs:
     steps:
       - run: exit 1
   qunit_tests4:
-    name: 'Constel ui.widgets(1/2)'
+    name: 'Constel ui.widgets(1/2)-no-csp'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
   qunit_tests5:
-    name: 'Constel ui.widgets(2/2)'
+    name: 'Constel ui.widgets(2/2)-no-csp'
     needs: [ changesSegregation ]
     if: false
     runs-on: ubuntu-latest

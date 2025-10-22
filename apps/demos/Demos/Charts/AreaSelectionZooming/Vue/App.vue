@@ -71,11 +71,11 @@ import { birthLife } from './data.ts';
 
 const chart = ref();
 
-const customizeTooltip = (pointInfo: DxChartTypes.CommonPointInfo) => {
-  const { point: { data } } = pointInfo;
+const customizeTooltip = (pointInfo: DxChartTypes.PointInfo) => {
+  const data = pointInfo.point?.data;
 
   return {
-    text: `${data.country} ${data.year}`,
+    text: data ? `${data.country} ${data.year}` : '',
   };
 };
 function resetZoom() {

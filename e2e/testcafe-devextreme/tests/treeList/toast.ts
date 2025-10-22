@@ -3,7 +3,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Toasts in TreeList`
+fixture.disablePageReloads`Toasts in TreeList`
   .page(url(__dirname, '../container.html'));
 
 test('Toast should be visible after calling and should be not visible after default display time', async (t) => {

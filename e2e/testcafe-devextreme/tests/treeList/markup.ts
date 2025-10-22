@@ -6,7 +6,7 @@ import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { Themes } from '../../helpers/themes';
 
-fixture`TreeList - Markup`
+fixture.disablePageReloads`TreeList - Markup`
   .disablePageReloads
   .page(url(__dirname, '../container.html'));
 

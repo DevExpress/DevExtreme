@@ -103,6 +103,12 @@
         "dxNumberBox-invalidValueMessage": "Valor deve ser um número",
         "dxNumberBox-noDataText": "Sem dados",
 
+
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+        "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+        "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+        "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Use {0} para exibir colunas",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Arraste uma coluna do painel do grupo aqui",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Use {0} ou arraste uma coluna do painel do grupo",
@@ -266,7 +272,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Lista de compromissos",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Assunto",
         "dxScheduler-editorLabelStartDate": "Data de Início",
         "dxScheduler-editorLabelEndDate": "Data Final",

@@ -1,6 +1,7 @@
 import { type DxChartTypes } from 'devextreme-vue/chart';
+import { type TimeInterval } from 'devextreme-vue/common/charts';
 
-export const aggregationIntervals = [
+export const aggregationIntervals: { displayName: string, interval: TimeInterval | Record<string, any> }[] = [
   { displayName: 'One week', interval: 'week' },
   { displayName: 'Two weeks', interval: { weeks: 2 } },
   { displayName: 'Month', interval: 'month' },

@@ -397,7 +397,10 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
-                    endDateExpr: 'end'
+                    endDateExpr: 'end',
+                    editing: {
+                        legacyForm: true,
+                    }
                 });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);
@@ -436,7 +439,10 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
-                    endDateExpr: 'end'
+                    endDateExpr: 'end',
+                    editing: {
+                        legacyForm: true,
+                    }
                 });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);

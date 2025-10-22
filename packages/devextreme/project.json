@@ -21,8 +21,7 @@
         "{projectRoot}/artifacts",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx"
+        "{projectRoot}/js/common/core/localization/default_messages.js"
       ]
     },
     "build-dist": {
@@ -51,7 +50,6 @@
       ],
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
-        { "env": "BUILD_INPROGRESS_RENOVATION" },
         { "env": "DEVEXTREME_TEST_CI" },
         { "env": "DOTNET_CLI_TELEMETRY_OPTOUT" },
         { "env": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE" },
@@ -62,8 +60,7 @@
         "{projectRoot}/artifacts",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx"
+        "{projectRoot}/js/common/core/localization/default_messages.js"
       ],
       "cache": true
     },
@@ -86,17 +83,6 @@
       ],
       "cache": false
     },
-    "compile:r": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "compile:r"
-      },
-      "inputs": [
-        "{projectRoot}/js/renovation/**/*",
-        "{projectRoot}/renovation.tsconfig.json"
-      ],
-      "cache": true
-    },
     "lint-css": {
       "executor": "nx:run-script",
       "options": {
@@ -116,8 +102,7 @@
         { "env": "DEBUG" },
         "{projectRoot}/**/*.d.ts",
         "{projectRoot}/.eslint*",
-        "{projectRoot}/tsconfig.json",
-        "!{projectRoot}/js/renovation/**/*"
+        "{projectRoot}/tsconfig.json"
       ],
       "cache": true
     },
@@ -142,7 +127,6 @@
         "{projectRoot}/**/*.ts?(x)",
         "{projectRoot}/.eslint*",
         "!{projectRoot}/**/*.d.ts",
-        "!{projectRoot}/js/renovation/**/*",
         "!{projectRoot}/testing/renovation/**/*"
       ],
       "cache": true

@@ -683,7 +683,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
-                firstDayOfWeek: 1
+                firstDayOfWeek: 1,
+                editing: { legacyForm: true }
             });
 
             const clock = sinon.useFakeTimers();
@@ -732,6 +733,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 onAppointmentAdding: (e) => {
                     e.appointmentData.customData.texts.push('456');
                 },
+                editing: { legacyForm: true },
                 firstDayOfWeek: 1
             });
 
@@ -880,7 +882,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
-                firstDayOfWeek: 1
+                firstDayOfWeek: 1,
+                editing: { legacyForm: true }
             });
             const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
@@ -1327,6 +1330,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: '2018-05-23T10:30:00Z',
                     recurrenceRule: 'FREQ=DAILY'
                 }],
+                editing: { legacyForm: true },
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(2018, 4, 23),
@@ -1674,6 +1678,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=MINUTELY;COUNT=3'
                 }],
+                editing: { legacyForm: true },
                 currentDate: apptStartDate,
             });
 
@@ -1701,6 +1706,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     endDate: apptEndDate,
                     recurrenceRule: 'FREQ=HOURLY;COUNT=3'
                 }],
+                editing: { legacyForm: true },
                 currentDate: apptStartDate,
             });
 

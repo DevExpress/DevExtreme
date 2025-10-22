@@ -3,7 +3,7 @@ import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`DateRangeBox focus state`
+fixture.disablePageReloads`DateRangeBox focus state`
   .page(url(__dirname, '../../container.html'));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by tab', async (t) => {

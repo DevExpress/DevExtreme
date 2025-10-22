@@ -10,7 +10,7 @@ import {
   setClassAttribute,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { getDarkThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 const valueModes = [false, true, undefined];
 
@@ -30,7 +30,7 @@ fixture.disablePageReloads`CheckBox`
   test(`Render ${!isColumnCountStyle ? 'default' : 'with column-count style on container'}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Checkbox states${isColumnCountStyle ? ' with column count style' : ''}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -66,8 +66,7 @@ test('Checkbox appearance', async (t) => {
 
   await insertStylesheetRulesToPage('.dx-checkbox.dx-widget { display: inline-flex; vertical-align: middle; margin-inline: 10px; }');
 
-  await testScreenshot(t, takeScreenshot, 'CheckBox appearance.png', { shouldTestInCompact: true });
-  await testScreenshot(t, takeScreenshot, 'CheckBox appearance.png', { theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox appearance.png');
 
   for (const scale of [1.15, 0.67]) {
     await ClientFunction(() => {
@@ -76,7 +75,7 @@ test('Checkbox appearance', async (t) => {
       dependencies: { scale },
     })();
 
-    await testScreenshot(t, takeScreenshot, `CheckBox appearance in scaled container, scale=${scale}.png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox appearance in scaled container, scale=${scale}.png`);
   }
 
   await t

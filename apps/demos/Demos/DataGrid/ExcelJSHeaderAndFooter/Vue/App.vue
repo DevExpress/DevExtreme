@@ -90,7 +90,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     headerRow.getCell(1).alignment = { horizontal: 'center' };
 
     // footer
-    const footerRowIndex = cellRange.to.row + 2;
+    const footerRowIndex = (cellRange.to?.row || 0) + 2;
     const footerRow = worksheet.getRow(footerRowIndex);
     worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
 

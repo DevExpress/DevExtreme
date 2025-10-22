@@ -95,7 +95,7 @@ const lookup = {
 const selectedRowIndex = ref(-1);
 const grid = computed(() => gridRef.value.instance);
 
-function selectedChanged(e) {
+function selectedChanged(e: any) {
   selectedRowIndex.value = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
 }
 function directionChanged(e: DxSelectBoxTypes.SelectionChangedEvent) {

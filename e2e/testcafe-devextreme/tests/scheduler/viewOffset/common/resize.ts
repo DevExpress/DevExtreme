@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import Appointment from 'devextreme-testcafe-models/scheduler/appointment';
 import { createWidget } from '../../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Offset: Resize appointments`
@@ -205,10 +205,7 @@ const getScreenshotName = (
         currentView: views[0].type,
         offset,
       });
-    })
-      .after(async () => {
-        await removeStylesheetRulesFromPage();
-      });
+    });
   });
 });
 

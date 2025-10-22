@@ -16,6 +16,7 @@ import {
 
 
 
+import { AppointmentFormIconsShowMode } from 'devextreme/ui/scheduler';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
@@ -43,6 +44,14 @@ export class DxoSchedulerFormComponent extends NestedOption implements OnDestroy
         this.setChildren('items', value);
     }
     
+    @Input()
+    get iconsShowMode(): AppointmentFormIconsShowMode {
+        return this._getOption('iconsShowMode');
+    }
+    set iconsShowMode(value: AppointmentFormIconsShowMode) {
+        this._setOption('iconsShowMode', value);
+    }
+
     @Input()
     get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
         return this._getOption('items');

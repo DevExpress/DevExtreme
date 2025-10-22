@@ -1048,7 +1048,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   createAppointmentForm() {
     const scheduler = {
-      createResourceEditorModel: () => createResourceEditorModel(this.resourceManager.resourceById),
+      getResourceById: () => this.resourceManager.resourceById,
       getDataAccessors: () => this._dataAccessors,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1061,9 +1061,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
 
-    return this._editing.legacyForm
-      ? new AppointmentLegacyForm(scheduler)
-      : new AppointmentForm(scheduler);
+    if (this._editing.legacyForm) {
+      (scheduler as any).createResourceEditorModel = () => createResourceEditorModel(this.resourceManager.resourceById);
+
+      return new AppointmentLegacyForm(scheduler);
+    }
+
+    return new AppointmentForm(scheduler);
   }
 
   createAppointmentPopup(form) {

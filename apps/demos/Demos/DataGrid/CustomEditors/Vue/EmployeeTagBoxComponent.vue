@@ -29,7 +29,7 @@ const props = defineProps<{
 const currentValue = ref(props.cellInfo.value);
 
 const onSelectionChanged = () => {
-  props.dataGridComponent.updateDimensions();
+  props.dataGridComponent?.updateDimensions();
 };
 
 const onValueChanged = (e: DxTagBoxTypes.ValueChangedEvent) => {
