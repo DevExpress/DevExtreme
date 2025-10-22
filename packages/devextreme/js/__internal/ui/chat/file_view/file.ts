@@ -1,4 +1,3 @@
-import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
@@ -163,7 +162,5 @@ class File extends Widget<Properties> {
     super._dispose();
   }
 }
-
-registerComponent('dxFile', File);
 
 export default File;
