@@ -77,8 +77,6 @@ test('Filter row\'s height should be adjusted by content (T1072609)', async (t) 
     wordWrapEnabled: true,
     showBorders: true,
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('FilterRow range overlay screenshot', async (t) => {
@@ -190,8 +188,6 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
     showBorders: true,
     columns: ['ID', 'Field'],
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)', async (t) => {

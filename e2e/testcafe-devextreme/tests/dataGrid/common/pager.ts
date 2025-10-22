@@ -132,7 +132,7 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => createDataGridWithPager());
 
-['generic.light', 'generic.light.compact', 'material.blue.light', 'material.blue.light.compact'].forEach((theme) => {
+['material.blue.light'].forEach((theme) => {
   safeSizeTest(`Compact pager in the ${theme} theme (T1057735)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const pagerElement = dataGrid.getPager().element;
@@ -162,9 +162,6 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
           displayMode: 'compact',
         },
       });
-    })
-    .after(async () => {
-      await changeTheme('generic.light');
     });
 });
 

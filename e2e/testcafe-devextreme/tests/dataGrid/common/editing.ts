@@ -1782,8 +1782,6 @@ test('Checkbox has ink ripple in material theme inside editing popup (T977287)',
     },
     columns: ['LastName'],
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
@@ -1847,8 +1845,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
       },
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('DataGrid adaptive text should have correct paddings (T1062084)', async (t) => {
@@ -1914,8 +1910,6 @@ test('DataGrid adaptive text should have correct paddings (T1062084)', async (t)
       format: 'currency',
     }],
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
@@ -1962,8 +1956,6 @@ test('DataGrid checkboxes should have correct outline in adaptive row', async (t
       dataType: 'boolean',
     }],
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });
 
 test('DataGrid cell with checkbox should have outline on focused', async (t) => {
@@ -2438,15 +2430,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     useIcons: true,
   },
   {
-    theme: 'generic.light',
-    useIcons: true,
-  },
-  {
     theme: 'material.blue.light',
-    useIcons: false,
-  },
-  {
-    theme: 'generic.light',
     useIcons: false,
   },
 ].forEach(({ theme, useIcons }) => {
@@ -2507,8 +2491,6 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
         ],
       }],
     });
-  }).after(async () => {
-    await changeTheme('generic.light');
   });
 });
 

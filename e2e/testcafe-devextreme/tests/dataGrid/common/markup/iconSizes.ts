@@ -56,6 +56,4 @@ test('Correct icon sizes in the Fluent compact theme (T1207612)', async (t) => {
       showNavigationButtons: true,
     },
   });
-}).after(async () => {
-  await changeTheme('generic.light');
 });

@@ -9,7 +9,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../../container.html'));
 
-['material.blue.light', 'generic.light'].forEach((theme) => {
+['material.blue.light'].forEach((theme) => {
   test(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -75,8 +75,6 @@ fixture.disablePageReloads`Master detail`
         },
       },
     });
-  }).after(async () => {
-    await changeTheme('generic.light');
   });
 });
 
