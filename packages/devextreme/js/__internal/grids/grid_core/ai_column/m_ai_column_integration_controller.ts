@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   AIIntegration,
   GenerateGridColumnCommandResult,
@@ -75,8 +74,8 @@ export class AiColumnIntegrationController extends Controller {
 
     const keys = Object.keys(data);
     const cachedResponse: Record<PropertyKey, string> = useCache
-      ? {}
-      : this.aiColumnCacheController.getCachedResponse(columnName, keys);
+      ? this.aiColumnCacheController.getCachedResponse(columnName, keys)
+      : {};
     const keyField = this.dataController.key();
     const reducedData = reduceDataCachedKeys(data, cachedResponse, keyField);
     const areAllDataCached = Object.keys(reducedData).length === 0;
@@ -104,6 +103,7 @@ export class AiColumnIntegrationController extends Controller {
     this.abortRequest(columnName);
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   private showResult(
     columnName: string,
     response: Record<PropertyKey, unknown>,
