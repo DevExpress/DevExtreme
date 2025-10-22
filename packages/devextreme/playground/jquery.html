@@ -52,15 +52,9 @@
         <div id="button"></div>
         <script>
             $(() => {
-                $("#button").dxFile({
-                    width: 240,
-                    data: {
-                        name: 'Crypto.pdf',
-                        size: 1024,
-                    },
-                    onDownload: (e) => {
-                        console.log(e);
-                    },
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: () => { alert("clicked"); }
                 });
             });
         </script>
