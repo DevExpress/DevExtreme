@@ -18,7 +18,7 @@ const getFileIconName = (fileName: string): string => 'file';
 export type Properties = WidgetProperties & {
   data: Attachment;
 
-  onDownload?: (e: Partial<AttachmentDownloadEvent>) => void;
+  onDownload?: (e: AttachmentDownloadEvent) => void;
 };
 
 const CHAT_FILE_CLASS = 'dx-chat-file';
@@ -128,7 +128,7 @@ class File extends Widget<Properties> {
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
         const event = {
-          event: e,
+          event: e.event,
           attachment: data,
         };
 
