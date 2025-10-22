@@ -48,7 +48,7 @@ import {
   DxCircularGauge, DxScale, DxLabel, DxRangeContainer, DxRange, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/circular-gauge';
 
-const customizeText = ({ valueText }) => `${valueText} %`;
+const customizeText = ({ valueText }: Record<string, any>) => `${valueText} %`;
 </script>
 <style scoped>
 #gauge {

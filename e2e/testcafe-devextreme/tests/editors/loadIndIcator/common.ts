@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import LoadIndicator from 'devextreme-testcafe-models/loadindicator';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
@@ -25,14 +25,8 @@ fixture.disablePageReloads`LoadIndicator`
       },
     });
 
-    const darkTheme = getFullThemeName().replace('light', 'dark');
-
     await testScreenshot(t, takeScreenshot, `LoadIndicator with ${animationType} animation.png`, {
       element: '#container',
-      theme: darkTheme,
-      themeChanged: async () => {
-        await loadIndicator.repaint();
-      },
     });
 
     await t

@@ -1,18 +1,25 @@
-export function generateDataSource() {
+interface DataPoint {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+export function generateDataSource(): DataPoint[] {
   const b1 = random(-100, 100) / 10;
   const b2 = random(-100, 100) / 10;
   let k1 = random(-100, 100) / 10;
   let k2 = random(-100, 100) / 10;
-  const ds = [];
+  const ds: DataPoint[] = [];
 
-  let i;
-  let x1;
-  let x2;
-  let y1;
-  let y2;
-  let isNegativeDelta;
-  let delta1;
-  let delta2;
+  let i: number;
+  let x1: number;
+  let x2: number;
+  let y1: number;
+  let y2: number;
+  let isNegativeDelta: boolean;
+  let delta1: number;
+  let delta2: number;
 
   if (k1 < 0.1 && k1 >= 0) { k1 = 0.1; }
   if (k1 > -0.1 && k1 < 0) { k1 = -0.1; }
@@ -42,6 +49,6 @@ export function generateDataSource() {
   return ds;
 }
 
-function random(min, max) {
+function random(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -24,7 +24,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-const currency = (data) => currencyFormatter.format(data);
+const currency = (data: number) => currencyFormatter.format(data);
 </script>
 <style scoped>
 .product {

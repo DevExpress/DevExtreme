@@ -46,7 +46,6 @@
   ],
   "include": [
     "js/**/*.d.ts",
-    "js/renovation",
     "../devextreme-themebuilder",
     "testing/testcafe"
   ]
