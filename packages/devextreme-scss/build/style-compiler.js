@@ -21,15 +21,15 @@ const starLicense = require('../../devextreme/build/gulp/header-pipes').starLice
 const cssArtifactsPath = join(process.cwd(), '..', 'devextreme', 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
-    // 'light',
+    'light',
     // 'light.compact',
     // 'dark',
     // 'contrast',
-    // 'material.blue.light',
+    'material.blue.light',
     // 'material.blue.light.compact',
     // 'material.blue.dark',
     'fluent.blue.light',
-    'fluent.blue.light.compact',
+    // 'fluent.blue.light.compact',
     // 'fluent.blue.dark',
     // 'fluent.saas.light',
     // 'fluent.saas.dark',

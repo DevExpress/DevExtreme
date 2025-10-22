@@ -16,16 +16,16 @@
   $chat-avatar-background-color,
 );
 @include chat-file(
-  $chat-container-min-width,
-  $chat-container-padding,
-  $chat-container-background-color,
-  $chat-container-border-radius,
-  $chat-container-box-shadow,
-  $chat-button-size,
-  $chat-secondary-font-size,
-  $chat-secondary-color,
-  $chat-base-section-gap,
-  $chat-file-size-max-width,
+  $chat-file-container-min-width,
+  $chat-file-container-padding,
+  $chat-file-container-background-color,
+  $chat-file-container-border-radius,
+  $chat-file-container-box-shadow,
+  $chat-file-button-size,
+  $chat-file-secondary-font-size,
+  $chat-file-secondary-color,
+  $chat-file-base-section-gap,
+  $chat-file-file-size-max-width,
 );
 @include chat-alertlist(
   $chat-alertlist-color,

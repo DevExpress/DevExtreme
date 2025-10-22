@@ -1,48 +1,48 @@
 @mixin chat-file(
-  $chat-container-min-width,
-  $chat-container-padding,
-  $chat-container-background-color,
-  $chat-container-border-radius,
-  $chat-container-box-shadow,
-  $chat-button-size,
-  $chat-secondary-font-size,
-  $chat-secondary-color,
-  $chat-base-section-gap,
-  $chat-file-size-max-width
+  $chat-file-container-min-width,
+  $chat-file-container-padding,
+  $chat-file-container-background-color,
+  $chat-file-container-border-radius,
+  $chat-file-container-box-shadow,
+  $chat-file-button-size,
+  $chat-file-secondary-font-size,
+  $chat-file-secondary-color,
+  $chat-file-base-section-gap,
+  $chat-file-file-size-max-width
 ) {
   .dx-chat-file {
-    min-width: $chat-container-min-width;
-    padding: $chat-container-padding;
-    background-color: $chat-container-background-color;
-    border-radius: $chat-container-border-radius;
-    box-shadow: $chat-container-box-shadow;
+    min-width: $chat-file-container-min-width;
+    padding: $chat-file-container-padding;
+    background-color: $chat-file-container-background-color;
+    border-radius: $chat-file-container-border-radius;
+    box-shadow: $chat-file-container-box-shadow;
   }
 
   .dx-chat-file-icon-container {
-    flex-basis: $chat-button-size;
-    width: $chat-button-size;
-    height: $chat-button-size;
+    flex-basis: $chat-file-button-size;
+    width: $chat-file-button-size;
+    height: $chat-file-button-size;
 
     .dx-icon {
-      color: $chat-secondary-color;
+      color: $chat-file-secondary-color;
     }
   }
 
   .dx-chat-file-name {
-    margin-inline-end: $chat-base-section-gap * 2;
-    margin-inline-start: $chat-base-section-gap;
+    margin-inline-end: $chat-file-base-section-gap * 2;
+    margin-inline-start: $chat-file-base-section-gap;
   }
 
   .dx-chat-file-size {
-    max-width: $chat-file-size-max-width;
-    margin-inline-end: $chat-base-section-gap;
-    font-size: $chat-secondary-font-size;
-    color: $chat-secondary-color;
+    max-width: $chat-file-file-size-max-width;
+    margin-inline-end: $chat-file-base-section-gap;
+    font-size: $chat-file-secondary-font-size;
+    color: $chat-file-secondary-color;
   }
 
   .dx-chat-file-download-button {
-    width: $chat-button-size;
-    height: $chat-button-size;
-    flex-basis: $chat-button-size;
+    width: $chat-file-button-size;
+    height: $chat-file-button-size;
+    flex-basis: $chat-file-button-size;
   }
 }
