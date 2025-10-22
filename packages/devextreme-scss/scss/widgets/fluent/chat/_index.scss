@@ -15,6 +15,18 @@
   $chat-avatar-color,
   $chat-avatar-background-color,
 );
+@include chat-file(
+  $chat-container-min-width, // 17.14em
+  $chat-container-padding, // 7px 8px
+  $chat-container-background-color, // #fff
+  $chat-container-border-radius, // 4px
+  $chat-container-box-shadow, // 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024
+  $chat-button-size, // 32px
+  $chat-secondary-font-size, // 10px
+  $chat-secondary-color, // #707070
+  $chat-base-section-gap, // 4px
+  $chat-file-size-max-width, // 3em
+);
 @include chat-alertlist(
   $chat-alertlist-color,
   $chat-alerts-padding-block,

@@ -122,6 +122,10 @@ $chat-typingindicator-circle-bg-color-center: null !default;
 */
 $chat-typingindicator-circle-bg-color: null !default;
 
+$chat-container-background-color: #fff !default; // Replace with base-bg-color
+$chat-container-box-shadow: 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024 !default; // Replace
+$chat-secondary-color: #707070 !default; // Replace
+
 @if $mode == "light" {
   $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
   $chat-information-author-name-color: darken($base-bg, 56.08) !default;

@@ -1,9 +1,7 @@
 @use "../../../mixins" as *;
 
 .dx-chat-file {
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 30%;
+  flex: 1 1 30%;
   display: flex;
   align-items: center;
 }
@@ -18,9 +16,7 @@
 
 .dx-chat-file-name {
   display: block;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: auto;
+  flex: 1 1 auto;
   min-width: 0;
   font-weight: 600;
   line-height: 1.2857;
@@ -30,9 +26,7 @@
 
 .dx-chat-file-size {
   display: block;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: auto;
+  flex: 1 0 auto;
   min-width: 0;
   text-align: end;
 

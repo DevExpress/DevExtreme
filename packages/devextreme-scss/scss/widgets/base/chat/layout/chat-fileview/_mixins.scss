@@ -1,14 +1,14 @@
 @mixin chat-file(
-  $chat-container-min-width, // 17.14em
-  $chat-container-padding, // 7px 8px
-  $chat-container-background-color, // #fff
-  $chat-container-border-radius, // 4px
-  $chat-container-box-shadow, // 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024
-  $chat-button-size, // 32px
-  $chat-secondary-font-size, // 10px
-  $chat-secondary-color, // #707070
-  $chat-base-section-gap, // 4px
-  $chat-file-size-max-width // 3em
+  $chat-container-min-width,
+  $chat-container-padding,
+  $chat-container-background-color,
+  $chat-container-border-radius,
+  $chat-container-box-shadow,
+  $chat-button-size,
+  $chat-secondary-font-size,
+  $chat-secondary-color,
+  $chat-base-section-gap,
+  $chat-file-size-max-width
 ) {
   .dx-chat-file {
     min-width: $chat-container-min-width;
@@ -45,6 +45,5 @@
     height: $chat-button-size;
     outline: 0.5px solid #8787875e; // TO REMOVE
     flex-basis: $chat-button-size;
-    min-width: $chat-button-size; // TO REMOVE
   }
 }
