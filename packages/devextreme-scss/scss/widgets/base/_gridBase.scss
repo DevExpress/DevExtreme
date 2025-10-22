@@ -285,10 +285,6 @@
 
     // T105728
     box-sizing: content-box;
-
-    &.dx-drag-command-cell {
-      padding: 0;
-    }
   }
 
   .dx-#{$widget-name}-columns-separator {
@@ -1242,5 +1238,13 @@
       margin-right: 7px;
       cursor: pointer;
     }
+  }
+
+  .dx-ai-prompt-editor__progressbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    line-height: 0;
   }
 }

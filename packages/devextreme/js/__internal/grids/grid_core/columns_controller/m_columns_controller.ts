@@ -3,7 +3,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import type { ColumnBase } from '@js/common/grids';
+import type { ColumnAIOptions, ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
@@ -25,6 +25,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 
+import { AI_COLUMN_NAME } from '../ai_column/const';
 import modules from '../m_modules';
 import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -65,6 +66,7 @@ import {
   getSerializationFormat,
   getValueDataType,
   isColumnFixed,
+  isColumnNameRequired,
   isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
@@ -88,6 +90,8 @@ export interface Column extends ColumnBase {
   groupIndex?: number;
   type?: string;
   visibleWidth?: string | number;
+  hidingPriority?: number;
+  ai?: ColumnAIOptions;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -138,6 +142,27 @@ export class ColumnsController extends modules.Controller {
   protected _stateStoringController!: StateStoringController;
 
   public _isWarnedAboutUnsupportedProperties?: boolean;
+
+  private getCommonColumnSettings(column): Partial<Column> {
+    switch (true) {
+      case !column?.type:
+        return this.option('commonColumnSettings');
+      case column?.type === AI_COLUMN_NAME:
+        return this.getAiColumnSettings();
+      default:
+        return {};
+    }
+  }
+
+  private getAiColumnSettings(): Partial<Column> {
+    return {
+      allowHiding: true,
+      ai: {
+        mode: 'auto',
+        showHeaderMenu: true,
+      },
+    };
+  }
 
   public init(isApplyingUserState?): void {
     this._dataController = this.getController('data');
@@ -296,7 +321,7 @@ export class ColumnsController extends modules.Controller {
   private _columnOptionChanged(args) {
     let columnOptionValue = {};
     const column = this.getColumnByPath(args.fullName);
-    const columnOptionName = args.fullName.replace(COLUMN_OPTION_REGEXP, '');
+    const columnOptionName = this.getColumnOptionNameByFullName(args.fullName);
 
     if (column) {
       if (columnOptionName) {
@@ -389,7 +414,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public getCommonSettings(column?) {
-    const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    const commonColumnSettings = this.getCommonColumnSettings(column);
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 
@@ -444,9 +469,8 @@ export class ColumnsController extends modules.Controller {
   public getGroupColumns() {
     const result: any = [];
 
-    each(this._columns, function () {
-      const column = this;
-      if (isDefined(column.groupIndex)) {
+    (this._columns as Column[]).forEach((column) => {
+      if (isDefined(column.groupIndex) && !column.type) {
         result[column.groupIndex] = column;
       }
     });
@@ -1552,7 +1576,9 @@ export class ColumnsController extends modules.Controller {
   }
 
   public setName(column) {
-    column.name = column.name || column.dataField || column.type;
+    if (!isColumnNameRequired(column)) {
+      column.name = column.name || column.dataField || column.type;
+    }
   }
 
   public setUserState(state) {
@@ -1593,18 +1619,23 @@ export class ColumnsController extends modules.Controller {
 
   public _checkColumns() {
     const usedNames = {};
-    let hasEditableColumnWithoutName = false;
     const duplicatedNames: any = [];
+    let hasEditableColumnWithoutName = false;
+    let hasColumnsWithoutRequiredNames = false;
+
     this._columns.forEach((column) => {
       const { name } = column;
       const isBand = column.columns?.length;
       const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
+
       if (name) {
         if (usedNames[name]) {
           duplicatedNames.push(`"${name}"`);
         }
 
         usedNames[name] = true;
+      } else if (isColumnNameRequired(column)) {
+        hasColumnsWithoutRequiredNames = true;
       } else if (isEditable) {
         hasEditableColumnWithoutName = true;
       }
@@ -1612,6 +1643,10 @@ export class ColumnsController extends modules.Controller {
 
     if (duplicatedNames.length) {
       errors.log('E1059', duplicatedNames.join(', '));
+    }
+
+    if (hasColumnsWithoutRequiredNames) {
+      errors.log('E1066');
     }
 
     if (hasEditableColumnWithoutName) {
@@ -1915,6 +1950,10 @@ export class ColumnsController extends modules.Controller {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isNeedToRenderVirtualColumns(scrollPosition: number): boolean {
     return false;
+  }
+
+  public getColumnOptionNameByFullName(fullName: string): string {
+    return fullName.replace(COLUMN_OPTION_REGEXP, '');
   }
 }
 

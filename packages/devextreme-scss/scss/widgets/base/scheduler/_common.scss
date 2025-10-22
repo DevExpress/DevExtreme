@@ -4,7 +4,7 @@
 // adduse
 
 $scheduler-appointment-collector-margin: 3px;
-$scheduler-appointment-collector-height: 20px;
+$scheduler-appointment-collector-height: 22px;
 $scheduler-popup-scrollable-content-padding: 20px;
 
 // NOTE: a11y aria-live container must be visible to allow screen readers read it
@@ -16,7 +16,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
   clip-path: polygon(0 0);
 }
 
-.dx-scheduler-appointment-popup {
+.dx-scheduler-legacy-appointment-popup {
   .dx-popup-content {
     padding-top: 0;
     padding-bottom: 0;
@@ -50,7 +50,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
   display: block;
   height: $scheduler-appointment-collector-height;
   cursor: pointer;
-  margin: $scheduler-appointment-collector-margin 0 0 $scheduler-appointment-collector-margin;
+  margin: $scheduler-appointment-collector-margin;
 
   .dx-scheduler-appointment-collector-content,
   .dx-button-content {
@@ -72,8 +72,11 @@ $scheduler-popup-scrollable-content-padding: 20px;
   &.dx-button.dx-button-default {
     padding: 0;
     max-width: none;
-    border-radius: $scheduler-appointment-collector-height;
   }
+}
+
+.dx-scheduler-adaptive .dx-scheduler-appointment-collector {
+  margin: 0 3px;
 }
 
 .dx-scheduler-work-space-mouse-selection {
@@ -81,12 +84,6 @@ $scheduler-popup-scrollable-content-padding: 20px;
   .dx-scheduler-scrollable-appointments,
   .dx-scheduler-all-day-appointments {
     pointer-events: none;
-  }
-}
-
-.dx-rtl {
-  .dx-scheduler-appointment-collector {
-    margin: $scheduler-appointment-collector-margin $scheduler-appointment-collector-margin 0 0;
   }
 }
 
@@ -112,7 +109,17 @@ $scheduler-popup-scrollable-content-padding: 20px;
     line-height: 1.3;
   }
 
-  .dx-scheduler-appointment-collector {
-    margin: 0;
+  .dx-scheduler-appointment-collector,
+  .dx-scheduler-appointment-collector.dx-scheduler-appointment-collector-compact {
+    height: 28px;
+    width: 28px;
+    margin: 0 3px;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-timeline {
+    .dx-scheduler-appointment-collector,
+    .dx-scheduler-appointment-collector.dx-scheduler-appointment-collector-compact {
+      width: auto;
+    }
   }
 }

@@ -2,7 +2,12 @@ import '@js/ui/validation_summary';
 import '@js/ui/validation_group';
 
 import type { EditorStyle } from '@js/common';
-import type { RequestCallbacks, SmartPasteCommandParams, SmartPasteCommandResult } from '@js/common/ai-integration';
+import type {
+  RequestCallbacks,
+  SmartPasteCommandParams,
+  SmartPasteCommandResult,
+  SmartPasteResultFieldType,
+} from '@js/common/ai-integration';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
@@ -31,7 +36,6 @@ import type {
   Item,
   LabelLocation,
   Properties,
-  SimpleItem,
   SimpleItemTemplateData,
   SmartPastedEvent,
   SmartPastingEvent,
@@ -69,9 +73,8 @@ import {
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
 import {
+  getFieldType,
   getItemFormatInfo,
-  type ParsedAIValue,
-  parseResultForEditorType,
 } from '@ts/ui/form/form.ai.utils';
 import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
 import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
@@ -1900,25 +1903,15 @@ class Form extends Widget<FormProperties> {
     this._abort = aiIntegration[command](params, callbacks);
   }
 
-  private _updateFieldWithSmartPasteValue(dataField: string, value: SmartPasteCommandResult[number]['value'], item?: SimpleItem): void {
+  private _updateFieldWithSmartPasteValue(
+    dataField: string,
+    value: SmartPasteResultFieldType,
+  ): void {
     const { formData } = this.option();
 
     if (isDefined(formData)) {
-      let resultValue: ParsedAIValue = value;
-
-      resultValue = parseResultForEditorType(dataField, item?.editorType, value);
-      if (typeof resultValue !== undefined) {
-        this._updateFieldValue(dataField, resultValue);
-      }
+      this._updateFieldValue(dataField, value);
     }
-  }
-
-  private _getEditorItemsMap(): Record<string, SimpleItem> {
-    const dataItems = this._itemsRunTimeInfo.getItemsForDataExtraction();
-    return dataItems.reduce((itemsMap, item) => {
-      itemsMap[item.dataField] = item;
-      return itemsMap;
-    }, {});
   }
 
   private _getSmartPasteCommandCallbacks(): RequestCallbacks<SmartPasteCommandResult> {
@@ -1938,11 +1931,9 @@ class Form extends Widget<FormProperties> {
             this._hideLoadPanel();
             this.beginUpdate();
 
-            const editorTypesMap = this._getEditorItemsMap();
             fieldsData.forEach(({ name, value }: SmartPasteCommandResult[number]) => {
               try {
-                const currentItem = editorTypesMap[name];
-                this._updateFieldWithSmartPasteValue(name, value, currentItem);
+                this._updateFieldWithSmartPasteValue(name, value);
               } catch (error) {
                 logger.error(error);
               }
@@ -1950,6 +1941,9 @@ class Form extends Widget<FormProperties> {
             this.endUpdate();
 
             this._smartPastedAction?.({ aiResult });
+          },
+          (): void => {
+            this._hideLoadPanel();
           },
         );
 
@@ -1984,6 +1978,7 @@ class Form extends Widget<FormProperties> {
     const fields = dataItems.map((item) => ({
       name: item.dataField,
       format: getItemFormatInfo(item),
+      type: getFieldType(item.editorType),
       instruction: item.aiOptions?.instruction,
     }));
 

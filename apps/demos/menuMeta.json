@@ -1961,8 +1961,10 @@
                 "Name": "ServerSideDataProcessing",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
+                "Modules": "devextreme-aspnet-data-nojquery",
                 "MvcAdditionalFiles": [
-                  "/Models/SampleData/MonthNames.cs"
+                  "/Models/SampleData/MonthNames.cs",
+                  "/Controllers/ApiControllers/TemperatureDataController.cs"
                 ],
                 "DemoType": "Viz"
               },
@@ -4757,11 +4759,12 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Autocomplete",
-            "Modules": "whatwg-fetch",
+            "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
             "MvcAdditionalFiles": [
               "/Models/SampleData/Names.cs",
               "/Models/SampleData/Surnames.cs",
-              "/Models/SampleData/Cities.cs"
+              "/Models/SampleData/Cities.cs",
+              "/Controllers/ApiControllers/DataGridStatesLookupController.cs"
             ],
             "ShowOnMainPage": true
           }
@@ -4990,6 +4993,24 @@
               "/Models/SampleData/DropDownButtonData.cs"
             ],
             "ShowOnMainPage": true
+          }
+        ]
+      },
+      {
+        "Name": "Speech To Text",
+        "Equivalents": "dxSpeechToText, dx-speechtotext, VoiceInput, VoiceToText, AIDictation, MicrophoneInput, SpeechRecognition, SpeechTranscription, MicInput",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Equivalents": "voice input, speech recognition, speech transcription, voice to text, voice dictation, voice recognition, microphone input, AI dictation, voice typing, mic input",
+            "DocUrl": "",
+            "Widget": "SpeechToText",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
           }
         ]
       },
@@ -5737,6 +5758,10 @@
                 "Title": "Virtual Mode",
                 "Name": "VirtualMode",
                 "Widget": "TreeView",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
+                ],
                 "DemoType": "Web"
               }
             ]

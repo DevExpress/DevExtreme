@@ -58,8 +58,6 @@ $material-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$material-scheduler-compact-appointment-button-border-radius: 12px;
-
 $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -332,34 +330,61 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
   }
 
-  .dx-scheduler-appointment-collector {
-    margin-top: $material-scheduler-dropdown-appointment-margin-top;
-    margin-left: 52px;
-  }
-
   .dx-scheduler-date-table-current-date {
     color: $scheduler-current-time-cell-color;
   }
 }
 
-
-.dx-scheduler-adaptive {
-  .dx-scheduler-work-space.dx-scheduler-work-space-month .dx-scheduler-appointment-collector {
-    margin: 0;
+.dx-scheduler:not(.dx-scheduler-adaptive) {
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $material-scheduler-dropdown-button-vertical-margin;
+      }
+    }
   }
 
+  .dx-scheduler-work-space.dx-scheduler-work-space-month:not(.dx-rtl) .dx-scheduler-appointment-collector {
+    margin-left: 52px;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-month.dx-rtl .dx-scheduler-appointment-collector {
+    margin-right: 52px;
+  }
+}
+
+.dx-scheduler-adaptive {
   .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
     white-space: nowrap;
+  }
+
+  .dx-scheduler-appointment-collector {
+    margin: $material-scheduler-dropdown-button-adaptive-margin;
+  }
+
+  .dx-scheduler-work-space.dx-scheduler-work-space-day,
+  .dx-scheduler-work-space.dx-scheduler-work-space-week,
+  .dx-scheduler-work-space.dx-scheduler-work-space-work-week {
+    .dx-scheduler-fixed-appointments,
+    .dx-scheduler-date-table-container {
+      .dx-scheduler-appointment-collector {
+        margin: $material-scheduler-dropdown-button-adaptive-vertical-margin;
+      }
+    }
   }
 }
 
 .dx-scheduler-appointment-collector {
-  margin-top: $material-scheduler-dropdown-day-margin;
+  height: $material-scheduler-dropdown-button-height;
+  margin: $material-scheduler-dropdown-button-margin;
   position: absolute;
 
   &.dx-button {
     box-shadow: none;
-    border-radius: $material-scheduler-compact-appointment-button-border-radius;
+    border-radius: $material-scheduler-dropdown-button-height;
     height: $material-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;
@@ -520,6 +545,78 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment-popup {
+  > .dx-overlay-content {
+    border-radius: $material-scheduler-appointment-popup-border-radius;
+  }
+
+  > .dx-overlay-content > .dx-toolbar.dx-widget {
+    > .dx-toolbar-items-container {
+      height: $material-scheduler-appointment-popup-toolbar-height;
+    }
+
+    .dx-toolbar-label {
+      font-size: $material-scheduler-appointment-popup-toolbar-label-size;
+    }
+  }
+
+  .dx-form {
+    .dx-scheduler-form-icon {
+      color: $scheduler-form-icon-color;
+
+      &.dx-field-item {
+        height: $material-scheduler-appointment-popup-icon-container-height;
+        padding-inline-end: $material-scheduler-appointment-popup-icon-padding-right;
+
+        .dx-icon {
+          font-size: $material-scheduler-appointment-popup-icon-size;
+        }
+      }
+    }
+
+    .dx-scheduler-form-subject-group .dx-scheduler-form-icon {
+      color: $scheduler-form-subject-icon-color;
+    }
+
+    .dx-scheduler-form-description-group .dx-scheduler-form-icon,
+    .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
+      margin-top: $material-scheduler-appointment-popup-description-icon-margin-top;
+    }
+
+    .dx-field-item:not(.dx-first-col) {
+      padding-inline-start: $material-scheduler-appointment-popup-item-padding-horizontal;
+    }
+
+    .dx-field-item:not(.dx-last-col) {
+      padding-inline-end: $material-scheduler-appointment-popup-item-padding-horizontal;
+    }
+
+    .dx-field-item:not(.dx-first-row) {
+      padding-top: 6px;
+    }
+
+    .dx-field-item:not(.dx-last-row) {
+      padding-bottom: 6px;
+    }
+
+    .dx-scheduler-form-all-day-switch.dx-field-item.dx-label-h-align {
+      height: $material-scheduler-appointment-popup-all-day-item-height;
+      padding-inline-start: $material-scheduler-appointment-popup-all-day-item-padding-left;
+
+      .dx-field-item-label-text {
+        font-size: $material-scheduler-appointment-popup-all-day-item-font-size;
+        color: $base-text-color;
+      }
+
+      .dx-field-item-content {
+        .dx-switch.dx-widget {
+          margin-bottom: $material-scheduler-appointment-popup-all-day-item-margin-bottom;
+        }
+      }
+    }
+  }
+}
+
+.dx-scheduler-legacy-appointment-popup {
   .dx-form {
     padding: 0 10px 0 10px;
   }
@@ -544,7 +641,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-appointment-popup .dx-form-validation-summary {
+.dx-scheduler-legacy-appointment-popup .dx-form-validation-summary {
   padding: 10px 20px;
 }
 

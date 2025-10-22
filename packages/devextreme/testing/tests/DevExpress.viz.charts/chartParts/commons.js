@@ -15,10 +15,10 @@ import {
 import { Label } from 'viz/series/points/label';
 import chartThemeManagerModule from 'viz/components/chart_theme_manager';
 import layoutManagerModule from 'viz/chart_components/layout_manager';
-import vizUtils from 'viz/core/utils';
+import vizUtils from 'viz/core/utils_default';
 import seriesFamilyModule from 'viz/core/series_family';
 import legendModule from 'viz/components/legend';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import tooltipModule from 'viz/core/tooltip';
 import titleModule from 'viz/core/title';
 import crosshairModule from 'viz/chart_components/crosshair';

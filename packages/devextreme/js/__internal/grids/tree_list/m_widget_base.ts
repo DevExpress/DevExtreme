@@ -21,6 +21,7 @@ const TREELIST_CLASS = 'dx-treelist';
 treeListCore.registerModulesOrder([
   'stateStoring',
   'columns',
+  'aiColumn',
   'selection',
   'editorFactory',
   'columnChooser',
@@ -50,7 +51,9 @@ treeListCore.registerModulesOrder([
   'summary',
   'columnFixing',
   'export',
-  'gridView']);
+  'toast',
+  'gridView',
+]);
 
 class TreeList extends GridCoreWidget<dxTreeListOptions> {
   private _initMarkup() {

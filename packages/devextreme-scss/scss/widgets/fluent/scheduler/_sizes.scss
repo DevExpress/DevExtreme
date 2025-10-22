@@ -14,14 +14,23 @@ $fluent-scheduler-appointment-content-padding: null !default;
 $fluent-scheduler-recurring-appointment-content-padding: null !default;
 $fluent-scheduler-appointment-content-padding-rtl: null !default;
 $fluent-scheduler-recurring-appointment-content-padding-rtl: null !default;
-$fluent-scheduler-dropdown-appointment-margin-top: null !default;
 $fluent-scheduler-dropdown-button-height: null !default;
 $fluent-scheduler-dropdown-button-padding: null !default;
-$fluent-scheduler-dropdown-day-margin: null !default;
+$fluent-scheduler-dropdown-button-margin: null !default;
+$fluent-scheduler-dropdown-button-vertical-margin: null !default;
+$fluent-scheduler-dropdown-button-adaptive-margin: null !default;
+$fluent-scheduler-dropdown-button-adaptive-vertical-margin: null !default;
 $fluent-scheduler-appointment-tooltip-content-margin-left: null !default;
 $fluent-tooltip-marker-dimension: null !default;
 $fluent-scheduler-appointment-tooltip-title-margin-top: null !default;
 $fluent-scheduler-appointment-tooltip-remove-padding-top: null !default;
+
+$fluent-scheduler-appointment-popup-toolbar-height: null !default;
+$fluent-scheduler-appointment-popup-icon-container-height: null !default;
+$fluent-scheduler-appointment-popup-icon-padding-right: null !default;
+$fluent-scheduler-appointment-popup-description-icon-margin-top: null !default;
+$fluent-scheduler-appointment-popup-item-padding-horizontal: null !default;
+$fluent-scheduler-appointment-popup-all-day-item-height: null !default;
 
 $scheduler-left-column-width: 65px !default;
 $fluent-scheduler-timeline-date-table-cell-height: 50px !default;
@@ -80,15 +89,24 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-recurring-appointment-content-padding: 6px 20px 6px 12px !default;
   $fluent-scheduler-appointment-content-padding-rtl: 6px 12px 6px 8px !default;
   $fluent-scheduler-recurring-appointment-content-padding-rtl: 6px 12px 6px 20px !default;
-  $fluent-scheduler-dropdown-appointment-margin-top: 7px !default;
   $fluent-scheduler-dropdown-button-height: 22px !default;
   $fluent-scheduler-dropdown-button-padding: 4px !default;
-  $fluent-scheduler-dropdown-day-margin: 5px !default;
+  $fluent-scheduler-dropdown-button-margin: 5px 1px 3px 3px !default;
+  $fluent-scheduler-dropdown-button-vertical-margin: 5px 3px 3px 3px !default;
+  $fluent-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $fluent-scheduler-appointment-tooltip-content-margin-left: 6px !default;
   $fluent-tooltip-marker-dimension: 12px !default;
   $fluent-scheduler-appointment-tooltip-title-margin-top: 0 !default;
   $fluent-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
+
+  $fluent-scheduler-appointment-popup-toolbar-height: 56px !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: 32px !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: 10px !default;
+  $fluent-scheduler-appointment-popup-description-icon-margin-top: 24px !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: 6px !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: 40px !default;
 
   $agenda-appointment-title-font-size: 14px;
 }
@@ -114,15 +132,24 @@ $header-panel-time-cell-padding: null !default;
   $fluent-scheduler-recurring-appointment-content-padding: 4px 16px 4px 8px !default;
   $fluent-scheduler-appointment-content-padding-rtl: 4px 8px 4px 6px !default;
   $fluent-scheduler-recurring-appointment-content-padding-rtl: 4px 8px 4px 16px !default;
-  $fluent-scheduler-dropdown-appointment-margin-top: 3px !default;
   $fluent-scheduler-dropdown-button-height: 18px !default;
   $fluent-scheduler-dropdown-button-padding: 2px !default;
-  $fluent-scheduler-dropdown-day-margin: 2px !default;
+  $fluent-scheduler-dropdown-button-margin: 2px 1px 2px 3px !default;
+  $fluent-scheduler-dropdown-button-vertical-margin: 2px 1px 2px 1px !default;
+  $fluent-scheduler-dropdown-button-adaptive-margin: 0 2px !default;
+  $fluent-scheduler-dropdown-button-adaptive-vertical-margin: 0 2px 0 1px !default;
 
   $fluent-scheduler-appointment-tooltip-content-margin-left: 8px !default;
   $fluent-tooltip-marker-dimension: 18px !default;
   $fluent-scheduler-appointment-tooltip-title-margin-top: 3px !default;
   $fluent-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
+
+  $fluent-scheduler-appointment-popup-toolbar-height: 48px !default;
+  $fluent-scheduler-appointment-popup-icon-container-height: 24px !default;
+  $fluent-scheduler-appointment-popup-icon-padding-right: 8px !default;
+  $fluent-scheduler-appointment-popup-description-icon-margin-top: 18px !default;
+  $fluent-scheduler-appointment-popup-item-padding-horizontal: 4px !default;
+  $fluent-scheduler-appointment-popup-all-day-item-height: 30px !default;
 
   $agenda-appointment-title-font-size: 13px;
 }

@@ -67,7 +67,18 @@ jobs:
       matrix:
         STRATEGY: [screenshots, accessibility]
         THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
-        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4), jquery]
+        exclude:
+          - STRATEGY: accessibility
+            CONSTEL: jquery(1/4)
+          - STRATEGY: accessibility
+            CONSTEL: jquery(2/4)
+          - STRATEGY: accessibility
+            CONSTEL: jquery(3/4)
+          - STRATEGY: accessibility
+            CONSTEL: jquery(4/4)
+          - STRATEGY: screenshots
+            CONSTEL: jquery
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
@@ -163,7 +174,7 @@ jobs:
       if: matrix.STRATEGY == 'accessibility'
       uses: actions/upload-artifact@v4
       with:
-        name: accessibility-reports-${{ env.JOB_NAME }}
+        name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
         path: apps/demos/testing/artifacts/axe-reports/*
         if-no-files-found: ignore
 

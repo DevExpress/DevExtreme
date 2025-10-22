@@ -26,6 +26,7 @@ const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the
 gridCore.registerModulesOrder([
   'stateStoring',
   'columns',
+  'aiColumn',
   'selection',
   'editorFactory',
   'columnChooser',
@@ -56,7 +57,9 @@ gridCore.registerModulesOrder([
   'summary',
   'columnFixing',
   'export',
-  'gridView']);
+  'toast',
+  'gridView',
+]);
 
 class DataGrid extends GridCoreWidget<Properties> {
   private _defaultOptionsRules() {

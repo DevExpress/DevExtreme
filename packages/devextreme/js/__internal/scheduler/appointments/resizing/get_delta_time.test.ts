@@ -17,7 +17,7 @@ describe('getDeltaTime', () => {
           cellSize: { width: 50, height: 50 },
           resizableStep: 50,
           cellDurationInMinutes: 30,
-          isAllDay: true,
+          isAllDayPanel: true,
         },
       )).toBe(0);
     });
@@ -33,7 +33,7 @@ describe('getDeltaTime', () => {
           cellSize: { width: 50, height: 50 },
           resizableStep: 50,
           cellDurationInMinutes: 30,
-          isAllDay: false,
+          isAllDayPanel: false,
         },
       )).toBe(-30 * 60_000);
     });
@@ -47,7 +47,7 @@ describe('getDeltaTime', () => {
           cellSize: { width: 50, height: 50 },
           resizableStep: 50,
           cellDurationInMinutes: 30,
-          isAllDay: true,
+          isAllDayPanel: true,
         },
       )).toBe(-24 * 3600_000);
     });
@@ -63,7 +63,7 @@ describe('getDeltaTime', () => {
           cellSize: { width: 50, height: 50 },
           resizableStep: 50,
           cellDurationInMinutes: 30,
-          isAllDay: false,
+          isAllDayPanel: false,
         },
       )).toBe(-24 * 3600_000);
     });
@@ -79,7 +79,7 @@ describe('getDeltaTime', () => {
           cellSize: { width: 50, height: 50 },
           resizableStep: 50,
           cellDurationInMinutes: 30,
-          isAllDay: false,
+          isAllDayPanel: false,
         },
       )).toBe(-30 * 60_000);
     });

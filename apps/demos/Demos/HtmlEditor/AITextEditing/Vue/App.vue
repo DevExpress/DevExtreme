@@ -33,7 +33,7 @@ import {
   DxToolbarItem,
   DxCommand,
 } from 'devextreme-vue/html-editor';
-import { AIIntegration } from 'devextreme-vue/common/ai-integration';
+import { AIIntegration, type Response } from 'devextreme-vue/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import {
   markup,
@@ -41,14 +41,15 @@ import {
   extractKeywordsPrompt,
 } from './data.ts';
 
-// eslint-disable-next-line vue/max-len
-type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+type AIMessage = (
+  OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam
+) & {
   content: string;
 };
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
+async function getAIResponse(messages: AIMessage[], signal: AbortSignal): Promise<string> {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -57,7 +58,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   };
 
   const response = await aiService.chat.completions.create(params, { signal });
-  const result = response.choices[0].message?.content;
+  const result = response.choices[0].message?.content || '';
 
   return result;
 }
@@ -68,13 +69,13 @@ const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system },
-      { role: 'user', content: prompt.user },
+      { role: 'system', content: prompt.system || '' },
+      { role: 'user', content: prompt.user || '' },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);
 
-    const result = {
+    const result: Response = {
       promise,
       abort: () => {
         controller.abort();

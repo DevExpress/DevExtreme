@@ -14,7 +14,7 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
 
   public items: Data[] = [];
 
-  public data: T[] = []; // TODO(9): probably we dont need it. Used in getGroupPanelData
+  public data: T[] = [];
 
   protected readonly isSharedDataSource: boolean;
 

@@ -1,9 +1,11 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
-import { isFunction } from '@js/core/utils/type';
+import { isFunction, isObject } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
+import { camelize } from '@ts/core/utils/m_inflector';
 import type { IntervalOptions, Step } from '@ts/scheduler/header/types';
-import type { NormalizedView, ViewType } from '@ts/scheduler/utils/options/types';
+import type { NormalizedView, RawViewType, ViewType } from '@ts/scheduler/utils/options/types';
 
 import type { Direction } from './constants';
 
@@ -324,6 +326,25 @@ const STEP_MAP: Record<ViewType, Step> = {
   agenda: 'agenda',
 } as const;
 
-export const getStep = (type: ViewType): Step => STEP_MAP[type];
+export const getViewName = (view: RawViewType): string | undefined => {
+  if (isObject(view)) {
+    return view.name ?? view.type;
+  }
 
-export const getViewName = (view: NormalizedView): string | undefined => view.name ?? view.type;
+  return view;
+};
+
+export const getViewText = (
+  view: NormalizedView,
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+): string => view.name || messageLocalization.format(`dxScheduler-switcher${camelize(view.type, true)}`);
+
+export const formatViews = (
+  views: NormalizedView[],
+): NormalizedView[] => views.map((view) => ({
+  ...view,
+  name: getViewName(view),
+  text: getViewText(view),
+}));
+
+export const getStep = (type: ViewType): Step => STEP_MAP[type];

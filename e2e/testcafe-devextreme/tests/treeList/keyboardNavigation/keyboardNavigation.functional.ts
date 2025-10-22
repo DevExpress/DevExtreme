@@ -3,7 +3,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture`Keyboard Navigation - common`
+fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
 test('TreeList - Selection CheckBox in a data row isn\'t navigable with Tab button if this CheckBox was focused manually (T1207467)', async (t) => {

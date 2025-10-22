@@ -34,3 +34,5 @@ export const UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS = [
   'type',
   'buttons',
 ];
+
+export const COMMAND_COLUMNS_WITH_REQUIRED_NAMES = ['ai'];

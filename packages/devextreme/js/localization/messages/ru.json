@@ -103,6 +103,12 @@
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
         "dxNumberBox-noDataText": "Нет данных",
 
+
+        "dxDataGrid-aiPromptEditorTitle": "AI Prompt Editor",
+        "dxDataGrid-aiPromptEditorPlaceholder": "Prompt AI to generate the column's values",
+        "dxDataGrid-aiPromptEditorApplyButton": "Apply",
+        "dxDataGrid-aiPromptEditorRegenerateButton": "Regenerate Data",
+        "dxDataGrid-aiPromptEditorStopButton": "Stop",
         "dxDataGrid-emptyHeaderWithColumnChooserText": "Используйте {0} чтобы отобразить столбцы",
         "dxDataGrid-emptyHeaderWithGroupPanelText": "Перетащите столбец из панели группировки",
         "dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText": "Используйте {0} или перетащите столбец из панели группировки",
@@ -266,7 +272,9 @@
 
         "dxScheduler-appointmentListAriaLabel": "Appointment list",
 
-
+        "dxScheduler-editPopupTitle": "Edit Appointment",
+        "dxScheduler-editPopupSaveButtonText": "Save",
+        
         "dxScheduler-editorLabelTitle": "Название",
         "dxScheduler-editorLabelStartDate": "Дата начала",
         "dxScheduler-editorLabelEndDate": "Дата завершения",
@@ -851,6 +859,9 @@
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
         "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
 
-        "dxStepper-optionalMark": "(Optional)"
+        "dxStepper-optionalMark": "(Optional)",
+
+        "dxSpeechToText-ariaLabelStart": "Press to start voice transcription",
+        "dxSpeechToText-ariaLabelStop": "Press to stop voice transcription"
     }
 }

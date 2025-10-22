@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -182,8 +182,6 @@ generateOptionMatrix({
         })),
       },
     });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });
 

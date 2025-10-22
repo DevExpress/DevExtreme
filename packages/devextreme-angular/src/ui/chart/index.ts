@@ -25,7 +25,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import * as CommonChartTypes from 'devextreme/common/charts';
 import { AnimationEaseMode, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, ChartsLabelOverlap, Theme, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
-import { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
+import { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxChartPointInfo, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 import { HorizontalAlignment, VerticalAlignment, Position, ExportFormat, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -42,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -222,16 +223,15 @@ import { DxoChartVisualRangeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartWholeRangeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiPaneComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-import { DxiValueAxisComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiChartAnnotationComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartPaneComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartSeriesComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_breaks,
+           PROPERTY_TOKEN_constantLines,
+           PROPERTY_TOKEN_panes,
+           PROPERTY_TOKEN_series,
+           PROPERTY_TOKEN_strips,
+           PROPERTY_TOKEN_valueAxis,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -253,6 +253,42 @@ import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
     ]
 })
 export class DxChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_panes)
+    set _panesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('panes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_valueAxis)
+    set _valueAxisContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('valueAxis', value);
+    }
+
     instance: DxChart = null;
 
     /**
@@ -884,10 +920,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
+    get tooltip(): { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
+    set tooltip(value: { argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -1426,7 +1462,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: any | string | undefined, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: dxChartPointInfo) => Record<string, any>) | undefined, enabled?: boolean, font?: Font, format?: Format | undefined, interactive?: boolean, location?: ChartTooltipLocation, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
 
     /**
     
@@ -1441,74 +1477,6 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() zoomAndPanChange: EventEmitter<{ allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: ChartZoomAndPanMode, dragBoxStyle?: { color?: string | undefined, opacity?: number | undefined }, dragToZoom?: boolean, panKey?: EventKeyModifier, valueAxis?: ChartZoomAndPanMode }>;
-
-
-
-
-    @ContentChildren(DxiChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiChartPaneComponent)
-    get panesChildren(): QueryList<DxiChartPaneComponent> {
-        return this._getOption('panes');
-    }
-    set panesChildren(value) {
-        this._setChildren('panes', value, 'DxiChartPaneComponent');
-    }
-
-    @ContentChildren(DxiChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiChartSeriesComponent');
-    }
-
-    @ContentChildren(DxiChartValueAxisComponent)
-    get valueAxesChildren(): QueryList<DxiChartValueAxisComponent> {
-        return this._getOption('valueAxis');
-    }
-    set valueAxesChildren(value) {
-        this._setChildren('valueAxis', value, 'DxiChartValueAxisComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPaneComponent)
-    get panesLegacyChildren(): QueryList<DxiPaneComponent> {
-        return this._getOption('panes');
-    }
-    set panesLegacyChildren(value) {
-        this._setChildren('panes', value, 'DxiPaneComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
-
-    @ContentChildren(DxiValueAxisComponent)
-    get valueAxisLegacyChildren(): QueryList<DxiValueAxisComponent> {
-        return this._getOption('valueAxis');
-    }
-    set valueAxisLegacyChildren(value) {
-        this._setChildren('valueAxis', value, 'DxiValueAxisComponent');
-    }
 
 
 

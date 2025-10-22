@@ -1462,7 +1462,6 @@ export const rowsModule = {
         width: 200,
         height: 90,
         showIndicator: true,
-        indicatorSrc: '',
         showPane: true,
       },
       dataRowTemplate: null,

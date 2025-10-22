@@ -7,27 +7,30 @@ export type ViewObject = Extract<RawViewType, object>;
 export type View = ViewObject & Required<Pick<ViewObject,
   'groupOrientation'
   | 'intervalCount'
-  | 'name'
   | 'type'
->>;
+>> & {
+  skippedDays: number[];
+};
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
-  | 'name'
   | 'type'
->>;
+>> & {
+  skippedDays: number[];
+};
 export type NormalizedView = View | AgendaView;
 
 export interface SchedulerInternalOptions {
   indicatorTime?: Date;
   renovateRender: boolean;
+  editing: Properties['editing'] | {
+    legacyForm: boolean;
+  };
   _draggingMode: 'outlook' | 'default';
   _appointmentTooltipOffset: { x: number; y: number };
-  _appointmentCountPerCell: number;
-  _collectorOffset: number;
-  _appointmentOffset: number;
   appointmentPopupTemplate: template;
   disabledExpr: string;
+  visibleExpr: string;
   allowMultipleCellSelection: boolean;
 }
 
@@ -42,7 +45,6 @@ type RequiredOptions = 'views'
   | 'groups'
   | 'resources'
   | 'appointmentTemplate'
-  | 'dropDownAppointmentTemplate'
   | 'appointmentCollectorTemplate'
   | 'startDayHour'
   | 'endDayHour'

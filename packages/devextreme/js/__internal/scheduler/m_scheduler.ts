@@ -35,7 +35,9 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
-import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
+import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_legacy_form';
+import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
+import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
@@ -75,9 +77,9 @@ import type { NormalizedView } from './utils/options/types';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
-import { AppointmentDataSource } from './view_model/generate_view_model/data_provider/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
-import AppointmentLayoutManager from './view_model/m_appointments_layout_manager';
+import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import { AppointmentDataSource } from './view_model/m_appointment_data_source';
+import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
 import SchedulerTimelineMonth from './workspaces/m_timeline_month';
@@ -94,6 +96,7 @@ const WIDGET_CLASS = 'dx-scheduler';
 const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
 const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
 const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+export const POPUP_DIALOG_CLASS = 'dx-dialog';
 const WIDGET_SMALL_WIDTH = 400;
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
@@ -409,7 +412,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this._refreshWorkSpace();
           if (this._readyToRenderAppointments) {
-            this._appointments.option('items', this._getAppointmentsToRepaint());
+            this._appointments.option('items', this._layoutManager.generateViewModel());
           }
         });
         break;
@@ -418,7 +421,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this._readyToRenderAppointments) {
           this._updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this._getAppointmentsToRepaint());
+          this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'tabIndex':
@@ -481,17 +484,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateAppointmentDataSource();
         this.repaint();
         break;
-      case 'dropDownAppointmentTemplate':
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
-      case '_appointmentCountPerCell':
-      case '_collectorOffset':
-      case '_appointmentOffset':
         this.repaint();
         break;
       case 'dateSerializationFormat':
         break;
       case 'maxAppointmentsPerCell':
+        this.repaint();
         break;
       case 'startDateExpr':
       case 'endDateExpr':
@@ -503,6 +503,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'recurrenceRuleExpr':
       case 'recurrenceExceptionExpr':
       case 'disabledExpr':
+      case 'visibleExpr':
         this._updateExpression(name, value);
         this._initAppointmentTemplate();
         this.repaint();
@@ -553,7 +554,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _isAgenda() {
-    return this._layoutManager.appointmentRenderingStrategyName === 'agenda';
+    return this.currentView.type === 'agenda';
   }
 
   _allowDragging() {
@@ -681,7 +682,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       if (isForce || (!isFixedHeight || !isFixedWidth)) {
         workspace.option('allDayExpanded', this._isAllDayExpanded());
         workspace._dimensionChanged();
-        const appointments = this._layoutManager.createAppointmentsMap();
+        const appointments = this._layoutManager.generateViewModel();
 
         this._appointments.option('items', appointments);
       }
@@ -736,6 +737,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       recurrenceRuleExpr: this.option('recurrenceRuleExpr'),
       recurrenceExceptionExpr: this.option('recurrenceExceptionExpr'),
       disabledExpr: this.option('disabledExpr'),
+      visibleExpr: this.option('visibleExpr'),
     } as IFieldExpr);
 
     super._init();
@@ -848,10 +850,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _dataSourceChangedHandler(result?: Appointment[]) {
     if (this._readyToRenderAppointments) {
       this._workSpaceRecalculation.done(() => {
-        this._layoutManager.prepareItems(result);
+        this._layoutManager.prepareAppointments(result);
         this._renderAppointments();
         this._updateA11yStatus();
-        this.getWorkSpace().onDataSourceChanged(this._layoutManager.filteredItems);
       });
     }
   }
@@ -876,16 +877,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this._getAppointmentsToRepaint()
+      ? this._layoutManager.generateViewModel()
       : [];
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
-  }
-
-  _getAppointmentsToRepaint(): AppointmentViewModelPlain[] {
-    const appointmentsMap = this._layoutManager.createAppointmentsMap();
-    return appointmentsMap;
+    if (this._isAgenda()) {
+      this._workSpace.renderAgendaLayout(viewModel);
+    }
   }
 
   _initExpressions(fields: IFieldExpr) {
@@ -909,6 +908,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowDeleting: Boolean(editing),
       allowResizing: Boolean(editing),
       allowDragging: Boolean(editing),
+      legacyForm: false,
     };
 
     if (isObject(editing)) {
@@ -970,7 +970,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this.currentView,
       dateRange[0],
       dateRange[1],
-      this._appointments.appointmentsCount,
+      this._layoutManager.filteredItems.length,
       indicatorTime,
     );
 
@@ -999,6 +999,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderA11yStatus();
     this._renderMainContainer();
     this._renderHeader();
+    this._toggleAdaptiveClass();
 
     this._layoutManager = new AppointmentLayoutManager(this);
 
@@ -1047,7 +1048,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   createAppointmentForm() {
     const scheduler = {
-      createResourceEditorModel: () => createResourceEditorModel(this.resourceManager.resourceById),
+      getResourceById: () => this.resourceManager.resourceById,
       getDataAccessors: () => this._dataAccessors,
       // @ts-expect-error
       createComponent: (element, component, options) => this._createComponent(element, component, options),
@@ -1059,6 +1060,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
       getTimeZoneCalculator: () => this.timeZoneCalculator,
     };
+
+    if (this._editing.legacyForm) {
+      (scheduler as any).createResourceEditorModel = () => createResourceEditorModel(this.resourceManager.resourceById);
+
+      return new AppointmentLegacyForm(scheduler);
+    }
 
     return new AppointmentForm(scheduler);
   }
@@ -1086,8 +1093,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._workSpace.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
       },
     };
-
-    return new AppointmentPopup(scheduler, form);
+    return this._editing.legacyForm
+      ? new AppointmentLegacyPopup(scheduler, form)
+      : new AppointmentPopup(scheduler, form);
   }
 
   _getAppointmentTooltipOptions() {
@@ -1181,8 +1189,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _render() {
-    this._toggleAdaptiveClass();
-
     this.getWorkSpace()?.updateHeaderEmptyCellWidth();
 
     // @ts-expect-error
@@ -1246,6 +1252,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allowAllDayResize: this._allowAllDayResizing(),
       rtlEnabled: this.option('rtlEnabled'),
       groups: this.getViewOption('groups'),
+      groupByDate: this.getViewOption('groupByDate'),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
@@ -1260,23 +1267,25 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return config;
   }
 
-  getCollectorOffset() {
-    if (this._workSpace.needApplyCollectorOffset() && !this.option('adaptivityEnabled')) {
-      return this.option('_collectorOffset');
-    }
-    return 0;
-  }
-
-  getAppointmentDurationInMinutes() {
-    return this.getViewOption('cellDuration');
-  }
-
   _renderWorkSpace() {
     const currentViewOptions = this.currentView;
     if (!currentViewOptions) {
       return;
     }
 
+    if (this._isAgenda()) {
+      this.renderAgendaWorkspace();
+    } else {
+      this.renderGridWorkspace();
+    }
+
+    this._recalculateWorkspace();
+    if (currentViewOptions.startDate) {
+      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+    }
+  }
+
+  renderGridWorkspace(): void {
     if (this._readyToRenderAppointments) {
       this._toggleSmallClass();
       // TODO(9): Get rid of it as soon as you can. Workspace didn't render
@@ -1287,20 +1296,24 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
     const $workSpace = $('<div>').appendTo(this._mainContainer);
 
-    const currentViewType = currentViewOptions.type;
+    const currentViewType = this.currentView.type;
     const workSpaceComponent = VIEWS_CONFIG[currentViewType].workSpace;
-    const workSpaceConfig = this._workSpaceConfig(currentViewOptions);
+    const workSpaceConfig = this._workSpaceConfig(this.currentView);
     // @ts-expect-error
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     this._allowDragging() && this._workSpace.initDragBehavior(this, this._all);
     this._workSpace._attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
+  }
 
-    this._recalculateWorkspace();
-    if (currentViewOptions.startDate) {
-      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
-    }
+  renderAgendaWorkspace(): void {
+    const $workSpace = $('<div>').appendTo(this._mainContainer);
+    const workSpaceConfig = this._workSpaceConfig(this.currentView);
+    const workSpaceComponent = VIEWS_CONFIG.agenda.workSpace;
+    // @ts-expect-error
+    this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
+    this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
   _recalculateWorkspace() {
@@ -1327,7 +1340,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
-      getFilteredItems: () => this._layoutManager.filteredItems,
+      getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
 
       noDataText: this.option('noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1361,7 +1374,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: this._renderAppointments.bind(this),
+      onRenderAppointments: () => {
+        this._renderAppointments();
+      },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this._header),
       onScrollEnd: () => this._appointments.updateResizableArea(),
@@ -1581,7 +1596,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         { text: occurrenceText, onClick() { return RECURRENCE_EDITING_MODE.OCCURRENCE; } },
       ],
       popupOptions: {
-        wrapperAttr: { class: 'dx-dialog' },
+        wrapperAttr: { class: POPUP_DIALOG_CLASS },
+        onHidden: () => {
+          this._appointments?.focus();
+        },
       },
     } as any);
 
@@ -1680,7 +1698,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointment,
       settings,
       this._dataAccessors,
-      this.timeZoneCalculator,
       this.resourceManager,
     );
   }
@@ -1879,7 +1896,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.showAppointmentPopup(resultAppointment, true);
   }
 
-  showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment?: any) {
+  showAppointmentPopup(rawAppointment?: any, createNewAppointment?: boolean, rawTargetedAppointment?: any) {
     const newRawTargetedAppointment = { ...rawTargetedAppointment };
     if (newRawTargetedAppointment) {
       delete newRawTargetedAppointment.displayStartDate;
@@ -1984,11 +2001,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   hideAppointmentTooltip() {
     this._appointmentTooltip?.hide();
-  }
-
-  scrollToTime(hours, minutes, date) {
-    errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
-    this._workSpace.scrollToTime(hours, minutes, date);
   }
 
   scrollTo(date, groupValues, allDay) {

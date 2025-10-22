@@ -3,7 +3,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     ValueChangedInfo,
@@ -105,8 +105,9 @@ export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:number | false
      */
-    reset(value?: Number | false): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

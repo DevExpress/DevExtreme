@@ -8,7 +8,7 @@ import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture`FixedColumns`
+fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../container.html'));
 
 // T1156153
@@ -328,6 +328,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     },
     scrolling: {
       useNative: false,
+      showScrollbar: 'never',
       rowRenderingMode: 'virtual',
     },
     showBorders: true,

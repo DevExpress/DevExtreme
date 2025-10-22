@@ -882,6 +882,24 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['10.1626', '44.9187', '44.9187'] },
                 { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['27.5407', '27.5407', '44.9187'] },
             ]
+        },
+        {
+            items: [ { collapsible: true, collapsedSize: 50, size: 100, minSize: 100, maxSize: 100 }, { collapsible: true, size: 100 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['5', '95'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['10.0806', '89.9194'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['100', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['10.0806', '89.9194'] },
+            ],
+        },
+        {
+            items: [ { collapsible: true, collapsedSize: 50, size: 100, minSize: 100, maxSize: 100 }, { collapsible: false }, { collapsible: true, size: 100 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['5.0813', '84.7561', '10.1626'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['10.1626', '79.6748', '10.1626'] },
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '89.8374', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 1, expectedLayout: ['10.1626', '79.6748', '10.1626'] },
+            ],
         }
     ].forEach(({ items, scenarios }) => {
         QUnit.test(`The pane should restore its size after collapsing and expanding by click, items: ${JSON.stringify(items)}`, function(assert) {
@@ -1941,6 +1959,17 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
             this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
         });
+    });
+
+
+    QUnit.test('size set should work for resizable pane (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ }, { size: 10, resizable: true }],
+        });
+
+        this.instance.option('items[1].size', 50);
+        assert.strictEqual(this.instance.option('items[1].size'), 50, 'new item size was set');
     });
 
     [

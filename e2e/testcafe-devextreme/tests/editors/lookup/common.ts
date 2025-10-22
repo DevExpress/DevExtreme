@@ -12,6 +12,7 @@ import {
 } from '../../../helpers/domUtils';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const OVERLAY_CLASS = 'dx-overlay-content';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
@@ -89,6 +90,7 @@ if (!isMaterialBased()) {
 safeSizeTest('Check popup height with no found data option', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup with no found data.png');
 
@@ -101,6 +103,7 @@ safeSizeTest('Check popup height in loading state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(Selector(`.${LOOKUP_FIELD_CLASS}`));
+  await t.hover(`.${OVERLAY_CLASS}`);
 
   await testScreenshot(t, takeScreenshot, 'Lookup in loading.png');
 
@@ -140,19 +143,19 @@ test('Placeholder is visible after items option change when value is not chosen 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: fit-content;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: 100px;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png');
 
   await t
     .expect(compareResults.isValid())

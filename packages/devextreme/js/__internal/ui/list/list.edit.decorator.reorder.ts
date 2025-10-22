@@ -5,7 +5,11 @@ import { isMouseEvent } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth, setWidth } from '@js/core/utils/size';
-import type { Cancelable, DxEvent } from '@js/events';
+import type {
+  Cancelable,
+  DxEvent,
+  PointerInteractionEvent,
+} from '@js/events';
 import type {
   DragChangeEvent,
   DragStartEvent,
@@ -114,7 +118,7 @@ class EditDecoratorReorder extends EditDecorator {
     eventsEngine.on(
       $handle,
       pointerEvents.down,
-      (e: DxEvent<PointerEvent | MouseEvent | TouchEvent>): void => {
+      (e: DxEvent<PointerInteractionEvent>): void => {
         this._lockedDrag = !isMouseEvent(e);
       },
     );
@@ -122,7 +126,7 @@ class EditDecoratorReorder extends EditDecorator {
       $handle,
       holdEvent.name,
       { timeout: 30 },
-      (e: DxEvent<PointerEvent | MouseEvent | TouchEvent> & Cancelable): void => {
+      (e: DxEvent<PointerInteractionEvent> & Cancelable): void => {
         e.cancel = true;
         this._lockedDrag = false;
       },

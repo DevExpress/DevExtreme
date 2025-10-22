@@ -33,7 +33,6 @@ export class AppComponent {
     this.click = this.click.bind(this);
   }
 
-  // eslint-disable-next-line consistent-return
   customizeTooltip = ({ attribute }) => {
     const name = attribute('name');
     const country = this.countries[name];
@@ -43,6 +42,7 @@ export class AppComponent {
         color: country.color,
       };
     }
+    return null;
   };
 
   customizeLayers = (elements: { attribute: Function, applySettings: Function }[]) => {

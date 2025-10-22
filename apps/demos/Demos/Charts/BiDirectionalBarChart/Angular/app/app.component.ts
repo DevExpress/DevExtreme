@@ -27,8 +27,8 @@ export class AppComponent {
     this.populationData = service.getPopulationData();
   }
 
-  customizeTooltip = ({ valueText }: { valueText: number }) => ({
-    text: Math.abs(valueText),
+  customizeTooltip = ({ valueText }: DxChartTypes.CommonPointInfo) => ({
+    text: Math.abs(Number(valueText)),
   });
 
   customizeLabel: DxChartTypes.ValueAxisLabel['customizeText'] = ({ value }) => `${Math.abs(value as number)}%`;

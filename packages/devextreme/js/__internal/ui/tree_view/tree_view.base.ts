@@ -25,7 +25,7 @@ import {
   isDefined, isFunction, isPlainObject, isPrimitive, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent, NativeEventInfo } from '@js/events';
+import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
   Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
@@ -1802,7 +1802,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       $itemContainer,
       clickEventNamespace,
       itemSelector,
-      (e: DxEvent<MouseEvent | PointerEvent | TouchEvent>): void => {
+      (e: DxEvent<InteractionEvent>): void => {
         if ($(e.target).hasClass(CHECK_BOX_ICON_CLASS) || $(e.target).hasClass(CHECK_BOX_CLASS)) {
           return;
         }
@@ -1848,7 +1848,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _itemClick(
     args: NativeEventInfo<
       TreeViewBase,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      InteractionEvent
     > & CollectionItemInfo<TreeViewItem>,
   ): void {
     const { event, itemData } = args;
@@ -1861,7 +1861,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _processItemClick(
-    e: DxEvent<KeyboardEvent | MouseEvent | PointerEvent | TouchEvent>,
+    e: DxEvent<InteractionEvent>,
     $item: dxElementWrapper,
   ): void {
     const itemData = this._getItemData($item);
@@ -1971,7 +1971,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _moveFocus(location: string, e: DxEvent<KeyboardEvent>): void {
-    const { rtlEnabled } = this.option();
+    const { rtlEnabled, selectByClick } = this.option();
 
     const FOCUS_UP = 'up';
     const FOCUS_DOWN = 'down';
@@ -1993,6 +1993,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       return;
     }
 
+    const isSelectionByShiftAllowed = this._showCheckboxes() || selectByClick;
+
     switch (location) {
       case FOCUS_UP: {
         const $prevItem = this._prevItem($items);
@@ -2000,7 +2002,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
         const prevItemElement = this._getNodeItemElement($prevItem);
         this.getScrollable().scrollToElement(prevItemElement);
-        if (e.shiftKey && this._showCheckboxes()) {
+        if (e.shiftKey && isSelectionByShiftAllowed) {
           this._updateItemSelection(true, prevItemElement);
         }
         break;
@@ -2011,14 +2013,14 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
         const nextItemElement = this._getNodeItemElement($nextItem);
         this.getScrollable().scrollToElement(nextItemElement);
-        if (e.shiftKey && this._showCheckboxes()) {
+        if (e.shiftKey && isSelectionByShiftAllowed) {
           this._updateItemSelection(true, nextItemElement);
         }
         break;
       }
       case FOCUS_FIRST: {
         const $firstItem = $items.first();
-        if (e.shiftKey && this._showCheckboxes()) {
+        if (e.shiftKey && isSelectionByShiftAllowed) {
           this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
         }
 
@@ -2029,7 +2031,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       case FOCUS_LAST: {
         const $lastItem = $items.last();
 
-        if (e.shiftKey && this._showCheckboxes()) {
+        if (e.shiftKey && isSelectionByShiftAllowed) {
           this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
         }
 

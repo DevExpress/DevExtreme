@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-/* eslint-disable max-classes-per-file */
+
 import type { GridBase, GridBaseOptions, SelectionBase } from '@js/common/grids';
 import type { Component } from '@js/core/component';
 import type { PropertyType } from '@js/core/index';
@@ -40,6 +40,12 @@ type OptionsMethod<TOptions> =
 
 type GridBaseType = GridBase<unknown, unknown> & Omit<Widget<InternalGridOptions>, 'option'>;
 
+export type CreateComponent<TComponent extends Component<any>> = (
+  $container: dxElementWrapper,
+  component: new (...args) => TComponent,
+  options?: TComponent extends Component<infer TOptions> ? TOptions : never
+) => TComponent;
+
 export interface InternalGrid extends GridBaseType {
   _views: Views;
 
@@ -69,11 +75,7 @@ export interface InternalGrid extends GridBaseType {
 
   _disposed: any;
 
-  _createComponent: <TComponent extends Component<any>>(
-    $container: dxElementWrapper,
-    component: new (...args) => TComponent,
-    options?: TComponent extends Component<infer TOptions> ? TOptions : never
-  ) => TComponent;
+  _createComponent: CreateComponent<any>;
 
   _createAction: any;
 
@@ -198,6 +200,8 @@ export interface Controllers {
   stateStoring: import('./state_storing/m_state_storing_core').StateStoringController;
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
+  toastViewController: import('./toast/m_toast_controller').ToastViewController;
+  aiColumn: import('./ai_column/m_ai_column_controller').AiColumnController;
 }
 
 type ControllerTypes = {
@@ -220,6 +224,8 @@ export interface Views {
   gridView: import('./views/m_grid_view').GridView;
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
+  toastView: import('./toast/m_toast_view').ToastView;
+  aiColumnView: import('./ai_column/m_ai_column_view').AiColumnView;
 }
 
 export interface EditingControllerRequired {

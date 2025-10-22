@@ -247,12 +247,6 @@
     }
   },
   {
-    "name": "ui/defer_rendering",
-    "exports": {
-      "default": { "path": "ui.dxDeferRendering", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/diagram",
     "exports": {
       "default": { "path": "ui.dxDiagram", "isWidget": true }
@@ -388,6 +382,12 @@
     "name": "ui/notify",
     "exports": {
       "default": { "path": "ui.notify" }
+    }
+  },
+  {
+    "name": "ui/speech_to_text",
+    "exports": {
+      "default": { "path": "ui.dxSpeechToText", "isWidget": true }
     }
   },
   {

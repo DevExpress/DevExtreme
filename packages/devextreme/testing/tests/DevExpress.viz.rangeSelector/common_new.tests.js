@@ -3,7 +3,7 @@ import {
     Renderer,
     stubClass,
 } from '../../helpers/vizMocks.js';
-import rendererModule from 'viz/core/renderers/renderer';
+import rendererModule from 'viz/core/renderers/renderer_default';
 import axisModule from 'viz/axes/base_axis';
 import translator2DModule from 'viz/translators/translator2d';
 import '__internal/viz/range_selector/range_selector';

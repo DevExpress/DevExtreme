@@ -109,14 +109,6 @@ declare global {
     dxDateRangeBox(options: string): any;
     dxDateRangeBox(options: string, ...params: any[]): any;
 
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: 'instance'): DevExpress.ui.dxDeferRendering;
-    dxDeferRendering(
-      options: DevExpress.ui.dxDeferRendering.Properties
-    ): JQuery;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-
     dxDiagram(): JQuery;
     dxDiagram(options: 'instance'): DevExpress.ui.dxDiagram;
     dxDiagram(options: DevExpress.ui.dxDiagram.Properties): JQuery;
@@ -394,6 +386,12 @@ declare global {
     dxSparkline(options: DevExpress.viz.dxSparkline.Properties): JQuery;
     dxSparkline(options: string): any;
     dxSparkline(options: string, ...params: any[]): any;
+
+    dxSpeechToText(): JQuery;
+    dxSpeechToText(options: 'instance'): DevExpress.ui.dxSpeechToText;
+    dxSpeechToText(options: DevExpress.ui.dxSpeechToText.Properties): JQuery;
+    dxSpeechToText(options: string): any;
+    dxSpeechToText(options: string, ...params: any[]): any;
 
     dxSpeedDialAction(): JQuery;
     dxSpeedDialAction(options: 'instance'): DevExpress.ui.dxSpeedDialAction;
@@ -769,8 +767,13 @@ declare module DevExpress {
     showIndicator?: boolean;
     /**
      * [descr:ExportLoadPanel.indicatorSrc]
+     * @deprecated [depNote:ExportLoadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:ExportLoadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:ExportLoadPanel.showPane]
      */
@@ -912,6 +915,10 @@ declare module DevExpress.aiIntegration {
       params: SmartPasteCommandParams,
       callbacks: RequestCallbacks<SmartPasteCommandResult>
     ): () => void;
+    generateGridColumn(
+      params: GenerateGridColumnCommandParams,
+      callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
+    ): () => void;
   }
   /**
    * [descr:AIProvider]
@@ -922,6 +929,10 @@ declare module DevExpress.aiIntegration {
      */
     sendRequest: (params: RequestParams) => Response;
   };
+  /**
+   * [descr:AIResponse]
+   */
+  export type AIResponse = string | Record<PropertyKey, any>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -970,8 +981,20 @@ declare module DevExpress.aiIntegration {
   export type FieldInfo = {
     name: string;
     format: string;
+    type?: SmartPasteFieldType;
     instruction?: string;
   };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type GenerateGridColumnCommandParams = {
+    text: string;
+    data: Record<PropertyKey, unknown>;
+  };
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type GenerateGridColumnCommandResult = Record<PropertyKey, unknown>;
   /**
    * [descr:Prompt]
    */
@@ -1011,7 +1034,15 @@ declare module DevExpress.aiIntegration {
      * [descr:RequestParams.prompt]
      */
     prompt: Prompt;
+    /**
+     * [descr:RequestParams.data]
+     */
+    data?: RequestParamsData;
   };
+  /**
+   * [descr:RequestParamsData]
+   */
+  export type RequestParamsData = Record<PropertyKey, any>;
   /**
    * [descr:Response]
    */
@@ -1019,7 +1050,7 @@ declare module DevExpress.aiIntegration {
     /**
      * [descr:Response.promise]
      */
-    promise: Promise<string>;
+    promise: Promise<AIResponse>;
     /**
      * [descr:Response.abort]
      */
@@ -1047,8 +1078,31 @@ declare module DevExpress.aiIntegration {
    */
   export type SmartPasteCommandResult = Array<{
     name: string;
-    value: string | string[];
+    value: SmartPasteResultFieldType;
   }>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteFieldType =
+    | 'color'
+    | 'boolean'
+    | 'string'
+    | 'stringArray'
+    | 'number'
+    | 'numberRange'
+    | 'date'
+    | 'dateRange';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type SmartPasteResultFieldType =
+    | string
+    | string[]
+    | number
+    | number[]
+    | Date
+    | Date[]
+    | boolean;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1308,6 +1362,10 @@ declare module DevExpress.common {
      */
     defaultUseCurrencyAccountingStyle?: boolean;
     /**
+     * [descr:GlobalConfig.copyStylesToShadowDom]
+     */
+    copyStylesToShadowDom?: boolean;
+    /**
      * [descr:GlobalConfig.editorStylingMode]
      */
     editorStylingMode?: EditorStyle | undefined;
@@ -1549,7 +1607,7 @@ declare module DevExpress.common {
     Pick<
       DevExpress.common.core.events.NativeEventInfo<
         TComponent,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       >,
       'component' | 'event'
     >
@@ -4464,13 +4522,101 @@ declare module DevExpress.common.grids {
      */
     readonly formOptions: any;
   };
+  export type AIColumnMode = 'auto' | 'manual';
+  /**
+   * [descr:AIColumnRequestCreatingInfo]
+   */
+  export type AIColumnRequestCreatingInfo<TRowData = any> = {
+    /**
+     * [descr:AIColumnRequestCreatingInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.data]
+     */
+    readonly data: TRowData[];
+    /**
+     * [descr:AIColumnRequestCreatingInfo.cancel]
+     */
+    cancel?: boolean;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+    /**
+     * [descr:AIColumnRequestCreatingInfo.useCache]
+     */
+    useCache?: boolean;
+  };
+  /**
+   * [descr:AIColumnResponseReceivedInfo]
+   */
+  export type AIColumnResponseReceivedInfo = {
+    /**
+     * [descr:AIColumnResponseReceivedInfo.column]
+     */
+    readonly column: ColumnBase;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.error]
+     */
+    error?: string;
+    /**
+     * [descr:AIColumnResponseReceivedInfo.data]
+     */
+    data: any[];
+    /**
+     * [descr:AIColumnResponseReceivedInfo.additionalInfo]
+     */
+    additionalInfo?: Record<string, any>;
+  };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
   export type ApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * [descr:ColumnAIOptions]
+   */
+  export type ColumnAIOptions = {
+    /**
+     * [descr:ColumnAIOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
+    /**
+     * [descr:ColumnAIOptions.prompt]
+     */
+    prompt?: string;
+    /**
+     * [descr:ColumnAIOptions.mode]
+     */
+    mode?: AIColumnMode;
+    /**
+     * [descr:ColumnAIOptions.showHeaderMenu]
+     */
+    showHeaderMenu?: boolean;
+    /**
+     * [descr:ColumnAIOptions.noDataText]
+     */
+    noDataText?: string;
+    /**
+     * [descr:ColumnAIOptions.emptyText]
+     */
+    emptyText?: string;
+    /**
+     * [descr:ColumnAIOptions.popup]
+     */
+    popup?: DevExpress.ui.dxPopup.Properties;
+    /**
+     * [descr:ColumnAIOptions.editorOptions]
+     */
+    editorOptions?: DevExpress.ui.dxTextBox.Properties;
+  };
   /**
    * [descr:GridBaseColumn]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ColumnBase<TRowData = any> {
+    /**
+     * [descr:GridBaseColumn.ai]
+     */
+    ai?: ColumnAIOptions;
     /**
      * [descr:GridBaseColumn.alignment]
      */
@@ -5303,6 +5449,27 @@ declare module DevExpress.common.grids {
    */
   export interface GridBase<TRowData = any, TKey = any> {
     /**
+     * [descr:GridBase.abortAIColumnRequest(columnName)]
+     */
+    abortAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.sendAIColumnRequest(columnName)]
+     */
+    sendAIColumnRequest(columnName: string): void;
+    /**
+     * [descr:GridBase.refreshAIColumn(columnName)]
+     */
+    refreshAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.clearAIColumn(columnName)]
+     */
+    clearAIColumn(columnName: string): void;
+    /**
+     * [descr:GridBase.getAIColumnText(columnName, key)]
+     */
+    getAIColumnText(columnName: string, key: TKey): string;
+
+    /**
      * [descr:GridBase.beginCustomLoading(messageText)]
      */
     beginCustomLoading(messageText: string): void;
@@ -5590,6 +5757,10 @@ declare module DevExpress.common.grids {
     GridBaseOptionsBlank<TComponent, TRowData, TKey>,
     'focusStateEnabled'
   > & {
+    /**
+     * [descr:GridBaseOptions.aiIntegration]
+     */
+    aiIntegration?: DevExpress.aiIntegration.AIIntegration | undefined;
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
      */
@@ -6097,8 +6268,13 @@ declare module DevExpress.common.grids {
     height?: number | string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
+     * @deprecated [depNote:GridBaseOptions.loadPanel.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:GridBaseOptions.loadPanel.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:GridBaseOptions.loadPanel.shading]
      */
@@ -7892,6 +8068,14 @@ declare module DevExpress.events {
     cancel?: boolean;
   }
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type InteractionEvent = PointerInteractionEvent | KeyboardEvent;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PointerInteractionEvent = MouseEvent | TouchEvent | PointerEvent;
+  /**
    * [descr:events.triggerHandler(element, event)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -8587,7 +8771,7 @@ declare module DevExpress.ui {
     onItemContextMenu?: (
       e: DevExpress.common.core.events.NativeEventInfo<
         TComponent,
-        MouseEvent | PointerEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         DevExpress.common.core.events.ItemInfo<TItem>
     ) => void;
@@ -8597,7 +8781,7 @@ declare module DevExpress.ui {
     onItemHold?: (
       e: DevExpress.common.core.events.NativeEventInfo<
         TComponent,
-        MouseEvent | PointerEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         DevExpress.common.core.events.ItemInfo<TItem>
     ) => void;
@@ -8697,7 +8881,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class DateBoxBase<
-    TProperties = DevExpress.ui.dxDateBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDateBox.Properties
   > extends dxDropDownEditor<TProperties> {
     /**
      * [descr:DateBoxBase.close()]
@@ -8905,7 +9089,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxAccordion<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -8916,7 +9100,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxAccordion<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -9147,7 +9331,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxActionSheet<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -9158,7 +9342,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxActionSheet<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -9273,7 +9457,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocomplete.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxAutocomplete.Properties['value']): void;
   }
   module dxAutocomplete {
     /**
@@ -9430,8 +9614,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAutocompleteOptions.value]
      */
-    value?: string;
-
+    value?: string | null;
     /**
      * [descr:dxAutocompleteOptions.dropDownOptions]
      */
@@ -9504,7 +9687,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -9515,7 +9698,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -9824,9 +10007,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendar.reset(value)]
      */
-    reset(
-      value?: DevExpress.common.DateLike | Array<Date | number | string | null>
-    ): void;
+    reset(value?: DevExpress.ui.dxCalendar.Properties['value']): void;
   }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
@@ -9873,7 +10054,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCalendar,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+        DevExpress.events.InteractionEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
     export type WeekNumberRule =
@@ -10138,7 +10319,7 @@ declare module DevExpress.ui {
      */
     export type CardClickEvent = DevExpress.common.core.events.NativeEventInfo<
       dxCardView,
-      PointerEvent | MouseEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       WithCardInfo;
     /**
@@ -10147,7 +10328,7 @@ declare module DevExpress.ui {
     export type CardDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         WithCardInfo;
     export type CardHeaderPredefinedItem =
@@ -10422,7 +10603,7 @@ declare module DevExpress.ui {
     export type FieldCaptionClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         WithFieldCaptionInfo;
     /**
@@ -10431,7 +10612,7 @@ declare module DevExpress.ui {
     export type FieldCaptionDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         WithFieldCaptionInfo;
     /**
@@ -10455,7 +10636,7 @@ declare module DevExpress.ui {
     export type FieldValueClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         WithFieldValueInfo;
     /**
@@ -10464,7 +10645,7 @@ declare module DevExpress.ui {
     export type FieldValueDblClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCardView,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         WithFieldValueInfo;
     /**
@@ -10967,6 +11148,16 @@ declare module DevExpress.ui {
   }
   module dxChat {
     /**
+     * [descr:_ui_chat_AttachmentDownloadEvent]
+     */
+    export type AttachmentDownloadEvent =
+      DevExpress.common.core.events.EventInfo<dxChat> & {
+        /**
+         * [descr:_ui_chat_AttachmentDownloadEvent.attachment]
+         */
+        readonly attachment?: Attachment;
+      };
+    /**
      * [descr:_ui_chat_DisposingEvent]
      */
     export type DisposingEvent =
@@ -11037,7 +11228,7 @@ declare module DevExpress.ui {
     export type MessageEnteredEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxChat,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > & {
         /**
          * [descr:_ui_chat_MessageEnteredEvent.message]
@@ -11117,6 +11308,13 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.activeStateEnabled]
      */
     activeStateEnabled?: boolean;
+    /**
+     * [descr:dxChatOptions.fileUploaderOptions]
+     */
+    fileUploaderOptions?: Omit<
+      DevExpress.ui.dxFileUploader.Properties,
+      'dialogTrigger' | 'showFileList' | 'uploadMode'
+    >;
     /**
      * [descr:dxChatOptions.focusStateEnabled]
      */
@@ -11217,6 +11415,12 @@ declare module DevExpress.ui {
      */
     showMessageTimestamp?: boolean;
     /**
+     * [descr:dxChatOptions.onAttachmentDownload]
+     */
+    onAttachmentDownload?:
+      | ((e: DevExpress.ui.dxChat.AttachmentDownloadEvent) => void)
+      | undefined;
+    /**
      * [descr:dxChatOptions.onMessageEntered]
      */
     onMessageEntered?:
@@ -11226,7 +11430,7 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onTypingStart]
      */
     onTypingStart?:
-      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onTypingEnd]
@@ -11282,7 +11486,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCheckBox.reset(value)]
      */
-    reset(value?: boolean | null | undefined): void;
+    reset(value?: DevExpress.ui.dxCheckBox.Properties['value']): void;
   }
   module dxCheckBox {
     /**
@@ -11313,7 +11517,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxCheckBox,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+        DevExpress.events.InteractionEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -11363,7 +11567,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBox.reset(value)]
      */
-    reset(value?: string | null): void;
+    reset(value?: DevExpress.ui.dxColorBox.Properties['value']): void;
   }
   module dxColorBox {
     /**
@@ -11519,7 +11723,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBoxOptions.value]
      */
-    value?: string;
+    value?: string | null;
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -11620,7 +11824,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxContextMenu<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -11651,7 +11855,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxContextMenu<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > & {
       /**
        * [descr:_ui_context_menu_PositioningEvent.position]
@@ -11714,9 +11918,7 @@ declare module DevExpress.ui {
     hideOnOutsideClick?:
       | boolean
       | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
+          event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>
         ) => boolean);
     /**
      * [descr:dxContextMenuOptions.items]
@@ -11860,7 +12062,11 @@ declare module DevExpress.ui {
      * [descr:dxDataGrid.totalCount()]
      */
     totalCount(): number;
-
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -11955,6 +12161,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_data_grid_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_data_grid_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
@@ -12788,7 +13010,7 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxDataGrid<TRowData, TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > & {
         /**
          * [descr:_ui_data_grid_FocusedCellChangingEvent.cellElement]
@@ -12852,7 +13074,7 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxDataGrid<TRowData, TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > & {
         /**
          * [descr:_ui_data_grid_FocusedRowChangingEvent.rowElement]
@@ -14057,6 +14279,18 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxDataGrid.Toolbar | undefined;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxDataGridOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxDataGrid.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Row instead
@@ -14073,7 +14307,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBox.reset(value)]
      */
-    reset(value?: DevExpress.common.DateLike): void;
+    reset(value?: DevExpress.ui.dxDateBox.Properties['value']): void;
   }
   module dxDateBox {
     /**
@@ -14282,7 +14516,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateRangeBox.reset(value)]
      */
-    reset(value?: Array<Date | number | string | null>): void;
+    reset(value?: DevExpress.ui.dxDateRangeBox.Properties['value']): void;
   }
   module dxDateRangeBox {
     /**
@@ -14487,76 +14721,6 @@ declare module DevExpress.ui {
         KeyboardEvent | MouseEvent | PointerEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * [descr:dxDeferRendering]
-   */
-  export class dxDeferRendering extends Widget<dxDeferRenderingOptions> {}
-  module dxDeferRendering {
-    /**
-     * [descr:_ui_defer_rendering_ContentReadyEvent]
-     */
-    export type ContentReadyEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_DisposingEvent]
-     */
-    export type DisposingEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_InitializedEvent]
-     */
-    export type InitializedEvent =
-      DevExpress.common.core.events.InitializedEventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_OptionChangedEvent]
-     */
-    export type OptionChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering> &
-        DevExpress.common.core.events.ChangedOptionInfo;
-    export type Properties = dxDeferRenderingOptions;
-    /**
-     * [descr:_ui_defer_rendering_RenderedEvent]
-     */
-    export type RenderedEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-    /**
-     * [descr:_ui_defer_rendering_ShownEvent]
-     */
-    export type ShownEvent =
-      DevExpress.common.core.events.EventInfo<dxDeferRendering>;
-  }
-  /**
-   * [descr:dxDeferRenderingOptions]
-   * @deprecated [depNote:dxDeferRenderingOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxDeferRenderingOptions
-    extends WidgetOptions<dxDeferRendering> {
-    /**
-     * [descr:dxDeferRenderingOptions.animation]
-     */
-    animation?: DevExpress.common.core.animation.AnimationConfig | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.onRendered]
-     */
-    onRendered?: (e: DevExpress.ui.dxDeferRendering.RenderedEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.onShown]
-     */
-    onShown?: (e: DevExpress.ui.dxDeferRendering.ShownEvent) => void;
-    /**
-     * [descr:dxDeferRenderingOptions.renderWhen]
-     */
-    renderWhen?: PromiseLike<void> | boolean | undefined;
-    /**
-     * [descr:dxDeferRenderingOptions.showLoadIndicator]
-     */
-    showLoadIndicator?: boolean;
-    /**
-     * [descr:dxDeferRenderingOptions.staggerItemSelector]
-     */
-    staggerItemSelector?: string | undefined;
   }
   /**
    * [descr:dxDiagram]
@@ -15920,7 +16084,7 @@ declare module DevExpress.ui {
     export type DragEndEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxDraggable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_draggable_DragEndEvent.itemData]
@@ -15953,7 +16117,7 @@ declare module DevExpress.ui {
     export type DragMoveEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxDraggable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_draggable_DragMoveEvent.itemData]
@@ -15986,7 +16150,7 @@ declare module DevExpress.ui {
     export type DragStartEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxDraggable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_draggable_DragStartEvent.itemData]
@@ -16121,9 +16285,7 @@ declare module DevExpress.ui {
     closeOnOutsideClick?:
       | boolean
       | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
+          event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>
         ) => boolean);
     /**
      * [descr:dxDrawerOptions.maxSize]
@@ -16586,7 +16748,9 @@ declare module DevExpress.ui {
    * [descr:dxDropDownEditor]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
+  export class dxDropDownEditor<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxDropDownEditor.Properties
+  > extends dxTextBox<TProperties> {
     /**
      * [descr:dxDropDownEditor.close()]
      */
@@ -16603,6 +16767,10 @@ declare module DevExpress.ui {
      * [descr:dxDropDownEditor.open()]
      */
     open(): void;
+    /**
+     * [descr:dxDropDownEditor.reset(value)]
+     */
+    reset(value?: TProperties['value']): void;
   }
   module dxDropDownEditor {
     /**
@@ -16612,7 +16780,15 @@ declare module DevExpress.ui {
       readonly text?: string;
       readonly icon?: string;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    interface DropDownEditorInstance extends dxDropDownEditor<Properties> {}
     export type DropDownPredefinedButton = 'clear' | 'dropDown';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -16698,7 +16874,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxDropDownList<
-    TProperties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
   > extends dxDropDownEditor<TProperties> {
     getDataSource(): DevExpress.common.data.DataSource;
   }
@@ -17681,7 +17857,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileUploader.reset(value)]
      */
-    reset(value?: Array<File>): void;
+    reset(value?: DevExpress.ui.dxFileUploader.Properties['value']): void;
   }
   module dxFileUploader {
     /**
@@ -18603,7 +18779,10 @@ declare module DevExpress.ui {
     validate(): DevExpress.ui.dxValidationGroup.ValidationResult;
   }
   module dxForm {
-    export type AIResult = Record<string, string | string[]>;
+    export type AIResult = Record<
+      string,
+      DevExpress.aiIntegration.SmartPasteResultFieldType
+    >;
     /**
      * [descr:_ui_form_ContentReadyEvent]
      */
@@ -19268,7 +19447,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxGallery<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -19279,7 +19458,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxGallery<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -19569,9 +19748,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_gantt_ContextMenuPreparingEvent.event]
          */
-        readonly event?: DevExpress.events.DxEvent<
-          PointerEvent | MouseEvent | TouchEvent
-        >;
+        readonly event?: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>;
         /**
          * [descr:_ui_gantt_ContextMenuPreparingEvent.targetKey]
          */
@@ -21689,7 +21866,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxList<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       ListItemInfo<TItem>;
     /**
@@ -21728,7 +21905,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxList<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       ListItemInfo<TItem>;
     /**
@@ -21768,7 +21945,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxList<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       ListItemInfo<TItem> & {
         /**
@@ -22213,6 +22390,27 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadPanel>;
     /**
+     * [descr:LoadPanelIndicatorProperties]
+     */
+    export type LoadPanelIndicatorProperties = {
+      /**
+       * [descr:LoadPanelIndicatorProperties.animationType]
+       */
+      animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
+      /**
+       * [descr:LoadPanelIndicatorProperties.src]
+       */
+      src?: string;
+      /**
+       * [descr:LoadPanelIndicatorProperties.height]
+       */
+      height?: number | string | undefined;
+      /**
+       * [descr:LoadPanelIndicatorProperties.width]
+       */
+      width?: number | string | undefined;
+    };
+    /**
      * [descr:_ui_load_panel_OptionChangedEvent]
      */
     export type OptionChangedEvent =
@@ -22272,8 +22470,13 @@ declare module DevExpress.ui {
     height?: number | string;
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
+     * @deprecated [depNote:dxLoadPanelOptions.indicatorSrc]
      */
     indicatorSrc?: string;
+    /**
+     * [descr:dxLoadPanelOptions.indicatorOptions]
+     */
+    indicatorOptions?: DevExpress.ui.dxLoadPanel.LoadPanelIndicatorProperties;
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
@@ -22874,7 +23077,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxMenu<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -23307,7 +23510,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxMultiView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -23318,7 +23521,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxMultiView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -23417,7 +23620,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBox.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxNumberBox.Properties['value']): void;
   }
   module dxNumberBox {
     /**
@@ -23524,7 +23727,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxNumberBox,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+        DevExpress.events.InteractionEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -23651,9 +23854,7 @@ declare module DevExpress.ui {
     hideOnOutsideClick?:
       | boolean
       | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
+          event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>
         ) => boolean);
     /**
      * [descr:dxOverlayOptions.hideOnParentScroll]
@@ -24785,9 +24986,7 @@ declare module DevExpress.ui {
     hideOnOutsideClick?:
       | boolean
       | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
+          event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>
         ) => boolean);
     /**
      * [descr:dxPopoverOptions.hideOnParentScroll]
@@ -25013,7 +25212,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxProgressBar.reset(value)]
      */
-    reset(value?: Number | false): void;
+    reset(value?: DevExpress.ui.dxProgressBar.Properties['value']): void;
   }
   module dxProgressBar {
     /**
@@ -25153,7 +25352,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxRangeSlider.reset(value)]
      */
-    reset(value?: Array<number>): void;
+    reset(value?: DevExpress.ui.dxRangeSlider.Properties['value']): void;
   }
   module dxRangeSlider {
     /**
@@ -25184,7 +25383,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxRangeSlider,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
+        DevExpress.events.InteractionEvent | UIEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo & {
           /**
@@ -25464,7 +25663,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxResponsiveBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -25475,7 +25674,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxResponsiveBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -25659,11 +25858,6 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
-     * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
-     * @deprecated [depNote:dxScheduler.scrollToTime(hours, minutes, date)]
-     */
-    scrollToTime(hours: number, minutes: number, date?: Date): void;
-    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
@@ -25752,7 +25946,7 @@ declare module DevExpress.ui {
     export type AppointmentContextMenuEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxScheduler,
-        MouseEvent | PointerEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > &
         TargetedAppointmentInfo & {
           /**
@@ -25842,6 +26036,11 @@ declare module DevExpress.ui {
         Omit<AppointmentDraggingEvent, 'itemData'> & {
           itemData?: any;
         };
+    export type AppointmentFormIconsShowMode =
+      | 'both'
+      | 'main'
+      | 'recurrence'
+      | 'none';
     /**
      * [descr:_ui_scheduler_AppointmentFormOpeningEvent]
      */
@@ -25964,7 +26163,7 @@ declare module DevExpress.ui {
     export type CellContextMenuEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxScheduler,
-        MouseEvent | PointerEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_scheduler_CellContextMenuEvent.cellData]
@@ -26247,17 +26446,6 @@ declare module DevExpress.ui {
      */
     descriptionExpr?: string;
     /**
-     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
-     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
-     */
-    dropDownAppointmentTemplate?:
-      | template
-      | ((
-          itemData: any,
-          itemIndex: number,
-          contentElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
      * [descr:dxSchedulerOptions.editing]
      */
     editing?:
@@ -26287,6 +26475,29 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.editing.allowUpdating]
            */
           allowUpdating?: boolean;
+          /**
+           * [descr:dxSchedulerOptions.editing.form]
+           */
+          form?:
+            | {
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.items]
+                 */
+                items?: Array<DevExpress.ui.dxForm.Item>;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onSaved]
+                 */
+                onSaved?: (formData: any) => void;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.onCanceled]
+                 */
+                onCanceled?: (formData: any) => void;
+                /**
+                 * [descr:dxSchedulerOptions.editing.form.iconsShowMode]
+                 */
+                iconsShowMode?: DevExpress.ui.dxScheduler.AppointmentFormIconsShowMode;
+              }
+            | undefined;
         };
     /**
      * [descr:dxSchedulerOptions.endDateExpr]
@@ -26474,6 +26685,10 @@ declare module DevExpress.ui {
        */
       fieldExpr?: string;
       /**
+       * [descr:dxSchedulerOptions.resources.icon]
+       */
+      icon?: string;
+      /**
        * [descr:dxSchedulerOptions.resources.label]
        */
       label?: string;
@@ -26592,17 +26807,6 @@ declare module DevExpress.ui {
             | template
             | ((
                 model: DevExpress.ui.dxScheduler.AppointmentTooltipTemplateData,
-                itemIndex: number,
-                contentElement: DevExpress.core.DxElement
-              ) => string | DevExpress.core.UserDefinedElement);
-          /**
-           * [descr:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           * @deprecated [depNote:dxSchedulerOptions.views.dropDownAppointmentTemplate]
-           */
-          dropDownAppointmentTemplate?:
-            | template
-            | ((
-                itemData: any,
                 itemIndex: number,
                 contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
@@ -26967,7 +27171,7 @@ declare module DevExpress.ui {
    * [descr:dxSelectBox]
    */
   export class dxSelectBox<
-    TProperties = DevExpress.ui.dxSelectBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxSelectBox.Properties
   > extends dxDropDownList<TProperties> {}
   module dxSelectBox {
     /**
@@ -27178,7 +27382,6 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */
     customItemCreateEvent?: string;
-
     /**
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
@@ -27191,7 +27394,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlider.reset(value)]
      */
-    reset(value?: number): void;
+    reset(value?: DevExpress.ui.dxSlider.Properties['value']): void;
   }
   module dxSlider {
     /**
@@ -27222,7 +27425,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxSlider,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
+        DevExpress.events.InteractionEvent | UIEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -27351,9 +27554,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_sortable_AddEvent.event]
        */
-      readonly event: DevExpress.events.DxEvent<
-        PointerEvent | MouseEvent | TouchEvent
-      >;
+      readonly event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>;
       /**
        * [descr:_ui_sortable_AddEvent.itemData]
        */
@@ -27402,7 +27603,7 @@ declare module DevExpress.ui {
     export type DragChangeEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxSortable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_sortable_DragChangeEvent.itemData]
@@ -27447,7 +27648,7 @@ declare module DevExpress.ui {
     export type DragEndEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxSortable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_sortable_DragEndEvent.itemData]
@@ -27492,7 +27693,7 @@ declare module DevExpress.ui {
     export type DragMoveEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxSortable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_sortable_DragMoveEvent.itemData]
@@ -27537,7 +27738,7 @@ declare module DevExpress.ui {
     export type DragStartEvent = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxSortable,
-        PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.PointerInteractionEvent
       > & {
         /**
          * [descr:_ui_sortable_DragStartEvent.itemData]
@@ -27578,7 +27779,7 @@ declare module DevExpress.ui {
      */
     export type RemoveEvent = DevExpress.common.core.events.NativeEventInfo<
       dxSortable,
-      PointerEvent | MouseEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > & {
       /**
        * [descr:_ui_sortable_RemoveEvent.itemData]
@@ -27618,7 +27819,7 @@ declare module DevExpress.ui {
      */
     export type ReorderEvent = DevExpress.common.core.events.NativeEventInfo<
       dxSortable,
-      PointerEvent | MouseEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > & {
       /**
        * [descr:_ui_sortable_ReorderEvent.itemData]
@@ -27730,6 +27931,150 @@ declare module DevExpress.ui {
      * [descr:dxSortableOptions.onReorder]
      */
     onReorder?: (e: DevExpress.ui.dxSortable.ReorderEvent) => void;
+  }
+  /**
+   * [descr:dxSpeechToText]
+   */
+  export class dxSpeechToText extends Widget<DevExpress.ui.dxSpeechToText.Properties> {}
+  module dxSpeechToText {
+    /**
+     * [descr:_ui_speech_to_text_ContentReadyEvent]
+     */
+    export type ContentReadyEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_DisposingEvent]
+     */
+    export type DisposingEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_EndEvent]
+     */
+    export type EndEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
+     * [descr:_ui_speech_to_text_ErrorEvent]
+     */
+    export type ErrorEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    export type ExplicitTypes = {
+      Properties: Properties;
+      ContentReadyEvent: ContentReadyEvent;
+      DisposingEvent: DisposingEvent;
+      InitializedEvent: InitializedEvent;
+      OptionChangedEvent: OptionChangedEvent;
+      StartClickEvent: StartClickEvent;
+      StopClickEvent: StopClickEvent;
+      ResultEvent: ResultEvent;
+      ErrorEvent: ErrorEvent;
+    };
+    /**
+     * [descr:_ui_speech_to_text_InitializedEvent]
+     */
+    export type InitializedEvent =
+      DevExpress.common.core.events.InitializedEventInfo<dxSpeechToText>;
+    /**
+     * [descr:_ui_speech_to_text_OptionChangedEvent]
+     */
+    export type OptionChangedEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> &
+        DevExpress.common.core.events.ChangedOptionInfo;
+    /**
+     * [descr:dxSpeechToTextOptions]
+     */
+    export interface Properties extends WidgetOptions<dxSpeechToText> {
+      /**
+       * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
+       */
+      customSpeechRecognizer?: CustomSpeechRecognizer;
+
+      /**
+       * [descr:dxSpeechToTextOptions.startText]
+       */
+      startText?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stopText]
+       */
+      stopText?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stylingMode]
+       */
+      stylingMode?: DevExpress.common.ButtonStyle;
+
+      /**
+       * [descr:dxSpeechToTextOptions.startIcon]
+       */
+      startIcon?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.stopIcon]
+       */
+      stopIcon?: string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.type]
+       */
+      type?: DevExpress.common.ButtonType | string;
+
+      /**
+       * [descr:dxSpeechToTextOptions.speechRecognitionConfig]
+       */
+      speechRecognitionConfig?:
+        | SpeechRecognitionConfig
+        | { [key: string]: any };
+
+      /**
+       * [descr:dxSpeechToTextOptions.onStartClick]
+       */
+      onStartClick?: ((e: StartClickEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onStopClick]
+       */
+      onStopClick?: ((e: StopClickEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onResult]
+       */
+      onResult?: ((e: ResultEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onError]
+       */
+      onError?: ((e: ErrorEvent) => void) | undefined;
+
+      /**
+       * [descr:dxSpeechToTextOptions.onEnd]
+       */
+      onEnd?: ((e: EndEvent) => void) | undefined;
+    }
+    /**
+     * [descr:_ui_speech_to_text_ResultEvent]
+     */
+    export type ResultEvent =
+      DevExpress.common.core.events.EventInfo<dxSpeechToText> & {
+        event: Event;
+      };
+    /**
+     * [descr:_ui_speech_to_text_StartClickEvent]
+     */
+    export type StartClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxSpeechToText,
+      DevExpress.events.InteractionEvent
+    >;
+    /**
+     * [descr:_ui_speech_to_text_StopClickEvent]
+     */
+    export type StopClickEvent = DevExpress.common.core.events.NativeEventInfo<
+      dxSpeechToText,
+      DevExpress.events.InteractionEvent
+    >;
   }
   /**
    * [descr:dxSpeedDialAction]
@@ -27874,7 +28219,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxSplitter<TKey>,
-      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      DevExpress.events.InteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TKey>;
     /**
@@ -27885,7 +28230,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxSplitter<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -27896,7 +28241,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxSplitter<TKey>,
-      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      DevExpress.events.InteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TKey>;
     /**
@@ -27929,7 +28274,7 @@ declare module DevExpress.ui {
     export type ResizeEndEvent<TKey = any> =
       DevExpress.common.core.events.NativeEventInfo<
         dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > &
         ResizeInfo;
     /**
@@ -27939,7 +28284,7 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.Cancelable &
         DevExpress.common.core.events.NativeEventInfo<
           dxSplitter<TKey>,
-          KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+          DevExpress.events.InteractionEvent
         > &
         ResizeInfo;
     /**
@@ -27959,7 +28304,7 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.Cancelable &
         DevExpress.common.core.events.NativeEventInfo<
           dxSplitter<TKey>,
-          KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+          DevExpress.events.InteractionEvent
         > &
         ResizeInfo;
   }
@@ -28108,7 +28453,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxStepper<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -28227,7 +28572,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSwitch.reset(value)]
      */
-    reset(value?: boolean): void;
+    reset(value?: DevExpress.ui.dxSwitch.Properties['value']): void;
   }
   module dxSwitch {
     /**
@@ -28258,7 +28603,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxSwitch,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
+        DevExpress.events.InteractionEvent | UIEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -28367,7 +28712,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTabPanel<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -28378,7 +28723,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTabPanel<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -28459,7 +28804,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTabPanel<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       TabPanelItemInfo<TItem>;
     /**
@@ -28649,7 +28994,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTabs<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -28660,7 +29005,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTabs<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -28789,7 +29134,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTagBox]
    */
-  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
+  export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {
+    /**
+     * [descr:dxTagBox.reset(value)]
+     */
+    reset(value?: DevExpress.ui.dxTagBox.Properties['value']): void;
+  }
   module dxTagBox {
     /**
      * [descr:_ui_tag_box_ChangeEvent]
@@ -29124,7 +29474,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxTextArea,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+        DevExpress.events.InteractionEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -29155,12 +29505,12 @@ declare module DevExpress.ui {
    * [descr:dxTextBox]
    */
   export class dxTextBox<
-    TProperties = DevExpress.ui.dxTextBox.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextBox.Properties
   > extends dxTextEditor<TProperties> {
     /**
      * [descr:dxTextBox.reset(value)]
      */
-    reset(value?: string): void;
+    reset(value?: TProperties['value']): void;
   }
   module dxTextBox {
     /**
@@ -29276,7 +29626,7 @@ declare module DevExpress.ui {
     export type ValueChangedEvent =
       DevExpress.common.core.events.NativeEventInfo<
         dxTextBox,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+        DevExpress.events.InteractionEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
   }
@@ -29305,7 +29655,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class dxTextEditor<
-    TProperties = DevExpress.ui.dxTextEditor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.dxTextEditor.Properties
   > extends Editor<TProperties> {
     /**
      * [descr:dxTextEditor.blur()]
@@ -29565,7 +29915,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTileView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -29576,7 +29926,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTileView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -29760,9 +30110,7 @@ declare module DevExpress.ui {
     hideOnOutsideClick?:
       | boolean
       | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
+          event: DevExpress.events.DxEvent<DevExpress.events.PointerInteractionEvent>
         ) => boolean);
     /**
      * [descr:dxToastOptions.height]
@@ -29858,7 +30206,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxToolbar<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -29869,7 +30217,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxToolbar<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       DevExpress.common.core.events.ItemInfo<TItem>;
     /**
@@ -30023,7 +30371,9 @@ declare module DevExpress.ui {
    * [descr:dxTrackBar]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export class dxTrackBar<TProperties> extends Editor<TProperties> {}
+  export class dxTrackBar<
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue
+  > extends Editor<TProperties> {}
   /**
    * [descr:dxTrackBarOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30137,6 +30487,12 @@ declare module DevExpress.ui {
       childrenOnly: boolean
     ): DevExpress.core.utils.DxPromise<void>;
 
+    abortAIColumnRequest(columnName: string): void;
+    sendAIColumnRequest(columnName: string): void;
+    refreshAIColumn(columnName: string): void;
+    clearAIColumn(columnName: string): void;
+    getAIColumnText(columnName: string, key: TKey): string;
+
     beginCustomLoading(messageText: string): void;
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
@@ -30232,6 +30588,22 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    /**
+     * [descr:_ui_tree_list_AIColumnRequestCreatingEvent]
+     */
+    export type AIColumnRequestCreatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnRequestCreatingInfo<TRowData>;
+    /**
+     * [descr:_ui_tree_list_AIColumnResponseReceivedEvent]
+     */
+    export type AIColumnResponseReceivedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.common.core.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.common.grids.AIColumnResponseReceivedInfo;
     /**
      * [descr:_ui_tree_list_CellClickEvent]
      */
@@ -30774,7 +31146,7 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxTreeList<TRowData, TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > & {
         /**
          * [descr:_ui_tree_list_FocusedCellChangingEvent.cellElement]
@@ -30838,7 +31210,7 @@ declare module DevExpress.ui {
     > = DevExpress.common.core.events.Cancelable &
       DevExpress.common.core.events.NativeEventInfo<
         dxTreeList<TRowData, TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        DevExpress.events.InteractionEvent
       > & {
         /**
          * [descr:_ui_tree_list_FocusedRowChangingEvent.rowElement]
@@ -31742,6 +32114,18 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar | undefined;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnRequestCreating]
+     */
+    onAIColumnRequestCreating?: (
+      e: DevExpress.ui.dxTreeList.AIColumnRequestCreatingEvent
+    ) => void;
+    /**
+     * [descr:dxTreeListOptions.onAIColumnResponseReceived]
+     */
+    onAIColumnResponseReceived?: (
+      e: DevExpress.ui.dxTreeList.AIColumnResponseReceivedEvent
+    ) => void;
   };
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
@@ -31930,7 +32314,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTreeView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       ItemInfo<TItem, TKey>;
     /**
@@ -31952,7 +32336,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.common.core.events.NativeEventInfo<
       dxTreeView<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      DevExpress.events.PointerInteractionEvent
     > &
       ItemInfo<TItem, TKey>;
     /**
@@ -32650,7 +33034,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Editor<
-    TProperties = DevExpress.ui.Editor.Properties
+    TProperties extends DevExpress.ui.Editor.EditorOptionsWithValue = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
      * [descr:Editor.clear()]
@@ -32660,13 +33044,20 @@ declare module DevExpress.ui {
     /**
      * [descr:Editor.reset(value)]
      */
-    reset(value?: any): void;
+    reset(value?: TProperties['value']): void;
   }
   module Editor {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     interface EditorInstance extends Editor<Properties> {}
+    /**
+     * [descr:EditorOptionsWithValue]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface EditorOptionsWithValue {
+      value?: unknown;
+    }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -33592,6 +33983,19 @@ declare module DevExpress.ui.dxChat {
     message?: string;
   };
   /**
+   * [descr:Attachment]
+   */
+  export type Attachment = {
+    /**
+     * [descr:Attachment.name]
+     */
+    name: string;
+    /**
+     * [descr:Attachment.size]
+     */
+    size: number;
+  };
+  /**
    * [descr:ImageMessage]
    */
   export type ImageMessage = MessageBase & {
@@ -33641,6 +34045,10 @@ declare module DevExpress.ui.dxChat {
    */
   export type TextMessage = MessageBase & {
     /**
+     * [descr:TextMessage.attachments]
+     */
+    attachments?: Attachment[];
+    /**
      * [descr:TextMessage.text]
      */
     text?: string;
@@ -33648,6 +34056,8 @@ declare module DevExpress.ui.dxChat {
      * [descr:TextMessage.isEdited]
      */
     isEdited?: boolean;
+
+    [key: string]: any;
   };
   /**
    * [descr:User]
@@ -34092,6 +34502,51 @@ declare module DevExpress.ui.dxScheduler {
     location?: DevExpress.common.ToolbarItemLocation;
   };
 }
+declare module DevExpress.ui.dxSpeechToText {
+  /**
+   * [descr:CustomSpeechRecognizer]
+   */
+  export type CustomSpeechRecognizer = {
+    /**
+     * [descr:CustomSpeechRecognizer.enabled]
+     */
+    enabled?: boolean;
+
+    /**
+     * [descr:CustomSpeechRecognizer.isListening]
+     */
+    isListening?: boolean;
+  };
+  /**
+   * [descr:SpeechRecognitionConfig]
+   */
+  export type SpeechRecognitionConfig = {
+    /**
+     * [descr:SpeechRecognitionConfig.continuous]
+     */
+    continuous?: boolean;
+
+    /**
+     * [descr:SpeechRecognitionConfig.grammars]
+     */
+    grammars?: string[];
+
+    /**
+     * [descr:SpeechRecognitionConfig.interimResults]
+     */
+    interimResults?: boolean;
+
+    /**
+     * [descr:SpeechRecognitionConfig.lang]
+     */
+    lang?: string;
+
+    /**
+     * [descr:SpeechRecognitionConfig.maxAlternatives]
+     */
+    maxAlternatives?: number;
+  };
+}
 declare module DevExpress.ui.dxSplitter {
   export type Item<TKey = any> = dxSplitterItem<TKey>;
 }
@@ -34417,7 +34872,8 @@ declare module DevExpress.viz {
    * [descr:BaseChartTooltip]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface BaseChartTooltip extends BaseWidgetTooltip {
+  export interface BaseChartTooltip<TPointInfo = any>
+    extends BaseWidgetTooltip {
     /**
      * [descr:BaseChartOptions.tooltip.argumentFormat]
      */
@@ -34428,14 +34884,14 @@ declare module DevExpress.viz {
     contentTemplate?:
       | template
       | ((
-          pointInfo: any,
+          pointInfo: TPointInfo,
           element: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement)
       | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.customizeTooltip]
      */
-    customizeTooltip?: ((pointInfo: any) => any) | undefined;
+    customizeTooltip?: ((pointInfo: TPointInfo) => any) | undefined;
     /**
      * [descr:BaseChartOptions.tooltip.shared]
      */
@@ -34795,6 +35251,56 @@ declare module DevExpress.viz {
      */
     show(holdVisible: boolean): void;
   }
+  /**
+   * [descr:BasePointInfo]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type BasePointInfo<TPoint extends basePointObject> = {
+    /**
+     * [descr:BasePointInfo.argument]
+     */
+    argument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.argumentText]
+     */
+    argumentText?: string;
+    /**
+     * [descr:BasePointInfo.highErrorValue]
+     */
+    highErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.lowErrorValue]
+     */
+    lowErrorValue?: number;
+    /**
+     * [descr:BasePointInfo.originalArgument]
+     */
+    originalArgument?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.originalValue]
+     */
+    originalValue?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.point]
+     */
+    point?: TPoint;
+    /**
+     * [descr:BasePointInfo.points]
+     */
+    points?: BasePointInfo<TPoint>[];
+    /**
+     * [descr:BasePointInfo.seriesName]
+     */
+    seriesName?: any;
+    /**
+     * [descr:BasePointInfo.value]
+     */
+    value?: string | number | Date;
+    /**
+     * [descr:BasePointInfo.valueText]
+     */
+    valueText?: string;
+  };
   /**
    * [descr:basePointObject]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36596,6 +37102,108 @@ declare module DevExpress.viz {
        */
       text?: string | undefined;
     };
+    /**
+     * [descr:BubblePointInfo]
+     */
+    export type BubblePointInfo = CommonPointInfo & {
+      /**
+       * [descr:BubblePointInfo.points]
+       */
+      points?: BubblePointInfo[];
+      /**
+       * [descr:BubblePointInfo.size]
+       */
+      size?: number;
+      /**
+       * [descr:BubblePointInfo.sizeText]
+       */
+      sizeText?: string;
+    };
+    /**
+     * [descr:CandleStickPointInfo]
+     */
+    export type CandleStickPointInfo = {
+      /**
+       * [descr:CandleStickPointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.closeValue]
+       */
+      closeValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.closeValueText]
+       */
+      closeValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.highValue]
+       */
+      highValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.highValueText]
+       */
+      highValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.lowValue]
+       */
+      lowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.lowValueText]
+       */
+      lowValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.openValue]
+       */
+      openValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.openValueText]
+       */
+      openValueText?: string;
+      /**
+       * [descr:CandleStickPointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:CandleStickPointInfo.originalCloseValue]
+       */
+      originalCloseValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalHighValue]
+       */
+      originalHighValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalLowValue]
+       */
+      originalLowValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.originalOpenValue]
+       */
+      originalOpenValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:CandleStickPointInfo.points]
+       */
+      points?: CandleStickPointInfo[];
+      /**
+       * [descr:CandleStickPointInfo.reductionValue]
+       */
+      reductionValue?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:CandleStickPointInfo.value]
+       */
+      value?: number | string;
+      /**
+       * [descr:CandleStickPointInfo.valueText]
+       */
+      valueText?: string;
+    };
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
     export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
@@ -37025,6 +37633,10 @@ declare module DevExpress.viz {
       };
     };
     /**
+     * [descr:CommonPointInfo]
+     */
+    export type CommonPointInfo = BasePointInfo<chartPointObject>;
+    /**
      * [descr:dxChartCommonSeriesSettings]
      */
     export type CommonSeriesSettings = dxChartSeriesTypesCommonSeries & {
@@ -37253,12 +37865,78 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     /**
+     * [descr:dxChartPointInfo]
+     */
+    export type PointInfo =
+      | CommonPointInfo
+      | StackedPointInfo
+      | BubblePointInfo
+      | CandleStickPointInfo
+      | RangePointInfo;
+    /**
      * [descr:_viz_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<chartPointObject>;
     export type Properties = dxChartOptions;
+    /**
+     * [descr:RangePointInfo]
+     */
+    export type RangePointInfo = {
+      /**
+       * [descr:RangePointInfo.argument]
+       */
+      argument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.argumentText]
+       */
+      argumentText?: string;
+      /**
+       * [descr:RangePointInfo.valueText]
+       */
+      valueText?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue1]
+       */
+      rangeValue1?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue1Text]
+       */
+      rangeValue1Text?: string;
+      /**
+       * [descr:RangePointInfo.rangeValue2]
+       */
+      rangeValue2?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.rangeValue2Text]
+       */
+      rangeValue2Text?: string;
+      /**
+       * [descr:RangePointInfo.seriesName]
+       */
+      seriesName?: any;
+      /**
+       * [descr:RangePointInfo.point]
+       */
+      point?: chartPointObject;
+      /**
+       * [descr:RangePointInfo.points]
+       */
+      points?: RangePointInfo[];
+      /**
+       * [descr:RangePointInfo.originalArgument]
+       */
+      originalArgument?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalMinValue]
+       */
+      originalMinValue?: string | number | Date;
+      /**
+       * [descr:RangePointInfo.originalValue]
+       */
+      originalValue?: string | number | Date;
+    };
     /**
      * [descr:_viz_chart_SeriesClickEvent]
      */
@@ -37293,14 +37971,55 @@ declare module DevExpress.viz {
     export type SeriesSelectionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxChart> & SeriesInteractionInfo;
     /**
-     * [descr:dxChartTooltip]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:StackedPointInfo]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type StackedPointInfo = CommonPointInfo & {
+      /**
+       * [descr:StackedPointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:StackedPointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:StackedPointInfo.points]
+       */
+      points?: StackedPointInfo[];
+      /**
+       * [descr:StackedPointInfo.total]
+       */
+      total?: number;
+      /**
+       * [descr:StackedPointInfo.totalText]
+       */
+      totalText?: string;
+    };
+    /**
+     * [descr:dxChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxChartOptions.tooltip.location]
        */
       location?: ChartTooltipLocation;
+      /**
+       * [descr:dxChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_chart_TooltipHiddenEvent]
@@ -40789,6 +41508,23 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<piePointObject>;
     /**
+     * [descr:dxPieChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<piePointObject> & {
+      /**
+       * [descr:PointInfo.percent]
+       */
+      percent?: number;
+      /**
+       * [descr:PointInfo.percentText]
+       */
+      percentText?: string;
+      /**
+       * [descr:PointInfo.points]
+       */
+      points?: PointInfo;
+    };
+    /**
      * [descr:_viz_pie_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -40799,6 +41535,28 @@ declare module DevExpress.viz {
       | 'none'
       | 'smallValueThreshold'
       | 'topN';
+    /**
+     * [descr:dxPieChartTooltip]
+     */
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
+      /**
+       * [descr:dxPieChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPieChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
+    };
     /**
      * [descr:_viz_pie_chart_TooltipHiddenEvent]
      */
@@ -40972,6 +41730,10 @@ declare module DevExpress.viz {
           annotation: dxPieChartAnnotationConfig | any
         ) => dxPieChartAnnotationConfig)
       | undefined;
+    /**
+     * [descr:dxPieChartOptions.tooltip]
+     */
+    tooltip?: DevExpress.viz.dxPieChart.Tooltip;
   }
   /**
    * [descr:dxPieChartSeriesTypes]
@@ -41853,6 +42615,10 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo<polarPointObject>;
     /**
+     * [descr:dxPolarChartPointInfo]
+     */
+    export type PointInfo = BasePointInfo<polarPointObject>;
+    /**
      * [descr:_viz_polar_chart_PointSelectionChangedEvent]
      */
     export type PointSelectionChangedEvent =
@@ -41903,11 +42669,28 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartTooltip]
      */
-    export type Tooltip = BaseChartTooltip & {
+    export type Tooltip = Omit<
+      BaseChartTooltip<PointInfo>,
+      'contentTemplate' | 'customizeTooltip'
+    > & {
       /**
        * [descr:dxPolarChartOptions.tooltip.shared]
        */
       shared?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | template
+        | ((
+            pointInfo: PointInfo,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement)
+        | undefined;
+      /**
+       * [descr:dxPolarChartOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: ((pointInfo: PointInfo) => any) | undefined;
     };
     /**
      * [descr:_viz_polar_chart_TooltipHiddenEvent]

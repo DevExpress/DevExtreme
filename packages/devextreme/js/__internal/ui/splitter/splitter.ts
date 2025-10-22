@@ -16,6 +16,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type {
   Item,
   ItemCollapsedEvent,
@@ -64,7 +65,6 @@ import {
   type EventMap,
   type FlexProperty,
   type HandlerMap,
-  type InteractionEvent,
   type PaneRestrictions,
   type RenderQueueItem,
 } from './utils/types';
@@ -122,7 +122,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
 
-  private _savedCollapsingEvent?: InteractionEvent;
+  private _savedCollapsingEvent?: DxEvent<InteractionEvent>;
 
   private _shouldRecalculateLayout?: boolean;
 
@@ -627,9 +627,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     if (itemData.splitter) {
       this._onItemTemplateRendered(itemTemplate, args)();
       // @ts-expect-error
-      return itemTemplate.source
-        ? itemTemplate.source()
-        : $();
+      return itemTemplate.source ? itemTemplate.source() : $();
     }
 
     return super._createItemByTemplate(itemTemplate, args);
@@ -667,7 +665,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._layout = this._getDefaultLayoutBasedOnSize();
+        this._layout = this._getDefaultLayoutBasedOnSize(property === 'size' ? item : undefined);
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
@@ -844,7 +842,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     );
 
     this._itemRestrictions.forEach((pane) => {
-      pane.maxSize = undefined;
+      if (item.collapsed) {
+        pane.maxSize = undefined;
+      }
       pane.resizable = undefined;
     });
 
@@ -955,7 +955,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _fireCollapsedStateChanged(
     isExpanded: boolean,
     $item: dxElementWrapper,
-    e?: InteractionEvent,
+    e?: DxEvent<InteractionEvent>,
   ): void {
     const eventName = isExpanded ? ITEM_EXPANDED_EVENT : ITEM_COLLAPSED_EVENT;
     const actionArgs = { event: e };
@@ -963,13 +963,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._itemEventHandler($item, eventName, actionArgs);
   }
 
-  _getDefaultLayoutBasedOnSize(): number[] {
-    this._updateItemsRestrictions();
+  _getDefaultLayoutBasedOnSize(item?: Item): number[] {
+    this._updateItemsRestrictions(item);
 
     return getDefaultLayout(this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(): void {
+  _updateItemsRestrictions(currentItem?: Item): void {
     const { orientation, items = [] } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -979,7 +979,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
+        resizable: item === currentItem ? false : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),

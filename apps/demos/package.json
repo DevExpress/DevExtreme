@@ -41,7 +41,7 @@
         "devextreme-aspnet-data": "5.0.0",
         "devextreme-aspnet-data-nojquery": "5.0.0",
         "devextreme-cldr-data": "1.0.3",
-        "devextreme-exceljs-fork": "^4.4.2",
+        "devextreme-exceljs-fork": "^4.4.3",
         "devextreme-quill": "catalog:",
         "dx-systemjs-vue-browser": "1.1.2",
         "esbuild": "0.25.0",
@@ -146,9 +146,10 @@
         "stylelint-config-recommended-vue": "1.5.0",
         "stylelint-config-standard": "35.0.0",
         "systemjs-builder": "0.16.15",
-        "testcafe": "2.6.2",
+        "testcafe": "3.7.2",
         "ts-node": "10.9.2",
-        "vue-tsc": "^2.2.8"
+        "@types/file-saver-es": "^2.0.3",
+        "vue-tsc": "^3.0.6"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",
@@ -168,8 +169,8 @@
         "lint-css": "stylelint **/*.{css,vue}",
         "lint-non-demos": "pnpx nx run-many -t lint-js lint-css lint-html -p devextreme-demos",
         "lint": "pnpm run lint-non-demos && pnpm run lint-demos",
-        "test-testcafe": "node utils/visual-tests/testcafe-runner.mjs",
-        "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.mjs",
+        "test-testcafe": "ts-node utils/visual-tests/testcafe-runner.ts",
+        "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.ts",
         "fix-lint": "prettier --write . && eslint --fix . && stylelint **/*.{css,vue} --fix",
         "prettier": "prettier",
         "build-bundles": "gulp bundles",

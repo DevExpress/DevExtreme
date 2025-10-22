@@ -24,10 +24,11 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import dxChat from 'devextreme/ui/chat';
-import { Alert, Message, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, AttachmentDownloadEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
+import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -39,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAlertModule } from 'devextreme-angular/ui/nested';
@@ -52,21 +54,21 @@ import { DxiTypingUserModule } from 'devextreme-angular/ui/nested';
 import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
 import { DxiChatAlertModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatAttachmentModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatDayHeaderFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatFileUploaderOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
-
-import { DxiAlertComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiTypingUserComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiChatAlertComponent } from 'devextreme-angular/ui/chat/nested';
-import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
-import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
+import { 
+           PROPERTY_TOKEN_alerts,
+           PROPERTY_TOKEN_attachments,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_typingUsers,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -87,6 +89,27 @@ import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
     ]
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_alerts)
+    set _alertsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('alerts', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_attachments)
+    set _attachmentsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('attachments', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_typingUsers)
+    set _typingUsersContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('typingUsers', value);
+    }
+
     instance: DxChat = null;
 
     /**
@@ -203,6 +226,16 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set emptyViewTemplate(value: any) {
         this._setOption('emptyViewTemplate', value);
+    }
+
+
+    
+    @Input()
+    get fileUploaderOptions(): dxFileUploaderOptions {
+        return this._getOption('fileUploaderOptions');
+    }
+    set fileUploaderOptions(value: dxFileUploaderOptions) {
+        this._setOption('fileUploaderOptions', value);
     }
 
 
@@ -428,6 +461,14 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:undefined]
+    
+    
+     */
+    @Output() onAttachmentDownload: EventEmitter<AttachmentDownloadEvent>;
+
+    /**
+    
      * [descr:dxChatOptions.onDisposing]
     
     
@@ -590,6 +631,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fileUploaderOptionsChange: EventEmitter<dxFileUploaderOptions>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -707,58 +755,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiChatAlertComponent)
-    get alertsChildren(): QueryList<DxiChatAlertComponent> {
-        return this._getOption('alerts');
-    }
-    set alertsChildren(value) {
-        this._setChildren('alerts', value, 'DxiChatAlertComponent');
-    }
-
-    @ContentChildren(DxiChatItemComponent)
-    get itemsChildren(): QueryList<DxiChatItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiChatItemComponent');
-    }
-
-    @ContentChildren(DxiChatTypingUserComponent)
-    get typingUsersChildren(): QueryList<DxiChatTypingUserComponent> {
-        return this._getOption('typingUsers');
-    }
-    set typingUsersChildren(value) {
-        this._setChildren('typingUsers', value, 'DxiChatTypingUserComponent');
-    }
-
-
-    @ContentChildren(DxiAlertComponent)
-    get alertsLegacyChildren(): QueryList<DxiAlertComponent> {
-        return this._getOption('alerts');
-    }
-    set alertsLegacyChildren(value) {
-        this._setChildren('alerts', value, 'DxiAlertComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiTypingUserComponent)
-    get typingUsersLegacyChildren(): QueryList<DxiTypingUserComponent> {
-        return this._getOption('typingUsers');
-    }
-    set typingUsersLegacyChildren(value) {
-        this._setChildren('typingUsers', value, 'DxiTypingUserComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -769,6 +765,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
+            { subscribe: 'attachmentDownload', emit: 'onAttachmentDownload' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'messageDeleted', emit: 'onMessageDeleted' },
@@ -790,6 +787,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'editingChange' },
             { emit: 'elementAttrChange' },
             { emit: 'emptyViewTemplateChange' },
+            { emit: 'fileUploaderOptionsChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
@@ -869,9 +867,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiTypingUserModule,
     DxoUserModule,
     DxiChatAlertModule,
+    DxiChatAttachmentModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,
+    DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
     DxiChatTypingUserModule,
@@ -890,9 +890,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiTypingUserModule,
     DxoUserModule,
     DxiChatAlertModule,
+    DxiChatAttachmentModule,
     DxoChatAuthorModule,
     DxoChatDayHeaderFormatModule,
     DxoChatEditingModule,
+    DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
     DxiChatTypingUserModule,

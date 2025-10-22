@@ -1,12 +1,12 @@
 import Widget from '@js/ui/widget/ui.widget';
 import { extend } from '@ts/core/utils/m_extend';
 
+import timeZoneUtils from './m_utils_time_zone';
 import {
   DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
   DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS_RULES,
-  DEPRECATED_SCHEDULER_OPTIONS,
 } from './utils/options/constants';
 import type {
   NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
@@ -39,14 +39,6 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
       ...DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
       ...DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
     }) as SafeSchedulerOptions;
-  }
-
-  _setDeprecatedOptions(): void {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-
-    // @ts-expect-error
-    extend(this._deprecatedOptions, DEPRECATED_SCHEDULER_OPTIONS);
   }
 
   protected _defaultOptionsRules(): SchedulerOptionsRule[] {
@@ -100,6 +92,10 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     };
     const validationResult = this.optionsValidator.validate(currentViewOptions);
     this.optionsValidatorErrorHandler.handleValidationResult(validationResult);
+  }
+
+  getTimeZone(): string {
+    return (this.option('timeZone') || timeZoneUtils.getMachineTimezoneName()) ?? 'Etc/UTC';
   }
 
   getViewOption<K extends keyof SafeSchedulerOptions>(optionName: K): SafeSchedulerOptions[K] {

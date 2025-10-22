@@ -55,13 +55,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import DxTagBox from 'devextreme-vue/tag-box';
+import DxTagBox, { type DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import { products } from './data.ts';
 
 const items = products.slice(0, 5);
 
-function onMultiTagPreparing(args) {
-  const selectedItemsLength = args.selectedItems.length;
+function onMultiTagPreparing(args: DxTagBoxTypes.MultiTagPreparingEvent) {
+  const selectedItemsLength = (args.selectedItems || []).length;
   const totalCount = 5;
 
   if (selectedItemsLength < totalCount) {

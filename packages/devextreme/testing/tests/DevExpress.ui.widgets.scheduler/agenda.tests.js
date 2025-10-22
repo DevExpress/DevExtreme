@@ -32,18 +32,8 @@ module('Agenda', {}, () => {
 
         const config = {
             onContentReady: e => {
-                e.component.onDataSourceChanged(rows);
-            },
-            notifyScheduler: {
-                invoke: (functionName) => {
-                    if(functionName === 'getLayoutManager') {
-                        return {
-                            getRenderingStrategyInstance: () => {
-                                return { calculateRows: () => rows };
-                            }
-                        };
-                    }
-                }
+                e.component._renderView();
+                e.component._recalculateAgenda(rows);
             },
             getResourceManager: getEmptyResourceManager,
         };

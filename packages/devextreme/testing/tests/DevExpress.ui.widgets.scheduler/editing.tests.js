@@ -81,7 +81,12 @@ QUnit.test('Appointment should not be draggable & resizable', async function(ass
 });
 
 QUnit.test('ReadOnly option should be passed to the details appointment view', async function(assert) {
-    await this.createInstance();
+    await this.createInstance({
+        editing: {
+            allowUpdating: false,
+            legacyForm: true
+        }
+    });
 
     this.instance.showAppointmentPopup({
         text: 'a',
@@ -93,7 +98,7 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', a
 
     assert.ok(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
 
-    this.instance.option('editing', true);
+    this.instance.option('editing.allowUpdating', true);
     this.instance.showAppointmentPopup({
         text: 'a',
         startDate: new Date(2015, 5, 15, 10),
@@ -107,7 +112,8 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', a
 QUnit.test('Details appointment view should be readOnly if editing.allowUpdating=false', async function(assert) {
     await this.createInstance({
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         }
     });
 
@@ -139,7 +145,8 @@ QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appo
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false,
-            allowAdding: true
+            allowAdding: true,
+            legacyForm: true
         }
     });
 
@@ -158,7 +165,8 @@ QUnit.test('Details appointment form should be readOnly after adding new appoint
     await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         },
         dataSource: []
     });
@@ -183,7 +191,8 @@ QUnit.test('Details form of new appointment shouldn\'t be readOnly after try to 
     await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
-            allowUpdating: false
+            allowUpdating: false,
+            legacyForm: true
         },
         dataSource: [first]
     });
