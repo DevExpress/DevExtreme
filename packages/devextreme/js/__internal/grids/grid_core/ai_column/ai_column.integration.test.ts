@@ -1110,6 +1110,53 @@ describe('API Methods', () => {
       expect(abortSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('should send a request after changing the prompt in auto mode (dynamic update)', async () => {
+      const aiIntegrationResult = (): RequestResult => ({
+        promise: new Promise<string>((resolve) => {
+          columnSendRequestResolved();
+          resolve('1');
+        }),
+        abort: (): void => {
+          abortSpy();
+        },
+      });
+
+      const columnAiIntegration = new AIIntegration({
+        sendRequest(): RequestResult {
+          return aiIntegrationResult();
+        },
+      });
+      const { instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            ai: {
+              aiIntegration: columnAiIntegration,
+            },
+          },
+        ],
+      });
+
+      instance.sendAIColumnRequest('myColumn');
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(0);
+      expect(abortSpy).toHaveBeenCalledTimes(0);
+
+      instance.columnOption('myColumn', 'ai.prompt', 'Test prompt');
+      expect(columnSendRequestResolved).toHaveBeenCalledTimes(1);
+      await Promise.resolve();
+      expect(abortSpy).toHaveBeenCalledTimes(1);
+    });
+
     it('should not send a request if there are no data rows', async () => {
       const aiIntegrationResult = (): RequestResult => ({
         promise: new Promise<string>((resolve) => {
