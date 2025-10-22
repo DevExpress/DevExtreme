@@ -36,6 +36,7 @@ const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
 const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
 const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
 const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
+const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 
 const FILEUPLOADER_CANCEL_BUTTON_CLASS = 'dx-fileuploader-cancel-button';
 const FILEUPLOADER_UPLOAD_BUTTON_CLASS = 'dx-fileuploader-upload-button';
@@ -2584,6 +2585,110 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.equal($fileUploader.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS + ':visible').length, 3, 'uploaded files\' cancel button are hidden');
     });
 
+    QUnit.test('cancel button should not be hidden for uploaded file if _hideCancelButtonOnUpload is disabled on init', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT + FILEUPLOADER_AFTER_LOAD_DELAY);
+        assert.strictEqual($fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}:visible`).length, 1, 'cancel button is not hidden after upload');
+    });
+
+    QUnit.test('cancel button should be hidden for uploaded file after _hideCancelButtonOnUpload enable at runtime', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+
+        fileUploader.option('_hideCancelButtonOnUpload', true);
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT + FILEUPLOADER_AFTER_LOAD_DELAY);
+        assert.strictEqual($fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}:visible`).length, 0, 'cancel button is hidden after upload');
+    });
+
+    QUnit.test('should show file icon if _showFileIcon is enabled', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _showFileIcon: true,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile'}]);
+
+        const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
+
+        assert.strictEqual($fileIcon.length, 1, 'file icon is shown');
+        assert.ok($fileIcon.hasClass('dx-icon'), 'icon has dx-icon class');
+        assert.ok($fileIcon.hasClass('dx-icon-file'), 'icon has dx-icon-file class');
+
+        fileUploader.option('_showFileIcon', false);
+
+        assert.strictEqual($fileIcon.length, 1, 'file icon is hidden');
+    });
+
+    [
+        {
+            extension: 'png',
+            icon: 'image'
+        },
+        {
+            extension: 'mp3',
+            icon: 'music'
+        },
+        {
+            extension: 'mp4',
+            icon: 'video'
+        },
+        {
+            extension: 'pdf',
+            icon: 'pdffile'
+        },
+        {
+            extension: 'doc',
+            icon: 'textdocument'
+        },
+        {
+            extension: 'xls',
+            icon: 'exportxlsx'
+        },
+        {
+            extension: 'zip',
+            icon: 'folder'
+        },
+    ].forEach(({ extension, icon }) => {
+        QUnit.test(`should show file icon with dx-icon-${icon} class when file has ${extension} extension`, function(assert) {
+            const $fileUploader = $('#fileuploader').dxFileUploader({
+                uploadMode: 'instantly',
+                _showFileIcon: true,
+            });
+
+            simulateFileChoose($fileUploader, [{ name: `fakefile.${extension}`}]);
+
+            const $fileIcon = $fileUploader.find(`.${FILEUPLOADER_FILE_ICON_CLASS}`);
+
+            assert.ok($fileIcon.hasClass(`dx-icon-${icon}`), `icon has dx-icon-${icon} class`);
+        });
+    })
+
+    QUnit.test('cancel button should be placed to the end if _cancelButtonPosition is set to "end"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _cancelButtonPosition: 'end',
+        });
+
+        simulateFileChoose($fileUploader, [{ name: 'fakefile'}]);
+
+        const $cancelButtonContainer = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).parent();
+        const $fileContainer = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
+        const $lastChild = $fileContainer.children().last();
+
+        assert.strictEqual($cancelButtonContainer.is($lastChild), true, 'cancel button is placed to the end of file container');
+    });
+
     QUnit.test('files count should be correct after value reset', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             extendSelection: true,
@@ -3543,6 +3648,29 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual(progressSpy.args[0][0].bytesTotal, 100023, 'the bytesTotal argument value is correct');
     });
 
+    QUnit.test('onCancelButtonClick should be called with correct arguments on cancel button click', function(assert) {
+        assert.expect(3);
+        
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            _hideCancelButtonOnUpload: false,
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        const onCancelButtonClick = ({ component, element, file }) => {
+            assert.strictEqual($(element).is($fileUploader), true, 'element is passed');
+            assert.strictEqual(component, fileUploader, 'component is passed');
+            assert.strictEqual(file.value, fakeFile, 'file is passed');
+        }
+
+        fileUploader.option('onCancelButtonClick', onCancelButtonClick);
+
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        $cancelButton.trigger('dxclick');
+    });
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {

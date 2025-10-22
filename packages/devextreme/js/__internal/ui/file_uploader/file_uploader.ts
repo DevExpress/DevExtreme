@@ -17,7 +17,7 @@ import { extend } from '@js/core/utils/extend';
 import { getOffset, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, NativeEventInfo } from '@js/events';
 import type { ButtonStyle, ButtonType, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
@@ -27,6 +27,7 @@ import { fromPromise } from '@ts/core/utils/m_deferred';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
+import { getFileIconName } from './file_uploader.utils';
 
 const window = getWindow();
 
@@ -50,6 +51,7 @@ const FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS = 'dx-fileuploader-file-status-mess
 const FILEUPLOADER_FILE_CLASS = 'dx-fileuploader-file';
 const FILEUPLOADER_FILE_NAME_CLASS = 'dx-fileuploader-file-name';
 const FILEUPLOADER_FILE_SIZE_CLASS = 'dx-fileuploader-file-size';
+const FILEUPLOADER_FILE_ICON_CLASS = 'dx-fileuploader-file-icon';
 
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_BUTTON_CONTAINER_CLASS = 'dx-fileuploader-button-container';
@@ -177,10 +179,19 @@ interface FileUploaderChunkUploadResponse {
   error?: string;
 }
 
+type CancelButtonClickEvent = NativeEventInfo<KeyboardEvent | MouseEvent | PointerEvent> & {
+  readonly file?: File;
+};
 export interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
   _uploadButtonType?: ButtonType;
+
+  _hideCancelButtonOnUpload?: boolean;
+
+  _showFileIcon?: boolean;
+
+  _cancelButtonPosition?: 'start' | 'end';
 
   extendSelection?: boolean;
 
@@ -191,6 +202,8 @@ export interface Properties extends PublicProperties {
   nativeDropSupported?: boolean;
 
   useDragOver?: boolean;
+
+  onCancelButtonClick?: ((e: CancelButtonClickEvent) => void);
 }
 
 interface FileUploaderProperties extends Properties,
@@ -813,6 +826,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _beforeSendAction?: (event?: Record<string, unknown>) => void;
 
+  _cancelButtonClickAction?: (event?: Record<string, unknown>) => void;
+
   static __internals: {
     changeFileInputRenderer: (renderer: () => dxElementWrapper) => void;
     resetFileInputTag: () => void;
@@ -879,6 +894,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         onUploadAborted: null,
         onDropZoneEnter: null,
         onDropZoneLeave: null,
+        onCancelButtonClick: null,
         allowedFileExtensions: [],
         maxFileSize: 0,
         minFileSize: 0,
@@ -898,6 +914,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         nativeDropSupported: true,
         _uploadButtonType: 'normal',
         _buttonStylingMode: 'contained',
+        _hideCancelButtonOnUpload: true,
+        _showFileIcon: false,
+        _cancelButtonPosition: 'start',
       },
     };
   }
@@ -976,6 +995,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._createUploadAbortedAction();
     this._createDropZoneEnterAction();
     this._createDropZoneLeaveAction();
+    this._createCancelButtonClickAction();
   }
 
   _setUploadStrategy(): void {
@@ -1265,6 +1285,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._dropZoneLeaveAction = this._createActionByOption('onDropZoneLeave');
   }
 
+  _createCancelButtonClickAction(): void {
+    this._cancelButtonClickAction = this._createActionByOption('onCancelButtonClick', { excludeValidators: ['readOnly'] });
+  }
+
   _createFile(value: File): FileUploaderItem {
     return {
       value,
@@ -1332,8 +1356,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
       .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
       .appendTo(this._$filesContainer);
 
-    this._renderFileButtons(file, $fileContainer);
-
+    this._renderFileIcon(value.name, $fileContainer);
+    
     file.$file = $('<div>')
       .addClass(FILEUPLOADER_FILE_CLASS)
       .appendTo($fileContainer);
@@ -1357,6 +1381,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
         .text(this._getFileSize(value.size))
         .appendTo($fileInfo);
     }
+
+    this._renderFileButtons(file, $fileContainer);
 
     if (file.isValid()) {
       const { readyToUploadMessage } = this.option();
@@ -1399,17 +1425,36 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {
-    const $cancelButton = this._getCancelButton(file);
-
-    if ($cancelButton) {
-      $container.append($cancelButton);
-    }
+    const { _cancelButtonPosition } = this.option();
 
     const $uploadButton = this._getUploadButton(file);
 
     if ($uploadButton) {
-      $container.append($uploadButton);
+      $container.prepend($uploadButton);
     }
+
+    const $cancelButton = this._getCancelButton(file);
+
+    if ($cancelButton) {
+      if (_cancelButtonPosition === 'end') {
+        $container.append($cancelButton);
+
+        return
+      }
+      $container.prepend($cancelButton);
+    }
+  }
+
+  _renderFileIcon(fileName: string, $container: dxElementWrapper): void {
+    const { _showFileIcon } = this.option();
+
+    if (!_showFileIcon) {
+      return;
+    }
+
+    $('<div>')
+      .addClass(`${FILEUPLOADER_FILE_ICON_CLASS} dx-icon dx-icon-${getFileIconName(fileName)}`)
+      .appendTo($container);
   }
 
   _getCancelButton(file: FileUploaderItem): dxElementWrapper | null {
@@ -1430,7 +1475,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
       $('<div>').addClass(`${FILEUPLOADER_BUTTON_CLASS} ${FILEUPLOADER_CANCEL_BUTTON_CLASS}`),
       Button,
       {
-        onClick: (): void => { this._removeFile(file); },
+        onClick: (): void => { 
+          this._removeFile(file); 
+          this._cancelButtonClickAction?.({file: file.value});
+        },
         icon: 'close',
         visible: allowCanceling,
         disabled: readOnly,
@@ -1465,15 +1513,20 @@ class FileUploader extends Editor<FileUploaderProperties> {
       },
     );
 
-    file.onLoadStart.add(() => file.uploadButton?.option({
-      visible: false,
-      disabled: true,
-    }));
+    file.onLoadStart.add(() => {
+      file.uploadButton?.option({
+        visible: false,
+        disabled: true,
+      });
+    });
 
-    file.onAbort.add(() => file.uploadButton?.option({
-      visible: true,
-      disabled: false,
-    }));
+    file.onAbort.add(() => {
+      console.log('onAbort');
+      file.uploadButton?.option({
+        visible: true,
+        disabled: false,
+      });
+    });
 
     return $('<div>')
       .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
@@ -2005,10 +2058,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
       onClick: (): void => {
         this._preventFilesUploading([file]);
         this._removeFile(file);
+        this._cancelButtonClickAction?.({file});
       },
     });
 
     const hideCancelButton = (): void => {
+      const { _hideCancelButtonOnUpload } = this.option();
+
+      if (!_hideCancelButtonOnUpload) {
+        return;
+      }
       // eslint-disable-next-line no-restricted-globals
       setTimeout(() => {
         file.cancelButton?.option({
@@ -2230,6 +2289,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
       case 'uploadedMessage':
       case 'uploadFailedMessage':
       case 'uploadAbortedMessage':
+      case '_hideCancelButtonOnUpload':
+      case '_cancelButtonPosition':
+      case '_showFileIcon':
         this._invalidate();
         break;
       case 'labelText':
@@ -2288,6 +2350,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         break;
       case 'onDropZoneLeave':
         this._createDropZoneLeaveAction();
+        break;
+      case 'onCancelButtonClick':
+        this._createCancelButtonClickAction();
         break;
       case 'useNativeInputClick':
         this._renderInput();
