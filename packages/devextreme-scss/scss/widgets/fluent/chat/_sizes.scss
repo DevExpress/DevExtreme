@@ -72,7 +72,7 @@ $chat-file-container-border-radius: $fluent-base-border-radius !default;
 $chat-file-button-size: $fluent-button-height !default;
 $chat-file-secondary-font-size: 10px !default;
 $chat-file-base-section-gap: 4px !default;
-$chat-file-file-size-max-width: 3em !default;
+$chat-file-file-size-max-width: 4em !default;
 
 @if $size == "default" {
   $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;
