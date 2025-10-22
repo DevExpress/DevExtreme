@@ -1,0 +1,42 @@
+@mixin chat-file(
+  
+) {
+  .dx-chat-file {
+    padding: 7px 8px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px 0px #0000001F, 0px 1px 2px 0px #00000024;
+  }
+
+  .dx-chat-file-icon-container {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+
+    .dx-icon {
+      font-size: 20px;
+      color: #707070;
+    }
+  }
+
+  .dx-chat-file-name {
+    margin-inline-end: 8px;
+    margin-inline-start: 4px;
+    font-weight: 600;
+    line-height: 1.2857;
+  }
+  
+  .dx-chat-file-size {
+    margin-inline-end: 4px;
+    font-size: 10px;
+    color: #707070;
+  }
+
+  .dx-chat-file-download-button {
+    width: 32px;
+    height: 32px;
+    outline: 0.5px solid #8787875e; // TO REMOVE
+    flex-basis: 32px;
+    min-width: 32px; // TO REMOVE
+  }
+}
