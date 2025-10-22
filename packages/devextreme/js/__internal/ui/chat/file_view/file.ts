@@ -1,5 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
-// import type { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -12,6 +12,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getFileIconName = (fileName: string): string => 'file';
 
 export type Properties = WidgetProperties & {
   data: Attachment;
@@ -68,7 +71,10 @@ class File extends Widget<Properties> {
   }
 
   private _renderIcon(): void {
-    const $icon = getImageContainer('file') ?? $('<i>');
+    const { data } = this.option();
+
+    const iconName = getFileIconName(data.name);
+    const $icon = getImageContainer(iconName) as dxElementWrapper;
 
     const $iconContainer = $('<div>')
       .addClass(CHAT_FILE_ICON_CONTAINER_CLASS)
