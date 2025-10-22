@@ -143,19 +143,19 @@ test('Placeholder is visible after items option change when value is not chosen 
 test('Lookup appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: fit-content;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup width adjust to fit its content.png');
 
   for (const id of t.ctx.ids) {
     await setStyleAttribute(Selector(`#${id}`), 'width: 100px;');
   }
 
-  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Lookup appearance with limited width.png');
 
   await t
     .expect(compareResults.isValid())

@@ -522,6 +522,26 @@ describe('columnOption', () => {
       expect(errors.log).toHaveBeenCalledWith('E1059', '"myColumn1"');
     });
   });
+
+  it('should be able to switch column type to "ai" at runtime', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'type', 'ai');
+    expect(component.apiColumnOption('myColumn').type).toBe('ai');
+  });
 });
 
 describe('aiIntegration', () => {

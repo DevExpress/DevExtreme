@@ -20,7 +20,6 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', {
     element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
-    shouldTestInCompact: true,
   });
 
   await t

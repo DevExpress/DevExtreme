@@ -1961,6 +1961,17 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
     });
 
+
+    QUnit.test('size set should work for resizable pane (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ }, { size: 10, resizable: true }],
+        });
+
+        this.instance.option('items[1].size', 50);
+        assert.strictEqual(this.instance.option('items[1].size'), 50, 'new item size was set');
+    });
+
     [
         { scenario: 'left', items: [{ resizable: false }, { }] },
         { scenario: 'right', items: [{ }, { resizable: false }] },
