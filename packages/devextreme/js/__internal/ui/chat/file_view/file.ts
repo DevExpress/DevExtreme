@@ -14,9 +14,10 @@ import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+// import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
 
 export type Properties = WidgetProperties & {
-  data?: Attachment;
+  data: Attachment;
 
   onDownload?: (e: Partial<AttachmentDownloadEvent>) => void;
 };
@@ -28,9 +29,9 @@ const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
 class File extends Widget<Properties> {
-  _downloadButton?: Button | null;
+  private _downloadButton?: Button | null;
 
-  _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
+  private readonly _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -62,14 +63,14 @@ class File extends Widget<Properties> {
     this._renderSections();
   }
 
-  _renderSections(): void {
+  private _renderSections(): void {
     this._renderIcon();
     this._renderName();
     this._renderSize();
     this._renderButton();
   }
 
-  _renderIcon(): void {
+  private _renderIcon(): void {
     const $icon = getImageContainer('file') ?? $('<i>');
 
     const $iconContainer = $('<div>')
@@ -79,9 +80,9 @@ class File extends Widget<Properties> {
     this.$element().append($iconContainer);
   }
 
-  _renderName(): void {
+  private _renderName(): void {
     const { data } = this.option();
-    const { name = '' } = data ?? {};
+    const { name } = data;
 
     const $name = $('<div>')
       .addClass(CHAT_FILE_NAME_CLASS)
@@ -91,11 +92,11 @@ class File extends Widget<Properties> {
     this.$element().append($name);
   }
 
-  _renderSize(): void {
+  private _renderSize(): void {
     const { data } = this.option();
-    const { size } = data ?? {};
+    const { size } = data;
 
-    const text = `${size ?? 0} KB`;
+    const text = `${size} KB`;
 
     const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
@@ -105,8 +106,14 @@ class File extends Widget<Properties> {
     this.$element().append($size);
   }
 
-  _renderButton(): void {
+  private _renderButton(): void {
     const $button = $('<div>').addClass(CHAT_FILE_DOWNLOAD_BUTTON_CLASS);
+
+    // this._downloadButton = this._createComponent<Button, ButtonProperties>(
+    //   this.$element(),
+    //   Button,
+    //   this._getButtonOptions(),
+    // );
 
     this.$element().append($button);
   }
