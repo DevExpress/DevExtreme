@@ -19,7 +19,6 @@ test('FilterBuilder - The field drop-down closes with the page scroll', async (t
     .scrollIntoView(filterBuilder.getItem('operation', 4));
 
   await t.expect(FilterBuilder.getPopupTreeView().exists).notOk();
-
 }).before(async () => {
   await insertStylesheetRulesToPage('#container {height: 150px; overflow: scroll;}');
 
