@@ -1,4 +1,9 @@
+import type { DxElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { getImageContainer } from '@js/core/utils/icon';
+import type { Properties as DropDownProperties } from '@js/ui/drop_down_button';
+import DropDownButton from '@js/ui/drop_down_button';
 import domAdapter from '@ts/core/m_dom_adapter';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
@@ -9,7 +14,7 @@ import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
 import type { AIColumnController } from './m_ai_column_controller';
 import {
-  getAICommandColumnOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
+  getAICommandColumnDefaultOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
   isPromptOption,
   isRefreshOption,
 } from './utils';
@@ -22,7 +27,7 @@ export class AIColumnView extends View {
   private promptEditorInstance!: AIPromptEditor;
 
   private addAICommandColumn(): void {
-    this.columnsController.addCommandColumn(getAICommandColumnOptions());
+    this.columnsController.addCommandColumn(getAICommandColumnDefaultOptions());
   }
 
   private getAIPromptEditorConfig(

@@ -269,6 +269,11 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     .dx-#{$widget-name}-table .dx-header-row  > td {
       padding-top: $material-grid-base-header-cell-vertical-padding;
       padding-bottom: $material-grid-base-header-cell-vertical-padding;
+
+      &.dx-command-ai {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
@@ -366,6 +371,11 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
     }
+  }
+
+  .dx-command-ai-header__text {
+    padding-top: $material-grid-base-header-cell-vertical-padding;
+    padding-bottom: $material-grid-base-header-cell-vertical-padding;
   }
 
   .dx-#{$widget-name}-edit-popup {

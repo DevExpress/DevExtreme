@@ -189,6 +189,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-row {
       & > td {
         padding: $generic-grid-base-cell-padding;
+
+        &.dx-command-ai {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
       }
     }
 
@@ -236,6 +241,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         color: $datagrid-drop-highlight-color;
       }
     }
+  }
+
+  .dx-command-ai-header__text {
+    padding-top: $generic-grid-base-cell-padding;
+    padding-bottom: $generic-grid-base-cell-padding;
   }
 
   .dx-#{$widget-name}-edit-popup .dx-error-message {

@@ -10,6 +10,8 @@ import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import { CLASSES } from './const';
+
 const SELECTORS = {
   gridContainer: '#gridContainer',
 };
@@ -235,6 +237,75 @@ describe('Options', () => {
       expect(headerCellTemplate).toHaveBeenCalledTimes(1);
       expect(headerCell.querySelectorAll('.template-class').length).toBe(1);
       expect(headerCell.textContent).toBe('Template');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeader}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
+    });
+  });
+
+  describe('default headerCellTemplate', () => {
+    it('should render icon, text and button by default', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      const headerCell = component.getHeaderCell(3);
+      const aiColumnHeaderText = headerCell.querySelector(`.${CLASSES.aiColumnHeaderText}`);
+
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeader}`)).not.toBeNull();
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).not.toBeNull();
+      expect(aiColumnHeaderText).not.toBeNull();
+      expect(aiColumnHeaderText?.textContent).toBe('AI Column');
+      expect(headerCell.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).not.toBeNull();
+    });
+
+    it('should replace default header template after dynamic headerCellTemplate update', async () => {
+      const headerCellTemplate = jest.fn((container: HTMLElement) => {
+        const span = document.createElement('span');
+
+        span.className = 'my-template-class';
+        span.textContent = 'Test';
+        container.append(span);
+      });
+
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+          },
+        ],
+      });
+
+      component.apiColumnOption('myColumn', 'headerCellTemplate', headerCellTemplate);
+
+      const headerCellUpdated = component.getHeaderCell(3);
+
+      expect(headerCellTemplate).toHaveBeenCalledTimes(1);
+      expect(headerCellUpdated.querySelector('.my-template-class')).not.toBeNull();
+      expect(headerCellUpdated.textContent).toBe('Test');
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeader}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderIcon}`)).toBeNull();
+      expect(headerCellUpdated.querySelector(`.${CLASSES.aiColumnHeaderButton}`)).toBeNull();
     });
   });
 

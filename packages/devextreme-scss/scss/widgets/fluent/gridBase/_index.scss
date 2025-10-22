@@ -284,6 +284,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       padding-top: $fluent-grid-base-header-cell-vertical-padding;
       padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
 
+      &.dx-command-ai {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
       &:first-child {
         border-top-left-radius: $datagrid-border-radius;
       }
@@ -388,6 +393,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
     }
+  }
+
+  .dx-command-ai-header__text {
+    padding-top: $fluent-grid-base-header-cell-vertical-padding;
+    padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
   }
 
   .dx-#{$widget-name}-edit-popup {

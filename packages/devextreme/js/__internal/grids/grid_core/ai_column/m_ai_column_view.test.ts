@@ -119,6 +119,7 @@ describe('AIColumnView', () => {
         command: AI_COLUMN_NAME,
         cssClass: 'dx-command-ai',
         fixed: false,
+        headerCellTemplate: expect.any(Function),
       });
     });
   });

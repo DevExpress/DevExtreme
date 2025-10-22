@@ -1247,4 +1247,20 @@
     bottom: 0;
     line-height: 0;
   }
+
+  .dx-command-ai-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+
+  .dx-command-ai-header__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dx-command-ai-header__button {
+    margin-left: auto;
+  }
 }
