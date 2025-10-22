@@ -83,7 +83,8 @@ jobs:
       matrix:
         CONSTEL: [
           export,
-          misc,
+          misc(1/2),
+          misc(2/2),
           ui,
           ui.editors,
           ui.htmlEditor,
