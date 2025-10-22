@@ -31,7 +31,8 @@
   flex-shrink: 1;
   flex-basis: auto;
   min-width: 0;
-  margin-inline-end: 9px;
+  margin-inline-end: 8px;
+  margin-inline-start: 4px;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.2857;
@@ -50,6 +51,7 @@
   text-overflow: ellipsis;
   max-width: 42px;
   min-width: 0;
+  margin-inline-end: 4px;
   text-align: end;
   font-size: 10px;
   color: #707070;
