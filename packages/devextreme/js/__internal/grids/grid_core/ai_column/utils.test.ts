@@ -1,9 +1,10 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import type { Column } from '@js/ui/data_grid';
 
 import type { Item } from '../data_controller/m_data_controller';
-import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
+import { getDataFromRowItems, isAIColumnAutoMode, reduceDataCachedKeys } from './utils';
 
 describe('reduceDataCachedKeys', () => {
   it('should remove keys from data that are present in cachedKeys', () => {
@@ -112,5 +113,45 @@ describe('getDataFromRowItems', () => {
     expect(result).toEqual([
       { id: 1, value: 'one' },
     ]);
+  });
+});
+
+describe('isAIColumnAutoMode', () => {
+  it('should return true for AI columns in auto mode', () => {
+    const column = {
+      type: 'ai',
+      ai: {
+        mode: 'auto',
+      },
+    } as Column;
+    const result = isAIColumnAutoMode(column);
+    expect(result).toBe(true);
+  });
+
+  it('should return false for AI columns in manual mode', () => {
+    const column = {
+      type: 'ai',
+      ai: {
+        mode: 'manual',
+      },
+    } as Column;
+    const result = isAIColumnAutoMode(column);
+    expect(result).toBe(false);
+  });
+
+  it('should return false for non-AI columns', () => {
+    const column = {
+      type: 'buttons',
+    } as Column;
+    const result = isAIColumnAutoMode(column);
+    expect(result).toBe(false);
+  });
+
+  it('should return true by default', () => {
+    const column = {
+      type: 'ai',
+    } as Column;
+    const result = isAIColumnAutoMode(column);
+    expect(result).toBe(true);
   });
 });

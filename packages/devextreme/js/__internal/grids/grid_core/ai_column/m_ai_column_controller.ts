@@ -6,6 +6,7 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import { Controller } from '../m_modules';
 import { AiColumnIntegrationController } from './m_ai_column_integration_controller';
+import { isAIColumnAutoMode } from './utils';
 
 export class AiColumnController extends Controller {
   private dataController!: DataController;
@@ -45,7 +46,7 @@ export class AiColumnController extends Controller {
 
   private handleDataChanged(e) {
     const aiColumns = this.columnsController.getColumns()
-      .filter((col) => col.type === 'ai' && (!col.ai?.mode || col.ai.mode === 'auto'));
+      .filter((col) => col.type === 'ai' && isAIColumnAutoMode(col));
 
     for (const col of aiColumns) {
       this.refreshAIColumn(col.name);

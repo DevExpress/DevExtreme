@@ -1,3 +1,5 @@
+import type { Column } from '@js/ui/data_grid';
+
 import type { Item, UserData } from '../data_controller/m_data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 
@@ -27,3 +29,5 @@ export const reduceDataCachedKeys = (
 
   return newData;
 };
+
+export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');
