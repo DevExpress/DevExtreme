@@ -2,15 +2,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Guid from 'devextreme/core/guid';
 import { Selector } from 'testcafe';
-import { testScreenshot } from '../../helpers/themeUtils';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
-import { appendElementTo } from '../../helpers/domUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
+import { appendElementTo } from '../../../helpers/domUtils';
 
 const TOOLBAR_ITEM_BUTTON = '.dx-button';
 
 fixture.disablePageReloads`Gantt`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const data = {
   tasks: [{

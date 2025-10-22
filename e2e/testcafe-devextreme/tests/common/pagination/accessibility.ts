@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Pagination from 'devextreme-testcafe-models/pagination';
-import url from '../../helpers/getPageUrl';
-import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
-import { createWidget } from '../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Pagination`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 ['full', 'compact'].forEach((displayMode) => {
   [undefined, 'Total {2} items. Page {0} of {1}'].forEach((infoText) => {
