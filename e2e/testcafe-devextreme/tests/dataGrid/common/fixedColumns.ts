@@ -328,7 +328,6 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     },
     scrolling: {
       useNative: false,
-      showScrollbar: 'never',
       rowRenderingMode: 'virtual',
     },
     showBorders: true,

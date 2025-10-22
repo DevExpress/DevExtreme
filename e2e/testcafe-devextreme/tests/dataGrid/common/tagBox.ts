@@ -9,7 +9,7 @@ fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../../container.html'),
 );
 // T1228720
-[Themes.materialBlue, Themes.fluentBlue].forEach(
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
     test('Datagrid tagbox column should not look broken', async (t) => {
       const dataGrid = new DataGrid('#container');
@@ -60,6 +60,9 @@ fixture.disablePageReloads`Tagbox Columns`.page(
           ],
           editing: { mode: 'batch', allowUpdating: true },
         });
+      })
+      .after(async () => {
+        await changeTheme(Themes.genericLight);
       });
   },
 );

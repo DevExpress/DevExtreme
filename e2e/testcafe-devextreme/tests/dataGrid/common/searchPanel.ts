@@ -50,7 +50,7 @@ safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
       },
     },
   });
-});
+}).after(async () => { await changeTheme(Themes.genericLight); });
 
 // T1272535
 safeSizeTest('Base sensitivity search should accept rows with accent letters in lookup columns', async (t) => {

@@ -56,8 +56,10 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
 }));
 
 [
+  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
+  Themes.genericGreenMist,
 ].forEach((theme) => {
   safeSizeTest(`Header hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -97,6 +99,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
     })
     .after(async (t) => {
       await t.hover(Selector('body'));
+      await changeTheme(Themes.genericLight);
     });
 
   safeSizeTest(`Row hover should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
@@ -138,6 +141,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
     })
     .after(async (t) => {
       await t.hover(Selector('body'));
+      await changeTheme(Themes.genericLight);
     });
 
   safeSizeTest(`Alternating rows should display correctly when there are fixed columns (${theme} theme)`, async (t) => {
@@ -171,10 +175,14 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
           columns[9].fixedPosition = 'right';
         },
       });
+    })
+    .after(async () => {
+      await changeTheme(Themes.genericLight);
     });
 });
 
 [
+  Themes.genericLight,
   Themes.materialBlue,
   Themes.fluentBlue,
 ].forEach((theme) => {
@@ -217,6 +225,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
         await ClientFunction(() => {
           $('body').css('zoom', '');
         })();
+        await changeTheme(Themes.genericLight);
       });
   });
 });

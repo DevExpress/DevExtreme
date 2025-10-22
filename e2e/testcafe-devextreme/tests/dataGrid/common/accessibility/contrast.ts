@@ -12,6 +12,7 @@ fixture.disablePageReloads`DataGrid - contrast`
 
 // T1257970
 [
+  Themes.genericLight,
   Themes.fluentBlue,
   Themes.materialBlue,
 ].forEach((theme) => {
@@ -44,11 +45,19 @@ fixture.disablePageReloads`DataGrid - contrast`
         },
       });
     },
+  ).after(
+    async () => {
+      if (theme === Themes.genericLight) {
+        return;
+      }
+      await changeTheme(Themes.genericLight);
+    },
   );
 });
 
 // T1286345
 [
+  Themes.genericLight,
   Themes.fluentBlue,
   Themes.materialBlue,
 ].forEach((theme) => {
@@ -87,6 +96,10 @@ fixture.disablePageReloads`DataGrid - contrast`
           visible: true,
         },
       });
+    },
+  ).after(
+    async () => {
+      await changeTheme(Themes.genericLight);
     },
   );
 });

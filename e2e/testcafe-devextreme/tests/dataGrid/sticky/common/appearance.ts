@@ -14,10 +14,14 @@ fixture.disablePageReloads`FixedColumns - appearance`
   .page(url(__dirname, '../../../container.html'));
 
 ([
+  [Themes.genericLight, false],
+  [Themes.genericLightCompact, false],
   [Themes.materialBlue, false],
   [Themes.materialBlueCompact, false],
   [Themes.fluentBlue, false],
   [Themes.fluentBlueCompact, false],
+  [Themes.genericLight, true],
+  [Themes.genericLightCompact, true],
   [Themes.materialBlue, true],
   [Themes.materialBlueCompact, true],
   [Themes.fluentBlue, true],
@@ -83,6 +87,8 @@ fixture.disablePageReloads`FixedColumns - appearance`
           columns[12].fixedPosition = 'right';
         },
       });
+    }).after(async () => {
+      await changeTheme(Themes.genericLight);
     });
   },
 );

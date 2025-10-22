@@ -1870,6 +1870,8 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 
 // T1270354
 [
+  { theme: Themes.genericLight, useNative: true },
+  { theme: Themes.genericLight, useNative: false },
   { theme: Themes.materialBlue, useNative: true },
   { theme: Themes.materialBlue, useNative: false },
   { theme: Themes.fluentBlue, useNative: true },
@@ -1929,7 +1931,8 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
           ],
         },
       });
-    });
+    })
+    .after(async () => changeTheme(Themes.genericLight));
 });
 
 fixture`Scrolling - warnings`

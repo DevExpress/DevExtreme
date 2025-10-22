@@ -46,6 +46,8 @@ const DATA_GRID_SELECTOR = '#container';
     return createWidget('dxDataGrid', {
       dataSource: [],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Sorting and group panel in ${theme}`, async (t) => {
@@ -81,6 +83,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Paging with displayMode is 'full' in ${theme}`, async (t) => {
@@ -116,6 +120,8 @@ const DATA_GRID_SELECTOR = '#container';
         displayMode: 'full',
       },
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Paging with displayMode is 'compact' in ${theme}`, async (t) => {
@@ -151,6 +157,8 @@ const DATA_GRID_SELECTOR = '#container';
         displayMode: 'compact',
       },
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Grouping and Summary in ${theme}`, async (t) => {
@@ -203,6 +211,8 @@ const DATA_GRID_SELECTOR = '#container';
         }],
       },
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Filter row - filter menu in ${theme}`, async (t) => {
@@ -243,6 +253,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Header filter - filter menu in ${theme}`, async (t) => {
@@ -281,6 +293,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Filter panel in ${theme}`, async (t) => {
@@ -316,6 +330,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Filter panel - popup with filter builder in ${theme}`, async (t) => {
@@ -355,6 +371,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Search panel in ${theme}`, async (t) => {
@@ -382,6 +400,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Search panel - highlight in ${theme}`, async (t) => {
@@ -410,6 +430,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Selection in ${theme}`, async (t) => {
@@ -443,6 +465,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Focused row in ${theme}`, async (t) => {
@@ -472,6 +496,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Fixed columns in ${theme}`, async (t) => {
@@ -517,6 +543,8 @@ const DATA_GRID_SELECTOR = '#container';
         },
       ],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Column chooser with the 'dragAndDrop' mode in ${theme}`, async (t) => {
@@ -565,6 +593,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_6',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Column chooser with the 'select' mode in ${theme}`, async (t) => {
@@ -613,6 +643,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_6',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Empty column chooser in ${theme}`, async (t) => {
@@ -652,6 +684,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   [false, true].forEach((useIcons) => {
@@ -685,6 +719,8 @@ const DATA_GRID_SELECTOR = '#container';
           'field_4',
         ],
       }, DATA_GRID_SELECTOR);
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
 
     test(`Row in edit state with useIcons=${useIcons} in ${theme}`, async (t) => {
@@ -725,6 +761,8 @@ const DATA_GRID_SELECTOR = '#container';
           'field_4',
         ],
       }, DATA_GRID_SELECTOR);
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 
@@ -766,6 +804,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Batch editing mode in ${theme} - edit cell`, async (t) => {
@@ -805,6 +845,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Batch editing mode in ${theme} - modified cell`, async (t) => {
@@ -844,6 +886,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Batch editing mode in ${theme} - delete row`, async (t) => {
@@ -883,6 +927,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Form editing mode in ${theme}`, async (t) => {
@@ -922,6 +968,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Popup editing mode in ${theme}`, async (t) => {
@@ -961,6 +1009,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Validation in cell editing mode in ${theme}`, async (t) => {
@@ -1007,6 +1057,8 @@ const DATA_GRID_SELECTOR = '#container';
         'field_4',
       ],
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Error row in ${theme}`, async (t) => {
@@ -1059,6 +1111,8 @@ const DATA_GRID_SELECTOR = '#container';
         e.errorText = 'Test';
       },
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Adaptability in ${theme}`, async (t) => {
@@ -1089,6 +1143,8 @@ const DATA_GRID_SELECTOR = '#container';
       width: 800,
       columnHidingEnabled: true,
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Row drag and drop in ${theme}`, async (t) => {
@@ -1112,6 +1168,8 @@ const DATA_GRID_SELECTOR = '#container';
         showDragIcons: true,
       },
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Export in ${theme}`, async (t) => {
@@ -1146,6 +1204,8 @@ const DATA_GRID_SELECTOR = '#container';
         allowExportSelectedData: true,
       },
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 
   test(`Context menu in ${theme}`, async (t) => {
@@ -1183,5 +1243,7 @@ const DATA_GRID_SELECTOR = '#container';
         mode: 'multiple',
       },
     }, DATA_GRID_SELECTOR);
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });

@@ -8,7 +8,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
 
-['material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
   ['dragAndDrop', 'select'].forEach((mode: any) => {
     test(`Column chooser screenshot in mode=${mode}, theme=${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -43,6 +43,8 @@ fixture.disablePageReloads`Column chooser`
           mode,
         },
       });
+    }).after(async () => {
+      await changeTheme('generic.light');
     });
   });
 });

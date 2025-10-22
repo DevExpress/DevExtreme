@@ -164,27 +164,30 @@ const markupTest = (matrixOptions) => {
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await changeTheme(Themes.materialBlue);
+    await changeTheme(matrixOptions.theme);
     await createDataGrid(matrixOptions);
-  });
+  }).after(async () => changeTheme(Themes.genericLight));
 };
 
-[true, false].forEach((hasFixedColumn) => {
-  [true, false].forEach((hasMasterDetail) => {
-    [true, false].forEach((rowAlternationEnabled) => {
-      [true, false].forEach((showColumnLines) => {
-        [true, false].forEach((showRowLines) => {
-          [true, false].forEach((showBorders) => {
-            const matrixOptions = {
-              rowAlternationEnabled,
-              showColumnLines,
-              showRowLines,
-              showBorders,
-              hasFixedColumn,
-              hasMasterDetail,
-            };
+[Themes.materialBlue, Themes.genericLight].forEach((theme) => {
+  [true, false].forEach((hasFixedColumn) => {
+    [true, false].forEach((hasMasterDetail) => {
+      [true, false].forEach((rowAlternationEnabled) => {
+        [true, false].forEach((showColumnLines) => {
+          [true, false].forEach((showRowLines) => {
+            [true, false].forEach((showBorders) => {
+              const matrixOptions = {
+                theme,
+                rowAlternationEnabled,
+                showColumnLines,
+                showRowLines,
+                showBorders,
+                hasFixedColumn,
+                hasMasterDetail,
+              };
 
-            markupTest(matrixOptions);
+              markupTest(matrixOptions);
+            });
           });
         });
       });

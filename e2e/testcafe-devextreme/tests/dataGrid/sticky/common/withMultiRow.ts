@@ -12,7 +12,7 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Multi Row Header Columns`
   .page(url(__dirname, '../../../container.html'));
 
-[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`The multi row header columns should have vertical borders when a column is fixed (${theme} theme) (T1282595)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -46,5 +46,8 @@ fixture.disablePageReloads`Sticky columns - Multi Row Header Columns`
         ],
         showBorders: true,
       });
+    })
+    .after(async () => {
+      await changeTheme(Themes.genericLight);
     });
 });

@@ -180,7 +180,7 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
   },
 }));
 
-[Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   safeSizeTest(`The header row should be highlighted correctly when dragging column when there are fixed columns and allowColumnReordering=false (${theme} theme)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
@@ -206,6 +206,9 @@ safeSizeTest('Sticky columns with grouping - overflow of group cell', async (t) 
       },
       allowColumnReordering: false,
     });
+  }).after(async () => {
+    await MouseUpEvents.enable(MouseAction.dragToOffset);
+    await changeTheme(Themes.genericLight);
   });
 });
 
