@@ -64,6 +64,7 @@ export class AiPromptEditor {
       shadingColor: 'transparent',
       dragEnabled: true,
       hideOnOutsideClick: true,
+      showCloseButton: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: `${CLASSES.aiPromptEditor} ${CLASSES.aiDialog}` },
       contentTemplate: ($container): void => {

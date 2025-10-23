@@ -74,6 +74,7 @@ describe('AiPromptEditor', () => {
           height: 'auto',
           title: 'AI Prompt Editor',
           hideOnOutsideClick: true,
+          showCloseButton: true,
           shading: false,
           shadingColor: 'transparent',
           dragEnabled: true,
