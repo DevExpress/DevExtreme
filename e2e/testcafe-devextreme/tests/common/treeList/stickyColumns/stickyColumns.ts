@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import TreeList from 'devextreme-testcafe-models/treeList';
-import { Selector } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
@@ -25,7 +24,7 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
 
   await t.expect(headerCell.isHovered()).ok();
 
-  await testScreenshot(t, takeScreenshot, 'treelist_header_hover_with_fixed_columns_(generic.light).png', { element: treeList.element });
+  await testScreenshot(t, takeScreenshot, 'treelist_header_hover_with_fixed_columns.png', { element: treeList.element });
 
   await t
     .expect(compareResults.isValid())
@@ -62,9 +61,6 @@ safeSizeTest('Header hover should display correctly when there are fixed columns
         columns[9].fixedPosition = 'right';
       },
     });
-  })
-  .after(async (t) => {
-    await t.hover(Selector('body'));
   });
 
 // visual: generic.light
@@ -118,6 +114,4 @@ test.meta({ unstable: true })('Row hover should display correctly when there are
       columns[9].fixedPosition = 'right';
     },
   });
-}).after(async (t) => {
-  await t.hover(Selector('body'));
 });

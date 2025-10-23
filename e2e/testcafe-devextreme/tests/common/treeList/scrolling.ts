@@ -47,7 +47,7 @@ function generateData(rowCount): Record<string, unknown>[] {
 }
 
 // T1129106
-safeSizeTest('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async (t) => {
+test('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async (t) => {
   // arrange, act
   const treeList = new TreeList('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -103,10 +103,6 @@ safeSizeTest('The vertical scroll bar of the container\'s parent should not be d
     },
     columns: ['Title', 'Full_Name', 'City', 'State', 'Mobile_Phone', 'Hire_Date'],
   });
-}).after(async () => {
-  await ClientFunction(() => {
-    $('#container').unwrap();
-  })();
 });
 
 // T1189118

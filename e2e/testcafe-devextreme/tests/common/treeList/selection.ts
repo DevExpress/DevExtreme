@@ -76,18 +76,18 @@ test('TreeList restore selection after the search panel has cleared', async (t) 
   await t
     .click(expandableCell.getExpandButton())
     .expect(expandableCell.isExpanded()).ok();
-  await t.expect(await testScreenshot(t, takeScreenshot, 'T1264312-selection-checked-all', { element: treeList.element })).ok();
+  await testScreenshot(t, takeScreenshot, 'T1264312-selection-checked-all', { element: treeList.element });
 
   await t
     .click(expandableCell.getCollapseButton())
     .typeText(searchBox.input, 'google')
     .expect(expandableCell.isExpanded()).ok();
-  await t.expect(await testScreenshot(t, takeScreenshot, 'T1264312-selection-checked-searched', { element: treeList.element })).ok();
+  await testScreenshot(t, takeScreenshot, 'T1264312-selection-checked-searched', { element: treeList.element });
 
   await t
     .click(dataRow.getSelectCheckBox())
     .expect(dataRow.isSelected).notOk();
-  await t.expect(await testScreenshot(t, takeScreenshot, 'T1264312-selection-unchecked-searched', { element: treeList.element })).ok();
+  await testScreenshot(t, takeScreenshot, 'T1264312-selection-unchecked-searched', { element: treeList.element });
 
   await t
     .click(searchBox.getClearButton())
