@@ -85,6 +85,17 @@ export class AiColumnView extends View {
     if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
       this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
+
+    const refreshOptionNames = [
+      'ai.showHeaderMenu',
+      'ai.prompt',
+      'ai.noDataText',
+      'ai.emptyText',
+    ];
+
+    if (refreshOptionNames.includes(columnOptionName)) {
+      this.component.refresh();
+    }
   }
 
   public init(): void {
