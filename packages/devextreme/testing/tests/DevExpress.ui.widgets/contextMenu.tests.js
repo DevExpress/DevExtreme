@@ -14,7 +14,6 @@ import config from 'core/config';
 import themes from 'ui/themes';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import {
     SCROLLABLE_CONTENT_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
@@ -292,10 +291,6 @@ QUnit.module('Rendering', moduleConfig, () => {
 
 QUnit.module('Repaint', moduleConfig, () => {
     QUnit.test('On repaint all submenus should be hidden without console errors (T1257288)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'Item 1', items: [{ text: 'Item 11' }, { text: 'Item 12' }] }],
             visible: true,
@@ -339,10 +334,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -364,10 +355,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -381,10 +368,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })) }],
             visible: true,
@@ -408,10 +391,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{
                 text: 'item 11',
@@ -453,10 +432,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
             focusStateEnabled: true,
@@ -485,10 +460,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
             focusStateEnabled: true,
@@ -518,10 +489,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (root menu)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
             focusStateEnabled: true,
@@ -548,10 +515,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, KBN)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
             focusStateEnabled: true,
@@ -582,10 +545,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu, pointer)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
@@ -1186,10 +1145,6 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
 
     [0, { show: 0 }].forEach((delay) => {
         QUnit.test(`submenu should be shown synchronously if showSubmenuMode.delay=${JSON.stringify(delay)} (T1247739)`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const instance = new ContextMenu(this.$element, {
                 items: [{ text: 1, items: [{ text: 11 }] }],
                 visible: true,
@@ -1209,10 +1164,6 @@ QUnit.module('Showing and hiding submenus', moduleConfig, () => {
     });
 
     QUnit.test('context menu should not blink after second hover on root item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         let hideSubmenu;
 
         try {
@@ -1499,10 +1450,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover without delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1521,10 +1468,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('showSubmenuMode hover with custom delay', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1543,10 +1486,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('submenu should not be shown if hover was ended before show delay time exceeded', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
@@ -1839,10 +1778,6 @@ QUnit.module('Options', moduleConfig, () => {
     });
 
     QUnit.test('items changed should not break keyboard navigation', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const instance = new ContextMenu(this.$element, {});
         instance.option({ visible: true, items: [{ text: '1' }, { text: '2' }] });
 

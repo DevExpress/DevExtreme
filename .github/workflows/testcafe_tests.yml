@@ -81,8 +81,7 @@ jobs:
           { componentFolder: "accessibility", name: "accessibility (2/2)", indices: "2/2" },
           { componentFolder: "common", name: "common" },
 
-          # TreeList and Grids tests need to be reworked to work in fluent theme
-          { componentFolder: "treeList", name: "treeList", concurrency: 1, theme: 'generic.light' },
+          # Grids tests need to be reworked to work in fluent theme
           { componentFolder: "dataGrid/common", name: "dataGrid / common (1/5)", indices: "1/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (2/5)", indices: "2/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (3/5)", indices: "3/5" },
@@ -93,7 +92,6 @@ jobs:
           { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (2/3)", indices: "2/3" },
           { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (3/3)", indices: "3/3" },
           { componentFolder: "cardView", name: "cardView" },
-          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
 
           # Scheduler tests need to be reworked to work in fluent theme
           { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
@@ -107,10 +105,8 @@ jobs:
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
 
-          { componentFolder: "editors", name: "editors (1/4)", indices: "1/4" },
-          { componentFolder: "editors", name: "editors (2/4)", indices: "2/4" },
-          { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
-          { componentFolder: "editors", name: "editors (4/4)", indices: "4/4" },
+          { componentFolder: "editors", name: "editors (1/2)", indices: "1/2" },
+          { componentFolder: "editors", name: "editors (2/2)", indices: "2/2" },
           { componentFolder: "navigation", name: "navigation" },
         ]
     runs-on: devextreme-shr2

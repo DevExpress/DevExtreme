@@ -84,8 +84,8 @@ catalogs:
       specifier: 20.12.8
       version: 20.12.8
     devextreme-internal-tools:
-      specifier: 18.2.0
-      version: 18.2.0
+      specifier: 20.0.1
+      version: 20.0.1
     prettier:
       specifier: 3.5.3
       version: 3.5.3
@@ -138,7 +138,7 @@ importers:
         version: 6.0.2(@angular/compiler@19.2.8)(@angular/core@19.2.8(rxjs@7.8.1)(zone.js@0.15.0))(tslint@6.1.3(typescript@5.9.2))
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 18.2.0
+        version: 20.0.1
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
@@ -989,10 +989,10 @@ importers:
     devDependencies:
       '@babel/eslint-parser':
         specifier: catalog:eslint8
-        version: 7.23.10(@babel/core@7.23.9)(eslint@9.18.0(jiti@1.21.6))
+        version: 7.23.10(@babel/core@7.26.10)(eslint@9.18.0(jiti@1.21.6))
       '@babel/plugin-transform-runtime':
         specifier: 7.19.6
-        version: 7.19.6(@babel/core@7.23.9)
+        version: 7.19.6(@babel/core@7.26.10)
       '@eslint/eslintrc':
         specifier: 'catalog:'
         version: 3.2.0
@@ -1885,7 +1885,7 @@ importers:
         version: 20.12.8
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 18.2.0
+        version: 20.0.1
       prettier:
         specifier: catalog:tools
         version: 3.5.3
@@ -10193,8 +10193,8 @@ packages:
     resolution: {integrity: sha512-h+8HVdgXOEtIgKG636y/BxOoIfq3XRNis2OeZDZIvPAcYGurAqjnTL8utdbT3IKQzMqcFcmH9Cyb9Tr2xlf+1g==}
     engines: {node: '>=16.20.2'}
 
-  devextreme-internal-tools@18.2.0:
-    resolution: {integrity: sha512-Su5AD43mR3Tg+AtL8R0MfAlt/yvHIHDC7yqrF2drdJwCjGdELKg+vwXwRrCbeBQiugrEIqym4l3O2JAM0ZWzyQ==}
+  devextreme-internal-tools@20.0.1:
+    resolution: {integrity: sha512-F/5HTCkI3JYrah1wJ1EUN1FE61lb0jLbpB6MaMZjqH7ieyiDb9Zjeqzcke3rjkEfDCtdqnTSiYMCiavTkfAP1A==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -20269,9 +20269,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/eslint-parser@7.23.10(@babel/core@7.23.9)(eslint@9.18.0(jiti@1.21.6))':
+  '@babel/eslint-parser@7.23.10(@babel/core@7.26.10)(eslint@9.18.0(jiti@1.21.6))':
     dependencies:
-      '@babel/core': 7.23.9
+      '@babel/core': 7.26.10
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
       eslint: 9.18.0(jiti@1.21.6)
       eslint-visitor-keys: 2.1.0
@@ -20426,9 +20426,9 @@ snapshots:
       regexpu-core: 6.2.0
       semver: 6.3.1
 
-  '@babel/helper-define-polyfill-provider@0.3.3(@babel/core@7.23.9)':
+  '@babel/helper-define-polyfill-provider@0.3.3(@babel/core@7.26.10)':
     dependencies:
-      '@babel/core': 7.23.9
+      '@babel/core': 7.26.10
       '@babel/helper-compilation-targets': 7.27.0
       '@babel/helper-plugin-utils': 7.27.1
       debug: 4.4.0
@@ -22059,14 +22059,14 @@ snapshots:
       '@babel/core': 7.26.10
       '@babel/helper-plugin-utils': 7.25.9
 
-  '@babel/plugin-transform-runtime@7.19.6(@babel/core@7.23.9)':
+  '@babel/plugin-transform-runtime@7.19.6(@babel/core@7.26.10)':
     dependencies:
-      '@babel/core': 7.23.9
+      '@babel/core': 7.26.10
       '@babel/helper-module-imports': 7.25.9
       '@babel/helper-plugin-utils': 7.25.9
-      babel-plugin-polyfill-corejs2: 0.3.3(@babel/core@7.23.9)
-      babel-plugin-polyfill-corejs3: 0.6.0(@babel/core@7.23.9)
-      babel-plugin-polyfill-regenerator: 0.4.1(@babel/core@7.23.9)
+      babel-plugin-polyfill-corejs2: 0.3.3(@babel/core@7.26.10)
+      babel-plugin-polyfill-corejs3: 0.6.0(@babel/core@7.26.10)
+      babel-plugin-polyfill-regenerator: 0.4.1(@babel/core@7.26.10)
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -24626,13 +24626,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -24692,7 +24694,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -25107,7 +25109,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -29010,11 +29012,11 @@ snapshots:
       reselect: 4.1.8
       resolve: 1.22.10
 
-  babel-plugin-polyfill-corejs2@0.3.3(@babel/core@7.23.9):
+  babel-plugin-polyfill-corejs2@0.3.3(@babel/core@7.26.10):
     dependencies:
       '@babel/compat-data': 7.26.2
-      '@babel/core': 7.23.9
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.23.9)
+      '@babel/core': 7.26.10
+      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.26.10)
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -29054,10 +29056,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-polyfill-corejs3@0.6.0(@babel/core@7.23.9):
+  babel-plugin-polyfill-corejs3@0.6.0(@babel/core@7.26.10):
     dependencies:
-      '@babel/core': 7.23.9
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.23.9)
+      '@babel/core': 7.26.10
+      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.26.10)
       core-js-compat: 3.42.0
     transitivePeerDependencies:
       - supports-color
@@ -29086,10 +29088,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-polyfill-regenerator@0.4.1(@babel/core@7.23.9):
+  babel-plugin-polyfill-regenerator@0.4.1(@babel/core@7.26.10):
     dependencies:
-      '@babel/core': 7.23.9
-      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.23.9)
+      '@babel/core': 7.26.10
+      '@babel/helper-define-polyfill-provider': 0.3.3(@babel/core@7.26.10)
     transitivePeerDependencies:
       - supports-color
 
@@ -31192,7 +31194,7 @@ snapshots:
       unzipper: 0.12.3
       uuid: 8.3.2
 
-  devextreme-internal-tools@18.2.0:
+  devextreme-internal-tools@20.0.1:
     dependencies:
       '@prettier/sync': 0.6.1(prettier@3.6.2)
       dot: 1.1.3
