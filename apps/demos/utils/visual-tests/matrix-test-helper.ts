@@ -349,7 +349,7 @@ export function runManualTestCore(
   const test = testObject.clientScripts([
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
-    { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
+    { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
     ...clientScriptSource,
   ])
     .page(testURL);
