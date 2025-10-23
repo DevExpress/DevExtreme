@@ -1144,7 +1144,6 @@ QUnit.module('options changed callbacks', {
 
     },
     afterEach() {
-        executeAsyncMock.teardown();
         fx.off = false;
         this.clock.restore();
     }
@@ -1177,6 +1176,7 @@ QUnit.module('options changed callbacks', {
         const store = new ArrayStore([11, 22]);
         this.instance.option('dataSource', new DataSource(store));
         assert.equal(getImageSources(this.$element), '1122');
+        executeAsyncMock.teardown();
     });
 
     QUnit.test('selectedIndex', function(assert) {
