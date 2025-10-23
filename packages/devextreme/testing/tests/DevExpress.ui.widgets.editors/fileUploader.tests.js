@@ -3659,7 +3659,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         const onCancelButtonClick = ({ component, element, file }) => {
             assert.strictEqual($(element).is($fileUploader), true, 'element is passed');
             assert.strictEqual(component, fileUploader, 'component is passed');
-            assert.strictEqual(file.value, fakeFile, 'file is passed');
+            assert.strictEqual(file, fakeFile, 'file is passed');
         };
 
         fileUploader.option('onCancelButtonClick', onCancelButtonClick);
