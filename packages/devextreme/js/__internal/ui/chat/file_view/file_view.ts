@@ -1,4 +1,3 @@
-import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Attachment, AttachmentDownloadEvent } from '@js/ui/chat';
@@ -6,21 +5,20 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
+import File from './file';
+
 export interface FileViewProperties extends WidgetProperties<FileView> {
   files?: Attachment[];
 
   onDownload?: (e: AttachmentDownloadEvent) => void;
 }
 
-export const FILE_VIEW_CLASS = 'dx-file-view';
-export const FILE_VIEW_CONTAINER_CLASS = 'dx-file-view-container';
-export const FILE_VIEW_ITEM_CLASS = 'dx-file-view-item';
-// TODO: Import from File component once it's ready
-export const CHAT_FILE_CLASS = 'dx-chat-file';
+export const CHAT_FILE_VIEW_CLASS = 'dx-chat-file-view';
+export const CHAT_FILE_VIEW_CONTAINER_CLASS = 'dx-chat-file-view-container';
+export const CHAT_FILE_VIEW_ITEM_CLASS = 'dx-chat-file-view-item';
 
 class FileView extends Widget<FileViewProperties> {
-  // TODO: Replace with the actual type once File component is ready
-  private _fileInstances: Widget[] = [];
+  private _fileInstances: File[] = [];
 
   _getDefaultOptions(): FileViewProperties {
     return {
@@ -34,7 +32,7 @@ class FileView extends Widget<FileViewProperties> {
   }
 
   _initMarkup(): void {
-    this.$element().addClass(FILE_VIEW_CLASS);
+    this.$element().addClass(CHAT_FILE_VIEW_CLASS);
     super._initMarkup();
 
     this._renderContainer();
@@ -42,12 +40,12 @@ class FileView extends Widget<FileViewProperties> {
   }
 
   _renderContainer(): void {
-    const $container = $('<div>').addClass(FILE_VIEW_CONTAINER_CLASS);
+    const $container = $('<div>').addClass(CHAT_FILE_VIEW_CONTAINER_CLASS);
     this.$element().append($container);
   }
 
   _getContainer(): dxElementWrapper {
-    return this.$element().find(`.${FILE_VIEW_CONTAINER_CLASS}`);
+    return this.$element().find(`.${CHAT_FILE_VIEW_CONTAINER_CLASS}`);
   }
 
   _renderItems(): void {
@@ -61,43 +59,30 @@ class FileView extends Widget<FileViewProperties> {
     });
   }
 
-  _renderItem(attachment: Attachment, $container: dxElementWrapper): void {
-    const $itemWrapper = $('<div>').addClass(FILE_VIEW_ITEM_CLASS);
+  _renderItem(data: Attachment, $container: dxElementWrapper): void {
+    const {
+      activeStateEnabled, focusStateEnabled, hoverStateEnabled, onDownload,
+    } = this.option();
 
+    const $itemWrapper = $('<div>').addClass(CHAT_FILE_VIEW_ITEM_CLASS);
+    const $file = $('<div>');
+
+    $itemWrapper.append($file);
     $container.append($itemWrapper);
 
-    // TODO: Uncomment once File component is ready
-    // const {
-    //   activeStateEnabled, focusStateEnabled, hoverStateEnabled, onDownload,
-    // } = this.option();
-    // const fileInstance = this._createComponent($itemWrapper, File, {
-    //   data,
-    //   onDownload,
-    //   activeStateEnabled,
-    //   focusStateEnabled,
-    //   hoverStateEnabled,
-    // }).dxFile('instance');
-    //
-    // this._fileInstances.push(fileInstance);
+    const fileInstance = this._createComponent($file, File, {
+      data,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+      onDownload,
+    });
 
-    // TODO: Remove once File component is ready
-    this._renderPlaceholderItem(attachment, $itemWrapper);
-  }
-
-  // TODO: Remove once File component is ready
-  _renderPlaceholderItem({ name, size }: Attachment, $container: dxElementWrapper): void {
-    const $placeholder = $('<div>')
-      .addClass(CHAT_FILE_CLASS)
-      .text(`${name} (${size} KB)`);
-
-    $container.append($placeholder);
+    this._fileInstances.push(fileInstance);
   }
 
   _clearFileInstances(): void {
-    this._fileInstances?.forEach((instance) => {
-      instance.dispose();
-    });
-
+    this._fileInstances?.forEach((instance) => { instance.dispose(); });
     this._fileInstances = [];
     this._getContainer().empty();
   }
@@ -129,7 +114,5 @@ class FileView extends Widget<FileViewProperties> {
     }
   }
 }
-
-registerComponent('dxFileView', FileView);
 
 export default FileView;

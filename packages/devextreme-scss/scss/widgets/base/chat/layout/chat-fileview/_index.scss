@@ -41,14 +41,14 @@ $dx-file-view-item-spacing: 8px !default;
   flex-shrink: 0;
 }
 
-.dx-file-view-container {
+.dx-chat-file-view-container {
   display: flex;
   flex-wrap: wrap;
   gap: $dx-file-view-item-spacing;
   width: 100%;
 }
 
-.dx-file-view-item {
+.dx-chat-file-view-item {
   width: $dx-file-view-item-width;
   flex-shrink: 0;
 }

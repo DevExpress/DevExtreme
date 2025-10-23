@@ -35,7 +35,6 @@ ui.dxDateRangeBox = require('../../../ui/date_range_box');
 ui.dxDrawer = require('../../../ui/drawer');
 ui.dxDropDownBox = require('../../../ui/drop_down_box');
 ui.dxFileUploader = require('../../../ui/file_uploader');
-ui.dxFileView = require('../../../ui/file_view');
 ui.dxForm = require('../../../ui/form');
 ui.dxGallery = require('../../../ui/gallery');
 ui.dxHtmlEditor = require('../../../ui/html_editor');

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import FileView, { FILE_VIEW_ITEM_CLASS, } from '__internal/ui/chat/file_view/file_view';
+import FileView, { CHAT_FILE_VIEW_ITEM_CLASS } from '__internal/ui/chat/file_view/file_view';
 
 const { test } = QUnit;
 
@@ -37,11 +37,11 @@ QUnit.module('FileView', {
         const fileInstanceMock = { dispose: sinon.spy() };
         this.instance._fileInstances = [fileInstanceMock];
 
-        let $items = this.$element.find(`.${FILE_VIEW_ITEM_CLASS}`);
+        let $items = this.$element.find(`.${CHAT_FILE_VIEW_ITEM_CLASS}`);
         assert.strictEqual($items.length, 1, 'initially one file rendered');
 
         this.instance.option('files', files2);
-        $items = this.$element.find(`.${FILE_VIEW_ITEM_CLASS}`);
+        $items = this.$element.find(`.${CHAT_FILE_VIEW_ITEM_CLASS}`);
 
         assert.ok(fileInstanceMock.dispose.calledOnce, 'dispose called for old instances');
         assert.strictEqual($items.length, 2, 'renders two files after option change');
