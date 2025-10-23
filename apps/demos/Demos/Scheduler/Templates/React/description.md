@@ -1,7 +1,10 @@
-The Scheduler contains the following properties used to specify custom templates globally and for individual views:
+The following DevExtreme Scheduler properties can be used to specify custom templates (both globally and for individual views):
 
 * Appointment rectangle: [appointmentComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentComponent) / **views[]**.[appointmentComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentComponent)
 
 * Tooltip: [appointmentTooltipComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentTooltipComponent) / **views[]**.[appointmentTooltipComponent](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentTooltipComponent).
 
-To customize the appointment details form, implement the [onAppointmentFormOpening](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) handler. In this demo, this handler adds custom fields to the appointment details form.
+To customize our built-in Appointment Detail form, use the [onAppointmentFormOpening](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentFormOpening) handler. In this demo, this handler adds custom fields to the Appointment Detail form.
+
+Image Source: **Wikimedia Commons**
+<!--split-->
