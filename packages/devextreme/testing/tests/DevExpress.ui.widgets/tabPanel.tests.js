@@ -10,6 +10,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
+import { current as currentTheme } from 'ui/themes';
 import {
     TABPANEL_TABS_ITEM_CLASS,
     TABPANEL_CONTAINER_CLASS,
@@ -1135,6 +1136,8 @@ QUnit.module('keyboard navigation', {
 
         this.$element.trigger(keyDownEvent);
         assert.strictEqual(this.instance.option('loop'), true, 'loop option is set to true');
+
+        assert.strictEqual(currentTheme(), 'generic.light', 'theme is generic.light');
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
