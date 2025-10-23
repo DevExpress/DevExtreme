@@ -1124,7 +1124,7 @@ QUnit.module('keyboard navigation', {
             swipeEnabled: true,
         });
         this.instance.option('loop', true);
-        const pointer = pointerMock(this.$element);
+        const pointer = pointerMock($('#tabPanel'));
         const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
