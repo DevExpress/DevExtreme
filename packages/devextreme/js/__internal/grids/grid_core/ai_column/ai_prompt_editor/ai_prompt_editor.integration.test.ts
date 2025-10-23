@@ -145,6 +145,7 @@ describe('AiPromptEditor', () => {
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',
+          stylingMode: 'outlined',
           placeholder: 'Prompt AI to generate column values...',
         },
       ]);

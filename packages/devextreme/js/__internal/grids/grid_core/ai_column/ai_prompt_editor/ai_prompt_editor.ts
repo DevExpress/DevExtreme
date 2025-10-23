@@ -46,6 +46,7 @@ export class AiPromptEditor {
     return {
       value: this.prompt,
       height: 110,
+      stylingMode: 'outlined',
       onValueChanged: (e): void => {
         this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value); // Update the disable state of the Apply button
         this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', true); // Update the disable state of the Regenerate Data button
