@@ -121,7 +121,7 @@ export const products: Product[] = [
     Product_Name: "SuperLCD 70",
     Product_Cost: "2125.0000",
     Product_Sale_Price: "3200.0000",
-    Product_Retail_Price: "400.0000",
+    Product_Retail_Price: "4000.0000",
     Product_Current_Inventory: 95,
   },
   {
