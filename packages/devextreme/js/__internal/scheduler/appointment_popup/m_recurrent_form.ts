@@ -5,6 +5,7 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type dxButton from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type { GroupItem, SimpleItem } from '@js/ui/form';
@@ -19,7 +20,7 @@ import type Scheduler from '../m_scheduler';
 import { getRecurrenceString, parseRecurrenceRule } from '../recurrence/base';
 import { daysFromByDayRule } from '../recurrence/days_from_by_day_rule';
 import type { Rule } from '../recurrence/types';
-import { getStartDateCommonConfig } from './utils';
+import { createFormIconTemplate, getStartDateCommonConfig } from './utils';
 
 const CLASSES = {
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
@@ -56,6 +57,7 @@ const frequenciesValues = [
     value: 'yearly',
   },
 ].map((item) => ({
+  // todo: check if it works with runtime localization change
   text: capitalize(messageLocalization.format(item.recurrence)),
   value: item.value,
 }));
@@ -65,13 +67,6 @@ const monthsValues = dateLocalization.getMonthNames().map((monthName, index) => 
   text: monthName,
 }));
 
-const weekDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-
-const weekDaysButtons = weekDays.map((day) => ({
-  text: day[0],
-  key: day,
-}));
-
 const FREQ = {
   HOURLY: 'hourly',
   DAILY: 'daily',
@@ -79,6 +74,9 @@ const FREQ = {
   MONTHLY: 'monthly',
   YEARLY: 'yearly',
 } as const;
+
+// TODO: use dateLocalization instead of constants
+const weekDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 
@@ -154,9 +152,30 @@ export class RecurrentForm {
 
   private _tempRecurrenceRule?: RecurrenceRule;
 
+  private readonly weekDayItems: { text: string; key: string }[] = [];
+
+  private _weekDayButtons: Record<string, dxButton> = {};
+
   constructor(scheduler: Scheduler) {
     this.scheduler = scheduler;
     this._recurrenceRule = new RecurrenceRule('');
+    this.weekDayItems = this.createWeekDayItems();
+  }
+
+  private createWeekDayItems(): { text: string; key: string }[] {
+    const weekDayItems = weekDays.map((day) => ({
+      text: day[0],
+      key: day,
+    }));
+
+    const firstDayOfWeek = this.scheduler.getFirstDayOfWeek()
+      ?? dateLocalization.firstDayOfWeekIndex();
+
+    const arrangeWeekDayItems = weekDayItems
+      .slice(firstDayOfWeek)
+      .concat(weekDayItems.slice(0, firstDayOfWeek));
+
+    return arrangeWeekDayItems;
   }
 
   private createByMonthDayNumberBoxItem(
@@ -277,7 +296,7 @@ export class RecurrentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: RecurrentForm.createIconTemplate('clock'),
+          template: createFormIconTemplate('clock'),
         },
         extend(
           true,
@@ -313,7 +332,7 @@ export class RecurrentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: RecurrentForm.createIconTemplate('repeat'),
+          template: createFormIconTemplate('repeat'),
         },
         {
           itemType: 'group',
@@ -420,63 +439,47 @@ export class RecurrentForm {
   }
 
   private createRecurrenceByDayEditor(): SimpleItem {
-    const firstDayOfWeek = this.scheduler.getFirstDayOfWeek();
-
-    const buttonGroupItems = weekDaysButtons
-      .slice(firstDayOfWeek)
-      .concat(weekDaysButtons.slice(0, firstDayOfWeek));
-
     return {
-      itemType: 'simple',
       name: 'byday', // todo: better to move such constants to constant variables and reuse them in the code
       colSpan: 1,
       label: {
         visible: false,
       },
-      template: (_, itemElement): void => {
-        const container = $('<div>')
-          .addClass(CLASSES.recurrenceByDayButtons)
-          .appendTo(itemElement);
+      template: (): dxElementWrapper => {
+        const $container = $('<div>').addClass(CLASSES.recurrenceByDayButtons);
 
-        buttonGroupItems.forEach((item) => {
-          const isSelected = this.recurrenceRule?.getRule('byday')?.includes(item.key) ?? false;
-          const buttonContainer = $('<div>').appendTo(container);
+        this.weekDayItems.forEach((item) => {
+          const buttonContainer = $('<div>').appendTo($container);
 
-          this.scheduler.createComponent(buttonContainer, Button, {
+          this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
             width: 32,
             height: 32,
-            stylingMode: isSelected ? 'contained' : 'outlined',
-            type: isSelected ? 'default' : 'normal',
-            elementAttr: {
-              'data-day-key': item.key,
-            },
-            onClick: (e: any): void => {
-              const isSelectedStyleMode = e.component.option('stylingMode') === 'contained';
+            onClick: (): void => {
+              // TODO: we do not need to parse and serialize 'byday' string every time
+              const selectedWeekDays = this.recurrenceRule.getDaysFromByDayRule();
+              const isSelected = selectedWeekDays.includes(item.key);
 
-              e.component.option('stylingMode', !isSelectedStyleMode ? 'contained' : 'outlined');
-              e.component.option('type', !isSelectedStyleMode ? 'default' : 'normal');
-
-              if (isSelectedStyleMode) {
-                this.recurrenceRule.setRule('byday', this.recurrenceRule.getRule('byday')?.filter((day) => day !== item.key) ?? []);
+              if (isSelected) {
+                selectedWeekDays.splice(selectedWeekDays.indexOf(item.key), 1);
               } else {
-                this.recurrenceRule.setRule('byday', [...this.recurrenceRule.getRule('byday') ?? [], item.key]);
+                selectedWeekDays.push(item.key);
               }
+
+              this.recurrenceRule.setRule('byday', selectedWeekDays.toString());
+
+              this.updateWeekDaysButtons();
             },
           });
         });
+
+        return $container;
       },
     } as SimpleItem;
   }
 
   private createRecurrenceEndGroup(): GroupItem {
     const repeatType = this._recurrenceRule.getRepeatEndRule();
-
-    const repeatEndTypes = [
-      { type: 'never' },
-      { type: 'until' },
-      { type: 'count' },
-    ];
 
     return {
       itemType: 'group',
@@ -490,7 +493,7 @@ export class RecurrentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: RecurrentForm.createIconTemplate('description'),
+          template: createFormIconTemplate('description'),
         },
         {
           itemType: 'group',
@@ -511,20 +514,20 @@ export class RecurrentForm {
                 visible: false,
               },
               editorOptions: {
-                items: repeatEndTypes,
-                value: repeatType,
                 valueExpr: 'type',
-                itemTemplate: (itemData): string => {
-                  if (itemData.type === 'count') {
-                    return messageLocalization.format('dxScheduler-recurrenceAfter');
-                  }
-                  if (itemData.type === 'until') {
-                    return messageLocalization.format('dxScheduler-recurrenceOn');
-                  }
-                  return messageLocalization.format('dxScheduler-recurrenceNever');
-                },
+                items: [
+                  { text: messageLocalization.format('dxScheduler-recurrenceNever'), type: 'never' },
+                  { text: messageLocalization.format('dxScheduler-recurrenceOn'), type: 'until' },
+                  { text: messageLocalization.format('dxScheduler-recurrenceAfter'), type: 'count' },
+                ],
                 layout: 'vertical',
-                onValueChanged: (args): void => this._repeatEndValueChangedHandler(args),
+                onContentReady: (e): void => {
+                  e.component.option('value', this.recurrenceRule.getRepeatEndRule());
+                },
+                onValueChanged: (args): void => {
+                  this.recurrenceRule.setRule('repeatEnd', args.value);
+                  this._updateDisabledRepeatEndEditors();
+                },
               } as RadioGroupProperties,
             },
             {
@@ -616,8 +619,9 @@ export class RecurrentForm {
     this.dxForm.getEditor('until')?.option('value', rules.until);
     this.dxForm.getEditor('count')?.option('value', rules.count);
 
-    this._updateDisabledRepeatEndEditors(repeatEndValue);
+    this._updateDisabledRepeatEndEditors();
     this.updateRecurrenceRepeatOnVisibility();
+    this.updateWeekDaysButtons();
   }
 
   private createRecurrenceRule(
@@ -637,7 +641,7 @@ export class RecurrentForm {
       newRecurrenceRule.setRule('repeatEnd', 'never'); // TODO: change 'never' to constant variable
       newRecurrenceRule.setRule('until', todayEnd);
       newRecurrenceRule.setRule('count', 1);
-      newRecurrenceRule.setRule('byday', [defaultByDay]);
+      newRecurrenceRule.setRule('byday', defaultByDay);
       newRecurrenceRule.setRule('bymonth', (this.startDate?.getMonth() ?? 0) + 1);
       newRecurrenceRule.setRule('bymonthday', this.startDate?.getDate() ?? 1);
 
@@ -664,7 +668,7 @@ export class RecurrentForm {
   private _repeatEndValueChangedHandler(args: any): void {
     const { value } = args;
 
-    this._updateDisabledRepeatEndEditors(value);
+    this._updateDisabledRepeatEndEditors();
 
     if (!this._tempRecurrenceRule) {
       return;
@@ -683,7 +687,9 @@ export class RecurrentForm {
     }
   }
 
-  private _updateDisabledRepeatEndEditors(repeatEndValue: string): void {
+  private _updateDisabledRepeatEndEditors(): void {
+    const repeatEndValue = this.recurrenceRule.getRepeatEndRule();
+
     const untilEditor = this.dxForm.getEditor('until');
     const countEditor = this.dxForm.getEditor('count');
 
@@ -703,25 +709,6 @@ export class RecurrentForm {
     }
 
     return new Date(untilDate);
-  }
-
-  private _daysOfWeekByRules(): string[] {
-    const ruleToUse = this._tempRecurrenceRule ?? this._recurrenceRule;
-    let daysByRule = ruleToUse.getDaysFromByDayRule();
-    if (!daysByRule.length) {
-      daysByRule = this._getDefaultByDayValue();
-    }
-
-    return daysByRule;
-  }
-
-  private _getDefaultByDayValue(): string[] {
-    const { startDate } = this;
-    if (!startDate) {
-      return ['MO'];
-    }
-    const startDay = startDate.getDay();
-    return [weekDays[startDay]];
   }
 
   private updateRecurrenceRepeatOnVisibility(): void {
@@ -750,8 +737,12 @@ export class RecurrentForm {
     this.dxForm.endUpdate();
   }
 
-  // TODO: move to utils, reuse in main form and in recurrence form
-  private static createIconTemplate(iconName: string): () => void {
-    return (): dxElementWrapper => $('<i>').addClass('dx-icon').addClass(`dx-icon-${iconName}`);
+  private updateWeekDaysButtons(): void {
+    Object.entries(this._weekDayButtons).forEach(([dayKey, button]) => {
+      const isSelected = this.recurrenceRule.getDaysFromByDayRule().includes(dayKey);
+
+      button.option('stylingMode', isSelected ? 'contained' : 'outlined');
+      button.option('type', isSelected ? 'default' : 'normal');
+    });
   }
 }

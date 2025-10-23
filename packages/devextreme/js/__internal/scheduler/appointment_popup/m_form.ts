@@ -19,7 +19,7 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import { RecurrenceRule, RecurrentForm } from './m_recurrent_form';
-import { getStartDateCommonConfig } from './utils';
+import { createFormIconTemplate, getStartDateCommonConfig } from './utils';
 
 const CLASSES = {
   form: 'dx-scheduler-form',
@@ -271,7 +271,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: this.createIconTemplate('isnotblank'),
+          template: createFormIconTemplate('isnotblank'),
         },
         {
           colSpan: 1,
@@ -299,7 +299,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: this.createIconTemplate('clock'),
+          template: createFormIconTemplate('clock'),
         },
         {
           colSpan: 1,
@@ -555,7 +555,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: this.createIconTemplate('repeat'),
+          template: createFormIconTemplate('repeat'),
         },
         {
           name: EDITOR_NAMES.repeat,
@@ -599,7 +599,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: CLASSES.icon,
-          template: this.createIconTemplate('description'),
+          template: createFormIconTemplate('description'),
         },
         {
           colSpan: 1,
@@ -656,7 +656,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
-          template: this.createIconTemplate('user'), // TODO: change icon to 'addcircleoutline'
+          template: createFormIconTemplate('user'), // TODO: change icon to 'addcircleoutline'
         },
         {
           itemType: 'group',
@@ -832,9 +832,5 @@ export class AppointmentForm {
     this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.endDate}`, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(`${MAIN_GROUP_NAME}.${EDITOR_NAMES.endTime}`, 'visible', visible);
     this.dxForm.endUpdate();
-  }
-
-  private createIconTemplate(iconName: string): () => void {
-    return (): dxElementWrapper => $('<i>').addClass('dx-icon').addClass(`dx-icon-${iconName}`);
   }
 }
