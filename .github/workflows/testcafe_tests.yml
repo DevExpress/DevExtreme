@@ -71,7 +71,7 @@ jobs:
         retention-days: 1
 
   testcafe:
-    name: ${{ matrix.ARGS.name }}${{ (matrix.ARGS.theme == null || matrix.ARGS.theme == '') && ' - fluent' || '' }}
+    name: ${{ matrix.ARGS.name }}${{ !matrix.ARGS.theme && ' - fluent' || '' }}
     needs: [build]
     strategy:
       fail-fast: false
@@ -92,17 +92,18 @@ jobs:
           { componentFolder: "dataGrid/sticky/fixed", name: "dataGrid / sticky (3/3)", indices: "3/3" },
           { componentFolder: "cardView", name: "cardView" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
-          # Works only in generic theme which is deprecated
-#          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6" },
-#          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6" },
-#          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6" },
-#          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6" },
-#          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6" },
-#          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6" },
-#          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset" },
-#          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups" },
-#          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin" },
-#          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles" },
+
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (4/6)", indices: "4/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (5/6)", indices: "5/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/common", name: "scheduler / common (6/6)", indices: "6/6", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/common", name: "scheduler / offset", theme: 'generic.light' },
+          { componentFolder: "scheduler/viewOffset/markup", name: "scheduler / offset markups", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (Europe/Berlin)", timezone: "Europe/Berlin", theme: 'generic.light' },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones (America/Los_Angeles)", timezone: "America/Los_Angeles", theme: 'generic.light' },
+
           { componentFolder: "editors", name: "editors (1/4)", indices: "1/4" },
           { componentFolder: "editors", name: "editors (2/4)", indices: "2/4" },
           { componentFolder: "editors", name: "editors (3/4)", indices: "3/4" },
