@@ -8,7 +8,7 @@ fixture`Appointment Form: Recurrence Form`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
-const theme = 'fluent.blue.light';
+const theme = 'generic.light';
 
 test.clientScripts([
   { module: 'mockdate' },
