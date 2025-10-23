@@ -1,9 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { changeTheme } from '../../../../../helpers/changeTheme';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import { Themes } from '../../../../../helpers/themes';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
@@ -12,7 +10,6 @@ fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
 const GRID_SELECTOR = '#container';
 
 const getTestParams = ({
-  theme,
   rowAlternationEnabled,
   showColumnLines,
   showRowLines,
@@ -20,7 +17,6 @@ const getTestParams = ({
   hasFixedColumn,
   hasMasterDetail,
 }) => [
-  `theme: ${theme}`,
   `alt rows: ${rowAlternationEnabled}`,
   `column lines: ${showColumnLines}`,
   `row lines: ${showRowLines}`,
@@ -30,7 +26,6 @@ const getTestParams = ({
 ].join(', ');
 
 const getScreenshotParams = ({
-  theme,
   rowAlternationEnabled,
   showColumnLines,
   showRowLines,
@@ -38,7 +33,6 @@ const getScreenshotParams = ({
   hasFixedColumn,
   hasMasterDetail,
 }) => [
-  `${theme === Themes.materialBlue ? 'material' : ''}`,
   `${rowAlternationEnabled ? 'r-alt' : ''}`,
   `${showColumnLines ? 'lines-c' : ''}`,
   `${showRowLines ? 'lines-r' : ''}`,
@@ -164,30 +158,28 @@ const markupTest = (matrixOptions) => {
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await changeTheme(matrixOptions.theme);
     await createDataGrid(matrixOptions);
-  }).after(async () => changeTheme(Themes.genericLight));
+  });
 };
 
-[Themes.materialBlue, Themes.genericLight].forEach((theme) => {
-  [true, false].forEach((hasFixedColumn) => {
-    [true, false].forEach((hasMasterDetail) => {
-      [true, false].forEach((rowAlternationEnabled) => {
-        [true, false].forEach((showColumnLines) => {
-          [true, false].forEach((showRowLines) => {
-            [true, false].forEach((showBorders) => {
-              const matrixOptions = {
-                theme,
-                rowAlternationEnabled,
-                showColumnLines,
-                showRowLines,
-                showBorders,
-                hasFixedColumn,
-                hasMasterDetail,
-              };
+// visual: generic.light
+// visual: material.blue.light
+[true, false].forEach((hasFixedColumn) => {
+  [true, false].forEach((hasMasterDetail) => {
+    [true, false].forEach((rowAlternationEnabled) => {
+      [true, false].forEach((showColumnLines) => {
+        [true, false].forEach((showRowLines) => {
+          [true, false].forEach((showBorders) => {
+            const matrixOptions = {
+              rowAlternationEnabled,
+              showColumnLines,
+              showRowLines,
+              showBorders,
+              hasFixedColumn,
+              hasMasterDetail,
+            };
 
-              markupTest(matrixOptions);
-            });
+            markupTest(matrixOptions);
           });
         });
       });
