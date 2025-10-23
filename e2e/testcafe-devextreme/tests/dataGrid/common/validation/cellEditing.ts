@@ -2,7 +2,6 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Validation`
   .page(url(__dirname, '../../../container.html'));
@@ -63,7 +62,7 @@ test('DataGrid - Validation message gets cut off in Fluent and Material themes (
   await t.click(dataCellEditLink);
   await t.pressKey('backspace enter');
 
-  await testScreenshot(t, takeScreenshot, 'Invalid-message-word-wrapping-generic.light', { element: dataGrid.element });
+  await takeScreenshot('Invalid-message-word-wrapping-generic.light', dataGrid.element);
 
   await t
     .expect(compareResults.isValid())
