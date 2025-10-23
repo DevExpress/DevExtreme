@@ -1,7 +1,6 @@
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
@@ -18,8 +17,8 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import { RecurrenceRule, RecurrentForm } from './m_recurrent_form';
-import { createFormIconTemplate, getStartDateCommonConfig } from './utils';
+import { RecurrentForm } from './m_recurrent_form';
+import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 const CLASSES = {
   form: 'dx-scheduler-form',
@@ -143,6 +142,9 @@ export class AppointmentForm {
 
   set formData(formData: Record<string, any>) {
     this.dxForm.option('formData', formData);
+
+    const repeatEditorValue = this.dxForm.getEditor(EDITOR_NAMES.repeat)?.option('value');
+    this._recurrentForm.updateRecurrenceFormValues(repeatEditorValue, this.recurrenceRuleRaw);
   }
 
   get startDate(): Date | null {
@@ -707,14 +709,6 @@ export class AppointmentForm {
   }
 
   showMainGroup(saveRecurrenceValue = true): void {
-    /*
-    if(saveRecurrenceValue) {
-      const recurrenceValue = this.recurrenceForm.getRecurrenceValue() -> returns string
-      this.form.updateData('recurrenceExpr', recurrenceValue);
-    }
-    */
-
-    // TODO: it better to store these group elements in the class fields
     const $formElement = $(this.dxForm.element());
     const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
     const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
@@ -724,29 +718,23 @@ export class AppointmentForm {
 
     this._popup.updateToolbarForMainGroup();
 
-    // this._isRecurrenceFormVisible = false;
+    this._isRecurrenceFormVisible = false;
 
-    // if (!this._recurrentForm) {
-    //   return;
-    // }
+    if (saveRecurrenceValue) {
+      const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
+      this.dxForm.updateData(
+        recurrenceRuleExpr,
+        this._recurrentForm.recurrenceRule.getRecurrenceString() ?? undefined,
+      );
 
-    // if (saveChanges && this._recurrentForm.tempRecurrenceRule) {
-    //   const tempRecurrenceString = this._recurrentForm.tempRecurrenceRule.getRecurrenceString();
+      //   const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
 
-    //   this._recurrenceRule = this._recurrentForm.tempRecurrenceRule;
-    //   this._recurrentForm.recurrenceRule = this._recurrenceRule;
+      //   if (repeatEditor) {
+      //     const { freq } = this._recurrenceRule.getRules();
 
-    //   const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-    //   this.dxForm.updateData(recurrenceRuleExpr, tempRecurrenceString ?? undefined);
-
-    //   const repeatEditor = this.dxForm.getEditor(EDITOR_NAMES.repeat);
-
-    //   if (repeatEditor) {
-    //     const { freq } = this._recurrenceRule.getRules();
-
-    //     if (freq) {
-    //       const freqValue = freq.toLowerCase();
-    //       repeatEditor.option('value', freqValue);
+      //     if (freq) {
+      //       const freqValue = freq.toLowerCase();
+      //       repeatEditor.option('value', freqValue);
 
     //       const buttons = this.getRepeatEditorButtons();
     //       repeatEditor.option('buttons', buttons);
@@ -757,7 +745,7 @@ export class AppointmentForm {
     //   }
     // } else if (!saveChanges) {
     //   this._recurrentForm.tempRecurrenceRule = undefined;
-    // }
+    }
   }
 
   private updateDateEditorsValues(): void {
@@ -784,7 +772,7 @@ export class AppointmentForm {
     } else {
       const recurrenceRule = new RecurrenceRule(this.recurrenceRuleRaw);
       const freq = recurrenceRule.getRule('freq');
-      const value = freq ? freq.toLowerCase() : repeatNeverValue;
+      const value = freq ? (freq as string).toLowerCase() : repeatNeverValue;
 
       repeatEditor.option('value', value);
     }
