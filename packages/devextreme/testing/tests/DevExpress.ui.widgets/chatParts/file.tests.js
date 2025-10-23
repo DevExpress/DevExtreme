@@ -193,6 +193,57 @@ QUnit.module('File', moduleConfig, () => {
         });
     });
 
+    QUnit.module('Proxy state options', () => {
+        [true, false].forEach(value => {
+            QUnit.test(`passed state options should be equal to download button state options when value is ${value}`, function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.reinit({
+                    data: {
+                        name: 'test.txt',
+                        size: 1024,
+                    },
+                    ...options,
+                });
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, this.downloadButton.option(key), `button ${key} value is correct`);
+                });
+            });
+
+            QUnit.test(`passed state options should be updated when state options are changed at runtime with value ${value}`, function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.instance.option(options);
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, this.downloadButton.option(key), `button ${key} value is correct`);
+                });
+            });
+        });
+
+        QUnit.test('should have correct default state options', function(assert) {
+            this.reinit({
+                data: {
+                    name: 'test.txt',
+                    size: 1024,
+                },
+            });
+
+            assert.strictEqual(this.instance.option('activeStateEnabled'), true, 'activeStateEnabled is true by default');
+            assert.strictEqual(this.instance.option('focusStateEnabled'), true, 'focusStateEnabled is true by default');
+            assert.strictEqual(this.instance.option('hoverStateEnabled'), true, 'hoverStateEnabled is true by default');
+        });
+    });
+
     QUnit.module('Dispose', () => {
         QUnit.test('should properly dispose download button', function(assert) {
             const buttonDisposeSpy = sinon.spy(this.downloadButton, 'dispose');

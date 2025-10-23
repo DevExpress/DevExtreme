@@ -7,13 +7,19 @@ import type {
   AttachmentDownloadEvent,
 } from '@js/ui/chat';
 import { getImageContainer } from '@ts/core/utils/m_icon';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
+import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { WidgetProperties } from '@ts/core/widget/widget';
-import Widget from '@ts/core/widget/widget';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
 import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
 
-export type Properties = WidgetProperties & {
+export type Properties = DOMComponentProperties<File> & {
+  activeStateEnabled?: boolean;
+
+  focusStateEnabled?: boolean;
+
+  hoverStateEnabled?: boolean;
+
   data: Attachment;
 
   onDownload?: (e: AttachmentDownloadEvent) => void;
@@ -25,7 +31,7 @@ const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
 const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';
 const CHAT_FILE_DOWNLOAD_BUTTON_CLASS = 'dx-chat-file-download-button';
 
-class File extends Widget<Properties> {
+class File extends DOMComponent<File, Properties> {
   private _downloadButton?: Button | null;
 
   private _downloadAction?: (e: Partial<AttachmentDownloadEvent>) => void;
@@ -33,6 +39,9 @@ class File extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       data: {
         name: '',
         size: 0,
@@ -119,9 +128,17 @@ class File extends Widget<Properties> {
   }
 
   private _getButtonConfig(): ButtonProperties {
-    const { data } = this.option();
+    const {
+      data,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
 
     const configuration = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       icon: 'download',
       stylingMode: 'text' as const,
       onClick: (e: ClickEvent): void => {
