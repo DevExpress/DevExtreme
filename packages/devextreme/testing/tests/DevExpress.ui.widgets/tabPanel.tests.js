@@ -1134,6 +1134,7 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(this.instance.option('selectedIndex'), 2, 'at third element after first keydown');
 
         this.$element.trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('loop'), true, 'loop option is set to true');
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
