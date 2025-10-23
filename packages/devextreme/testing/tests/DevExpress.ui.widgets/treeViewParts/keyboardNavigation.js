@@ -6,7 +6,6 @@ import fx from 'common/core/animation/fx';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 QUnit.module('keyboard navigation', {
     beforeEach: function() {
@@ -775,10 +774,6 @@ QUnit.test('T179601', function(assert) {
 });
 
 QUnit.test('treeview should not lose focus when parent item is disabled (T303800)', function(assert) {
-    if(shouldSkipOnMobile(assert)) {
-        return;
-    }
-
     const items = [{ id: 1, text: 'Item 1', items: [{ id: 2, text: 'Item 2', disabled: true, expanded: true, items: [{ id: 21, text: 'Item 21' }] }] }, { id: 3, text: 'item 3' }];
     const $treeView = initTree({
         focusStateEnabled: true,
@@ -800,10 +795,6 @@ QUnit.test('treeview should not lose focus when parent item is disabled (T303800
 });
 
 QUnit.testInActiveWindow('First list item should be focused on the tab key press when the search editor is focused', function(assert) {
-    if(shouldSkipOnMobile(assert, 'keyboard navigation is disabled for not desktop devices')) {
-        return;
-    }
-
     const $treeView = initTree({
         items: $.extend(true, [], DATA[1]),
         keyExpr: 'key',

@@ -17,7 +17,7 @@ import EditingPreview, {
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -187,10 +187,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const onMessageEnteredStub = sinon.stub();
 
             this.reinit({ onMessageEntered: onMessageEnteredStub });
@@ -288,10 +284,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be fired with correct arguments when enter is pressed', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             assert.expect(6);
 
             const text = '  new text message ';

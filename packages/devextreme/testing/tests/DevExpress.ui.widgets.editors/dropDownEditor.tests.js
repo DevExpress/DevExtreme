@@ -14,7 +14,6 @@ import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
 import domAdapter from '__internal/core/m_dom_adapter';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/validator';
@@ -387,10 +386,6 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
 
 QUnit.module('focus policy', () => {
     QUnit.testInActiveWindow('editor should save focus on button clicking', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             applyValueMode: 'useButtons',
             focusStateEnabled: true
@@ -423,10 +418,6 @@ QUnit.module('focus policy', () => {
     });
 
     QUnit.testInActiveWindow('editor should save focus on clearbutton clicking, fieldTemplate is used', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [{ 'Name': 'one', 'ID': 1 }, { 'Name': 'two', 'ID': 2 }, { 'Name': 'three', 'ID': 3 }],
             displayExpr: 'Name',
@@ -765,10 +756,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Focus policy with field template', function(assert) {
-        if(shouldSkipOnMobile(assert, 'blur preventing is unnecessary on mobile devices')) {
-            return;
-        }
-
         this.dropDownEditor.option('fieldTemplate', function(data, container) {
             $(container).append($('<div>').dxTextBox({ value: data }));
         });
@@ -1629,6 +1616,217 @@ QUnit.module('Templates', () => {
     });
 });
 
+QUnit.module('Templates: fieldAddons', {
+    beforeEach: function() {
+        this.$container = $('#dropDownEditorLazy');
+
+        this.createEditor = function(options = {}) {
+            return this.$container
+                .dxDropDownEditor({
+                    value: 'test',
+                    fieldAddons: this.getDefaultAddons(),
+                    ...options,
+                })
+                .dxDropDownEditor('instance');
+        };
+
+        this.getDefaultAddons = function() {
+            return {
+                beforeTemplate: (value) => `before - ${value}`,
+                afterTemplate: (value) => `after - ${value}`,
+            };
+        };
+
+        this.getAddons = function() {
+            const $beforeAddon = this.$container.find(`.${DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON}`);
+            const $afterAddon = this.$container.find(`.${DROP_DOWN_EDITOR_AFTER_FIELD_ADDON}`);
+
+            return {
+                beforeAddon: $beforeAddon.get(0),
+                afterAddon: $afterAddon.get(0),
+                $beforeAddon,
+                $afterAddon
+            };
+        };
+    },
+}, () => {
+    QUnit.test('should create addons once and reuse them on value change', function(assert) {
+        const instance = this.createEditor();
+
+        const { beforeAddon: beforeInitial, afterAddon: afterInitial } = this.getAddons();
+
+        assert.ok(beforeInitial, 'before addon exists');
+        assert.ok(afterInitial, 'after addon exists');
+
+        instance.option('value', 'test1');
+
+        const { beforeAddon: beforeUpdated, afterAddon: afterUpdated } = this.getAddons();
+
+        assert.strictEqual(beforeInitial, beforeUpdated, 'before addon is reused');
+        assert.strictEqual(afterInitial, afterUpdated, 'after addon is reused');
+    });
+
+    QUnit.test('should render addons content with data', function(assert) {
+        this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content is correct');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addon content is correct');
+    });
+
+    ['beforeTemplate', 'afterTemplate'].forEach(template => {
+        QUnit.test(`should support only ${template}`, function(assert) {
+            this.createEditor({
+                fieldAddons: { [template]: (data) => `${template} - ${data}` },
+            });
+
+            const { $beforeAddon, $afterAddon } = this.getAddons();
+
+            if(template === 'beforeTemplate') {
+                assert.strictEqual($afterAddon.text(), '', 'after slot remains empty');
+                assert.strictEqual($beforeAddon.text(), 'beforeTemplate - test', 'beforeTemplate rendered');
+            } else {
+                assert.strictEqual($beforeAddon.text(), '', 'before slot remains empty');
+                assert.strictEqual($afterAddon.text(), 'afterTemplate - test', 'afterTemplate rendered');
+            }
+        });
+    });
+
+    QUnit.test('should update addons content and re-render on value change', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content matches value');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addons content matches value');
+
+        instance.option('value', 'updated');
+
+        assert.strictEqual($beforeAddon.text(), 'before - updated', 'before addon content updated');
+        assert.strictEqual($afterAddon.text(), 'after - updated', 'after addon content updated');
+    });
+
+    QUnit.test('should render fieldAddons when set dynamically', function(assert) {
+        const instance = this.createEditor({ fieldAddons: undefined });
+
+        instance.option('fieldAddons', this.getDefaultAddons());
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'rendered correct content');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'rendered correct content');
+    });
+
+    QUnit.test('should clear addons when fieldAddons is removed', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test', 'before addon content matches value');
+        assert.strictEqual($afterAddon.text(), 'after - test', 'after addon content matches value');
+
+        instance.option('fieldAddons', null);
+
+        const { $beforeAddon: $beforeSlotUpdated, $afterAddon: $afterSlotUpdated } = this.getAddons();
+
+        assert.strictEqual($beforeSlotUpdated.text(), '', 'before addon cleared');
+        assert.strictEqual($afterSlotUpdated.text(), '', 'after addon cleared');
+    });
+
+    QUnit.test('should remove addons on widget dispose', function(assert) {
+        const instance = this.createEditor();
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.length, 1, 'before addon exists');
+        assert.strictEqual($afterAddon.length, 1, 'after addon exists');
+
+        instance.dispose();
+
+        const { $beforeAddon: $beforeSlotRemoved, $afterAddon: $afterSlotRemoved } = this.getAddons();
+
+        assert.strictEqual($beforeSlotRemoved.length, 0, 'before addon removed');
+        assert.strictEqual($afterSlotRemoved.length, 0, 'after addon removed');
+    });
+
+    QUnit.test('should render fieldAddons but not fieldTemplate if both provided', function(assert) {
+        const instance = this.createEditor({
+            fieldTemplate: (data, container) => $('<div>').dxTextBox({ value: 'Custom' }).appendTo(container)
+        });
+
+        const $inputs = this.$container.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'before - test');
+        assert.strictEqual($afterAddon.text(), 'after - test');
+        assert.strictEqual($inputs.length, 1, 'only editor input is present');
+        assert.strictEqual($inputs.val(), instance.option('value'), 'input shows editor value');
+    });
+
+    QUnit.test('should handle string templates using integrationOptions', function(assert) {
+        this.createEditor({
+            fieldAddons: { beforeTemplate: 'customBefore', afterTemplate: 'customAfter' },
+            integrationOptions: {
+                templates: {
+                    customBefore: { render: ({ container, model }) => $(container).text(`customBefore - ${model}`) },
+                    customAfter: { render: ({ container, model }) => $(container).text(`customAfter - ${model}`) },
+                }
+            }
+        });
+
+        const { $beforeAddon, $afterAddon } = this.getAddons();
+
+        assert.strictEqual($beforeAddon.text(), 'customBefore - test', 'before content is correct');
+        assert.strictEqual($afterAddon.text(), 'customAfter - test', 'after content is correct');
+    });
+
+    QUnit.test('should pass correct values to fieldAddons render-functions', function(assert) {
+        const beforeSpy = sinon.spy((data, element) => {
+            assert.strictEqual(data, 'test', 'beforeTemplate: data is value');
+            assert.strictEqual($(element).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), true, 'beforeTemplate: element is addon');
+        });
+
+        const afterSpy = sinon.spy((data, element) => {
+            assert.strictEqual(data, 'test', 'afterTemplate: data is value');
+            assert.strictEqual($(element).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), true, 'afterTemplate: element is addon');
+        });
+
+        this.createEditor({
+            fieldAddons: { beforeTemplate: beforeSpy, afterTemplate: afterSpy },
+        });
+
+        assert.strictEqual(beforeSpy.calledOnce, true, 'beforeTemplate called once');
+        assert.strictEqual(afterSpy.calledOnce, true, 'afterTemplate called once');
+    });
+
+    QUnit.test('should pass correct values to fieldAddons render-functions with integrationOptions', function(assert) {
+        const beforeSpy = sinon.spy(({ container, model }) => {
+            assert.strictEqual(model, 'test', 'before: model is value');
+            assert.strictEqual($(container).hasClass(DROP_DOWN_EDITOR_BEFORE_FIELD_ADDON), true, 'before: container is addon');
+        });
+
+        const afterSpy = sinon.spy(({ container, model }) => {
+            assert.strictEqual(model, 'test', 'after: model is value');
+            assert.strictEqual($(container).hasClass(DROP_DOWN_EDITOR_AFTER_FIELD_ADDON), true, 'after: container is addon');
+        });
+
+        this.createEditor({
+            fieldAddons: { beforeTemplate: 'customBefore', afterTemplate: 'customAfter' },
+            integrationOptions: {
+                templates: {
+                    customBefore: { render: beforeSpy },
+                    customAfter: { render: afterSpy },
+                }
+            }
+        });
+
+        assert.strictEqual(beforeSpy.calledOnce, true, 'before.render called');
+        assert.strictEqual(afterSpy.calledOnce, true, 'after.render called');
+    });
+});
+
 QUnit.module('options', () => {
     QUnit.test('acceptCustomValue', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
@@ -1926,31 +2124,31 @@ QUnit.module('popup integration', () => {
             assert.strictEqual(dropDownOptions.disabled, false, 'dropDownOptions includes disabled option from Popup');
         });
 
-        QUnit.test('Should cache dropDownOptions from user in _userDropDownOptions on init', function(assert) {
+        QUnit.test('Should cache dropDownOptions from user in _cached_dropDownOptions on init', function(assert) {
             const dropDownOptions = { showTitle: true };
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 opened: true,
                 dropDownOptions,
             }).dxDropDownEditor('instance');
 
-            const { _userDropDownOptions } = dropDownEditor.option();
+            const { _cached_dropDownOptions } = dropDownEditor.option();
 
-            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'initial dropDownOptions are cached in _userDropDownOptions');
+            assert.deepEqual(_cached_dropDownOptions, dropDownOptions, 'initial dropDownOptions are cached in _cached_dropDownOptions');
         });
 
-        QUnit.test('Should cache updated dropDownOptions from user in _userDropDownOptions on runtime change', function(assert) {
+        QUnit.test('Should cache updated dropDownOptions from user in _cached_dropDownOptions on runtime change', function(assert) {
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 opened: true,
             }).dxDropDownEditor('instance');
 
             dropDownEditor.option('dropDownOptions', { width: 123 });
 
-            const { _userDropDownOptions } = dropDownEditor.option();
+            const { _cached_dropDownOptions } = dropDownEditor.option();
 
-            assert.deepEqual(_userDropDownOptions, { width: 123, showTitle: false }, 'updated dropDownOptions are cached in _userDropDownOptions');
+            assert.deepEqual(_cached_dropDownOptions, { width: 123, showTitle: false }, 'updated dropDownOptions are cached in _cached_dropDownOptions');
         });
 
-        QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+        QUnit.test('_cached_dropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
             const dropDownOptions = {
                 showTitle: false,
                 position: {
@@ -1966,10 +2164,10 @@ QUnit.module('popup integration', () => {
 
             dropDownEditor.option('dropDownOptions.position.my', 'top');
 
-            const { _userDropDownOptions } = dropDownEditor.option();
+            const { _cached_dropDownOptions } = dropDownEditor.option();
             dropDownOptions.position.my = 'top';
 
-            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+            assert.deepEqual(_cached_dropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
         });
     });
 

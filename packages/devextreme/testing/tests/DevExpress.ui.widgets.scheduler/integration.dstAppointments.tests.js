@@ -4,7 +4,6 @@ import fx from 'common/core/animation/fx';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import '__internal/scheduler/m_scheduler';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
@@ -73,9 +72,6 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
     });
 
     QUnit.test('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
         const scheduler = await createWrapper({
             dataSource: [
@@ -184,10 +180,6 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
     });
 
     QUnit.test('Recurrence appt part at the time of DST should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
         const scheduler = await createWrapper({
             dataSource: [
@@ -345,10 +337,6 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
     });
 
     QUnit.test('Recurrence appt part at the time of DST-end should have correct tooltip and popup if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', async function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         // NOTE: The daylight saving changed backward in Montreal on 03.11.2019 and in Paris on 27.10.2019
         const scheduler = await createWrapper({
             dataSource: [
