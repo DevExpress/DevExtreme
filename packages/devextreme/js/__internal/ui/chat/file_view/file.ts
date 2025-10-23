@@ -11,9 +11,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getFileIconName = (fileName: string): string => 'file';
+import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
 
 export type Properties = WidgetProperties & {
   data: Attachment;
