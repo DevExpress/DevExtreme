@@ -1124,12 +1124,16 @@ QUnit.module('keyboard navigation', {
             swipeEnabled: true,
         });
         this.instance.option('loop', true);
-        const pointer = pointerMock($('#tabPanel'));
+        const pointer = pointerMock(this.$element);
         const keyDownEvent = $.Event('keydown', { key: 'ArrowRight' });
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-        this.$element.trigger(keyDownEvent).trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'at second element after swipe');
 
+        this.$element.trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'at third element after first keydown');
+
+        this.$element.trigger(keyDownEvent);
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
     });
 
