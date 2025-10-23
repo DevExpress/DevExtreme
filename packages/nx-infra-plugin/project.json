@@ -1,0 +1,47 @@
+{
+  "name": "devextreme-nx-infra-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nx-infra-plugin/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "{projectRoot}/prod",
+        "main": "{projectRoot}/src/index.ts",
+        "tsConfig": "packages/nx-infra-plugin/tsconfig.lib.json",
+        "generateExportsField": true,
+        "assets": [
+          "packages/nx-infra-plugin/*.md",
+          {
+            "input": "./packages/nx-infra-plugin/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nx-infra-plugin/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nx-infra-plugin",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/nx-infra-plugin/jest.config.ts"
+      }
+    }
+  }
+}

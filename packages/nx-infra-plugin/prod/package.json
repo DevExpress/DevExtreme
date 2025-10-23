@@ -1,0 +1,31 @@
+{
+  "name": "devextreme-nx-infra-plugin",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "private": true,
+  "executors": "./prod/executors.json",
+  "exports": {
+    ".": {
+      "require": "./prod/src/index.js",
+      "types": "./prod/src/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "glob": "10.4.5",
+    "rimraf": "3.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "4.9.5",
+    "prettier": "catalog:tools"
+  },
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "build": "nx build nx-infra-plugin",
+    "test": "nx test nx-infra-plugin",
+    "lint": "pnpm run format:check"
+  },
+  "main": "./src/index.js"
+}
