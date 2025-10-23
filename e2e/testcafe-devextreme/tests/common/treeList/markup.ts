@@ -29,7 +29,7 @@ test('TreeList - Expand/collapse buttons are too close to column borders if the 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList('#container');
 
-  await testScreenshot(t, takeScreenshot, 'T1223168-expandable-generic.light', { element: treeList.element });
+  await testScreenshot(t, takeScreenshot, 'T1223168-expandable', { element: treeList.element });
 
   await t
     .expect(compareResults.isValid())
@@ -62,7 +62,7 @@ test.meta({ unstable: true })('TreeList screenshot when the first cell has a tem
   const treeList = new TreeList('#container');
 
   await t.expect(treeList.isReady()).ok();
-  await testScreenshot(t, takeScreenshot, 'T1221037-cell-with-template-generic.light', { element: treeList.element });
+  await testScreenshot(t, takeScreenshot, 'T1221037-cell-with-template', { element: treeList.element });
 
   await t
     .expect(compareResults.isValid())
@@ -229,7 +229,7 @@ test('The shading should alternate correctly after expanding the node when repai
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
           const treeList = new TreeList('#container');
 
-          await testScreenshot(t, takeScreenshot, `markup-selection=${selectionMode}-rtl=${rtlEnabled}-content=${contentType} (generic.light)`, { element: treeList.element });
+          await testScreenshot(t, takeScreenshot, `markup-selection=${selectionMode}-rtl=${rtlEnabled}-content=${contentType}`, { element: treeList.element });
 
           await t
             .expect(compareResults.isValid())
