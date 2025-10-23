@@ -1,4 +1,5 @@
 import createTestCafe from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import fs from 'fs';
 
 function reporter() {
@@ -39,7 +40,7 @@ function reporter() {
     renderErrors(errs) {
       const filteredErrors = errs.filter((x) => {
         // eslint-disable-next-line spellcheck/spell-checker
-        if (x && x.errMsg && x.errMsg.indexOf('INVALID_SCREENSHOT') !== -1) return false;
+        if (x && x.errMsg && typeof x.errMsg === 'string' && x.errMsg.indexOf('INVALID_SCREENSHOT') !== -1) return false;
         return true;
       });
       if (!filteredErrors.length) return;
@@ -220,7 +221,21 @@ async function main() {
     .browsers(process.env.BROWSERS || 'chrome --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning --disable-dev-shm-usage')
     .concurrency(concurrency || 1)
     .run({
-      quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,
+      quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 3 } : false,
+      // @ts-expect-error ts-error
+      hooks: {
+        test: {
+          before: async (t: TestController) => {
+            await ClientFunction(() => {
+              if (document.activeElement && document.activeElement !== document.body) {
+                (document.activeElement as HTMLElement).blur();
+              }
+              window.getSelection()?.removeAllRanges();
+            }).with({ boundTestRun: t })();
+            await t.hover('html');
+          },
+        },
+      },
     });
 
   await tester.close();

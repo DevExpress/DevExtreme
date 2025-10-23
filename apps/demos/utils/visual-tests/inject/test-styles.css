@@ -4,8 +4,12 @@ body {
   overflow: clip;
 }
 
+.dx-scrollable-scroll { visibility: hidden !important; }
+
 /* trying to achieve more predictable results of rendered text */
 
 * {
-  text-rendering: geometricprecision !important;
+  caret-color: transparent !important;
+  
+  /* text-rendering: geometricprecision !important; */
 }
