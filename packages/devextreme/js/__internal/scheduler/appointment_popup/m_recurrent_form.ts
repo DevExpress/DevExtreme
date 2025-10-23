@@ -75,8 +75,7 @@ const FREQ = {
   YEARLY: 'yearly',
 } as const;
 
-// TODO: use dateLocalization instead of constants
-const weekDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+const weekDays = dateLocalization.getDayNames('abbreviated').map((dayName) => dayName.slice(0, 2).toUpperCase());
 
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 
