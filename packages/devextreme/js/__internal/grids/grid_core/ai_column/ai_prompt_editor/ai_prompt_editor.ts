@@ -45,7 +45,8 @@ export class AiPromptEditor {
   private getTextAreaConfig(): TextAreaProperties {
     return {
       value: this.prompt,
-      height: 140,
+      height: 110,
+      stylingMode: 'outlined',
       onValueChanged: (e): void => {
         this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value); // Update the disable state of the Apply button
         this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', true); // Update the disable state of the Regenerate Data button
@@ -63,6 +64,7 @@ export class AiPromptEditor {
       shadingColor: 'transparent',
       dragEnabled: true,
       hideOnOutsideClick: true,
+      showCloseButton: true,
       title: messageLocalization.format('dxDataGrid-aiPromptEditorTitle'),
       wrapperAttr: { class: `${CLASSES.aiPromptEditor} ${CLASSES.aiDialog}` },
       contentTemplate: ($container): void => {
