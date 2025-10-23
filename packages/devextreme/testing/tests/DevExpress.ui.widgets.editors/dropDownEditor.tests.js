@@ -1937,7 +1937,7 @@ QUnit.module('popup integration', () => {
             assert.deepEqual(_userDropDownOptions, { width: 123, showTitle: false }, 'updated dropDownOptions are cached in _userDropDownOptions');
         });
 
-        QUnit.test('_cached_dropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+        QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
             const dropDownOptions = {
                 showTitle: false,
                 position: {
@@ -1953,10 +1953,10 @@ QUnit.module('popup integration', () => {
 
             dropDownEditor.option('dropDownOptions.position.my', 'top');
 
-            const { _cached_dropDownOptions } = dropDownEditor.option();
+            const { _userDropDownOptions } = dropDownEditor.option();
             dropDownOptions.position.my = 'top';
 
-            assert.deepEqual(_cached_dropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
+            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _userDropDownOptions');
         });
     });
 
