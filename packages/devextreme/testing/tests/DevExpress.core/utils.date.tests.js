@@ -701,8 +701,14 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
     assert.deepEqual(dates[4], new Date(2018, 8, 4, 12, 13, 0), 'Date in interval is correct');
 });
 
-QUnit.module('week numbers', (assert) => {
+QUnit.module('week numbers', () => {
     const daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+    const dayDescriptions = [
+        'Last day of first week (with sunday as first day of week)',
+        'First day of second week (with sunday as first day of week)',
+        'Last day of second-to last week (with sunday as first day of week)',
+        'First day of last week (with sunday as first day of week)',
+    ];
 
     [[[{
         day: new Date(2034, 0, 7),
@@ -984,17 +990,23 @@ QUnit.module('week numbers', (assert) => {
         firstDay: [1, 53, 1, 1, 1, 1, 1],
         firstFourDays: [1, 52, 52, 53, 53, 1, 1],
         fullWeek: [53, 52, 52, 52, 52, 52, 53],
-    }]]].forEach((years, firsDayOfYear) => {
-        QUnit.test(`weeks years starting ${WEEK_DAYS[firsDayOfYear]}`, function(assert) {
+    }]]].forEach((years, firstDayOfYear) => {
+        QUnit.test(`weeks years starting ${WEEK_DAYS[firstDayOfYear]}`, function(assert) {
+            const comparer = (day, rule, expected, description) => {
+                assert.deepEqual(daysOfWeek.map((firstDayOfWeek) => dateUtils.getWeekNumber(day, firstDayOfWeek, rule)), expected, description);
+            };
+
             years.forEach((days => {
-                days.forEach(({ day, firstDay, firstFourDays, fullWeek }) => {
+                days.forEach(({ day, firstDay, firstFourDays, fullWeek }, index) => {
                     const year = day.getFullYear();
                     const feb29 = new Date(year, 1, 29);
                     const isLeapYear = feb29.getMonth() === 1;
+                    const dayDescription = dayDescriptions[index];
+                    const baseDescription = `${dayDescription} ${isLeapYear ? 'leap ' : ''}year: ${year}, rule: `;
 
-                    assert.deepEqual(daysOfWeek.map((firstDayOfWeek) => dateUtils.getWeekNumber(day, firstDayOfWeek, 'firstDay')), firstDay, `${isLeapYear ? 'leap ' : ''}year: ${year}, rule: firstDay (american format)`);
-                    assert.deepEqual(daysOfWeek.map((firstDayOfWeek) => dateUtils.getWeekNumber(day, firstDayOfWeek, 'firstFourDays')), firstFourDays, `${isLeapYear ? 'leap ' : ''}year: ${year}, rule: firstFourDays (ISO8601)`);
-                    assert.deepEqual(daysOfWeek.map((firstDayOfWeek) => dateUtils.getWeekNumber(day, firstDayOfWeek, 'fullWeek')), fullWeek, `${isLeapYear ? 'leap ' : ''}year: ${year}, rule: fullWeek`);
+                    comparer(day, 'firstDay', firstDay, `${baseDescription}firstDay (american format)`);
+                    comparer(day, 'firstFourDays', firstFourDays, `${baseDescription}firstFourDays (ISO8601)`);
+                    comparer(day, 'fullWeek', fullWeek, `${baseDescription}fullWeek`);
                 });
             }));
         });
