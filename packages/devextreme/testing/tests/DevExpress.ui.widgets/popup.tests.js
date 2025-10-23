@@ -30,7 +30,6 @@ import {
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -3271,10 +3270,6 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const visualPositionChangedStub = sinon.stub();
             this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
