@@ -65,11 +65,11 @@ const monthsValues = dateLocalization.getMonthNames().map((monthName, index) => 
   text: monthName,
 }));
 
-const weekDays = dateLocalization.getDayNames('short').map((dayName) => dayName.toUpperCase());
+const weekDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-const weekDaysButtons = dateLocalization.getDayNames('short').map((dayName) => ({
-  text: dayName[0],
-  key: dayName,
+const weekDaysButtons = weekDays.map((day) => ({
+  text: day[0],
+  key: day,
 }));
 
 const FREQ = {
@@ -152,8 +152,6 @@ export class RecurrentForm {
 
   private _recurrenceRule: RecurrenceRule;
 
-  private _dayButtons?: Button[];
-
   private _tempRecurrenceRule?: RecurrenceRule;
 
   constructor(scheduler: Scheduler) {
@@ -210,78 +208,6 @@ export class RecurrentForm {
         },
       } as SelectBoxProperties,
     } as SimpleItem;
-  }
-
-  private renderByDayButtons(
-    itemsButtonGroup: { text: string; key: string }[],
-    itemElement: any,
-  ): void {
-    const container = $('<div>')
-      .addClass(CLASSES.recurrenceByDayButtons)
-      .appendTo(itemElement);
-
-    this._dayButtons = [];
-
-    const buttonKeyMap = new Map<Button, string>();
-
-    const updateByDay = (clickedKey: string, isSelected: boolean): void => {
-      if (!this._tempRecurrenceRule) {
-        return;
-      }
-
-      const currentByDay = this._daysOfWeekByRules();
-      let newByDay: string[] = [];
-
-      if (isSelected) {
-        newByDay = currentByDay.includes(clickedKey)
-          ? currentByDay
-          : [...currentByDay, clickedKey];
-      } else {
-        newByDay = currentByDay.filter((d) => d !== clickedKey);
-      }
-
-      if (newByDay.length === 0) {
-        newByDay = this._getDefaultByDayValue();
-      }
-
-      this._tempRecurrenceRule.setRule('byday', newByDay);
-
-      this._dayButtons?.forEach((btn) => {
-        const key = buttonKeyMap.get(btn);
-        const selected = key ? newByDay.includes(key) : false;
-        btn.option('stylingMode', selected ? 'contained' : 'outlined');
-        btn.option('type', selected ? 'default' : 'normal');
-      });
-    };
-
-    itemsButtonGroup.forEach((item) => {
-      const isSelected = this.recurrenceRule.getRule('byDay').includes(item.key);
-      const buttonContainer = $('<div>').appendTo(container);
-
-      const button = this.scheduler.createComponent(buttonContainer, Button, {
-        text: item.text,
-        width: 32,
-        height: 32,
-        stylingMode: isSelected ? 'contained' : 'outlined',
-        type: isSelected ? 'default' : 'normal',
-        elementAttr: {
-          'data-day-key': item.key,
-        },
-        onClick: (): void => {
-          // change button style
-          // recurrenceRule.getDaysFromByDayRule().includes(item.key);
-          // recurrenceRule.getRules().byday.filter()
-          // recurrenceRule.getRules().byday.push()
-
-          const currentByDay = this._daysOfWeekByRules();
-          const isCurrentlySelected = currentByDay.includes(item.key);
-          updateByDay(item.key, !isCurrentlySelected);
-        },
-      });
-
-      this._dayButtons?.push(button);
-      buttonKeyMap.set(button, item.key);
-    });
   }
 
   get dxForm(): dxForm {
@@ -508,7 +434,37 @@ export class RecurrentForm {
         visible: false,
       },
       template: (_, itemElement): void => {
-        this.renderByDayButtons(buttonGroupItems, itemElement);
+        const container = $('<div>')
+          .addClass(CLASSES.recurrenceByDayButtons)
+          .appendTo(itemElement);
+
+        buttonGroupItems.forEach((item) => {
+          const isSelected = this.recurrenceRule?.getRule('byday')?.includes(item.key) ?? false;
+          const buttonContainer = $('<div>').appendTo(container);
+
+          this.scheduler.createComponent(buttonContainer, Button, {
+            text: item.text,
+            width: 32,
+            height: 32,
+            stylingMode: isSelected ? 'contained' : 'outlined',
+            type: isSelected ? 'default' : 'normal',
+            elementAttr: {
+              'data-day-key': item.key,
+            },
+            onClick: (e: any): void => {
+              const isSelectedStyleMode = e.component.option('stylingMode') === 'contained';
+
+              e.component.option('stylingMode', !isSelectedStyleMode ? 'contained' : 'outlined');
+              e.component.option('type', !isSelectedStyleMode ? 'default' : 'normal');
+
+              if (isSelectedStyleMode) {
+                this.recurrenceRule.setRule('byday', this.recurrenceRule.getRule('byday')?.filter((day) => day !== item.key) ?? []);
+              } else {
+                this.recurrenceRule.setRule('byday', [...this.recurrenceRule.getRule('byday') ?? [], item.key]);
+              }
+            },
+          });
+        });
       },
     } as SimpleItem;
   }
