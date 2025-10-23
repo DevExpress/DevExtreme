@@ -23,7 +23,7 @@ test('default render', async (t) => {
   height: 600,
   columns: ['Customer', 'Order Date'],
   cardCover: {
-    imageExpr: (data) => data.Picture && `https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/${data.Picture}`,
+    imageExpr: (data) => data.Picture && `../../../apps/demos/${data.Picture}`,
     altExpr: 'FirstName',
   },
   dataSource: [{
