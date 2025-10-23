@@ -511,15 +511,12 @@ export class AdaptiveColumnsController extends modules.ViewController {
     const hasAdaptiveColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
 
     if (hasAdaptiveColumns) {
-      for (let i = 0; i < COLUMN_VIEWS.length; i++) {
-        // @ts-expect-error
-        const view = this.getView(COLUMN_VIEWS[i]);
-        if (view && view.isVisible() && view.element()) {
-          const $rowsFixedTable = view.element();
-          each($rowsFixedTable.find(ADAPTIVE_ROW_SELECTOR), (_, item) => {
-            $(item).css('display', isBestFit ? 'none' : '');
-          });
-        }
+      const rowsView = this.getView(ROWS_VIEW);
+      if (rowsView && rowsView.isVisible() && rowsView.element()) {
+        const $rowsFixedTable = rowsView.element();
+        each($rowsFixedTable.find(ADAPTIVE_ROW_SELECTOR), (_, item) => {
+          $(item).css('display', isBestFit ? 'none' : '');
+        });
       }
     }
   }
