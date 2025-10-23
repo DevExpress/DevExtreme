@@ -28,8 +28,7 @@ import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-
-import { getFileIconName } from './file_uploader.utils';
+import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
 
 const window = getWindow();
 
@@ -184,6 +183,7 @@ interface FileUploaderChunkUploadResponse {
 type CancelButtonClickEvent = NativeEventInfo<InteractionEvent> & {
   readonly file?: File;
 };
+
 export interface Properties extends PublicProperties {
   _buttonStylingMode?: ButtonStyle;
 
@@ -828,7 +828,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _beforeSendAction?: (event?: Record<string, unknown>) => void;
 
-  _cancelButtonClickAction?: (event?: Record<string, unknown>) => void;
+  _cancelButtonClickAction?: (event?: Partial<CancelButtonClickEvent>) => void;
 
   static __internals: {
     changeFileInputRenderer: (renderer: () => dxElementWrapper) => void;
@@ -2061,7 +2061,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       onClick: (): void => {
         this._preventFilesUploading([file]);
         this._removeFile(file);
-        this._cancelButtonClickAction?.({ file });
+        this._cancelButtonClickAction?.({ file: file.value });
       },
     });
 
