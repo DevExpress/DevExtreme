@@ -74,6 +74,7 @@ describe('AiPromptEditor', () => {
           height: 'auto',
           title: 'AI Prompt Editor',
           hideOnOutsideClick: true,
+          showCloseButton: true,
           shading: false,
           shadingColor: 'transparent',
           dragEnabled: true,
@@ -141,10 +142,11 @@ describe('AiPromptEditor', () => {
         $(POM.getTextArea().getElement()),
         TextArea,
         {
-          height: 140,
+          height: 110,
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',
+          stylingMode: 'outlined',
           placeholder: 'Prompt AI to generate column values...',
         },
       ]);
