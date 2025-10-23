@@ -1,6 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
 import $ from 'jquery';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import SpeechToText from 'ui/speech_to_text';
 import Button from 'ui/button';
 import devices from '__internal/core/m_devices';
@@ -397,10 +396,6 @@ QUnit.module('Events', moduleConfig, () => {
 
 QUnit.module('Accessibility', moduleConfig, () => {
     QUnit.test('should have tabindex=0 on button element', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $button = this.getButton();
 
         assert.strictEqual($button.attr('tabindex'), '0', 'tabindex is set to 0');

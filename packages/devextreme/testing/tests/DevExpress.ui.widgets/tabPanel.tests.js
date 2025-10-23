@@ -11,7 +11,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 import {
     TABPANEL_TABS_ITEM_CLASS,
     TABPANEL_CONTAINER_CLASS,
@@ -1120,10 +1119,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.skip('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
-        if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
-            return;
-        }
-
         this.instance.option({
             items: [1, 2, 3],
             loop: false,
