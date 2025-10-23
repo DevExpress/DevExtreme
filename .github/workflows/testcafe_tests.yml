@@ -93,6 +93,7 @@ jobs:
           { componentFolder: "cardView", name: "cardView" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
 
+          # Scheduler tests need to be reworked to work in fluent theme
           { componentFolder: "scheduler/common", name: "scheduler / common (1/6)", indices: "1/6", theme: 'generic.light' },
           { componentFolder: "scheduler/common", name: "scheduler / common (2/6)", indices: "2/6", theme: 'generic.light' },
           { componentFolder: "scheduler/common", name: "scheduler / common (3/6)", indices: "3/6", theme: 'generic.light' },
