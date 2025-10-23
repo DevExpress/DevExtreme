@@ -80,7 +80,9 @@ jobs:
           { componentFolder: "accessibility", name: "accessibility (1/2)", indices: "1/2" },
           { componentFolder: "accessibility", name: "accessibility (2/2)", indices: "2/2" },
           { componentFolder: "common", name: "common" },
-          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+
+          # TreeList and Grids tests need to be reworked to work in fluent theme
+          { componentFolder: "treeList", name: "treeList", concurrency: 1, theme: 'generic.light' },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (1/5)", indices: "1/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (2/5)", indices: "2/5" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (3/5)", indices: "3/5" },
