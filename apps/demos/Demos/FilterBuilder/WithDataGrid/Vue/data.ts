@@ -63,7 +63,7 @@ export const products: Product[] = [
   {
     Product_ID: 2,
     Product_Name: "SuperHD Video Player",
-    Product_Cост: "175.0000",
+    Product_Cost: "175.0000",
     Product_Sale_Price: "275.0000",
     Product_Retail_Price: "400.0000",
     Product_Current_Inventory: 150,
@@ -71,7 +71,7 @@ export const products: Product[] = [
   {
     Product_ID: 3,
     Product_Name: "SuperPlasma 50",
-    Product_Cост: "1100.0000",
+    Product_Cost: "1100.0000",
     Product_Sale_Price: "1800.0000",
     Product_Retail_Price: "2400.0000",
     Product_Current_Inventory: 0,
@@ -79,7 +79,7 @@ export const products: Product[] = [
   {
     Product_ID: 4,
     Product_Name: "SuperLED 50",
-    Product_Cост: "775.0000",
+    Product_Cost: "775.0000",
     Product_Sale_Price: "1100.0000",
     Product_Retail_Price: "1600.0000",
     Product_Current_Inventory: 77,
@@ -111,7 +111,7 @@ export const products: Product[] = [
   {
     Product_ID: 8,
     Product_Name: "SuperPlasma 65",
-    Product_Cост: "1800.0000",
+    Product_Cost: "1800.0000",
     Product_Sale_Price: "2900.0000",
     Product_Retail_Price: "3500.0000",
     Product_Current_Inventory: 0,
@@ -119,7 +119,7 @@ export const products: Product[] = [
   {
     Product_ID: 9,
     Product_Name: "SuperLCD 70",
-    Product_Cост: "2125.0000",
+    Product_Cost: "2125.0000",
     Product_Sale_Price: "3200.0000",
     Product_Retail_Price: "400.0000",
     Product_Current_Inventory: 95,
@@ -135,7 +135,7 @@ export const products: Product[] = [
   {
     Product_ID: 11,
     Product_Name: "DesktopLED 19",
-    Product_Cост: "70.0000",
+    Product_Cost: "70.0000",
     Product_Sale_Price: "115.0000",
     Product_Retail_Price: "165.0000",
     Product_Current_Inventory: 425,
@@ -143,7 +143,7 @@ export const products: Product[] = [
   {
     Product_ID: 12,
     Product_Name: "DesktopLCD 21",
-    Product_Cост: "75.0000",
+    Product_Cost: "75.0000",
     Product_Sale_Price: "120.0000",
     Product_Retail_Price: "170.0000",
     Product_Current_Inventory: 210,
@@ -151,7 +151,7 @@ export const products: Product[] = [
   {
     Product_ID: 13,
     Product_Name: "DesktopLCD 19",
-    Product_Cост: "68.0000",
+    Product_Cost: "68.0000",
     Product_Sale_Price: "110.0000",
     Product_Retail_Price: "160.0000",
     Product_Current_Inventory: 150,
@@ -159,7 +159,7 @@ export const products: Product[] = [
   {
     Product_ID: 14,
     Product_Name: "Projector Plus",
-    Product_Cост: "225.0000",
+    Product_Cost: "225.0000",
     Product_Sale_Price: "400.0000",
     Product_Retail_Price: "550.0000",
     Product_Current_Inventory: 0,
@@ -167,7 +167,7 @@ export const products: Product[] = [
   {
     Product_ID: 15,
     Product_Name: "Projector PlusHD",
-    Product_Cост: "425.0000",
+    Product_Cost: "425.0000",
     Product_Sale_Price: "600.0000",
     Product_Retail_Price: "750.0000",
     Product_Current_Inventory: 110,
@@ -175,7 +175,7 @@ export const products: Product[] = [
   {
     Product_ID: 16,
     Product_Name: "Projector PlusHT",
-    Product_Cост: "725.0000",
+    Product_Cost: "725.0000",
     Product_Sale_Price: "900.0000",
     Product_Retail_Price: "1050.0000",
     Product_Current_Inventory: 0,
@@ -191,7 +191,7 @@ export const products: Product[] = [
   {
     Product_ID: 18,
     Product_Name: "ExcelRemote Bluetooth",
-    Product_Cост: "85.0000",
+    Product_Cost: "85.0000",
     Product_Sale_Price: "135.0000",
     Product_Retail_Price: "180.0000",
     Product_Current_Inventory: 310,
@@ -199,7 +199,7 @@ export const products: Product[] = [
   {
     Product_ID: 19,
     Product_Name: "ExcelRemote IP",
-    Product_Cост: "105.0000",
+    Product_Cost: "105.0000",
     Product_Sale_Price: "155.0000",
     Product_Retail_Price: "200.0000",
     Product_Current_Inventory: 0,
