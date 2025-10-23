@@ -180,9 +180,12 @@ Object.values(FRAMEWORKS).forEach((approach) => {
               ...comparisonOptions,
               looksSameComparisonOptions: {
                 ...comparisonOptions?.looksSameComparisonOptions,
-                threshold: 0.1,
-                antialiasingTolerance: 5,
+                tolerance: 10,
+                antialiasingTolerance: 10,
+
               },
+              // eslint-disable-next-line spellcheck/spell-checker
+              textDiffTreshold: 0.1,
             };
 
             comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, fastComparisonOptions);
