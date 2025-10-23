@@ -7,8 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
-import { changeTheme } from '../../../helpers/changeTheme';
-import { Themes } from '../../../helpers/themes';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1869,17 +1867,16 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 });
 
 // T1270354
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
 [
-  { theme: Themes.genericLight, useNative: true },
-  { theme: Themes.genericLight, useNative: false },
-  { theme: Themes.materialBlue, useNative: true },
-  { theme: Themes.materialBlue, useNative: false },
-  { theme: Themes.fluentBlue, useNative: true },
-  { theme: Themes.fluentBlue, useNative: false },
-].forEach(({ theme, useNative }) => {
-  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary (${theme} theme)`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  { useNative: true },
+  { useNative: false },
+].forEach(({ useNative }) => {
+  test(`Virtual ${useNative ? 'native' : 'simulated'} scrolling - Scrolling to the bottom should work correctly when there is a grouping and a summary`, async (t) => {
     const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
       .expect(dataGrid.isReady())
@@ -1888,13 +1885,12 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
     await dataGrid.scrollBy({ y: 10000 });
 
     await t
-      .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-${theme}.png`, '#container'))
+      .expect(await takeScreenshot(`T1270354-virtual-${useNative ? 'native' : 'simulated'}-scrolling-with-grouping-and-summary-generic.light.png`, '#container'))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   })
     .before(async () => {
-      await changeTheme(theme);
       await createWidget('dxDataGrid', {
         dataSource: [...new Array(50)]
           .fill(null)
@@ -1931,8 +1927,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
           ],
         },
       });
-    })
-    .after(async () => changeTheme(Themes.genericLight));
+    });
 });
 
 fixture`Scrolling - warnings`
