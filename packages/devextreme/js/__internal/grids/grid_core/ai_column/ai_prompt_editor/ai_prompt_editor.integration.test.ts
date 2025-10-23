@@ -141,7 +141,7 @@ describe('AiPromptEditor', () => {
         $(POM.getTextArea().getElement()),
         TextArea,
         {
-          height: 140,
+          height: 110,
           onValueChanged: expect.any(Function),
           value: '',
           valueChangeEvent: 'input change keyup',

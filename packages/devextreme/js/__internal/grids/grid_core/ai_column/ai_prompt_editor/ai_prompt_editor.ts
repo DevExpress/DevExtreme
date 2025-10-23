@@ -45,7 +45,7 @@ export class AiPromptEditor {
   private getTextAreaConfig(): TextAreaProperties {
     return {
       value: this.prompt,
-      height: 140,
+      height: 110,
       onValueChanged: (e): void => {
         this.updateButtonOption(APPLY_BUTTON_INDEX, 'disabled', !e.value); // Update the disable state of the Apply button
         this.updateButtonOption(REGENERATE_DATA_BUTTON_INDEX, 'disabled', true); // Update the disable state of the Regenerate Data button
