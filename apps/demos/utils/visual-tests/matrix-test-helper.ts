@@ -55,6 +55,12 @@ function patternGroupFromValues(product, demo, framework) {
   };
 }
 
+export const injectStyle = (style) => `
+  var style = document.createElement('style');
+  style.innerHTML = \`${style}\`;
+  document.getElementsByTagName('head')[0].appendChild(style);
+`;
+
 export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
   let demoAppCounter = 0;
   const demoAppIntervalHandle = setInterval(() => {
@@ -343,6 +349,7 @@ export function runManualTestCore(
   const test = testObject.clientScripts([
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
+    { content: injectStyle(globalReadFrom(__dirname, '../utils/visual-tests/inject/test-styles.css', (x) => x)) },
     ...clientScriptSource,
   ])
     .page(testURL);
