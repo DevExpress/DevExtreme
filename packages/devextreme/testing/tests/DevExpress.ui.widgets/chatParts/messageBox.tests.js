@@ -17,7 +17,6 @@ import EditingPreview, {
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
-import { BUTTON_CLASS } from '__internal/ui/button/button';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
