@@ -1,10 +1,4 @@
-import {
-  AddMutation,
-  DataType,
-  DataTypes,
-  Mutation,
-  RemoveMutation,
-} from 'devextreme-internal-tools/metadata';
+import { DataTypes } from 'devextreme-internal-tools/metadata';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { PATHS } from './paths';
@@ -20,28 +14,13 @@ export function cleanArtifacts(...files: string[]) {
   }
 }
 
-export function removeMembers(uidPattern: RegExp): RemoveMutation {
-  return { kind: 'remove', uid: uidPattern };
-}
-
-export function addMember({ uid, name, parent, types }: Omit<AddMutation, 'kind'>): AddMutation {
-  return { kind: 'add', uid, name, parent, types };
-}
-
-export function replaceTypes({ uid, types }: { uid: string; types: DataType[] }): Mutation[] {
-  return [
-    { kind: 'remove', uid: new RegExp(uid) },
-    { kind: 'add', uid, types },
-  ];
-}
-
 export const types = {
   array(...itemTypes: DataTypes.Array['itemTypes']): DataTypes.Array {
     return { kind: 'array', itemTypes };
   },
 
-  uidRef(uid: string): DataTypes.UidRef {
-    return { kind: 'uidRef', uid };
+  uidRef(uid: string, ambient: boolean = false): DataTypes.UidRef {
+    return { kind: 'uidRef', uid, ambient };
   },
 
   object: { kind: 'object' } as DataTypes.Object,
