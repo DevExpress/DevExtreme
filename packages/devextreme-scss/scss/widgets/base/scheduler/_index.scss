@@ -501,8 +501,8 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-form-date-range-group .dx-box-item:has(.dx-scheduler-form-icon),
       .dx-scheduler-form-description-group .dx-box-item:has(.dx-scheduler-form-icon),
       .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon),
-      .dx-scheduler-form-recurrence-repeat-every-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-recurrence-end-repeat-group .dx-box-item:has(.dx-scheduler-form-icon) {
+      .dx-scheduler-form-recurrence-settings-group .dx-box-item:has(.dx-scheduler-form-icon),
+      .dx-scheduler-form-recurrence-end-group .dx-box-item:has(.dx-scheduler-form-icon) {
         align-items: start;
       }
 
@@ -530,9 +530,9 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-scheduler-form-start-date-group .dx-item,
       .dx-scheduler-form-end-date-group .dx-item,
-      .dx-scheduler-form-recurrence-repeat-every-group .dx-item,
-      .dx-scheduler-form-recurrence-repeat-on-monthly-group .dx-item,
-      .dx-scheduler-form-recurrence-repeat-on-yearly-group .dx-item {
+      .dx-scheduler-form-recurrence-settings-group .dx-item,
+      .dx-scheduler-form-day-of-month-group .dx-item,
+      .dx-scheduler-form-day-of-year-group .dx-item {
         align-items: end;
 
         .dx-datebox input.dx-texteditor-input {
@@ -541,7 +541,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       /* Recurrence End section - Grid layout with equal heights */
-      .dx-scheduler-form-recurrence-end-repeat-group {
+      .dx-scheduler-form-recurrence-end-group {
         .dx-field-item-label {
           display: flex;
           align-items: center;
@@ -582,7 +582,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       // Inputs column
-      .dx-scheduler-form-recurrence-end-inputs {
+      .dx-scheduler-form-recurrence-end-editors {
         .dx-box-item-content {
           height: 100%;
           padding: 0;
@@ -642,7 +642,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       /* Recurrence Day Buttons */
-      .dx-scheduler-recurrence-byday-buttons {
+      .dx-scheduler-days-of-week-buttons {
         display: flex;
         gap: 8px;
 

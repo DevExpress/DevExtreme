@@ -109,8 +109,6 @@ export class AppointmentForm {
 
   private _recurrentForm!: RecurrentForm;
 
-  private _isRecurrenceFormVisible = false;
-
   private _popup!: any;
 
   get dxForm(): dxForm {
@@ -148,10 +146,6 @@ export class AppointmentForm {
     const value = this.formData[recurrenceRuleExpr] as string | undefined;
 
     return value ?? null;
-  }
-
-  get isRecurrenceFormVisible(): boolean {
-    return this._isRecurrenceFormVisible;
   }
 
   constructor(scheduler: any) {
@@ -674,8 +668,6 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
-    this._isRecurrenceFormVisible = true;
-
     const $formElement = $(this.dxForm.element());
     const mainGroup = $formElement.find(`.${CLASSES.mainGroupClass}`);
     const recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
@@ -703,8 +695,6 @@ export class AppointmentForm {
     recurrenceGroup.addClass(CLASSES.recurrenceHidden);
 
     this._popup.updateToolbarForMainGroup();
-
-    this._isRecurrenceFormVisible = false;
 
     if (saveRecurrenceValue) {
       const { recurrenceRule } = this._recurrentForm;
