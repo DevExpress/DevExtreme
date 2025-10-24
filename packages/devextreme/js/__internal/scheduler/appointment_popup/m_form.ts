@@ -212,6 +212,9 @@ export class AppointmentForm {
       showValidationSummary: false,
       scrollingEnabled: false,
       labelLocation: 'top',
+      colCountByScreen: {
+        xs: 1,
+      },
       elementAttr: {
         class: CLASSES.form,
       },
