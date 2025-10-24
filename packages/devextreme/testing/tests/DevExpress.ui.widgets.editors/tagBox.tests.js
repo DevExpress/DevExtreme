@@ -21,7 +21,6 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
 import browser from 'core/utils/browser';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
@@ -2451,10 +2450,6 @@ QUnit.module('keyboard navigation', {
     }
 }, () => {
     QUnit.test('pagedown/pageup keys should move focus to last/first item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $listItems = getListItems(this.instance);
         this.keyboard.press('down');
 
@@ -2466,10 +2461,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('down/up keys should move focus to next/previous item', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $listItems = getListItems(this.instance);
         const $firstItem = $listItems.eq(0);
         const $secondItem = $listItems.eq(1);
@@ -2552,9 +2543,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Value should be correct when not last item is focused and the \'tab\' key pressed', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const items = ['first', 'second', 'third'];
         const value = [items[0], items[2]];
 
@@ -2670,10 +2658,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox selects item on enter key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true,
@@ -2690,10 +2674,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('control keys test', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true
@@ -2712,10 +2692,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('up and down keys should work correctly in dxTagBox', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true
@@ -2727,10 +2703,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox selects item on space key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true,
@@ -2747,10 +2719,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox didn\'t selects item on space key if it acceptCustomValue', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true,
@@ -2768,10 +2736,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox didn\'t selects item on space key if search is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true,
@@ -2789,9 +2753,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('the \'enter\' key should not add/remove tags if the editor is closed (T378292)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         this.reinit({
             items: [1, 2, 3],
             focusStateEnabled: true,
@@ -2810,10 +2771,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('onValueChanged shouldn\'t be fired on the \'tab\' key press', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const spy = sinon.spy();
 
         this.instance.option('onValueChanged', spy);
@@ -2827,10 +2784,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('value shouldn\'t be changed on \'tab\' if there is a focused item in the drop down list', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const expectedValue = this.instance.option('value');
 
         this.keyboard
@@ -2843,10 +2796,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('the \'apply\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.instance.option({
             applyValueMode: 'useButtons',
             opened: true
@@ -2861,10 +2810,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('toolbar button should be focused on the "tab" key press if the input is focused and showSelectionControls is enabled', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             opened: true,
             showSelectionControls: true,
@@ -2925,10 +2870,6 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Popup should not close on tab press after search when applyValueMode is "useButtons" (T1230517)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             focusStateEnabled: true,
             items: ['first', 'second', 'third'],
@@ -3854,10 +3795,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
     });
 
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],
             searchEnabled: true,
@@ -3917,10 +3854,6 @@ QUnit.module('searchEnabled', moduleSetup, () => {
     });
 
     QUnit.test('tagBox set focused class with searchEnabled after press \'delete\' key', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: ['val-1', 'val-2', 'val-3', 'val-4'],
             searchEnabled: true,
@@ -6473,10 +6406,6 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('tags should be scrolled by mouse wheel (T386939)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const itemText = 'Test item ';
         const items = [];
 
@@ -6508,10 +6437,6 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('stopPropagation and preventDefault should be called for the mouse wheel event (T386939)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const spy = sinon.spy();
 
         $(this.$element).on('dxmousewheel', spy);
@@ -6526,10 +6451,6 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('stopPropagation and preventDefault should not be called for the mouse wheel event at scroll end/start position', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const spy = sinon.spy();
 
         $(this.$element).on('dxmousewheel', spy);
@@ -6556,10 +6477,6 @@ QUnit.module('single line mode', {
 
     ['ctrlKey', 'metaKey'].forEach((commandKey) => {
         QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const spy = sinon.spy();
 
             $(this.$element).on('dxmousewheel', spy);
@@ -6861,10 +6778,6 @@ QUnit.module('keyboard navigation through tags in single line mode', {
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: this.items,
             value: this.items,
@@ -6894,10 +6807,6 @@ QUnit.module('keyboard navigation through tags in single line mode', {
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the left in the RTL mode', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             items: this.items,
             value: this.items,
@@ -7953,10 +7862,6 @@ QUnit.module('regression', {
     });
 
     QUnit.testInActiveWindow('Searching should work correctly in grouped tagBox (T516798)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const items = [{
             'ID': 1,
             'Name': 'Item1',
@@ -8373,10 +8278,6 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
         ['enter', 'space'].forEach(key => {
             QUnit.test(`on selectAll item selecting using ${key}`, function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
-
                 this.keyboard
                     .focus()
                     .press('down')
