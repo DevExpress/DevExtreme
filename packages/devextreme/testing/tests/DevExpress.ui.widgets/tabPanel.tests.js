@@ -1137,8 +1137,29 @@ QUnit.module('keyboard navigation', {
         this.$element.trigger(keyDownEvent);
         assert.strictEqual(this.instance.option('loop'), true, 'loop option is set to true');
 
-        assert.strictEqual(currentTheme(), 'generic.light', 'theme is generic.light');
         assert.strictEqual(this.instance.option('selectedIndex'), 0, 'loop comes back to first element');
+    });
+
+    QUnit.test('2nd looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
+        this.instance.option({
+            items: [1, 2, 3],
+            loop: true,
+            swipeEnabled: true,
+        });
+        // this.instance.option('loop', true);
+        const pointer = pointerMock(this.$element);
+        const keyDownEvent = $.Event('keydown', { key: 'ArrowLeft' });
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        assert.strictEqual(this.instance.option('selectedIndex'), 1, 'at second element after swipe');
+
+        this.$element.trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('selectedIndex'), 0, 'at first element after first keydown');
+
+        this.$element.trigger(keyDownEvent);
+        assert.strictEqual(this.instance.option('loop'), true, 'loop option is set to true');
+
+        assert.strictEqual(this.instance.option('selectedIndex'), 2, 'loop goess back to last element');
     });
 
     const createWidget = ($element) => {
