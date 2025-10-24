@@ -211,7 +211,7 @@ QUnit.module('File', moduleConfig, () => {
                 });
 
                 Object.entries(options).forEach(([key, value]) => {
-                    assert.deepEqual(value, this.downloadButton.option(key), `button ${key} value is correct`);
+                    assert.strictEqual(this.downloadButton.option(key), value, `button ${key} value is correct`);
                 });
             });
 
@@ -225,7 +225,7 @@ QUnit.module('File', moduleConfig, () => {
                 this.instance.option(options);
 
                 Object.entries(options).forEach(([key, value]) => {
-                    assert.deepEqual(value, this.downloadButton.option(key), `button ${key} value is correct`);
+                    assert.strictEqual(this.downloadButton.option(key), value, `button ${key} value is correct`);
                 });
             });
         });
@@ -238,9 +238,9 @@ QUnit.module('File', moduleConfig, () => {
                 },
             });
 
-            assert.strictEqual(this.instance.option('activeStateEnabled'), true, 'activeStateEnabled is true by default');
-            assert.strictEqual(this.instance.option('focusStateEnabled'), true, 'focusStateEnabled is true by default');
-            assert.strictEqual(this.instance.option('hoverStateEnabled'), true, 'hoverStateEnabled is true by default');
+            [ 'activeStateEnabled', 'focusStateEnabled', 'hoverStateEnabled' ].forEach((option) => {
+                assert.strictEqual(this.instance.option(option), true, `${option} is true by default`);
+            });
         });
     });
 

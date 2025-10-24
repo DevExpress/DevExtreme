@@ -155,9 +155,15 @@ class File extends DOMComponent<File, Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._downloadButton?.option(name, value);
+        break;
+
       case 'data':
         this._invalidate();
         break;
@@ -171,10 +177,15 @@ class File extends DOMComponent<File, Properties> {
     }
   }
 
-  _dispose(): void {
+  _clean(): void {
+    this._cleanDownloadButton();
+    this.$element().empty();
+    super._clean();
+  }
+
+  _cleanDownloadButton(): void {
     this._downloadButton?.dispose();
     this._downloadButton = null;
-    super._dispose();
   }
 }
 
