@@ -408,7 +408,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return cellElements;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const fixedColumns = this.getFixedColumns();
@@ -1122,7 +1121,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point.index += correctIndex;
         }
 
-        return that._pointCreated(point, columns.length, columns);
+        return that._pointCreated(point, { length: columns.length } as dxElementWrapper, columns);
       });
     }
   }

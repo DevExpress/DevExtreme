@@ -601,11 +601,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     super._generatePointsByColumns(hasStickyColumns);
   }
 
-  protected _pointCreated(point, cellsLength, columns) {
+  protected _pointCreated(point, cells: dxElementWrapper | undefined, columns) {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const result = super._pointCreated(point, cellsLength, columns);
-    const needToCheckPoint = hasStickyColumns && cellsLength > 0;
+    const result = super._pointCreated(point, cells, columns);
+    const needToCheckPoint = hasStickyColumns && cells && cells.length > 0;
 
     if (needToCheckPoint && !result) {
       const column = columns[point.index - 1];
@@ -618,6 +618,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point,
           column,
           nextColumn,
+          cells,
         },
         this.addWidgetPrefix.bind(this),
       );

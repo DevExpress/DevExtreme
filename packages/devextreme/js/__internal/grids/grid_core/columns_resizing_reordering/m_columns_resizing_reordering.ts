@@ -748,11 +748,12 @@ export class ColumnsResizerViewController extends modules.ViewController {
   /**
    * @extended: adaptivity
    */
-  protected _pointCreated(point, cellsLength, columns) {
+  protected _pointCreated(point, cells: dxElementWrapper | undefined, columns) {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
     const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlParentStyle ? 0 : 1;
+    const cellsLength = cells?.length ?? 0;
 
     if (point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlParentStyle) ? 1 : 0)) {
       this._correctColumnIndexForPoint(point, firstPointColumnIndex, columns);
@@ -989,7 +990,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     if (cells && cells.length > 0) {
       that._pointsByColumns = gridCoreUtils.getPointsByColumns(
         cells,
-        (point) => that._pointCreated(correctColumnY(point), cells.length, columns),
+        (point) => that._pointCreated(correctColumnY(point), cells, columns),
         false,
         0,
         needToCheckPrevPoint,
