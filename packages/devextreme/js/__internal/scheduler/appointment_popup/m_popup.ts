@@ -195,7 +195,7 @@ export class AppointmentPopup {
       ...appointmentAdapter.source,
       ...groupValues,
       [allDayExpr]: Boolean(appointmentAdapter.allDay),
-      [recurrenceRuleExpr]: appointmentAdapter.recurrenceRule ?? '',
+      [recurrenceRuleExpr]: appointmentAdapter.recurrenceRule,
     };
   }
 
@@ -418,7 +418,9 @@ export class AppointmentPopup {
       cssClass: 'dx-toolbar-label',
     }];
 
-    if (this.state.allowSaving) {
+    // Show save button only if saving is allowed and form is not read-only
+    const canSave = this.state.allowSaving && !this.form.readOnly;
+    if (canSave) {
       toolbarItems.push(
         {
           toolbar: 'top',

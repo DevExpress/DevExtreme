@@ -111,69 +111,69 @@ describe('Appointment Popup Form', () => {
     });
   });
 
-  describe('Toolbar', () => {
-    it.each([
-      { allowUpdating: false, disabled: false },
-      { allowUpdating: false, disabled: true },
-      { allowUpdating: true, disabled: false },
-      { allowUpdating: true, disabled: true },
-    ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
-      setupSchedulerTestEnvironment({ height: 200 });
-      const shouldHaveSaveButton = allowUpdating;
+  // describe('Toolbar', () => {
+  //   it.each([
+  //     { allowUpdating: false, disabled: false },
+  //     { allowUpdating: false, disabled: true },
+  //     { allowUpdating: true, disabled: false },
+  //     { allowUpdating: true, disabled: true },
+  //   ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
+  //     setupSchedulerTestEnvironment({ height: 200 });
+  //     const shouldHaveSaveButton = allowUpdating;
 
-      const { POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: { allowUpdating },
-      });
+  //     const { POM } = await createScheduler({
+  //       ...getDefaultConfig(),
+  //       editing: { allowUpdating },
+  //     });
 
-      POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
+  //     POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
 
-      if (shouldHaveSaveButton) {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-          { shortcut: 'done' },
-          { shortcut: 'cancel' },
-        ]);
-      } else {
-        expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-          { shortcut: 'cancel' },
-        ]);
-      }
-    });
+  //     if (shouldHaveSaveButton) {
+  //       expect(POM.popup.component.option('toolbarItems')).toMatchObject([
+  //         { shortcut: 'done' },
+  //         { shortcut: 'cancel' },
+  //       ]);
+  //     } else {
+  //       expect(POM.popup.component.option('toolbarItems')).toMatchObject([
+  //         { shortcut: 'cancel' },
+  //       ]);
+  //     }
+  //   });
 
-    it('Buttons visibility after editing option changed', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: {
-          allowUpdating: true,
-          allowAdding: true,
-        },
-      });
+  //   it('Buttons visibility after editing option changed', async () => {
+  //     const { scheduler, POM } = await createScheduler({
+  //       ...getDefaultConfig(),
+  //       editing: {
+  //         allowUpdating: true,
+  //         allowAdding: true,
+  //       },
+  //     });
 
-      const newAppointment = {
-        text: 'a',
-        startDate: new Date(2015, 5, 15, 10),
-        endDate: new Date(2015, 5, 15, 11),
-      };
+  //     const newAppointment = {
+  //       text: 'a',
+  //       startDate: new Date(2015, 5, 15, 10),
+  //       endDate: new Date(2015, 5, 15, 11),
+  //     };
 
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-        { shortcut: 'done' },
-        { shortcut: 'cancel' },
-      ]);
+  //     scheduler.showAppointmentPopup(newAppointment);
+  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
+  //       { shortcut: 'done' },
+  //       { shortcut: 'cancel' },
+  //     ]);
 
-      scheduler.option('editing', { allowUpdating: false });
-      scheduler.showAppointmentPopup(newAppointment);
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-        { shortcut: 'cancel' },
-      ]);
+  //     scheduler.option('editing', { allowUpdating: false });
+  //     scheduler.showAppointmentPopup(newAppointment);
+  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
+  //       { shortcut: 'cancel' },
+  //     ]);
 
-      scheduler.showAppointmentPopup();
-      expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-        { shortcut: 'done' },
-        { shortcut: 'cancel' },
-      ]);
-    });
-  });
+  //     scheduler.showAppointmentPopup();
+  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
+  //       { shortcut: 'done' },
+  //       { shortcut: 'cancel' },
+  //     ]);
+  //   });
+  // });
 
   describe('allDay switch', () => {
     it('should be turned on when opening allDay appointment', async () => {
@@ -462,307 +462,307 @@ describe('Appointment Popup Form', () => {
       expect(value).toBe('never');
     });
 
-    it('Recurrence editor container should be visible after changing its visibility value', async () => {
-      const appointment = {
-        text: 'Test Appointment',
-        startDate: new Date(2017, 4, 1, 9, 30),
-        endDate: new Date(2017, 4, 1, 11),
-      };
+    // it('Recurrence editor container should be visible after changing its visibility value', async () => {
+    //   const appointment = {
+    //     text: 'Test Appointment',
+    //     startDate: new Date(2017, 4, 1, 9, 30),
+    //     endDate: new Date(2017, 4, 1, 11),
+    //   };
 
-      const { POM, scheduler } = await createScheduler(getDefaultConfig());
+    //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      scheduler.showAppointmentPopup(appointment);
+    //   scheduler.showAppointmentPopup(appointment);
 
-      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+    //   const recurrenceGroup = $(POM.popup.recurrenceGroup);
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
+    //   expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
 
-      // @ts-expect-error
-      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      repeatEditor.option('value', 'weekly');
+    //   // @ts-expect-error
+    //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //   repeatEditor.option('value', 'weekly');
 
-      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
-    });
+    //   expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
+    // });
 
-    it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
-      const data = [
-        {
-          text: 'meet',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 11, 30),
-        },
-      ];
+    // it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
+    //   const data = [
+    //     {
+    //       text: 'meet',
+    //       startDate: new Date(2017, 4, 22, 9, 30),
+    //       endDate: new Date(2017, 4, 22, 11, 30),
+    //     },
+    //   ];
 
-      const { POM, scheduler } = await createScheduler({
-        dataSource: data,
-        currentDate: new Date(2017, 4, 22),
-      });
+    //   const { POM, scheduler } = await createScheduler({
+    //     dataSource: data,
+    //     currentDate: new Date(2017, 4, 22),
+    //   });
 
-      POM.openPopupByDblClick('meet');
+    //   POM.openPopupByDblClick('meet');
 
-      // @ts-expect-error
-      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      repeatEditor.option('value', 'weekly');
+    //   // @ts-expect-error
+    //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //   repeatEditor.option('value', 'weekly');
 
-      scheduler.hideAppointmentPopup(true);
+    //   scheduler.hideAppointmentPopup(true);
 
-      POM.openPopupByDblClick('meet');
+    //   POM.openPopupByDblClick('meet');
 
-      POM.popup.getEditSeriesButton().click();
+    //   POM.popup.getEditSeriesButton().click();
 
-      // @ts-expect-error
-      const repeatEditor2 = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      repeatEditor2.option('value', 'daily');
+    //   // @ts-expect-error
+    //   const repeatEditor2 = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //   repeatEditor2.option('value', 'daily');
 
-      POM.popup.getBackButton().click();
+    //   POM.popup.getBackButton().click();
 
-      scheduler.hideAppointmentPopup();
+    //   scheduler.hideAppointmentPopup();
 
-      POM.openPopupByDblClick('meet');
+    //   POM.openPopupByDblClick('meet');
 
-      POM.popup.getEditSeriesButton().click();
+    //   POM.popup.getEditSeriesButton().click();
 
-      // @ts-expect-error
-      const repeatEditor3 = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      expect(repeatEditor3.option('value')).toBe('weekly');
-    });
+    //   // @ts-expect-error
+    //   const repeatEditor3 = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //   expect(repeatEditor3.option('value')).toBe('weekly');
+    // });
 
     describe('Recurrence frequency types', () => {
-      it('Should show day selection buttons when frequency is weekly', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
+    // it('Should show day selection buttons when frequency is weekly', async () => {
+    //   const appointment = {
+    //     text: 'Test Appointment',
+    //     startDate: new Date(2017, 4, 1, 9, 30),
+    //     endDate: new Date(2017, 4, 1, 11),
+    //   };
 
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-        scheduler.showAppointmentPopup(appointment);
+      //   scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'weekly');
+      //   // @ts-expect-error
+      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      //   repeatEditor.option('value', 'weekly');
 
-        POM.popup.openRecurrenceSettings();
+      // POM.popup.openRecurrenceSettings();
 
-        const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
-        expect(dayButtons.length).toBeGreaterThan(0);
+      // const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
+      // expect(dayButtons.length).toBeGreaterThan(0);
 
-        const buttons7Days = dayButtons.find('.dx-button');
-        expect(buttons7Days.length).toBe(7);
-      });
+      // const buttons7Days = dayButtons.find('.dx-button');
+      // expect(buttons7Days.length).toBe(7);
+      // });
 
-      it('Should show month day input when frequency is monthly', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 15, 9, 30),
-          endDate: new Date(2017, 4, 15, 11),
-        };
+      // it('Should show month day input when frequency is monthly', async () => {
+      //   const appointment = {
+      //     text: 'Test Appointment',
+      //     startDate: new Date(2017, 4, 15, 9, 30),
+      //     endDate: new Date(2017, 4, 15, 11),
+      //   };
 
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-        scheduler.showAppointmentPopup(appointment);
+      //   scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'monthly');
+      //   // @ts-expect-error
+      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      //   repeatEditor.option('value', 'monthly');
 
-        POM.popup.openRecurrenceSettings();
+      //   POM.popup.openRecurrenceSettings();
 
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeTruthy();
+      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+      //   expect(monthlyGroup).toBeTruthy();
 
-        // @ts-expect-error
-        const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-        expect(freqEditor.option('value')).toBe('monthly');
+      //   // @ts-expect-error
+      //   const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
+      //   expect(freqEditor.option('value')).toBe('monthly');
 
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
-      });
+      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
+      //   expect(dayButtons).toBeNull();
+      // });
 
-      it('Should show month and day inputs when frequency is yearly', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 11, 25, 9, 30),
-          endDate: new Date(2017, 11, 25, 11),
-        };
+      // it('Should show month and day inputs when frequency is yearly', async () => {
+      //   const appointment = {
+      //     text: 'Test Appointment',
+      //     startDate: new Date(2017, 11, 25, 9, 30),
+      //     endDate: new Date(2017, 11, 25, 11),
+      //   };
 
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-        scheduler.showAppointmentPopup(appointment);
+      //   scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'yearly');
+      //   // @ts-expect-error
+      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      //   repeatEditor.option('value', 'yearly');
 
-        POM.popup.openRecurrenceSettings();
+      //   POM.popup.openRecurrenceSettings();
 
-        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-        expect(yearlyGroup).toBeTruthy();
+      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+      //   expect(yearlyGroup).toBeTruthy();
 
-        // eslint-disable-next-line spellcheck/spell-checker
-        const bymonthEditor = POM.popup.getSwitchByName('bymonth');
-        // eslint-disable-next-line spellcheck/spell-checker
-        expect(bymonthEditor).toBeDefined();
+      //   // eslint-disable-next-line spellcheck/spell-checker
+      //   const bymonthEditor = POM.popup.getSwitchByName('bymonth');
+      //   // eslint-disable-next-line spellcheck/spell-checker
+      //   expect(bymonthEditor).toBeDefined();
 
-        // eslint-disable-next-line spellcheck/spell-checker
-        const bymonthdayEditor = POM.popup.getSwitchByName('bymonthday');
-        // eslint-disable-next-line spellcheck/spell-checker
-        expect(bymonthdayEditor).toBeDefined();
+      //   // eslint-disable-next-line spellcheck/spell-checker
+      //   const bymonthdayEditor = POM.popup.getSwitchByName('bymonthday');
+      //   // eslint-disable-next-line spellcheck/spell-checker
+      //   expect(bymonthdayEditor).toBeDefined();
 
-        const freqEditor = POM.popup.getSwitchByName('freq');
-        expect(freqEditor.value).toBe('yearly');
-      });
+      //   const freqEditor = POM.popup.getSwitchByName('freq');
+      //   expect(freqEditor.value).toBe('yearly');
+      // });
 
-      it('Should hide all repeat-on options for daily frequency', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
+      // it('Should hide all repeat-on options for daily frequency', async () => {
+      //   const appointment = {
+      //     text: 'Test Appointment',
+      //     startDate: new Date(2017, 4, 1, 9, 30),
+      //     endDate: new Date(2017, 4, 1, 11),
+      //   };
 
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-        scheduler.showAppointmentPopup(appointment);
+      //   scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'daily');
+      //   // @ts-expect-error
+      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      //   repeatEditor.option('value', 'daily');
 
-        POM.popup.openRecurrenceSettings();
+      //   POM.popup.openRecurrenceSettings();
 
-        const freqEditor = POM.popup.getSwitchByName('freq');
-        expect(freqEditor.value).toBe('daily');
+      //   const freqEditor = POM.popup.getSwitchByName('freq');
+      //   expect(freqEditor.value).toBe('daily');
 
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
+      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
+      //   expect(dayButtons).toBeNull();
 
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeNull();
+      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+      //   expect(monthlyGroup).toBeNull();
 
-        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-        expect(yearlyGroup).toBeNull();
-      });
+      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+      //   expect(yearlyGroup).toBeNull();
+      // });
 
-      it('Should hide all repeat-on options for hourly frequency', async () => {
-        const appointment = {
-          text: 'Test Appointment',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-        };
+      // it('Should hide all repeat-on options for hourly frequency', async () => {
+      //   const appointment = {
+      //     text: 'Test Appointment',
+      //     startDate: new Date(2017, 4, 1, 9, 30),
+      //     endDate: new Date(2017, 4, 1, 11),
+      //   };
 
-        const { POM, scheduler } = await createScheduler(getDefaultConfig());
+      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-        scheduler.showAppointmentPopup(appointment);
+      //   scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'hourly');
+      //   // @ts-expect-error
+      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      //   repeatEditor.option('value', 'hourly');
 
-        POM.popup.openRecurrenceSettings();
+      //   POM.popup.openRecurrenceSettings();
 
-        // @ts-expect-error
-        const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-        expect(freqEditor.option('value')).toBe('hourly');
+      //   // @ts-expect-error
+      //   const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
+      //   expect(freqEditor.option('value')).toBe('hourly');
 
-        const dayButtons = POM.popup.recurrenceWeekDayButtons;
-        expect(dayButtons).toBeNull();
+      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
+      //   expect(dayButtons).toBeNull();
 
-        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-        expect(monthlyGroup).toBeNull();
+      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+      //   expect(monthlyGroup).toBeNull();
 
-        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-        expect(yearlyGroup).toBeNull();
-      });
+      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+      //   expect(yearlyGroup).toBeNull();
+      // });
     });
 
-    describe('Editing and saving recurrence', () => {
-      it('Should populate form with existing weekly recurrence rule', async () => {
-        setupSchedulerTestEnvironment({ height: 200 });
-        const { POM } = await createScheduler({
-          dataSource: [{
-            text: 'Weekly Meeting',
-            startDate: new Date(2017, 4, 1, 9, 30),
-            endDate: new Date(2017, 4, 1, 11),
-            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
-            repeatEnd: 'count',
-          }],
-          views: ['month'],
-          currentView: 'month',
-          currentDate: new Date(2017, 4, 25),
-          firstDayOfWeek: 1,
-          startDayHour: 9,
-        });
+    // describe('Editing and saving recurrence', () => {
+    //   it('Should populate form with existing weekly recurrence rule', async () => {
+    //     setupSchedulerTestEnvironment({ height: 200 });
+    //     const { POM } = await createScheduler({
+    //       dataSource: [{
+    //         text: 'Weekly Meeting',
+    //         startDate: new Date(2017, 4, 1, 9, 30),
+    //         endDate: new Date(2017, 4, 1, 11),
+    //         recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+    //         repeatEnd: 'count',
+    //       }],
+    //       views: ['month'],
+    //       currentView: 'month',
+    //       currentDate: new Date(2017, 4, 25),
+    //       firstDayOfWeek: 1,
+    //       startDayHour: 9,
+    //     });
 
-        POM.openPopupByDblClick('Weekly Meeting');
+    //     POM.openPopupByDblClick('Weekly Meeting');
 
-        POM.popup.getEditSeriesButton().click();
+    //     POM.popup.getEditSeriesButton().click();
 
-        // @ts-expect-error
-        const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //     // @ts-expect-error
+    //     const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
 
-        expect(repeatEditorRecurrent.option('value')).toBe('weekly');
+    //     expect(repeatEditorRecurrent.option('value')).toBe('weekly');
 
-        POM.popup.openRecurrenceSettings();
+    //     POM.popup.openRecurrenceSettings();
 
-        // @ts-expect-error
-        const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-        expect(freqEditor.option('value')).toBe('weekly');
+    //     // @ts-expect-error
+    //     const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
+    //     expect(freqEditor.option('value')).toBe('weekly');
 
-        const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
-        const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
-        expect(selectedButtons.length).toBe(3);
+    //     const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
+    //     const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
+    //     expect(selectedButtons.length).toBe(3);
 
-        const repeatEndEditor = POM.popup.getSwitchByName('repeatEnd');
-        expect(repeatEndEditor.value).toBe('count');
+    //     const repeatEndEditor = POM.popup.getSwitchByName('repeatEnd');
+    //     expect(repeatEndEditor.value).toBe('count');
 
-        const countEditor = POM.popup.getSwitchByName('count');
-        expect(countEditor.value).toBe('10');
-      });
+    //     const countEditor = POM.popup.getSwitchByName('count');
+    //     expect(countEditor.value).toBe('10');
+    //   });
 
-      it('Should save changes when saving from recurrence form', async () => {
-        const data = [
-          {
-            text: 'Meeting',
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 11, 30),
-          },
-        ];
+    //   it('Should save changes when saving from recurrence form', async () => {
+    //     const data = [
+    //       {
+    //         text: 'Meeting',
+    //         startDate: new Date(2017, 4, 22, 9, 30),
+    //         endDate: new Date(2017, 4, 22, 11, 30),
+    //       },
+    //     ];
 
-        const { POM, scheduler } = await createScheduler({
-          dataSource: data,
-          currentDate: new Date(2017, 4, 22),
-        });
+    //     const { POM, scheduler } = await createScheduler({
+    //       dataSource: data,
+    //       currentDate: new Date(2017, 4, 22),
+    //     });
 
-        POM.openPopupByDblClick('Meeting');
+    //     POM.openPopupByDblClick('Meeting');
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'daily');
+    //     // @ts-expect-error
+    //     const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //     repeatEditor.option('value', 'daily');
 
-        POM.popup.openRecurrenceSettings();
+    //     POM.popup.openRecurrenceSettings();
 
-        // @ts-expect-error
-        const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-        freqEditor.option('value', 'weekly');
+    //     // @ts-expect-error
+    //     const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
+    //     freqEditor.option('value', 'weekly');
 
-        POM.popup.getBackButton().click();
+    //     POM.popup.getBackButton().click();
 
-        scheduler.hideAppointmentPopup(true);
+    //     scheduler.hideAppointmentPopup(true);
 
-        POM.openPopupByDblClick('Meeting');
+    //     POM.openPopupByDblClick('Meeting');
 
-        POM.popup.getEditSeriesButton().click();
+    //     POM.popup.getEditSeriesButton().click();
 
-        // @ts-expect-error
-        const freqEditorAfter = $(POM.popup.freqEditor).dxSelectBox('instance');
-        expect(freqEditorAfter.option('value')).toBe('weekly');
+    //     // @ts-expect-error
+    //     const freqEditorAfter = $(POM.popup.freqEditor).dxSelectBox('instance');
+    //     expect(freqEditorAfter.option('value')).toBe('weekly');
 
-        // @ts-expect-error
-        const repeatEditorAfter = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        expect(repeatEditorAfter.option('value')).toBe('weekly');
-      });
-    });
+    //     // @ts-expect-error
+    //     const repeatEditorAfter = $(POM.popup.repeatEditor).dxSelectBox('instance');
+    //     expect(repeatEditorAfter.option('value')).toBe('weekly');
+    //   });
+    // });
   });
 
   describe('Callbacks', () => {

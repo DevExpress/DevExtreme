@@ -555,7 +555,7 @@ export class AppointmentForm {
             onValueChanged: (e): void => {
               if (e.value === repeatNeverValue) {
                 const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
-                this.dxForm.updateData(recurrenceRuleExpr, '');
+                this.dxForm.updateData(recurrenceRuleExpr, undefined);
               } else if (e.event) {
                 this.showRecurrenceGroup();
               }
