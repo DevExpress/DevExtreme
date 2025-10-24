@@ -111,12 +111,22 @@ export class AppointmentForm {
 
   private _popup!: any;
 
+  private _readOnly = false;
+
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
   }
 
+  get readOnly(): boolean {
+    return this._readOnly;
+  }
+
   set readOnly(value: boolean) {
-    this.dxForm.option('readOnly', value);
+    this._readOnly = value;
+    if (this._dxForm) {
+      this._dxForm.option('readOnly', value);
+      this._recurrenceForm?.setReadOnly(value);
+    }
   }
 
   get formData(): Record<string, any> {

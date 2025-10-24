@@ -155,6 +155,21 @@ export class RecurrenceForm {
     this._dxForm = value;
   }
 
+  setReadOnly(value: boolean): void {
+    if (!this._dxForm) {
+      return;
+    }
+
+    Object.values(EDITOR_NAMES).forEach((editorName) => {
+      const editor = this._dxForm?.getEditor(editorName);
+      editor?.option('readOnly', value);
+    });
+
+    Object.values(this._weekDayButtons).forEach((button) => {
+      button?.option('disabled', value);
+    });
+  }
+
   get recurrenceRule(): RecurrenceRule {
     return this._recurrenceRule;
   }

@@ -76,8 +76,6 @@ export class AppointmentPopup {
       this._popup = this._createPopup(popupConfig);
     }
 
-    this.updateToolbarForMainGroup();
-
     this._popup.show();
   }
 
@@ -144,6 +142,7 @@ export class AppointmentPopup {
       if (canceled) {
         e.cancel = true;
       } else {
+        this.updateToolbarForMainGroup();
         this.updatePopupFullScreenMode();
       }
     });
@@ -178,8 +177,8 @@ export class AppointmentPopup {
 
     const formData = this._createFormData(appointmentAdapter);
 
-    this.form.readOnly = this._isReadOnly(appointmentAdapter);
     this.form.formData = formData;
+    this.form.readOnly = this._isReadOnly(appointmentAdapter);
   }
 
   _createFormData(appointmentAdapter: AppointmentAdapter): Record<string, any> {
