@@ -1,5 +1,7 @@
+/* eslint-disable spellcheck/spell-checker */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type { SimpleItem } from '@js/ui/form';
@@ -30,80 +32,83 @@ export const getStartDateCommonConfig = (firstDayOfWeek: string): SimpleItem => 
 });
 
 export class RecurrenceRule {
-  private _recurrenceRule: Rule;
+  startDate: Date | null = null;
 
-  private _untilValue: Date | null = null;
+  frequency: string | null = null;
 
-  private _countValue: number | null = null;
+  interval!: number;
 
-  constructor(rule: string) {
-    this._recurrenceRule = parseRecurrenceRule(rule);
+  until!: Date | null;
+
+  count!: number | null;
+
+  byDay!: string[];
+
+  byMonthDay!: number | null;
+
+  byMonth!: number | null;
+
+  repeatEnd!: 'never' | 'count' | 'until';
+
+  constructor(rule: string, startDate: Date | null) {
+    const recurrenceRule = parseRecurrenceRule(rule);
+    const todayEnd = dateUtils.setToDayEnd(new Date());
+
+    this.startDate = startDate;
+    this.frequency = recurrenceRule.freq?.toLowerCase() ?? null;
+    this.interval = recurrenceRule.interval ?? 1;
+
+    this.until = recurrenceRule.until ?? todayEnd;
+    this.count = recurrenceRule.count ?? 1;
+
+    this.byDay = daysFromByDayRule(recurrenceRule);
+    this.byMonthDay = recurrenceRule.bymonthday
+      ? Number(recurrenceRule.bymonthday)
+      : startDate?.getDate() ?? 1;
+
+    this.byMonth = recurrenceRule.bymonth
+      ? Number(recurrenceRule.bymonth)
+      : (this.startDate?.getMonth() ?? 0) + 1;
+
+    this.repeatEnd = 'never';
+    if (isDefined(recurrenceRule.count)) {
+      this.repeatEnd = 'count';
+    } else if (isDefined(recurrenceRule.until)) {
+      this.repeatEnd = 'until';
+    }
   }
 
-  setUntilValue(value: Date): void {
-    this._untilValue = value;
-  }
-
-  setCountValue(value: number): void {
-    this._countValue = value;
-  }
-
-  getUntilValue(): Date | null {
-    return this._untilValue;
-  }
-
-  getCountValue(): number | null {
-    return this._countValue;
-  }
-
-  setRule(field: string, value: string | number | Date | null): void {
-    if (!value || (Array.isArray(value) && !value.length)) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this._recurrenceRule[field];
-      return;
+  toString(): string | undefined {
+    if (!this.frequency) {
+      return undefined;
     }
 
-    if (isDefined(field)) {
-      if (field === 'until') {
-        delete this._recurrenceRule.count;
-      }
+    const rule: Rule = { freq: this.frequency, interval: this.interval };
 
-      if (field === 'count') {
-        delete this._recurrenceRule.until;
-      }
-
-      this._recurrenceRule[field] = value;
-    }
-  }
-
-  getRepeatEndRule(): string {
-    const rules = this._recurrenceRule;
-
-    if ('count' in rules) {
-      return 'count';
+    if (this.repeatEnd === 'until' && this.until) {
+      rule.until = this.until;
+    } else if (this.repeatEnd === 'count' && this.count) {
+      rule.count = this.count;
     }
 
-    if ('until' in rules) {
-      return 'until';
+    switch (this.frequency) {
+      case 'weekly':
+        rule.byday = this.byDay.join(',');
+        break;
+      case 'monthly':
+        if (this.byMonthDay) {
+          rule.bymonthday = String(this.byMonthDay);
+        }
+        break;
+      case 'yearly':
+        if (this.byMonthDay && this.byMonth) {
+          rule.bymonthday = String(this.byMonthDay);
+          rule.bymonth = String(this.byMonth);
+        }
+        break;
+      default:
     }
 
-    return 'never';
-  }
-
-  getRecurrenceString(): string | undefined {
-    return getRecurrenceString(this._recurrenceRule);
-  }
-
-  getRules(): Rule {
-    return this._recurrenceRule;
-  }
-
-  getRule(field: string): string | number | Date | null | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._recurrenceRule[field];
-  }
-
-  getDaysFromByDayRule(): string[] {
-    return daysFromByDayRule(this._recurrenceRule);
+    return getRecurrenceString(rule);
   }
 }

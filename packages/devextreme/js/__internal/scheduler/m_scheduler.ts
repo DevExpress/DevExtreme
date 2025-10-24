@@ -261,9 +261,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'customizeDateNavigatorText':
         this._updateOption('header', name, value);
         break;
-      case 'firstDayOfWeek': // TODO: we need to clean popup when this option changes
+      case 'firstDayOfWeek':
         this._updateOption('workSpace', name, value);
         this._updateOption('header', name, value);
+        this._cleanPopup();
         break;
       case 'currentDate': {
         const dateValue = this.getViewOption(name);

@@ -1,8 +1,6 @@
-/* eslint-disable max-classes-per-file */
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
-import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import type dxButton from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -71,6 +69,22 @@ const FREQ = {
   YEARLY: 'yearly',
 } as const;
 
+const EDITOR_NAMES = {
+  recurrenceStartDate: 'recurrenceStartDateEditor',
+  interval: 'intervalEditor',
+  frequency: 'frequencyEditor',
+  byMonth: 'byMonthEditor',
+  repeatEnd: 'repeatEndEditor',
+  until: 'untilEditor',
+  count: 'countEditor',
+};
+
+const GROUP_NAMES = {
+  daysOfWeek: 'daysOfWeek',
+  dayOfMonth: 'dayOfMonth',
+  dayOfYear: 'dayOfYear',
+};
+
 const weekDays = dateLocalization.getDayNames('abbreviated').map((dayName) => dayName.slice(0, 2).toUpperCase());
 
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
@@ -78,11 +92,9 @@ const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 export class RecurrentForm {
   private readonly scheduler: any;
 
-  private _dxForm!: dxForm;
+  private _dxForm?: dxForm;
 
-  private _recurrenceRule: RecurrenceRule;
-
-  private _tempRecurrenceRule?: RecurrenceRule;
+  private _recurrenceRule: RecurrenceRule = new RecurrenceRule('', new Date());
 
   private readonly weekDayItems: { text: string; key: string }[] = [];
 
@@ -90,7 +102,6 @@ export class RecurrentForm {
 
   constructor(scheduler: Scheduler) {
     this.scheduler = scheduler;
-    this._recurrenceRule = new RecurrenceRule('');
     this.weekDayItems = this.createWeekDayItems();
   }
 
@@ -129,10 +140,10 @@ export class RecurrentForm {
         showSpinButtons: true,
         useLargeSpinButtons: false,
         onContentReady: (e): void => {
-          e.component.option('value', parseInt(this.recurrenceRule.getRule('bymonthday')?.toString() ?? '1', 10));
+          e.component.option('value', this.recurrenceRule.byMonthDay as any);
         },
         onValueChanged: (e): void => {
-          this.recurrenceRule.setRule('bymonthday', e.value);
+          this.recurrenceRule.byMonthDay = e.value;
         },
       } as NumberBoxProperties,
     } as SimpleItem;
@@ -141,7 +152,7 @@ export class RecurrentForm {
   private createByMonthSelectBoxItem(): SimpleItem {
     return {
       itemType: 'simple',
-      name: 'bymonth',
+      name: EDITOR_NAMES.byMonth,
       colSpan: 1,
       editorType: 'dxSelectBox',
       label: {
@@ -152,29 +163,21 @@ export class RecurrentForm {
         displayExpr: 'text',
         valueExpr: 'value',
         onContentReady: (e): void => {
-          e.component.option('value', this.recurrenceRule.getRule('bymonth'));
+          e.component.option('value', this.recurrenceRule.byMonth);
         },
         onValueChanged: (e): void => {
-          this.recurrenceRule.setRule('bymonth', e.value);
+          this.recurrenceRule.byMonth = e.value;
         },
       } as SelectBoxProperties,
     } as SimpleItem;
   }
 
   get dxForm(): dxForm {
-    return this._dxForm;
+    return this._dxForm as dxForm;
   }
 
-  set dxForm(value: dxForm) {
+  set dxForm(value: dxForm | undefined) {
     this._dxForm = value;
-  }
-
-  get tempRecurrenceRule(): RecurrenceRule | undefined {
-    return this._tempRecurrenceRule;
-  }
-
-  set tempRecurrenceRule(value: RecurrenceRule | undefined) {
-    this._tempRecurrenceRule = value;
   }
 
   get recurrenceRule(): RecurrenceRule {
@@ -234,16 +237,16 @@ export class RecurrentForm {
           true,
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
-            name: 'recurrenceStartDate',
+            name: EDITOR_NAMES.recurrenceStartDate,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
             },
             editorOptions: {
               onContentReady: (e): void => {
-                e.component.option('value', this.startDate);
+                e.component.option('value', this.recurrenceRule.startDate);
               },
               onValueChanged: (e): void => {
-                this.dxForm.getEditor('startDateEditor')?.option('value', e.value);
+                this.recurrenceRule.startDate = e.value;
               },
             } as unknown as DateBoxProperties,
           },
@@ -276,7 +279,7 @@ export class RecurrentForm {
           items: [
             {
               itemType: 'simple',
-              name: 'interval',
+              name: EDITOR_NAMES.interval,
               colSpan: 1,
               editorType: 'dxNumberBox',
               label: {
@@ -288,16 +291,16 @@ export class RecurrentForm {
                 showSpinButtons: true,
                 useLargeSpinButtons: false,
                 onContentReady: (e): void => {
-                  e.component.option('value', parseInt(this.recurrenceRule.getRule('interval')?.toString() ?? '1', 10));
+                  e.component.option('value', this.recurrenceRule.interval as any);
                 },
                 onValueChanged: (e): void => {
-                  this.recurrenceRule.setRule('interval', e.value);
+                  this.recurrenceRule.interval = e.value;
                 },
               } as NumberBoxProperties,
             },
             {
               itemType: 'simple',
-              name: 'freq',
+              name: EDITOR_NAMES.frequency,
               cssClass: CLASSES.freqEditor,
               colSpan: 1,
               editorType: 'dxSelectBox',
@@ -309,16 +312,16 @@ export class RecurrentForm {
                 valueExpr: 'value',
                 displayExpr: 'text',
                 onContentReady: (e): void => {
-                  e.component.option('value', this.recurrenceRule.getRule('freq'));
+                  e.component.option('value', this.recurrenceRule.frequency);
                 },
                 onValueChanged: (e): void => {
-                  const previousValue = this.recurrenceRule.getRule('freq');
+                  const previousValue = this.recurrenceRule.frequency;
 
                   if (previousValue === e.value) {
                     return;
                   }
 
-                  this.recurrenceRule.setRule('freq', e.value);
+                  this.recurrenceRule.frequency = e.value;
                   this.updateRecurrenceRepeatOnVisibility();
                 },
               } as SelectBoxProperties,
@@ -344,7 +347,7 @@ export class RecurrentForm {
   private createRecurrenceRepeatOnMonthlyGroup(): GroupItem {
     return {
       itemType: 'group',
-      name: 'repeatOnMonthlyGroup',
+      name: GROUP_NAMES.dayOfMonth,
       cssClass: CLASSES.recurrenceRepeatOnMonthlyGroup,
       colCount: 1,
       items: [
@@ -356,7 +359,7 @@ export class RecurrentForm {
   private createRecurrenceRepeatOnYearlyGroup(): GroupItem {
     return {
       itemType: 'group',
-      name: 'repeatOnYearlyGroup',
+      name: GROUP_NAMES.dayOfYear,
       cssClass: CLASSES.recurrenceRepeatOnYearlyGroup,
       colCount: 2,
       colCountByScreen: {
@@ -364,7 +367,6 @@ export class RecurrentForm {
       },
       items: [
         this.createByMonthSelectBoxItem(),
-        // TODO: move editor name to constant EDITOR_NAME
         this.createByMonthDayNumberBoxItem('bymonthdayYearly', false),
       ],
     } as GroupItem;
@@ -372,7 +374,7 @@ export class RecurrentForm {
 
   private createRecurrenceByDayEditor(): SimpleItem {
     return {
-      name: 'byday', // todo: better to move such constants to constant variables and reuse them in the code
+      name: GROUP_NAMES.daysOfWeek,
       colSpan: 1,
       label: {
         visible: false,
@@ -388,17 +390,14 @@ export class RecurrentForm {
             width: 32,
             height: 32,
             onClick: (): void => {
-              // TODO: we do not need to parse and serialize 'byday' string every time
-              const selectedWeekDays = this.recurrenceRule.getDaysFromByDayRule();
-              const isSelected = selectedWeekDays.includes(item.key);
+              const isSelected = this.recurrenceRule.byDay.includes(item.key);
 
               if (isSelected) {
-                selectedWeekDays.splice(selectedWeekDays.indexOf(item.key), 1);
+                const index = this.recurrenceRule.byDay.indexOf(item.key);
+                this.recurrenceRule.byDay.splice(index, 1);
               } else {
-                selectedWeekDays.push(item.key);
+                this.recurrenceRule.byDay.push(item.key);
               }
-
-              this.recurrenceRule.setRule('byday', selectedWeekDays.toString());
 
               this.updateWeekDaysButtons();
             },
@@ -411,11 +410,8 @@ export class RecurrentForm {
   }
 
   private createRecurrenceEndGroup(): GroupItem {
-    const repeatType = this._recurrenceRule.getRepeatEndRule();
-
     return {
       itemType: 'group',
-      name: 'recurrenceEndGroup',
       colCount: 2,
       colCountByScreen: {
         xs: 2,
@@ -438,7 +434,7 @@ export class RecurrentForm {
           items: [
             {
               itemType: 'simple',
-              name: 'repeatEnd',
+              name: EDITOR_NAMES.repeatEnd,
               colSpan: 1,
               editorType: 'dxRadioGroup',
               cssClass: CLASSES.recurrenceEndRadio,
@@ -454,10 +450,11 @@ export class RecurrentForm {
                 ],
                 layout: 'vertical',
                 onContentReady: (e): void => {
-                  e.component.option('value', this.recurrenceRule.getRepeatEndRule());
+                  e.component.option('value', this.recurrenceRule.repeatEnd);
                 },
                 onValueChanged: (e): void => {
-                  this._repeatEndValueChangedHandler(e.value);
+                  this.recurrenceRule.repeatEnd = e.value;
+                  this._updateDisabledRepeatEndEditors();
                 },
               } as RadioGroupProperties,
             },
@@ -471,7 +468,7 @@ export class RecurrentForm {
                 },
                 {
                   itemType: 'simple',
-                  name: 'until',
+                  name: EDITOR_NAMES.until,
                   editorType: 'dxDateBox',
                   label: {
                     visible: false,
@@ -479,22 +476,20 @@ export class RecurrentForm {
                   editorOptions: {
                     type: 'date',
                     useMaskBehavior: true,
-                    disabled: repeatType !== 'until',
                     calendarOptions: {
                       firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
                     },
                     onContentReady: (e): void => {
-                      e.component.option('value', this.recurrenceRule.getUntilValue() ?? dateUtils.setToDayEnd(new Date()));
+                      e.component.option('value', this.recurrenceRule.until);
                     },
                     onValueChanged: (e): void => {
-                      this.recurrenceRule.setRule('until', e.value);
-                      this.recurrenceRule.setUntilValue(e.value);
+                      this.recurrenceRule.until = e.value;
                     },
                   } as DateBoxProperties,
                 },
                 {
                   itemType: 'simple',
-                  name: 'count',
+                  name: EDITOR_NAMES.count,
                   editorType: 'dxNumberBox',
                   label: {
                     visible: false,
@@ -504,14 +499,11 @@ export class RecurrentForm {
                     min: 1,
                     showSpinButtons: true,
                     useLargeSpinButtons: false,
-                    disabled: repeatType !== 'count',
                     onContentReady: (e): void => {
-                      const count = this.recurrenceRule.getCountValue() ?? 1;
-                      e.component.option('value', count);
+                      e.component.option('value', this.recurrenceRule.count as any);
                     },
                     onValueChanged: (e): void => {
-                      this.recurrenceRule.setRule('count', e.value);
-                      this.recurrenceRule.setCountValue(e.value);
+                      this.recurrenceRule.count = e.value;
                     },
                   } as NumberBoxProperties,
                 },
@@ -523,42 +515,43 @@ export class RecurrentForm {
     } as GroupItem;
   }
 
-  updateRecurrenceFormValues(repeatEditorValue: string, recurrenceRuleRaw: string | null): void {
-    this.recurrenceRule = this.createRecurrenceRule(repeatEditorValue, recurrenceRuleRaw);
-    const rules = this.recurrenceRule.getRules();
+  updateRecurrenceFormValues(
+    repeatEditorValue: string,
+    recurrenceRuleRaw: string | null,
+    startDate: Date | null,
+  ): void {
+    this.recurrenceRule = this.createRecurrenceRule(
+      repeatEditorValue,
+      recurrenceRuleRaw,
+      startDate,
+    );
 
-    this.dxForm.getEditor('recurrenceStartDate')?.option('value', this.startDate);
-    this.dxForm.getEditor('freq')?.option('value', repeatEditorValue);
-    this.dxForm.getEditor('interval')?.option('value', rules.interval);
-    this.dxForm.getEditor('repeatEnd')?.option('value', this.recurrenceRule.getRepeatEndRule());
-    this.dxForm.getEditor('until')?.option('value', this.recurrenceRule.getUntilValue());
-    this.dxForm.getEditor('count')?.option('value', this.recurrenceRule.getCountValue());
+    this.dxForm.getEditor(EDITOR_NAMES.recurrenceStartDate)?.option('value', this.recurrenceRule.startDate);
+    this.dxForm.getEditor(EDITOR_NAMES.frequency)?.option('value', repeatEditorValue);
+    this.dxForm.getEditor(EDITOR_NAMES.interval)?.option('value', this.recurrenceRule.interval);
+    this.dxForm.getEditor(EDITOR_NAMES.repeatEnd)?.option('value', this.recurrenceRule.repeatEnd);
+    this.dxForm.getEditor(EDITOR_NAMES.until)?.option('value', this.recurrenceRule.until);
+    this.dxForm.getEditor(EDITOR_NAMES.count)?.option('value', this.recurrenceRule.count);
 
     this._updateDisabledRepeatEndEditors();
     this.updateRecurrenceRepeatOnVisibility();
-    this.updateWeekDaysButtons();
   }
 
   private createRecurrenceRule(
     repeatEditorValue: string,
     recurrenceRuleRaw: string | null,
-  ) {
-    const recurrenceRule = new RecurrenceRule(recurrenceRuleRaw ?? '');
-    const recurrenceFreq = recurrenceRule?.getRules().freq?.toLowerCase();
+    startDate: Date | null,
+  ): RecurrenceRule {
+    const recurrenceRule = new RecurrenceRule(recurrenceRuleRaw ?? '', startDate);
+    const { frequency } = recurrenceRule;
 
-    if (recurrenceFreq !== repeatEditorValue) {
-      // const todayEnd = dateUtils.setToDayEnd(new Date());
-      const newRecurrenceRule = new RecurrenceRule('');
-      const defaultByDay = weekDays[this.startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()];
+    if (frequency !== repeatEditorValue) {
+      const newRecurrenceRule = new RecurrenceRule(`freq=${repeatEditorValue};`, startDate);
+      const defaultByDay = [
+        weekDays[this.startDate?.getDay() ?? this.scheduler.getFirstDayOfWeek()],
+      ];
 
-      newRecurrenceRule.setRule('freq', repeatEditorValue);
-      newRecurrenceRule.setRule('interval', 1);
-      // newRecurrenceRule.setRule('repeatEnd', 'never'); // TODO: change 'never' to constant variable
-      newRecurrenceRule.setUntilValue(dateUtils.setToDayEnd(new Date()));
-      newRecurrenceRule.setCountValue(1);
-      newRecurrenceRule.setRule('byday', defaultByDay);
-      newRecurrenceRule.setRule('bymonth', (this.startDate?.getMonth() ?? 0) + 1);
-      newRecurrenceRule.setRule('bymonthday', this.startDate?.getDate() ?? 1);
+      newRecurrenceRule.byDay = defaultByDay;
 
       return newRecurrenceRule;
     }
@@ -566,44 +559,24 @@ export class RecurrentForm {
     return recurrenceRule;
   }
 
-  private _repeatEndValueChangedHandler(value: string): void {
-    if (value === 'until') {
-      this.recurrenceRule.setRule('until', this.recurrenceRule.getUntilValue() ?? dateUtils.setToDayEnd(new Date()));
-      this.recurrenceRule.setUntilValue(this.recurrenceRule.getUntilValue()
-      ?? dateUtils.setToDayEnd(new Date()));
-    }
-    if (value === 'count') {
-      this.recurrenceRule.setRule('count', this.recurrenceRule.getCountValue() ?? 1);
-      this.recurrenceRule.setCountValue(this.recurrenceRule.getCountValue() ?? 1);
-    }
-    if (value === 'never') {
-      this.recurrenceRule.setRule('count', '');
-      this.recurrenceRule.setRule('until', '');
-    }
-
-    this._updateDisabledRepeatEndEditors();
-  }
-
   private _updateDisabledRepeatEndEditors(): void {
-    const repeatEndValue = this.recurrenceRule.getRepeatEndRule();
+    const repeatEndValue = this.recurrenceRule.repeatEnd;
 
-    const untilEditor = this.dxForm.getEditor('until');
-    const countEditor = this.dxForm.getEditor('count');
+    const untilEditor = this.dxForm.getEditor(EDITOR_NAMES.until);
+    const countEditor = this.dxForm.getEditor(EDITOR_NAMES.count);
 
     untilEditor?.option('disabled', repeatEndValue !== 'until');
     countEditor?.option('disabled', repeatEndValue !== 'count');
   }
 
   private updateRecurrenceRepeatOnVisibility(): void {
-    const freq = this.recurrenceRule.getRule('freq');
-
     this.dxForm.beginUpdate();
 
     this.dxForm.itemOption(`${RECURRENCE_GROUP_NAME}.byday`, 'visible', false);
     this.dxForm.itemOption(`${RECURRENCE_GROUP_NAME}.repeatOnMonthlyGroup`, 'visible', false);
     this.dxForm.itemOption(`${RECURRENCE_GROUP_NAME}.repeatOnYearlyGroup`, 'visible', false);
 
-    switch (freq) {
+    switch (this.recurrenceRule.frequency) {
       case FREQ.WEEKLY:
         this.dxForm.itemOption(`${RECURRENCE_GROUP_NAME}.byday`, 'visible', true);
         break;
@@ -618,11 +591,12 @@ export class RecurrentForm {
     }
 
     this.dxForm.endUpdate();
+    this.updateWeekDaysButtons();
   }
 
   private updateWeekDaysButtons(): void {
     Object.entries(this._weekDayButtons).forEach(([dayKey, button]) => {
-      const isSelected = this.recurrenceRule.getDaysFromByDayRule().includes(dayKey);
+      const isSelected = this.recurrenceRule.byDay.includes(dayKey);
 
       button.option('stylingMode', isSelected ? 'contained' : 'outlined');
       button.option('type', isSelected ? 'default' : 'normal');

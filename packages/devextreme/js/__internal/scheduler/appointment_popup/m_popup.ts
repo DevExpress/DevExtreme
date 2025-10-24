@@ -7,6 +7,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { ToolbarItem } from '@js/ui/popup';
+import type dxPopup from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
 
@@ -28,19 +29,31 @@ export const ACTION_TO_APPOINTMENT = {
   EXCLUDE_FROM_SERIES: 2,
 };
 
+/*
+TODO:
+- add test that check that firstDayOfWeek is correct after opening popup and then scheduler option change
+- add test that recurrence form does not show when popup is open for recurrence appointment
+*/
 export class AppointmentPopup {
   scheduler: any;
 
   form: AppointmentForm;
 
-  popup: any;
+  private _popup?: dxPopup;
 
   state: any;
 
-  constructor(scheduler, form) {
+  get popup(): dxPopup {
+    return this._popup as dxPopup;
+  }
+
+  get visible(): boolean {
+    return Boolean(this._popup?.option('visible'));
+  }
+
+  constructor(scheduler: any, form: AppointmentForm) {
     this.scheduler = scheduler;
     this.form = form;
-    this.popup = null;
 
     this.state = {
       action: null,
@@ -52,35 +65,33 @@ export class AppointmentPopup {
     };
   }
 
-  get visible() {
-    return this.popup ? this.popup.option('visible') : false;
-  }
-
   show(appointment, config) {
     this.state.appointment.data = appointment;
     this.state.action = config.action;
     this.state.allowSaving = config.allowSaving;
     this.state.excludeInfo = config.excludeInfo;
 
-    if (!this.popup) {
+    if (!this._popup) {
       const popupConfig = this._createPopupConfig();
-      this.popup = this._createPopup(popupConfig);
+      this._popup = this._createPopup(popupConfig);
     }
 
     this.updateToolbarForMainGroup();
 
-    this.popup.show();
+    this._popup.show();
   }
 
   hide() {
-    this.popup.hide();
+    this._popup?.hide();
   }
 
   dispose() {
-    this.popup?.$element().remove();
+    this.form.dispose();
+    this._popup?.dispose();
+    this._popup = undefined;
   }
 
-  _createPopup(options) {
+  _createPopup(options): dxPopup {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
@@ -98,7 +109,6 @@ export class AppointmentPopup {
       enableBodyScroll: false,
       _ignorePreventScrollEventsDeprecation: true,
       onHiding: (): void => {
-        this.form.reset();
         this.scheduler.focus();
       },
       contentTemplate: (): dxElementWrapper => {
@@ -190,13 +200,11 @@ export class AppointmentPopup {
   }
 
   triggerResize(): void {
-    if (this.popup) {
-      triggerResizeEvent(this.popup.$element());
-    }
+    triggerResizeEvent(this.popup.$element());
   }
 
   updatePopupFullScreenMode(): void {
-    if (this.form.dxForm && this.visible) {
+    if (this.visible) {
       const isPopupFullScreenNeeded = () => {
         const window = getWindow();
         const width = window && getWidth(window);
@@ -299,7 +307,7 @@ export class AppointmentPopup {
   }
 
   _showLoadPanel() {
-    const container = this.popup.$overlayContent();
+    const container = (this.popup as any).$overlayContent();
 
     showLoading({
       container,
