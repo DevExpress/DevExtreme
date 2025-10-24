@@ -154,11 +154,11 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.children-template-container')?.innerHTML)
-      .toBe('<div class="child-template">Children template</div><div style="display: none;"></div>');
+      .toBe('<div style="display: none;"></div><div class="child-template">Children template</div><div style="display: none;"></div>');
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+      .toBe('<div style="display: none;"></div><div class="render-template">Render template text-2</div><div style="display: none;"></div>');
     expect(document.querySelector('.component-template-container')?.innerHTML)
-      .toBe('<div class="component-template">Component template text</div><div style="display: none;"></div>');
+      .toBe('<div style="display: none;"></div><div class="component-template">Component template text</div><div style="display: none;"></div>');
 
     expect(childrenTemplateRendered && renderTemplateRendered && componentTemplateRendered).toBeTruthy();
   });
@@ -200,7 +200,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+      .toBe('<div style="display: none;"></div><div class="render-template">Render template text-2</div><div style="display: none;"></div>');
   });
 
   it('does not render template instances if the template prop has been removed but instance removal is delayed (T1208518)', () => {
@@ -232,7 +232,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+      .toBe('<div style="display: none;"></div><div class="render-template">Render template text-2</div><div style="display: none;"></div>');
     expect(document.querySelector('.component-template-container')?.innerHTML)
       .toBe('');
 
@@ -250,7 +250,7 @@ describe('Template Manager', () => {
     expect(document.querySelector('.render-template-container')?.innerHTML)
       .toBe('');
     expect(document.querySelector('.component-template-container')?.innerHTML)
-      .toBe('<div class="component-template">Component template text</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="component-template">Component template text</div><div style="display: none;"></div>');
   });
 
   it('template wrappers are memoized', () => {
@@ -345,9 +345,9 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">render-data-key</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">render-data-key</div><div style="display: none;"></div>');
     expect(document.querySelector('.component-template-container')?.innerHTML)
-      .toBe('<div class="component-template">component-data-key</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="component-template">component-data-key</div><div style="display: none;"></div>');
   });
 
   it('onRendered is not called if the template was rendered by a previous widget instance (StrictMode)', () => {
@@ -400,7 +400,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-2</div><div style="display: none;"></div>');
     expect(renderTemplateRendered).toBeTruthy();
   });
 
@@ -437,7 +437,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-2</div><div style="display: none;"></div>');
 
     const newTemplateOptions = {
       renderKey: {
@@ -458,7 +458,7 @@ describe('Template Manager', () => {
     });
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="new-render-template">Render template text</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="new-render-template">Render template text</div><div style="display: none;"></div>');
     expect(callbackCalled).toBeTruthy();
   });
 
@@ -493,7 +493,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-1</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>');
 
     act(() => dxTemplates.renderKey.render({
       model: data1,
@@ -502,7 +502,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-1</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>');
     
     act(() => dxTemplates.renderKey.render({
       model: data2,
@@ -511,8 +511,8 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe(''.concat('<div class="render-template">Render template text-1</div><div style="display: none;"></div>',
-        '<div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
+      .toBe(''.concat('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>',
+        '<div style=\"display: none;\"></div><div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
 
     act(() => dxTemplates.renderKey.render({
       model: data2,
@@ -521,8 +521,8 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe(''.concat('<div class="render-template">Render template text-1</div><div style="display: none;"></div>',
-        '<div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
+      .toBe(''.concat('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>',
+        '<div style=\"display: none;\"></div><div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
 
     act(() => dxTemplates.renderKey.render({
       model: data2,
@@ -531,10 +531,10 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe(''.concat('<div class="render-template">Render template text-1</div><div style="display: none;"></div>',
-        '<div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
+      .toBe(''.concat('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>',
+        '<div style=\"display: none;\"></div><div class="render-template">Some other text-1</div><div style="display: none;"></div>'));
     expect(document.querySelector('.other-container')?.innerHTML)
-      .toBe('<div class="render-template">Some other text-1</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Some other text-1</div><div style="display: none;"></div>');
   });
 
   it('template is removed if the container was removed during render', () => {
@@ -589,7 +589,7 @@ describe('Template Manager', () => {
     }));
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-1</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>');
 
     rerender(
       <React.Fragment>
@@ -599,6 +599,6 @@ describe('Template Manager', () => {
     );
 
     expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-1</div><div style="display: none;"></div>');
+      .toBe('<div style=\"display: none;\"></div><div class="render-template">Render template text-1</div><div style="display: none;"></div>');
   });
 });

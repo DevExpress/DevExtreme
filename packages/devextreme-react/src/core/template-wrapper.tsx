@@ -50,7 +50,8 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   }), []);
 
   const elements = useRef<HTMLElement[]>([]);
-  const hiddenNodeElement = useRef<HTMLElement>();
+  const startGuardElement = useRef<HTMLElement>();
+  const endGuardElement = useRef<HTMLElement>();
   const removalListenerElement = useRef<HTMLElement>();
 
   const onTemplateRemoved = useCallback((_, args: DXRemoveCustomArgs | undefined) => {
@@ -93,7 +94,8 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
 
       [
         ...elements.current,
-        hiddenNodeElement.current,
+        startGuardElement.current,
+        endGuardElement.current,
         removalListenerElement.current,
       ].forEach((el) => safeAppend(el));
 
@@ -107,19 +109,18 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     onRendered();
   }, [onRendered]);
 
-  const containerContent = Array.from(container.childNodes);
+  const startGuardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
+    startGuardElement.current = node;
+  }, 'div');
 
-  const hiddenNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
-    hiddenNodeElement.current = node;
+  const endGuardNode = createHiddenNode(container?.nodeName, (node: HTMLElement) => {
+    endGuardElement.current = node;
     elements.current = [];
 
     let currentNode = node?.previousSibling as HTMLElement;
 
-    while (currentNode) {
-      if (!containerContent.includes(currentNode)) {
-        elements.current.push(currentNode);
-      }
-
+    while (currentNode && currentNode !== startGuardElement.current) {
+      elements.current.push(currentNode);
       currentNode = currentNode?.previousSibling as HTMLElement;
     }
   }, 'div');
@@ -131,8 +132,9 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
   return createPortal(
       <>
         <RemovalLockerContext.Provider value={removalLocker}>
+          { startGuardNode }
           { templateFactory({ data, index, onRendered }) }
-          { hiddenNode }
+          { endGuardNode }
           { removalListener }
         </RemovalLockerContext.Provider>
       </>,

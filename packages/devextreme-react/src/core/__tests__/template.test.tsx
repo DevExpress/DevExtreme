@@ -146,7 +146,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, ref.current); });
 
     expect(screen.getByText('Text')?.outerHTML)
-      .toBe('<div>Text<div><div>Template</div><div style=\"display: none;\"></div></div></div>');
+      .toBe('<div>Text<div><div style=\"display: none;\"></div><div>Template</div><div style=\"display: none;\"></div></div></div>');
   });
 
   it('renders new template after component change', () => {
@@ -227,7 +227,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, ref.current); });
 
     expect((container.firstChild?.firstChild as HTMLDivElement).outerHTML)
-      .toContain('<div>Template with data<div style=\"display: none;\"></div><span style=\"display: none;\"></span></div>');
+      .toContain('<div><div style=\"display: none;\"></div>Template with data<div style=\"display: none;\"></div><span style=\"display: none;\"></span></div>');
   });
 
   it('does not render template removeEvent listener', () => {
@@ -255,7 +255,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, table); });
 
     expect(table.innerHTML)
-      .toBe('<tbody><tr><td>Template with data</td></tr></tbody><tbody style=\"display: none;\"></tbody>');
+      .toBe('<tbody style=\"display: none;\"></tbody><tbody><tr><td>Template with data</td></tr></tbody><tbody style=\"display: none;\"></tbody>');
   });
 
   it('render invisible element as tr tag', () => {
@@ -281,7 +281,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 'with data' }, table); });
 
     expect(table.innerHTML)
-      .toBe('<tr><td>Template with data</td></tr><tr style=\"display: none;\"></tr>');
+      .toBe('<tr style=\"display: none;\"></tr><tr><td>Template with data</td></tr><tr style=\"display: none;\"></tr>');
   });
 
   it('calls onRendered callback', () => {
