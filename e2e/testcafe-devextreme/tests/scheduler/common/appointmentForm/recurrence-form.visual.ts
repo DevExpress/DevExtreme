@@ -607,7 +607,7 @@ test.clientScripts([
     text: 'Existing Recurrent',
     startDate: new Date('2024-01-01T10:00:00'),
     endDate: new Date('2024-01-01T11:00:00'),
-    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
   };
 
   await ClientFunction((appointmentData) => {
@@ -639,7 +639,7 @@ test.clientScripts([
       text: 'Existing Recurrent',
       startDate: new Date('2024-01-01T10:00:00'),
       endDate: new Date('2024-01-01T11:00:00'),
-      recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+      recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
     }],
     views: ['week'],
     currentView: 'week',
