@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Недопустимий тип файлу",
         "dxFileUploader-invalidMaxFileSize": "Файл завеликий",
         "dxFileUploader-invalidMinFileSize": "Файл замалий",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Від",
         "dxRangeSlider-ariaTill": "До",
