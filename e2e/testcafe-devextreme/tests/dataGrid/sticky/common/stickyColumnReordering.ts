@@ -4,8 +4,6 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
 import url from '../../../../helpers/getPageUrl';
-import { Themes } from '../../../../helpers/themes';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -220,43 +218,39 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
   },
 }));
 
-[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
-  safeSizeTest(`Check the draggable source column while moving the fixed column on the right side (${theme} theme)`, async (t) => {
-    // arrange
-    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+// visual: generic.light
+// visual: material.blue.light
+// visual: fluent.blue.light
+safeSizeTest('Check the draggable source column while moving the fixed column on the right side (generic.light theme)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.expect(dataGrid.isReady()).ok();
+  await t.expect(dataGrid.isReady()).ok();
 
-    // act
-    await dataGrid.moveHeader(24, -200, 5, true);
+  // act
+  await dataGrid.moveHeader(24, -200, 5, true);
 
-    await takeScreenshot(`draggable_source_column_with_fixed_columns_(${theme}).png`, dataGrid.element);
+  await takeScreenshot('draggable_source_column_with_fixed_columns_(generic.light).png', dataGrid.element);
 
-    // assert
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }, [1000, 800])
-    .before(async () => {
-      await changeTheme(theme);
-
-      await createWidget('dxDataGrid', {
-        dataSource: getData(5, 25),
-        columnAutoWidth: true,
-        allowColumnReordering: true,
-        columnWidth: 100,
-        customizeColumns: (columns) => {
-          columns[5].fixed = true;
-          columns[5].fixedPosition = 'right';
-          columns[6].fixed = true;
-          columns[6].fixedPosition = 'right';
-          columns[7].fixed = true;
-          columns[7].fixedPosition = 'right';
-        },
-      });
-    })
-    .after(async () => {
-      await changeTheme(Themes.genericLight);
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [1000, 800])
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: getData(5, 25),
+      columnAutoWidth: true,
+      allowColumnReordering: true,
+      columnWidth: 100,
+      customizeColumns: (columns) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'right';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'right';
+        columns[7].fixed = true;
+        columns[7].fixedPosition = 'right';
+      },
     });
-});
+  });

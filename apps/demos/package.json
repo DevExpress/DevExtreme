@@ -94,6 +94,7 @@
         "@babel/eslint-parser": "catalog:eslint8",
         "@babel/preset-env": "7.23.9",
         "@babel/preset-react": "^7.26.3",
+        "@babel/preset-typescript": "^7.26.3",
         "@rollup/plugin-babel": "6.0.4",
         "@rollup/plugin-node-resolve": "15.2.3",
         "@rollup/plugin-replace": "5.0.5",

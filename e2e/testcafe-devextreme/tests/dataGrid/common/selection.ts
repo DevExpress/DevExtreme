@@ -294,3 +294,36 @@ test('"Select All" checkbox should not react when not visible', async (t) => {
     width: 90,
   }],
 }));
+
+test('"Deselect all" should work after changing showCheckboxMode', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.option('selection.showCheckBoxesMode', 'onClick');
+
+  const selectAllCheckBox = new CheckBox(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
+  );
+
+  await t.click(selectAllCheckBox.element); // select all
+  await t.click(selectAllCheckBox.element); // deselect all
+
+  await t
+    .expect(selectAllCheckBox.option('value'))
+    .eql(false);
+
+  for (let i = 0; i < 7; i += 1) {
+    await t
+      .expect(dataGrid.getDataRow(i).isSelected)
+      .notOk();
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 },
+  ],
+  keyExpr: 'a',
+  selection: {
+    mode: 'multiple',
+    showCheckBoxesMode: 'always',
+  },
+  selectedRowKeys: [1, 2],
+}));

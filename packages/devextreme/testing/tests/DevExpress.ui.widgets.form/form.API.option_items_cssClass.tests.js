@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'ui/form';
 
@@ -252,10 +251,6 @@ function isFocusedElement(element) {
         });
 
         QUnit.testInActiveWindow('ButtonItem(class1 -> class2)', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const form = createForm([{
                 itemType: 'button',
                 name: 'item1',
@@ -280,10 +275,6 @@ function isFocusedElement(element) {
         });
 
         QUnit.testInActiveWindow('ButtonItem(class1 -> class2) in form with 2 items', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const form = createForm([
                 {
                     itemType: 'button',

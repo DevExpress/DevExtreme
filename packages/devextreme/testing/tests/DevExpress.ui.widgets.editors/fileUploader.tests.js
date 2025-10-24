@@ -6,7 +6,6 @@ import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../helpers/device.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'generic_light.css!';
 
@@ -3568,10 +3567,6 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     });
 
     QUnit.test('T328503 - \'enter\' press on select button should lead to input click', function(assert) {
-        if(shouldSkipOnMobile(assert, 'keyboard is not supported for non-desktop devices')) {
-            return;
-        }
-
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'instantly',
             focusStateEnabled: true,
@@ -3965,10 +3960,6 @@ QUnit.module('Drag and drop', moduleConfig, () => {
     });
 
     QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
-        if(shouldSkipOnMobile(assert, 'default label text is hidden for mobile devices')) {
-            return;
-        }
-
         const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
@@ -4334,10 +4325,6 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
     ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
         ['enter', 'space'].forEach(keyName => {
             QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
-                if(shouldSkipOnMobile(assert, 'keyboard is not supported for non-desktop devices')) {
-                    return;
-                }
-
                 const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
 
                 $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
@@ -4375,18 +4362,5 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
             $dialogTrigger.trigger('click');
             assert.strictEqual(fileUploaderInputClickSpy.callCount, 3, 'third click triggers input click');
         });
-    });
-});
-
-QUnit.module('labelText', moduleConfig, () => {
-    QUnit.test('Dropzone default label text should be hidden on mobile devices', function(assert) {
-        if(shouldSkipOnDesktop(assert, 'should only apply on mobile devices')) {
-            return;
-        }
-
-        const $fileUploader = $('#fileuploader').dxFileUploader();
-        const $inputLabel = $fileUploader.find(`.${FILEUPLOADER_INPUT_LABEL_CLASS}`);
-
-        assert.strictEqual($inputLabel.text(), '', 'default label is hidden on mobile');
     });
 });
