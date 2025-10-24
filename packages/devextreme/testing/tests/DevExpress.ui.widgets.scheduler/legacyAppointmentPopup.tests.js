@@ -10,7 +10,7 @@ import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import messageLocalization from 'common/core/localization/message';
-import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_form';
+import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_legacy_form';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
