@@ -462,6 +462,7 @@ describe('Appointment Popup Form', () => {
       expect(value).toBe('never');
     });
 
+    // eslint-disable-next-line @stylistic/max-len
     // it('Recurrence editor container should be visible after changing its visibility value', async () => {
     //   const appointment = {
     //     text: 'Test Appointment',
@@ -484,6 +485,7 @@ describe('Appointment Popup Form', () => {
     //   expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
     // });
 
+    // eslint-disable-next-line @stylistic/max-len
     // it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
     //   const data = [
     //     {
