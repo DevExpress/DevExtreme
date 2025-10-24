@@ -40,7 +40,8 @@
   $agenda-appointment-text-color: $agenda-appointment-text-color,
   $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
 
-  $scheduler-days-of-week-button-size: $generic-scheduler-days-of-week-button-size
+  $scheduler-days-of-week-button-size: $generic-scheduler-days-of-week-button-size,
+  $scheduler-recurrence-end-item-height: $generic-scheduler-recurrence-end-item-height
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;

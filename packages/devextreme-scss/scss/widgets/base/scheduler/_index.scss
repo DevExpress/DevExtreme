@@ -32,6 +32,7 @@ $agenda-appointment-title-font-size: null !default;
 
 $scheduler-header-panel-table-cell-height: null !default;
 $scheduler-days-of-week-button-size: null !default;
+$scheduler-recurrence-end-item-height: null !default;
 
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
@@ -556,7 +557,7 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       // RadioGroup column
-      .dx-scheduler-form-recurrence-end-radio {
+      .dx-scheduler-form-recurrence-end-editors {
         .dx-field-item-content {
           height: 100%;
           padding: 0;
@@ -570,7 +571,7 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-item.dx-radiobutton {
           margin: 8px 0 0 0;
           padding: 0;
-          height: 32px !important; // stylelint-disable-line declaration-no-important
+          height: $scheduler-recurrence-end-item-height !important; // stylelint-disable-line declaration-no-important
 
           &:first-child {
             margin-top: 0;
@@ -590,7 +591,7 @@ $scheduler-appointment-form-label-padding: 20px;
         }
 
         .dx-box-item {
-          height: 32px;
+          height: $scheduler-recurrence-end-item-height;
           margin: 0;
           padding: 0;
 
@@ -599,26 +600,26 @@ $scheduler-appointment-form-label-padding: 20px;
           }
 
           .dx-box-item-content {
-            height: 32px;
+            height: $scheduler-recurrence-end-item-height;
             padding: 0;
           }
         }
 
         .dx-field-item,
         .dx-empty-item {
-          height: 32px;
+          height: $scheduler-recurrence-end-item-height;
           margin: 0;
           padding: 0 !important; // stylelint-disable-line declaration-no-important
         }
 
         .dx-field-item-content {
           padding: 0 !important; // stylelint-disable-line declaration-no-important
-          height: 32px;
+          height: $scheduler-recurrence-end-item-height;
         }
 
         .dx-texteditor,
         .dx-numberbox {
-          height: 32px;
+          height: $scheduler-recurrence-end-item-height;
         }
       }
 
@@ -626,6 +627,7 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
         overflow: visible;
         position: relative;
+        height: auto;
 
         .dx-icon {
           color: $scheduler-workspace-accent-color;
