@@ -162,7 +162,23 @@
 .dx-icon-micfilled,
 .dx-icon-micoutline,
 .dx-icon-stopfilled,
-.dx-icon-stopoutline {
+.dx-icon-stopoutline,
+.dx-icon-optionsoutline,
+.dx-icon-optionsfilled,
+.dx-icon-conferenceroomoutline,
+.dx-icon-conferenceroomfilled,
+.dx-icon-chatsparkleoutline,
+.dx-icon-chatsparklefilled,
+.dx-icon-addcircleoutline,
+.dx-icon-addcirclefilled,
+.dx-icon-zoomoutoutline,
+.dx-icon-zoomoutfilled,
+.dx-icon-zoominoutline,
+.dx-icon-zoominfilled,
+.dx-icon-calendardatestartoutline,
+.dx-icon-calendardatestartfilled,
+.dx-icon-calendardateendoutline,
+.dx-icon-calendardateendfilled {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -540,6 +556,22 @@ $icons: (
     "micfilled":"\f204",
     "stopoutline":"\f205",
     "stopfilled":"\f206",
+    "optionsoutline":"\f207",
+    "optionsfilled":"\f208",
+    "conferenceroomoutline":"\f209",
+    "conferenceroomfilled":"\f210",
+    "chatsparkleoutline":"\f211",
+    "chatsparklefilled":"\f212",
+    "addcircleoutline":"\f213",
+    "addcirclefilled":"\f214",
+    "zoomoutoutline":"\f215",
+    "zoomoutfilled":"\f216",
+    "zoominoutline":"\f217",
+    "zoominfilled":"\f218",
+    "calendardatestartoutline":"\f219",
+    "calendardatestartfilled":"\f220",
+    "calendardateendoutline":"\f221",
+    "calendardateendfilled":"\f222",
 );
 
 // stylelint-enable
