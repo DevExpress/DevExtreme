@@ -148,7 +148,7 @@ QUnit.module('Nested scrollable styles', () => {
             ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
                 const config = { rtlEnabled, outerDirection, showScrollbar, outerUseNative: false };
                 config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
-                configs.push(notOuterUseNativeConfigs);
+                notOuterUseNativeConfigs.push(config);
             });
         });
     });
