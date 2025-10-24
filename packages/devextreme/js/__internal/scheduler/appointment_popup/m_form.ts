@@ -17,7 +17,7 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import { RecurrenceForm } from './m_recurrent_form';
+import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 const CLASSES = {
