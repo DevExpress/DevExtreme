@@ -595,7 +595,8 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
                     currentView: 'week',
                     currentDate: new Date(2017, 4, 25),
                     editing: {
-                        allowUpdating: allowUpdatingValue
+                        allowUpdating: allowUpdatingValue,
+                        legacyForm: true
                     }
                 });
 
