@@ -7,7 +7,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -2431,28 +2430,12 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
     })();
   });
 });
-
-[
-  {
-    theme: 'material.blue.light',
-    useIcons: true,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: true,
-  },
-  {
-    theme: 'material.blue.light',
-    useIcons: false,
-  },
-  {
-    theme: 'generic.light',
-    useIcons: false,
-  },
-].forEach(({ theme, useIcons }) => {
+// visual: generic.light
+// visual: material.blue.light
+[true, false].forEach((useIcons) => {
   // T1179114
   // TODO Chrome133: skipped during chrome update
-  test.skip(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+  test.skip('The disabled state should be correct for a custom button when given as a SVG image', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
     const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
@@ -2464,52 +2447,46 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
       .eql(20)
       .expect(secondCustomIcon.clientWidth)
       .eql(20)
-      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-generic-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
-    await changeTheme(theme);
-
-    return createWidget('dxDataGrid', {
-      width: 600,
-      dataSource: [{
-        Id: 0,
-        name: 'test',
-      }],
-      keyExpr: 'Id',
-      editing: {
-        mode: 'row',
-        allowUpdating: true,
-        allowDeleting: true,
-        useIcons,
-      },
-      columns: ['Id', 'name', {
-        type: 'buttons',
-        width: 200,
-        buttons: [
-          {
-            name: 'delete',
-            disabled: false,
-          },
-          {
-            name: 'delete',
-            disabled: true,
-          },
-          {
-            icon: encodedIcon,
-            disabled: false,
-          },
-          {
-            icon: encodedIcon,
-            disabled: true,
-          },
-        ],
-      }],
-    });
-  }).after(async () => {
-    await changeTheme('generic.light');
-  });
+  }).before(async () => createWidget('dxDataGrid', {
+    width: 600,
+    dataSource: [{
+      Id: 0,
+      name: 'test',
+    }],
+    keyExpr: 'Id',
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+      useIcons,
+    },
+    columns: ['Id', 'name', {
+      type: 'buttons',
+      width: 200,
+      buttons: [
+        {
+          name: 'delete',
+          disabled: false,
+        },
+        {
+          name: 'delete',
+          disabled: true,
+        },
+        {
+          icon: encodedIcon,
+          disabled: false,
+        },
+        {
+          icon: encodedIcon,
+          disabled: true,
+        },
+      ],
+    }],
+  }));
 });
 
 test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set in data source (T1181477)', async (t) => {
@@ -2772,45 +2749,39 @@ test('DataGrid - A new row is added above the existing row if the data source is
   ],
 }));
 
-[
-  Themes.genericLight,
-  Themes.fluentBlue,
-  Themes.materialBlue,
-].forEach((theme) => {
-  test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const dataGrid = new DataGrid('#container');
+// visual: generic.light
+// visual: fluent.blue.light
+// visual: material.blue.light
+test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
 
-    await t.click(dataGrid.getDataCell(0, 0).element);
+  await t.click(dataGrid.getDataCell(0, 0).element);
 
-    await t
-      .expect(await takeScreenshot(`grid-form-editing-with-color-box_(${theme})`, dataGrid.element))
-      .ok()
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  })
-    .before(async () => {
-      await changeTheme(theme);
-
-      await createWidget('dxDataGrid', {
-        dataSource: [
-          { Color: 'red' },
-        ],
-        showBorders: true,
-        editing: {
-          allowUpdating: true,
-          mode: 'cell',
-        },
-        onEditorPreparing(e) {
-          if (e.dataField === 'Color') {
-            e.editorName = 'dxColorBox';
-            e.editorOptions.readOnly = false;
-          }
-        },
-      });
-    })
-    .after(async () => changeTheme(Themes.genericLight));
-});
+  await t
+    .expect(await takeScreenshot('grid-form-editing-with-color-box_(generic.light)', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+})
+  .before(async () => {
+    await createWidget('dxDataGrid', {
+      dataSource: [
+        { Color: 'red' },
+      ],
+      showBorders: true,
+      editing: {
+        allowUpdating: true,
+        mode: 'cell',
+      },
+      onEditorPreparing(e) {
+        if (e.dataField === 'Color') {
+          e.editorName = 'dxColorBox';
+          e.editorOptions.readOnly = false;
+        }
+      },
+    });
+  });
 
 // T1291087
 test('The editCellTemplate template should not be called after clicking on a cell in another row and column', async (t) => {

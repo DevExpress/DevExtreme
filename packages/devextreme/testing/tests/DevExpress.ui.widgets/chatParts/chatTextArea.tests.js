@@ -6,7 +6,6 @@ import config from 'core/config';
 import ChatTextArea from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
-import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -164,10 +163,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('should be fired on enter key if textarea contains valid text', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const onSendStub = sinon.stub();
 
             this.reinit({ onSend: onSendStub });
@@ -192,10 +187,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('should not be fired on enter key if textarea contains only spaces', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const onSendStub = sinon.stub();
 
             this.reinit({ onSend: onSendStub });
@@ -244,10 +235,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('should be fired with correct arguments on enter key', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             assert.expect(5);
 
             const text = 'new text message';
@@ -270,24 +257,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 .keyDown('enter')
                 .keyUp('enter');
         });
-
-        QUnit.test('should not send message on enter key on mobile devices', function(assert) {
-            if(shouldSkipOnDesktop(assert)) {
-                return;
-            }
-
-            const onSendStub = sinon.stub();
-
-            this.reinit({ onSend: onSendStub });
-
-            keyboardMock(this.$input)
-                .focus()
-                .type('new text message')
-                .keyDown('enter')
-                .keyUp('enter');
-
-            assert.strictEqual(onSendStub.callCount, 0);
-        });
     });
 
     QUnit.module('Keyboard navigation', () => {
@@ -302,10 +271,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('textarea should be cleared on enter when valid text is entered', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             keyboardMock(this.$input)
                 .focus()
                 .type('some text')
@@ -316,10 +281,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('enter keydown should be prevented if input has non-space characters', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
 
             keyboardMock(this.$input).type('1');
@@ -350,10 +311,6 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         });
 
         QUnit.test('textarea should restore height after enter with multiline text', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             const initialHeight = this.$element.height();
 
             keyboardMock(this.$input)

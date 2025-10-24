@@ -8,6 +8,7 @@ QUnit.testStart(() => {
 });
 
 import './chatParts/avatar.tests.js';
+import './chatParts/file.tests.js';
 import './chatParts/messageBox.tests.js';
 import './chatParts/messageBubble.tests.js';
 import './chatParts/confirmationPopup.tests.js';
