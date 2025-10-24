@@ -10,7 +10,7 @@ export const skippedTests = {
   },
   React: {
     DataGrid: ['Toolbar', 'SignalRService'],
-     // NOTE: 'GroupByDate' demo has problems with rendering
+    // NOTE: 'GroupByDate' demo has problems with rendering
     Scheduler: ['GroupByDate'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     Gantt: ['Validation'],

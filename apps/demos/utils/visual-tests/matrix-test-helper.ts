@@ -346,12 +346,32 @@ export function runManualTestCore(
     testURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
 
-  const test = testObject.clientScripts([
+  const specialDemos = ['VirtualScrolling', 'StatePersistence', 'EditStateManagement', 'BatchUpdateRequest'];
+  const needsSpecialStyles = specialDemos.includes(demo);
+  
+  const getTestStyles = (demoName) => {
+    switch (demoName) {
+      case 'VirtualScrolling':
+      case 'StatePersistence':
+      case 'EditStateManagement':
+      case 'BatchUpdateRequest':
+        return `.dx-scrollable-scroll { visibility: visible !important; }`;
+      default:
+        return '';
+    }
+  };
+  
+  const testStyles = getTestStyles(demo);
+
+  const clientScripts = [
     { module: 'mockdate' },
     join(__dirname, './inject/test-utils.js'),
     { content: injectStyle(globalReadFrom(__dirname, './inject/test-styles.css', (x) => x)) },
+    ...(needsSpecialStyles ? [{ content: injectStyle(testStyles) }] : []),
     ...clientScriptSource,
-  ])
+  ];
+
+  const test = testObject.clientScripts(clientScripts)
     .page(testURL);
 
   test.before?.(async (t) => {
