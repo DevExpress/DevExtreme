@@ -79,7 +79,7 @@ const textStyles = {
   color: 'white',
   'font-family': '-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, adwaita sans, cantarell, ubuntu, roboto, noto, helvetica, arial, sans-serif',
   'font-size': '0.875rem',
-  'font-wight': '600',
+  'font-weight': '600',
 };
 
 function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
