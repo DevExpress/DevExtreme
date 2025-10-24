@@ -8,7 +8,7 @@ import { AiPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AiPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
 import type { AiColumnController } from './m_ai_column_controller';
-import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
+import { getAiCommandColumnOptions, isAIColumnAutoMode } from './utils';
 
 export class AiColumnView extends View {
   private columnsController!: ColumnsController;
@@ -43,7 +43,7 @@ export class AiColumnView extends View {
       },
       onStop: (): void => {
         this.promptEditorInstance.updateStateOnAction('stop');
-        this.aiColumnController.abortAIColumnRequest();
+        this.aiColumnController.abortAIColumnRequest(column.name as string);
       },
       onRefresh: (): void => {
         this.promptEditorInstance.updateStateOnAction('regenerate');
@@ -53,7 +53,7 @@ export class AiColumnView extends View {
         container: domAdapter.getBody(),
         onHiding: (): void => {
           this.promptEditorInstance.updateStateOnAction('stop');
-          this.aiColumnController.abortAIColumnRequest();
+          this.aiColumnController.abortAIColumnRequest(column.name as string);
         },
         position: {
           my: `${alignment} top`,
@@ -68,6 +68,8 @@ export class AiColumnView extends View {
 
   // TODO: support changing all columns and the entire column
   public optionChanged(args): void {
+    super.optionChanged(args);
+
     if (args.name !== 'columns') {
       return;
     }
@@ -80,7 +82,7 @@ export class AiColumnView extends View {
 
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
-    if (columnOptionName === 'ai.prompt') {
+    if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
       this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
   }
