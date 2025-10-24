@@ -199,7 +199,9 @@ export class AppointmentPopup {
   }
 
   triggerResize(): void {
-    triggerResizeEvent(this.popup.$element());
+    if (this.popup?.$element()) {
+      triggerResizeEvent(this.popup.$element());
+    }
   }
 
   updatePopupFullScreenMode(): void {
