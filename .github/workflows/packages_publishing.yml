@@ -175,6 +175,7 @@ jobs:
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
           pnpm publish --no-git-checks --quiet --ignore-scripts --registry https://npm.pkg.github.com;
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-next --registry=https://npm.pkg.github.com
 
       - name: Move 'daily' tag
         if: ${{ env.MOVE_DAILY_TAG == 'true' }}
