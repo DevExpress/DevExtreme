@@ -816,7 +816,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         stylingMode: _buttonStylingMode,
         elementAttr: {
           // @ts-expect-error foramat params should be extended
-          'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file.value.name),
+          'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file?.value?.name ?? ''),
         },
       },
     );
@@ -845,7 +845,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         stylingMode: _buttonStylingMode,
         elementAttr: {
           // @ts-expect-error foramat params should be extended
-          'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file.value.name),
+          'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file?.value?.name ?? ''),
         },
       },
     );
