@@ -563,14 +563,14 @@ describe('aiIntegration', () => {
     abort: (): void => { },
   });
 
-  const rootAiIntegration = new AIIntegration({
+  const rootAIIntegration = new AIIntegration({
     sendRequest(): RequestResult {
       rootSendRequestSpy();
       return aiIntegrationResult();
     },
   });
 
-  const columnAiIntegration = new AIIntegration({
+  const columnAIIntegration = new AIIntegration({
     sendRequest(): RequestResult {
       columnSendRequestSpy();
       return aiIntegrationResult();
@@ -583,7 +583,7 @@ describe('aiIntegration', () => {
         { id: 1, name: 'Name 1', value: 10 },
       ],
       keyExpr: 'id',
-      aiIntegration: rootAiIntegration,
+      aiIntegration: rootAIIntegration,
       columns: [
         { dataField: 'id', caption: 'ID' },
         { dataField: 'name', caption: 'Name' },
@@ -624,7 +624,7 @@ describe('aiIntegration', () => {
         },
       ],
     });
-    instance.option('aiIntegration', rootAiIntegration);
+    instance.option('aiIntegration', rootAIIntegration);
     instance.sendAIColumnRequest('myColumn');
     expect(rootSendRequestSpy).toHaveBeenCalled();
     expect(columnSendRequestSpy).not.toHaveBeenCalled();
@@ -636,7 +636,7 @@ describe('aiIntegration', () => {
         { id: 1, name: 'Name 1', value: 10 },
       ],
       keyExpr: 'id',
-      aiIntegration: rootAiIntegration,
+      aiIntegration: rootAIIntegration,
       columns: [
         { dataField: 'id', caption: 'ID' },
         { dataField: 'name', caption: 'Name' },
@@ -646,7 +646,7 @@ describe('aiIntegration', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
             prompt: 'Test prompt',
           },
         },
@@ -678,8 +678,8 @@ describe('aiIntegration', () => {
         },
       ],
     });
-    instance.columnOption('myColumn', 'ai', { aiIntegration: columnAiIntegration, prompt: 'Test prompt' });
-    instance.option('aiIntegration', rootAiIntegration);
+    instance.columnOption('myColumn', 'ai', { aiIntegration: columnAIIntegration, prompt: 'Test prompt' });
+    instance.option('aiIntegration', rootAIIntegration);
     instance.sendAIColumnRequest('myColumn');
     expect(columnSendRequestSpy).toHaveBeenCalled();
     expect(rootSendRequestSpy).not.toHaveBeenCalled();
@@ -704,7 +704,7 @@ describe('prompt', () => {
     abort: (): void => { },
   });
 
-  const columnAiIntegration = new AIIntegration({
+  const columnAIIntegration = new AIIntegration({
     sendRequest(params: RequestParams): RequestResult {
       columnSendRequestSpy(params.prompt.user?.includes(prompt));
       return aiIntegrationResult();
@@ -727,7 +727,7 @@ describe('prompt', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
             prompt,
           },
         },
@@ -754,7 +754,7 @@ describe('prompt', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
           },
         },
       ],
@@ -803,7 +803,7 @@ describe('aiMode', () => {
     abort: (): void => { },
   });
 
-  const columnAiIntegration = new AIIntegration({
+  const columnAIIntegration = new AIIntegration({
     sendRequest(): RequestResult {
       columnSendRequestSpy();
       return aiIntegrationResult();
@@ -826,7 +826,7 @@ describe('aiMode', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
           },
         },
       ],
@@ -859,7 +859,7 @@ describe('aiMode', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
             prompt: 'Test prompt',
           },
         },
@@ -917,7 +917,7 @@ describe('aiMode', () => {
           caption: 'AI Column',
           name: 'myColumn',
           ai: {
-            aiIntegration: columnAiIntegration,
+            aiIntegration: columnAIIntegration,
             mode: 'manual',
           },
         },
@@ -981,7 +981,7 @@ describe('API Methods', () => {
       },
     });
 
-    const columnAiIntegration = new AIIntegration({
+    const columnAIIntegration = new AIIntegration({
       sendRequest(): RequestResult {
         return aiIntegrationResult();
       },
@@ -1002,7 +1002,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1038,7 +1038,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1072,7 +1072,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1092,7 +1092,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
             },
           },
@@ -1121,7 +1121,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1141,7 +1141,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
             },
           },
         ],
@@ -1171,7 +1171,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1188,7 +1188,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1216,7 +1216,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1236,7 +1236,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1272,12 +1272,12 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
       });
-      const columnAiIntegration2 = new AIIntegration({
+      const columnAIIntegration2 = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1297,7 +1297,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1307,7 +1307,7 @@ describe('API Methods', () => {
             caption: 'AI Column2',
             name: 'myColumn2',
             ai: {
-              aiIntegration: columnAiIntegration2,
+              aiIntegration: columnAIIntegration2,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1341,7 +1341,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1361,7 +1361,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
             },
           },
@@ -1390,7 +1390,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1407,7 +1407,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1435,7 +1435,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1455,7 +1455,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1491,12 +1491,12 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
       });
-      const columnAiIntegration2 = new AIIntegration({
+      const columnAIIntegration2 = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1516,7 +1516,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1526,7 +1526,7 @@ describe('API Methods', () => {
             caption: 'AI Column2',
             name: 'myColumn2',
             ai: {
-              aiIntegration: columnAiIntegration2,
+              aiIntegration: columnAIIntegration2,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1567,7 +1567,7 @@ describe('API Methods', () => {
         },
       });
 
-      const columnAiIntegration = new AIIntegration({
+      const columnAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResult();
         },
@@ -1587,7 +1587,7 @@ describe('API Methods', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1648,7 +1648,7 @@ describe('API Handlers', () => {
         abortSpy();
       },
     });
-    const columnAiIntegration = new AIIntegration({
+    const columnAIIntegration = new AIIntegration({
       sendRequest({ prompt, data }): RequestResult {
         sendRequestPromptSpy(prompt);
         sendRequestDataSpy(data);
@@ -1672,7 +1672,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1726,7 +1726,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1759,7 +1759,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1800,7 +1800,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1844,7 +1844,7 @@ describe('API Handlers', () => {
         abortSpy();
       },
     });
-    const columnAiIntegration = new AIIntegration({
+    const columnAIIntegration = new AIIntegration({
       sendRequest(): RequestResult {
         return aiIntegrationResult();
       },
@@ -1866,7 +1866,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1920,7 +1920,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegration,
+              aiIntegration: columnAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -1964,7 +1964,7 @@ describe('API Handlers', () => {
           abortSpy();
         },
       });
-      const columnCustomAiIntegration = new AIIntegration({
+      const columnCustomAIIntegration = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationCustomResult();
         },
@@ -1985,7 +1985,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnCustomAiIntegration,
+              aiIntegration: columnCustomAIIntegration,
               mode: 'manual',
               prompt: 'Test prompt',
             },
@@ -2035,7 +2035,7 @@ describe('API Handlers', () => {
           abortSpy();
         },
       });
-      const columnAiIntegrationWithError = new AIIntegration({
+      const columnAIIntegrationWithError = new AIIntegration({
         sendRequest(): RequestResult {
           return aiIntegrationResultWithError();
         },
@@ -2056,7 +2056,7 @@ describe('API Handlers', () => {
             caption: 'AI Column',
             name: 'myColumn',
             ai: {
-              aiIntegration: columnAiIntegrationWithError,
+              aiIntegration: columnAIIntegrationWithError,
               mode: 'manual',
               prompt: 'Test prompt',
             },
