@@ -25,7 +25,7 @@ export type Properties = DOMComponentProperties<File> & {
   onDownload?: (e: AttachmentDownloadEvent) => void;
 };
 
-const CHAT_FILE_CLASS = 'dx-chat-file';
+export const CHAT_FILE_CLASS = 'dx-chat-file';
 const CHAT_FILE_ICON_CONTAINER_CLASS = 'dx-chat-file-icon-container';
 const CHAT_FILE_NAME_CLASS = 'dx-chat-file-name';
 const CHAT_FILE_SIZE_CLASS = 'dx-chat-file-size';

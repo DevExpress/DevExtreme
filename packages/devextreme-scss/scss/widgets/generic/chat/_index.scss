@@ -19,7 +19,7 @@
   $chat-avatar-background-color,
 );
 @include chat-file(
-  $chat-file-container-min-width,
+  $chat-file-container-width,
   $chat-file-container-padding,
   $chat-file-container-background-color,
   $chat-file-container-border-radius,
@@ -29,6 +29,9 @@
   $chat-file-secondary-color,
   $chat-file-base-section-gap,
   $chat-file-file-size-max-width,
+);
+@include chat-fileview(
+  $chat-file-view-items-gap
 );
 @include chat-alertlist(
   $chat-alertlist-color,
