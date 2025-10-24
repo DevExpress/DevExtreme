@@ -111,69 +111,99 @@ describe('Appointment Popup Form', () => {
     });
   });
 
-  // describe('Toolbar', () => {
-  //   it.each([
-  //     { allowUpdating: false, disabled: false },
-  //     { allowUpdating: false, disabled: true },
-  //     { allowUpdating: true, disabled: false },
-  //     { allowUpdating: true, disabled: true },
-  //   ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
-  //     setupSchedulerTestEnvironment({ height: 200 });
-  //     const shouldHaveSaveButton = allowUpdating;
+  describe('Toolbar', () => {
+    const toolbarWithSaveButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: 'Edit Appointment',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: expect.any(Function),
+          stylingMode: 'contained',
+          type: 'default',
+          text: 'Save',
+        },
+        shortcut: 'done',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        shortcut: 'cancel',
+        options: { stylingMode: 'outlined' },
+      },
+    ];
+    const toolbarWithCancelButton = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: 'Edit Appointment',
+        cssClass: 'dx-toolbar-label',
+      },
+      {
+        toolbar: 'top',
+        location: 'after',
+        shortcut: 'cancel',
+        options: { stylingMode: 'outlined' },
+      },
+    ];
 
-  //     const { POM } = await createScheduler({
-  //       ...getDefaultConfig(),
-  //       editing: { allowUpdating },
-  //     });
+    it.each([
+      { allowUpdating: false, disabled: false },
+      { allowUpdating: false, disabled: true },
+      { allowUpdating: true, disabled: false },
+      { allowUpdating: true, disabled: true },
+    ])('Buttons visibility when %p', async ({ allowUpdating, disabled }) => {
+      setupSchedulerTestEnvironment({ height: 200 });
+      const shouldHaveSaveButton = allowUpdating && !disabled;
 
-  //     POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
+      const { POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { allowUpdating },
+      });
 
-  //     if (shouldHaveSaveButton) {
-  //       expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-  //         { shortcut: 'done' },
-  //         { shortcut: 'cancel' },
-  //       ]);
-  //     } else {
-  //       expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-  //         { shortcut: 'cancel' },
-  //       ]);
-  //     }
-  //   });
+      POM.openPopupByDblClick(disabled ? 'disabled-app' : 'common-app');
 
-  //   it('Buttons visibility after editing option changed', async () => {
-  //     const { scheduler, POM } = await createScheduler({
-  //       ...getDefaultConfig(),
-  //       editing: {
-  //         allowUpdating: true,
-  //         allowAdding: true,
-  //       },
-  //     });
+      if (shouldHaveSaveButton) {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+      } else {
+        expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+      }
 
-  //     const newAppointment = {
-  //       text: 'a',
-  //       startDate: new Date(2015, 5, 15, 10),
-  //       endDate: new Date(2015, 5, 15, 11),
-  //     };
+      await POM.popup.component.hide();
+    });
 
-  //     scheduler.showAppointmentPopup(newAppointment);
-  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-  //       { shortcut: 'done' },
-  //       { shortcut: 'cancel' },
-  //     ]);
+    it('Buttons visibility after editing option changed', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: {
+          allowUpdating: true,
+          allowAdding: true,
+        },
+      });
 
-  //     scheduler.option('editing', { allowUpdating: false });
-  //     scheduler.showAppointmentPopup(newAppointment);
-  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-  //       { shortcut: 'cancel' },
-  //     ]);
+      const newAppointment = {
+        text: 'a',
+        startDate: new Date(2015, 5, 15, 10),
+        endDate: new Date(2015, 5, 15, 11),
+      };
 
-  //     scheduler.showAppointmentPopup();
-  //     expect(POM.popup.component.option('toolbarItems')).toMatchObject([
-  //       { shortcut: 'done' },
-  //       { shortcut: 'cancel' },
-  //     ]);
-  //   });
-  // });
+      scheduler.showAppointmentPopup(newAppointment);
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+
+      scheduler.option('editing', { allowUpdating: false, allowAdding: true });
+      scheduler.showAppointmentPopup(newAppointment);
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithCancelButton);
+
+      await POM.popup.component.hide();
+      scheduler.showAppointmentPopup();
+      expect(POM.popup.component.option('toolbarItems')).toMatchObject(toolbarWithSaveButton);
+    });
+  });
 
   describe('allDay switch', () => {
     it('should be turned on when opening allDay appointment', async () => {
