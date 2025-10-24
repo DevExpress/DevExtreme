@@ -44,7 +44,7 @@ describe('Equals svg to font', () => {
     });
 
     return result;
-  }
+  };
 
   test('generic themes', () => {
     const countElementGenericFont = getCountElementInFont(`${BASE_PATH}/icons/dxicons.ttf`);
@@ -88,10 +88,6 @@ describe('Equals svg to font', () => {
     ];
     const svgWithComments = findSvgWithComments(folders);
 
-    if (svgWithComments.length) {
-      throw new Error(`Found comments in: ${svgWithComments.join(', ')}`);
-    }
-
-    expect(svgWithComments).toHaveLength(0);
+    expect(svgWithComments).toEqual([]);
   });
 });
