@@ -22,13 +22,17 @@ const CLASSES = {
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-hidden',
 
-  recurrenceSettingsGroup: 'dx-scheduler-form-recurrence-settings-group',
+  frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
+  byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',
+  dayOfMonthEditor: 'dx-scheduler-form-day-of-month-editor',
+  countEditor: 'dx-scheduler-form-recurrence-count-editor',
   daysOfWeekButtons: 'dx-scheduler-days-of-week-buttons',
   dayOfMonthGroup: 'dx-scheduler-form-day-of-month-group',
   dayOfYearGroup: 'dx-scheduler-form-day-of-year-group',
+
   recurrenceEndGroup: 'dx-scheduler-form-recurrence-end-group',
-  recurrenceEndRadio: 'dx-scheduler-form-recurrence-end-radio',
   recurrenceEndEditors: 'dx-scheduler-form-recurrence-end-editors',
+  recurrenceSettingsGroup: 'dx-scheduler-form-recurrence-settings-group',
 };
 
 const frequenciesValues = [
@@ -128,6 +132,7 @@ export class RecurrenceForm {
       name,
       colSpan: 1,
       editorType: 'dxNumberBox',
+      cssClass: CLASSES.dayOfMonthEditor,
       label: labelVisible
         ? { text: messageLocalization.format('dxScheduler-recurrenceRepeatOn') }
         : { visible: false },
@@ -293,6 +298,7 @@ export class RecurrenceForm {
         {
           itemType: 'simple',
           name: EDITOR_NAMES.frequency,
+          cssClass: CLASSES.frequencyEditor,
           colSpan: 1,
           editorType: 'dxSelectBox',
           label: {
@@ -385,6 +391,7 @@ export class RecurrenceForm {
           itemType: 'simple',
           name: EDITOR_NAMES.byMonth,
           colSpan: 1,
+          cssClass: CLASSES.byMonthEditor,
           editorType: 'dxSelectBox',
           label: {
             text: messageLocalization.format('dxScheduler-recurrenceRepeatEvery'),
@@ -443,7 +450,7 @@ export class RecurrenceForm {
       name: EDITOR_NAMES.repeatEnd,
       colSpan: 1,
       editorType: 'dxRadioGroup',
-      cssClass: CLASSES.recurrenceEndRadio,
+      cssClass: CLASSES.recurrenceEndEditors,
       label: {
         visible: false,
       },
@@ -499,6 +506,7 @@ export class RecurrenceForm {
         {
           itemType: 'simple',
           name: EDITOR_NAMES.count,
+          cssClass: CLASSES.countEditor,
           label: {
             visible: false,
           },

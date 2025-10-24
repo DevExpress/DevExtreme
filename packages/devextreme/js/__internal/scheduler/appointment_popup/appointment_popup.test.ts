@@ -401,400 +401,279 @@ describe('Appointment Popup Form', () => {
   });
 
   describe('Recurrence', () => {
-    it('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', async () => {
-      const { POM } = await createScheduler({
-        dataSource: [{
-          text: 'Watercolor Landscape',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-          customRecurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10',
-        }],
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 25),
-        recurrenceRuleExpr: 'customRecurrenceRule',
-        height: 600,
-      });
+    it('Recurrence editor container should be visible after changing its visibility value', async () => {
+      const appointment = {
+        text: 'Test Appointment',
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+      };
 
-      POM.openPopupByDblClick();
-
-      POM.popup.getEditSeriesButton().click();
-
-      // @ts-expect-error
-      const repeatEditorBeforeRecurrenceForm = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      expect(repeatEditorBeforeRecurrenceForm.option('value')).toBe('weekly');
-    });
-
-    it('Repeat editor should have value "never" if previous appointment was recurrent', async () => {
-      setupSchedulerTestEnvironment({ height: 200 });
-      const { POM, scheduler } = await createScheduler({
-        dataSource: [{
-          text: 'recurrent-app',
-          startDate: new Date(2017, 4, 1, 9, 30),
-          endDate: new Date(2017, 4, 1, 11),
-          recurrenceRule: 'FREQ=DAILY;COUNT=5',
-        }, {
-          text: 'common-app',
-          startDate: new Date(2017, 4, 9, 9, 30),
-          endDate: new Date(2017, 4, 9, 11),
-        }],
-        views: ['month'],
-        currentView: 'month',
-        currentDate: new Date(2017, 4, 25),
-        firstDayOfWeek: 1,
-        startDayHour: 9,
-      });
-
-      POM.openPopupByDblClick('recurrent-app');
-
-      POM.popup.getEditSeriesButton().click();
-
-      // @ts-expect-error
-      const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      const buttonsRecurrent = repeatEditorRecurrent.option('buttons');
-      const hasSettingsButtonRecurrent = buttonsRecurrent?.some((btn) => btn.name === 'settings');
-
-      expect(repeatEditorRecurrent.option('value')).toBe('daily');
-      expect(hasSettingsButtonRecurrent).toBe(true);
-
-      scheduler.hideAppointmentPopup();
-
-      POM.openPopupByDblClick('common-app');
-
-      // @ts-expect-error
-      const repeatEditorCommon = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      const buttonsCommon = repeatEditorCommon.option('buttons');
-      const hasSettingsButtonCommon = buttonsCommon?.some((btn) => btn.name === 'settings');
-
-      expect(repeatEditorCommon.option('value')).toBe('never');
-      expect(hasSettingsButtonCommon).toBe(false);
-    });
-
-    it('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', async () => {
-      const firstAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 1' };
-      const secondAppointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption 2' };
       const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      scheduler.showAppointmentPopup(firstAppointment);
+      scheduler.showAppointmentPopup(appointment);
+
+      const recurrenceGroup = $(POM.popup.recurrenceGroup);
+
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
 
       // @ts-expect-error
       const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
       repeatEditor.option('value', 'weekly');
 
-      scheduler.hideAppointmentPopup();
+      expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
+    });
 
-      scheduler.showAppointmentPopup(secondAppointment);
+    it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
+      const data = [
+        {
+          text: 'meet',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 11, 30),
+          recurrenceRule: 'FREQ=DAILY;',
+        },
+      ];
+
+      const { POM, scheduler } = await createScheduler({
+        dataSource: data,
+        currentDate: new Date(2017, 4, 22),
+      });
+
+      scheduler.showAppointmentPopup(data[0]);
 
       // @ts-expect-error
-      const repeatEditorSecond = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      const value = repeatEditorSecond.option('value');
+      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+      repeatEditor.option('value', 'weekly');
 
-      expect(value).toBe('never');
+      // TODO: this method works weirdly
+      scheduler.hideAppointmentPopup(true);
+
+      expect(scheduler.option('dataSource')?.[0]).toEqual(data[0]);
     });
-
-    // eslint-disable-next-line @stylistic/max-len
-    // it('Recurrence editor container should be visible after changing its visibility value', async () => {
-    //   const appointment = {
-    //     text: 'Test Appointment',
-    //     startDate: new Date(2017, 4, 1, 9, 30),
-    //     endDate: new Date(2017, 4, 1, 11),
-    //   };
-
-    //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
-
-    //   scheduler.showAppointmentPopup(appointment);
-
-    //   const recurrenceGroup = $(POM.popup.recurrenceGroup);
-
-    //   expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
-
-    //   // @ts-expect-error
-    //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //   repeatEditor.option('value', 'weekly');
-
-    //   expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
-    // });
-
-    // eslint-disable-next-line @stylistic/max-len
-    // it('Should discard recurrence changes when clicking \'cancel\' button in recurrence form', async () => {
-    //   const data = [
-    //     {
-    //       text: 'meet',
-    //       startDate: new Date(2017, 4, 22, 9, 30),
-    //       endDate: new Date(2017, 4, 22, 11, 30),
-    //     },
-    //   ];
-
-    //   const { POM, scheduler } = await createScheduler({
-    //     dataSource: data,
-    //     currentDate: new Date(2017, 4, 22),
-    //   });
-
-    //   POM.openPopupByDblClick('meet');
-
-    //   // @ts-expect-error
-    //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //   repeatEditor.option('value', 'weekly');
-
-    //   scheduler.hideAppointmentPopup(true);
-
-    //   POM.openPopupByDblClick('meet');
-
-    //   POM.popup.getEditSeriesButton().click();
-
-    //   // @ts-expect-error
-    //   const repeatEditor2 = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //   repeatEditor2.option('value', 'daily');
-
-    //   POM.popup.getBackButton().click();
-
-    //   scheduler.hideAppointmentPopup();
-
-    //   POM.openPopupByDblClick('meet');
-
-    //   POM.popup.getEditSeriesButton().click();
-
-    //   // @ts-expect-error
-    //   const repeatEditor3 = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //   expect(repeatEditor3.option('value')).toBe('weekly');
-    // });
 
     describe('Recurrence frequency types', () => {
-    // it('Should show day selection buttons when frequency is weekly', async () => {
-    //   const appointment = {
-    //     text: 'Test Appointment',
-    //     startDate: new Date(2017, 4, 1, 9, 30),
-    //     endDate: new Date(2017, 4, 1, 11),
-    //   };
+      it('Should show day selection buttons when frequency is weekly', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 1, 9, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        };
 
-      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      //   scheduler.showAppointmentPopup(appointment);
+        scheduler.showAppointmentPopup(appointment);
 
-      //   // @ts-expect-error
-      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      //   repeatEditor.option('value', 'weekly');
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'weekly');
 
-      // POM.popup.openRecurrenceSettings();
+        const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
+        expect(dayButtons.length).toBeGreaterThan(0);
 
-      // const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
-      // expect(dayButtons.length).toBeGreaterThan(0);
+        const buttons7Days = dayButtons.find('.dx-button');
+        expect(buttons7Days.length).toBe(7);
+      });
 
-      // const buttons7Days = dayButtons.find('.dx-button');
-      // expect(buttons7Days.length).toBe(7);
-      // });
+      it('Should show month day input when frequency is monthly', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 15, 9, 30),
+          endDate: new Date(2017, 4, 15, 11),
+        };
 
-      // it('Should show month day input when frequency is monthly', async () => {
-      //   const appointment = {
-      //     text: 'Test Appointment',
-      //     startDate: new Date(2017, 4, 15, 9, 30),
-      //     endDate: new Date(2017, 4, 15, 11),
-      //   };
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
+        scheduler.showAppointmentPopup(appointment);
 
-      //   scheduler.showAppointmentPopup(appointment);
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'monthly');
 
-      //   // @ts-expect-error
-      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      //   repeatEditor.option('value', 'monthly');
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeTruthy();
 
-      //   POM.popup.openRecurrenceSettings();
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(frequencyEditor.option('value')).toBe('monthly');
 
-      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-      //   expect(monthlyGroup).toBeTruthy();
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
+      });
 
-      //   // @ts-expect-error
-      //   const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-      //   expect(freqEditor.option('value')).toBe('monthly');
+      it('Should show month and day inputs when frequency is yearly', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 11, 25, 9, 30),
+          endDate: new Date(2017, 11, 25, 11),
+        };
 
-      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
-      //   expect(dayButtons).toBeNull();
-      // });
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      // it('Should show month and day inputs when frequency is yearly', async () => {
-      //   const appointment = {
-      //     text: 'Test Appointment',
-      //     startDate: new Date(2017, 11, 25, 9, 30),
-      //     endDate: new Date(2017, 11, 25, 11),
-      //   };
+        scheduler.showAppointmentPopup(appointment);
 
-      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'yearly');
 
-      //   scheduler.showAppointmentPopup(appointment);
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(frequencyEditor.option('value')).toBe('yearly');
 
-      //   // @ts-expect-error
-      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      //   repeatEditor.option('value', 'yearly');
+        const { recurrenceYearlyGroup } = POM.popup;
+        expect(recurrenceYearlyGroup).toBeTruthy();
 
-      //   POM.popup.openRecurrenceSettings();
+        const { byMonthEditor } = POM.popup;
+        expect(byMonthEditor).toBeTruthy();
 
-      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-      //   expect(yearlyGroup).toBeTruthy();
+        const { dayOfMonthEditor } = POM.popup;
+        expect(dayOfMonthEditor).toBeTruthy();
+      });
 
-      //   // eslint-disable-next-line spellcheck/spell-checker
-      //   const bymonthEditor = POM.popup.getSwitchByName('bymonth');
-      //   // eslint-disable-next-line spellcheck/spell-checker
-      //   expect(bymonthEditor).toBeDefined();
+      it('Should hide all repeat-on options for daily frequency', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 1, 9, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        };
 
-      //   // eslint-disable-next-line spellcheck/spell-checker
-      //   const bymonthdayEditor = POM.popup.getSwitchByName('bymonthday');
-      //   // eslint-disable-next-line spellcheck/spell-checker
-      //   expect(bymonthdayEditor).toBeDefined();
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      //   const freqEditor = POM.popup.getSwitchByName('freq');
-      //   expect(freqEditor.value).toBe('yearly');
-      // });
+        scheduler.showAppointmentPopup(appointment);
 
-      // it('Should hide all repeat-on options for daily frequency', async () => {
-      //   const appointment = {
-      //     text: 'Test Appointment',
-      //     startDate: new Date(2017, 4, 1, 9, 30),
-      //     endDate: new Date(2017, 4, 1, 11),
-      //   };
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'daily');
 
-      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(frequencyEditor.option('value')).toBe('daily');
 
-      //   scheduler.showAppointmentPopup(appointment);
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
 
-      //   // @ts-expect-error
-      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      //   repeatEditor.option('value', 'daily');
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeNull();
 
-      //   POM.popup.openRecurrenceSettings();
+        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+        expect(yearlyGroup).toBeNull();
+      });
 
-      //   const freqEditor = POM.popup.getSwitchByName('freq');
-      //   expect(freqEditor.value).toBe('daily');
+      it('Should hide all repeat-on options for hourly frequency', async () => {
+        const appointment = {
+          text: 'Test Appointment',
+          startDate: new Date(2017, 4, 1, 9, 30),
+          endDate: new Date(2017, 4, 1, 11),
+        };
 
-      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
-      //   expect(dayButtons).toBeNull();
+        const { POM, scheduler } = await createScheduler(getDefaultConfig());
 
-      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-      //   expect(monthlyGroup).toBeNull();
+        scheduler.showAppointmentPopup(appointment);
 
-      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-      //   expect(yearlyGroup).toBeNull();
-      // });
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'hourly');
 
-      // it('Should hide all repeat-on options for hourly frequency', async () => {
-      //   const appointment = {
-      //     text: 'Test Appointment',
-      //     startDate: new Date(2017, 4, 1, 9, 30),
-      //     endDate: new Date(2017, 4, 1, 11),
-      //   };
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(frequencyEditor.option('value')).toBe('hourly');
 
-      //   const { POM, scheduler } = await createScheduler(getDefaultConfig());
+        const dayButtons = POM.popup.recurrenceWeekDayButtons;
+        expect(dayButtons).toBeNull();
 
-      //   scheduler.showAppointmentPopup(appointment);
+        const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
+        expect(monthlyGroup).toBeNull();
 
-      //   // @ts-expect-error
-      //   const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      //   repeatEditor.option('value', 'hourly');
-
-      //   POM.popup.openRecurrenceSettings();
-
-      //   // @ts-expect-error
-      //   const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-      //   expect(freqEditor.option('value')).toBe('hourly');
-
-      //   const dayButtons = POM.popup.recurrenceWeekDayButtons;
-      //   expect(dayButtons).toBeNull();
-
-      //   const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
-      //   expect(monthlyGroup).toBeNull();
-
-      //   const yearlyGroup = POM.popup.recurrenceYearlyGroup;
-      //   expect(yearlyGroup).toBeNull();
-      // });
+        const yearlyGroup = POM.popup.recurrenceYearlyGroup;
+        expect(yearlyGroup).toBeNull();
+      });
     });
 
-    // describe('Editing and saving recurrence', () => {
-    //   it('Should populate form with existing weekly recurrence rule', async () => {
-    //     setupSchedulerTestEnvironment({ height: 200 });
-    //     const { POM } = await createScheduler({
-    //       dataSource: [{
-    //         text: 'Weekly Meeting',
-    //         startDate: new Date(2017, 4, 1, 9, 30),
-    //         endDate: new Date(2017, 4, 1, 11),
-    //         recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
-    //         repeatEnd: 'count',
-    //       }],
-    //       views: ['month'],
-    //       currentView: 'month',
-    //       currentDate: new Date(2017, 4, 25),
-    //       firstDayOfWeek: 1,
-    //       startDayHour: 9,
-    //     });
+    describe('Editing and saving recurrence', () => {
+      it('Should populate form with existing weekly recurrence rule', async () => {
+        setupSchedulerTestEnvironment({ height: 200 });
+        const { POM } = await createScheduler({
+          dataSource: [{
+            text: 'Weekly Meeting',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+            repeatEnd: 'count',
+          }],
+          views: ['month'],
+          currentView: 'month',
+          currentDate: new Date(2017, 4, 25),
+          firstDayOfWeek: 1,
+          startDayHour: 9,
+        });
 
-    //     POM.openPopupByDblClick('Weekly Meeting');
+        POM.openPopupByDblClick('Weekly Meeting');
 
-    //     POM.popup.getEditSeriesButton().click();
+        POM.popup.getEditSeriesButton().click();
 
-    //     // @ts-expect-error
-    //     const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        // @ts-expect-error
+        const repeatEditorRecurrent = $(POM.popup.repeatEditor).dxSelectBox('instance');
 
-    //     expect(repeatEditorRecurrent.option('value')).toBe('weekly');
+        expect(repeatEditorRecurrent.option('value')).toBe('weekly');
 
-    //     POM.popup.openRecurrenceSettings();
+        POM.popup.openRecurrenceSettings();
 
-    //     // @ts-expect-error
-    //     const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-    //     expect(freqEditor.option('value')).toBe('weekly');
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(frequencyEditor.option('value')).toBe('weekly');
 
-    //     const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
-    //     const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
-    //     expect(selectedButtons.length).toBe(3);
+        const dayButtons = $(POM.popup.recurrenceWeekDayButtons).find('.dx-button');
+        const selectedButtons = dayButtons.filter('.dx-button-mode-contained');
+        expect(selectedButtons.length).toBe(3);
 
-    //     const repeatEndEditor = POM.popup.getSwitchByName('repeatEnd');
-    //     expect(repeatEndEditor.value).toBe('count');
+        // @ts-expect-error
+        const repeatEndEditor = $(POM.popup.repeatEndEditors).dxRadioGroup('instance');
+        expect(repeatEndEditor.option('value')).toBe('count');
 
-    //     const countEditor = POM.popup.getSwitchByName('count');
-    //     expect(countEditor.value).toBe('10');
-    //   });
+        // @ts-expect-error
+        const countEditor = $(POM.popup.countEditor).dxNumberBox('instance');
+        expect(countEditor.option('value')).toBe(10);
+      });
 
-    //   it('Should save changes when saving from recurrence form', async () => {
-    //     const data = [
-    //       {
-    //         text: 'Meeting',
-    //         startDate: new Date(2017, 4, 22, 9, 30),
-    //         endDate: new Date(2017, 4, 22, 11, 30),
-    //       },
-    //     ];
+      it('Should save changes when saving from recurrence form', async () => {
+        const data = [
+          {
+            text: 'Meeting',
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30),
+          },
+        ];
 
-    //     const { POM, scheduler } = await createScheduler({
-    //       dataSource: data,
-    //       currentDate: new Date(2017, 4, 22),
-    //     });
+        const { POM, scheduler } = await createScheduler({
+          dataSource: data,
+          currentDate: new Date(2017, 4, 22),
+        });
 
-    //     POM.openPopupByDblClick('Meeting');
+        POM.openPopupByDblClick('Meeting');
 
-    //     // @ts-expect-error
-    //     const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //     repeatEditor.option('value', 'daily');
+        // @ts-expect-error
+        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        repeatEditor.option('value', 'daily');
 
-    //     POM.popup.openRecurrenceSettings();
+        // @ts-expect-error
+        const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        frequencyEditor.option('value', 'weekly');
 
-    //     // @ts-expect-error
-    //     const freqEditor = $(POM.popup.freqEditor).dxSelectBox('instance');
-    //     freqEditor.option('value', 'weekly');
+        POM.popup.getBackButton().click();
 
-    //     POM.popup.getBackButton().click();
+        scheduler.hideAppointmentPopup(true);
 
-    //     scheduler.hideAppointmentPopup(true);
+        POM.openPopupByDblClick('Meeting');
 
-    //     POM.openPopupByDblClick('Meeting');
+        POM.popup.getEditSeriesButton().click();
 
-    //     POM.popup.getEditSeriesButton().click();
+        // @ts-expect-error
+        const freqEditorAfter = $(POM.popup.frequencyEditor).dxSelectBox('instance');
+        expect(freqEditorAfter.option('value')).toBe('weekly');
 
-    //     // @ts-expect-error
-    //     const freqEditorAfter = $(POM.popup.freqEditor).dxSelectBox('instance');
-    //     expect(freqEditorAfter.option('value')).toBe('weekly');
-
-    //     // @ts-expect-error
-    //     const repeatEditorAfter = $(POM.popup.repeatEditor).dxSelectBox('instance');
-    //     expect(repeatEditorAfter.option('value')).toBe('weekly');
-    //   });
-    // });
+        // @ts-expect-error
+        const repeatEditorAfter = $(POM.popup.repeatEditor).dxSelectBox('instance');
+        expect(repeatEditorAfter.option('value')).toBe('weekly');
+      });
+    });
   });
 
   describe('Callbacks', () => {

@@ -566,7 +566,7 @@ export class AppointmentForm {
               if (e.value === repeatNeverValue) {
                 const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
                 this.dxForm.updateData(recurrenceRuleExpr, undefined);
-              } else if (e.event) {
+              } else if (e.previousValue !== undefined && e.value !== e.previousValue) {
                 this.showRecurrenceGroup();
               }
             },

@@ -47,20 +47,28 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
   }
 
-  get freqEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-freq-editor .dx-selectbox.dx-widget');
+  get frequencyEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget');
   }
 
   get intervalEditor(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-recurrence-interval-editor .dx-textbox.dx-widget');
   }
 
+  get byMonthEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget');
+  }
+
+  get dayOfMonthEditor(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-editor .dx-numberbox.dx-widget');
+  }
+
   get countEditor(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-recurrence-count-editor .dx-numberbox.dx-widget');
   }
 
-  get repeatEndEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-end-editor .dx-radiogroup.dx-widget');
+  get repeatEndEditors(): Element | null {
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors .dx-radiogroup.dx-widget');
   }
 
   get recurrenceGroup(): Element | null {
@@ -76,11 +84,11 @@ export class PopupModel {
   }
 
   get recurrenceWeekDayButtons(): Element | null {
-    return this.element.querySelector('.dx-scheduler-recurrence-byday-buttons');
+    return this.element.querySelector('.dx-scheduler-days-of-week-buttons');
   }
 
   get recurrenceMonthDayInput(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-monthly-group [type="text"]');
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-group [type="text"]');
   }
 
   get recurrenceYearlyInputs(): NodeListOf<Element> {
@@ -96,11 +104,11 @@ export class PopupModel {
   }
 
   get recurrenceMonthlyGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-monthly-group');
+    return this.element.querySelector('.dx-scheduler-form-day-of-month-group');
   }
 
   get recurrenceYearlyGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-on-yearly-group');
+    return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
   }
 
   getLabelIdByText = (labelText: string): string => {
