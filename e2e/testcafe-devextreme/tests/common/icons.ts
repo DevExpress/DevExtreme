@@ -314,7 +314,7 @@ const iconSet = {
   addcirclefilled: '\f214',
   zoomoutoutline: '\f215',
   zoomoutfilled: '\f216',
-  zoominoutlined: '\f217',
+  zoominoutline: '\f217',
   zoominfilled: '\f218',
   calendardatestartoutline: '\f219',
   calendardatestartfilled: '\f220',
