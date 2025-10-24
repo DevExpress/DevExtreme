@@ -87,7 +87,7 @@ const weekDays = dateLocalization.getDayNames('abbreviated').map((dayName) => da
 
 const RECURRENCE_GROUP_NAME = 'recurrenceGroup';
 
-export class RecurrentForm {
+export class RecurrenceForm {
   private readonly scheduler: any;
 
   private _dxForm?: dxForm;

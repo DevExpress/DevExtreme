@@ -17,7 +17,7 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
-import { RecurrentForm } from './m_recurrent_form';
+import { RecurrenceForm } from './m_recurrent_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
 const CLASSES = {
@@ -107,7 +107,7 @@ export class AppointmentForm {
 
   private _dxForm?: dxForm;
 
-  private _recurrentForm!: RecurrentForm;
+  private _recurrenceForm!: RecurrenceForm;
 
   private _popup!: any;
 
@@ -155,8 +155,8 @@ export class AppointmentForm {
   dispose(): void {
     this._dxForm?.dispose();
     this._dxForm = undefined;
-    if (this._recurrentForm) {
-      this._recurrentForm.dxForm = undefined;
+    if (this._recurrenceForm) {
+      this._recurrenceForm.dxForm = undefined;
     }
   }
 
@@ -165,8 +165,8 @@ export class AppointmentForm {
 
     const mainGroup = this.createMainFormGroup();
 
-    this._recurrentForm = new RecurrentForm(this.scheduler);
-    const recurrenceGroup = this._recurrentForm.createRecurrenceFormGroup();
+    this._recurrenceForm = new RecurrenceForm(this.scheduler);
+    const recurrenceGroup = this._recurrenceForm.createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
 
@@ -215,7 +215,7 @@ export class AppointmentForm {
       },
       onInitialized: (e): void => {
         this._dxForm = e.component;
-        this._recurrentForm.dxForm = this.dxForm;
+        this._recurrenceForm.dxForm = this.dxForm;
       },
     } as FormProperties) as dxForm;
   }
@@ -677,7 +677,7 @@ export class AppointmentForm {
 
     const repeatEditorValue = this.dxForm.getEditor(EDITOR_NAMES.repeat)?.option('value');
 
-    this._recurrentForm.updateRecurrenceFormValues(
+    this._recurrenceForm.updateRecurrenceFormValues(
       repeatEditorValue,
       this.recurrenceRuleRaw,
       this.startDate,
@@ -697,7 +697,7 @@ export class AppointmentForm {
     this._popup.updateToolbarForMainGroup();
 
     if (saveRecurrenceValue) {
-      const { recurrenceRule } = this._recurrentForm;
+      const { recurrenceRule } = this._recurrenceForm;
       const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
       this.dxForm.updateData(
