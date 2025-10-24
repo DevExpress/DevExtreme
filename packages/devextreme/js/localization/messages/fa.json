@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "فایل انتخابی مجاز نمی باشد",
         "dxFileUploader-invalidMaxFileSize": "فایل حجم بیشتری از مقدار مجاز دارد",
         "dxFileUploader-invalidMinFileSize": "فایل حجم کمتری از مقدار مجاز دارد",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "از",
         "dxRangeSlider-ariaTill": "تا",

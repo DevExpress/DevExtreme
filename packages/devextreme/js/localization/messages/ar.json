@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "نوع الملف غير مسموح به",
         "dxFileUploader-invalidMaxFileSize": "الملف كبير جدا",
         "dxFileUploader-invalidMinFileSize": "الملف صغير جدًا",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "من عند",
         "dxRangeSlider-ariaTill": "حتى",

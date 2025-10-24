@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Dosya türüne izin verilmiyor",
         "dxFileUploader-invalidMaxFileSize": "Dosya çok büyük",
         "dxFileUploader-invalidMinFileSize": "Dosya çok küçük",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "İtibaren",
         "dxRangeSlider-ariaTill": "Kadar",

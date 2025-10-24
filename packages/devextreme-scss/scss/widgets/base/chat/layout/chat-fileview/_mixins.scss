@@ -1,5 +1,5 @@
 @mixin chat-file(
-  $chat-file-container-min-width,
+  $chat-file-container-width,
   $chat-file-container-padding,
   $chat-file-container-background-color,
   $chat-file-container-border-radius,
@@ -11,7 +11,7 @@
   $chat-file-file-size-max-width
 ) {
   .dx-chat-file {
-    min-width: $chat-file-container-min-width;
+    width: $chat-file-container-width;
     padding: $chat-file-container-padding;
     background-color: $chat-file-container-background-color;
     border-radius: $chat-file-container-border-radius;
@@ -44,5 +44,13 @@
     width: $chat-file-button-size;
     height: $chat-file-button-size;
     flex-basis: $chat-file-button-size;
+  }
+}
+
+@mixin chat-fileview(
+  $chat-file-view-items-gap,
+) {
+  .dx-chat-file-view {
+    gap: $chat-file-view-items-gap;
   }
 }
