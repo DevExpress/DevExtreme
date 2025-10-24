@@ -662,7 +662,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _toggleFileContainerAria(applyAria: boolean): void {
     const aria = {
       role: applyAria ? 'list' : null,
-      'aria-label': applyAria ? 'File list' : null,
+      'aria-label': applyAria
+        ? messageLocalization.format('dxFileUploader-fileListLabel')
+        : null,
     };
 
     // @ts-expect-error attr type should be extdened
@@ -813,7 +815,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          'aria-label': `Remove file ${file.value.name}`,
+          // @ts-expect-error foramat params should be extended
+          'aria-label': messageLocalization.format('dxFileUploader-removeFileButtonLabel', file.value.name),
         },
       },
     );
@@ -841,7 +844,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
         elementAttr: {
-          'aria-label': `Upload file ${file.value.name}`,
+          // @ts-expect-error foramat params should be extended
+          'aria-label': messageLocalization.format('dxFileUploader-uploadFileButtonLabel', file.value.name),
         },
       },
     );

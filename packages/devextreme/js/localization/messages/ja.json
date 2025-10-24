@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "このファイルの種類を使用できません",
         "dxFileUploader-invalidMaxFileSize": "ファイルが大きすぎます",
         "dxFileUploader-invalidMinFileSize": "ファイルが小さすぎます",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "から",
         "dxRangeSlider-ariaTill": "まで",

@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Ο τυπος του αρχείου δεν είναι επιτρεπτός",
         "dxFileUploader-invalidMaxFileSize": "Το αρχείο είναι πολύ μεγάλο",
         "dxFileUploader-invalidMinFileSize": "Το αρχειο είναι πολυ μικρό",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Από",
         "dxRangeSlider-ariaTill": "Εώς",

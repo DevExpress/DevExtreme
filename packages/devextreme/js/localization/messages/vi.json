@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Kiểu tập tin không cho phép",
         "dxFileUploader-invalidMaxFileSize": "Tập tin quá lớn",
         "dxFileUploader-invalidMinFileSize": "Tập tin quá nhỏ",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Từ",
         "dxRangeSlider-ariaTill": "Vẫn",
