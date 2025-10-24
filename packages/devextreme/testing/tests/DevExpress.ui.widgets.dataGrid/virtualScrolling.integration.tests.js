@@ -11,7 +11,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'common/core/animation/translator';
 import dataUtils from 'core/element_data';
 import ODataStore from 'common/data/odata/store';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -1361,10 +1360,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
     // T878343
     QUnit.test('cellValue should work correctly with virtual scrolling and row rendering', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             dataSource: {
