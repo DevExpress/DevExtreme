@@ -127,39 +127,68 @@ QUnit.module('Nested scrollable styles', () => {
             checkElementStyles(innerScrollableElement.querySelector(`.${SCROLLABLE_CONTAINER_CLASS}`),
                 (config.innerUseNative ? expectedNative : expectedSimulated)[config.innerDirection], 'innerScrollable');
         });
+    });
 
-        QUnit.test(`check scrollbar styles, config: ${config.message}`, function(assert) {
+    const checkStyles = function(scrollableElement, direction, expectedSimulated, message) {
+        if(direction === 'both') {
+            const horizontalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_HORIZONTAL_CLASS}`);
+            const verticalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_VERTICAL_CLASS}`);
+
+            checkElementStyles(horizontalScrollbars[horizontalScrollbars.length - 1], expectedSimulated, message);
+            checkElementStyles(verticalScrollbars[verticalScrollbars.length - 1], expectedSimulated, message);
+        } else {
+            const scrollbars = scrollableElement.querySelectorAll(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+            checkElementStyles(scrollbars[scrollbars.length - 1], expectedSimulated, message);
+        }
+    };
+
+    const notOuterUseNativeConfigs = [];
+    [false, true].forEach((rtlEnabled) => {
+        ['vertical', 'horizontal', 'both'].forEach((outerDirection) => {
+            ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
+                const config = { rtlEnabled, outerDirection, showScrollbar, outerUseNative: false };
+                config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
+                configs.push(notOuterUseNativeConfigs);
+            });
+        });
+    });
+
+    notOuterUseNativeConfigs.forEach(config => {
+        QUnit.test(`check scrollbar styles, config: ${config.message}`, function() {
             const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
             const outerScrollableElement = $('#outerScrollable').get(0);
-            const innerScrollableElement = $('#innerScrollable').get(0);
-
-            new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: config.outerUseNative }));
-            new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
-
             const expectedSimulated = {
                 display: config.showScrollbar === 'never' ? 'none' : 'block'
             };
 
-            const checkStyles = function(scrollableElement, direction, message) {
-                if(direction === 'both') {
-                    const horizontalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_HORIZONTAL_CLASS}`);
-                    const verticalScrollbars = scrollableElement.querySelectorAll(`.${SCROLLBAR_VERTICAL_CLASS}`);
+            new Scrollable(outerScrollableElement, extend(options, { width: 200, height: 200, direction: config.outerDirection, useNative: false }));
 
-                    checkElementStyles(horizontalScrollbars[horizontalScrollbars.length - 1], expectedSimulated, message);
-                    checkElementStyles(verticalScrollbars[verticalScrollbars.length - 1], expectedSimulated, message);
-                } else {
-                    const scrollbars = scrollableElement.querySelectorAll(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
-                    checkElementStyles(scrollbars[scrollbars.length - 1], expectedSimulated, message);
-                }
+            checkStyles(outerScrollableElement, config.outerDirection, expectedSimulated, 'outerScrollable');
+        });
+    });
+
+    const notInnerUseNativeConfigs = [];
+    [false, true].forEach((rtlEnabled) => {
+        ['vertical', 'horizontal', 'both'].forEach((innerDirection) => {
+            ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
+                const config = { rtlEnabled, innerDirection, showScrollbar, innerUseNative: false };
+                config.message = Object.keys(config).reduce((message, key) => message += `${key}: ${config[key]}, `, '');
+                notInnerUseNativeConfigs.push(config);
+            });
+        });
+    });
+
+    notInnerUseNativeConfigs.forEach(config => {
+        QUnit.test(`check scrollbar styles, config: ${config.message}`, function() {
+            const options = { showScrollbar: config.showScrollbar, rtlEnabled: config.rtlEnabled };
+            const innerScrollableElement = $('#innerScrollable').get(0);
+            const expectedSimulated = {
+                display: config.showScrollbar === 'never' ? 'none' : 'block'
             };
 
-            if(!config.outerUseNative) {
-                checkStyles(outerScrollableElement, config.outerDirection, 'outerScrollable');
-            } else if(!config.innerUseNative) {
-                checkStyles(innerScrollableElement, config.innerDirection, 'innerScrollable');
-            } else {
-                assert.ok(true);
-            }
+            new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: false }));
+
+            checkStyles(innerScrollableElement, config.innerDirection, expectedSimulated, 'innerScrollable');
         });
     });
 });
