@@ -1,8 +1,9 @@
 import { loadSync } from 'opentype.js';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { join, extname } from 'path';
 
 const BASE_PATH = join(__dirname, '..');
+const SVG_ICONS_ROOT = `${BASE_PATH}/images/icons`;
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
@@ -20,6 +21,30 @@ describe('Equals svg to font', () => {
 
     return svgFiles.length;
   };
+
+  const findSvgWithComments = (folders: string[]): string[] => {
+    const result: string[] = [];
+
+    folders.forEach((dir) => {
+      let files: string[] = [];
+
+      try {
+        files = readdirSync(dir);
+      } catch (e) {
+        return;
+      }
+
+      files.filter((f) => extname(f) === '.svg').forEach((file) => {
+        const content = readFileSync(join(dir, file), 'utf8');
+
+        if (content.includes('<!--')) {
+          result.push(`${dir}/${file}`);
+        }
+      });
+    });
+
+    return result;
+  }
 
   test('generic themes', () => {
     const countElementGenericFont = getCountElementInFont(`${BASE_PATH}/icons/dxicons.ttf`);
@@ -53,5 +78,20 @@ describe('Equals svg to font', () => {
 
     expect(differenceMaterial.toString()).toBe(differenceGeneric.toString());
     expect(differenceFluent.toString()).toBe(differenceGeneric.toString());
+  });
+
+  test('svg do not contain comments', () => {
+    const folders = [
+      `${SVG_ICONS_ROOT}/generic`,
+      `${SVG_ICONS_ROOT}/material`,
+      `${SVG_ICONS_ROOT}/fluent`,
+    ];
+    const svgWithComments = findSvgWithComments(folders);
+
+    if (svgWithComments.length) {
+      throw new Error(`Found comments in: ${svgWithComments.join(', ')}`);
+    }
+
+    expect(svgWithComments).toHaveLength(0);
   });
 });
