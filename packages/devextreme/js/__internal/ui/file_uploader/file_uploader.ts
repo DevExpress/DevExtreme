@@ -652,10 +652,21 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
 
     this.$element().toggleClass(FILEUPLOADER_SHOW_FILE_LIST_CLASS, showFileList);
+    this._toggleFileContainerAria(Boolean(showFileList && this._files?.length));
     this._toggleFileUploaderEmptyClassName();
     this._updateFileNameMaxWidth();
 
     this._validationMessage?.repaint();
+  }
+
+  _toggleFileContainerAria(applyAria: boolean): void {
+    const aria = {
+      role: applyAria ? 'list' : null,
+      'aria-label': applyAria ? 'File list' : null,
+    };
+
+    // @ts-expect-error attr type should be extdened
+    this._$filesContainer?.attr(aria);
   }
 
   _renderFile(file: FileUploaderItem): void {
@@ -667,7 +678,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
     const $fileContainer = $('<div>')
       .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
-      .appendTo(this._$filesContainer);
+      .appendTo(this._$filesContainer)
+      .attr('role', 'listitem');
 
     this._renderFileIcon(value.name, $fileContainer);
 
@@ -800,6 +812,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         integrationOptions: {},
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
+        elementAttr: {
+          'aria-label': `Remove file ${file.value.name}`,
+        },
       },
     );
 
@@ -825,6 +840,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
         icon: 'upload',
         hoverStateEnabled,
         stylingMode: _buttonStylingMode,
+        elementAttr: {
+          'aria-label': `Upload file ${file.value.name}`,
+        },
       },
     );
 
@@ -858,6 +876,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._preventRecreatingFiles = true;
     this.option({ value: valueCopy });
     this._preventRecreatingFiles = false;
+
+    if (this._files?.length === 0) {
+      this._toggleFileContainerAria(false);
+    }
 
     this._toggleFileUploaderEmptyClassName();
     this._resetInputValue(true);
