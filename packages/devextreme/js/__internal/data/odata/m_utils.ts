@@ -139,7 +139,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
     if (!(this[key] instanceof Date)) {
       return value;
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     value = formatISO8601(this[key]);
     switch (protocolVersion) {
       case 2:
@@ -443,10 +443,6 @@ const serializeValueV2 = (value) => {
     return value.valueOf();
   }
 
-  if (typeof value === 'string' && ISO8601_DATE_REGEX.test(value)) {
-    return formatISO8601(new Date(value), false, false);
-  }
-
   if (typeof value === 'string') {
     return serializeString(value);
   }
@@ -489,6 +485,31 @@ export const keyConverters = {
   Single: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}f`)),
 
   Decimal: (value) => (value instanceof EdmLiteral ? value : new EdmLiteral(`${value}m`)),
+
+  DateTime: (value) => {
+    // If value is already a Date object, return it
+    if (value instanceof Date) {
+      return value;
+    }
+
+    // If string, try to convert to Date
+    if (typeof value === 'string') {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        throw new Error(`Invalid DateTime value: ${value}`);
+      }
+      return date;
+    }
+
+    // If number (timestamp), convert to Date
+    if (typeof value === 'number') {
+      return new Date(value);
+    }
+
+    throw new Error(`Cannot convert ${typeof value} to DateTime`);
+  },
+
+  DateTimeOffset: (value) => keyConverters.DateTime(value),
 };
 
 export const convertPrimitiveValue = (type, value) => {
