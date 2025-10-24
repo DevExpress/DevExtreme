@@ -30,7 +30,6 @@ function run_test_impl {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
     [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
-    [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
     [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
     if [ -n "$TZ" ]; then

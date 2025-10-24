@@ -146,14 +146,14 @@ const onRowInserted = (e: DxDataGridTypes.RowInsertedEvent) => {
 function calculateFilterExpression(
   this: DxDataGridTypes.Column,
   filterValue: any,
-  selectedFilterOperations: string,
+  selectedFilterOperations: string | null,
   target: string,
-): any {
+) {
   if (target === 'search' && typeof filterValue === 'string') {
     return [this.dataField, 'contains', filterValue];
   }
 
-  return (rowData: Task) => (rowData.AssignedEmployee || []).includes(filterValue);
+  return ((rowData: Task) => (rowData.AssignedEmployee || []).includes(filterValue)) as () => any;
 }
 </script>
 <style>

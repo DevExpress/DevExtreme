@@ -7,8 +7,6 @@ node_modules
 /js/bundles/dx.custom.js
 /js/common/core/localization/default_messages.js
 /js/common/core/localization/cldr-data
-/js/renovation/**/*.j.tsx
-/js/renovation/code_coverage
 /scss/bundles/*.scss
 RawLog.txt
 testing/CompletedSuites.txt

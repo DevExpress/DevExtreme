@@ -1,4 +1,6 @@
-const products = [{
+import { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
+
+const products: DxTreeViewTypes.Item[] = [{
   id: '1',
   text: 'Stores',
   expanded: true,

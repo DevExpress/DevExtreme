@@ -42,7 +42,7 @@ import { computed, ref } from 'vue';
 import DxPagination from 'devextreme-vue/pagination';
 import { employees } from './data.ts';
 
-const getPageEmployees = (pageIndex, pageSize) => {
+const getPageEmployees = (pageIndex: number, pageSize: number) => {
   return employees.slice((pageIndex - 1) * pageSize, pageIndex * pageSize);
 }
 

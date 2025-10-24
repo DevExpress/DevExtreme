@@ -1,4 +1,4 @@
-export const directions = {
+export const directions: Record<string, any> = {
   auto: {
     icon: 'rowfield',
     shading: true,
