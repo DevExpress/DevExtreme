@@ -9,10 +9,10 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import type { ErrorHandlingController } from '../error_handling/m_error_handling';
 import { Controller } from '../m_modules';
-import { AiColumnCacheController } from './m_ai_column_cache_controller';
+import { AIColumnCacheController } from './m_ai_column_cache_controller';
 import { getDataFromRowItems, reduceDataCachedKeys } from './utils';
 
-export class AiColumnIntegrationController extends Controller {
+export class AIColumnIntegrationController extends Controller {
   private aborts: Record<string, (() => void) | undefined> = { };
 
   private columnsController!: ColumnsController;
@@ -21,14 +21,14 @@ export class AiColumnIntegrationController extends Controller {
 
   private errorHandlingController!: ErrorHandlingController;
 
-  private aiColumnCacheController!: AiColumnCacheController;
+  private aiColumnCacheController!: AIColumnCacheController;
 
   public init(): void {
     this.columnsController = this.getController('columns');
     this.dataController = this.getController('data');
     this.errorHandlingController = this.getController('errorHandling');
 
-    this.aiColumnCacheController = new AiColumnCacheController(this.component);
+    this.aiColumnCacheController = new AIColumnCacheController(this.component);
     this.aiColumnCacheController.init();
 
     this.createAction('onAIColumnRequestCreating');
@@ -40,7 +40,7 @@ export class AiColumnIntegrationController extends Controller {
     useCache: boolean,
     callbacks?: RequestCallbacks<GenerateGridColumnCommandResult>,
   ): void {
-    const aiIntegration = this.getAiIntegration(columnName);
+    const aiIntegration = this.getAIIntegration(columnName);
     if (!aiIntegration) {
       return;
     }
@@ -165,7 +165,7 @@ export class AiColumnIntegrationController extends Controller {
     this.errorHandlingController?.showToastError(message);
   }
 
-  private getAiIntegration(columnName: string): AIIntegration | null {
+  private getAIIntegration(columnName: string): AIIntegration | null {
     if (!columnName) {
       errors.log('E1066');
     }
@@ -174,9 +174,9 @@ export class AiColumnIntegrationController extends Controller {
       return aiIntegration as AIIntegration;
     }
 
-    const gridAiIntegration = this.option('aiIntegration');
-    if (gridAiIntegration) {
-      return gridAiIntegration;
+    const gridAIIntegration = this.option('aiIntegration');
+    if (gridAIIntegration) {
+      return gridAIIntegration;
     }
 
     errors.log('E1067', columnName);

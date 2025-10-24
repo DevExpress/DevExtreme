@@ -201,7 +201,7 @@ export interface Controllers {
   synchronizeScrolling: import('./views/m_grid_view').SynchronizeScrollingController;
   tablePosition: import('./columns_resizing_reordering/m_columns_resizing_reordering').TablePositionViewController;
   toastViewController: import('./toast/m_toast_controller').ToastViewController;
-  aiColumn: import('./ai_column/m_ai_column_controller').AiColumnController;
+  aiColumn: import('./ai_column/m_ai_column_controller').AIColumnController;
 }
 
 type ControllerTypes = {
@@ -225,7 +225,7 @@ export interface Views {
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
   toastView: import('./toast/m_toast_view').ToastView;
-  aiColumnView: import('./ai_column/m_ai_column_view').AiColumnView;
+  aiColumnView: import('./ai_column/m_ai_column_view').AIColumnView;
 }
 
 export interface EditingControllerRequired {
