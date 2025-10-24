@@ -1,12 +1,9 @@
 @use "../../../mixins" as *;
 
-$dx-file-view-item-width: 240px !default;
-$dx-file-view-item-spacing: 8px !default;
-
 .dx-chat-file {
-  flex: 1 1 30%;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .dx-chat-file-icon-container {
@@ -41,14 +38,8 @@ $dx-file-view-item-spacing: 8px !default;
   flex-shrink: 0;
 }
 
-.dx-chat-file-view-container {
+.dx-chat-file-view {
   display: flex;
   flex-wrap: wrap;
-  gap: $dx-file-view-item-spacing;
   width: 100%;
-}
-
-.dx-chat-file-view-item {
-  width: $dx-file-view-item-width;
-  flex-shrink: 0;
 }
