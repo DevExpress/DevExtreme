@@ -556,7 +556,7 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
 
-      // RadioGroup column
+      // RadioGroup and Inputs columns
       .dx-scheduler-form-recurrence-end-editors {
         .dx-field-item-content {
           height: 100%;
@@ -581,10 +581,7 @@ $scheduler-appointment-form-label-padding: 20px;
         .dx-radiogroup-item {
           align-items: center;
         }
-      }
 
-      // Inputs column
-      .dx-scheduler-form-recurrence-end-editors {
         .dx-box-item-content {
           height: 100%;
           padding: 0;
@@ -610,11 +607,11 @@ $scheduler-appointment-form-label-padding: 20px;
           height: $scheduler-recurrence-end-item-height;
           margin: 0;
           padding: 0 !important; // stylelint-disable-line declaration-no-important
-        }
 
-        .dx-field-item-content {
-          padding: 0 !important; // stylelint-disable-line declaration-no-important
-          height: $scheduler-recurrence-end-item-height;
+          .dx-field-item-content {
+            padding: 0 !important; // stylelint-disable-line declaration-no-important
+            height: $scheduler-recurrence-end-item-height;
+          }
         }
 
         .dx-texteditor,
@@ -651,10 +648,8 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-button {
           border-radius: 50%;
-
           width: $scheduler-days-of-week-button-size;
           height: $scheduler-days-of-week-button-size;
-          
           min-width: $scheduler-days-of-week-button-size;
           min-height: $scheduler-days-of-week-button-size;
 
