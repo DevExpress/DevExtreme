@@ -342,8 +342,6 @@ export class RecurrenceForm {
 
           this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
-            width: 32,
-            height: 32,
             onClick: (): void => {
               const isSelected = this.recurrenceRule.byDay.includes(item.key);
 

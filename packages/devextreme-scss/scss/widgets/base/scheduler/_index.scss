@@ -31,6 +31,7 @@ $agenda-appointment-text-color: null !default;
 $agenda-appointment-title-font-size: null !default;
 
 $scheduler-header-panel-table-cell-height: null !default;
+$scheduler-days-of-week-button-size: null !default;
 
 // Agenda
 $agenda-appointment-recurrence-icon-color: null !default;
@@ -648,7 +649,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-button {
           border-radius: 50%;
-          min-width: 32px;
+
+          width: $scheduler-days-of-week-button-size;
+          height: $scheduler-days-of-week-button-size;
+          
+          min-width: $scheduler-days-of-week-button-size;
+          min-height: $scheduler-days-of-week-button-size;
 
           .dx-button-content {
             padding: 0;
