@@ -7,8 +7,8 @@ export class AiColumnCacheController extends Controller {
   }
 
   public getCachedResponse(columnName: string, keys: PropertyKey[]):
-    Record<PropertyKey, string> | null {
-    return null;
+  Record<PropertyKey, string> {
+    return {};
   }
 
   public getCachedString(columnName: string, key: PropertyKey): string | null {

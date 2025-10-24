@@ -462,6 +462,10 @@ export class ColumnsController extends modules.Controller {
     return this._columns;
   }
 
+  public getColumnByName(columnName: string): Column | undefined {
+    return this.getColumns().find((column) => column.name === columnName);
+  }
+
   public isBandColumnsUsed() {
     return this.getColumns().some((column) => column.isBand);
   }
