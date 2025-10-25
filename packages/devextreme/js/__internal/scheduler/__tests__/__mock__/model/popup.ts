@@ -286,6 +286,24 @@ export class PopupModel {
     this.openRecurrenceSettings();
   };
 
+  selectRepeatValue = (value: string): void => {
+    // @ts-expect-error
+    const repeatEditor = $(this.repeatEditor).dxSelectBox('instance');
+    const previousValue = repeatEditor.option('value');
+
+    const originalOnValueChanged = repeatEditor.option('onValueChanged');
+
+    repeatEditor.option('value', value);
+
+    if (originalOnValueChanged) {
+      originalOnValueChanged({
+        value,
+        previousValue,
+        event: new Event('change'),
+      });
+    }
+  };
+
   setRecurrenceInterval = (interval: number): void => {
     const input = this.recurrenceRepeatEveryInput as HTMLInputElement;
     if (!input) {

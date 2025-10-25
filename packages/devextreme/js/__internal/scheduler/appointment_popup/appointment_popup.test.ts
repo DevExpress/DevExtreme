@@ -416,9 +416,7 @@ describe('Appointment Popup Form', () => {
 
       expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(true);
 
-      // @ts-expect-error
-      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      repeatEditor.option('value', 'weekly');
+      POM.popup.selectRepeatValue('weekly');
 
       expect(recurrenceGroup.hasClass('dx-scheduler-form-recurrence-hidden')).toBe(false);
     });
@@ -440,9 +438,7 @@ describe('Appointment Popup Form', () => {
 
       scheduler.showAppointmentPopup(data[0]);
 
-      // @ts-expect-error
-      const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-      repeatEditor.option('value', 'weekly');
+      POM.popup.selectRepeatValue('weekly');
 
       // TODO: this method works weirdly
       scheduler.hideAppointmentPopup(true);
@@ -462,9 +458,7 @@ describe('Appointment Popup Form', () => {
 
         scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'weekly');
+        POM.popup.selectRepeatValue('weekly');
 
         const dayButtons = $(POM.popup.recurrenceWeekDayButtons);
         expect(dayButtons.length).toBeGreaterThan(0);
@@ -484,9 +478,7 @@ describe('Appointment Popup Form', () => {
 
         scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'monthly');
+        POM.popup.selectRepeatValue('monthly');
 
         const monthlyGroup = POM.popup.recurrenceMonthlyGroup;
         expect(monthlyGroup).toBeTruthy();
@@ -510,9 +502,7 @@ describe('Appointment Popup Form', () => {
 
         scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'yearly');
+        POM.popup.selectRepeatValue('yearly');
 
         // @ts-expect-error
         const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
@@ -539,9 +529,7 @@ describe('Appointment Popup Form', () => {
 
         scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'daily');
+        POM.popup.selectRepeatValue('daily');
 
         // @ts-expect-error
         const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
@@ -568,9 +556,7 @@ describe('Appointment Popup Form', () => {
 
         scheduler.showAppointmentPopup(appointment);
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'hourly');
+        POM.popup.selectRepeatValue('hourly');
 
         // @ts-expect-error
         const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
@@ -649,9 +635,7 @@ describe('Appointment Popup Form', () => {
 
         POM.openPopupByDblClick('Meeting');
 
-        // @ts-expect-error
-        const repeatEditor = $(POM.popup.repeatEditor).dxSelectBox('instance');
-        repeatEditor.option('value', 'daily');
+        POM.popup.selectRepeatValue('daily');
 
         // @ts-expect-error
         const frequencyEditor = $(POM.popup.frequencyEditor).dxSelectBox('instance');
