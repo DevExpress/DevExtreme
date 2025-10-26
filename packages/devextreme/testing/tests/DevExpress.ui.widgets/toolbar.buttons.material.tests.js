@@ -7,6 +7,8 @@ const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
 
+import 'material_blue_light.css!';
+
 QUnit.module('Buttons rendering', {
     beforeEach: function() {
         $('#qunit-fixture').html('<div id="toolbar"></div>');
