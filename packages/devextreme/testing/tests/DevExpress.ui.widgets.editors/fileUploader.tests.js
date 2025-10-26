@@ -4492,3 +4492,231 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
         });
     });
 });
+
+QUnit.module('Accessibility', moduleConfig, () => {
+    QUnit.test('files container should have role="list" and aria-label when files are present', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+        });
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should not be set initially');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should not be set initially');
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+
+        assert.strictEqual($filesContainer.attr('role'), 'list', 'role should be "list"');
+        assert.strictEqual($filesContainer.attr('aria-label'), 'File list', 'aria-label should be "File list"');
+    });
+
+    QUnit.test('files container should remove aria attributes when all files are removed', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+
+        assert.strictEqual($filesContainer.attr('role'), 'list', 'role should be "list" with files');
+        assert.strictEqual($filesContainer.attr('aria-label'), 'File list', 'aria-label should be "File list" with files');
+
+        const instance = $fileUploader.dxFileUploader('instance');
+        instance.option('value', []);
+
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should be undefined after removing files');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should be undefined after removing files');
+    });
+
+    QUnit.test('files container should not have aria attributes when showFileList is false', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+            showFileList: false,
+        });
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+
+        assert.strictEqual($filesContainer.attr('role'), undefined, 'role should not be set when showFileList is false');
+        assert.strictEqual($filesContainer.attr('aria-label'), undefined, 'aria-label should not be set when showFileList is false');
+    });
+
+    QUnit.test('file container should have role="listitem"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        const $fileContainer = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first();
+
+        assert.strictEqual($fileContainer.attr('role'), 'listitem', 'file container should have role="listitem"');
+    });
+
+    QUnit.test('multiple file containers should each have role="listitem"', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $fileContainers = $fileUploader.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`);
+
+        assert.strictEqual($fileContainers.length, 3, 'should have 3 file containers');
+        assert.strictEqual($fileContainers.eq(0).attr('role'), 'listitem', 'first file container should have role="listitem"');
+        assert.strictEqual($fileContainers.eq(1).attr('role'), 'listitem', 'second file container should have role="listitem"');
+        assert.strictEqual($fileContainers.eq(2).attr('role'), 'listitem', 'third file container should have role="listitem"');
+    });
+
+    QUnit.test('cancel button should have correct aria-label with file name', function(assert) {
+        const testFileName = 'testfile.png';
+        const testFile = {
+            name: testFileName,
+            size: 1024,
+            type: 'image/png',
+            lastModifiedDate: Date.now(),
+        };
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [testFile],
+        });
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${testFileName}`,
+            'cancel button should have aria-label with file name',
+        );
+    });
+
+    QUnit.test('cancel button aria-label should be updated when file is changed', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [fakeFile],
+        });
+
+        let $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${fakeFile.name}`,
+            'cancel button should have aria-label with first file name',
+        );
+
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        instance.option('value', [fakeFile1]);
+
+        $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`).first();
+
+        assert.strictEqual(
+            $cancelButton.attr('aria-label'),
+            `Remove file ${fakeFile1.name}`,
+            'cancel button aria-label should be updated with new file name'
+        );
+    });
+
+    QUnit.test('upload button should have correct aria-label with file name', function(assert) {
+        const testFileName = 'document.pdf';
+        const testFile = {
+            name: testFileName,
+            size: 2048,
+            type: 'application/pdf',
+            lastModifiedDate: Date.now(),
+        };
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            value: [testFile],
+        });
+
+        const $uploadButton = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual(
+            $uploadButton.attr('aria-label'),
+            `Upload file ${testFileName}`,
+            'upload button should have aria-label with file name',
+        );
+    });
+
+    QUnit.test('upload button should not be rendered in instantly mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            value: [fakeFile],
+        });
+
+        const $uploadButton = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual($uploadButton.length, 0, 'upload button should not be rendered in instantly mode');
+    });
+
+    QUnit.test('cancel button should have aria-label for each file in multiple mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $cancelButtons = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButtons.length, 3, 'should have 3 cancel buttons');
+
+        assert.strictEqual(
+            $cancelButtons.eq(0).attr('aria-label'),
+            `Remove file ${fakeFile.name}`,
+            'first cancel button should have correct aria-label',
+        );
+
+        assert.strictEqual(
+            $cancelButtons.eq(1).attr('aria-label'),
+            `Remove file ${fakeFile1.name}`,
+            'second cancel button should have correct aria-label',
+        );
+
+        assert.strictEqual(
+            $cancelButtons.eq(2).attr('aria-label'),
+            `Remove file ${fakeFile2.name}`,
+            'third cancel button should have correct aria-label',
+        );
+    });
+
+    QUnit.test('upload button should have aria-label for each file in multiple mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            value: [fakeFile, fakeFile1, fakeFile2],
+        });
+
+        const $uploadButtons = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS} .${FILEUPLOADER_UPLOAD_BUTTON_CLASS}`);
+
+        assert.strictEqual($uploadButtons.length, 3, 'should have 3 upload buttons');
+        assert.strictEqual(
+            $uploadButtons.eq(0).attr('aria-label'),
+            `Upload file ${fakeFile.name}`,
+            'first upload button should have correct aria-label',
+        );
+        assert.strictEqual(
+            $uploadButtons.eq(1).attr('aria-label'),
+            `Upload file ${fakeFile1.name}`,
+            'second upload button should have correct aria-label',
+        );
+        assert.strictEqual(
+            $uploadButtons.eq(2).attr('aria-label'),
+            `Upload file ${fakeFile2.name}`,
+            'third upload button should have correct aria-label',
+        );
+    });
+
+    QUnit.test('cancel button should not have aria-label in useForm mode', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm',
+            value: [fakeFile],
+        });
+
+        const $cancelButton = $fileUploader.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
+
+        assert.strictEqual($cancelButton.length, 0, 'cancel button should not be rendered in useForm mode');
+    });
+});
+

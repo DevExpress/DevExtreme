@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "文件類型錯誤",
         "dxFileUploader-invalidMaxFileSize": "文件過大",
         "dxFileUploader-invalidMinFileSize": "文件過小",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "從",
         "dxRangeSlider-ariaTill": "至",

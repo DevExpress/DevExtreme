@@ -66,13 +66,14 @@ $chat-confirmation-popup-toolbar-padding-block: $fluent-popup-content-withtitle-
 $chat-confirmation-popup-toolbar-padding-inline: $fluent-popup-content-withtitle-top-padding !default;
 $chat-confirmation-popup-toolbar-gap: null !default;
 
-$chat-file-container-min-width: 17.14em !default;
+$chat-file-container-width: 17.14em !default;
 $chat-file-container-padding: 7px 8px !default;
 $chat-file-container-border-radius: $fluent-base-border-radius !default;
 $chat-file-button-size: $fluent-button-height !default;
 $chat-file-secondary-font-size: 10px !default;
 $chat-file-base-section-gap: 4px !default;
 $chat-file-file-size-max-width: 4em !default;
+$chat-file-view-items-gap: 8px !default;
 
 @if $size == "default" {
   $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;

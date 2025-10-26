@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Bylos tipas yra negalimas",
         "dxFileUploader-invalidMaxFileSize": "Byla yra per didelė",
         "dxFileUploader-invalidMinFileSize": "Byla yra per maža",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Nuo",
         "dxRangeSlider-ariaTill": "Iki",

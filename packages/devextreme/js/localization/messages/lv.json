@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Faila tips nav atļauts",
         "dxFileUploader-invalidMaxFileSize": "Fails ir pārāk liels",
         "dxFileUploader-invalidMinFileSize": "Fails ir pārāk mazs",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "No",
         "dxRangeSlider-ariaTill": "Līdz",
