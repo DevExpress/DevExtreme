@@ -27,7 +27,6 @@ import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 import {
     TEXTEDITOR_INPUT_CLASS
 } from '__internal/ui/text_box/m_text_editor.base';
-import { FIELD_ITEM_CONTENT_WRAPPER_CLASS } from '__internal/ui/form/components/field_item';
 
 import {
     FIELD_ITEM_CLASS,
