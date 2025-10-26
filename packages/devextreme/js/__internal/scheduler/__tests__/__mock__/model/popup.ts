@@ -80,7 +80,7 @@ export class PopupModel {
   }
 
   get recurrenceRepeatEveryInput(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-repeat-every-group [type="text"]');
+    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-group [type="text"]');
   }
 
   get recurrenceWeekDayButtons(): Element | null {
@@ -96,7 +96,7 @@ export class PopupModel {
   }
 
   get recurrenceEndRadioGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-end-radio');
+    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors');
   }
 
   get recurrenceEndInputGroup(): Element | null {
@@ -315,20 +315,18 @@ export class PopupModel {
     input.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
-  selectRecurrenceWeekDays = (days: string[]): void => {
+  selectRecurrenceWeekDays = (daysIndex: number[]): void => {
     const buttonsContainer = this.recurrenceWeekDayButtons;
     if (!buttonsContainer) {
       throw new Error('Week day buttons not found');
     }
 
-    days.forEach((day) => {
-      const dayKey = day.slice(0, 2).toUpperCase();
-      const button = buttonsContainer.querySelector(`[data-day-key="${dayKey}"]`) as HTMLElement;
-
+    daysIndex.forEach((dayIndex) => {
+      const buttons = Array.from(buttonsContainer.querySelectorAll('button'));
+      const button = buttons[dayIndex];
       if (!button) {
-        throw new Error(`Day button for "${day}" not found`);
+        throw new Error(`Day button for index ${dayIndex} not found`);
       }
-
       button.click();
     });
   };

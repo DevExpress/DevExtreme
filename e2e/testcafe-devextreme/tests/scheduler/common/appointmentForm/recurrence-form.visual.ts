@@ -175,7 +175,7 @@ test.clientScripts([
   const { appointmentPopup } = scheduler;
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.selectRecurrenceWeekDays(t, ['Monday', 'Wednesday', 'Friday']);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 2, 4]);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
   await takeScreenshot(
@@ -225,7 +225,7 @@ test.clientScripts([
   const { appointmentPopup } = scheduler;
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
-  await appointmentPopup.selectRecurrenceWeekDays(t, ['Saturday', 'Sunday']);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [5, 6]);
   await appointmentPopup.setRecurrenceEnd(t, 'count', 15);
 
   await takeScreenshot(
@@ -276,7 +276,7 @@ test.clientScripts([
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 2);
-  await appointmentPopup.selectRecurrenceWeekDays(t, ['Monday', 'Friday']);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 4]);
 
   await takeScreenshot(
     `scheduler__recurrence-form__weekly__interval-2.png (theme=${theme})`,
@@ -325,7 +325,7 @@ test.clientScripts([
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 5);
-  await appointmentPopup.selectRecurrenceWeekDays(t, ['Monday', 'Friday']);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 4]);
 
   await takeScreenshot(
     `scheduler__recurrence-form__weekly__interval-5.png (theme=${theme})`,
@@ -471,7 +471,7 @@ test.clientScripts([
   const { appointmentPopup } = scheduler;
 
   await appointmentPopup.openRecurrenceForm(t, 'Yearly');
-  await appointmentPopup.setRecurrenceYearlyDate(t, 1, 1);
+  await appointmentPopup.setRecurrenceYearlyDate(t, 'January', 1);
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
   await takeScreenshot(
@@ -499,6 +499,7 @@ test.clientScripts([
   })();
 });
 
+// TODO: fix this test
 test.clientScripts([
   { module: 'mockdate' },
   { content: 'window.MockDate = MockDate;' },
@@ -520,7 +521,7 @@ test.clientScripts([
   const { appointmentPopup } = scheduler;
 
   await appointmentPopup.openRecurrenceForm(t, 'Yearly');
-  await appointmentPopup.setRecurrenceYearlyDate(t, 12, 31);
+  await appointmentPopup.setRecurrenceYearlyDate(t, 'December', 31);
   await appointmentPopup.setRecurrenceEnd(t, 'until', '01/01/2030');
 
   await takeScreenshot(

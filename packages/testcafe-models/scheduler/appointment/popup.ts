@@ -27,12 +27,13 @@ export const SELECTORS = {
   recurrenceGroup: '.dx-scheduler-form-recurrence-group',
   repeatEditorButton: '.dx-scheduler-form-repeat-editor .dx-button-has-icon',
   recurrenceSettingsButton: '.dx-scheduler-form-recurrence-settings-button',
-  repeatEveryInput: '.dx-scheduler-form-recurrence-repeat-every-group [type="text"]',
-  weekDayButtons: '.dx-scheduler-recurrence-byday-buttons .dx-button',
-  monthDayInput: '.dx-scheduler-form-recurrence-repeat-on-monthly-group [type="text"]',
-  yearlyMonthInput: '.dx-scheduler-form-recurrence-repeat-on-yearly-group [type="text"]',
-  recurrenceEndRadioGroup: '.dx-scheduler-form-recurrence-end-radio',
-  recurrenceEndInputGroup: '.dx-scheduler-form-recurrence-end-inputs',
+  repeatEveryInput: '.dx-scheduler-form-recurrence-settings-group [type="text"]',
+  weekDayButtons: '.dx-scheduler-days-of-week-buttons .dx-button',
+  monthDayInput: '.dx-scheduler-form-day-of-month-group [type="text"]',
+  yearlyMonthInput: '.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget',
+  recurrenceEndRadioGroup: '.dx-scheduler-form-recurrence-end-editors',
+  recurrenceEndInputGroup: '.dx-scheduler-form-recurrence-end-group',
+  dayOfMonthInput: '.dx-scheduler-form-day-of-month-editor input[type="text"]',
   listOption: '.dx-list-item',
 };
 
@@ -77,11 +78,6 @@ export default class AppointmentPopup {
 
   constructor(private readonly scheduler: Selector) { }
 
-  /**
-   * Opens the recurrence form by selecting a frequency
-   * @param t - TestController instance
-   * @param freq - Frequency to select (e.g., 'Daily', 'Weekly', 'Monthly', 'Yearly', 'Hourly')
-   */
   async openRecurrenceForm(t: TestController, freq = 'Daily'): Promise<void> {
     await t.click(this.repeatEditor.element);
 
@@ -91,75 +87,44 @@ export default class AppointmentPopup {
     await t.wait(500);
   }
 
-  /**
-   * Opens the recurrence settings (for editing existing recurrence rules)
-   * @param t - TestController instance
-   */
   async openRecurrenceSettings(t: TestController): Promise<void> {
     await t.click(this.recurrence.settingsButton);
     await t.wait(500);
   }
 
-  /**
-   * Sets the repeat every interval
-   * @param t - TestController instance
-   * @param interval - The interval value to set
-   */
   async setRecurrenceInterval(t: TestController, interval: number): Promise<void> {
     await t
       .selectText(this.recurrence.repeatEveryInput)
       .typeText(this.recurrence.repeatEveryInput, interval.toString(), { replace: true });
   }
 
-  /**
-   * Selects specific days of the week for weekly recurrence
-   * @param t - TestController instance
-   * @param days - Array of day names (e.g., ['Monday', 'Wednesday', 'Friday'])
-   */
-  async selectRecurrenceWeekDays(t: TestController, days: string[]): Promise<void> {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const day of days) {
-      const dayButton = this.recurrence.weekDayButtons.withAttribute('data-day-key', day.slice(0, 2).toUpperCase());
+  async selectRecurrenceWeekDays(t: TestController, daysIndex: number[]): Promise<void> {
+    daysIndex.forEach(async (dayIndex) => {
+      const dayButton = this.recurrence.weekDayButtons.nth(dayIndex);
       await t.click(dayButton);
-    }
+    });
   }
 
-  /**
-   * Sets the day of the month for monthly recurrence
-   * @param t - TestController instance
-   * @param day - The day of the month (1-31)
-   */
   async setRecurrenceMonthDay(t: TestController, day: number): Promise<void> {
     await t
       .selectText(this.recurrence.monthDayInput)
       .typeText(this.recurrence.monthDayInput, day.toString(), { replace: true });
   }
 
-  /**
-   * Sets the month and day for yearly recurrence
-   * @param t - TestController instance
-   * @param month - The month (1-12)
-   * @param day - The day of the month (1-31)
-   */
-  async setRecurrenceYearlyDate(t: TestController, month: number, day: number): Promise<void> {
-    const monthEditor = this.recurrence.yearlyMonthInput.nth(0);
-    const dayEditor = this.recurrence.yearlyMonthInput.nth(1);
+  async setRecurrenceYearlyMonth(t: TestController, month: string): Promise<void> {
+    await t.click(this.recurrence.yearlyMonthInput);
 
-    await t
-      .selectText(monthEditor)
-      .typeText(monthEditor, month.toString(), { replace: true });
-
-    await t
-      .selectText(dayEditor)
-      .typeText(dayEditor, day.toString(), { replace: true });
+    const option = Selector(SELECTORS.listOption).withText(month);
+    await t.click(option);
   }
 
-  /**
-   * Sets the repeat end condition
-   * @param t - TestController instance
-   * @param type - The end type: 'never', 'until', or 'count'
-   * @param value - The value for 'until' (date string) or 'count' (number)
-   */
+  async setRecurrenceYearlyDate(t: TestController, month: string, day: number): Promise<void> {
+   await this.setRecurrenceYearlyMonth(t, month);
+    await t
+      .selectText(SELECTORS.dayOfMonthInput)
+      .typeText(SELECTORS.dayOfMonthInput, day.toString(), { replace: true });
+  }
+
   async setRecurrenceEnd(
     t: TestController,
     type: 'never' | 'count' | 'until',
