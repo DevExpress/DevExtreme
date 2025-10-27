@@ -8,15 +8,29 @@ on:
   pull_request:
   push:
     branches: [24_1]
+  workflow_dispatch:
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  RUN_TESTS: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')) && 'true' || 'false' }}
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     name: build
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     strategy:
       fail-fast: false
 
@@ -62,7 +76,8 @@ jobs:
 
   testcafe:
     name: ${{ matrix.ARGS.name }}
-    needs: [build]
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     strategy:
       fail-fast: false
       matrix:
