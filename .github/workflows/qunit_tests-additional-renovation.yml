@@ -8,11 +8,27 @@ on:
   pull_request:
   push:
     branches: [23_2]
+  workflow_dispatch:
+
+env:
+  RUN_TESTS: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')) && 'true' || 'false' }}
 
 jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
   build:
     runs-on: devextreme-shr2
     name: Build
+    needs: check-should-run
+    if: needs.check-should-run.outputs.should-run == 'true'
     timeout-minutes: 15
 
     steps:
@@ -57,7 +73,8 @@ jobs:
           retention-days: 1
 
   qunit-tests-timezones:
-    needs: build
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-${{ matrix.timezone }}
     timeout-minutes: 15
@@ -112,7 +129,8 @@ jobs:
           useCsp: 'false'
 
   qunit-tests-mobile-and-shadow-dom:
-    needs: build
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-${{ matrix.kind }}
     timeout-minutes: 15
@@ -178,7 +196,8 @@ jobs:
           useCsp: 'true'
 
   qunit-tests-firefox:
-    needs: build
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-firefox
     timeout-minutes: 15
@@ -216,7 +235,8 @@ jobs:
           useCsp: 'true'
 
   qunit-tests-no-csp:
-    needs: build
+    needs: [check-should-run, build]
+    if: needs.check-should-run.outputs.should-run == 'true'
     runs-on: devextreme-shr2
     name: ${{ matrix.constel }}-no-csp
     timeout-minutes: 15
