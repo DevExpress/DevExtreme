@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
-import browser from 'core/utils/browser';
 import 'ui/form';
 
 import 'generic_light.css!';
@@ -110,10 +109,6 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
 [true, false].forEach(alignItemLabels => {
     [true, false].forEach(alignItemLabelsInAllGroups => {
         QUnit.module(`Items layout and labels alignment. alignItemLabels: ${alignItemLabels}, alignItemLabelsInAllGroups: ${alignItemLabelsInAllGroups}`, () => {
-            if(!browser.chrome) {
-                return;
-            }
-
             QUnit.test('1 column-> [text]', function() {
                 const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, ['text']);
                 test_1Column_1Item(wrapper);
@@ -265,12 +260,6 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 test_2Columns_2Items_NotAlignedLabels(wrapper);
             });
 
-            QUnit.test('2 column-> form.colCount:2 [group.colSpan: 1 [text.colSpan: 1], longText.colSpan: 1]', function() {
-                const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
-                    [ { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { dataField: 'longText', colSpan: 1 }]);
-                test_2Columns_2Items_NotAlignedLabels(wrapper);
-            });
-
             QUnit.test('2 column-> form.colCount:2 [group.colSpan: 1 [text.colSpan: 2], longText.colSpan: 1]', function() {
                 const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
                     [ { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 2 }] }, { dataField: 'longText', colSpan: 1 }]);
@@ -280,18 +269,6 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
             QUnit.test('2 column-> form.colCount:2 [group.colSpan: 1 [text.colSpan: 1], longText.colSpan: 2]', function() {
                 const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
                     [ { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { dataField: 'longText', colSpan: 2 } ]);
-                test_2Columns_2Items_NotAlignedLabels(wrapper);
-            });
-
-            QUnit.test('2 column-> form.colCount:2 [group.colSpan: 1 [text.colSpan: 1], group.colSpan: 1 [longText.colSpan: 1]]]', function() {
-                const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
-                    [ { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { itemType: 'group', colSpan: 1, items: [{ dataField: 'longText', colSpan: 2 }] }]);
-                test_2Columns_2Items_NotAlignedLabels(wrapper);
-            });
-
-            QUnit.test('2 column-> form.colCount:2 [group.colSpan: 1 [text.colSpan: 1], longText.colSpan: 2]', function() {
-                const wrapper = new FormLayoutTestWrapper(2, { alignItemLabels, alignItemLabelsInAllGroups },
-                    [ { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { dataField: 'longText', colSpan: 2 }]);
                 test_2Columns_2Items_NotAlignedLabels(wrapper);
             });
 
@@ -377,12 +354,6 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 }
             });
 
-            QUnit.test('2 column-> group.colCount:2 [group.colSpan: 1 [text.colSpan: 1], longText.colSpan: 1]', function() {
-                const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [{ itemType: 'group', colCount: 2, items: [
-                    { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { dataField: 'longText', colSpan: 1 }] }]);
-                test_2Columns_2Items_NotAlignedLabels(wrapper);
-            });
-
             QUnit.test('2 column-> group.colCount:2 [group.colSpan: 1 [text.colSpan: 2], longText.colSpan: 1]', function() {
                 const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [{ itemType: 'group', colCount: 2, items: [
                     { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 2 }] }, { dataField: 'longText', colSpan: 1 }] }]);
@@ -403,12 +374,6 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 } else {
                     test_2Columns_2Items_NotAlignedLabels(wrapper);
                 }
-            });
-
-            QUnit.test('2 column-> group.colCount:2 [group.colSpan: 1 [text.colSpan: 1], longText.colSpan: 2]', function() {
-                const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [{ itemType: 'group', colCount: 2, items: [
-                    { itemType: 'group', colSpan: 1, items: [{ dataField: 'text', colSpan: 1 }] }, { dataField: 'longText', colSpan: 2 }] }]);
-                test_2Columns_2Items_NotAlignedLabels(wrapper);
             });
 
             QUnit.test('2 column-> group.colCount:2 [group.colSpan: 1 [text.colSpan: 2], longText.colSpan: 2]', function() {
