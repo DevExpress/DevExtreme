@@ -1,7 +1,7 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import AppointmentPopup from 'testcafe-models/scheduler/appointment/popup';
+import AppointmentPopup from 'devextreme-testcafe-models/scheduler/appointment/popup';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
