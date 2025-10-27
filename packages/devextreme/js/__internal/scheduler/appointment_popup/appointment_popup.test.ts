@@ -116,7 +116,6 @@ describe('Appointment Popup Form', () => {
       {
         toolbar: 'top',
         location: 'before',
-        text: 'Edit Appointment',
         cssClass: 'dx-toolbar-label',
       },
       {
@@ -141,7 +140,6 @@ describe('Appointment Popup Form', () => {
       {
         toolbar: 'top',
         location: 'before',
-        text: 'Edit Appointment',
         cssClass: 'dx-toolbar-label',
       },
       {
@@ -151,6 +149,39 @@ describe('Appointment Popup Form', () => {
         options: { stylingMode: 'outlined' },
       },
     ];
+
+
+    describe('Popup Title', () => {
+      it('should display "New Appointment" when creating new appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowAdding: true },
+        });
+
+        scheduler.showAppointmentPopup();
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('New Appointment');
+      });
+
+      it('should display "Edit Appointment" when editing existing appointment', async () => {
+        const { scheduler, POM } = await createScheduler({
+          ...getDefaultConfig(),
+          editing: { allowUpdating: true },
+        });
+
+        scheduler.showAppointmentPopup(commonAppointment);
+
+        const toolbarItems = POM.popup.component.option('toolbarItems');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const titleItem = toolbarItems?.find((item: any) => item.cssClass === 'dx-toolbar-label');
+
+        expect(titleItem?.text).toBe('Edit Appointment');
+      });
+    });
 
     it.each([
       { allowUpdating: false, disabled: false },

@@ -274,7 +274,7 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
 
         "dxScheduler-appointmentListAriaLabel": "Aftaleliste",
-
+        "dxScheduler-newAppointmentPopupTitle": "New Appointment",
         "dxScheduler-editPopupTitle": "Edit Appointment",
         "dxScheduler-editPopupSaveButtonText": "Save",
         
