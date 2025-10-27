@@ -29,6 +29,7 @@ import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
+import type { View } from '../m_modules';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import type { PagerView } from '../pager/m_pager';
@@ -65,6 +66,16 @@ type ColumnIndex = number | {
   rowIndex: number;
   columnIndex: number;
 };
+
+interface DraggingPanelBoundingRect {
+  draggingPanel: View;
+  boundingRect: {
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
+  };
+}
 
 export class TrackerView extends modules.View {
   private _positionChanged: any;
@@ -404,6 +415,8 @@ export class DraggingHeaderView extends modules.View {
 
   private _onSelectStart: any;
 
+  private _draggingPanelBoundingRects!: DraggingPanelBoundingRect[] | null;
+
   /// #DEBUG
   private _testPointsByColumns: any;
   /// #ENDDEBUG
@@ -449,6 +462,7 @@ export class DraggingHeaderView extends modules.View {
     this._columnsResizerViewController = this.getController('columnsResizer');
     this._columnsController = this.getController('columns');
     this._isDragging = false;
+    this._draggingPanelBoundingRects = null;
 
     dataController.loadingChanged.add((isLoading) => {
       const element = this.element();
@@ -465,22 +479,47 @@ export class DraggingHeaderView extends modules.View {
 
   private _getDraggingPanelByPos(pos) {
     const that = this;
+    const draggingPanelBoundingRects = that._getDraggingPanelBoundingRects();
     let result;
 
-    each(that._dragOptions.draggingPanels, (index, draggingPanel) => {
-      if (draggingPanel) {
-        const boundingRect = draggingPanel.getBoundingRect();
-        if (boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
-                    && (boundingRect.left === undefined || pos.x > boundingRect.left) && (boundingRect.right === undefined || pos.x < boundingRect.right)) {
-          result = draggingPanel;
-          return false;
-        }
+    each(draggingPanelBoundingRects, (_, { draggingPanel, boundingRect }) => {
+      if (boundingRect
+        && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom)
+        && (boundingRect.top === undefined || pos.y > boundingRect.top)
+        && (boundingRect.left === undefined || pos.x > boundingRect.left)
+        && (boundingRect.right === undefined || pos.x < boundingRect.right)
+      ) {
+        result = draggingPanel;
+        return false;
       }
 
       return undefined;
     });
 
     return result;
+  }
+
+  public setDraggingPanelBoundingRects(): void {
+    const that = this;
+    const boundingRects: DraggingPanelBoundingRect[] = [];
+
+    each(that._dragOptions.draggingPanels, (_, draggingPanel) => {
+      const boundingRect = draggingPanel?.getBoundingRect();
+
+      if (boundingRect) {
+        boundingRects.push({ draggingPanel, boundingRect });
+      }
+    });
+
+    that._draggingPanelBoundingRects = boundingRects.length ? boundingRects : null;
+  }
+
+  private _getDraggingPanelBoundingRects(): DraggingPanelBoundingRect[] | null {
+    return this._draggingPanelBoundingRects;
+  }
+
+  private _resetDraggingPanelBoundingRects(): void {
+    this._draggingPanelBoundingRects = null;
   }
 
   protected _renderCore() {
@@ -649,6 +688,7 @@ export class DraggingHeaderView extends modules.View {
     that._isDragging = false;
     // eslint-disable-next-line spellcheck/spell-checker
     domAdapter.getDocument().onselectstart = that._onSelectStart || null;
+    that._resetDraggingPanelBoundingRects();
   }
 }
 
@@ -1513,6 +1553,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
                 draggingPanels,
                 rowIndex: that._columnsController.getRowIndex(column.index, true),
               });
+              draggingHeader.setDraggingPanelBoundingRects();
             }));
             eventsEngine.on($columnElement, addNamespace(dragEventMove, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
             eventsEngine.on($columnElement, addNamespace(dragEventEnd, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
