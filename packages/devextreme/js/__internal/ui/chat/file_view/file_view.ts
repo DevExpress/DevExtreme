@@ -1,3 +1,4 @@
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import type { Attachment, AttachmentDownloadEvent } from '@js/ui/chat';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -51,9 +52,11 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
 
   _initMarkup(): void {
     this.$element().addClass(CHAT_FILE_VIEW_CLASS);
+
     super._initMarkup();
 
     this._renderItems();
+    this._toggleAria();
   }
 
   _renderItems(): void {
@@ -92,6 +95,22 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
     return configuration;
   }
 
+  _toggleAria(): void {
+    const { files } = this.option();
+
+    const applyAria = Boolean(files?.length);
+
+    const aria = {
+      role: applyAria ? 'list' : null,
+      'aria-label': applyAria
+        ? messageLocalization.format('dxChat-fileViewLabel')
+        : null,
+    };
+
+    // @ts-expect-error attr type should be extdened
+    this.$element().attr(aria);
+  }
+
   _clearFileInstances(): void {
     this._fileInstances?.forEach((instance) => { instance.dispose(); });
     this._fileInstances = [];
@@ -110,8 +129,12 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
+        this._renderItems();
+        break;
+
       case 'files':
         this._renderItems();
+        this._toggleAria();
         break;
 
       case 'onDownload':
