@@ -1,8 +1,8 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
-import type { Column } from '@js/ui/data_grid';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import type { Item } from '../data_controller/m_data_controller';
 import {
   getDataFromRowItems,

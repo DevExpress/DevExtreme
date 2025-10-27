@@ -52,7 +52,9 @@ export class AIColumnController extends Controller {
     const aiColumns = this.getAIColumns();
 
     for (const col of aiColumns) {
-      this.refreshAIColumn(col.name as string);
+      if (isAIColumnAutoMode(col)) {
+        this.refreshAIColumn(col.name as string);
+      }
     }
   }
 
