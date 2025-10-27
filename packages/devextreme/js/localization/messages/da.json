@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Filtype er ikke tilladt",
         "dxFileUploader-invalidMaxFileSize": "Filen er for stor",
         "dxFileUploader-invalidMinFileSize": "Filen er for lille",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Fra",
         "dxRangeSlider-ariaTill": "Indtil",

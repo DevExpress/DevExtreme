@@ -88,6 +88,9 @@
         "dxFileUploader-invalidFileExtension": "Dit bestandstype is niet toegestaan",
         "dxFileUploader-invalidMaxFileSize": "Het bestand is te groot",
         "dxFileUploader-invalidMinFileSize": "Het bestand is te klein",
+        "dxFileUploader-fileListLabel": "File list",
+        "dxFileUploader-removeFileButtonLabel": "Remove file {0}",
+        "dxFileUploader-uploadFileButtonLabel": "Upload file {0}",
 
         "dxRangeSlider-ariaFrom": "Van",
         "dxRangeSlider-ariaTill": "Tot",

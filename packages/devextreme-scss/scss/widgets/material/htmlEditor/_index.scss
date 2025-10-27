@@ -372,4 +372,8 @@
   .dx-pending-indicator {
     @include dx-pending-indicator-centered();
   }
+
+  &.dx-popup-wrapper > .dx-overlay-content {
+    border-radius: $material-aidialog-border-radius;
+  }
 }

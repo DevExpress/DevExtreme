@@ -17,6 +17,7 @@ export const PROPERTY_TOKEN_series = new InjectionToken<string>('property-token-
 export const PROPERTY_TOKEN_strips = new InjectionToken<string>('property-token-strips');
 export const PROPERTY_TOKEN_valueAxis = new InjectionToken<string>('property-token-valueAxis');
 export const PROPERTY_TOKEN_alerts = new InjectionToken<string>('property-token-alerts');
+export const PROPERTY_TOKEN_attachments = new InjectionToken<string>('property-token-attachments');
 export const PROPERTY_TOKEN_typingUsers = new InjectionToken<string>('property-token-typingUsers');
 export const PROPERTY_TOKEN_ranges = new InjectionToken<string>('property-token-ranges');
 export const PROPERTY_TOKEN_groupItems = new InjectionToken<string>('property-token-groupItems');

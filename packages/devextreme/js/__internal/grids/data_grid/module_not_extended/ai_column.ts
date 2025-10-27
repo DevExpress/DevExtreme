@@ -1,13 +1,13 @@
-import { AiColumnController } from '@ts/grids/grid_core/ai_column/m_ai_column_controller';
-import { AiColumnView } from '@ts/grids/grid_core/ai_column/m_ai_column_view';
+import { AIColumnController } from '@ts/grids/grid_core/ai_column/m_ai_column_controller';
+import { AIColumnView } from '@ts/grids/grid_core/ai_column/m_ai_column_view';
 
 import gridCore from '../m_core';
 
 gridCore.registerModule('aiColumn', {
   controllers: {
-    aiColumn: AiColumnController,
+    aiColumn: AIColumnController,
   },
   views: {
-    aiColumnView: AiColumnView,
+    aiColumnView: AIColumnView,
   },
 });

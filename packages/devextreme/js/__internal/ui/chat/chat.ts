@@ -15,11 +15,10 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties as PublicProperties,
+  Properties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -42,10 +41,6 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-
-type Properties = PublicProperties & {
-  fileUploaderOptions?: FileUploaderProperties;
-};
 
 class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;

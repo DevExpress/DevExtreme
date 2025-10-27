@@ -4,27 +4,27 @@ import domAdapter from '@ts/core/m_dom_adapter';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import { View } from '../m_modules';
-import { AiPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
-import type { AiPromptEditorOptions } from './ai_prompt_editor/types';
+import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
+import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
-import type { AiColumnController } from './m_ai_column_controller';
-import { getAiCommandColumnOptions } from './m_ai_column_controller_utils';
+import type { AIColumnController } from './m_ai_column_controller';
+import { getAICommandColumnOptions, isAIColumnAutoMode } from './utils';
 
-export class AiColumnView extends View {
+export class AIColumnView extends View {
   private columnsController!: ColumnsController;
 
-  private aiColumnController!: AiColumnController;
+  private aiColumnController!: AIColumnController;
 
-  private promptEditorInstance!: AiPromptEditor;
+  private promptEditorInstance!: AIPromptEditor;
 
-  private addAiCommandColumn(): void {
-    this.columnsController.addCommandColumn(getAiCommandColumnOptions());
+  private addAICommandColumn(): void {
+    this.columnsController.addCommandColumn(getAICommandColumnOptions());
   }
 
-  private getAiPromptEditorConfig(
+  private getAIPromptEditorConfig(
     $cellElement: dxElementWrapper,
     column: Column,
-  ): AiPromptEditorOptions {
+  ): AIPromptEditorOptions {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
     const visibleIndex = this.columnsController.getVisibleIndex(column.index);
 
@@ -43,7 +43,7 @@ export class AiColumnView extends View {
       },
       onStop: (): void => {
         this.promptEditorInstance.updateStateOnAction('stop');
-        this.aiColumnController.abortAIColumnRequest();
+        this.aiColumnController.abortAIColumnRequest(column.name as string);
       },
       onRefresh: (): void => {
         this.promptEditorInstance.updateStateOnAction('regenerate');
@@ -53,7 +53,7 @@ export class AiColumnView extends View {
         container: domAdapter.getBody(),
         onHiding: (): void => {
           this.promptEditorInstance.updateStateOnAction('stop');
-          this.aiColumnController.abortAIColumnRequest();
+          this.aiColumnController.abortAIColumnRequest(column.name as string);
         },
         position: {
           my: `${alignment} top`,
@@ -68,6 +68,8 @@ export class AiColumnView extends View {
 
   // TODO: support changing all columns and the entire column
   public optionChanged(args): void {
+    super.optionChanged(args);
+
     if (args.name !== 'columns') {
       return;
     }
@@ -80,7 +82,7 @@ export class AiColumnView extends View {
 
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
-    if (columnOptionName === 'ai.prompt') {
+    if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
       this.aiColumnController.sendAIColumnRequest(column.name as string);
     }
   }
@@ -89,7 +91,7 @@ export class AiColumnView extends View {
     this.columnsController = this.getController('columns');
     this.aiColumnController = this.getController('aiColumn');
 
-    this.addAiCommandColumn();
+    this.addAICommandColumn();
     this.aiColumnController.aiRequestCompleted.add(() => {
       this.promptEditorInstance?.updatePrompt(this.promptEditorInstance.getEditorValue());
       this.promptEditorInstance?.updateStateOnAction('stop');
@@ -106,10 +108,10 @@ export class AiColumnView extends View {
       return Promise.resolve(false);
     }
 
-    const config = this.getAiPromptEditorConfig($cellElement, column);
+    const config = this.getAIPromptEditorConfig($cellElement, column);
 
     if (!this.promptEditorInstance) {
-      this.promptEditorInstance = new AiPromptEditor(config);
+      this.promptEditorInstance = new AIPromptEditor(config);
     } else {
       this.promptEditorInstance.updateOptions(config);
     }
@@ -121,7 +123,7 @@ export class AiColumnView extends View {
     return this.promptEditorInstance?.hide();
   }
 
-  public getPromptEditorInstance(): AiPromptEditor {
+  public getPromptEditorInstance(): AIPromptEditor {
     return this.promptEditorInstance;
   }
 }
