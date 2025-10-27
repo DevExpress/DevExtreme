@@ -34,7 +34,7 @@ export const reduceDataCachedKeys = (
 export const isAIColumnAutoMode = (column: Column): boolean => column.type === 'ai' && (!column.ai?.mode || column.ai.mode === 'auto');
 
 export const isPopupOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.popup')
-  || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.popupOptions));
+  || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.popup));
 
 export const isEditorOptions = (optionName: string, value: unknown): boolean => optionName.startsWith('ai.editorOptions')
   || (optionName === 'ai' && isDefined((value as Record<string, unknown>)?.editorOptions));
