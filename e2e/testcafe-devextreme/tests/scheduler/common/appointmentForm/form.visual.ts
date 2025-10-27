@@ -48,7 +48,7 @@ const getResources = (withIcons = false) => ([
     dataSource: [
       { text: 'Room 1', id: 1, color: '#00af2c' },
     ],
-    icon: withIcons ? 'conference-room' : undefined,
+    icon: withIcons ? 'conferenceroomfilled' : undefined,
   },
   {
     fieldExpr: 'priorityId',
@@ -56,7 +56,7 @@ const getResources = (withIcons = false) => ([
     dataSource: [
       { text: 'High', id: 1, color: '#cc5c53' },
     ],
-    icon: withIcons ? 'tag' : undefined,
+    icon: withIcons ? 'tags' : undefined,
   },
 ]);
 
@@ -163,7 +163,7 @@ safeSizeTest('main form with resources that have icons', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(() => createWidget('dxScheduler', {
+}, [1500, 1500]).before(() => createWidget('dxScheduler', {
   dataSource: [],
   views: ['week'],
   currentView: 'week',

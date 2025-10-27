@@ -4,11 +4,13 @@ import { DataSource } from '@js/common/data';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
+import { isBoolean } from '@js/core/utils/type';
 import type { Properties as DateBoxProperties } from '@js/ui/date_box';
 import type {
   GroupItem, Item as FormItem, Properties as FormProperties, SimpleItem,
 } from '@js/ui/form';
 import dxForm from '@js/ui/form';
+import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import type { Properties as SwitchProperties } from '@js/ui/switch';
 import type { Properties as TextAreaProperties } from '@js/ui/text_area';
@@ -17,6 +19,7 @@ import { dateSerialization } from '@ts/core/utils/m_date_serialization';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
+import { DEFAULT_ICONS_SHOW_MODE } from '../utils/options/constants';
 import { RecurrenceForm } from './m_recurrence_form';
 import { createFormIconTemplate, getStartDateCommonConfig, RecurrenceRule } from './utils';
 
@@ -174,7 +177,7 @@ export class AppointmentForm {
 
     const items = [mainGroup, recurrenceGroup];
 
-    const { iconsShowMode } = this.scheduler.getEditingConfig().form;
+    const iconsShowMode = this.getIconsShowMode();
     const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
     const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
@@ -182,6 +185,16 @@ export class AppointmentForm {
     this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
 
     this.createForm(items);
+  }
+
+  private getIconsShowMode(): 'main' | 'recurrence' | 'both' | 'none' {
+    const editingConfig = this.scheduler.getEditingConfig() as SchedulerProperties['editing'];
+
+    if (isBoolean(editingConfig)) {
+      return DEFAULT_ICONS_SHOW_MODE;
+    }
+
+    return editingConfig?.form?.iconsShowMode ?? DEFAULT_ICONS_SHOW_MODE;
   }
 
   private createForm(items: FormProperties['items']): dxForm {
