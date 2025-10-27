@@ -264,6 +264,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'firstDayOfWeek':
         this._updateOption('workSpace', name, value);
         this._updateOption('header', name, value);
+        this._cleanPopup();
         break;
       case 'currentDate': {
         const dateValue = this.getViewOption(name);
@@ -1543,7 +1544,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isPopupEditing) {
       this._appointmentPopup.show(singleRawAppointment, {
-        isToolbarVisible: true,
+        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
         action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
         excludeInfo: {
           sourceAppointment: rawAppointment,
@@ -1914,7 +1915,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (isCreateAppointment) {
       delete this._editAppointmentData; // TODO
       this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, {
-        isToolbarVisible: true,
+        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
         action: ACTION_TO_APPOINTMENT.CREATE,
       });
     } else {
@@ -1924,7 +1925,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._editAppointmentData = rawAppointment; // TODO
 
         this._appointmentPopup.show(rawAppointment, {
-          isToolbarVisible: this._editing.allowUpdating,
+          isToolbarVisible: this._editing.allowUpdating, // TODO: remove when legacyForm is deleted
           action: ACTION_TO_APPOINTMENT.UPDATE,
         });
       }, false, true);

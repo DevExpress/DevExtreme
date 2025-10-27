@@ -38,7 +38,10 @@
   $agenda-appointment-hover-bg: $agenda-appointment-hover-bg,
   $agenda-appointment-active-bg: $agenda-appointment-active-bg,
   $agenda-appointment-text-color: $agenda-appointment-text-color,
-  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size
+  $agenda-appointment-title-font-size: $agenda-appointment-title-font-size,
+
+  $scheduler-days-of-week-button-size: $generic-scheduler-days-of-week-button-size,
+  $scheduler-recurrence-end-item-height: $generic-scheduler-recurrence-end-item-height
 );
 @use "../button/colors" as *;
 @use "../tooltip/colors" as *;
@@ -276,6 +279,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     .dx-scheduler-form-description-group .dx-scheduler-form-icon,
     .dx-scheduler-form-resources-group .dx-scheduler-default-resources-icon {
       margin-top: $generic-scheduler-appointment-popup-description-icon-margin-top;
+    }
+
+    .dx-scheduler-form-recurrence-end-group .dx-field-item-label {
+      height: $generic-scheduler-appointment-popup-all-day-item-height;
     }
 
     .dx-field-item:not(.dx-first-col) {
