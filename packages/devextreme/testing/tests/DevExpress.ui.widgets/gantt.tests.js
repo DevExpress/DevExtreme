@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'fluent_blue_light.css!';
+import 'generic_light.css!';
 import 'gantt.css!';
 import 'ui/gantt';
 

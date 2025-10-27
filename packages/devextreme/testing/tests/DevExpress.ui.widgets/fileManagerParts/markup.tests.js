@@ -8,7 +8,7 @@ import windowUtils from 'core/utils/window';
 import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
 import devices from '__internal/core/m_devices';
 
-import 'fluent_blue_light.css!';
+import 'generic_light.css!';
 
 const getDefaultConfig = () => {
     return {
