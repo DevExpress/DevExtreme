@@ -52,10 +52,14 @@
         <div id="button"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
-                });
+                const dxChat = $("#button").dxChat({
+                    height: 700,
+                    fileUploaderOptions: {},
+                }).dxChat('instance');
+
+                dxChat._messageBox._textArea.option({
+                    value: 'wefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwewefwefwkefwe',
+                })
             });
         </script>
     </div>

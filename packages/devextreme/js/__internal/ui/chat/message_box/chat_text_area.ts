@@ -21,6 +21,7 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import FileUploader from '@ts/ui/file_uploader/file_uploader';
 import type { CancelButtonClickEvent, Properties as FileUploaderProperties } from '@ts/ui/file_uploader/file_uploader.types';
+import Informer from '@ts/ui/informer/informer';
 import type { TextAreaProperties } from '@ts/ui/m_text_area';
 import TextArea from '@ts/ui/m_text_area';
 
@@ -45,6 +46,8 @@ export type Properties = TextAreaProperties & {
 };
 
 class ChatTextArea extends TextArea<Properties> {
+  _informer?: Informer | null;
+
   _$toolbar?: dxElementWrapper | null;
 
   _toolbar?: Toolbar | null;
@@ -75,8 +78,8 @@ class ChatTextArea extends TextArea<Properties> {
       stylingMode: 'outlined',
       placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
-      maxHeight: '8em',
       valueChangeEvent: 'input',
+      maxHeight: '24em',
       fileUploaderOptions: undefined,
     };
   }
@@ -137,8 +140,25 @@ class ChatTextArea extends TextArea<Properties> {
 
   _initMarkup(): void {
     super._initMarkup();
+    this._renderInformer();
     this._renderToolbar();
     this._initFileUploader();
+  }
+
+  _renderInformer(): void {
+    const $informer = $('<div>')
+      .addClass('dx-chat-informer')
+      .prependTo(this.$element());
+
+    this._informer = this._createComponent(
+      $informer,
+      Informer,
+      {
+        contentAlignment: 'start',
+        icon: 'errorcircle',
+        text: 'You selected too many files. Select no more than 3 files and retry.',
+      },
+    );
   }
 
   _renderToolbar(): void {
