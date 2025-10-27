@@ -174,9 +174,9 @@ export class AppointmentForm {
 
     const items = [mainGroup, recurrenceGroup];
 
-    const { showIcons } = this.scheduler.getEditingConfig().form;
-    const showMainGroupIcons = ['main', 'both'].includes(showIcons);
-    const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(showIcons);
+    const { iconsShowMode } = this.scheduler.getEditingConfig().form;
+    const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
+    const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
     this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
     this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
@@ -685,11 +685,11 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem, showIcons: boolean): void {
+  private setStylingModeToEditors(item: FormItem, iconsShowMode: boolean): void {
     const isIconItem = item.cssClass?.includes(CLASSES.icon);
 
     if (isIconItem) {
-      item.cssClass += showIcons ? '' : ' dx-hidden';
+      item.cssClass += iconsShowMode ? '' : ' dx-hidden';
       return;
     }
 
@@ -707,7 +707,7 @@ export class AppointmentForm {
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child, showIcons);
+        this.setStylingModeToEditors(child, iconsShowMode);
       });
     }
   }

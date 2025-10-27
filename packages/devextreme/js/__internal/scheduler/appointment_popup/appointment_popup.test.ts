@@ -787,18 +787,18 @@ describe('Appointment Popup Form', () => {
 
   describe('Icons', () => {
     it.each<{
-      showIcons: 'both' | 'main' | 'none' | 'recurrence';
+      iconsShowMode: 'both' | 'main' | 'none' | 'recurrence';
       visibleMain: boolean;
       visibleRecurrence: boolean;
     }>([
-      { showIcons: 'both', visibleMain: true, visibleRecurrence: true },
-      { showIcons: 'main', visibleMain: true, visibleRecurrence: false },
-      { showIcons: 'recurrence', visibleMain: false, visibleRecurrence: true },
-      { showIcons: 'none', visibleMain: false, visibleRecurrence: false },
-    ])('should shown icons correctly when showIcons is \'$showIcons\'', async ({ showIcons, visibleMain, visibleRecurrence }) => {
+      { iconsShowMode: 'both', visibleMain: true, visibleRecurrence: true },
+      { iconsShowMode: 'main', visibleMain: true, visibleRecurrence: false },
+      { iconsShowMode: 'recurrence', visibleMain: false, visibleRecurrence: true },
+      { iconsShowMode: 'none', visibleMain: false, visibleRecurrence: false },
+    ])('should shown icons correctly when iconsShowMode is \'$iconsShowMode\'', async ({ iconsShowMode, visibleMain, visibleRecurrence }) => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        editing: { form: { showIcons } },
+        editing: { form: { iconsShowMode } },
       });
 
       scheduler.showAppointmentPopup(commonAppointment);
