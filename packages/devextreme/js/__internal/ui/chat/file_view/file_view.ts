@@ -107,7 +107,7 @@ class FileView extends DOMComponent<FileView, FileViewProperties> {
         : null,
     };
 
-    // @ts-expect-error attr type should be extdened
+    // @ts-expect-error attr type should be extended
     this.$element().attr(aria);
   }
 
