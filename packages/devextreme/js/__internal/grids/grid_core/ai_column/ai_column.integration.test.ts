@@ -2126,4 +2126,38 @@ describe('Popup', () => {
     const popupInstance = component.getAIPromptEditor().getPopupInstance();
     expect(popupInstance.option('visible')).toBe(true);
   });
+
+  it('should be invisible when the ai.popup.visible is false (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+          },
+        },
+      ],
+    });
+
+    expect(component.getAIDialog()).not.toBeNull();
+
+    component.apiColumnOption('myColumn', 'ai.popup.visible', false);
+
+    jest.runAllTimers();
+    await Promise.resolve();
+    expect(component.getAIDialog()).toBeNull();
+
+    const popupInstance = component.getAIPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(false);
+  });
 });

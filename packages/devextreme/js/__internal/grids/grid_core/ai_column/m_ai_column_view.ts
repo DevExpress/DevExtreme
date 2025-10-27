@@ -65,10 +65,10 @@ export class AIColumnView extends View {
           collision: 'fit',
           boundary: this.component.element(),
         },
-        ...column.ai?.popup ?? { },
+        ...column.ai?.popup,
       },
       editorOptions: {
-        ...column.ai?.editorOptions ?? { },
+        ...column.ai?.editorOptions,
       },
     };
   }
@@ -115,7 +115,15 @@ export class AIColumnView extends View {
     }
 
     if (isRefreshOption(columnOptionName, args.value)) {
-      // this.component.refresh();
+      // TODO: this.component.refresh();
+    }
+  }
+
+  private ensureAIPromptEditorVisibility() {
+    const aiColumns = this.aiColumnController.getAIColumns();
+    const aiColumnsWithVisiblePopup = aiColumns.filter((column) => column.ai?.popup?.visible);
+    if (aiColumnsWithVisiblePopup.length > 0) {
+      this.updatePromptEditorInstance(aiColumnsWithVisiblePopup[0]);
     }
   }
 
@@ -130,6 +138,10 @@ export class AIColumnView extends View {
     });
     this.aiColumnController.aiRequestRejected.add(() => {
       this.promptEditorInstance?.updateStateOnAction('stop');
+    });
+
+    this.renderCompleted.add(() => {
+      this.ensureAIPromptEditorVisibility();
     });
   }
 
