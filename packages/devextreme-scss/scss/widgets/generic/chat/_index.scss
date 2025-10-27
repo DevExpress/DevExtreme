@@ -18,7 +18,18 @@
   $chat-avatar-color,
   $chat-avatar-background-color,
 );
-@include chat-header($chat-header-padding);
+@include chat-file(
+  $chat-file-container-min-width,
+  $chat-file-container-padding,
+  $chat-file-container-background-color,
+  $chat-file-container-border-radius,
+  $chat-file-container-box-shadow,
+  $chat-file-button-size,
+  $chat-file-secondary-font-size,
+  $chat-file-secondary-color,
+  $chat-file-base-section-gap,
+  $chat-file-file-size-max-width,
+);
 @include chat-alertlist(
   $chat-alertlist-color,
   $chat-alerts-padding-block,
