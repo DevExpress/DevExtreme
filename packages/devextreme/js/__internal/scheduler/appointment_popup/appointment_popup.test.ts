@@ -9,6 +9,11 @@ import fx from '../../../common/core/animation/fx';
 import { createScheduler } from '../__tests__/__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from '../__tests__/__mock__/m_mock_scheduler';
 
+const CLASSES = {
+  icon: 'dx-scheduler-form-icon',
+  hidden: 'dx-hidden',
+};
+
 const getDefaultData = () => [
   {
     text: 'recurrent-app',
@@ -777,6 +782,45 @@ describe('Appointment Popup Form', () => {
           recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR',
         });
       });
+    });
+  });
+
+  describe('Icons', () => {
+    it.each<{
+      showIcons: 'both' | 'main' | 'none' | 'recurrence';
+      visibleMain: boolean;
+      visibleRecurrence: boolean;
+    }>([
+      { showIcons: 'both', visibleMain: true, visibleRecurrence: true },
+      { showIcons: 'main', visibleMain: true, visibleRecurrence: false },
+      { showIcons: 'recurrence', visibleMain: false, visibleRecurrence: true },
+      { showIcons: 'none', visibleMain: false, visibleRecurrence: false },
+    ])('should shown icons correctly when showIcons is \'$showIcons\'', async ({ showIcons, visibleMain, visibleRecurrence }) => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        editing: { form: { showIcons } },
+      });
+
+      scheduler.showAppointmentPopup(commonAppointment);
+
+      const mainFormIcons = POM.popup.mainGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+      const recurrenceFormIcons = POM.popup.recurrenceGroup?.querySelectorAll(`.${CLASSES.icon}`) ?? [];
+
+      expect(mainFormIcons.length).toBe(4);
+      expect(recurrenceFormIcons.length).toBe(3);
+
+      const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
+        const isVisible = !icon.classList.contains(CLASSES.hidden);
+        return isVisible === visibleMain;
+      });
+
+      const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
+        const isVisible = !icon.classList.contains(CLASSES.hidden);
+        return isVisible === visibleRecurrence;
+      });
+
+      expect(mainIconsCorrect).toBe(true);
+      expect(recurrenceIconsCorrect).toBe(true);
     });
   });
 
