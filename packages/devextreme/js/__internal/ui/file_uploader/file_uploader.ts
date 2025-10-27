@@ -34,7 +34,10 @@ import type {
   LoadedFileData,
   MouseLikeEvent,
 } from '@ts/ui/file_uploader/file_uploader.types';
-import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
+import {
+  getFileIconName,
+  getFileSize,
+} from '@ts/ui/file_uploader/file_uploader.utils';
 
 const window = getWindow();
 
@@ -705,7 +708,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     if (isDefined(value.size)) {
       $('<div>')
         .addClass(FILEUPLOADER_FILE_SIZE_CLASS)
-        .text(this._getFileSize(value.size))
+        .text(getFileSize(value.size))
         .appendTo($fileInfo);
     }
 
@@ -913,26 +916,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _hasInvalidFile(files: FileUploaderItem[]): boolean {
     return files.some((file) => !file.isValid());
-  }
-
-  _getFileSize(size: number): string {
-    const labels = [
-      messageLocalization.format('dxFileUploader-bytes'),
-      messageLocalization.format('dxFileUploader-kb'),
-      messageLocalization.format('dxFileUploader-Mb'),
-      messageLocalization.format('dxFileUploader-Gb'),
-    ];
-
-    const count = labels.length - 1;
-    let value = size;
-    let i = 0;
-
-    while (i < count && value >= 1024) {
-      value /= 1024;
-      i += 1;
-    }
-
-    return `${Math.round(value)} ${labels[i]}`;
   }
 
   _renderSelectButton(): void {
