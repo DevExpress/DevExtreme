@@ -79,7 +79,7 @@ test.clientScripts([
   const { appointmentPopup } = scheduler;
 
   await appointmentPopup.openRecurrenceForm(t, 'Daily');
-  await appointmentPopup.setRecurrenceEnd(t, 'until', '12/31/2025');
+  await appointmentPopup.setRecurrenceEnd(t, 'until', '12/31/2024');
 
   await takeScreenshot(
     `scheduler__recurrence-form__daily__repeat-end-until.png (theme=${theme})`,
@@ -276,7 +276,7 @@ test.clientScripts([
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 2);
-  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 4]);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 5]);
 
   await takeScreenshot(
     `scheduler__recurrence-form__weekly__interval-2.png (theme=${theme})`,
@@ -325,7 +325,7 @@ test.clientScripts([
 
   await appointmentPopup.openRecurrenceForm(t, 'Weekly');
   await appointmentPopup.setRecurrenceInterval(t, 5);
-  await appointmentPopup.selectRecurrenceWeekDays(t, [0, 4]);
+  await appointmentPopup.selectRecurrenceWeekDays(t, [1, 4]);
 
   await takeScreenshot(
     `scheduler__recurrence-form__weekly__interval-5.png (theme=${theme})`,
