@@ -43,6 +43,7 @@ const mockAIColumnController = {
   abortAIColumnRequest: jest.fn(),
   refreshAIColumn: jest.fn(),
   sendAIColumnRequest: jest.fn(),
+  getAIColumns: jest.fn().mockReturnValue([]),
   aiRequestCompleted: Callbacks(),
   aiRequestRejected: Callbacks(),
 };
