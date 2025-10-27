@@ -1,5 +1,5 @@
 import { getOuterWidth } from 'core/utils/size';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import { triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';

@@ -4,8 +4,6 @@ import animationFrame from 'common/core/animation/frame';
 import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
-
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,

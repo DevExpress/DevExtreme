@@ -15,7 +15,7 @@ import LoadIndicator from 'ui/load_indicator';
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';

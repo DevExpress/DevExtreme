@@ -7,7 +7,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
 import '../../helpers/xmlHttpRequestMock.js';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { test } = QUnit;
 

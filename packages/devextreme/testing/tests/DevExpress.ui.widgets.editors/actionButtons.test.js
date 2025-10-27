@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/text_box';
 import 'ui/select_box';
 import 'ui/number_box';
