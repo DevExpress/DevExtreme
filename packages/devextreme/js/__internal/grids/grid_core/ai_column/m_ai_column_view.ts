@@ -8,7 +8,9 @@ import { AIPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AIPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
 import type { AIColumnController } from './m_ai_column_controller';
-import { getAICommandColumnOptions, isAIColumnAutoMode } from './utils';
+import {
+  getAICommandColumnOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
+} from './utils';
 
 export class AIColumnView extends View {
   private columnsController!: ColumnsController;
@@ -22,7 +24,6 @@ export class AIColumnView extends View {
   }
 
   private getAIPromptEditorConfig(
-    $cellElement: dxElementWrapper,
     column: Column,
   ): AIPromptEditorOptions {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
@@ -71,10 +72,10 @@ export class AIColumnView extends View {
   }
 
   private updatePromptEditorInstance(column: Column): void {
-    const config = this.getAiPromptEditorConfig(column);
+    const config = this.getAIPromptEditorConfig(column);
 
     if (!this.promptEditorInstance) {
-      this.promptEditorInstance = new AiPromptEditor(config);
+      this.promptEditorInstance = new AIPromptEditor(config);
     } else {
       this.promptEditorInstance.updateOptions(config);
     }
@@ -97,7 +98,25 @@ export class AIColumnView extends View {
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
     if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
-      this.aiColumnController.sendAIColumnRequest(column.name as string);
+      this.aiColumnController.sendAIColumnRequest(column.name);
+    }
+
+    const needUpdatePopup = isPopupOptions(columnOptionName, args.value);
+    const needUpdateEditor = isEditorOptions(columnOptionName, args.value);
+    if (needUpdatePopup || needUpdateEditor) {
+      this.updatePromptEditorInstance(column);
+    }
+
+    const refreshOptionNames = [
+      'ai.showHeaderMenu',
+      'ai.prompt',
+      'ai.noDataText',
+      'ai.emptyText',
+    ];
+
+    if (refreshOptionNames.includes(columnOptionName)) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.component.refresh();
     }
   }
 
@@ -122,14 +141,7 @@ export class AIColumnView extends View {
       return Promise.resolve(false);
     }
 
-    const config = this.getAIPromptEditorConfig($cellElement, column);
-
-    if (!this.promptEditorInstance) {
-      this.promptEditorInstance = new AIPromptEditor(config);
-    } else {
-      this.promptEditorInstance.updateOptions(config);
-    }
-
+    this.updatePromptEditorInstance(column);
     return this.promptEditorInstance.show();
   }
 

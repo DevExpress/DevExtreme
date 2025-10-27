@@ -57,7 +57,6 @@ import {
   getAlignmentByDataType,
   getChildrenByBandColumn,
   getColumnByIndexes,
-  getColumnHeaderCellSelector,
   getColumnIndexByVisibleIndex,
   getCustomizeTextByDataType,
   getDataColumns,
