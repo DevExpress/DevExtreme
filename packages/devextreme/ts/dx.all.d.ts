@@ -3887,7 +3887,18 @@ declare module DevExpress.common.data {
     /**
      * [descr:ODataStoreOptions.fieldTypes]
      */
-    fieldTypes?: any;
+    fieldTypes?: {
+      [fieldName: string]:
+        | 'String'
+        | 'Int32'
+        | 'Int64'
+        | 'Guid'
+        | 'Boolean'
+        | 'Single'
+        | 'Decimal'
+        | 'DateTime'
+        | 'DateTimeOffset';
+    };
     /**
      * [descr:ODataStoreOptions.filterToLower]
      */
@@ -3907,6 +3918,8 @@ declare module DevExpress.common.data {
       | 'Boolean'
       | 'Single'
       | 'Decimal'
+      | 'DateTime'
+      | 'DateTimeOffset'
       | any;
     /**
      * [descr:ODataStoreOptions.url]
