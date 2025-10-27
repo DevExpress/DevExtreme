@@ -57,6 +57,7 @@ import {
   getAlignmentByDataType,
   getChildrenByBandColumn,
   getColumnByIndexes,
+  getColumnHeaderCellSelector,
   getColumnIndexByVisibleIndex,
   getCustomizeTextByDataType,
   getDataColumns,
@@ -464,6 +465,16 @@ export class ColumnsController extends modules.Controller {
 
   public getColumnByName(columnName: string): Column | undefined {
     return this.getColumns().find((column) => column.name === columnName);
+  }
+
+  public getColumnHeaderCellElement(columnName: string): HTMLElement | null {
+    const column = this.getColumnByName(columnName);
+    if (!column) {
+      return null;
+    }
+    const visibleIndex = this.getVisibleIndex(column.index);
+    const headerCellSelector = getColumnHeaderCellSelector(visibleIndex);
+    return this.component.element().querySelector(headerCellSelector) as HTMLElement;
   }
 
   public isBandColumnsUsed() {

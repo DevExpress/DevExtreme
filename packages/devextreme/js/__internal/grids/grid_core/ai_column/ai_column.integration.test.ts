@@ -2093,3 +2093,37 @@ describe('API Handlers', () => {
     });
   });
 });
+
+describe('Popup', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should be visible when the ai.popup.visible is true (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+        },
+      ],
+    });
+
+    expect(component.getAiDialog()).toBeNull();
+
+    component.apiColumnOption('myColumn', 'ai.popup.visible', true);
+
+    jest.runAllTimers();
+    await Promise.resolve();
+    expect(component.getAiDialog()).not.toBeNull();
+
+    const popupInstance = component.getAiPromptEditor().getPopupInstance();
+    expect(popupInstance.option('visible')).toBe(true);
+  });
+});

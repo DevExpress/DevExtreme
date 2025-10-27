@@ -1,14 +1,16 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import domAdapter from '@ts/core/m_dom_adapter';
 
 import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import { getColumnHeaderCellSelector } from '../columns_controller/m_columns_controller_utils';
 import { View } from '../m_modules';
 import { AiPromptEditor } from './ai_prompt_editor/ai_prompt_editor';
 import type { AiPromptEditorOptions } from './ai_prompt_editor/types';
 import { AI_COLUMN_NAME } from './const';
 import type { AiColumnController } from './m_ai_column_controller';
-import { getAiCommandColumnOptions, isAIColumnAutoMode } from './utils';
+import {
+  getAiCommandColumnOptions, isAIColumnAutoMode, isEditorOptions, isPopupOptions,
+} from './utils';
 
 export class AiColumnView extends View {
   private columnsController!: ColumnsController;
@@ -22,7 +24,6 @@ export class AiColumnView extends View {
   }
 
   private getAiPromptEditorConfig(
-    $cellElement: dxElementWrapper,
     column: Column,
   ): AiPromptEditorOptions {
     const alignment = column.alignment === 'right' ? 'left' : 'right';
@@ -58,12 +59,26 @@ export class AiColumnView extends View {
         position: {
           my: `${alignment} top`,
           at: `${alignment} bottom`,
-          of: `.dx-header-row td[aria-colindex="${visibleIndex + 1}"]`,
+          of: getColumnHeaderCellSelector(visibleIndex),
           collision: 'fit',
           boundary: this.component.element(),
         },
+        ...column.ai?.popup ?? { },
+      },
+      editorOptions: {
+        ...column.ai?.editorOptions ?? { },
       },
     };
+  }
+
+  private updatePromptEditorInstance(column: Column): void {
+    const config = this.getAiPromptEditorConfig(column);
+
+    if (!this.promptEditorInstance) {
+      this.promptEditorInstance = new AiPromptEditor(config);
+    } else {
+      this.promptEditorInstance.updateOptions(config);
+    }
   }
 
   // TODO: support changing all columns and the entire column
@@ -83,7 +98,13 @@ export class AiColumnView extends View {
     const columnOptionName = this.columnsController.getColumnOptionNameByFullName(args.fullName);
 
     if (columnOptionName === 'ai.prompt' && isAIColumnAutoMode(column)) {
-      this.aiColumnController.sendAIColumnRequest(column.name as string);
+      this.aiColumnController.sendAIColumnRequest(column.name);
+    }
+
+    const needUpdatePopup = isPopupOptions(columnOptionName, args.value);
+    const needUpdateEditor = isEditorOptions(columnOptionName, args.value);
+    if (needUpdatePopup || needUpdateEditor) {
+      this.updatePromptEditorInstance(column);
     }
 
     const refreshOptionNames = [
@@ -94,6 +115,7 @@ export class AiColumnView extends View {
     ];
 
     if (refreshOptionNames.includes(columnOptionName)) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.component.refresh();
     }
   }
@@ -119,14 +141,7 @@ export class AiColumnView extends View {
       return Promise.resolve(false);
     }
 
-    const config = this.getAiPromptEditorConfig($cellElement, column);
-
-    if (!this.promptEditorInstance) {
-      this.promptEditorInstance = new AiPromptEditor(config);
-    } else {
-      this.promptEditorInstance.updateOptions(config);
-    }
-
+    this.updatePromptEditorInstance(column);
     return this.promptEditorInstance.show();
   }
 
