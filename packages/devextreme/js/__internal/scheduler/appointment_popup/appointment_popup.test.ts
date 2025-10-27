@@ -150,7 +150,6 @@ describe('Appointment Popup Form', () => {
       },
     ];
 
-
     describe('Popup Title', () => {
       it('should display "New Appointment" when creating new appointment', async () => {
         const { scheduler, POM } = await createScheduler({
