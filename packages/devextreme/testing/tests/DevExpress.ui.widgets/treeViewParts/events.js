@@ -4,7 +4,6 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import holdEvent from 'common/core/events/hold';
-import devices from '__internal/core/m_devices';
 import fx from 'common/core/animation/fx';
 import contextMenuEvent from 'common/core/events/contextmenu';
 import dblclickEvent from 'common/core/events/dblclick';
@@ -602,33 +601,28 @@ QUnit.test('T177595', function(assert) {
 });
 
 QUnit.test('T184799: expand item', function(assert) {
-    const currentDevice = devices.current();
-    if(currentDevice.phone || currentDevice.tablet) {
-        assert.ok(true);
-    } else {
-        const handler = sinon.spy(commonUtils.noop);
-        const treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-            onItemExpanded: handler
-        }).dxTreeView('instance');
+    const handler = sinon.spy(commonUtils.noop);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
+        onItemExpanded: handler
+    }).dxTreeView('instance');
 
-        const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
+    const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
 
-        $rootItem.trigger(dblclickEvent.name);
-        this.clock.tick(0);
+    $rootItem.trigger(dblclickEvent.name);
+    this.clock.tick(0);
 
-        const args = handler.getCall(0).args[0];
+    const args = handler.getCall(0).args[0];
 
-        assert.ok(treeView.option('items')[0].expanded);
-        assert.ok(treeView.getNodes()[0].expanded);
-        assert.ok($rootItem.parent().find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
-        assert.ok(handler.calledOnce);
-        assert.ok(args.itemData.expanded);
-        assert.ok(args.node.expanded);
-        assert.equal(args.itemData.text, 'Item 1');
-        assert.equal(args.node.text, 'Item 1');
-        assert.equal(treeView.$element().find('.' + internals.ITEM_CLASS).length, 3);
-    }
+    assert.ok(treeView.option('items')[0].expanded);
+    assert.ok(treeView.getNodes()[0].expanded);
+    assert.ok($rootItem.parent().find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
+    assert.ok(handler.calledOnce);
+    assert.ok(args.itemData.expanded);
+    assert.ok(args.node.expanded);
+    assert.equal(args.itemData.text, 'Item 1');
+    assert.equal(args.node.text, 'Item 1');
+    assert.equal(treeView.$element().find('.' + internals.ITEM_CLASS).length, 3);
 });
 
 QUnit.test('double click should be detached if expand by click is enabled', function(assert) {
@@ -709,32 +703,27 @@ QUnit.test('double click should expand an item after widget repainted', function
 });
 
 QUnit.test('T184799: collapse item', function(assert) {
-    const currentDevice = devices.current();
-    if(currentDevice.phone || currentDevice.tablet) {
-        assert.ok(true);
-    } else {
-        const handler = sinon.spy(commonUtils.noop);
-        const treeView = initTree({
-            items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
-            onItemCollapsed: handler
-        }).dxTreeView('instance');
+    const handler = sinon.spy(commonUtils.noop);
+    const treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', expanded: true, items: [{ id: 3, text: 'Nested items' }] }, { id: 2, text: 'Item 2' }],
+        onItemCollapsed: handler
+    }).dxTreeView('instance');
 
-        const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
+    const $rootItem = $(treeView.$element()).find('.' + internals.ITEM_CLASS).eq(0);
 
-        $rootItem.trigger(dblclickEvent.name);
+    $rootItem.trigger(dblclickEvent.name);
 
-        const args = handler.getCall(0).args[0];
+    const args = handler.getCall(0).args[0];
 
-        assert.ok(!treeView.option('items')[0].expanded);
-        assert.ok(!treeView.getNodes()[0].expanded);
-        assert.ok(!$rootItem.parent().find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
-        assert.ok(handler.calledOnce);
-        assert.ok(!args.itemData.expanded);
-        assert.ok(!args.node.expanded);
-        assert.equal(args.itemData.text, 'Item 1');
-        assert.equal(args.node.text, 'Item 1');
-        assert.equal(treeView.$element().find('.' + internals.ITEM_CLASS).length, 3);
-    }
+    assert.ok(!treeView.option('items')[0].expanded);
+    assert.ok(!treeView.getNodes()[0].expanded);
+    assert.ok(!$rootItem.parent().find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
+    assert.ok(handler.calledOnce);
+    assert.ok(!args.itemData.expanded);
+    assert.ok(!args.node.expanded);
+    assert.equal(args.itemData.text, 'Item 1');
+    assert.equal(args.node.text, 'Item 1');
+    assert.equal(treeView.$element().find('.' + internals.ITEM_CLASS).length, 3);
 });
 
 QUnit.test('Select event handler has correct arguments', function(assert) {

@@ -148,13 +148,13 @@ export class ColumnsController extends modules.Controller {
       case !column?.type:
         return this.option('commonColumnSettings');
       case column?.type === AI_COLUMN_NAME:
-        return this.getAiColumnSettings();
+        return this.getAIColumnSettings();
       default:
         return {};
     }
   }
 
-  private getAiColumnSettings(): Partial<Column> {
+  private getAIColumnSettings(): Partial<Column> {
     return {
       allowHiding: true,
       ai: {
@@ -460,6 +460,10 @@ export class ColumnsController extends modules.Controller {
 
   public getColumns() {
     return this._columns;
+  }
+
+  public getColumnByName(columnName: string): Column | undefined {
+    return this.getColumns().find((column) => column.name === columnName);
   }
 
   public isBandColumnsUsed() {

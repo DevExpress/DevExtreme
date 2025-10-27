@@ -10,7 +10,6 @@ import hoverEvents from 'common/core/events/hover';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import Popup from 'ui/popup/ui.popup';
 import localization from 'localization';
-import { shouldSkipOnMobile, shouldSkipOnDesktop } from '../../helpers/device.js';
 
 import 'ui/validator';
 import 'generic_light.css!';
@@ -129,24 +128,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
         assert.strictEqual($(this.instance.getEndDateBox().field()).attr('tabIndex'), '0', 'endDateBox input tabIndex value');
     });
 
-    QUnit.test('Calendar should have one view by default on mobile device', function(assert) {
-        if(shouldSkipOnDesktop(assert)) {
-            return;
-        }
-
-        this.reinit({});
-        this.instance.open();
-
-        const calendar = this.getCalendar();
-
-        assert.strictEqual(calendar.option('viewsCount'), 1);
-    });
-
     QUnit.test('Calendar should have two views by default on desktop device', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({ });
         this.instance.open();
 
@@ -4109,10 +4091,6 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should equal contoured calendar cell\'s identifier, deferRendering="${deferRendering}', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             this.reinit({
                 calendarOptions: {
                     currentDate: new Date(2021, 9, 17),
@@ -4126,10 +4104,6 @@ QUnit.module('Aria accessibility', {
         });
 
         QUnit.test('aria-activedescendant attribute value of each input should be saved after change opened option value to false in runtime', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
-
             this.reinit({
                 calendarOptions: {
                     currentDate: new Date(2021, 9, 17),
@@ -4146,10 +4120,6 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('aria-activedescendant attribute value of each input should be synchronized with contoured calendar cell\'s identifier after navigation in calendar', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         this.reinit({
             calendarOptions: {
                 currentDate: new Date(2021, 9, 17),

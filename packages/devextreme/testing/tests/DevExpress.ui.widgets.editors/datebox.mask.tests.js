@@ -7,7 +7,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const { test, module } = QUnit;
 
@@ -1452,10 +1451,6 @@ module('Empty dateBox', {
     });
 
     test('space keydown event should be prevented', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const value = new Date(2020, 5, 5);
         this.instance.option({ value });
         this.keyboard.keyDown('space');

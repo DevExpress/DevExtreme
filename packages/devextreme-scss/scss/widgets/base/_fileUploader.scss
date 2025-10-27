@@ -195,6 +195,13 @@
   font-size: 10px;
 }
 
+.dx-fileuploader-file-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 6px;
+}
+
 .dx-rtl {
   .dx-fileuploader,
   &.dx-fileuploader {

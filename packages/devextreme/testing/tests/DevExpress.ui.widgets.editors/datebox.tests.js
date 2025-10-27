@@ -22,7 +22,6 @@ import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import browser from 'core/utils/browser';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -718,10 +717,6 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in date strategy', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
             opened: true,
@@ -740,10 +735,6 @@ QUnit.module('focus policy', {}, () => {
 
     QUnit.test('dateBox should stay focused after value selecting in time strategy', function(assert) {
         assert.expect(1);
-
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
 
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'time',
@@ -765,10 +756,6 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('dateBox should stay focused after value selecting in datetime strategy', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             opened: true,
@@ -789,10 +776,6 @@ QUnit.module('focus policy', {}, () => {
     QUnit.test('calendar in datebox should not have tabIndex attribute', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'date',
             opened: true,
@@ -806,10 +789,6 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('set focus on \'tab\' key from editor to overlay and inversely', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             opened: true,
@@ -845,10 +824,6 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.testInActiveWindow('first input in poup should have selected text when move from dateBox input on tab (T1127632)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             opened: true,
@@ -876,10 +851,6 @@ QUnit.module('focus policy', {}, () => {
     });
 
     QUnit.test('mousewheel action should not work if dateBox is not focused', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({ type: 'datetime', useMaskBehavior: true });
         const dateBox = $dateBox.dxDateBox('instance');
         const initText = dateBox.option('text');
@@ -1545,10 +1516,6 @@ QUnit.module('dateView integration', {
     });
 
     QUnit.test('Gesture cover should be hidden after wheel event processed by Overlay emitter (T820405)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const pointer = pointerMock($('.dx-dateviewroller').eq(0).find('.dx-scrollable-container'));
 
         assert.equal($('.dx-dateviewroller-current').length, 0, 'no rollers are chosen after widget is opened first time');
@@ -2118,10 +2085,6 @@ QUnit.module('datebox and calendar integration', () => {
     });
 
     QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const valueChangedHandle = sinon.spy();
         const date = new Date();
         const currentYear = date.getFullYear();
@@ -3151,10 +3114,6 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const date = new Date(2015, 0, 1);
         $('#dateBox').dxDateBox({
             pickerType: 'rollers',
@@ -3186,10 +3145,6 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         assert.expect(0);
 
         const clock = sinon.useFakeTimers();
@@ -3241,9 +3196,6 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (default)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             value: new Date('2015/1/25')
@@ -3261,9 +3213,6 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('DateBox renders the right stylingMode for editors in time view overlay (custom)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             value: new Date('2015/1/25'),
@@ -4162,9 +4111,6 @@ QUnit.module('datebox w/ time list', {
         });
 
         QUnit.testInActiveWindow('should not close on "tab" press', function(assert) {
-            if(shouldSkipOnMobile(assert)) {
-                return;
-            }
             const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input);
 
@@ -5117,9 +5063,6 @@ QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {
         ['calendar', 'list'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be closed on tab key when there is no focusable elements, applyValueMode: "instantly", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'instantly',
@@ -5144,9 +5087,6 @@ QUnit.module('Popup open state', () => {
     ['date', 'time', 'datetime'].forEach(type => {
         ['calendar', 'list', 'rollers'].forEach(pickerType => {
             QUnit.testInActiveWindow(`Popup should be opened on tab key when there are focusable items, applyValueMode: "useButtons", type: "${type}", pickerType: "${pickerType}"`, function(assert) {
-                if(shouldSkipOnMobile(assert)) {
-                    return;
-                }
                 const $dateBox = $('#dateBox').dxDateBox({
                     focusStateEnabled: true,
                     applyValueMode: 'useButtons',
@@ -5168,9 +5108,6 @@ QUnit.module('Popup open state', () => {
 
 QUnit.module('aria accessibility', {}, () => {
     QUnit.test('aria-activedescendant on combobox should point to the active list item (date view)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
         const $element = $('#dateBox').dxDateBox({
             value: new Date(2008, 7, 8, 5, 0),
             opened: true,
@@ -5189,10 +5126,6 @@ QUnit.module('aria accessibility', {}, () => {
     });
 
     QUnit.test('aria-activedescendant on combobox should point to the active list item (time view)', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $element = $('#dateBox').dxDateBox({
             type: 'time',
             pickerType: 'list',
@@ -5434,10 +5367,6 @@ QUnit.module('datebox validation', {}, () => {
     });
 
     QUnit.test('invalidDateMessage', function(assert) {
-        if(shouldSkipOnMobile(assert)) {
-            return;
-        }
-
         const $dateBox = $('#dateBox').dxDateBox({
             invalidDateMessage: 'A lorem ipsum...'
         });
