@@ -682,6 +682,7 @@ safeSizeTest('recurrence form with icons', async (t) => {
     assigneeId: [1, 2],
     roomId: 1,
     priorityId: 1,
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=1',
   };
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
