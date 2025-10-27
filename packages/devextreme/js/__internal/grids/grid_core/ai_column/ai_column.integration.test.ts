@@ -2233,7 +2233,7 @@ describe('Popup', () => {
     );
   });
 
-  it('should pass popup options to the AI column prompt editor popup (initial rendering)', async () => {
+  it('should pass popup options to the AI column prompt editor popup (dynamic update)', async () => {
     const { component } = await createDataGrid({
       dataSource: [
         { id: 1, name: 'Name 1', value: 10 },
@@ -2305,5 +2305,77 @@ describe('Popup', () => {
         }),
       ]),
     );
+  });
+});
+
+describe('Editor', () => {
+  beforeEach(beforeTest);
+  afterEach(afterTest);
+
+  it('should pass editor options to the AI column prompt editor (initial rendering)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+            prompt: 'Test prompt',
+            editorOptions: {
+              height: 200,
+              placeholder: 'Custom placeholder',
+            },
+          },
+        },
+      ],
+    });
+
+    const textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('height')).toBe(200);
+    expect(textEditorInstance.option('placeholder')).toBe('Custom placeholder');
+    expect(textEditorInstance.option('value')).toBe('Test prompt');
+  });
+
+  it('should pass editor options to the AI column prompt editor (dynamic update)', async () => {
+    const { component } = await createDataGrid({
+      dataSource: [
+        { id: 1, name: 'Name 1', value: 10 },
+      ],
+      columns: [
+        { dataField: 'id', caption: 'ID' },
+        { dataField: 'name', caption: 'Name' },
+        { dataField: 'value', caption: 'Value' },
+        {
+          type: 'ai',
+          caption: 'AI Column',
+          name: 'myColumn',
+          ai: {
+            popup: {
+              visible: true,
+            },
+          },
+        },
+      ],
+    });
+
+    component.apiColumnOption('myColumn', 'ai.editorOptions', {
+      height: 200,
+      placeholder: 'Custom placeholder',
+    });
+    component.apiColumnOption('myColumn', 'ai.prompt', 'My test prompt');
+
+    const textEditorInstance = component.getAIPromptEditor().getTextArea().getInstance();
+    expect(textEditorInstance.option('height')).toBe(200);
+    expect(textEditorInstance.option('placeholder')).toBe('Custom placeholder');
+    expect(textEditorInstance.option('value')).toBe('My test prompt');
   });
 });
