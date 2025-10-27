@@ -645,7 +645,7 @@ export class AppointmentForm {
         {
           colSpan: 1,
           cssClass: `${CLASSES.icon} ${CLASSES.defaultResourceIcon}`,
-          template: createFormIconTemplate('user'), // TODO: change icon to 'addcircleoutline'
+          template: createFormIconTemplate('addcircleoutline'),
         },
         {
           itemType: 'group',
@@ -761,7 +761,7 @@ export class AppointmentForm {
         location: 'after',
         name: 'settings',
         options: {
-          icon: 'preferences',
+          icon: 'optionsoutline',
           stylingMode: 'text',
           onClick: (): void => {
             this.showRecurrenceGroup();
