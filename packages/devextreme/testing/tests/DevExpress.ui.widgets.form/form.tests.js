@@ -89,6 +89,27 @@ const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const TEXTBOX_CLASS = 'dx-textbox';
 
+const editorTypes = [
+    'dxAutocomplete',
+    'dxCalendar',
+    'dxCheckBox',
+    'dxColorBox',
+    'dxDateBox',
+    'dxDropDownBox',
+    'dxHtmlEditor',
+    'dxLookup',
+    'dxNumberBox',
+    'dxRadioGroup',
+    'dxRangeSlider',
+    'dxSelectBox',
+    'dxSlider',
+    'dxSwitch',
+    'dxTagBox',
+    'dxTextArea',
+    'dxTextBox',
+    'dxDateRangeBox',
+];
+
 QUnit.module('Form');
 
 if(device.current().deviceType === 'desktop') {
@@ -541,53 +562,50 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
 });
 
 [true, false].forEach((showColon) => {
-    [undefined, true, false].forEach((isLabelVisible) => {
-        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-            [
-                'dxAutocomplete',
-                'dxCalendar',
-                'dxCheckBox',
-                'dxColorBox',
-                'dxDateBox',
-                'dxDropDownBox',
-                'dxHtmlEditor',
-                'dxLookup',
-                'dxNumberBox',
-                'dxRadioGroup',
-                'dxRangeSlider',
-                'dxSelectBox',
-                'dxSlider',
-                'dxSwitch',
-                'dxTagBox',
-                'dxTextArea',
-                'dxTextBox',
-                'dxDateRangeBox',
-            ].forEach((editorType) => {
-                QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType},label.showColon=${showColon}`, function(assert) {
-                    const $form = $('#form').dxForm({
-                        labelMode: formLabelMode,
-                        items: [{
-                            dataField: 'item1',
-                            editorType,
-                            label: {
-                                visible: isLabelVisible,
-                                showColon,
-                            }
-                        }],
-                    });
-
-                    const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-                    let needRenderLabel = isLabelVisible;
-                    if(needRenderLabel === undefined) {
-                        if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
-                            needRenderLabel = true;
-                        } else if(formLabelMode === 'outside') {
-                            needRenderLabel = true;
-                        }
+    editorTypes.forEach((editorType) => {
+        QUnit.test(`label text, editorType=${editorType},label.showColon=${showColon}`, function(assert) {
+            const $form = $('#form').dxForm({
+                items: [{
+                    dataField: 'item1',
+                    editorType,
+                    label: {
+                        showColon,
                     }
-                    assert.equal($label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
-                    assert.equal($label.text(), needRenderLabel ? `Item 1${showColon ? ':' : ''}` : '');
+                }],
+            });
+
+            const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+            assert.equal($label.text(), `Item 1${showColon ? ':' : ''}`);
+        });
+    });
+});
+
+[undefined, true, false].forEach((isLabelVisible) => {
+    ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+        editorTypes.forEach((editorType) => {
+            QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelMode: formLabelMode,
+                    items: [{
+                        dataField: 'item1',
+                        editorType,
+                        label: {
+                            visible: isLabelVisible,
+                            showColon: true,
+                        }
+                    }],
                 });
+
+                const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                let needRenderLabel = isLabelVisible;
+                if(needRenderLabel === undefined) {
+                    if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
+                        needRenderLabel = true;
+                    } else if(formLabelMode === 'outside') {
+                        needRenderLabel = true;
+                    }
+                }
+                assert.equal($label.length, needRenderLabel ? 1 : 0, `label is ${needRenderLabel ? '' : 'not '}rendered`);
             });
         });
     });
@@ -620,51 +638,33 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
     [true, false].forEach((isLabelVisible) => {
         [true, false].forEach((showColon) => {
             ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-                [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
-                    [undefined, '', 'some help text'].forEach((helpText) => {
-                        [null, () => { return $('<div>').text('Custom text'); }].forEach((labelTemplate) => {
-                            QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText, showColon, labelTemplate })}`, function(assert) {
-                                const $form = $('#form').dxForm({
-                                    showOptionalMark,
-                                    labelMode: formLabelMode,
-                                    items: [ {
-                                        dataField: 'item1',
-                                        label: { visible: isLabelVisible, showColon, template: labelTemplate },
-                                        editorOptions: { labelMode: editorLabelMode },
-                                        helpText
-                                    }]
-                                });
-
-                                const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-                                const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
-                                const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
-
-                                const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
-                                const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
-                                const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
-
-                                const labelText = labelTemplate ? 'Custom text' : 'Item 1';
-                                const editorLabelText = 'Item 1';
-
-                                const expectedFormLabelText = isLabelVisible ? `${labelText}${showColon && !labelTemplate ? ':' : ''}${optionalMarkIsRenderedAsFormLabel ? `${String.fromCharCode(160)}optional` : ''}` : '';
-                                assert.equal($formLabel.text(), expectedFormLabelText, 'form.labelText');
-                                const resultLabelMode = editorLabelMode || formLabelMode;
-                                const needRenderEditorLabel = resultLabelMode !== 'outside' && resultLabelMode !== 'hidden';
-                                assert.equal($editorLabel.text(), needRenderEditorLabel ? editorLabelText : '', 'editor.labelText');
-
-                                assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
-                                if(showOptionalMark === false) {
-                                    assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
-                                    assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
-                                } else if(isLabelVisible) {
-                                    assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
-                                    assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
-                                } else {
-                                    assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
-                                    assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && ['static', 'floating'].indexOf(editorLabelMode || formLabelMode) !== -1, 'optional mark in help text is rendered correctly');
-                                }
-                            });
+                [null, () => { return $('<div>').text('Custom text'); }].forEach((labelTemplate) => {
+                    QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, showColon, labelTemplate })}`, function(assert) {
+                        const $form = $('#form').dxForm({
+                            showOptionalMark,
+                            labelMode: formLabelMode,
+                            items: [ {
+                                dataField: 'item1',
+                                label: { visible: isLabelVisible, showColon, template: labelTemplate },
+                            }]
                         });
+
+                        const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+
+                        const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
+
+                        const labelText = labelTemplate ? 'Custom text' : 'Item 1';
+
+                        const expectedFormLabelText = isLabelVisible ? `${labelText}${showColon && !labelTemplate ? ':' : ''}${optionalMarkIsRenderedAsFormLabel ? `${String.fromCharCode(160)}optional` : ''}` : '';
+                        assert.equal($formLabel.text(), expectedFormLabelText, 'form.labelText');
+
+                        if(showOptionalMark === false) {
+                            assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
+                        } else if(isLabelVisible) {
+                            assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
+                        } else {
+                            assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
+                        }
                     });
                 });
             });
@@ -672,6 +672,49 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
     });
 });
 
+[true, false].forEach((showOptionalMark) => {
+    [true, false].forEach((isLabelVisible) => {
+        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+            [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+                [undefined, '', 'some help text'].forEach((helpText) => {
+                    QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText })}`, function(assert) {
+                        const $form = $('#form').dxForm({
+                            showOptionalMark,
+                            labelMode: formLabelMode,
+                            items: [{
+                                dataField: 'item1',
+                                label: { visible: isLabelVisible },
+                                editorOptions: { labelMode: editorLabelMode },
+                                helpText
+                            }]
+                        });
+
+                        const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
+                        const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
+
+                        const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
+                        const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
+
+                        const editorLabelText = 'Item 1';
+
+                        const resultLabelMode = editorLabelMode || formLabelMode;
+                        const needRenderEditorLabel = resultLabelMode !== 'outside' && resultLabelMode !== 'hidden';
+                        assert.equal($editorLabel.text(), needRenderEditorLabel ? editorLabelText : '', 'editor.labelText');
+
+                        assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
+                        if(showOptionalMark === false) {
+                            assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
+                        } else if(isLabelVisible) {
+                            assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
+                        } else {
+                            assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && needRenderEditorLabel, 'optional mark in help text is rendered correctly');
+                        }
+                    });
+                });
+            });
+        });
+    });
+});
 
 QUnit.test('Check aria-labelledby attribute for editors label', function(assert) {
     const form = $('#form').dxForm({
