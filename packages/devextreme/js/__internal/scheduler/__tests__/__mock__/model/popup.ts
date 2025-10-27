@@ -79,10 +79,6 @@ export class PopupModel {
     return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors .dx-radiogroup.dx-widget');
   }
 
-  get recurrenceGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
-  }
-
   get recurrenceSettingsButton(): Element | null {
     return this.element.querySelector('.dx-scheduler-form-recurrence-settings-button');
   }
