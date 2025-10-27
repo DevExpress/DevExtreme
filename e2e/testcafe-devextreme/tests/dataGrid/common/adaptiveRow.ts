@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Column chooser`
+fixture.disablePageReloads`Adaptive Row`
   .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('Should be shown and hidden when the window is resized', async (t) => {
