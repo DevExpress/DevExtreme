@@ -42,6 +42,8 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
+  adaptiveColumnButton: 'dx-datagrid-adaptive-more',
   errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
@@ -405,6 +407,18 @@ export default class DataGrid extends GridCore {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
+  }
+
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
+  }
+
+  isAdaptiveColumnHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
   }
 
   apiAddRow(): Promise<void> {

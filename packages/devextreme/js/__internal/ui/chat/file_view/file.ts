@@ -12,7 +12,7 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
-import { getFileIconName } from '@ts/ui/file_uploader/file_uploader.utils';
+import { getFileIconName, getFileSize } from '@ts/ui/file_uploader/file_uploader.utils';
 
 export type Properties = DOMComponentProperties<File> & {
   activeStateEnabled?: boolean;
@@ -109,7 +109,7 @@ class File extends DOMComponent<File, Properties> {
     const { data } = this.option();
     const { size } = data;
 
-    const text = `${size} B`;
+    const text = getFileSize(size);
 
     const $size = $('<div>')
       .addClass(CHAT_FILE_SIZE_CLASS)
