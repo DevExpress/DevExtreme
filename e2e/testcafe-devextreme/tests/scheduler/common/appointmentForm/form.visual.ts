@@ -141,7 +141,7 @@ const getResources = (withIcons = false) => ([
   });
 });
 
-safeSizeTest('main form with resources that has has icons', async (t) => {
+safeSizeTest('main form with resources that have icons', async (t) => {
   const appointment = {
     text: 'Appointment',
     startDate: new Date('2021-04-26T16:30:00.000Z'),
