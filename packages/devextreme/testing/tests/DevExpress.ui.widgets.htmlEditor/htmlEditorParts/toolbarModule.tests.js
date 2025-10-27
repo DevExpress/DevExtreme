@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'fluent_blue_light.css!';
+import 'generic_light.css!';
 
 import 'ui/select_box';
 import '__internal/ui/color_box/m_color_view';

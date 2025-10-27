@@ -9,6 +9,8 @@ const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
 
+import 'fluent_blue_light.css!';
+
 QUnit.testStart(() => {
     const markup =
         `<div id='container'>
