@@ -687,7 +687,7 @@ safeSizeTest('recurrence form with icons', async (t) => {
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const appointmentPopup = await openAppointmentPopup(t, appointment, false);
+  const appointmentPopup = await openAppointmentPopup(t, appointment, true);
   await appointmentPopup.openRecurrenceSettings(t);
 
   await takeScreenshot(
